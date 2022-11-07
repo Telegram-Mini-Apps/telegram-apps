@@ -1,0 +1,15 @@
+{
+  "name": "root",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^6.0.1"
+  },
+  "scripts": {
+    "version": "lerna version --conventional-commits",
+    "build": "lerna run build",
+    "test": "lerna run test"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
