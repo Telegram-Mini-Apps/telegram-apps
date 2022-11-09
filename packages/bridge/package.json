@@ -1,6 +1,6 @@
 {
   "name": "twa-bridge",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Communication layer between native and client applications.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/sdk/packages/bridge#readme",
@@ -25,11 +25,7 @@
     "test": "jest",
     "lint": "eslint src/**/*.ts",
     "build": "rimraf dist && rollup --config rollup.config.js",
-    "dev": "rollup --watch --config rollup.dev.config.js",
-    "commit": "cz",
-    "prerelease": "npm-run-all test lint build",
-    "release": "standard-version -a",
-    "postrelease": "git push --follow-tags origin master && yarn publish --non-interactive"
+    "dev": "rollup --watch --config rollup.dev.config.js"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Web-Apps/sdk/issues"

@@ -1,6 +1,6 @@
 {
   "name": "twa-core",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Web Apps core TypeScript utilities, which are reused in other packages of ecosystem.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/sdk/packages/core#readme",
@@ -24,11 +24,7 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint src/**/*.ts",
-    "build": "rimraf dist && rollup --config rollup.config.js",
-    "commit": "cz",
-    "prerelease": "npm-run-all test lint build",
-    "release": "standard-version -a",
-    "postrelease": "git push --follow-tags origin master && yarn publish --non-interactive"
+    "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Web-Apps/sdk/issues"
