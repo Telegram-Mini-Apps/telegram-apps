@@ -1,6 +1,6 @@
 {
   "name": "twa-core",
-  "version": "0.0.26",
+  "version": "0.1.2",
   "description": "Web Apps core TypeScript utilities, which are reused in other packages of ecosystem.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/sdk/packages/core#readme",

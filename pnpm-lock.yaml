@@ -44,7 +44,7 @@ importers:
 
   packages/bridge:
     specifiers:
-      twa-bridge: '*'
+      twa-bridge: ^0.1.2
     dependencies:
       twa-bridge: 'link:'
 
