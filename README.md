@@ -1,37 +1,15 @@
-# Lerna Getting Started Example
+# SDK
 
-This repo is a small example of using Lerna 5+.
+Monorepository, containing all the packages, connected with TypeScript
+development on Web Apps platform. To learn more, follow packages own
+documentation.
 
-Watch this [10-minute walkthrough](https://youtu.be/1oxFYphTS4Y) to see how new versions of Lerna work.
+## Packages
 
-This repo contains three packages or projects:
-
-- `header` (a library of React components)
-- `footer` (a library of React components)
-- `remixapp` (an app written using the Remix framework which depends on both `header` and `footer`)
-
-```
-packages/
-    header/
-        src/
-            ...
-        package.json
-        rollup.config.json
-        jest.config.js
-
-    footer/
-        src/
-            ...
-        package.json
-        rollup.config.json
-        jest.config.js
-
-    remixapp/
-        app/
-            ...
-        public/
-        package.json
-        remix.config.js
-
-package.json
-```
+- [core](/packages/core) - core utilities reused all over the ecosystem
+  libraries. You probably don't need to use this package directly, but it's
+  surely useful to know how most of our libraries works.
+- [bridge](/packages/bridge) - provides utilities to simplify communication
+  flow between frontend and Telegram native applications. It also solves some
+  across-platform data difference problems to protect developers code and save
+  their time.
