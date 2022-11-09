@@ -46,12 +46,12 @@ yarn add twa-bridge
 communication layer between Telegram native and client applications, so you
 could call native methods and receive events from Telegram application.
 
-To start using bridge, it is enough to use `Bridge.init` method:
+To start using bridge, it is enough to use `init` method:
 
 ```typescript
-import {Bridge} from 'twa-bridge';
+import {init} from 'twa-bridge';
 
-const bridge = Bridge.init();
+const bridge = init();
 ```
 
 This function will append special handler to global window object, which is
@@ -61,24 +61,23 @@ and event receiving function.
 
 ### Debug mode
 
-
 `Bridge` supports debug mode which outputs additional log messages into console.
-By default, this mode is disabled. To enable it, it is required to pass 
+By default, this mode is disabled. To enable it, it is required to pass
 `debug: true` while creating new `Bridge` instance.
 
 ```typescript
-import {Bridge} from 'twa-bridge';
+import {init} from 'twa-bridge';
 
-const bridge = Bridge.init({debug: true});
+const bridge = init({debug: true});
 ```
 
-Or, in case when instance already exists, just change its `debug` property 
+Or, in case when instance already exists, just change its `debug` property
 to `true`.
 
 ```typescript
-import {Bridge} from 'twa-bridge';
+import {init} from 'twa-bridge';
 
-const bridge = Bridge.init();
+const bridge = init();
 bridge.debug = true;
 ```
 
@@ -92,22 +91,22 @@ This method automatically finds correct way of sending event which depends
 on current environment. Let's take a look on simple example:
 
 ```typescript
-import {Bridge} from 'twa-bridge';
+import {init} from 'twa-bridge';
 
-const bridge = Bridge.init();
+const bridge = init();
 
 // Close current application.
 bridge.postEvent('web_app_close')
 ```
 
 Some events don't require parameters, and they can be called without additional
-second parameter which represents event payload. But there are some events, 
+second parameter which represents event payload. But there are some events,
 which have arguments:
 
 ```typescript
-import {Bridge} from 'twa-bridge';
+import {init} from 'twa-bridge';
 
-const bridge = Bridge.init();
+const bridge = init();
 
 // Open new popup.
 bridge.postEvent('web_app_open_popup', {
@@ -168,12 +167,12 @@ versions of Telegram, unless some additional actions are done.
 
 Bridge itself is not listening to window `message` event or events sent
 from Telegram native application directly. It expects passing event emitter
-that is responsible for this kind of job. 
+that is responsible for this kind of job.
 
-This way of working with events allows us to normally subscribe to and 
-unsubscribe from such events. 
+This way of working with events allows us to normally subscribe to and
+unsubscribe from such events.
 
-In case, this property is not passed, function will create required event 
+In case, this property is not passed, function will create required event
 emitter, place it in window for future reuse by other `Bridge` instances,
 and store it in newly created bridge.
 
