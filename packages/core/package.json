@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "TODO"
+    "url": "git@github.com:Telegram-Web-Apps/sdk.git"
   },
   "scripts": {
     "test": "jest",
