@@ -1,7 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
 import {terser} from 'rollup-plugin-terser';
 import {defineConfig} from 'rollup';
-import del from 'rollup-plugin-delete';
 import {createRequire} from 'node:module';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 
@@ -17,7 +16,7 @@ export default [
       {file: pkg.module, format: 'esm'},
     ],
     external: ['twa-core'],
-    plugins: [del({targets: 'dist'}), typescript(), terser()],
+    plugins: [typescript(), terser()],
   }),
 
   // Browser.
