@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {isColorDark} from './utils';
+import {isColorDark} from '../../colors/utils';
 
 describe('colors', () => {
   describe('utils', () => {

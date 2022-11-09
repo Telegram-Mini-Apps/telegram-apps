@@ -1,5 +1,5 @@
 import {describe, it, expect, jest} from '@jest/globals';
-import {createSearchParamsStructParser} from './schema';
+import {createSearchParamsStructParser} from '../../../parsing/search-params/schema';
 
 const parser = createSearchParamsStructParser({
   hey: ['ho', v => v],

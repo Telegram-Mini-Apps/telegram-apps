@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {compareVersions, requireVersion} from './version';
+import {compareVersions, requireVersion} from '../version';
 
 describe('utils', () => {
   describe('version', () => {

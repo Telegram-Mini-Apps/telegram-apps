@@ -1,5 +1,5 @@
 import {describe, it, expect, jest} from '@jest/globals';
-import {createJsonStructParser} from './schema';
+import {createJsonStructParser} from '../../../parsing/json/schema';
 
 const parser = createJsonStructParser({
   hey: ['ho', v => v],

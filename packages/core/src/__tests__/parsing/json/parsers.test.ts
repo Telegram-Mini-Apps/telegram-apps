@@ -7,7 +7,7 @@ import {
   parseJsonParamAsOptString,
   parseJsonParamAsRecord,
   parseJsonParamAsString,
-} from './parsers';
+} from '../../../parsing/json/parsers';
 
 describe('parsing', () => {
   describe('json', () => {

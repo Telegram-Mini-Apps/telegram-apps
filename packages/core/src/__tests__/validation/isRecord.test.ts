@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {isRecord} from './isRecord';
+import {isRecord} from '../../validation/isRecord';
 
 describe('validation', () => {
   describe('isRecord', () => {

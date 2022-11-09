@@ -3,7 +3,7 @@ import {
   parseSearchParamAsDate, parseSearchParamAsOptDate,
   parseSearchParamAsOptString,
   parseSearchParamAsString,
-} from './parsers';
+} from '../../../parsing/search-params/parsers';
 
 describe('parsing', () => {
   describe('search-params', () => {
