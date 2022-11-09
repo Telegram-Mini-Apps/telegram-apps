@@ -18,6 +18,7 @@ importers:
       npm-run-all: ^4.1.5
       rimraf: ^3.0.2
       rollup: ^3.2.5
+      rollup-plugin-serve: ^2.0.1
       rollup-plugin-terser: ^7.0.2
       ts-jest: ^29.0.3
       tslib: ^2.4.1
@@ -37,6 +38,7 @@ importers:
       npm-run-all: 4.1.5
       rimraf: 3.0.2
       rollup: 3.2.5
+      rollup-plugin-serve: 2.0.1
       rollup-plugin-terser: 7.0.2_rollup@3.2.5
       ts-jest: 29.0.3_r24ewcothphvclnu77pxb4u4se
       tslib: 2.4.1
@@ -44,9 +46,9 @@ importers:
 
   packages/bridge:
     specifiers:
-      twa-bridge: ^0.1.2
+      twa-core: workspace:*
     dependencies:
-      twa-bridge: 'link:'
+      twa-core: link:../core
 
   packages/core:
     specifiers: {}
@@ -5549,6 +5551,12 @@ packages:
       mime-db: 1.52.0
     dev: true
 
+  /mime/3.0.0:
+    resolution: {integrity: sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==}
+    engines: {node: '>=10.0.0'}
+    hasBin: true
+    dev: true
+
   /mimic-fn/2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
     engines: {node: '>=6'}
@@ -6032,6 +6040,11 @@ packages:
       define-lazy-prop: 2.0.0
       is-docker: 2.2.1
       is-wsl: 2.2.0
+    dev: true
+
+  /opener/1.5.2:
+    resolution: {integrity: sha512-ur5UIdyw5Y7yEj9wLzhqXiy6GZ3Mwx0yGI+5sMn2r0N0v3cKJvUmFH5yPP+WXh9e0xfyzyJX95D8l088DNFj7A==}
+    hasBin: true
     dev: true
 
   /optionator/0.8.3:
@@ -6682,6 +6695,13 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.3
+    dev: true
+
+  /rollup-plugin-serve/2.0.1:
+    resolution: {integrity: sha512-/9lnzylTMwbXNQUwWAO0DIxW145wl+rmikwFXgujLJ5N9bRfWcjP+qd1XM5wxSiw8ZlBAlFy/n2zRvzcG21bBw==}
+    dependencies:
+      mime: 3.0.0
+      opener: 1.5.2
     dev: true
 
   /rollup-plugin-terser/7.0.2_rollup@3.2.5:
