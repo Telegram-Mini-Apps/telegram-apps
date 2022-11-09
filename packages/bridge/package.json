@@ -1,6 +1,6 @@
 {
   "name": "twa-bridge",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Communication layer between native and client applications.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/sdk#readme",
