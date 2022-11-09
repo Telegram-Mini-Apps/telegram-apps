@@ -16,6 +16,9 @@
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
+  "files": [
+    "dist/**/*"
+  ],
   "main": "dist/index.cjs",
   "browser": "dist/browser.js",
   "module": "dist/index.mjs",
