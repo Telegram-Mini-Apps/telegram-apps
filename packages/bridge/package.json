@@ -3,7 +3,16 @@
   "version": "0.2.0",
   "description": "Communication layer between native and client applications.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/sdk/packages/bridge#readme",
+  "homepage": "https://github.com/Telegram-Web-Apps/sdk#readme",
+  "keywords": [
+    "telegram",
+    "telegram-web-apps",
+    "telegram-bot",
+    "twa",
+    "typescript",
+    "bridge",
+    "webview"
+  ],
   "license": "MIT",
   "type": "module",
   "sideEffects": false,

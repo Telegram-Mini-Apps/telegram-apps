@@ -3,7 +3,15 @@
   "version": "0.2.0",
   "description": "Web Apps core TypeScript utilities, which are reused in other packages of ecosystem.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/sdk/packages/core#readme",
+  "homepage": "https://github.com/Telegram-Web-Apps/sdk#readme",
+  "keywords": [
+    "telegram",
+    "telegram-web-apps",
+    "telegram-bot",
+    "twa",
+    "core",
+    "typescript"
+  ],
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
