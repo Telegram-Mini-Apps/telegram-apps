@@ -1,4 +1,5 @@
 {
+  "name": "root",
   "private": true,
   "devDependencies": {
     "@jest/globals": "^29.3.1",
