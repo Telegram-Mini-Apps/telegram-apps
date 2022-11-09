@@ -1,5 +1,5 @@
 import {beforeEach, describe, expect, it} from '@jest/globals';
-import {isBrowserEnv, isDesktopOrMobileEnv, isWindowsPhoneEnv} from './env';
+import {isBrowserEnv, isDesktopOrMobileEnv, isWindowsPhoneEnv} from '../env';
 
 beforeEach(() => {
   const wnd = window as any;

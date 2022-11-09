@@ -1,6 +1,6 @@
 import {describe, expect, it} from '@jest/globals';
-import {BridgePostEventName} from './events';
-import {supports} from './support';
+import {BridgePostEventName} from '../events';
+import {supports} from '../support';
 
 describe('support', () => {
   describe('supports', () => {

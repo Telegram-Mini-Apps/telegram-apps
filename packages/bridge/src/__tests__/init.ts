@@ -1,14 +1,8 @@
 import {beforeEach, describe, expect, it, jest} from '@jest/globals';
-import * as eventReceiverPkg from './event-receiver';
-import {init} from './init';
+import * as eventReceiverPkg from '../event-receiver';
+import {init} from '../init';
 
-jest.mock('./event-receiver');
-jest.mock('./Bridge', () => {
-  return {
-    __esModule: true,
-    Bridge: class {}
-  }
-});
+jest.mock('../event-receiver');
 
 const {defineEventReceiver, getGlobalEventEmitter} = eventReceiverPkg;
 
