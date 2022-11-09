@@ -5,3 +5,4 @@ dist
 .cache
 .env
 lerna-debug.log
+coverage
