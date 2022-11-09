@@ -24,6 +24,7 @@
     "version": "lerna version --conventional-commits",
     "build": "lerna run build",
     "test": "lerna run test",
+    "publish": "lerna publish",
     "commit": "git cz"
   },
   "workspaces": [
