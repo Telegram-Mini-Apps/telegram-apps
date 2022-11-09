@@ -35,6 +35,6 @@
     "url": "https://github.com/Telegram-Web-Apps/sdk/issues"
   },
   "dependencies": {
-    "twa-bridge": "^0.1.2"
+    "twa-core": "workspace:*"
   }
 }
