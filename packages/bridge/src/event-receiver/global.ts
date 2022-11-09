@@ -1,6 +1,7 @@
 import {EventEmitter, log} from 'twa-core';
 import {extractMessageEventData} from '../parsing';
 import {WindowGlobalEventEmitter} from './constants';
+import {ViewportChangedPayload} from '../events';
 
 export interface GlobalEventEmitterEventsMap {
   /**
@@ -47,7 +48,7 @@ export function getGlobalEventEmitter(debug = false): GlobalEventEmitter {
       if (event.source !== window.parent || typeof event.data !== 'string') {
         return logMessage('log', 'event rejected', event);
       }
-      evData = event.data
+      evData = event.data;
     } else if (event instanceof CustomEvent) {
       // In case, global receiveEvent function was installed, we could receive
       // event of CustomEvent type.
@@ -62,6 +63,20 @@ export function getGlobalEventEmitter(debug = false): GlobalEventEmitter {
     } catch (e) {
       logMessage('error', 'event data extraction error', evData, e);
     }
+  });
+
+  // Desktop version of Telegram sometimes not sending viewport_changed
+  // event. For example, when main button is shown. That's why we should
+  // add out own listener to be sure, viewport information is always fresh.
+  // Issue: https://github.com/Telegram-Web-Apps/client-sdk/issues/8
+  window.addEventListener('resize', () => {
+    const payload: ViewportChangedPayload = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      is_state_stable: true,
+      is_expanded: true,
+    };
+    emitter.emit('message', 'viewport_changed', payload);
   });
 
   wnd[WindowGlobalEventEmitter] = emitter;
