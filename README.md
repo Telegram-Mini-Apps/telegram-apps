@@ -19,8 +19,12 @@ documentation.
 - [init-data](/packages/init-data) - TypeScript isomorphic library to make work
   with Telegram Web Apps init data easier. Could be used both in browser and
   Node JS.
-- [sdk](/packages/sdk) - Made from scratch TypeScript library for communication with Telegram Web Apps
+- [sdk](/packages/sdk) - Made from scratch TypeScript library for communication
+  with Telegram Web Apps
   functionality.
+- [sdk-react](/packages/sdk-react) - React bindings for Web Apps client SDK.
+  Contains hooks, components and other useful tools which allow usage of React
+  along with Web Apps client SDK.
 
 ## Contribution
 
