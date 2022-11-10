@@ -14,7 +14,13 @@ import {
   compareVersions,
 } from 'twa-core';
 import {WebAppEventsMap} from './events';
-import {Bridge, isBrowserEnv, supports} from 'twa-bridge';
+import {
+  Bridge,
+  BridgeEventListener,
+  InvoiceStatus,
+  isBrowserEnv,
+  supports,
+} from 'twa-bridge';
 import {isDesktop, isWeb} from './utils';
 import {WithCommonProps} from '../../types';
 
@@ -25,7 +31,12 @@ export interface WebAppProps extends WithCommonProps {
   platform?: Platform;
 }
 
-type SupportsFunc = SupportChecker<'disableClosingConfirmation' | 'enableClosingConfirmation' | 'setBackgroundColor'>;
+type SupportedFunc =
+  | 'disableClosingConfirmation'
+  | 'enableClosingConfirmation'
+  | 'setBackgroundColor'
+  | 'openInvoice';
+type SupportsFunc = SupportChecker<SupportedFunc>;
 
 /**
  * Provides functionality which is recognized as common for Web Apps. In other
@@ -51,6 +62,7 @@ export class WebApp {
       disableClosingConfirmation: 'web_app_setup_closing_behavior',
       enableClosingConfirmation: 'web_app_setup_closing_behavior',
       setBackgroundColor: 'web_app_set_background_color',
+      openInvoice: 'web_app_open_invoice',
     });
     this.version = version;
     this.platform = platform;
@@ -199,15 +211,40 @@ export class WebApp {
   }
 
   /**
-   * TODO: Check docs.
-   * FIXME: Implement
-   * Opens an invoice using the link url.
+   * Opens an invoice using its url.
+   * @param url - invoice URL.
    * @since Bot API 6.1+
-   * @param url
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  openInvoice(url: string): void {
-    throw new Error('not implemented');
+  openInvoice(url: string): Promise<InvoiceStatus> {
+    // TODO: Allow opening with slug.
+    const {hostname, pathname} = new URL(formatURL(url));
+
+    if (hostname !== 't.me') {
+      throw new Error('Incorrect hostname: ' + hostname);
+    }
+    // Valid examples:
+    // "/invoice/my-slug"
+    // "/$my-slug"
+    const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
+
+    if (match === null) {
+      throw new Error('Link pathname has incorrect format. Expected to receive "/invoice/slug" or "/$slug"');
+    }
+    return new Promise(res => {
+      // Create event listener which will resolve invoice status.
+      const listener: BridgeEventListener<'invoice_closed'> = a => {
+        // Remove bound listener.
+        this.bridge.off('invoice_closed', listener);
+
+        // Resolve value.
+        res(a.status);
+      };
+      // Add event listener to catch invoice status.
+      this.bridge.on('invoice_closed', listener);
+
+      // Open invoice.
+      this.bridge.postEvent('web_app_open_invoice', {slug: match[2]});
+    });
   }
 
   /**
