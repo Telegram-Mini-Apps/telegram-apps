@@ -141,8 +141,3 @@ console.log(extractThemeFromLocation());
 //   textColor: '#f5f5f5',
 // }
 ```
-
-## Contribution
-
-Any contribution is appreciated. Feel free to create new feature requests, bug
-reports etc.

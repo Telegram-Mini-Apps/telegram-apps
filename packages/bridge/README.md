@@ -182,8 +182,3 @@ As long as bridge provides only low-level control, we recommend using
 [SDK](https://github.com/Telegram-Web-Apps/client-sdk), which implements
 bridge methods. It also provides additional parameters checks, more intuitive
 method names and easier usage.
-
-## Contribution
-
-Any contribution is appreciated. Feel free to create new feature requests, bug
-reports etc.
