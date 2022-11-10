@@ -46,7 +46,7 @@ from current window's location.
 
 To do this, we should create script and place it in `head` section of document
 which will extract required parameters. Otherwise, due to some specific problems
-in platform ([issue](https://github.com/Telegram-Web-Apps/sdk/issues/10))
+in platform ([issue](https://github.com/Telegram-Web-Apps/twa/issues/12))
 , application will "flash".
 
 Thanks to this library, it already has script ready to use. To make

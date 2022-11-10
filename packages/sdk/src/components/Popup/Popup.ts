@@ -53,9 +53,9 @@ export class Popup {
   }
 
   /**
-   * Hides currently opened popup. This function has no real effect for native opened Popup. We
-   * currently need this function to update open status.
-   * Feature request: https://github.com/Telegram-Web-Apps/client-sdk/issues/11
+   * Hides currently opened popup. This function has no real effect for native
+   * opened Popup. We currently need this function to update open status.
+   * Feature request: https://github.com/Telegram-Web-Apps/twa/issues/4
    */
   hide(): void {
     this.isOpened = false;
@@ -80,7 +80,7 @@ export class Popup {
    * button, `null` will be returned.
    *
    * FIXME: On desktop, this function may work incorrectly.
-   *  Issue: https://github.com/Telegram-Web-Apps/client-sdk/issues/5
+   *  Issue: https://github.com/Telegram-Web-Apps/twa/issues/7
    * @param params - popup parameters.
    * @since Web App version 6.2+
    * @see preparePopupParams

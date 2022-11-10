@@ -60,9 +60,8 @@ function initTheme(bridge: Bridge, themeParams: TwaThemeParams): ThemeParams {
 async function initViewport(bridge: Bridge, platform: Platform): Promise<Viewport> {
   // Get current viewport information.
   const {height, is_state_stable, width, is_expanded} = isDesktop(platform)
-    // TODO: In desktop version, method web_app_request_viewport
-    //  does not work.
-    //  Issue: https://github.com/Telegram-Web-Apps/client-sdk/issues/7
+    // In desktop version Viewport.request() will not work. See its
+    // implementation.
     ? {
       width: window.innerWidth,
       height: window.innerHeight,

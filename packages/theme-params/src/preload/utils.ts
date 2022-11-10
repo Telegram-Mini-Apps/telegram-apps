@@ -66,6 +66,6 @@ export function run() {
   });
 
   // We should call this method due to bug in platform.
-  // Issue: https://github.com/Telegram-Web-Apps/client-sdk/issues/14
+  // Issue: https://github.com/Telegram-Web-Apps/sdk/issues/14
   bridge.postEvent('web_app_request_theme');
 }

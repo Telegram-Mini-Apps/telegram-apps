@@ -260,10 +260,10 @@ export class WebApp {
 
   /**
    * Updates current application background color.
-   * FIXME: Has no effect on desktop, works incorrectly on Android.
+   * FIXME: Has no effect on desktop, works incorrectly in Android.
    *  Issues:
-   *  https://github.com/Telegram-Web-Apps/client-sdk/issues/1
-   *  https://github.com/Telegram-Web-Apps/client-sdk/issues/2
+   *  https://github.com/Telegram-Web-Apps/twa/issues/9
+   *  https://github.com/Telegram-Web-Apps/twa/issues/8
    * @param color - settable color key or color description in known RGB
    * format.
    * @since Web App version 6.1+
@@ -291,8 +291,8 @@ export class WebApp {
    * Updates current application header color.
    * FIXME: Has no effect on desktop, works incorrectly on Android.
    *  Issues:
-   *  https://github.com/Telegram-Web-Apps/client-sdk/issues/1
-   *  https://github.com/Telegram-Web-Apps/client-sdk/issues/2
+   *  https://github.com/Telegram-Web-Apps/twa/issues/9
+   *  https://github.com/Telegram-Web-Apps/twa/issues/8
    * @param color - settable color key.
    * @since Web App version 6.1+
    */

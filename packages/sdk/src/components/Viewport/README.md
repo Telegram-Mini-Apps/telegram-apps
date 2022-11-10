@@ -52,9 +52,3 @@ A method that expands the Web App to the maximum available height. To find out
 if the Web App is expanded to the maximum height, refer to the value of
 the `isExpanded`.
 
-#### `sync(): Promise<void>`
-
-Requests and applies fresh viewport information from native application.
-
-> ⚠️ This function will show warning in case, current platform
-> is desktop or web. See this [issue](https://github.com/Telegram-Web-Apps/client-sdk/issues/7) for more.

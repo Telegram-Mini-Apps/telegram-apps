@@ -105,7 +105,7 @@ export class Bridge {
 
         case 'popup_closed':
           // FIXME: Payloads are different on different platforms.
-          //  Issue: https://github.com/Telegram-Web-Apps/client-sdk/issues/4
+          //  Issue: https://github.com/Telegram-Web-Apps/twa/issues/2
           if (
             // Sent on desktop.
             data === undefined ||
