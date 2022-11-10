@@ -1,6 +1,6 @@
 {
   "name": "twa-theme-params",
-  "version": "0.1.3",
+  "version": "0.4.0",
   "description": "Theme parameters specialized package. Contains ready to use JS scripts and set of TS utils which are commonly used in projects.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/sdk#readme",
@@ -42,7 +42,7 @@
     "url": "https://github.com/Telegram-Web-Apps/sdk/issues"
   },
   "dependencies": {
-    "twa-core": "workspace:*",
-    "twa-bridge": "workspace:*"
+    "twa-bridge": "workspace:*",
+    "twa-core": "workspace:*"
   }
 }
