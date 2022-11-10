@@ -6,21 +6,8 @@
 
 [size-badge]: https://img.shields.io/bundlephobia/minzip/twa-bridge
 
-[license-badge]: https://img.shields.io/github/license/telegram-web-apps/bridge
-
-[tree-shaking-badge]: https://img.shields.io/badge/Tree%20Shaking-enabled-success
-
-[tree-shaking-link]: https://webpack.js.org/guides/tree-shaking/
-
-[gh-org-badge]: https://img.shields.io/badge/-Ecosystem_Component-%23555?logo=github
-
-[gh-org-link]: https://github.com/Telegram-Web-Apps
-
-[![Ecosystem Component][gh-org-badge]][gh-org-link]
-[![Tree Shaking][tree-shaking-badge]][tree-shaking-link]
 [![NPM][npm-badge]][npm-link]
 ![Size][size-badge]
-![License][license-badge]
 
 Package which provides utilities to simplify communication flow between
 frontend and Telegram native applications. It also solves some across-platform
@@ -179,6 +166,6 @@ and store it in newly created bridge.
 ## Higher-level control
 
 As long as bridge provides only low-level control, we recommend using
-[SDK](https://github.com/Telegram-Web-Apps/client-sdk), which implements
+[SDK](https://github.com/Telegram-Web-Apps/sdk), which implements
 bridge methods. It also provides additional parameters checks, more intuitive
 method names and easier usage.

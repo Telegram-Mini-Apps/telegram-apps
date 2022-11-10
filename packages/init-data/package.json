@@ -3,7 +3,7 @@
   "version": "3.1.0",
   "description": "TypeScript library to make work with Telegram Web Apps init data easier.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/sdk#readme",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
   "keywords": [
     "telegram",
     "telegram-web-apps",
@@ -35,7 +35,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/sdk.git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.git",
     "directory": "packages/core"
   },
   "scripts": {
@@ -44,7 +44,7 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/sdk/issues"
+    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
   },
   "dependencies": {
     "twa-core": "workspace:*"

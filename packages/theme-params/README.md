@@ -6,21 +6,8 @@
 
 [size-badge]: https://img.shields.io/bundlephobia/minzip/twa-theme-params
 
-[license-badge]: https://img.shields.io/github/license/telegram-web-apps/theme-params
-
-[tree-shaking-badge]: https://img.shields.io/badge/Tree%20Shaking-enabled-success
-
-[tree-shaking-link]: https://webpack.js.org/guides/tree-shaking/
-
-[gh-org-badge]: https://img.shields.io/badge/-Ecosystem_Component-%23555?logo=github
-
-[gh-org-link]: https://github.com/Telegram-Web-Apps
-
-[![Ecosystem Component][gh-org-badge]][gh-org-link]
-[![Tree Shaking][tree-shaking-badge]][tree-shaking-link]
 [![NPM][npm-badge]][npm-link]
 ![Size][size-badge]
-![License][license-badge]
 
 Web Apps theme parameters contain rather important information to follow visual
 consistency of client application with native one. It provides developer
@@ -59,7 +46,7 @@ from current window's location.
 
 To do this, we should create script and place it in `head` section of document
 which will extract required parameters. Otherwise, due to some specific problems
-in platform ([issue](https://github.com/Telegram-Web-Apps/client-sdk/issues/10))
+in platform ([issue](https://github.com/Telegram-Web-Apps/sdk/issues/10))
 , application will "flash".
 
 Thanks to this library, it already has script ready to use. To make

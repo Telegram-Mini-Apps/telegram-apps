@@ -6,21 +6,8 @@
 
 [size-badge]: https://img.shields.io/bundlephobia/minzip/twa-sdk
 
-[license-badge]: https://img.shields.io/github/license/telegram-web-apps/sdk
-
-[tree-shaking-badge]: https://img.shields.io/badge/Tree%20Shaking-enabled-success
-
-[tree-shaking-link]: https://webpack.js.org/guides/tree-shaking/
-
-[gh-org-badge]: https://img.shields.io/badge/-Ecosystem_Component-%23555?logo=github
-
-[gh-org-link]: https://github.com/Telegram-Web-Apps
-
-[![Ecosystem Component][gh-org-badge]][gh-org-link]
-[![Tree Shaking][tree-shaking-badge]][tree-shaking-link]
 [![NPM][npm-badge]][npm-link]
 ![Size][size-badge]
-![License][license-badge]
 
 Made from scratch TypeScript library for communication with Telegram Web Apps
 functionality.

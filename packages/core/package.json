@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "description": "Web Apps core TypeScript utilities, which are reused in other packages of ecosystem.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/sdk#readme",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
   "keywords": [
     "telegram",
     "telegram-web-apps",
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/sdk.git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.git",
     "directory": "packages/core"
   },
   "scripts": {
@@ -38,6 +38,6 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/sdk/issues"
+    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
   }
 }
