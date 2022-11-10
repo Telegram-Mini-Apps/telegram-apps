@@ -6,7 +6,7 @@
 
 [size-badge]: https://img.shields.io/bundlephobia/minzip/twa-sdk
 
-[license-badge]: https://img.shields.io/github/license/telegram-web-apps/client-sdk
+[license-badge]: https://img.shields.io/github/license/telegram-web-apps/sdk
 
 [tree-shaking-badge]: https://img.shields.io/badge/Tree%20Shaking-enabled-success
 
