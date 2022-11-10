@@ -63,6 +63,18 @@ importers:
       crypto-js: 4.1.1
       twa-core: link:../core
 
+  packages/sdk:
+    specifiers:
+      twa-bridge: workspace:*
+      twa-core: workspace:*
+      twa-init-data: workspace:*
+      twa-theme-params: workspace:*
+    dependencies:
+      twa-bridge: link:../bridge
+      twa-core: link:../core
+      twa-init-data: link:../init-data
+      twa-theme-params: link:../theme-params
+
   packages/theme-params:
     specifiers:
       twa-bridge: workspace:*

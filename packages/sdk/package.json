@@ -1,0 +1,50 @@
+{
+  "name": "twa-sdk",
+  "version": "0.0.0",
+  "description": "TypeScript reimplemented Source Development Kit for Telegram Web Apps client application.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Web-Apps/sdk#readme",
+  "keywords": [
+    "telegram",
+    "telegram-web-apps",
+    "twa",
+    "typescript",
+    "source-development-kit",
+    "framework",
+    "sdk"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist/**/*"
+  ],
+  "main": "dist/index.cjs",
+  "browser": "dist/browser.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "web": "./dist/index.mjs",
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Web-Apps/sdk.git",
+    "directory": "packages/sdk"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "build": "rimraf dist && rollup --config rollup.config.js"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Web-Apps/sdk/issues"
+  },
+  "dependencies": {
+    "twa-bridge": "workspace:*",
+    "twa-core": "workspace:*",
+    "twa-init-data": "workspace:*",
+    "twa-theme-params": "workspace:*"
+  }
+}

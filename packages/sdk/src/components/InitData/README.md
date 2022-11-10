@@ -1,0 +1,68 @@
+# InitData
+
+Class which is responsible for displaying Web Apps init data.
+
+## Usage
+
+This class represents object with readonly properties. To create its new
+instance, you could use static method `fromSearchParams` or class constructor
+directly:
+
+```typescript
+import {InitData} from 'twa-client-sdk';
+
+const initData = InitData.fromSearchParams('query_id=AAHdF6IQAAAAAN0Xoh...');
+// or
+const initData = new InitData(new Date(), 'some-hash-goes-here', {...});
+```
+
+## Properties
+
+#### `authDate: Date`
+
+Init data generation date.
+
+#### `canSendAfter: Date | null`
+
+Date after which a message can be sent via
+the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery)
+method.
+
+#### <code>chat: [Chat](https://github.com/Telegram-Web-Apps/init-data-ts/blob/master/src/types.ts#L55) | null</code>
+
+An object containing data about the chat where the bot was launched via the
+attachment menu. Returned for supergroups, channels and group chats – only for
+Web Apps launched via the attachment menu.
+
+#### `hash: string`
+
+A hash of all passed parameters, which the bot server can use
+to [check their validity](https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app)
+.
+
+#### `queryId: string | null`
+
+A unique identifier for the Web App session, required for sending messages via
+the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery)
+method.
+
+#### <code>receiver: [User](https://github.com/Telegram-Web-Apps/init-data-ts/blob/master/src/types.ts#L5) | null</code>
+
+An object containing data about the chat partner of the current user in the chat
+where the bot was launched via the attachment menu. Returned only for private
+chats and only for Web Apps launched via the attachment menu.
+
+#### `raw: string`
+
+Raw representation of parsed init data. It is usually presented as JSON object
+converted to string.
+
+#### `startParam: string | null`
+
+The value of the `startattach` parameter,
+passed [via link](https://core.telegram.org/bots/webapps#adding-bots-to-the-attachment-menu)
+. Only returned for Web Apps when launched from the attachment menu via link.
+
+#### <code>user: [User](https://github.com/Telegram-Web-Apps/init-data-ts/blob/master/src/types.ts#L5) | null</code>
+
+An object containing data about the current user.
