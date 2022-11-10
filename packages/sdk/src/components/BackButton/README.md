@@ -11,7 +11,7 @@ To create new instance of `BackButton`, we need current Web App version
 and optional `Bridge` instance.
 
 ```typescript
-import {BackButton} from 'twa-client-sdk';
+import {BackButton} from 'twa-sdk';
 import {Bridge} from 'twa-bridge';
 
 const backButton = new BackButton('6.1');

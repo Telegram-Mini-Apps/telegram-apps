@@ -1,10 +1,10 @@
-# twa-client-sdk <sup><img src="https://static.npmjs.com/255a118f56f5346b97e56325a1217a16.svg" alt="drawing" width="20"/></sup>
+# twa-sdk <sup><img src="https://static.npmjs.com/255a118f56f5346b97e56325a1217a16.svg" alt="drawing" width="20"/></sup>
 
-[npm-badge]: https://img.shields.io/npm/v/twa-client-sdk?logo=npm
+[npm-badge]: https://img.shields.io/npm/v/twa-sdk?logo=npm
 
-[npm-link]: https://npmjs.com/package/twa-client-sdk
+[npm-link]: https://npmjs.com/package/twa-sdk
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/twa-client-sdk
+[size-badge]: https://img.shields.io/bundlephobia/minzip/twa-sdk
 
 [license-badge]: https://img.shields.io/github/license/telegram-web-apps/client-sdk
 
@@ -62,13 +62,13 @@ to understand platform concepts.
 ## Installation
 
 ```bash  
-npm i twa-client-sdk
+npm i twa-sdk
 ```  
 
 or
 
 ```bash  
-yarn add twa-client-sdk
+yarn add twa-sdk
 ```
 
 ## Usage
@@ -84,7 +84,7 @@ moment, when DOM body starts rendering.
 This package itself has no utility which provides such kind of behavior. The
 reason is, ecosystem contains separate component responsible for this
 functionality named ThemeParams. To learn how it works,
-visit [this link](https://github.com/Telegram-Web-Apps/theme-params).
+visit [this link](../theme-params).
 
 ### Initialization
 
@@ -97,7 +97,7 @@ To make developers life easier, package contains special function called `init`,
 which allows to get everything package needs and work with created components:
 
 ```typescript
-import {init} from 'twa-client-sdk';
+import {init} from 'twa-sdk';
 
 init().then(components => {
   // Now we have all initialized components.
@@ -108,7 +108,7 @@ After this step, it is allowed to start using Web Apps functionality and trust
 components properties.
 
 ```typescript
-import {init} from 'twa-client-sdk';
+import {init} from 'twa-sdk';
 
 init().then(components => {
   const {mainButton, viewport} = components;
@@ -133,9 +133,9 @@ To display additional debug messages, use the first argument in `init`
 function:
 
 ```typescript
-import {init} from 'twa-client-sdk';
+import {init} from 'twa-sdk';
 
-// Init debug mode.
+// Init with debug mode.
 init(true);
 ```
 
@@ -143,15 +143,14 @@ init(true);
 
 Each component contains its own documentation:
 
-- [BackButton](/src/components/BackButton)
-- [Bridge](/src/components/Bridge)
-- [HapticFeedback](/src/components/HapticFeedback)
-- [InitData](/src/components/InitData)
-- [MainButton](/src/components/MainButton)
-- [Popup](/src/components/Popup)
-- [ThemeParams](/src/components/ThemeParams)
-- [Viewport](/src/components/Viewport)
-- [WebApp](/src/components/WebApp)
+- [BackButton](src/components/BackButton)
+- [HapticFeedback](src/components/HapticFeedback)
+- [InitData](src/components/InitData)
+- [MainButton](src/components/MainButton)
+- [Popup](src/components/Popup)
+- [ThemeParams](src/components/ThemeParams)
+- [Viewport](src/components/Viewport)
+- [WebApp](src/components/WebApp)
 
 ## Contribution
 
@@ -159,4 +158,4 @@ Any contribution is appreciated. Feel free to create new feature requests, bug
 reports etc.
 
 In case, you found a bug in Web Apps platform (not this SDK), please, create new
-issue [here](https://github.com/Telegram-Web-Apps/client-sdk/issues/new/choose).
+issue [here](https://github.com/Telegram-Web-Apps/sdk/issues/new/choose).

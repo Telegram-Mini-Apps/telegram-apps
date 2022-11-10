@@ -10,7 +10,7 @@ To create new instance of `HapticFeedback`, we need current Web App version
 and optional `Bridge` instance.
 
 ```typescript
-import {HapticFeedback} from 'twa-client-sdk';
+import {HapticFeedback} from 'twa-sdk';
 import {Bridge} from 'twa-bridge';
 
 const haptic = new HapticFeedback('6.1');

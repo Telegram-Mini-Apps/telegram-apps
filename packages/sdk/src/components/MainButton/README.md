@@ -8,7 +8,7 @@ Telegram interface.
 To create new empty instance of `MainButton`, we don't need any parameters:
 
 ```typescript
-import {BackButton} from 'twa-client-sdk';
+import {BackButton} from 'twa-sdk';
 
 const mainButton = new MainButton();
 ```
@@ -16,7 +16,7 @@ const mainButton = new MainButton();
 Nevertheless, it is allowed to specify initial parameters and `Bridge` instance:
 
 ```typescript
-import {BackButton} from 'twa-client-sdk';
+import {BackButton} from 'twa-sdk';
 import {Bridge} from 'twa-bridge';
 
 const mainButton = new MainButton({
