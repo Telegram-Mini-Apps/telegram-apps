@@ -25,5 +25,4 @@ documentation.
 ## Contribution
 
 Any contribution is appreciated. Feel free to create new feature requests, bug
-reports etc. In case, you found a bug in Web Apps platform (not in SDK), please, create new
-issue [here](https://github.com/Telegram-Web-Apps/sdk/issues/new/choose).
+reports etc.
