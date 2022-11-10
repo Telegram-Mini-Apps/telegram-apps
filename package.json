@@ -23,7 +23,6 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "version": "lerna version --conventional-commits",
     "build": "lerna run build",
     "test": "lerna run test",
     "publish": "lerna publish",
