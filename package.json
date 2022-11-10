@@ -27,7 +27,7 @@
     "build": "lerna run build",
     "test": "lerna run test",
     "publish": "lerna publish",
-    "release": "npm-run-all test build publish",
+    "release": "pnpm run test && pnpm run build && pnpm run publish",
     "commit": "git cz"
   },
   "workspaces": [
