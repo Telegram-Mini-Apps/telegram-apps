@@ -1,25 +1,20 @@
-# SDK React <sup><img src="https://static.npmjs.com/255a118f56f5346b97e56325a1217a16.svg" alt="drawing" width="20"/></sup>
+# twa-sdk-react <sup><img src="https://static.npmjs.com/255a118f56f5346b97e56325a1217a16.svg" alt="drawing" width="20"/></sup>
 
-[npm-badge]: https://img.shields.io/npm/v/twa-client-sdk-react.svg
+[npm-badge]: https://img.shields.io/npm/v/twa-sdk-react.svg
 
-[npm-link]: https://npmjs.com/package/twa-client-sdk-react
+[npm-link]: https://npmjs.com/package/twa-sdk-react
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/twa-client-sdk-react
+[size-badge]: https://img.shields.io/bundlephobia/minzip/twa-sdk-react
 
-[license-badge]: https://img.shields.io/github/license/telegram-web-apps/twa-client-sdk-react
-
-[gh-org-badge]: https://img.shields.io/badge/-Ecosystem_Component-%23555?logo=github
-
-[gh-org-link]: https://github.com/Telegram-Web-Apps
-
-[![Ecosystem Component][gh-org-badge]][gh-org-link] [![NPM][npm-badge]][npm-link] ![Size][size-badge] ![License][license-badge]
+[![NPM][npm-badge]][npm-link]
+![Size][size-badge]
 
 React bindings for client SDK. Contains hooks, components and other
 useful tools which allow usage of React along with Web Apps client SDK.
 Tracks SDK components changes out of box.
 
 To learn how client SDK works, please, refer to its official
-[documentation](https://github.com/Telegram-Web-Apps/client-sdk).
+[documentation](https://github.com/Telegram-Web-Apps/twa/tree/master/packages/sdk).
 
 ## Installation
 
@@ -30,13 +25,13 @@ not required, current package already includes it.
 Then, you can install this package via this command:
 
 ```bash
-npm i twa-client-sdk-react
+npm i twa-sdk-react
 ```  
 
 or
 
 ```bash  
-yarn add twa-client-sdk-react
+yarn add twa-sdk-react
 ```
 
 ## Usage
@@ -55,11 +50,11 @@ created components. For this purpose, component `SDKProvider` exist:
 
 ```typescript jsx
 import React from 'react';
-import {SDKProvider} from 'twa-client-sdk-react';
+import {SDKProvider} from 'twa-sdk-react';
 
 function Root() {
   return (
-    <SDKProvider>
+    <SDKProvider debug={true}>
       <div>My application!</div>
     </SDKProvider>
   );
@@ -71,7 +66,7 @@ Insertion of this component allows its child elements to use hook
 
 ```typescript jsx
 import React from 'react';
-import {SDKProvider, useSDK} from 'twa-client-sdk-react';
+import {SDKProvider, useSDK} from 'twa-sdk-react';
 
 function App() {
   const sdk = useSDK();
@@ -97,7 +92,7 @@ connected with SDK lifecycle:
 
 ```typescript jsx
 import React, {PropsWithChildren, useEffect} from 'react';
-import {SDKProvider, useSDK, useBackButton, useWebApp} from 'twa-client-sdk-react';
+import {SDKProvider, useSDK, useBackButton, useWebApp} from 'twa-sdk-react';
 
 /**
  * Part of application which is free of using SDK components.
@@ -179,7 +174,7 @@ call `webApp.ready` function. This will notify native application about current
 Web App is ready to be displayed.
 
 ```typescript jsx
-import {useWebApp} from 'twa-client-sdk-react';
+import {useWebApp} from 'twa-sdk-react';
 import React, {useEffect} from 'react';
 
 function App() {
@@ -204,7 +199,7 @@ know theme colors to render app loader with appropriate colors.
 For this purpose, hook `useThemeFromLocation` is used:
 
 ```typescript jsx
-import {useThemeFromLocation} from 'twa-client-sdk-react';
+import {useThemeFromLocation} from 'twa-sdk-react';
 import React, {useEffect} from 'react';
 
 function App() {
@@ -229,8 +224,3 @@ in case, something changed in component.
 > Do not create new components instances as long as it will lead to new
 > problems connected with events listening done during SDK initialization
 > process.
-
-## Contribution
-
-Any contribution is appreciated. Feel free to create new feature requests, bug
-reports etc.
