@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@0.1.2...twa-sdk@0.2.0) (2022-11-10)
+
+
+### Features
+
+* **webapp:** implement openInvoice function ([804e9d5](https://github.com/Telegram-Web-Apps/twa/commit/804e9d5b43855ae20202242f62e2c5efaae5f3dd))
+
+
+
+
+
 ## [0.1.2](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@0.1.1...twa-sdk@0.1.2) (2022-11-10)
 
 **Note:** Version bump only for package twa-sdk
