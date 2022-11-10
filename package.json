@@ -24,9 +24,10 @@
   },
   "scripts": {
     "build": "lerna run build",
+    "lint": "lerna run lint",
     "test": "lerna run test",
     "publish": "lerna publish",
-    "release": "pnpm run test && pnpm run build && pnpm run publish",
+    "release": "pnpm run test && pnpm run lint && pnpm run build && pnpm run publish",
     "commit": "git cz"
   },
   "workspaces": [
