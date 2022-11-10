@@ -9,6 +9,7 @@ import {IsNever} from 'twa-core';
 /**
  * Describes list of events and their parameters that could be posted by
  * Bridge.
+ * @see https://corefork.telegram.org/api/web-events#event-types
  */
 export interface BridgePostEventParamsMap {
   /**

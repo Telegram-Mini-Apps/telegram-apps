@@ -53,3 +53,7 @@ export type PopupButton = {
    */
   type: 'ok' | 'close' | 'cancel';
 });
+
+export interface PopupClosedPayload {
+  button_id: string | null;
+}

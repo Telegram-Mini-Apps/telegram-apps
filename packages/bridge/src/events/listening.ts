@@ -1,24 +1,8 @@
 import {EventNames, EventListener} from 'twa-core';
-
-export interface ThemeChangedPayload {
-  theme_params: Record<string, unknown>;
-}
-
-export interface ViewportChangedPayload {
-  height: number;
-  width: number;
-  is_expanded: boolean;
-  is_state_stable: boolean;
-}
-
-export interface PopupClosedPayload {
-  button_id: string | null;
-}
-
-export interface InvoiceClosedPayload {
-  slug: string;
-  status: 'paid' | 'failed' | 'pending' | 'cancelled' | string;
-}
+import {InvoiceClosedPayload} from './invoice';
+import {PopupClosedPayload} from './popup';
+import {ViewportChangedPayload} from './viewport';
+import {ThemeChangedPayload} from './theme';
 
 /**
  * Map where key is known event name, and value is its listener.
@@ -62,7 +46,6 @@ export interface BridgeEventsMap {
   /**
    * Occurs whenever theme settings are changed in the user's Telegram app
    * (including switching to night mode).
-   *
    * @param payload - theme information.
    */
   theme_changed: (payload: ThemeChangedPayload) => void;
