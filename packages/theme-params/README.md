@@ -85,8 +85,8 @@ As a result, a set of CSS variables will be ready to use even when `body` is not
 loaded. It means, you could display your application with already known colors
 and use these colors in you CSS files.
 
-- [Script source](https://github.com/Telegram-Web-Apps/theme-params/blob/master/src/preload.ts)
-- [Usage example](https://github.com/Telegram-Web-Apps/theme-params/blob/master/preview.html)
+- [Script source](https://github.com/Telegram-Web-Apps/sdk/blob/master/packages/theme-params/src/preload/run.ts)
+- [Usage example](https://github.com/Telegram-Web-Apps/sdk/blob/master/packages/theme-params/preview.html)
 
 ### Programmatic control
 
@@ -94,7 +94,7 @@ and use these colors in you CSS files.
 
 This library contains such useful function as `extractThemeFromJson`. It accepts
 JSON object or its string representation and
-returns [ThemeParams](https://github.com/Telegram-Web-Apps/theme-params/blob/master/src/types.ts#L7)
+returns [ThemeParams](https://github.com/Telegram-Web-Apps/sdk/blob/master/packages/theme-params/src/types.ts#L7)
 interface with already prepared and known colors.
 
 ```typescript
