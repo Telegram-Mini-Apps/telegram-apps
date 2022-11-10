@@ -53,6 +53,14 @@ importers:
   packages/core:
     specifiers: {}
 
+  packages/theme-params:
+    specifiers:
+      twa-bridge: workspace:*
+      twa-core: workspace:*
+    dependencies:
+      twa-bridge: link:../bridge
+      twa-core: link:../core
+
 packages:
 
   /@ampproject/remapping/2.2.0:

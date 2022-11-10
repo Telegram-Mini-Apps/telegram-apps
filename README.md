@@ -1,6 +1,6 @@
 # SDK
 
-Monorepository, containing all the packages, connected with TypeScript
+Mono-repository, containing all the packages, connected with TypeScript
 development on Web Apps platform. To learn more, follow packages own
 documentation.
 
@@ -13,3 +13,6 @@ documentation.
   flow between frontend and Telegram native applications. It also solves some
   across-platform data difference problems to protect developers code and save
   their time.
+- [theme-params](/packages/theme-params) - provides developer
+  information about which colors are currently used by native application and
+  expects developer to use them.
