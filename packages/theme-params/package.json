@@ -1,6 +1,6 @@
 {
   "name": "twa-theme-params",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Theme parameters specialized package. Contains ready to use JS scripts and set of TS utils which are commonly used in projects.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/sdk#readme",
