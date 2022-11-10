@@ -1,4 +1,4 @@
-# SDK
+# twa
 
 Mono-repository, containing all the packages, connected with TypeScript
 development on Web Apps platform. To learn more, follow packages own
@@ -16,3 +16,8 @@ documentation.
 - [theme-params](/packages/theme-params) - provides developer
   information about which colors are currently used by native application and
   expects developer to use them.
+- [init-data](/packages/init-data) - TypeScript isomorphic library to make work
+  with Telegram Web Apps init data easier. Could be used both in browser and
+  Node JS.
+- [sdk](/packages/sdk) - Made from scratch TypeScript library for communication with Telegram Web Apps
+  functionality.
