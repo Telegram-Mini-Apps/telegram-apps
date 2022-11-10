@@ -1,0 +1,64 @@
+{
+  "name": "twa-init-data",
+  "version": "3.0.7",
+  "description": "TypeScript library to make work with Telegram Web Apps init data easier.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Web-Apps/sdk#readme",
+  "keywords": [
+    "telegram",
+    "telegram-web-apps",
+    "twa",
+    "telegram-bot",
+    "init-data"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist/**/*"
+  ],
+  "main": "dist/index.cjs",
+  "browser": "dist/browser.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "./validation": {
+      "web": "./dist/validation.mjs",
+      "import": "./dist/validation.mjs",
+      "require": "./dist/validation.cjs"
+    },
+    ".": {
+      "web": "./dist/index.mjs",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Web-Apps/sdk.git",
+    "directory": "packages/core"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "build": "rimraf dist && rollup --config rollup.config.js"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Web-Apps/sdk/issues"
+  },
+  "dependencies": {
+    "twa-core": "workspace:*"
+  },
+  "peerDependencies": {
+    "@types/crypto-js": "^4.1.1",
+    "crypto-js": "^4.1.1"
+  },
+  "peerDependenciesMeta": {
+    "@types/crypto-js": {
+      "optional": true
+    },
+    "crypto-js": {
+      "optional": true
+    }
+  }
+}
