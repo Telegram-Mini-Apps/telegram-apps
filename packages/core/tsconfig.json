@@ -17,7 +17,8 @@
     "module": "ES6",
     "moduleResolution": "node",
     "lib": [
-      "ESNext"
+      "ESNext",
+      "dom"
     ],
     "outDir": "dist"
   },

@@ -1,7 +1,7 @@
 /**
  * Message log level.
  */
-export type LogLevel = 'log' | 'error';
+export type LogLevel = 'log' | 'error' | 'warn';
 
 /**
  * Logs message into console.
