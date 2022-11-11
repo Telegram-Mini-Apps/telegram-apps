@@ -13,6 +13,19 @@ Package which provides utilities to simplify communication flow between
 frontend and Telegram native applications. It also solves some across-platform
 data difference problems to protect developers code and save their time.
 
+## Table of contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+    - [Init](#init)
+    - [Debugging](#debugging)
+    - [Setting target origin](#setting-target-origin)
+    - [Events posting](#events-posting)
+    - [Events listening](#events-listening)
+    - [Lower level control](#lower-level-control)
+    - [Checking post event support](#checking-post-event-support)
+    - [No-bridge posting](#no-bridge-posting)
+
 ## Installation
 
 ```bash 
@@ -27,7 +40,7 @@ yarn add twa-bridge
 
 ## Usage
 
-### Initializing
+### Init
 
 `Bridge` component has rather simple API. Its main purpose is to provide
 communication layer between Telegram native and client applications, so you
@@ -46,7 +59,7 @@ used by Telegram native application. It is allowed to use it as many times
 as required as long as this function will just reuse once created event emitter
 and event receiving function.
 
-### Debug mode
+### Debugging
 
 `Bridge` supports debug mode which outputs additional log messages into console.
 By default, this mode is disabled. To enable it, it is required to pass
@@ -94,7 +107,7 @@ const bridge = init({targetOrigin: '*'});
 bridge.postEvent('web_app_close', {targetOrigin: 'https://myendpoint.org'})
 ```
 
-### Posting events
+### Events posting
 
 To call Web Apps methods, it is enough to call `Bridge`s `postEvent` method.
 This method automatically finds correct way of sending event which depends
@@ -126,7 +139,7 @@ bridge.postEvent('web_app_open_popup', {
 });
 ```
 
-### Tracking events
+### Events listening
 
 Tracking of events is rather simple thing too. For this purpose, we could
 use such methods as `on` and `subscribe`. To remove event listeners, we
@@ -186,7 +199,7 @@ In case, this property is not passed, function will create required event
 emitter, place it in window for future reuse by other `Bridge` instances,
 and store it in newly created bridge.
 
-### Checking event support
+### Checking post event support
 
 Bridge itself does not check if posted event is supported by current
 version of Web App. To check, if event is supported, you could use `supports`
@@ -198,6 +211,26 @@ import {supports} from 'twa-bridge';
 supports('web_app_trigger_haptic_feedback', '6.0'); // false
 supports('web_app_trigger_haptic_feedback', '6.1'); // true
 ```
+
+### No-bridge posting
+
+This library allows posting events without creating new Bridge instance. To
+perform this, you should use `postEvent` function which has the same
+type as `bridge.postEvent` (actually, bridge uses `postEvent` function
+internally):
+
+```typescript
+import {postEvent} from 'twa-bridge';
+
+postEvent('web_app_setup_back_button', {is_visible: true});
+```
+
+Nevertheless, sometimes you need to handle event sent from native app which is 
+emitted as a response to posted event. For example, you would like to
+call `web_app_request_theme` event. As a result, native app will emit
+`theme_changed` event. Using default bridge init flow, this event will
+be captured by bridge instance. We can't say the same about bare `postEvent` function,
+so, do not forget about response event (if it exists) handling process.
 
 ## Higher-level control
 

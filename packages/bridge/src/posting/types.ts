@@ -1,17 +1,17 @@
+import {PopupParams} from '../events';
+import {IsNever} from 'twa-core';
 import {
   ImpactHapticFeedback,
   NotificationHapticFeedback,
   SelectionHapticFeedback,
 } from './haptic';
-import {PopupParams} from './popup';
-import {IsNever} from 'twa-core';
 
 /**
  * Describes list of events and their parameters that could be posted by
  * Bridge.
  * @see https://corefork.telegram.org/api/web-events#event-types
  */
-export interface BridgePostEventParamsMap {
+export interface PostEventParamsMap {
   /**
    * Notifies parent iframe about current frame is ready.
    */
@@ -118,25 +118,25 @@ export interface BridgePostEventParamsMap {
 /**
  * Any post-available event name.
  */
-export type BridgePostEventName = keyof BridgePostEventParamsMap;
+export type PostEventName = keyof PostEventParamsMap;
 
 /**
  * Returns parameters for specified post-available event.
  */
-export type BridgePostEventParams<E extends BridgePostEventName> =
-  BridgePostEventParamsMap[E];
+export type PostEventParams<E extends PostEventName> =
+  PostEventParamsMap[E];
 
 /**
  * Any post-available event name which does not require arguments.
  */
-export type BridgePostEmptyEventName = {
-  [E in BridgePostEventName]: IsNever<BridgePostEventParams<E>> extends true
+export type PostEmptyEventName = {
+  [E in PostEventName]: IsNever<PostEventParams<E>> extends true
     ? E
     : never;
-}[BridgePostEventName];
+}[PostEventName];
 
 /**
  * Any post-available event name which require arguments.
  */
-export type BridgePostNonEmptyEventName =
-  Exclude<BridgePostEventName, BridgePostEmptyEventName>;
+export type PostNonEmptyEventName =
+  Exclude<PostEventName, PostEmptyEventName>;

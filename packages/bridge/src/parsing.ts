@@ -1,5 +1,5 @@
 import {
-  createJsonStructParser, isRecord,
+  createJsonStructParser,
   JsonParser, parseJsonParamAsBool,
   parseJsonParamAsNum, parseJsonParamAsOptNum,
   parseJsonParamAsRecord, parseJsonParamAsString,

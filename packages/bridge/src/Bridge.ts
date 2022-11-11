@@ -1,34 +1,13 @@
 import {EventEmitter, parseJsonParamAsString, log} from 'twa-core';
-import {
-  BridgeEventName,
-  BridgeEventsMap,
-  BridgePostEmptyEventName,
-  BridgePostEventParams,
-  BridgePostEventName,
-  BridgePostNonEmptyEventName,
-} from './events';
+import {BridgeEventName, BridgeEventsMap} from './events';
 import {
   extractInvoiceClosedPayload,
   extractPopupClosedPayload,
   extractThemeChangedPayload,
   extractViewportChangedPayload,
 } from './parsing';
-import {isBrowserEnv, isDesktopOrMobileEnv, isWindowsPhoneEnv} from './env';
 import {GlobalEventEmitter} from './event-receiver';
-
-/**
- * Origin used while posting message. This option is only used in case,
- * current environment is browser (Web version of Telegram) and could
- * be used for test purposes.
- */
-type TargetOrigin = string;
-
-interface PostEventOptions {
-  /**
-   * @default bridge.targetOrigin
-   */
-  targetOrigin?: TargetOrigin;
-}
+import {postEvent} from './posting';
 
 export interface BridgeProps {
   /**
@@ -39,9 +18,12 @@ export interface BridgeProps {
   debug?: boolean;
 
   /**
+   * Origin used while posting message. This option is only used in case,
+   * current environment is browser (Web version of Telegram) and could
+   * be used for test purposes.
    * @default 'https://web.telegram.org'
    */
-  targetOrigin?: TargetOrigin;
+  targetOrigin?: string;
 
   /**
    * Event emitter to listen events from. It is allowed to leave this
@@ -182,70 +164,12 @@ export class Bridge {
    */
   off = this.ee.off.bind(this.ee);
 
-  /**
-   * Sends event to native application which launched Web App. In case,
-   * low-level control required, usage of this function allowed,
-   * but expected behavior not guaranteed.
-   *
-   * This function accepts only events, which require arguments.
-   *
-   * @param event - event name.
-   * @param params - event parameters.
-   * @param options - posting options.
-   * @throws {Error} Bridge could not determine current
-   * environment and possible way to send event.
-   */
-  postEvent<E extends BridgePostNonEmptyEventName>(
-    event: E,
-    params: BridgePostEventParams<E>,
-    options?: PostEventOptions,
-  ): void;
+  postEvent: typeof postEvent = ((event, params, options) => {
+    const {targetOrigin = this.targetOrigin, ...rest} = options || {};
 
-  /**
-   * Sends event to native application which launched Web App. In case,
-   * low-level control required, usage of this function allowed,
-   * but expected behavior not guaranteed.
-   *
-   * This function accepts only events, which require arguments.
-   *
-   * @param event - event name.
-   * @param options - posting options.
-   * @throws {Error} Bridge could not determine current
-   * environment and possible way to send event.
-   */
-  postEvent(event: BridgePostEmptyEventName, options?: PostEventOptions): void;
-
-  postEvent(
-    event: BridgePostEventName,
-    params: any = '',
-    options: PostEventOptions = {},
-  ): void {
-    let method: string;
-
-    if (isBrowserEnv()) {
-      window.parent.postMessage(JSON.stringify({
-        eventType: event,
-        eventData: params,
-      }), options.targetOrigin || this.targetOrigin);
-      method = 'window.parent.postMessage';
-    } else if (isDesktopOrMobileEnv(window)) {
-      window.TelegramWebviewProxy.postEvent(event, JSON.stringify(params));
-      method = 'window.TelegramWebviewProxy.postEvent';
-    } else if (isWindowsPhoneEnv(window)) {
-      window.external.notify(JSON.stringify({
-        eventType: event,
-        eventData: params,
-      }));
-      method = 'window.external.notify';
-    } else {
-      // Otherwise, application is not ready to post events.
-      throw new Error(
-        'Bridge could not determine current environment and possible ' +
-        'way to send event.',
-      );
-    }
-    this.log('log', '[postEvent]', method, event, params);
-  }
+    postEvent(event, params, {...rest, targetOrigin});
+    this.log('log', '[postEvent]', event, params);
+  }) as typeof postEvent;
 
   /**
    * Add listener for all events. It is triggered always, when `emit`
