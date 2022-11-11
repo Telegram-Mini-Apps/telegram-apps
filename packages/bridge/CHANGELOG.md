@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@0.6.0...twa-bridge@0.7.0) (2022-11-11)
+
+
+### Bug Fixes
+
+* **support:** fix support.ts file types ([5474d7e](https://github.com/Telegram-Web-Apps/twa/commit/5474d7eab86b31545a568621dd733ea8272f57f4))
+
+
+### Features
+
+* **posting:** make postEvent separate function. Add its documentation. Add table of contents ([bb190a8](https://github.com/Telegram-Web-Apps/twa/commit/bb190a8da061ef897a215fa46b48ce4a1bbcaff7))
+
+
+
+
+
 # [0.6.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@0.5.1...twa-bridge@0.6.0) (2022-11-11)
 
 
