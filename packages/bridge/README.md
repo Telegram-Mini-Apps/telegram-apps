@@ -71,6 +71,29 @@ bridge.debug = true;
 As a result, you will see logs in console with information about called
 methods and processes.
 
+### Setting target origin
+
+In case, current bridge instance is used in browser environment (iframe),
+we use such function as `window.parent.postMessage` which requires passing
+target origin to prevent sending events to unknown parent iframes.
+
+By default, bridge uses such origin as `https://web.telegram.org`. To allow
+sending events to other origins, you should use `targetOrigin` options:
+
+```typescript
+const unsafeBridge = init({targetOrigin: '*'});
+// or
+const safeBridge = init({targetOrigin: 'https://myendpoint.org'});
+```
+
+Additionally, you could use `postEvent`s `targetOrigin` option. This will 
+override origin passed during initialization:
+
+```typescript
+const bridge = init({targetOrigin: '*'});
+bridge.postEvent('web_app_close', {targetOrigin: 'https://myendpoint.org'})
+```
+
 ### Posting events
 
 To call Web Apps methods, it is enough to call `Bridge`s `postEvent` method.

@@ -25,7 +25,7 @@ type TargetOrigin = string;
 
 interface PostEventOptions {
   /**
-   * @default bridge.defaultTargetOrigin
+   * @default bridge.targetOrigin
    */
   targetOrigin?: TargetOrigin;
 }
@@ -41,7 +41,7 @@ export interface BridgeProps {
   /**
    * @default 'https://web.telegram.org'
    */
-  defaultTargetOrigin?: TargetOrigin;
+  targetOrigin?: TargetOrigin;
 
   /**
    * Event emitter to listen events from. It is allowed to leave this
@@ -54,20 +54,21 @@ export interface BridgeProps {
  * Provides special layer between parent device and current application.
  * It can send and receive events, return initial application parameters and
  * much more.
+ * @see How events work: https://corefork.telegram.org/api/web-events
  */
 export class Bridge {
   private _boundEmitter: GlobalEventEmitter | null = null;
-  private readonly defaultTargetOrigin: string;
+  private readonly targetOrigin: string;
   private readonly ee = new EventEmitter<BridgeEventsMap>();
 
   constructor(props: BridgeProps = {}) {
     const {
       debug = false,
       emitter = null,
-      defaultTargetOrigin = 'https://web.telegram.org',
+      targetOrigin = 'https://web.telegram.org',
     } = props;
     this.debug = debug;
-    this.defaultTargetOrigin = defaultTargetOrigin;
+    this.targetOrigin = targetOrigin;
     this.boundEmitter = emitter;
   }
 
@@ -225,7 +226,7 @@ export class Bridge {
       window.parent.postMessage(JSON.stringify({
         eventType: event,
         eventData: params,
-      }), options.targetOrigin || this.defaultTargetOrigin);
+      }), options.targetOrigin || this.targetOrigin);
       method = 'window.parent.postMessage';
     } else if (isDesktopOrMobileEnv(window)) {
       window.TelegramWebviewProxy.postEvent(event, JSON.stringify(params));
