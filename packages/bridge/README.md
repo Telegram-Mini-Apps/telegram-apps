@@ -86,7 +86,7 @@ const unsafeBridge = init({targetOrigin: '*'});
 const safeBridge = init({targetOrigin: 'https://myendpoint.org'});
 ```
 
-Additionally, you could use `postEvent`s `targetOrigin` option. This will 
+Additionally, you could use `postEvent`s `targetOrigin` option. This will
 override origin passed during initialization:
 
 ```typescript
@@ -186,9 +186,22 @@ In case, this property is not passed, function will create required event
 emitter, place it in window for future reuse by other `Bridge` instances,
 and store it in newly created bridge.
 
+### Checking event support
+
+Bridge itself does not check if posted event is supported by current
+version of Web App. To check, if event is supported, you could use `supports`
+function:
+
+```typescript
+import {supports} from 'twa-bridge';
+
+supports('web_app_trigger_haptic_feedback', '6.0'); // false
+supports('web_app_trigger_haptic_feedback', '6.1'); // true
+```
+
 ## Higher-level control
 
 As long as bridge provides only low-level control, we recommend using
-[SDK](https://github.com/Telegram-Web-Apps/sdk), which implements
-bridge methods. It also provides additional parameters checks, more intuitive
-method names and easier usage.
+[SDK](https://github.com/Telegram-Web-Apps/twa/tree/master/packages/sdk), which
+implements bridge methods. It also provides additional parameters checks, more
+intuitive method names and easier usage.
