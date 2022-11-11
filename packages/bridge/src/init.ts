@@ -5,7 +5,7 @@ import {
 } from './event-receiver';
 import {Bridge, BridgeProps} from './Bridge';
 
-interface InitOptions extends Pick<BridgeProps, 'debug' | 'emitter'> {
+interface InitOptions extends BridgeProps {
   /**
    * Should global event receiving function be defined. To learn more,
    * see `defineEventReceiver` implementation.
@@ -15,8 +15,8 @@ interface InitOptions extends Pick<BridgeProps, 'debug' | 'emitter'> {
   defineReceiver?: boolean;
 
   /**
-   * @default Global event emitter which is stored in window. Bridge will
-   * create its instance by itself.
+   * @default This function will create its instance by itself in case, it is
+   * not specified.
    * @see getGlobalEventEmitter
    * @see BridgeProps.emitter
    */
