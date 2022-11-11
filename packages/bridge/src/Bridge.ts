@@ -16,14 +16,18 @@ import {
 import {isBrowserEnv, isDesktopOrMobileEnv, isWindowsPhoneEnv} from './env';
 import {GlobalEventEmitter} from './event-receiver';
 
+/**
+ * Origin used while posting message. This option is only used in case,
+ * current environment is browser (Web version of Telegram) and could
+ * be used for test purposes.
+ */
+type TargetOrigin = string;
+
 interface PostEventOptions {
   /**
-   * Origin used while posting message. This option is only used in case,
-   * current environment is browser (Web version of Telegram) and could
-   * be used for test purposes.
-   * @default 'https://web.telegram.org'
+   * @default bridge.defaultTargetOrigin
    */
-  targetOrigin?: string;
+  targetOrigin?: TargetOrigin;
 }
 
 export interface BridgeProps {
@@ -33,6 +37,11 @@ export interface BridgeProps {
    * @default false
    */
   debug?: boolean;
+
+  /**
+   * @default 'https://web.telegram.org'
+   */
+  defaultTargetOrigin?: TargetOrigin;
 
   /**
    * Event emitter to listen events from. It is allowed to leave this
@@ -48,11 +57,17 @@ export interface BridgeProps {
  */
 export class Bridge {
   private _boundEmitter: GlobalEventEmitter | null = null;
-  private ee = new EventEmitter<BridgeEventsMap>();
+  private readonly defaultTargetOrigin: string;
+  private readonly ee = new EventEmitter<BridgeEventsMap>();
 
   constructor(props: BridgeProps = {}) {
-    const {debug = false, emitter = null} = props;
+    const {
+      debug = false,
+      emitter = null,
+      defaultTargetOrigin = 'https://web.telegram.org',
+    } = props;
     this.debug = debug;
+    this.defaultTargetOrigin = defaultTargetOrigin;
     this.boundEmitter = emitter;
   }
 
@@ -210,7 +225,7 @@ export class Bridge {
       window.parent.postMessage(JSON.stringify({
         eventType: event,
         eventData: params,
-      }), options.targetOrigin || 'https://web.telegram.org');
+      }), options.targetOrigin || this.defaultTargetOrigin);
       method = 'window.parent.postMessage';
     } else if (isDesktopOrMobileEnv(window)) {
       window.TelegramWebviewProxy.postEvent(event, JSON.stringify(params));
