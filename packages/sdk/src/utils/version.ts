@@ -1,4 +1,4 @@
-import {BridgePostEventName, supports} from 'twa-bridge';
+import {PostEventName, supports} from 'twa-bridge';
 import {Version} from 'twa-core';
 
 export type SupportChecker<Method extends string> = (method: Method) => boolean;
@@ -13,14 +13,14 @@ export type SupportChecker<Method extends string> = (method: Method) => boolean;
  */
 export function createSupportChecker<Method extends string>(
   version: Version,
-  schema: Record<Method, BridgePostEventName | BridgePostEventName[]>,
+  schema: Record<Method, PostEventName | PostEventName[]>,
 ): SupportChecker<Method> {
   const formattedSchema = Object
     .entries(schema)
     .reduce((acc, [method, deps]) => {
       (acc as any)[method] = Array.isArray(deps) ? deps : [deps];
       return acc;
-    }, {} as Record<Method, BridgePostEventName[]>);
+    }, {} as Record<Method, PostEventName[]>);
 
   return method => {
     for (let i = 0; i < formattedSchema[method].length; i++) {
