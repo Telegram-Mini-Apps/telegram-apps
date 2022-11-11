@@ -1,4 +1,4 @@
-import {EventEmitter, log} from 'twa-core';
+import {EventEmitter, isRecord, log} from 'twa-core';
 import {extractMessageEventData} from '../parsing';
 import {WindowGlobalEventEmitter} from './constants';
 import {ViewportChangedPayload} from '../events';
@@ -49,12 +49,17 @@ export function getGlobalEventEmitter(debug = false): GlobalEventEmitter {
         return logMessage('log', 'event rejected', event);
       }
       evData = event.data;
-    } else if (event instanceof CustomEvent) {
+    } else if (
+      event instanceof CustomEvent &&
+      isRecord(event.detail) &&
+      typeof event.detail.eventType === 'string' &&
+      'eventData' in event.detail
+    ) {
       // In case, global receiveEvent function was installed, we could receive
       // event of CustomEvent type.
       evData = event.detail;
     } else {
-      return logMessage('error', 'event has unexpected type', event);
+      return logMessage('warn', 'event was skipped', event);
     }
 
     try {
