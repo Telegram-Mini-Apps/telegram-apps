@@ -1,4 +1,4 @@
-import {BridgePostEventName} from './events';
+import {PostEventName} from './posting';
 import {compareVersions, Version} from 'twa-core';
 
 /**
@@ -6,7 +6,7 @@ import {compareVersions, Version} from 'twa-core';
  * @param method - checked method.
  * @param inVersion - Web App version to check method support in.
  */
-export function supports(method: BridgePostEventName, inVersion: Version): boolean {
+export function supports(method: PostEventName, inVersion: Version): boolean {
   switch (method) {
     case 'web_app_open_tg_link':
     case 'web_app_open_invoice':

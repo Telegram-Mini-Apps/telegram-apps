@@ -1,16 +1,16 @@
 import {describe, expect, it} from '@jest/globals';
-import {BridgePostEventName} from '../events';
 import {supports} from '../support';
+import {PostEventName} from '../posting';
 
 describe('support', () => {
   describe('supports', () => {
-    const methods61: BridgePostEventName[] = [
+    const methods61: PostEventName[] = [
       'web_app_open_tg_link', 'web_app_open_invoice', 'web_app_setup_back_button',
       'web_app_set_background_color', 'web_app_set_header_color',
       'web_app_trigger_haptic_feedback',
     ];
-    const methods62: BridgePostEventName[] = ['web_app_open_popup'];
-    const methodsAny: BridgePostEventName[] = [
+    const methods62: PostEventName[] = ['web_app_open_popup'];
+    const methodsAny: PostEventName[] = [
       'iframe_ready', 'web_app_close', 'web_app_data_send', 'web_app_expand',
       'web_app_open_link', 'web_app_ready', 'web_app_request_theme',
       'web_app_request_viewport', 'web_app_setup_main_button',
