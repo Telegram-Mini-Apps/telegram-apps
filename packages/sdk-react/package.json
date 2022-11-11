@@ -33,7 +33,7 @@
   },
   "scripts": {
     "dev": "rollup --watch --config rollup.dev.config.js",
-    "test": "tsc --noEmit",
+    "test": "echo \"Tests not specified\"",
     "build": "rollup --config rollup.config.js"
   },
   "bugs": {
