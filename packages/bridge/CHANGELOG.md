@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@0.5.1...twa-bridge@0.6.0) (2022-11-11)
+
+
+### Bug Fixes
+
+* **init:** extend init options ([71c517e](https://github.com/Telegram-Web-Apps/twa/commit/71c517eb53a76942138ee55a7d06d28121578050))
+* **targetorigin:** rename defaultTargetOrigin to targetOrigin. Add option mentions in docs ([becf208](https://github.com/Telegram-Web-Apps/twa/commit/becf208f180a7945ed34aa40f26efd9b5303c32d))
+
+
+### Features
+
+* **bridge:** add opportunity yo specify target origin in postEvent ([ddaad28](https://github.com/Telegram-Web-Apps/twa/commit/ddaad28e59e737c27d9a83bb2ae4b32f365aa5a6))
+* **constructor:** add possibility to specify default targetOrigin ([5755d25](https://github.com/Telegram-Web-Apps/twa/commit/5755d256ebd20e100ef22d6315410f52ce982bac))
+* **events:** make CustomEvent handling more safe ([db5fb7b](https://github.com/Telegram-Web-Apps/twa/commit/db5fb7bc8795f3723b99d79f8c32c4961be2dac0))
+
+
+
+
+
 ## [0.5.1](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@0.5.0...twa-bridge@0.5.1) (2022-11-10)
 
 **Note:** Version bump only for package twa-bridge

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-core@0.4.1...twa-core@0.5.0) (2022-11-11)
+
+
+### Features
+
+* **logging:** add "warn" level ([be2784e](https://github.com/Telegram-Web-Apps/twa/commit/be2784e26c670a9a524457424d63983a05287049))
+
+
+
+
+
 ## 0.4.1 (2022-11-10)
 
 
