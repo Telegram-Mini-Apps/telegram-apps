@@ -11,6 +11,6 @@ export type ColorScheme = 'dark' | 'light';
 /**
  * Native application environment:
  * - `tdesktop` - desktop application.
- * - `web` - browser.
+ * - `webz` - browser.
  */
-export type Platform = 'tdesktop' | 'web' | string;
+export type Platform = 'tdesktop' | 'webz' | string;
