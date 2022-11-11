@@ -16,6 +16,16 @@ import {
 import {isBrowserEnv, isDesktopOrMobileEnv, isWindowsPhoneEnv} from './env';
 import {GlobalEventEmitter} from './event-receiver';
 
+interface PostEventOptions {
+  /**
+   * Origin used while posting message. This option is only used in case,
+   * current environment is browser (Web version of Telegram) and could
+   * be used for test purposes.
+   * @default 'https://web.telegram.org'
+   */
+  targetOrigin?: string;
+}
+
 export interface BridgeProps {
   /**
    * Is debug mode currently enabled. Enable of this feature outputs additional
@@ -64,17 +74,11 @@ export class Bridge {
     }
   }
 
-  /**
-   * @see EventEmitter.emit
-   */
   private emit: typeof this.ee.emit = (event: any, ...args: any[]) => {
     this.log('log', '[emit]', event, ...args);
     this.ee.emit(event, ...args);
   };
 
-  /**
-   * @see EventEmitter.emitUnsafe
-   */
   private emitUnsafe: typeof this.ee.emitUnsafe = (event, ...args) => {
     this.log('log', '[emitUnsafe]', event, ...args);
     this.ee.emitUnsafe(event, ...args);
@@ -87,7 +91,7 @@ export class Bridge {
   };
 
   /**
-   * Prepares event data before passing it to listeners.
+   * Prepares event data before passing it to listeners. Then, calls them.
    * @param type - event name.
    * @param data - event data.
    * @throws {TypeError} Data has unexpected format for event.
@@ -170,13 +174,15 @@ export class Bridge {
    * This function accepts only events, which require arguments.
    *
    * @param event - event name.
-   * @param params
+   * @param params - event parameters.
+   * @param options - posting options.
    * @throws {Error} Bridge could not determine current
    * environment and possible way to send event.
    */
   postEvent<E extends BridgePostNonEmptyEventName>(
     event: E,
     params: BridgePostEventParams<E>,
+    options?: PostEventOptions,
   ): void;
 
   /**
@@ -187,19 +193,24 @@ export class Bridge {
    * This function accepts only events, which require arguments.
    *
    * @param event - event name.
+   * @param options - posting options.
    * @throws {Error} Bridge could not determine current
    * environment and possible way to send event.
    */
-  postEvent(event: BridgePostEmptyEventName): void;
+  postEvent(event: BridgePostEmptyEventName, options?: PostEventOptions): void;
 
-  postEvent(event: BridgePostEventName, params: any = ''): void {
+  postEvent(
+    event: BridgePostEventName,
+    params: any = '',
+    options: PostEventOptions = {},
+  ): void {
     let method: string;
 
     if (isBrowserEnv()) {
       window.parent.postMessage(JSON.stringify({
         eventType: event,
         eventData: params,
-      }), 'https://web.telegram.org');
+      }), options.targetOrigin || 'https://web.telegram.org');
       method = 'window.parent.postMessage';
     } else if (isDesktopOrMobileEnv(window)) {
       window.TelegramWebviewProxy.postEvent(event, JSON.stringify(params));
