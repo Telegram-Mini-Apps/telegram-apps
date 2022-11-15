@@ -1,18 +1,15 @@
-import {EventEmitter, Version} from 'twa-core';
+import {EventEmitter} from 'twa-core';
 import {BackButtonEventListener, BackButtonEventsMap} from './events';
 import {Bridge} from 'twa-bridge';
 import {
   createSupportChecker,
   processBridgeProp,
-  SupportChecker,
 } from '../../utils';
 import {WithCommonProps} from '../../types';
 
 export interface BackButtonProps extends WithCommonProps {
   isVisible?: boolean;
 }
-
-type SupportsFunc = SupportChecker<'show' | 'hide'>;
 
 /**
  * Class which controls the back button displayed in the header
@@ -21,17 +18,21 @@ type SupportsFunc = SupportChecker<'show' | 'hide'>;
  * action.
  */
 export class BackButton {
+  /**
+   * Checks if method is supported by specified version of Web App.
+   */
+  static supports = createSupportChecker({
+    show: 'web_app_setup_back_button',
+    hide: 'web_app_setup_back_button',
+  });
+
   private readonly ee = new EventEmitter<BackButtonEventsMap>();
   private readonly bridge: Bridge;
   private _isVisible: boolean;
 
-  constructor(version: Version, props: BackButtonProps = {}) {
+  constructor(props: BackButtonProps = {}) {
     const {bridge, isVisible = false} = props;
     this.bridge = processBridgeProp(bridge);
-    this.supports = createSupportChecker(version, {
-      show: 'web_app_setup_back_button',
-      hide: 'web_app_setup_back_button',
-    });
     this._isVisible = isVisible;
   }
 
@@ -85,10 +86,4 @@ export class BackButton {
   show() {
     this.isVisible = true;
   }
-
-  /**
-   * Returns true in case, specified method is supported by BackButton.
-   */
-  supports: SupportsFunc;
 }
-
