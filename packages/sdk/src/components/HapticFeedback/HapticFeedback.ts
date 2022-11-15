@@ -3,17 +3,10 @@ import {
   NotificationHapticFeedbackType,
   Bridge,
 } from 'twa-bridge';
-import {
-  createSupportChecker,
-  processBridgeProp,
-  SupportChecker,
-} from '../../utils';
+import {createSupportChecker, processBridgeProp} from '../../utils';
 import {WithCommonProps} from '../../types';
-import {Version} from 'twa-core';
 
 export type HapticFeedbackProps = WithCommonProps;
-
-type SupportsFunc = SupportChecker<'impactOccurred' | 'notificationOccurred' | 'selectionChanged'>;
 
 /**
  * Class which controls haptic feedback. It allows calling different types of
@@ -21,23 +14,26 @@ type SupportsFunc = SupportChecker<'impactOccurred' | 'notificationOccurred' | '
  * application.
  */
 export class HapticFeedback {
+  /**
+   * Checks if method is supported by specified version of Web App.
+   */
+  static supports = createSupportChecker({
+    notificationOccurred: 'web_app_trigger_haptic_feedback',
+    impactOccurred: 'web_app_trigger_haptic_feedback',
+    selectionChanged: 'web_app_trigger_haptic_feedback',
+  });
+
   private readonly bridge: Bridge;
 
-  constructor(version: Version, props: HapticFeedbackProps = {}) {
+  constructor(props: HapticFeedbackProps = {}) {
     const {bridge} = props;
     this.bridge = processBridgeProp(bridge);
-    this.supports = createSupportChecker(version, {
-      notificationOccurred: 'web_app_trigger_haptic_feedback',
-      impactOccurred: 'web_app_trigger_haptic_feedback',
-      selectionChanged: 'web_app_trigger_haptic_feedback',
-    });
   }
 
   /**
    * A method tells that an impact occurred. The Telegram app may play the
    * appropriate haptics based on style value passed.
    * @param style - impact style.
-   * @since Web App version 6.1+
    */
   impactOccurred(style: ImpactHapticFeedbackStyle): void {
     this.bridge.postEvent('web_app_trigger_haptic_feedback', {
@@ -51,7 +47,6 @@ export class HapticFeedback {
    * a warning. The Telegram app may play the appropriate haptics based on
    * type value passed.
    * @param type - notification type.
-   * @since Web App version 6.1+
    */
   notificationOccurred(type: NotificationHapticFeedbackType): void {
     this.bridge.postEvent('web_app_trigger_haptic_feedback', {
@@ -66,16 +61,10 @@ export class HapticFeedback {
    *
    * Do not use this feedback when the user makes or confirms a selection;
    * use it only when the selection changes.
-   * @since Web App version 6.1+
    */
   selectionChanged(): void {
     this.bridge.postEvent('web_app_trigger_haptic_feedback', {
       type: 'selection_change',
     });
   }
-
-  /**
-   * Returns true in case, specified method is supported by HapticFeedback.
-   */
-  supports: SupportsFunc;
 }

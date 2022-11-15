@@ -1,26 +1,25 @@
-# HapticFeedback
+# `HapticFeedback`
 
-Class which controls haptic feedback. It allows calling different types of
+Controls haptic feedback. It allows calling different types of
 haptic notifications which usually occur after user interaction with
 application.
 
 ## Usage
 
-To create new instance of `HapticFeedback`, we need current Web App version
-and optional `Bridge` instance.
+### Init
 
 ```typescript
 import {HapticFeedback} from 'twa-sdk';
 import {Bridge} from 'twa-bridge';
 
-const haptic = new HapticFeedback('6.1');
+const haptic = new HapticFeedback();
 // or
-const haptic = new HapticFeedback('6.1', Bridge.init());
+const haptic = new HapticFeedback({bridge: init()});
 ```
 
-### Haptic notifications
+### Notifications
 
-`HapticFeedback` supports 3 types of haptic events - 
+`HapticFeedback` supports 3 types of haptic events -
 `impactOccurred`, `notificationOccurred` and `selectionChanged`:
 
 ```typescript
@@ -29,5 +28,10 @@ haptic.impactOccurred('medium');
 haptic.notificationOccurred('success');
 ```
 
-[//]: # (TODO: Add guidance for usage of haptic events. We should point which)
-[//]: # (notifications should be called in different cases.)
+### Methods support
+
+Methods available for [support check](../../../README.md#methods-support):
+
+- `notificationOccurred`
+- `impactOccurred`
+- `selectionChanged`
