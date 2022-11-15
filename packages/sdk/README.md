@@ -13,16 +13,11 @@ Made from scratch TypeScript library for communication with Telegram Web Apps
 functionality.
 
 Code of this library was written with aim to make developers communication with
-Telegram way easier. It contains a lot of separate components which are
+Telegram Web Apps way easier. It contains a lot of separate components which are
 responsible for their own part of Telegram Web Apps ecosystem.
 
 Before starting to use SDK, we highly recommend learning Web Apps
-[documentation](https://github.com/Telegram-Web-Apps/documentation)
-to understand platform concepts.
-
-> ⚠️ This library is independent. Please, do not associate this SDK with
-> library created by Telegram or TON Foundation developers and their
-> documentation.
+[documentation](../documentation) to understand platform concepts.
 
 ## Table of contents
 
@@ -60,20 +55,20 @@ yarn add twa-sdk
 
 ## Usage
 
-### Preparing visual part
+### Visual first
 
-It is not secret, that visual part of application is rather important for user.
-It means, that your application should not have any visual problems. We can say
-the same about application "flashes", when its color scheme changes on flight.
-To prevent application from flashing, it is required to know theme colors at the
-moment, when DOM body starts rendering.
+It is not a secret, that visual part of application is rather important for
+user.
+It means, your application should not have any visual problems. One of them is
+called "flashing", which happens in case, visual part of application changes
+too fast for user. To prevent application from flashing, it is required to
+know theme colors at the moment, when DOM body starts rendering.
 
 This package itself has no utility which provides such kind of behavior. The
-reason is, ecosystem contains separate component responsible for this
-functionality named ThemeParams. To learn how it works,
-visit [this link](../theme-params).
+reason is, ecosystem contains separate package
+[`twa-theme-params`](../theme-params) responsible for this functionality.
 
-### Initialization
+### Init
 
 According to logic, this package provides full control over its lifecycle,
 its initialization is on your shoulders. It means, that there are no already
@@ -81,28 +76,18 @@ initialized global components which could be used by developer, he has to
 create them.
 
 To make developers life easier, package contains special function called `init`,
-which allows to get everything package needs and work with created components:
+which returns initialized components instances:
 
 ```typescript
 import {init} from 'twa-sdk';
 
 init().then(components => {
   // Now we have all initialized components.
-});
-```
-
-After this step, it is allowed to start using Web Apps functionality and trust
-components properties.
-
-```typescript
-import {init} from 'twa-sdk';
-
-init().then(components => {
   const {mainButton, viewport} = components;
 
   // Add main button event click which will lead to
   // application expansion.
-  mainButton.on('click', viewport.expand);
+  mainButton.on('click', () => viewport.expand());
 
   // Update main button information and show it.
   mainButton
@@ -110,7 +95,8 @@ init().then(components => {
     .setTextColor('#ffffff')
     .setText('Expand')
     .enable()
-    .show();
+    .show()
+    .commit();
 });
 ```
 
@@ -138,3 +124,61 @@ Each component contains its own documentation:
 - [ThemeParams](src/components/ThemeParams)
 - [Viewport](src/components/Viewport)
 - [WebApp](src/components/WebApp)
+
+### Methods support
+
+Almost each component is capable of checking whether is its method supported by
+passed Web App version or not. To check if some methods are supported, you
+should use `{Component}.supports()` function. For example:
+
+```typescript  
+import {BackButton} from 'twa-sdk';  
+  
+console.log(BackButton.supports('show', '6.0')); // false  
+console.log(BackButton.supports('hide', '6.3')); // true  
+```  
+
+It is recommended to use this functionality before calling some component  
+method as long as this will make you sure, it will work. Component itself  
+is not checking if method is supported by current Web App version, what could  
+lead to issues.
+
+List of supported methods by components is described in each component's  
+documentation.
+
+> ⚠️ This behaviour (not checking if method is supported in methods
+> themselves) will change in next major version of SDK. Consider
+> using `supports` functionality where it is possible.
+
+### Constructors
+
+Some components which require usage of `Bridge` functionality can
+apply its custom instance in constructor. In case, `Bridge` is not passed,
+component will create it via `init()` method from `twa-bridge` package. We
+recommend passing your own single instance of `Bridge` to avoid unexpected  
+behaviour or errors.
+
+### Events listening
+
+Component instances use common way of events listening through `on` and `off`  
+functions:
+
+```typescript  
+const listener = (...args) => {  
+ // Do something I need.};  
+component.on(event, listener); // add listener.  
+component.off(event, listener); // remove listener.  
+```  
+
+Example with `BackButton` component:
+
+```typescript
+import {BackButton} from 'twa-sdk';
+
+const backButton = new BackButton();
+backButton.on('click', () => {
+  console.log('Back button clicked.');
+});
+```
+
+You can find list of supported events in components own documentations.
