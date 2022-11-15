@@ -114,7 +114,21 @@ init(true);
 
 ## Components
 
-Each component contains its own documentation:
+You should remember, that all components in this package are supposed to be
+used as singletons. It means, you should not create several instances of
+same component and use them even if it is not forbidden. But in this case,
+there is no warranty, everything will work fine. 
+
+The reason is, each component class stores its state locally and class instances
+are not synchronized between each other. So, for example, in case, you create
+2 instances of `Popup` component and one of them calls `show()` function, it
+will change its `isOpened` property to `true`, but the second instance of `Popup`
+will not know about it and will still return `false` value. 
+
+To avoid possible problems, you can rely on package's `init` function which
+provides initialized components which are enough to use across application.
+
+To learn more, how each component works, refer to their own documentations:
 
 - [BackButton](src/components/BackButton)
 - [HapticFeedback](src/components/HapticFeedback)
