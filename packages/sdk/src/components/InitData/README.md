@@ -1,6 +1,9 @@
-# InitData
+[user-ref]: https://github.com/Telegram-Web-Apps/twa/blob/master/packages/init-data/src/types.ts#L5
+[chat-ref]: https://github.com/Telegram-Web-Apps/twa/blob/master/packages/init-data/src/types.ts#L55
 
-Class which is responsible for displaying Web Apps init data.
+# `InitData`
+
+Responsible for displaying Web Apps init data.
 
 ## Usage
 
@@ -28,7 +31,7 @@ Date after which a message can be sent via
 the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery)
 method.
 
-#### <code>chat: [Chat](https://github.com/Telegram-Web-Apps/init-data-ts/blob/master/src/types.ts#L55) | null</code>
+#### <code>chat: [Chat][chat-ref] | null</code>
 
 An object containing data about the chat where the bot was launched via the
 attachment menu. Returned for supergroups, channels and group chats – only for
@@ -46,7 +49,7 @@ A unique identifier for the Web App session, required for sending messages via
 the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery)
 method.
 
-#### <code>receiver: [User](https://github.com/Telegram-Web-Apps/init-data-ts/blob/master/src/types.ts#L5) | null</code>
+#### <code>receiver: [User][user-ref] | null</code>
 
 An object containing data about the chat partner of the current user in the chat
 where the bot was launched via the attachment menu. Returned only for private
@@ -63,6 +66,6 @@ The value of the `startattach` parameter,
 passed [via link](https://core.telegram.org/bots/webapps#adding-bots-to-the-attachment-menu)
 . Only returned for Web Apps when launched from the attachment menu via link.
 
-#### <code>user: [User](https://github.com/Telegram-Web-Apps/init-data-ts/blob/master/src/types.ts#L5) | null</code>
+#### <code>user: [User][user-ref] | null</code>
 
 An object containing data about the current user.
