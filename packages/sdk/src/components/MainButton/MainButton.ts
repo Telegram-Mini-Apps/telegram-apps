@@ -2,7 +2,7 @@ import {EventEmitter, toRGB, RGBColor} from 'twa-core';
 import {MainButtonEventListener, MainButtonEventsMap} from './events';
 import {Bridge} from 'twa-bridge';
 import {WithCommonProps} from '../../types';
-import {processBridgeProp} from '../../utils';
+import {createSupportChecker, processBridgeProp} from '../../utils';
 
 export interface MainButtonProps extends WithCommonProps {
   /**
@@ -40,12 +40,6 @@ function formatText(text: string): string {
  *  right after click. It is not smooth.
  */
 export class MainButton {
-  /**
-   * Flag which is responsible for automatic commit of changes to native
-   * application in case, they were done.
-   * @private
-   */
-  private readonly autocommit: boolean;
   private readonly bridge: Bridge
   private readonly ee = new EventEmitter<MainButtonEventsMap>();
   private _color: RGBColor;
@@ -69,6 +63,12 @@ export class MainButton {
     this._isVisible = isVisible;
     this._isActive = isActive;
   }
+
+  /**
+   * Flag which is responsible for automatic commit of changes to native
+   * application in case, they were done.
+   */
+  autocommit: boolean;
 
   private set color(value: RGBColor) {
     value = toRGB(value);
