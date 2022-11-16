@@ -4,11 +4,7 @@ import {
   extractThemeFromJson,
   ThemeParams as TwaThemeParams,
 } from 'twa-theme-params';
-import {
-  BridgeEventListener,
-  init,
-  ThemeChangedPayload,
-} from 'twa-bridge';
+import {BridgeEventListener, init} from 'twa-bridge';
 
 /**
  * Contains information about currently used theme by application.
@@ -28,15 +24,15 @@ export class ThemeParams {
    * Requests fresh information about current theme information.
    * @param bridge - bridge instance.
    */
-  static request(bridge = init()): Promise<ThemeChangedPayload> {
+  static request(bridge = init()): Promise<TwaThemeParams> {
     return new Promise(res => {
       const listener: BridgeEventListener<'theme_changed'> = payload => {
         // Remove previously bound listener.
         bridge.off('theme_changed', listener);
 
         // Resolve result.
-        res(payload);
-      }
+        res(extractThemeFromJson(payload));
+      };
 
       // Add listener which will resolve promise in case, theme information
       // was received.
