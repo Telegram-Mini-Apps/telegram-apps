@@ -1,51 +1,59 @@
-# Popup
+# `Popup`
 
 Controls currently displayed application popup. It allows developers to open new
 custom popups and detect popup-connected events.
 
 ## Usage
 
-To create new instance of `Popup`, we need current Web App version
-and optional `Bridge` instance.
+### Init
 
+```typescript
+import {Popup} from 'twa-sdk';
+import {init} from 'twa-bridge';
 
+const popup = new Popup();
+// or with your bridge.  
+const popup = new Popup({bridge: init()});
+```
 
+### Opening new popup
 
+```typescript
+popup.show({
+  title: 'Hello!',
+  message: 'Here is a test message.',
+  buttons: [{id: 'my-id', type: 'default', text: 'Default text'}]
+});
+console.log(popup.isOpened); // true
+```
 
+`show` function returns promise which will be resolved in case, popup is hidden.
+Popup will resolve button identifier in case, user clicked it. Otherwise,
+null will be resolved.
 
+There are some additional shorthand functions using `show` function for showing
+popups which way also be useful:
 
+```typescript
+// Will show popup with only 1 button. Could be used as alert. 
+popup.showAlert('This page will be closed in 2 minutes.');
 
-## Props
+// Show confirm message.
+popup.showConfirm('Are you sure, this form should be closed?').then(value => {
+  // value will be `true` or `false`.
+})
+```
 
-#### `isOpened: boolean`
+### Events
 
-Shows whether popup is currently opened.
+Events available for [listening](../../../README.md#events-listening) :
 
-## Methods
+- `close: () => void`
+- `openChange: (isOpened: boolean) => void`
+- `open: () => void`
 
-#### <code>show(params: [PopupParams](types.ts#L5)): Promise<string | null></code>
+### Methods support
 
-**Web App version**: `6.2+`
+Methods available for [support check](../../../README.md#methods-support):
 
-A method that shows a native popup described by the `params` argument. Promise
-will be resolved when popup is closed. Resolved value will have an identifier of
-pressed button.
-
-In case, user clicked outside the popup or clicked top right popup close
-button, `null` will be returned.
-
-#### `showAlert(message: string): Promise<void>`
-
-**Web App version**: `6.2+`
-
-A method that shows message in a simple alert with a `Close` button. Promise
-will be resolved when popup is closed.
-
-#### `showConfirm(message: string): Promise<boolean>`
-
-**Web App version**: `6.2+`
-
-A method that shows message in a simple confirmation window with `OK`
-and `Cancel` buttons. Promise will be resolved when popup is closed. Resolved
-value will be `true` in case, user pressed `OK` button. The result will
-be `false` otherwise.
+- `show`

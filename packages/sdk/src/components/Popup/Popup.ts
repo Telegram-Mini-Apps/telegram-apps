@@ -1,12 +1,8 @@
 import {PopupParams} from './types';
-import {EventEmitter, Version} from 'twa-core';
+import {EventEmitter} from 'twa-core';
 import {PopupEventsMap} from './events';
 import {preparePopupParams} from './utils';
-import {
-  createSupportChecker,
-  processBridgeProp,
-  SupportChecker,
-} from '../../utils';
+import {createSupportChecker, processBridgeProp} from '../../utils';
 import {Bridge, BridgeEventListener} from 'twa-bridge';
 import {WithCommonProps} from '../../types';
 
@@ -14,21 +10,25 @@ export interface PopupProps extends WithCommonProps {
   isOpened?: boolean;
 }
 
-type SupportsFunc = SupportChecker<'show'>;
+// TODO: Rename `show` to `popup` in next major version.
 
 /**
  * Controls currently displayed application popup. It allows developers to
  * open new custom popups and detect popup-connected events.
  */
 export class Popup {
+  /**
+   * Checks if Popup method is supported by specified version of Web App.
+   */
+  static supports = createSupportChecker({show: 'web_app_open_popup'});
+
   private readonly ee = new EventEmitter<PopupEventsMap>();
   private readonly bridge: Bridge;
   private _isOpened: boolean;
 
-  constructor(version: Version, props: PopupProps = {}) {
+  constructor(props: PopupProps = {}) {
     const {bridge, isOpened = false} = props;
     this.bridge = processBridgeProp(bridge);
-    this.supports = createSupportChecker(version, {show: 'web_app_open_popup'});
     this._isOpened = isOpened;
   }
 
@@ -79,7 +79,7 @@ export class Popup {
    * In case, user clicked outside the popup or clicked top right popup close
    * button, `null` will be returned.
    *
-   * FIXME: On desktop, this function may work incorrectly.
+   * FIXME: In desktop, this function may work incorrectly.
    *  Issue: https://github.com/Telegram-Web-Apps/twa/issues/7
    * @param params - popup parameters.
    * @since Web App version 6.2+
@@ -153,9 +153,4 @@ export class Popup {
       })
       .then(id => id === 'ok');
   }
-
-  /**
-   * Returns true in case, specified method is supported by Popup.
-   */
-  supports: SupportsFunc;
 }
