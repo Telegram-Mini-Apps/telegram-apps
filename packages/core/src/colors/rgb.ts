@@ -17,8 +17,11 @@ export function isRGB(value: string): boolean {
 }
 
 /**
- * Converts passed value to #RRGGBB format.
- *
+ * Converts passed value to #RRGGBB format. Accepts such color formats:
+ * - #RGB
+ * - #RRGGBB
+ * - rgb(1,2,3)
+ * - rgba(1,2,3,4)
  * @param value - value to convert.
  * @throws {SyntaxError} Passed value does not contain any of known RGB formats.
  */
@@ -30,6 +33,7 @@ export function toRGB(value: string): RGBColor {
   if (isRGB(clean)) {
     return clean;
   }
+
   // Convert from #RGB.
   if (isRGBShort(clean)) {
     let color: RGBColor = '#';
@@ -39,6 +43,7 @@ export function toRGB(value: string): RGBColor {
     }
     return color;
   }
+
   // Example valid values: rgb(0,3,10) rgba(32,114,8,0)
   const match = clean.match(/^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/)
     || clean.match(/^rgba\((\d{1,3}),(\d{1,3}),(\d{1,3}),\d{1,3}\)$/);
