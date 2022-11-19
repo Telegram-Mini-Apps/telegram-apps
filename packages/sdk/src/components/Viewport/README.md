@@ -1,54 +1,43 @@
-# Viewport
+# `Viewport`
 
 Contains information about current Web App device viewport, its dimensions and
 state.
 
-## Props
+## Usage
 
-#### `isExpanded: boolean`
+### Init
 
-`true`, if the Web App is expanded to the maximum available height. `false`, if
-the Web App occupies part of the screen and can be expanded to the full height
-using `expand` method.
+```typescript  
+import {Viewport} from 'twa-sdk';  
+import {init} from 'twa-bridge';  
+  
+const viewport = new Viewport();  
+// or with your bridge.  
+const viewport = new Viewport({bridge: init()});  
+```  
 
-#### `isStable: boolean`
+### Dimensions
 
-`true`, in case current viewport height is stable.
-
-#### `height: number`
-
-The current height of the visible area of the Web App.
+`Viewport` instance contains information about viewport dimensions. We can
+get current visible are height and width via `height` and `width` properties.
 
 The application can display just the top part of the Web App, with its lower
 part remaining outside the screen area. From this position, the user can "pull"
 the Web App to its maximum height, while the bot can do the same by
-calling `expand` method. As the position of the Web App changes, the current
-height value of the visible area will be updated in real time.
+calling `expand` method (use `isExpanded` prop to get current expansion state).
+As the position of the Web App changes, the current height value of the visible
+area will be updated in real time.
 
 Please note that the refresh rate of this value is not sufficient to smoothly
 follow the lower border of the window. It should not be used to pin interface
 elements to the bottom of the visible area. It's more appropriate to use the
 value of the `stableHeight` field for this purpose.
 
-#### `stableHeight: number`
+### Events
 
-The height of the visible area of the Web App in its last stable state.
+Events available for [listening](../../../README.md#events-listening) :
 
-The application can display just the top part of the Web App, with its lower
-part remaining outside the screen area. From this position, the user can "pull"
-the Web App to its maximum height, while the bot can do the same by
-calling `expand` method.
-
-Unlike the value of `height`, the value of `stableHeight` does not change as the
-position of the Web App changes with user gestures or during animations. The
-value of `stableHeight` will be updated after all gestures and animations are
-completed and the Web App reaches its final size.
-
-## Methods
-
-#### `expand(): void`
-
-A method that expands the Web App to the maximum available height. To find out
-if the Web App is expanded to the maximum height, refer to the value of
-the `isExpanded`.
-
+- `heightChange: (height: number) => void`
+- `widthChange: (width: number) => void`
+- `stableHeightChange: (stableHeight: number) => void`
+- `expansionChange: (isExpanded: boolean) => void`

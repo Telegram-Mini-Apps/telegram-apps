@@ -1,11 +1,6 @@
 import {EventEmitter} from 'twa-core';
 import {ViewportEventsMap} from './events';
-import {
-  Bridge,
-  BridgeEventListener,
-  init,
-  ViewportChangedPayload,
-} from 'twa-bridge';
+import {Bridge, BridgeEventListener, init} from 'twa-bridge';
 import {processBridgeProp} from '../../utils';
 import {WithCommonProps} from '../../types';
 
@@ -21,6 +16,13 @@ export interface UpdateViewportProps {
   width?: number;
   isExpanded?: boolean,
   isStateStable?: boolean
+}
+
+export interface TwaViewport {
+  height: number;
+  width: number;
+  isStateStable: boolean;
+  isExpanded: boolean;
 }
 
 /**
@@ -40,7 +42,7 @@ export class Viewport {
    * Requests fresh information about current viewport.
    * @param bridge - bridge instance.
    */
-  static request(bridge = init()): Promise<ViewportChangedPayload> {
+  static request(bridge = init()): Promise<TwaViewport> {
     // FIXME: Be careful using this function in desktop version of Telegram as
     //  long as method web_app_request_viewport does not work in desktop
     //  version.
@@ -51,8 +53,14 @@ export class Viewport {
         bridge.off('viewport_changed', listener);
 
         // Resolve result.
-        res(payload);
-      }
+        const {
+          height,
+          width,
+          is_expanded: isExpanded,
+          is_state_stable: isStateStable,
+        } = payload;
+        res({height, isExpanded, width, isStateStable});
+      };
 
       // Add listener which will resolve promise in case, viewport information
       // was received.

@@ -1,4 +1,4 @@
-# WebApp
+# `WebApp`
 
 Provides functionality which is recognized as common for Web Apps. In other
 words, this class contains mostly utilities.

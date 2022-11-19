@@ -1,7 +1,10 @@
 import {PostEventName, supports} from 'twa-bridge';
 import {Version} from 'twa-core';
 
-export type SupportChecker<Method extends string> = (method: Method) => boolean;
+export type SupportChecker<Method extends string> = (
+  method: Method,
+  version: Version,
+) => boolean;
 
 /**
  * Function which applies schema, which is record with keys as method names
@@ -9,10 +12,8 @@ export type SupportChecker<Method extends string> = (method: Method) => boolean;
  * validates if specified method name is supported assuming, it uses specified
  * bridge event names.
  * @param schema - validation schema.
- * @param version - current version.
  */
 export function createSupportChecker<Method extends string>(
-  version: Version,
   schema: Record<Method, PostEventName | PostEventName[]>,
 ): SupportChecker<Method> {
   const formattedSchema = Object
@@ -22,7 +23,7 @@ export function createSupportChecker<Method extends string>(
       return acc;
     }, {} as Record<Method, PostEventName[]>);
 
-  return method => {
+  return (method, version) => {
     for (let i = 0; i < formattedSchema[method].length; i++) {
       if (!supports(formattedSchema[method][i], version)) {
         return false;
