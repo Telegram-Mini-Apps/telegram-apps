@@ -1,3 +1,6 @@
+/**
+ * @see https://corefork.telegram.org/api/bots/webapps#viewport-changed
+ */
 export interface ViewportChangedPayload {
   height: number;
   width: number;
