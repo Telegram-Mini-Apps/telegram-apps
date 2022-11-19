@@ -3,7 +3,7 @@ import {
   EventListener, EventNames,
   EventParams, GlobalListener, NonEmptyEventNames,
 } from './types';
-import {AnyFunc} from '../../types';
+import {AnyFunc} from '../types';
 
 /**
  * EventEmitter represents classic JavaScript event emitter. It allows usage

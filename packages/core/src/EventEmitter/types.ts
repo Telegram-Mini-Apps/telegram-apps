@@ -1,4 +1,4 @@
-import {AnyFunc, IsNever} from '../../types';
+import {AnyFunc, IsNever} from '../types';
 
 /**
  * Returns function that represents event listener.
