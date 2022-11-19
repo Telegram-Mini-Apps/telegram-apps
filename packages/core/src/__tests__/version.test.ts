@@ -24,6 +24,7 @@ describe('utils', () => {
           expect(() => requireVersion('6.0', '7')).not.toThrow();
           expect(() => requireVersion('6.0', '6.1')).not.toThrow();
           expect(() => requireVersion('6.0', '6')).not.toThrow();
+          expect(() => requireVersion('6', '6.0')).not.toThrow();
         },
       );
 
