@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {extractInitDataFromSearchParams} from './parsing';
+import {extractInitDataFromSearchParams} from '../parsing';
 
 describe('parsing', () => {
   describe('extractInitDataFromSearchParams', () => {
