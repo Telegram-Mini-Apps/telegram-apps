@@ -2,7 +2,6 @@ import {SearchParamsParser} from './types';
 
 /**
  * Parses URL search parameter as string.
- *
  * @param value - raw value.
  * @throws {TypeError} Value has incorrect type.
  */
@@ -22,7 +21,6 @@ export const parseSearchParamAsOptString: SearchParamsParser<string | undefined>
 
 /**
  * Parses URL search parameter as Date.
- *
  * @param value - raw value.
  * @throws {TypeError} Value has incorrect type.
  */
@@ -40,7 +38,6 @@ export const parseSearchParamAsDate: SearchParamsParser<Date> = value => {
 
 /**
  * Parses SearchParams parameter as optional Date.
- *
  * @param value - raw value.
  * @throws {TypeError} Value has incorrect type.
  */

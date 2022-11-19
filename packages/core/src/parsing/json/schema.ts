@@ -5,7 +5,6 @@ import {isRecord} from '../../validation';
 /**
  * Creates new parser for JSON structure with specified schema. In case, string
  * value was passed, parser tries to convert it to JSON.
- *
  * @param schema - parsing schema.
  * @param getDefault - returns default value in case, it is recognized as empty.
  */

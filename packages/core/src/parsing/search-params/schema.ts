@@ -3,7 +3,6 @@ import {SchemaParserResult, SchemaParserResultFunc} from '../shared';
 
 /**
  * Creates new parser for search params structure with specified schema.
- *
  * @param schema - parsing schema.
  * @param getDefault - returns default value in case, it is recognized as empty.
  */
