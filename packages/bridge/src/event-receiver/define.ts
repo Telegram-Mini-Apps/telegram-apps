@@ -1,17 +1,19 @@
 import {CustomEventDetail} from './types';
-import {WindowReceiverDefined} from './constants';
+
+/**
+ * States, that receiver was defined before.
+ */
+let receiverDefined = false;
 
 /**
  * Defines global event receiver, which handles events sent from native
  * Telegram application. As a result, this handler emits "message" event.
  */
-export function defineEventReceiver(): void {
-  const wnd = window as any;
-
-  // We expect installing event receiver only once.
-  if (wnd[WindowReceiverDefined]) {
+export function defineEventReceiver(force = false): void {
+  if (receiverDefined && !force) {
     return;
   }
+  const wnd = window as any;
 
   // Iterate over each path, where "receiveEvent" function should be
   // defined. This function is called by external environment in case,
@@ -50,5 +52,5 @@ export function defineEventReceiver(): void {
   });
 
   // To prevent another receiver installation, set flag.
-  wnd[WindowReceiverDefined] = true;
+  receiverDefined = true;
 }
