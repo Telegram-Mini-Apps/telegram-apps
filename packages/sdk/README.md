@@ -55,25 +55,12 @@ yarn add twa-sdk
 
 ## Usage
 
-### Visual first
-
-It is not a secret, that visual part of application is rather important for
-user.
-It means, your application should not have any visual problems. One of them is
-called "flashing", which happens in case, visual part of application changes
-too fast for user. To prevent application from flashing, it is required to
-know theme colors at the moment, when DOM body starts rendering.
-
-This package itself has no utility which provides such kind of behavior. The
-reason is, ecosystem contains separate package
-[`twa-theme-params`](../theme-params) responsible for this functionality.
-
 ### Init
 
 According to logic, this package provides full control over its lifecycle,
-its initialization is on your shoulders. It means, that there are no already
-initialized global components which could be used by developer, he has to
-create them.
+its initialization is on developer's shoulders. It means, that there are no
+already initialized global components which could be used by developer, they
+should be created by him.
 
 To make developers life easier, package contains special function called `init`,
 which returns initialized components instances:
@@ -100,30 +87,39 @@ init().then(components => {
 });
 ```
 
-### Debug mode
-
-To display additional debug messages, use the first argument in `init`
-function:
+To enable debug mode, use `true` value as argument:
 
 ```typescript
-import {init} from 'twa-sdk';
-
 // Init with debug mode.
 init(true);
 ```
 
+In case, you want to initialize components with your own props, you should
+pass object to `init` function:
+
+```typescript
+init({
+  props: {
+    bridge: {debug: true},
+    backButton: {isVisible: true},
+    // ...
+    webApp: {platform: 'tdesktop', backgroundColor: '#FF0233', ...}
+  }
+});
+```
+
 ## Components
 
-You should remember, that all components in this package are supposed to be
+All components in this package are supposed to be
 used as singletons. It means, you should not create several instances of
 same component and use them even if it is not forbidden. But in this case,
-there is no warranty, everything will work fine. 
+there is no warranty, everything will work fine.
 
 The reason is, each component class stores its state locally and class instances
 are not synchronized between each other. So, for example, in case, you create
 2 instances of `Popup` component and one of them calls `show()` function, it
-will change its `isOpened` property to `true`, but the second instance of `Popup`
-will not know about it and will still return `false` value. 
+will change its `isOpened` property to `true`, but the second instance
+of `Popup` will not know about it and will still return `false` value.
 
 To avoid possible problems, you can rely on package's `init` function which
 provides initialized components which are enough to use across application.
@@ -160,14 +156,10 @@ lead to issues.
 List of supported methods by components is described in each component's  
 documentation.
 
-> ⚠️ This behaviour (not checking if method is supported in methods
-> themselves) will change in next major version of SDK. Consider
-> using `supports` functionality where it is possible.
-
 ### Constructors
 
 Some components which require usage of `Bridge` functionality can
-apply its custom instance in constructor. In case, `Bridge` is not passed,
+accept its custom instance in constructor. In case, `Bridge` is not passed,
 component will create it via `init()` method from `twa-bridge` package. We
 recommend passing your own single instance of `Bridge` to avoid unexpected  
 behaviour or errors.
