@@ -166,7 +166,7 @@ behaviour or errors.
 
 ### Events listening
 
-Component instances use common way of events listening through `on` and `off`  
+Component instances use common way of events listening through `on` and `off` 
 functions:
 
 ```typescript  
