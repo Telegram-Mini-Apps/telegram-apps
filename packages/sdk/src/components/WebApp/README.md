@@ -63,8 +63,10 @@ import {WebApp} from './WebApp';
 
 const webApp = new WebApp('7.0', {platform: 'webz'});
 console.log(webApp.platform); // webz
-console.log(webApp.isWeb); // true
+console.log(webApp.isAndroid); // false
 console.log(webApp.isDesktop); // false
+console.log(webApp.isIOS); // false
+console.log(webApp.isWeb); // true
 ```
 
 ### Opening links

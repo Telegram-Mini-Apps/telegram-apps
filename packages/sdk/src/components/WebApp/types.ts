@@ -10,7 +10,9 @@ export type ColorScheme = 'dark' | 'light';
 
 /**
  * Native application environment:
- * - `tdesktop` - desktop application.
- * - `webz` - browser.
+ * - `tdesktop` - desktop application;
+ * - `webz` - webz browser version;
+ * - `ios` - iOS;
+ * - `android` - Android;
  */
-export type Platform = 'tdesktop' | 'webz' | string;
+export type Platform = 'tdesktop' | 'webz' | 'ios' | 'android' | string;

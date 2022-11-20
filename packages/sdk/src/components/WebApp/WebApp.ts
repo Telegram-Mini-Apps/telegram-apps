@@ -19,7 +19,7 @@ import {
   InvoiceStatus,
   supports,
 } from 'twa-bridge';
-import {isDesktop, isWeb} from './utils';
+import {isAndroid, isDesktop, isIOS, isWeb} from './utils';
 import {WithCommonProps} from '../../types';
 
 export interface WebAppProps extends WithCommonProps {
@@ -147,10 +147,24 @@ export class WebApp {
   }
 
   /**
+   * True if current platform is Android.
+   */
+  get isAndroid(): boolean {
+    return isAndroid(this.platform);
+  }
+
+  /**
    * True if current platform is desktop.
    */
   get isDesktop(): boolean {
     return isDesktop(this.platform);
+  }
+
+  /**
+   * True if current platform is iOS.
+   */
+  get isIOS(): boolean {
+    return isIOS(this.platform);
   }
 
   /**
