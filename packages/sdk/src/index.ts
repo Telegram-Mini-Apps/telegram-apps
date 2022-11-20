@@ -1,2 +1,2 @@
 export * from './components';
-export {init} from './init';
+export {init, InitResult, InitOptions} from './init';
