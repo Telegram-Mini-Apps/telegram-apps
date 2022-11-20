@@ -8,7 +8,6 @@ import {RGBColor} from 'twa-core';
 export interface WebAppEventsMap {
   /**
    * Being emitted when Web App background color changes.
-   *
    * @param color - background color.
    */
   backgroundColorChange: (color: RGBColor) => void;
@@ -22,7 +21,6 @@ export interface WebAppEventsMap {
 
   /**
    * Being emitted when Web App header color changes.
-   *
    * @param color - color key.
    * @see SettableColorKey
    */
