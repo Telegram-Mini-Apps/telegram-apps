@@ -33,6 +33,22 @@ follow the lower border of the window. It should not be used to pin interface
 elements to the bottom of the visible area. It's more appropriate to use the
 value of the `stableHeight` field for this purpose.
 
+### Requesting viewport information
+
+To get fresh viewport information, you could use static `request` function:
+
+```typescript
+import {Viewport} from 'twa-sdk';
+import {init} from 'twa-bridge';
+
+Viewport.request().then(console.log);
+// or with bridge instance.
+Viewport.request(init()).then(console.log);
+
+// Output:
+// { height: 122, isExpanded: false, width: 375, isStateStable: true }
+```
+
 ### Events
 
 Events available for [listening](../../../README.md#events-listening) :

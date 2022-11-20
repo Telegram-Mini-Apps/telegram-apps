@@ -40,13 +40,13 @@ function truncate(dim: number): number {
 export class Viewport {
   /**
    * Requests fresh information about current viewport.
+   * FIXME: Be careful using this function in desktop version of Telegram as
+   *  long as method web_app_request_viewport does not work in desktop
+   *  version.
+   *  Issue: https://github.com/Telegram-Web-Apps/twa/issues/5
    * @param bridge - bridge instance.
    */
   static request(bridge = init()): Promise<TwaViewport> {
-    // FIXME: Be careful using this function in desktop version of Telegram as
-    //  long as method web_app_request_viewport does not work in desktop
-    //  version.
-    //  Issue: https://github.com/Telegram-Web-Apps/twa/issues/5
     return new Promise(res => {
       const listener: BridgeEventListener<'viewport_changed'> = payload => {
         // Remove previously bound listener.
