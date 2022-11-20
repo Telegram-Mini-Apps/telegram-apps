@@ -13,5 +13,5 @@ export function isDesktop(platform: Platform): boolean {
  * @param platform - platform name.
  */
 export function isWeb(platform: Platform): boolean {
-  return platform === 'web';
+  return platform === 'webz';
 }
