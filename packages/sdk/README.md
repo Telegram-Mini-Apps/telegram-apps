@@ -171,7 +171,8 @@ functions:
 
 ```typescript  
 const listener = (...args) => {  
- // Do something I need.};  
+  console.log(...args);
+};  
 component.on(event, listener); // add listener.  
 component.off(event, listener); // remove listener.  
 ```  
