@@ -36,7 +36,8 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint src/**/*.ts",
-    "build": "rimraf dist && rollup --config rollup.config.js"
+    "build": "rimraf dist && rollup --config rollup.config.js",
+    "dev": "rollup --watch --config rollup.dev.config.js"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Web-Apps/twa/issues"
