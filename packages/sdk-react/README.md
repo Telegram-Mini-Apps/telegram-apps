@@ -14,7 +14,8 @@ useful tools which allow usage of React along with Web Apps client SDK.
 Tracks SDK components changes out of box.
 
 To learn how client SDK works, please, refer to its official
-[documentation](https://github.com/Telegram-Web-Apps/twa/tree/master/packages/sdk).
+[documentation](https://github.com/Telegram-Web-Apps/twa/tree/master/packages/sdk)
+.
 
 ## Installation
 
@@ -36,7 +37,7 @@ yarn add twa-sdk-react
 
 ## Usage
 
-### Initializing
+### Init
 
 According to SDK documentation, it represents a set of components, which are
 not initialized by default and developer should create them by himself.
@@ -54,14 +55,44 @@ import {SDKProvider} from 'twa-sdk-react';
 
 function Root() {
   return (
-    <SDKProvider debug={true}>
+    <SDKProvider>
       <div>My application!</div>
     </SDKProvider>
   );
 }
 ```
 
-Insertion of this component allows its child elements to use hook
+Internally, `SDKProvider` uses `init` function from `twa-sdk`. It accepts
+list of optional parameters described [here](../sdk#init):
+
+```typescript jsx
+import React from 'react';
+import {InitOptions} from 'twa-sdk';
+import {SDKProvider} from 'twa-sdk-react';
+
+function Root() {
+  const options: InitOptions = {
+    props: {
+      bridge: {debug: true},
+      backButton: {isVisible: true},
+      // ...
+      webApp: {platform: 'tdesktop', backgroundColor: '#FF0233', ...}
+    }
+  };
+
+  return (
+    <SDKProvider initOptions={options}>
+      <div>My application!</div>
+    </SDKProvider>
+  );
+}
+```
+
+In production, there is no need to use `initOptions` unless you have some
+specific logic in your application. Usually, SDK does everything developer
+needs by itself.
+
+Insertion of `SDKProvider` component allows its child elements to use hook
 `useSDK` returning core SDK information:
 
 ```typescript jsx
@@ -85,10 +116,8 @@ function Root() {
 }
 ```
 
-Ok, we have access to SDK now, but what about `init` function? We don't have
-to call this function as long as `SDKProvider` will do it for us when it was
-attached to DOM. Let's complicate previous example and add important logic
-connected with SDK lifecycle:
+Let's complicate previous example and add important logic connected with SDK
+lifecycle:
 
 ```typescript jsx
 import React, {PropsWithChildren, useEffect} from 'react';
@@ -104,11 +133,12 @@ function App() {
   // When App is attached to DOM, lets show back button and
   // add click event handler, which will close application.
   useEffect(() => {
-    backButton.on('click', webApp.close);
+    const listener = () => webApp.close();
+    backButton.on('click', listener);
     backButton.show();
 
     return () => {
-      backButton.off('click', webApp.close);
+      backButton.off('click', listener);
       backButton.hide();
     };
     // We know, that backButton and webApp will never change,
@@ -123,12 +153,17 @@ function App() {
  * which uses hooks, returning SDK components.
  */
 function Loader({children}: PropsWithChildren) {
-  const {didInit, components} = useSDK();
+  const {didInit, components, error} = useSDK();
 
   // There were no calls of SDK's init function. It means, we did not
   // even try to do it.
   if (!didInit) {
     return <div>SDK init function is not yet called.</div>;
+  }
+  
+  // Error occurred during SDK init.
+  if (error !== null) {
+    return <div>Something went wrong.</div>;
   }
 
   // If components is null, it means, SDK is not ready at the
@@ -183,7 +218,7 @@ function App() {
   useEffect(() => {
     webApp.ready();
   }, [webApp]);
-  
+
   return <div>Here is my App</div>;
 }
 ```
