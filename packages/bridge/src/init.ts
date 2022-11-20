@@ -5,7 +5,7 @@ import {
 } from './event-receiver';
 import {Bridge, BridgeProps} from './Bridge';
 
-interface InitOptions extends BridgeProps {
+export interface InitOptions extends BridgeProps {
   /**
    * Should global event receiving function be defined. To learn more,
    * see `defineEventReceiver` implementation.
