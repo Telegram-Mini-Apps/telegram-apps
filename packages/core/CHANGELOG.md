@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-core@0.5.0...twa-core@1.0.0) (2022-11-20)
+
+**Note:** Version bump only for package twa-core
+
+
+
+
+
 # [0.5.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-core@0.4.1...twa-core@0.5.0) (2022-11-11)
 
 

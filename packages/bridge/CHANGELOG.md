@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@0.7.0...twa-bridge@1.0.0) (2022-11-20)
+
+
+### Bug Fixes
+
+* **receiver,global event emitter:** flags are now set in package, not in window ([56a0bdf](https://github.com/Telegram-Web-Apps/twa/commit/56a0bdf70b26ff9c20ea7f79c03d6e5b0cf940ea))
+
+
+### Features
+
+* **types:** export InitOptions ([83f557d](https://github.com/Telegram-Web-Apps/twa/commit/83f557d44ead2213e3e5273d964b75a71fa5d135))
+
+
+
+
+
 # [0.7.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@0.6.0...twa-bridge@0.7.0) (2022-11-11)
 
 

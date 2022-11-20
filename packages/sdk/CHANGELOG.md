@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@0.2.3...twa-sdk@1.0.0) (2022-11-20)
+
+
+### Bug Fixes
+
+* **webapp:** fix isWeb check: web -> webz ([1f9fc31](https://github.com/Telegram-Web-Apps/twa/commit/1f9fc31701f67dbf2af4a44344135e5190a2ad59))
+
+
+### Features
+
+* **backbutton:** remove requirement of version. Create static "supports" function ([549af07](https://github.com/Telegram-Web-Apps/twa/commit/549af0795afa0e01f53434c7ae798476487dbe3e))
+* **hapticfeedback:** dont require version. Make "supports" function static. Update docs ([4fc7793](https://github.com/Telegram-Web-Apps/twa/commit/4fc7793f1cece6abb8edcc7760373895444a6723))
+* **init:** improve init system. Make it more flexible. Refactor its code ([b4a6ffb](https://github.com/Telegram-Web-Apps/twa/commit/b4a6ffb6ec5de87dded28e662348e53698d8f20d))
+* **mainbutton:** do not require version. Actualize docs ([13e04d0](https://github.com/Telegram-Web-Apps/twa/commit/13e04d0d924dd64f7131e045ebcf0c171993ffb7))
+* **popup:** do not require version. Add static "supports" method. Actualize docs ([e45e6e9](https://github.com/Telegram-Web-Apps/twa/commit/e45e6e9dcd230cb95b4161b0af5eedcb29e06d62))
+* **themeparams:** request now returns formmated params. Actualize docs ([d066050](https://github.com/Telegram-Web-Apps/twa/commit/d0660509bf1b04e2d4cb06daae783b3e2ca0e8f6))
+* **types:** export init function types ([957304d](https://github.com/Telegram-Web-Apps/twa/commit/957304d302bb2c0d4f7c83ece7f32cc847fbd1d3))
+* **webapp:** add Android and iOS platforms detection ([8ae5c5c](https://github.com/Telegram-Web-Apps/twa/commit/8ae5c5c371a06138cd63078092e41226ec4e2742))
+* **webapp:** add supports function. Refactor comments ([0073ca2](https://github.com/Telegram-Web-Apps/twa/commit/0073ca27175980181134526726618c3d15fba931))
+
+
+
+
+
 ## [0.2.3](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@0.2.2...twa-sdk@0.2.3) (2022-11-11)
 
 
