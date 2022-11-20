@@ -1,103 +1,112 @@
 # `WebApp`
 
-Provides functionality which is recognized as common for Web Apps. In other
-words, this class contains mostly utilities.
+Provides common Web Apps functionality not covered by other system components.
 
-## Props
+## Usage
 
-#### `backgroundColor: RGBColor | undefined`
+### Init
 
-Current native application background color.
+`WebApp` requires passing current Web App version and list of optional initial
+properties:
 
-#### <code>colorScheme: [ColorScheme](types.ts)</code>
+```typescript
+import {WebApp} from 'twa-sdk';
+import {init} from 'twa-bridge';
 
-Current application color scheme. This value is computed according
-to current background color.
+const webApp = new WebApp('6.0');
+// or with custom bridge
+const webApp = new WebApp('7.0', {bridge: init()});
+// or with some more properties you probably dont need in your code.
+const webApp = new WebApp('7.0', {
+  bridge: init(),
+  headerColor: 'bg_color',
+  backgroundColor: '#ffffff',
+  isClosingConfirmationEnabled: false,
+  platform: 'webz',
+});
+```
 
-#### <code>headerColor: [SettableColorKey](types.ts)</code>
+### Colors
 
-Current native application header color key.
+`WebApp` provides access to 2 colors with their own setters.
 
-#### `isClosingConfirmationEnabled: boolean`
+| Property                                          | Setter                                                      | Description                  |
+|---------------------------------------------------|-------------------------------------------------------------|------------------------------|
+| `backgroundColor: RGBColor`                       | `setBackgroundColor(color: RGBColor)`                       | application background color |
+| `headerColor: 'bg_color' or 'secondary_bg_color'` | `setHeaderColor(color: 'bg_color' or 'secondary_bg_color')` | application header color     |
 
-`true`, if the confirmation dialog enabled while the user is trying to close the
-Web App.
+To get current color scheme (`dark` or `light`), you can use `colorScheme`
+property.
 
-#### `version: string`
+### Closing confirmation
 
-Current Web App version. This property is used by other components to check if
-some functionality is available on current device.
+To manipulate Web App closing confirmation,
+functions `disableClosingConfirmation`
+and `enableClosingConfirmation` are used:
 
-## Methods
+```typescript
+webApp.enableClosingConfirmation();
+console.log(webApp.isClosingConfirmationEnabled); // true
 
-#### `close(): void`
+webApp.disableClosingConfirmation();
+console.log(webApp.isClosingConfirmationEnabled); // false
+```
 
-Closes the Web App.
+### Platform
 
-#### `disableClosingConfirmation(): void`
+You could get current Web App platform (`tdesktop`, `webz` etc.) by getting
+`platform` property. In case, you want this property to detect current platform
+a bit easier, properties `isDesktop` and `isWeb` are used:
 
-**Web App version**: `6.1+`
+```typescript
+import {WebApp} from './WebApp';
 
-Disables the confirmation dialog while the user is trying to close the Web App.
+const webApp = new WebApp('7.0', {platform: 'webz'});
+console.log(webApp.platform); // webz
+console.log(webApp.isWeb); // true
+console.log(webApp.isDesktop); // false
+```
 
-#### `enableClosingConfirmation(): void`
+### Opening links
 
-**Web App version**: `6.1+`
+Here comes the list of methods, which allow opening links with help of Web App:
 
-Enables the confirmation dialog while the user is trying to close the Web App.
+- `openLink(url: string)` - opens link in external browser. Web App will not be
+  closed;
+- `openTelegramLink(url: string)` - opens a Telegram link inside Telegram app.
+  The Web App will be closed. It expects passing link in full format, with
+  hostname "t.me";
+- `openInvoice(url: string)` - opens an invoice using its url. It expects
+  passing link in full format, with hostname "t.me".
 
-#### `isVersionAtLeast(version: string): boolean`
+### Other methods
 
-Return `true` in case, passed version is more than or equal to current Web App
-version.
+- `close()` - closes Web App;
+- `isVersionAtLeast(version: string)` - checks if current `WebApp` instance
+  version is higher than passed one;
+- `ready()` - should be called whenever Web App is ready to be displayed;
+- `sendData(data: string)` - sends data to Telegram bot.
 
-#### `openLink(url: string): void`
+### Events
 
-Opens a link in an external browser. The Web App will not be closed.
+Events available for [listening](../../../README.md#events-listening):
 
-Note that this method can be called only in response to the user interaction
-with the Web App interface (e.g. click inside the Web App or on the main button)
-.
+- `backgroundColorChange: (color: RGBColor) => void`
+- `closingConfirmationChange: (isClosingConfirmationEnabled: boolean) => void`
+- `headerColorChange: (color: SettableColorKey) => void`
 
-#### `openTelegramLink(url: string): void`
+### Methods support
 
-**Web App version**: `6.1+`
+Methods available for [support check](../../../README.md#methods-support):
 
-Opens a telegram link inside Telegram app. The Web App will be closed.
+- `openInvoice`
+- `setBackgroundColor`
+- `setHeaderColor`
 
-#### `openInvoice(url: string): void`
+You can also use `supports` function with `WebApp` instance:
 
-**Web App version**: `6.1+`
+```typescript
+const webApp = new WebApp('6.0');
 
-Opens an invoice using the link url.
-
-#### `ready(): void`
-
-Informs the Telegram app that the Web App is ready to be displayed.
-
-It is recommended to call this method as early as possible, as soon as all
-essential interface elements loaded. Once this method called, the loading
-placeholder is hidden and the Web App shown.
-
-If the method not called, the placeholder will be hidden only when the page
-fully loaded.
-
-#### `sendData(data: string): void`
-
-Sends data to the bot. When this method called, a service message sent to the
-bot containing the data of the length up to 4096 bytes, and the Web App closed.
-See the field `web_app_data` in the class Message.
-
-This method is only available for Web Apps launched via a Keyboard button.
-
-#### `setBackgroundColor(color: RGBColor): void`
-
-**Web App version**: `6.1+`
-
-Updates current application background color.
-
-#### <code>setHeaderColor(color: [SettableColorKey](/src/components/WebApp/types.ts)): void</code>
-
-**Web App version**: `6.1+` 
-
-Updates current application header color.
+console.log(webApp.supports('setHeaderColor')); // false
+```
