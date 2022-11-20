@@ -4,13 +4,11 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {init} from 'twa-sdk';
+import {init, InitOptions} from 'twa-sdk';
 import {sdkContext} from './context';
 import {SDKComponents, SDKContext} from './types';
 
-export type SDKProviderProps = PropsWithChildren<{
-  debug?: boolean;
-}>;
+export type SDKProviderProps = PropsWithChildren<{ initOptions?: InitOptions }>;
 
 const {Provider} = sdkContext;
 
@@ -18,8 +16,9 @@ const {Provider} = sdkContext;
  * Component which provides access to SDK components.
  */
 export const SDKProvider = memo<SDKProviderProps>(props => {
-  const {children, debug} = props;
+  const {children, initOptions} = props;
   const [didInit, setDidInit] = useState(false);
+  const [error, setError] = useState<null | unknown>(null);
   const [components, setComponents] = useState<SDKComponents | null>(null);
 
   // Initialize SDK on DOM attach.
@@ -28,15 +27,16 @@ export const SDKProvider = memo<SDKProviderProps>(props => {
     setDidInit(true);
 
     // Init SDK.
-    init(debug)
+    init(initOptions)
       .then(setComponents)
-      .catch(e => console.error('Unable to initialize SDK:', e));
+      .catch(setError);
   }, []);
 
   const context = useMemo<SDKContext>(() => ({
     components,
     didInit,
-  }), [didInit, components]);
+    error,
+  }), [didInit, components, error]);
 
   return <Provider value={context}>{children}</Provider>;
 });

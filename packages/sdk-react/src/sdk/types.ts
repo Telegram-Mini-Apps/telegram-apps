@@ -1,25 +1,9 @@
-import {
-  BackButton,
-  HapticFeedback,
-  InitData,
-  MainButton, Popup, ThemeParams, Viewport, WebApp,
-} from 'twa-sdk';
-import {Bridge} from 'twa-bridge';
+import {InitResult} from 'twa-sdk';
 
 /**
  * List of provided SDK components.
  */
-export interface SDKComponents {
-  backButton: BackButton;
-  bridge: Bridge;
-  haptic: HapticFeedback;
-  initData: InitData;
-  mainButton: MainButton;
-  popup: Popup;
-  theme: ThemeParams;
-  viewport: Viewport;
-  webApp: WebApp;
-}
+export type SDKComponents = InitResult;
 
 /**
  * Known SDK component name.
@@ -36,6 +20,11 @@ export interface SDKContext {
    * States, that SDK called `init()` method.
    */
   didInit: boolean;
+
+  /**
+   * Error occurred during initialization.
+   */
+  error: unknown | null;
 
   /**
    * Components ready to use. This value will be null until initialization
