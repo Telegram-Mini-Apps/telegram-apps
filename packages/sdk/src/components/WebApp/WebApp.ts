@@ -3,7 +3,6 @@ import {
   createSupportChecker,
   formatURL,
   processBridgeProp,
-  SupportChecker,
 } from '../../utils';
 import {
   EventEmitter,
@@ -18,7 +17,6 @@ import {
   Bridge,
   BridgeEventListener,
   InvoiceStatus,
-  isBrowserEnv,
   supports,
 } from 'twa-bridge';
 import {isDesktop, isWeb} from './utils';
@@ -31,18 +29,22 @@ export interface WebAppProps extends WithCommonProps {
   platform?: Platform;
 }
 
-type SupportedFunc =
-  | 'disableClosingConfirmation'
-  | 'enableClosingConfirmation'
-  | 'setBackgroundColor'
-  | 'openInvoice';
-type SupportsFunc = SupportChecker<SupportedFunc>;
+type MethodName = 'setBackgroundColor' | 'setHeaderColor' | 'openInvoice';
 
 /**
- * Provides functionality which is recognized as common for Web Apps. In other
- * words, this class mostly contains utilities.
+ * Provides common Web Apps functionality not covered by other system
+ * components.
  */
 export class WebApp {
+  /**
+   * Checks if WebApp method is supported by specified version of Web App.
+   */
+  static supports = createSupportChecker<MethodName>({
+    setBackgroundColor: 'web_app_set_background_color',
+    setHeaderColor: 'web_app_set_header_color',
+    openInvoice: 'web_app_open_invoice',
+  });
+
   private readonly ee = new EventEmitter<WebAppEventsMap>();
   private readonly bridge: Bridge;
   private _backgroundColor: RGBColor;
@@ -58,12 +60,6 @@ export class WebApp {
       platform = 'unknown',
     } = props;
     this.bridge = processBridgeProp(bridge);
-    this.supports = createSupportChecker(version, {
-      disableClosingConfirmation: 'web_app_setup_closing_behavior',
-      enableClosingConfirmation: 'web_app_setup_closing_behavior',
-      setBackgroundColor: 'web_app_set_background_color',
-      openInvoice: 'web_app_open_invoice',
-    });
     this.version = version;
     this.platform = platform;
     this._backgroundColor = toRGB(backgroundColor);
@@ -134,7 +130,7 @@ export class WebApp {
   }
 
   /**
-   * `true`, if the confirmation dialog enabled while the user is trying to
+   * true, if the confirmation dialog enabled while the user is trying to
    * close the Web App.
    */
   get isClosingConfirmationEnabled(): boolean {
@@ -142,7 +138,7 @@ export class WebApp {
   }
 
   /**
-   * Return `true` in case, passed version is more than or equal to current
+   * Returns true if passed version is more than or equal to current
    * Web App version.
    * @param version - compared version.
    */
@@ -151,14 +147,14 @@ export class WebApp {
   }
 
   /**
-   * Returns true in case, current platform is desktop.
+   * True if current platform is desktop.
    */
   get isDesktop(): boolean {
     return isDesktop(this.platform);
   }
 
   /**
-   * Returns true in case, current platform is browser.
+   * True if current platform is browser.
    */
   get isWeb(): boolean {
     return isWeb(this.platform);
@@ -175,8 +171,7 @@ export class WebApp {
   openLink(url: string): void {
     url = formatURL(url);
 
-    // In case, current version is 6.1+, open link with special native
-    // application event.
+    // If method is supported by current version, open link via bridge event.
     if (supports('web_app_open_link', this.version)) {
       return this.bridge.postEvent('web_app_open_link', {url});
     }
@@ -185,7 +180,8 @@ export class WebApp {
   }
 
   /**
-   * Opens a telegram link inside Telegram app. The Web App will be closed.
+   * Opens a Telegram link inside Telegram app. The Web App will be closed.
+   * It expects passing link in full format, with hostname "t.me".
    * @param url - URL to be opened.
    * @throws {Error} URL has not allowed hostname.
    */
@@ -199,9 +195,8 @@ export class WebApp {
       );
     }
 
-    // In case, current version is 6.1+ or we are currently in iframe, open
-    // link with special native application event.
-    if (isBrowserEnv() || supports('web_app_open_tg_link', this.version)) {
+    // If method is supported by current version, open link via bridge event.
+    if (supports('web_app_open_tg_link', this.version)) {
       return this.bridge.postEvent('web_app_open_tg_link', {
         path_full: pathname + search,
       });
@@ -211,9 +206,9 @@ export class WebApp {
   }
 
   /**
-   * Opens an invoice using its url.
+   * Opens an invoice using its url. It expects passing link in full format,
+   * with hostname "t.me".
    * @param url - invoice URL.
-   * @since Bot API 6.1+
    */
   openInvoice(url: string): Promise<InvoiceStatus> {
     // TODO: Allow opening with slug.
@@ -303,7 +298,6 @@ export class WebApp {
    *  https://github.com/Telegram-Web-Apps/twa/issues/8
    * @param color - settable color key or color description in known RGB
    * format.
-   * @since Web App version 6.1+
    */
   setBackgroundColor(color: RGBColor): void {
     // Convert passed value to expected `#RRGGBB` format.
@@ -331,7 +325,6 @@ export class WebApp {
    *  https://github.com/Telegram-Web-Apps/twa/issues/9
    *  https://github.com/Telegram-Web-Apps/twa/issues/8
    * @param color - settable color key.
-   * @since Web App version 6.1+
    */
   setHeaderColor(color: SettableColorKey): void {
     // Notify native application about updating current header color.
@@ -350,9 +343,11 @@ export class WebApp {
   }
 
   /**
-   * Returns true in case, specified method is supported by WebApp.
+   * Returns true in case, specified method is supported by current WebApp.
    */
-  supports: SupportsFunc;
+  supports(method: MethodName): boolean {
+    return WebApp.supports(method, this.version);
+  }
 
   /**
    * Current Web App version. This property is used by other components to check if
