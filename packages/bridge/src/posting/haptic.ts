@@ -19,7 +19,7 @@ export type ImpactHapticFeedbackStyle =
   | 'soft';
 
 /**
- * Type off notification occurred type event.
+ * Type of notification occurred type event.
  * - `error`, indicates that a task or action has failed,
  * - `success`, indicates that a task or action has completed successfully,
  * - `warning`, indicates that a task or action produced a warning.
