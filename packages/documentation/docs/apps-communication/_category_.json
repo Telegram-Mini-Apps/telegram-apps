@@ -1,0 +1,8 @@
+{
+  "label": "Apps communication",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Learn how Telegram native application communicates with front-end application."
+  }
+}

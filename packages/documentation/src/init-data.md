@@ -34,7 +34,7 @@ SDK [documentation](https://github.com/Telegram-Web-Apps/twa/tree/master/package
 . As a result, valid init data will be placed in `InitData` object:
 
 ```typescript
-import {init} from 'twa-sdk';
+import {init} from 'packages/sdk/dist/index';
 
 init().then(({initData}) => console.log(initData));
 ```
