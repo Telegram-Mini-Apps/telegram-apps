@@ -18,7 +18,9 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'telegram-web-apps', // Usually your GitHub org/user name.
-  projectName: 'twa', // Usually your repo name.
+  projectName: 'telegram-web-apps.github.io', // Usually your repo name.
+  trailingSlash: false,
+  deploymentBranch: 'documentation',
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -65,16 +67,9 @@ const config = {
           src: 'img/logo.png',
         },
         items: [
-          // {
-          //   type: 'doc',
-          //   docId: 'about',
-          //   position: 'left',
-          //   label: 'Docs',
-          // },
           {to: '/docs/category/introduction', label: 'Docs', position: 'left'},
-          // {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/Telegram-Web-Apps/twa/tree/master/packages/documentation',
+            href: 'https://github.com/Telegram-Web-Apps',
             label: 'GitHub',
             position: 'right',
           },
@@ -109,19 +104,19 @@ const config = {
           //     },
           //   ],
           // },
-          {
-            title: 'More',
-            items: [
-              {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/Telegram-Web-Apps',
-              },
-            ],
-          },
+          // {
+          //   title: 'More',
+          //   items: [
+          //     {
+          //       label: 'Blog',
+          //       to: '/blog',
+          //     },
+          //     {
+          //       label: 'GitHub',
+          //       href: 'https://github.com/Telegram-Web-Apps',
+          //     },
+          //   ],
+          // },
         ],
       },
       prism: {
