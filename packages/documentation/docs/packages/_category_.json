@@ -1,8 +1,0 @@
-{
-  "label": "Packages",
-  "position": 100,
-  "link": {
-    "type": "generated-index",
-    "description": "List of supported by community libraries."
-  }
-}
