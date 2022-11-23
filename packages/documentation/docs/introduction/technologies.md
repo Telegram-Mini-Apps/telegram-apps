@@ -1,18 +1,29 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Technologies
 
-Internally, Web Apps are usual web applications which have their own download
-URL. So, it is enough to learn standard front-end development technologies to
-create simple Telegram Web App.
+Before starting to create application on Web Apps platform, it is important to
+know what Web Apps is from its technical side. This will lead developer to
+language and technologies selection.
 
-Here comes the list of these basic technologies:
+Internally, Web Apps are usual web applications, which are displayed in WebView.
+In other words, they are just a set of static files (mostly `.js`, `.css`
+and `.html`). As you can assume, to create Web App, it is enough to learn
+standard front-end development technologies, such as:
 
 - JavaScript
 - CSS
 - HTML
 
-But to make much more serious application, you will probably need `TypeScript`,
-`React`, `SCSS` etc.
+Really simple, isn't it? But to make much more serious and bigger applications,
+we recommend to use more solid technologies, such as `TypeScript`, `React`,
+`SCSS` etc. You could also use `Vue`, `Angular` and other libraries, Web Apps
+has no restriction, connected with this.
+
+So, if we want to create Web App, we should create standard web application with
+any technologies stack. The only 1 thing Telegram needs from developer is
+application URL to download it from. It will be used as source for WebView, what
+will lead to application download and display.
+
