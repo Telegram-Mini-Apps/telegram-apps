@@ -1,27 +1,19 @@
+---
+sidebar_position: 5
+---
+
 # Init data
 
-Telegram Web Apps init data is rather important part of Telegram`s platform.
-This repository contains its explanation and verification examples and libraries
-via different programming languages. You can find official verification example
-via pseudocode in Web
+Init data is rather important part of Telegram's platform. This documentation
+contains its explanation and verification examples. You can find official
+verification example via pseudocode in Web
 Apps [documentation](https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app)
 .
 
-## Table of contents
+----------- TODO
 
-- [Core information](#core-information)
-- [Extraction](#extraction)
-- [Sending to server](#sending-to-server)
-- [Libraries](#libraries)
-
-## Core information
-
-Launching an application on Telegram Web Apps platform implies passing special
-parameters which are connected with current user.
-
-According to Web Apps are usual web applications, and they should be correctly
-displayed on any device, they are always wrapped into WebView. So, native device
-can communicate with our web application through WebView functionality.
+Launching an application on Web Apps platform implies passing special
+parameters which are connected with current Web App launch. 
 
 ## Extraction
 
@@ -34,7 +26,7 @@ SDK [documentation](https://github.com/Telegram-Web-Apps/twa/tree/master/package
 . As a result, valid init data will be placed in `InitData` object:
 
 ```typescript
-import {init} from 'packages/sdk/dist/index';
+import {init} from 'docs/libraries/sdk/dist/index';
 
 init().then(({initData}) => console.log(initData));
 ```
@@ -79,5 +71,5 @@ Here comes the recommended list of supported by community libraries on different
 programming languages to work with Telegram's init data.
 
 - [Golang](https://github.com/Telegram-Web-Apps/init-data-golang)
-- [TypeScript](https://github.com/Telegram-Web-Apps/twa/tree/master/packages/init-data) (works in
-  browser and Node)
+- [TypeScript](https://github.com/Telegram-Web-Apps/twa/tree/master/packages/init-data) (
+  works in browser and Node)
