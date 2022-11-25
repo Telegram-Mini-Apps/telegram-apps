@@ -1,6 +1,6 @@
 {
   "name": "twa-sdk-react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React bindings for Web Apps client SDK. Contains hooks, components and other useful tools which allow usage of React along with Web Apps client SDK.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
