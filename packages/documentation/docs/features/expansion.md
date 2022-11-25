@@ -10,7 +10,7 @@ able to do it programmatically too.
 
 By default, application is minimized, it has minimal allowed height. To expand
 application via code, developer should
-call [`web_app_expand`](../apps-communication/methods/types#web_app_expand)
+call [`web_app_expand`](../apps-communication/methods-list.md#web_app_expand)
 method. This will lead application to be fully displayed.
 
 ## Other platforms

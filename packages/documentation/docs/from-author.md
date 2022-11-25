@@ -2,7 +2,7 @@
 sidebar_position: 0
 ---
 
-# From authors
+# From author
 
 Hey developer! We spent a lot of time researching Telegram platform to create
 something useful, something, that will help you to learn it much faster than we
@@ -30,7 +30,7 @@ This will make your studying more consistent and understandable.
 
 In conclusion, we would like to say, that the result of our job is your
 appreciation and attention. If you would like to support us, you could do it
-this way:
+these ways:
 
 - Give as a star on [GitHub](https://github.com/Telegram-Web-Apps/twa)
 - Follow our [GitHub organization](https://github.com/Telegram-Web-Apps)

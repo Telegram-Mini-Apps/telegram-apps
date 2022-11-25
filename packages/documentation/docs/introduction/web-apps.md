@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# About
+# Web Apps
 
 Web Apps is a technology created by developers of famous messenger Telegram. The
 main it’s purpose is to provide developers more flexible communication channel
