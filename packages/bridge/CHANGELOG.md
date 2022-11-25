@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@1.0.0...twa-bridge@1.0.1) (2022-11-25)
+
+
+### Bug Fixes
+
+* **popup_closed:** button_id now cannot be null. It can only be optional ([c9b1e38](https://github.com/Telegram-Web-Apps/twa/commit/c9b1e381ce1da19fadce5406314c42ab638403bf))
+
+
+
+
+
 # [1.0.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@0.7.0...twa-bridge@1.0.0) (2022-11-20)
 
 
