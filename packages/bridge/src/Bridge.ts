@@ -114,7 +114,7 @@ export class Bridge {
             // Sent on iOS.
             data === null
           ) {
-            return this.emit(type, {button_id: null});
+            return this.emit(type, {});
           }
           return this.emit(type, extractPopupClosedPayload(data));
 
