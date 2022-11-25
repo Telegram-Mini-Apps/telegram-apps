@@ -100,7 +100,7 @@ export class Popup {
 
     return new Promise<string | null>(res => {
       // Create 'popup_closed' event listener to catch clicked button.
-      const listener: BridgeEventListener<'popup_closed'> = ({button_id}) => {
+      const listener: BridgeEventListener<'popup_closed'> = ({button_id = null}) => {
         // Remove event listener.
         this.bridge.off('popup_closed', listener);
 
