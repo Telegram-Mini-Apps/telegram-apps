@@ -35,24 +35,9 @@ const config = {
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-        docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          // editUrl:
-          //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        },
+        docs: {sidebarPath: require.resolve('./sidebars.js')},
         blog: false,
-        // blog: {
-        //   showReadingTime: true,
-        //   // Please change this to your repo.
-        //   // Remove this to remove the "edit this page" links.
-        //   // editUrl:
-        //   //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        // },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
+        theme: {customCss: require.resolve('./src/css/custom.css')},
       }),
     ],
   ],
@@ -67,7 +52,7 @@ const config = {
           src: 'img/logo.png',
         },
         items: [
-          {to: '/docs/category/introduction', label: 'Docs', position: 'left'},
+          {to: '/docs/from-author', label: 'Docs', position: 'left'},
           {
             href: 'https://github.com/Telegram-Web-Apps',
             label: 'GitHub',
