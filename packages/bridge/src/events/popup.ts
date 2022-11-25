@@ -55,5 +55,5 @@ export type PopupButton = {
 });
 
 export interface PopupClosedPayload {
-  button_id: string | null;
+  button_id?: string;
 }

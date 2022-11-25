@@ -7,6 +7,11 @@ import {
 } from './haptic';
 
 /**
+ * Color key which could be used tot update header color.
+ */
+export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
+
+/**
  * Describes list of events and their parameters that could be posted by
  * Bridge.
  * @see https://corefork.telegram.org/api/web-events#event-types
@@ -118,7 +123,7 @@ export interface PostEventParamsMap {
    * @since Web App version 6.1+
    * @see https://corefork.telegram.org/api/web-events#web-app-set-header-color
    */
-  web_app_set_header_color: { color_key: 'bg_color' | 'secondary_bg_color' };
+  web_app_set_header_color: { color_key: HeaderColorKey };
 
   /**
    * Generates haptic feedback event.

@@ -1,6 +1,6 @@
 {
   "name": "twa-sdk",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "TypeScript reimplemented Source Development Kit for Telegram Web Apps client application.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",

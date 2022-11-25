@@ -25,9 +25,9 @@ interface ViewportChangedRawPayload {
  * Parses incoming JSON value as popup button id.
  * @param value - raw value.
  */
-const parseJsonParamAsPopupButtonId: JsonParser<string | null> = value => {
+const parseJsonParamAsPopupButtonId: JsonParser<string | undefined> = value => {
   return value === null || value === undefined
-    ? null
+    ? undefined
     : parseJsonParamAsString(value);
 };
 
