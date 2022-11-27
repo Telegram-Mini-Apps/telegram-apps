@@ -10,8 +10,8 @@ did.
 
 Telegram documentation is rather specific and takes a lot of time to find
 something you really need. But what if you don't even know about functionality
-you could use? How could you find it in some huge documentation like Telegram's
-one? This is another problem we are trying to solve.
+you could use? How could you find it in some huge as universe documentation like
+Telegram's one? This is another problem we are trying to solve.
 
 You should remember, that this documentation was created by enthusiasts, not
 Telegram developers. We could miss something, make mistakes, but we are doing

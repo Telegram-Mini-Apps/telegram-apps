@@ -11,7 +11,7 @@ by Web App.
 
 As long as web version of Telegram displays front-end application in `<iframe/>`
 tag, it uses default way of communication between 2 iframes - sending messages
-through `window.parent.postMessage(message, origin)` function.
+through `window.parent.postMessage` function.
 
 As the first parameter, you should pass JSON object **converted to string**.
 Object should have this interface:
@@ -95,7 +95,7 @@ as it is not defined.
 
 Notifies parent iframe about current frame is ready. This method is only used in
 Web version of Telegram. As a result, Web App will receive
-`set_custom_style` event.
+[`set_custom_style`](events#set_custom_style) event.
 
 *No parameters.*
 
@@ -120,10 +120,9 @@ type Parameters = {data: string};
 
 #### `web_app_expand`
 
-Expands Web App. To learn more about expansion,
-follow [this](../../features/expansion) link.
+Expands Web App. *No parameters.*
 
-*No parameters.*
+- [Viewport](../features/viewport)
 
 #### `web_app_open_link`
 
@@ -135,27 +134,30 @@ type Parameters = {url: string};
 
 #### `web_app_ready`
 
-Notifies Telegram about current application is ready to be shown.
-
-*No parameters.*
+Notifies Telegram about current application is ready to be shown. This method
+will make Telegram to remove application loader and display Web App. *No
+parameters.*
 
 #### `web_app_request_theme`
 
-Requests current theme from Telegram. As a result, Telegram will emit
-[`theme_changed`](../events/types#theme_changed) event.
+Requests current theme information from Telegram. As a result, Telegram will
+emit [`theme_changed`](events#theme_changed) event. *No parameters.*
 
-*No parameters.*
+- [Colors](../features/colors)
 
 #### `web_app_request_viewport`
 
 Requests current viewport information from Telegram. As a result, Telegram will
-emit [`viewport_changed`](../events/types#viewport_changed) event.
+emit [`viewport_changed`](events#viewport_changed) event. *No parameters.*
 
-*No parameters.*
+- [Viewport](../features/viewport)
 
 #### `web_app_setup_main_button`
 
-Updates main button settings.
+Updates main button settings. To learn more about main button,
+follow [this](../features/main-button) link.
+
+- [Main button](../features/main-button)
 
 ```typescript
 type Parameters = {
@@ -177,9 +179,9 @@ type Parameters = {
 
 #### `web_app_setup_closing_behavior`
 
-Changes current closing confirmation requirement status. This method is rather
-useful to prevent accidental application close. For example, when user fills out
-a big form and accidentally swipes application down, which leads to its close.
+Changes current closing confirmation requirement status.
+
+- [Closing behavior](../features/closing-behavior)
 
 ```typescript
 type Parameters = {need_confirmation: boolean};
@@ -189,8 +191,8 @@ type Parameters = {need_confirmation: boolean};
 
 #### `web_app_open_tg_link`
 
-Opens link which has format like "https://t.me/*". Link will be opened in
-Telegram app, Web App will not be closed.
+Opens link which in format like <i> https://t.me/* </i>. Link will be opened in
+Telegram app, Web App will be closed.
 
 ```typescript
 type Parameters = {path_full: string};
@@ -200,6 +202,10 @@ type Parameters = {path_full: string};
 
 Opens invoice by its specified slug.
 
+[//]: # (TODO: Should provide more information about invoices. It is not common knowledge)
+
+[//]: # (for developer.)
+
 ```typescript
 type Parameters = {slug: string};
 ```
@@ -208,16 +214,17 @@ type Parameters = {slug: string};
 
 Updates back button settings.
 
+- [Back button](../features/back-button)
+
 ```typescript
 type Parameters = {is_visible: boolean};
 ```
 
 #### `web_app_set_background_color`
 
-Updates current Web App background color. To be more accurate, this color is not
-color of `html` or `body` tags of Web App. This method changes color of Web View
-background. So, in case Web App is fully transparent, user will see specified
-background color which is, obviously placed behind Web App layer.
+Updates current Web App background color. 
+
+- [Background color](../features/colors#background-and-header-colors)
 
 ```typescript
 type Parameters = {
@@ -228,8 +235,9 @@ type Parameters = {
 
 #### `web_app_set_header_color`
 
-Updates current header color. As `web_app_set_background_color`, this method
-updates color of native component, not Web App.
+Updates current header color.
+
+- [Header color](../features/colors#background-and-header-colors)
 
 ```typescript
 type Parameters = {color_key: 'bg_color' | 'secondary_bg_color'};
@@ -237,8 +245,9 @@ type Parameters = {color_key: 'bg_color' | 'secondary_bg_color'};
 
 #### `web_app_trigger_haptic_feedback`
 
-Generates haptic feedback event. This method makes user interaction with
-application more comfortable, but should be used with accuracy.
+Generates haptic feedback event.
+
+- [Haptic feedback](../features/other#haptic-feedback)
 
 ```typescript
 type Parameters = {
@@ -270,11 +279,8 @@ type Parameters = {
 
 #### `web_app_open_popup`
 
-Opens new popup. Popup is native component, containing title, message text and
-list of customizable buttons.
-
-When user closes popup, Telegram
-emits [`popup_closed`](../events/types#popup_closed) event.
+Opens new popup. When user closes popup, Telegram
+emits [`popup_closed`](events#popup_closed) event.
 
 ```typescript
 type PopupButton = {

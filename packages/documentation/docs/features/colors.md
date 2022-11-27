@@ -28,3 +28,14 @@ and [`web_app_set_header_color`](../apps-communication/methods-list.md#web_app_s
 Don't forget to check if current Web App version supports these methods.
 
 :::
+
+## Background and header colors
+
+
+To be more accurate, this color is not
+color of `html` or `body` tags of Web App. This method changes color of Web View
+background. So, in case Web App is fully transparent, user will see specified
+background color which is, obviously placed behind Web App layer.
+
+As `web_app_set_background_color`, this method
+updates color of native component, not Web App.

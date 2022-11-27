@@ -15,7 +15,7 @@ create Web App without creating a Telegram Bot.
 
 Platform offers high variety of available methods to communicate with Telegram
 native application to make your applications look more native, allow them to
-simulate native application's behaviour, and, finally, **imitate**
+simulate native application's behaviour, and, finally, **mimic**
 native applications.
 
 This documentation provides information about whole Web Apps platforms - its

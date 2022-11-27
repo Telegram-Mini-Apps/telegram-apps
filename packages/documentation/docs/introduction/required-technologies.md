@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# Technologies
+# Required technologies
 
 Before starting to create application on Web Apps platform, it is important to
 know what Web Apps is from its technical side. This will lead developer to
@@ -10,8 +10,8 @@ language and technologies selection.
 
 Internally, Web Apps are usual web applications, which are displayed in WebView.
 In other words, they are just a set of static files (mostly `.js`, `.css`
-and `.html`). As you can assume, to create Web App, it is enough to learn
-standard front-end development technologies, such as:
+and `.html`). So, to create Web App, it is enough to learn standard front-end
+development technologies, such as:
 
 - JavaScript
 - CSS
@@ -19,8 +19,7 @@ standard front-end development technologies, such as:
 
 Really simple, isn't it? But to make much more serious and bigger applications,
 we recommend to use more solid technologies, such as `TypeScript`, `React`,
-`SCSS` etc. You could also use `Vue`, `Angular` and other libraries, Web Apps
-has no restriction, connected with this.
+`SCSS` etc.
 
 So, if we want to create Web App, we should create standard web application with
 any technologies stack. The only 1 thing Telegram needs from developer is

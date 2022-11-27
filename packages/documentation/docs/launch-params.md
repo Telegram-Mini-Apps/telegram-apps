@@ -53,4 +53,4 @@ to [this](./introduction/platforms.md) documentation.
 ### `tgWebAppThemeParams`
 
 Provides information about current Telegram application theme (colors). We also
-have separate [documentation](./features/theming.md) for this parameter.
+have separate [documentation](./features/colors.md) for this parameter.

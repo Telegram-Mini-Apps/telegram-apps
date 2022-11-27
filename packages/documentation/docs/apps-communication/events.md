@@ -38,9 +38,9 @@ window.addEventListener('message', ({data}) => {
 :::caution
 
 In this code, we assumed, that `message` event is sent only by native
-application which is not always true in real applications. Additionally, we 
-didn't check if `data` is really `string`. In your code, don't
-forget to check each type and appropriately process incoming event.
+application which is not always true in real applications. Additionally, we
+didn't check if `data` is really `string`. Don't forget to check each type and
+appropriately process incoming event.
 
 :::
 
@@ -82,7 +82,7 @@ events inside section could be sent.
 #### `invoice_closed`
 
 Invoice closed. Event contains passed
-during [`web_app_open_invoice`](../methods-list.md#web_app_open_invoice) method
+during [`web_app_open_invoice`](methods#web_app_open_invoice) method
 invocation `slug` and invoice status.
 
 ```typescript
@@ -94,15 +94,17 @@ type Payload = {
 
 #### `main_button_pressed`
 
-User clicked main button.
+User clicked main button. *No payload.*
 
-*No payload.*
+- [Main button](../features/main-button)
 
 #### `popup_closed`
 
 Popup was closed. Payload will contain `button_id` property which is identifier
 of clicked button. In case, no button was clicked, payload will be empty
 object (`{}`).
+
+- [Popup](../features/popup)
 
 ```typescript
 type Payload = {button_id?: string}
@@ -126,6 +128,8 @@ Occurs whenever theme settings changed in the user's Telegram app
 key-value pairs, where key is some key name (`bg_color`, `secondary_bg_color`,
 ...), and value is its color in `#RRGGBB` format.
 
+- [Colors](../features/colors)
+
 ```typescript
 type Payload = {theme_params: Record<string, string>};
 ```
@@ -133,11 +137,13 @@ type Payload = {theme_params: Record<string, string>};
 #### `viewport_changed`
 
 Occurs whenever viewport has been changed. For example, when user started
-dragging application popup, or called expansion method.
+dragging application or called expansion method.
 
 Pay attention to fact, that send rate of this method is not enough to smoothly
 resize application window. You should probably use stable height instead of
 current one, or handle this problem in other way.
+
+- [Viewport](../features/viewport)
 
 ```typescript
 type Payload = {
@@ -154,13 +160,11 @@ type Payload = {
 
 #### `back_button_pressed`
 
-User clicked back button.
+User clicked back button. *No payload.*
 
-*No payload.*
+- [Back button](../features/back-button)
 
 #### `settings_button_pressed`
 
 Occurs when the `Settings` item in context menu was pressed. Not all
-applications have this button.
-
-*No payload.*
+applications have this button. *No payload.*
