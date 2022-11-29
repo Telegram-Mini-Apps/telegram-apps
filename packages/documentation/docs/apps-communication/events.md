@@ -128,7 +128,7 @@ Occurs whenever theme settings changed in the user's Telegram app
 key-value pairs, where key is some key name (`bg_color`, `secondary_bg_color`,
 ...), and value is its color in `#RRGGBB` format.
 
-- [Colors](../features/colors)
+- [Colors](../features/theme)
 
 ```typescript
 type Payload = {theme_params: Record<string, string>};

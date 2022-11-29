@@ -143,7 +143,7 @@ parameters.*
 Requests current theme information from Telegram. As a result, Telegram will
 emit [`theme_changed`](events#theme_changed) event. *No parameters.*
 
-- [Colors](../features/colors)
+- [Colors](../features/theme)
 
 #### `web_app_request_viewport`
 
@@ -224,7 +224,7 @@ type Parameters = {is_visible: boolean};
 
 Updates current Web App background color. 
 
-- [Background color](../features/colors#background-and-header-colors)
+- [Background color](../features/theme#background-and-header-colors)
 
 ```typescript
 type Parameters = {
@@ -237,7 +237,7 @@ type Parameters = {
 
 Updates current header color.
 
-- [Header color](../features/colors#background-and-header-colors)
+- [Header color](../features/theme#background-and-header-colors)
 
 ```typescript
 type Parameters = {color_key: 'bg_color' | 'secondary_bg_color'};

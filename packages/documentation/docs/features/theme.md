@@ -1,4 +1,4 @@
-# Theming
+# Theme
 
 Web Apps are web applications which are meant to look native. It includes not
 only usage of components which mimics the native components, but parent
