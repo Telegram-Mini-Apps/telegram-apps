@@ -3,7 +3,11 @@ sidebar_position: 1
 sidebar_label: "twa-bridge"
 ---
 
-# twa-bridge <sup><img src="https://static.npmjs.com/255a118f56f5346b97e56325a1217a16.svg" alt="ts" width="20"/></sup>
+# twa-bridge <sup><img src="https://static.npmjs.com/255a118f56f5346b97e56325a1217a16.svg" alt="drawing" width="20"/></sup>
+
+Package which provides utilities to simplify communication between
+Web App and Telegram native application. It also solves some across-platform
+data difference problems to protect developers code and save their time.
 
 <div style={{marginBottom: 10}}>
   <a href={"https://npmjs.com/package/twa-bridge"}>
@@ -16,10 +20,6 @@ sidebar_label: "twa-bridge"
     src={"https://img.shields.io/bundlephobia/minzip/twa-bridge"}
   />
 </div>
-
-Package which provides utilities to simplify communication flow between
-frontend and Telegram native applications. It also solves some across-platform
-data difference problems to protect developers code and save their time.
 
 ## Installation
 
@@ -45,9 +45,7 @@ import CodeBlock from '@theme/CodeBlock';
   </TabItem>
 </Tabs>
 
-## Usage
-
-### Init
+## Init
 
 `Bridge` component has rather simple API. Its main purpose is to provide
 communication layer between Telegram native and client applications, so you
@@ -66,7 +64,7 @@ used by Telegram native application. It is allowed to use it as many times
 as required as long as this function will just reuse once created event emitter
 and event receiving function.
 
-### Debugging
+## Debugging
 
 `Bridge` supports debug mode which outputs additional log messages into console.
 By default, this mode is disabled. To enable it, it is required to pass
@@ -91,7 +89,7 @@ bridge.debug = true;
 As a result, you will see logs in console with information about called
 methods and processes.
 
-### Setting target origin
+## Setting target origin
 
 In case, current bridge instance is used in browser environment (iframe),
 we use such function as `window.parent.postMessage` which requires passing
@@ -114,7 +112,7 @@ const bridge = init({targetOrigin: '*'});
 bridge.postEvent('web_app_close', {targetOrigin: 'https://myendpoint.org'})
 ```
 
-### Methods calling
+## Calling methods
 
 To call Web Apps methods, it is enough to call `Bridge`s `postEvent` method.
 This method automatically finds correct way of sending event which depends
@@ -146,80 +144,7 @@ bridge.postEvent('web_app_open_popup', {
 });
 ```
 
-### Events listening
-
-Tracking of events is rather simple thing too. For this purpose, we could
-use such methods as `on` and `subscribe`. To remove event listeners, we
-use `off` and `unsubscribe`:
-
-```typescript
-import {Bridge, BridgeEventListener} from 'twa-bridge';
-import {GlobalListener} from 'twa-core';
-
-const bridge = new Bridge();
-const listener: BridgeEventListener<'viewport_changed'> = payload => {
-  console.log('Viewport changed:', payload)
-};
-const globalListener: GlobalListener = (event, ...args) => {
-  console.log('Event was called:', event, ...args);
-};
-
-// Add event listener.
-bridge.on('viewport_changed', listener);
-
-// Add any event listener.
-bridge.subscribe(globalListener);
-
-// Remove event listeners.
-bridge.off('viewport_changed', listener);
-bridge.unsubscribe(globalListener);
-```
-
-### Lower level control
-
-Previously, we used such function as `init` almost without any parameters,
-but this method supports some more additional options.
-
-#### `defineReceiver: boolean`
-
-By default, `init` sets this value as `true`. It leads to call of function
-named `defineEventReceiver` which defines global function, handling events
-from native application and emitting window `message` event.
-
-It is safe to use this function as many times as required. This function
-will run only once.
-
-In spite of it is not recommended, you could set this option to `false`.
-This will lead to not handling of events in iOS, Android and desktop
-versions of Telegram, unless some additional actions are done.
-
-#### `emitter: GlobalEventEmitter`
-
-Bridge itself is not listening to window `message` event or events sent
-from Telegram native application directly. It expects passing event emitter
-that is responsible for this kind of job.
-
-This way of working with events allows us to normally subscribe to and
-unsubscribe from such events.
-
-In case, this property is not passed, function will create required event
-emitter, place it in window for future reuse by other `Bridge` instances,
-and store it in newly created bridge.
-
-### Checking method support
-
-Bridge itself does not check if Web App method is supported by current
-version of Web App. To check, if method is supported, you could use `supports`
-function:
-
-```typescript
-import {supports} from 'twa-bridge';
-
-supports('web_app_trigger_haptic_feedback', '6.0'); // false
-supports('web_app_trigger_haptic_feedback', '6.1'); // true
-```
-
-### No-bridge methods call
+### Without bridge
 
 This library allows calling methods without creating new Bridge instance. To
 perform this, you should use `postEvent` function which has the same
@@ -239,9 +164,80 @@ call `web_app_request_theme` event. As a result, native app will emit
 be captured by bridge instance. We can't say the same about bare `postEvent` function,
 so, do not forget about response event (if it exists) handling process.
 
+## Listening to events
+
+Tracking of events is rather simple thing too. For this purpose, we could
+use such methods as `on` and `subscribe`. To remove event listeners, we
+use `off` and `unsubscribe`:
+
+```typescript
+import {BridgeEventListener, init} from 'twa-bridge';
+import {GlobalListener} from 'twa-core';
+
+const bridge = init();
+const listener: BridgeEventListener<'viewport_changed'> = payload => {
+  console.log('Viewport changed:', payload)
+};
+const globalListener: GlobalListener = (event, ...args) => {
+  console.log('Event was called:', event, ...args);
+};
+
+// Add event listener.
+bridge.on('viewport_changed', listener);
+
+// Add any event listener.
+bridge.subscribe(globalListener);
+
+// Remove event listeners.
+bridge.off('viewport_changed', listener);
+bridge.unsubscribe(globalListener);
+```
+
+## Lower level control
+
+Previously, we used such function as `init` almost without any parameters,
+but this method supports some more additional options.
+
+### `defineReceiver: boolean`
+
+By default, `init` sets this value as `true`. It leads to call of function
+named `defineEventReceiver` which defines global function, handling events
+from native application and emitting window `message` event.
+
+It is safe to use this function as many times as required. This function
+will run only once.
+
+In spite of it is not recommended, you could set this option to `false`.
+This will lead to not handling of events in iOS, Android and desktop
+versions of Telegram, unless some additional actions are done.
+
+### `emitter: GlobalEventEmitter`
+
+Bridge itself is not listening to window `message` event or events sent
+from Telegram native application directly. It expects passing event emitter
+that is responsible for this kind of job.
+
+This way of working with events allows us to normally subscribe to and
+unsubscribe from such events.
+
+In case, this property is not passed, function will create required event
+emitter which will be shared between other `Bridge` instances.
+
+## Checking method support
+
+Bridge itself does not check if Web App method is supported by current
+version of Web App. To check, if method is supported, you could use `supports`
+function:
+
+```typescript
+import {supports} from 'twa-bridge';
+
+supports('web_app_trigger_haptic_feedback', '6.0'); // false
+supports('web_app_trigger_haptic_feedback', '6.1'); // true
+```
+
 ## Higher-level control
 
 As long as bridge provides only low-level control, we recommend using
-[SDK](./twa-sdk/general-info), which
-implements bridge methods. It also provides additional parameters checks, more
-intuitive method names and easier usage.
+[SDK](twa-sdk/general), which implements bridge methods. It also provides
+additional parameters checks, more intuitive method names and easier usage.
