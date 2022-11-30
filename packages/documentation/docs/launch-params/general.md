@@ -1,8 +1,8 @@
 ---
-sidebar_position: 4
+sidebar_position: 1
 ---
 
-# Launch parameters
+# About
 
 Web Apps should have URL to be downloaded by Telegram. It will be used as source
 for WebView, which will load application.
@@ -32,19 +32,15 @@ console.log(params.get('tgWebAppVersion')); // "6.2"
 
 ## Parameters
 
-### tgWebAppVersion
+### `tgWebAppVersion`
 
 Contains information about current Web App version. This parameter is useful
-to check, if some [Web App method](apps-communication/methods) supported.
+to check, if some [Web App method](../apps-communication/methods) supported.
 
-### tgWebAppData
+### `tgWebAppData`
 
-Web App [init data](init-data).
-
-Value of this parameter is query parameters presented as string. To make
-its usage easier, consider `URLSearchParams` class. Additionally, it is worth
-mentioning, that `user` property is JSON object, converted to string. Here
-comes the example with user already parsed.
+Web App [init data](init-data/general). Value of this parameter is query parameters
+presented as string. To make its usage easier, consider `URLSearchParams` class.
 
 ```typescript title="Parsed example value"
 {
@@ -55,16 +51,16 @@ comes the example with user already parsed.
 }
 ```
 
-### tgWebAppPlatform
+### `tgWebAppPlatform`
 
-[Platform](introduction/platforms) identifier.
+[Platform](../platforms) identifier.
 
-### tgWebAppThemeParams
+### `tgWebAppThemeParams`
 
-[Theme](features/theme.md) information. You could use this parameter to
-know colors at the moment of its render. Keep in mind, that you are able to
-receive theme
-with [Web App method](apps-communication/methods.md#web_app_request_theme).
+[Theme](../features/theme) information. You could use this parameter to
+know colors at the moment of Web App render. Keep in mind, that you are able to
+receive theme with [method](../apps-communication/methods#web_app_request_theme)
+.
 
 Value of this parameter is JSON object converted to string. To receive more
 appropriate and easy to use value, use `JSON.parse` function.
