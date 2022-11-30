@@ -1,0 +1,178 @@
+---
+sidebar_position: 1
+sidebar_label: "About"
+---
+
+# twa-sdk
+
+Made from scratch TypeScript library for communication with Telegram Web Apps
+functionality.
+
+Code of this library was written with aim to make developers communication with
+Telegram Web Apps way easier. It contains a lot of separate components which are
+responsible for their own part of Telegram Web Apps ecosystem.
+
+Before starting to use SDK, we highly recommend learning Web Apps
+[documentation](/docs/category/introduction) to understand platform concepts.
+
+<div style={{marginBottom: 10}}>
+  <a href={"https://npmjs.com/package/twa-sdk"}>
+    <img alt={"npm"} src={"https://img.shields.io/npm/v/twa-sdk?logo=npm"}/>
+  </a>
+
+  <img
+    alt={"size"}
+    style={{marginLeft: 10}}
+    src={"https://img.shields.io/bundlephobia/minzip/twa-sdk"}
+  />
+</div>
+
+## Installation
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+
+<Tabs>
+  <TabItem value="npm" label="npm" default>
+    <CodeBlock language={"bash"}>
+      npm i twa-sdk
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+    <CodeBlock language={"bash"}>
+      yarn add twa-sdk
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+    <CodeBlock language={"bash"}>
+      pnpm i twa-sdk
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+## Init
+
+According to logic, this package provides full control over its lifecycle,
+its initialization is on developer's shoulders. It means, that there are no
+already initialized global components which could be used by developer, they
+should be created by him.
+
+To make developers life easier, package contains special function called `init`,
+which returns initialized components instances:
+
+```typescript
+import {init} from 'twa-sdk';
+
+init().then(components => {
+  // Now we have all initialized components.
+  const {mainButton, viewport} = components;
+
+  // Add main button event click which will lead to
+  // application expansion.
+  mainButton.on('click', () => viewport.expand());
+
+  // Update main button information and show it.
+  mainButton
+    .setColor('#ff0000')
+    .setTextColor('#ffffff')
+    .setText('Expand')
+    .enable()
+    .show()
+    .commit();
+});
+```
+
+To enable debug mode, use `true` value as argument:
+
+```typescript
+// Init with debug mode.
+init(true);
+```
+
+In case, you want to initialize components with your own props, you should
+pass object to `init` function:
+
+```typescript
+init({
+  props: {
+    bridge: {debug: true},
+    backButton: {isVisible: true},
+    // ...
+    webApp: {platform: 'tdesktop', backgroundColor: '#FF0233', ...}
+  }
+});
+```
+
+## Components
+
+All components in this package are supposed to be
+used as singletons. It means, you should not create several instances of
+same component and use them even if it is not forbidden. But in this case,
+there is no warranty, everything will work fine.
+
+The reason is, each component class stores its state locally and class instances
+are not synchronized between each other. So, for example, in case, you create
+2 instances of `Popup` component and one of them calls `show()` function, it
+will change its `isOpened` property to `true`, but the second instance
+of `Popup` will not know about it and will still return `false` value.
+
+To avoid possible problems, you can rely on package's `init` function which
+provides initialized components which are enough to use across application.
+
+:::info
+
+Some components which require usage of `Bridge` functionality can
+accept its custom instance in constructor. In case, `Bridge` is not passed,
+component will create it via `init()` method from `twa-bridge` package. We
+recommend passing your own single instance of `Bridge` to avoid unexpected
+behaviour or errors.
+
+:::
+
+### Events
+
+Component instances use common way of events listening through `on` and `off`
+functions:
+
+```typescript
+const listener = (...args) => {
+  console.log(...args);
+};
+component.on(event, listener); // add listener.
+component.off(event, listener); // remove listener.
+```
+
+Example with `BackButton` component:
+
+```typescript
+import {BackButton} from 'twa-sdk';
+
+const backButton = new BackButton();
+backButton.on('click', () => {
+  console.log('Back button clicked.');
+});
+```
+
+You can find list of supported events in components own documentations.
+
+### Methods support
+
+Almost each component is capable of checking whether its method is supported by
+passed Web App version or not. To check if some methods are supported, you
+should use `{Component}.supports()` function. For example:
+
+```typescript
+import {BackButton} from 'twa-sdk';
+
+console.log(BackButton.supports('show', '6.0')); // false
+console.log(BackButton.supports('hide', '6.3')); // true
+```
+
+It is recommended to use this functionality before calling some component method
+as long as this will make you sure, it will work. Component itself is not
+checking if method is supported by current Web App version, what could lead to
+issues.
+
+List of supported methods by components is described in each component's
+documentation.

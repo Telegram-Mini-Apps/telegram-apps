@@ -126,7 +126,7 @@ export interface PostEventParamsMap {
   web_app_set_header_color: { color_key: HeaderColorKey };
 
   /**
-   * Generates haptic feedback events.
+   * Generates haptic feedback event.
    * @since Web App version 6.1+
    * @see https://corefork.telegram.org/api/web-events#web-app-trigger-haptic-feedback
    */

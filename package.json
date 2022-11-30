@@ -24,6 +24,7 @@
   },
   "scripts": {
     "build": "lerna run build",
+    "dev:docs": "lerna run --scope=documentation start",
     "lint": "lerna run lint",
     "test": "lerna run test",
     "publish": "lerna publish",
