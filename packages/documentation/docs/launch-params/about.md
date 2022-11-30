@@ -39,7 +39,7 @@ to check, if some [Web App method](../apps-communication/methods) supported.
 
 ### `tgWebAppData`
 
-Web App [init data](init-data/general). Value of this parameter is query parameters
+Web App [init data](init-data/about). Value of this parameter is query parameters
 presented as string. To make its usage easier, consider `URLSearchParams` class.
 
 ```typescript title="Parsed example value"

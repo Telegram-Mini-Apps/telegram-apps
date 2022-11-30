@@ -16,7 +16,7 @@ via pseudocode.
 The easiest way to pass init data to application and allow its usage while
 executing javascript code is to specify it in application URL. That's why
 Telegram Web Apps uses this way. As long as init data is one of the
-[launch parameters](general), you could extract it this way:
+[launch parameters](about), you could extract it this way:
 
 ```typescript title="Extraction example"
 // Get "tgWebAppData" launch parameter.

@@ -29,14 +29,14 @@ console.log(backButton.isVisible); // false
 
 ## Events
 
-Events available for [listening](../general#events):
+Events available for [listening](../about#events):
 
 - `visibleChange: (isVisible: boolean) => void`
 - `click: () => void`
 
 ## Methods support
 
-Methods available for [support check](../general#methods-support):
+Methods available for [support check](../about#methods-support):
 
 - `show`
 - `hide`  

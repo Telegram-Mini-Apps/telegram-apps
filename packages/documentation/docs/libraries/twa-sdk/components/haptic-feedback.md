@@ -28,7 +28,7 @@ haptic.notificationOccurred('success');
 
 ## Methods support
 
-Methods available for [support check](../general#methods-support):
+Methods available for [support check](../about#methods-support):
 
 - `notificationOccurred`
 - `impactOccurred`
