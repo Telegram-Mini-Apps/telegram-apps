@@ -15,41 +15,11 @@ responsible for their own part of Telegram Web Apps ecosystem.
 Before starting to use SDK, we highly recommend learning Web Apps
 [documentation](/docs/category/introduction) to understand platform concepts.
 
-<div style={{marginBottom: 10}}>
-  <a href={"https://npmjs.com/package/twa-sdk"}>
-    <img alt={"npm"} src={"https://img.shields.io/npm/v/twa-sdk?logo=npm"}/>
-  </a>
-
-  <img
-    alt={"size"}
-    style={{marginLeft: 10}}
-    src={"https://img.shields.io/bundlephobia/minzip/twa-sdk"}
-  />
-</div>
+<NpmMeta pkg={'twa-sdk'}/>
 
 ## Installation
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import CodeBlock from '@theme/CodeBlock';
-
-<Tabs>
-  <TabItem value="npm" label="npm" default>
-    <CodeBlock language={"bash"}>
-      npm i twa-sdk
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="yarn" label="yarn">
-    <CodeBlock language={"bash"}>
-      yarn add twa-sdk
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="pnpm" label="pnpm">
-    <CodeBlock language={"bash"}>
-      pnpm i twa-sdk
-    </CodeBlock>
-  </TabItem>
-</Tabs>
+<NpmInstall pkg={'twa-sdk'}/>
 
 ## Init
 
@@ -122,11 +92,14 @@ provides initialized components which are enough to use across application.
 
 :::info
 
-Some components which require usage of `Bridge` functionality can
-accept its custom instance in constructor. In case, `Bridge` is not passed,
-component will create it via `init()` method from `twa-bridge` package. We
-recommend passing your own single instance of `Bridge` to avoid unexpected
-behaviour or errors.
+<p>
+  Some components which require usage of <code>Bridge</code> functionality can
+  accept its custom instance in constructor. In case, <code>Bridge</code> is not
+  passed, component will create it via <code>init()</code> method
+  from <NpmLink pkg={'twa-bridge'}/> package. We recommend passing your own
+  single instance of <code>Bridge</code> to avoid unexpected behaviour or
+  errors.
+</p>
 
 :::
 

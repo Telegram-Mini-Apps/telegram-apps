@@ -1,49 +1,18 @@
 ---
 sidebar_position: 1
-sidebar_label: "twa-bridge"
 ---
 
-# twa-bridge <sup><img src="https://static.npmjs.com/255a118f56f5346b97e56325a1217a16.svg" alt="drawing" width="20"/></sup>
+# twa-bridge
 
 Package which provides utilities to simplify communication between
 Web App and Telegram native application. It also solves some across-platform
 data difference problems to protect developers code and save their time.
 
-<div style={{marginBottom: 10}}>
-  <a href={"https://npmjs.com/package/twa-bridge"}>
-    <img alt={"npm"} src={"https://img.shields.io/npm/v/twa-bridge?logo=npm"}/>
-  </a>
-
-  <img
-    alt={"size"}
-    style={{marginLeft: 10}}
-    src={"https://img.shields.io/bundlephobia/minzip/twa-bridge"}
-  />
-</div>
+<NpmMeta pkg={'twa-bridge'}/>
 
 ## Installation
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import CodeBlock from '@theme/CodeBlock';
-
-<Tabs>
-  <TabItem value="npm" label="npm" default>
-    <CodeBlock language={"bash"}>
-      npm i twa-bridge
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="yarn" label="yarn">
-    <CodeBlock language={"bash"}>
-      yarn add twa-bridge
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="pnpm" label="pnpm">
-    <CodeBlock language={"bash"}>
-      pnpm i twa-bridge
-    </CodeBlock>
-  </TabItem>
-</Tabs>
+<NpmInstall pkg={'twa-bridge'}/>
 
 ## Init
 
@@ -214,7 +183,7 @@ versions of Telegram, unless some additional actions are done.
 ### `emitter: GlobalEventEmitter`
 
 Bridge itself is not listening to window `message` event or events sent
-from Telegram native application directly. It expects passing event emitter
+from Telegram native application directly. It expects passing [event emitter](https://github.com/Telegram-Web-Apps/twa/blob/master/packages/bridge/src/event-receiver/global.ts#L18)
 that is responsible for this kind of job.
 
 This way of working with events allows us to normally subscribe to and
