@@ -1,0 +1,13 @@
+name: deploy-docs
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.4
+      - run: pnpm i
+      - run: pnpm run docs:deploy
