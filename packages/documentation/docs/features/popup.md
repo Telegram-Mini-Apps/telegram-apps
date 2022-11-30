@@ -1,3 +1,7 @@
+# Popup
 
-Popup is native component, containing title, message text and
-list of customizable buttons.
+:::info
+
+This section is under development. You can help us to improve or write it.
+
+:::

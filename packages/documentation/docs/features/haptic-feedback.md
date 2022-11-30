@@ -1,4 +1,4 @@
-# Main button
+# Haptic feedback
 
 :::info
 
