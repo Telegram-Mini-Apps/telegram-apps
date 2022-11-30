@@ -94,20 +94,16 @@ type Payload = {
 
 #### `main_button_pressed`
 
-User clicked main button. *No payload.*
-
-- [Main button](../features/main-button)
+User clicked [main button](../features/main-button).
 
 #### `popup_closed`
 
-Popup was closed. Payload will contain `button_id` property which is identifier
-of clicked button. In case, no button was clicked, payload will be empty
-object (`{}`).
-
-- [Popup](../features/popup)
+[Popup](../features/popup) was closed. Payload will contain `button_id` property
+which is identifier of clicked button. In case, no button was clicked, payload
+will be empty object `{}`.
 
 ```typescript
-type Payload = {button_id?: string}
+type Payload = { button_id?: string }
 ```
 
 #### `set_custom_style`
@@ -123,35 +119,29 @@ type Payload = string;
 
 #### `theme_changed`
 
-Occurs whenever theme settings changed in the user's Telegram app
-(including switching to night mode). `theme_params` property is object with
+Occurs whenever [theme](../features/theme) was changed in the user's Telegram
+app (including switching to night mode). `theme_params` property is object with
 key-value pairs, where key is some key name (`bg_color`, `secondary_bg_color`,
 ...), and value is its color in `#RRGGBB` format.
 
-- [Colors](../features/theme)
-
 ```typescript
-type Payload = {theme_params: Record<string, string>};
+type Payload = { theme_params: Record<string, string> };
 ```
 
 #### `viewport_changed`
 
-Occurs whenever viewport has been changed. For example, when user started
-dragging application or called expansion method.
+Occurs whenever [viewport](../features/viewport) has been changed. For example,
+when user started dragging application or called expansion method.
 
 Pay attention to fact, that send rate of this method is not enough to smoothly
 resize application window. You should probably use stable height instead of
 current one, or handle this problem in other way.
-
-- [Viewport](../features/viewport)
 
 ```typescript
 type Payload = {
   height: number;
   width?: number;
   is_expanded: boolean;
-  // Will be true in case, viewport changes stopped, and passed height
-  // could be saved as latest stable.
   is_state_stable: boolean;
 };
 ```
@@ -160,11 +150,9 @@ type Payload = {
 
 #### `back_button_pressed`
 
-User clicked back button. *No payload.*
-
-- [Back button](../features/back-button)
+User clicked [back button](../features/back-button).
 
 #### `settings_button_pressed`
 
 Occurs when the `Settings` item in context menu was pressed. Not all
-applications have this button. *No payload.*
+applications have this button.

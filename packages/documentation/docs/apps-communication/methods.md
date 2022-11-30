@@ -97,13 +97,9 @@ Notifies parent iframe about current frame is ready. This method is only used in
 Web version of Telegram. As a result, Web App will receive
 [`set_custom_style`](events#set_custom_style) event.
 
-*No parameters.*
-
 #### `web_app_close`
 
 Closes Web App.
-
-*No parameters.*
 
 #### `web_app_data_send`
 
@@ -115,49 +111,40 @@ To get more information, take a look at `web_app_data` field in the
 class [`Message`](https://core.telegram.org/bots/api#message).
 
 ```typescript
-type Parameters = {data: string};
+type Parameters = { data: string };
 ```
 
 #### `web_app_expand`
 
-Expands Web App. *No parameters.*
-
-- [Viewport](../features/viewport)
+Expands Web App. More information about expansion [here](../features/viewport).
 
 #### `web_app_open_link`
 
 Opens link in default browser. Web App will not be closed.
 
 ```typescript
-type Parameters = {url: string};
+type Parameters = { url: string };
 ```
 
 #### `web_app_ready`
 
 Notifies Telegram about current application is ready to be shown. This method
-will make Telegram to remove application loader and display Web App. *No
-parameters.*
+will make Telegram to remove application loader and display Web App.
 
 #### `web_app_request_theme`
 
-Requests current theme information from Telegram. As a result, Telegram will
-emit [`theme_changed`](events#theme_changed) event. *No parameters.*
-
-- [Colors](../features/theme)
+Requests current [theme](../features/theme) from Telegram. As a result, Telegram
+will emit [`theme_changed`](events#theme_changed) event.
 
 #### `web_app_request_viewport`
 
-Requests current viewport information from Telegram. As a result, Telegram will
-emit [`viewport_changed`](events#viewport_changed) event. *No parameters.*
-
-- [Viewport](../features/viewport)
+Requests current [viewport](../features/viewport) information from Telegram. As
+a result, Telegram will emit [`viewport_changed`](events#viewport_changed)
+event.
 
 #### `web_app_setup_main_button`
 
-Updates main button settings. To learn more about main button,
-follow [this](../features/main-button) link.
-
-- [Main button](../features/main-button)
+Updates [main button](../features/main-button) settings.
 
 ```typescript
 type Parameters = {
@@ -179,23 +166,21 @@ type Parameters = {
 
 #### `web_app_setup_closing_behavior`
 
-Changes current closing confirmation requirement status.
-
-- [Closing behavior](../features/closing-behavior)
+Changes current [closing behavior](../features/closing-behavior).
 
 ```typescript
-type Parameters = {need_confirmation: boolean};
+type Parameters = { need_confirmation: boolean };
 ```
 
 ### v6.1
 
 #### `web_app_open_tg_link`
 
-Opens link which in format like <i> https://t.me/* </i>. Link will be opened in
+Opens link which in format like `https://t.me/*`. Link will be opened in
 Telegram app, Web App will be closed.
 
 ```typescript
-type Parameters = {path_full: string};
+type Parameters = { path_full: string };
 ```
 
 #### `web_app_open_invoice`
@@ -207,24 +192,21 @@ Opens invoice by its specified slug.
 [//]: # (for developer.)
 
 ```typescript
-type Parameters = {slug: string};
+type Parameters = { slug: string };
 ```
 
 #### `web_app_setup_back_button`
 
-Updates back button settings.
-
-- [Back button](../features/back-button)
+Updates [back button](../features/back-button) settings.
 
 ```typescript
-type Parameters = {is_visible: boolean};
+type Parameters = { is_visible: boolean };
 ```
 
 #### `web_app_set_background_color`
 
-Updates current Web App background color. 
-
-- [Background color](../features/theme#background-and-header-colors)
+Updates Web
+App [background color](../features/theme#background-and-header-colors).
 
 ```typescript
 type Parameters = {
@@ -235,19 +217,15 @@ type Parameters = {
 
 #### `web_app_set_header_color`
 
-Updates current header color.
-
-- [Header color](../features/theme#background-and-header-colors)
+Updates Web App [header color](../features/theme#background-and-header-colors).
 
 ```typescript
-type Parameters = {color_key: 'bg_color' | 'secondary_bg_color'};
+type Parameters = { color_key: 'bg_color' | 'secondary_bg_color' };
 ```
 
 #### `web_app_trigger_haptic_feedback`
 
-Generates haptic feedback event.
-
-- [Haptic feedback](../features/other#haptic-feedback)
+Generates [haptic feedback](../features/haptic-feedback) event.
 
 ```typescript
 type Parameters = {
@@ -279,7 +257,7 @@ type Parameters = {
 
 #### `web_app_open_popup`
 
-Opens new popup. When user closes popup, Telegram
+Opens new [popup](../features/popup). When user closes popup, Telegram
 emits [`popup_closed`](events#popup_closed) event.
 
 ```typescript

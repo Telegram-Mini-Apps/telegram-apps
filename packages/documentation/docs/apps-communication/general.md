@@ -2,12 +2,12 @@
 sidebar_position: 1
 ---
 
-# General
+# About
 
 To understand how to use Web Apps functionality, we should start from learning
 how Telegram native application communicates with Web App.
 
-Depending on the [platform](../introduction/platforms), Telegram will create
+Depending on the [platform](../platforms), Telegram will create
 special environment for Web App. For developer, it is enough to know, that this
 environment is web-based, but nevertheless, each of them has its own
 communication way between Telegram native application and Web App.
