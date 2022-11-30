@@ -1,0 +1,8 @@
+{
+  "label": "Tutorials",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "description": "Community-made tutorials to increase speed of Web App development."
+  }
+}
