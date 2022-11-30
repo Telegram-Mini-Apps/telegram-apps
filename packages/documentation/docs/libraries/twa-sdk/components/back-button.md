@@ -1,16 +1,10 @@
----
-sidebar_position: 4
----
-
-# BackButton
+# `BackButton`
 
 Controls the back button displayed in the header of the Web App in the
 Telegram interface. It is mostly used in case, when you want to provide a way to
 go back in routing history or rollback some action.
 
-## Usage
-
-### Init
+## Init
 
 ```typescript  
 import {BackButton} from 'twa-sdk';  
@@ -21,7 +15,7 @@ const backButton = new BackButton();
 const backButton = new BackButton({bridge: init()});  
 ```  
 
-### Showing and hiding
+## Showing and hiding
 
 ```typescript  
 // Show back button.  
@@ -33,16 +27,16 @@ backButton.hide();
 console.log(backButton.isVisible); // false  
 ```  
 
-### Events
+## Events
 
-Events available for [listening](./events-listening):
+Events available for [listening](../general#events):
 
 - `visibleChange: (isVisible: boolean) => void`
 - `click: () => void`
 
-### Methods support
+## Methods support
 
-Methods available for [support check](./methods-support):
+Methods available for [support check](../general#methods-support):
 
 - `show`
 - `hide`  

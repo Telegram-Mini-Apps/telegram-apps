@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-sidebar_label: "General information"
+sidebar_label: "About"
 ---
 
 # twa-sdk <sup><img src="https://static.npmjs.com/255a118f56f5346b97e56325a1217a16.svg" alt="drawing" width="20"/></sup>
@@ -51,9 +51,7 @@ import CodeBlock from '@theme/CodeBlock';
   </TabItem>
 </Tabs>
 
-## Usage
-
-### Init
+## Init
 
 According to logic, this package provides full control over its lifecycle,
 its initialization is on developer's shoulders. It means, that there are no
@@ -131,3 +129,50 @@ recommend passing your own single instance of `Bridge` to avoid unexpected
 behaviour or errors.
 
 :::
+
+### Events
+
+Component instances use common way of events listening through `on` and `off`
+functions:
+
+```typescript
+const listener = (...args) => {
+  console.log(...args);
+};
+component.on(event, listener); // add listener.
+component.off(event, listener); // remove listener.
+```
+
+Example with `BackButton` component:
+
+```typescript
+import {BackButton} from 'twa-sdk';
+
+const backButton = new BackButton();
+backButton.on('click', () => {
+  console.log('Back button clicked.');
+});
+```
+
+You can find list of supported events in components own documentations.
+
+### Methods support
+
+Almost each component is capable of checking whether its method is supported by
+passed Web App version or not. To check if some methods are supported, you
+should use `{Component}.supports()` function. For example:
+
+```typescript
+import {BackButton} from 'twa-sdk';
+
+console.log(BackButton.supports('show', '6.0')); // false
+console.log(BackButton.supports('hide', '6.3')); // true
+```
+
+It is recommended to use this functionality before calling some component method
+as long as this will make you sure, it will work. Component itself is not
+checking if method is supported by current Web App version, what could lead to
+issues.
+
+List of supported methods by components is described in each component's
+documentation.
