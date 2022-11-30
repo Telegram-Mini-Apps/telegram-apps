@@ -6,11 +6,8 @@ import {Redirect} from '@docusaurus/router';
 export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext();
   return (
-    <Layout
-      noFooter={true}
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
-      <Redirect to={'docs/from-author'}/>
+    <Layout noFooter={true} description={siteConfig.tagline}>
+      <Redirect to={'docs/from-authors'}/>
     </Layout>
   );
 }
