@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# From author
+# From authors
 
 Hey developer! We spent a lot of time researching Telegram platform to create
 something useful, something, that will help you to learn it much faster than we
