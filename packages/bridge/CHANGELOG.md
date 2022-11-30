@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@1.1.0...twa-bridge@1.2.0) (2022-11-30)
+
+
+### Features
+
+* **post types:** set more accurate type for web_app_set_header_color color_key ([f4a31ec](https://github.com/Telegram-Web-Apps/twa/commit/f4a31eca6f3089910e3e7791e35fabb0fe14a7ee))
+
+
+
+
+
+
 # [1.1.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@1.0.1...twa-bridge@1.1.0) (2022-11-25)
 
 
