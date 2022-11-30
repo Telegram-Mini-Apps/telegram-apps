@@ -27,6 +27,7 @@
     "commit": "git cz",
     "docs:dev": "lerna run --scope=documentation start",
     "docs:deploy": "lerna run --scope=documentation deploy",
+    "docs:build": "lerna run --scope=documentation build",
     "lint": "lerna run lint",
     "test": "lerna run test",
     "publish": "lerna publish",
