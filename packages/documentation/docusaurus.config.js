@@ -6,9 +6,10 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Telegram Web Apps',
-  tagline: 'Telegram Web Apps platform documentation. Useful libraries, ' +
-    'platform concepts, lifecycle and much more.',
+  title: 'Telegram Web Apps documentation',
+  tagline: 'Written by enthusiasts full documentation for Telegram Web ' +
+    'Apps technology. Provides explanations, tutorials, examples, hints ' +
+    'and much more',
   url: 'https://telegram-web-apps.github.io',
   baseUrl: '/twa/',
   onBrokenLinks: 'throw',
@@ -43,7 +44,7 @@ const config = {
   ],
 
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+  /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
         title: 'Web Apps',
@@ -52,7 +53,7 @@ const config = {
           src: 'img/logo.png',
         },
         items: [
-          {to: '/docs/from-author', label: 'Docs', position: 'left'},
+          {to: '/docs/from-authors', label: 'Docs', position: 'left'},
           {
             href: 'https://github.com/Telegram-Web-Apps',
             label: 'GitHub',
