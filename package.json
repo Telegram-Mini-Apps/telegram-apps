@@ -24,12 +24,13 @@
   },
   "scripts": {
     "build": "lerna run build",
-    "dev:docs": "lerna run --scope=documentation start",
+    "commit": "git cz",
+    "docs:dev": "lerna run --scope=documentation start",
+    "docs:deploy": "lerna run --scope=documentation deploy",
     "lint": "lerna run lint",
     "test": "lerna run test",
     "publish": "lerna publish",
-    "release": "pnpm run test && pnpm run lint && pnpm run build && pnpm run publish --no-private",
-    "commit": "git cz"
+    "release": "pnpm run test && pnpm run lint && pnpm run build && pnpm run publish --no-private"
   },
   "workspaces": [
     "packages/*"
