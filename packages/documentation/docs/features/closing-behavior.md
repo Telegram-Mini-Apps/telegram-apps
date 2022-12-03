@@ -1,18 +1,14 @@
 # Closing behavior
 
-[//]: # (This method is rather)
+It is rather common for Web Apps, when user accidentally closes application
+during scrolling it to top. The problem is user could drag application block
+too much which will result in application close.
 
-[//]: # (useful to prevent accidental application close. For example, when user fills out)
+To prevent user from doing this, you could use `closing behaviour`. Web Apps
+allows developer to prompt if user really wants to close application. This
+functionality could also be used during filling some big forms or something
+like that. Just not to lose progress.
 
-[//]: # (a big form and accidentally swipes application down.)
+![closing-behavior.png](../../static/docs/closing-behavior.png)
 
-[//]: # ()
-[//]: # (By setting `need_confirmation = true`, you will make user to confirm if he)
-
-[//]: # (really wants to close application.)
-
-:::info
-
-This section is under development. You can help us to improve or write it.
-
-:::
+- [Web App method](../apps-communication/methods#web_app_setup_closing_behavior)
