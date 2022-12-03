@@ -1,12 +1,12 @@
 import MDXComponents from '@theme-original/MDXComponents';
-import NpmInstall from '../components/NpmInstall';
-import NpmMeta from '../components/NpmMeta';
-import NpmLink from '../components/NpmLink';
+import NpmInstall from '../components/docs/NpmInstall';
+import LibraryBadges from '../components/docs/LibraryBadges';
+import NpmLink from '../components/docs/NpmLink';
 
 export default {
   // Re-use the default mapping
   ...MDXComponents,
   NpmInstall,
-  NpmMeta,
+  LibraryBadges,
   NpmLink,
 };

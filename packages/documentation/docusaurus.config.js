@@ -38,7 +38,7 @@ const config = {
       ({
         docs: {sidebarPath: require.resolve('./sidebars.js')},
         blog: false,
-        theme: {customCss: require.resolve('./src/css/custom.css')},
+        theme: {customCss: require.resolve('./src/css/custom.scss')},
       }),
     ],
   ],
@@ -111,6 +111,8 @@ const config = {
         darkTheme: darkCodeTheme,
       },
     }),
+
+  plugins: ['docusaurus-plugin-sass'],
 };
 
 module.exports = config;

@@ -1,7 +1,4 @@
 import React from 'react';
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import CodeBlock from '@theme/CodeBlock';
 
 interface Props {
   pkg: string;
@@ -12,7 +9,7 @@ interface Props {
  * @param pkg
  * @constructor
  */
-export default function NpmMeta({pkg}: Props) {
+export default function LibraryBadges({pkg}: Props) {
   return (
     <div style={{marginBottom: 10}}>
       <a href={`https://npmjs.com/package/${pkg}`}>
