@@ -58,6 +58,7 @@ importers:
       '@docusaurus/core': 2.2.0
       '@docusaurus/module-type-aliases': 2.2.0
       '@docusaurus/preset-classic': 2.2.0
+      '@docusaurus/theme-common': ^2.2.0
       '@docusaurus/types': ^2.2.0
       '@mdx-js/react': ^1.6.22
       '@tsconfig/docusaurus': ^1.0.5
@@ -67,10 +68,14 @@ importers:
       prism-react-renderer: ^1.3.5
       react: ^17.0.2
       react-dom: ^17.0.2
+      twa-bridge: workspace:*
+      twa-sdk: workspace:*
+      twa-sdk-react: workspace:*
       typescript: ^4.7.4
     dependencies:
       '@docusaurus/core': 2.2.0_ehuab5y7qm7umqkczzguzxp57i
       '@docusaurus/preset-classic': 2.2.0_qealvalg3qigqrjomgx4rnwdxu
+      '@docusaurus/theme-common': 2.2.0_ehuab5y7qm7umqkczzguzxp57i
       '@mdx-js/react': 1.6.22_react@17.0.2
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.9
@@ -78,6 +83,9 @@ importers:
       prism-react-renderer: 1.3.5_react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+      twa-bridge: link:../bridge
+      twa-sdk: link:../sdk
+      twa-sdk-react: link:../sdk-react
     devDependencies:
       '@docusaurus/module-type-aliases': 2.2.0_sfoxds7t5ydpegc3knd667wn6m
       '@docusaurus/types': 2.2.0_sfoxds7t5ydpegc3knd667wn6m
@@ -115,7 +123,7 @@ importers:
       twa-theme-params: workspace:*
     dependencies:
       '@types/react': 18.0.25
-      react: 18.2.0
+      react: 17.0.2
       twa-bridge: link:../bridge
       twa-sdk: link:../sdk
       twa-theme-params: link:../theme-params
@@ -11487,13 +11495,6 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
-
-  /react/18.2.0:
-    resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      loose-envify: 1.4.0
-    dev: false
 
   /read-cmd-shim/3.0.1:
     resolution: {integrity: sha512-kEmDUoYf/CDy8yZbLTmhB1X9kkjf9Q80PCNsDMb7ufrGd6zZSQA1+UyjrO+pZm5K/S4OXCWJeiIt1JA8kAsa6g==}
