@@ -4,6 +4,12 @@ Mono-repository, containing all the packages, connected with TypeScript
 development on Web Apps platform. To learn more, follow packages own
 documentations.
 
+## Documentation
+
+Before using packages in this repository, it is recommended to learn
+how Telegram Web Apps platform works. You can find more information about
+platform in our [documentation](https://telegram-web-apps.github.io/twa/).
+
 ## Packages
 
 - [twa-core](packages/core) - core utilities reused all over the ecosystem
