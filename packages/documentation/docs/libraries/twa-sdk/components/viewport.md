@@ -3,20 +3,18 @@
 Contains information about current Web App device viewport, its dimensions and
 state.
 
-## Usage
-
-### Init
+## Init
 
 ```typescript  
 import {Viewport} from 'twa-sdk';  
 import {init} from 'twa-bridge';  
   
 const viewport = new Viewport();  
-// or with your bridge.  
+// or with your bridge instance.  
 const viewport = new Viewport({bridge: init()});  
 ```  
 
-### Dimensions
+## Dimensions
 
 `Viewport` instance contains information about viewport dimensions. We can
 get current visible are height and width via `height` and `width` properties.
@@ -33,7 +31,7 @@ follow the lower border of the window. It should not be used to pin interface
 elements to the bottom of the visible area. It's more appropriate to use the
 value of the `stableHeight` field for this purpose.
 
-### Requesting viewport information
+## Requesting viewport information
 
 To get fresh viewport information, you could use static `request` function:
 
@@ -49,9 +47,9 @@ Viewport.request(init()).then(console.log);
 // { height: 122, isExpanded: false, width: 375, isStateStable: true }
 ```
 
-### Events
+## Events
 
-Events available for [listening](../../../README.md#events-listening) :
+Events available for [listening](../about#events):
 
 - `heightChange: (height: number) => void`
 - `widthChange: (width: number) => void`

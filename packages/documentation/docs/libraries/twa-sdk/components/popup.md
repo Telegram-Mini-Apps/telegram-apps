@@ -3,9 +3,10 @@
 Controls currently displayed application popup. It allows developers to open new
 custom popups and detect popup-connected events.
 
-## Usage
+To learn more, visit description of this feature
+in [documentation](../../../features/popup).
 
-### Init
+## Init
 
 ```typescript
 import {Popup} from 'twa-sdk';
@@ -16,7 +17,11 @@ const popup = new Popup();
 const popup = new Popup({bridge: init()});
 ```
 
-### Opening new popup
+## Opening new popup
+
+`show` function returns promise which will be resolved in case, popup is hidden.
+Popup will resolve button identifier in case, user clicked it. Otherwise,
+`null` will be resolved.
 
 ```typescript
 popup.show({
@@ -27,10 +32,6 @@ popup.show({
 console.log(popup.isOpened); // true
 ```
 
-`show` function returns promise which will be resolved in case, popup is hidden.
-Popup will resolve button identifier in case, user clicked it. Otherwise,
-null will be resolved.
-
 There are some additional shorthand functions using `show` function for showing
 popups which way also be useful:
 
@@ -40,20 +41,20 @@ popup.showAlert('This page will be closed in 2 minutes.');
 
 // Show confirm message.
 popup.showConfirm('Are you sure, this form should be closed?').then(value => {
-  // value will be `true` or `false`.
+  // value will be true or false.
 })
 ```
 
-### Events
+## Events
 
-Events available for [listening](../../../README.md#events-listening) :
+Events available for [listening](../about#events):
 
 - `close: () => void`
 - `openChange: (isOpened: boolean) => void`
 - `open: () => void`
 
-### Methods support
+## Methods support
 
-Methods available for [support check](../../../README.md#methods-support):
+Methods available for [support check](../about#methods-support):
 
 - `show`

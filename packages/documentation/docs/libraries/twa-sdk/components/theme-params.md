@@ -2,9 +2,10 @@
 
 Contains information about currently used theme by application.
 
-## Usage
+To learn more, visit description of this feature
+in [documentation](../../../features/theme).
 
-### Init
+## Init
 
 ```typescript  
 import {ThemeParams} from 'twa-sdk';  
@@ -12,7 +13,7 @@ import {ThemeParams} from 'twa-sdk';
 const themeParams = new ThemeParams();  
 ```  
 
-### Creating from JSON
+## Creating from JSON
 
 `ThemeParams` could be created from their JSON representation (or JSON object
 converted to string):
@@ -24,7 +25,7 @@ const themeParams = ThemeParams.fromJson({bg_color: '#RRGGBB', ...})
 Internally, `fromJson` uses `extractThemeFromJson` function
 from `twa-theme-params` package.
 
-### Requesting fresh theme params
+## Requesting fresh theme params
 
 To get fresh theme parameters information, you could use `request` static
 function. It will return `TwaThemeParams` interface from `twa-theme-params`

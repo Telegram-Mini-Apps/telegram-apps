@@ -4,6 +4,9 @@ Controls the back button displayed in the header of the Web App in the
 Telegram interface. It is mostly used in case, when you want to provide a way to
 go back in routing history or rollback some action.
 
+To learn more, visit description of this feature
+in [documentation](../../../features/back-button).
+
 ## Init
 
 ```typescript  

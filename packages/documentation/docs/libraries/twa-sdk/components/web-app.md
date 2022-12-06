@@ -2,9 +2,7 @@
 
 Provides common Web Apps functionality not covered by other system components.
 
-## Usage
-
-### Init
+## Init
 
 `WebApp` requires passing current Web App version and list of optional initial
 properties:
@@ -26,19 +24,42 @@ const webApp = new WebApp('7.0', {
 });
 ```
 
-### Colors
+## Colors
 
-`WebApp` provides access to 2 colors with their own setters.
+### `backgroundColor: RGBColor`
 
-| Property                                          | Setter                                                      | Description                  |
-|---------------------------------------------------|-------------------------------------------------------------|------------------------------|
-| `backgroundColor: RGBColor`                       | `setBackgroundColor(color: RGBColor)`                       | application background color |
-| `headerColor: 'bg_color' or 'secondary_bg_color'` | `setHeaderColor(color: 'bg_color' or 'secondary_bg_color')` | application header color     |
+Application background color.
+
+Setter: `setBackgroundColor(color: RGBColor)`
+
+```typescript
+webApp.setBackgroundColor('#ffaacc');
+console.log(webApp.backgroundColor); // #ffaacc
+```
+
+### `headerColor: 'bg_color' or 'secondary_bg_color'`
+
+Application header color.
+
+Setter: `setHeaderColor(color: 'bg_color' or 'secondary_bg_color')`
+
+```typescript
+webApp.setHeaderColor('bg_color');
+console.log(webApp.headerColor); // bg_color
+```
+
+### `colorScheme: 'dark' | 'light'`
 
 To get current color scheme (`dark` or `light`), you can use `colorScheme`
-property.
+property:
 
-### Closing confirmation
+```typescript
+console.log(webApp.colorScheme); // dark
+```
+
+This property is computed depending on current `backgroundColor`.
+
+## Closing confirmation
 
 To manipulate Web App closing confirmation,
 functions `disableClosingConfirmation`
@@ -52,7 +73,7 @@ webApp.disableClosingConfirmation();
 console.log(webApp.isClosingConfirmationEnabled); // false
 ```
 
-### Platform
+## Platform
 
 You could get current Web App platform (`tdesktop`, `webz` etc.) by getting
 `platform` property. In case, you want this property to detect current platform
@@ -69,7 +90,7 @@ console.log(webApp.isIOS); // false
 console.log(webApp.isWeb); // true
 ```
 
-### Opening links
+## Opening links
 
 Here comes the list of methods, which allow opening links with help of Web App:
 
@@ -81,7 +102,7 @@ Here comes the list of methods, which allow opening links with help of Web App:
 - `openInvoice(url: string)` - opens an invoice using its url. It expects
   passing link in full format, with hostname "t.me".
 
-### Other methods
+## Other methods
 
 - `close()` - closes Web App;
 - `isVersionAtLeast(version: string)` - checks if current `WebApp` instance
@@ -89,17 +110,17 @@ Here comes the list of methods, which allow opening links with help of Web App:
 - `ready()` - should be called whenever Web App is ready to be displayed;
 - `sendData(data: string)` - sends data to Telegram bot.
 
-### Events
+## Events
 
-Events available for [listening](../../../README.md#events-listening):
+Events available for [listening](../about#events):
 
 - `backgroundColorChange: (color: RGBColor) => void`
 - `closingConfirmationChange: (isClosingConfirmationEnabled: boolean) => void`
 - `headerColorChange: (color: SettableColorKey) => void`
 
-### Methods support
+## Methods support
 
-Methods available for [support check](../../../README.md#methods-support):
+Methods available for [support check](../about#methods-support):
 
 - `openInvoice`
 - `setBackgroundColor`
