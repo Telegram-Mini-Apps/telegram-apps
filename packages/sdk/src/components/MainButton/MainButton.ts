@@ -2,12 +2,12 @@ import {EventEmitter, toRGB, RGBColor} from 'twa-core';
 import {MainButtonEventListener, MainButtonEventsMap} from './events';
 import {Bridge} from 'twa-bridge';
 import {WithCommonProps} from '../../types';
-import {createSupportChecker, processBridgeProp} from '../../utils';
+import {processBridgeProp} from '../../utils';
 
 export interface MainButtonProps extends WithCommonProps {
   /**
    * Should changes be automatically sent to native application.
-   * @default false
+   * @default true
    */
   autocommit?: boolean;
   color?: RGBColor;
@@ -52,7 +52,7 @@ export class MainButton {
   constructor(props: MainButtonProps = {}) {
     const {
       isProgressVisible = false, isVisible = false, isActive = false,
-      bridge, text, textColor, color, autocommit = false,
+      bridge, text, textColor, color, autocommit = true,
     } = props;
     this.autocommit = autocommit;
     this.bridge = processBridgeProp(bridge);
