@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@1.0.4...twa-sdk@1.1.0) (2022-12-06)
+
+
+### Bug Fixes
+
+* **mainbutton:** set autocommit to true ([d88a3a5](https://github.com/Telegram-Web-Apps/twa/commit/d88a3a54cacbcb87f682d0b642c84c02dcd420fd))
+
+
+### Features
+
+* **twa-sdk:** add documentation for components ([847c66f](https://github.com/Telegram-Web-Apps/twa/commit/847c66f40c53931b376b35ac3fe00d3aef292ebe))
+
+
+
+
+
 ## [1.0.4](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@1.0.3...twa-sdk@1.0.4) (2022-11-30)
 
 **Note:** Version bump only for package twa-sdk
