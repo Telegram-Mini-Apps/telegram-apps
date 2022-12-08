@@ -1,0 +1,52 @@
+{
+  "private": true,
+  "name": "twa-ui",
+  "version": "0.0.0",
+  "description": "React Telegram UI components.",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
+  "keywords": [
+    "telegram",
+    "telegram-web-apps",
+    "twa",
+    "react",
+    "ui",
+    "telegram-ui"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist/**/*"
+  ],
+  "main": "dist/index.cjs",
+  "browser": "dist/browser.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "web": "./dist/index.mjs",
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.git",
+    "directory": "packages/ui"
+  },
+  "scripts": {
+    "dev": "rollup --watch --config rollup.dev.config.js",
+    "test": "echo \"Tests not specified\"",
+    "build": "rollup --config rollup.config.js"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+  },
+  "peerDependencies": {
+    "@types/react": "^17.0.0 || ^18.0.0",
+    "react": "^17.0.0 || ^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
+  }
+}
