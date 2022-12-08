@@ -23,5 +23,5 @@ export function Switch({platform = 'web', ...rest}: SwitchProps) {
   if (platform === 'ios') {
     return <IOSSwitch {...rest}/>;
   }
-  throw new Error('Suck it');
+  throw new Error('not implemented');
 }
