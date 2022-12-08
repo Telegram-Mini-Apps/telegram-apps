@@ -1,0 +1,77 @@
+@import "../../../scss/utils";
+
+$root-l-height: 34px;
+$root-l-width: 70px;
+
+$track-l-height: 24px;
+$track-l-padding: 8px;
+
+$switch-l-size: $root-l-height;
+
+@mixin root-size($width, $height) {
+  @include size($width, $height);
+}
+
+@mixin track-size($height, $padding) {
+  margin-left: $padding;
+
+  @include size(calc(100% - $padding * 2), $height);
+
+  &Checked {
+  }
+}
+
+@mixin switch-size($size) {
+  @include size($size, $size);
+
+  &Checked {
+    left: calc(100% - $size)
+  }
+}
+
+.root {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+
+  &SizeL {
+    @include root-size($root-l-width, $root-l-height);
+  }
+}
+
+.track {
+  position: absolute;
+  border-radius: 1000px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: background-color 0.2s ease;
+  width: 100%;
+  background-color: #AEB5BB;
+
+  &Checked {
+  }
+
+  &SizeL {
+    @include track-size($track-l-height, $track-l-padding);
+  }
+}
+
+.switch {
+  position: absolute;
+  display: block;
+  left: 0;
+  border-radius: 50%;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, left 0.3s ease, border 0.2s ease;
+  background-color: white;
+  border: solid #AEB5BB;
+
+  &SizeL {
+    @include switch-size($switch-l-size)
+  }
+
+  &Active {
+    &Checked {
+    }
+  }
+}

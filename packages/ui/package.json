@@ -33,7 +33,7 @@
     "directory": "packages/ui"
   },
   "scripts": {
-    "dev": "rollup --watch --config rollup.dev.config.js",
+    "dev": "rollup --watch --config ./playground/rollup.config.js",
     "test": "echo \"Tests not specified\"",
     "build": "rollup --config rollup.config.js"
   },
@@ -48,5 +48,13 @@
     "@types/react": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^23.0.4",
+    "@rollup/plugin-replace": "^5.0.1",
+    "classnames": "^2.3.2",
+    "rollup-plugin-postcss": "^4.0.2",
+    "sass": "^1.56.1"
   }
 }
