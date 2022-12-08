@@ -32,6 +32,7 @@
     "docs:dev": "lerna run --scope=documentation start",
     "docs:deploy": "lerna run --scope=documentation deploy",
     "docs:build": "lerna run --scope=documentation build",
+    "ui:dev": "lerna run --scope=twa-ui dev",
     "lint": "lerna run lint",
     "test": "lerna run test",
     "publish": "lerna publish",
