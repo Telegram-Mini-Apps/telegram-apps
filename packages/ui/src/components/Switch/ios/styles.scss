@@ -1,12 +1,44 @@
 @import "../../../scss/utils";
 
-$root-l-height: 46px;
-$root-l-width: 76px;
+// sm
+$root-sm-height: 25px;
+$root-sm-width: 43px;
+
+$track-sm-height: $root-sm-height;
+$track-sm-padding: 3px;
+
+$switch-sm-size: $root-sm-height - $track-sm-padding * 2;
+// sm
+
+// m
+$root-m-height: 35px;
+$root-m-width: 60px;
+
+$track-m-height: $root-m-height;
+$track-m-padding: 3px;
+
+$switch-m-size: $root-m-height - $track-m-padding * 2;
+// m
+
+// l
+$root-l-height: 45px;
+$root-l-width: 75px;
 
 $track-l-height: $root-l-height;
 $track-l-padding: 3px;
 
 $switch-l-size: $root-l-height - $track-l-padding * 2;
+// l
+
+// xl
+$root-xl-height: 55px;
+$root-xl-width: 90px;
+
+$track-xl-height: $root-xl-height;
+$track-xl-padding: 3px;
+
+$switch-xl-size: $root-xl-height - $track-xl-padding * 2;
+// xl
 
 @mixin root-size() {
 }
@@ -31,8 +63,17 @@ $switch-l-size: $root-l-height - $track-l-padding * 2;
   position: relative;
   display: inline-block;
 
+  &SizeSM {
+    @include size($root-sm-width, $root-sm-height);
+  }
+  &SizeM {
+    @include size($root-m-width, $root-m-height);
+  }
   &SizeL {
     @include size($root-l-width, $root-l-height);
+  }
+  &SizeXL {
+    @include size($root-xl-width, $root-xl-height);
   }
 }
 
@@ -47,9 +88,6 @@ $switch-l-size: $root-l-height - $track-l-padding * 2;
   &Checked {
   }
 
-  &SizeL {
-    @include track-size();
-  }
 }
 
 .switch {
@@ -59,8 +97,17 @@ $switch-l-size: $root-l-height - $track-l-padding * 2;
   transition: background-color 0.2s ease, left 0.3s ease, transform 200ms ease;
   background-color: white;
 
+  &SizeSM {
+    @include switch-size($switch-sm-size, $track-sm-padding);
+  }
+  &SizeM {
+    @include switch-size($switch-m-size, $track-m-padding);
+  }
   &SizeL {
     @include switch-size($switch-l-size, $track-l-padding);
+  }
+  &SizeXL {
+    @include switch-size($switch-xl-size, $track-xl-padding);
   }
 
   &Active {

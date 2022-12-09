@@ -1,10 +1,10 @@
 import React, {useCallback, useState} from 'react';
 import cn from 'classnames';
-import {SwitchClasses, SwitchSize} from '../shared';
+import {SwitchClasses} from '../shared';
 import styles from './styles.scss';
 
 export interface SwitchBaseProps {
-  size?: SwitchSize;
+  size?: string;
   classes: SwitchClasses;
   activeColor: string;
   inactiveColor?: string;
@@ -16,7 +16,7 @@ export interface SwitchBaseProps {
  * @constructor
  */
 export function SwitchBase(props: SwitchBaseProps) {
-  const {size = 'l', classes, activeColor, inactiveColor} = props;
+  const {size, activeColor, inactiveColor} = props;
   const [checked, setChecked] = useState(false);
   const [active, setActive] = useState(false);
 
@@ -24,19 +24,20 @@ export function SwitchBase(props: SwitchBaseProps) {
   const disable = useCallback(() => setActive(false), []);
   const enable = useCallback(() => setActive(true), []);
 
-  const isLarge = size === 'l';
+  const classes = props.classes as (SwitchClasses & Record<string, string>);
+  const s = size?.toUpperCase();
 
-  const rootCn = cn(classes.root, {[classes.rootSizeL]: isLarge});
+  const rootCn = cn(classes.root, classes[`rootSize${s}`]);
   const trackCn = cn(classes.track, {
     [classes.trackChecked]: checked,
-    [classes.trackSizeL]: isLarge,
-    [classes.trackSizeLChecked]: isLarge && checked,
+    [classes[`trackSize${s}`]]: true,
+    [classes[`trackSize${s}Checked`]]: true && checked,
   });
   const switchCn = cn(classes.switch, {
     [classes.switchActive]: active,
     [classes.switchActiveChecked]: active && checked,
-    [classes.switchSizeL]: isLarge,
-    [classes.switchSizeLChecked]: isLarge && checked,
+    [classes[`switchSize${s}`]]: true,
+    [classes[`switchSize${s}Checked`]]: true && checked,
   });
 
   return (

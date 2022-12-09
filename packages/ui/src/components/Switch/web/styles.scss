@@ -1,41 +1,41 @@
 @import "../../../scss/utils";
 
 // l
-$root-sm-height: 20px;
-$root-sm-width: 44px;
+$root-sm-height: 16px;
+$root-sm-width: 30px;
 
 $track-sm-height: 10px;
-$track-sm-padding: 8px;
+$track-sm-padding: 4px;
 
 $switch-sm-size: $root-sm-height;
 // l
 
 // l
-$root-m-height: 30px;
-$root-m-width: 60px;
+$root-m-height: 25px;
+$root-m-width: 44px;
 
 $track-m-height: 15px;
-$track-m-padding: 8px;
+$track-m-padding: 4px;
 
 $switch-m-size: $root-m-height;
 // l
 
 // l
-$root-l-height: 40px;
-$root-l-width: 78px;
+$root-l-height: 39px;
+$root-l-width: 68px;
 
 $track-l-height: 25px;
-$track-l-padding: 8px;
+$track-l-padding: 4px;
 
 $switch-l-size: $root-l-height;
 // l
 
 // xl
-$root-xl-height: 55px;
-$root-xl-width: 105px;
+$root-xl-height: 57px;
+$root-xl-width: 95px;
 
 $track-xl-height: 35px;
-$track-xl-padding: 8px;
+$track-xl-padding: 4px;
 
 $switch-xl-size: $root-xl-height;
 // xl
@@ -120,7 +120,7 @@ $switch-xl-size: $root-xl-height;
   box-sizing: border-box;
   transition: background-color 0.2s ease, left 0.3s ease, border 0.2s ease;
   background-color: white;
-  border: 3px solid #AEB5BB;
+  border: solid #AEB5BB;
 
   &SizeSM {
     @include switch-size($switch-sm-size)

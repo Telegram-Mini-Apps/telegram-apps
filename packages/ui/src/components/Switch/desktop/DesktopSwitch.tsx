@@ -1,19 +1,22 @@
 import React from 'react';
 import {SwitchBase} from '../base';
-import c from './styles.scss';
 import {mergeClasses} from '../../../styles';
 import {CustomSwitchProps, SwitchClasses} from '../shared';
 
-export type IOSSwitchProps = CustomSwitchProps;
+import styles from './styles.scss';
+
+export type DesktopSwitchProps = CustomSwitchProps;
+
+console.log(styles)
 
 /**
- * Switch used on iOS platform.
+ * Switch used on Android platform.
  * @param props
  * @constructor
  */
-export function IOSSwitch(props: IOSSwitchProps) {
+export function DesktopSwitch(props: DesktopSwitchProps) {
   const {classes = {}, ...rest} = props;
-  const finalClasses = mergeClasses(c, classes) as SwitchClasses;
+  const finalClasses = mergeClasses(styles, classes) as SwitchClasses;
 
   return <SwitchBase classes={finalClasses} {...rest}/>
 }

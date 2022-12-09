@@ -7,11 +7,14 @@ import styles from './styles.scss';
 
 export type AndroidSwitchProps = CustomSwitchProps;
 
+console.log(styles)
+
 /**
  * Switch used on Android platform.
  * @param props
  * @constructor
  */
+
 export function AndroidSwitch(props: AndroidSwitchProps) {
   const {classes = {}, ...rest} = props;
   const finalClasses = mergeClasses(styles, classes) as SwitchClasses;
