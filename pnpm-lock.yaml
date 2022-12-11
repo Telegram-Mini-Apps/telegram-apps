@@ -57,7 +57,6 @@ importers:
     specifiers:
       '@docusaurus/core': 2.2.0
       '@docusaurus/module-type-aliases': 2.2.0
-      '@docusaurus/plugin-google-analytics': ^2.2.0
       '@docusaurus/preset-classic': 2.2.0
       '@docusaurus/theme-common': ^2.2.0
       '@docusaurus/types': ^2.2.0
@@ -79,7 +78,6 @@ importers:
       typescript: ^4.7.4
     dependencies:
       '@docusaurus/core': 2.2.0_ehuab5y7qm7umqkczzguzxp57i
-      '@docusaurus/plugin-google-analytics': 2.2.0_56jbash75ng5psbctf36wqywr4
       '@docusaurus/preset-classic': 2.2.0_qealvalg3qigqrjomgx4rnwdxu
       '@docusaurus/theme-common': 2.2.0_ehuab5y7qm7umqkczzguzxp57i
       '@mdx-js/react': 1.6.22_react@17.0.2

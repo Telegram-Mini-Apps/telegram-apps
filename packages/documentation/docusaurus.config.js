@@ -39,7 +39,7 @@ const config = {
         docs: {sidebarPath: require.resolve('./sidebars.js')},
         blog: false,
         theme: {customCss: require.resolve('./src/css/custom.scss')},
-        googleAnalytics: {
+        gtag: {
           trackingID: 'G-56XMKLCYLQ',
           anonymizeIP: true,
         },
