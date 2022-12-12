@@ -12,7 +12,10 @@ export interface CustomSwitchProps extends Omit<SwitchBaseProps, 'classes'> {
  */
 export type SwitchClasses = {
   root: string;
-  rootSize: string;
+  rootSizeSM: string;
+  rootSizeM: string;
+  rootSizeL: string;
+  rootSizeXL: string;
   track: string;
   trackSizeSM: string;
   trackSizeM: string;
@@ -45,3 +48,5 @@ export type SwitchClasses = {
 //   l: string,
 //   xl: string,
 // };
+
+export type SwitchSize = ('sm' | 'm' | 'l' | 'xl')

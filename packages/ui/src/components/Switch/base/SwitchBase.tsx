@@ -1,10 +1,10 @@
 import React, {useCallback, useState} from 'react';
 import cn from 'classnames';
-import {SwitchClasses} from '../shared';
+import {SwitchClasses, SwitchSize} from '../shared';
 import styles from './styles.scss';
 
 export interface SwitchBaseProps {
-  size?: string;
+  size?: SwitchSize;
   classes: SwitchClasses;
   activeColor: string;
   inactiveColor?: string;
@@ -25,7 +25,7 @@ export function SwitchBase(props: SwitchBaseProps) {
   const enable = useCallback(() => setActive(true), []);
 
   const classes = props.classes as (SwitchClasses & Record<string, string>);
-  const s = size?.toUpperCase();
+  const s = size ? size.toUpperCase() : "L";
 
   const rootCn = cn(classes.root, classes[`rootSize${s}`]);
   const trackCn = cn(classes.track, {
