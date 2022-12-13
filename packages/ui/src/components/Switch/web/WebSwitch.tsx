@@ -7,8 +7,6 @@ import styles from './styles.scss';
 
 export type WebSwitchProps = CustomSwitchProps;
 
-console.log(styles)
-
 /**
  * Switch used on Android platform.
  * @param props

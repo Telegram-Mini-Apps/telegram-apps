@@ -12,41 +12,19 @@ export interface CustomSwitchProps extends Omit<SwitchBaseProps, 'classes'> {
  */
 export type SwitchClasses = {
   root: string;
-  rootSizeSM: string;
-  rootSizeM: string;
-  rootSizeL: string;
-  rootSizeXL: string;
+  rootSize: `rootSize${SwitchSize}`;
   track: string;
-  trackSizeSM: string;
-  trackSizeM: string;
-  trackSizeL: string;
-  trackSizeXL: string;
-  trackSizeSMChecked: string;
-  trackSizeMChecked: string;
-  trackSizeLChecked: string;
-  trackSizeXLChecked: string;
+  trackSize: `trackSize${SwitchSize}`;
+  trackSizeChecked: `trackSize${SwitchSize}Checked`;
   trackChecked: string;
   switch: string;
   switchActive: string;
   switchActiveChecked: string;
-  switchSizeSM: string;
-  switchSizeM: string;
-  switchSizeL: string;
-  switchSizeXL: string;
-  switchSizeSMChecked: string;
-  switchSizeMChecked: string;
-  switchSizeLChecked: string;
-  switchSizeXLChecked: string;
+  switchSize: `switchSize${SwitchSize}`;
+  switchSizeChecked: `switchSize${SwitchSize}Checked`;
 };
 
 /**
  * List of known switch sizes.
  */
-// export type SwitchSize = {
-//   sm: string,
-//   m: string,
-//   l: string,
-//   xl: string,
-// };
-
-export type SwitchSize = ('sm' | 'm' | 'l' | 'xl')
+export type SwitchSize = 'SM' | 'M' | 'L' | 'XL'
