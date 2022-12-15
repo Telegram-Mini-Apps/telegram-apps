@@ -4,8 +4,8 @@ import {SwitchClasses, SwitchSize} from '../shared';
 import styles from './styles.scss';
 
 export interface SwitchBaseProps {
-  size?: SwitchSize;
-  classes?: SwitchClasses;
+  size: SwitchSize;
+  classes: SwitchClasses;
   activeColor?: string;
   inactiveColor?: string;
 }
