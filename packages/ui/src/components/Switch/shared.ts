@@ -8,23 +8,26 @@ export interface CustomSwitchProps extends Omit<SwitchBaseProps, 'classes'> {
 }
 
 /**
- * List of class names used in SwitchBase component.
+ * List of known platforms.
  */
-export type SwitchClasses = {
-  root: string;
-  rootSize: `rootSize${SwitchSize}`;
-  track: string;
-  trackSize: `trackSize${SwitchSize}`;
-  trackSizeChecked: `trackSize${SwitchSize}Checked`;
-  trackChecked: string;
-  switch: string;
-  switchActive: string;
-  switchActiveChecked: string;
-  switchSize: `switchSize${SwitchSize}`;
-  switchSizeChecked: `switchSize${SwitchSize}Checked`;
-};
+export type SwitchPlatform = 'web' | 'desktop' | 'ios' | 'android';
 
 /**
  * List of known switch sizes.
  */
-export type SwitchSize = 'SM' | 'M' | 'L' | 'XL'
+export type SwitchSize = 'sm' | 'm' | 'l' | 'xl';
+
+/**
+ * List of class names used in SwitchBase component.
+ */
+export type SizedClassNames =
+  | 'root' | `track${'' | 'Checked'}` | `switch${'' | 'Checked'}`
+  | `rootSize${Uppercase<SwitchSize>}`
+  | `trackSize${Uppercase<SwitchSize>}${'' | 'Checked'}`
+  | `switchSize${Uppercase<SwitchSize>}${'' | 'Checked'}`;
+
+export type SwitchClasses = {
+  root: string;
+  track: string;
+  switch: string;
+} & Record<SizedClassNames, string>;

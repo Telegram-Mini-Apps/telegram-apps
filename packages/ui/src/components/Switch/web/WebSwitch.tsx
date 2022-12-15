@@ -1,20 +1,13 @@
 import React from 'react';
 import {SwitchBase} from '../base';
-import {mergeClasses} from '../../../styles';
-import {CustomSwitchProps, SwitchClasses} from '../shared';
 
+import withStyles from '../../../styles/customStyles';
 import styles from './styles.scss';
 
-export type WebSwitchProps = CustomSwitchProps;
-
 /**
- * Switch used on Android platform.
+ * Switch used on Web platform.
  * @param props
  * @constructor
  */
-export function WebSwitch(props: WebSwitchProps) {
-  const {classes = {}, ...rest} = props;
-  const finalClasses = mergeClasses(styles, classes) as SwitchClasses;
 
-  return <SwitchBase classes={finalClasses} {...rest}/>
-}
+export const WebSwitch = withStyles(styles, SwitchBase);

@@ -1,12 +1,12 @@
 import React from 'react';
-import {CustomSwitchProps} from './shared';
+import {CustomSwitchProps, SwitchPlatform} from './shared';
 import {AndroidSwitch} from './android';
 import {IOSSwitch} from './ios';
 import {DesktopSwitch} from './desktop';
 import {WebSwitch} from './web';
 
 export interface SwitchProps extends CustomSwitchProps {
-  platform?: 'web' | 'desktop' | 'ios' | 'android';
+  platform?: SwitchPlatform;
   inactiveColor?: string;
   activeColor: string;
 }
@@ -18,6 +18,7 @@ export interface SwitchProps extends CustomSwitchProps {
  * @param rest
  * @constructor
  */
+
 export function Switch({platform = 'web', ...rest}: SwitchProps) {
   if (platform === 'android') {
     return <AndroidSwitch {...rest}/>;

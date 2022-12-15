@@ -1,0 +1,42 @@
+
+.root {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  width: 65px;
+  height: 40px;
+}
+
+.track {
+  position: absolute;
+  border-radius: 1000px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: background-color 0.2s ease;
+  width: 100%;
+  background-color: #ffaa5b;
+  margin-left: 5px;
+  height: 20px;
+  &Checked {
+    background-color: #5bffce;
+  }
+}
+
+.switch {
+  position: absolute;
+  display: block;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, left 0.3s ease, border 0.2s ease;
+  background-color: #5bffce;
+  border: 3px solid #ffaa5b;
+
+  &Checked {
+    background-color: #ffaa5b;
+    border: 3px solid #5bffce;
+    left: calc(100% - 25px)
+  }
+}

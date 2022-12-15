@@ -1,11 +1,7 @@
-import React from 'react';
 import {SwitchBase} from '../base';
-import {mergeClasses} from '../../../styles';
-import {CustomSwitchProps, SwitchClasses} from '../shared';
 
 import styles from './styles.scss';
-
-export type AndroidSwitchProps = CustomSwitchProps;
+import withStyles from '../../../styles/customStyles';
 
 /**
  * Switch used on Android platform.
@@ -13,9 +9,4 @@ export type AndroidSwitchProps = CustomSwitchProps;
  * @constructor
  */
 
-export function AndroidSwitch(props: AndroidSwitchProps) {
-  const {classes = {}, ...rest} = props;
-  const finalClasses = mergeClasses(styles, classes) as SwitchClasses;
-
-  return <SwitchBase classes={finalClasses} {...rest}/>
-}
+export const AndroidSwitch = withStyles(styles, SwitchBase);

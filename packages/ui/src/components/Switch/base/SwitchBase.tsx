@@ -5,8 +5,8 @@ import styles from './styles.scss';
 
 export interface SwitchBaseProps {
   size?: SwitchSize;
-  classes: SwitchClasses;
-  activeColor: string;
+  classes?: SwitchClasses;
+  activeColor?: string;
   inactiveColor?: string;
 }
 
@@ -34,6 +34,7 @@ export function SwitchBase(props: SwitchBaseProps) {
     [classes[`trackSize${s}Checked`]]: true && checked,
   });
   const switchCn = cn(classes.switch, {
+    [classes.switchChecked]: checked,
     [classes.switchActive]: active,
     [classes.switchActiveChecked]: active && checked,
     [classes[`switchSize${s}`]]: true,

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Switch} from '../../src/components/Switch';
 import ReactDOM from 'react-dom';
+import { CustomSwitch } from '../../src/components/Switch/customComponent';
 
 ReactDOM.render(
   (
@@ -24,6 +25,8 @@ ReactDOM.render(
       <Switch platform={'web'} activeColor={'#56ACE9'} size="m"/>
       <Switch platform={'web'} activeColor={'#56ACE9'} size="l"/>
       <Switch platform={'web'} activeColor={'#56ACE9'} size="xl"/>
+
+      <CustomSwitch />
     </>
   ),
   document.getElementById('root')!,
