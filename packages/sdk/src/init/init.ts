@@ -11,7 +11,7 @@ import {
   InitOptions as BridgeInitOptions,
 } from 'twa-bridge';
 import {InitOptions, InitResult} from './types';
-import {extractWebAppData} from './utils';
+import {getWebAppData} from './web-app-data';
 import {initPopup, initTheme, initViewport} from './components';
 
 /**
@@ -37,6 +37,7 @@ export async function init(
   let viewportProps: ViewportProps = {};
   let webAppProps: WebAppProps = {};
 
+  // Extract component properties.
   if (typeof debugOrOptions === 'boolean') {
     bridgeProps = {debug: debugOrOptions};
   } else {
@@ -52,18 +53,8 @@ export async function init(
     viewportProps = viewport;
     webAppProps = webApp;
   }
-  const searchParams = window.location.hash.slice(1);
 
-  // Create bridge.
   const bridge = initBridge(bridgeProps);
-
-  // Extract WebApp data.
-  const {
-    initData: {authDate, hash, ...restInitData},
-    version,
-    platform,
-    themeParams,
-  } = extractWebAppData(searchParams);
 
   // In case, we are currently in iframe, it is required to listen to
   // messages, coming from parent source to apply requested changes.
@@ -83,6 +74,13 @@ export async function init(
     // tag html from native application.
     bridge.postEvent('iframe_ready');
   }
+
+  const {
+    initData: {authDate, hash, ...restInitData},
+    version,
+    platform,
+    themeParams,
+  } = getWebAppData();
 
   return {
     bridge,
