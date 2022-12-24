@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@1.1.0...twa-sdk@1.2.0) (2022-12-24)
+
+
+### Features
+
+* **init:** use session storage to cache init params ([7732628](https://github.com/Telegram-Web-Apps/twa/commit/773262878415984c8487e9ead190c77f0dbe60f9))
+
+
+
+
+
 # [1.1.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@1.0.4...twa-sdk@1.1.0) (2022-12-06)
 
 
