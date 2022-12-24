@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Haptic feedback
 
 Native mobile applications are always filled with interactive components, which

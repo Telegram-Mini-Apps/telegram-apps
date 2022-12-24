@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # Popup
 
 Popups are windows, which are opened on the top of Web App. They provide another

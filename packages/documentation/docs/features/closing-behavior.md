@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Closing behavior
 
 It is rather common for Web Apps, when user accidentally closes application

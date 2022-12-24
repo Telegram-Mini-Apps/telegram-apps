@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 # Viewport
 
 By term *Viewport*, we mean information about current **visible part** of Web

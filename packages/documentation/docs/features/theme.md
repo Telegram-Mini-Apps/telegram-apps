@@ -1,3 +1,7 @@
+---
+sidebar_position: 6
+---
+
 # Theme
 
 Web Apps are web applications which are meant to look native. It includes not

@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Back button
 
 Back button is component displayed on the top left of Telegram interface.

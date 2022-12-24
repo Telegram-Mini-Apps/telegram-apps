@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 # Main button
 
 Main button is placed at the bottom of Telegram interface. It is rather big
