@@ -17,6 +17,10 @@ export function supports(method: PostEventName, inVersion: Version): boolean {
       return compareVersions('6.1', inVersion) <= 0;
     case 'web_app_open_popup':
       return compareVersions('6.2', inVersion) <= 0;
+    case 'web_app_close_scan_qr_popup':
+    case 'web_app_open_scan_qr_popup':
+    case 'web_app_read_text_from_clipboard':
+      return compareVersions('6.4', inVersion) <= 0;
     default:
       return true;
   }
