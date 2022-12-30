@@ -29,6 +29,7 @@
     "docs:deploy": "lerna run --scope=documentation deploy",
     "docs:build": "lerna run --scope=documentation build",
     "bridge:dev": "lerna run --scope=twa-bridge dev",
+    "bridge:build": "lerna run --scope=twa-bridge build",
     "sdk:dev": "lerna run --scope=twa-sdk dev",
     "lint": "lerna run lint",
     "test": "lerna run test",
