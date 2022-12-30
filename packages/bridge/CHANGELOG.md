@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@1.2.0...twa-bridge@1.3.0) (2022-12-30)
+
+
+### Features
+
+* **events support:** add support check for v6.4 ([ba1dd13](https://github.com/Telegram-Web-Apps/twa/commit/ba1dd135f6aea315ba7cc3c5c3ab5708786fc2d9))
+* **events,methods:** present v6.4 methods and events ([470727c](https://github.com/Telegram-Web-Apps/twa/commit/470727c3e3774618a61b13899c5618c2d6e1c25b))
+
+
+
+
+
 # [1.2.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-bridge@1.1.0...twa-bridge@1.2.0) (2022-11-30)
 
 
