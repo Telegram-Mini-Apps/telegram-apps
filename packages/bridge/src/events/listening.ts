@@ -3,6 +3,8 @@ import {InvoiceClosedPayload} from './invoice';
 import {PopupClosedPayload} from './popup';
 import {ViewportChangedPayload} from './viewport';
 import {ThemeChangedPayload} from './theme';
+import {ClipboardTextReceivedPayload} from './clipboard';
+import {QrTextReceivedPayload} from './qr';
 
 /**
  * Map where key is known event name, and value is its listener.
@@ -55,6 +57,25 @@ export interface BridgeEventsMap {
    * @param payload - viewport information.
    */
   viewport_changed: (payload: ViewportChangedPayload) => void;
+
+  /**
+   * Data from QR was extracted.
+   * @since Web App version 6.4+
+   */
+  qr_text_received: (payload: QrTextReceivedPayload) => void;
+
+  /**
+   * QR scanner was closed.
+   * @since Web App version 6.4+
+   */
+  scan_qr_popup_closed: () => void;
+
+  /**
+   * Text was extracted from clipboard.
+   * @since Web App version 6.4+
+   * @param payload - event information
+   */
+  clipboard_text_received: (payload: ClipboardTextReceivedPayload) => void;
 }
 
 /**

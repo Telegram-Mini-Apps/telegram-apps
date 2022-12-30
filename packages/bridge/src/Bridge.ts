@@ -1,8 +1,13 @@
-import {EventEmitter, parseJsonParamAsString, log} from 'twa-core';
+import {
+  EventEmitter,
+  parseJsonParamAsString,
+  log,
+} from 'twa-core';
 import {BridgeEventName, BridgeEventsMap} from './events';
 import {
+  extractClipboardTextReceivedPayload,
   extractInvoiceClosedPayload,
-  extractPopupClosedPayload,
+  extractPopupClosedPayload, extractQrTextReceivedPayload,
   extractThemeChangedPayload,
   extractViewportChangedPayload,
 } from './parsing';
@@ -121,11 +126,18 @@ export class Bridge {
         case 'set_custom_style':
           return this.emit(type, parseJsonParamAsString(data));
 
+        case 'qr_text_received':
+          return this.emit(type, extractQrTextReceivedPayload(data))
+
         // Events which do not require any arguments.
         case 'main_button_pressed':
         case 'back_button_pressed':
         case 'settings_button_pressed':
+        case 'scan_qr_popup_closed':
           return this.emit(type);
+
+        case 'clipboard_text_received':
+          return this.emit(type, extractClipboardTextReceivedPayload(data))
 
         case 'invoice_closed':
           return this.emit(type, extractInvoiceClosedPayload(data));

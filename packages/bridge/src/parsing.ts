@@ -1,7 +1,7 @@
 import {
   createJsonStructParser,
   JsonParser, parseJsonParamAsBool,
-  parseJsonParamAsNum, parseJsonParamAsOptNum,
+  parseJsonParamAsNum, parseJsonParamAsOptNum, parseJsonParamAsOptString,
   parseJsonParamAsRecord, parseJsonParamAsString,
 } from 'twa-core';
 import {
@@ -9,6 +9,8 @@ import {
   PopupClosedPayload,
   ThemeChangedPayload,
   ViewportChangedPayload,
+  QrTextReceivedPayload,
+  ClipboardTextReceivedPayload,
 } from './events';
 
 /**
@@ -30,6 +32,16 @@ const parseJsonParamAsPopupButtonId: JsonParser<string | undefined> = value => {
     ? undefined
     : parseJsonParamAsString(value);
 };
+
+/**
+ * Parses incoming JSON value as clipboard data.
+ * @param value - raw value.
+ */
+const parseJsonParamAsClipboardData: JsonParser<string | undefined | null> = value => {
+  return value === null || value === undefined
+    ? value
+    : parseJsonParamAsString(value);
+}
 
 /**
  * Parses incoming JSON value as ViewportChangedPayload.
@@ -69,12 +81,25 @@ export const extractPopupClosedPayload = createJsonStructParser<PopupClosedPaylo
 });
 
 /**
+ * Parses incoming value as QrTextReceivedPayload.
+ */
+export const extractQrTextReceivedPayload = createJsonStructParser<QrTextReceivedPayload>({
+  data: ['data', parseJsonParamAsOptString],
+});
+
+/**
  * Parses incoming value as InvoiceClosedPayload.
  */
 export const extractInvoiceClosedPayload = createJsonStructParser<InvoiceClosedPayload>({
   slug: ['slug', parseJsonParamAsString],
   status: ['status', parseJsonParamAsString],
 });
+
+export const extractClipboardTextReceivedPayload =
+  createJsonStructParser<ClipboardTextReceivedPayload>({
+    req_id: ['req_id', parseJsonParamAsString],
+    data: ['data', parseJsonParamAsClipboardData],
+  });
 
 /**
  * Extracts event data from native application event.

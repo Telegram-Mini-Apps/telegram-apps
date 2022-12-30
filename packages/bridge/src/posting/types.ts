@@ -44,7 +44,16 @@ export interface PostEventParamsMap {
    * Opens link in default browser. Doesn't close application.
    * @see https://corefork.telegram.org/api/web-events#web-app-open-link
    */
-  web_app_open_link: { url: string };
+  web_app_open_link: {
+    url: string,
+
+    /**
+     * Link will be opened in Instant View mode if possible.
+     * @since Web App version 6.4+
+     * @see https://instantview.telegram.org/
+     */
+    try_instant_view?: boolean;
+  };
 
   /**
    * Opens link which has format like "https://t.me/*".
@@ -134,6 +143,28 @@ export interface PostEventParamsMap {
     | ImpactHapticFeedback
     | NotificationHapticFeedback
     | SelectionHapticFeedback;
+
+  /**
+   * Opens QR scanner.
+   * @since Web App version 6.4+
+   */
+  web_app_open_scan_qr_popup: {
+    text?: string;
+  };
+
+  /**
+   * Closes QR scanner.
+   * @since Web App version 6.4+
+   */
+  web_app_close_scan_qr_popup: never;
+
+  /**
+   * Reads text from clipboard.
+   * @since Web App version 6.4+
+   */
+  web_app_read_text_from_clipboard: {
+    req_id: string;
+  };
 }
 
 /**
