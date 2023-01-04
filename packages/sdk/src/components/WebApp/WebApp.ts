@@ -148,6 +148,8 @@ export class WebApp {
 
   /**
    * True if current platform is Android.
+   * @deprecated Works incorrectly as long as there are a lot of platforms
+   * not currently used by function.
    */
   get isAndroid(): boolean {
     return isAndroid(this.platform);
@@ -155,6 +157,8 @@ export class WebApp {
 
   /**
    * True if current platform is desktop.
+   * @deprecated Works incorrectly as long as there are a lot of platforms
+   * not currently used by function.
    */
   get isDesktop(): boolean {
     return isDesktop(this.platform);
@@ -162,6 +166,8 @@ export class WebApp {
 
   /**
    * True if current platform is iOS.
+   * @deprecated Works incorrectly as long as there are a lot of platforms
+   * not currently used by function.
    */
   get isIOS(): boolean {
     return isIOS(this.platform);
@@ -169,6 +175,8 @@ export class WebApp {
 
   /**
    * True if current platform is browser.
+   * @deprecated Works incorrectly as long as there are a lot of platforms
+   * not currently used by function.
    */
   get isWeb(): boolean {
     return isWeb(this.platform);
