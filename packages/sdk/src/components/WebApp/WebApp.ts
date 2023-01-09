@@ -82,6 +82,13 @@ export class WebApp {
   }
 
   /**
+   * Closes QR scanner.
+   */
+  closeQRScanner() {
+    this.bridge.postEvent('web_app_close_scan_qr_popup');
+  }
+
+  /**
    * Returns current application color scheme. This value is computed according
    * to current background color.
    */
@@ -265,6 +272,32 @@ export class WebApp {
   }
 
   /**
+   * Opens QR scanner with specified title shown to user. Method returns
+   * scanned QR content in case, it was scanned. It returns null in case,
+   * scanner was closed.
+   * @param text - title to display.
+   */
+  openQRScanner(text?: string): Promise<string | null> {
+    return new Promise<string | null>(res => {
+      const closeListener: BridgeEventListener<'scan_qr_popup_closed'> = () => {
+        res(null);
+        unbind();
+      };
+      const scanListener: BridgeEventListener<'qr_text_received'> = ({data = null}) => {
+        res(data);
+        unbind();
+      };
+
+      const unbind = () => {
+        this.bridge.off('scan_qr_popup_closed', closeListener);
+        this.bridge.off('qr_text_received', scanListener);
+      };
+
+      this.bridge.postEvent('web_app_open_scan_qr_popup', {text});
+    });
+  }
+
+  /**
    * Adds new event listener.
    */
   on = this.ee.on.bind(this.ee);
@@ -291,6 +324,31 @@ export class WebApp {
    */
   ready(): void {
     this.bridge.postEvent('web_app_ready');
+  }
+
+  /**
+   * Reads text from clipboard and returns string or null. null is returned
+   * in cases:
+   * - Value in clipboard is not text
+   * - Access to clipboard is not allowed
+   */
+  readTextFromClipboard(): Promise<string | null> {
+    // Generate request identifier.
+    let reqId = '';
+    for (let i = 0; i < 32; i++) {
+      reqId += Math.ceil(Math.random() * 10).toString();
+    }
+
+    return new Promise<string | null>(res => {
+      const listener: BridgeEventListener<'clipboard_text_received'> = payload => {
+        if (payload.req_id === reqId) {
+          res(payload.data === undefined ? null : payload.data);
+          this.bridge.off('clipboard_text_received', listener);
+        }
+      };
+      this.bridge.on('clipboard_text_received', listener);
+      this.bridge.postEvent('web_app_read_text_from_clipboard', {req_id: reqId});
+    });
   }
 
   /**
