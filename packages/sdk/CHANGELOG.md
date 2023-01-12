@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@1.3.0...twa-sdk@1.3.1) (2023-01-12)
+
+
+### Bug Fixes
+
+* **viewport:** add macos platform to web_app_request_viewport exception ([5b5eee7](https://github.com/Telegram-Web-Apps/twa/commit/5b5eee71d39d84abd84e633df748b29aff552fbd))
+
+
+
+
+
 # [1.3.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@1.2.1...twa-sdk@1.3.0) (2023-01-09)
 
 
