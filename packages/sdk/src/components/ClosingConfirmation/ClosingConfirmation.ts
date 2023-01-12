@@ -14,7 +14,7 @@ export class ClosingConfirmation {
   constructor(private readonly bridge: BridgeLike) {
   }
 
-  private set isClosingConfirmationEnabled(value: boolean) {
+  private set isEnabled(value: boolean) {
     // Send request to native app.
     this.bridge.postEvent('web_app_setup_closing_behavior', {
       need_confirmation: value,
@@ -35,7 +35,7 @@ export class ClosingConfirmation {
    * Returns true, if the confirmation dialog enabled while the user is trying
    * to close the Web App.
    */
-  get isClosingConfirmationEnabled(): boolean {
+  get isEnabled(): boolean {
     return this._isEnabled;
   }
 
@@ -44,7 +44,7 @@ export class ClosingConfirmation {
    * Web App.
    */
   disable(): void {
-    this.isClosingConfirmationEnabled = false;
+    this.isEnabled = false;
   }
 
   /**
@@ -52,7 +52,7 @@ export class ClosingConfirmation {
    * Web App.
    */
   enable(): void {
-    this.isClosingConfirmationEnabled = true;
+    this.isEnabled = true;
   }
 
   /**
