@@ -32,15 +32,4 @@ export default [
       terser(),
     ],
   }),
-
-  // Preload: Browser.
-  defineConfig({
-    input: 'src/preload/run.ts',
-    output: {file: 'dist/preload.js', format: 'iife'},
-    plugins: [
-      typescript({tsconfig: './tsconfig.preload.json'}),
-      nodeResolve(),
-      terser(),
-    ],
-  }),
 ];
