@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.6](https://github.com/Telegram-Web-Apps/twa/compare/twa-theme-params@1.0.5...twa-theme-params@1.0.6) (2023-01-12)
+
+
+### Bug Fixes
+
+* **preload:** remove preload functionality as long as it is now considered not useful ([7169fde](https://github.com/Telegram-Web-Apps/twa/commit/7169fde7b28baafa1b748fea327c3eebb31f99d7))
+
+
+
+
+
 ## [1.0.5](https://github.com/Telegram-Web-Apps/twa/compare/twa-theme-params@1.0.4...twa-theme-params@1.0.5) (2022-12-30)
 
 **Note:** Version bump only for package twa-theme-params

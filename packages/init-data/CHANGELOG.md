@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.2](https://github.com/Telegram-Web-Apps/twa/compare/twa-init-data@4.0.1...twa-init-data@4.0.2) (2023-01-12)
+
+**Note:** Version bump only for package twa-init-data
+
+
+
+
+
 ## [4.0.1](https://github.com/Telegram-Web-Apps/twa/compare/twa-init-data@4.0.0...twa-init-data@4.0.1) (2022-11-30)
 
 **Note:** Version bump only for package twa-init-data

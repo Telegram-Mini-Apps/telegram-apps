@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk-react@1.0.9...twa-sdk-react@1.1.0) (2023-01-12)
+
+
+### Bug Fixes
+
+* **events:** actualize listened event names. Refactor imports ([9583b04](https://github.com/Telegram-Web-Apps/twa/commit/9583b04009d5e950d94807e86fe0e39457e71770))
+
+
+### Features
+
+* **components:** add hooks and hocs for new components. Refactor imports ([227513b](https://github.com/Telegram-Web-Apps/twa/commit/227513be652fa00071b20ca9824b9be276c1c652))
+
+
+
+
+
+
 ## [1.0.9](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk-react@1.0.8...twa-sdk-react@1.0.9) (2023-01-12)
 
 **Note:** Version bump only for package twa-sdk-react

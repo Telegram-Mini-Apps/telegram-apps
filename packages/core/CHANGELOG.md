@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-core@1.0.0...twa-core@1.1.0) (2023-01-12)
+
+
+### Features
+
+* **rgb:** add parser for required RGB. Shorten and improve RGB type definition ([8b660a5](https://github.com/Telegram-Web-Apps/twa/commit/8b660a569563165e2aca0d053a4f33c7514e5d3e))
+
+
+
+
+
 # [1.0.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-core@0.5.0...twa-core@1.0.0) (2022-11-20)
 
 **Note:** Version bump only for package twa-core

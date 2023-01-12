@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@1.3.1...twa-sdk@2.0.0) (2023-01-12)
+
+
+### Bug Fixes
+
+* **closing confirmation:** remove unnecessary properties names parts ([384e89d](https://github.com/Telegram-Web-Apps/twa/commit/384e89d8de4aee24b9a057bea2e9e99ebeee0d44))
+
+
+### Features
+
+* **bridge:** add BridgeScoped class and allow to use bridge in its minimal appearance ([d5b2d35](https://github.com/Telegram-Web-Apps/twa/commit/d5b2d35bbdf9da1183f8f41e00136b597ceb80fb))
+* **components:** implement new ClosingConfirmation component ([8366f13](https://github.com/Telegram-Web-Apps/twa/commit/8366f13bcf85e253f03c94d7994523a30552c953))
+* **components:** implement new Layout component ([c55da32](https://github.com/Telegram-Web-Apps/twa/commit/c55da32d437967ab85b15f9a99cb72ca95c6052a))
+* **components:** implement new QRScanner component ([bd88135](https://github.com/Telegram-Web-Apps/twa/commit/bd88135225cb4a223e8ab977f7df33923c45eb43))
+* **errors:** add error class for unsupported method ([4353500](https://github.com/Telegram-Web-Apps/twa/commit/43535009c85a7c14f4b411c3ba2adeeb60f46e79))
+* **sdk:** new components, reworks, refactoring and more ([5b466ef](https://github.com/Telegram-Web-Apps/twa/commit/5b466ef33a6b78c594544aae652f634de5bde2f4))
+
+
+### BREAKING CHANGES
+
+* **sdk:** init function now accepts other type of options. Such methods as isDev, isAndroid
+etc. were removed as long as Telegram provides too many platforms. WebApp class was splitted a bit
+into some new - ClosingConfirmation and Layout. Almost each component now accepts bridge instance
+with Web Apps version to check method support. Some methods of components were renamed.
+
+
+
+
+
+
 ## [1.3.1](https://github.com/Telegram-Web-Apps/twa/compare/twa-sdk@1.3.0...twa-sdk@1.3.1) (2023-01-12)
 
 
