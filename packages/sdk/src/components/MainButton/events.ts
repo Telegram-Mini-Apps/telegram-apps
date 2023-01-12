@@ -1,51 +1,49 @@
-import {RGBColor} from 'twa-core';
-
-interface PropertyEventsMap {
-  /**
-   * Being emitted when main button changes its active state.
-   * @param isActive - current main button active state.
-   */
-  activeChange: (isActive: boolean) => void;
-
-  /**
-   * Being emitted when main button changes its color.
-   * @param color - current main button color.
-   */
-  colorChange: (color: RGBColor) => void;
-
-  /**
-   * Being emitted when main button changes its progress visibility.
-   * @param isVisible - current main button progress visibility state.
-   */
-  progressVisibleChange: (isVisible: boolean) => void;
-
-  /**
-   * Being emitted when main button changes its text.
-   * @param text - current main button text.
-   */
-  textChange: (text: string) => void;
-
-  /**
-   * Being emitted when main button changes its color.
-   * @param color - current main button text color.
-   */
-  textColorChange: (color: RGBColor) => void;
-
-  /**
-   * Being emitted when main button changes its visibility.
-   * @param isVisible - current main button visibility state.
-   */
-  visibleChange: (isVisible: boolean) => void;
-}
+import {RGB} from 'twa-core';
 
 /**
- * List of events supported for listening by MainButton.
+ * Information about MainButton supported events.
  */
-export interface MainButtonEventsMap extends PropertyEventsMap {
+export interface MainButtonEventsMap {
   /**
-   * Being emitted when user pressed main button.
+   * Active status changed.
+   * @param isActive - current state.
+   */
+  activeChanged: (isActive: boolean) => void;
+
+  /**
+   * Main button was clicked.
    */
   click: () => void;
+
+  /**
+   * Background color changed.
+   * @param color - current state.
+   */
+  colorChanged: (color: RGB) => void;
+
+  /**
+   * Progress visibility changed.
+   * @param isVisible - current state.
+   */
+  progressVisibleChanged: (isVisible: boolean) => void;
+
+  /**
+   * Text changed.
+   * @param text - current main button text.
+   */
+  textChanged: (text: string) => void;
+
+  /**
+   * Text color changed.
+   * @param color - current main button text color.
+   */
+  textColorChanged: (color: RGB) => void;
+
+  /**
+   * Visibility changed.
+   * @param isVisible - current main button visibility state.
+   */
+  visibleChanged: (isVisible: boolean) => void;
 }
 
 /**
@@ -54,7 +52,7 @@ export interface MainButtonEventsMap extends PropertyEventsMap {
 export type MainButtonEventName = keyof MainButtonEventsMap;
 
 /**
- * Returns listener for specified MainButton event.
+ * Listener for specified MainButton event.
  */
 export type MainButtonEventListener<E extends MainButtonEventName> =
   MainButtonEventsMap[E];

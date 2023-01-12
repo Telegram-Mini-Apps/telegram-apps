@@ -1,9 +1,20 @@
 /**
- * List of events supported for listening by ThemeParams.
+ * Information about events supported by ThemeParamsEventsMap.
  */
 export interface ThemeParamsEventsMap {
   /**
-   * Being emitted when current theme params instance gets updated.
+   * Theme parameters were updated.
    */
   change: () => void;
 }
+
+/**
+ * Known ThemeParams event name.
+ */
+export type ThemeParamsEventName = keyof ThemeParamsEventsMap;
+
+/**
+ * Listener for specified ThemeParams event.
+ */
+export type ThemeParamsEventListener<E extends ThemeParamsEventName> =
+  ThemeParamsEventsMap[E];

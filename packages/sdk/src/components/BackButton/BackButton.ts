@@ -1,15 +1,8 @@
-import {EventEmitter} from 'twa-core';
-import {BackButtonEventListener, BackButtonEventsMap} from './events';
-import {Bridge} from 'twa-bridge';
-import {
-  createSupportChecker,
-  processBridgeProp,
-} from '../../utils';
-import {WithCommonProps} from '../../types';
+import {EventEmitter, Version} from 'twa-core';
 
-export interface BackButtonProps extends WithCommonProps {
-  isVisible?: boolean;
-}
+import {BackButtonEventListener, BackButtonEventsMap} from './events';
+import {BridgeLike} from '../../types';
+import {createSupportsFunc, SupportsFunc} from '../../utils';
 
 /**
  * Class which controls the back button displayed in the header
@@ -18,22 +11,14 @@ export interface BackButtonProps extends WithCommonProps {
  * action.
  */
 export class BackButton {
-  /**
-   * Checks if method is supported by specified version of Web App.
-   */
-  static supports = createSupportChecker({
-    show: 'web_app_setup_back_button',
-    hide: 'web_app_setup_back_button',
-  });
-
   private readonly ee = new EventEmitter<BackButtonEventsMap>();
-  private readonly bridge: Bridge;
-  private _isVisible: boolean;
+  private _isVisible = false;
 
-  constructor(props: BackButtonProps = {}) {
-    const {bridge, isVisible = false} = props;
-    this.bridge = processBridgeProp(bridge);
-    this._isVisible = isVisible;
+  constructor(private readonly bridge: BridgeLike, version: Version) {
+    this.supports = createSupportsFunc(version, {
+      show: 'web_app_setup_back_button',
+      hide: 'web_app_setup_back_button',
+    });
   }
 
   private set isVisible(visible: boolean) {
@@ -43,20 +28,20 @@ export class BackButton {
       return;
     }
     this._isVisible = visible;
-    this.ee.emit('visibleChange', visible);
+    this.ee.emit('visibleChanged', visible);
   }
 
   /**
-   * Shows whether the button is visible.
+   * Returns true if back button is currently visible.
    */
-  get isVisible() {
+  get isVisible(): boolean {
     return this._isVisible;
   }
 
   /**
    * Hides the button.
    */
-  hide() {
+  hide(): void {
     this.isVisible = false;
   }
 
@@ -83,7 +68,13 @@ export class BackButton {
   /**
    * Shows the button.
    */
-  show() {
+  show(): void {
     this.isVisible = true;
   }
+
+  /**
+   * Returns true in case, specified method is supported by current component
+   * including Web Apps platform version.
+   */
+  supports: SupportsFunc<'show' | 'hide'>;
 }

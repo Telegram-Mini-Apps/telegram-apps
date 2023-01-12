@@ -1,32 +1,22 @@
-import {PopupParams} from './types';
-
-interface PropertyEventsMap {
-  /**
-   * Being emitted when popup open state changes.
-   * @param isOpened - current open state.
-   */
-  openChange: (isOpened: boolean) => void;
-}
+import {ViewportEventName, ViewportEventsMap} from '../Viewport';
 
 /**
- * List of events supported for listening by Popup.
+ * Information about Popup events.
  */
-export interface PopupEventsMap extends PropertyEventsMap {
+export interface PopupEventsMap  {
   /**
-   * Being emitted when popup opens.
-   * @param params - popup parameters.
+   * Open status changed.
+   * @param isOpened - current state.
    */
-  open: (params: PopupParams) => void;
-
-  /**
-   * Being emitted when popup closes.
-   * @param buttonId - button identifier. Will be null in case, user
-   * pressed native app close button or clicks outside.
-   */
-  close: (buttonId: string | null) => void;
+  openChanged: (isOpened: boolean) => void;
 }
 
 /**
- * Known MainButton event name.
+ * Known Popup event name.
  */
 export type PopupEventName = keyof PopupEventsMap;
+
+/**
+ * Listener for specified Popup event.
+ */
+export type PopupEventListener<E extends PopupEventName> = PopupEventsMap[E];
