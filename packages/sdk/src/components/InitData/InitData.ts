@@ -2,24 +2,12 @@ import {
   Chat,
   InitData as TwaInitData,
   User,
-  extractInitDataFromSearchParams,
 } from 'twa-init-data';
 
 /**
  * Class which is responsible for displaying Web Apps init data.
  */
 export class InitData {
-  // /**
-  //  * Creates new InitData instance from string which represents value of some
-  //  * parameter of URLSearchParams.
-  //  * @param params - query parameters presented as string or URLSearchParams.
-  //  */
-  // static fromSearchParams(params: string | URLSearchParams): InitData {
-  //   const {authDate, hash, ...rest} = extractInitDataFromSearchParams(params);
-  //
-  //   return new InitData(authDate, hash, rest);
-  // }
-
   private readonly _canSendAfter: Date | null = null;
   private readonly _chat: Chat | null = null;
   private readonly _queryId: string | null = null;

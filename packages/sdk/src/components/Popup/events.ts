@@ -1,5 +1,3 @@
-import {ViewportEventName, ViewportEventsMap} from '../Viewport';
-
 /**
  * Information about Popup events.
  */
