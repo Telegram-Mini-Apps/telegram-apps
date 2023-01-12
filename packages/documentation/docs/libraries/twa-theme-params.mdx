@@ -15,60 +15,7 @@ expects developer to use them.
 
 <NpmInstall pkg={'twa-theme-params'}/>
 
-## Motivation
-
-As long as it is important to create applications which look native, developers
-have to watch for current theme parameters and their changes.
-
-Moreover, user will have better experience in case, when application is loading
-without "flashes", which usually occur due to on-flight color changes. That's
-why this library should provide theme information even when application script
-is still not loaded.
-
-## CSS variables
-
-It is important to display application with colors already known. The only one
-easy way of getting theme colors before application is displayed, is to get them
-from current window's location.
-
-To do this, we should create script and place it in `head` section of document
-which will extract required parameters. Otherwise, due to some specific problems
-in platform ([issue](https://github.com/Telegram-Web-Apps/twa/issues/12))
-, application will "flash".
-
-Thanks to this library, it already has script ready to use. To make
-everything work, just add `script` tag with `src` attribute as follows:
-
-```html
-
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    <script src="https://cdn.jsdelivr.net/npm/twa-theme-params/dist/preload.js"></script>
-</head>
-<body>
-</body>
-```
-
-:::note
-
-It is recommended to specify version of `twa-theme-params` to make sure,
-nothing will break in case library updated. For example, you could use
-such URL as https://cdn.jsdelivr.net/npm/twa-theme-params@0.0.11/dist/preload.js
-
-:::
-
-As a result, a set of CSS variables will be ready to use even when `body` is not
-loaded. It means, you could display your application with already known colors
-and use these colors in you CSS files.
-
-- [Script source](https://github.com/Telegram-Web-Apps/twa/blob/master/packages/theme-params/src/preload/utils.ts)
-- [Usage example](https://github.com/Telegram-Web-Apps/twa/blob/master/packages/theme-params/preview.html)
-
-## Programmatic control
-
-### Extracting from JSON
+## Extracting from JSON
 
 This library contains such useful function as `extractThemeFromJson`. It accepts
 JSON object or its string representation and
