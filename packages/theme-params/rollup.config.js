@@ -16,20 +16,13 @@ export default [
       {file: pkg.module, format: 'esm'},
     ],
     external: ['twa-core'],
-    plugins: [
-      typescript({tsconfig: './tsconfig.main.json'}),
-      terser(),
-    ],
+    plugins: [typescript(), terser()],
   }),
 
   // Main functionality: Browser.
   defineConfig({
     input: 'src/index.ts',
     output: {file: pkg.browser, format: 'iife', name: 'TwaThemeParams'},
-    plugins: [
-      typescript({tsconfig: './tsconfig.main.json'}),
-      nodeResolve(),
-      terser(),
-    ],
+    plugins: [typescript(), nodeResolve(), terser()],
   }),
 ];
