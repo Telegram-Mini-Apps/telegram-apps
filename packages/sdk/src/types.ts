@@ -1,9 +1,3 @@
 import {Bridge} from 'twa-bridge';
 
-export interface WithCommonProps {
-  /**
-   * Bridge to use in component.
-   * @default Bridge.init()
-   */
-  bridge?: Bridge;
-}
+export type BridgeLike = Pick<Bridge, 'postEvent' | 'off' | 'on'>;
