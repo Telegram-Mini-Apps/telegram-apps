@@ -5,7 +5,9 @@ importers:
   .:
     specifiers:
       '@jest/globals': ^29.3.1
+      '@rollup/plugin-commonjs': ^24.0.0
       '@rollup/plugin-node-resolve': ^15.0.1
+      '@rollup/plugin-replace': ^5.0.2
       '@rollup/plugin-typescript': ^9.0.2
       '@typescript-eslint/eslint-plugin': ^5.42.1
       '@typescript-eslint/parser': ^5.42.1
@@ -26,7 +28,9 @@ importers:
       typescript: ^4.8.4
     devDependencies:
       '@jest/globals': 29.3.1
+      '@rollup/plugin-commonjs': 24.0.0_rollup@3.2.5
       '@rollup/plugin-node-resolve': 15.0.1_rollup@3.2.5
+      '@rollup/plugin-replace': 5.0.2_rollup@3.2.5
       '@rollup/plugin-typescript': 9.0.2_skqhbvp355vci76ty3pdffvjrq
       '@typescript-eslint/eslint-plugin': 5.42.1_2udltptbznfmezdozpdoa2aemq
       '@typescript-eslint/parser': 5.42.1_rmayb2veg2btbq6mbmnyivgasy
@@ -126,8 +130,6 @@ importers:
 
   packages/sdk-react:
     specifiers:
-      '@rollup/plugin-commonjs': ^24.0.0
-      '@rollup/plugin-replace': ^5.0.2
       '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0
       twa-bridge: workspace:*
@@ -139,9 +141,6 @@ importers:
       twa-bridge: link:../bridge
       twa-sdk: link:../sdk
       twa-theme-params: link:../theme-params
-    devDependencies:
-      '@rollup/plugin-commonjs': 24.0.0
-      '@rollup/plugin-replace': 5.0.2
 
   packages/theme-params:
     specifiers:
@@ -3872,7 +3871,7 @@ packages:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: false
 
-  /@rollup/plugin-commonjs/24.0.0:
+  /@rollup/plugin-commonjs/24.0.0_rollup@3.2.5:
     resolution: {integrity: sha512-0w0wyykzdyRRPHOb0cQt14mIBLujfAv6GgP6g8nvg/iBxEm112t3YPPq+Buqe2+imvElTka+bjNlJ/gB56TD8g==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -3881,12 +3880,13 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2_rollup@3.2.5
       commondir: 1.0.1
       estree-walker: 2.0.2
       glob: 8.0.3
       is-reference: 1.2.1
       magic-string: 0.27.0
+      rollup: 3.2.5
     dev: true
 
   /@rollup/plugin-node-resolve/15.0.1_rollup@3.2.5:
@@ -3907,7 +3907,7 @@ packages:
       rollup: 3.2.5
     dev: true
 
-  /@rollup/plugin-replace/5.0.2:
+  /@rollup/plugin-replace/5.0.2_rollup@3.2.5:
     resolution: {integrity: sha512-M9YXNekv/C/iHHK+cvORzfRYfPbq0RDD8r0G+bMiTXjNGKulPnCT9O3Ss46WfhI6ZOCgApOP7xAdmCQJ+U2LAA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -3916,8 +3916,9 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2_rollup@3.2.5
       magic-string: 0.27.0
+      rollup: 3.2.5
     dev: true
 
   /@rollup/plugin-typescript/9.0.2_skqhbvp355vci76ty3pdffvjrq:
@@ -3938,20 +3939,6 @@ packages:
       rollup: 3.2.5
       tslib: 2.4.1
       typescript: 4.8.4
-    dev: true
-
-  /@rollup/pluginutils/5.0.2:
-    resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dependencies:
-      '@types/estree': 1.0.0
-      estree-walker: 2.0.2
-      picomatch: 2.3.1
     dev: true
 
   /@rollup/pluginutils/5.0.2_rollup@3.2.5:
