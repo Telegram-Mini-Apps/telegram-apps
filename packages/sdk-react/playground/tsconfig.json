@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "target": "ES5"
+  },
+  "include": [
+    "./index.tsx",
+    "../src"
+  ]
+}

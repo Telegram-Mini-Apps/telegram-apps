@@ -32,7 +32,7 @@
     "directory": "packages/sdk"
   },
   "scripts": {
-    "dev": "rollup --watch --config rollup.dev.config.js",
+    "dev": "rollup --watch --config ./playground/rollup.config.js",
     "test": "echo \"Tests not specified\"",
     "build": "rollup --config rollup.config.js"
   },
