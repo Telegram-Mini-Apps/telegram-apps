@@ -4,6 +4,8 @@ import {MainButtonEventListener, MainButtonEventsMap} from './events';
 import {BridgeLike} from '../../types';
 import {MainButtonProps} from './types';
 
+type Emitter = EventEmitter<MainButtonEventsMap>;
+
 /**
  * Controls the main button, which is displayed at the bottom
  * of the Web App in the Telegram interface.
@@ -12,7 +14,7 @@ import {MainButtonProps} from './types';
  *  right after click. It is not smooth.
  */
 export class MainButton {
-  private readonly ee = new EventEmitter<MainButtonEventsMap>();
+  private readonly ee: Emitter = new EventEmitter();
   private _isActive = false;
   private _isVisible = false;
   private _isProgressVisible = false;
@@ -22,7 +24,7 @@ export class MainButton {
     private readonly bridge: BridgeLike,
     private _color: RGB,
     private _textColor: RGB,
-    props: MainButtonProps = {}
+    props: MainButtonProps = {},
   ) {
     const {autocommit = true} = props;
     this.autocommit = autocommit;
@@ -211,7 +213,7 @@ export class MainButton {
    * @param event - event name.
    * @param listener - event listener.
    */
-  on: typeof this.ee.on = (event, listener) => {
+  on: Emitter['on'] = (event, listener) => {
     if (event === 'click') {
       return this.bridge.on('main_button_pressed', listener as MainButtonEventListener<'click'>);
     }
@@ -223,7 +225,7 @@ export class MainButton {
    * @param event - event name.
    * @param listener - event listener.
    */
-  off: typeof this.ee.off = (event, listener) => {
+  off: Emitter['off'] = (event, listener) => {
     if (event === 'click') {
       return this.bridge.off('main_button_pressed', listener as MainButtonEventListener<'click'>);
     }

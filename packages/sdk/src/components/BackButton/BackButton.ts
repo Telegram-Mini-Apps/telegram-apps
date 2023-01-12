@@ -4,6 +4,8 @@ import {BackButtonEventListener, BackButtonEventsMap} from './events';
 import {BridgeLike} from '../../types';
 import {createSupportsFunc, SupportsFunc} from '../../utils';
 
+type Emitter = EventEmitter<BackButtonEventsMap>;
+
 /**
  * Class which controls the back button displayed in the header
  * of the Web App in the Telegram interface. It is mostly used in case, when
@@ -11,7 +13,7 @@ import {createSupportsFunc, SupportsFunc} from '../../utils';
  * action.
  */
 export class BackButton {
-  private readonly ee = new EventEmitter<BackButtonEventsMap>();
+  private readonly ee: Emitter = new EventEmitter();
   private _isVisible = false;
 
   constructor(private readonly bridge: BridgeLike, version: Version) {
@@ -48,7 +50,7 @@ export class BackButton {
   /**
    * Adds new event listener.
    */
-  on: typeof this.ee.on = (event, listener) => {
+  on: Emitter['on'] = (event, listener) => {
     if (event === 'click') {
       return this.bridge.on('back_button_pressed', listener as BackButtonEventListener<'click'>);
     }
@@ -58,7 +60,7 @@ export class BackButton {
   /**
    * Removes event listener.
    */
-  off: typeof this.ee.off = (event, listener) => {
+  off: Emitter['off'] = (event, listener) => {
     if (event === 'click') {
       return this.bridge.off('back_button_pressed', listener as BackButtonEventListener<'click'>);
     }
