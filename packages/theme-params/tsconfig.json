@@ -21,5 +21,11 @@
       "dom"
     ],
     "outDir": "dist"
-  }
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/__tests__"
+  ]
 }
