@@ -5,12 +5,11 @@ import React, {
   useState,
 } from 'react';
 import {init, InitOptions} from 'twa-sdk';
+
 import {sdkContext} from './context';
 import {SDKComponents, SDKContext} from './types';
 
 export type SDKProviderProps = PropsWithChildren<{ initOptions?: InitOptions }>;
-
-const {Provider} = sdkContext;
 
 /**
  * Component which provides access to SDK components.
@@ -38,7 +37,7 @@ export const SDKProvider = memo<SDKProviderProps>(props => {
     error,
   }), [didInit, components, error]);
 
-  return <Provider value={context}>{children}</Provider>;
+  return <sdkContext.Provider value={context}>{children}</sdkContext.Provider>;
 });
 
 SDKProvider.displayName = 'SDKProvider';

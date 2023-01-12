@@ -1,4 +1,5 @@
 import {useContext} from 'react';
+
 import {sdkContext} from './context';
 import {SDKComponent, SDKComponentName} from './types';
 
