@@ -47,6 +47,9 @@ export function applyTheme(theme: ThemeParams) {
  * --theme-text-color
  */
 export function run() {
+  // TODO: Extend this script with load from session storage. Current script
+  //  will not work in case, user reloaded application via "Reload Page" button.
+
   try {
     // On init, we are able to extract theme from current location.
     applyTheme(extractThemeFromLocation());
