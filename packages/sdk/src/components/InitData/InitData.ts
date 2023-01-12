@@ -9,16 +9,16 @@ import {
  * Class which is responsible for displaying Web Apps init data.
  */
 export class InitData {
-  /**
-   * Creates new InitData instance from string which represents value of some
-   * parameter of URLSearchParams.
-   * @param params - query parameters presented as string or URLSearchParams.
-   */
-  static fromSearchParams(params: string | URLSearchParams): InitData {
-    const {authDate, hash, ...rest} = extractInitDataFromSearchParams(params);
-
-    return new InitData(authDate, hash, rest);
-  }
+  // /**
+  //  * Creates new InitData instance from string which represents value of some
+  //  * parameter of URLSearchParams.
+  //  * @param params - query parameters presented as string or URLSearchParams.
+  //  */
+  // static fromSearchParams(params: string | URLSearchParams): InitData {
+  //   const {authDate, hash, ...rest} = extractInitDataFromSearchParams(params);
+  //
+  //   return new InitData(authDate, hash, rest);
+  // }
 
   private readonly _canSendAfter: Date | null = null;
   private readonly _chat: Chat | null = null;
@@ -45,14 +45,15 @@ export class InitData {
   }
 
   /**
-   * Init data generation date.
+   * Returns init data generation date.
    */
   get authDate(): Date {
     return this._authDate;
   }
 
   /**
-   * Date after which a message can be sent via the answerWebAppQuery method.
+   * Returns date after which a message can be sent via the answerWebAppQuery
+   * method.
    * @see https://core.telegram.org/bots/api#answerwebappquery
    */
   get canSendAfter(): Date | null {
@@ -60,16 +61,16 @@ export class InitData {
   }
 
   /**
-   * An object containing data about the chat where the bot was launched via
-   * the attachment menu. Returned for supergroups, channels and group
-   * chats – only for Web Apps launched via the attachment menu.
+   * Returns an object containing data about the chat where the bot was
+   * launched via the attachment menu. Returned for supergroups, channels and
+   * group chats – only for Web Apps launched via the attachment menu.
    */
   get chat(): Chat | null {
     return this._chat;
   }
 
   /**
-   * A hash of all passed parameters, which the bot server can use to
+   * Returns a hash of all passed parameters, which the bot server can use to
    * check their validity.
    * @see https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app
    */
@@ -78,7 +79,7 @@ export class InitData {
   }
 
   /**
-   * A unique identifier for the Web App session, required for sending
+   * Returns a unique identifier for the Web App session, required for sending
    * messages via the `answerWebAppQuery` method.
    * @see https://core.telegram.org/bots/api#answerwebappquery
    */
@@ -87,8 +88,8 @@ export class InitData {
   }
 
   /**
-   * An object containing data about the chat partner of the current user in
-   * the chat where the bot was launched via the attachment menu.
+   * Returns an object containing data about the chat partner of the current
+   * user in the chat where the bot was launched via the attachment menu.
    * Returned only for private chats and only for Web Apps launched
    * via the attachment menu.
    */
@@ -97,15 +98,15 @@ export class InitData {
   }
 
   /**
-   * The value of the `startattach` parameter, passed via link. Only returned
-   * for Web Apps when launched from the attachment menu via link.
+   * Returns the value of the `startattach` parameter, passed via link. Only
+   * returned for Web Apps when launched from the attachment menu via link.
    */
   get startParam(): string | null {
     return this._startParam;
   }
 
   /**
-   * An object containing data about the current user.
+   * Returns an object containing data about the current user.
    */
   get user(): User | null {
     return this._user;

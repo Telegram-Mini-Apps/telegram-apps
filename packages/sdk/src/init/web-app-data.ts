@@ -6,10 +6,12 @@ import {
 import {extractInitDataFromSearchParams, InitData} from 'twa-init-data';
 import {extractThemeFromJson, ThemeParams} from 'twa-theme-params';
 
+import {Platform} from '../components';
+
 interface WebAppData {
   version: string;
   initData: InitData;
-  platform: string;
+  platform: Platform;
   themeParams: ThemeParams;
 }
 

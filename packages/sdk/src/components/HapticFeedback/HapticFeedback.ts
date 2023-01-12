@@ -1,12 +1,11 @@
 import {
   ImpactHapticFeedbackStyle,
   NotificationHapticFeedbackType,
-  Bridge,
 } from 'twa-bridge';
-import {createSupportChecker, processBridgeProp} from '../../utils';
-import {WithCommonProps} from '../../types';
+import {Version} from 'twa-core';
 
-export type HapticFeedbackProps = WithCommonProps;
+import {createSupportsFunc, SupportsFunc} from '../../utils';
+import {BridgeLike} from '../../types';
 
 /**
  * Class which controls haptic feedback. It allows calling different types of
@@ -14,20 +13,12 @@ export type HapticFeedbackProps = WithCommonProps;
  * application.
  */
 export class HapticFeedback {
-  /**
-   * Checks if method is supported by specified version of Web App.
-   */
-  static supports = createSupportChecker({
-    notificationOccurred: 'web_app_trigger_haptic_feedback',
-    impactOccurred: 'web_app_trigger_haptic_feedback',
-    selectionChanged: 'web_app_trigger_haptic_feedback',
-  });
-
-  private readonly bridge: Bridge;
-
-  constructor(props: HapticFeedbackProps = {}) {
-    const {bridge} = props;
-    this.bridge = processBridgeProp(bridge);
+  constructor(private readonly bridge: BridgeLike, version: Version) {
+    this.supports = createSupportsFunc(version, {
+      impactOccurred: 'web_app_trigger_haptic_feedback',
+      notificationOccurred: 'web_app_trigger_haptic_feedback',
+      selectionChanged: 'web_app_trigger_haptic_feedback',
+    });
   }
 
   /**
@@ -67,4 +58,10 @@ export class HapticFeedback {
       type: 'selection_change',
     });
   }
+
+  /**
+   * Returns true in case, specified method is supported by current component
+   * including Web Apps platform version.
+   */
+  supports: SupportsFunc<'impactOccurred' | 'notificationOccurred' | 'selectionChanged'>;
 }

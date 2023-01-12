@@ -1,4 +1,5 @@
 import {PopupButton, PopupParams as BridgePopupParams} from 'twa-bridge';
+
 import {PopupParams} from './types';
 
 /**

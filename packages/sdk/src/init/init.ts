@@ -1,60 +1,44 @@
+import {isBrowserEnv, init as initBridge} from 'twa-bridge';
+
 import {
-  BackButton, BackButtonProps,
-  HapticFeedback, HapticFeedbackProps,
-  InitData,
-  MainButton, MainButtonProps, PopupProps, ViewportProps,
-  WebApp, WebAppProps,
+  BackButton,
+  ClosingConfirmation,
+  HapticFeedback,
+  InitData, Layout,
+  MainButton,
+  Popup,
+  QRScanner,
+  ThemeParams,
+  Viewport,
+  WebApp,
 } from '../components';
-import {
-  isBrowserEnv,
-  init as initBridge,
-  InitOptions as BridgeInitOptions,
-} from 'twa-bridge';
 import {InitOptions, InitResult} from './types';
 import {getWebAppData} from './web-app-data';
-import {initPopup, initTheme, initViewport} from './components';
-
-/**
- * Initializes all SDK components.
- * @param debug - enable debug mode.
- */
-export async function init(debug?: boolean): Promise<InitResult>;
+import {BridgeScoped} from '../lib/BridgeScoped';
 
 /**
  * Initializes all SDK components.
  * @param options - initialization options.
  */
-export async function init(options?: InitOptions): Promise<InitResult>;
+export async function init(options: InitOptions = {}): Promise<InitResult> {
+  const {checkCompat = true} = options;
 
-export async function init(
-  debugOrOptions: boolean | InitOptions = false,
-): Promise<InitResult> {
-  let bridgeProps: BridgeInitOptions;
-  let hapticProps: HapticFeedbackProps = {};
-  let backButtonProps: BackButtonProps = {};
-  let mainButtonProps: MainButtonProps = {};
-  let popupProps: PopupProps = {};
-  let viewportProps: ViewportProps = {};
-  let webAppProps: WebAppProps = {};
+  // Get Web App data.
+  const {
+    initData: {authDate, hash, ...restInitData},
+    version,
+    platform,
+    themeParams,
+  } = getWebAppData();
+  const {
+    backgroundColor = '#ffffff',
+    buttonColor = '#000000',
+    buttonTextColor = '#ffffff',
+  } = themeParams;
 
-  // Extract component properties.
-  if (typeof debugOrOptions === 'boolean') {
-    bridgeProps = {debug: debugOrOptions};
-  } else {
-    const {
-      bridge = {}, haptic = {}, backButton = {}, mainButton = {}, popup = {},
-      viewport = {}, webApp = {},
-    } = debugOrOptions.props || {};
-    bridgeProps = bridge;
-    hapticProps = haptic;
-    backButtonProps = backButton;
-    mainButtonProps = mainButton;
-    popupProps = popup;
-    viewportProps = viewport;
-    webAppProps = webApp;
-  }
-
-  const bridge = initBridge(bridgeProps);
+  // Create Bridge instance.
+  const twaBridge = initBridge(options);
+  const bridge = checkCompat ? new BridgeScoped(twaBridge, version) : twaBridge;
 
   // In case, we are currently in iframe, it is required to listen to
   // messages, coming from parent source to apply requested changes.
@@ -68,39 +52,42 @@ export async function init(
     document.head.appendChild(styleElement);
 
     // Listen to custom style changes.
-    bridge.on('set_custom_style', html => styleElement.innerHTML = html);
+    twaBridge.on('set_custom_style', html => styleElement.innerHTML = html);
 
     // Notify Telegram, iframe is ready. This will result in sending style
     // tag html from native application.
-    bridge.postEvent('iframe_ready');
+    twaBridge.postEvent('iframe_ready');
   }
 
+  // Get viewport information.
   const {
-    initData: {authDate, hash, ...restInitData},
-    version,
-    platform,
-    themeParams,
-  } = getWebAppData();
+    width,
+    isExpanded,
+    height,
+    isStateStable,
+  } = platform !== 'tdesktop' && platform !== 'macos'
+    ? await Viewport.request(bridge)
+    : {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      isStateStable: true,
+      isExpanded: true,
+    };
 
   return {
-    bridge,
-    backButton: new BackButton({...backButtonProps, bridge}),
-    haptic: new HapticFeedback({...hapticProps, bridge}),
+    backButton: new BackButton(bridge, version),
+    bridge: twaBridge,
+    closingConfirmation: new ClosingConfirmation(bridge),
+    haptic: new HapticFeedback(bridge, version),
     initData: new InitData(authDate, hash, restInitData),
-    mainButton: new MainButton({
-      color: themeParams.buttonColor,
-      textColor: themeParams.buttonTextColor,
-      ...mainButtonProps,
-      bridge,
-    }),
-    popup: initPopup(bridge, popupProps),
-    theme: initTheme(bridge, themeParams),
-    viewport: await initViewport(bridge, platform, viewportProps),
-    webApp: new WebApp(version, {
-      platform,
-      backgroundColor: themeParams.backgroundColor,
-      ...webAppProps,
-      bridge,
-    }),
+    layout: new Layout(bridge, version, 'bg_color', backgroundColor),
+    mainButton: new MainButton(bridge, buttonColor, buttonTextColor),
+    popup: new Popup(bridge, version),
+    qrScanner: new QRScanner(bridge, version),
+    themeParams: ThemeParams.synced(bridge, themeParams),
+    viewport: Viewport.synced(
+      bridge, height, width, isStateStable ? height : 0, isExpanded,
+    ),
+    webApp: new WebApp(bridge, version, platform),
   };
 }

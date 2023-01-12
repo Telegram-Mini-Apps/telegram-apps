@@ -1,36 +1,15 @@
 import {EventEmitter} from 'twa-core';
+import {BridgeEventListener} from 'twa-bridge';
+
 import {ViewportEventsMap} from './events';
-import {Bridge, BridgeEventListener, init} from 'twa-bridge';
-import {processBridgeProp} from '../../utils';
-import {WithCommonProps} from '../../types';
+import {BridgeLike} from '../../types';
+import {truncate} from './utils';
 
-export interface ViewportProps extends WithCommonProps {
-  height?: number;
-  width?: number;
-  stableHeight?: number;
-  isExpanded?: boolean;
-}
-
-export interface UpdateViewportProps {
-  height?: number,
-  width?: number;
-  isExpanded?: boolean,
-  isStateStable?: boolean
-}
-
-export interface TwaViewport {
+export interface RequestViewportResult {
   height: number;
   width: number;
   isStateStable: boolean;
   isExpanded: boolean;
-}
-
-/**
- * Formats dimension before setting in viewport.
- * @param dim - dimension to format.
- */
-function truncate(dim: number): number {
-  return dim < 0 ? 0 : dim;
 }
 
 /**
@@ -41,12 +20,15 @@ export class Viewport {
   /**
    * Requests fresh information about current viewport.
    * FIXME: Be careful using this function in desktop version of Telegram as
-   *  long as method web_app_request_viewport does not work in desktop
-   *  version.
-   *  Issue: https://github.com/Telegram-Web-Apps/twa/issues/5
+   *  long as method web_app_request_viewport does not work on `tdesktop`
+   *  and `macos` platforms.
+   * @see Issue: https://github.com/Telegram-Web-Apps/twa/issues/5
    * @param bridge - bridge instance.
    */
-  static request(bridge = init()): Promise<TwaViewport> {
+  static request(bridge: BridgeLike): Promise<RequestViewportResult> {
+    // Emit event to receive viewport information.
+    bridge.postEvent('web_app_request_viewport');
+
     return new Promise(res => {
       const listener: BridgeEventListener<'viewport_changed'> = payload => {
         // Remove previously bound listener.
@@ -65,28 +47,59 @@ export class Viewport {
       // Add listener which will resolve promise in case, viewport information
       // was received.
       bridge.on('viewport_changed', listener);
-
-      // Emit event to receive viewport information.
-      bridge.postEvent('web_app_request_viewport');
     });
   }
 
+  /**
+   * Returns initialized instance of Viewport which is synchronized with
+   * its actual state in Web Apps.
+   * @param bridge - bridge instance.
+   * @param height - viewport height.
+   * @param width - viewport width.
+   * @param stableHeight - viewport stable height.
+   * @param isExpanded - viewport expansion status.
+   */
+  static synced(
+    bridge: BridgeLike,
+    height: number,
+    width: number,
+    stableHeight: number,
+    isExpanded: boolean,
+  ): Viewport {
+    const v = new Viewport(bridge, height, width, stableHeight, isExpanded);
+
+    bridge.on('viewport_changed', event => {
+      const {
+        height,
+        width,
+        is_expanded: isExpanded,
+        is_state_stable: isStateStable,
+      } = event;
+      v.height = truncate(height);
+      v.width = truncate(width);
+      v.isExpanded = isExpanded;
+
+      if (isStateStable) {
+        v.stableHeight = v.height;
+      }
+    });
+
+    return v;
+  }
+
   private readonly ee = new EventEmitter<ViewportEventsMap>();
-  private readonly bridge: Bridge;
   private _height: number;
   private _width: number;
   private _stableHeight: number;
   private _isExpanded: boolean;
 
-  constructor(props: ViewportProps = {}) {
-    const {
-      height = 0,
-      width = 0,
-      stableHeight = 0,
-      isExpanded = false,
-      bridge,
-    } = props;
-    this.bridge = processBridgeProp(bridge);
+  constructor(
+    private readonly bridge: BridgeLike,
+    height: number,
+    width: number,
+    stableHeight: number,
+    isExpanded: boolean,
+  ) {
     this._height = truncate(height);
     this._width = truncate(width);
     this._stableHeight = truncate(stableHeight);
@@ -94,12 +107,11 @@ export class Viewport {
   }
 
   private set height(value: number) {
-    value = truncate(value);
     if (this._height === value) {
       return;
     }
     this._height = value;
-    this.ee.emit('heightChange', value);
+    this.ee.emit('heightChanged', value);
   }
 
   /**
@@ -127,12 +139,11 @@ export class Viewport {
   }
 
   private set stableHeight(value: number) {
-    value = truncate(value);
     if (this._stableHeight === value) {
       return;
     }
     this._stableHeight = value;
-    this.ee.emit('stableHeightChange', value);
+    this.ee.emit('stableHeightChanged', value);
   }
 
   /**
@@ -162,12 +173,12 @@ export class Viewport {
       return;
     }
     this._isExpanded = value;
-    this.ee.emit('expansionChange', value);
+    this.ee.emit('expansionChanged', value);
   }
 
   /**
-   * `true`, if the Web App is expanded to the maximum available height.
-   * `false`, if the Web App occupies part of the screen and can be expanded
+   * Returns true if the Web App is expanded to the maximum available height.
+   * Otherwise, if the Web App occupies part of the screen and can be expanded
    * to the full height using `expand` method.
    * @see expand
    */
@@ -176,12 +187,11 @@ export class Viewport {
   }
 
   private set width(value: number) {
-    value = truncate(value);
     if (this._width === value) {
       return;
     }
     this._width = value;
-    this.ee.emit('widthChange', value);
+    this.ee.emit('widthChanged', value);
   }
 
   /**
@@ -202,8 +212,8 @@ export class Viewport {
   }
 
   /**
-   * `true`, in case current viewport height is stable and is not going to
-   * change next moment.
+   * Returns true in case current viewport height is stable and is not going to
+   * change in the next moment.
    */
   get isStable(): boolean {
     return this._stableHeight === this._height;
@@ -218,25 +228,4 @@ export class Viewport {
    * Removes event listener.
    */
   off = this.ee.off.bind(this.ee);
-
-  /**
-   * Updates current information about viewport.
-   *
-   * @param props
-   */
-  update(props: UpdateViewportProps = {}): void {
-    const {
-      height = this.height,
-      isExpanded = this.isExpanded,
-      width = this.width,
-      isStateStable = false,
-    } = props;
-    this.height = height;
-    this.width = width;
-    this.isExpanded = isExpanded;
-
-    if (isStateStable) {
-      this.stableHeight = height;
-    }
-  }
 }

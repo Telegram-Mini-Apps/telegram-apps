@@ -1,19 +1,17 @@
-interface PropertyEventsMap {
-  /**
-   * Being emitted when back button changes visibility status.
-   * @param visible - current visibility status.
-   */
-  visibleChange: (visible: boolean) => void;
-}
-
 /**
- * List of events supported for listening by BackButton.
+ * Information about BackButton supported events.
  */
-export interface BackButtonEventsMap extends PropertyEventsMap {
+export interface BackButtonEventsMap {
   /**
-   * Being emitted when user pressed back button.
+   * Back button clicked.
    */
   click: () => void;
+
+  /**
+   * Visibility changed.
+   * @param visible - current visibility state.
+   */
+  visibleChanged: (visible: boolean) => void;
 }
 
 /**
@@ -22,7 +20,7 @@ export interface BackButtonEventsMap extends PropertyEventsMap {
 export type BackButtonEventName = keyof BackButtonEventsMap;
 
 /**
- * Returns listener for specified BackButton event.
+ * Listener for specified BackButton event.
  */
 export type BackButtonEventListener<E extends BackButtonEventName> =
   BackButtonEventsMap[E];

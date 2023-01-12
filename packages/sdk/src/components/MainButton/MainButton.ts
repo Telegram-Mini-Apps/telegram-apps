@@ -1,36 +1,8 @@
-import {EventEmitter, toRGB, RGBColor} from 'twa-core';
+import {EventEmitter, RGB} from 'twa-core';
+
 import {MainButtonEventListener, MainButtonEventsMap} from './events';
-import {Bridge} from 'twa-bridge';
-import {WithCommonProps} from '../../types';
-import {processBridgeProp} from '../../utils';
-
-export interface MainButtonProps extends WithCommonProps {
-  /**
-   * Should changes be automatically sent to native application.
-   * @default true
-   */
-  autocommit?: boolean;
-  color?: RGBColor;
-  isActive?: boolean;
-  isVisible?: boolean;
-  isProgressVisible?: boolean;
-  text?: string;
-  textColor?: RGBColor;
-}
-
-/**
- * Formats text before setting it.
- * @param text - text to set.
- * @private
- */
-function formatText(text: string): string {
-  text = text.trim();
-
-  if (text.length === 0 || text.length > 64) {
-    throw new Error(`Text has incorrect length: ${text.length}`);
-  }
-  return text;
-}
+import {BridgeLike} from '../../types';
+import {MainButtonProps} from './types';
 
 /**
  * Controls the main button, which is displayed at the bottom
@@ -40,28 +12,20 @@ function formatText(text: string): string {
  *  right after click. It is not smooth.
  */
 export class MainButton {
-  private readonly bridge: Bridge
   private readonly ee = new EventEmitter<MainButtonEventsMap>();
-  private _color: RGBColor;
-  private _textColor: RGBColor;
-  private _isActive: boolean;
-  private _isVisible: boolean;
-  private _isProgressVisible: boolean;
-  private _text: string;
+  private _isActive = false;
+  private _isVisible = false;
+  private _isProgressVisible = false;
+  private _text = '';
 
-  constructor(props: MainButtonProps = {}) {
-    const {
-      isProgressVisible = false, isVisible = false, isActive = false,
-      bridge, text, textColor, color, autocommit = true,
-    } = props;
+  constructor(
+    private readonly bridge: BridgeLike,
+    private _color: RGB,
+    private _textColor: RGB,
+    props: MainButtonProps = {}
+  ) {
+    const {autocommit = true} = props;
     this.autocommit = autocommit;
-    this.bridge = processBridgeProp(bridge);
-    this._color = color === undefined ? '' : toRGB(color);
-    this._textColor = textColor === undefined ? '' : toRGB(textColor);
-    this._text = text === undefined ? '' : formatText(text);
-    this._isProgressVisible = isProgressVisible;
-    this._isVisible = isVisible;
-    this._isActive = isActive;
   }
 
   /**
@@ -70,20 +34,22 @@ export class MainButton {
    */
   autocommit: boolean;
 
-  private set color(value: RGBColor) {
-    value = toRGB(value);
+  private set color(value: RGB) {
     const prev = this._color;
     this._color = value;
 
-    if (value !== prev) {
-      this.ee.emit('colorChange', value);
-    }
     if (this.autocommit) {
       this.commit();
     }
+    if (this._color !== prev) {
+      this.ee.emit('colorChanged', this._color);
+    }
   }
 
-  get color(): RGBColor {
+  /**
+   * Returns current main button background color.
+   */
+  get color(): RGB {
     return this._color;
   }
 
@@ -91,16 +57,16 @@ export class MainButton {
     const prev = this._isActive;
     this._isActive = value;
 
-    if (value !== prev) {
-      this.ee.emit('activeChange', value);
-    }
     if (this.autocommit) {
       this.commit();
+    }
+    if (this._isActive !== prev) {
+      this.ee.emit('activeChanged', this._isActive);
     }
   }
 
   /**
-   * Shows whether the button is active.
+   * Returns true in case, main button is currently enabled.
    */
   get isActive(): boolean {
     return this._isActive;
@@ -110,16 +76,16 @@ export class MainButton {
     const prev = this._isProgressVisible;
     this._isProgressVisible = value;
 
-    if (value !== prev) {
-      this.ee.emit('progressVisibleChange', value);
-    }
     if (this.autocommit) {
       this.commit();
+    }
+    if (this._isProgressVisible !== prev) {
+      this.ee.emit('progressVisibleChanged', this._isProgressVisible);
     }
   }
 
   /**
-   * Shows whether the button is displaying a loading indicator.
+   * Returns true in case, main button loading progress is currently visible.
    */
   get isProgressVisible(): boolean {
     return this._isProgressVisible;
@@ -129,58 +95,56 @@ export class MainButton {
     const prev = this._isVisible;
     this._isVisible = value;
 
-    if (value !== prev) {
-      this.ee.emit('visibleChange', value);
-    }
     if (this.autocommit) {
       this.commit();
+    }
+    if (this._isVisible !== prev) {
+      this.ee.emit('visibleChanged', this._isVisible);
     }
   }
 
   /**
-   * Shows whether the button is visible.
+   * Returns true in case, main button is currently visible.
    */
   get isVisible(): boolean {
     return this._isVisible;
   }
 
   private set text(value: string) {
-    value = formatText(value);
     const prev = this._text;
     this._text = value;
 
-    if (value !== prev) {
-      this.ee.emit('textChange', value);
-    }
     if (this.autocommit) {
       this.commit();
+    }
+    if (this._text !== prev) {
+      this.ee.emit('textChanged', value);
     }
   }
 
   /**
-   * Current button text.
+   * Returns current main button text.
    */
   get text(): string {
     return this._text;
   }
 
-  private set textColor(value: RGBColor) {
-    value = toRGB(value);
+  private set textColor(value: RGB) {
     const prev = this._textColor;
     this._textColor = value;
 
-    if (value !== prev) {
-      this.ee.emit('textColorChange', value);
-    }
     if (this.autocommit) {
       this.commit();
+    }
+    if (this._textColor !== prev) {
+      this.ee.emit('textColorChanged', this._textColor);
     }
   }
 
   /**
-   * Current button text color.
+   * Returns current main button text color.
    */
-  get textColor(): RGBColor {
+  get textColor(): RGB {
     return this._textColor;
   }
 
@@ -191,7 +155,7 @@ export class MainButton {
     // We should not commit changes until payload is correct. We could
     // have some invalid values in case, button instance could be created
     // with empty values. Otherwise, unexpected behaviour could be received.
-    if (this.text === '' || this.color === '' || this.textColor === '') {
+    if (this.text === '') {
       return;
     }
     this.bridge.postEvent('web_app_setup_main_button', {
@@ -305,7 +269,7 @@ export class MainButton {
    * chaining.
    * @param color - new text color.
    */
-  setTextColor(color: RGBColor): this {
+  setTextColor(color: RGB): this {
     this.textColor = color;
     return this;
   }
@@ -315,7 +279,7 @@ export class MainButton {
    * chaining.
    * @param color - color to set.
    */
-  setColor(color: RGBColor): this {
+  setColor(color: RGB): this {
     this.color = color;
     return this;
   }

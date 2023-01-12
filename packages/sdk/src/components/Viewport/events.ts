@@ -1,33 +1,39 @@
 /**
- * List of events, supported for listening by Viewport.
+ * Information about events supported by Viewport.
  */
 export interface ViewportEventsMap {
   /**
-   * Being emitted when viewport height changed.
-   * @param height - new height.
+   * Height changed.
+   * @param height - current height.
    */
-  heightChange: (height: number) => void;
+  heightChanged: (height: number) => void;
 
   /**
-   * Being emitted when viewport width changed.
-   * @param width - new width.
+   * Width changed.
+   * @param width - current width.
    */
-  widthChange: (width: number) => void;
+  widthChanged: (width: number) => void;
 
   /**
-   * Being emitted when viewport stable height changed.
-   * @param height - new stable height.
+   * Stable height changed.
+   * @param stableHeight - current stable height.
    */
-  stableHeightChange: (stableHeight: number) => void;
+  stableHeightChanged: (stableHeight: number) => void;
 
   /**
-   * Being emitted when viewport expansion status changed.
-   * @param isExpanded - new expansion status.
+   * Expansion status changed.
+   * @param isExpanded - current expansion status.
    */
-  expansionChange: (isExpanded: boolean) => void;
+  expansionChanged: (isExpanded: boolean) => void;
 }
 
 /**
  * Known Viewport event name.
  */
 export type ViewportEventName = keyof ViewportEventsMap;
+
+/**
+ * Listener for specified Viewport event.
+ */
+export type ViewportEventListener<E extends ViewportEventName> =
+  ViewportEventsMap[E];

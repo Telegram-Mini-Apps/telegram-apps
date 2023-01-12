@@ -1,77 +1,25 @@
-import {ColorScheme, Platform, SettableColorKey} from './types';
-import {
-  createSupportChecker,
-  formatURL,
-  processBridgeProp,
-} from '../../utils';
-import {
-  EventEmitter,
-  RGBColor,
-  isColorDark,
-  toRGB,
-  Version,
-  compareVersions,
-} from 'twa-core';
-import {WebAppEventsMap} from './events';
-import {
-  Bridge,
-  BridgeEventListener,
-  InvoiceStatus,
-  supports,
-} from 'twa-bridge';
-import {isAndroid, isDesktop, isIOS, isWeb} from './utils';
-import {WithCommonProps} from '../../types';
+import {Version, compareVersions} from 'twa-core';
+import {BridgeEventListener, InvoiceStatus, supports} from 'twa-bridge';
 
-export interface WebAppProps extends WithCommonProps {
-  backgroundColor?: RGBColor;
-  headerColor?: SettableColorKey;
-  isClosingConfirmationEnabled?: boolean;
-  platform?: Platform;
-}
-
-type MethodName = 'setBackgroundColor' | 'setHeaderColor' | 'openInvoice';
+import {Platform} from './types';
+import {createSupportsFunc, formatURL, SupportsFunc} from '../../utils';
+import {BridgeLike} from '../../types';
 
 /**
  * Provides common Web Apps functionality not covered by other system
  * components.
  */
 export class WebApp {
-  /**
-   * Checks if WebApp method is supported by specified version of Web App.
-   */
-  static supports = createSupportChecker<MethodName>({
-    setBackgroundColor: 'web_app_set_background_color',
-    setHeaderColor: 'web_app_set_header_color',
-    openInvoice: 'web_app_open_invoice',
-  });
-
-  private readonly ee = new EventEmitter<WebAppEventsMap>();
-  private readonly bridge: Bridge;
-  private _backgroundColor: RGBColor;
-  private _headerColor: SettableColorKey;
-  private _isClosingConfirmationEnabled: boolean;
-
-  constructor(version: Version, props: WebAppProps = {}) {
-    const {
-      bridge,
-      headerColor = 'bg_color',
-      backgroundColor = '#ffffff',
-      isClosingConfirmationEnabled = false,
-      platform = 'unknown',
-    } = props;
-    this.bridge = processBridgeProp(bridge);
+  constructor(
+    private readonly bridge: BridgeLike,
+    version: Version,
+    private readonly _platform: Platform,
+  ) {
+    this.supports = createSupportsFunc(version, {
+      openInvoice: 'web_app_open_invoice',
+      readTextFromClipboard: 'web_app_read_text_from_clipboard',
+    });
     this.version = version;
-    this.platform = platform;
-    this._backgroundColor = toRGB(backgroundColor);
-    this._headerColor = headerColor;
-    this._isClosingConfirmationEnabled = isClosingConfirmationEnabled;
-  }
-
-  /**
-   * Current native application background color.
-   */
-  get backgroundColor(): RGBColor {
-    return this._backgroundColor;
   }
 
   /**
@@ -82,111 +30,12 @@ export class WebApp {
   }
 
   /**
-   * Closes QR scanner.
-   */
-  closeQRScanner() {
-    this.bridge.postEvent('web_app_close_scan_qr_popup');
-  }
-
-  /**
-   * Returns current application color scheme. This value is computed according
-   * to current background color.
-   */
-  get colorScheme(): ColorScheme {
-    return isColorDark(this.backgroundColor) ? 'dark' : 'light';
-  }
-
-  /**
-   * Disables the confirmation dialog while the user is trying to close the
-   * Web App.
-   */
-  disableClosingConfirmation(): void {
-    this.isClosingConfirmationEnabled = false;
-  }
-
-  /**
-   * Enables the confirmation dialog while the user is trying to close the
-   * Web App.
-   */
-  enableClosingConfirmation(): void {
-    this.isClosingConfirmationEnabled = true;
-  }
-
-  /**
-   * Current native application header color key.
-   */
-  get headerColor(): SettableColorKey {
-    return this._headerColor;
-  }
-
-  private set isClosingConfirmationEnabled(value: boolean) {
-    // Send request to native app.
-    this.bridge.postEvent('web_app_setup_closing_behavior', {
-      need_confirmation: value,
-    });
-
-    if (this._isClosingConfirmationEnabled === value) {
-      return;
-    }
-
-    // Update current value.
-    this._isClosingConfirmationEnabled = value;
-
-    // Emit event.
-    this.ee.emit('closingConfirmationChange', value);
-  }
-
-  /**
-   * true, if the confirmation dialog enabled while the user is trying to
-   * close the Web App.
-   */
-  get isClosingConfirmationEnabled(): boolean {
-    return this._isClosingConfirmationEnabled;
-  }
-
-  /**
    * Returns true if passed version is more than or equal to current
    * Web App version.
    * @param version - compared version.
    */
   isVersionAtLeast(version: Version): boolean {
     return compareVersions(version, this.version) >= 0;
-  }
-
-  /**
-   * True if current platform is Android.
-   * @deprecated Works incorrectly as long as there are a lot of platforms
-   * not currently used by function.
-   */
-  get isAndroid(): boolean {
-    return isAndroid(this.platform);
-  }
-
-  /**
-   * True if current platform is desktop.
-   * @deprecated Works incorrectly as long as there are a lot of platforms
-   * not currently used by function.
-   */
-  get isDesktop(): boolean {
-    return isDesktop(this.platform);
-  }
-
-  /**
-   * True if current platform is iOS.
-   * @deprecated Works incorrectly as long as there are a lot of platforms
-   * not currently used by function.
-   */
-  get isIOS(): boolean {
-    return isIOS(this.platform);
-  }
-
-  /**
-   * True if current platform is browser.
-   * @deprecated Works incorrectly as long as there are a lot of platforms
-   * not currently used by function.
-   */
-  get isWeb(): boolean {
-    return isWeb(this.platform);
   }
 
   /**
@@ -254,6 +103,9 @@ export class WebApp {
     if (match === null) {
       throw new Error('Link pathname has incorrect format. Expected to receive "/invoice/slug" or "/$slug"');
     }
+    // Open invoice.
+    this.bridge.postEvent('web_app_open_invoice', {slug: match[2]});
+
     return new Promise(res => {
       // Create event listener which will resolve invoice status.
       const listener: BridgeEventListener<'invoice_closed'> = a => {
@@ -265,52 +117,15 @@ export class WebApp {
       };
       // Add event listener to catch invoice status.
       this.bridge.on('invoice_closed', listener);
-
-      // Open invoice.
-      this.bridge.postEvent('web_app_open_invoice', {slug: match[2]});
     });
   }
 
   /**
-   * Opens QR scanner with specified title shown to user. Method returns
-   * scanned QR content in case, it was scanned. It returns null in case,
-   * scanner was closed.
-   * @param text - title to display.
+   * Returns current Web App platform.
    */
-  openQRScanner(text?: string): Promise<string | null> {
-    return new Promise<string | null>(res => {
-      const closeListener: BridgeEventListener<'scan_qr_popup_closed'> = () => {
-        res(null);
-        unbind();
-      };
-      const scanListener: BridgeEventListener<'qr_text_received'> = ({data = null}) => {
-        res(data);
-        unbind();
-      };
-
-      const unbind = () => {
-        this.bridge.off('scan_qr_popup_closed', closeListener);
-        this.bridge.off('qr_text_received', scanListener);
-      };
-
-      this.bridge.postEvent('web_app_open_scan_qr_popup', {text});
-    });
+  get platform(): Platform {
+    return this._platform;
   }
-
-  /**
-   * Adds new event listener.
-   */
-  on = this.ee.on.bind(this.ee);
-
-  /**
-   * Removes event listener.
-   */
-  off = this.ee.off.bind(this.ee);
-
-  /**
-   * Current Web App platform.
-   */
-  platform: Platform;
 
   /**
    * Informs the Telegram app that the Web App is ready to be displayed.
@@ -371,63 +186,9 @@ export class WebApp {
   }
 
   /**
-   * Updates current application background color.
-   * FIXME: Has no effect on desktop, works incorrectly in Android.
-   *  Issues:
-   *  https://github.com/Telegram-Web-Apps/twa/issues/9
-   *  https://github.com/Telegram-Web-Apps/twa/issues/8
-   * @param color - settable color key or color description in known RGB
-   * format.
-   */
-  setBackgroundColor(color: RGBColor): void {
-    // Convert passed value to expected `#RRGGBB` format.
-    color = toRGB(color);
-
-    // Notify native application about updating current background color.
-    this.bridge.postEvent('web_app_set_background_color', {color});
-
-    // Don't do anything in case, color is the same.
-    if (this._backgroundColor === color) {
-      return;
-    }
-
-    // Override current background color key.
-    this._backgroundColor = color;
-
-    // Emit event.
-    this.ee.emit('backgroundColorChange', color);
-  }
-
-  /**
-   * Updates current application header color.
-   * FIXME: Has no effect on desktop, works incorrectly on Android.
-   *  Issues:
-   *  https://github.com/Telegram-Web-Apps/twa/issues/9
-   *  https://github.com/Telegram-Web-Apps/twa/issues/8
-   * @param color - settable color key.
-   */
-  setHeaderColor(color: SettableColorKey): void {
-    // Notify native application about updating current header color.
-    this.bridge.postEvent('web_app_set_header_color', {color_key: color});
-
-    // Don't do anything in case, color is the same.
-    if (this._headerColor === color) {
-      return;
-    }
-
-    // Override current header color key.
-    this._headerColor = color;
-
-    // Emit event.
-    this.ee.emit('headerColorChange', color);
-  }
-
-  /**
    * Returns true in case, specified method is supported by current WebApp.
    */
-  supports(method: MethodName): boolean {
-    return WebApp.supports(method, this.version);
-  }
+  supports: SupportsFunc<'openInvoice' | 'readTextFromClipboard'>;
 
   /**
    * Current Web App version. This property is used by other components to check if
