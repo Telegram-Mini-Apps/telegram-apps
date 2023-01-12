@@ -28,6 +28,7 @@
   "scripts": {
     "build": "lerna run build",
     "commit": "git cz",
+    "core:build": "lerna run --scope=twa-core build",
     "docs:dev": "lerna run --scope=documentation start",
     "docs:deploy": "lerna run --scope=documentation deploy",
     "docs:build": "lerna run --scope=documentation build",
