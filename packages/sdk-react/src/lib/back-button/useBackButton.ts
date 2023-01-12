@@ -1,5 +1,6 @@
-import {useComponent} from '../../sdk';
 import {BackButton} from 'twa-sdk';
+
+import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';
 
 /**
@@ -7,7 +8,7 @@ import {useEventsTracking} from '../../hooks';
  */
 export function useBackButton(): BackButton {
   const backButton = useComponent('backButton');
-  useEventsTracking(backButton, ['visibleChange']);
+  useEventsTracking(backButton, ['visibleChanged']);
 
   return backButton;
 }

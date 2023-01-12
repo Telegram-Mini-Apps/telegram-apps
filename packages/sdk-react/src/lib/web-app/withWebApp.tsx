@@ -1,5 +1,6 @@
 import React, {ComponentType} from 'react';
 import {WebApp} from 'twa-sdk';
+
 import {useWebApp} from './useWebApp';
 
 /**

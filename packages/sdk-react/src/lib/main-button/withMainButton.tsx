@@ -1,5 +1,6 @@
 import React, {ComponentType} from 'react';
 import {MainButton} from 'twa-sdk';
+
 import {useMainButton} from './useMainButton';
 
 /**

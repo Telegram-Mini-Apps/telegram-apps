@@ -1,4 +1,5 @@
 import {InitData} from 'twa-sdk';
+
 import {useComponent} from '../../sdk';
 
 /**

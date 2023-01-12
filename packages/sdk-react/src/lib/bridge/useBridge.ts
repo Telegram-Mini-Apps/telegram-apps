@@ -1,4 +1,5 @@
 import {Bridge} from 'twa-bridge';
+
 import {useComponent} from '../../sdk';
 
 /**

@@ -1,5 +1,6 @@
 import React, {ComponentType} from 'react';
 import {Bridge} from 'twa-bridge';
+
 import {useBridge} from './useBridge';
 
 /**

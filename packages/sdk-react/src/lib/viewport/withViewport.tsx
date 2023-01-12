@@ -1,5 +1,6 @@
 import React, {ComponentType} from 'react';
 import {Viewport} from 'twa-sdk';
+
 import {useViewport} from './useViewport';
 
 /**

@@ -1,4 +1,5 @@
 import {Viewport} from 'twa-sdk';
+
 import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';
 
@@ -8,7 +9,7 @@ import {useEventsTracking} from '../../hooks';
 export function useViewport(): Viewport {
   const viewport = useComponent('viewport');
   useEventsTracking(viewport, [
-    'stableHeightChange', 'expansionChange', 'heightChange', 'widthChange',
+    'stableHeightChanged', 'expansionChanged', 'heightChanged', 'widthChanged',
   ]);
 
   return viewport;

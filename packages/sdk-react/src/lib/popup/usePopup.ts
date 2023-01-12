@@ -1,4 +1,5 @@
 import {Popup} from 'twa-sdk';
+
 import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';
 
@@ -7,7 +8,7 @@ import {useEventsTracking} from '../../hooks';
  */
 export function usePopup(): Popup {
   const popup = useComponent('popup');
-  useEventsTracking(popup, ['openChange']);
+  useEventsTracking(popup, ['openChanged']);
 
   return popup;
 }

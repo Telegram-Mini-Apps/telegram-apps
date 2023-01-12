@@ -1,4 +1,5 @@
 import {MainButton} from 'twa-sdk';
+
 import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';
 
@@ -8,8 +9,8 @@ import {useEventsTracking} from '../../hooks';
 export function useMainButton(): MainButton {
   const mainButton = useComponent('mainButton');
   useEventsTracking(mainButton, [
-    'activeChange', 'colorChange', 'progressVisibleChange', 'textChange',
-    'textColorChange', 'visibleChange',
+    'activeChanged', 'colorChanged', 'progressVisibleChanged', 'textChanged',
+    'textColorChanged', 'visibleChanged',
   ]);
 
   return mainButton;

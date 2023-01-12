@@ -1,6 +1,7 @@
 import React, {ComponentType} from 'react';
-import {useBackButton} from './useBackButton';
 import {BackButton} from 'twa-sdk';
+
+import {useBackButton} from './useBackButton';
 
 /**
  * HOC which passes BackButton SDK component to wrapped React component.

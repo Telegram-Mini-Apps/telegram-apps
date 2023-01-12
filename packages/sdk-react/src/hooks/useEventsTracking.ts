@@ -1,5 +1,6 @@
-import {useForceUpdate} from './useForceUpdate';
 import {useEffect, useMemo} from 'react';
+
+import {useForceUpdate} from './useForceUpdate';
 
 /**
  * Minimal set of properties, which is required by hook.

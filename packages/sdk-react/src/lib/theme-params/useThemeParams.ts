@@ -1,4 +1,5 @@
 import {ThemeParams} from 'twa-sdk';
+
 import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';
 
@@ -6,7 +7,7 @@ import {useEventsTracking} from '../../hooks';
  * Returns ThemeParams component instance.
  */
 export function useThemeParams(): ThemeParams {
-  const theme = useComponent('theme');
+  const theme = useComponent('themeParams');
   useEventsTracking(theme, ['change']);
 
   return theme;
