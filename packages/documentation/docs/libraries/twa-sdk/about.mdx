@@ -53,55 +53,51 @@ init().then(components => {
 });
 ```
 
-To enable debug mode, use `true` value as argument:
+### Options
+
+#### `debug: boolean`
+
+Enables debug mode which leads to more debugging information sent by SDK:
 
 ```typescript
-// Init with debug mode.
-init(true);
+init({debug: true});
 ```
 
-In case, you want to initialize components with your own props, you should
-pass object to `init` function:
+#### `checkCompat: boolean`
+
+Enables mode in which calls of methods not supported by current version
+of Web App will lead to thrown errors. This mode is recommended to be used
+and enabled by default.
 
 ```typescript
-init({
-  props: {
-    bridge: {debug: true},
-    backButton: {isVisible: true},
-    // ...
-    webApp: {platform: 'tdesktop', backgroundColor: '#FF0233', ...}
-  }
-});
+init({checkCompat: true});
+```
+
+#### `targetOrigin: string`
+
+This option is directly passed to `Bridge` during its initialization. It
+restricts lists of parent iframes allowed to receive data from current
+application.
+
+```typescript
+init({targetOrigin: 'https://web.telegram.org'});
 ```
 
 ## Components
 
-All components in this package are supposed to be
-used as singletons. It means, you should not create several instances of
-same component and use them even if it is not forbidden. But in this case,
-there is no warranty, everything will work fine.
+All components in this package are supposed to be used as singletons. It means,
+you should not create several instances of same component and use them even
+if it is not forbidden. But in this case, there is no warranty, everything
+will work fine.
 
 The reason is, each component class stores its state locally and class instances
 are not synchronized between each other. So, for example, in case, you create
-2 instances of `Popup` component and one of them calls `show()` function, it
+2 instances of `Popup` component and one of them calls `open()` method, it
 will change its `isOpened` property to `true`, but the second instance
 of `Popup` will not know about it and will still return `false` value.
 
 To avoid possible problems, you can rely on package's `init` function which
 provides initialized components which are enough to use across application.
-
-:::info
-
-<p>
-  Some components which require usage of <code>Bridge</code> functionality can
-  accept its custom instance in constructor. In case, <code>Bridge</code> is not
-  passed, component will create it via <code>init()</code> method
-  from <NpmLink pkg={'twa-bridge'}/> package. We recommend passing your own
-  single instance of <code>Bridge</code> to avoid unexpected behaviour or
-  errors.
-</p>
-
-:::
 
 ### Events
 
@@ -132,20 +128,22 @@ You can find list of supported events in components own documentations.
 ### Methods support
 
 Almost each component is capable of checking whether its method is supported by
-passed Web App version or not. To check if some methods are supported, you
+current Web App version or not. To check if some methods are supported, you
 should use `{Component}.supports()` function. For example:
 
 ```typescript
 import {BackButton} from 'twa-sdk';
+import {init} from 'twa-bridge';
 
-console.log(BackButton.supports('show', '6.0')); // false
-console.log(BackButton.supports('hide', '6.3')); // true
+let backButton = new BackButton(init(), '6.0');
+console.log(backButton.supports('show')); // false
+
+backButton = new BackButton(init(), '6.3');
+console.log(backButton.supports('hide')); // true
 ```
 
 It is recommended to use this functionality before calling some component method
-as long as this will make you sure, it will work. Component itself is not
-checking if method is supported by current Web App version, what could lead to
-issues.
+as long as this will make you sure, it will work.
 
 List of supported methods by components is described in each component's
 documentation.
