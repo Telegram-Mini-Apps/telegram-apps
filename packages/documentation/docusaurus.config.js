@@ -67,7 +67,7 @@ const config = {
       },
       footer: {
         style: 'dark',
-        copyright: 'Made by Telegram Web Apps Enthusiasts @ 2022',
+        copyright: 'Made by Telegram Web Apps Enthusiasts @ 2023',
         links: [
           // {
           //   title: 'Docs',

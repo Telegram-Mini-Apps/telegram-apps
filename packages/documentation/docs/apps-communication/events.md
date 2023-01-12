@@ -157,3 +157,30 @@ User clicked [back button](../features/back-button).
 
 Occurs when the `Settings` item in context menu was pressed. Not all
 applications have this button.
+
+### v6.4
+
+#### `qr_text_received`
+
+QR scanner scanned some QR and extracted its content.
+
+```typescript
+type Payload = {
+  req_id: string;
+  data?: string | null;
+};
+```
+
+#### `scan_qr_popup_closed`
+
+QR scanner was closed.
+
+#### `clipboard_text_received`
+
+Telegram application attempted to extract text from clipboard.
+
+```typescript
+type Payload = {
+  data?: string;
+};
+```

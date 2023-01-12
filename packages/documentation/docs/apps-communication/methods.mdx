@@ -188,9 +188,9 @@ type Parameters = { path_full: string };
 
 Opens invoice by its specified slug.
 
-[//]: # (TODO: Should provide more information about invoices. It is not common knowledge)
+[//]  # (TODO: Should provide more information about invoices. It is not common knowledge)
 
-[//]: # (for developer.)
+[//]  # (for developer.)
 
 ```typescript
 type Parameters = { slug: string };
@@ -307,4 +307,28 @@ type Parameters = {
    */
   buttons: PopupButton[];
 };
+```
+
+### v6.4
+
+#### `web_app_open_scan_qr_popup`
+
+Opens QR scanner.
+
+```typescript
+type Parameters = { text?: string };
+```
+
+#### `web_app_close_scan_qr_popup`
+
+Closes QR scanner.
+
+#### `web_app_read_text_from_clipboard`
+
+Reads text from clipboard. Method accepts request identifier which is
+used to appropriately retrieve method execution result from
+[`qr_text_received`](events#qr_text_received) event.
+
+```typescript
+type Parameters = { req_id: string };
 ```
