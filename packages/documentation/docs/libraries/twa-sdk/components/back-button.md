@@ -13,9 +13,7 @@ in [documentation](../../../features/back-button).
 import {BackButton} from 'twa-sdk';  
 import {init} from 'twa-bridge';  
   
-const backButton = new BackButton();  
-// or with your bridge instance.  
-const backButton = new BackButton({bridge: init()});  
+const backButton = new BackButton(init(), '6.3');  
 ```  
 
 ## Showing and hiding
@@ -34,7 +32,7 @@ console.log(backButton.isVisible); // false
 
 Events available for [listening](../about#events):
 
-- `visibleChange: (isVisible: boolean) => void`
+- `visibleChanged: (isVisible: boolean) => void`
 - `click: () => void`
 
 ## Methods support

@@ -13,9 +13,7 @@ in [documentation](../../../features/haptic-feedback).
 import {HapticFeedback} from 'twa-sdk';
 import {init} from 'twa-bridge';
 
-const haptic = new HapticFeedback();
-// or with your bridge instance.  
-const haptic = new HapticFeedback({bridge: init()});
+const haptic = new HapticFeedback(init(), '6.3');
 ```
 
 ## Notifications

@@ -9,9 +9,11 @@ state.
 import {Viewport} from 'twa-sdk';  
 import {init} from 'twa-bridge';  
   
-const viewport = new Viewport();  
-// or with your bridge instance.  
-const viewport = new Viewport({bridge: init()});  
+// Specify bridge instance, height, width, stable height and
+// expansion status.
+const viewport = new Viewport(
+  init(), 390, 365, 300, false,
+);  
 ```  
 
 ## Dimensions
@@ -39,19 +41,41 @@ To get fresh viewport information, you could use static `request` function:
 import {Viewport} from 'twa-sdk';
 import {init} from 'twa-bridge';
 
-Viewport.request().then(console.log);
-// or with bridge instance.
 Viewport.request(init()).then(console.log);
 
 // Output:
 // { height: 122, isExpanded: false, width: 375, isStateStable: true }
 ```
 
+## Creating synchronized instance
+
+Class is capable of returning instance of `Viewport` which
+is synchronized with its actual state in Telegram application. To
+get it, use static `synced()` method:
+
+```typescript
+import {Viewport} from 'twa-sdk';
+import {init} from 'twa-bridge';
+
+const viewport = Viewport.synced(
+  init(), 390, 365, 300, false,
+);
+
+// viewport will be automatically updated in case, 
+// Telegram changed viewport.
+
+console.log(viewport.height); // 390
+console.log(viewport.stableHeight); // 300
+console.log(viewport.width); // 365
+console.log(viewport.isExpanded); // false
+console.log(viewport.isStable); // false
+```
+
 ## Events
 
 Events available for [listening](../about#events):
 
-- `heightChange: (height: number) => void`
-- `widthChange: (width: number) => void`
-- `stableHeightChange: (stableHeight: number) => void`
-- `expansionChange: (isExpanded: boolean) => void`
+- `heightChanged: (height: number) => void`
+- `widthChanged: (width: number) => void`
+- `stableHeightChanged: (stableHeight: number) => void`
+- `expansionChanged: (isExpanded: boolean) => void`

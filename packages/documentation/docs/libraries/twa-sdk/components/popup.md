@@ -12,19 +12,17 @@ in [documentation](../../../features/popup).
 import {Popup} from 'twa-sdk';
 import {init} from 'twa-bridge';
 
-const popup = new Popup();
-// or with your bridge.  
-const popup = new Popup({bridge: init()});
+const popup = new Popup(init(), '6.3');
 ```
 
 ## Opening new popup
 
-`show` function returns promise which will be resolved in case, popup is hidden.
+`open` function returns promise which will be resolved in case, popup is hidden.
 Popup will resolve button identifier in case, user clicked it. Otherwise,
 `null` will be resolved.
 
 ```typescript
-popup.show({
+popup.open({
   title: 'Hello!',
   message: 'Here is a test message.',
   buttons: [{id: 'my-id', type: 'default', text: 'Default text'}]
@@ -32,29 +30,14 @@ popup.show({
 console.log(popup.isOpened); // true
 ```
 
-There are some additional shorthand functions using `show` function for showing
-popups which way also be useful:
-
-```typescript
-// Will show popup with only 1 button. Could be used as alert. 
-popup.showAlert('This page will be closed in 2 minutes.');
-
-// Show confirm message.
-popup.showConfirm('Are you sure, this form should be closed?').then(value => {
-  // value will be true or false.
-})
-```
-
 ## Events
 
 Events available for [listening](../about#events):
 
-- `close: () => void`
-- `openChange: (isOpened: boolean) => void`
-- `open: () => void`
+- `openChanged: (isOpened: boolean) => void`
 
 ## Methods support
 
 Methods available for [support check](../about#methods-support):
 
-- `show`
+- `open`

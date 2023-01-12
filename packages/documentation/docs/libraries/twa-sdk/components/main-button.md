@@ -12,9 +12,8 @@ in [documentation](../../../features/main-button).
 import {BackButton} from 'twa-sdk';
 import {init} from 'twa-bridge';
 
-const mainButton = new MainButton();
-// or with your bridge instance.  
-const mainButton = new MainButton({bridge: init()});
+// Specify bridge instance, color and text colors.
+const mainButton = new MainButton(init(), '#000000', '#ffffff');
 ```
 
 ## Committing changes
@@ -24,14 +23,15 @@ by setters, such as `setText`, `show` etc. This behavior could be change by
 using `autocommit` constructor property:
 
 ```typescript
-const mainButton = new MainButton({autocommit: false});
+const mainButton = new MainButton(init(), '#000000', '#ffffff', {
+  autocommit: false,
+});
 ```
 
 In this case, to apply locally done changes, you have to call `commit()` 
 function:
 
 ```typescript
-const mainButton = new MainButton({autocommit: false});
 mainButton.setText('Submit').show().commit();
 ```
 
@@ -65,7 +65,7 @@ console.log(mainButton.isProgressVisible); // false
 
 ## Colors
 
-### `color` / `setColor(color: RGBColor)`
+### `color` / `setColor(color: RGB)`
 
 Button background color.
 
@@ -74,7 +74,7 @@ mainButton.setColor('#ffffaa');
 console.log(mainButton.color); // '#ffffaa'
 ```
 
-### `textColor` / `setTextColor(color: RGBColor)`
+### `textColor` / `setTextColor(color: RGB)`
 
 Button text color.
 
@@ -102,10 +102,10 @@ will receive `click` event. Otherwise, no event will be received.
 
 Events available for [listening](../about#events):
 
-- `activeChange: (isActive: boolean) => void`
+- `activeChanged: (isActive: boolean) => void`
 - `click: () => void`
-- `colorChange: (color: RGBColor) => void`
-- `progressVisibleChange: (isVisible: boolean) => void`
-- `textChange: (text: string) => void`
-- `textColorChange: (color: RGBColor) => void`
-- `visibleChange: (isVisible: boolean) => void`
+- `colorChanged: (color: RGB) => void`
+- `progressVisibleChanged: (isVisible: boolean) => void`
+- `textChanged: (text: string) => void`
+- `textColorChanged: (color: RGB) => void`
+- `visibleChanged: (isVisible: boolean) => void`
