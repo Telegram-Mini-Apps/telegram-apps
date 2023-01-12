@@ -1,8 +1,10 @@
 import {createJsonStructParser, parseJsonParamAsOptRGB} from 'twa-core';
+
 import {ThemeParams} from './types';
 
 /**
- * Tries to extract theme information from JSON value.
+ * Extracts theme information from value which could be presented as
+ * JSON object.
  */
 export const extractThemeFromJson = createJsonStructParser<ThemeParams>({
   backgroundColor: ['bg_color', parseJsonParamAsOptRGB],
@@ -23,7 +25,7 @@ export function extractThemeFromLocation(): ThemeParams {
     .get('tgWebAppThemeParams');
 
   if (searchParam === null) {
-    throw new Error('Parameter "tgWebAppThemeParams" missing.');
+    throw new Error('Parameter "tgWebAppThemeParams" is missing.');
   }
   return extractThemeFromJson(searchParam);
 }

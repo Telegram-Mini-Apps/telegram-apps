@@ -1,4 +1,4 @@
-import {RGBColor, toRGB} from '../../colors';
+import {RGB, toRGB} from '../../colors';
 import {JsonParser} from './types';
 import {isRecord} from '../../validation';
 
@@ -74,9 +74,17 @@ export const parseJsonParamAsOptBool: JsonParser<boolean | undefined> = value =>
   value === undefined ? undefined : parseJsonParamAsBool(value);
 
 /**
+ * Converts value received from some JSON to RGB in full format.
+ * @param value - raw value.
+ * @throws {TypeError} Value has incorrect type.
+ */
+export const parseJsonParamAsRGB: JsonParser<RGB> =
+  value => toRGB(parseJsonParamAsString(value));
+
+/**
  * Converts value received from some JSON to RGB in full format or undefined.
  * @param value - raw value.
  * @throws {TypeError} Value has incorrect type.
  */
-export const parseJsonParamAsOptRGB: JsonParser<RGBColor | undefined> =
-  value => value === undefined ? value : toRGB(parseJsonParamAsString(value));
+export const parseJsonParamAsOptRGB: JsonParser<RGB | undefined> =
+  value => value === undefined ? value : parseJsonParamAsRGB(value);

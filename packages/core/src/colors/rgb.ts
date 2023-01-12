@@ -1,10 +1,10 @@
-import {RGBColor} from './types';
+import {RGB, RGBShort} from './types';
 
 /**
  * Returns true in case, passed value has #RGB format.
  * @param value - value to check.
  */
-export function isRGBShort(value: string): boolean {
+export function isRGBShort(value: string): value is RGBShort {
   return /^#[\da-f]{3}$/i.test(value);
 }
 
@@ -12,7 +12,7 @@ export function isRGBShort(value: string): boolean {
  * Returns true in case, passed value has #RRGGBB format.
  * @param value - value to check.
  */
-export function isRGB(value: string): boolean {
+export function isRGB(value: string): value is RGB {
   return /^#[\da-f]{6}$/i.test(value);
 }
 
@@ -25,7 +25,7 @@ export function isRGB(value: string): boolean {
  * @param value - value to convert.
  * @throws {SyntaxError} Passed value does not contain any of known RGB formats.
  */
-export function toRGB(value: string): RGBColor {
+export function toRGB(value: string): RGB {
   // Remove all spaces.
   const clean = value.replace(/\s/g, '');
 
@@ -36,12 +36,12 @@ export function toRGB(value: string): RGBColor {
 
   // Convert from #RGB.
   if (isRGBShort(clean)) {
-    let color: RGBColor = '#';
+    let color = '#';
 
     for (let i = 0; i < 3; i++) {
       color += clean[1 + i].repeat(2);
     }
-    return color;
+    return color as RGB;
   }
 
   // Example valid values: rgb(0,3,10) rgba(32,114,8,0)
@@ -59,5 +59,5 @@ export function toRGB(value: string): RGBColor {
   return match.slice(1).reduce((acc, component) => {
     const formatted = parseInt(component).toString(16);
     return acc + (formatted.length === 1 ? '0' : '') + formatted;
-  }, '#');
+  }, '#') as RGB;
 }
