@@ -38,19 +38,18 @@ export function initTheme(bridge: Bridge, themeParams: TwaThemeParams): ThemePar
 export async function initViewport(
   bridge: Bridge,
   platform: Platform,
-  props: ViewportProps
+  props: ViewportProps,
 ): Promise<Viewport> {
   // Get current viewport information.
-  const {height, isStateStable, width, isExpanded} = isDesktop(platform)
-    // In desktop version Viewport.request() will not work. See its
-    // implementation.
-    ? {
+  const isSupported = platform !== 'tdesktop' && platform !== 'macos';
+  const {height, isStateStable, width, isExpanded} = isSupported
+    ? await Viewport.request(bridge)
+    : {
       width: window.innerWidth,
       height: window.innerHeight,
       isStateStable: true,
       isExpanded: true,
-    }
-    : await Viewport.request(bridge);
+    };
 
   // Create Viewport instance.
   const viewport = new Viewport({
