@@ -55,17 +55,17 @@ const bridge = init();
 bridge.debug = true;
 ```
 
-As a result, you will see logs in console with information about called
-methods and processes.
+After debug mode is enabled, bridge logs additional information about received
+and sent events into console.
 
-## Setting target origin
+## Target origin
 
 In case, current bridge instance is used in browser environment (iframe),
 we use such function as `window.parent.postMessage` which requires passing
-target origin to prevent sending events to unknown parent iframes.
+target origin to prevent sending events to untrusted parent iframes.
 
 By default, bridge uses such origin as `https://web.telegram.org`. To allow
-sending events to other origins, you should use `targetOrigin` options:
+sending events to other origins, you should use `targetOrigin` option:
 
 ```typescript
 const unsafeBridge = init({targetOrigin: '*'});
@@ -81,7 +81,12 @@ const bridge = init({targetOrigin: '*'});
 bridge.postEvent('web_app_close', {targetOrigin: 'https://myendpoint.org'})
 ```
 
+It is highly recommended not to override this value as long as it could lead
+to security issues. Update this value only in test purposes.
+
 ## Calling methods
+
+### With `Bridge`
 
 To call Web Apps methods, it is enough to call `Bridge`s `postEvent` method.
 This method automatically finds correct way of sending event which depends
@@ -113,10 +118,10 @@ bridge.postEvent('web_app_open_popup', {
 });
 ```
 
-### Without bridge
+### Without `Bridge`
 
-This library allows calling methods without creating new Bridge instance. To
-perform this, you should use `postEvent` function which has the same
+This library allows calling methods without creating new `Bridge` instance. To
+perform this action, you should use `postEvent` function which has the same
 type as `bridge.postEvent` (actually, bridge uses `postEvent` function
 internally):
 
@@ -130,12 +135,13 @@ Nevertheless, sometimes you need to handle event sent from native app which is
 emitted as a response to posted event. For example, you would like to
 call `web_app_request_theme` event. As a result, native app will emit
 `theme_changed` event. Using default bridge init flow, this event will
-be captured by bridge instance. We can't say the same about bare `postEvent` function,
-so, do not forget about response event (if it exists) handling process.
+be captured by bridge instance. We can't say the same about bare `postEvent`
+function, so, do not forget about response event (if it exists) handling
+process.
 
 ## Listening to events
 
-Tracking of events is rather simple thing too. For this purpose, we could
+Events tracking is rather simple thing too. For this purpose, we could
 use such methods as `on` and `subscribe`. To remove event listeners, we
 use `off` and `unsubscribe`:
 
@@ -154,7 +160,7 @@ const globalListener: GlobalListener = (event, ...args) => {
 // Add event listener.
 bridge.on('viewport_changed', listener);
 
-// Add any event listener.
+// Add listener for all events.
 bridge.subscribe(globalListener);
 
 // Remove event listeners.
@@ -162,16 +168,18 @@ bridge.off('viewport_changed', listener);
 bridge.unsubscribe(globalListener);
 ```
 
-## Lower level control
+## Lower level control options
 
 Previously, we used such function as `init` almost without any parameters,
 but this method supports some more additional options.
 
 ### `defineReceiver: boolean`
 
-By default, `init` sets this value as `true`. It leads to call of function
-named `defineEventReceiver` which defines global function, handling events
-from native application and emitting window `message` event.
+*Default: `true`*
+
+Settings this value to `true`, `init` function will call such function
+as `defineEventReceiver` which defines global function, handling events
+from Telegram application and emitting window `message` event.
 
 It is safe to use this function as many times as required. This function
 will run only once.
@@ -183,7 +191,8 @@ versions of Telegram, unless some additional actions are done.
 ### `emitter: GlobalEventEmitter`
 
 Bridge itself is not listening to window `message` event or events sent
-from Telegram native application directly. It expects passing [event emitter](https://github.com/Telegram-Web-Apps/twa/blob/master/packages/bridge/src/event-receiver/global.ts#L18)
+from Telegram native application directly. It expects passing
+[event emitter](https://github.com/Telegram-Web-Apps/twa/blob/master/packages/bridge/src/event-receiver/global.ts#L18)
 that is responsible for this kind of job.
 
 This way of working with events allows us to normally subscribe to and
@@ -204,6 +213,9 @@ import {supports} from 'twa-bridge';
 supports('web_app_trigger_haptic_feedback', '6.0'); // false
 supports('web_app_trigger_haptic_feedback', '6.1'); // true
 ```
+
+It is recommended to use this function before calling Web Apps methods to
+prevent application from stalling.
 
 ## Higher-level control
 
