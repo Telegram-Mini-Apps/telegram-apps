@@ -29,6 +29,8 @@
     "build": "lerna run build",
     "commit": "git cz",
     "core:build": "lerna run --scope=twa-core build",
+    "utils:dev": "lerna run --scope=@twa.js/utils dev",
+    "utils:build": "lerna run --scope=@twa.js/utils build",
     "docs:dev": "lerna run --scope=documentation start",
     "docs:deploy": "lerna run --scope=documentation deploy",
     "docs:build": "lerna run --scope=documentation build",
