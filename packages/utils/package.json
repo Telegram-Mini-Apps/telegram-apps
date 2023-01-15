@@ -1,0 +1,44 @@
+{
+  "name": "@twa.js/utils",
+  "version": "0.0.0",
+  "description": "Web Apps core TypeScript utilities reused by other packages of ecosystem.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
+  "keywords": [
+    "telegram",
+    "telegram-web-apps",
+    "telegram-bot",
+    "twa",
+    "core",
+    "typescript"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist/**/*"
+  ],
+  "main": "dist/index.cjs",
+  "browser": "dist/browser.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "web": "./dist/index.mjs",
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.git",
+    "directory": "packages/utils"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "build": "rimraf dist && rollup --config rollup.config.js",
+    "dev": "rollup --watch --config playground/rollup.config.js"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+  }
+}
