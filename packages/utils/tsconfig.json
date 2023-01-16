@@ -20,8 +20,7 @@
       "ESNext",
       "dom"
     ],
-    "outDir": "dist",
-    "typeRoots": ["src/a.d.ts"]
+    "outDir": "dist"
   },
   "include": [
     "src"
