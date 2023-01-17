@@ -1,4 +1,4 @@
-# @twa.js/utils <sup><img src="https://static.npmjs.com/255a118f56f5346b97e56325a1217a16.svg" alt="drawing" width="20"/></sup>
+# @twa.js/utils
 
 [npm-badge]: https://img.shields.io/npm/v/@twa.js/utils?logo=npm
 

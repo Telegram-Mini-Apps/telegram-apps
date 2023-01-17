@@ -1,4 +1,4 @@
-# twa-sdk
+# @twa.js/sdk
 
 [npm-badge]: https://img.shields.io/npm/v/twa-sdk?logo=npm
 
