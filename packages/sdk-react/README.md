@@ -13,6 +13,8 @@ React bindings for client SDK. Contains hooks, components and other
 useful tools which allow usage of React along with Web Apps client SDK.
 Tracks SDK components changes out of box.
 
-This library is a part of Web Apps ecosystem. To see full documentation, please,
-visit [this](https://telegram-web-apps.github.io/twa/docs/libraries/@twa.js/sdk-react)
-link.
+This library is a part of TypeScript packages ecosystem around Telegram Web
+Apps. You can learn more about this package in this
+[documentation](https://telegram-web-apps.github.io/twa/docs/libraries/twa-sdk-react) and,
+probably, find more useful libraries
+[here](https://telegram-web-apps.github.io/twa/docs/category/-libraries).
