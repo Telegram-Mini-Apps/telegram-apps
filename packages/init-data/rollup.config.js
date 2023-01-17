@@ -15,7 +15,7 @@ export default [
       {file: pkg.main, format: 'commonjs'},
       {file: pkg.module, format: 'esm'},
     ],
-    external: ['twa-core'],
+    external: ['@twa.js/utils'],
     plugins: [
       typescript({tsconfig: './tsconfig.main.json'}),
       terser(),
@@ -40,7 +40,7 @@ export default [
       {file: pkg.exports['./validation'].require, format: 'commonjs'},
       {file: pkg.exports['./validation'].import, format: 'esm'},
     ],
-    external: ['twa-core', 'crypto-js'],
+    external: ['@twa.js/utils', 'crypto-js'],
     plugins: [
       typescript({tsconfig: './tsconfig.validation.json'}),
       terser(),
