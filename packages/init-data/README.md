@@ -1,17 +1,19 @@
-# twa-init-data
+# @twa.js/init-data
 
-[npm-badge]: https://img.shields.io/npm/v/twa-init-data?logo=npm
+[npm-badge]: https://img.shields.io/npm/v/@twa.js/init-data?logo=npm
 
-[npm-link]: https://npmjs.com/package/twa-init-data
+[npm-link]: https://npmjs.com/package/@twa.js/init-data
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/twa-init-data
+[size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/init-data
 
 [![NPM][npm-badge]][npm-link]
 ![Size][size-badge]
 
-TypeScript isomorphic library to make work with Telegram Web Apps init data
-easier. Could be used both in browser and Node JS.
+Package providing utilities connected with Telegram Web Apps init data. It
+allows init data validation and parse, works both in browser and NodeJS.
 
-This library is a part of Web Apps ecosystem. To see full documentation, please,
-visit [this](https://telegram-web-apps.github.io/twa/docs/libraries/twa-init-data)
-link.
+This library is a part of TypeScript packages ecosystem around Telegram Web
+Apps. You can learn more about this package in this 
+[documentation](http://localhost:3000/twa/docs/libraries/@twa-init-data) and, 
+probably, find more useful libraries 
+[here](https://telegram-web-apps.github.io/twa/docs/category/-libraries).
