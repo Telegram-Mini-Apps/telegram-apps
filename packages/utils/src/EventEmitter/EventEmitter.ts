@@ -9,7 +9,7 @@ import {
  * EventEmitter represents classic JavaScript event emitter. It allows usage
  * both known and unknown events.
  */
-export class EventEmitter<Schema> {
+class EventEmitter<Schema> {
   private listeners: Record<string, EventListener<any[]>[]> = {};
   private subscribeListeners: AnySubscribeListener<Schema>[] = [];
 
@@ -102,3 +102,5 @@ export class EventEmitter<Schema> {
     }
   }
 }
+
+export {EventEmitter};

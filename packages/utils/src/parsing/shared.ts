@@ -33,6 +33,11 @@ interface SchemaFieldParser<P> {
   parser: P;
 }
 
+/**
+ * Converts schema to array of parsers.
+ * @param schema - schema definition.
+ * @param knownTypesParses - list of known types and their parsers.
+ */
 function schemaToParsers<P extends Parser<any, any>,
   T extends string,
   S extends Schema<T | P>>(

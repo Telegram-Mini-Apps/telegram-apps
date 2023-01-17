@@ -77,7 +77,7 @@ const knownTypesParses = {
  * Creates new search params parser according to passed schema.
  * @param schema - object schema.
  */
-export function createSearchParamsParser<S extends SearchParamsSchema>(
+function createSearchParamsParser<S extends SearchParamsSchema>(
   schema: S,
 ): SchemaParser<S> {
   // Transform schema to array of parsers.
@@ -114,3 +114,5 @@ export function createSearchParamsParser<S extends SearchParamsSchema>(
     }, {} as ParserResult<S>);
   };
 }
+
+export {createSearchParamsParser};

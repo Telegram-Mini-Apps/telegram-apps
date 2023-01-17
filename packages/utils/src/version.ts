@@ -1,7 +1,7 @@
 /**
  * Web App version in format like "\d+.\d+".
  */
-export type Version = string;
+type Version = string;
 
 /**
  * Returns 1 in case, version "a" is greater than "b".
@@ -10,7 +10,7 @@ export type Version = string;
  * @param a - first version.
  * @param b - second version.
  */
-export function compareVersions(a: string, b: string): number {
+function compareVersions(a: string, b: string): number {
   // Split both of the version by dot.
   const aParts = a.split('.');
   const bParts = b.split('.');
@@ -31,3 +31,5 @@ export function compareVersions(a: string, b: string): number {
   }
   return 0;
 }
+
+export {Version, compareVersions};

@@ -97,7 +97,7 @@ const knownTypesParses = {
  * Creates new Json parser according to passed schema.
  * @param schema - object schema.
  */
-export function createJsonParser<S extends JsonSchema>(schema: S): SchemaParser<S> {
+function createJsonParser<S extends JsonSchema>(schema: S): SchemaParser<S> {
   // Transform schema to array of parsers.
   const parsers = schemaToParsers<FieldParser<any>, KnownTypeName, S>(
     schema, knownTypesParses,
@@ -139,3 +139,5 @@ export function createJsonParser<S extends JsonSchema>(schema: S): SchemaParser<
     }, {} as ParserResult<S>);
   };
 }
+
+export {createJsonParser};

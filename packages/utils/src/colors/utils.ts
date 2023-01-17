@@ -5,7 +5,7 @@ import {toRGB} from './rgb';
  * @param color - color in format, accepted by `toRGB` function.
  * @see toRGB
  */
-export function isColorDark(color: string): boolean {
+function isColorDark(color: string): boolean {
   // Convert color to RGB.
   color = toRGB(color);
 
@@ -20,3 +20,5 @@ export function isColorDark(color: string): boolean {
   );
   return hsp < 120;
 }
+
+export {isColorDark};
