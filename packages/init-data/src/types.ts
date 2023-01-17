@@ -2,7 +2,7 @@
  * Describes user information.
  * @see https://core.telegram.org/bots/webapps#webappuser
  */
-export interface User {
+interface User {
   /**
    * First name of the user or bot.
    */
@@ -52,7 +52,7 @@ export interface User {
  * Describes chat information.
  * @see https://core.telegram.org/bots/webapps#webappchat
  */
-export interface Chat {
+interface Chat {
   /**
    * Unique identifier for this chat.
    */
@@ -84,7 +84,7 @@ export interface Chat {
  * Describes parsed initial data sent from Web App.
  * @see https://core.telegram.org/bots/webapps#webappinitdata
  */
-export interface InitData {
+interface InitData {
   /**
    * Init data generation date.
    */
@@ -138,3 +138,5 @@ export interface InitData {
    */
   user?: User;
 }
+
+export {User, Chat, InitData};

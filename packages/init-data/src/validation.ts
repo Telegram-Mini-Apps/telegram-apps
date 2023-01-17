@@ -32,10 +32,10 @@ interface ValidateOptions {
  * @throws {Error} Init data expired.
  * @throws {Error} Sign invalid.
  */
-export function validate(
+function validate(
   sp: string | URLSearchParams,
   token: string,
-  options: ValidateOptions = {}
+  options: ValidateOptions = {},
 ): void {
   const searchParams = typeof sp === 'string' ? new URLSearchParams(sp) : sp;
 
@@ -107,3 +107,5 @@ export function validate(
     throw new Error('Sign invalid');
   }
 }
+
+export {validate};

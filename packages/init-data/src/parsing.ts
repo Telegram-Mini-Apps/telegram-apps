@@ -1,38 +1,42 @@
-import {Chat, InitData, User} from './types';
-import {JsonShape, SearchParamsShape} from '@twa.js/utils';
+import {InitData} from './types';
+import {createSearchParamsParser, createJsonParser} from '@twa.js/utils';
 
-const userSchema: JsonShape<User> = new JsonShape()
-  .string('first_name', 'firstName')
-  .number('id')
-  .bool('is_bot', 'isBot', true)
-  .bool('is_premium', 'isPremium', true)
-  .string('last_name', 'lastName', true)
-  .string('language_code', 'languageCode', true)
-  .string('photo_url', 'photoUrl', true)
-  .string('username', true);
+const user = createJsonParser({
+  firstName: {type: 'string', from: 'first_name'},
+  id: 'number',
+  isBot: {type: 'boolean', from: 'is_bot', optional: true},
+  isPremium: {type: 'boolean', from: 'is_premium', optional: true},
+  lastName: {type: 'string', from: 'last_name', optional: true},
+  languageCode: {type: 'string', from: 'language_code', optional: true},
+  photoUrl: {type: 'string', from: 'photo_url', optional: true},
+  username: {type: 'string', optional: true},
+});
 
-const chatSchema: JsonShape<Chat> = new JsonShape()
-  .number('id')
-  .string('photo_url', 'photoUrl', true)
-  .string('type')
-  .string('title')
-  .string('username', true);
-
-const initDataSchema: SearchParamsShape<InitData> = new SearchParamsShape()
-  .date('auth_date', 'authDate')
-  .string('hash')
-  .custom('user', userSchema, true)
-  .custom('receiver', userSchema, true)
-  .custom('chat', chatSchema, true)
-  .date('can_send_after', 'canSendAfter', true)
-  .string('query_id', 'queryId', true)
-  .string('start_param', 'startParam', true);
+const initData = createSearchParamsParser({
+  authDate: {type: 'date', from: 'auth_date'},
+  hash: 'string',
+  user: {type: user, optional: true},
+  receiver: {type: user, optional: true},
+  chat: {
+    type: createJsonParser({
+      id: 'number',
+      type: 'string',
+      title: 'string',
+      photoUrl: {type: 'string', from: 'photo_url', optional: true},
+      username: {type: 'string', optional: true},
+    }),
+    optional: true,
+  },
+  canSendAfter: {type: 'date', from: 'can_send_after', optional: true},
+  queryId: {type: 'string', from: 'query_id', optional: true},
+  startParam: {type: 'string', from: 'start_param', optional: true},
+});
 
 /**
  * Extracts init data from search params presented as string.
  */
-function parseInitData(value: string | URLSearchParams): InitData {
-  return initDataSchema.parse(value);
+function parseInitData(searchParams: string | URLSearchParams): InitData {
+  return initData(searchParams);
 }
 
 export {parseInitData};
