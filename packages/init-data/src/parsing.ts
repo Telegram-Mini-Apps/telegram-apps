@@ -1,53 +1,38 @@
 import {Chat, InitData, User} from './types';
-import {
-  createJsonStructParser, createSearchParamsStructParser,
-  parseJsonParamAsNum,
-  parseJsonParamAsOptBool, parseJsonParamAsOptString,
-  parseJsonParamAsString,
-  parseSearchParamAsDate,
-  parseSearchParamAsOptDate,
-  parseSearchParamAsOptString,
-  parseSearchParamAsString,
-} from 'twa-core';
+import {JsonShape, SearchParamsShape} from '@twa.js/utils';
+
+const userSchema: JsonShape<User> = new JsonShape()
+  .string('first_name', 'firstName')
+  .number('id')
+  .bool('is_bot', 'isBot', true)
+  .bool('is_premium', 'isPremium', true)
+  .string('last_name', 'lastName', true)
+  .string('language_code', 'languageCode', true)
+  .string('photo_url', 'photoUrl', true)
+  .string('username', true);
+
+const chatSchema: JsonShape<Chat> = new JsonShape()
+  .number('id')
+  .string('photo_url', 'photoUrl', true)
+  .string('type')
+  .string('title')
+  .string('username', true);
+
+const initDataSchema: SearchParamsShape<InitData> = new SearchParamsShape()
+  .date('auth_date', 'authDate')
+  .string('hash')
+  .custom('user', userSchema, true)
+  .custom('receiver', userSchema, true)
+  .custom('chat', chatSchema, true)
+  .date('can_send_after', 'canSendAfter', true)
+  .string('query_id', 'queryId', true)
+  .string('start_param', 'startParam', true);
 
 /**
- * Parses value as User.
- * @see createJsonStructParser
+ * Extracts init data from search params presented as string.
  */
-const parseUser = createJsonStructParser<User, undefined>({
-  id: ['id', parseJsonParamAsNum],
-  isBot: ['is_bot', parseJsonParamAsOptBool],
-  firstName: ['first_name', parseJsonParamAsString],
-  lastName: ['last_name', parseJsonParamAsOptString],
-  username: ['username', parseJsonParamAsOptString],
-  languageCode: ['language_code', parseJsonParamAsOptString],
-  isPremium: ['is_premium', parseJsonParamAsOptBool],
-  photoUrl: ['photo_url', parseJsonParamAsOptString],
-}, () => undefined);
+function parseInitData(value: string | URLSearchParams): InitData {
+  return initDataSchema.parse(value);
+}
 
-/**
- * Parses value as Chat.
- * @see createJsonStructParser
- */
-const parseChat = createJsonStructParser<Chat, undefined>({
-  id: ['id', parseJsonParamAsNum],
-  title: ['title', parseJsonParamAsString],
-  type: ['type', parseJsonParamAsString],
-  username: ['username', parseJsonParamAsOptString],
-  photoUrl: ['photo_url', parseJsonParamAsOptString],
-}, () => undefined);
-
-/**
- * Extracts init data information from search params.
- */
-export const extractInitDataFromSearchParams =
-  createSearchParamsStructParser<InitData>({
-    queryId: ['query_id', parseSearchParamAsOptString],
-    user: ['user', parseUser],
-    receiver: ['receiver', parseUser],
-    chat: ['chat', parseChat],
-    startParam: ['start_param', parseSearchParamAsOptString],
-    canSendAfter: ['can_send_after', parseSearchParamAsOptDate],
-    authDate: ['auth_date', parseSearchParamAsDate],
-    hash: ['hash', parseSearchParamAsString],
-  });
+export {parseInitData};

@@ -1,7 +1,7 @@
 {
-  "name": "twa-init-data",
-  "version": "4.0.2",
-  "description": "TypeScript library to make work with Telegram Web Apps init data easier.",
+  "name": "@twa.js/init-data",
+  "version": "0.0.0",
+  "description": "Isomorphic TypeScript library to make work with Web Apps init data easier.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
   "keywords": [
@@ -47,7 +47,7 @@
     "url": "https://github.com/Telegram-Web-Apps/twa/issues"
   },
   "dependencies": {
-    "twa-core": "workspace:*"
+    "@twa.js/utils": "workspace:*"
   },
   "peerDependencies": {
     "@types/crypto-js": "^4.1.1",

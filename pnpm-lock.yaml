@@ -108,13 +108,13 @@ importers:
 
   packages/init-data:
     specifiers:
+      '@twa.js/utils': workspace:*
       '@types/crypto-js': ^4.1.1
       crypto-js: ^4.1.1
-      twa-core: workspace:*
     dependencies:
+      '@twa.js/utils': link:../utils
       '@types/crypto-js': 4.1.1
       crypto-js: 4.1.1
-      twa-core: link:../core
 
   packages/sdk:
     specifiers:
@@ -149,6 +149,9 @@ importers:
     dependencies:
       twa-bridge: link:../bridge
       twa-core: link:../core
+
+  packages/utils:
+    specifiers: {}
 
 packages:
 
