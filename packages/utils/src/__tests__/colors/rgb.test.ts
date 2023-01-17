@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {isRGB, toRGB, isRGBShort} from '../../colors/rgb';
+import {isRGB, toRGB, isRGBShort} from '../../colors';
 
 describe('colors', () => {
   describe('rgb', () => {
