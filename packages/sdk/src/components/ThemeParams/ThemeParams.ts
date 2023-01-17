@@ -3,8 +3,11 @@ import {BridgeEventListener} from '@twa.js/bridge';
 
 import {ThemeParamsEventsMap} from './events';
 import {BridgeLike} from '../../types';
-import {parseThemeParams, ThemeParams as TwaThemeParams} from '../../utils';
-import {isColorDark} from './utils';
+import {
+  isColorDark,
+  parseThemeParams,
+  ThemeParams as TwaThemeParams,
+} from '../../utils';
 
 /**
  * Contains information about currently used theme by application.

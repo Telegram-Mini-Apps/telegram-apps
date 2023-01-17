@@ -1,4 +1,4 @@
-import {toRGB} from '@twa.js/utils/dist/colors/rgb';
+import {toRGB} from '@twa.js/utils';
 
 /**
  * Returns true in case, color is recognized as dark.

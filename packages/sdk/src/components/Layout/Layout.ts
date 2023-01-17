@@ -1,9 +1,9 @@
-import {EventEmitter, isColorDark, RGB, Version} from '@twa.js/utils';
+import {EventEmitter, RGB, Version} from '@twa.js/utils';
 import {HeaderColorKey} from '@twa.js/bridge';
 
 import {LayoutEventsMap} from './events';
 import {BridgeLike} from '../../types';
-import {createSupportsFunc, SupportsFunc} from '../../utils';
+import {createSupportsFunc, isColorDark, SupportsFunc} from '../../utils';
 import {ColorScheme} from '../WebApp';
 
 /**
