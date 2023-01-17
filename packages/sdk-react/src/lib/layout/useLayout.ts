@@ -1,4 +1,4 @@
-import {Layout} from 'twa-sdk';
+import {Layout} from '@twa.js/sdk';
 
 import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';

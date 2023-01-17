@@ -1,5 +1,5 @@
 import React, {ComponentType} from 'react';
-import {ThemeParams} from 'twa-sdk';
+import {ThemeParams} from '@twa.js/sdk';
 
 import {useThemeParams} from './useThemeParams';
 

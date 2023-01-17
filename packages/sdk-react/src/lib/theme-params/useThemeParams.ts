@@ -1,4 +1,4 @@
-import {ThemeParams} from 'twa-sdk';
+import {ThemeParams} from '@twa.js/sdk';
 
 import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';

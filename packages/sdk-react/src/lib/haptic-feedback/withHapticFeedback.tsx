@@ -1,5 +1,5 @@
 import React, {ComponentType} from 'react';
-import {HapticFeedback} from 'twa-sdk';
+import {HapticFeedback} from '@twa.js/sdk';
 
 import {useHapticFeedback} from './useHapticFeedback';
 

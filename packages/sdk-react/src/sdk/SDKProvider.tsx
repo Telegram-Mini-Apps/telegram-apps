@@ -4,7 +4,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {init, InitOptions} from 'twa-sdk';
+import {init, InitOptions} from '@twa.js/sdk';
 
 import {sdkContext} from './context';
 import {SDKComponents, SDKContext} from './types';

@@ -1,4 +1,4 @@
-import {ClosingConfirmation} from 'twa-sdk';
+import {ClosingConfirmation} from '@twa.js/sdk';
 
 import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';

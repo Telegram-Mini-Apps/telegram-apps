@@ -1,5 +1,5 @@
 import React, {ComponentType} from 'react';
-import {ClosingConfirmation} from 'twa-sdk';
+import {ClosingConfirmation} from '@twa.js/sdk';
 
 import {useClosingConfirmation} from './useClosingConfirmation';
 

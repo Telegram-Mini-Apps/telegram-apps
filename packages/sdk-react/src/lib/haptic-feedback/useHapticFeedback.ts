@@ -1,4 +1,4 @@
-import {HapticFeedback} from 'twa-sdk';
+import {HapticFeedback} from '@twa.js/sdk';
 
 import {useComponent} from '../../sdk';
 

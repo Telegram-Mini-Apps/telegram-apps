@@ -1,5 +1,5 @@
 import React, {ComponentType} from 'react';
-import {BackButton} from 'twa-sdk';
+import {BackButton} from '@twa.js/sdk';
 
 import {useBackButton} from './useBackButton';
 

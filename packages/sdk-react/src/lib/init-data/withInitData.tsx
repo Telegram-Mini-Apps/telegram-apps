@@ -1,5 +1,5 @@
 import React, {ComponentType} from 'react';
-import {InitData} from 'twa-sdk';
+import {InitData} from '@twa.js/sdk';
 
 import {useInitData} from './useInitData';
 

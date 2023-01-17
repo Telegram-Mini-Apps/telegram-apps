@@ -1,4 +1,4 @@
-import {Popup} from 'twa-sdk';
+import {Popup} from '@twa.js/sdk';
 
 import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';

@@ -1,4 +1,4 @@
-import {BackButton} from 'twa-sdk';
+import {BackButton} from '@twa.js/sdk';
 
 import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';

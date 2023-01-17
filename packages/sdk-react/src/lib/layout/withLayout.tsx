@@ -1,5 +1,5 @@
 import React, {ComponentType} from 'react';
-import {Layout} from 'twa-sdk';
+import {Layout} from '@twa.js/sdk';
 
 import {useLayout} from './useLayout';
 

@@ -1,4 +1,4 @@
-import {MainButton} from 'twa-sdk';
+import {MainButton} from '@twa.js/sdk';
 
 import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';

@@ -1,5 +1,5 @@
 import React, {ComponentType} from 'react';
-import {Popup} from 'twa-sdk';
+import {Popup} from '@twa.js/sdk';
 
 import {usePopup} from './usePopup';
 

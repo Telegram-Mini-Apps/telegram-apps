@@ -1,5 +1,5 @@
 import React, {ComponentType} from 'react';
-import {QRScanner} from 'twa-sdk';
+import {QRScanner} from '@twa.js/sdk';
 
 import {useQRScanner} from './useQRScanner';
 

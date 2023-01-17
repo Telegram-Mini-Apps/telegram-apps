@@ -1,4 +1,4 @@
-import {InitData} from 'twa-sdk';
+import {InitData} from '@twa.js/sdk';
 
 import {useComponent} from '../../sdk';
 

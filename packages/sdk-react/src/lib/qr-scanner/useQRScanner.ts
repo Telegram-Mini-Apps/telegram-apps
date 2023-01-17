@@ -1,4 +1,4 @@
-import {QRScanner} from 'twa-sdk';
+import {QRScanner} from '@twa.js/sdk';
 
 import {useComponent} from '../../sdk';
 import {useEventsTracking} from '../../hooks';

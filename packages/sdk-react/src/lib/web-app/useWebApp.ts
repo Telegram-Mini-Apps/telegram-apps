@@ -1,4 +1,4 @@
-import {WebApp} from 'twa-sdk';
+import {WebApp} from '@twa.js/sdk';
 
 import {useComponent} from '../../sdk';
 
