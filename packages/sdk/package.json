@@ -1,7 +1,7 @@
 {
-  "name": "twa-sdk",
-  "version": "2.0.0",
-  "description": "TypeScript reimplemented Source Development Kit for Telegram Web Apps client application.",
+  "name": "@twa.js/sdk",
+  "version": "0.0.0",
+  "description": "TypeScript Source Development Kit for Telegram Web Apps client application.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
   "keywords": [
@@ -43,9 +43,8 @@
     "url": "https://github.com/Telegram-Web-Apps/twa/issues"
   },
   "dependencies": {
-    "twa-bridge": "workspace:*",
-    "twa-core": "workspace:*",
-    "twa-init-data": "workspace:*",
-    "twa-theme-params": "workspace:*"
+    "@twa.js/bridge": "workspace:*",
+    "@twa.js/utils": "workspace:*",
+    "@twa.js/init-data": "workspace:*"
   }
 }

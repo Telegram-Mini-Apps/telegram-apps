@@ -1,7 +1,7 @@
 import {describe, it, expect} from '@jest/globals';
 // import {emitDesktopEvent, mockDesktop} from '../../../tests';
 import {Popup} from './Popup';
-// import {Bridge} from 'twa-bridge';
+// import {Bridge} from '@twa.js/bridge';
 // import {PopupParams} from './types';
 // import {preparePopupParams} from './utils';
 

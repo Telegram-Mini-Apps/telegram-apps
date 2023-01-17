@@ -1,8 +1,8 @@
 import {
   ImpactHapticFeedbackStyle,
   NotificationHapticFeedbackType,
-} from 'twa-bridge';
-import {Version} from 'twa-core';
+} from '@twa.js/bridge';
+import {Version} from '@twa.js/utils';
 
 import {createSupportsFunc, SupportsFunc} from '../../utils';
 import {BridgeLike} from '../../types';
@@ -12,7 +12,7 @@ import {BridgeLike} from '../../types';
  * haptic notifications which usually occur after user interaction with
  * application.
  */
-export class HapticFeedback {
+class HapticFeedback {
   constructor(private readonly bridge: BridgeLike, version: Version) {
     this.supports = createSupportsFunc(version, {
       impactOccurred: 'web_app_trigger_haptic_feedback',
@@ -65,3 +65,5 @@ export class HapticFeedback {
    */
   supports: SupportsFunc<'impactOccurred' | 'notificationOccurred' | 'selectionChanged'>;
 }
+
+export {HapticFeedback};

@@ -2,7 +2,7 @@
  * This object describes the native popup.
  * @see https://core.telegram.org/bots/webapps#popupparams
  */
-export interface PopupParams {
+interface PopupParams {
   /**
    * The text to be displayed in the popup title, 0-64 characters.
    * @default ""
@@ -25,7 +25,7 @@ export interface PopupParams {
  * This object describes the native popup button.
  * @see https://core.telegram.org/bots/webapps#popupbutton
  */
-export type PopupButton = {
+type PopupButton = {
   /**
    * Identifier of the button, 0-64 characters.
    * @default ""
@@ -55,3 +55,5 @@ export type PopupButton = {
    */
   type: 'ok' | 'close' | 'cancel';
 });
+
+export {PopupParams, PopupButton};

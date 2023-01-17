@@ -8,7 +8,7 @@
  * protocol.
  * @private
  */
-export function formatURL(url: string): string {
+function formatURL(url: string): string {
   // We do create new anchor element and assign its href to passed URL. This
   // will format link, so it could be used in `window.open`.
   const anchor = document.createElement('a');
@@ -23,3 +23,5 @@ export function formatURL(url: string): string {
   }
   return anchor.href;
 }
+
+export {formatURL};

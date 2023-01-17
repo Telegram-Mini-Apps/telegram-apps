@@ -1,7 +1,7 @@
 /**
  * Information about ClosingConfirmation supported events.
  */
-export interface ClosingConfirmationEventsMap {
+interface ClosingConfirmationEventsMap {
   /**
    * Confirmation status changed.
    * @param isEnabled - current status.
@@ -12,10 +12,16 @@ export interface ClosingConfirmationEventsMap {
 /**
  * Known ClosingConfirmation event name.
  */
-export type ClosingConfirmationEventName = keyof ClosingConfirmationEventsMap;
+type ClosingConfirmationEventName = keyof ClosingConfirmationEventsMap;
 
 /**
  * Listener for specified ClosingConfirmation event.
  */
-export type ClosingConfirmationEventListener<E extends ClosingConfirmationEventName> =
+type ClosingConfirmationEventListener<E extends ClosingConfirmationEventName> =
   ClosingConfirmationEventsMap[E];
+
+export {
+  ClosingConfirmationEventName,
+  ClosingConfirmationEventListener,
+  ClosingConfirmationEventsMap,
+};

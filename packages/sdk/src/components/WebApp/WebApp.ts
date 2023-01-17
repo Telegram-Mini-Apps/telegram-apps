@@ -1,5 +1,5 @@
-import {Version, compareVersions} from 'twa-core';
-import {BridgeEventListener, InvoiceStatus, supports} from 'twa-bridge';
+import {Version, compareVersions} from '@twa.js/utils';
+import {BridgeEventListener, InvoiceStatus, supports} from '@twa.js/bridge';
 
 import {Platform} from './types';
 import {createSupportsFunc, formatURL, SupportsFunc} from '../../utils';
@@ -9,7 +9,7 @@ import {BridgeLike} from '../../types';
  * Provides common Web Apps functionality not covered by other system
  * components.
  */
-export class WebApp {
+class WebApp {
   constructor(
     private readonly bridge: BridgeLike,
     version: Version,
@@ -196,3 +196,5 @@ export class WebApp {
    */
   version: Version;
 }
+
+export {WebApp};

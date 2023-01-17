@@ -1,4 +1,4 @@
-import {EventEmitter} from 'twa-core';
+import {EventEmitter} from '@twa.js/utils';
 
 import {ClosingConfirmationEventsMap} from './events';
 import {BridgeLike} from '../../types';
@@ -7,7 +7,7 @@ import {BridgeLike} from '../../types';
  * Component responsible for controlling current closing confirmation
  * status.
  */
-export class ClosingConfirmation {
+class ClosingConfirmation {
   private readonly ee = new EventEmitter<ClosingConfirmationEventsMap>();
   private _isEnabled = false;
 
@@ -65,3 +65,5 @@ export class ClosingConfirmation {
    */
   off = this.ee.off.bind(this.ee);
 }
+
+export {ClosingConfirmation};

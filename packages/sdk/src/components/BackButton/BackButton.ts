@@ -1,4 +1,4 @@
-import {EventEmitter, Version} from 'twa-core';
+import {EventEmitter, Version} from '@twa.js/utils';
 
 import {BackButtonEventListener, BackButtonEventsMap} from './events';
 import {BridgeLike} from '../../types';
@@ -12,7 +12,7 @@ type Emitter = EventEmitter<BackButtonEventsMap>;
  * you want to provide a way to go bach in routing history or "rollback" some
  * action.
  */
-export class BackButton {
+class BackButton {
   private readonly ee: Emitter = new EventEmitter();
   private _isVisible = false;
 
@@ -80,3 +80,5 @@ export class BackButton {
    */
   supports: SupportsFunc<'show' | 'hide'>;
 }
+
+export {BackButton};

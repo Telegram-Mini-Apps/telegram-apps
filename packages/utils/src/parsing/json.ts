@@ -16,7 +16,7 @@ interface KnownTypeMap {
   string: string;
   boolean: boolean;
   number: number;
-  rgb: string;
+  rgb: RGB;
 }
 
 /**
@@ -62,11 +62,10 @@ type SchemaParser<Schema extends JsonSchema> = (value: unknown) => ParserResult<
 function createTypeOfParser<Type extends 'string' | 'boolean' | 'number'>(
   type: Type,
 ): FieldParser<KnownTypeMap[Type]> {
-  return (value, field) => {
+  return value => {
     if (typeof value !== type) {
       throw new TypeError(
-        `Unable to parse field "${field}" with ` +
-        `value ${JSON.stringify(value)} as ${type}.`,
+        `Unable to parse value ${JSON.stringify(value)} as ${type}.`,
       );
     }
     return value as KnownTypeMap[Type];
@@ -74,23 +73,40 @@ function createTypeOfParser<Type extends 'string' | 'boolean' | 'number'>(
 }
 
 /**
+ * Parses Json value as string.
+ */
+const parseJsonValueAsString = createTypeOfParser('string');
+
+/**
+ * Parses Json value as boolean.
+ */
+const parseJsonValueAsBoolean = createTypeOfParser('boolean');
+
+/**
+ * Parses Json value as number.
+ */
+const parseJsonValueAsNumber = createTypeOfParser('number');
+
+/**
+ * Parses Json value as RGB color.
+ */
+function parseJsonValueAsRgb(value: unknown): RGB {
+  const str = parseJsonValueAsString(value);
+
+  if (!isRGB(str)) {
+    throw new TypeError(`Unable to parse value "${str}" as RGB.`);
+  }
+  return str;
+}
+
+/**
  * Parsers used for known types.
  */
 const knownTypesParses = {
-  string: createTypeOfParser('string'),
-  boolean: createTypeOfParser('boolean'),
-  number: createTypeOfParser('number'),
-  rgb: (value: unknown, field: string): RGB => {
-    const str = knownTypesParses.string(value, field);
-
-    if (!isRGB(str)) {
-      throw new TypeError(
-        `Unable to parse field "${field}" with ` +
-        `value ${JSON.stringify(value)} as RGB.`,
-      );
-    }
-    return str;
-  },
+  string: parseJsonValueAsString,
+  boolean: parseJsonValueAsBoolean,
+  number: parseJsonValueAsNumber,
+  rgb: parseJsonValueAsRgb,
 };
 
 /**
@@ -126,18 +142,28 @@ function createJsonParser<S extends JsonSchema>(schema: S): SchemaParser<S> {
 
       if (value === undefined) {
         if (!optional) {
-          throw new TypeError(`Unable to parse field "${from}". Value is empty.`);
+          throw new Error(`Unable to parse field "${from}". Value is empty.`);
         }
-      } else {
-        const parsed = parser(value, from);
+        return acc;
+      }
+      try {
+        const parsed = parser(value);
 
         if (parsed !== undefined) {
           (acc as any)[to] = parsed;
         }
+      } catch (cause) {
+        throw new Error(`Unable to parse field "${from}"`, {cause})
       }
       return acc;
     }, {} as ParserResult<S>);
   };
 }
 
-export {createJsonParser};
+export {
+  createJsonParser,
+  parseJsonValueAsRgb,
+  parseJsonValueAsBoolean,
+  parseJsonValueAsNumber,
+  parseJsonValueAsString,
+};

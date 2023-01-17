@@ -1,4 +1,4 @@
-import {PopupButton, PopupParams as BridgePopupParams} from 'twa-bridge';
+import {PopupButton, PopupParams as BridgePopupParams} from '@twa.js/bridge';
 
 import {PopupParams} from './types';
 
@@ -6,7 +6,7 @@ import {PopupParams} from './types';
  * Prepares popup parameters before sending them to native app.
  * @param params - popup parameters.
  */
-export function preparePopupParams(params: PopupParams): BridgePopupParams {
+function preparePopupParams(params: PopupParams): BridgePopupParams {
   const message = params.message.trim();
   const title = (params.title || '').trim();
   const buttons = params.buttons || [];
@@ -57,3 +57,5 @@ export function preparePopupParams(params: PopupParams): BridgePopupParams {
   }
   return {title, message, buttons: preparedButtons};
 }
+
+export {preparePopupParams};

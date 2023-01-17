@@ -1,5 +1,5 @@
-import {EventEmitter, isColorDark, RGB, Version} from 'twa-core';
-import {HeaderColorKey} from 'twa-bridge';
+import {EventEmitter, isColorDark, RGB, Version} from '@twa.js/utils';
+import {HeaderColorKey} from '@twa.js/bridge';
 
 import {LayoutEventsMap} from './events';
 import {BridgeLike} from '../../types';
@@ -9,7 +9,7 @@ import {ColorScheme} from '../WebApp';
 /**
  * Class which provides information about current Web App layout.
  */
-export class Layout {
+class Layout {
   private readonly ee = new EventEmitter<LayoutEventsMap>();
 
   constructor(
@@ -110,3 +110,5 @@ export class Layout {
     this.ee.emit('headerColorChanged', color);
   }
 }
+
+export {Layout};

@@ -1,5 +1,5 @@
-import {BridgeEventListener} from 'twa-bridge';
-import {EventEmitter, Version} from 'twa-core';
+import {BridgeEventListener} from '@twa.js/bridge';
+import {EventEmitter, Version} from '@twa.js/utils';
 
 import {QRScannerEventsMap} from './events';
 import {createSupportsFunc, SupportsFunc} from '../../utils';
@@ -8,7 +8,7 @@ import {BridgeLike} from '../../types';
 /**
  * Provides QR scanner functionality.
  */
-export class QRScanner {
+class QRScanner {
   private _isOpened = false;
   private readonly ee = new EventEmitter<QRScannerEventsMap>();
 
@@ -91,3 +91,5 @@ export class QRScanner {
    */
   supports: SupportsFunc<'close' | 'open'>;
 }
+
+export {QRScanner};

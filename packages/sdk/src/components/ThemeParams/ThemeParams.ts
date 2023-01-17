@@ -1,18 +1,16 @@
-import {isColorDark, RGB, EventEmitter} from 'twa-core';
-import {
-  extractThemeFromJson,
-  ThemeParams as TwaThemeParams,
-} from 'twa-theme-params';
-import {BridgeEventListener} from 'twa-bridge';
+import {RGB, EventEmitter} from '@twa.js/utils';
+import {BridgeEventListener} from '@twa.js/bridge';
 
 import {ThemeParamsEventsMap} from './events';
 import {BridgeLike} from '../../types';
+import {parseThemeParams, ThemeParams as TwaThemeParams} from '../../utils';
+import {isColorDark} from './utils';
 
 /**
  * Contains information about currently used theme by application.
  * @see https://core.telegram.org/bots/webapps#themeparams
  */
-export class ThemeParams {
+class ThemeParams {
   /**
    * Requests fresh information about current theme.
    * @param bridge - bridge instance.
@@ -27,7 +25,7 @@ export class ThemeParams {
         bridge.off('theme_changed', listener);
 
         // Resolve result.
-        res(extractThemeFromJson(payload));
+        res(parseThemeParams(payload.theme_params));
       };
 
       // Add listener which will resolve promise in case, theme information
@@ -46,23 +44,38 @@ export class ThemeParams {
     const tp = new ThemeParams(params);
 
     bridge.on('theme_changed', params => {
-      tp.assignThemeParams(extractThemeFromJson(params), true);
+      tp.assignThemeParams(parseThemeParams(params), true);
     });
 
     return tp;
   }
 
   private readonly ee = new EventEmitter<ThemeParamsEventsMap>();
-  private _backgroundColor: RGB | null = null;
-  private _buttonColor: RGB | null = null;
-  private _buttonTextColor: RGB | null = null;
-  private _hintColor: RGB | null = null;
-  private _linkColor: RGB | null = null;
+  private _backgroundColor: RGB;
+  private _buttonColor: RGB;
+  private _buttonTextColor: RGB;
+  private _hintColor: RGB;
+  private _linkColor: RGB;
   private _secondaryBackgroundColor: RGB | null = null;
-  private _textColor: RGB | null = null;
+  private _textColor: RGB;
 
   constructor(params: TwaThemeParams) {
-    this.assignThemeParams(params, false);
+    const {
+      secondaryBackgroundColor = null,
+      backgroundColor,
+      buttonTextColor,
+      textColor,
+      buttonColor,
+      linkColor,
+      hintColor,
+    } = params;
+    this._backgroundColor = backgroundColor;
+    this._buttonTextColor = buttonTextColor;
+    this._buttonColor = buttonColor;
+    this._textColor = textColor;
+    this._secondaryBackgroundColor = secondaryBackgroundColor;
+    this._linkColor = linkColor;
+    this._hintColor = hintColor;
   }
 
   /**
@@ -108,28 +121,28 @@ export class ThemeParams {
   /**
    * Returns background color.
    */
-  get backgroundColor(): RGB | null {
+  get backgroundColor(): RGB {
     return this._backgroundColor;
   }
 
   /**
    * Returns button color.
    */
-  get buttonColor(): RGB | null {
+  get buttonColor(): RGB {
     return this._buttonColor;
   }
 
   /**
    * Returns button text color.
    */
-  get buttonTextColor(): RGB | null {
+  get buttonTextColor(): RGB {
     return this._buttonTextColor;
   }
 
   /**
    * Returns hint color.
    */
-  get hintColor(): RGB | null {
+  get hintColor(): RGB {
     return this._hintColor;
   }
 
@@ -146,7 +159,7 @@ export class ThemeParams {
   /**
    * Returns current link color.
    */
-  get linkColor(): RGB | null {
+  get linkColor(): RGB {
     return this._linkColor;
   }
 
@@ -171,7 +184,9 @@ export class ThemeParams {
   /**
    * Returns text color.
    */
-  get textColor(): RGB | null {
+  get textColor(): RGB {
     return this._textColor;
   }
 }
+
+export {ThemeParams};

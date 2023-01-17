@@ -1,7 +1,7 @@
 import {beforeAll, describe, expect, it, jest} from '@jest/globals';
 import {HapticFeedback} from './HapticFeedback';
 // import {mockDesktop} from '../../../tests';
-import {Bridge} from 'twa-bridge';
+import {Bridge} from '@twa.js/bridge';
 
 // beforeAll(mockDesktop);
 

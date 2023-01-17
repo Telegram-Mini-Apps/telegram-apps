@@ -1,4 +1,4 @@
-import {Bridge, InitOptions as BridgeInitOptions} from 'twa-bridge';
+import {Bridge, InitOptions as BridgeInitOptions} from '@twa.js/bridge';
 
 import {
   BackButton,
@@ -14,7 +14,7 @@ import {
   WebApp,
 } from '../components';
 
-export interface InitResult {
+interface InitResult {
   backButton: BackButton;
   bridge: Bridge;
   closingConfirmation: ClosingConfirmation;
@@ -29,7 +29,7 @@ export interface InitResult {
   webApp: WebApp;
 }
 
-export interface InitOptions extends Pick<BridgeInitOptions, 'targetOrigin'>{
+interface InitOptions extends Pick<BridgeInitOptions, 'targetOrigin'>{
   /**
    * Enable debug mode.
    * @default false
@@ -45,3 +45,5 @@ export interface InitOptions extends Pick<BridgeInitOptions, 'targetOrigin'>{
    */
   checkCompat?: boolean;
 }
+
+export {InitOptions, InitResult};

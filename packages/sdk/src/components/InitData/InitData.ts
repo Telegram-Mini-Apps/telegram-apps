@@ -2,12 +2,12 @@ import {
   Chat,
   InitData as TwaInitData,
   User,
-} from 'twa-init-data';
+} from '@twa.js/init-data';
 
 /**
  * Class which is responsible for displaying Web Apps init data.
  */
-export class InitData {
+class InitData {
   private readonly _canSendAfter: Date | null = null;
   private readonly _chat: Chat | null = null;
   private readonly _queryId: string | null = null;
@@ -100,3 +100,5 @@ export class InitData {
     return this._user;
   }
 }
+
+export {InitData};

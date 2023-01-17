@@ -1,8 +1,8 @@
-import {Bridge, supports} from 'twa-bridge';
-import {Version} from 'twa-core';
+import {Bridge, supports} from '@twa.js/bridge';
+import {Version} from '@twa.js/utils';
 
-import {BridgeLike} from '../../types';
-import {MethodUnsupportedError} from '../MethodUnsupportedError';
+import {BridgeLike} from '../types';
+import {MethodUnsupportedError} from './MethodUnsupportedError';
 
 /**
  * Represents wrapper around Bridge which provides some extra functionality.

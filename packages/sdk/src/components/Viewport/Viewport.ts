@@ -1,11 +1,10 @@
-import {EventEmitter} from 'twa-core';
-import {BridgeEventListener} from 'twa-bridge';
+import {EventEmitter} from '@twa.js/utils';
+import {BridgeEventListener} from '@twa.js/bridge';
 
 import {ViewportEventsMap} from './events';
 import {BridgeLike} from '../../types';
-import {truncate} from './utils';
 
-export interface RequestViewportResult {
+interface RequestViewportResult {
   height: number;
   width: number;
   isStateStable: boolean;
@@ -13,10 +12,18 @@ export interface RequestViewportResult {
 }
 
 /**
+ * Formats value to make it stay in bounds [0, +Inf).
+ * @param value - value to format.
+ */
+function truncate(value: number): number {
+  return value < 0 ? 0 : value;
+}
+
+/**
  * Contains information about current WebApp device viewport, its dimensions
  * and state.
  */
-export class Viewport {
+class Viewport {
   /**
    * Requests fresh information about current viewport.
    * FIXME: Be careful using this function in desktop version of Telegram as
@@ -229,3 +236,5 @@ export class Viewport {
    */
   off = this.ee.off.bind(this.ee);
 }
+
+export {RequestViewportResult, Viewport};

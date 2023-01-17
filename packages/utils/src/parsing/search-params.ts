@@ -57,7 +57,7 @@ type SchemaParser<Schema extends SearchParamsSchema> =
  */
 const knownTypesParses = {
   string: (value: string) => value,
-  date: (value: string, field: string) => {
+  date: (value: string) => {
     if (value !== '') {
       const asInt = Number(value);
       const date = new Date(asInt.toString() === value ? asInt * 1000 : value);
@@ -66,10 +66,7 @@ const knownTypesParses = {
         return date;
       }
     }
-    throw new TypeError(
-      `Unable to parse field "${field}" with ` +
-      `value ${JSON.stringify(value)} as Date.`,
-    );
+    throw new TypeError(`Unable to parse value "${value}" as Date.`);
   },
 };
 
@@ -103,12 +100,16 @@ function createSearchParamsParser<S extends SearchParamsSchema>(
         if (!optional) {
           throw new TypeError(`Unable to parse field "${from}". Value is empty.`);
         }
-      } else {
-        const parsed = parser(value, from);
+        return acc;
+      }
+      try {
+        const parsed = parser(value);
 
         if (parsed !== undefined) {
           (acc as any)[to] = parsed;
         }
+      } catch (cause) {
+        throw new Error(`Unable to parse field "${from}"`, {cause})
       }
       return acc;
     }, {} as ParserResult<S>);

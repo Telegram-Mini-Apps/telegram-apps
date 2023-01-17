@@ -1,5 +1,5 @@
-import {BridgeEventListener} from 'twa-bridge';
-import {EventEmitter, Version} from 'twa-core';
+import {BridgeEventListener} from '@twa.js/bridge';
+import {EventEmitter, Version} from '@twa.js/utils';
 
 import {PopupParams} from './types';
 import {PopupEventsMap} from './events';
@@ -11,7 +11,7 @@ import {BridgeLike} from '../../types';
  * Controls currently displayed application popup. It allows developers to
  * open new custom popups and detect popup-connected events.
  */
-export class Popup {
+class Popup {
   private readonly ee = new EventEmitter<PopupEventsMap>();
   private _isOpened = false;
 
@@ -91,3 +91,5 @@ export class Popup {
    */
   supports: SupportsFunc<'open'>;
 }
+
+export {Popup};

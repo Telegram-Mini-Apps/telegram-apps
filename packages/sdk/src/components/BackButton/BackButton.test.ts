@@ -1,7 +1,7 @@
 import {beforeAll, describe, expect, it, jest, test} from '@jest/globals';
 import {BackButton} from './BackButton';
 // import {mockDesktop} from '../../../tests';
-import {Bridge} from 'twa-bridge';
+import {Bridge} from '@twa.js/bridge';
 
 // beforeAll(mockDesktop);
 

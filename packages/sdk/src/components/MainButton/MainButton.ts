@@ -1,10 +1,17 @@
-import {EventEmitter, RGB} from 'twa-core';
+import {EventEmitter, RGB} from '@twa.js/utils';
 
 import {MainButtonEventListener, MainButtonEventsMap} from './events';
 import {BridgeLike} from '../../types';
-import {MainButtonProps} from './types';
 
 type Emitter = EventEmitter<MainButtonEventsMap>;
+
+interface MainButtonProps {
+  /**
+   * Should changes be automatically sent to Telegram native application.
+   * @default true
+   */
+  autocommit?: boolean;
+}
 
 /**
  * Controls the main button, which is displayed at the bottom
@@ -13,7 +20,7 @@ type Emitter = EventEmitter<MainButtonEventsMap>;
  * TODO: Desktop animation is rather bad in case, we call progress visibility
  *  right after click. It is not smooth.
  */
-export class MainButton {
+class MainButton {
   private readonly ee: Emitter = new EventEmitter();
   private _isActive = false;
   private _isVisible = false;
@@ -286,3 +293,5 @@ export class MainButton {
     return this;
   }
 }
+
+export {MainButton, MainButtonProps};

@@ -1,4 +1,4 @@
-import {isBrowserEnv, init as initBridge} from 'twa-bridge';
+import {isBrowserEnv, init as initBridge} from '@twa.js/bridge';
 
 import {
   BackButton,
@@ -13,14 +13,14 @@ import {
   WebApp,
 } from '../components';
 import {InitOptions, InitResult} from './types';
-import {getWebAppData} from './web-app-data';
-import {BridgeScoped} from '../lib/BridgeScoped';
+import {retrieveLaunchParams} from './launch-params';
+import {BridgeScoped} from '../lib';
 
 /**
  * Initializes all SDK components.
  * @param options - initialization options.
  */
-export async function init(options: InitOptions = {}): Promise<InitResult> {
+async function init(options: InitOptions = {}): Promise<InitResult> {
   const {checkCompat = true} = options;
 
   // Get Web App data.
@@ -29,7 +29,7 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
     version,
     platform,
     themeParams,
-  } = getWebAppData();
+  } = retrieveLaunchParams();
   const {
     backgroundColor = '#ffffff',
     buttonColor = '#000000',
@@ -91,3 +91,5 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
     webApp: new WebApp(bridge, version, platform),
   };
 }
+
+export {init};

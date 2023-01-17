@@ -24,7 +24,7 @@ type NonOptionalField<S extends Schema<any>> = Exclude<keyof S, OptionalField<S>
 /**
  * Standard parser definition.
  */
-type Parser<V, R> = (value: V, field: string) => R;
+type Parser<V, R> = (value: V) => R;
 
 interface SchemaFieldParser<P> {
   from: string;

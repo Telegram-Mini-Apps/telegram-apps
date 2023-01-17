@@ -1,9 +1,9 @@
-import {RGB} from 'twa-core';
+import {RGB} from '@twa.js/utils';
 
 /**
  * Information about MainButton supported events.
  */
-export interface MainButtonEventsMap {
+interface MainButtonEventsMap {
   /**
    * Active status changed.
    * @param isActive - current state.
@@ -49,10 +49,11 @@ export interface MainButtonEventsMap {
 /**
  * Known MainButton event name.
  */
-export type MainButtonEventName = keyof MainButtonEventsMap;
+type MainButtonEventName = keyof MainButtonEventsMap;
 
 /**
  * Listener for specified MainButton event.
  */
-export type MainButtonEventListener<E extends MainButtonEventName> =
-  MainButtonEventsMap[E];
+type MainButtonEventListener<E extends MainButtonEventName> = MainButtonEventsMap[E];
+
+export {MainButtonEventListener, MainButtonEventName, MainButtonEventsMap};

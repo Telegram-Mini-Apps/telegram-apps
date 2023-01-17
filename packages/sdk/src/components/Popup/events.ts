@@ -1,7 +1,7 @@
 /**
  * Information about Popup events.
  */
-export interface PopupEventsMap  {
+interface PopupEventsMap {
   /**
    * Open status changed.
    * @param isOpened - current state.
@@ -12,9 +12,11 @@ export interface PopupEventsMap  {
 /**
  * Known Popup event name.
  */
-export type PopupEventName = keyof PopupEventsMap;
+type PopupEventName = keyof PopupEventsMap;
 
 /**
  * Listener for specified Popup event.
  */
-export type PopupEventListener<E extends PopupEventName> = PopupEventsMap[E];
+type PopupEventListener<E extends PopupEventName> = PopupEventsMap[E];
+
+export {PopupEventName, PopupEventListener, PopupEventsMap};

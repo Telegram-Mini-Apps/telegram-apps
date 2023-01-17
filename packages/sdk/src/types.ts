@@ -1,3 +1,8 @@
-import {Bridge} from 'twa-bridge';
+import {Bridge} from '@twa.js/bridge';
 
-export type BridgeLike = Pick<Bridge, 'postEvent' | 'off' | 'on'>;
+/**
+ * Minimal set of properties SDK requires from bridge.
+ */
+type BridgeLike = Pick<Bridge, 'postEvent' | 'off' | 'on'>;
+
+export {BridgeLike};

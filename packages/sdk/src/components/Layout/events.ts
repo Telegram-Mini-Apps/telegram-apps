@@ -1,10 +1,10 @@
-import {RGB} from 'twa-core';
-import {HeaderColorKey} from 'twa-bridge';
+import {RGB} from '@twa.js/utils';
+import {HeaderColorKey} from '@twa.js/bridge';
 
 /**
  * Information about Layout supported events.
  */
-export interface LayoutEventsMap {
+interface LayoutEventsMap {
   /**
    * Background color changed.
    * @param color - current background color.
@@ -21,10 +21,11 @@ export interface LayoutEventsMap {
 /**
  * Known Layout event name.
  */
-export type LayoutEventName = keyof LayoutEventsMap;
+type LayoutEventName = keyof LayoutEventsMap;
 
 /**
  * Listener for specified Layout event.
  */
-export type LayoutEventListener<E extends LayoutEventName> =
-  LayoutEventsMap[E];
+type LayoutEventListener<E extends LayoutEventName> = LayoutEventsMap[E];
+
+export {LayoutEventsMap, LayoutEventName, LayoutEventListener};

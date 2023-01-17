@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {isColorDark} from '../../colors/utils';
+import {isColorDark} from '../../../../sdk/src/components/ThemeParams/utils';
 
 describe('colors', () => {
   describe('utils', () => {
