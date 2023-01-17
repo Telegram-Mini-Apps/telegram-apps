@@ -15,7 +15,7 @@ export default [
       {file: pkg.main, format: 'commonjs'},
       {file: pkg.module, format: 'esm'},
     ],
-    external: ['@twa.js/sdk', 'twa-theme-params', 'twa-bridge', 'react'],
+    external: ['@twa.js/sdk', '@twa.js/bridge', 'react'],
     plugins: [typescript(), terser()],
   }),
 

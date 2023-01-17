@@ -15,7 +15,7 @@ export default [
       {file: pkg.main, format: 'commonjs'},
       {file: pkg.module, format: 'esm'},
     ],
-    external: ['twa-core'],
+    external: ['@twa.js/utils'],
     plugins: [typescript(), terser()],
   }),
 
