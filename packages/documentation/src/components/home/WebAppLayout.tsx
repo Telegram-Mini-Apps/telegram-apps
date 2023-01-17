@@ -1,4 +1,4 @@
-import {SDKProvider, useSDK, useWebApp} from 'twa-sdk-react';
+import {SDKProvider, useSDK, useWebApp} from '@twa.js/sdk-react';
 import {Redirect} from '@docusaurus/router';
 import React, {FC, PropsWithChildren, useEffect} from 'react';
 import {useColorMode} from '@docusaurus/theme-common';

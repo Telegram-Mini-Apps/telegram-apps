@@ -9,8 +9,8 @@ in [documentation](../../../features/main-button).
 ## Init
 
 ```typescript
-import {BackButton} from 'twa-sdk';
-import {init} from 'twa-bridge';
+import {BackButton} from '@twa.js/sdk';
+import {init} from '@twa.js/bridge';
 
 // Specify bridge instance, color and text colors.
 const mainButton = new MainButton(init(), '#000000', '#ffffff');

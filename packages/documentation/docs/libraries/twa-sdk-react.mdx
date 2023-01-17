@@ -1,22 +1,23 @@
 ---
+sidebar_label: "@twa.js/sdk-react"
 sidebar_position: 5
 ---
 
-# twa-sdk-react
+# @twa.js/sdk-react
 
-React bindings for [client SDK](twa-sdk/about). Contains hooks, components and other
+React bindings for [client SDK](@twa.js/sdk/about). Contains hooks, components and other
 useful tools which allow usage of React along with Web Apps client SDK.
 Tracks SDK components changes out of box.
 
-<LibraryBadges pkg={'twa-sdk-react'}/>
+<LibraryBadges pkg={'@twa.js/sdk-react'}/>
 
 ## Installation
 
 Before everything, it is assumed, that you already installed `react` package
 as long as this package has it as peer dependency. Installation of SDK itself
-is not required, `twa-sdk-react` already includes it.
+is not required, `@twa.js/sdk-react` already includes it.
 
-<NpmInstall pkg={'twa-sdk-react'}/>
+<NpmInstall pkg={'@twa.js/sdk-react'}/>
 
 ## Init
 
@@ -32,7 +33,7 @@ created components. For this purpose, component `SDKProvider` exist:
 
 ```typescript jsx
 import React from 'react';
-import {SDKProvider} from 'twa-sdk-react';
+import {SDKProvider} from '@twa.js/sdk-react';
 
 function Root() {
   return (
@@ -43,13 +44,13 @@ function Root() {
 }
 ```
 
-Internally, `SDKProvider` uses `init` function from `twa-sdk`. It accepts
-list of optional parameters described [here](twa-sdk/about#init):
+Internally, `SDKProvider` uses `init` function from `@twa.js/sdk`. It accepts
+list of optional parameters described [here](@twa.js/sdk/about#init):
 
 ```typescript jsx
 import React from 'react';
-import {InitOptions} from 'twa-sdk';
-import {SDKProvider} from 'twa-sdk-react';
+import {InitOptions} from '@twa.js/sdk';
+import {SDKProvider} from '@twa.js/sdk-react';
 
 function Root() {
   const options: InitOptions = {
@@ -78,7 +79,7 @@ Insertion of `SDKProvider` component allows its child elements to use hook
 
 ```typescript jsx
 import React from 'react';
-import {SDKProvider, useSDK} from 'twa-sdk-react';
+import {SDKProvider, useSDK} from '@twa.js/sdk-react';
 
 function App() {
   const sdk = useSDK();
@@ -102,7 +103,7 @@ lifecycle:
 
 ```typescript jsx
 import React, {PropsWithChildren, useEffect} from 'react';
-import {SDKProvider, useSDK, useBackButton, useWebApp} from 'twa-sdk-react';
+import {SDKProvider, useSDK, useBackButton, useWebApp} from '@twa.js/sdk-react';
 
 /**
  * Part of application which is free of using SDK components.
@@ -190,7 +191,7 @@ call `webApp.ready` function. This will notify native application about current
 Web App is ready to be displayed.
 
 ```typescript jsx
-import {useWebApp} from 'twa-sdk-react';
+import {useWebApp} from '@twa.js/sdk-react';
 import React, {useEffect} from 'react';
 
 function App() {
@@ -215,7 +216,7 @@ know theme colors to render app loader with appropriate colors.
 For this purpose, hook `useThemeFromLocation` is used:
 
 ```typescript jsx
-import {useThemeFromLocation} from 'twa-sdk-react';
+import {useThemeFromLocation} from '@twa.js/sdk-react';
 import React, {useEffect} from 'react';
 
 function App() {

@@ -8,7 +8,7 @@ in [documentation](../../../features/theme).
 ## Init
 
 ```typescript  
-import {ThemeParams} from 'twa-sdk';
+import {ThemeParams} from '@twa.js/sdk';
   
 const themeParams = new ThemeParams({});  
 ```
@@ -20,7 +20,7 @@ function. It will return `TwaThemeParams` interface from `twa-theme-params`
 package:
 
 ```typescript
-import {init} from 'twa-bridge';
+import {init} from '@twa.js/bridge';
 
 ThemeParams.request(init()).then(console.log);
 
@@ -35,8 +35,8 @@ is synchronized with its actual state in Telegram application. To
 get it, use static `synced()` method:
 
 ```typescript
-import {ThemeParams} from 'twa-sdk';
-import {init} from 'twa-bridge';
+import {ThemeParams} from '@twa.js/sdk';
+import {init} from '@twa.js/bridge';
 
 const tp = ThemeParams.synced(init(), {});
 

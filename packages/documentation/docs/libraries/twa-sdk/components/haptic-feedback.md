@@ -10,8 +10,8 @@ in [documentation](../../../features/haptic-feedback).
 ## Init
 
 ```typescript
-import {HapticFeedback} from 'twa-sdk';
-import {init} from 'twa-bridge';
+import {HapticFeedback} from '@twa.js/sdk';
+import {init} from '@twa.js/bridge';
 
 const haptic = new HapticFeedback(init(), '6.3');
 ```

@@ -10,8 +10,8 @@ in [documentation](../../../features/back-button).
 ## Init
 
 ```typescript  
-import {BackButton} from 'twa-sdk';  
-import {init} from 'twa-bridge';  
+import {BackButton} from '@twa.js/sdk';  
+import {init} from '@twa.js/bridge';  
   
 const backButton = new BackButton(init(), '6.3');  
 ```  

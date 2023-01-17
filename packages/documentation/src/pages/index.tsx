@@ -5,7 +5,7 @@ import {
   isBrowserEnv,
   isDesktopOrMobileEnv,
   isWindowsPhoneEnv,
-} from 'twa-bridge';
+} from '@twa.js/bridge';
 
 /**
  * Index entry for whole documentation.

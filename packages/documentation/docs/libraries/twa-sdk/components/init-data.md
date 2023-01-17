@@ -12,7 +12,7 @@ instance, you could use static method `fromSearchParams` or class constructor
 directly:
 
 ```typescript
-import {InitData} from 'twa-sdk';
+import {InitData} from '@twa.js/sdk';
 
 const initData = InitData.fromSearchParams('query_id=AAHdF6IQAAAAAN0Xoh...');
 // or

@@ -6,8 +6,8 @@ state.
 ## Init
 
 ```typescript  
-import {Viewport} from 'twa-sdk';  
-import {init} from 'twa-bridge';  
+import {Viewport} from '@twa.js/sdk';  
+import {init} from '@twa.js/bridge';  
   
 // Specify bridge instance, height, width, stable height and
 // expansion status.
@@ -38,8 +38,8 @@ value of the `stableHeight` field for this purpose.
 To get fresh viewport information, you could use static `request` function:
 
 ```typescript
-import {Viewport} from 'twa-sdk';
-import {init} from 'twa-bridge';
+import {Viewport} from '@twa.js/sdk';
+import {init} from '@twa.js/bridge';
 
 Viewport.request(init()).then(console.log);
 
@@ -54,8 +54,8 @@ is synchronized with its actual state in Telegram application. To
 get it, use static `synced()` method:
 
 ```typescript
-import {Viewport} from 'twa-sdk';
-import {init} from 'twa-bridge';
+import {Viewport} from '@twa.js/sdk';
+import {init} from '@twa.js/bridge';
 
 const viewport = Viewport.synced(
   init(), 390, 365, 300, false,

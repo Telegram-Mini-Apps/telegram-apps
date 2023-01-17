@@ -5,8 +5,8 @@ Provides QR scanner functionality.
 ## Init
 
 ```typescript
-import {QRScanner} from 'twa-sdk';
-import {init} from 'twa-bridge';
+import {QRScanner} from '@twa.js/sdk';
+import {init} from '@twa.js/bridge';
 
 const scanner = new QRScanner(init(), '6.3');
 ```

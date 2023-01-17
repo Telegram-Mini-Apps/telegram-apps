@@ -4,7 +4,7 @@ import {
   isWindowsPhoneEnv,
   isDesktopOrMobileEnv,
   isBrowserEnv,
-} from 'twa-bridge';
+} from '@twa.js/bridge';
 
 /**
  * Returns true in case, current environment is Telegram Web App.

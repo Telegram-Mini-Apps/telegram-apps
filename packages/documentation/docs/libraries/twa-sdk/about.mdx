@@ -3,7 +3,7 @@ sidebar_position: 1
 sidebar_label: "About"
 ---
 
-# twa-sdk
+# @twa.js/sdk
 
 Made from scratch TypeScript library for communication with Telegram Web Apps
 functionality.
@@ -15,11 +15,11 @@ responsible for their own part of Telegram Web Apps ecosystem.
 Before starting to use SDK, we highly recommend learning Web Apps
 [documentation](/docs/category/introduction) to understand platform concepts.
 
-<LibraryBadges pkg={'twa-sdk'}/>
+<LibraryBadges pkg={'@twa.js/sdk'}/>
 
 ## Installation
 
-<NpmInstall pkg={'twa-sdk'}/>
+<NpmInstall pkg={'@twa.js/sdk'}/>
 
 ## Init
 
@@ -32,7 +32,7 @@ To make developers life easier, package contains special function called `init`,
 which returns initialized components instances:
 
 ```typescript
-import {init} from 'twa-sdk';
+import {init} from '@twa.js/sdk';
 
 init().then(components => {
   // Now we have all initialized components.
@@ -115,7 +115,7 @@ component.off(event, listener); // remove listener.
 Example with `BackButton` component:
 
 ```typescript
-import {BackButton} from 'twa-sdk';
+import {BackButton} from '@twa.js/sdk';
 
 const backButton = new BackButton();
 backButton.on('click', () => {
@@ -132,8 +132,8 @@ current Web App version or not. To check if some methods are supported, you
 should use `{Component}.supports()` function. For example:
 
 ```typescript
-import {BackButton} from 'twa-sdk';
-import {init} from 'twa-bridge';
+import {BackButton} from '@twa.js/sdk';
+import {init} from '@twa.js/bridge';
 
 let backButton = new BackButton(init(), '6.0');
 console.log(backButton.supports('show')); // false

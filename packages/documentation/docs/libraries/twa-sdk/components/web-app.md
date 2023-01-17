@@ -5,8 +5,8 @@ Provides common Web Apps functionality not covered by other system components.
 ## Init
 
 ```typescript
-import {WebApp} from 'twa-sdk';
-import {init} from 'twa-bridge';
+import {WebApp} from '@twa.js/sdk';
+import {init} from '@twa.js/bridge';
 
 // Specify bridge instance, Web Apps version and platform name.
 const webApp = new WebApp(init(), '6.4', 'webz');

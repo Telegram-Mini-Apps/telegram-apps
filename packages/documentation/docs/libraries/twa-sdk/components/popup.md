@@ -9,8 +9,8 @@ in [documentation](../../../features/popup).
 ## Init
 
 ```typescript
-import {Popup} from 'twa-sdk';
-import {init} from 'twa-bridge';
+import {Popup} from '@twa.js/sdk';
+import {init} from '@twa.js/bridge';
 
 const popup = new Popup(init(), '6.3');
 ```

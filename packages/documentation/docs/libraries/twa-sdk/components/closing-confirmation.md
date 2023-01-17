@@ -8,8 +8,8 @@ in [documentation](../../../features/closing-behavior.md).
 ## Init
 
 ```typescript  
-import {ClosingConfirmation} from 'twa-sdk';  
-import {init} from 'twa-bridge';  
+import {ClosingConfirmation} from '@twa.js/sdk';  
+import {init} from '@twa.js/bridge';  
   
 const closingConfirmation = new ClosingConfirmation(init());  
 ```
