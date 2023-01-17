@@ -1,2 +1,2 @@
-export * from './JsonShape';
-export * from './SearchParamsShape';
+export * from './json';
+export * from './search-params';
