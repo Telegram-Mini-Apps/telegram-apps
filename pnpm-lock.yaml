@@ -52,12 +52,9 @@ importers:
 
   packages/bridge:
     specifiers:
-      twa-core: workspace:*
+      '@twa.js/utils': workspace:*
     dependencies:
-      twa-core: link:../core
-
-  packages/core:
-    specifiers: {}
+      '@twa.js/utils': link:../utils
 
   packages/documentation:
     specifiers:
@@ -68,6 +65,9 @@ importers:
       '@docusaurus/types': ^2.2.0
       '@mdx-js/react': ^1.6.22
       '@tsconfig/docusaurus': ^1.0.5
+      '@twa.js/bridge': workspace:*
+      '@twa.js/sdk': workspace:*
+      '@twa.js/sdk-react': workspace:*
       '@types/react': ^18.0.25
       '@types/react-dom': ^18.0.9
       clsx: ^1.2.1
@@ -78,15 +78,15 @@ importers:
       react-dom: ^17.0.2
       sass: ^1.56.1
       sass-loader: ^13.2.0
-      twa-bridge: workspace:*
-      twa-sdk: workspace:*
-      twa-sdk-react: workspace:*
       typescript: ^4.7.4
     dependencies:
       '@docusaurus/core': 2.2.0_ehuab5y7qm7umqkczzguzxp57i
       '@docusaurus/preset-classic': 2.2.0_qealvalg3qigqrjomgx4rnwdxu
       '@docusaurus/theme-common': 2.2.0_ehuab5y7qm7umqkczzguzxp57i
       '@mdx-js/react': 1.6.22_react@17.0.2
+      '@twa.js/bridge': link:../bridge
+      '@twa.js/sdk': link:../sdk
+      '@twa.js/sdk-react': link:../sdk-react
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.9
       clsx: 1.2.1
@@ -97,9 +97,6 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       sass: 1.56.1
       sass-loader: 13.2.0_pdhtt3djyeaiszivnbiawwu3yy
-      twa-bridge: link:../bridge
-      twa-sdk: link:../sdk
-      twa-sdk-react: link:../sdk-react
     devDependencies:
       '@docusaurus/module-type-aliases': 2.2.0_sfoxds7t5ydpegc3knd667wn6m
       '@docusaurus/types': 2.2.0_sfoxds7t5ydpegc3knd667wn6m
@@ -118,37 +115,25 @@ importers:
 
   packages/sdk:
     specifiers:
-      twa-bridge: workspace:*
-      twa-core: workspace:*
-      twa-init-data: workspace:*
-      twa-theme-params: workspace:*
+      '@twa.js/bridge': workspace:*
+      '@twa.js/init-data': workspace:*
+      '@twa.js/utils': workspace:*
     dependencies:
-      twa-bridge: link:../bridge
-      twa-core: link:../core
-      twa-init-data: link:../init-data
-      twa-theme-params: link:../theme-params
+      '@twa.js/bridge': link:../bridge
+      '@twa.js/init-data': link:../init-data
+      '@twa.js/utils': link:../utils
 
   packages/sdk-react:
     specifiers:
+      '@twa.js/bridge': workspace:*
+      '@twa.js/sdk': workspace:*
       '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0
-      twa-bridge: workspace:*
-      twa-sdk: workspace:*
-      twa-theme-params: workspace:*
     dependencies:
+      '@twa.js/bridge': link:../bridge
+      '@twa.js/sdk': link:../sdk
       '@types/react': 18.0.25
       react: 17.0.2
-      twa-bridge: link:../bridge
-      twa-sdk: link:../sdk
-      twa-theme-params: link:../theme-params
-
-  packages/theme-params:
-    specifiers:
-      twa-bridge: workspace:*
-      twa-core: workspace:*
-    dependencies:
-      twa-bridge: link:../bridge
-      twa-core: link:../core
 
   packages/utils:
     specifiers: {}
