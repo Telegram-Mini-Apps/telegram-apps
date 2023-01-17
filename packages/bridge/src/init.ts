@@ -5,7 +5,7 @@ import {
 } from './event-receiver';
 import {Bridge, BridgeProps} from './Bridge';
 
-export interface InitOptions extends BridgeProps {
+interface InitOptions extends BridgeProps {
   /**
    * Should global event receiving function be defined. To learn more,
    * see `defineEventReceiver` implementation.
@@ -31,10 +31,10 @@ export interface InitOptions extends BridgeProps {
  * constructor.
  * @param options - init options.
  */
-export function init(options: InitOptions = {}): Bridge {
+function init(options: InitOptions = {}): Bridge {
   const {
     defineReceiver = true,
-    emitter = getGlobalEventEmitter(),
+    emitter = getGlobalEventEmitter(options.debug),
     ...rest
   } = options;
 
@@ -44,3 +44,5 @@ export function init(options: InitOptions = {}): Bridge {
 
   return new Bridge({...rest, emitter});
 }
+
+export {init, InitOptions};

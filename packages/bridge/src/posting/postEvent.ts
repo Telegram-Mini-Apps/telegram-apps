@@ -3,7 +3,7 @@ import {
   PostEventParams,
   PostNonEmptyEventName,
 } from './types';
-import {isBrowserEnv, isDesktopOrMobileEnv, isWindowsPhoneEnv} from '../env';
+import {isBrowserEnv, hasTelegramWebviewProxy, hasExternalNotify} from '../env';
 
 interface PostEventOptions {
   /**
@@ -54,10 +54,10 @@ export function postEvent(
       eventData: params,
     }), options.targetOrigin || 'https://web.telegram.org');
   }
-  if (isDesktopOrMobileEnv(window)) {
+  if (hasTelegramWebviewProxy(window)) {
     return window.TelegramWebviewProxy.postEvent(event, JSON.stringify(params));
   }
-  if (isWindowsPhoneEnv(window)) {
+  if (hasExternalNotify(window)) {
     return window.external.notify(JSON.stringify({
       eventType: event,
       eventData: params,

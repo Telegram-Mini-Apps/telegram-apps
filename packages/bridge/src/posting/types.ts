@@ -1,5 +1,5 @@
 import {PopupParams} from '../events';
-import {IsNever} from 'twa-core';
+import {IsNever} from '@twa.js/utils';
 import {
   ImpactHapticFeedback,
   NotificationHapticFeedback,
@@ -9,14 +9,14 @@ import {
 /**
  * Color key which could be used tot update header color.
  */
-export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
+type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
 
 /**
  * Describes list of events and their parameters that could be posted by
  * Bridge.
  * @see https://corefork.telegram.org/api/web-events#event-types
  */
-export interface PostEventParamsMap {
+interface PostEventParamsMap {
   /**
    * Notifies parent iframe about current frame is ready.
    */
@@ -170,18 +170,18 @@ export interface PostEventParamsMap {
 /**
  * Any post-available event name.
  */
-export type PostEventName = keyof PostEventParamsMap;
+type PostEventName = keyof PostEventParamsMap;
 
 /**
  * Returns parameters for specified post-available event.
  */
-export type PostEventParams<E extends PostEventName> =
+type PostEventParams<E extends PostEventName> =
   PostEventParamsMap[E];
 
 /**
  * Any post-available event name which does not require arguments.
  */
-export type PostEmptyEventName = {
+type PostEmptyEventName = {
   [E in PostEventName]: IsNever<PostEventParams<E>> extends true
     ? E
     : never;
@@ -190,5 +190,13 @@ export type PostEmptyEventName = {
 /**
  * Any post-available event name which require arguments.
  */
-export type PostNonEmptyEventName =
-  Exclude<PostEventName, PostEmptyEventName>;
+type PostNonEmptyEventName = Exclude<PostEventName, PostEmptyEventName>;
+
+export {
+  HeaderColorKey,
+  PostEmptyEventName,
+  PostEventName,
+  PostEventParams,
+  PostNonEmptyEventName,
+  PostEventParamsMap,
+};

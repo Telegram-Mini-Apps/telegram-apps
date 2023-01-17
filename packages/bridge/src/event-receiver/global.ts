@@ -1,8 +1,7 @@
-import {EventEmitter, isRecord, log} from 'twa-core';
-import {extractMessageEventData} from '../parsing';
+import {createJsonParser, EventEmitter, isRecord, log} from '@twa.js/utils';
 import {ViewportChangedPayload} from '../events';
 
-export interface GlobalEventEmitterEventsMap {
+interface GlobalEventEmitterEventsMap {
   /**
    * Event, emitted by external environment.
    * @param event - event name.
@@ -15,9 +14,7 @@ export interface GlobalEventEmitterEventsMap {
  * Represents global event emitter which handles window "message" event and
  * emits new event with prepared data.
  */
-export type GlobalEventEmitter = EventEmitter<GlobalEventEmitterEventsMap>;
-
-// TODO: eventEmitter is probably side-effect.
+type GlobalEventEmitter = EventEmitter<GlobalEventEmitterEventsMap>;
 
 /**
  * Represents global event emitter. Once created, it can be reused by
@@ -27,9 +24,17 @@ export type GlobalEventEmitter = EventEmitter<GlobalEventEmitterEventsMap>;
 let eventEmitter: GlobalEventEmitter | undefined;
 
 /**
+ * Extracts event data from native application event.
+ */
+const parseMessageEventData = createJsonParser({
+  eventType: 'string',
+  eventData: {type: value => value},
+});
+
+/**
  * Returns singleton version of GlobalEventEmitter.
  */
-export function getGlobalEventEmitter(debug = false): GlobalEventEmitter {
+function getGlobalEventEmitter(debug = false): GlobalEventEmitter {
   if (eventEmitter === undefined) {
     // Create global event emitter.
     const emitter = new EventEmitter<GlobalEventEmitterEventsMap>();
@@ -66,8 +71,8 @@ export function getGlobalEventEmitter(debug = false): GlobalEventEmitter {
       }
 
       try {
-        const {type, data} = extractMessageEventData(evData);
-        emitter.emit('message', type, data);
+        const {eventType, eventData} = parseMessageEventData(evData);
+        emitter.emit('message', eventType, eventData);
       } catch (e) {
         logMessage('error', 'event data extraction error', evData, e);
       }
@@ -91,3 +96,5 @@ export function getGlobalEventEmitter(debug = false): GlobalEventEmitter {
   }
   return eventEmitter;
 }
+
+export {GlobalEventEmitterEventsMap, GlobalEventEmitter, getGlobalEventEmitter};

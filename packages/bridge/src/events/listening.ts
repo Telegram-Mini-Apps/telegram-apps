@@ -1,15 +1,62 @@
-import {EventNames, EventListener} from 'twa-core';
-import {InvoiceClosedPayload} from './invoice';
-import {PopupClosedPayload} from './popup';
-import {ViewportChangedPayload} from './viewport';
-import {ThemeChangedPayload} from './theme';
-import {ClipboardTextReceivedPayload} from './clipboard';
-import {QrTextReceivedPayload} from './qr';
+import {EventName, EventListener, RGB} from '@twa.js/utils';
+
+interface ClipboardTextReceivedPayload {
+  req_id: string;
+  data?: string | null;
+}
+
+type InvoiceStatus =
+  | 'paid'
+  | 'failed'
+  | 'pending'
+  | 'cancelled'
+  | string;
+
+/**
+ * @see https://corefork.telegram.org/api/bots/webapps#invoice-closed
+ */
+interface InvoiceClosedPayload {
+  slug: string;
+  status: InvoiceStatus;
+}
+
+interface QrTextReceivedPayload {
+  data?: string;
+}
+
+/**
+ * @see https://corefork.telegram.org/api/bots/webapps#theme-changed
+ */
+interface ThemeChangedPayload {
+  theme_params: {
+    bg_color: RGB;
+    text_color: RGB;
+    hint_color: RGB;
+    link_color: RGB;
+    button_color: RGB;
+    button_text_color: RGB;
+    secondary_bg_color?: RGB;
+  };
+}
+
+/**
+ * @see https://corefork.telegram.org/api/bots/webapps#viewport-changed
+ */
+interface ViewportChangedPayload {
+  height: number;
+  width: number;
+  is_expanded: boolean;
+  is_state_stable: boolean;
+}
+
+interface PopupClosedPayload {
+  button_id?: string;
+}
 
 /**
  * Map where key is known event name, and value is its listener.
  */
-export interface BridgeEventsMap {
+interface BridgeEventsMap {
   /**
    * User clicked back button.
    * @since Web App version 6.1+
@@ -81,10 +128,23 @@ export interface BridgeEventsMap {
 /**
  * Bridge event name which could be listened.
  */
-export type BridgeEventName = EventNames<BridgeEventsMap>;
+type BridgeEventName = EventName<BridgeEventsMap>;
 
 /**
  * Returns listener for specified event name.
  */
-export type BridgeEventListener<E extends BridgeEventName> =
+type BridgeEventListener<E extends BridgeEventName> =
   EventListener<BridgeEventsMap[E]>;
+
+export {
+  BridgeEventListener,
+  BridgeEventsMap,
+  PopupClosedPayload,
+  InvoiceClosedPayload,
+  BridgeEventName,
+  InvoiceStatus,
+  ThemeChangedPayload,
+  ViewportChangedPayload,
+  ClipboardTextReceivedPayload,
+  QrTextReceivedPayload,
+};

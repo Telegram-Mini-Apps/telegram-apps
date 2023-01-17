@@ -1,5 +1,5 @@
 import {beforeEach, describe, expect, it} from '@jest/globals';
-import {isBrowserEnv, isDesktopOrMobileEnv, isWindowsPhoneEnv} from '../env';
+import {isBrowserEnv, hasTelegramWebviewProxy, hasExternalNotify} from '../env';
 
 beforeEach(() => {
   const wnd = window as any;
@@ -9,24 +9,24 @@ beforeEach(() => {
 });
 
 describe('env', () => {
-  describe('isDesktopOrMobileEnv', () => {
+  describe('hasTelegramWebviewProxy', () => {
     it(
       'should return true in case, window has "TelegramWebviewProxy" property',
       () => {
         (window as any).TelegramWebviewProxy = {};
-        expect(isDesktopOrMobileEnv(window)).toBe(true);
+        expect(hasTelegramWebviewProxy(window)).toBe(true);
       },
     );
 
     it(
       'should return false in case, window has no "TelegramWebviewProxy" property',
       () => {
-        expect(isDesktopOrMobileEnv(window)).toBe(false);
+        expect(hasTelegramWebviewProxy(window)).toBe(false);
       },
     );
   });
 
-  describe('isWindowsPhoneEnv', () => {
+  describe('hasExternalNotify', () => {
     it(
       'should return true in case, path value ' +
       '"window.external.notify" is function',
@@ -35,7 +35,7 @@ describe('env', () => {
           notify: () => {
           },
         };
-        expect(isWindowsPhoneEnv(window)).toBe(true);
+        expect(hasExternalNotify(window)).toBe(true);
       },
     );
 
@@ -43,7 +43,7 @@ describe('env', () => {
       'should return false in case, path value ' +
       '"window.external.notify" is not function',
       () => {
-        expect(isWindowsPhoneEnv(window)).toBe(false);
+        expect(hasExternalNotify(window)).toBe(false);
       },
     );
   });

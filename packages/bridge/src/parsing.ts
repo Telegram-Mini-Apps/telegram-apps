@@ -1,110 +1,75 @@
 import {
-  createJsonStructParser,
-  JsonParser, parseJsonParamAsBool,
-  parseJsonParamAsNum, parseJsonParamAsOptNum, parseJsonParamAsOptString,
-  parseJsonParamAsRecord, parseJsonParamAsString,
-} from 'twa-core';
-import {
-  InvoiceClosedPayload,
-  PopupClosedPayload,
-  ThemeChangedPayload,
-  ViewportChangedPayload,
-  QrTextReceivedPayload,
-  ClipboardTextReceivedPayload,
-} from './events';
-
-/**
- * Raw `viewport_changed` event payload.
- */
-interface ViewportChangedRawPayload {
-  height: number;
-  width: number | null;
-  is_expanded: boolean;
-  is_state_stable: boolean;
-}
-
-/**
- * Parses incoming JSON value as popup button id.
- * @param value - raw value.
- */
-const parseJsonParamAsPopupButtonId: JsonParser<string | undefined> = value => {
-  return value === null || value === undefined
-    ? undefined
-    : parseJsonParamAsString(value);
-};
-
-/**
- * Parses incoming JSON value as clipboard data.
- * @param value - raw value.
- */
-const parseJsonParamAsClipboardData: JsonParser<string | undefined | null> = value => {
-  return value === null || value === undefined
-    ? value
-    : parseJsonParamAsString(value);
-}
-
-/**
- * Parses incoming JSON value as ViewportChangedPayload.
- */
-const parseJsonParamAsViewportChangedRawPayload =
-  createJsonStructParser<ViewportChangedRawPayload>({
-    height: ['height', parseJsonParamAsNum],
-    width: ['width', parseJsonParamAsOptNum],
-    is_state_stable: ['is_state_stable', parseJsonParamAsBool],
-    is_expanded: ['is_expanded', parseJsonParamAsBool],
-  });
+  createJsonParser,
+  parseJsonValueAsNumber,
+  parseJsonValueAsString,
+} from '@twa.js/utils';
 
 /**
  * Parses incoming value as ThemeChangedPayload.
  */
-export const extractThemeChangedPayload = createJsonStructParser<ThemeChangedPayload>({
-  theme_params: ['theme_params', parseJsonParamAsRecord],
+const parseThemeChangedPayload = createJsonParser({
+  theme_params: createJsonParser({
+    bg_color: 'rgb',
+    text_color: 'rgb',
+    hint_color: 'rgb',
+    link_color: 'rgb',
+    button_color: 'rgb',
+    button_text_color: 'rgb',
+    secondary_bg_color: {type: 'rgb', optional: true},
+  }),
 });
 
 /**
  * Parses incoming value as ViewportChangedPayload.
  */
-export function extractViewportChangedPayload(data: unknown): ViewportChangedPayload {
-  // Firstly, try to parse event payload as its web version.
-  const {width, ...rest} = parseJsonParamAsViewportChangedRawPayload(data);
-
-  // Desktop and mobile versions of Telegram are not sending width property.
-  // TODO: Issue
-  return {...rest, width: width === null ? window.innerWidth : width};
-}
+const parseViewportChangedPayload = createJsonParser({
+  height: 'number',
+  width: value => value === undefined || value === null
+    ? window.innerWidth
+    : parseJsonValueAsNumber(value),
+  is_state_stable: 'boolean',
+  is_expanded: 'boolean',
+});
 
 /**
  * Parses incoming value as PopupClosedPayload.
  */
-export const extractPopupClosedPayload = createJsonStructParser<PopupClosedPayload>({
-  button_id: ['button_id', parseJsonParamAsPopupButtonId],
+const parsePopupClosedPayload = createJsonParser({
+  button_id: value => value === null || value === undefined
+    ? undefined
+    : parseJsonValueAsString(value),
 });
 
 /**
  * Parses incoming value as QrTextReceivedPayload.
  */
-export const extractQrTextReceivedPayload = createJsonStructParser<QrTextReceivedPayload>({
-  data: ['data', parseJsonParamAsOptString],
+const parseQrTextReceivedPayload = createJsonParser({
+  data: {type: 'string', optional: true},
 });
 
 /**
  * Parses incoming value as InvoiceClosedPayload.
  */
-export const extractInvoiceClosedPayload = createJsonStructParser<InvoiceClosedPayload>({
-  slug: ['slug', parseJsonParamAsString],
-  status: ['status', parseJsonParamAsString],
+const parseInvoiceClosedPayload = createJsonParser({
+  slug: 'string',
+  status: 'string',
 });
-
-export const extractClipboardTextReceivedPayload =
-  createJsonStructParser<ClipboardTextReceivedPayload>({
-    req_id: ['req_id', parseJsonParamAsString],
-    data: ['data', parseJsonParamAsClipboardData],
-  });
 
 /**
- * Extracts event data from native application event.
+ * Parses incoming value as clipboard text received payload.
  */
-export const extractMessageEventData = createJsonStructParser<{ type: string, data: unknown }>({
-  type: ['eventType', parseJsonParamAsString],
-  data: ['eventData', value => value],
+const parseClipboardTextReceivedPayload = createJsonParser({
+  req_id: 'string',
+  data: value => value === null || value === undefined
+    ? value
+    : parseJsonValueAsString(value),
 });
+
+export {
+  parseClipboardTextReceivedPayload,
+  parseInvoiceClosedPayload,
+  parsePopupClosedPayload,
+  parseQrTextReceivedPayload,
+  parseViewportChangedPayload,
+  parseThemeChangedPayload,
+};

@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {supports} from '../support';
+import {supports} from '../supports';
 import {PostEventName} from '../posting';
 
 describe('support', () => {

@@ -1,5 +1,3 @@
-import {CustomEventDetail} from './types';
-
 /**
  * States, that receiver was defined before.
  */
@@ -9,7 +7,7 @@ let receiverDefined = false;
  * Defines global event receiver, which handles events sent from native
  * Telegram application. As a result, this handler emits "message" event.
  */
-export function defineEventReceiver(force = false): void {
+function defineEventReceiver(force = false): void {
   if (receiverDefined && !force) {
     return;
   }
@@ -36,9 +34,7 @@ export function defineEventReceiver(force = false): void {
         // and `window.addEventListener('message')` to receive.
         pointer[item] = (eventType: string, eventData: unknown): void => {
           window.dispatchEvent(
-            new CustomEvent<CustomEventDetail>('message', {
-              detail: {eventType, eventData},
-            }),
+            new CustomEvent('message', {detail: {eventType, eventData}}),
           );
         };
         return;
@@ -54,3 +50,5 @@ export function defineEventReceiver(force = false): void {
   // To prevent another receiver installation, set flag.
   receiverDefined = true;
 }
+
+export {defineEventReceiver};

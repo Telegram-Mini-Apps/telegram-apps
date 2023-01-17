@@ -1,12 +1,12 @@
 import {PostEventName} from './posting';
-import {compareVersions, Version} from 'twa-core';
+import {compareVersions, Version} from '@twa.js/utils';
 
 /**
  * Returns true in case, specified method is supported in passed version.
  * @param method - checked method.
  * @param inVersion - Web App version to check method support in.
  */
-export function supports(method: PostEventName, inVersion: Version): boolean {
+function supports(method: PostEventName, inVersion: Version): boolean {
   switch (method) {
     case 'web_app_open_tg_link':
     case 'web_app_open_invoice':
@@ -25,3 +25,5 @@ export function supports(method: PostEventName, inVersion: Version): boolean {
       return true;
   }
 }
+
+export {supports};

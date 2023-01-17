@@ -4,4 +4,4 @@ export * from './posting';
 export * from './Bridge';
 export * from './env';
 export * from './init';
-export * from './support';
+export * from './supports';

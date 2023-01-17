@@ -1,20 +1,17 @@
-import {
-  EventEmitter,
-  parseJsonParamAsString,
-  log,
-} from 'twa-core';
+import {EventEmitter, log, parseJsonValueAsString} from '@twa.js/utils';
 import {BridgeEventName, BridgeEventsMap} from './events';
 import {
-  extractClipboardTextReceivedPayload,
-  extractInvoiceClosedPayload,
-  extractPopupClosedPayload, extractQrTextReceivedPayload,
-  extractThemeChangedPayload,
-  extractViewportChangedPayload,
+  parseClipboardTextReceivedPayload,
+  parseInvoiceClosedPayload,
+  parsePopupClosedPayload,
+  parseQrTextReceivedPayload,
+  parseThemeChangedPayload,
+  parseViewportChangedPayload,
 } from './parsing';
 import {GlobalEventEmitter} from './event-receiver';
 import {postEvent} from './posting';
 
-export interface BridgeProps {
+interface BridgeProps {
   /**
    * Is debug mode currently enabled. Enable of this feature outputs additional
    * log messages into console.
@@ -43,7 +40,7 @@ export interface BridgeProps {
  * much more.
  * @see How events work: https://corefork.telegram.org/api/web-events
  */
-export class Bridge {
+class Bridge {
   private _boundEmitter: GlobalEventEmitter | null = null;
   private readonly targetOrigin: string;
   private readonly ee = new EventEmitter<BridgeEventsMap>();
@@ -82,11 +79,6 @@ export class Bridge {
     this.ee.emit(event, ...args);
   };
 
-  private emitUnsafe: typeof this.ee.emitUnsafe = (event, ...args) => {
-    this.log('log', '[emitUnsafe]', event, ...args);
-    this.ee.emitUnsafe(event, ...args);
-  };
-
   private log: typeof log = (level, ...args) => {
     if (this.debug) {
       log(level, '[Bridge]', ...args);
@@ -105,10 +97,10 @@ export class Bridge {
     try {
       switch (type) {
         case 'viewport_changed':
-          return this.emit(type, extractViewportChangedPayload(data));
+          return this.emit(type, parseViewportChangedPayload(data));
 
         case 'theme_changed':
-          return this.emit(type, extractThemeChangedPayload(data));
+          return this.emit(type, parseThemeChangedPayload(data));
 
         case 'popup_closed':
           // FIXME: Payloads are different on different platforms.
@@ -121,13 +113,13 @@ export class Bridge {
           ) {
             return this.emit(type, {});
           }
-          return this.emit(type, extractPopupClosedPayload(data));
+          return this.emit(type, parsePopupClosedPayload(data));
 
         case 'set_custom_style':
-          return this.emit(type, parseJsonParamAsString(data));
+          return this.emit(type, parseJsonValueAsString(data));
 
         case 'qr_text_received':
-          return this.emit(type, extractQrTextReceivedPayload(data))
+          return this.emit(type, parseQrTextReceivedPayload(data))
 
         // Events which do not require any arguments.
         case 'main_button_pressed':
@@ -137,14 +129,14 @@ export class Bridge {
           return this.emit(type);
 
         case 'clipboard_text_received':
-          return this.emit(type, extractClipboardTextReceivedPayload(data))
+          return this.emit(type, parseClipboardTextReceivedPayload(data))
 
         case 'invoice_closed':
-          return this.emit(type, extractInvoiceClosedPayload(data));
+          return this.emit(type, parseInvoiceClosedPayload(data));
 
         // All other event listeners will receive unknown type of data.
         default:
-          return this.emitUnsafe(type, data);
+          return this.emit(type as any, data);
       }
     } catch (e) {
       this.log('error', `[processEvent] error`, e);
@@ -201,3 +193,5 @@ export class Bridge {
     this.boundEmitter = null;
   }
 }
+
+export {BridgeProps, Bridge};

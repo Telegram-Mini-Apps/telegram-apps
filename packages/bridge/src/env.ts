@@ -7,7 +7,7 @@
  * window.TelegramWebviewProxy.postEvent(event, data);
  * ```
  */
-export type IncludeDesktopOrMobileEnvProxy<T> = T & {
+type WithTelegramWebviewProxy<T> = T & {
   TelegramWebviewProxy: {
     postEvent(event: string, data: string): void;
   };
@@ -22,7 +22,7 @@ export type IncludeDesktopOrMobileEnvProxy<T> = T & {
  * window.external.notify(data);
  * ```
  */
-export type IncludeWindowsPhoneEnvProxy<T> = T & {
+type WithExternalNotify<T> = T & {
   external: {
     notify(data: string): void;
   };
@@ -33,9 +33,9 @@ export type IncludeWindowsPhoneEnvProxy<T> = T & {
  * for receiving events on desktop version of Telegram.
  * @param wnd - Window object.
  */
-export function isDesktopOrMobileEnv<W extends Window>(
+function hasTelegramWebviewProxy<W extends Window>(
   wnd: W,
-): wnd is IncludeDesktopOrMobileEnvProxy<W> {
+): wnd is WithTelegramWebviewProxy<W> {
   return (wnd as any).TelegramWebviewProxy !== undefined;
 }
 
@@ -44,9 +44,9 @@ export function isDesktopOrMobileEnv<W extends Window>(
  * for receiving events on desktop version of Telegram.
  * @param wnd - Window object.
  */
-export function isWindowsPhoneEnv<W extends Window>(
+function hasExternalNotify<W extends Window>(
   wnd: W,
-): wnd is IncludeWindowsPhoneEnvProxy<W> {
+): wnd is WithExternalNotify<W> {
   return 'external' in wnd && typeof (wnd.external as any).notify === 'function';
 }
 
@@ -54,10 +54,18 @@ export function isWindowsPhoneEnv<W extends Window>(
  * Returns true in case, current environment is iframe.
  * @see https://stackoverflow.com/a/326076
  */
-export function isBrowserEnv(): boolean {
+function isBrowserEnv(): boolean {
   try {
     return window.self !== window.top;
   } catch (e) {
     return true;
   }
 }
+
+export {
+  isBrowserEnv,
+  hasTelegramWebviewProxy,
+  WithTelegramWebviewProxy,
+  WithExternalNotify,
+  hasExternalNotify,
+};
