@@ -11,6 +11,8 @@ import {
 import {GlobalEventEmitter} from './event-receiver';
 import {postEvent} from './posting';
 
+type Emitter = EventEmitter<BridgeEventsMap>;
+
 interface BridgeProps {
   /**
    * Is debug mode currently enabled. Enable of this feature outputs additional
@@ -43,7 +45,7 @@ interface BridgeProps {
 class Bridge {
   private _boundEmitter: GlobalEventEmitter | null = null;
   private readonly targetOrigin: string;
-  private readonly ee = new EventEmitter<BridgeEventsMap>();
+  private readonly ee: Emitter = new EventEmitter<BridgeEventsMap>();
 
   constructor(props: BridgeProps = {}) {
     const {
@@ -74,7 +76,7 @@ class Bridge {
     }
   }
 
-  private emit: typeof this.ee.emit = (event: any, ...args: any[]) => {
+  private emit: Emitter['emit'] = (event: any, ...args: any[]) => {
     this.log('log', '[emit]', event, ...args);
     this.ee.emit(event, ...args);
   };
@@ -161,12 +163,12 @@ class Bridge {
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on: Emitter['on'] = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off: Emitter['off'] = this.ee.off.bind(this.ee);
 
   postEvent: typeof postEvent = ((event, params, options) => {
     const {targetOrigin = this.targetOrigin, ...rest} = options || {};
@@ -179,12 +181,12 @@ class Bridge {
    * Add listener for all events. It is triggered always, when `emit`
    * function called.
    */
-  subscribe = this.ee.subscribe.bind(this.ee);
+  subscribe: Emitter['subscribe'] = this.ee.subscribe.bind(this.ee);
 
   /**
    * Removes listener added with `subscribe`.
    */
-  unsubscribe = this.ee.unsubscribe.bind(this.ee);
+  unsubscribe: Emitter['unsubscribe'] = this.ee.unsubscribe.bind(this.ee);
 
   /**
    * Unbinds from currently bound event emitter.
