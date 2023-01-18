@@ -1,10 +1,10 @@
 # @twa.js/sdk
 
-[npm-badge]: https://img.shields.io/npm/v/twa-sdk?logo=npm
+[npm-badge]: https://img.shields.io/npm/v/@twa.js/sdk?logo=npm
 
-[npm-link]: https://npmjs.com/package/twa-sdk
+[npm-link]: https://npmjs.com/package/@twa.js/sdk
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/twa-sdk
+[size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/sdk
 
 [![NPM][npm-badge]][npm-link]
 ![Size][size-badge]
