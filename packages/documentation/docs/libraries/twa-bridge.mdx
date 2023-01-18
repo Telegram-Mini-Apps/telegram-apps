@@ -21,7 +21,7 @@ data difference problems to protect developers code and save their time.
 communication layer between Telegram native and client applications, so you
 could call native methods and receive events from Telegram application.
 
-To start using bridge, it is enough to use `init` method:
+To start using `Bridge`, it is enough to use `init` function:
 
 ```typescript
 import {init} from '@twa.js/bridge';
@@ -34,7 +34,7 @@ used by Telegram native application. It is allowed to use it as many times
 as required as long as this function will just reuse once created event emitter
 and event receiving function.
 
-## Debugging
+### Debugging
 
 `Bridge` supports debug mode which outputs additional log messages into console.
 By default, this mode is disabled. To enable it, it is required to pass
@@ -47,7 +47,7 @@ const bridge = init({debug: true});
 ```
 
 Or, in case when instance already exists, just change its `debug` property
-to `true`.
+to `true`:
 
 ```typescript
 import {init} from '@twa.js/bridge';
@@ -59,7 +59,7 @@ bridge.debug = true;
 After debug mode is enabled, bridge logs additional information about received
 and sent events into console.
 
-## Target origin
+### Target origin
 
 In case, current bridge instance is used in browser environment (iframe),
 we use such function as `window.parent.postMessage` which requires passing
@@ -82,8 +82,41 @@ const bridge = init({targetOrigin: '*'});
 bridge.postEvent('web_app_close', {targetOrigin: 'https://myendpoint.org'})
 ```
 
-It is highly recommended not to override this value as long as it could lead
+It is strongly recommended not to override this value as long as it could lead
 to security issues. Update this value only in test purposes.
+
+### Lower level options
+
+Previously, we used such function as `init` almost without any parameters,
+but this method supports some more additional options.
+
+#### `defineReceiver: boolean`
+
+*Default: `true`*
+
+Settings this value to `true`, `init` function will call such function
+as `defineEventReceiver` which defines global function, handling events
+from Telegram application and emitting window `message` event.
+
+It is safe to use this function as many times as required. This function
+will run only once.
+
+In spite of it is not recommended, you could set this option to `false`.
+This will lead to not handling of events in iOS, Android and desktop
+versions of Telegram, unless some additional actions are done.
+
+#### `emitter: GlobalEventEmitter`
+
+Bridge itself is not listening to window `message` event or events sent
+from Telegram native application directly. It expects passing
+[event emitter](https://github.com/Telegram-Web-Apps/twa/blob/master/packages/bridge/src/event-receiver/global.ts#L17)
+that is responsible for this kind of job.
+
+This way of working with events allows us to normally subscribe to and
+unsubscribe from such events.
+
+In case, this property is not passed, function will create required event
+emitter which will be shared between other `Bridge` instances.
 
 ## Calling methods
 
@@ -99,12 +132,12 @@ import {init} from '@twa.js/bridge';
 const bridge = init();
 
 // Close current application.
-bridge.postEvent('web_app_close')
+bridge.postEvent('web_app_close');
 ```
 
-Some events don't require parameters, and they can be called without additional
-second parameter which represents event payload. But there are some events,
-which have arguments:
+Some methods don't require parameters, and they can be called without additional
+second parameter which represents event payload. But there are some events which
+do require it:
 
 ```typescript
 import {init} from '@twa.js/bridge';
@@ -121,7 +154,7 @@ bridge.postEvent('web_app_open_popup', {
 
 ### Without `Bridge`
 
-This library allows calling methods without creating new `Bridge` instance. To
+This package allows calling methods without creating new `Bridge` instance. To
 perform this action, you should use `postEvent` function which has the same
 type as `bridge.postEvent` (actually, bridge uses `postEvent` function
 internally):
@@ -132,9 +165,9 @@ import {postEvent} from '@twa.js/bridge';
 postEvent('web_app_setup_back_button', {is_visible: true});
 ```
 
-Nevertheless, sometimes you need to handle event sent from native app which is
-emitted as a response to posted event. For example, you would like to
-call `web_app_request_theme` event. As a result, native app will emit
+Nevertheless, sometimes you need to handle events sent from native app which are
+emitted as a response to called method. For example, you would like to
+call `web_app_request_theme` method. As a result, native app will emit
 `theme_changed` event. Using default bridge init flow, this event will
 be captured by bridge instance. We can't say the same about bare `postEvent`
 function, so, do not forget about response event (if it exists) handling
@@ -147,14 +180,13 @@ use such methods as `on` and `subscribe`. To remove event listeners, we
 use `off` and `unsubscribe`:
 
 ```typescript
-import {BridgeEventListener, init} from '@twa.js/bridge';
-import {GlobalListener} from '@twa.js/utils';
+import {BridgeEventListener, BridgeEventName, init} from '@twa.js/bridge';
 
 const bridge = init();
 const listener: BridgeEventListener<'viewport_changed'> = payload => {
   console.log('Viewport changed:', payload)
 };
-const globalListener: GlobalListener = (event, ...args) => {
+const subListener = (event: BridgeEventName, ...args: any[]) => {
   console.log('Event was called:', event, ...args);
 };
 
@@ -162,50 +194,17 @@ const globalListener: GlobalListener = (event, ...args) => {
 bridge.on('viewport_changed', listener);
 
 // Add listener for all events.
-bridge.subscribe(globalListener);
+bridge.subscribe(subListener);
 
 // Remove event listeners.
 bridge.off('viewport_changed', listener);
-bridge.unsubscribe(globalListener);
+bridge.unsubscribe(subListener);
 ```
-
-## Lower level control options
-
-Previously, we used such function as `init` almost without any parameters,
-but this method supports some more additional options.
-
-### `defineReceiver: boolean`
-
-*Default: `true`*
-
-Settings this value to `true`, `init` function will call such function
-as `defineEventReceiver` which defines global function, handling events
-from Telegram application and emitting window `message` event.
-
-It is safe to use this function as many times as required. This function
-will run only once.
-
-In spite of it is not recommended, you could set this option to `false`.
-This will lead to not handling of events in iOS, Android and desktop
-versions of Telegram, unless some additional actions are done.
-
-### `emitter: GlobalEventEmitter`
-
-Bridge itself is not listening to window `message` event or events sent
-from Telegram native application directly. It expects passing
-[event emitter](https://github.com/Telegram-Web-Apps/twa/blob/master/packages/bridge/src/event-receiver/global.ts#L18)
-that is responsible for this kind of job.
-
-This way of working with events allows us to normally subscribe to and
-unsubscribe from such events.
-
-In case, this property is not passed, function will create required event
-emitter which will be shared between other `Bridge` instances.
 
 ## Checking method support
 
-Bridge itself does not check if Web App method is supported by current
-version of Web App. To check, if method is supported, you could use `supports`
+Bridge itself does not check if Web Apps method is supported by current
+version of platform. To check, if method is supported, you could use `supports`
 function:
 
 ```typescript
@@ -216,10 +215,10 @@ supports('web_app_trigger_haptic_feedback', '6.1'); // true
 ```
 
 It is recommended to use this function before calling Web Apps methods to
-prevent application from stalling.
+prevent application from stalling and other unexpected behavior.
 
 ## Higher-level control
 
 As long as bridge provides only low-level control, we recommend using
-[SDK](twa-sdk/about), which implements bridge methods. It also provides
+[SDK](twa-sdk/about) which implements bridge methods. It also provides
 additional parameters checks, more intuitive method names and easier usage.
