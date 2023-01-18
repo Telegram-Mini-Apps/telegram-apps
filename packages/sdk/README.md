@@ -9,7 +9,9 @@
 [![NPM][npm-badge]][npm-link]
 ![Size][size-badge]
 
-Made from scratch TypeScript library for communication with Telegram Web Apps
+Made from scratch production-ready TypeScript Telegram Web Apps
+Source Development Kit. It includes all features provided
+by other packages extending them with intuitively clear
 functionality.
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
