@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.3](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.1.2...@twa.js/bridge@0.1.3) (2023-01-21)
+
+
+### Bug Fixes
+
+* **eventdata extraction:** make eventData optional ([9dfa607](https://github.com/Telegram-Web-Apps/twa/commit/9dfa607355d55973e017e01ac2db9c294432b086))
+
+
+
+
+
 ## [0.1.2](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.1.1...@twa.js/bridge@0.1.2) (2023-01-17)
 
 **Note:** Version bump only for package @twa.js/bridge
