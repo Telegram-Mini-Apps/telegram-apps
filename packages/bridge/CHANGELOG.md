@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.4](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.1.3...@twa.js/bridge@0.1.4) (2023-01-21)
+
+
+### Bug Fixes
+
+* **parsing:** fix problem with viewport_changed width property ([0245c7d](https://github.com/Telegram-Web-Apps/twa/commit/0245c7dee1af0119839e09bf497378a1c9b457c2))
+
+
+
+
+
 ## [0.1.3](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.1.2...@twa.js/bridge@0.1.3) (2023-01-21)
 
 
