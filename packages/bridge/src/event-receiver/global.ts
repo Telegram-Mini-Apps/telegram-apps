@@ -28,7 +28,7 @@ let eventEmitter: GlobalEventEmitter | undefined;
  */
 const parseMessageEventData = createJsonParser({
   eventType: 'string',
-  eventData: {type: value => value},
+  eventData: {type: value => value, optional: true},
 });
 
 /**
