@@ -3,6 +3,7 @@ import {
   parseJsonValueAsNumber,
   parseJsonValueAsString,
 } from '@twa.js/utils';
+import {ViewportChangedPayload} from './events';
 
 /**
  * Parses incoming value as ThemeChangedPayload.
@@ -20,16 +21,29 @@ const parseThemeChangedPayload = createJsonParser({
 });
 
 /**
- * Parses incoming value as ViewportChangedPayload.
+ * Parses incoming value as ViewportChangedPayload with optional width.
  */
-const parseViewportChangedPayload = createJsonParser({
+const parseRawViewportChangedPayload = createJsonParser({
   height: 'number',
-  width: value => value === undefined || value === null
-    ? window.innerWidth
-    : parseJsonValueAsNumber(value),
+  width: {
+    type: value => value === null ? undefined : parseJsonValueAsNumber(value),
+    optional: true,
+  },
   is_state_stable: 'boolean',
   is_expanded: 'boolean',
 });
+
+/**
+ * Parses incoming value as ViewportChangedPayload.
+ * @param value - value to parse.
+ */
+function parseViewportChangedPayload(value: unknown): ViewportChangedPayload {
+  const {
+    width = window.innerWidth,
+    ...rest
+  } = parseRawViewportChangedPayload(value);
+  return {width, ...rest};
+}
 
 /**
  * Parses incoming value as PopupClosedPayload.
