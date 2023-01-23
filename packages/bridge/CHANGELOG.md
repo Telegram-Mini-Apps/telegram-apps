@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.1.5...@twa.js/bridge@0.2.0) (2023-01-23)
+
+
+### Features
+
+* **global event receiver:** improve data extraction. Take out event emit from try catch ([b19c7b7](https://github.com/Telegram-Web-Apps/twa/commit/b19c7b70b013fedc46aebc8a999c592a0c639a4b))
+
+
+
+
+
 ## [0.1.5](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.1.4...@twa.js/bridge@0.1.5) (2023-01-23)
 
 **Note:** Version bump only for package @twa.js/bridge

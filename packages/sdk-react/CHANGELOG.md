@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.7](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk-react@0.1.6...@twa.js/sdk-react@0.1.7) (2023-01-23)
+
+
+### Bug Fixes
+
+* **deps:** switch twa-bridge to [@twa](https://github.com/twa).js/bridge ([a349ccb](https://github.com/Telegram-Web-Apps/twa/commit/a349ccb15f74a8194025d7b375a9404585291491))
+
+
+
+
+
 ## [0.1.6](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk-react@0.1.5...@twa.js/sdk-react@0.1.6) (2023-01-23)
 
 **Note:** Version bump only for package @twa.js/sdk-react
