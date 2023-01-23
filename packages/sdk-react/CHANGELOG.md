@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.5](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk-react@0.1.4...@twa.js/sdk-react@0.1.5) (2023-01-23)
+
+**Note:** Version bump only for package @twa.js/sdk-react
+
+
+
+
+
 ## [0.1.4](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk-react@0.1.3...@twa.js/sdk-react@0.1.4) (2023-01-21)
 
 **Note:** Version bump only for package @twa.js/sdk-react

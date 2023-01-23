@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.5](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk@0.1.4...@twa.js/sdk@0.1.5) (2023-01-23)
+
+
+### Bug Fixes
+
+* **themeparams:** fix theme params parser ([464849b](https://github.com/Telegram-Web-Apps/twa/commit/464849b5283d96830f8dcefc0d6d5951fca21ac2))
+
+
+
+
+
 ## [0.1.4](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk@0.1.3...@twa.js/sdk@0.1.4) (2023-01-21)
 
 **Note:** Version bump only for package @twa.js/sdk
