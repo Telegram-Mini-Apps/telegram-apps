@@ -2,7 +2,10 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
-    "target": "ES5"
+    "lib": [
+      "ESNext",
+      "dom"
+    ]
   },
   "include": [
     "./index.tsx",
