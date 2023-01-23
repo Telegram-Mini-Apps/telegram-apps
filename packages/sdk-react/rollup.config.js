@@ -12,8 +12,8 @@ export default [
   defineConfig({
     input: 'src/index.ts',
     output: [
-      {file: pkg.main, format: 'commonjs'},
-      {file: pkg.module, format: 'esm'},
+      {file: pkg.main, format: 'commonjs', sourcemap: true},
+      {file: pkg.module, format: 'esm', sourcemap: true},
     ],
     external: ['@twa.js/sdk', '@twa.js/bridge', 'react'],
     plugins: [typescript(), terser()],
@@ -27,6 +27,7 @@ export default [
       format: 'umd',
       name: 'TwaSDKReact',
       globals: {'react': 'React'},
+      sourcemap: true,
     },
     external: ['react'],
     plugins: [typescript(), nodeResolve(), terser()],

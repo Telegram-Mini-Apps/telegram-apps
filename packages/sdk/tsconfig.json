@@ -21,6 +21,7 @@
       "dom",
       "dom.iterable"
     ],
+    "sourceMap": true,
     "outDir": "dist"
   },
   "exclude": ["tests", "src/**/*.test.ts"],

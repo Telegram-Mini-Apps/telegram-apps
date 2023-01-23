@@ -12,8 +12,8 @@ export default [
   defineConfig({
     input: 'src/index.ts',
     output: [
-      {file: pkg.main, format: 'commonjs'},
-      {file: pkg.module, format: 'esm'},
+      {file: pkg.main, format: 'commonjs', sourcemap: true},
+      {file: pkg.module, format: 'esm', sourcemap: true},
     ],
     external: ['@twa.js/utils'],
     plugins: [typescript(), terser()],
@@ -22,7 +22,12 @@ export default [
   // Browser.
   defineConfig({
     input: 'src/index.ts',
-    output: {file: pkg.browser, format: 'iife', name: 'TwaBridge'},
+    output: {
+      file: pkg.browser,
+      format: 'iife',
+      name: 'TwaBridge',
+      sourcemap: true,
+    },
     plugins: [typescript(), nodeResolve(), terser()],
   }),
 ];

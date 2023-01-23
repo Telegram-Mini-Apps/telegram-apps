@@ -9,9 +9,9 @@ const pkg = require('./package.json');
 export default defineConfig({
   input: 'src/index.ts',
   output: [
-    {file: pkg.main, format: 'commonjs'},
-    {file: pkg.browser, format: 'iife', name: 'TwaUtils'},
-    {file: pkg.module, format: 'esm'},
+    {file: pkg.main, format: 'commonjs', sourcemap: true},
+    {file: pkg.browser, format: 'iife', name: 'TwaUtils', sourcemap: true},
+    {file: pkg.module, format: 'esm', sourcemap: true},
   ],
   plugins: [typescript(), terser()],
 });

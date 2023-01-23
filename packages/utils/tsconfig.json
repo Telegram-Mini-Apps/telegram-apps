@@ -13,6 +13,7 @@
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "sourceMap": true,
     "target": "ES5",
     "module": "ES6",
     "moduleResolution": "node",

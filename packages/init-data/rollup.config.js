@@ -12,8 +12,8 @@ export default [
   defineConfig({
     input: 'src/index.ts',
     output: [
-      {file: pkg.main, format: 'commonjs'},
-      {file: pkg.module, format: 'esm'},
+      {file: pkg.main, format: 'commonjs', sourcemap: true},
+      {file: pkg.module, format: 'esm', sourcemap: true},
     ],
     external: ['@twa.js/utils'],
     plugins: [
@@ -25,7 +25,12 @@ export default [
   // Main functionality: Browser.
   defineConfig({
     input: 'src/index.ts',
-    output: {file: pkg.browser, format: 'iife', name: 'TwaInitData'},
+    output: {
+      file: pkg.browser,
+      format: 'iife',
+      name: 'TwaInitData',
+      sourcemap: true,
+    },
     plugins: [
       typescript({tsconfig: './tsconfig.main.json'}),
       nodeResolve(),
@@ -37,8 +42,16 @@ export default [
   defineConfig({
     input: 'src/validation.ts',
     output: [
-      {file: pkg.exports['./validation'].require, format: 'commonjs'},
-      {file: pkg.exports['./validation'].import, format: 'esm'},
+      {
+        file: pkg.exports['./validation'].require,
+        format: 'commonjs',
+        sourcemap: true,
+      },
+      {
+        file: pkg.exports['./validation'].import,
+        format: 'esm',
+        sourcemap: true,
+      },
     ],
     external: ['@twa.js/utils', 'crypto-js'],
     plugins: [
@@ -55,6 +68,7 @@ export default [
       format: 'iife',
       name: 'TwaInitDataValidation',
       globals: {'crypto-js': 'CryptoJS'},
+      sourcemap: true,
     },
     external: ['crypto-js'],
     plugins: [
