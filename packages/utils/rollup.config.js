@@ -2,6 +2,7 @@ import typescript from '@rollup/plugin-typescript';
 import terser from '@rollup/plugin-terser';
 import {defineConfig} from 'rollup';
 import {createRequire} from 'node:module';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
@@ -13,5 +14,5 @@ export default defineConfig({
     {file: pkg.browser, format: 'iife', name: 'TwaUtils', sourcemap: true},
     {file: pkg.module, format: 'esm', sourcemap: true},
   ],
-  plugins: [typescript(), terser()],
+  plugins: [typescript(), sourcemaps(), terser()],
 });

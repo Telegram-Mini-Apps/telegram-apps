@@ -3,6 +3,7 @@ import terser from '@rollup/plugin-terser';
 import {defineConfig} from 'rollup';
 import {createRequire} from 'node:module';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
@@ -16,7 +17,7 @@ export default [
       {file: pkg.module, format: 'esm', sourcemap: true},
     ],
     external: ['@twa.js/utils', '@twa.js/init-data', '@twa.js/bridge'],
-    plugins: [typescript(), terser()],
+    plugins: [typescript(), sourcemaps(), terser()],
   }),
 
   // Browser.
@@ -28,6 +29,6 @@ export default [
       name: 'TwaSDK',
       sourcemap: true,
     },
-    plugins: [typescript(), nodeResolve(), terser()],
+    plugins: [typescript(), sourcemaps(), nodeResolve(), terser()],
   }),
 ];

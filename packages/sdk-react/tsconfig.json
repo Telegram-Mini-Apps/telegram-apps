@@ -1,31 +1,12 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "strict": true,
-    "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "strictBindCallApply": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
-    "alwaysStrict": true,
-    "esModuleInterop": true,
-    "declaration": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "target": "ES5",
-    "module": "ES6",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "lib": [
-      "esnext",
-      "dom"
-    ],
-    "outDir": "dist",
     "jsx": "react"
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "src/__tests__"
   ]
 }
