@@ -19,6 +19,7 @@
     "lib": [
       "ESNext",
       "dom"
-    ]
+    ],
+    "outDir": "dist"
   }
 }
