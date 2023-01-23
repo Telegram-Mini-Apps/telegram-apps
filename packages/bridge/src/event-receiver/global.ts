@@ -70,12 +70,16 @@ function getGlobalEventEmitter(debug = false): GlobalEventEmitter {
         return logMessage('warn', 'event was skipped', event);
       }
 
+      let type: string;
+      let data: unknown;
       try {
         const {eventType, eventData} = parseMessageEventData(evData);
-        emitter.emit('message', eventType, eventData);
+        type = eventType;
+        data = eventData;
       } catch (e) {
-        logMessage('error', 'event data extraction error', evData, e);
+        return logMessage('error', 'event data extraction error', evData, e);
       }
+      emitter.emit('message', type, data);
     });
 
     // Desktop version of Telegram sometimes not sending viewport_changed
