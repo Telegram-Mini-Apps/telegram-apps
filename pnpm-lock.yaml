@@ -8,6 +8,7 @@ importers:
       '@rollup/plugin-commonjs': ^24.0.0
       '@rollup/plugin-node-resolve': ^15.0.1
       '@rollup/plugin-replace': ^5.0.2
+      '@rollup/plugin-terser': ^0.3.0
       '@rollup/plugin-typescript': ^9.0.2
       '@typescript-eslint/eslint-plugin': ^5.42.1
       '@typescript-eslint/parser': ^5.42.1
@@ -22,7 +23,6 @@ importers:
       rimraf: ^3.0.2
       rollup: ^3.2.5
       rollup-plugin-serve: ^2.0.1
-      rollup-plugin-terser: ^7.0.2
       ts-jest: ^29.0.3
       tslib: ^2.4.1
       typescript: ^4.8.4
@@ -31,6 +31,7 @@ importers:
       '@rollup/plugin-commonjs': 24.0.0_rollup@3.2.5
       '@rollup/plugin-node-resolve': 15.0.1_rollup@3.2.5
       '@rollup/plugin-replace': 5.0.2_rollup@3.2.5
+      '@rollup/plugin-terser': 0.3.0_rollup@3.2.5
       '@rollup/plugin-typescript': 9.0.2_skqhbvp355vci76ty3pdffvjrq
       '@typescript-eslint/eslint-plugin': 5.42.1_2udltptbznfmezdozpdoa2aemq
       '@typescript-eslint/parser': 5.42.1_rmayb2veg2btbq6mbmnyivgasy
@@ -45,7 +46,6 @@ importers:
       rimraf: 3.0.2
       rollup: 3.2.5
       rollup-plugin-serve: 2.0.1
-      rollup-plugin-terser: 7.0.2_rollup@3.2.5
       ts-jest: 29.0.3_25xopm7qx5wgmsgnog4okhpq5a
       tslib: 2.4.1
       typescript: 4.8.4
@@ -2723,7 +2723,7 @@ packages:
     resolution: {integrity: sha512-m7O9o2uR8k2ObDysZYzdfhb08VuEml5oWGiosa1VdaPZ/A6QyPkAJuwN0Q1lhULOf6B7MtQmHENS743hWtCrgw==}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.2
-      '@jridgewell/trace-mapping': 0.3.9
+      '@jridgewell/trace-mapping': 0.3.17
 
   /@jridgewell/sourcemap-codec/1.4.14:
     resolution: {integrity: sha512-XPSJHWmi394fuUuzDnGz1wiKqWfo1yXecHQMRf2l6hztTO+nPru658AyDngaBe7isIxEkRsPR3FZh+s7iVa4Uw==}
@@ -2739,6 +2739,7 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
+    dev: true
 
   /@leichtgewicht/ip-codec/2.0.4:
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
@@ -3907,6 +3908,21 @@ packages:
       '@rollup/pluginutils': 5.0.2_rollup@3.2.5
       magic-string: 0.27.0
       rollup: 3.2.5
+    dev: true
+
+  /@rollup/plugin-terser/0.3.0_rollup@3.2.5:
+    resolution: {integrity: sha512-mYTkNW9KjOscS/3QWU5LfOKsR3/fAAVDaqcAe2TZ7ng6pN46f+C7FOZbITuIW/neA+PhcjoKl7yMyB3XcmA4gw==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^2.x || ^3.x
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      rollup: 3.2.5
+      serialize-javascript: 6.0.0
+      smob: 0.0.6
+      terser: 5.15.1
     dev: true
 
   /@rollup/plugin-typescript/9.0.2_skqhbvp355vci76ty3pdffvjrq:
@@ -9145,15 +9161,6 @@ packages:
       string-length: 4.0.2
     dev: true
 
-  /jest-worker/26.6.2:
-    resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
-    engines: {node: '>= 10.13.0'}
-    dependencies:
-      '@types/node': 14.18.33
-      merge-stream: 2.0.0
-      supports-color: 7.2.0
-    dev: true
-
   /jest-worker/27.5.1:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
@@ -12062,18 +12069,6 @@ packages:
       opener: 1.5.2
     dev: true
 
-  /rollup-plugin-terser/7.0.2_rollup@3.2.5:
-    resolution: {integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==}
-    peerDependencies:
-      rollup: ^2.0.0
-    dependencies:
-      '@babel/code-frame': 7.18.6
-      jest-worker: 26.6.2
-      rollup: 3.2.5
-      serialize-javascript: 4.0.0
-      terser: 5.15.1
-    dev: true
-
   /rollup/3.2.5:
     resolution: {integrity: sha512-/Ha7HhVVofduy+RKWOQJrxe4Qb3xyZo+chcpYiD8SoQa4AG7llhupUtyfKSSrdBM2mWJjhM8wZwmbY23NmlIYw==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
@@ -12331,12 +12326,6 @@ packages:
       - supports-color
     dev: false
 
-  /serialize-javascript/4.0.0:
-    resolution: {integrity: sha512-GaNA54380uFefWghODBWEGisLZFj00nS5ACs6yHa9nLqlLpVLO8ChDGeKRjZnV4Nh4n0Qi7nhYZD/9fCPzEqkw==}
-    dependencies:
-      randombytes: 2.1.0
-    dev: true
-
   /serialize-javascript/6.0.0:
     resolution: {integrity: sha512-Qr3TosvguFt8ePWqsvRfrKyQXIiW+nGbYpy8XK24NQHE83caxWt+mIymTT19DGFbNWNLfEwsrkSmN64lVWB9ag==}
     dependencies:
@@ -12486,6 +12475,10 @@ packages:
   /smart-buffer/4.2.0:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
     engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
+
+  /smob/0.0.6:
+    resolution: {integrity: sha512-V21+XeNni+tTyiST1MHsa84AQhT1aFZipzPpOFAVB8DkHzwJyjjAmt9bgwnuZiZWnIbMo2duE29wybxv/7HWUw==}
+    dev: true
 
   /sockjs/0.3.24:
     resolution: {integrity: sha512-GJgLTZ7vYb/JtPSSZ10hsOYIvEYsjbNU+zPdIHcUaWVNUEPivzxku31865sSSud0Da0W4lEeOPlmw93zLQchuQ==}

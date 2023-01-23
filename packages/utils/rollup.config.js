@@ -1,5 +1,5 @@
 import typescript from '@rollup/plugin-typescript';
-import {terser} from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import {defineConfig} from 'rollup';
 import {createRequire} from 'node:module';
 
