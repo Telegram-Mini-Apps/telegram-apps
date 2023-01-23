@@ -1,4 +1,4 @@
-import {Bridge} from 'twa-bridge';
+import {Bridge} from '@twa.js/bridge';
 
 import {useComponent} from '../../sdk';
 
