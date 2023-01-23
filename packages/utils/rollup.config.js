@@ -10,7 +10,7 @@ export default defineConfig({
   input: 'src/index.ts',
   output: [
     {file: pkg.main, format: 'commonjs'},
-    {file: pkg.browser, format: 'iife', name: 'TwaCore'},
+    {file: pkg.browser, format: 'iife', name: 'TwaUtils'},
     {file: pkg.module, format: 'esm'},
   ],
   plugins: [typescript(), terser()],
