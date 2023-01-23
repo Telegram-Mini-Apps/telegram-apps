@@ -47,7 +47,7 @@ class ThemeParams {
     const tp = new ThemeParams(params);
 
     bridge.on('theme_changed', params => {
-      tp.assignThemeParams(parseThemeParams(params), true);
+      tp.assignThemeParams(parseThemeParams(params.theme_params), true);
     });
 
     return tp;
