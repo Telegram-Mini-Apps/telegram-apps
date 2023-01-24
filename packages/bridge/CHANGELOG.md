@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.2.0...@twa.js/bridge@0.2.1) (2023-01-24)
+
+
+### Bug Fixes
+
+* **parsing:** fix problems with optional event fields ([7a1deef](https://github.com/Telegram-Web-Apps/twa/commit/7a1deef45e4e39bf865b2e4ad488b1478220e18b))
+
+
+
+
+
 # [0.2.0](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.1.5...@twa.js/bridge@0.2.0) (2023-01-23)
 
 
