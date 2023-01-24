@@ -49,9 +49,10 @@ function parseViewportChangedPayload(value: unknown): ViewportChangedPayload {
  * Parses incoming value as PopupClosedPayload.
  */
 const parsePopupClosedPayload = createJsonParser({
-  button_id: value => value === null || value === undefined
-    ? undefined
-    : parseJsonValueAsString(value),
+  button_id: {
+    type: value => value === null ? undefined : parseJsonValueAsString(value),
+    optional: true,
+  },
 });
 
 /**
@@ -74,9 +75,10 @@ const parseInvoiceClosedPayload = createJsonParser({
  */
 const parseClipboardTextReceivedPayload = createJsonParser({
   req_id: 'string',
-  data: value => value === null || value === undefined
-    ? value
-    : parseJsonValueAsString(value),
+  data: {
+    type: value => value === null ? value : parseJsonValueAsString(value),
+    optional: true,
+  },
 });
 
 export {
