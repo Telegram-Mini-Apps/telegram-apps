@@ -15,6 +15,7 @@ import {
 import {InitOptions, InitResult} from './types';
 import {retrieveLaunchParams} from './launch-params';
 import {BridgeScoped} from '../lib';
+import {setupLogger} from "../utils/logging";
 
 /**
  * Initializes all SDK components.
@@ -22,6 +23,8 @@ import {BridgeScoped} from '../lib';
  */
 async function init(options: InitOptions = {}): Promise<InitResult> {
   const {checkCompat = true} = options;
+
+  setupLogger(options);
 
   // Get Web App data.
   const {
@@ -66,13 +69,13 @@ async function init(options: InitOptions = {}): Promise<InitResult> {
     height,
     isStateStable,
   } = platform !== 'tdesktop' && platform !== 'macos'
-    ? await Viewport.request(bridge)
-    : {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      isStateStable: true,
-      isExpanded: true,
-    };
+      ? await Viewport.request(bridge)
+      : {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        isStateStable: true,
+        isExpanded: true,
+      };
 
   return {
     backButton: new BackButton(bridge, version),
@@ -86,7 +89,7 @@ async function init(options: InitOptions = {}): Promise<InitResult> {
     qrScanner: new QRScanner(bridge, version),
     themeParams: ThemeParams.synced(bridge, themeParams),
     viewport: Viewport.synced(
-      bridge, height, width, isStateStable ? height : 0, isExpanded,
+        bridge, height, width, isStateStable ? height : 0, isExpanded,
     ),
     webApp: new WebApp(bridge, version, platform),
   };

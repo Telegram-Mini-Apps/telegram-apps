@@ -1,9 +1,9 @@
-/* eslint-disable no-empty */
 import {createSearchParamsParser} from '@twa.js/utils';
 import {parseInitData, InitData} from '@twa.js/init-data';
 
 import {parseThemeParams, ThemeParams} from '../utils';
 import {Platform} from '../components';
+import {debugLog} from "../utils/logging";
 
 interface LaunchParams {
   version: string;
@@ -35,6 +35,8 @@ function retrieveLaunchParams(): LaunchParams {
 
     return webAppData;
   } catch (e) {
+    const initParams = window.location.hash.slice(1);
+    debugLog('log', `Can't parse launch params from search params`, initParams, e);
   }
 
   // Web Apps allows reloading current page. In this case,
@@ -44,6 +46,7 @@ function retrieveLaunchParams(): LaunchParams {
   try {
     return parseLaunchParams(sessionStorage.getItem(sessionStorageKey) || '');
   } catch (e) {
+    debugLog('log', `Can't parse launch params from session storage`, sessionStorage.getItem(sessionStorageKey), e);
   }
   throw new Error('Unable to extract launch params.');
 }
