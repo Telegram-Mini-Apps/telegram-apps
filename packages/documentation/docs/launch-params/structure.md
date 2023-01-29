@@ -36,7 +36,7 @@ console.log(params.get('tgWebAppVersion')); // "6.2"
 ### `tgWebAppVersion`
 
 Contains information about the current Web App version. This parameter is useful
-to check if some Web Apps [methods]((../apps-communication/methods)) are
+to check if some Web Apps [methods](../apps-communication/methods) are
 supported.
 
 ### `tgWebAppData`
