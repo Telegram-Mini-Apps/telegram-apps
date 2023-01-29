@@ -16,7 +16,7 @@ application.
 
 To learn how to get theme information, you will probably need these links:
 
-- [Getting from launch parameters](../launch-params/about#tgwebappthemeparams)
+- [Getting from launch parameters](../launch-params/structure#tgwebappthemeparams)
 - [Getting with Web Apps method](../apps-communication/methods#web_app_request_theme)
 
 ## Updating colors

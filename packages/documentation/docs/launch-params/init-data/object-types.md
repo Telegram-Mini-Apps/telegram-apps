@@ -1,6 +1,6 @@
 # Object types
 
-Here comes the type definition of each object used in init data.
+The type definitions of each object used in init data.
 
 ## Init Data
 

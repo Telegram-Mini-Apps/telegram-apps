@@ -11,14 +11,14 @@ name and payload.
 
 ## Web
 
-As mentioned before, web version uses standard way of communication between
-iframes. It means, parent iframe is able to send events through
-`postMessage` function. To handle this type of message, it is enough to
-add `message` event listener on global `window` object.
+As mentioned before, the web version uses a standard way of communication
+between iframes. It means, the parent iframe is able to send events
+through `postMessage` function. To handle this type of message, it is enough to
+add `message` event listener on the global `window` object.
 
-Native application will send event with `data: string` which represents JSON
-object converted to string. This object has the same interface as we defined in
-methods section:
+The native application will send an event with `data: string` which represents a
+JSON object converted to string. This object has the same interface as we
+defined in the methods section:
 
 ```typescript
 interface MessageJSON {
@@ -38,20 +38,20 @@ window.addEventListener('message', ({data}) => {
 
 :::caution
 
-In this code, we assumed, that `message` event is sent only by native
+In this code, we assumed, that `message` event is sent only by the native
 application which is not always true in real applications. Additionally, we
-didn't check if `data` is really `string`. Don't forget to check each type and
-appropriately process incoming event.
+didn't check if `data` is really of type `string`. Don't forget to check each
+type and appropriately process incoming events.
 
 :::
 
 ## Desktop, mobile and Windows Phone
 
-Desktop, mobile and Windows Phone version of Telegram does not use method,
-described in previous section. They do it in a bit unusual way. First thing
-developer should know, is in case, when Telegram needs to emit event, it will
-insert JavaScript code, which calls globally defined function. Here is an
-example:
+Desktop, mobile, and Windows Phone versions of Telegram don’t use the method,
+described in the previous section. They do it in a bit unusual way. The first
+thing developer should know, is in case, when Telegram needs to emit an event,
+it will insert JavaScript code, which calls a globally defined function. Here is
+an example:
 
 ```typescript
 window.Telegram.WebView.receiveEvent('popup_closed', {button_id: 'cancel'});
@@ -59,8 +59,8 @@ window.Telegram.WebView.receiveEvent('popup_closed', {button_id: 'cancel'});
 
 Path to this function depends on platform:
 
-- `window.TelegramGameProxy.receiveEvent` - desktop
-- `window.Telegram.WebView.receiveEvent` - mobile
+- `window.TelegramGameProxy.receiveEvent` - Telegram Desktop;
+- `window.Telegram.WebView.receiveEvent` - mobile applications;
 - `window.TelegramGameProxy_receiveEvent` - Windows Phone
 
 All of these functions have the same signature:
@@ -69,14 +69,14 @@ All of these functions have the same signature:
 type ReceiveEvent = (eventType: string, eventData: unknown) => void;
 ```
 
-So, solution is rather simple. To handle incoming event we should create
-function of this type and assign to all 3 paths.
+So, the solution is rather simple. To handle incoming events we should create a
+function of this type and assign it to all 3 paths.
 
 ## Available events
 
-This section contains list of events, sent from Telegram: their names,
-description and parameters. Section title means minimal version, from which
-events inside section could be sent.
+This section contains the list of events, sent from Telegram: their names,
+description, and parameters. Section title means minimal version, from which
+events inside the section could be sent.
 
 ### v6.0
 
@@ -109,10 +109,10 @@ type Payload = { button_id?: string }
 
 #### `set_custom_style`
 
-Event, which is usually sent from Telegram web version. Its payload represents
-`<style/>` tag html content, developer could use. Stylesheet described in
-payload will help developer to stylize app scrollbar (but he is still able to do
-it himself).
+The event is usually sent in the Telegram web version. Its payload
+represents `<style/>` tag html content, a developer could use. The stylesheet
+described in the payload will help the developer to stylize the app scrollbar
+(but he is still able to do it himself).
 
 ```typescript
 type Payload = string;
@@ -120,10 +120,11 @@ type Payload = string;
 
 #### `theme_changed`
 
-Occurs whenever [theme](../features/theme) was changed in the user's Telegram
-app (including switching to night mode). `theme_params` property is object with
-key-value pairs, where key is some key name (`bg_color`, `secondary_bg_color`,
-...), and value is its color in `#RRGGBB` format.
+Occurs whenever [the theme](../features/theme) was changed in the user's
+Telegram app (including switching to night mode).`theme_params` property is an
+object with key-value pairs, where the key is some key
+name (`bg_color`, `secondary_bg_color`, etc.), and the value is its color
+in `#RRGGBB`format.
 
 ```typescript
 type Payload = { theme_params: Record<string, string> };
@@ -131,12 +132,13 @@ type Payload = { theme_params: Record<string, string> };
 
 #### `viewport_changed`
 
-Occurs whenever [viewport](../features/viewport) has been changed. For example,
-when user started dragging application or called expansion method.
+Occurs whenever the [viewport](../features/viewport) has been changed. For
+example, when the user started dragging the application or called the expansion
+method.
 
-Pay attention to fact, that send rate of this method is not enough to smoothly
-resize application window. You should probably use stable height instead of
-current one, or handle this problem in other way.
+Pay attention to the fact, that send rate of this method is not enough to
+smoothly resize the application window. You should probably use a stable height
+instead of the current one, or handle this problem in another way.
 
 ```typescript
 type Payload = {
