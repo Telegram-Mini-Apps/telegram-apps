@@ -6,8 +6,6 @@ export default {
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/index.ts',
-    '!src/parsing/**/*.ts', // FIXME
-    '!src/EventEmitter/**/*.ts', // FIXME
   ],
   coverageThreshold: {
     global: {

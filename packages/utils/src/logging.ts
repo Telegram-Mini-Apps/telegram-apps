@@ -1,14 +1,14 @@
 /**
  * Message log level.
  */
-type LogLevel = 'log' | 'error' | 'warn';
+export type LogLevel = 'log' | 'error' | 'warn';
 
 /**
  * Logs message into console.
  * @param level - log level.
  * @param args - arguments.
  */
-function log(level: LogLevel, ...args: any[]): void {
+export function log(level: LogLevel, ...args: any[]): void {
   const now = new Date();
   const date = Intl
     .DateTimeFormat(undefined, {
@@ -21,5 +21,3 @@ function log(level: LogLevel, ...args: any[]): void {
 
   console[level](`[${date}.${'0'.repeat(3 - ms.length) + ms}]`, ...args);
 }
-
-export {LogLevel, log};

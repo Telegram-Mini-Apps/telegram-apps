@@ -4,7 +4,7 @@ import {RGB, RGBShort} from './types';
  * Returns true in case, passed value has #RGB format.
  * @param value - value to check.
  */
-function isRGBShort(value: string): value is RGBShort {
+export function isRGBShort(value: string): value is RGBShort {
   return /^#[\da-f]{3}$/i.test(value);
 }
 
@@ -12,7 +12,7 @@ function isRGBShort(value: string): value is RGBShort {
  * Returns true in case, passed value has #RRGGBB format.
  * @param value - value to check.
  */
-function isRGB(value: string): value is RGB {
+export function isRGB(value: string): value is RGB {
   return /^#[\da-f]{6}$/i.test(value);
 }
 
@@ -25,7 +25,7 @@ function isRGB(value: string): value is RGB {
  * @param value - value to convert.
  * @throws {SyntaxError} Passed value does not contain any of known RGB formats.
  */
-function toRGB(value: string): RGB {
+export function toRGB(value: string): RGB {
   // Remove all spaces.
   const clean = value.replace(/\s/g, '');
 
@@ -61,5 +61,3 @@ function toRGB(value: string): RGB {
     return acc + (formatted.length === 1 ? '0' : '') + formatted;
   }, '#') as RGB;
 }
-
-export {isRGB, toRGB, isRGBShort};

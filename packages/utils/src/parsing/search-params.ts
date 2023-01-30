@@ -74,7 +74,7 @@ const knownTypesParses = {
  * Creates new search params parser according to passed schema.
  * @param schema - object schema.
  */
-function createSearchParamsParser<S extends SearchParamsSchema>(
+export function createSearchParamsParser<S extends SearchParamsSchema>(
   schema: S,
 ): SchemaParser<S> {
   // Transform schema to array of parsers.
@@ -83,9 +83,6 @@ function createSearchParamsParser<S extends SearchParamsSchema>(
   );
 
   return value => {
-    if (value === undefined) {
-      throw new TypeError('Value is empty.');
-    }
     if (typeof value !== 'string' && !(value instanceof URLSearchParams)) {
       throw new TypeError('Value has not processable type.');
     }
@@ -115,5 +112,3 @@ function createSearchParamsParser<S extends SearchParamsSchema>(
     }, {} as ParserResult<S>);
   };
 }
-
-export {createSearchParamsParser};

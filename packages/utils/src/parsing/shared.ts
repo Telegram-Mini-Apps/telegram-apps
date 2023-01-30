@@ -1,7 +1,7 @@
 /**
  * Schema expected by parser creators.
  */
-interface Schema<T extends string | Parser<any, any>> {
+export interface Schema<T extends string | Parser<any, any>> {
   [field: string]: T | {
     type: T;
     from?: string;
@@ -12,21 +12,21 @@ interface Schema<T extends string | Parser<any, any>> {
 /**
  * Returns optional fields in schema.
  */
-type OptionalField<S extends Schema<any>> = {
+export type OptionalField<S extends Schema<any>> = {
   [F in keyof S]: S[F] extends { optional: true } ? F : never;
 }[keyof S];
 
 /**
  * Returns non-optional fields in schema.
  */
-type NonOptionalField<S extends Schema<any>> = Exclude<keyof S, OptionalField<S>>;
+export type NonOptionalField<S extends Schema<any>> = Exclude<keyof S, OptionalField<S>>;
 
 /**
  * Standard parser definition.
  */
-type Parser<V, R> = (value: V) => R;
+export type Parser<V, R> = (value: V) => R;
 
-interface SchemaFieldParser<P> {
+export interface SchemaFieldParser<P> {
   from: string;
   to: string;
   optional: boolean;
@@ -38,7 +38,7 @@ interface SchemaFieldParser<P> {
  * @param schema - schema definition.
  * @param knownTypesParses - list of known types and their parsers.
  */
-function schemaToParsers<P extends Parser<any, any>,
+export function schemaToParsers<P extends Parser<any, any>,
   T extends string,
   S extends Schema<T | P>>(
   schema: S,
@@ -62,5 +62,3 @@ function schemaToParsers<P extends Parser<any, any>,
     return {optional, from, to, parser};
   })
 }
-
-export {Schema, OptionalField, NonOptionalField, Parser, schemaToParsers};

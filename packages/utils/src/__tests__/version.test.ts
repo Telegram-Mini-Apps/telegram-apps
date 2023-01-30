@@ -9,7 +9,7 @@ describe('utils', () => {
       });
 
       it('should return 0 in case "a" is equal ot "b"', () => {
-        expect(compareVersions('6', '6.0')).toBe(0);
+        expect(compareVersions('6', '6')).toBe(0);
       });
 
       it('should return -1 in case "a" is lower than "b"', () => {

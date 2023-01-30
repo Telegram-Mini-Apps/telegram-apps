@@ -75,22 +75,22 @@ function createTypeOfParser<Type extends 'string' | 'boolean' | 'number'>(
 /**
  * Parses Json value as string.
  */
-const parseJsonValueAsString = createTypeOfParser('string');
+export const parseJsonValueAsString = createTypeOfParser('string');
 
 /**
  * Parses Json value as boolean.
  */
-const parseJsonValueAsBoolean = createTypeOfParser('boolean');
+export const parseJsonValueAsBoolean = createTypeOfParser('boolean');
 
 /**
  * Parses Json value as number.
  */
-const parseJsonValueAsNumber = createTypeOfParser('number');
+export const parseJsonValueAsNumber = createTypeOfParser('number');
 
 /**
  * Parses Json value as RGB color.
  */
-function parseJsonValueAsRgb(value: unknown): RGB {
+export function parseJsonValueAsRgb(value: unknown): RGB {
   const str = parseJsonValueAsString(value);
 
   if (!isRGB(str)) {
@@ -113,7 +113,7 @@ const knownTypesParses = {
  * Creates new Json parser according to passed schema.
  * @param schema - object schema.
  */
-function createJsonParser<S extends JsonSchema>(schema: S): SchemaParser<S> {
+export function createJsonParser<S extends JsonSchema>(schema: S): SchemaParser<S> {
   // Transform schema to array of parsers.
   const parsers = schemaToParsers<FieldParser<any>, KnownTypeName, S>(
     schema, knownTypesParses,
@@ -159,11 +159,3 @@ function createJsonParser<S extends JsonSchema>(schema: S): SchemaParser<S> {
     }, {} as ParserResult<S>);
   };
 }
-
-export {
-  createJsonParser,
-  parseJsonValueAsRgb,
-  parseJsonValueAsBoolean,
-  parseJsonValueAsNumber,
-  parseJsonValueAsString,
-};
