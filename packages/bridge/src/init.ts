@@ -1,48 +1,16 @@
-import {
-  defineEventReceiver,
-  getGlobalEventEmitter,
-  GlobalEventEmitter,
-} from './event-receiver';
 import {Bridge, BridgeProps} from './Bridge';
 
-interface InitOptions extends BridgeProps {
-  /**
-   * Should global event receiving function be defined. To learn more,
-   * see `defineEventReceiver` implementation.
-   * @default true
-   * @see defineEventReceiver
-   */
-  defineReceiver?: boolean;
-
-  /**
-   * @default This function will create its instance by itself in case, it is
-   * not specified.
-   * @see getGlobalEventEmitter
-   * @see BridgeProps.emitter
-   */
-  emitter?: GlobalEventEmitter;
-}
+export type InitOptions = BridgeProps;
 
 /**
  * Initializes default version of Bridge instance applying additional
- * Bridge required lifecycle logic.
- *
- * It is recommended to use this function instead of usual Bridge
- * constructor.
+ * Bridge-required lifecycle logic. It is recommended to use this function
+ * instead of usual Bridge constructor to make sure, created instance will
+ * work appropriately.
  * @param options - init options.
+ * @deprecated Use Bridge.init()
  */
-function init(options: InitOptions = {}): Bridge {
-  const {
-    defineReceiver = true,
-    emitter = getGlobalEventEmitter(options.debug),
-    ...rest
-  } = options;
-
-  if (defineReceiver) {
-    defineEventReceiver();
-  }
-
-  return new Bridge({...rest, emitter});
+export function init(options: InitOptions = {}): Bridge {
+  return Bridge.init(options);
 }
 
-export {init, InitOptions};
