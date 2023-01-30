@@ -3,12 +3,12 @@ import {
   parseJsonValueAsNumber,
   parseJsonValueAsString,
 } from '@twa.js/utils';
-import {ViewportChangedPayload} from './events';
+import {ViewportChangedPayload} from './listening';
 
 /**
  * Parses incoming value as ThemeChangedPayload.
  */
-const parseThemeChangedPayload = createJsonParser({
+export const parseThemeChangedPayload = createJsonParser({
   theme_params: createJsonParser({
     bg_color: 'rgb',
     text_color: 'rgb',
@@ -37,7 +37,7 @@ const parseRawViewportChangedPayload = createJsonParser({
  * Parses incoming value as ViewportChangedPayload.
  * @param value - value to parse.
  */
-function parseViewportChangedPayload(value: unknown): ViewportChangedPayload {
+export function parseViewportChangedPayload(value: unknown): ViewportChangedPayload {
   const {
     width = window.innerWidth,
     ...rest
@@ -48,7 +48,7 @@ function parseViewportChangedPayload(value: unknown): ViewportChangedPayload {
 /**
  * Parses incoming value as PopupClosedPayload.
  */
-const parsePopupClosedPayload = createJsonParser({
+export const parsePopupClosedPayload = createJsonParser({
   button_id: {
     type: value => value === null ? undefined : parseJsonValueAsString(value),
     optional: true,
@@ -58,14 +58,14 @@ const parsePopupClosedPayload = createJsonParser({
 /**
  * Parses incoming value as QrTextReceivedPayload.
  */
-const parseQrTextReceivedPayload = createJsonParser({
+export const parseQrTextReceivedPayload = createJsonParser({
   data: {type: 'string', optional: true},
 });
 
 /**
  * Parses incoming value as InvoiceClosedPayload.
  */
-const parseInvoiceClosedPayload = createJsonParser({
+export const parseInvoiceClosedPayload = createJsonParser({
   slug: 'string',
   status: 'string',
 });
@@ -73,19 +73,10 @@ const parseInvoiceClosedPayload = createJsonParser({
 /**
  * Parses incoming value as clipboard text received payload.
  */
-const parseClipboardTextReceivedPayload = createJsonParser({
+export const parseClipboardTextReceivedPayload = createJsonParser({
   req_id: 'string',
   data: {
     type: value => value === null ? value : parseJsonValueAsString(value),
     optional: true,
   },
 });
-
-export {
-  parseClipboardTextReceivedPayload,
-  parseInvoiceClosedPayload,
-  parsePopupClosedPayload,
-  parseQrTextReceivedPayload,
-  parseViewportChangedPayload,
-  parseThemeChangedPayload,
-};

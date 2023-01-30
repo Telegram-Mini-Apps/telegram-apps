@@ -7,7 +7,7 @@
  * window.TelegramWebviewProxy.postEvent(event, data);
  * ```
  */
-type WithTelegramWebviewProxy<T> = T & {
+export type WithTelegramWebviewProxy<T> = T & {
   TelegramWebviewProxy: {
     postEvent(event: string, data: string): void;
   };
@@ -22,7 +22,7 @@ type WithTelegramWebviewProxy<T> = T & {
  * window.external.notify(data);
  * ```
  */
-type WithExternalNotify<T> = T & {
+export type WithExternalNotify<T> = T & {
   external: {
     notify(data: string): void;
   };
@@ -33,7 +33,7 @@ type WithExternalNotify<T> = T & {
  * for receiving events on desktop version of Telegram.
  * @param wnd - Window object.
  */
-function hasTelegramWebviewProxy<W extends Window>(
+export function hasTelegramWebviewProxy<W extends Window>(
   wnd: W,
 ): wnd is WithTelegramWebviewProxy<W> {
   return (wnd as any).TelegramWebviewProxy !== undefined;
@@ -44,7 +44,7 @@ function hasTelegramWebviewProxy<W extends Window>(
  * for receiving events on desktop version of Telegram.
  * @param wnd - Window object.
  */
-function hasExternalNotify<W extends Window>(
+export function hasExternalNotify<W extends Window>(
   wnd: W,
 ): wnd is WithExternalNotify<W> {
   return 'external' in wnd && typeof (wnd.external as any).notify === 'function';
@@ -54,18 +54,10 @@ function hasExternalNotify<W extends Window>(
  * Returns true in case, current environment is iframe.
  * @see https://stackoverflow.com/a/326076
  */
-function isBrowserEnv(): boolean {
+export function isBrowserEnv(): boolean {
   try {
     return window.self !== window.top;
   } catch (e) {
     return true;
   }
 }
-
-export {
-  isBrowserEnv,
-  hasTelegramWebviewProxy,
-  WithTelegramWebviewProxy,
-  WithExternalNotify,
-  hasExternalNotify,
-};
