@@ -1,24 +1,14 @@
-import {beforeEach, describe, expect, it, jest} from '@jest/globals';
-import * as eventReceiverPkg from '../event-receiver';
+import {describe, expect, it, jest} from '@jest/globals';
 import {init} from '../init';
-
-jest.mock('../event-receiver');
-
-const {defineEventReceiver, getGlobalEventEmitter} = eventReceiverPkg;
-
-beforeEach(() => {
-  jest.clearAllMocks();
-});
+import {Bridge} from '../Bridge';
 
 describe('init', () => {
   describe('init', () => {
-    it('should define event receiver function in case, its option is not specified', () => {
-      init()
-      expect(defineEventReceiver).toBeCalled();
-    });
-
-    it('should use global event emitter in case, it is not specified', () => {
-      expect((init() as any).emitter).toBe(getGlobalEventEmitter());
+    it('should call Bridge.init', () => {
+      const spy = jest.spyOn(Bridge, 'init');
+      expect(spy).toHaveBeenCalledTimes(0);
+      init();
+      expect(spy).toHaveBeenCalledTimes(1);
     });
   })
 })
