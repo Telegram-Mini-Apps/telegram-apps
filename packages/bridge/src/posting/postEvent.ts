@@ -2,7 +2,7 @@ import {
   PostEmptyEventName, PostEventName,
   PostEventParams,
   PostNonEmptyEventName,
-} from './types';
+} from './events';
 import {isBrowserEnv, hasTelegramWebviewProxy, hasExternalNotify} from '../env';
 
 interface PostEventOptions {
@@ -46,13 +46,13 @@ export function postEvent(
 export function postEvent(
   event: PostEventName,
   params: any = '',
-  options: PostEventOptions = {},
+  {targetOrigin = 'https://web.telegram.org'}: PostEventOptions = {},
 ): void {
   if (isBrowserEnv()) {
     return window.parent.postMessage(JSON.stringify({
       eventType: event,
       eventData: params,
-    }), options.targetOrigin || 'https://web.telegram.org');
+    }), targetOrigin);
   }
   if (hasTelegramWebviewProxy(window)) {
     return window.TelegramWebviewProxy.postEvent(event, JSON.stringify(params));

@@ -11,7 +11,7 @@ type HapticFeedback<T extends string, P> = { type: T } & P;
  * - `rigid`, indicates a collision between hard or inflexible UI objects,
  * - `soft`, indicates a collision between soft or flexible UI objects.
  */
-type ImpactHapticFeedbackStyle =
+export type ImpactHapticFeedbackStyle =
   | 'light'
   | 'medium'
   | 'heavy'
@@ -24,19 +24,19 @@ type ImpactHapticFeedbackStyle =
  * - `success`, indicates that a task or action has completed successfully,
  * - `warning`, indicates that a task or action produced a warning.
  */
-type NotificationHapticFeedbackType = 'error' | 'success' | 'warning';
+export type NotificationHapticFeedbackType = 'error' | 'success' | 'warning';
 
 /**
  * `impactOccurred` haptic feedback.
  */
-type ImpactHapticFeedback = HapticFeedback<'impact', {
+export type ImpactHapticFeedback = HapticFeedback<'impact', {
   impact_style: ImpactHapticFeedbackStyle;
 }>;
 
 /**
  * `notificationOccurred` haptic feedback.
  */
-type NotificationHapticFeedback = HapticFeedback<'notification', {
+export type NotificationHapticFeedback = HapticFeedback<'notification', {
   notification_type: NotificationHapticFeedbackType;
 }>;
 
@@ -44,12 +44,4 @@ type NotificationHapticFeedback = HapticFeedback<'notification', {
  * `selectionChanged` haptic feedback.
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-type SelectionHapticFeedback = HapticFeedback<'selection_change', {}>;
-
-export {
-  SelectionHapticFeedback,
-  ImpactHapticFeedback,
-  ImpactHapticFeedbackStyle,
-  NotificationHapticFeedbackType,
-  NotificationHapticFeedback,
-};
+export type SelectionHapticFeedback = HapticFeedback<'selection_change', {}>;
