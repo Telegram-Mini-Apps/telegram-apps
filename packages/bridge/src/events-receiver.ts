@@ -3,8 +3,8 @@
  * default web environment between 2 iframes. It dispatches new MessageEvent
  * and expects it to be handled via `window.addEventListener('message', ...)`
  * as developer would do it to handle messages sent from parent iframe.
- * @param eventType
- * @param eventData
+ * @param eventType - event name.
+ * @param eventData - event payload.
  */
 function emitTelegramEvent(eventType: string, eventData: unknown): void {
   window.dispatchEvent(new MessageEvent('message', {
@@ -16,7 +16,7 @@ function emitTelegramEvent(eventType: string, eventData: unknown): void {
  * Defines global event receiver, which handles events sent from native
  * Telegram application. As a result, this handler emits "message" event.
  */
-function defineEventReceiver(): void {
+export function defineEventsReceiver(): void {
   const wnd = window as any;
 
   // Iterate over each path, where "receiveEvent" function should be
@@ -44,5 +44,3 @@ function defineEventReceiver(): void {
     });
   });
 }
-
-export {defineEventReceiver};
