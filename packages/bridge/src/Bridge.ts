@@ -1,5 +1,5 @@
 import {EventEmitter, log, parseJsonValueAsString} from '@twa.js/utils';
-import {BridgeEventName, BridgeEventsMap} from './events';
+
 import {
   parseClipboardTextReceivedPayload,
   parseInvoiceClosedPayload,
@@ -8,12 +8,19 @@ import {
   parseThemeChangedPayload,
   parseViewportChangedPayload,
 } from './parsing';
-import {GlobalEventEmitter} from './event-receiver';
-import {postEvent} from './posting';
+import {
+  PostEmptyEventName,
+  postEvent, PostEventName,
+  PostEventParams,
+  PostNonEmptyEventName,
+} from './posting';
+import {createEventsObserver, EventsObserver} from './events-observer';
+import {BridgeEventName, BridgeEventsMap} from './listening';
+import {defineEventsReceiver} from './events-receiver';
 
 type Emitter = EventEmitter<BridgeEventsMap>;
 
-interface BridgeProps {
+export interface BridgeProps {
   /**
    * Is debug mode currently enabled. Enable of this feature outputs additional
    * log messages into console.
@@ -28,56 +35,53 @@ interface BridgeProps {
    * @default 'https://web.telegram.org'
    */
   targetOrigin?: string;
-
-  /**
-   * Event emitter to listen events from. It is allowed to leave this
-   * property undefined unless some special events handling is required.
-   */
-  emitter?: GlobalEventEmitter;
 }
 
 /**
  * Provides special layer between parent device and current application.
- * It can send and receive events, return initial application parameters and
- * much more.
- * @see How events work: https://corefork.telegram.org/api/web-events
+ * @see How events work: https://telegram-web-apps.github.io/twa/docs/category/apps-communication
  */
-class Bridge {
-  private _boundEmitter: GlobalEventEmitter | null = null;
-  private readonly targetOrigin: string;
-  private readonly ee: Emitter = new EventEmitter<BridgeEventsMap>();
+export class Bridge {
+  /**
+   * Returns instance of Bridge which is attached to passed observer.
+   * @param observer - events observer.
+   * @param props - props to pass to bridge constructor.
+   */
+  static attached(observer: EventsObserver, props: BridgeProps = {}): Bridge {
+    // Create Bridge instance.
+    const bridge = new Bridge(props);
 
-  constructor(props: BridgeProps = {}) {
-    const {
-      debug = false,
-      emitter = null,
-      targetOrigin = 'https://web.telegram.org',
-    } = props;
+    // Start listening to incoming events from observer.
+    observer.on('message', bridge.processEvent);
+
+    return bridge;
+  }
+
+  /**
+   * Initializes default version of Bridge instance applying additional
+   * Bridge-required lifecycle logic. It is recommended to use this function
+   * instead of usual Bridge constructor to make sure, created instance will
+   * work appropriately.
+   * @param props - bridge properties.
+   */
+  static init(props: BridgeProps = {}): Bridge {
+    // Define event receiver to make sure, emitter will receive events.
+    defineEventsReceiver();
+
+    return Bridge.attached(createEventsObserver(), props);
+  }
+
+  private readonly targetOrigin: string;
+  private readonly ee: Emitter = new EventEmitter();
+
+  constructor(props: BridgeProps) {
+    const {debug = false, targetOrigin = 'https://web.telegram.org'} = props;
     this.debug = debug;
     this.targetOrigin = targetOrigin;
-    this.boundEmitter = emitter;
-  }
-
-  private get boundEmitter(): GlobalEventEmitter | null {
-    return this._boundEmitter || null;
-  }
-
-  private set boundEmitter(emitter) {
-    // Unbind from previous emitter.
-    if (this._boundEmitter !== null) {
-      this._boundEmitter.off('message', this.processEvent);
-    }
-
-    // Assign new emitter and start listening to events.
-    this._boundEmitter = emitter;
-
-    if (this._boundEmitter !== null) {
-      this._boundEmitter.on('message', this.processEvent);
-    }
   }
 
   private emit: Emitter['emit'] = (event: any, ...args: any[]) => {
-    this.log('log', '[emit]', event, ...args);
+    this.log('log', 'Emitting event:', event, ...args);
     this.ee.emit(event, ...args);
   };
 
@@ -94,7 +98,7 @@ class Bridge {
    * @throws {TypeError} Data has unexpected format for event.
    */
   private processEvent = (type: BridgeEventName | string, data: unknown): void => {
-    this.log('log', '[processEvent]', type, data);
+    this.log('log', 'Received event from Telegram:', type, data);
 
     try {
       switch (type) {
@@ -121,7 +125,7 @@ class Bridge {
           return this.emit(type, parseJsonValueAsString(data));
 
         case 'qr_text_received':
-          return this.emit(type, parseQrTextReceivedPayload(data))
+          return this.emit(type, parseQrTextReceivedPayload(data));
 
         // Events which do not require any arguments.
         case 'main_button_pressed':
@@ -131,7 +135,7 @@ class Bridge {
           return this.emit(type);
 
         case 'clipboard_text_received':
-          return this.emit(type, parseClipboardTextReceivedPayload(data))
+          return this.emit(type, parseClipboardTextReceivedPayload(data));
 
         case 'invoice_closed':
           return this.emit(type, parseInvoiceClosedPayload(data));
@@ -140,19 +144,10 @@ class Bridge {
         default:
           return this.emit(type as any, data);
       }
-    } catch (e) {
-      this.log('error', `[processEvent] error`, e);
-      throw e;
+    } catch (cause) {
+      this.log('error', `Error processing Telegram event:`, cause);
     }
   };
-
-  /**
-   * Binds to specified event emitter and listens to it "message" event.
-   * @param emitter - event emitter.
-   */
-  bind(emitter: GlobalEventEmitter): void {
-    this.boundEmitter = emitter;
-  }
 
   /**
    * Is debug mode currently enabled. This value must be set by developer
@@ -170,12 +165,38 @@ class Bridge {
    */
   off: Emitter['off'] = this.ee.off.bind(this.ee);
 
-  postEvent: typeof postEvent = ((event, params, options) => {
-    const {targetOrigin = this.targetOrigin, ...rest} = options || {};
+  /**
+   * Sends event to native application which launched Web App. This function
+   * accepts only events, which require arguments.
+   * @param event - event name.
+   * @throws {Error} Bridge could not determine current
+   * environment and possible way to send event.
+   */
+  postEvent(event: PostEmptyEventName): void;
 
-    postEvent(event, params, {...rest, targetOrigin});
-    this.log('log', '[postEvent]', event, params);
-  }) as typeof postEvent;
+  /**
+   * Sends event to native application which launched Web App. This function
+   * accepts only events, which require arguments.
+   * @param event - event name.
+   * @param params - event parameters.
+   * @throws {Error} Bridge could not determine current
+   * environment and possible way to send event.
+   */
+  postEvent<E extends PostNonEmptyEventName>(
+    event: E,
+    params: PostEventParams<E>,
+  ): void;
+
+  postEvent(event: PostEventName, params?: any) {
+    const options = {targetOrigin: this.targetOrigin};
+
+    if (params === undefined) {
+      postEvent(event as PostEmptyEventName, options);
+    } else {
+      postEvent(event as PostNonEmptyEventName, params, options);
+    }
+    this.log('log', 'Sending event to Telegram:', event, params);
+  }
 
   /**
    * Add listener for all events. It is triggered always, when `emit`
@@ -187,13 +208,4 @@ class Bridge {
    * Removes listener added with `subscribe`.
    */
   unsubscribe: Emitter['unsubscribe'] = this.ee.unsubscribe.bind(this.ee);
-
-  /**
-   * Unbinds from currently bound event emitter.
-   */
-  unbind(): void {
-    this.boundEmitter = null;
-  }
 }
-
-export {BridgeProps, Bridge};
