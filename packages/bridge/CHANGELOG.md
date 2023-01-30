@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.2.1...@twa.js/bridge@0.3.0) (2023-01-30)
+
+
+### Bug Fixes
+
+* **event receiver:** make defineEventReceiver pure. Move emitting function to separate declaration ([5d0a99f](https://github.com/Telegram-Web-Apps/twa/commit/5d0a99f46f1f8aa185325cfb65d0f90de194fde2))
+
+
+### Features
+
+* **bridge:** add new bridge static methods attached and init. Remove code connected with observer ([3151669](https://github.com/Telegram-Web-Apps/twa/commit/3151669b99854714405c8a13793ae30b70d7f4f1))
+
+
+
+
+
 ## [0.2.1](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.2.0...@twa.js/bridge@0.2.1) (2023-01-24)
 
 
