@@ -61,68 +61,68 @@ interface BridgeEventsMap {
    * User clicked back button.
    * @since Web App version 6.1+
    */
-  back_button_pressed: () => void;
+  back_button_pressed(): void;
 
   /**
    * Invoice was closed.
    * @param payload - invoice close information.
    */
-  invoice_closed: (payload: InvoiceClosedPayload) => void;
+  invoice_closed(payload: InvoiceClosedPayload): void;
 
   /**
    * User clicked main button.
    */
-  main_button_pressed: () => void;
+  main_button_pressed(): void;
 
   /**
    * Popup was closed.
    * @param payload - popup close information.
    */
-  popup_closed: (payload: PopupClosedPayload) => void;
+  popup_closed(payload: PopupClosedPayload): void;
 
   /**
    * Telegram requested to update current application style.
    * @param html - `style` tag inner HTML.
    */
-  set_custom_style: (html: string) => void;
+  set_custom_style(html: string): void;
 
   /**
    * Occurs when the Settings item in context menu is pressed.
    * @since Web App version 6.1+
    */
-  settings_button_pressed: () => void;
+  settings_button_pressed(): void;
 
   /**
    * Occurs whenever theme settings are changed in the user's Telegram app
    * (including switching to night mode).
    * @param payload - theme information.
    */
-  theme_changed: (payload: ThemeChangedPayload) => void;
+  theme_changed(payload: ThemeChangedPayload): void;
 
   /**
    * Viewport was changed.
    * @param payload - viewport information.
    */
-  viewport_changed: (payload: ViewportChangedPayload) => void;
+  viewport_changed(payload: ViewportChangedPayload): void;
 
   /**
    * Data from QR was extracted.
    * @since Web App version 6.4+
    */
-  qr_text_received: (payload: QrTextReceivedPayload) => void;
+  qr_text_received(payload: QrTextReceivedPayload): void;
 
   /**
    * QR scanner was closed.
    * @since Web App version 6.4+
    */
-  scan_qr_popup_closed: () => void;
+  scan_qr_popup_closed(): void;
 
   /**
    * Text was extracted from clipboard.
    * @since Web App version 6.4+
    * @param payload - event information
    */
-  clipboard_text_received: (payload: ClipboardTextReceivedPayload) => void;
+  clipboard_text_received(payload: ClipboardTextReceivedPayload): void;
 }
 
 /**
