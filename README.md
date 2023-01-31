@@ -14,49 +14,20 @@ platform in our own [documentation](https://telegram-web-apps.github.io/twa/).
 
 Here is the list of open source supported libraries:
 
-### [@twa.js/utils](packages/utils)
+### [@twa.js/sdk-react](packages/sdk-react)
 
-[utils-npm-badge]: https://img.shields.io/npm/v/@twa.js/utils?logo=npm
+[sdk-react-npm-badge]: https://img.shields.io/npm/v/@twa.js/sdk-react.svg
 
-[utils-npm-link]: https://npmjs.com/package/@twa.js/utils
+[sdk-react-npm-link]: https://npmjs.com/package/@twa.js/sdk-react
 
-[utils-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/utils
+[sdk-react-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/sdk-react
 
-[![NPM][utils-npm-badge]][utils-npm-link]
-![Size][utils-size-badge]
+[![NPM][sdk-react-npm-badge]][sdk-react-npm-link]
+![Size][sdk-react-size-badge]
 
-Tree-shakeable set of useful utilities used by many other libraries of
-ecosystem. You probably don't need to install this package directly, but may
-find provided functionality useful in other contexts.
-
-### [@twa.js/init-data](packages/init-data)
-
-[init-data-npm-badge]: https://img.shields.io/npm/v/@twa.js/init-data?logo=npm
-
-[init-data-npm-link]: https://npmjs.com/package/@twa.js/init-data
-
-[init-data-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/init-data
-
-[![NPM][init-data-npm-badge]][init-data-npm-link]
-![Size][init-data-size-badge]
-
-Package providing utilities connected with Telegram Web Apps init data. It
-allows init data validation and parse, works both in browser and NodeJS.
-
-### [@twa.js/bridge](packages/bridge)
-
-[bridge-npm-badge]: https://img.shields.io/npm/v/@twa.js/bridge?logo=npm
-
-[bridge-npm-link]: https://npmjs.com/package/@twa.js/bridge
-
-[bridge-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/bridge
-
-[![NPM][bridge-npm-badge]][bridge-npm-link]
-![Size][bridge-size-badge]
-
-Package which provides utilities to simplify communication flow between
-frontend and Telegram native applications. It also solves some across-platform
-data difference problems to protect developers code and save their time.
+React bindings for client SDK. Contains hooks, components and other
+useful tools which allow usage of React along with Web Apps client SDK.
+Tracks SDK components changes out of box.
 
 ### [@twa.js/sdk](packages/sdk)
 
@@ -74,20 +45,49 @@ Source Development Kit. It includes all features provided
 by other packages extending them with intuitively clear 
 functionality.
 
-### [@twa.js/sdk-react](packages/sdk-react)
+### [@twa.js/bridge](packages/bridge)
 
-[sdk-react-npm-badge]: https://img.shields.io/npm/v/@twa.js/sdk-react.svg
+[bridge-npm-badge]: https://img.shields.io/npm/v/@twa.js/bridge?logo=npm
 
-[sdk-react-npm-link]: https://npmjs.com/package/@twa.js/sdk-react
+[bridge-npm-link]: https://npmjs.com/package/@twa.js/bridge
 
-[sdk-react-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/sdk-react
+[bridge-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/bridge
 
-[![NPM][sdk-react-npm-badge]][sdk-react-npm-link]
-![Size][sdk-react-size-badge]
+[![NPM][bridge-npm-badge]][bridge-npm-link]
+![Size][bridge-size-badge]
 
-React bindings for client SDK. Contains hooks, components and other
-useful tools which allow usage of React along with Web Apps client SDK.
-Tracks SDK components changes out of box.
+Package which provides utilities to simplify communication flow between
+frontend and Telegram native applications. It also solves some across-platform
+data difference problems to protect developers code and save their time.
+
+### [@twa.js/init-data](packages/init-data)
+
+[init-data-npm-badge]: https://img.shields.io/npm/v/@twa.js/init-data?logo=npm
+
+[init-data-npm-link]: https://npmjs.com/package/@twa.js/init-data
+
+[init-data-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/init-data
+
+[![NPM][init-data-npm-badge]][init-data-npm-link]
+![Size][init-data-size-badge]
+
+Package providing utilities connected with Telegram Web Apps init data. It
+allows init data validation and parse, works both in browser and NodeJS.
+
+### [@twa.js/utils](packages/utils)
+
+[utils-npm-badge]: https://img.shields.io/npm/v/@twa.js/utils?logo=npm
+
+[utils-npm-link]: https://npmjs.com/package/@twa.js/utils
+
+[utils-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/utils
+
+[![NPM][utils-npm-badge]][utils-npm-link]
+![Size][utils-size-badge]
+
+Tree-shakeable set of useful utilities used by many other libraries of
+ecosystem. You probably don't need to install this package directly, but may
+find provided functionality useful in other contexts.
 
 ## Contribution
 
