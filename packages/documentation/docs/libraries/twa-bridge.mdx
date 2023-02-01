@@ -5,11 +5,14 @@ sidebar_position: 1
 
 # @twa.js/bridge
 
-Package which provides utilities to simplify communication between
-Web App and Telegram native application. It also solves some across-platform
-data difference problems to protect developers code and save their time.
-
 <LibraryBadges pkg={'@twa.js/bridge'}/>
+
+The package which provides utilities to simplify communication between Web App
+and Telegram native application. It also solves some across-platform data
+difference problems to protect developers' code and save their time.
+
+Developers could also use this package to make their SDK as long as it provides
+the lowest level of control over the cross applications' communication.
 
 ## Installation
 
@@ -17,132 +20,85 @@ data difference problems to protect developers code and save their time.
 
 ## Init
 
-`Bridge` component has rather simple API. Its main purpose is to provide
-communication layer between Telegram native and client applications, so you
-could call native methods and receive events from Telegram application.
+The `Bridge` component has a relatively simple API. Its primary purpose is to
+provide communication layer between Telegram native and client applications,
+so you could call native methods and receive events from the Telegram
+application.
 
-To start using `Bridge`, it is enough to use `init` function:
+To start using `Bridge`, it is enough to use its static `init` function:
 
 ```typescript
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
-const bridge = init();
+const bridge = Bridge.init();
 ```
 
 This function will append special handler to global window object, which is
-used by Telegram native application. It is allowed to use it as many times
-as required as long as this function will just reuse once created event emitter
-and event receiving function.
+used by Telegram native application and make this instance work correctly.
 
 ### Debugging
 
-`Bridge` supports debug mode which outputs additional log messages into console.
-By default, this mode is disabled. To enable it, it is required to pass
-`debug: true` while creating new `Bridge` instance.
+`Bridge` supports debug mode which outputs additional log messages into the
+console. By default, this mode is disabled. To enable it, it is required to
+pass the `debug: true` option while creating a new `Bridge` instance.
 
 ```typescript
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
-const bridge = init({debug: true});
+const bridge = Bridge.init({debug: true});
 ```
 
-Or, in case when instance already exists, just change its `debug` property
+Or, in case when an instance already exists, just change its `debug` property
 to `true`:
 
 ```typescript
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
-const bridge = init();
+const bridge = Bridge.init({debug: true});
 bridge.debug = true;
 ```
 
-After debug mode is enabled, bridge logs additional information about received
-and sent events into console.
-
 ### Target origin
 
-In case, current bridge instance is used in browser environment (iframe),
+In case, the current bridge instance is used in a browser environment (iframe),
 we use such function as `window.parent.postMessage` which requires passing
-target origin to prevent sending events to untrusted parent iframes.
-
-By default, bridge uses such origin as `https://web.telegram.org`. To allow
+target origin to prevent sending events to untrusted parent iframes. By
+default, bridge uses such origin as `https://web.telegram.org`. To allow
 sending events to other origins, you should use `targetOrigin` option:
 
 ```typescript
-const unsafeBridge = init({targetOrigin: '*'});
+const unsafeBridge = Bridge.init({targetOrigin: '*'});
 // or
-const safeBridge = init({targetOrigin: 'https://myendpoint.org'});
-```
-
-Additionally, you could use `postEvent`s `targetOrigin` option. This will
-override origin passed during initialization:
-
-```typescript
-const bridge = init({targetOrigin: '*'});
-bridge.postEvent('web_app_close', {targetOrigin: 'https://myendpoint.org'})
+const safeBridge = Bridge.init({targetOrigin: 'https://myendpoint.org'});
 ```
 
 It is strongly recommended not to override this value as long as it could lead
-to security issues. Update this value only in test purposes.
-
-### Lower level options
-
-Previously, we used such function as `init` almost without any parameters,
-but this method supports some more additional options.
-
-#### `defineReceiver: boolean`
-
-*Default: `true`*
-
-Settings this value to `true`, `init` function will call such function
-as `defineEventReceiver` which defines global function, handling events
-from Telegram application and emitting window `message` event.
-
-It is safe to use this function as many times as required. This function
-will run only once.
-
-In spite of it is not recommended, you could set this option to `false`.
-This will lead to not handling of events in iOS, Android and desktop
-versions of Telegram, unless some additional actions are done.
-
-#### `emitter: GlobalEventEmitter`
-
-Bridge itself is not listening to window `message` event or events sent
-from Telegram native application directly. It expects passing
-[event emitter](https://github.com/Telegram-Web-Apps/twa/blob/master/packages/bridge/src/event-receiver/global.ts#L17)
-that is responsible for this kind of job.
-
-This way of working with events allows us to normally subscribe to and
-unsubscribe from such events.
-
-In case, this property is not passed, function will create required event
-emitter which will be shared between other `Bridge` instances.
+to security issues. Specify this value only for test purposes.
 
 ## Calling methods
 
 ### With `Bridge`
 
 To call Web Apps methods, it is enough to call `Bridge`s `postEvent` method.
-This method automatically finds correct way of sending event which depends
-on current environment. Let's take a look on simple example:
+This method automatically finds a correct way of sending events which depends
+on the current environment. Let's take a look at a simple example:
 
 ```typescript
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
-const bridge = init();
+const bridge = Bridge.init();
 
 // Close current application.
 bridge.postEvent('web_app_close');
 ```
 
-Some methods don't require parameters, and they can be called without additional
-second parameter which represents event payload. But there are some events which
-do require it:
+Some methods don't require parameters and can be called without an additional
+second parameter representing the event payload. But some events do require it:
 
 ```typescript
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
-const bridge = init();
+const bridge = Bridge.init();
 
 // Open new popup.
 bridge.postEvent('web_app_open_popup', {
@@ -154,10 +110,10 @@ bridge.postEvent('web_app_open_popup', {
 
 ### Without `Bridge`
 
-This package allows calling methods without creating new `Bridge` instance. To
-perform this action, you should use `postEvent` function which has the same
-type as `bridge.postEvent` (actually, bridge uses `postEvent` function
-internally):
+This package allows calling methods without creating a new `Bridge` instance.
+To perform this action, you should use the `postEvent` function which has the
+same type as `bridge.postEvent` (actually, the bridge uses the `postEvent`
+function internally):
 
 ```typescript
 import {postEvent} from '@twa.js/bridge';
@@ -165,13 +121,13 @@ import {postEvent} from '@twa.js/bridge';
 postEvent('web_app_setup_back_button', {is_visible: true});
 ```
 
-Nevertheless, sometimes you need to handle events sent from native app which are
-emitted as a response to called method. For example, you would like to
-call `web_app_request_theme` method. As a result, native app will emit
-`theme_changed` event. Using default bridge init flow, this event will
-be captured by bridge instance. We can't say the same about bare `postEvent`
-function, so, do not forget about response event (if it exists) handling
-process.
+Nevertheless, sometimes you need to handle events sent from the native app
+emitted as a response to the called method. For example, you would like to
+call the `web_app_request_theme` method. As a result, the native app will
+emit a `theme_changed` event. Using the default bridge init flow, this event
+will be captured by the bridge instance. We can't say the same about the bare
+`postEvent` function, so, do not forget about the response event (if it exists)
+handling process.
 
 ## Listening to events
 
@@ -180,9 +136,9 @@ use such methods as `on` and `subscribe`. To remove event listeners, we
 use `off` and `unsubscribe`:
 
 ```typescript
-import {BridgeEventListener, BridgeEventName, init} from '@twa.js/bridge';
+import {BridgeEventListener, BridgeEventName, Bridge} from '@twa.js/bridge';
 
-const bridge = init();
+const bridge = Bridge.init();
 const listener: BridgeEventListener<'viewport_changed'> = payload => {
   console.log('Viewport changed:', payload)
 };
@@ -203,9 +159,9 @@ bridge.unsubscribe(subListener);
 
 ## Checking method support
 
-Bridge itself does not check if Web Apps method is supported by current
-version of platform. To check, if method is supported, you could use `supports`
-function:
+Bridge itself does not check if the Web Apps method is supported by the current
+version of the platform. To check, if the method is supported, you could use
+the `supports` function:
 
 ```typescript
 import {supports} from '@twa.js/bridge';
@@ -215,10 +171,10 @@ supports('web_app_trigger_haptic_feedback', '6.1'); // true
 ```
 
 It is recommended to use this function before calling Web Apps methods to
-prevent application from stalling and other unexpected behavior.
+prevent applications from stalling and other unexpected behavior.
 
 ## Higher-level control
 
-As long as bridge provides only low-level control, we recommend using
+As long as the bridge provides only low-level control, we recommend using
 [SDK](twa-sdk/about) which implements bridge methods. It also provides
-additional parameters checks, more intuitive method names and easier usage.
+additional parameter checks, more intuitive method names, and easier usage.
