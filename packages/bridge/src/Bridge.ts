@@ -14,7 +14,7 @@ import {
   PostEventParams,
   PostNonEmptyEventName,
 } from './posting';
-import {createEventsObserver, EventsObserver} from './events-observer';
+import {createEventsObserver} from './events-observer';
 import {BridgeEventName, BridgeEventsMap} from './listening';
 import {defineEventsReceiver} from './events-receiver';
 
@@ -43,21 +43,6 @@ export interface BridgeProps {
  */
 export class Bridge {
   /**
-   * Returns instance of Bridge which is attached to passed observer.
-   * @param observer - events observer.
-   * @param props - props to pass to bridge constructor.
-   */
-  static attached(observer: EventsObserver, props: BridgeProps = {}): Bridge {
-    // Create Bridge instance.
-    const bridge = new Bridge(props);
-
-    // Start listening to incoming events from observer.
-    observer.on('message', bridge.processEvent);
-
-    return bridge;
-  }
-
-  /**
    * Initializes default version of Bridge instance applying additional
    * Bridge-required lifecycle logic. It is recommended to use this function
    * instead of usual Bridge constructor to make sure, created instance will
@@ -68,7 +53,16 @@ export class Bridge {
     // Define event receiver to make sure, emitter will receive events.
     defineEventsReceiver();
 
-    return Bridge.attached(createEventsObserver(), props);
+    // Create Bridge instance.
+    const bridge = new Bridge(props);
+
+    // Create global events observer.
+    const observer = createEventsObserver();
+
+    // Start listening to incoming events from observer.
+    observer.on('message', bridge.processEvent);
+
+    return bridge;
   }
 
   private readonly targetOrigin: string;
