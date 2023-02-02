@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.3.0...@twa.js/bridge@0.3.1) (2023-02-02)
+
+
+### Bug Fixes
+
+* **bridge:** remove static "attached" function ([43bc99c](https://github.com/Telegram-Web-Apps/twa/commit/43bc99ce698cc5b8cb803d9a76d78ec21e3dd805))
+* **postevent:** correctly implement postEvent function ([35d1f81](https://github.com/Telegram-Web-Apps/twa/commit/35d1f81090ae21c1eece557580edbb5a6740074c))
+
+
+
+
+
 # [0.3.0](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/bridge@0.2.1...@twa.js/bridge@0.3.0) (2023-01-30)
 
 

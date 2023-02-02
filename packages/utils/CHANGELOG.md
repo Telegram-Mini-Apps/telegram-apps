@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.5](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/utils@0.2.4...@twa.js/utils@0.2.5) (2023-02-02)
+
+
+### Bug Fixes
+
+* **logging:** use UTC timezone ([e9c9b64](https://github.com/Telegram-Web-Apps/twa/commit/e9c9b64c12a898683532d4c3a34d082a22dbb121))
+
+
+
+
+
 ## [0.2.4](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/utils@0.2.3...@twa.js/utils@0.2.4) (2023-01-30)
 
 **Note:** Version bump only for package @twa.js/utils

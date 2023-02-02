@@ -1,6 +1,6 @@
 {
   "name": "@twa.js/init-data",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Isomorphic TypeScript library to make work with Web Apps init data easier.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
