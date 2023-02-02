@@ -15,6 +15,7 @@ export function log(level: LogLevel, ...args: any[]): void {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
+      timeZone: 'UTC',
     })
     .format(now);
   const ms = now.getMilliseconds().toString();
