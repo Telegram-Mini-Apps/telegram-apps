@@ -1,7 +1,7 @@
 import {describe, expect, it} from '@jest/globals';
 import {isRecord} from '../validation';
 
-describe('validation', () => {
+describe('validation.ts', () => {
   describe('isRecord', () => {
     it('should return false for non-object value', () => {
       [true, 123, 'abc'].forEach(v => {

@@ -2,7 +2,7 @@ import {describe, expect, it} from '@jest/globals';
 import {isRGB, toRGB, isRGBShort} from '../../colors';
 
 describe('colors', () => {
-  describe('rgb', () => {
+  describe('rgb.ts', () => {
     describe('isRGBShort', () => {
       it('should return true for correct short RGB representation', () => {
         expect(isRGBShort('#fff')).toBe(true);

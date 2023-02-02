@@ -7,7 +7,7 @@ import {
 } from '../../parsing';
 
 describe('parsing', () => {
-  describe('json', () => {
+  describe('json.ts', () => {
     describe('parseJsonValueAsString', () => {
       it('should return value in case, it has type string', () => {
         expect(parseJsonValueAsString('abc')).toBe('abc');
