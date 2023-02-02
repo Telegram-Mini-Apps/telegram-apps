@@ -7,7 +7,7 @@ import {
   parseViewportChangedPayload,
 } from '../parsing';
 
-describe('parsing', () => {
+describe('parsing.ts', () => {
   describe('parseThemeChangedPayload', () => {
     it('should return parsed value in case, passed value satisfies schema', () => {
       const values = [

@@ -1,7 +1,7 @@
 import {expect, it, describe, jest, beforeEach} from '@jest/globals';
 import {createEventsObserver} from '../events-observer';
 
-describe('events-observer', () => {
+describe('events-observer.ts', () => {
   describe('createEventsObserver', () => {
     describe('returned event emitter', () => {
       let listeners: Record<string, ((...args: any) => any)[]>;

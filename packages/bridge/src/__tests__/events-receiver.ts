@@ -1,7 +1,7 @@
 import {expect, it, describe, jest, beforeEach, afterEach} from '@jest/globals';
 import {defineEventsReceiver} from '../events-receiver';
 
-describe('events-receiver', () => {
+describe('events-receiver.ts', () => {
   describe('defineEventsReceiver', () => {
     let windowSpy = jest.spyOn(window, 'window', 'get');
     let dispatchSpy = jest.fn();

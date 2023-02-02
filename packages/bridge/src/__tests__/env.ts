@@ -7,7 +7,7 @@ afterEach(() => {
   windowSpy.mockReset();
 });
 
-describe('env', () => {
+describe('env.ts', () => {
   describe('hasTelegramWebviewProxy', () => {
     it('should return true in case, window has ' +
       '"TelegramWebviewProxy" property', () => {

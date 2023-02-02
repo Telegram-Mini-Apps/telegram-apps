@@ -2,7 +2,7 @@ import {describe, expect, it} from '@jest/globals';
 import {supports} from '../supports';
 import {PostEventName} from '../posting';
 
-describe('support', () => {
+describe('supports.ts', () => {
   describe('supports', () => {
     const methods61: PostEventName[] = [
       'web_app_open_tg_link', 'web_app_open_invoice', 'web_app_setup_back_button',

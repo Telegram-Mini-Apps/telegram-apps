@@ -2,7 +2,7 @@ import {describe, expect, it, jest} from '@jest/globals';
 import {init} from '../init';
 import {Bridge} from '../Bridge';
 
-describe('init', () => {
+describe('init.ts', () => {
   describe('init', () => {
     it('should call Bridge.init', () => {
       const spy = jest.spyOn(Bridge, 'init');
