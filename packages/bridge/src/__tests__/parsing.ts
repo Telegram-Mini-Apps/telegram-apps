@@ -65,6 +65,12 @@ describe('parsing', () => {
           is_expanded: true,
         },
         {
+          width: null,
+          height: 900,
+          is_state_stable: true,
+          is_expanded: true,
+        },
+        {
           height: 900,
           width: 100,
           is_state_stable: true,
@@ -73,7 +79,8 @@ describe('parsing', () => {
       ];
 
       values.forEach(value => {
-        const width = value.width === undefined ? innerWidth : value.width;
+        const width = value.width === undefined || value.width === null
+          ? innerWidth : value.width;
         expect(parseViewportChangedPayload(value))
           .toStrictEqual({...value, width});
         expect(parseViewportChangedPayload(JSON.stringify(value)))

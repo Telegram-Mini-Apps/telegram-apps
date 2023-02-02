@@ -2,11 +2,12 @@
 export default {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  // collectCoverage: true,
-  // collectCoverageFrom: [
-  //   'src/**/*.ts',
-  //   '!src/**/index.ts',
-  // ],
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/index.ts',
+    '!src/__tests__',
+  ],
   // coverageThreshold: {
   //   global: {
   //     branches: 90,
