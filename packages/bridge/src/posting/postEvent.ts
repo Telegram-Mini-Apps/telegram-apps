@@ -45,22 +45,44 @@ export function postEvent(
 
 export function postEvent(
   event: PostEventName,
-  params: any = '',
-  {targetOrigin = 'https://web.telegram.org'}: PostEventOptions = {},
+  paramsOrOptions?: PostEventParams<PostEventName> | PostEventOptions,
+  options?: PostEventOptions,
 ): void {
+  let _options: PostEventOptions = {};
+  let _params: any;
+
+  // Parameters and options were not passed.
+  if (paramsOrOptions === undefined && options === undefined) {
+    _options = {};
+  }
+  // Both parameters and options passed.
+  else if (paramsOrOptions !== undefined && options !== undefined) {
+    _options = options;
+    _params = paramsOrOptions;
+  }
+  // Only parameters were passed.
+  else if (paramsOrOptions !== undefined) {
+    if ('targetOrigin' in paramsOrOptions) {
+      _options = paramsOrOptions;
+    } else {
+      _params = paramsOrOptions;
+    }
+  }
+  const {targetOrigin = 'https://web.telegram.org'} = _options;
+
   if (isBrowserEnv()) {
     return window.parent.postMessage(JSON.stringify({
       eventType: event,
-      eventData: params,
+      eventData: _params,
     }), targetOrigin);
   }
   if (hasTelegramWebviewProxy(window)) {
-    return window.TelegramWebviewProxy.postEvent(event, JSON.stringify(params));
+    return window.TelegramWebviewProxy.postEvent(event, JSON.stringify(_params));
   }
   if (hasExternalNotify(window)) {
     return window.external.notify(JSON.stringify({
       eventType: event,
-      eventData: params,
+      eventData: _params,
     }));
   }
   // Otherwise, application is not ready to post events.
