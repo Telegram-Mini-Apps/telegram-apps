@@ -6,6 +6,7 @@ export default {
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/index.ts',
+    '!src/__tests__'
   ],
   coverageThreshold: {
     global: {
