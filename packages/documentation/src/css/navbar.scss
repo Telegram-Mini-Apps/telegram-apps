@@ -1,0 +1,59 @@
+:root {
+  --ifm-navbar-height: 48px;
+}
+
+// Application navigation bar.
+[class~="navbar"] {
+  padding: 0 24px;
+  box-shadow: 0 1px var(--ifm-toc-border-color);
+  position: fixed;
+  width: 100%;
+
+  // GitHub logo.
+  [class~="navbar-github-logo"] {
+    color: var(--ifm-color-primary);
+    display: inline-flex;
+  }
+
+  @media screen and (min-width: 997px) {
+    width: calc(100% - var(--doc-sidebar-width) - 1px);
+    left: calc(var(--doc-sidebar-width) + 1px);
+  }
+}
+
+[class~="navbar__brand"] {
+  display: none;
+}
+
+[class~="navbar__item"] {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  font-weight: 400;
+  font-size: 15px;
+  position: relative;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: var(--ifm-color-primary);
+
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    border-radius: 2px 2px 0 0;
+    background-color: var(--ifm-color-primary);
+    transform: scaleX(0.3) scaleY(0);
+    transition: opacity .2s ease-in-out, transform .2s ease-in-out;
+  }
+
+  &:hover, &[class~="navbar__link--active"] {
+    &::after {
+      opacity: 1;
+      transform: scaleX(1.0) scaleY(1.0);
+    }
+  }
+}

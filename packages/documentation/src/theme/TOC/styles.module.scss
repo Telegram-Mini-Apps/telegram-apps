@@ -1,0 +1,27 @@
+@import "../../css/variables";
+
+.root {
+  top: var(--ifm-navbar-height);
+  margin-top: -20px;
+
+  [class~="table-of-contents__link"] {
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0.2px;
+    font-weight: 500;
+  }
+
+  code {
+    padding: 2px 4px;
+    color: black;
+    background: $codeBackgroundColor;
+    border: 1px solid $codeBorderColor;
+  }
+}
+
+[data-theme='dark'] {
+  code {
+    color: white;
+    background: transparentize($primaryColor, 0.6);
+  }
+}

@@ -1,0 +1,56 @@
+:root {
+  --doc-sidebar-width: 264px;
+}
+
+.root {
+  border: solid var(--ifm-toc-border-color);
+  border-width: 0 1px 0 0;
+  display: none;
+
+  @media screen and (min-width: 997px) {
+    display: block;
+  }
+
+  // We use this trick to make .sticky work.
+  ::before {
+    content: "";
+    display: block;
+  }
+
+  .sticky {
+    position: sticky;
+    top: 0;
+  }
+
+  aside {
+    height: 100%;
+    margin-top: 0;
+    border: none;
+
+    > div {
+      position: unset;
+
+      > div {
+        padding-top: 0;
+      }
+    }
+  }
+
+  nav {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+.logoWrapper {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+}
+
+.logoText {
+  padding-left: 10px;
+  font-weight: 600;
+  font-family: var(--ifm-font-family-base);
+  font-size: 18px;
+}

@@ -1,6 +1,5 @@
 ---
 sidebar_position: 2
-toc_max_heading_level: 4
 ---
 
 # Methods
@@ -25,7 +24,7 @@ interface MessageJSON {
 ```
 
 The second parameter is `targetOrigin` - allowed parent iframe origin. We
-recommend avoiding the usage of wildcard`*`as long as it is not secure - your
+recommend avoiding the usage of wildcard `*` as long as it is not secure - your
 application could be inserted not by Telegram, but by another iframe that will
 still be able to communicate with your app and receive some data.
 
