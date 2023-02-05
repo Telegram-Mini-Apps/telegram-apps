@@ -1,6 +1,5 @@
 ---
 sidebar_position: 3
-toc_max_heading_level: 4
 ---
 
 # Events

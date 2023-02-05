@@ -1,0 +1,13 @@
+// Page content excluding footer and navbar.
+[class~="main-wrapper"] {
+  // Page content without go to top button.
+  > div {
+    flex-grow: 1;
+  }
+
+  main {
+    > div {
+      padding-top: calc(var(--ifm-navbar-height) + 20px) !important;
+    }
+  }
+}

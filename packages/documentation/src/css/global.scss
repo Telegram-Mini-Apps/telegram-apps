@@ -1,0 +1,40 @@
+@import "./variables";
+
+:root {
+  // Custom.
+  --border-default-color: #E8E8E8;
+
+  --ifm-color-primary: #{$primaryColor};
+  --ifm-color-primary-dark: #{darken($primaryColor, 10)};
+  --ifm-color-primary-darker: #{darken($primaryColor, 20)};
+  --ifm-color-primary-darkest: #{darken($primaryColor, 30)};
+  --ifm-color-primary-light: #{lighten($primaryColor, 10)};
+  --ifm-color-primary-lighter: #{lighten($primaryColor, 20)};
+  --ifm-color-primary-lightest: #{lighten($primaryColor, 30)};
+  --ifm-code-font-size: 95%;
+  --ifm-background-color: white;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  --ifm-toc-link-color: #8C8C8C;
+
+  --ifm-menu-color: #8C8C8C;
+  --ifm-menu-link-padding-horizontal: 10px;
+
+  --ifm-font-family-base: "Inter", system-ui, -apple-system, Segoe UI, Roboto,
+  Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI',
+  Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+  'Segoe UI Symbol';
+  --ifm-heading-font-weight: 600;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #28b2ff;
+  --ifm-color-primary-dark: #008dd5;
+  --ifm-color-primary-darker: #007fbd;
+  --ifm-color-primary-darkest: #006ea2;
+  --ifm-color-primary-light: #00a2ff;
+  --ifm-color-primary-lighter: #16a3ff;
+  --ifm-color-primary-lightest: #16a3ff;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
