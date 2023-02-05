@@ -18,3 +18,10 @@
     border: 1px solid $codeBorderColor;
   }
 }
+
+[data-theme='dark'] {
+  code {
+    color: white;
+    background: transparentize($primaryColor, 0.6);
+  }
+}

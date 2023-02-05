@@ -7,8 +7,8 @@
   }
 
   button {
+    color: var(--ifm-color-primary);
     background-color: transparentize($primaryColor, 0.9);
-    color: $primaryColor;
     font-size: 12px;
     font-weight: 500;
     border-radius: 0;
@@ -24,7 +24,7 @@
   }
 
   a {
-    color: $primaryColor;
+    color: var(--ifm-color-primary);
     font-size: 12px;
   }
 }
