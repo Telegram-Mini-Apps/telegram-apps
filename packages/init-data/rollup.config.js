@@ -56,29 +56,10 @@ export default [
         sourcemap: true,
       },
     ],
-    external: ['@twa.js/utils', 'crypto-js'],
+    external: ['@twa.js/utils', 'node:crypto'],
     plugins: [
       typescript({tsconfig: './tsconfig.validation.json'}),
       sourcemaps(),
-      terser(),
-    ],
-  }),
-
-  // Validation: Browser.
-  defineConfig({
-    input: 'src/validation.ts',
-    output: {
-      file: './dist/validation.js',
-      format: 'iife',
-      name: 'TwaInitDataValidation',
-      globals: {'crypto-js': 'CryptoJS'},
-      sourcemap: true,
-    },
-    external: ['crypto-js'],
-    plugins: [
-      typescript({tsconfig: './tsconfig.validation.json'}),
-      sourcemaps(),
-      nodeResolve(),
       terser(),
     ],
   }),

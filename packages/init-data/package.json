@@ -47,18 +47,7 @@
     "url": "https://github.com/Telegram-Web-Apps/twa/issues"
   },
   "dependencies": {
-    "@twa.js/utils": "workspace:*"
-  },
-  "peerDependencies": {
-    "@types/crypto-js": "^4.1.1",
-    "crypto-js": "^4.1.1"
-  },
-  "peerDependenciesMeta": {
-    "@types/crypto-js": {
-      "optional": true
-    },
-    "crypto-js": {
-      "optional": true
-    }
+    "@twa.js/utils": "workspace:*",
+    "@types/node": "^18.11.19"
   }
 }

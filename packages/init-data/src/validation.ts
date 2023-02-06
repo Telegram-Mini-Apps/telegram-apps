@@ -1,6 +1,6 @@
-import {algo} from 'crypto-js';
+import {createHmac} from 'node:crypto';
 
-interface ValidateOptions {
+export interface ValidateOptions {
   /**
    * Time in seconds which states, how long from creation time is init data
    * considered valid.
@@ -32,7 +32,7 @@ interface ValidateOptions {
  * @throws {Error} Init data expired.
  * @throws {Error} Sign invalid.
  */
-function validate(
+export function validate(
   sp: string | URLSearchParams,
   token: string,
   options: ValidateOptions = {},
@@ -92,20 +92,16 @@ function validate(
   pairs.sort();
 
   // Compute sign.
-  const skHmac = algo
-    .HMAC
-    .create(algo.SHA256, 'WebAppData')
-    .finalize(token);
-  const impHmac = algo
-    .HMAC
-    .create(algo.SHA256, skHmac)
-    .finalize(pairs.join('\n'))
-    .toString();
+  const computedHash = createHmac(
+    'sha256',
+    createHmac('sha256', 'WebAppData').update(token).digest(),
+  )
+    .update(pairs.join('\n'))
+    .digest()
+    .toString('hex');
 
   // In case, our sign is not equal to found one, we should throw an error.
-  if (impHmac !== hash) {
+  if (computedHash !== hash) {
     throw new Error('Sign invalid');
   }
 }
-
-export {validate};
