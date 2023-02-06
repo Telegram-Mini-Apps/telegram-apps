@@ -34,9 +34,9 @@ const initData = createSearchParamsParser({
 
 /**
  * Extracts init data from search params presented as string.
+ * @param searchParams - query parameters presented as string or
+ * URLSearchParams.
  */
-function parseInitData(searchParams: string | URLSearchParams): InitData {
+export function parseInitData(searchParams: string | URLSearchParams): InitData {
   return initData(searchParams);
 }
-
-export {parseInitData};
