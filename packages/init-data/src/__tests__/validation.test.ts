@@ -11,17 +11,15 @@ describe('validation', () => {
         .toThrowError('"hash" is empty or not found.');
     });
 
-    it(
-      'should throw an error on case, auth_date is not ' +
+    it('should throw an error on case, auth_date is not ' +
       'passed, equal to 0 or does not represent integer', () => {
-        expect(() => validate('auth_date=0&hash=HHH', secretToken))
-          .toThrowError('"auth_date" is empty or not found.');
-        expect(() => validate('hash=HHH', secretToken))
-          .toThrowError('"auth_date" is empty or not found.');
-        expect(() => validate('auth_date=AAA&hash=HHH', secretToken))
-          .toThrowError('"auth_date" should present integer.');
-      },
-    );
+      expect(() => validate('auth_date=0&hash=HHH', secretToken))
+        .toThrowError('"auth_date" is empty or not found.');
+      expect(() => validate('hash=HHH', secretToken))
+        .toThrowError('"auth_date" is empty or not found.');
+      expect(() => validate('auth_date=AAA&hash=HHH', secretToken))
+        .toThrowError('"auth_date" should present integer.');
+    });
 
     it('should throw an error in case, parameters are expired', () => {
       expect(() => validate(sp, secretToken, {
@@ -40,12 +38,10 @@ describe('validation', () => {
       expect(() => validate(new URLSearchParams(sp), secretToken, {expiresIn: 0})).not.toThrow();
     });
 
-    it(
-      'should throw an error in case, expiration time is ' +
+    it('should throw an error in case, expiration time is ' +
       'not passed, parameters were created more than 1 day ago and ' +
       'already expired', () => {
-        expect(() => validate(sp, secretToken)).toThrow('Init data expired.');
-      },
-    );
+      expect(() => validate(sp, secretToken)).toThrow('Init data expired.');
+    });
   });
 });
