@@ -11,14 +11,14 @@ export type LogLevel = 'log' | 'error' | 'warn';
 export function log(level: LogLevel, ...args: any[]): void {
   const now = new Date();
   const date = Intl
-    .DateTimeFormat(undefined, {
+    .DateTimeFormat('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
+      fractionalSecondDigits: 3,
       timeZone: 'UTC',
     })
     .format(now);
-  const ms = now.getMilliseconds().toString();
 
-  console[level](`[${date}.${'0'.repeat(3 - ms.length) + ms}]`, ...args);
+  console[level](`[${date}]`, ...args);
 }
