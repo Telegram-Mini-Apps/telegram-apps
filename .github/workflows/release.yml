@@ -25,16 +25,16 @@ jobs:
 
       # Run linter.
       - name: Run linter
-        run: pnpm run lint
+        run: pnpm run ci:lint
 
       # Build packages.
       - name: Build packages
-        run: pnpm run build
+        run: pnpm run ci:build:packages
 
       # Run tests.
       - name: Run tests
-        run: pnpm run test
+        run: pnpm run ci:test
 
       # Publish packages.
       - name: Publish packages
-        run: pnpm run publish --no-private -y
+        run: pnpm run ci:publish

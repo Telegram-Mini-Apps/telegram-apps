@@ -41,7 +41,12 @@
     "sdk-react:dev": "lerna run --scope=@twa.js/sdk-react dev",
     "lint": "lerna run lint",
     "test": "lerna run test",
-    "publish": "lerna publish"
+    "publish": "lerna publish",
+    "ci:lint": "lerna run lint",
+    "ci:build:docs": "lerna run build --scope=documentation",
+    "ci:build:packages": "lerna run build --skip-nx-cache --ignore=documentation",
+    "ci:test": "lerna run test",
+    "ci:publish": "lerna publish --no-private -y"
   },
   "workspaces": [
     "packages/*"
