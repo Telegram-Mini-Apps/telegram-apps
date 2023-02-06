@@ -60,7 +60,7 @@ export function validate(
       const authDateNum = parseInt(value);
 
       if (Number.isNaN(authDateNum)) {
-        throw new TypeError('"auth_date" should present integer.');
+        throw new TypeError('"auth_date" should present integer');
       }
       authDate = new Date(authDateNum * 1000);
     }
@@ -71,11 +71,11 @@ export function validate(
 
   // Hash and auth date always required.
   if (hash.length === 0) {
-    throw new Error('"hash" is empty or not found.');
+    throw new Error('"hash" is empty or not found');
   }
 
   if (authDate.getTime() === 0) {
-    throw new Error('"auth_date" is empty or not found.');
+    throw new Error('"auth_date" is empty or not found');
   }
 
   // In case, expiration time passed, we do additional parameters check.
@@ -84,7 +84,7 @@ export function validate(
   if (expiresIn > 0) {
     // Check if init data expired.
     if (authDate.getTime() + expiresIn * 1000 < new Date().getTime()) {
-      throw new Error('Init data expired.');
+      throw new Error('Init data expired');
     }
   }
 
@@ -102,6 +102,6 @@ export function validate(
 
   // In case, our sign is not equal to found one, we should throw an error.
   if (computedHash !== hash) {
-    throw new Error('Sign invalid');
+    throw new Error('Signature is invalid');
   }
 }
