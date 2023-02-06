@@ -41,9 +41,7 @@
     "sdk-react:dev": "lerna run --scope=@twa.js/sdk-react dev",
     "lint": "lerna run lint",
     "test": "lerna run test",
-    "publish": "lerna publish",
-    "release": "pnpm run test && pnpm run lint && pnpm run build && pnpm run publish --no-private",
-    "ci:release": "pnpm run test && pnpm run lint && pnpm run build && pnpm run publish --no-private -y"
+    "publish": "lerna publish"
   },
   "workspaces": [
     "packages/*"
