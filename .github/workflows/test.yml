@@ -8,8 +8,7 @@ on:
       - master
     paths:
       - packages/*
-    paths-ignore:
-      - packages/documentation
+      - !packages/documentation
 
 jobs:
   test:
