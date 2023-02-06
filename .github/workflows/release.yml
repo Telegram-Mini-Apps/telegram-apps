@@ -1,18 +1,12 @@
-name: Test @twa.js packages
+name: Release @twa.js packages
 
-run-name: Test @twa.js packages
+run-name: Release @twa.js packages
 
-on:
-  pull_request:
-    branches:
-      - master
-    paths:
-      - packages/*
-      - !packages/documentation
+on: workflow_dispatch
 
 jobs:
-  test:
-    name: Run tests
+  release:
+    name: Release to npm
     runs-on: ubuntu-latest
     steps:
       # Setup node.
@@ -30,5 +24,5 @@ jobs:
         run: pnpm i
 
       # Run tests.
-      - name: Run tests
-        run: pnpm run test
+      - name: Run release script
+        run: pnpm run ci:release

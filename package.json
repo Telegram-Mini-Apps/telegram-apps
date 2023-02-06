@@ -42,7 +42,8 @@
     "lint": "lerna run lint",
     "test": "lerna run test",
     "publish": "lerna publish",
-    "release": "pnpm run test && pnpm run lint && pnpm run build && pnpm run publish --no-private"
+    "release": "pnpm run test && pnpm run lint && pnpm run build && pnpm run publish --no-private",
+    "ci:release": "pnpm run test && pnpm run lint && pnpm run build && pnpm run publish --no-private -y"
   },
   "workspaces": [
     "packages/*"
