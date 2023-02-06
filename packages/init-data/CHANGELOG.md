@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/init-data@0.1.5...@twa.js/init-data@0.2.0) (2023-02-06)
+
+
+### Bug Fixes
+
+* **errors:** refactor error texts and comments ([1e368bb](https://github.com/Telegram-Web-Apps/twa/commit/1e368bb7c03284258af5313ac3ace8f5d907d087))
+
+
+### Features
+
+* **crypto:** switch to node:crypto ([c96a58d](https://github.com/Telegram-Web-Apps/twa/commit/c96a58decacde8d3bfd1cd119a788293a930c3bc))
+
+
+
+
+
 ## [0.1.5](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/init-data@0.1.4...@twa.js/init-data@0.1.5) (2023-02-02)
 
 **Note:** Version bump only for package @twa.js/init-data
