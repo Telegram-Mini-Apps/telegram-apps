@@ -29,6 +29,14 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      # Run tests and linter.
+      # Run linter.
+      - name: Run linter
+        run: pnpm run lint
+
+      # Build packages.
+      - name: Build packages
+        run: pnpm run build
+
+      # Run tests.
       - name: Run tests
-        run: pnpm run test && pnpm run lint
+        run: pnpm run test

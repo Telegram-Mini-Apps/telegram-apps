@@ -23,14 +23,18 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      - name: Test packages
-        run: pnpm run test
-
-      - name: Apply linter
+      # Run linter.
+      - name: Run linter
         run: pnpm run lint
 
+      # Build packages.
       - name: Build packages
         run: pnpm run build
 
+      # Run tests.
+      - name: Run tests
+        run: pnpm run test
+
+      # Publish packages.
       - name: Publish packages
         run: pnpm run publish --no-private -y
