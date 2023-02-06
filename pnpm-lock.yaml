@@ -109,10 +109,12 @@ importers:
     specifiers:
       '@twa.js/utils': workspace:*
       '@types/crypto-js': ^4.1.1
+      '@types/node': ^18.11.19
       crypto-js: ^4.1.1
     dependencies:
       '@twa.js/utils': link:../utils
       '@types/crypto-js': 4.1.1
+      '@types/node': 18.11.19
       crypto-js: 4.1.1
 
   packages/sdk:
@@ -4422,6 +4424,10 @@ packages:
 
   /@types/node/17.0.45:
     resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
+
+  /@types/node/18.11.19:
+    resolution: {integrity: sha512-YUgMWAQBWLObABqrvx8qKO1enAvBUdjZOAWQ5grBAkp5LQv45jBvYKZ3oFS9iKRCQyFjqw6iuEa1vmFqtxYLZw==}
+    dev: false
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
