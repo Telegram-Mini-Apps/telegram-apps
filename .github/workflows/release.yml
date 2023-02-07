@@ -9,8 +9,8 @@ jobs:
     name: Release to npm
     runs-on: ubuntu-latest
     steps:
-      # Setup node.
       - uses: actions/checkout@v2
+
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -23,27 +23,24 @@ jobs:
           version: 7
           run_install: false
 
-      # Install dependencies.
       - name: Install dependencies
         run: pnpm i
 
-      # Run linter.
       - name: Run linter
         run: pnpm run ci:lint
 
-      # Build packages.
       - name: Build packages
         run: pnpm run ci:build:packages
 
-      # Run tests.
       - name: Run tests
         run: pnpm run ci:test
 
-      # Publish packages.
-      - name: Publish packages
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: "Configure Git identity"
         run: |
           git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor}}@users.noreply.github.com"
-          pnpm run ci:publish --loglevel silly
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Publish packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm run ci:publish
