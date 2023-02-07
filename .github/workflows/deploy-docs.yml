@@ -7,7 +7,7 @@ on:
     branches:
       - master
     paths:
-      - packages/documentation
+      - packages/documentation/**
 
 jobs:
   deploy:

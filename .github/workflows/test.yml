@@ -7,8 +7,8 @@ on:
     branches:
       - master
     paths:
-      - packages/*
-      - !packages/documentation
+      - packages/**
+      - !packages/documentation/**
 
 jobs:
   test:
