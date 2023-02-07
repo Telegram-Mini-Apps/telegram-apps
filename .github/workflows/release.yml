@@ -39,11 +39,18 @@ jobs:
       - name: Run tests
         run: pnpm run ci:test
 
-      # Publish packages.
-      - name: Publish packages
+      - name: "Configure Git identity"
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git remote set-url origin https://${{github.actor}}:${GH_TOKEN}@github.com/$GITHUB_REPOSITORY
+
+      - name: "NPM Identity"
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor}}@users.noreply.github.com"
-          pnpm run ci:publish --loglevel silly
+          pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
+
+      # Publish packages.
+      - name: Publish packages
+        run: pnpm run ci:publish from-package --loglevel silly --no-verify-access --yes
