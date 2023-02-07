@@ -46,7 +46,7 @@
     "ci:build:docs": "lerna run build --scope=documentation",
     "ci:build:packages": "lerna run build --ignore=documentation",
     "ci:test": "lerna run test",
-    "ci:publish": "lerna publish -y"
+    "ci:publish": "lerna publish --no-private -y"
   },
   "workspaces": [
     "packages/*"
