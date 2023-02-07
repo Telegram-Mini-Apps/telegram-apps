@@ -44,8 +44,6 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          pnpm config --global set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor}}@users.noreply.github.com"
-          pnpm config ls -l
           pnpm run ci:publish --loglevel silly
