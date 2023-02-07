@@ -40,5 +40,8 @@
   },
   "bugs": {
     "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

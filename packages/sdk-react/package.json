@@ -51,5 +51,8 @@
   "dependencies": {
     "@twa.js/bridge": "workspace:*",
     "@twa.js/sdk": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

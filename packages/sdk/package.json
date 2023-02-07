@@ -46,5 +46,8 @@
     "@twa.js/bridge": "workspace:*",
     "@twa.js/init-data": "workspace:*",
     "@twa.js/utils": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

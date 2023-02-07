@@ -14,10 +14,14 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+          registry-url: 'https://registry.npmjs.org'
 
-      # Install pnpm
-      - name: Install pnpm
-        run: npm i -g pnpm
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
 
       # Install dependencies.
       - name: Install dependencies
@@ -38,8 +42,8 @@ jobs:
       # Publish packages.
       - name: Publish packages
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor}}@users.noreply.github.com"
-          pnpm run ci:publish
+          pnpm run ci:publish --loglevel silly

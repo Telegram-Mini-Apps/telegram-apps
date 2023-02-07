@@ -49,5 +49,8 @@
   "dependencies": {
     "@twa.js/utils": "workspace:*",
     "@types/node": "^18.11.19"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

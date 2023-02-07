@@ -44,9 +44,9 @@
     "publish": "lerna publish",
     "ci:lint": "lerna run lint",
     "ci:build:docs": "lerna run build --scope=documentation",
-    "ci:build:packages": "lerna run build --skip-nx-cache --ignore=documentation",
+    "ci:build:packages": "lerna run build --ignore=documentation",
     "ci:test": "lerna run test",
-    "ci:publish": "lerna publish --no-private -y"
+    "ci:publish": "lerna publish -y"
   },
   "workspaces": [
     "packages/*"
