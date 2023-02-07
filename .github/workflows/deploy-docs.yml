@@ -27,11 +27,11 @@ jobs:
 
       # Install dependencies.
       - name: Install dependencies
-        run: pnpm i
+        run: pnpm run ci:docs:install
 
       # Create documentation build directory.
       - name: Build documentation
-        run: pnpm run docs:build
+        run: pnpm run ci:docs:build
 
       # Popular action to deploy to GitHub Pages:
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus

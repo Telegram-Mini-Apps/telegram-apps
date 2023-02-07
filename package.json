@@ -43,8 +43,9 @@
     "test": "lerna run test",
     "publish": "lerna publish",
     "ci:lint": "lerna run lint",
-    "ci:build:docs": "lerna run build --scope=documentation",
-    "ci:build:packages": "lerna run build --ignore=documentation",
+    "ci:docs:install": "pnpm i --filter documentation",
+    "ci:docs:build": "lerna run build --scope=documentation",
+    "ci:packages:build": "lerna run build --ignore=documentation",
     "ci:test": "lerna run test",
     "ci:publish": "lerna publish from-package --no-private -y"
   },

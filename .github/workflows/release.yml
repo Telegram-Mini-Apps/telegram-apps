@@ -30,7 +30,7 @@ jobs:
         run: pnpm run ci:lint
 
       - name: Build packages
-        run: pnpm run ci:build:packages
+        run: pnpm run ci:packages:build
 
       - name: Run tests
         run: pnpm run ci:test
