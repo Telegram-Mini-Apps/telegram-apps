@@ -40,7 +40,7 @@
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint src/**/*.ts",
+    "lint": "eslint -c ../../.eslintrc.cjs src",
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "bugs": {
