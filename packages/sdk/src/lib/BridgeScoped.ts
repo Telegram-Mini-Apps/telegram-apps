@@ -14,7 +14,7 @@ export class BridgeScoped implements BridgeLike {
   ) {
   }
 
-  postEvent: typeof this.bridge.postEvent = (method: any, params: any) => {
+  postEvent: typeof this.bridge.postEvent = (method: any, params?: any) => {
     if (!supports(method, this.version)) {
       throw new MethodUnsupportedError(method, this.version);
     }
