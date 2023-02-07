@@ -1,4 +1,14 @@
 $primaryColor: #0088cc;
 
-$codeBackgroundColor: transparentize($primaryColor, 0.9);
-$codeBorderColor: rgba(0, 0, 0, 0.1);
+$codeBackgroundColor: #feeae4;
+$codeColor: #c61717;
+
+$darkThemeCodeBackgroundColor: rgb(94 44 44 / 20%);
+$darkThemeCodeColor: #ed4545;
+
+$tocLinkActiveColor: $primaryColor;
+$tocLinkColor: #8C8C8C;
+$tocBorderColor: #E8E8E8;
+
+$darkThemeTocLinkColor: #8C8C8C;
+$darkThemeTocBorderColor: #262626;

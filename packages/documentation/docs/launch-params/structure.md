@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Structure
 
-The web App should have a URL to be used by Telegram. It will be used as the
+The Web App should have a URL to be used by Telegram. It will be used as the
 source of WebView, which will load application.
 
 Nevertheless, it is not enough for the application to work correctly. In
@@ -36,7 +36,7 @@ console.log(params.get('tgWebAppVersion')); // "6.2"
 ### `tgWebAppVersion`
 
 Contains information about the current Web App version. This parameter is useful
-to check if some Web Apps [methods](../apps-communication/methods) are
+to check if some Web Apps [methods](../apps-communication/methods.mdx) are
 supported.
 
 ### `tgWebAppData`
@@ -57,14 +57,14 @@ const initData = {
 
 ### `tgWebAppPlatform`
 
-[Platform](../platforms) identifier.
+The [platform](../platforms) identifier.
 
 ### `tgWebAppThemeParams`
 
-[Theme](../features/theme) information. You could use
+The Telegram application [theme](../features/theme) information. You could use
 this parameter to know colors at the moment of Web App rendering. Keep in mind,
 that you are able to receive a theme with
-the [method](../apps-communication/methods#web_app_request_theme).
+the [method](../apps-communication/methods.mdx#web_app_request_theme).
 
 The value of this parameter is a JSON object converted to a string. To receive
 more appropriate and easy-to-use value, use `JSON.parse` function.

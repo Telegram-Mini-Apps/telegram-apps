@@ -1,3 +1,28 @@
+@import "../../../css/variables";
+
 .root {
-  color: var(--ifm-color-primary);
+  color: $primaryColor;
+  height: 100%;
+  box-sizing: content-box;
+  position: relative;
+  padding: 0 2px;
+
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    border-radius: 2px 2px 0 0;
+    background-color: $primaryColor;
+    transform: scaleX(0.3) scaleY(0);
+    transition: opacity .2s ease-in-out, transform .2s ease-in-out;
+  }
+
+  &:hover::after {
+    opacity: 1;
+    transform: scaleX(1.0) scaleY(1.0);
+  }
 }

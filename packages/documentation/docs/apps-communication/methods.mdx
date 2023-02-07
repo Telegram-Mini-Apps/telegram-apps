@@ -1,0 +1,433 @@
+---
+sidebar_position: 2
+---
+
+# Methods
+
+Web Apps methods are events, which execute some action. They are always called
+by Web App.
+
+## Web
+
+As long as the web version of Telegram displays the front-end application in
+`<iframe/>` tag, it uses the default way of communication between 2 iframes -
+sending messages through `window.parent.postMessage` function.
+
+As the first parameter, you should pass a JSON object
+**converted to a string**. The object should have this interface:
+
+```typescript
+interface MessageJSON {
+  eventType: string;
+  eventData: any;
+}
+```
+
+The second parameter is `targetOrigin` - allowed parent iframe origin. We
+recommend avoiding the usage of wildcard `*` as long as it is not secure - your
+application could be inserted not by Telegram, but by another iframe that will
+still be able to communicate with your app and receive some data.
+
+As a default value, you could use `https://web.telegram.org`.
+
+So, as you see, each method has its own name expressed by `eventType` and
+parameters stored in `eventData` property. Here is the usage example:
+
+```typescript
+window.parent.postMessage(JSON.stringify({
+  eventType: 'web_app_setup_back_button',
+  eventData: {is_visible: true},
+}), 'https://web.telegram.org');
+```
+
+This code will make the Telegram back button appear. We will define the back
+button and other components in the next sections of the documentation.
+
+## Desktop and mobile
+
+Unlike the web, desktop and mobile applications use a bit more unusual way of
+calling methods. Both of these platforms will create a global
+function `window.TelegramWebviewProxy.postEvent(eventType: string, eventData: string)`.
+
+As the first argument, this function accepts the event name. The second one -
+the parameters object, converted to a string. Here is how it works:
+
+```typescript
+window.TelegramWebviewProxy.postEvent('web_app_setup_back_button', JSON.stringify({
+  is_visible: true
+}));
+```
+
+## Windows Phone
+
+Telegram Windows Phone app provides such function
+as `window.external.notify(message: string)`. It accepts the same parameter as
+the web version does:
+
+```typescript
+window.external.notify(JSON.stringify({
+  eventType: 'web_app_setup_back_button',
+  eventData: {is_visible: true},
+}))
+```
+
+## Available methods
+
+This section contains a list of available methods to call with their names,
+description, and parameters. Section title means minimal Web App version to call
+methods inside it. In case, Web App does not satisfy the minimal method version
+requirement, nothing will happen. The native app just doesn't know which method
+should be called as long as it is not defined.
+
+### v6.0
+
+#### `iframe_ready`
+
+Notifies parent iframe about the current frame is ready. This method is only
+used in the Web version of Telegram. As a result, Web App will
+receive [`set_custom_style`](events#set_custom_style) event.
+
+#### `web_app_close`
+
+Closes Web App.
+
+#### `web_app_data_send`
+
+Sends data to the bot. When this method is called, a service message is sent to
+the bot containing the data of the length up to 4096 bytes. Then, Web App will
+be closed.
+
+To get more information, take a look at `web_app_data` field in the
+class [`Message`](https://core.telegram.org/bots/api#message).
+
+| Field | Type     | Description                                                          |
+|-------|----------|----------------------------------------------------------------------|
+| data  | `string` | Data to send to a bot. Should not have size of more than 4096 bytes. |
+
+#### `web_app_expand`
+
+[Expands](../features/viewport) the Web App.
+
+#### `web_app_open_link`
+
+Opens link in the default browser. Web App will not be closed.
+
+| Field | Type     | Description                                                                            |
+|-------|----------|----------------------------------------------------------------------------------------|
+| url   | `string` | URL to be opened by Telegram application. Should be a full path with `https` protocol. |
+
+#### `web_app_ready`
+
+Notifies Telegram about current application is ready to be shown. This method
+will make Telegram to remove application loader and display Web App.
+
+#### `web_app_request_theme`
+
+Requests current [theme](../features/theme) from Telegram. As a result, Telegram
+will create [`theme_changed`](events#theme_changed) event.
+
+#### `web_app_request_viewport`
+
+Requests current [viewport](../features/viewport) information from Telegram. As
+a result, Telegram will create [`viewport_changed`](events#viewport_changed)
+event.
+
+#### `web_app_setup_main_button`
+
+Updates the [Main Button](../features/main-button) settings.
+
+| Field               | Type      | Description                                                                                                                                                        |
+|---------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| is_visible          | `boolean` | _Optional_. Should the Main Button be displayed.                                                                                                                   |
+| is_active           | `boolean` | _Optional_. Should the Main Button be enabled.                                                                                                                     |
+| is_progress_visible | `boolean` | _Optional_. Should loader inside the Main Button be displayed. Use this property in case, some opertaion takes time. This loader will make user notified about it. |
+| text                | `string`  | _Optional_. Text inside the Main Button.                                                                                                                           |
+| color               | `string`  | _Optional_. The Main Button background color in `#RRGGBB` format.                                                                                                  |
+| text_color          | `string`  | _Optional_. The Main Button text color in `#RRGGBB` format.                                                                                                        |
+
+#### `web_app_setup_closing_behavior`
+
+Updates current [closing behavior](../features/closing-behavior).
+
+| Field             | Type      | Description                                                          |
+|-------------------|-----------|----------------------------------------------------------------------|
+| need_confirmation | `boolean` | Will user be prompted in case, an application is going to be closed. |
+
+### v6.1
+
+#### `web_app_open_tg_link`
+
+Opens the Telegram link by its pathname and query parameters. The link will be
+opened in the Telegram app, Web App will be closed.
+
+| Field     | Type     | Description                                                                                                                  |
+|-----------|----------|------------------------------------------------------------------------------------------------------------------------------|
+| path_full | `string` | Should be a value taken from the link of this format: `https://t.me/{path_full}`. Can additionally contain query parameters. |
+
+#### `web_app_open_invoice`
+
+Opens an invoice by its specified slug. More information about invoices in
+this [documentation](https://core.telegram.org/bots/payments).
+
+| Field | Type     | Description                |
+|-------|----------|----------------------------|
+| slug  | `string` | Invoice unique identifier. |
+
+#### `web_app_setup_back_button`
+
+Updates the [Back Button](../features/back-button) settings.
+
+| Field      | Type      | Description                        |
+|------------|-----------|------------------------------------|
+| is_visible | `boolean` | Should the Back Button be visible. |
+
+#### `web_app_set_background_color`
+
+Updates the Web
+App [background color](../features/theme#background-and-header-colors).
+
+| Field | Type     | Description                                       |
+|-------|----------|---------------------------------------------------|
+| color | `string` | The Web App background color in `#RRGGBB` format. |
+
+#### `web_app_set_header_color`
+
+Updates the Web App [header color](../features/theme#background-and-header-colors).
+
+| Field     | Type     | Description                                                                       |
+|-----------|----------|-----------------------------------------------------------------------------------|
+| color_key | `string` | The Web App header color key. Could be either `bg_color` or `secondary_bg_color`. |
+
+#### `web_app_trigger_haptic_feedback`
+
+Generates the [haptic feedback](../features/haptic-feedback) event.
+
+<table>
+  <thead>
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>type</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      <p>Type of haptic event. Values:</p>
+      <ul>
+        <li>
+          <code>impact</code>
+        </li>
+        <li>
+          <code>notification</code>
+        </li>
+        <li>
+          <code>selection_change</code>
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>impact_style</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      <p>
+        Required when <code>type</code> is <code>impact</code>. Values:
+      </p>
+      <ul>
+        <li>
+          <code>light</code>
+          , indicates a collision between small or lightweight UI objects
+        </li>
+        <li>
+          <code>medium</code>
+          , indicates a collision between medium-sized or medium-weight UI
+          objects
+        </li>
+        <li>
+          <code>heavy</code>
+          , indicates a collision between large or heavyweight UI objects
+        </li>
+        <li>
+          <code>rigid</code>
+          , indicates a collision between hard or inflexible UI objects
+        </li>
+        <li>
+          <code>soft</code>
+          , indicates a collision between soft or flexible UI objects
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>notification_type</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      <p>
+        Required when <code>type</code> is <code>notification</code>. Values:
+      </p>
+      <ul>
+        <li>
+          <code>error</code>
+          , indicates that a task or action has failed
+        </li>
+        <li>
+          <code>success</code>
+          , indicates that a task or action has completed successfully
+        </li>
+        <li>
+          <code>warning</code>
+          , indicates that a task or action produced a warning
+        </li>
+      </ul>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+### v6.2
+
+#### `web_app_open_popup`
+
+Opens a new [popup](../features/popup). When user closes the popup, Telegram
+creates the [`popup_closed`](events#popup_closed) event.
+
+##### Parameters
+
+<table style={{marginTop: -10}}>
+  <thead>
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>title</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>The text to be displayed in the popup title, 0-64 characters</td>
+  </tr>
+  <tr>
+    <td>message</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      The message to be displayed in the body of the popup, 1-256 characters
+    </td>
+  </tr>
+  <tr>
+    <td>buttons</td>
+    <td>
+      <a href={'#popupbutton'}>
+        <code>PopupButton[]</code>
+      </a>
+    </td>
+    <td>List of buttons to be displayed in the popup, 1-3 buttons</td>
+  </tr>
+  </tbody>
+</table>
+
+##### `PopupButton`
+
+<table style={{marginTop: -10}}>
+  <thead>
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>id</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>Identifier of the button, 0-64 characters.</td>
+  </tr>
+  <tr>
+    <td>type</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      <p>Type of the button. Values:</p>
+      <ul>
+        <li>
+          <code>default</code>
+          , a button with the default style
+        </li>
+        <li>
+          <code>destructive</code>
+          , a button with a style that indicates a destructive action (e.g.
+          "Remove", "Delete", etc.)
+        </li>
+        <li>
+          <code>ok</code>
+          , a button with the localized text "OK"
+        </li>
+        <li>
+          <code>close</code>
+          , a button with the localized text "Close"
+        </li>
+        <li>
+          <code>cancel</code>
+          , a button with the localized text "Cancel"
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>text</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      The text to be displayed on the button, 0-64
+      characters. <i>Ignored</i> when <code>type</code> is <code>ok</code>, <code>close</code> or
+      <code>cancel</code>.
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+### v6.4
+
+#### `web_app_open_scan_qr_popup`
+
+Opens a QR scanner. When the scanner was closed, the Telegram application
+creates the [`scan_qr_popup_closed`](events#scan_qr_popup_closed) event. When
+the scanner reads QR, Telegram creates the [`qr_text_received`](events#qr_text_received)
+event.
+
+| Field | Type     | Description                                        |
+|-------|----------|----------------------------------------------------|
+| text  | `string` | _Optional_. Text to be displayed in the QR scanner |
+
+#### `web_app_close_scan_qr_popup`
+
+Closes a QR scanner. The Telegram application
+creates the [`scan_qr_popup_closed`](events#scan_qr_popup_closed) event.
+
+#### `web_app_read_text_from_clipboard`
+
+Reads text from the clipboard. The method accepts a request identifier which is
+used to appropriately retrieve the method execution result from the
+[`qr_text_received`](events#qr_text_received) event.
+
+| Field  | Type     | Description                                                                                        |
+|--------|----------|----------------------------------------------------------------------------------------------------|
+| req_id | `string` | Unique request identifier. Should be any unique string to handle the generated event appropriately |
+

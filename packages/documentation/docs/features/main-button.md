@@ -20,5 +20,5 @@ performing some long action - making request, for example.
 
 ![main-button-2.png](../../static/docs/main-button-2.png)
 
-- [Web App method](../apps-communication/methods#web_app_setup_main_button)
-- [Button clicked event](../apps-communication/events#main_button_pressed)
+- [Web App method](../apps-communication/methods.mdx#web_app_setup_main_button)
+- [Button clicked event](../apps-communication/events.mdx#main_button_pressed)

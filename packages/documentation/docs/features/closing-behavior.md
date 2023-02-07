@@ -15,4 +15,4 @@ like that. Just not to lose progress.
 
 ![closing-behavior.png](../../static/docs/closing-behavior.png)
 
-- [Web App method](../apps-communication/methods#web_app_setup_closing_behavior)
+- [Web App method](../apps-communication/methods.mdx#web_app_setup_closing_behavior)

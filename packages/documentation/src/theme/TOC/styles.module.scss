@@ -9,13 +9,21 @@
     line-height: 18px;
     letter-spacing: 0.2px;
     font-weight: 500;
+    color: $tocLinkColor;
+  }
+
+  [class~="table-of-contents__link--active"] {
+    color: $tocLinkActiveColor !important;
+  }
+
+  [class~="table-of-contents__left-border"] {
+    border-color: $tocBorderColor;
   }
 
   code {
     padding: 2px 4px;
     color: black;
     background: $codeBackgroundColor;
-    border: 1px solid $codeBorderColor;
   }
 }
 
@@ -23,5 +31,13 @@
   code {
     color: white;
     background: transparentize($primaryColor, 0.6);
+  }
+
+  [class~="table-of-contents__left-border"] {
+    border-color: $darkThemeTocBorderColor;
+  }
+
+  [class~="table-of-contents__link"] {
+    color: $darkThemeTocLinkColor;
   }
 }

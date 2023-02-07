@@ -3,12 +3,22 @@
 [class~="markdown"] {
   --ifm-global-shadow-lw: none;
   --ifm-pre-padding: 10px;
-
   font-size: 14px;
 
+  a {
+    code:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Any code, met in markdown.
   code {
     background: $codeBackgroundColor;
-    border: 1px solid $codeBorderColor;
+    color: $codeColor;
+    border: none;
+    border-radius: 0;
+    padding: 3px 5px;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
   }
 
   h1:first-child {
@@ -38,21 +48,36 @@
     font-size: 15px;
     line-height: 17px;
     letter-spacing: 0.5px;
-
-    & > code {
-      font-family: var(--ifm-font-family-base);
-      padding: 2px 4px;
-    }
+    margin-bottom: 12px;
   }
 
+  // Any paragraph.
   p {
     font-size: 14px;
     line-height: 22px;
     letter-spacing: 0.25px;
 
-    & > code {
-      font-family: var(--ifm-font-family-base);
-      padding: 2px 4px;
+    + table {
+      margin-top: -10px;
+    }
+
+    + ul {
+      margin-top: -13px;
+    }
+  }
+
+  ul {
+    padding-left: 10px;
+    list-style-type: none;
+
+    li::before {
+      display: inline-block;
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: $primaryColor;
+      margin-right: 13px;
     }
   }
 
@@ -60,17 +85,76 @@
     font-weight: 500;
   }
 
-  pre > code {
-    font-size: 14px;
-    border: none;
-    background-color: #F6F8FA;
+  // Wrapper around CodeBlock.
+  pre {
+    background-color: transparent;
+    border-radius: 0;
+
+    // CodeBlock itself.
+    code {
+      font-size: 14px;
+      border: none;
+      background-color: #ecf3f8;
+      padding: 8px;
+    }
+  }
+
+  // Usual table.
+  table {
+    display: table;
+    width: 100%;
+    text-align: left;
+    line-height: 1.42857143;
+
+    thead {
+      background-color: transparent;
+
+      tr {
+        border-bottom: 2px solid #eee;
+      }
+    }
+
+    tbody {
+      td {
+        border-left: none;
+        border-right: none;
+        border-color: #eee;
+      }
+    }
+
+    tr {
+      border-top: none;
+      background: transparent;
+    }
+
+    td, th {
+      padding: 8px;
+      vertical-align: top;
+    }
+
+    th {
+      border: none;
+      font-size: 14px;
+      min-width: 70px;
+    }
   }
 }
 
 [data-theme='dark'] {
   [class~="markdown"] {
-    pre > code {
+    code {
+      background: $darkThemeCodeBackgroundColor;
+      color: $darkThemeCodeColor;
+    }
+
+    pre code {
       background-color: rgba(255, 255, 255, 0.01);
+    }
+
+    table {
+      tr, td {
+        border-color: #484848;
+      }
     }
   }
 }

@@ -1,9 +1,11 @@
+@import "../../../../css/variables";
+
 :root {
   --doc-sidebar-width: 264px;
 }
 
 .root {
-  border: solid var(--ifm-toc-border-color);
+  border: solid $tocBorderColor;
   border-width: 0 1px 0 0;
   display: none;
 
@@ -53,4 +55,10 @@
   font-weight: 600;
   font-family: var(--ifm-font-family-base);
   font-size: 18px;
+}
+
+[data-theme="dark"] {
+  .root {
+    border-color: $darkThemeTocBorderColor;
+  }
 }

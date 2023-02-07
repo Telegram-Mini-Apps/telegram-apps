@@ -23,4 +23,4 @@ on user's mobile device battery.
 
 :::
 
-- [Web App method](../apps-communication/methods#web_app_trigger_haptic_feedback)
+- [Web App method](../apps-communication/methods.mdx#web_app_trigger_haptic_feedback)

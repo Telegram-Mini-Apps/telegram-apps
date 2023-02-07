@@ -17,14 +17,14 @@ application.
 To learn how to get theme information, you will probably need these links:
 
 - [Getting from launch parameters](../launch-params/structure#tgwebappthemeparams)
-- [Getting with Web Apps method](../apps-communication/methods#web_app_request_theme)
+- [Getting with Web Apps method](../apps-communication/methods.mdx#web_app_request_theme)
 
 ## Updating colors
 
 Nevertheless, we forgot something important. Developer could change some colors
 by himself. To do this, he should
-use [`web_app_set_background_color`](../apps-communication/methods#web_app_set_background_color)
-and [`web_app_set_header_color`](../apps-communication/methods#web_app_set_header_color)
+use [`web_app_set_background_color`](../apps-communication/methods.mdx#web_app_set_background_color)
+and [`web_app_set_header_color`](../apps-communication/methods.mdx#web_app_set_header_color)
 , which will update background and header colors respectively.
 
 :::note
@@ -42,6 +42,6 @@ application. This structure consists of header and body. WebView will be placed
 inside body part.
 
 Telegram allows updating these header and background colors with methods such
-as [`web_app_set_background_color`](../apps-communication/methods#web_app_set_background_color)
-and [`web_app_set_header_color`](../apps-communication/methods#web_app_set_header_color)
+as [`web_app_set_background_color`](../apps-communication/methods.mdx#web_app_set_background_color)
+and [`web_app_set_header_color`](../apps-communication/methods.mdx#web_app_set_header_color)
 . 

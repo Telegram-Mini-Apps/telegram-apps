@@ -26,5 +26,5 @@ type.
 When popup is closed, Telegram will emit connected event with clicked button id.
 Telegram will also emit event in case, no buttons were clicked.
 
-- [Web App method](../apps-communication/methods#web_app_open_popup)
-- [Emitted event](../apps-communication/events#popup_closed)
+- [Web App method](../apps-communication/methods.mdx#web_app_open_popup)
+- [Emitted event](../apps-communication/events.mdx#popup_closed)
