@@ -53,4 +53,4 @@ jobs:
 
       # Publish packages.
       - name: Publish packages
-        run: pnpm run ci:publish from-git --loglevel silly --yes
+        run: pnpm run ci:publish --loglevel silly --yes
