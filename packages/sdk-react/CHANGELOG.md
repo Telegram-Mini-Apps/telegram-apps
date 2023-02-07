@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.1.13 (2023-02-07)
+
+
+### Bug Fixes
+
+* **bridge scoped:** fix postEvent implementation ([7ec9351](https://github.com/Telegram-Web-Apps/twa/commit/7ec9351bcb57a56b1a20242d07da79f419d56115))
+
+
+
+
+
 ## 0.1.12 (2023-02-07)
 
 **Note:** Version bump only for package @twa.js/sdk-react
