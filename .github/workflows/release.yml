@@ -49,7 +49,7 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
+          pnpm config --global set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
 
       # Publish packages.
       - name: Publish packages
