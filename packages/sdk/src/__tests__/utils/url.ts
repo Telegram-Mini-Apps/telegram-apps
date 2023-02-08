@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {formatURL} from './url';
+import {formatURL} from '../../utils';
 
 describe('utils', () => {
   describe('url', () => {

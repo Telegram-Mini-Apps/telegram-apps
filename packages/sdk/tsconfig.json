@@ -5,10 +5,12 @@
       "ESNext",
       "dom",
       "dom.iterable"
-    ],
+    ]
   },
-  "exclude": ["tests", "src/**/*.test.ts"],
   "include": [
     "src"
+  ],
+  "exclude": [
+    "src/__tests__"
   ]
 }
