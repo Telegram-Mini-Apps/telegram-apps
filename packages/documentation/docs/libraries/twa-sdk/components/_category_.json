@@ -1,9 +1,4 @@
 {
   "label": "Components",
-  "position": 2,
-  "link": {
-    "type": "generated-index",
-    "description": "More information on what SDK consists of.",
-    "keywords": ["guides"]
-  }
+  "position": 2
 }
