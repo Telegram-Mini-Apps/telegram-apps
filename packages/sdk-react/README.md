@@ -15,6 +15,4 @@ Tracks SDK components changes out of box.
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
 Apps. You can learn more about this package in this
-[documentation](https://telegram-web-apps.github.io/twa/docs/libraries/twa-sdk-react) and,
-probably, find more useful libraries
-[here](https://telegram-web-apps.github.io/twa/docs/category/-libraries).
+[documentation](https://telegram-web-apps.github.io/twa/docs/libraries/twa-sdk-react).

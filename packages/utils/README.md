@@ -15,7 +15,7 @@ find provided functionality useful in other contexts.
 
 This library is a part of TypeScript packages ecosystem around Telegram Web 
 Apps. To see full documentation and other libraries, please, visit 
-[this](https://telegram-web-apps.github.io/twa/docs/category/-libraries) link.
+[this](https://telegram-web-apps.github.io/twa/) link.
 
 ## Installation
 
