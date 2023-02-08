@@ -8,7 +8,7 @@ import {BridgeLike} from '../../types';
 /**
  * Provides QR scanner functionality.
  */
-class QRScanner {
+export class QRScanner {
   private _isOpened = false;
   private readonly ee = new EventEmitter<QRScannerEventsMap>();
 
@@ -91,5 +91,3 @@ class QRScanner {
    */
   supports: SupportsFunc<'close' | 'open'>;
 }
-
-export {QRScanner};

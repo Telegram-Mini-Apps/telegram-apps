@@ -13,7 +13,7 @@ import {
  * Contains information about currently used theme by application.
  * @see https://core.telegram.org/bots/webapps#themeparams
  */
-class ThemeParams {
+export class ThemeParams {
   /**
    * Requests fresh information about current theme.
    * @param bridge - bridge instance.
@@ -191,5 +191,3 @@ class ThemeParams {
     return this._textColor;
   }
 }
-
-export {ThemeParams};

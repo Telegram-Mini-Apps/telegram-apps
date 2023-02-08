@@ -7,7 +7,7 @@ import {BridgeLike} from '../../types';
  * Component responsible for controlling current closing confirmation
  * status.
  */
-class ClosingConfirmation {
+export class ClosingConfirmation {
   private readonly ee = new EventEmitter<ClosingConfirmationEventsMap>();
   private _isEnabled = false;
 
@@ -65,5 +65,3 @@ class ClosingConfirmation {
    */
   off = this.ee.off.bind(this.ee);
 }
-
-export {ClosingConfirmation};

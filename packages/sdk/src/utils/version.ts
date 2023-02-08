@@ -1,7 +1,7 @@
 import {PostEventName, supports} from '@twa.js/bridge';
 import {Version} from '@twa.js/utils';
 
-type SupportsFunc<Method extends string> = (
+export type SupportsFunc<Method extends string> = (
   method: Method,
 ) => boolean;
 
@@ -13,11 +13,9 @@ type SupportsFunc<Method extends string> = (
  * @param version - Web Apps version.
  * @param schema - validation schema.
  */
-function createSupportsFunc<Method extends string>(
+export function createSupportsFunc<Method extends string>(
   version: Version,
   schema: Record<Method, PostEventName>,
 ): SupportsFunc<Method> {
   return method => supports(schema[method], version);
 }
-
-export {SupportsFunc, createSupportsFunc};

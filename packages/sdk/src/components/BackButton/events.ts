@@ -1,7 +1,7 @@
 /**
  * Information about BackButton supported events.
  */
-interface BackButtonEventsMap {
+export interface BackButtonEventsMap {
   /**
    * Back button clicked.
    */
@@ -17,12 +17,10 @@ interface BackButtonEventsMap {
 /**
  * Known BackButton event name.
  */
-type BackButtonEventName = keyof BackButtonEventsMap;
+export type BackButtonEventName = keyof BackButtonEventsMap;
 
 /**
  * Listener for specified BackButton event.
  */
-type BackButtonEventListener<E extends BackButtonEventName> =
+export type BackButtonEventListener<E extends BackButtonEventName> =
   BackButtonEventsMap[E];
-
-export {BackButtonEventsMap, BackButtonEventName, BackButtonEventListener};

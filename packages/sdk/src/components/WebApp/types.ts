@@ -1,12 +1,12 @@
 /**
  * Color scheme.
  */
-type ColorScheme = 'dark' | 'light';
+export type ColorScheme = 'dark' | 'light';
 
 /**
  * Native Telegram application identifier.
  */
-type Platform =
+export type Platform =
   | 'android'
   | 'android_x'
   | 'ios'
@@ -17,5 +17,3 @@ type Platform =
   | 'unigram'
   | 'unknown'
   | string;
-
-export {ColorScheme, Platform};

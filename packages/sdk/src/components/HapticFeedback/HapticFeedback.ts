@@ -12,7 +12,7 @@ import {BridgeLike} from '../../types';
  * haptic notifications which usually occur after user interaction with
  * application.
  */
-class HapticFeedback {
+export class HapticFeedback {
   constructor(private readonly bridge: BridgeLike, version: Version) {
     this.supports = createSupportsFunc(version, {
       impactOccurred: 'web_app_trigger_haptic_feedback',
@@ -65,5 +65,3 @@ class HapticFeedback {
    */
   supports: SupportsFunc<'impactOccurred' | 'notificationOccurred' | 'selectionChanged'>;
 }
-
-export {HapticFeedback};

@@ -4,7 +4,7 @@ import {createJsonParser, RGB} from '@twa.js/utils';
  * Describes theme parameters which are passed to WebApp.
  * @see https://core.telegram.org/api/bots/webapps#theme-parameters
  */
-interface ThemeParams {
+export interface ThemeParams {
   /**
    * Background color.
    */
@@ -39,7 +39,7 @@ interface ThemeParams {
 /**
  * Parses value as theme params.
  */
-const parseThemeParams = createJsonParser({
+export const parseThemeParams = createJsonParser({
   backgroundColor: {type: 'rgb', from: 'bg_color'},
   buttonColor: {type: 'rgb', from: 'button_color'},
   buttonTextColor: {type: 'rgb', from: 'button_text_color'},
@@ -52,5 +52,3 @@ const parseThemeParams = createJsonParser({
     optional: true,
   },
 });
-
-export {parseThemeParams, ThemeParams};

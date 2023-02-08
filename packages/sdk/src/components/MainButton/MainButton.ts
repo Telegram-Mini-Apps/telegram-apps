@@ -5,7 +5,7 @@ import {BridgeLike} from '../../types';
 
 type Emitter = EventEmitter<MainButtonEventsMap>;
 
-interface MainButtonProps {
+export interface MainButtonProps {
   /**
    * Should changes be automatically sent to Telegram native application.
    * @default true
@@ -20,7 +20,7 @@ interface MainButtonProps {
  * TODO: Desktop animation is rather bad in case, we call progress visibility
  *  right after click. It is not smooth.
  */
-class MainButton {
+export class MainButton {
   private readonly ee: Emitter = new EventEmitter();
   private _isActive = false;
   private _isVisible = false;
@@ -293,5 +293,3 @@ class MainButton {
     return this;
   }
 }
-
-export {MainButton, MainButtonProps};

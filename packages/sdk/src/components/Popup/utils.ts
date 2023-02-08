@@ -6,7 +6,7 @@ import {PopupParams} from './types';
  * Prepares popup parameters before sending them to native app.
  * @param params - popup parameters.
  */
-function preparePopupParams(params: PopupParams): BridgePopupParams {
+export function preparePopupParams(params: PopupParams): BridgePopupParams {
   const message = params.message.trim();
   const title = (params.title || '').trim();
   const buttons = params.buttons || [];
@@ -57,5 +57,3 @@ function preparePopupParams(params: PopupParams): BridgePopupParams {
   }
   return {title, message, buttons: preparedButtons};
 }
-
-export {preparePopupParams};

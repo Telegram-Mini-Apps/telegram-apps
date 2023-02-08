@@ -4,7 +4,7 @@ import {BridgeEventListener} from '@twa.js/bridge';
 import {ViewportEventsMap} from './events';
 import {BridgeLike} from '../../types';
 
-interface RequestViewportResult {
+export interface RequestViewportResult {
   height: number;
   width: number;
   isStateStable: boolean;
@@ -23,7 +23,7 @@ function truncate(value: number): number {
  * Contains information about current WebApp device viewport, its dimensions
  * and state.
  */
-class Viewport {
+export class Viewport {
   /**
    * Requests fresh information about current viewport.
    * FIXME: Be careful using this function in desktop version of Telegram as
@@ -236,5 +236,3 @@ class Viewport {
    */
   off = this.ee.off.bind(this.ee);
 }
-
-export {RequestViewportResult, Viewport};

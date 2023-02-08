@@ -6,9 +6,8 @@
  * @param url - URL to format.
  * @throws {Error} URL protocol is not supported by OS, or link has not allowed
  * protocol.
- * @private
  */
-function formatURL(url: string): string {
+export function formatURL(url: string): string {
   // We do create new anchor element and assign its href to passed URL. This
   // will format link, so it could be used in `window.open`.
   const anchor = document.createElement('a');
@@ -23,5 +22,3 @@ function formatURL(url: string): string {
   }
   return anchor.href;
 }
-
-export {formatURL};

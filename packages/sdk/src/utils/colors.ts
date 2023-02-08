@@ -5,7 +5,7 @@ import {toRGB} from '@twa.js/utils';
  * @param color - color in format, accepted by `toRGB` function.
  * @see toRGB
  */
-function isColorDark(color: string): boolean {
+export function isColorDark(color: string): boolean {
   // Convert color to RGB.
   color = toRGB(color);
 
@@ -20,5 +20,3 @@ function isColorDark(color: string): boolean {
   );
   return hsp < 120;
 }
-
-export {isColorDark};

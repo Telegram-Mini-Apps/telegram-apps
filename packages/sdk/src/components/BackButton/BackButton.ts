@@ -12,7 +12,7 @@ type Emitter = EventEmitter<BackButtonEventsMap>;
  * you want to provide a way to go bach in routing history or "rollback" some
  * action.
  */
-class BackButton {
+export class BackButton {
   private readonly ee: Emitter = new EventEmitter();
   private _isVisible = false;
 
@@ -80,5 +80,3 @@ class BackButton {
    */
   supports: SupportsFunc<'show' | 'hide'>;
 }
-
-export {BackButton};

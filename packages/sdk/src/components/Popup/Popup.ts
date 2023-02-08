@@ -11,7 +11,7 @@ import {BridgeLike} from '../../types';
  * Controls currently displayed application popup. It allows developers to
  * open new custom popups and detect popup-connected events.
  */
-class Popup {
+export class Popup {
   private readonly ee = new EventEmitter<PopupEventsMap>();
   private _isOpened = false;
 
@@ -91,5 +91,3 @@ class Popup {
    */
   supports: SupportsFunc<'open'>;
 }
-
-export {Popup};

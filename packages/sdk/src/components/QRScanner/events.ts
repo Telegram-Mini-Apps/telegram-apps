@@ -1,7 +1,7 @@
 /**
  * Information about events supported by QRScanner.
  */
-interface QRScannerEventsMap {
+export interface QRScannerEventsMap {
   /**
    * Open state changed.
    * @param isOpened - current state.
@@ -12,11 +12,10 @@ interface QRScannerEventsMap {
 /**
  * Known QRScanner event name.
  */
-type QRScannerEventName = keyof QRScannerEventsMap;
+export type QRScannerEventName = keyof QRScannerEventsMap;
 
 /**
  * Listener for specified QRScanner event.
  */
-type QRScannerEventListener<E extends QRScannerEventName> = QRScannerEventsMap[E];
-
-export {QRScannerEventName, QRScannerEventsMap, QRScannerEventListener};
+export type QRScannerEventListener<E extends QRScannerEventName> =
+  QRScannerEventsMap[E];

@@ -7,7 +7,7 @@ import {
 /**
  * Class which is responsible for displaying Web Apps init data.
  */
-class InitData {
+export class InitData {
   private readonly _canSendAfter: Date | null = null;
   private readonly _chat: Chat | null = null;
   private readonly _queryId: string | null = null;
@@ -100,5 +100,3 @@ class InitData {
     return this._user;
   }
 }
-
-export {InitData};

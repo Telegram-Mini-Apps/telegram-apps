@@ -9,7 +9,7 @@ import {BridgeLike} from '../../types';
  * Provides common Web Apps functionality not covered by other system
  * components.
  */
-class WebApp {
+export class WebApp {
   constructor(
     private readonly bridge: BridgeLike,
     version: Version,
@@ -196,5 +196,3 @@ class WebApp {
    */
   version: Version;
 }
-
-export {WebApp};

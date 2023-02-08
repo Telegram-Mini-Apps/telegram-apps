@@ -1,7 +1,7 @@
 /**
  * Information about events supported by Viewport.
  */
-interface ViewportEventsMap {
+export interface ViewportEventsMap {
   /**
    * Height changed.
    * @param height - current height.
@@ -30,11 +30,10 @@ interface ViewportEventsMap {
 /**
  * Known Viewport event name.
  */
-type ViewportEventName = keyof ViewportEventsMap;
+export type ViewportEventName = keyof ViewportEventsMap;
 
 /**
  * Listener for specified Viewport event.
  */
-type ViewportEventListener<E extends ViewportEventName> = ViewportEventsMap[E];
-
-export {ViewportEventName, ViewportEventsMap, ViewportEventListener};
+export type ViewportEventListener<E extends ViewportEventName> =
+  ViewportEventsMap[E];

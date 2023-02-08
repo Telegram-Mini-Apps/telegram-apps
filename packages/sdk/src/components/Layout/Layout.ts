@@ -9,7 +9,7 @@ import {ColorScheme} from '../WebApp';
 /**
  * Class which provides information about current Web App layout.
  */
-class Layout {
+export class Layout {
   private readonly ee = new EventEmitter<LayoutEventsMap>();
 
   constructor(
@@ -110,5 +110,3 @@ class Layout {
     this.ee.emit('headerColorChanged', color);
   }
 }
-
-export {Layout};
