@@ -2,8 +2,5 @@
   "extends": "./tsconfig.json",
   "include": [
     "src/validation.ts"
-  ],
-  "exclude": [
-    "src/__tests__"
   ]
 }

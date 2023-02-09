@@ -1,6 +1,6 @@
 import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
-import {Bridge} from '../Bridge';
-import * as postEventPackage from '../posting/postEvent';
+import {Bridge} from '../src/Bridge';
+import * as postEventPackage from '../src/posting/postEvent';
 
 const now = new Date('2022-11-04T10:10:00.300Z');
 jest.useFakeTimers().setSystemTime(now);

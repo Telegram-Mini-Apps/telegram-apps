@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {parseInitData} from '../parsing';
+import {parseInitData} from '../src/parsing';
 
 describe('parsing', () => {
   describe('parseInitData', () => {

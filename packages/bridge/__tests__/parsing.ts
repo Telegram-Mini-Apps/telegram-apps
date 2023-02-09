@@ -5,7 +5,7 @@ import {
   parsePopupClosedPayload, parseQrTextReceivedPayload,
   parseThemeChangedPayload,
   parseViewportChangedPayload,
-} from '../parsing';
+} from '../src/parsing';
 
 describe('parsing.ts', () => {
   describe('parseThemeChangedPayload', () => {

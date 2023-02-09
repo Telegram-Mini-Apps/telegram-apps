@@ -4,7 +4,6 @@
     "src"
   ],
   "exclude": [
-    "src/validation.ts",
-    "src/__tests__"
+    "src/validation.ts"
   ]
 }

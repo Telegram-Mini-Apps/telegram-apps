@@ -1,6 +1,6 @@
 import {describe, expect, it} from '@jest/globals';
-import {supports} from '../supports';
-import {PostEventName} from '../posting';
+import {supports} from '../src/supports';
+import {PostEventName} from '../src/posting';
 
 describe('supports.ts', () => {
   describe('supports', () => {

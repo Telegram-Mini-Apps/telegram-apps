@@ -1,5 +1,5 @@
 import {expect, it, describe, jest, beforeEach, afterEach} from '@jest/globals';
-import {defineEventsReceiver} from '../events-receiver';
+import {defineEventsReceiver} from '../src/events-receiver';
 
 describe('events-receiver.ts', () => {
   describe('defineEventsReceiver', () => {

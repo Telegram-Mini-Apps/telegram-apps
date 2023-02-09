@@ -1,5 +1,5 @@
 import {beforeEach, describe, expect, it, jest} from '@jest/globals';
-import {schemaToParsers} from '../../parsing/shared';
+import {schemaToParsers} from '../../src/parsing/shared';
 
 let knownParsers: Record<string, () => void>;
 

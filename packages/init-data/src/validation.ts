@@ -10,7 +10,6 @@ export interface ValidateOptions {
    *
    * In case, this value is equal to 0, function does not check init data
    * expiration.
-   *
    * @default 86400 (1 day)
    */
   expiresIn?: number;

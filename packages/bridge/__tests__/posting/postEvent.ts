@@ -1,5 +1,5 @@
 import {describe, jest, beforeEach, afterEach, it, expect} from '@jest/globals';
-import {postEvent} from '../../posting';
+import {postEvent} from '../../src/posting';
 
 describe('posting', () => {
   describe('postEvent.ts', () => {

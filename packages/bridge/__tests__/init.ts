@@ -1,6 +1,6 @@
 import {describe, expect, it, jest} from '@jest/globals';
-import {init} from '../init';
-import {Bridge} from '../Bridge';
+import {init} from '../src/init';
+import {Bridge} from '../src/Bridge';
 
 describe('init.ts', () => {
   describe('init', () => {

@@ -1,5 +1,5 @@
 import {afterEach, describe, expect, it, jest} from '@jest/globals';
-import {isBrowserEnv, hasTelegramWebviewProxy, hasExternalNotify} from '../env';
+import {isBrowserEnv, hasTelegramWebviewProxy, hasExternalNotify} from '../src/env';
 
 let windowSpy = jest.spyOn(window, 'window', 'get');
 

@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {createSearchParamsParser} from '../../parsing';
+import {createSearchParamsParser} from '../../src/parsing';
 
 describe('parsing', () => {
   describe('search-params.ts', () => {
