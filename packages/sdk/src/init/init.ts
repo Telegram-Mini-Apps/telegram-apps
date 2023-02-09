@@ -1,4 +1,4 @@
-import {isBrowserEnv, init as initBridge} from '@twa.js/bridge';
+import {isBrowserEnv, Bridge} from '@twa.js/bridge';
 
 import {
   BackButton,
@@ -20,8 +20,8 @@ import {BridgeScoped} from '../lib';
  * Initializes all SDK components.
  * @param options - initialization options.
  */
-async function init(options: InitOptions = {}): Promise<InitResult> {
-  const {checkCompat = true} = options;
+export async function init(options: InitOptions = {}): Promise<InitResult> {
+  const {checkCompat = true, acceptScrollbarStyle = true} = options;
 
   // Get Web App data.
   const {
@@ -37,14 +37,14 @@ async function init(options: InitOptions = {}): Promise<InitResult> {
   } = themeParams;
 
   // Create Bridge instance.
-  const twaBridge = initBridge(options);
+  const twaBridge = Bridge.init(options);
   const bridge = checkCompat ? new BridgeScoped(twaBridge, version) : twaBridge;
 
   // In case, we are currently in iframe, it is required to listen to
   // messages, coming from parent source to apply requested changes.
   // The only one case, when current application was placed into iframe is
   // web version of Telegram.
-  if (isBrowserEnv()) {
+  if (acceptScrollbarStyle && isBrowserEnv()) {
     // Create special style element which is responsible for application
     // style controlled by external app.
     const styleElement = document.createElement('style');
@@ -60,12 +60,7 @@ async function init(options: InitOptions = {}): Promise<InitResult> {
   }
 
   // Get viewport information.
-  const {
-    width,
-    isExpanded,
-    height,
-    isStateStable,
-  } = platform !== 'tdesktop' && platform !== 'macos'
+  const {width, isExpanded, height, isStateStable} = platform !== 'macos'
     ? await Viewport.request(bridge)
     : {
       width: window.innerWidth,
@@ -91,5 +86,3 @@ async function init(options: InitOptions = {}): Promise<InitResult> {
     webApp: new WebApp(bridge, version, platform),
   };
 }
-
-export {init};

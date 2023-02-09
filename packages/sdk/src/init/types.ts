@@ -14,7 +14,7 @@ import {
   WebApp,
 } from '../components';
 
-interface InitResult {
+export interface InitResult {
   backButton: BackButton;
   bridge: Bridge;
   closingConfirmation: ClosingConfirmation;
@@ -29,7 +29,17 @@ interface InitResult {
   webApp: WebApp;
 }
 
-interface InitOptions extends Pick<BridgeInitOptions, 'targetOrigin'>{
+export interface InitOptions extends Pick<BridgeInitOptions, 'targetOrigin'>{
+  /**
+   * Should SDK accept scrollbar styles sent from the Telegram web application.
+   * This option is only used in Web Z and Web K Telegram applications.
+   *
+   * You could specify the `false` value to apply your own styles for the
+   * scrollbar.
+   * @default true
+   */
+  acceptScrollbarStyle?: boolean;
+
   /**
    * Enable debug mode.
    * @default false
@@ -45,5 +55,3 @@ interface InitOptions extends Pick<BridgeInitOptions, 'targetOrigin'>{
    */
   checkCompat?: boolean;
 }
-
-export {InitOptions, InitResult};
