@@ -22,7 +22,7 @@ const parseLaunchParams = createSearchParamsParser({
 /**
  * Extracts launch params from current environment.
  */
-function retrieveLaunchParams(): LaunchParams {
+export function retrieveLaunchParams(): LaunchParams {
   const sessionStorageKey = '__telegram-launch-params__';
 
   // Try to extract Web App data from search parameters. This block of code
@@ -47,5 +47,3 @@ function retrieveLaunchParams(): LaunchParams {
   }
   throw new Error('Unable to extract launch params.');
 }
-
-export {retrieveLaunchParams};

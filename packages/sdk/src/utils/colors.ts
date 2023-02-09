@@ -1,8 +1,8 @@
 import {toRGB} from '@twa.js/utils';
 
 /**
- * Returns true in case, color is recognized as dark.
- * @param color - color in format, accepted by `toRGB` function.
+ * Returns true in case, the color is recognized as dark.
+ * @param color - color in any format acceptable by toRGB function.
  * @see toRGB
  */
 export function isColorDark(color: string): boolean {
