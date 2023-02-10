@@ -11,9 +11,9 @@ describe('utils', () => {
             openPopup: 'web_app_open_popup',
             closeApp: 'web_app_close',
           });
-          // web_app_open_popup is supported starting from 6.2.
+          // "web_app_open_popup" is supported starting from 6.2.
           expect(supports('openPopup')).toBe(false);
-          // web_app_close is always supported.
+          // "web_app_close" is always supported.
           expect(supports('closeApp')).toBe(true);
         });
       });
