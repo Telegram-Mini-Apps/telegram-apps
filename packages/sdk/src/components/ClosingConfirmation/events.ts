@@ -6,7 +6,7 @@ export interface ClosingConfirmationEventsMap {
    * Confirmation status changed.
    * @param isEnabled - current status.
    */
-  change: (isEnabled: boolean) => void;
+  isEnabledChanged: (isEnabled: boolean) => void;
 }
 
 /**

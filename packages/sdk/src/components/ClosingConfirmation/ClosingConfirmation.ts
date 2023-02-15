@@ -28,7 +28,7 @@ export class ClosingConfirmation {
     this._isEnabled = value;
 
     // Emit event.
-    this.ee.emit('change', value);
+    this.ee.emit('isEnabledChanged', value);
   }
 
   /**
