@@ -5,14 +5,6 @@ import {BridgeLike} from '../../types';
 
 type Emitter = EventEmitter<MainButtonEventsMap>;
 
-export interface MainButtonProps {
-  /**
-   * Should changes be automatically sent to Telegram native application.
-   * @default true
-   */
-  autocommit?: boolean;
-}
-
 /**
  * Controls the main button, which is displayed at the bottom
  * of the Web App in the Telegram interface.
@@ -31,139 +23,64 @@ export class MainButton {
     private readonly bridge: BridgeLike,
     private _color: RGB,
     private _textColor: RGB,
-    props: MainButtonProps = {},
   ) {
-    const {autocommit = true} = props;
-    this.autocommit = autocommit;
-  }
-
-  /**
-   * Flag which is responsible for automatic commit of changes to native
-   * application in case, they were done.
-   */
-  autocommit: boolean;
-
-  private set color(value: RGB) {
-    const prev = this._color;
-    this._color = value;
-
-    if (this.autocommit) {
-      this.commit();
-    }
-    if (this._color !== prev) {
-      this.ee.emit('colorChanged', this._color);
-    }
-  }
-
-  /**
-   * Returns current main button background color.
-   */
-  get color(): RGB {
-    return this._color;
   }
 
   private set isActive(value: boolean) {
-    const prev = this._isActive;
-    this._isActive = value;
+    this.commit();
 
-    if (this.autocommit) {
-      this.commit();
-    }
-    if (this._isActive !== prev) {
+    if (this._isActive !== value) {
+      this._isActive = value;
       this.ee.emit('activeChanged', this._isActive);
     }
   }
 
   /**
-   * Returns true in case, main button is currently enabled.
+   * Returns true in case, MainButton is currently enabled.
    */
   get isActive(): boolean {
     return this._isActive;
   }
 
   private set isProgressVisible(value: boolean) {
-    const prev = this._isProgressVisible;
-    this._isProgressVisible = value;
+    this.commit();
 
-    if (this.autocommit) {
-      this.commit();
-    }
-    if (this._isProgressVisible !== prev) {
+    if (this._isProgressVisible !== value) {
+      this._isProgressVisible = value;
       this.ee.emit('progressVisibleChanged', this._isProgressVisible);
     }
   }
 
   /**
-   * Returns true in case, main button loading progress is currently visible.
+   * Returns true in case, MainButton loading progress is currently visible.
    */
   get isProgressVisible(): boolean {
     return this._isProgressVisible;
   }
 
   private set isVisible(value: boolean) {
-    const prev = this._isVisible;
-    this._isVisible = value;
+    this.commit();
 
-    if (this.autocommit) {
-      this.commit();
-    }
-    if (this._isVisible !== prev) {
+    if (this._isVisible !== value) {
+      this._isVisible = value;
       this.ee.emit('visibleChanged', this._isVisible);
     }
   }
 
   /**
-   * Returns true in case, main button is currently visible.
+   * Returns true in case, MainButton is currently visible.
    */
   get isVisible(): boolean {
     return this._isVisible;
   }
 
-  private set text(value: string) {
-    const prev = this._text;
-    this._text = value;
-
-    if (this.autocommit) {
-      this.commit();
-    }
-    if (this._text !== prev) {
-      this.ee.emit('textChanged', value);
-    }
-  }
-
   /**
-   * Returns current main button text.
+   * Sends current local button state to Telegram application.
    */
-  get text(): string {
-    return this._text;
-  }
-
-  private set textColor(value: RGB) {
-    const prev = this._textColor;
-    this._textColor = value;
-
-    if (this.autocommit) {
-      this.commit();
-    }
-    if (this._textColor !== prev) {
-      this.ee.emit('textColorChanged', this._textColor);
-    }
-  }
-
-  /**
-   * Returns current main button text color.
-   */
-  get textColor(): RGB {
-    return this._textColor;
-  }
-
-  /**
-   * Sends current local button state to native app.
-   */
-  commit(): void {
+  private commit(): void {
     // We should not commit changes until payload is correct. We could
-    // have some invalid values in case, button instance could be created
-    // with empty values. Otherwise, unexpected behaviour could be received.
+    // have some invalid values in case, button instance was created
+    // with empty values. Otherwise, an unexpected behaviour could be received.
     if (this.text === '') {
       return;
     }
@@ -175,6 +92,27 @@ export class MainButton {
       color: this.color,
       text_color: this.textColor,
     });
+  }
+
+  /**
+   * Returns current main button background color.
+   */
+  get color(): RGB {
+    return this._color;
+  }
+
+  /**
+   * Returns current main button text.
+   */
+  get text(): string {
+    return this._text;
+  }
+
+  /**
+   * Returns current main button text color.
+   */
+  get textColor(): RGB {
+    return this._textColor;
   }
 
   /**
@@ -266,30 +204,51 @@ export class MainButton {
   /**
    * Sets new main button text. Returns current button instance for chaining.
    * Minimal length for text is 1 symbol, and maximum is 64 symbols.
+   *
+   * Returns current button instance for chaining.
    * @param text - new text.
    */
   setText(text: string): this {
-    this.text = text;
+    this.commit();
+
+    if (this._text !== text) {
+      this._text = text;
+      this.ee.emit('textChanged', text);
+    }
     return this;
   }
 
   /**
    * Sets new main button text color. Returns current button instance for
    * chaining.
+   *
+   * Returns current button instance for chaining.
    * @param color - new text color.
    */
   setTextColor(color: RGB): this {
-    this.textColor = color;
+    this.commit();
+
+    if (this._textColor !== color) {
+      this._textColor = color;
+      this.ee.emit('textColorChanged', this._textColor);
+    }
     return this;
   }
 
   /**
    * Updates current button color. Returns current button instance for
    * chaining.
+   *
+   * Returns current button instance for chaining.
    * @param color - color to set.
    */
   setColor(color: RGB): this {
-    this.color = color;
+    this.commit();
+
+    if (this._color !== color) {
+      this._color = color;
+      this.ee.emit('colorChanged', this._color);
+    }
     return this;
   }
 }
