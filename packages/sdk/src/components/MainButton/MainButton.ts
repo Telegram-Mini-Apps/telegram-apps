@@ -225,8 +225,8 @@ export class MainButton {
    * @param color - new text color.
    */
   setTextColor(color: RGB): this {
-    if (this._color !== color) {
-      this._color = color;
+    if (this._textColor !== color) {
+      this._textColor = color;
       this.commit();
       this.ee.emit('textColorChanged', color);
     }
