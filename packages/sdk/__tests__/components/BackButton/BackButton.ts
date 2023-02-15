@@ -17,13 +17,13 @@ describe('components', () => {
             expect(postEvent).toHaveBeenCalledWith('web_app_setup_back_button', {is_visible: false});
           });
 
-          it('should emit "visibleChanged" event with false value', () => {
+          it('should emit "isVisibleChanged" event with false value', () => {
             const backButton = new BackButton({postEvent: jest.fn()} as any, '');
             const listener = jest.fn();
 
             backButton.show();
 
-            backButton.on('visibleChanged', listener);
+            backButton.on('isVisibleChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
             backButton.hide();
             expect(listener).toHaveBeenCalledTimes(1);
@@ -43,11 +43,11 @@ describe('components', () => {
             expect(postEvent).toHaveBeenCalledWith('web_app_setup_back_button', {is_visible: true});
           });
 
-          it('should emit "visibleChanged" event with true value', () => {
+          it('should emit "isVisibleChanged" event with true value', () => {
             const backButton = new BackButton({postEvent: jest.fn()} as any, '');
             const listener = jest.fn();
 
-            backButton.on('visibleChanged', listener);
+            backButton.on('isVisibleChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
             backButton.show();
             expect(listener).toHaveBeenCalledTimes(1);
@@ -95,18 +95,18 @@ describe('components', () => {
             });
           });
 
-          describe('"visibleChanged" event', () => {
+          describe('"isVisibleChanged" event', () => {
             it('should remove event listener from event', () => {
               const listener = jest.fn();
               const backButton = new BackButton({postEvent: jest.fn()} as any, '');
 
-              backButton.on('visibleChanged', listener);
+              backButton.on('isVisibleChanged', listener);
 
               expect(listener).toHaveBeenCalledTimes(0);
               backButton.show();
               expect(listener).toHaveBeenCalledTimes(1);
 
-              backButton.off('visibleChanged', listener);
+              backButton.off('isVisibleChanged', listener);
 
               expect(listener).toHaveBeenCalledTimes(1);
               backButton.hide();

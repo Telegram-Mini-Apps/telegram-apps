@@ -11,7 +11,7 @@ export interface BackButtonEventsMap {
    * Visibility changed.
    * @param visible - current visibility state.
    */
-  visibleChanged: (visible: boolean) => void;
+  isVisibleChanged: (visible: boolean) => void;
 }
 
 /**

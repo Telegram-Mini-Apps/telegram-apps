@@ -30,7 +30,7 @@ export class BackButton {
       return;
     }
     this._isVisible = visible;
-    this.ee.emit('visibleChanged', visible);
+    this.ee.emit('isVisibleChanged', visible);
   }
 
   /**
