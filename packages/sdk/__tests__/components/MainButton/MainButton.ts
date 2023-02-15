@@ -1,137 +1,263 @@
 import {describe, expect, it, jest} from '@jest/globals';
-import {BackButton} from '../../../src';
+import {MainButton} from '../../../src';
 
 describe('components', () => {
-  describe('BackButton', () => {
-    describe('BackButton.ts', () => {
-      describe('BackButton', () => {
-        describe('hide', () => {
-          it('should call "web_app_setup_back_button" method ' +
-            'with "is_visible" equal to false', () => {
+  describe('MainButton', () => {
+    describe('MainButton.ts', () => {
+      describe('MainButton', () => {
+        describe('disable', () => {
+          it('should call "web_app_setup_main_button" method ' +
+            'with parameter where "is_active" property equal to false', () => {
             const postEvent = jest.fn();
-            const backButton = new BackButton({postEvent} as any, '');
+            const mainButton = new MainButton({postEvent} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+            mainButton.enable();
+            postEvent.mockClear();
 
             expect(postEvent).toHaveBeenCalledTimes(0);
-            backButton.hide();
+            mainButton.disable();
             expect(postEvent).toHaveBeenCalledTimes(1);
-            expect(postEvent).toHaveBeenCalledWith('web_app_setup_back_button', {is_visible: false});
+            expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
+            expect(postEvent.mock.calls[0][1]).toHaveProperty('is_active', false);
           });
 
-          it('should emit "visibleChanged" event with false value', () => {
-            const backButton = new BackButton({postEvent: jest.fn()} as any, '');
+          it('should emit "isActiveChanged" event with false value', () => {
             const listener = jest.fn();
+            const mainButton = new MainButton({postEvent: jest.fn()} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+            mainButton.enable();
 
-            backButton.show();
-
-            backButton.on('visibleChanged', listener);
+            mainButton.on('isActiveChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
-            backButton.hide();
+            mainButton.disable();
+            expect(listener).toHaveBeenCalledTimes(1);
+            expect(listener).toHaveBeenCalledWith(false);
+          });
+        });
+
+        describe('enable', () => {
+          it('should call "web_app_setup_main_button" method ' +
+            'with parameter where "is_active" property equal to true', () => {
+            const postEvent = jest.fn();
+            const mainButton = new MainButton({postEvent} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+            postEvent.mockClear();
+
+            expect(postEvent).toHaveBeenCalledTimes(0);
+            mainButton.enable();
+            expect(postEvent).toHaveBeenCalledTimes(1);
+            expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
+            expect(postEvent.mock.calls[0][1]).toHaveProperty('is_active', true);
+          });
+
+          it('should emit "isActiveChanged" event with true value', () => {
+            const listener = jest.fn();
+            const mainButton = new MainButton({postEvent: jest.fn()} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+
+            mainButton.on('isActiveChanged', listener);
+            expect(listener).toHaveBeenCalledTimes(0);
+            mainButton.enable();
+            expect(listener).toHaveBeenCalledTimes(1);
+            expect(listener).toHaveBeenCalledWith(true);
+          });
+        });
+
+        describe('hide', () => {
+          it('should call "web_app_setup_main_button" method ' +
+            'with parameter where "is_visible" property equal to false', () => {
+            const postEvent = jest.fn();
+            const mainButton = new MainButton({postEvent} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+            mainButton.show();
+            postEvent.mockClear();
+
+            expect(postEvent).toHaveBeenCalledTimes(0);
+            mainButton.hide();
+            expect(postEvent).toHaveBeenCalledTimes(1);
+            expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
+            expect(postEvent.mock.calls[0][1]).toHaveProperty('is_visible', false);
+          });
+
+          it('should emit "isVisibleChanged" event with false value', () => {
+            const listener = jest.fn();
+            const mainButton = new MainButton({postEvent: jest.fn()} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+            mainButton.show();
+
+            mainButton.on('isVisibleChanged', listener);
+            expect(listener).toHaveBeenCalledTimes(0);
+            mainButton.hide();
+            expect(listener).toHaveBeenCalledTimes(1);
+            expect(listener).toHaveBeenCalledWith(false);
+          });
+        });
+
+        describe('hideProgress', () => {
+          it('should call "web_app_setup_main_button" method ' +
+            'with parameter where "is_progress_visible" property equal to false', () => {
+            const postEvent = jest.fn();
+            const mainButton = new MainButton({postEvent} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+            mainButton.showProgress();
+            postEvent.mockClear();
+
+            expect(postEvent).toHaveBeenCalledTimes(0);
+            mainButton.hideProgress();
+            expect(postEvent).toHaveBeenCalledTimes(1);
+            expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
+            expect(postEvent.mock.calls[0][1]).toHaveProperty('is_progress_visible', false);
+          });
+
+          it('should emit "isProgressVisibleChanged" event with false value', () => {
+            const listener = jest.fn();
+            const mainButton = new MainButton({postEvent: jest.fn()} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+            mainButton.showProgress();
+
+            mainButton.on('isProgressVisibleChanged', listener);
+            expect(listener).toHaveBeenCalledTimes(0);
+            mainButton.hideProgress();
             expect(listener).toHaveBeenCalledTimes(1);
             expect(listener).toHaveBeenCalledWith(false);
           });
         });
 
         describe('show', () => {
-          it('should call "web_app_setup_back_button" method ' +
-            'with "is_visible" equal to true', () => {
+          it('should call "web_app_setup_main_button" method ' +
+            'with parameter where "is_visible" property equal to true', () => {
             const postEvent = jest.fn();
-            const backButton = new BackButton({postEvent} as any, '');
+            const mainButton = new MainButton({postEvent} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+            postEvent.mockClear();
 
             expect(postEvent).toHaveBeenCalledTimes(0);
-            backButton.show();
+            mainButton.show();
             expect(postEvent).toHaveBeenCalledTimes(1);
-            expect(postEvent).toHaveBeenCalledWith('web_app_setup_back_button', {is_visible: true});
+            expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
+            expect(postEvent.mock.calls[0][1]).toHaveProperty('is_visible', true);
           });
 
-          it('should emit "visibleChanged" event with true value', () => {
-            const backButton = new BackButton({postEvent: jest.fn()} as any, '');
+          it('should emit "isVisibleChanged" event with true value', () => {
             const listener = jest.fn();
+            const mainButton = new MainButton({postEvent: jest.fn()} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
 
-            backButton.on('visibleChanged', listener);
+            mainButton.on('isVisibleChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
-            backButton.show();
+            mainButton.show();
             expect(listener).toHaveBeenCalledTimes(1);
             expect(listener).toHaveBeenCalledWith(true);
           });
         });
 
-        describe('on', () => {
-          describe('"click" event', function () {
-            it('should add event listener to bridge\'s ' +
-              '"back_button_pressed" event', () => {
-              const on = jest.fn();
-              const backButton = new BackButton({on} as any, '');
-              const listener = jest.fn();
+        describe('showProgress', () => {
+          it('should call "web_app_setup_main_button" method ' +
+            'with parameter where "is_progress_visible" property equal to true', () => {
+            const postEvent = jest.fn();
+            const mainButton = new MainButton({postEvent} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+            postEvent.mockClear();
 
-              expect(on).toHaveBeenCalledTimes(0);
-              backButton.on('click', listener);
-              expect(on).toHaveBeenCalledTimes(1);
-              expect(on).toHaveBeenCalledWith('back_button_pressed', listener);
-            });
+            expect(postEvent).toHaveBeenCalledTimes(0);
+            mainButton.showProgress();
+            expect(postEvent).toHaveBeenCalledTimes(1);
+            expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
+            expect(postEvent.mock.calls[0][1]).toHaveProperty('is_progress_visible', true);
+          });
+
+          it('should emit "isProgressVisibleChanged" event with true value', () => {
+            const listener = jest.fn();
+            const mainButton = new MainButton({postEvent: jest.fn()} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+
+            mainButton.on('isProgressVisibleChanged', listener);
+            expect(listener).toHaveBeenCalledTimes(0);
+            mainButton.showProgress();
+            expect(listener).toHaveBeenCalledTimes(1);
+            expect(listener).toHaveBeenCalledWith(true);
           });
         });
 
-        describe('off', () => {
-          describe('"click" event', function () {
-            it('should remove event listener from bridge\'s ' +
-              '"back_button_pressed" event', () => {
-              const on = jest.fn();
-              const off = jest.fn();
-              const backButton = new BackButton({on, off} as any, '');
-              const listener = jest.fn();
+        describe('setText', () => {
+          it('should call "web_app_setup_main_button" method ' +
+            'with parameter where "text" property equal to specified value', () => {
+            const postEvent = jest.fn();
+            const mainButton = new MainButton({postEvent} as any, '#000000', '#ffffff');
 
-              expect(on).toHaveBeenCalledTimes(0);
-              backButton.on('click', listener);
-              expect(on).toHaveBeenCalledTimes(1);
-              expect(on).toHaveBeenCalledWith('back_button_pressed', listener);
-
-              // TODO: We should probably emit back_button_pressed event to
-              //  make sure, listener was removed.
-
-              expect(off).toHaveBeenCalledTimes(0);
-              backButton.off('click', listener);
-              expect(off).toHaveBeenCalledTimes(1);
-              expect(off).toHaveBeenCalledWith('back_button_pressed', listener);
-            });
+            expect(postEvent).toHaveBeenCalledTimes(0);
+            mainButton.setText('WOW');
+            expect(postEvent).toHaveBeenCalledTimes(1);
+            expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
+            expect(postEvent.mock.calls[0][1]).toHaveProperty('text', 'WOW');
           });
 
-          describe('"visibleChanged" event', () => {
-            it('should remove event listener from event', () => {
-              const listener = jest.fn();
-              const backButton = new BackButton({postEvent: jest.fn()} as any, '');
+          it('should emit "textChanged" event with specified value', () => {
+            const listener = jest.fn();
+            const mainButton = new MainButton({postEvent: jest.fn()} as any, '#000000', '#ffffff');
 
-              backButton.on('visibleChanged', listener);
-
-              expect(listener).toHaveBeenCalledTimes(0);
-              backButton.show();
-              expect(listener).toHaveBeenCalledTimes(1);
-
-              backButton.off('visibleChanged', listener);
-
-              expect(listener).toHaveBeenCalledTimes(1);
-              backButton.hide();
-              expect(listener).toHaveBeenCalledTimes(1);
-            });
+            mainButton.on('textChanged', listener);
+            expect(listener).toHaveBeenCalledTimes(0);
+            mainButton.setText('Punch');
+            expect(listener).toHaveBeenCalledTimes(1);
+            expect(listener).toHaveBeenCalledWith('Punch');
           });
         });
 
-        describe('supports', () => {
-          describe('show / hide', () => {
-            it('should return true in case, BackButton ' +
-              'version is 6.1 or higher. False, otherwise', () => {
-              const backButton1 = new BackButton({} as any, '6.0');
-              expect(backButton1.supports('show')).toBe(false);
-              expect(backButton1.supports('hide')).toBe(false);
+        describe('setTextColor', () => {
+          it('should call "web_app_setup_main_button" method ' +
+            'with parameter where "text_color" property equal to specified value', () => {
+            const postEvent = jest.fn();
+            const mainButton = new MainButton({postEvent} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+            postEvent.mockClear();
 
-              const backButton2 = new BackButton({} as any, '6.1');
-              expect(backButton2.supports('show')).toBe(true);
-              expect(backButton2.supports('hide')).toBe(true);
+            expect(postEvent).toHaveBeenCalledTimes(0);
+            mainButton.setTextColor('#ffaacc');
+            expect(postEvent).toHaveBeenCalledTimes(1);
+            expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
+            expect(postEvent.mock.calls[0][1]).toHaveProperty('text_color', '#ffaacc');
+          });
 
-              const backButton3 = new BackButton({} as any, '6.2');
-              expect(backButton3.supports('show')).toBe(true);
-              expect(backButton3.supports('hide')).toBe(true);
-            });
-          })
+          it('should emit "textColorChanged" event with specified value', () => {
+            const listener = jest.fn();
+            const mainButton = new MainButton({postEvent: jest.fn()} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+
+            mainButton.on('textColorChanged', listener);
+            expect(listener).toHaveBeenCalledTimes(0);
+            mainButton.setTextColor('#aaaaaa');
+            expect(listener).toHaveBeenCalledTimes(1);
+            expect(listener).toHaveBeenCalledWith('#aaaaaa');
+          });
+        });
+
+        describe('setColor', () => {
+          it('should call "web_app_setup_main_button" method ' +
+            'with parameter where "color" property equal to specified value', () => {
+            const postEvent = jest.fn();
+            const mainButton = new MainButton({postEvent} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+            postEvent.mockClear();
+
+            expect(postEvent).toHaveBeenCalledTimes(0);
+            mainButton.setColor('#ffaacc');
+            expect(postEvent).toHaveBeenCalledTimes(1);
+            expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
+            expect(postEvent.mock.calls[0][1]).toHaveProperty('color', '#ffaacc');
+          });
+
+          it('should emit "colorChanged" event with specified value', () => {
+            const listener = jest.fn();
+            const mainButton = new MainButton({postEvent: jest.fn()} as any, '#000000', '#ffffff');
+            mainButton.setText('TEST');
+
+            mainButton.on('colorChanged', listener);
+            expect(listener).toHaveBeenCalledTimes(0);
+            mainButton.setColor('#aaaaaa');
+            expect(listener).toHaveBeenCalledTimes(1);
+            expect(listener).toHaveBeenCalledWith('#aaaaaa');
+          });
         });
       });
     });
