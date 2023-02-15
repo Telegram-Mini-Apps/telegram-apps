@@ -27,12 +27,12 @@ export class MainButton {
   }
 
   private set isActive(value: boolean) {
-    this.commit();
-
-    if (this._isActive !== value) {
-      this._isActive = value;
-      this.ee.emit('activeChanged', this._isActive);
+    if (this._isActive === value) {
+      return
     }
+    this._isActive = value;
+    this.commit();
+    this.ee.emit('isActiveChanged', this._isActive);
   }
 
   /**
@@ -43,12 +43,12 @@ export class MainButton {
   }
 
   private set isProgressVisible(value: boolean) {
-    this.commit();
-
-    if (this._isProgressVisible !== value) {
-      this._isProgressVisible = value;
-      this.ee.emit('progressVisibleChanged', this._isProgressVisible);
+    if (this._isProgressVisible === value) {
+      return;
     }
+    this._isProgressVisible = value;
+    this.commit();
+    this.ee.emit('isProgressVisibleChanged', this._isProgressVisible);
   }
 
   /**
@@ -59,12 +59,12 @@ export class MainButton {
   }
 
   private set isVisible(value: boolean) {
-    this.commit();
-
-    if (this._isVisible !== value) {
-      this._isVisible = value;
-      this.ee.emit('visibleChanged', this._isVisible);
+    if (this._isVisible === value) {
+      return;
     }
+    this._isVisible = value;
+    this.commit();
+    this.ee.emit('isVisibleChanged', this._isVisible);
   }
 
   /**
@@ -209,10 +209,9 @@ export class MainButton {
    * @param text - new text.
    */
   setText(text: string): this {
-    this.commit();
-
     if (this._text !== text) {
       this._text = text;
+      this.commit();
       this.ee.emit('textChanged', text);
     }
     return this;
@@ -226,11 +225,10 @@ export class MainButton {
    * @param color - new text color.
    */
   setTextColor(color: RGB): this {
-    this.commit();
-
-    if (this._textColor !== color) {
-      this._textColor = color;
-      this.ee.emit('textColorChanged', this._textColor);
+    if (this._color !== color) {
+      this._color = color;
+      this.commit();
+      this.ee.emit('textColorChanged', color);
     }
     return this;
   }
@@ -243,10 +241,9 @@ export class MainButton {
    * @param color - color to set.
    */
   setColor(color: RGB): this {
-    this.commit();
-
     if (this._color !== color) {
       this._color = color;
+      this.commit();
       this.ee.emit('colorChanged', this._color);
     }
     return this;

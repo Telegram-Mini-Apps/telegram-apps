@@ -8,7 +8,7 @@ export interface MainButtonEventsMap {
    * Active status changed.
    * @param isActive - current state.
    */
-  activeChanged: (isActive: boolean) => void;
+  isActiveChanged: (isActive: boolean) => void;
 
   /**
    * Main button was clicked.
@@ -25,7 +25,7 @@ export interface MainButtonEventsMap {
    * Progress visibility changed.
    * @param isVisible - current state.
    */
-  progressVisibleChanged: (isVisible: boolean) => void;
+  isProgressVisibleChanged: (isVisible: boolean) => void;
 
   /**
    * Text changed.
@@ -43,7 +43,7 @@ export interface MainButtonEventsMap {
    * Visibility changed.
    * @param isVisible - current main button visibility state.
    */
-  visibleChanged: (isVisible: boolean) => void;
+  isVisibleChanged: (isVisible: boolean) => void;
 }
 
 /**
