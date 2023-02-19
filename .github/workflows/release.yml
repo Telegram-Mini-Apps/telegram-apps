@@ -52,7 +52,7 @@ jobs:
         run: |
           git config user.name "${{ vars.BOT_USER_NAME }}"
           git config user.email "${{ vars.BOT_USER_NAME }}@users.noreply.github.com"
-          git remote set-url origin https://${{ vars.BOT_USER_NAME }}:${{ BOT_ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git remote set-url origin https://${{ vars.BOT_USER_NAME }}:${{ secrets.BOT_ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY
 
       - name: Publish packages
         env:
