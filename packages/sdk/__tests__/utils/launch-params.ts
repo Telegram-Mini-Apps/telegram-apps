@@ -1,7 +1,7 @@
 import {afterEach, describe, expect, it, jest} from '@jest/globals';
-import {retrieveLaunchParams} from '../../src/init/launch-params';
+import {retrieveLaunchParams} from '../../src';
 
-describe('init', () => {
+describe('utils', () => {
   describe('launch-params.ts', () => {
     describe('retrieveLaunchParams', () => {
       afterEach(() => {

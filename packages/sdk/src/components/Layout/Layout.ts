@@ -2,9 +2,8 @@ import {EventEmitter, RGB, Version} from '@twa.js/utils';
 import {HeaderColorKey} from '@twa.js/bridge';
 
 import {LayoutEventsMap} from './events';
-import {BridgeLike} from '../../types';
+import {BridgeLike, ColorScheme} from '../../types';
 import {createSupportsFunc, isColorDark, SupportsFunc} from '../../utils';
-import {ColorScheme} from '../WebApp';
 
 /**
  * Class which provides information about current Web App layout.

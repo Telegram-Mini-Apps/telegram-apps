@@ -1,9 +1,8 @@
 import {Version, compareVersions} from '@twa.js/utils';
 import {BridgeEventListener, InvoiceStatus, supports} from '@twa.js/bridge';
 
-import {Platform} from './types';
 import {createSupportsFunc, formatURL, SupportsFunc} from '../../utils';
-import {BridgeLike} from '../../types';
+import {BridgeLike, Platform} from '../../types';
 
 /**
  * Provides common Web Apps functionality not covered by other system
