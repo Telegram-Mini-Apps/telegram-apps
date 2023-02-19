@@ -28,6 +28,7 @@
   },
   "scripts": {
     "build": "lerna run build",
+    "build:no-cache": "lerna run build --skip-nx-cache",
     "commit": "git cz",
     "utils:dev": "lerna run --scope=@twa.js/utils dev",
     "utils:build": "lerna run --scope=@twa.js/utils build",
@@ -45,7 +46,7 @@
     "ci:lint": "lerna run lint",
     "ci:docs:install": "pnpm i --filter documentation",
     "ci:docs:build": "lerna run build --scope=documentation",
-    "ci:packages:build": "lerna run build --ignore=documentation",
+    "ci:packages:build": "lerna run build --ignore=documentation --skip-nx-cache",
     "ci:test": "lerna run test",
     "ci:publish": "lerna publish from-package --no-private -y"
   },
