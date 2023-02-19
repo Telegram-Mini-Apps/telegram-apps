@@ -102,10 +102,10 @@ will receive `click` event. Otherwise, no event will be received.
 
 Events available for [listening](../about#events):
 
-- `activeChanged: (isActive: boolean) => void`
 - `click: () => void`
 - `colorChanged: (color: RGB) => void`
-- `progressVisibleChanged: (isVisible: boolean) => void`
+- `isProgressVisibleChanged: (isVisible: boolean) => void`
+- `isEnabledChanged: (isEnabled: boolean) => void`
+- `isVisibleChanged: (isVisible: boolean) => void`
 - `textChanged: (text: string) => void`
 - `textColorChanged: (color: RGB) => void`
-- `visibleChanged: (isVisible: boolean) => void`

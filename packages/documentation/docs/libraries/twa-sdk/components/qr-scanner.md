@@ -34,7 +34,7 @@ console.log(scanner.isOpened); // false
 
 Events available for [listening](../about#events):
 
-- `openChanged: (isOpened: boolean) => void`
+- `isOpenedChanged: (isOpened: boolean) => void`
 
 ## Methods support
 

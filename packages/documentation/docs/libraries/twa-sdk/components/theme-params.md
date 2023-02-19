@@ -55,3 +55,9 @@ Class contains list of colors, which could be either `RGB` or `null`:
 - `linkColor`
 - `secondaryBackgroundColor`
 - `textColor`
+
+## Events
+
+Events available for [listening](../about#events):
+
+- `change: () => void`

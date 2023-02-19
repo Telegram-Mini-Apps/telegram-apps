@@ -78,4 +78,4 @@ Events available for [listening](../about#events):
 - `heightChanged: (height: number) => void`
 - `widthChanged: (width: number) => void`
 - `stableHeightChanged: (stableHeight: number) => void`
-- `expansionChanged: (isExpanded: boolean) => void`
+- `isExpandedChanged: (isExpanded: boolean) => void`
