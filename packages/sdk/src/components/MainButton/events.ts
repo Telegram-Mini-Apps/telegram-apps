@@ -6,9 +6,9 @@ import {RGB} from '@twa.js/utils';
 export interface MainButtonEventsMap {
   /**
    * Active status changed.
-   * @param isActive - current state.
+   * @param isEnabled - current state.
    */
-  isActiveChanged: (isActive: boolean) => void;
+  isEnabledChanged: (isEnabled: boolean) => void;
 
   /**
    * Main button was clicked.
