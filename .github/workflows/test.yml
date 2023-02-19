@@ -5,10 +5,10 @@ run-name: Test @twa.js packages
 on:
   pull_request:
     branches:
-      - master
+      - "master"
     paths:
-      - packages/**
-      - !packages/documentation/**
+      - "packages/**"
+      - "!packages/documentation/**"
 
 jobs:
   test:

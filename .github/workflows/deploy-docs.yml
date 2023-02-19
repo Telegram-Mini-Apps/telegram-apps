@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
+      - "master"
     paths:
-      - packages/documentation/**
+      - "packages/documentation/**"
 
 jobs:
   deploy:
