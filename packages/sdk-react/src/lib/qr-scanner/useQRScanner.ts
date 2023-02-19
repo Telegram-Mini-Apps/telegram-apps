@@ -8,7 +8,7 @@ import {useEventsTracking} from '../../hooks';
  */
 export function useQRScanner(): QRScanner {
   const qrScanner = useComponent('qrScanner');
-  useEventsTracking(qrScanner, ['openChanged']);
+  useEventsTracking(qrScanner, ['isOpenedChanged']);
 
   return qrScanner;
 }

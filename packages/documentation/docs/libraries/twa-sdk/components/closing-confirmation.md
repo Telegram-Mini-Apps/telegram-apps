@@ -30,4 +30,4 @@ console.log(closingConfirmation.isEnabled); // false
 
 Events available for [listening](../about#events):
 
-- `change: (isEnabled: boolean) => void`
+- `isEnabledChanged: (isEnabled: boolean) => void`

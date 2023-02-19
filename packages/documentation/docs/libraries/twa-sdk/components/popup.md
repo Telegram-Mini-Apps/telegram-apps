@@ -1,10 +1,8 @@
 # `Popup`
 
 Controls currently displayed application popup. It allows developers to open new
-custom popups and detect popup-connected events.
-
-To learn more, visit description of this feature
-in [documentation](../../../features/popup).
+custom popups and detect popup-connected events. To learn more, visit
+description of this feature in [documentation](../../../features/popup).
 
 ## Init
 
@@ -34,7 +32,7 @@ console.log(popup.isOpened); // true
 
 Events available for [listening](../about#events):
 
-- `openChanged: (isOpened: boolean) => void`
+- `isOpenedChanged: (isOpened: boolean) => void`
 
 ## Methods support
 

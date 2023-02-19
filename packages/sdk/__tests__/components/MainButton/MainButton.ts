@@ -21,13 +21,13 @@ describe('components', () => {
             expect(postEvent.mock.calls[0][1]).toHaveProperty('is_active', false);
           });
 
-          it('should emit "isActiveChanged" event with false value', () => {
+          it('should emit "isEnabledChanged" event with false value', () => {
             const listener = jest.fn();
             const mainButton = new MainButton({postEvent: jest.fn()} as any, '#000000', '#ffffff');
             mainButton.setText('TEST');
             mainButton.enable();
 
-            mainButton.on('isActiveChanged', listener);
+            mainButton.on('isEnabledChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
             mainButton.disable();
             expect(listener).toHaveBeenCalledTimes(1);
@@ -50,12 +50,12 @@ describe('components', () => {
             expect(postEvent.mock.calls[0][1]).toHaveProperty('is_active', true);
           });
 
-          it('should emit "isActiveChanged" event with true value', () => {
+          it('should emit "isEnabledChanged" event with true value', () => {
             const listener = jest.fn();
             const mainButton = new MainButton({postEvent: jest.fn()} as any, '#000000', '#ffffff');
             mainButton.setText('TEST');
 
-            mainButton.on('isActiveChanged', listener);
+            mainButton.on('isEnabledChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
             mainButton.enable();
             expect(listener).toHaveBeenCalledTimes(1);

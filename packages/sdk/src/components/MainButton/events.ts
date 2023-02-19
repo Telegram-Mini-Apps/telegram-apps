@@ -5,12 +5,6 @@ import {RGB} from '@twa.js/utils';
  */
 export interface MainButtonEventsMap {
   /**
-   * Active status changed.
-   * @param isActive - current state.
-   */
-  isActiveChanged: (isActive: boolean) => void;
-
-  /**
    * Main button was clicked.
    */
   click: () => void;
@@ -28,6 +22,18 @@ export interface MainButtonEventsMap {
   isProgressVisibleChanged: (isVisible: boolean) => void;
 
   /**
+   * Active status changed.
+   * @param isEnabled - current state.
+   */
+  isEnabledChanged: (isEnabled: boolean) => void;
+
+  /**
+   * Visibility changed.
+   * @param isVisible - current main button visibility state.
+   */
+  isVisibleChanged: (isVisible: boolean) => void;
+
+  /**
    * Text changed.
    * @param text - current main button text.
    */
@@ -38,12 +44,6 @@ export interface MainButtonEventsMap {
    * @param color - current main button text color.
    */
   textColorChanged: (color: RGB) => void;
-
-  /**
-   * Visibility changed.
-   * @param isVisible - current main button visibility state.
-   */
-  isVisibleChanged: (isVisible: boolean) => void;
 }
 
 /**

@@ -16,96 +16,85 @@ import {init} from '@twa.js/bridge';
 const mainButton = new MainButton(init(), '#000000', '#ffffff');
 ```
 
-## Committing changes
+## Methods and properties
 
-By default, `MainButton` instance automatically applies changes, done
-by setters, such as `setText`, `show` etc. This behavior could be change by
-using `autocommit` constructor property:
+### Visibility
 
-```typescript
-const mainButton = new MainButton(init(), '#000000', '#ffffff', {
-  autocommit: false,
-});
-```
+#### Button
 
-In this case, to apply locally done changes, you have to call `commit()` 
-function:
-
-```typescript
-mainButton.setText('Submit').show().commit();
-```
-
-This code will change main button text to `Submit`, make it visible
-and commit changes. We use commit function to prevent unexpected visual changes
-to be sent while just updating main button props locally.
-
-## Controlling visibility
+To control `MainButton` visibility, you could use such property as `isVisible`.
+It is being changed during the call of `show()` and `hide()` methods:
 
 ```typescript  
-// Show main button.  
 mainButton.show();  
 console.log(mainButton.isVisible); // true  
   
-// Hide main button.  
 mainButton.hide();  
 console.log(mainButton.isVisible); // false  
 ```
 
-## Displaying loader
+#### Loader
+
+`MainButton` could display loader inside of it. To control its visibility,
+use `showProgress()` and `hideProgress()` methods. `isProgressVisible` property
+will be changed.
 
 ```typescript
-// Show main button loader.  
 mainButton.showProgress();
 console.log(mainButton.isProgressVisible); // true  
 
-// Hide main button loader.  
 mainButton.hideProgress();
 console.log(mainButton.isProgressVisible); // false
 ```
 
-## Colors
+### Active state
 
-### `color` / `setColor(color: RGB)`
+You could disable `MainButton` by calling `disable()` method and enable it
+via `enable()`. Both of the methods will update the `isEnabled` property.
 
-Button background color.
+```typescript
+// Enable button.  
+mainButton.enable();
+console.log(mainButton.isEnabled); // true  
+
+// Disable button.  
+mainButton.disable();
+console.log(mainButton.isEnabled); // false
+```
+
+Enabling main button will allow user to click it. As the result, `MainButton`
+will receive the `click` event. Otherwise, no event will be received.
+
+### Colors
+
+#### Background
+
+To update `MainButton` background color, use the `setColor(color: RGB)` method.
+It will update `color` property.
 
 ```typescript 
 mainButton.setColor('#ffffaa');
 console.log(mainButton.color); // '#ffffaa'
 ```
 
-### `textColor` / `setTextColor(color: RGB)`
+#### Text
 
-Button text color.
+To update `MainButton` text color, use the `setTextColor(color: RGB)` method.
+It will update `textColor` property.
 
 ```typescript 
 mainButton.setTextColor('#cca233');
 console.log(mainButton.textColor); // '#cca233'
 ```
 
-## Enable state
-
-```typescript
-// Enable button.  
-mainButton.enable();
-console.log(mainButton.isActive); // true  
-
-// Disable button.  
-mainButton.disable();
-console.log(mainButton.isActive); // false
-```
-
-Enabling main button will allow user to click it. As a result, main button
-will receive `click` event. Otherwise, no event will be received.
-
 ## Events
 
 Events available for [listening](../about#events):
 
-- `activeChanged: (isActive: boolean) => void`
 - `click: () => void`
 - `colorChanged: (color: RGB) => void`
-- `progressVisibleChanged: (isVisible: boolean) => void`
+- `isProgressVisibleChanged: (isVisible: boolean) => void`
+- `isEnabledChanged: (isEnabled: boolean) => void`
+- `isVisibleChanged: (isVisible: boolean) => void`
 - `textChanged: (text: string) => void`
 - `textColorChanged: (color: RGB) => void`
-- `visibleChanged: (isVisible: boolean) => void`

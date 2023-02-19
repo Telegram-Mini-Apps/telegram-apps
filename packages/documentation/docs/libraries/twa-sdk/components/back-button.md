@@ -32,8 +32,8 @@ console.log(backButton.isVisible); // false
 
 Events available for [listening](../about#events):
 
-- `visibleChanged: (isVisible: boolean) => void`
 - `click: () => void`
+- `isVisibleChanged: (isVisible: boolean) => void`
 
 ## Methods support
 

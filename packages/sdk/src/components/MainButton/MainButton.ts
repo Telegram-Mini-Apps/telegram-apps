@@ -14,7 +14,7 @@ type Emitter = EventEmitter<MainButtonEventsMap>;
  */
 export class MainButton {
   private readonly ee: Emitter = new EventEmitter();
-  private _isActive = false;
+  private _isEnabled = false;
   private _isVisible = false;
   private _isProgressVisible = false;
   private _text = '';
@@ -26,20 +26,20 @@ export class MainButton {
   ) {
   }
 
-  private set isActive(value: boolean) {
-    if (this._isActive === value) {
+  private set isEnabled(value: boolean) {
+    if (this._isEnabled === value) {
       return
     }
-    this._isActive = value;
+    this._isEnabled = value;
     this.commit();
-    this.ee.emit('isActiveChanged', this._isActive);
+    this.ee.emit('isEnabledChanged', this._isEnabled);
   }
 
   /**
    * Returns true in case, MainButton is currently enabled.
    */
-  get isActive(): boolean {
-    return this._isActive;
+  get isEnabled(): boolean {
+    return this._isEnabled;
   }
 
   private set isProgressVisible(value: boolean) {
@@ -86,7 +86,7 @@ export class MainButton {
     }
     this.bridge.postEvent('web_app_setup_main_button', {
       is_visible: this.isVisible,
-      is_active: this.isActive,
+      is_active: this.isEnabled,
       is_progress_visible: this.isProgressVisible,
       text: this.text,
       color: this.color,
@@ -122,7 +122,7 @@ export class MainButton {
     // FIXME: This method does not work on Android. Event "main_button_pressed"
     //  keeps getting received even in case, button is disabled.
     //  Issue: https://github.com/Telegram-Web-Apps/documentation/issues/1
-    this.isActive = false;
+    this.isEnabled = false;
     return this;
   }
 
@@ -130,7 +130,7 @@ export class MainButton {
    * Enables button. Returns current button instance for chaining.
    */
   enable(): this {
-    this.isActive = true;
+    this.isEnabled = true;
     return this;
   }
 

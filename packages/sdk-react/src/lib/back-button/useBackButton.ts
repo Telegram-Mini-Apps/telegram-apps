@@ -8,7 +8,7 @@ import {useEventsTracking} from '../../hooks';
  */
 export function useBackButton(): BackButton {
   const backButton = useComponent('backButton');
-  useEventsTracking(backButton, ['visibleChanged']);
+  useEventsTracking(backButton, ['isVisibleChanged']);
 
   return backButton;
 }

@@ -24,7 +24,7 @@ export class Popup {
       return;
     }
     this._isOpened = value;
-    this.ee.emit('openChanged', this._isOpened);
+    this.ee.emit('isOpenedChanged', this._isOpened);
   }
 
   /**

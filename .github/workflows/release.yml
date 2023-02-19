@@ -2,7 +2,17 @@ name: Release @twa.js packages
 
 run-name: Release @twa.js packages
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "master"
+    paths:
+      - "packages/bridge/src/**"
+      - "packages/init-data/src/**"
+      - "packages/sdk/src/**"
+      - "packages/sdk-react/src/**"
+      - "packages/utils/src/**"
 
 jobs:
   release:
@@ -40,7 +50,6 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git remote set-url origin https://${{github.actor}}:${GH_TOKEN}@github.com/$GITHUB_REPOSITORY
-
 
       - name: Publish packages
         env:
