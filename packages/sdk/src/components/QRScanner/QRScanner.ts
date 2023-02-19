@@ -32,7 +32,7 @@ export class QRScanner {
       return;
     }
     this._isOpened = value;
-    this.ee.emit('openChanged', value);
+    this.ee.emit('isOpenedChanged', value);
   }
 
   /**

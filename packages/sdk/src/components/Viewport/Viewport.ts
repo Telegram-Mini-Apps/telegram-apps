@@ -180,7 +180,7 @@ export class Viewport {
       return;
     }
     this._isExpanded = value;
-    this.ee.emit('expansionChanged', value);
+    this.ee.emit('isExpandedChanged', value);
   }
 
   /**

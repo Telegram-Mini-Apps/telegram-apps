@@ -6,7 +6,7 @@ export interface PopupEventsMap {
    * Open status changed.
    * @param isOpened - current state.
    */
-  openChanged: (isOpened: boolean) => void;
+  isOpenedChanged: (isOpened: boolean) => void;
 }
 
 /**

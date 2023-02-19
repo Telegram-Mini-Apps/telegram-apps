@@ -24,7 +24,7 @@ export interface ViewportEventsMap {
    * Expansion status changed.
    * @param isExpanded - current expansion status.
    */
-  expansionChanged: (isExpanded: boolean) => void;
+  isExpandedChanged: (isExpanded: boolean) => void;
 }
 
 /**

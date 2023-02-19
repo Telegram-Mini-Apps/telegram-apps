@@ -6,7 +6,7 @@ export interface QRScannerEventsMap {
    * Open state changed.
    * @param isOpened - current state.
    */
-  openChanged: (isOpened: boolean) => void;
+  isOpenedChanged: (isOpened: boolean) => void;
 }
 
 /**
