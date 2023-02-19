@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.14](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk-react@0.1.13...@twa.js/sdk-react@0.1.14) (2023-02-19)
+
+
+### Bug Fixes
+
+* **hooks:** actualize listened events names ([031dfbb](https://github.com/Telegram-Web-Apps/twa/commit/031dfbb8c9ed429c2ac814bc6100a62cc6775d67))
+
+
+
+
+
 ## 0.1.13 (2023-02-07)
 
 

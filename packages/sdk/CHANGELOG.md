@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk@0.1.13...@twa.js/sdk@0.2.0) (2023-02-19)
+
+
+### Bug Fixes
+
+* **backbutton:** rename events ([0ca194f](https://github.com/Telegram-Web-Apps/twa/commit/0ca194f431cdbf035459d8e7948f604ec522e827))
+* **closingconfirmation:** change event "change" to "isEnabledChanged" ([90e1f98](https://github.com/Telegram-Web-Apps/twa/commit/90e1f98b753f35d08a12dd52d7deecb1257a3d1a))
+* **events:** rename component events to property related names ([cf56eef](https://github.com/Telegram-Web-Apps/twa/commit/cf56eefcfa2b8502189776f4b8ef0d778267efb6))
+* **mainbutton:** fix incorrect implementation of setTextColor() ([bb285d1](https://github.com/Telegram-Web-Apps/twa/commit/bb285d1445d4e6aedd7b659507c4e3d9c41608d1))
+* **mainbutton:** fix incorrect implementations of setters. Rename events ([12fd769](https://github.com/Telegram-Web-Apps/twa/commit/12fd769c7ca3883fa4d764577f29d559d9548b66))
+* **mainbutton:** remove autocommit option. Make commit() private and call when some changes are done ([c7f7772](https://github.com/Telegram-Web-Apps/twa/commit/c7f7772959a70eb6057842c5c54916af84a67a44))
+* **mainbutton:** rename isActive to isEnabled. Rename related events ([7089c08](https://github.com/Telegram-Web-Apps/twa/commit/7089c087a499178bb70592922e32c9cc3cf21b34))
+
+
+### Features
+
+* **init:** add acceptScrollbarStyle option ([5c5ce08](https://github.com/Telegram-Web-Apps/twa/commit/5c5ce0890047afb66929072eb6766767234ad360))
+
+
+
+
+
 ## 0.1.13 (2023-02-07)
 
 
