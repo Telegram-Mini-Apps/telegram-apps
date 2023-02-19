@@ -19,7 +19,10 @@ jobs:
     name: Release to npm
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.BOT_ACCESS_TOKEN }}
 
       - uses: actions/setup-node@v3
         with:
@@ -47,9 +50,9 @@ jobs:
 
       - name: "Configure Git"
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git remote set-url origin https://${{github.actor}}:${GH_TOKEN}@github.com/$GITHUB_REPOSITORY
+          git config user.name "${{ vars.BOT_USER_NAME }}"
+          git config user.email "${{ vars.BOT_USER_NAME }}@users.noreply.github.com"
+          git remote set-url origin https://${{ vars.BOT_USER_NAME }}:${{ BOT_ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY
 
       - name: Publish packages
         env:
