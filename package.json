@@ -33,6 +33,7 @@
     "bridge:build": "lerna run --scope=@twa.js/bridge build",
     "commit": "git cz",
     "ci:lint": "lerna run lint",
+    "ci:build": "lerna run build --skip-nx-cache",
     "ci:docs:install": "pnpm i --filter documentation",
     "ci:docs:build": "lerna run build --scope=documentation",
     "ci:packages:build": "lerna run build --ignore=documentation --skip-nx-cache",
