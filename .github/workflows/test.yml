@@ -1,6 +1,6 @@
-name: Test @twa.js packages
+name: Test packages
 
-run-name: Test @twa.js packages
+run-name: Test packages
 
 on:
   pull_request:
@@ -8,7 +8,6 @@ on:
       - "master"
     paths:
       - "packages/**"
-      - "!packages/documentation/**"
 
 jobs:
   test:
@@ -38,9 +37,9 @@ jobs:
       - name: Run linter
         run: pnpm run ci:lint
 
-      # Build packages.
+      # Build all packages.
       - name: Build packages
-        run: pnpm run ci:packages:build
+        run: pnpm run ci:build
 
       # Run tests.
       - name: Run tests
