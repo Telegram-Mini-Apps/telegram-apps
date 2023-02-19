@@ -16,8 +16,7 @@ const themeParams = new ThemeParams({});
 ## Requesting fresh theme params
 
 To get fresh theme parameters information, you could use `request` static
-function. It will return `TwaThemeParams` interface from `twa-theme-params`
-package:
+function:
 
 ```typescript
 import {init} from '@twa.js/bridge';
@@ -30,15 +29,23 @@ ThemeParams.request(init()).then(console.log);
 
 ## Creating synchronized instance
 
-Class is capable of returning instance of `ThemeParams` which
-is synchronized with its actual state in Telegram application. To
+Class is capable of returning an instance of `ThemeParams` which
+is synchronized with its actual state in the Telegram application. To
 get it, use static `synced()` method:
 
 ```typescript
 import {ThemeParams} from '@twa.js/sdk';
 import {init} from '@twa.js/bridge';
 
-const tp = ThemeParams.synced(init(), {});
+const tp = ThemeParams.synced(init(), {
+  backgroundColor: '#ffaacc',
+  buttonColor: '#1123aa',
+  buttonTextColor: '#aadfbb',
+  hintColor: '#113123',
+  linkColor: '#ffaacc',
+  secondaryBackgroundColor: '#cccccc',
+  textColor: '#000000',
+});
 
 // tp will be automatically updated in case, Telegram changed
 // theme parameters.
@@ -46,15 +53,15 @@ const tp = ThemeParams.synced(init(), {});
 
 ## Colors
 
-Class contains list of colors, which could be either `RGB` or `null`:
+List of colors, provided by `ThemeParams`:
 
-- `backgroundColor`
-- `buttonColor`
-- `buttonTextColor`
-- `hintColor`
-- `linkColor`
-- `secondaryBackgroundColor`
-- `textColor`
+- `backgroundColor: RGB`
+- `buttonColor: RGB`
+- `buttonTextColor: RGB`
+- `hintColor: RGB`
+- `linkColor: RGB`
+- `secondaryBackgroundColor: RGB | null`
+- `textColor: RGB`
 
 ## Events
 

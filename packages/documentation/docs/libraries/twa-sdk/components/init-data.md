@@ -8,14 +8,11 @@ Responsible for displaying Web Apps init data.
 ## Usage
 
 This class represents object with readonly properties. To create its new
-instance, you could use static method `fromSearchParams` or class constructor
-directly:
+instance, you could use class constructor as follows:
 
 ```typescript
 import {InitData} from '@twa.js/sdk';
 
-const initData = InitData.fromSearchParams('query_id=AAHdF6IQAAAAAN0Xoh...');
-// or
 const authDate = new Date();
 const hash = 'myhash';
 const initData = new InitData(authDate, hash, {
