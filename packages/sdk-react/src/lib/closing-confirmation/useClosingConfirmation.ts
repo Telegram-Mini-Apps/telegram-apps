@@ -8,7 +8,7 @@ import {useEventsTracking} from '../../hooks';
  */
 export function useClosingConfirmation(): ClosingConfirmation {
   const component = useComponent('closingConfirmation');
-  useEventsTracking(component, ['change']);
+  useEventsTracking(component, ['isEnabledChanged']);
 
   return component;
 }

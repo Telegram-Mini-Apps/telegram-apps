@@ -9,7 +9,7 @@ import {useEventsTracking} from '../../hooks';
 export function useViewport(): Viewport {
   const viewport = useComponent('viewport');
   useEventsTracking(viewport, [
-    'stableHeightChanged', 'expansionChanged', 'heightChanged', 'widthChanged',
+    'stableHeightChanged', 'isExpandedChanged', 'heightChanged', 'widthChanged',
   ]);
 
   return viewport;

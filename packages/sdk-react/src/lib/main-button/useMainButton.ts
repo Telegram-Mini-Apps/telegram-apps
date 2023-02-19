@@ -9,8 +9,8 @@ import {useEventsTracking} from '../../hooks';
 export function useMainButton(): MainButton {
   const mainButton = useComponent('mainButton');
   useEventsTracking(mainButton, [
-    'activeChanged', 'colorChanged', 'progressVisibleChanged', 'textChanged',
-    'textColorChanged', 'visibleChanged',
+    'isEnabledChanged', 'colorChanged', 'isProgressVisibleChanged', 'textChanged',
+    'textColorChanged', 'isVisibleChanged',
   ]);
 
   return mainButton;

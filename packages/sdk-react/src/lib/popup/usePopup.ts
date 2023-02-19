@@ -8,7 +8,7 @@ import {useEventsTracking} from '../../hooks';
  */
 export function usePopup(): Popup {
   const popup = useComponent('popup');
-  useEventsTracking(popup, ['openChanged']);
+  useEventsTracking(popup, ['isOpenedChanged']);
 
   return popup;
 }
