@@ -17,13 +17,18 @@ jobs:
     steps:
       # Setup node.
       - uses: actions/checkout@v2
+
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+          registry-url: 'https://registry.npmjs.org'
 
-      # Install pnpm
-      - name: Install pnpm
-        run: npm i -g pnpm
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
 
       # Install dependencies.
       - name: Install dependencies
@@ -31,12 +36,12 @@ jobs:
 
       # Run linter.
       - name: Run linter
-        run: pnpm run lint
+        run: pnpm run ci:lint
 
       # Build packages.
       - name: Build packages
-        run: pnpm run build
+        run: pnpm run ci:packages:build
 
       # Run tests.
       - name: Run tests
-        run: pnpm run test
+        run: pnpm run ci:test
