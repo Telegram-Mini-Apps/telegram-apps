@@ -4,6 +4,7 @@ export * from './closing-confirmation';
 export * from './haptic-feedback';
 export * from './init-data';
 export * from './layout';
+export * from './launch-params';
 export * from './main-button';
 export * from './popup';
 export * from './qr-scanner';

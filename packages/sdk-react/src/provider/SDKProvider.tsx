@@ -9,7 +9,9 @@ import {init, InitOptions} from '@twa.js/sdk';
 import {sdkContext} from './context';
 import {SDKComponents, SDKContext} from './types';
 
-export type SDKProviderProps = PropsWithChildren<{ initOptions?: InitOptions }>;
+export type SDKInitOptions = InitOptions;
+
+export type SDKProviderProps = PropsWithChildren<{ initOptions?: SDKInitOptions }>;
 
 /**
  * Component which provides access to SDK components.

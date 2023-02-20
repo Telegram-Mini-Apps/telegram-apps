@@ -1,7 +1,7 @@
 import {QRScanner} from '@twa.js/sdk';
 
-import {useComponent} from '../../sdk';
-import {useEventsTracking} from '../../hooks';
+import {useComponent} from '../../provider';
+import {useEventsTracking} from '../hooks';
 
 /**
  * Returns QRScanner component instance.

@@ -17,6 +17,12 @@ export type SDKComponent<N extends SDKComponentName> = SDKComponents[N];
 
 export interface SDKContext {
   /**
+   * Components ready to use. This value will be null until initialization
+   * is done.
+   */
+  components: SDKComponents | null;
+
+  /**
    * States, that SDK called `init()` method.
    */
   didInit: boolean;
@@ -25,10 +31,4 @@ export interface SDKContext {
    * Error occurred during initialization.
    */
   error: unknown | null;
-
-  /**
-   * Components ready to use. This value will be null until initialization
-   * is done.
-   */
-  components: SDKComponents | null;
 }
