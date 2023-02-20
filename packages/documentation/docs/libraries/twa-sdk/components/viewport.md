@@ -55,10 +55,10 @@ get it, use static `synced()` method:
 
 ```typescript
 import {Viewport} from '@twa.js/sdk';
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
 const viewport = Viewport.synced(
-  init(), 390, 365, 300, false,
+  Bridge.init(), 390, 365, 300, false,
 );
 
 // viewport will be automatically updated in case, 

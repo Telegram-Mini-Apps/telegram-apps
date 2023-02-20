@@ -6,10 +6,10 @@ The class which provides information about the current Web App layout.
 
 ```typescript  
 import {Layout} from '@twa.js/sdk';  
-import {init} from '@twa.js/bridge';  
+import {Bridge} from '@twa.js/bridge';  
 
 // Specify bridge instance, Web Apps version, header and background colors.
-const layout = new Layout(init(), '6.3', 'bg_color', '#ffaabb');  
+const layout = new Layout(Bridge.init(), '6.3', 'bg_color', '#ffaabb');  
 ```  
 
 ## Methods and properties

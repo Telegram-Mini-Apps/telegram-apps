@@ -20,9 +20,10 @@ You could get current Web App platform (`tdesktop`, `webz` etc.) by getting
 a bit easier, properties `isDesktop` and `isWeb` are used:
 
 ```typescript
-import {WebApp} from './WebApp';
+import {WebApp} from '@twa.js/sdk';
+import {Bridge} from '@twa.js/bridge';
 
-const webApp = new WebApp(init(), '6.4', 'webz');
+const webApp = new WebApp(Bridge.init(), '6.4', 'webz');
 console.log(webApp.platform); // webz
 ```
 
