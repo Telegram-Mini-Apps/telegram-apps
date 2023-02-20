@@ -10,6 +10,7 @@ importers:
       '@rollup/plugin-replace': ^5.0.2
       '@rollup/plugin-terser': ^0.3.0
       '@rollup/plugin-typescript': ^9.0.2
+      '@types/react-dom': ^18.0.9
       '@typescript-eslint/eslint-plugin': ^5.42.1
       '@typescript-eslint/parser': ^5.42.1
       commitizen: ^4.2.5
@@ -20,6 +21,7 @@ importers:
       jest-environment-jsdom: ^29.3.1
       lerna: ^6.0.1
       npm-run-all: ^4.1.5
+      react-dom: ^17.0.2
       rimraf: ^3.0.2
       rollup: ^3.2.5
       rollup-plugin-serve: ^2.0.1
@@ -34,6 +36,7 @@ importers:
       '@rollup/plugin-replace': 5.0.2_rollup@3.2.5
       '@rollup/plugin-terser': 0.3.0_rollup@3.2.5
       '@rollup/plugin-typescript': 9.0.2_skqhbvp355vci76ty3pdffvjrq
+      '@types/react-dom': 18.0.9
       '@typescript-eslint/eslint-plugin': 5.42.1_2udltptbznfmezdozpdoa2aemq
       '@typescript-eslint/parser': 5.42.1_rmayb2veg2btbq6mbmnyivgasy
       commitizen: 4.2.5
@@ -44,6 +47,7 @@ importers:
       jest-environment-jsdom: 29.3.1
       lerna: 6.0.3
       npm-run-all: 4.1.5
+      react-dom: 17.0.2_react@17.0.2
       rimraf: 3.0.2
       rollup: 3.2.5
       rollup-plugin-serve: 2.0.1
@@ -4444,7 +4448,6 @@ packages:
     resolution: {integrity: sha512-qnVvHxASt/H7i+XG1U1xMiY5t+IHcPGUK7TDMDzom08xa7e86eCeKOiLZezwCKVxJn6NEiiy2ekgX8aQssjIKg==}
     dependencies:
       '@types/react': 18.0.25
-    dev: false
 
   /@types/react-router-config/5.0.6:
     resolution: {integrity: sha512-db1mx37a1EJDf1XeX8jJN7R3PZABmJQXR8r28yUjVMFSjkmnQo6X6pOEEmNl+Tp2gYQOGPdYbFIipBtdElZ3Yg==}

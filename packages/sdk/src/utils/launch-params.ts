@@ -5,7 +5,7 @@ import {parseInitData, InitData} from '@twa.js/init-data';
 import {parseThemeParams, ThemeParams} from './theme-params';
 import {Platform} from '../types';
 
-interface LaunchParams {
+export interface LaunchParams {
   version: string;
   initData: InitData;
   platform: Platform;

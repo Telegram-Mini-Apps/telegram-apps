@@ -9,6 +9,7 @@
   },
   "include": [
     "./index.tsx",
-    "../src"
+    "../src",
+    "src"
   ]
 }
