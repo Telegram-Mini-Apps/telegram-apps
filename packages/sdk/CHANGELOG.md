@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk@0.3.0...@twa.js/sdk@0.4.0) (2023-02-20)
+
+
+### Features
+
+* **exports:** export LaunchParams type ([448290c](https://github.com/Telegram-Web-Apps/twa/commit/448290cb64f7a8f44ca6d032b85a68f57b23e72e))
+
+
+
+
+
 # [0.3.0](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk@0.2.0...@twa.js/sdk@0.3.0) (2023-02-20)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk-react@0.1.15...@twa.js/sdk-react@0.2.0) (2023-02-20)
+
+
+### Features
+
+* **hooks,hocs:** add new hooks and hocs. Add more exported types ([148ac21](https://github.com/Telegram-Web-Apps/twa/commit/148ac21156bd5acbeb12a45eebcb4412a91b6bf9))
+
+
+
+
+
 ## [0.1.15](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk-react@0.1.14...@twa.js/sdk-react@0.1.15) (2023-02-20)
 
 **Note:** Version bump only for package @twa.js/sdk-react
