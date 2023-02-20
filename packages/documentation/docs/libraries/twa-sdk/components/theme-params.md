@@ -1,43 +1,50 @@
 # `ThemeParams`
 
-Contains information about currently used theme by application.
+The component which contains an information about currently used theme by 
+the application. There is more information about this component in this
+[documentation](../../../features/theme.md).
 
-To learn more, visit description of this feature
-in [documentation](../../../features/theme).
-
-## Init
+## Initialization
 
 ```typescript  
 import {ThemeParams} from '@twa.js/sdk';
   
-const themeParams = new ThemeParams({});  
+const themeParams = new ThemeParams({
+  backgroundColor: '#ffaabb',
+  buttonColor: '#113222',
+  buttonTextColor: '#aabc33',
+  hintColor: '#00ff00',
+  linkColor: '#a32213',
+  secondaryBackgroundColor: '#000000',
+  textColor: '#aaaaaa',
+});  
 ```
 
 ## Requesting fresh theme params
 
-To get fresh theme parameters information, you could use `request` static
-function:
+To get the fresh theme parameters information, developer could use the 
+`request` static method:
 
 ```typescript
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
-ThemeParams.request(init()).then(console.log);
+ThemeParams.request(Bridge.init()).then(console.log);
 
 // Output:
-// { backgroundColor: '#aabbcc', ... }
+// { backgroundColor: '#ffaabb', ... }
 ```
 
-## Creating synchronized instance
+## Creating the synchronized instance
 
-Class is capable of returning an instance of `ThemeParams` which
+The `ThemeParams` is capable of returning an instance of `ThemeParams` which
 is synchronized with its actual state in the Telegram application. To
-get it, use static `synced()` method:
+get it, use static the `synced()` method:
 
 ```typescript
 import {ThemeParams} from '@twa.js/sdk';
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
-const tp = ThemeParams.synced(init(), {
+const themeParams = ThemeParams.synced(Bridge.init(), {
   backgroundColor: '#ffaacc',
   buttonColor: '#1123aa',
   buttonTextColor: '#aadfbb',
@@ -47,7 +54,7 @@ const tp = ThemeParams.synced(init(), {
   textColor: '#000000',
 });
 
-// tp will be automatically updated in case, Telegram changed
+// themeParams will be automatically updated in case, Telegram changed
 // theme parameters.
 ```
 

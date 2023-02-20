@@ -3,12 +3,14 @@
 [user-ref]: https://github.com/Telegram-Web-Apps/twa/blob/master/packages/init-data/src/types.ts#L5
 [chat-ref]: https://github.com/Telegram-Web-Apps/twa/blob/master/packages/init-data/src/types.ts#L55
 
-Responsible for displaying Web Apps init data.
+The component which is responsible for displaying the Web Apps init data.
+There is more information about this component in this
+[documentation](../../../launch-params/init-data/about).
 
 ## Usage
 
 This class represents object with readonly properties. To create its new
-instance, you could use class constructor as follows:
+instance, a developer could use the class constructor as follows:
 
 ```typescript
 import {InitData} from '@twa.js/sdk';
@@ -65,7 +67,7 @@ converted to string.
 ### `startParam: string | null`
 
 The value of the `startattach` parameter,
-passed [via link](https://core.telegram.org/bots/webapps#adding-bots-to-the-attachment-menu)
+passed via [link](https://core.telegram.org/bots/webapps#adding-bots-to-the-attachment-menu)
 . Only returned for Web Apps when launched from the attachment menu via link.
 
 ### <code>user: [User][user-ref] | null</code>

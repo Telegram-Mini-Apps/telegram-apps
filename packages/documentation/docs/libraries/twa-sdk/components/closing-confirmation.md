@@ -1,33 +1,34 @@
 # `ClosingConfirmation`
 
-Controls application closing behavior. 
+Controls the application closing behavior. There is more
+information about this component in this
+[documentation](../../../features/closing-behavior).
 
-To learn more, visit description of this feature
-in [documentation](../../../features/closing-behavior.md).
-
-## Init
+## Initialization
 
 ```typescript  
 import {ClosingConfirmation} from '@twa.js/sdk';  
-import {init} from '@twa.js/bridge';  
+import {Bridge} from '@twa.js/bridge';  
   
-const closingConfirmation = new ClosingConfirmation(init());  
+const closingConfirmation = new ClosingConfirmation(Bridge.init());  
 ```
 
 ## Enabling and disabling
 
+To enable and disable closing confirmation, it is required to use `enable()`
+and `disable()` functions. These methods update the `ClosingConfirmation` 
+`isEnabled` property:
+
 ```typescript  
-// Enable closing confirmation.
 closingConfirmation.enable();  
 console.log(closingConfirmation.isEnabled); // true  
   
-// Disable closing confirmation.
 closingConfirmation.disable();  
 console.log(closingConfirmation.isEnabled); // false  
 ```  
 
 ## Events
 
-Events available for [listening](../about#events):
+Events available for the [listening](../about#events):
 
 - `isEnabledChanged: (isEnabled: boolean) => void`

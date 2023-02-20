@@ -1,24 +1,24 @@
 # `Viewport`
 
-Contains information about current Web App device viewport, its dimensions and
-state.
+The component which contains an information about the current Web App device 
+viewport, its dimensions and state.
 
-## Init
+## Initialization
 
 ```typescript  
 import {Viewport} from '@twa.js/sdk';  
-import {init} from '@twa.js/bridge';  
+import {Bridge} from '@twa.js/bridge';  
   
 // Specify bridge instance, height, width, stable height and
 // expansion status.
 const viewport = new Viewport(
-  init(), 390, 365, 300, false,
+  Bridge.init(), 390, 365, 300, false,
 );  
 ```  
 
 ## Dimensions
 
-`Viewport` instance contains information about viewport dimensions. We can
+The `Viewport` instance contains information about viewport dimensions. We can
 get current visible are height and width via `height` and `width` properties.
 
 The application can display just the top part of the Web App, with its lower
@@ -33,15 +33,15 @@ follow the lower border of the window. It should not be used to pin interface
 elements to the bottom of the visible area. It's more appropriate to use the
 value of the `stableHeight` field for this purpose.
 
-## Requesting viewport information
+## Requesting the viewport information
 
 To get fresh viewport information, you could use static `request` function:
 
 ```typescript
 import {Viewport} from '@twa.js/sdk';
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
-Viewport.request(init()).then(console.log);
+Viewport.request(Bridge.init()).then(console.log);
 
 // Output:
 // { height: 122, isExpanded: false, width: 375, isStateStable: true }

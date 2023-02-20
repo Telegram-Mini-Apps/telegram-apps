@@ -1,15 +1,16 @@
 # `WebApp`
 
-Provides common Web Apps functionality not covered by other system components.
+The component which provides the common Web Apps functionality not covered by 
+other system components.
 
-## Init
+## Initialization
 
 ```typescript
 import {WebApp} from '@twa.js/sdk';
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
 // Specify bridge instance, Web Apps version and platform name.
-const webApp = new WebApp(init(), '6.4', 'webz');
+const webApp = new WebApp(Bridge.init(), '6.4', 'webz');
 ```
 
 ## Platform
@@ -49,7 +50,7 @@ Here comes the list of methods, which allow opening links with help of Web App:
 
 ## Methods support
 
-Methods available for [support check](../about#methods-support):
+Methods available for the [support check](../about#methods-support):
 
 - `openInvoice`
 - `readTextFromClipboard`
