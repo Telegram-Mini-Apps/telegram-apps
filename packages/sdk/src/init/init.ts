@@ -13,7 +13,7 @@ import {
   WebApp,
 } from '../components';
 import {InitOptions, InitResult} from './types';
-import {retrieveLaunchParams} from './launch-params';
+import {retrieveLaunchParams} from '../utils';
 import {BridgeScoped} from '../lib';
 
 /**

@@ -1,60 +1,61 @@
 # `Layout`
 
-Class which provides information about current Web App layout.
+The class which provides information about the current Web App layout.
 
-## Init
+## Initialization
 
 ```typescript  
 import {Layout} from '@twa.js/sdk';  
-import {init} from '@twa.js/bridge';  
+import {Bridge} from '@twa.js/bridge';  
 
 // Specify bridge instance, Web Apps version, header and background colors.
-const layout = new Layout(init(), '6.3', 'bg_color', '#ffaabb');  
+const layout = new Layout(Bridge.init(), '6.3', 'bg_color', '#ffaabb');  
 ```  
 
-## Colors
+## Methods and properties
 
-Component provides access to header and background colors control.
+### Background color
 
-### `backgroundColor` / `setBackgroundColor(color: RGB)`
-
-Application background color.
+To update the Web App background color, it is required to use
+`setBackgroundColor(color: RGB)` method. Locally, it updates the
+`backgroundColor: RGB` property:
 
 ```typescript
 layout.setBackgroundColor('#ffaacc');
 console.log(layout.backgroundColor); // #ffaacc
 ```
 
-### `headerColor` / `setHeaderColor(color: HeaderColorKey)`
+### Header color
 
-Application header color.
+To update the Web App header color, it is required to use
+`setHeaderColor(color: HeaderColorKey)` method. Locally, it updates the
+`headerColor: HeaderColorKey` property:
 
 ```typescript
 layout.setHeaderColor('bg_color');
 console.log(layout.headerColor); // bg_color
 ```
 
-### `colorScheme: 'dark' | 'light'`
+### Color scheme
 
-To get current color scheme (`dark` or `light`), you can use `colorScheme`
-property:
+The `Layout` component allows returning the current color scheme based on the 
+actual background color. To get the current color scheme (`dark` or `light`), 
+a developer should use the `colorScheme` property:
 
 ```typescript
 console.log(layout.colorScheme); // dark
 ```
 
-This property is computed depending on current `backgroundColor`.
-
 ## Events
 
-Events available for [listening](../about#events):
+Events available for the [listening](../about#events):
 
 - `backgroundColorChanged: (color: RGB) => void`
 - `headerColorChanged: (color: HeaderColorKey) => void`
 
 ## Methods support
 
-Methods available for [support check](../about#methods-support):
+Methods available for the [support check](../about#methods-support):
 
 - `setHeaderColor`
 - `setBackgroundColor`  

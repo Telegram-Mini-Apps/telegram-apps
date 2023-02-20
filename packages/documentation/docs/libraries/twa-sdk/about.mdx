@@ -5,15 +5,17 @@ sidebar_label: "About"
 
 # @twa.js/sdk
 
-Made from scratch TypeScript library for communication with Telegram Web Apps
-functionality.
+Made from scratch the TypeScript library for communication with the Telegram
+Web Apps functionality.
 
-Code of this library was written with aim to make developers communication with
-Telegram Web Apps way easier. It contains a lot of separate components which are
-responsible for their own part of Telegram Web Apps ecosystem.
+Code of this library was written with the aim to make developers communication
+with the Telegram Web Apps way easier. It contains a lot of separate
+components which are responsible for their own part of the Telegram Web Apps
+ecosystem.
 
-Before starting to use SDK, we highly recommend learning Web Apps
-[documentation](../../introduction/web-apps) to understand platform concepts.
+Before starting to use the SDK, we highly recommend learning the Web Apps
+[documentation](../../introduction/web-apps) to understand the platform
+concepts.
 
 <LibraryBadges pkg={'@twa.js/sdk'}/>
 
@@ -21,15 +23,15 @@ Before starting to use SDK, we highly recommend learning Web Apps
 
 <NpmInstall pkg={'@twa.js/sdk'}/>
 
-## Init
+## Initialization
 
-According to logic, this package provides full control over its lifecycle,
-its initialization is on developer's shoulders. It means, that there are no
-already initialized global components which could be used by developer, they
-should be created by him.
+According to the logic, this package provides the full control over its
+lifecycle, its initialization is on the developer shoulders. It means, that
+there are no already initialized global components which could be used by
+developer, they should be created by himself.
 
-To make developers life easier, package contains special function called `init`,
-which returns initialized components instances:
+To make the developer life easier, package contains special function called
+`init` which returns initialized components instances:
 
 ```typescript
 import {init} from '@twa.js/sdk';
@@ -48,102 +50,133 @@ init().then(components => {
     .setTextColor('#ffffff')
     .setText('Expand')
     .enable()
-    .show()
-    .commit();
+    .show();
 });
 ```
 
 ### Options
 
-#### `debug: boolean`
-
-Enables debug mode which leads to more debugging information sent by SDK:
+The `init` function is capable of accepting options, which are specified in the
+object in the first argument of function. Each option and the options object
+itself are optional.
 
 ```typescript
-init({debug: true});
+import {init} from '@twa.js/sdk';
+
+init(options);
 ```
+
+#### `debug: boolean`
+
+Enables the debug mode which leads to printing more debugging information sent
+by the SDK. This option is also passed to the `Bridge` instance during its
+initialization.
 
 #### `checkCompat: boolean`
 
-Enables mode in which calls of methods not supported by current version
-of Web App will lead to thrown errors. This mode is recommended to be used
-and enabled by default.
-
-```typescript
-init({checkCompat: true});
-```
+Enables the mode in which calls of the methods not supported by the current
+version of the Web App will lead to throwing an error. This mode is
+recommended to be used and enabled by default.
 
 #### `targetOrigin: string`
 
-This option is directly passed to `Bridge` during its initialization. It
-restricts lists of parent iframes allowed to receive data from current
-application.
+This option is directly passed to the `Bridge` during its initialization. It
+restricts the list of parent iframes allowed to receive data from the current
+application. To learn more about this option, follow this
+[documentation](../twa-bridge#target-origin).
+
+## Launch parameters
+
+The launch parameters are initial parameters passed to the Web App. You can
+learn more about launch parameters in this
+[documentation](../../launch-params/structure).
+
+A developer is allowed to retrieve the launch parameters by the usage of
+the `retrieveLaunchParams` function. Simply put, this function parses
+the parameters starting with the `tgWebApp` prefix.
 
 ```typescript
-init({targetOrigin: 'https://web.telegram.org'});
+import {retrieveLaunchParams} from '@twa.js/sdk';
+
+console.log(retrieveLaunchParams());
+
+// Output:
+// {
+//   version: '6.4',
+//   initData: {
+//     authDate: Mon Feb 20 2023 04:11:25 GMT+0000,
+//     hash: 'kSJkn101-)S(djn1',
+//   },
+//   platform: 'android',
+//   themeParams: {
+//     backgroundColor: '#ffaabb',
+//     buttonColor: '#223112',
+//     buttonTextColor: '#111aa3',
+//     hintColor: '#000000',
+//     linkColor: '#ffffff',
+//     secondaryBackgroundColor: '#aaaaaa',
+//     textColor: '#bbbbbb',
+//   },
+// };
 ```
+
+This function needs no SDK initialization or something like that. It attempts
+to extract the launch parameters from the `window.location`. In case, they are
+invalid or missing, the function will try to extract these parameters from the
+`sessionStorage`. This function is safe to be used when a user reloads Web App
+via the `Reload Page` application button.
 
 ## Components
 
 All components in this package are supposed to be used as singletons. It means,
-you should not create several instances of same component and use them even
-if it is not forbidden. But in this case, there is no warranty, everything
-will work fine.
+you should not create several instances of the same component and use them even
+if it is not forbidden. Nevertheless, in this case, there is no warranty,
+everything will work fine.
 
 The reason is, each component class stores its state locally and class instances
-are not synchronized between each other. So, for example, in case, you create
-2 instances of `Popup` component and one of them calls `open()` method, it
-will change its `isOpened` property to `true`, but the second instance
-of `Popup` will not know about it and will still return `false` value.
+are not synchronized between each other. So, for instance, in case, developer
+creates 2 instances of the `Popup` component and one of them calls `open()`
+method, it will change its `isOpened` property to `true`, but the second
+instance of `Popup` will not know about it and will still return
+`false` value, which is incorrect.
 
-To avoid possible problems, you can rely on package's `init` function which
-provides initialized components which are enough to use across application.
+To avoid possible problems, developer can rely on package's `init` function
+which provides initialized components which are enough to use across the
+application.
 
 ### Events
 
-Component instances use common way of events listening through `on` and `off`
-functions:
-
-```typescript
-const listener = (...args) => {
-  console.log(...args);
-};
-component.on(event, listener); // add listener.
-component.off(event, listener); // remove listener.
-```
-
-Example with `BackButton` component:
+Component instances use the common way of events listening through the `on` and
+`off` functions. Here is the example with the `BackButton` component:
 
 ```typescript
 import {BackButton} from '@twa.js/sdk';
 
-const backButton = new BackButton();
+const backButton = new BackButton(...);
 backButton.on('click', () => {
   console.log('Back button clicked.');
 });
 ```
 
-You can find list of supported events in components own documentations.
+You can find the list of supported events in components own documentations.
 
 ### Methods support
 
 Almost each component is capable of checking whether its method is supported by
-current Web App version or not. To check if some methods are supported, you
-should use `{Component}.supports()` function. For example:
+the current Web Apps version or not. To check if some methods are supported,
+developer should use the component instance `supports()` function. For example:
 
 ```typescript
 import {BackButton} from '@twa.js/sdk';
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
-let backButton = new BackButton(init(), '6.0');
+let backButton = new BackButton(Bridge.init(), '6.0');
 console.log(backButton.supports('show')); // false
 
-backButton = new BackButton(init(), '6.3');
+backButton = new BackButton(Bridge.init(), '6.3');
 console.log(backButton.supports('hide')); // true
 ```
 
 It is recommended to use this functionality before calling some component method
-as long as this will make you sure, it will work.
-
-List of supported methods by components is described in each component's
-documentation.
+as long as this will make developer sure, it will work. The list of supported
+methods by components is described in each component documentation.

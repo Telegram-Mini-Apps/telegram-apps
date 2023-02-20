@@ -2,8 +2,8 @@
 import {createSearchParamsParser} from '@twa.js/utils';
 import {parseInitData, InitData} from '@twa.js/init-data';
 
-import {parseThemeParams, ThemeParams} from '../utils';
-import {Platform} from '../components';
+import {parseThemeParams, ThemeParams} from './theme-params';
+import {Platform} from '../types';
 
 interface LaunchParams {
   version: string;
@@ -20,7 +20,7 @@ const parseLaunchParams = createSearchParamsParser({
 });
 
 /**
- * Extracts launch params from current environment.
+ * Extracts launch params from the current environment.
  */
 export function retrieveLaunchParams(): LaunchParams {
   const sessionStorageKey = '__telegram-launch-params__';

@@ -1,19 +1,17 @@
 # `HapticFeedback`
 
-Controls haptic feedback. It allows calling different types of
-haptic notifications which usually occur after user interaction with
-application.
+Controls the haptic feedback. It allows calling different types of
+haptic notifications which usually occur after the user interaction with the
+application. There is more information about this component in this 
+[documentation](../../../features/haptic-feedback).
 
-To learn more, visit description of this feature
-in [documentation](../../../features/haptic-feedback).
-
-## Init
+## Initialization
 
 ```typescript
 import {HapticFeedback} from '@twa.js/sdk';
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
-const haptic = new HapticFeedback(init(), '6.3');
+const haptic = new HapticFeedback(Bridge.init(), '6.3');
 ```
 
 ## Notifications
@@ -34,7 +32,7 @@ event:
 - `rigid`, indicates a collision between hard or inflexible UI objects,
 - `soft`, indicates a collision between soft or flexible UI objects.
 
-```typescript title="Example"
+```typescript
 haptic.impactOccurred('medium');
 ```
 
@@ -48,7 +46,7 @@ type value passed. Type of notification occurred type event.
 - `success`, indicates that a task or action has completed successfully,
 - `warning`, indicates that a task or action produced a warning.
 
-```typescript title="Example"
+```typescript
 haptic.notificationOccurred('success');
 ```
 
@@ -66,7 +64,7 @@ haptic.selectionChanged();
 
 ## Methods support
 
-Methods available for [support check](../about#methods-support):
+Methods available for the [support check](../about#methods-support):
 
 - `notificationOccurred`
 - `impactOccurred`

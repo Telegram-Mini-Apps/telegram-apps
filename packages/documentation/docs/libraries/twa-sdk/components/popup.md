@@ -1,23 +1,24 @@
 # `Popup`
 
-Controls currently displayed application popup. It allows developers to open new
-custom popups and detect popup-connected events. To learn more, visit
-description of this feature in [documentation](../../../features/popup).
+The component which controls the currently displayed application popup. It 
+allows developers to open new custom popups and detect popup-connected events.
+There is more information about this component in this
+[documentation](../../../features/popup).
 
-## Init
+## Initialization
 
 ```typescript
 import {Popup} from '@twa.js/sdk';
-import {init} from '@twa.js/bridge';
+import {Bridge} from '@twa.js/bridge';
 
-const popup = new Popup(init(), '6.3');
+const popup = new Popup(Bridge.init(), '6.3');
 ```
 
 ## Opening new popup
 
-`open` function returns promise which will be resolved in case, popup is hidden.
-Popup will resolve button identifier in case, user clicked it. Otherwise,
-`null` will be resolved.
+The `open` function returns a promise which will be resolved in case, the 
+opened popup was closed. `Popup` will resolve a button identifier in case, 
+a user clicked it. Otherwise, `null` will be resolved.
 
 ```typescript
 popup.open({
@@ -30,12 +31,12 @@ console.log(popup.isOpened); // true
 
 ## Events
 
-Events available for [listening](../about#events):
+Events available for the [listening](../about#events):
 
 - `isOpenedChanged: (isOpened: boolean) => void`
 
 ## Methods support
 
-Methods available for [support check](../about#methods-support):
+Methods available for the [support check](../about#methods-support):
 
 - `open`
