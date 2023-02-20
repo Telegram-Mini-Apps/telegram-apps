@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk@0.2.0...@twa.js/sdk@0.3.0) (2023-02-20)
+
+
+### Features
+
+* **launch-params:** move launch params funcs to utils. Move WebApp types to root types.ts ([8d24f20](https://github.com/Telegram-Web-Apps/twa/commit/8d24f20aa19a6a0e76707b447890c67a8cd89304))
+
+
+
+
+
 # [0.2.0](https://github.com/Telegram-Web-Apps/twa/compare/@twa.js/sdk@0.1.13...@twa.js/sdk@0.2.0) (2023-02-19)
 
 
