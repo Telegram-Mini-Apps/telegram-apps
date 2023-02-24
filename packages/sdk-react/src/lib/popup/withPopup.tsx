@@ -1,7 +1,7 @@
 import React, {ComponentType} from 'react';
-import {Popup} from '@twa.js/sdk';
 
 import {usePopup} from './usePopup';
+import {Popup} from './types';
 
 /**
  * HOC which passes Popup SDK component to wrapped React component.

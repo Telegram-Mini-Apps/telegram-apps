@@ -1,7 +1,6 @@
-import {ClosingConfirmation} from '@twa.js/sdk';
-
 import {useComponent} from '../../provider';
 import {useEventsTracking} from '../hooks';
+import {ClosingConfirmation} from './types';
 
 /**
  * Returns ClosingConfirmation component instance.

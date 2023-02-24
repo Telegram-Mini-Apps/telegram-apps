@@ -1,7 +1,6 @@
-import {MainButton} from '@twa.js/sdk';
-
 import {useComponent} from '../../provider';
 import {useEventsTracking} from '../hooks';
+import {MainButton} from './types';
 
 /**
  * Returns MainButton component instance.

@@ -1,7 +1,7 @@
 import React, {ComponentType} from 'react';
-import {Bridge} from '@twa.js/bridge';
 
 import {useBridge} from './useBridge';
+import {Bridge} from './types';
 
 /**
  * HOC which passes Bridge SDK component to wrapped React component.

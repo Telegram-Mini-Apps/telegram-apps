@@ -1,7 +1,7 @@
 import React, {ComponentType} from 'react';
-import {Layout} from '@twa.js/sdk';
 
 import {useLayout} from './useLayout';
+import {Layout} from './types';
 
 /**
  * HOC which passes Layout SDK component to wrapped React component.

@@ -1,7 +1,6 @@
-import {BackButton} from '@twa.js/sdk';
-
 import {useComponent} from '../../provider';
 import {useEventsTracking} from '../hooks';
+import {BackButton} from './types';
 
 /**
  * Returns BackButton component instance.

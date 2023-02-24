@@ -1,7 +1,6 @@
-import {Viewport} from '@twa.js/sdk';
-
 import {useComponent} from '../../provider';
 import {useEventsTracking} from '../hooks';
+import {Viewport} from './types';
 
 /**
  * Returns Viewport component instance.
