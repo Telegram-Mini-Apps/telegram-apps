@@ -1,6 +1,5 @@
-import {WebApp} from '@twa.js/sdk';
-
 import {useComponent} from '../../provider';
+import {WebApp} from './types';
 
 /**
  * Returns WebApp component instance.

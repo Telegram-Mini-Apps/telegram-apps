@@ -1,7 +1,6 @@
-import {Layout} from '@twa.js/sdk';
-
 import {useComponent} from '../../provider';
 import {useEventsTracking} from '../hooks';
+import {Layout} from './types';
 
 /**
  * Returns Layout component instance.

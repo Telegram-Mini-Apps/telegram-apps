@@ -1,6 +1,5 @@
-import {InitData} from '@twa.js/sdk';
-
 import {useComponent} from '../../provider';
+import {InitData} from './types';
 
 /**
  * Returns InitData component instance.

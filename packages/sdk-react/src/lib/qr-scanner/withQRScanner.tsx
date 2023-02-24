@@ -1,7 +1,7 @@
 import React, {ComponentType} from 'react';
-import {QRScanner} from '@twa.js/sdk';
 
 import {useQRScanner} from './useQRScanner';
+import {QRScanner} from './types';
 
 /**
  * HOC which passes QRScanner SDK component to wrapped React component.

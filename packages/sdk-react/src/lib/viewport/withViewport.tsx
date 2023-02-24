@@ -1,7 +1,7 @@
 import React, {ComponentType} from 'react';
-import {Viewport} from '@twa.js/sdk';
 
 import {useViewport} from './useViewport';
+import {Viewport} from './types';
 
 /**
  * HOC which passes Viewport SDK component to wrapped React component.

@@ -1,7 +1,7 @@
 import React, {ComponentType} from 'react';
-import {ClosingConfirmation} from '@twa.js/sdk';
 
 import {useClosingConfirmation} from './useClosingConfirmation';
+import {ClosingConfirmation} from './types';
 
 /**
  * HOC which passes ClosingConfirmation SDK component to wrapped React component.

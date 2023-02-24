@@ -1,7 +1,7 @@
 import React, {ComponentType} from 'react';
-import {HapticFeedback} from '@twa.js/sdk';
 
 import {useHapticFeedback} from './useHapticFeedback';
+import {HapticFeedback} from './types';
 
 /**
  * HOC which passes HapticFeedback SDK component to wrapped React component.

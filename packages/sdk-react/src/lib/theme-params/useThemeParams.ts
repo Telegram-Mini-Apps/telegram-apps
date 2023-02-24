@@ -1,7 +1,6 @@
-import {ThemeParams} from '@twa.js/sdk';
-
 import {useComponent} from '../../provider';
 import {useEventsTracking} from '../hooks';
+import {ThemeParams} from './types';
 
 /**
  * Returns ThemeParams component instance.

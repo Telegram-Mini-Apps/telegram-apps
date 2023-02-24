@@ -1,7 +1,6 @@
-import {Popup} from '@twa.js/sdk';
-
 import {useComponent} from '../../provider';
 import {useEventsTracking} from '../hooks';
+import {Popup} from './types';
 
 /**
  * Returns Popup component instance.

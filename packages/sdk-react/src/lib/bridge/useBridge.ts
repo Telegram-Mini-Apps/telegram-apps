@@ -1,6 +1,5 @@
-import {Bridge} from '@twa.js/bridge';
-
 import {useComponent} from '../../provider';
+import {Bridge} from './types';
 
 /**
  * Returns Bridge component instance.

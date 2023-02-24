@@ -1,6 +1,5 @@
-import {HapticFeedback} from '@twa.js/sdk';
-
 import {useComponent} from '../../provider';
+import {HapticFeedback} from './types';
 
 /**
  * Returns HapticFeedback component instance.
