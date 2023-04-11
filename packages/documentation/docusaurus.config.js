@@ -17,7 +17,7 @@ const config = {
     'Apps technology. Provides explanations, tutorials, examples, hints ' +
     'and much more',
   url: 'https://telegram-web-apps.github.io',
-  baseUrl: '/twa/',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
