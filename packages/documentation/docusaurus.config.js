@@ -16,7 +16,7 @@ const config = {
   tagline: 'Written by enthusiasts full documentation for Telegram Web ' +
     'Apps technology. Provides explanations, tutorials, examples, hints ' +
     'and much more',
-  url: 'https://telegram-web-apps.github.io/twa',
+  url: 'https://telegram-web-apps.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
