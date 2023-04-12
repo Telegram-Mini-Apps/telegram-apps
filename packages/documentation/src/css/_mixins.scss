@@ -1,5 +1,0 @@
-@mixin whenDark() {
-  [data-theme="dark"] {
-    @content
-  }
-}
