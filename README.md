@@ -8,11 +8,9 @@ follow packages own documentations.
 
 Before using packages in this repository, it is recommended to learn
 how Telegram Web Apps platform works. You can find more information about
-platform in our own [documentation](https://telegram-web-apps.github.io/twa/).
+platform in this [documentation](https://docs.twa.dev).
 
 ## Packages
-
-Here is the list of open source supported libraries:
 
 ### [@twa.js/sdk-react](packages/sdk-react)
 
