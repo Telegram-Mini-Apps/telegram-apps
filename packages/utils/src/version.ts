@@ -20,9 +20,9 @@ export function compareVersions(a: string, b: string): number {
 
   // Iterate over each part of version and compare them. In case, part is
   // missing, assume its value is equal to 0.
-  for (let i = 0; i < len; i++) {
-    const aVal = parseInt(aParts[i] || '0');
-    const bVal = parseInt(bParts[i] || '0');
+  for (let i = 0; i < len; i += 1) {
+    const aVal = parseInt(aParts[i] || '0', 10);
+    const bVal = parseInt(bParts[i] || '0', 10);
 
     if (aVal === bVal) {
       continue;

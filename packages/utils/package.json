@@ -4,12 +4,18 @@
   "description": "Web Apps core TypeScript utilities reused by other packages of ecosystem.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.git",
+    "directory": "packages/utils"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+  },
   "keywords": [
-    "telegram",
     "telegram-web-apps",
-    "telegram-bot",
+    "telegram",
     "twa",
-    "core",
     "typescript"
   ],
   "license": "MIT",
@@ -22,24 +28,14 @@
   "browser": "dist/browser.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "exports": {
-    "web": "./dist/index.mjs",
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.cjs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/twa.git",
-    "directory": "packages/utils"
-  },
   "scripts": {
     "test": "jest",
-    "lint": "eslint -c ../../.eslintrc.cjs src",
-    "build": "rimraf dist && rollup --config rollup.config.js",
+    "lint": "eslint -c .eslintrc.cjs src/**/*",
+    "build": "rollup --config rollup.config.js",
     "dev": "rollup --watch --config playground/rollup.config.js"
   },
-  "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+  "devDependencies": {
+    "tsconfig": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

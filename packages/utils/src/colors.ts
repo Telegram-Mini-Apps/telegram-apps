@@ -1,4 +1,12 @@
-import {RGB, RGBShort} from './types';
+/**
+ * Color in format #RGB.
+ */
+export type RGBShort = `#${string}`;
+
+/**
+ * Color in format #RRGGBB.
+ */
+export type RGB = `#${string}`;
 
 /**
  * Returns true in case, passed value has #RGB format.
@@ -17,17 +25,17 @@ export function isRGB(value: string): value is RGB {
 }
 
 /**
- * Converts passed value to #RRGGBB format. Accepts such color formats:
- * - #RGB
- * - #RRGGBB
- * - rgb(1,2,3)
- * - rgba(1,2,3,4)
+ * Converts passed value to #RRGGBB format. Accepts following color formats:
+ * - `#RGB`
+ * - `#RRGGBB`
+ * - `rgb(1,2,3)`
+ * - `rgba(1,2,3,4)`
  * @param value - value to convert.
- * @throws {SyntaxError} Passed value does not contain any of known RGB formats.
+ * @throws {Error} Passed value does not satisfy any of known RGB formats.
  */
 export function toRGB(value: string): RGB {
   // Remove all spaces.
-  const clean = value.replace(/\s/g, '');
+  const clean = value.replace(/\s/g, '').toUpperCase();
 
   // Value already has required format.
   if (isRGB(clean)) {
@@ -38,7 +46,7 @@ export function toRGB(value: string): RGB {
   if (isRGBShort(clean)) {
     let color = '#';
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i += 1) {
       color += clean[1 + i].repeat(2);
     }
     return color as RGB;
@@ -51,13 +59,13 @@ export function toRGB(value: string): RGB {
   // In case, this didn't work as well, we can't extract RGB color from passed
   // text.
   if (match === null) {
-    throw new SyntaxError(`Value "${value}" does not match any of known RGB formats.`);
+    throw new Error(`Value "${value}" does not satisfy any of known RGB formats.`);
   }
 
   // Otherwise, take R, G and B components, convert to hex and create #RRGGBB
   // string.
   return match.slice(1).reduce((acc, component) => {
-    const formatted = parseInt(component).toString(16);
+    const formatted = parseInt(component, 10).toString(16);
     return acc + (formatted.length === 1 ? '0' : '') + formatted;
   }, '#') as RGB;
 }

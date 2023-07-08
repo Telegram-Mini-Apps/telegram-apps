@@ -1,4 +1,4 @@
-import {
+import type {
   AnySubscribeListener,
   EmptyEventName,
   EventListener, EventName,
@@ -11,6 +11,7 @@ import {
  */
 export class EventEmitter<Schema> {
   private listeners: Record<string, EventListener<any[]>[]> = {};
+
   private subscribeListeners: AnySubscribeListener<Schema>[] = [];
 
   /**
@@ -31,14 +32,14 @@ export class EventEmitter<Schema> {
 
   emit(event: string, ...args: any[]): void {
     // Emit global listeners.
-    this.subscribeListeners.forEach(l => (l as any)(event, ...args));
+    this.subscribeListeners.forEach((l) => (l as any)(event, ...args));
 
     // Emit event specific listeners.
     const listeners = this.listeners[event];
     if (listeners === undefined) {
       return;
     }
-    listeners.forEach(l => l(...args));
+    listeners.forEach((l) => l(...args));
   }
 
   /**

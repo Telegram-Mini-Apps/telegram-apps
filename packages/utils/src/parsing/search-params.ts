@@ -1,8 +1,8 @@
 import {
-  NonOptionalField,
-  OptionalField,
-  Parser,
-  Schema,
+  type NonOptionalField,
+  type OptionalField,
+  type Parser,
+  type Schema,
   schemaToParsers,
 } from './shared';
 
@@ -49,8 +49,7 @@ type ParserResult<S extends SearchParamsSchema> = {
 /**
  * Search params parser definition.
  */
-type SchemaParser<Schema extends SearchParamsSchema> =
-  (value: unknown) => ParserResult<Schema>;
+type SchemaParser<S extends SearchParamsSchema> = (value: unknown) => ParserResult<S>;
 
 /**
  * Parsers used for known types.
@@ -78,11 +77,9 @@ export function createSearchParamsParser<S extends SearchParamsSchema>(
   schema: S,
 ): SchemaParser<S> {
   // Transform schema to array of parsers.
-  const parsers = schemaToParsers<FieldParser<any>, KnownTypeName, S>(
-    schema, knownTypesParses,
-  );
+  const parsers = schemaToParsers<FieldParser<any>, KnownTypeName, S>(schema, knownTypesParses);
 
-  return value => {
+  return (value) => {
     if (typeof value !== 'string' && !(value instanceof URLSearchParams)) {
       throw new TypeError('Value has not processable type.');
     }
@@ -90,23 +87,25 @@ export function createSearchParamsParser<S extends SearchParamsSchema>(
       ? new URLSearchParams(value)
       : value;
 
-    return parsers.reduce((acc, {parser, to, optional, from}) => {
-      const value = params.get(from);
+    return parsers.reduce((acc, {
+      parser, to, optional, from,
+    }) => {
+      const paramsValue = params.get(from);
 
-      if (value === null) {
+      if (paramsValue === null) {
         if (!optional) {
           throw new TypeError(`Unable to parse field "${from}". Value is empty.`);
         }
         return acc;
       }
       try {
-        const parsed = parser(value);
+        const parsed = parser(paramsValue);
 
         if (parsed !== undefined) {
           (acc as any)[to] = parsed;
         }
       } catch (cause) {
-        throw new Error(`Unable to parse field "${from}"`, {cause})
+        throw new Error(`Unable to parse field "${from}"`, { cause });
       }
       return acc;
     }, {} as ParserResult<S>);
