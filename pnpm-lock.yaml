@@ -62,6 +62,9 @@ importers:
       '@twa.js/utils':
         specifier: workspace:*
         version: link:../utils
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
 
   packages/eslint-config-custom:
     dependencies:
