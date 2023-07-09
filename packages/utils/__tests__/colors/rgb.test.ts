@@ -1,5 +1,6 @@
-import {describe, expect, it} from '@jest/globals';
-import {isRGB, toRGB, isRGBShort} from '../../src/colors';
+/* eslint-disable import/no-extraneous-dependencies */
+import { describe, expect, it } from '@jest/globals';
+import { isRGB, toRGB, isRGBShort } from '../../src';
 
 describe('colors', () => {
   describe('rgb.ts', () => {
@@ -9,7 +10,7 @@ describe('colors', () => {
       });
 
       it('should return false for any other value', () => {
-        ['abc', '#ffff', '#ffffff', '#ggg'].forEach(v => {
+        ['abc', '#ffff', '#ffffff', '#ggg'].forEach((v) => {
           expect(isRGBShort(v)).toBe(false);
         });
       });
@@ -21,7 +22,7 @@ describe('colors', () => {
       });
 
       it('should return false for any other value', () => {
-        ['abc', '#ffff', '#fff', '#fffffg'].forEach(v => {
+        ['abc', '#ffff', '#fff', '#fffffg'].forEach((v) => {
           expect(isRGB(v)).toBe(false);
         });
       });

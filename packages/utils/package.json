@@ -30,9 +30,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "lint": "eslint -c .eslintrc.cjs src/**/*",
-    "build": "rollup --config rollup.config.js",
-    "dev": "rollup --watch --config playground/rollup.config.js"
+    "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
+    "build": "rollup --config rollup.config.js"
   },
   "devDependencies": {
     "tsconfig": "workspace:*"

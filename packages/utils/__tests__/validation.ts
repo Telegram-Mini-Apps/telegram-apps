@@ -1,10 +1,11 @@
-import {describe, expect, it} from '@jest/globals';
-import {isRecord} from '../src/validation';
+/* eslint-disable import/no-extraneous-dependencies */
+import { describe, expect, it } from '@jest/globals';
+import { isRecord } from '../src';
 
 describe('validation.ts', () => {
   describe('isRecord', () => {
     it('should return false for non-object value', () => {
-      [true, 123, 'abc'].forEach(v => {
+      [true, 123, 'abc'].forEach((v) => {
         expect(isRecord(v)).toBe(false);
       });
     });
@@ -18,7 +19,7 @@ describe('validation.ts', () => {
     });
 
     it('should return true for object', () => {
-      expect(isRecord({a: true})).toBe(true);
+      expect(isRecord({ a: true })).toBe(true);
     });
   });
 });

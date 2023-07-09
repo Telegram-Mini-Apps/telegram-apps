@@ -1,22 +1,15 @@
-import {beforeEach, describe, expect, it, jest} from '@jest/globals';
-import {schemaToParsers} from '../../src/parsing/shared';
-
-let knownParsers: Record<string, () => void>;
-
-beforeEach(() => {
-  knownParsers = {
-    string: () => 'some string',
-  };
-});
+/* eslint-disable import/no-extraneous-dependencies */
+import { describe, expect, it, jest } from '@jest/globals';
+import { schemaToParsers } from '../../src/parsing/shared';
 
 describe('parsing', () => {
   describe('shared.ts', () => {
     describe('schemaToParsers', () => {
-      it('should return element with parser specified as value ' +
-        'for field in schema', () => {
+      it('should return element with parser specified as value '
+        + 'for field in schema', () => {
         const fn = jest.fn();
         const knownParsers: Record<string, () => void> = {};
-        expect(schemaToParsers({field: fn}, knownParsers))
+        expect(schemaToParsers({ field: fn }, knownParsers))
           .toContainEqual({
             optional: false,
             from: 'field',
@@ -25,10 +18,10 @@ describe('parsing', () => {
           });
       });
 
-      it('should return element with predefined parser from known ' +
-        'parsers map', () => {
+      it('should return element with predefined parser from known '
+        + 'parsers map', () => {
         const known = jest.fn();
-        expect(schemaToParsers({field: 'known'}, {known}))
+        expect(schemaToParsers({ field: 'known' }, { known }))
           .toContainEqual({
             optional: false,
             from: 'field',
@@ -37,8 +30,8 @@ describe('parsing', () => {
           });
       });
 
-      it('should return element with all options described in ' +
-        'schema field', () => {
+      it('should return element with all options described in '
+        + 'schema field', () => {
         const fn = jest.fn();
         const knownParsers: Record<string, () => void> = {};
         const items = schemaToParsers({
@@ -47,7 +40,7 @@ describe('parsing', () => {
             optional: true,
             from: 'A',
           },
-          b: {type: fn},
+          b: { type: fn },
         }, knownParsers);
 
         expect(items).toContainEqual({

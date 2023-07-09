@@ -1,5 +1,6 @@
-import {beforeEach, describe, expect, it, jest} from '@jest/globals';
-import {EventEmitter} from '../../src/EventEmitter';
+/* eslint-disable import/no-extraneous-dependencies */
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { EventEmitter } from '../../src';
 
 interface EventsMap {
   test: (a: number, b: boolean) => void;
