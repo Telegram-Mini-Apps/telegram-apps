@@ -35,7 +35,7 @@ export function isRGB(value: string): value is RGB {
  */
 export function toRGB(value: string): RGB {
   // Remove all spaces.
-  const clean = value.replace(/\s/g, '').toUpperCase();
+  const clean = value.replace(/\s/g, '').toLowerCase();
 
   // Value already has required format.
   if (isRGB(clean)) {
