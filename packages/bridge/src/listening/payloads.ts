@@ -1,4 +1,4 @@
-import {RGB} from '@twa.js/utils';
+import type { RGB } from '@twa.js/utils';
 
 export interface ClipboardTextReceivedPayload {
   req_id: string;
@@ -12,9 +12,6 @@ export type InvoiceStatus =
   | 'cancelled'
   | string;
 
-/**
- * @see https://corefork.telegram.org/api/bots/webapps#invoice-closed
- */
 export interface InvoiceClosedPayload {
   slug: string;
   status: InvoiceStatus;
@@ -24,24 +21,18 @@ export interface QrTextReceivedPayload {
   data?: string;
 }
 
-/**
- * @see https://corefork.telegram.org/api/bots/webapps#theme-changed
- */
 export interface ThemeChangedPayload {
   theme_params: {
-    bg_color: RGB;
-    text_color: RGB;
-    hint_color: RGB;
-    link_color: RGB;
-    button_color: RGB;
-    button_text_color: RGB;
+    bg_color?: RGB;
+    text_color?: RGB;
+    hint_color?: RGB;
+    link_color?: RGB;
+    button_color?: RGB;
+    button_text_color?: RGB;
     secondary_bg_color?: RGB;
   };
 }
 
-/**
- * @see https://corefork.telegram.org/api/bots/webapps#viewport-changed
- */
 export interface ViewportChangedPayload {
   height: number;
   width: number;

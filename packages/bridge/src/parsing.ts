@@ -3,7 +3,7 @@ import {
   parseJsonValueAsNumber,
   parseJsonValueAsString,
 } from '@twa.js/utils';
-import {ViewportChangedPayload} from './listening';
+import type { ViewportChangedPayload } from './listening';
 
 /**
  * Parses incoming value as ThemeChangedPayload.
@@ -16,7 +16,7 @@ export const parseThemeChangedPayload = createJsonParser({
     link_color: 'rgb',
     button_color: 'rgb',
     button_text_color: 'rgb',
-    secondary_bg_color: {type: 'rgb', optional: true},
+    secondary_bg_color: { type: 'rgb', optional: true },
   }),
 });
 
@@ -26,7 +26,7 @@ export const parseThemeChangedPayload = createJsonParser({
 const parseRawViewportChangedPayload = createJsonParser({
   height: 'number',
   width: {
-    type: value => value === null ? undefined : parseJsonValueAsNumber(value),
+    type: (value) => (value === null ? undefined : parseJsonValueAsNumber(value)),
     optional: true,
   },
   is_state_stable: 'boolean',
@@ -42,7 +42,7 @@ export function parseViewportChangedPayload(value: unknown): ViewportChangedPayl
     width = window.innerWidth,
     ...rest
   } = parseRawViewportChangedPayload(value);
-  return {width, ...rest};
+  return { width, ...rest };
 }
 
 /**
@@ -50,7 +50,7 @@ export function parseViewportChangedPayload(value: unknown): ViewportChangedPayl
  */
 export const parsePopupClosedPayload = createJsonParser({
   button_id: {
-    type: value => value === null ? undefined : parseJsonValueAsString(value),
+    type: (value) => (value === null ? undefined : parseJsonValueAsString(value)),
     optional: true,
   },
 });
@@ -59,7 +59,7 @@ export const parsePopupClosedPayload = createJsonParser({
  * Parses incoming value as QrTextReceivedPayload.
  */
 export const parseQrTextReceivedPayload = createJsonParser({
-  data: {type: 'string', optional: true},
+  data: { type: 'string', optional: true },
 });
 
 /**
@@ -76,7 +76,7 @@ export const parseInvoiceClosedPayload = createJsonParser({
 export const parseClipboardTextReceivedPayload = createJsonParser({
   req_id: 'string',
   data: {
-    type: value => value === null ? value : parseJsonValueAsString(value),
+    type: (value) => (value === null ? value : parseJsonValueAsString(value)),
     optional: true,
   },
 });

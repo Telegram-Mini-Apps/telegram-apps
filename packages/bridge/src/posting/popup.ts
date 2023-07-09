@@ -51,5 +51,5 @@ export type PopupButton = {
    * - `close`, a button with the localized text "Close";
    * - `cancel`, a button with the localized text "Cancel".
    */
-  type: 'ok' | 'close' | 'cancel';
-});
+    type: 'ok' | 'close' | 'cancel';
+  });

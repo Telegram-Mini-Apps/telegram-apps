@@ -1,5 +1,5 @@
-import {EventEmitter, createJsonParser} from '@twa.js/utils';
-import {ViewportChangedPayload} from './listening';
+import { EventEmitter, createJsonParser } from '@twa.js/utils';
+import type { ViewportChangedPayload } from './listening';
 
 export interface EventsObserverEventsMap {
   /**
@@ -7,7 +7,7 @@ export interface EventsObserverEventsMap {
    * @param eventType - event name.
    * @param eventData - event payload.
    */
-  message(eventType: string, eventData: unknown): void;
+  message: (eventType: string, eventData: unknown) => void;
 }
 
 /**
@@ -16,13 +16,12 @@ export interface EventsObserverEventsMap {
  */
 export type EventsObserver = EventEmitter<EventsObserverEventsMap>;
 
-
 /**
  * Extracts event data from native application event.
  */
 const parseMessageEventData = createJsonParser({
   eventType: 'string',
-  eventData: {type: value => value, optional: true},
+  eventData: { type: (value) => value, optional: true },
 });
 
 /**
@@ -35,9 +34,9 @@ export function createEventsObserver(): EventsObserver {
 
   // We could receive "message" events in case they were sent from Telegram
   // native application.
-  window.addEventListener('message', event => {
+  window.addEventListener('message', (event) => {
     try {
-      const {eventType, eventData} = parseMessageEventData(event.data);
+      const { eventType, eventData } = parseMessageEventData(event.data);
       emitter.emit('message', eventType, eventData);
     } catch {
       // We ignore incorrect messages as long as they could be generated

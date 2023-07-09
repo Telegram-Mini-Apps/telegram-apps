@@ -8,7 +8,7 @@
  */
 function emitTelegramEvent(eventType: string, eventData: unknown): void {
   window.dispatchEvent(new MessageEvent('message', {
-    data: JSON.stringify({eventType, eventData}),
+    data: JSON.stringify({ eventType, eventData }),
   }));
 }
 
@@ -26,7 +26,7 @@ export function defineEventsReceiver(): void {
     ['TelegramGameProxy_receiveEvent'], // Windows Phone.
     ['TelegramGameProxy', 'receiveEvent'], // Desktop.
     ['Telegram', 'WebView', 'receiveEvent'], // Android and iOS.
-  ].forEach(path => {
+  ].forEach((path) => {
     // Path starts from "window" object.
     let pointer = wnd;
 

@@ -1,4 +1,4 @@
-import {EventEmitter, log, parseJsonValueAsString} from '@twa.js/utils';
+import { EventEmitter, log, parseJsonValueAsString } from '@twa.js/utils';
 
 import {
   parseClipboardTextReceivedPayload,
@@ -9,16 +9,15 @@ import {
   parseViewportChangedPayload,
 } from './parsing';
 import {
-  PostEmptyEventName,
-  postEvent, PostEventName,
-  PostEventParams,
-  PostNonEmptyEventName,
+  type PostEmptyEventName,
+  type PostEventName,
+  type PostEventParams,
+  type PostNonEmptyEventName,
+  postEvent,
 } from './posting';
-import {createEventsObserver} from './events-observer';
-import {BridgeEventName, BridgeEventsMap} from './listening';
-import {defineEventsReceiver} from './events-receiver';
-
-type Emitter = EventEmitter<BridgeEventsMap>;
+import { createEventsObserver } from './events-observer';
+import type { BridgeEventName, BridgeEventsMap } from './listening';
+import { defineEventsReceiver } from './events-receiver';
 
 export interface BridgeProps {
   /**
@@ -66,15 +65,16 @@ export class Bridge {
   }
 
   private readonly targetOrigin: string;
-  private readonly ee: Emitter = new EventEmitter();
+
+  private readonly ee = new EventEmitter<BridgeEventsMap>();
 
   constructor(props: BridgeProps) {
-    const {debug = false, targetOrigin = 'https://web.telegram.org'} = props;
+    const { debug = false, targetOrigin = 'https://web.telegram.org' } = props;
     this.debug = debug;
     this.targetOrigin = targetOrigin;
   }
 
-  private emit: Emitter['emit'] = (event: any, ...args: any[]) => {
+  private emit: typeof this.ee.emit = (event: any, ...args: any[]) => {
     this.log('log', 'Emitting event:', event, ...args);
     this.ee.emit(event, ...args);
   };
@@ -107,9 +107,9 @@ export class Bridge {
           //  Issue: https://github.com/Telegram-Web-Apps/twa/issues/2
           if (
             // Sent on desktop.
-            data === undefined ||
+            data === undefined
             // Sent on iOS.
-            data === null
+            || data === null
           ) {
             return this.emit(type, {});
           }
@@ -139,7 +139,7 @@ export class Bridge {
           return this.emit(type as any, data);
       }
     } catch (cause) {
-      this.log('error', `Error processing Telegram event:`, cause);
+      this.log('error', 'Error processing Telegram event:', cause);
     }
   };
 
@@ -152,12 +152,12 @@ export class Bridge {
   /**
    * Adds new event listener.
    */
-  on: Emitter['on'] = this.ee.on.bind(this.ee);
+  on = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off: Emitter['off'] = this.ee.off.bind(this.ee);
+  off = this.ee.off.bind(this.ee);
 
   /**
    * Sends event to native application which launched Web App. This function
@@ -182,7 +182,7 @@ export class Bridge {
   ): void;
 
   postEvent(event: PostEventName, params?: any) {
-    const options = {targetOrigin: this.targetOrigin};
+    const options = { targetOrigin: this.targetOrigin };
 
     if (params === undefined) {
       postEvent(event as PostEmptyEventName, options);
@@ -196,10 +196,10 @@ export class Bridge {
    * Add listener for all events. It is triggered always, when `emit`
    * function called.
    */
-  subscribe: Emitter['subscribe'] = this.ee.subscribe.bind(this.ee);
+  subscribe: typeof this.ee.subscribe = this.ee.subscribe.bind(this.ee);
 
   /**
    * Removes listener added with `subscribe`.
    */
-  unsubscribe: Emitter['unsubscribe'] = this.ee.unsubscribe.bind(this.ee);
+  unsubscribe: typeof this.ee.unsubscribe = this.ee.unsubscribe.bind(this.ee);
 }
