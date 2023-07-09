@@ -1,6 +1,6 @@
-import {describe, expect, it} from '@jest/globals';
-import {supports} from '../src/supports';
-import {PostEventName} from '../src/posting';
+/* eslint-disable import/no-extraneous-dependencies */
+import { describe, expect, it } from '@jest/globals';
+import { supports, PostEventName } from '../src';
 
 describe('supports.ts', () => {
   describe('supports', () => {
@@ -21,7 +21,7 @@ describe('supports.ts', () => {
       'web_app_setup_closing_behavior',
     ];
 
-    methods61.forEach(method => {
+    methods61.forEach((method) => {
       it(`should return true in case, passed method is "${method}" and version is 6.1 or more`, () => {
         expect(supports(method, '6.1')).toBe(true);
         expect(supports(method, '6.2')).toBe(true);
@@ -32,7 +32,7 @@ describe('supports.ts', () => {
       });
     });
 
-    methods62.forEach(method => {
+    methods62.forEach((method) => {
       it(`should return true in case, passed method is "${method}" and version is 6.2 or more`, () => {
         expect(supports(method, '6.2')).toBe(true);
         expect(supports(method, '6.3')).toBe(true);
@@ -43,7 +43,7 @@ describe('supports.ts', () => {
       });
     });
 
-    methods64.forEach(method => {
+    methods64.forEach((method) => {
       it(`should return true in case, passed method is "${method}" and version is 6.4 or more`, () => {
         expect(supports(method, '6.4')).toBe(true);
         expect(supports(method, '6.5')).toBe(true);
@@ -54,7 +54,7 @@ describe('supports.ts', () => {
       });
     });
 
-    methodsAny.forEach(method => {
+    methodsAny.forEach((method) => {
       it(`should return true in case, passed method is "${method}" and version is 1`, () => {
         expect(supports(method, '1')).toBe(true);
       });

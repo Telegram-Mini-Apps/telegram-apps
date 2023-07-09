@@ -1,27 +1,28 @@
-import {describe, jest, beforeEach, afterEach, it, expect} from '@jest/globals';
-import {postEvent} from '../../src/posting';
+/* eslint-disable import/no-extraneous-dependencies */
+import { describe, jest, beforeEach, afterEach, it, expect } from '@jest/globals';
+import { postEvent } from '../../src';
+
+let windowSpy: ReturnType<typeof jest.spyOn>;
+
+beforeEach(() => {
+  windowSpy = jest.spyOn(window, 'window', 'get');
+});
+
+afterEach(() => {
+  windowSpy.mockRestore();
+});
 
 describe('posting', () => {
   describe('postEvent.ts', () => {
     describe('postEvent', () => {
-      let windowSpy: ReturnType<typeof jest.spyOn>;
-
-      beforeEach(() => {
-        windowSpy = jest.spyOn(window, 'window', 'get');
-      });
-
-      afterEach(() => {
-        windowSpy.mockRestore();
-      });
-
-      it('should call "window.parent.postMessage" with object ' +
-        'with properties {eventType: string, eventData: any} converted to ' +
-        'string in case, current environment is WebView', () => {
+      it('should call "window.parent.postMessage" with object '
+        + 'with properties {eventType: string, eventData: any} converted to '
+        + 'string in case, current environment is iframe', () => {
         const postMessageSpy = jest.fn();
         windowSpy.mockImplementation(() => ({
           self: 1000,
           top: 900,
-          parent: {postMessage: postMessageSpy},
+          parent: { postMessage: postMessageSpy },
         }) as any);
 
         expect(postMessageSpy).toHaveBeenCalledTimes(0);
@@ -35,17 +36,17 @@ describe('posting', () => {
         postMessageSpy.mockClear();
 
         expect(postMessageSpy).toHaveBeenCalledTimes(0);
-        postEvent('web_app_set_header_color', {color_key: 'bg_color'});
+        postEvent('web_app_set_header_color', { color_key: 'bg_color' });
         expect(postMessageSpy).toHaveBeenCalledTimes(1);
         expect(postMessageSpy).toHaveBeenCalledWith(JSON.stringify({
           eventType: 'web_app_set_header_color',
-          eventData: {color_key: 'bg_color'},
+          eventData: { color_key: 'bg_color' },
         }), 'https://web.telegram.org');
 
         postMessageSpy.mockClear();
 
         expect(postMessageSpy).toHaveBeenCalledTimes(0);
-        postEvent('web_app_close', {targetOrigin: 'abc'});
+        postEvent('web_app_close', { targetOrigin: 'abc' });
         expect(postMessageSpy).toHaveBeenCalledTimes(1);
         expect(postMessageSpy).toHaveBeenCalledWith(JSON.stringify({
           eventType: 'web_app_close',
@@ -57,65 +58,60 @@ describe('posting', () => {
         expect(postMessageSpy).toHaveBeenCalledTimes(0);
         postEvent(
           'web_app_set_header_color',
-          {color_key: 'bg_color'},
-          {targetOrigin: 'abc'},
+          { color_key: 'bg_color' },
+          { targetOrigin: 'abc' },
         );
         expect(postMessageSpy).toHaveBeenCalledTimes(1);
         expect(postMessageSpy).toHaveBeenCalledWith(JSON.stringify({
           eventType: 'web_app_set_header_color',
-          eventData: {color_key: 'bg_color'},
+          eventData: { color_key: 'bg_color' },
         }), 'abc');
       });
 
-      it('should call "window.TelegramWebviewProxy.postEvent" with event name ' +
-        'and parameters converted to string in case, passed value contains ' +
-        '"TelegramWebviewProxy" property', () => {
-        const postEventSpy = jest.fn();
+      it('should call "window.external.invoke" in case it exists. '
+        + 'Passed value is array, converted to string. This array should '
+        + 'contain event name and data.', () => {
+        const spy = jest.fn();
         windowSpy.mockImplementation(() => ({
-          TelegramWebviewProxy: {postEvent: postEventSpy},
+          external: { invoke: spy },
         }) as any);
 
-        expect(postEventSpy).toHaveBeenCalledTimes(0);
+        // Without parameters.
+        expect(spy).toHaveBeenCalledTimes(0);
         postEvent('web_app_close');
-        expect(postEventSpy).toHaveBeenCalledTimes(1);
-        expect(postEventSpy).toHaveBeenCalledWith('web_app_close', undefined);
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith('["web_app_close",null]');
 
-        postEventSpy.mockClear();
+        spy.mockClear();
 
-        expect(postEventSpy).toHaveBeenCalledTimes(0);
-        postEvent('web_app_set_header_color', {color_key: 'bg_color'});
-        expect(postEventSpy).toHaveBeenCalledTimes(1);
-        expect(postEventSpy).toHaveBeenCalledWith(
-          'web_app_set_header_color', JSON.stringify({color_key: 'bg_color'}),
-        );
+        // With parameters.
+        expect(spy).toHaveBeenCalledTimes(0);
+        postEvent('web_app_set_header_color', { color_key: 'bg_color' });
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith('["web_app_set_header_color",{"color_key":"bg_color"}]');
       });
 
-      it('should call "window.external.notify" with object ' +
-        'with properties {eventType: string, eventData: any} converted to ' +
-        'string in case, passed value contains "external.notify" path, where ' +
-        '"notify" is function', () => {
-        const notifySpy = jest.fn();
+      it('should call "window.external.notify" in case it exists. '
+        + 'Passed value is object, converted to string. This object should '
+        + 'contain fields "eventType" and "eventData".', () => {
+        const spy = jest.fn();
         windowSpy.mockImplementation(() => ({
-          external: {notify: notifySpy},
+          external: { notify: spy },
         }) as any);
 
-        expect(notifySpy).toHaveBeenCalledTimes(0);
+        // Without parameters.
+        expect(spy).toHaveBeenCalledTimes(0);
         postEvent('web_app_close');
-        expect(notifySpy).toHaveBeenCalledTimes(1);
-        expect(notifySpy).toHaveBeenCalledWith(JSON.stringify({
-          eventType: 'web_app_close',
-          eventData: undefined,
-        }));
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith('{"eventType":"web_app_close"}');
 
-        notifySpy.mockClear();
+        spy.mockClear();
 
-        expect(notifySpy).toHaveBeenCalledTimes(0);
-        postEvent('web_app_set_header_color', {color_key: 'bg_color'});
-        expect(notifySpy).toHaveBeenCalledTimes(1);
-        expect(notifySpy).toHaveBeenCalledWith(JSON.stringify({
-          eventType: 'web_app_set_header_color',
-          eventData: {color_key: 'bg_color'},
-        }));
+        // With parameters.
+        expect(spy).toHaveBeenCalledTimes(0);
+        postEvent('web_app_set_header_color', { color_key: 'bg_color' });
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith('{"eventType":"web_app_set_header_color","eventData":{"color_key":"bg_color"}}');
       });
 
       it('should throw an error in case, current environment is unknown', () => {

@@ -1,4 +1,5 @@
-import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
+/* eslint-disable import/no-extraneous-dependencies */
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import {
   parseClipboardTextReceivedPayload,
   parseInvoiceClosedPayload,
@@ -34,7 +35,7 @@ describe('parsing.ts', () => {
         },
       ];
 
-      values.forEach(value => {
+      values.forEach((value) => {
         expect(parseThemeChangedPayload(value)).toStrictEqual(value);
         expect(parseThemeChangedPayload(JSON.stringify(value))).toStrictEqual(value);
       });
@@ -46,11 +47,11 @@ describe('parsing.ts', () => {
   });
 
   describe('parseViewportChangedPayload', () => {
-    let windowSpy = jest.spyOn(window, 'window', 'get');
+    const windowSpy = jest.spyOn(window, 'window', 'get');
     const innerWidth = 2000;
 
     beforeEach(() => {
-      windowSpy.mockImplementation(() => ({innerWidth}) as any);
+      windowSpy.mockImplementation(() => ({ innerWidth }) as any);
     });
 
     afterEach(() => {
@@ -78,13 +79,13 @@ describe('parsing.ts', () => {
         },
       ];
 
-      values.forEach(value => {
+      values.forEach((value) => {
         const width = value.width === undefined || value.width === null
           ? innerWidth : value.width;
         expect(parseViewportChangedPayload(value))
-          .toStrictEqual({...value, width});
+          .toStrictEqual({ ...value, width });
         expect(parseViewportChangedPayload(JSON.stringify(value)))
-          .toStrictEqual({...value, width});
+          .toStrictEqual({ ...value, width });
       });
     });
 
@@ -95,30 +96,30 @@ describe('parsing.ts', () => {
 
   describe('parsePopupClosedPayload', () => {
     it('should return parsed value in case, passed value satisfies schema', () => {
-      expect(parsePopupClosedPayload({button_id: 'ok'})).toStrictEqual({button_id: 'ok'});
+      expect(parsePopupClosedPayload({ button_id: 'ok' })).toStrictEqual({ button_id: 'ok' });
       expect(parsePopupClosedPayload({})).toStrictEqual({});
-      expect(parsePopupClosedPayload({button_id: null})).toStrictEqual({});
+      expect(parsePopupClosedPayload({ button_id: null })).toStrictEqual({});
     });
 
     it('should throw an error in case, passed value does not satisfy schema', () => {
-      expect(() => parsePopupClosedPayload({button_id: 100})).toThrow();
+      expect(() => parsePopupClosedPayload({ button_id: 100 })).toThrow();
     });
   });
 
   describe('parseQrTextReceivedPayload', () => {
     it('should return parsed value in case, passed value satisfies schema', () => {
-      expect(parseQrTextReceivedPayload({data: 'ok'})).toStrictEqual({data: 'ok'});
+      expect(parseQrTextReceivedPayload({ data: 'ok' })).toStrictEqual({ data: 'ok' });
       expect(parseQrTextReceivedPayload({})).toStrictEqual({});
     });
 
     it('should throw an error in case, passed value does not satisfy schema', () => {
-      expect(() => parseQrTextReceivedPayload({data: 100})).toThrow();
+      expect(() => parseQrTextReceivedPayload({ data: 100 })).toThrow();
     });
   });
 
   describe('parseInvoiceClosedPayload', () => {
     it('should return parsed value in case, passed value satisfies schema', () => {
-      const value = {slug: 'abc', status: 'def'};
+      const value = { slug: 'abc', status: 'def' };
       expect(parseInvoiceClosedPayload(value)).toStrictEqual(value);
     });
 
@@ -130,11 +131,11 @@ describe('parsing.ts', () => {
   describe('parseClipboardTextReceivedPayload', () => {
     it('should return parsed value in case, passed value satisfies schema', () => {
       const cases = [
-        {req_id: 'abc', data: 'ok'},
-        {req_id: 'abc'},
-        {req_id: 'abc', data: null},
+        { req_id: 'abc', data: 'ok' },
+        { req_id: 'abc' },
+        { req_id: 'abc', data: null },
       ];
-      cases.forEach(value => {
+      cases.forEach((value) => {
         expect(parseClipboardTextReceivedPayload(value)).toStrictEqual(value);
         expect(parseClipboardTextReceivedPayload(JSON.stringify(value)))
           .toStrictEqual(value);
