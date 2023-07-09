@@ -56,12 +56,16 @@ importers:
       turbo:
         specifier: ^1.9.7
         version: 1.9.7
+      typescript:
+        specifier: ^5.1.6
+        version: 5.1.6
 
   packages/bridge:
     dependencies:
       '@twa.js/utils':
         specifier: workspace:*
         version: link:../utils
+    devDependencies:
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -101,6 +105,7 @@ importers:
       '@types/node':
         specifier: ^18.11.19
         version: 18.11.19
+    devDependencies:
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig

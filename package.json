@@ -22,7 +22,8 @@
     "rollup-plugin-serve": "^2.0.2",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "ts-jest": "^29.1.1",
-    "turbo": "^1.9.7"
+    "turbo": "^1.9.7",
+    "typescript": "^5.1.6"
   },
   "packageManager": "pnpm@7.15.0",
   "name": "monorepo"
