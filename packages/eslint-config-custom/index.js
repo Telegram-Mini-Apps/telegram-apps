@@ -10,5 +10,6 @@ module.exports = {
     'no-continue': 0,
     // Enable default behavior of this rule.
     'object-curly-newline': ['error', { consistent: true }],
+    'consistent-return': 0,
   },
 };
