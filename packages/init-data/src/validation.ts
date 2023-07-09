@@ -1,4 +1,4 @@
-import {createHmac} from 'node:crypto';
+import { createHmac } from 'node:crypto';
 
 export interface ValidateOptions {
   /**
@@ -56,7 +56,7 @@ export function validate(
     }
 
     if (key === 'auth_date') {
-      const authDateNum = parseInt(value);
+      const authDateNum = parseInt(value, 10);
 
       if (Number.isNaN(authDateNum)) {
         throw new TypeError('"auth_date" should present integer');
@@ -78,7 +78,7 @@ export function validate(
   }
 
   // In case, expiration time passed, we do additional parameters check.
-  const {expiresIn = 86400} = options;
+  const { expiresIn = 86400 } = options;
 
   if (expiresIn > 0) {
     // Check if init data expired.
