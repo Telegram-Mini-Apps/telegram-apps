@@ -43,7 +43,7 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
-    "build": "rollup --config rollup.config.js"
+    "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
     "tsconfig": "workspace:*",
