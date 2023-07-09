@@ -14,4 +14,4 @@ allows init data validation and parse, works both in browser and NodeJS.
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
 Apps. You can learn more about this package in this
-[documentation](https://telegram-web-apps.github.io/twa/docs/libraries/twa-init-data).
+[documentation](https://docs.twa.dev/docs/libraries/twa-init-data).
