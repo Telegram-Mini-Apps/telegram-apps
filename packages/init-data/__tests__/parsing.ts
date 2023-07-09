@@ -1,5 +1,6 @@
-import {describe, expect, it} from '@jest/globals';
-import {parseInitData} from '../src/parsing';
+/* eslint-disable import/no-extraneous-dependencies */
+import { describe, expect, it } from '@jest/globals';
+import { parseInitData } from '../src';
 
 describe('parsing', () => {
   describe('parseInitData', () => {
