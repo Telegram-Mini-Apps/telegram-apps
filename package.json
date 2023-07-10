@@ -2,16 +2,22 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "commit": "git cz",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "packages:build": "turbo run build --filter=\"./packages/*\"",
+    "packages:test": "turbo run test --filter=\"./packages/*\"",
+    "packages:lint": "turbo run lint --filter=\"./packages/*\""
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.2",
     "@jest/globals": "^29.6.1",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-terser": "^0.4.3",
     "@rollup/plugin-typescript": "^11.1.2",
     "@turbo/gen": "^1.9.7",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.32.0",
     "eslint-config-custom": "workspace:*",
     "jest": "^29.6.1",
@@ -26,5 +32,10 @@
     "typescript": "^5.1.6"
   },
   "packageManager": "pnpm@7.15.0",
-  "name": "monorepo"
+  "name": "monorepo",
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
 }
