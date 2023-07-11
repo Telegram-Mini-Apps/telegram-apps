@@ -1,3 +1,1 @@
-import {HapticFeedback as SDKHapticFeedback} from '@twa.js/sdk';
-
-export type HapticFeedback = SDKHapticFeedback;
+export type { HapticFeedback } from '@twa.js/sdk';

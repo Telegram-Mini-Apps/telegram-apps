@@ -1,3 +1,1 @@
-import {Viewport as SDKViewport} from '@twa.js/sdk';
-
-export type Viewport = SDKViewport;
+export type { Viewport } from '@twa.js/sdk';

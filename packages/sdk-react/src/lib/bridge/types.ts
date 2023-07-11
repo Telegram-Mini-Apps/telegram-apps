@@ -1,3 +1,1 @@
-import {Bridge as SDKBridge} from '@twa.js/bridge';
-
-export type Bridge = SDKBridge;
+export type { Bridge } from '@twa.js/bridge';

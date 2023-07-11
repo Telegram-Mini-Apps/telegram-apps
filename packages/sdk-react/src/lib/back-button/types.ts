@@ -1,3 +1,1 @@
-import {BackButton as SDKBackButton} from '@twa.js/sdk';
-
-export type BackButton = SDKBackButton;
+export type { BackButton } from '@twa.js/sdk';

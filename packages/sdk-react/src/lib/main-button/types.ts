@@ -1,3 +1,1 @@
-import {MainButton as SDKMainButton} from '@twa.js/sdk';
-
-export type MainButton = SDKMainButton;
+export { MainButton } from '@twa.js/sdk';

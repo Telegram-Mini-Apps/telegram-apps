@@ -1,3 +1,1 @@
-import {WebApp as SDKWebApp} from '@twa.js/sdk';
-
-export type WebApp = SDKWebApp;
+export type { WebApp } from '@twa.js/sdk';
