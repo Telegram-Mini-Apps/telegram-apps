@@ -39,7 +39,8 @@
     "@twa.js/utils": "workspace:*"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "eslint-config-custom": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
