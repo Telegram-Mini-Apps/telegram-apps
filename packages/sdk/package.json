@@ -4,13 +4,19 @@
   "description": "TypeScript Source Development Kit for Telegram Web Apps client application.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.git",
+    "directory": "packages/sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+  },
   "keywords": [
     "telegram",
     "telegram-web-apps",
     "twa",
     "typescript",
-    "source-development-kit",
-    "framework",
     "sdk"
   ],
   "license": "MIT",
@@ -23,24 +29,10 @@
   "browser": "dist/browser.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "exports": {
-    "web": "./dist/index.mjs",
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.cjs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/twa.git",
-    "directory": "packages/sdk"
-  },
   "scripts": {
     "test": "jest",
-    "lint": "eslint src/**/*.ts",
-    "build": "rimraf dist && rollup --config rollup.config.js",
-    "dev": "rollup --watch --config playground/rollup.config.js"
-  },
-  "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+    "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
+    "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
     "@twa.js/bridge": "workspace:*",
