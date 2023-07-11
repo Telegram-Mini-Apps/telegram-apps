@@ -52,6 +52,10 @@
     "@twa.js/bridge": "workspace:*",
     "@twa.js/sdk": "workspace:*"
   },
+  "devDependencies": {
+    "tsconfig": "workspace:*",
+    "eslint-config-custom": "workspace:*"
+  },
   "publishConfig": {
     "access": "public"
   }

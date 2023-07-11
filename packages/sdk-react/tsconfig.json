@@ -1,12 +1,11 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "tsconfig/react-library.json",
   "compilerOptions": {
-    "jsx": "react"
+    // TODO: Change to react-jsx.
+    "jsx": "react",
+    "outDir": "dist"
   },
   "include": [
     "src"
-  ],
-  "exclude": [
-    "src/__tests__"
   ]
 }
