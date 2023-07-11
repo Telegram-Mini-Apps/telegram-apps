@@ -1,4 +1,4 @@
-import {isBrowserEnv, Bridge} from '@twa.js/bridge';
+import { isIframe, Bridge } from '@twa.js/bridge';
 
 import {
   BackButton,
@@ -12,20 +12,20 @@ import {
   Viewport,
   WebApp,
 } from '../components';
-import {InitOptions, InitResult} from './types';
-import {retrieveLaunchParams} from '../utils';
-import {BridgeScoped} from '../lib';
+import type { InitOptions, InitResult } from './types';
+import { BridgeScoped } from '../lib';
+import { retrieveLaunchParams } from '../utils';
 
 /**
  * Initializes all SDK components.
  * @param options - initialization options.
  */
 export async function init(options: InitOptions = {}): Promise<InitResult> {
-  const {checkCompat = true, acceptScrollbarStyle = true} = options;
+  const { checkCompat = true, acceptScrollbarStyle = true } = options;
 
   // Get Web App data.
   const {
-    initData: {authDate, hash, ...restInitData},
+    initData: { authDate, hash, ...restInitData },
     version,
     platform,
     themeParams,
@@ -44,7 +44,7 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
   // messages, coming from parent source to apply requested changes.
   // The only one case, when current application was placed into iframe is
   // web version of Telegram.
-  if (acceptScrollbarStyle && isBrowserEnv()) {
+  if (acceptScrollbarStyle && isIframe()) {
     // Create special style element which is responsible for application
     // style controlled by external app.
     const styleElement = document.createElement('style');
@@ -52,7 +52,9 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
     document.head.appendChild(styleElement);
 
     // Listen to custom style changes.
-    twaBridge.on('set_custom_style', html => styleElement.innerHTML = html);
+    twaBridge.on('set_custom_style', (html) => {
+      styleElement.innerHTML = html;
+    });
 
     // Notify Telegram, iframe is ready. This will result in sending style
     // tag html from native application.
@@ -60,7 +62,7 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
   }
 
   // Get viewport information.
-  const {width, isExpanded, height, isStateStable} = platform !== 'macos'
+  const { width, isExpanded, height, isStateStable } = platform !== 'macos'
     ? await Viewport.request(bridge)
     : {
       width: window.innerWidth,
@@ -80,9 +82,7 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
     popup: new Popup(bridge, version),
     qrScanner: new QRScanner(bridge, version),
     themeParams: ThemeParams.synced(bridge, themeParams),
-    viewport: Viewport.synced(
-      bridge, height, width, isStateStable ? height : 0, isExpanded,
-    ),
+    viewport: Viewport.synced(bridge, height, width, isStateStable ? height : 0, isExpanded),
     webApp: new WebApp(bridge, version, platform),
   };
 }
