@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { describe, jest, beforeEach, afterEach, it, expect } from '@jest/globals';
 import { postEvent } from '../../src';
 

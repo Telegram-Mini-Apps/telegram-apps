@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { expect, it, describe, jest, beforeEach } from '@jest/globals';
 import { createEventsObserver } from '../src/events-observer';
 

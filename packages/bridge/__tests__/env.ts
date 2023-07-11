@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { afterEach, describe, expect, it, jest } from '@jest/globals';
 import { hasExternal, hasNotify, hasInvoke, isIframe } from '../src';
 
