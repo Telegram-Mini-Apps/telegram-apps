@@ -34,7 +34,8 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "eslint-config-custom": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
