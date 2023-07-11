@@ -1,7 +1,7 @@
-import React, {ComponentType} from 'react';
+import React, { type ComponentType } from 'react';
 
-import {useClosingConfirmation} from './useClosingConfirmation';
-import {ClosingConfirmation} from './types';
+import { useClosingConfirmation } from './useClosingConfirmation';
+import type { ClosingConfirmation } from './types';
 
 /**
  * HOC which passes ClosingConfirmation SDK component to wrapped React component.
@@ -11,8 +11,8 @@ export function withClosingConfirmation<P extends { closingConfirmation?: Closin
   Component: ComponentType<P>,
 ): ComponentType<Omit<P, 'closingConfirmation'>> {
   return function WithClosingConfirmation(props: Omit<P, 'closingConfirmation'>) {
-    const p = {...props, closingConfirmation: useClosingConfirmation()} as P;
+    const p = { ...props, closingConfirmation: useClosingConfirmation() } as P;
 
-    return <Component {...p}/>;
+    return <Component {...p} />;
   };
 }

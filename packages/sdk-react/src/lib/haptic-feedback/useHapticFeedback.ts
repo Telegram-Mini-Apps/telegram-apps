@@ -1,5 +1,5 @@
-import {useComponent} from '../../provider';
-import {HapticFeedback} from './types';
+import { useComponent } from '../../provider';
+import type { HapticFeedback } from './types';
 
 /**
  * Returns HapticFeedback component instance.

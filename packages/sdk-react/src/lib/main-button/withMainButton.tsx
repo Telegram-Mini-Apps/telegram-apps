@@ -1,18 +1,18 @@
-import React, {ComponentType} from 'react';
+import React, { type ComponentType } from 'react';
 
-import {useMainButton} from './useMainButton';
-import {MainButton} from './types';
+import { useMainButton } from './useMainButton';
+import type { MainButton } from './types';
 
 /**
  * HOC which passes MainButton SDK component to wrapped React component.
  * @param Component - component to wrap.
  */
-export function withMainButton<P extends {mainButton?: MainButton}>(
+export function withMainButton<P extends { mainButton?: MainButton }>(
   Component: ComponentType<P>,
 ): ComponentType<Omit<P, 'mainButton'>> {
   return function WithMainButton(props: Omit<P, 'mainButton'>) {
-    const p = {...props, mainButton: useMainButton()} as P;
+    const p = { ...props, mainButton: useMainButton() } as P;
 
-    return <Component {...p}/>;
+    return <Component {...p} />;
   };
 }

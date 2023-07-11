@@ -1,6 +1,6 @@
-import {useComponent} from '../../provider';
-import {useEventsTracking} from '../hooks';
-import {ClosingConfirmation} from './types';
+import { useComponent } from '../../provider';
+import { useEventsTracking } from '../hooks';
+import type { ClosingConfirmation } from './types';
 
 /**
  * Returns ClosingConfirmation component instance.

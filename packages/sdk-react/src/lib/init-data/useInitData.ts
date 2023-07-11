@@ -1,5 +1,5 @@
-import {useComponent} from '../../provider';
-import {InitData} from './types';
+import { useComponent } from '../../provider';
+import type { InitData } from './types';
 
 /**
  * Returns InitData component instance.

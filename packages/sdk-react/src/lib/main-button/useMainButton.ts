@@ -1,6 +1,6 @@
-import {useComponent} from '../../provider';
-import {useEventsTracking} from '../hooks';
-import {MainButton} from './types';
+import { useComponent } from '../../provider';
+import { useEventsTracking } from '../hooks';
+import type { MainButton } from './types';
 
 /**
  * Returns MainButton component instance.
