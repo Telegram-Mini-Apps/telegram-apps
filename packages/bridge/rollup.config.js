@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import typescript from '@rollup/plugin-typescript';
 import terser from '@rollup/plugin-terser';
 import { defineConfig } from 'rollup';
