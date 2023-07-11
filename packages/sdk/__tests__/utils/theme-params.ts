@@ -1,13 +1,13 @@
-import {describe, expect, it} from '@jest/globals';
-import {parseThemeParams} from '../../src/utils';
+import { describe, expect, it } from '@jest/globals';
+import { parseThemeParams } from '../../src/utils';
 
 describe('utils', () => {
   describe('theme-params.ts', () => {
     describe('parseThemeParams', () => {
-      const fields = '"' + [
+      const fields = `"${[
         'backgroundColor', 'buttonColor', 'buttonTextColor', 'hintColor',
         'linkColor', 'textColor',
-      ].join('", "') + '"';
+      ].join('", "')}"`;
 
       it(`should return object with fields ${fields} in case, `
         + 'passed value satisfies required schema', () => {
@@ -19,7 +19,7 @@ describe('utils', () => {
           link_color: '#22314a',
           text_color: '#31344a',
         };
-        const value2 = {...value1, secondary_bg_color: '#ffaabb'};
+        const value2 = { ...value1, secondary_bg_color: '#ffaabb' };
 
         expect(parseThemeParams(value1)).toStrictEqual({
           backgroundColor: '#ffaabb',
@@ -36,12 +36,12 @@ describe('utils', () => {
           hintColor: '#da1122',
           linkColor: '#22314a',
           textColor: '#31344a',
-          secondaryBackgroundColor: '#ffaabb'
+          secondaryBackgroundColor: '#ffaabb',
         });
       });
 
-      it('should throw an error in case, passed value does not ' +
-        'satisfy schema', () => {
+      it('should throw an error in case, passed value does not '
+        + 'satisfy schema', () => {
         expect(() => parseThemeParams({
           bg_color: 'I am wrong!',
           button_color: '#233312',

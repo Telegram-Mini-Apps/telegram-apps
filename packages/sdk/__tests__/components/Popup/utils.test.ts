@@ -1,5 +1,5 @@
-import {describe, expect, it} from '@jest/globals';
-import {preparePopupParams} from './utils';
+import { describe, expect, it } from '@jest/globals';
+import { preparePopupParams } from '../../../src/components/Popup/utils';
 
 /**
  * Creates test text.
@@ -48,51 +48,49 @@ describe('components', () => {
         it('should throw an error in case, buttons count is more than 3', () => {
           expect(() => preparePopupParams({
             message: 'a',
-            buttons: new Array(4).fill({type: 'close'}),
+            buttons: new Array(4).fill({ type: 'close' }),
           })).toThrow(/^Buttons have incorrect size/);
 
           expect(() => preparePopupParams({
             message: 'a',
-            buttons: new Array(3).fill({type: 'close'}),
+            buttons: new Array(3).fill({ type: 'close' }),
           })).not.toThrow();
         });
 
         it('should append button type "close" in case, buttons array is empty', () => {
-          expect(preparePopupParams({message: 'a'}).buttons).toStrictEqual([{
+          expect(preparePopupParams({ message: 'a' }).buttons).toStrictEqual([{
             type: 'close',
             id: '',
           }]);
         });
 
-        it(
-          'should throw an error in case, some button text length ' +
-          'size is zero or more than 64 symbols', () => {
-            expect(() => preparePopupParams({
-              message: 'A',
-              buttons: [{type: 'default', text: createText(65)}],
-            })).toThrowError(/^Button text with type/);
+        it('should throw an error in case, some button text length '
+          + 'size is zero or more than 64 symbols', () => {
+          expect(() => preparePopupParams({
+            message: 'A',
+            buttons: [{ type: 'default', text: createText(65) }],
+          })).toThrowError(/^Button text with type/);
 
-            expect(() => preparePopupParams({
-              message: 'A',
-              buttons: [{type: 'default', text: ''}],
-            })).toThrowError(/^Button text with type/);
+          expect(() => preparePopupParams({
+            message: 'A',
+            buttons: [{ type: 'default', text: '' }],
+          })).toThrowError(/^Button text with type/);
 
-            expect(() => preparePopupParams({
-              message: 'A',
-              buttons: [{type: 'default', text: createText(64)}],
-            })).not.toThrow();
-          },
-        );
+          expect(() => preparePopupParams({
+            message: 'A',
+            buttons: [{ type: 'default', text: createText(64) }],
+          })).not.toThrow();
+        });
 
-        it('should fulfill all optional popup parameters', function () {
+        it('should fulfill all optional popup parameters', () => {
           expect(preparePopupParams({
             message: 'Message',
-            buttons: [{type: 'default', text: 'Wow!'}, {type: 'close'}]
+            buttons: [{ type: 'default', text: 'Wow!' }, { type: 'close' }],
           }))
             .toStrictEqual({
               title: '',
               message: 'Message',
-              buttons: [{id: '', type: 'default', text: 'Wow!'}, {type: 'close', id: ''}],
+              buttons: [{ id: '', type: 'default', text: 'Wow!' }, { type: 'close', id: '' }],
             });
         });
       });

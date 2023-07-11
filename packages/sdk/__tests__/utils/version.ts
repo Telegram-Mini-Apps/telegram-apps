@@ -1,12 +1,12 @@
-import {describe, expect, it} from '@jest/globals';
-import {createSupportsFunc} from '../../src/utils';
+import { describe, expect, it } from '@jest/globals';
+import { createSupportsFunc } from '../../src/utils';
 
 describe('utils', () => {
   describe('version.ts', () => {
     describe('createSupportsFunc', () => {
       describe('returned function', () => {
-        it('should return true in case, passed method is supported ' +
-          'by specified Web Apps version. False otherwise', () => {
+        it('should return true in case, passed method is supported '
+          + 'by specified Web Apps version. False otherwise', () => {
           const supports = createSupportsFunc('6.0', {
             openPopup: 'web_app_open_popup',
             closeApp: 'web_app_close',

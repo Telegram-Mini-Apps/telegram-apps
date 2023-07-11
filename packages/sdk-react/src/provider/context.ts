@@ -1,6 +1,6 @@
-import {createContext} from 'react';
+import { createContext } from 'react';
 
-import {SDKContext} from './types';
+import type { SDKContext } from './types';
 
 export const sdkContext = createContext<SDKContext>({
   components: null,

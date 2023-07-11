@@ -1,5 +1,5 @@
-import {afterEach, describe, expect, it, jest} from '@jest/globals';
-import {retrieveLaunchParams} from '../../src';
+import { afterEach, describe, expect, it, jest } from '@jest/globals';
+import { retrieveLaunchParams } from '../../src';
 
 describe('utils', () => {
   describe('launch-params.ts', () => {
@@ -8,8 +8,8 @@ describe('utils', () => {
         jest.resetAllMocks();
       });
 
-      it('should extract launch parameters from window.location.hash ' +
-        'and save them in sessionStorage by key "__telegram-launch-params__"', () => {
+      it('should extract launch parameters from window.location.hash '
+        + 'and save them in sessionStorage by key "__telegram-launch-params__"', () => {
         const version = '9.1';
         const platform = 'unbelievable';
         const launchParams = new URLSearchParams({
@@ -43,7 +43,7 @@ describe('utils', () => {
           setItem,
         }) as any);
         jest.spyOn(global, 'window', 'get').mockImplementation(() => ({
-          location: {hash: '#' + launchParams},
+          location: { hash: `#${launchParams}` },
         }) as any);
 
         expect(retrieveLaunchParams()).toStrictEqual({
@@ -71,12 +71,12 @@ describe('utils', () => {
             textColor: '#31344a',
           },
         });
-        expect(setItem).toHaveBeenCalledWith('__telegram-launch-params__', launchParams)
+        expect(setItem).toHaveBeenCalledWith('__telegram-launch-params__', launchParams);
       });
 
-      it('should returns launch parameters from sessionStorage key ' +
-        '"__telegram-launch-params__" in case they are missing ' +
-        'in window.location.hash', () => {
+      it('should returns launch parameters from sessionStorage key '
+        + '"__telegram-launch-params__" in case they are missing '
+        + 'in window.location.hash', () => {
         const version = '9.1';
         const platform = 'unbelievable';
         const launchParams = new URLSearchParams({
@@ -110,7 +110,7 @@ describe('utils', () => {
           getItem,
         }) as any);
         jest.spyOn(global, 'window', 'get').mockImplementation(() => ({
-          location: {hash: ''},
+          location: { hash: '' },
         }) as any);
 
         expect(retrieveLaunchParams()).toStrictEqual({

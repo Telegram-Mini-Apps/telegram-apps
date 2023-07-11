@@ -1,7 +1,7 @@
-import {useContext} from 'react';
+import { useContext } from 'react';
 
-import {sdkContext} from './context';
-import {SDKComponent, SDKComponentName} from './types';
+import { sdkContext } from './context';
+import type { SDKComponent, SDKComponentName } from './types';
 
 /**
  * Returns current SDK information.
@@ -17,7 +17,7 @@ export const useSDK = () => useContext(sdkContext);
 export function useComponent<N extends SDKComponentName>(
   name: N,
 ): SDKComponent<N> {
-  const {components} = useSDK();
+  const { components } = useSDK();
 
   if (components === null) {
     throw new Error(`Unable to get component "${name}" as long as SDK is not initialized.`);

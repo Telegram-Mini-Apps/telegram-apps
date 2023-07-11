@@ -1,6 +1,6 @@
-import {describe, it, expect} from '@jest/globals';
+import { describe, it, expect } from '@jest/globals';
 // import {emitDesktopEvent, mockDesktop} from '../../../tests';
-import {Popup} from './Popup';
+// import { Popup } from './Popup';
 // import {Bridge} from '@twa.js/bridge';
 // import {PopupParams} from './types';
 // import {preparePopupParams} from './utils';
@@ -11,7 +11,7 @@ describe('components', () => {
   describe('Popup', () => {
     it('should be fine', () => {
       expect(true).toBe(true);
-    })
+    });
     // describe('isOpened', () => {
     //   it('should emit event "openChange" with specified value in setter', () => {
     //     const popup = new Popup('7');
@@ -71,7 +71,8 @@ describe('components', () => {
     //     expect(popup.isOpened).toBe(true);
     //   });
     //
-    //   it('should emit close event with specified button_id when promise is resolved', async () => {
+    //   it('should emit close event with specified button_id when promise is resolved',
+    //   async () => {
     //     const popup = new Popup('7');
     //     const spy = jest.spyOn((popup as any).ee, 'emit');
     //     const promise = popup.show({message: 'Message'});
