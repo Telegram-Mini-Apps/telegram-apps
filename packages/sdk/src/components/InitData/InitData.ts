@@ -1,4 +1,4 @@
-import {
+import type {
   Chat,
   InitData as TwaInitData,
   User,
@@ -8,35 +8,46 @@ import {
  * Class which is responsible for displaying Web Apps init data.
  */
 export class InitData {
-  private readonly _canSendAfter: Date | null = null;
-  private readonly _chat: Chat | null = null;
-  private readonly _queryId: string | null = null;
-  private readonly _receiver: User | null = null;
-  private readonly _startParam: string | null = null;
-  private readonly _user: User | null = null;
+  readonly #authDate: Date;
+
+  readonly #canSendAfter: Date | null = null;
+
+  readonly #chat: Chat | null = null;
+
+  readonly #hash: string;
+
+  readonly #queryId: string | null = null;
+
+  readonly #receiver: User | null = null;
+
+  readonly #startParam: string | null = null;
+
+  readonly #user: User | null = null;
 
   constructor(
-    private _authDate: Date,
-    private _hash: string,
+    authDate: Date,
+    hash: string,
     options: Omit<TwaInitData, 'authDate' | 'hash'> = {},
   ) {
+    this.#authDate = authDate;
+    this.#hash = hash;
     const {
       chat = null, user = null, queryId = null, receiver = null,
       startParam = null, canSendAfter = null,
     } = options;
-    this._canSendAfter = canSendAfter;
-    this._chat = chat;
-    this._user = user;
-    this._queryId = queryId;
-    this._receiver = receiver;
-    this._startParam = startParam;
+    this.#canSendAfter = canSendAfter;
+    this.#chat = chat;
+    this.#user = user;
+    this.#queryId = queryId;
+    this.#receiver = receiver;
+    this.#startParam = startParam;
   }
 
   /**
    * Returns init data generation date.
    */
   get authDate(): Date {
-    return this._authDate;
+    return this.#authDate;
   }
 
   /**
@@ -45,7 +56,7 @@ export class InitData {
    * @see https://core.telegram.org/bots/api#answerwebappquery
    */
   get canSendAfter(): Date | null {
-    return this._canSendAfter;
+    return this.#canSendAfter;
   }
 
   /**
@@ -54,7 +65,7 @@ export class InitData {
    * group chats – only for Web Apps launched via the attachment menu.
    */
   get chat(): Chat | null {
-    return this._chat;
+    return this.#chat;
   }
 
   /**
@@ -63,7 +74,7 @@ export class InitData {
    * @see https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app
    */
   get hash(): string {
-    return this._hash;
+    return this.#hash;
   }
 
   /**
@@ -72,7 +83,7 @@ export class InitData {
    * @see https://core.telegram.org/bots/api#answerwebappquery
    */
   get queryId(): string | null {
-    return this._queryId;
+    return this.#queryId;
   }
 
   /**
@@ -82,7 +93,7 @@ export class InitData {
    * via the attachment menu.
    */
   get receiver(): User | null {
-    return this._receiver;
+    return this.#receiver;
   }
 
   /**
@@ -90,13 +101,13 @@ export class InitData {
    * returned for Web Apps when launched from the attachment menu via link.
    */
   get startParam(): string | null {
-    return this._startParam;
+    return this.#startParam;
   }
 
   /**
    * Returns an object containing data about the current user.
    */
   get user(): User | null {
-    return this._user;
+    return this.#user;
   }
 }

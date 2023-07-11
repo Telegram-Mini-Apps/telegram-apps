@@ -1,7 +1,7 @@
-import {EventEmitter, RGB} from '@twa.js/utils';
+import { EventEmitter, type RGB } from '@twa.js/utils';
 
-import {MainButtonEventListener, MainButtonEventsMap} from './events';
-import {BridgeLike} from '../../types';
+import type { MainButtonEventListener, MainButtonEventsMap } from './events';
+import type { BridgeLike } from '../../types';
 
 type Emitter = EventEmitter<MainButtonEventsMap>;
 
@@ -14,64 +14,74 @@ type Emitter = EventEmitter<MainButtonEventsMap>;
  */
 export class MainButton {
   private readonly ee: Emitter = new EventEmitter();
-  private _isEnabled = false;
-  private _isVisible = false;
-  private _isProgressVisible = false;
-  private _text = '';
+
+  #color: RGB;
+
+  #isEnabled = false;
+
+  #isVisible = false;
+
+  #isProgressVisible = false;
+
+  #text = '';
+
+  #textColor: RGB;
 
   constructor(
     private readonly bridge: BridgeLike,
-    private _color: RGB,
-    private _textColor: RGB,
+    color: RGB,
+    textColor: RGB,
   ) {
+    this.#color = color;
+    this.#textColor = textColor;
   }
 
   private set isEnabled(value: boolean) {
-    if (this._isEnabled === value) {
-      return
+    if (this.#isEnabled === value) {
+      return;
     }
-    this._isEnabled = value;
+    this.#isEnabled = value;
     this.commit();
-    this.ee.emit('isEnabledChanged', this._isEnabled);
+    this.ee.emit('isEnabledChanged', this.#isEnabled);
   }
 
   /**
    * Returns true in case, MainButton is currently enabled.
    */
   get isEnabled(): boolean {
-    return this._isEnabled;
+    return this.#isEnabled;
   }
 
   private set isProgressVisible(value: boolean) {
-    if (this._isProgressVisible === value) {
+    if (this.#isProgressVisible === value) {
       return;
     }
-    this._isProgressVisible = value;
+    this.#isProgressVisible = value;
     this.commit();
-    this.ee.emit('isProgressVisibleChanged', this._isProgressVisible);
+    this.ee.emit('isProgressVisibleChanged', this.#isProgressVisible);
   }
 
   /**
    * Returns true in case, MainButton loading progress is currently visible.
    */
   get isProgressVisible(): boolean {
-    return this._isProgressVisible;
+    return this.#isProgressVisible;
   }
 
   private set isVisible(value: boolean) {
-    if (this._isVisible === value) {
+    if (this.#isVisible === value) {
       return;
     }
-    this._isVisible = value;
+    this.#isVisible = value;
     this.commit();
-    this.ee.emit('isVisibleChanged', this._isVisible);
+    this.ee.emit('isVisibleChanged', this.#isVisible);
   }
 
   /**
    * Returns true in case, MainButton is currently visible.
    */
   get isVisible(): boolean {
-    return this._isVisible;
+    return this.#isVisible;
   }
 
   /**
@@ -98,21 +108,21 @@ export class MainButton {
    * Returns current main button background color.
    */
   get color(): RGB {
-    return this._color;
+    return this.#color;
   }
 
   /**
    * Returns current main button text.
    */
   get text(): string {
-    return this._text;
+    return this.#text;
   }
 
   /**
    * Returns current main button text color.
    */
   get textColor(): RGB {
-    return this._textColor;
+    return this.#textColor;
   }
 
   /**
@@ -209,8 +219,8 @@ export class MainButton {
    * @param text - new text.
    */
   setText(text: string): this {
-    if (this._text !== text) {
-      this._text = text;
+    if (this.#text !== text) {
+      this.#text = text;
       this.commit();
       this.ee.emit('textChanged', text);
     }
@@ -225,8 +235,8 @@ export class MainButton {
    * @param color - new text color.
    */
   setTextColor(color: RGB): this {
-    if (this._textColor !== color) {
-      this._textColor = color;
+    if (this.#textColor !== color) {
+      this.#textColor = color;
       this.commit();
       this.ee.emit('textColorChanged', color);
     }
@@ -241,10 +251,10 @@ export class MainButton {
    * @param color - color to set.
    */
   setColor(color: RGB): this {
-    if (this._color !== color) {
-      this._color = color;
+    if (this.#color !== color) {
+      this.#color = color;
       this.commit();
-      this.ee.emit('colorChanged', this._color);
+      this.ee.emit('colorChanged', this.#color);
     }
     return this;
   }

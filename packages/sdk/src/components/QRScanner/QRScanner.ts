@@ -1,15 +1,16 @@
-import {BridgeEventListener} from '@twa.js/bridge';
-import {EventEmitter, Version} from '@twa.js/utils';
+import type { BridgeEventListener } from '@twa.js/bridge';
+import { EventEmitter, type Version } from '@twa.js/utils';
 
-import {QRScannerEventsMap} from './events';
-import {createSupportsFunc, SupportsFunc} from '../../utils';
-import {BridgeLike} from '../../types';
+import { type QRScannerEventsMap } from './events';
+import { createSupportsFunc, type SupportsFunc } from '../../utils';
+import type { BridgeLike } from '../../types';
 
 /**
  * Provides QR scanner functionality.
  */
 export class QRScanner {
-  private _isOpened = false;
+  #isOpened = false;
+
   private readonly ee = new EventEmitter<QRScannerEventsMap>();
 
   constructor(private readonly bridge: BridgeLike, version: Version) {
@@ -28,10 +29,10 @@ export class QRScanner {
   }
 
   set isOpened(value) {
-    if (this._isOpened === value) {
+    if (this.#isOpened === value) {
       return;
     }
-    this._isOpened = value;
+    this.#isOpened = value;
     this.ee.emit('isOpenedChanged', value);
   }
 
@@ -39,7 +40,7 @@ export class QRScanner {
    * Returns true in case, QR scanner is currently opened.
    */
   get isOpened(): boolean {
-    return this._isOpened;
+    return this.#isOpened;
   }
 
   /**
@@ -53,19 +54,21 @@ export class QRScanner {
       throw new Error('QR scanner is already opened.');
     }
     // Try to call bridge method.
-    this.bridge.postEvent('web_app_open_scan_qr_popup', {text});
+    this.bridge.postEvent('web_app_open_scan_qr_popup', { text });
 
     // Update local state.
     this.isOpened = true;
 
-    return new Promise<string | null>(res => {
+    return new Promise<string | null>((res) => {
       // Define listeners which will catch result of QR scanner action.
       const closeListener: BridgeEventListener<'scan_qr_popup_closed'> = () => {
         res(null);
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         unbind();
       };
-      const scanListener: BridgeEventListener<'qr_text_received'> = ({data = null}) => {
+      const scanListener: BridgeEventListener<'qr_text_received'> = ({ data = null }) => {
         res(data);
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         unbind();
       };
 

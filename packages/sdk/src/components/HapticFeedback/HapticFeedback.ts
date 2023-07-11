@@ -1,11 +1,11 @@
-import {
+import type {
   ImpactHapticFeedbackStyle,
   NotificationHapticFeedbackType,
 } from '@twa.js/bridge';
-import {Version} from '@twa.js/utils';
+import type { Version } from '@twa.js/utils';
 
-import {createSupportsFunc, SupportsFunc} from '../../utils';
-import {BridgeLike} from '../../types';
+import { createSupportsFunc, type SupportsFunc } from '../../utils';
+import type { BridgeLike } from '../../types';
 
 /**
  * Class which controls haptic feedback. It allows calling different types of

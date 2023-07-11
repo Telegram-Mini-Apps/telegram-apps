@@ -1,4 +1,4 @@
-import {RGB} from '@twa.js/utils';
+import type { RGB } from '@twa.js/utils';
 
 /**
  * Information about MainButton supported events.

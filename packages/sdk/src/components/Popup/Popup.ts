@@ -1,11 +1,11 @@
-import {BridgeEventListener} from '@twa.js/bridge';
-import {EventEmitter, Version} from '@twa.js/utils';
+import type { BridgeEventListener } from '@twa.js/bridge';
+import { EventEmitter, type Version } from '@twa.js/utils';
 
-import {PopupParams} from './types';
-import {PopupEventsMap} from './events';
-import {preparePopupParams} from './utils';
-import {createSupportsFunc, SupportsFunc} from '../../utils';
-import {BridgeLike} from '../../types';
+import type { PopupParams } from './types';
+import type { PopupEventsMap } from './events';
+import { preparePopupParams } from './utils';
+import { createSupportsFunc, type SupportsFunc } from '../../utils';
+import type { BridgeLike } from '../../types';
 
 /**
  * Controls currently displayed application popup. It allows developers to
@@ -13,25 +13,26 @@ import {BridgeLike} from '../../types';
  */
 export class Popup {
   private readonly ee = new EventEmitter<PopupEventsMap>();
-  private _isOpened = false;
+
+  #isOpened = false;
 
   constructor(private readonly bridge: BridgeLike, version: Version) {
-    this.supports = createSupportsFunc(version, {open: 'web_app_open_popup'});
+    this.supports = createSupportsFunc(version, { open: 'web_app_open_popup' });
   }
 
   private set isOpened(value: boolean) {
-    if (this._isOpened === value) {
+    if (this.#isOpened === value) {
       return;
     }
-    this._isOpened = value;
-    this.ee.emit('isOpenedChanged', this._isOpened);
+    this.#isOpened = value;
+    this.ee.emit('isOpenedChanged', this.#isOpened);
   }
 
   /**
    * Shows whether popup is currently opened.
    */
   get isOpened(): boolean {
-    return this._isOpened;
+    return this.#isOpened;
   }
 
   /**
@@ -72,9 +73,9 @@ export class Popup {
     // Update popup opened status.
     this.isOpened = true;
 
-    return new Promise<string | null>(res => {
+    return new Promise<string | null>((res) => {
       // Create 'popup_closed' event listener to catch clicked button.
-      const listener: BridgeEventListener<'popup_closed'> = ({button_id = null}) => {
+      const listener: BridgeEventListener<'popup_closed'> = ({ button_id = null }) => {
         this.bridge.off('popup_closed', listener);
         res(button_id);
         this.isOpened = false;

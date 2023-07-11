@@ -1,19 +1,22 @@
-import {Version, compareVersions} from '@twa.js/utils';
-import {BridgeEventListener, InvoiceStatus, supports} from '@twa.js/bridge';
+import { type Version, compareVersions } from '@twa.js/utils';
+import { type BridgeEventListener, type InvoiceStatus, supports } from '@twa.js/bridge';
 
-import {createSupportsFunc, formatURL, SupportsFunc} from '../../utils';
-import {BridgeLike, Platform} from '../../types';
+import { createSupportsFunc, formatURL, type SupportsFunc } from '../../utils';
+import type { BridgeLike, Platform } from '../../types';
 
 /**
  * Provides common Web Apps functionality not covered by other system
  * components.
  */
 export class WebApp {
+  #platform: Platform;
+
   constructor(
     private readonly bridge: BridgeLike,
     version: Version,
-    private readonly _platform: Platform,
+    platform: Platform,
   ) {
+    this.#platform = platform;
     this.supports = createSupportsFunc(version, {
       openInvoice: 'web_app_open_invoice',
       readTextFromClipboard: 'web_app_read_text_from_clipboard',
@@ -46,14 +49,14 @@ export class WebApp {
    * @param url - URL to be opened.
    */
   openLink(url: string): void {
-    url = formatURL(url);
+    const formattedUrl = formatURL(url);
 
     // If method is supported by current version, open link via bridge event.
     if (supports('web_app_open_link', this.version)) {
-      return this.bridge.postEvent('web_app_open_link', {url});
+      return this.bridge.postEvent('web_app_open_link', { url: formattedUrl });
     }
     // Otherwise, do it in legacy way.
-    window.open(url, '_blank');
+    window.open(formattedUrl, '_blank');
   }
 
   /**
@@ -63,7 +66,7 @@ export class WebApp {
    * @throws {Error} URL has not allowed hostname.
    */
   openTelegramLink(url: string): void {
-    const {hostname, pathname, search} = new URL(formatURL(url));
+    const { hostname, pathname, search } = new URL(formatURL(url));
 
     // We allow opening links with the only 1 hostname.
     if (hostname !== 't.me') {
@@ -89,10 +92,10 @@ export class WebApp {
    */
   openInvoice(url: string): Promise<InvoiceStatus> {
     // TODO: Allow opening with slug.
-    const {hostname, pathname} = new URL(formatURL(url));
+    const { hostname, pathname } = new URL(formatURL(url));
 
     if (hostname !== 't.me') {
-      throw new Error('Incorrect hostname: ' + hostname);
+      throw new Error(`Incorrect hostname: ${hostname}`);
     }
     // Valid examples:
     // "/invoice/my-slug"
@@ -103,11 +106,11 @@ export class WebApp {
       throw new Error('Link pathname has incorrect format. Expected to receive "/invoice/slug" or "/$slug"');
     }
     // Open invoice.
-    this.bridge.postEvent('web_app_open_invoice', {slug: match[2]});
+    this.bridge.postEvent('web_app_open_invoice', { slug: match[2] });
 
-    return new Promise(res => {
+    return new Promise((res) => {
       // Create event listener which will resolve invoice status.
-      const listener: BridgeEventListener<'invoice_closed'> = a => {
+      const listener: BridgeEventListener<'invoice_closed'> = (a) => {
         // Remove bound listener.
         this.bridge.off('invoice_closed', listener);
 
@@ -123,7 +126,7 @@ export class WebApp {
    * Returns current Web App platform.
    */
   get platform(): Platform {
-    return this._platform;
+    return this.#platform;
   }
 
   /**
@@ -149,19 +152,19 @@ export class WebApp {
   readTextFromClipboard(): Promise<string | null> {
     // Generate request identifier.
     let reqId = '';
-    for (let i = 0; i < 32; i++) {
+    for (let i = 0; i < 32; i += 1) {
       reqId += Math.ceil(Math.random() * 10).toString();
     }
 
-    return new Promise<string | null>(res => {
-      const listener: BridgeEventListener<'clipboard_text_received'> = payload => {
+    return new Promise<string | null>((res) => {
+      const listener: BridgeEventListener<'clipboard_text_received'> = (payload) => {
         if (payload.req_id === reqId) {
           res(payload.data === undefined ? null : payload.data);
           this.bridge.off('clipboard_text_received', listener);
         }
       };
       this.bridge.on('clipboard_text_received', listener);
-      this.bridge.postEvent('web_app_read_text_from_clipboard', {req_id: reqId});
+      this.bridge.postEvent('web_app_read_text_from_clipboard', { req_id: reqId });
     });
   }
 
@@ -177,11 +180,11 @@ export class WebApp {
    */
   sendData(data: string): void {
     // Firstly, compute passed text size in bytes.
-    const size = new Blob([data]).size;
+    const { size } = new Blob([data]);
     if (size === 0 || size > 4096) {
       throw new Error(`Passed data has incorrect size: ${size}`);
     }
-    this.bridge.postEvent('web_app_data_send', {data});
+    this.bridge.postEvent('web_app_data_send', { data });
   }
 
   /**
