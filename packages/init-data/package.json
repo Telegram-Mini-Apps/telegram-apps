@@ -50,7 +50,8 @@
     "@types/node": "^18.11.19"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "eslint-config-custom": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
