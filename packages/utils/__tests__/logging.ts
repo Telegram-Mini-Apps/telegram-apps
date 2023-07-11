@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { describe, jest, expect, it } from '@jest/globals';
 import { log } from '../src';
 

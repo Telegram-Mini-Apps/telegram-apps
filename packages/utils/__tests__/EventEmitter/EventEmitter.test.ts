@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { EventEmitter } from '../../src';
 

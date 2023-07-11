@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { describe, expect, it, jest } from '@jest/globals';
 import { schemaToParsers } from '../../src/parsing/shared';
 
