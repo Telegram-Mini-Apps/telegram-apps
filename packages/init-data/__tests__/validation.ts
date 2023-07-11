@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { describe, expect, it } from '@jest/globals';
 import { validate } from '../src/validation';
 
