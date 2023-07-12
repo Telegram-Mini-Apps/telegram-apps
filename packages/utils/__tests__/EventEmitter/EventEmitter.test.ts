@@ -1,5 +1,5 @@
-import {beforeEach, describe, expect, it, jest} from '@jest/globals';
-import {EventEmitter} from '../../src/EventEmitter';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { EventEmitter } from '../../src';
 
 interface EventsMap {
   test: (a: number, b: boolean) => void;

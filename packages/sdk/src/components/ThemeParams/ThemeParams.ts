@@ -1,12 +1,12 @@
-import {RGB, EventEmitter} from '@twa.js/utils';
-import {BridgeEventListener} from '@twa.js/bridge';
+import { type RGB, EventEmitter } from '@twa.js/utils';
+import { type BridgeEventListener } from '@twa.js/bridge';
 
-import {ThemeParamsEventsMap} from './events';
-import {BridgeLike} from '../../types';
+import type { ThemeParamsEventsMap } from './events';
+import type { BridgeLike } from '../../types';
 import {
   isColorDark,
   parseThemeParams,
-  ThemeParams as TwaThemeParams,
+  type ThemeParams as TwaThemeParams,
 } from '../../utils';
 
 /**
@@ -22,8 +22,8 @@ export class ThemeParams {
     // Emit event to receive theme information.
     bridge.postEvent('web_app_request_theme');
 
-    return new Promise(res => {
-      const listener: BridgeEventListener<'theme_changed'> = payload => {
+    return new Promise((res) => {
+      const listener: BridgeEventListener<'theme_changed'> = (payload) => {
         // Remove previously bound listener.
         bridge.off('theme_changed', listener);
 
@@ -39,46 +39,26 @@ export class ThemeParams {
 
   /**
    * Returns instance of ThemeParams which is synchronized with external
-   * environment
+   * environment.
    * @param bridge - bridge instance.
    * @param params - theme parameters.
    */
   static synced(bridge: BridgeLike, params: TwaThemeParams): ThemeParams {
     const tp = new ThemeParams(params);
 
-    bridge.on('theme_changed', params => {
-      tp.assignThemeParams(parseThemeParams(params.theme_params), true);
+    bridge.on('theme_changed', (event) => {
+      tp.assignThemeParams(parseThemeParams(event.theme_params), true);
     });
 
     return tp;
   }
 
   private readonly ee = new EventEmitter<ThemeParamsEventsMap>();
-  private _backgroundColor: RGB;
-  private _buttonColor: RGB;
-  private _buttonTextColor: RGB;
-  private _hintColor: RGB;
-  private _linkColor: RGB;
-  private _secondaryBackgroundColor: RGB | null = null;
-  private _textColor: RGB;
+
+  private params: TwaThemeParams;
 
   constructor(params: TwaThemeParams) {
-    const {
-      secondaryBackgroundColor = null,
-      backgroundColor,
-      buttonTextColor,
-      textColor,
-      buttonColor,
-      linkColor,
-      hintColor,
-    } = params;
-    this._backgroundColor = backgroundColor;
-    this._buttonTextColor = buttonTextColor;
-    this._buttonColor = buttonColor;
-    this._textColor = textColor;
-    this._secondaryBackgroundColor = secondaryBackgroundColor;
-    this._linkColor = linkColor;
-    this._hintColor = hintColor;
+    this.params = params;
   }
 
   /**
@@ -97,7 +77,7 @@ export class ThemeParams {
     // Flag which means, some changes were done.
     let updated = false;
 
-    colors.forEach(color => {
+    colors.forEach((color) => {
       const value = params[color];
 
       // We skip undefined values.
@@ -105,14 +85,12 @@ export class ThemeParams {
         return;
       }
 
-      const prop = '_' + color as `_${typeof color}`;
-
       // No changes will be done, leave iteration.
-      if (this[prop] === value) {
+      if (this[color] === value) {
         return;
       }
       // Reassign current theme color.
-      this[prop] = value;
+      this.params[color] = value;
       updated = true;
     });
 
@@ -125,28 +103,28 @@ export class ThemeParams {
    * Returns background color.
    */
   get backgroundColor(): RGB {
-    return this._backgroundColor;
+    return this.params.backgroundColor;
   }
 
   /**
    * Returns button color.
    */
   get buttonColor(): RGB {
-    return this._buttonColor;
+    return this.params.buttonColor;
   }
 
   /**
    * Returns button text color.
    */
   get buttonTextColor(): RGB {
-    return this._buttonTextColor;
+    return this.params.buttonTextColor;
   }
 
   /**
    * Returns hint color.
    */
   get hintColor(): RGB {
-    return this._hintColor;
+    return this.params.hintColor;
   }
 
   /**
@@ -163,7 +141,7 @@ export class ThemeParams {
    * Returns current link color.
    */
   get linkColor(): RGB {
-    return this._linkColor;
+    return this.params.linkColor;
   }
 
   /**
@@ -181,13 +159,13 @@ export class ThemeParams {
    * @since Web App version 6.1+
    */
   get secondaryBackgroundColor(): RGB | null {
-    return this._secondaryBackgroundColor;
+    return this.params.secondaryBackgroundColor || null;
   }
 
   /**
    * Returns text color.
    */
   get textColor(): RGB {
-    return this._textColor;
+    return this.params.textColor;
   }
 }

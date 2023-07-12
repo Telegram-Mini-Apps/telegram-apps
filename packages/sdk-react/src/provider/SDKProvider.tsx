@@ -1,13 +1,14 @@
 import React, {
   memo,
-  PropsWithChildren, useEffect,
+  useEffect,
   useMemo,
   useState,
+  type PropsWithChildren,
 } from 'react';
-import {init, InitOptions} from '@twa.js/sdk';
+import { init, type InitOptions } from '@twa.js/sdk';
 
-import {sdkContext} from './context';
-import {SDKComponents, SDKContext} from './types';
+import { sdkContext } from './context';
+import type { SDKComponents, SDKContext } from './types';
 
 export type SDKInitOptions = InitOptions;
 
@@ -16,8 +17,8 @@ export type SDKProviderProps = PropsWithChildren<{ initOptions?: SDKInitOptions 
 /**
  * Component which provides access to SDK components.
  */
-export const SDKProvider = memo<SDKProviderProps>(props => {
-  const {children, initOptions} = props;
+export const SDKProvider = memo<SDKProviderProps>((props) => {
+  const { children, initOptions } = props;
   const [didInit, setDidInit] = useState(false);
   const [error, setError] = useState<null | unknown>(null);
   const [components, setComponents] = useState<SDKComponents | null>(null);
@@ -31,6 +32,7 @@ export const SDKProvider = memo<SDKProviderProps>(props => {
     init(initOptions)
       .then(setComponents)
       .catch(setError);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const context = useMemo<SDKContext>(() => ({

@@ -1,8 +1,8 @@
-import {EventEmitter, Version} from '@twa.js/utils';
+import { EventEmitter, type Version } from '@twa.js/utils';
 
-import {BackButtonEventListener, BackButtonEventsMap} from './events';
-import {BridgeLike} from '../../types';
-import {createSupportsFunc, SupportsFunc} from '../../utils';
+import type { BackButtonEventListener, BackButtonEventsMap } from './events';
+import type { BridgeLike } from '../../types';
+import { createSupportsFunc, type SupportsFunc } from '../../utils';
 
 type Emitter = EventEmitter<BackButtonEventsMap>;
 
@@ -14,7 +14,8 @@ type Emitter = EventEmitter<BackButtonEventsMap>;
  */
 export class BackButton {
   private readonly ee: Emitter = new EventEmitter();
-  private _isVisible = false;
+
+  #isVisible = false;
 
   constructor(private readonly bridge: BridgeLike, version: Version) {
     this.supports = createSupportsFunc(version, {
@@ -24,12 +25,12 @@ export class BackButton {
   }
 
   private set isVisible(visible: boolean) {
-    this.bridge.postEvent('web_app_setup_back_button', {is_visible: visible});
+    this.bridge.postEvent('web_app_setup_back_button', { is_visible: visible });
 
-    if (this._isVisible === visible) {
+    if (this.#isVisible === visible) {
       return;
     }
-    this._isVisible = visible;
+    this.#isVisible = visible;
     this.ee.emit('isVisibleChanged', visible);
   }
 
@@ -37,7 +38,7 @@ export class BackButton {
    * Returns true if back button is currently visible.
    */
   get isVisible(): boolean {
-    return this._isVisible;
+    return this.#isVisible;
   }
 
   /**

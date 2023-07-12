@@ -1,5 +1,5 @@
-import {describe, expect, it} from '@jest/globals';
-import {formatURL} from '../../src/utils';
+import { describe, expect, it } from '@jest/globals';
+import { formatURL } from '../../src/utils';
 
 describe('utils', () => {
   describe('url.ts', () => {
@@ -10,11 +10,11 @@ describe('utils', () => {
         expect(formatURL('//domain.com')).toBe('http://domain.com/');
       });
 
-      it('should throw an error in case, URL protocol ' +
-        'different from "http" not "https"', () => {
+      it('should throw an error in case, URL protocol '
+        + 'different from "http" not "https"', () => {
         expect(() => formatURL('fs://telegram.org')).toThrow(
-          'URL protocol is not supported by OS, or link has ' +
-          'not allowed protocol: fs',
+          'URL protocol is not supported by OS, or link has '
+          + 'not allowed protocol: fs',
         );
         expect(() => formatURL('https://telegram.org')).not.toThrow();
       });

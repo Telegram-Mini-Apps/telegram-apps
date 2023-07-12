@@ -1,6 +1,6 @@
-import {useComponent} from '../../provider';
-import {useEventsTracking} from '../hooks';
-import {BackButton} from './types';
+import { useComponent } from '../../provider';
+import { useEventsTracking } from '../hooks';
+import type { BackButton } from './types';
 
 /**
  * Returns BackButton component instance.

@@ -1,21 +1,17 @@
-import {IsNever} from '../types';
+import type { IsNever } from '../types';
 
 /**
- * Returns function that represents event listener.
+ * Function accepting the list of passed arguments and returning nothing.
  */
-export type EventListener<Params> = EventParams<Params> extends infer U
-  ? IsNever<U> extends true
-    ? true
-    : U extends []
-      ? () => void
-      : U extends any[]
-        ? (...args: U) => void
-        : never
-  : never;
+type VoidFunc<Args extends any[] = []> = (...args: Args) => void;
 
 /**
- * Verifies that passed generic type could be used to describe event
- * parameters.
+ * Accepts type assuming, it is responsible for describing event listener
+ * parameters. Covers following cases:
+ * 1. If function is passed, return its arguments.
+ * 2. If never or void is passed, return empty tuple.
+ * 3. If array is passed return this type.
+ * 4. Otherwise, return tuple with passed type.
  */
 export type EventParams<Params> = Params extends any[]
   ? Params
@@ -23,7 +19,15 @@ export type EventParams<Params> = Params extends any[]
     ? Parameters<Params>
     : IsNever<Params> extends true
       ? []
-      : never;
+      : Params extends void
+        ? []
+        : [Params];
+
+/**
+ * Returns function that represents event listener with specified
+ * list of parameters.
+ */
+export type EventListener<Params> = VoidFunc<EventParams<Params>>;
 
 /**
  * Returns event names.
@@ -47,7 +51,5 @@ export type NonEmptyEventName<Schema> =
  * Represents any listener, which could be used in EventEmitter.subscribe.
  */
 export type AnySubscribeListener<Schema> = {
-  [E in keyof Schema]: IsNever<EventParams<Schema[E]>> extends true
-    ? (event: E) => void
-    : (event: E, ...args: EventParams<Schema[E]>) => void;
+  [E in keyof Schema]: (event: E, ...args: EventParams<Schema[E]>) => void;
 }[keyof Schema];

@@ -1,6 +1,6 @@
-import {useComponent} from '../../provider';
-import {useEventsTracking} from '../hooks';
-import {Viewport} from './types';
+import { useComponent } from '../../provider';
+import { useEventsTracking } from '../hooks';
+import type { Viewport } from './types';
 
 /**
  * Returns Viewport component instance.

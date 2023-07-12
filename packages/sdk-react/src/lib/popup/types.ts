@@ -1,3 +1,1 @@
-import {Popup as SDKPopup} from '@twa.js/sdk';
-
-export type Popup = SDKPopup;
+export type { Popup } from '@twa.js/sdk';

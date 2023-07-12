@@ -42,23 +42,24 @@ export function schemaToParsers<P extends Parser<any, any>,
   T extends string,
   S extends Schema<T | P>>(
   schema: S,
-  knownTypesParses: Record<T, P>
+  knownTypesParses: Record<T, P>,
 ): SchemaFieldParser<P>[] {
   return Object.entries(schema).map<SchemaFieldParser<P>>(([to, def]) => {
-    let optional: boolean;
-    let from: string;
-    let parser: P;
-
     if (typeof def === 'function' || typeof def === 'string') {
-      optional = false;
-      from = to;
-      parser = typeof def === 'function' ? def : knownTypesParses[def];
-    } else {
-      const {optional: _optional = false, from: _from = to, type} = def;
-      optional = _optional;
-      from = _from;
-      parser = typeof type === 'function' ? type : knownTypesParses[type];
+      return {
+        optional: false,
+        from: to,
+        to,
+        parser: typeof def === 'function' ? def : knownTypesParses[def],
+      };
     }
-    return {optional, from, to, parser};
-  })
+    const { optional = false, from = to, type } = def;
+
+    return {
+      optional,
+      from,
+      to,
+      parser: typeof type === 'function' ? type : knownTypesParses[type],
+    };
+  });
 }

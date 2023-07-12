@@ -1,4 +1,4 @@
-import {InitResult} from '@twa.js/sdk';
+import type { InitResult } from '@twa.js/sdk';
 
 /**
  * List of provided SDK components.

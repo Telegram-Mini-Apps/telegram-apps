@@ -1,5 +1,5 @@
-import {describe, jest, expect, it} from '@jest/globals';
-import {log} from '../src/logging';
+import { describe, jest, expect, it } from '@jest/globals';
+import { log } from '../src';
 
 const now = new Date('2022-11-04T09:09:43.007Z');
 jest.useFakeTimers().setSystemTime(now);

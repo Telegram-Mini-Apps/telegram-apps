@@ -1,7 +1,7 @@
-import {EventEmitter} from '@twa.js/utils';
+import { EventEmitter } from '@twa.js/utils';
 
-import {ClosingConfirmationEventsMap} from './events';
-import {BridgeLike} from '../../types';
+import type { ClosingConfirmationEventsMap } from './events';
+import type { BridgeLike } from '../../types';
 
 /**
  * Component responsible for controlling current closing confirmation
@@ -9,7 +9,8 @@ import {BridgeLike} from '../../types';
  */
 export class ClosingConfirmation {
   private readonly ee = new EventEmitter<ClosingConfirmationEventsMap>();
-  private _isEnabled = false;
+
+  #isEnabled = false;
 
   constructor(private readonly bridge: BridgeLike) {
   }
@@ -20,12 +21,12 @@ export class ClosingConfirmation {
       need_confirmation: value,
     });
 
-    if (this._isEnabled === value) {
+    if (this.#isEnabled === value) {
       return;
     }
 
     // Update current value.
-    this._isEnabled = value;
+    this.#isEnabled = value;
 
     // Emit event.
     this.ee.emit('isEnabledChanged', value);
@@ -36,7 +37,7 @@ export class ClosingConfirmation {
    * to close the Web App.
    */
   get isEnabled(): boolean {
-    return this._isEnabled;
+    return this.#isEnabled;
   }
 
   /**

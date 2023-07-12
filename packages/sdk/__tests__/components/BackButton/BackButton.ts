@@ -1,24 +1,24 @@
-import {describe, expect, it, jest} from '@jest/globals';
-import {BackButton} from '../../../src';
+import { describe, expect, it, jest } from '@jest/globals';
+import { BackButton } from '../../../src';
 
 describe('components', () => {
   describe('BackButton', () => {
     describe('BackButton.ts', () => {
       describe('BackButton', () => {
         describe('hide', () => {
-          it('should call "web_app_setup_back_button" method ' +
-            'with "is_visible" equal to false', () => {
+          it('should call "web_app_setup_back_button" method '
+            + 'with "is_visible" equal to false', () => {
             const postEvent = jest.fn();
-            const backButton = new BackButton({postEvent} as any, '');
+            const backButton = new BackButton({ postEvent } as any, '');
 
             expect(postEvent).toHaveBeenCalledTimes(0);
             backButton.hide();
             expect(postEvent).toHaveBeenCalledTimes(1);
-            expect(postEvent).toHaveBeenCalledWith('web_app_setup_back_button', {is_visible: false});
+            expect(postEvent).toHaveBeenCalledWith('web_app_setup_back_button', { is_visible: false });
           });
 
           it('should emit "isVisibleChanged" event with false value', () => {
-            const backButton = new BackButton({postEvent: jest.fn()} as any, '');
+            const backButton = new BackButton({ postEvent: jest.fn() } as any, '');
             const listener = jest.fn();
 
             backButton.show();
@@ -32,19 +32,19 @@ describe('components', () => {
         });
 
         describe('show', () => {
-          it('should call "web_app_setup_back_button" method ' +
-            'with "is_visible" equal to true', () => {
+          it('should call "web_app_setup_back_button" method '
+            + 'with "is_visible" equal to true', () => {
             const postEvent = jest.fn();
-            const backButton = new BackButton({postEvent} as any, '');
+            const backButton = new BackButton({ postEvent } as any, '');
 
             expect(postEvent).toHaveBeenCalledTimes(0);
             backButton.show();
             expect(postEvent).toHaveBeenCalledTimes(1);
-            expect(postEvent).toHaveBeenCalledWith('web_app_setup_back_button', {is_visible: true});
+            expect(postEvent).toHaveBeenCalledWith('web_app_setup_back_button', { is_visible: true });
           });
 
           it('should emit "isVisibleChanged" event with true value', () => {
-            const backButton = new BackButton({postEvent: jest.fn()} as any, '');
+            const backButton = new BackButton({ postEvent: jest.fn() } as any, '');
             const listener = jest.fn();
 
             backButton.on('isVisibleChanged', listener);
@@ -56,11 +56,11 @@ describe('components', () => {
         });
 
         describe('on', () => {
-          describe('"click" event', function () {
-            it('should add event listener to bridge\'s ' +
-              '"back_button_pressed" event', () => {
+          describe('"click" event', () => {
+            it('should add event listener to bridge\'s '
+              + '"back_button_pressed" event', () => {
               const on = jest.fn();
-              const backButton = new BackButton({on} as any, '');
+              const backButton = new BackButton({ on } as any, '');
               const listener = jest.fn();
 
               expect(on).toHaveBeenCalledTimes(0);
@@ -72,12 +72,12 @@ describe('components', () => {
         });
 
         describe('off', () => {
-          describe('"click" event', function () {
-            it('should remove event listener from bridge\'s ' +
-              '"back_button_pressed" event', () => {
+          describe('"click" event', () => {
+            it('should remove event listener from bridge\'s '
+              + '"back_button_pressed" event', () => {
               const on = jest.fn();
               const off = jest.fn();
-              const backButton = new BackButton({on, off} as any, '');
+              const backButton = new BackButton({ on, off } as any, '');
               const listener = jest.fn();
 
               expect(on).toHaveBeenCalledTimes(0);
@@ -98,7 +98,7 @@ describe('components', () => {
           describe('"isVisibleChanged" event', () => {
             it('should remove event listener from event', () => {
               const listener = jest.fn();
-              const backButton = new BackButton({postEvent: jest.fn()} as any, '');
+              const backButton = new BackButton({ postEvent: jest.fn() } as any, '');
 
               backButton.on('isVisibleChanged', listener);
 
@@ -117,8 +117,8 @@ describe('components', () => {
 
         describe('supports', () => {
           describe('show / hide', () => {
-            it('should return true in case, BackButton ' +
-              'version is 6.1 or higher. False, otherwise', () => {
+            it('should return true in case, BackButton '
+              + 'version is 6.1 or higher. False, otherwise', () => {
               const backButton1 = new BackButton({} as any, '6.0');
               expect(backButton1.supports('show')).toBe(false);
               expect(backButton1.supports('hide')).toBe(false);
@@ -131,7 +131,7 @@ describe('components', () => {
               expect(backButton3.supports('show')).toBe(true);
               expect(backButton3.supports('hide')).toBe(true);
             });
-          })
+          });
         });
       });
     });

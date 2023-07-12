@@ -1,12 +1,12 @@
-import {describe, expect, it} from '@jest/globals';
-import {createSearchParamsParser} from '../../src/parsing';
+import { describe, expect, it } from '@jest/globals';
+import { createSearchParamsParser } from '../../src';
 
 describe('parsing', () => {
   describe('search-params.ts', () => {
     describe('createSearchParamsParser', () => {
       describe('function result', () => {
-        it('should throw an error in case, passed value is not of type ' +
-          'string or URLSearchParams', () => {
+        it('should throw an error in case, passed value is not of type '
+          + 'string or URLSearchParams', () => {
           const parser = createSearchParamsParser({});
           expect(() => parser(true)).toThrow();
           expect(() => parser({})).toThrow();
@@ -14,14 +14,14 @@ describe('parsing', () => {
           expect(() => parser(new URLSearchParams())).not.toThrow();
         });
 
-        it('should throw an error in case, passed value does not ' +
-          'contain required field presented in schema', () => {
-          const parser = createSearchParamsParser({prop: 'string'});
+        it('should throw an error in case, passed value does not '
+          + 'contain required field presented in schema', () => {
+          const parser = createSearchParamsParser({ prop: 'string' });
           expect(() => parser('abc=123')).toThrowError('Unable to parse field "prop"');
         });
 
-        it('should not throw an error in case, passed value ' +
-          'does not contain optional field presented in schema', () => {
+        it('should not throw an error in case, passed value '
+          + 'does not contain optional field presented in schema', () => {
           const parser = createSearchParamsParser({
             prop: {
               type: 'string',
@@ -29,12 +29,12 @@ describe('parsing', () => {
             },
           });
           expect(parser('')).toEqual({});
-          expect(parser('prop=abc')).toEqual({prop: 'abc'});
+          expect(parser('prop=abc')).toEqual({ prop: 'abc' });
         });
 
-        it('should throw an error in case, passed value contains ' +
-          'field of different type presented in schema', () => {
-          const parser = createSearchParamsParser({prop: 'date'});
+        it('should throw an error in case, passed value contains '
+          + 'field of different type presented in schema', () => {
+          const parser = createSearchParamsParser({ prop: 'date' });
           expect(() => parser('prop=abc'))
             .toThrowError('Unable to parse field "prop"');
         });

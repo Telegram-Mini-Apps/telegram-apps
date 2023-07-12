@@ -1,3 +1,1 @@
-import {QRScanner as SDKQRScanner} from '@twa.js/sdk';
-
-export type QRScanner = SDKQRScanner;
+export type { QRScanner } from '@twa.js/sdk';

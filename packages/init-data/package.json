@@ -4,11 +4,18 @@
   "description": "Isomorphic TypeScript library to make work with Web Apps init data easier.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.git",
+    "directory": "packages/init-data"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+  },
   "keywords": [
     "telegram",
     "telegram-web-apps",
     "twa",
-    "telegram-bot",
     "init-data"
   ],
   "license": "MIT",
@@ -33,22 +40,18 @@
       "require": "./dist/index.cjs"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/twa.git",
-    "directory": "packages/core"
-  },
   "scripts": {
     "test": "jest",
-    "lint": "eslint -c ../../.eslintrc.cjs src",
+    "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
     "build": "rimraf dist && rollup --config rollup.config.js"
-  },
-  "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
   },
   "dependencies": {
     "@twa.js/utils": "workspace:*",
     "@types/node": "^18.11.19"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*",
+    "eslint-config-custom": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

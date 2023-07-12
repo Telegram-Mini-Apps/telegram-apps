@@ -1,45 +1,53 @@
-import {afterEach, describe, expect, it, jest} from '@jest/globals';
-import {isBrowserEnv, hasTelegramWebviewProxy, hasExternalNotify} from '../src/env';
+import { afterEach, describe, expect, it, jest } from '@jest/globals';
+import { hasExternal, hasNotify, hasInvoke, isIframe } from '../src';
 
-let windowSpy = jest.spyOn(window, 'window', 'get');
+const windowSpy = jest.spyOn(window, 'window', 'get');
 
 afterEach(() => {
   windowSpy.mockReset();
 });
 
 describe('env.ts', () => {
-  describe('hasTelegramWebviewProxy', () => {
-    it('should return true in case, window has ' +
-      '"TelegramWebviewProxy" property', () => {
-      windowSpy.mockImplementation(() => ({TelegramWebviewProxy: null}) as any);
-      expect(hasTelegramWebviewProxy(window)).toBe(true);
-    });
-
-    it('should return false in case, window has no ' +
-      '"TelegramWebviewProxy" property', () => {
-      windowSpy.mockImplementation(() => ({}) as any);
-      expect(hasTelegramWebviewProxy(window)).toBe(false);
+  describe('hasExternal', () => {
+    it('should return true if passed object contains object '
+      + 'property "external". Otherwise, false.', () => {
+      expect(hasExternal({ external: {} })).toBe(true);
+      expect(hasExternal({ external: [] })).toBe(false);
+      expect(hasExternal({})).toBe(false);
     });
   });
 
-  describe('hasExternalNotify', () => {
-    it('should return true in case, path value ' +
-      '"window.external.notify" is function', () => {
-      windowSpy.mockImplementation(() => ({external: {notify: () => null}}) as any);
-      expect(hasExternalNotify(window)).toBe(true);
-    });
-
-    it('should return false in case, path value ' +
-      '"window.external.notify" is not function', () => {
-      windowSpy.mockImplementation(() => ({}) as any);
-      expect(hasExternalNotify(window)).toBe(false);
+  describe('hasNotify', () => {
+    it('should return true if passed object contains function '
+      + 'property "notify". Otherwise, false.', () => {
+      expect(hasNotify({
+        notify: () => {
+        },
+      })).toBe(true);
+      expect(hasNotify({ notify: {} })).toBe(false);
+      expect(hasNotify({})).toBe(false);
     });
   });
 
-  describe('isBrowserEnv', () => {
-    it('should return true in case window.self !== window.top', () => {
-      windowSpy.mockImplementation(() => ({self: 900, top: 1000}) as any);
-      expect(isBrowserEnv()).toBe(true);
+  describe('hasInvoke', () => {
+    it('should return true if passed object contains function '
+      + 'property "invoke". Otherwise, false.', () => {
+      expect(hasInvoke({
+        invoke: () => {
+        },
+      })).toBe(true);
+      expect(hasInvoke({ invoke: {} })).toBe(false);
+      expect(hasInvoke({})).toBe(false);
+    });
+  });
+
+  describe('isIframe', () => {
+    it('should return true in case window.self !== window.top. Otherwise, false.', () => {
+      windowSpy.mockImplementation(() => ({ self: 900, top: 1000 }) as any);
+      expect(isIframe()).toBe(true);
+
+      windowSpy.mockImplementation(() => ({ self: 900, top: 900 }) as any);
+      expect(isIframe()).toBe(false);
     });
 
     it('should return true in case window.self getter threw an error', () => {
@@ -48,12 +56,7 @@ describe('env.ts', () => {
           throw new Error();
         },
       }) as any);
-      expect(isBrowserEnv()).toBe(true);
-    });
-
-    it('should return false in case window.self === window.top', () => {
-      windowSpy.mockImplementation(() => ({self: 900, top: 900}) as any);
-      expect(isBrowserEnv()).toBe(false);
+      expect(isIframe()).toBe(true);
     });
   });
 });

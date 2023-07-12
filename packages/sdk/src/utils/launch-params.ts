@@ -1,9 +1,9 @@
 /* eslint-disable no-empty */
-import {createSearchParamsParser} from '@twa.js/utils';
-import {parseInitData, InitData} from '@twa.js/init-data';
+import { createSearchParamsParser } from '@twa.js/utils';
+import { parseInitData, type InitData } from '@twa.js/init-data';
 
-import {parseThemeParams, ThemeParams} from './theme-params';
-import {Platform} from '../types';
+import { parseThemeParams, type ThemeParams } from './theme-params';
+import { type Platform } from '../types';
 
 export interface LaunchParams {
   version: string;
@@ -13,10 +13,10 @@ export interface LaunchParams {
 }
 
 const parseLaunchParams = createSearchParamsParser({
-  version: {type: value => value, from: 'tgWebAppVersion'},
-  initData: {type: parseInitData, from: 'tgWebAppData'},
-  platform: {type: value => value, from: 'tgWebAppPlatform'},
-  themeParams: {type: parseThemeParams, from: 'tgWebAppThemeParams'},
+  version: { type: (value) => value, from: 'tgWebAppVersion' },
+  initData: { type: parseInitData, from: 'tgWebAppData' },
+  platform: { type: (value) => value, from: 'tgWebAppPlatform' },
+  themeParams: { type: parseThemeParams, from: 'tgWebAppThemeParams' },
 });
 
 /**

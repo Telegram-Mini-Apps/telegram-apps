@@ -1,3 +1,1 @@
-import {InitData as SDKInitData} from '@twa.js/sdk';
-
-export type InitData = SDKInitData;
+export { InitData } from '@twa.js/sdk';

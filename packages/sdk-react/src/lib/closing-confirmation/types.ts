@@ -1,3 +1,1 @@
-import {ClosingConfirmation as SDKClosingConfirmation} from '@twa.js/sdk';
-
-export type ClosingConfirmation = SDKClosingConfirmation;
+export type { ClosingConfirmation } from '@twa.js/sdk';

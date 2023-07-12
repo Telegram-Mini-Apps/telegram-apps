@@ -1,5 +1,5 @@
-import {expect, it, describe, jest, beforeEach} from '@jest/globals';
-import {createEventsObserver} from '../src/events-observer';
+import { expect, it, describe, jest, beforeEach } from '@jest/globals';
+import { createEventsObserver } from '../src/events-observer';
 
 describe('events-observer.ts', () => {
   describe('createEventsObserver', () => {
@@ -12,7 +12,7 @@ describe('events-observer.ts', () => {
         listeners = {};
         dispatchEvent = (event, ...args) => {
           const cbs = listeners[event] || [];
-          cbs.forEach(cb => cb(...args));
+          cbs.forEach((cb) => cb(...args));
         };
         addEventListener = (event, cb) => {
           if (listeners[event] === undefined) {
@@ -22,8 +22,8 @@ describe('events-observer.ts', () => {
         };
       });
 
-      it('should emit "message" event with arguments eventType and ' +
-        'eventData taken event.data property', () => {
+      it('should emit "message" event with arguments eventType and '
+        + 'eventData taken event.data property', () => {
         const eventType = 'custom_type';
         const eventData = 'custom_data';
         const windowSpy = jest.spyOn(window, 'window', 'get').mockImplementation(() => ({
@@ -34,16 +34,16 @@ describe('events-observer.ts', () => {
         const emitter = createEventsObserver();
         const spy = jest.spyOn(emitter, 'emit');
 
-        dispatchEvent('message', {data: JSON.stringify({eventType, eventData})});
+        dispatchEvent('message', { data: JSON.stringify({ eventType, eventData }) });
 
         expect(spy).toHaveBeenCalledWith('message', eventType, eventData);
 
         windowSpy.mockRestore();
       });
 
-      it('should emit "message" event with arguments eventType and ' +
-        'eventData taken event.data property in case, it contains incorrect ' +
-        'message event data', () => {
+      it('should emit "message" event with arguments eventType and '
+        + 'eventData taken event.data property in case, it contains incorrect '
+        + 'message event data', () => {
         const windowSpy = jest.spyOn(window, 'window', 'get').mockImplementation(() => ({
           dispatchEvent,
           addEventListener,
@@ -52,16 +52,16 @@ describe('events-observer.ts', () => {
         const emitter = createEventsObserver();
         const spy = jest.spyOn(emitter, 'emit');
 
-        dispatchEvent('message', {data: 'abc'});
+        dispatchEvent('message', { data: 'abc' });
 
         expect(spy).not.toHaveBeenCalled();
 
         windowSpy.mockRestore();
       });
 
-      it('should emit "message" event with arguments ' +
-        '"viewport_changed" and viewport changed payload in case, ' +
-        'window changed its size', () => {
+      it('should emit "message" event with arguments '
+        + '"viewport_changed" and viewport changed payload in case, '
+        + 'window changed its size', () => {
         const innerWidth = 100;
         const innerHeight = 100;
         const windowSpy = jest.spyOn(window, 'window', 'get').mockImplementation(() => ({

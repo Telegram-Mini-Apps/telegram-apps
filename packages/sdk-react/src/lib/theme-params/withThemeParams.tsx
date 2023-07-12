@@ -1,18 +1,18 @@
-import React, {ComponentType} from 'react';
+import React, { type ComponentType } from 'react';
 
-import {useThemeParams} from './useThemeParams';
-import {ThemeParams} from './types';
+import { useThemeParams } from './useThemeParams';
+import type { ThemeParams } from './types';
 
 /**
  * HOC which passes ThemeParams SDK component to wrapped React component.
  * @param Component - component to wrap.
  */
-export function withThemeParams<P extends {themeParams?: ThemeParams}>(
+export function withThemeParams<P extends { themeParams?: ThemeParams }>(
   Component: ComponentType<P>,
 ): ComponentType<Omit<P, 'themeParams'>> {
   return function WithThemeParams(props: Omit<P, 'themeParams'>) {
-    const p = {...props, themeParams: useThemeParams()} as P;
+    const p = { ...props, themeParams: useThemeParams() } as P;
 
-    return <Component {...p}/>;
+    return <Component {...p} />;
   };
 }

@@ -1,9 +1,9 @@
-import {EventEmitter, RGB, Version} from '@twa.js/utils';
-import {HeaderColorKey} from '@twa.js/bridge';
+import { EventEmitter, type RGB, type Version } from '@twa.js/utils';
+import type { HeaderColorKey } from '@twa.js/bridge';
 
-import {LayoutEventsMap} from './events';
-import {BridgeLike, ColorScheme} from '../../types';
-import {createSupportsFunc, isColorDark, SupportsFunc} from '../../utils';
+import type { LayoutEventsMap } from './events';
+import type { BridgeLike, ColorScheme } from '../../types';
+import { createSupportsFunc, isColorDark, type SupportsFunc } from '../../utils';
 
 /**
  * Class which provides information about current Web App layout.
@@ -11,12 +11,18 @@ import {createSupportsFunc, isColorDark, SupportsFunc} from '../../utils';
 export class Layout {
   private readonly ee = new EventEmitter<LayoutEventsMap>();
 
+  #backgroundColor: RGB;
+
+  #headerColor: HeaderColorKey;
+
   constructor(
     private readonly bridge: BridgeLike,
     version: Version,
-    private _headerColor: HeaderColorKey,
-    private _backgroundColor: RGB,
+    headerColor: HeaderColorKey,
+    backgroundColor: RGB,
   ) {
+    this.#backgroundColor = backgroundColor;
+    this.#headerColor = headerColor;
     this.supports = createSupportsFunc(version, {
       setHeaderColor: 'web_app_set_header_color',
       setBackgroundColor: 'web_app_set_background_color',
@@ -27,7 +33,7 @@ export class Layout {
    * Returns current Telegram application background color.
    */
   get backgroundColor(): RGB {
-    return this._backgroundColor;
+    return this.#backgroundColor;
   }
 
   /**
@@ -42,7 +48,7 @@ export class Layout {
    * Returns current Telegram application header color key.
    */
   get headerColor(): HeaderColorKey {
-    return this._headerColor;
+    return this.#headerColor;
   }
 
   /**
@@ -71,15 +77,15 @@ export class Layout {
    */
   setBackgroundColor(color: RGB): void {
     // Notify native application about updating current background color.
-    this.bridge.postEvent('web_app_set_background_color', {color});
+    this.bridge.postEvent('web_app_set_background_color', { color });
 
     // Don't do anything in case, color is the same.
-    if (this._backgroundColor === color) {
+    if (this.#backgroundColor === color) {
       return;
     }
 
     // Override current background color key.
-    this._backgroundColor = color;
+    this.#backgroundColor = color;
 
     // Emit event.
     this.ee.emit('backgroundColorChanged', color);
@@ -95,15 +101,15 @@ export class Layout {
    */
   setHeaderColor(color: HeaderColorKey): void {
     // Notify native application about updating current header color.
-    this.bridge.postEvent('web_app_set_header_color', {color_key: color});
+    this.bridge.postEvent('web_app_set_header_color', { color_key: color });
 
     // Don't do anything in case, color is the same.
-    if (this._headerColor === color) {
+    if (this.#headerColor === color) {
       return;
     }
 
     // Override current header color key.
-    this._headerColor = color;
+    this.#headerColor = color;
 
     // Emit event.
     this.ee.emit('headerColorChanged', color);

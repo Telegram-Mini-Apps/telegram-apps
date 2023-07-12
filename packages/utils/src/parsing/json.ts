@@ -1,10 +1,10 @@
-import {isRecord} from '../validation';
-import {isRGB, RGB} from '../colors';
+import { isRecord } from '../validation';
+import { isRGB, RGB } from '../colors';
 import {
-  NonOptionalField,
-  OptionalField,
-  Parser,
-  Schema,
+  type NonOptionalField,
+  type OptionalField,
+  type Parser,
+  type Schema,
   schemaToParsers,
 } from './shared';
 
@@ -53,7 +53,7 @@ type ParserResult<S extends JsonSchema> = {
 /**
  * Schema parser definition.
  */
-type SchemaParser<Schema extends JsonSchema> = (value: unknown) => ParserResult<Schema>;
+type SchemaParser<S extends JsonSchema> = (value: unknown) => ParserResult<S>;
 
 /**
  * Creates parser which uses "typeof" function.
@@ -62,7 +62,7 @@ type SchemaParser<Schema extends JsonSchema> = (value: unknown) => ParserResult<
 function createTypeOfParser<Type extends 'string' | 'boolean' | 'number'>(
   type: Type,
 ): FieldParser<KnownTypeMap[Type]> {
-  return value => {
+  return (value) => {
     if (typeof value !== type) {
       throw new TypeError(
         `Unable to parse value ${JSON.stringify(value)} as ${type}.`,
@@ -115,11 +115,9 @@ const knownTypesParses = {
  */
 export function createJsonParser<S extends JsonSchema>(schema: S): SchemaParser<S> {
   // Transform schema to array of parsers.
-  const parsers = schemaToParsers<FieldParser<any>, KnownTypeName, S>(
-    schema, knownTypesParses,
-  );
+  const parsers = schemaToParsers<FieldParser<any>, KnownTypeName, S>(schema, knownTypesParses);
 
-  return value => {
+  return (value) => {
     let json: any = value;
 
     // Convert value to JSON in case, it is string. We expect value to be
@@ -137,23 +135,25 @@ export function createJsonParser<S extends JsonSchema>(schema: S): SchemaParser<
       throw new TypeError('Value is not JSON object.');
     }
 
-    return parsers.reduce((acc, {parser, optional, from, to}) => {
-      const value = json[from];
+    return parsers.reduce((acc, {
+      parser, optional, from, to,
+    }) => {
+      const jsonValue = json[from];
 
-      if (value === undefined) {
+      if (jsonValue === undefined) {
         if (!optional) {
           throw new Error(`Unable to parse field "${from}". Value is empty.`);
         }
         return acc;
       }
       try {
-        const parsed = parser(value);
+        const parsed = parser(jsonValue);
 
         if (parsed !== undefined) {
           (acc as any)[to] = parsed;
         }
       } catch (cause) {
-        throw new Error(`Unable to parse field "${from}"`, {cause})
+        throw new Error(`Unable to parse field "${from}"`, { cause });
       }
       return acc;
     }, {} as ParserResult<S>);

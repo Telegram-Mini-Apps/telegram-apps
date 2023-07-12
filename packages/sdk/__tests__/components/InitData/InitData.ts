@@ -1,13 +1,13 @@
-import {describe, expect, it} from '@jest/globals';
-import {InitData} from '../../../src';
+import { describe, expect, it } from '@jest/globals';
+import { InitData } from '../../../src';
 
 describe('components', () => {
   describe('InitData', () => {
     describe('InitData.ts', () => {
       describe('InitData', () => {
-        it('should return fields specified in ' +
-          'constructor. In case, some properties are missing, they should ' +
-          'be equal to null in InitData', () => {
+        it('should return fields specified in '
+          + 'constructor. In case, some properties are missing, they should '
+          + 'be equal to null in InitData', () => {
           const authDate = new Date(123);
           const data1 = new InitData(authDate, 'hash');
           expect(data1.authDate).toBe(authDate);
@@ -37,7 +37,7 @@ describe('components', () => {
               username: 'c',
               isBot: false,
               isPremium: false,
-              languageCode: 'en'
+              languageCode: 'en',
             },
             startParam: 'param',
             user: {
@@ -46,7 +46,7 @@ describe('components', () => {
               firstName: 'a',
               lastName: 'b',
               username: 'c',
-              languageCode: 'en'
+              languageCode: 'en',
             },
           });
           expect(data2.authDate).toBe(authDate);
@@ -67,7 +67,7 @@ describe('components', () => {
             username: 'c',
             isBot: false,
             isPremium: false,
-            languageCode: 'en'
+            languageCode: 'en',
           });
           expect(data2.startParam).toBe('param');
           expect(data2.user).toStrictEqual({
@@ -76,7 +76,7 @@ describe('components', () => {
             firstName: 'a',
             lastName: 'b',
             username: 'c',
-            languageCode: 'en'
+            languageCode: 'en',
           });
         });
       });

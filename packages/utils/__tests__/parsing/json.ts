@@ -1,10 +1,10 @@
-import {describe, expect, it} from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import {
   parseJsonValueAsString,
   parseJsonValueAsBoolean,
   parseJsonValueAsNumber,
   parseJsonValueAsRgb, createJsonParser,
-} from '../../src/parsing';
+} from '../../src';
 
 describe('parsing', () => {
   describe('json.ts', () => {
@@ -55,47 +55,39 @@ describe('parsing', () => {
 
     describe('createJsonParser', () => {
       describe('returned function', () => {
-        it(
-          'should throw an error in case, passed value is not JSON ' +
-          'object or not JSON object converted to string', () => {
-            const parser = createJsonParser({});
-            expect(() => parser('')).toThrow('Value is not JSON object converted to string.');
-            expect(() => parser(true)).toThrow('Value is not JSON object.');
-            expect(() => parser('{}')).not.toThrow();
-            expect(() => parser({})).not.toThrow();
-          },
-        );
+        it('should throw an error in case, passed value is not JSON '
+          + 'object or not JSON object converted to string', () => {
+          const parser = createJsonParser({});
+          expect(() => parser('')).toThrow('Value is not JSON object converted to string.');
+          expect(() => parser(true)).toThrow('Value is not JSON object.');
+          expect(() => parser('{}')).not.toThrow();
+          expect(() => parser({})).not.toThrow();
+        });
 
-        it(
-          'should throw an error in case, passed value does not ' +
-          'contain required field presented in schema', () => {
-            const parser = createJsonParser({prop: 'string'});
-            expect(() => parser({})).toThrowError('Unable to parse field "prop"');
-          },
-        );
+        it('should throw an error in case, passed value does not '
+          + 'contain required field presented in schema', () => {
+          const parser = createJsonParser({ prop: 'string' });
+          expect(() => parser({})).toThrowError('Unable to parse field "prop"');
+        });
 
-        it(
-          'should not throw an error in case, passed value ' +
-          'does not contain optional field presented in schema', () => {
-            const parser = createJsonParser({
-              prop: {
-                type: 'string',
-                optional: true,
-              },
-            });
-            expect(parser({})).toEqual({});
-            expect(parser({prop: 'wow'})).toEqual({prop: 'wow'});
-          },
-        );
+        it('should not throw an error in case, passed value '
+          + 'does not contain optional field presented in schema', () => {
+          const parser = createJsonParser({
+            prop: {
+              type: 'string',
+              optional: true,
+            },
+          });
+          expect(parser({})).toEqual({});
+          expect(parser({ prop: 'wow' })).toEqual({ prop: 'wow' });
+        });
 
-        it(
-          'should throw an error in case, passed value contains ' +
-          'field of different type presented in schema', () => {
-            const parser = createJsonParser({prop: 'string'});
-            expect(() => parser({prop: 123}))
-              .toThrowError('Unable to parse field "prop"');
-          },
-        );
+        it('should throw an error in case, passed value contains '
+          + 'field of different type presented in schema', () => {
+          const parser = createJsonParser({ prop: 'string' });
+          expect(() => parser({ prop: 123 }))
+            .toThrowError('Unable to parse field "prop"');
+        });
 
         it('should correctly parse built-in types', () => {
           const parser = createJsonParser({

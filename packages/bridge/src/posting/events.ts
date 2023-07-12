@@ -1,7 +1,7 @@
-import {IsNever} from '@twa.js/utils';
+import type { IsNever } from '@twa.js/utils';
 
-import {PopupParams} from '../listening';
-import {
+import type { PopupParams } from './popup';
+import type {
   ImpactHapticFeedback,
   NotificationHapticFeedback,
   SelectionHapticFeedback,
@@ -15,39 +15,41 @@ export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
 /**
  * Describes list of events and their parameters that could be posted by
  * Bridge.
- * @see https://corefork.telegram.org/api/web-events#event-types
+ * @see https://docs.twa.dev/docs/apps-communication/methods
  */
 export interface PostEventParamsMap {
   /**
    * Notifies parent iframe about current frame is ready.
+   * @see https://docs.twa.dev/docs/apps-communication/methods#iframe_ready
    */
   iframe_ready: never;
 
   /**
    * Closes WebApp.
-   * @see https://corefork.telegram.org/api/web-events#web-app-close
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_close
    */
   web_app_close: never;
 
   /**
    * Sends data to bot.
-   * @see https://corefork.telegram.org/api/web-events#web-app-data-send
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_data_send
    */
   web_app_data_send: { data: string };
 
   /**
    * Expands Web App.
-   * @see https://corefork.telegram.org/api/web-events#web-app-expand
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_expand
    */
   web_app_expand: never;
 
   /**
    * Opens link in default browser. Doesn't close application.
-   * @see https://corefork.telegram.org/api/web-events#web-app-open-link
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_link
    */
   web_app_open_link: {
     url: string,
 
+    // TODO: Add to docs.
     /**
      * Link will be opened in Instant View mode if possible.
      * @since Web App version 6.4+
@@ -58,53 +60,49 @@ export interface PostEventParamsMap {
 
   /**
    * Opens link which has format like "https://t.me/*".
-   * @since Web App version 6.1+
-   * @see https://corefork.telegram.org/api/web-events#web-app-open-tg-link
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_tg_link
    */
   web_app_open_tg_link: { path_full: string };
 
   /**
    * Opens new popup.
-   * @since Web App version 6.2+
-   * @see https://corefork.telegram.org/api/web-events#web-app-open-popup
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_popup
    */
   web_app_open_popup: PopupParams;
 
   /**
    * Opens new invoice.
-   * @since Web App version 6.1+
-   * @see https://corefork.telegram.org/api/web-events#web-app-open-invoice
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_invoice
    */
   web_app_open_invoice: { slug: string };
 
   /**
    * Notifies Telegram about current application is ready to be shown.
-   * @see https://corefork.telegram.org/api/web-events#web-app-ready
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_ready
    */
   web_app_ready: never;
 
   /**
    * Requests current theme from Telegram.
-   * @see https://corefork.telegram.org/api/web-events#web-app-request-theme
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_request_theme
    */
   web_app_request_theme: never;
 
   /**
    * Requests current viewport information from Telegram.
-   * @see https://corefork.telegram.org/api/web-events#web-app-request-viewport
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_request_viewport
    */
   web_app_request_viewport: never;
 
   /**
    * Updates current information about back button.
-   * @since Web App version 6.1+
-   * @see https://corefork.telegram.org/api/web-events#web-app-setup-back-button
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_setup_back_button
    */
   web_app_setup_back_button: { is_visible: boolean };
 
   /**
    * Updates current information about main button.
-   * @see https://corefork.telegram.org/api/web-events#web-app-setup-main-button
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_setup_main_button
    */
   web_app_setup_main_button: {
     is_visible?: boolean;
@@ -117,37 +115,34 @@ export interface PostEventParamsMap {
 
   /**
    * Changes current closing confirmation requirement status.
-   * @see https://corefork.telegram.org/api/web-events#web-app-setup-closing-behavior
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_setup_closing_behavior
    */
   web_app_setup_closing_behavior: { need_confirmation: boolean };
 
   /**
    * Updates current background color.
-   * @since Web App version 6.1+
-   * @see https://corefork.telegram.org/api/web-events#web-app-set-background-color
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_set_background_color
    */
   web_app_set_background_color: { color: string };
 
   /**
    * Updates current header color.
-   * @since Web App version 6.1+
-   * @see https://corefork.telegram.org/api/web-events#web-app-set-header-color
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_set_header_color
    */
   web_app_set_header_color: { color_key: HeaderColorKey };
 
   /**
    * Generates haptic feedback event.
-   * @since Web App version 6.1+
-   * @see https://corefork.telegram.org/api/web-events#web-app-trigger-haptic-feedback
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_trigger_haptic_feedback
    */
   web_app_trigger_haptic_feedback:
-    | ImpactHapticFeedback
-    | NotificationHapticFeedback
-    | SelectionHapticFeedback;
+  | ImpactHapticFeedback
+  | NotificationHapticFeedback
+  | SelectionHapticFeedback;
 
   /**
    * Opens QR scanner.
-   * @since Web App version 6.4+
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_scan_qr_popup
    */
   web_app_open_scan_qr_popup: {
     text?: string;
@@ -155,13 +150,13 @@ export interface PostEventParamsMap {
 
   /**
    * Closes QR scanner.
-   * @since Web App version 6.4+
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_close_scan_qr_popup
    */
   web_app_close_scan_qr_popup: never;
 
   /**
    * Reads text from clipboard.
-   * @since Web App version 6.4+
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_read_text_from_clipboard
    */
   web_app_read_text_from_clipboard: {
     req_id: string;
@@ -176,8 +171,7 @@ export type PostEventName = keyof PostEventParamsMap;
 /**
  * Returns parameters for specified post-available event.
  */
-export type PostEventParams<E extends PostEventName> =
-  PostEventParamsMap[E];
+export type PostEventParams<E extends PostEventName> = PostEventParamsMap[E];
 
 /**
  * Any post-available event name which does not require arguments.

@@ -1,5 +1,5 @@
-import {PostEventName, supports} from '@twa.js/bridge';
-import {Version} from '@twa.js/utils';
+import { type PostEventName, supports } from '@twa.js/bridge';
+import type { Version } from '@twa.js/utils';
 
 export type SupportsFunc<Method extends string> = (
   method: Method,
@@ -17,5 +17,5 @@ export function createSupportsFunc<Method extends string>(
   version: Version,
   schema: Record<Method, PostEventName>,
 ): SupportsFunc<Method> {
-  return method => supports(schema[method], version);
+  return (method) => supports(schema[method], version);
 }

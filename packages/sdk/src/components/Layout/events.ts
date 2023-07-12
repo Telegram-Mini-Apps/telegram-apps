@@ -1,5 +1,5 @@
-import {RGB} from '@twa.js/utils';
-import {HeaderColorKey} from '@twa.js/bridge';
+import type { RGB } from '@twa.js/utils';
+import type { HeaderColorKey } from '@twa.js/bridge';
 
 /**
  * Information about Layout supported events.

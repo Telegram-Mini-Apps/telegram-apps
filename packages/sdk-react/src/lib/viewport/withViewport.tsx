@@ -1,18 +1,18 @@
-import React, {ComponentType} from 'react';
+import React, { ComponentType } from 'react';
 
-import {useViewport} from './useViewport';
-import {Viewport} from './types';
+import { useViewport } from './useViewport';
+import type { Viewport } from './types';
 
 /**
  * HOC which passes Viewport SDK component to wrapped React component.
  * @param Component - component to wrap.
  */
-export function withViewport<P extends {viewport?: Viewport}>(
+export function withViewport<P extends { viewport?: Viewport }>(
   Component: ComponentType<P>,
 ): ComponentType<Omit<P, 'viewport'>> {
   return function WithViewport(props: Omit<P, 'viewport'>) {
-    const p = {...props, viewport: useViewport()} as P;
+    const p = { ...props, viewport: useViewport() } as P;
 
-    return <Component {...p}/>;
+    return <Component {...p} />;
   };
 }

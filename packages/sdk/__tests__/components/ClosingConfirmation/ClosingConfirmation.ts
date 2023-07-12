@@ -1,15 +1,15 @@
-import {describe, expect, it, jest} from '@jest/globals';
-import {ClosingConfirmation} from '../../../src';
+import { describe, expect, it, jest } from '@jest/globals';
+import { ClosingConfirmation } from '../../../src';
 
 describe('components', () => {
   describe('ClosingConfirmation', () => {
     describe('ClosingConfirmation.ts', () => {
       describe('ClosingConfirmation', () => {
         describe('disable', () => {
-          it('should call "web_app_setup_closing_behavior" method ' +
-            'with "need_confirmation" equal to false', () => {
+          it('should call "web_app_setup_closing_behavior" method '
+            + 'with "need_confirmation" equal to false', () => {
             const postEvent = jest.fn();
-            const confirmation = new ClosingConfirmation({postEvent} as any);
+            const confirmation = new ClosingConfirmation({ postEvent } as any);
 
             confirmation.enable();
             postEvent.mockClear();
@@ -17,11 +17,11 @@ describe('components', () => {
             expect(postEvent).toHaveBeenCalledTimes(0);
             confirmation.disable();
             expect(postEvent).toHaveBeenCalledTimes(1);
-            expect(postEvent).toHaveBeenCalledWith('web_app_setup_closing_behavior', {need_confirmation: false});
+            expect(postEvent).toHaveBeenCalledWith('web_app_setup_closing_behavior', { need_confirmation: false });
           });
 
           it('should emit "isEnabledChanged" event with false value', () => {
-            const confirmation = new ClosingConfirmation({postEvent: jest.fn()} as any);
+            const confirmation = new ClosingConfirmation({ postEvent: jest.fn() } as any);
             const listener = jest.fn();
 
             confirmation.enable();
@@ -35,19 +35,19 @@ describe('components', () => {
         });
 
         describe('enable', () => {
-          it('should call "web_app_setup_closing_behavior" method ' +
-            'with "need_confirmation" equal to true', () => {
+          it('should call "web_app_setup_closing_behavior" method '
+            + 'with "need_confirmation" equal to true', () => {
             const postEvent = jest.fn();
-            const confirmation = new ClosingConfirmation({postEvent} as any);
+            const confirmation = new ClosingConfirmation({ postEvent } as any);
 
             expect(postEvent).toHaveBeenCalledTimes(0);
             confirmation.enable();
             expect(postEvent).toHaveBeenCalledTimes(1);
-            expect(postEvent).toHaveBeenCalledWith('web_app_setup_closing_behavior', {need_confirmation: true});
+            expect(postEvent).toHaveBeenCalledWith('web_app_setup_closing_behavior', { need_confirmation: true });
           });
 
           it('should emit "isEnabledChanged" event with true value', () => {
-            const confirmation = new ClosingConfirmation({postEvent: jest.fn()} as any);
+            const confirmation = new ClosingConfirmation({ postEvent: jest.fn() } as any);
             const listener = jest.fn();
 
             confirmation.on('isEnabledChanged', listener);
@@ -62,7 +62,7 @@ describe('components', () => {
           describe('"isEnabledChanged" event', () => {
             it('should remove event listener from event', () => {
               const listener = jest.fn();
-              const confirmation = new ClosingConfirmation({postEvent: jest.fn()} as any);
+              const confirmation = new ClosingConfirmation({ postEvent: jest.fn() } as any);
 
               confirmation.on('isEnabledChanged', listener);
 
@@ -84,7 +84,7 @@ describe('components', () => {
           describe('"isEnabledChanged" event', () => {
             it('should remove event listener from event', () => {
               const listener = jest.fn();
-              const confirmation = new ClosingConfirmation({postEvent: jest.fn()} as any);
+              const confirmation = new ClosingConfirmation({ postEvent: jest.fn() } as any);
 
               confirmation.on('isEnabledChanged', listener);
 

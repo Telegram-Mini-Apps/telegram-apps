@@ -1,14 +1,14 @@
-import {expect, it, describe, jest, beforeEach, afterEach} from '@jest/globals';
-import {defineEventsReceiver} from '../src/events-receiver';
+import { expect, it, describe, jest, beforeEach, afterEach } from '@jest/globals';
+import { defineEventsReceiver } from '../src/events-receiver';
 
 describe('events-receiver.ts', () => {
   describe('defineEventsReceiver', () => {
-    let windowSpy = jest.spyOn(window, 'window', 'get');
-    let dispatchSpy = jest.fn();
+    const windowSpy = jest.spyOn(window, 'window', 'get');
+    const dispatchSpy = jest.fn();
     let wnd: any;
 
     beforeEach(() => {
-      wnd = {dispatchEvent: dispatchSpy};
+      wnd = { dispatchEvent: dispatchSpy };
       windowSpy.mockImplementation(() => wnd);
     });
 
@@ -23,13 +23,13 @@ describe('events-receiver.ts', () => {
       ['Telegram', 'WebView', 'receiveEvent'],
     ];
 
-    paths.forEach(path => {
+    paths.forEach((path) => {
       const pathStr = path.join('.');
 
-      it(`should assign handler by path "${pathStr}" which calls ` +
-        'window.dispatchEvent with MessageEvent containing data ' +
-        'property which is JSON object {eventType: string, eventData: unknown} ' +
-        'converted to string', () => {
+      it(`should assign handler by path "${pathStr}" which calls `
+        + 'window.dispatchEvent with MessageEvent containing data '
+        + 'property which is JSON object {eventType: string, eventData: unknown} '
+        + 'converted to string', () => {
         defineEventsReceiver();
 
         // Path starts from "window" object.

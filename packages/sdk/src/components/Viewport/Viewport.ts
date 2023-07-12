@@ -1,8 +1,8 @@
-import {EventEmitter} from '@twa.js/utils';
-import {BridgeEventListener} from '@twa.js/bridge';
+import { EventEmitter } from '@twa.js/utils';
+import type { BridgeEventListener } from '@twa.js/bridge';
 
-import {ViewportEventsMap} from './events';
-import {BridgeLike} from '../../types';
+import type { ViewportEventsMap } from './events';
+import type { BridgeLike } from '../../types';
 
 export interface RequestViewportResult {
   height: number;
@@ -36,8 +36,8 @@ export class Viewport {
     // Emit event to receive viewport information.
     bridge.postEvent('web_app_request_viewport');
 
-    return new Promise(res => {
-      const listener: BridgeEventListener<'viewport_changed'> = payload => {
+    return new Promise((res) => {
+      const listener: BridgeEventListener<'viewport_changed'> = (payload) => {
         // Remove previously bound listener.
         bridge.off('viewport_changed', listener);
 
@@ -48,7 +48,7 @@ export class Viewport {
           is_expanded: isExpanded,
           is_state_stable: isStateStable,
         } = payload;
-        res({height, isExpanded, width, isStateStable});
+        res({ height, isExpanded, width, isStateStable });
       };
 
       // Add listener which will resolve promise in case, viewport information
@@ -75,16 +75,16 @@ export class Viewport {
   ): Viewport {
     const v = new Viewport(bridge, height, width, stableHeight, isExpanded);
 
-    bridge.on('viewport_changed', event => {
+    bridge.on('viewport_changed', (event) => {
       const {
-        height,
-        width,
-        is_expanded: isExpanded,
+        height: evHeight,
+        width: evWidth,
+        is_expanded: evIsExpanded,
         is_state_stable: isStateStable,
       } = event;
-      v.height = truncate(height);
-      v.width = truncate(width);
-      v.isExpanded = isExpanded;
+      v.height = truncate(evHeight);
+      v.width = truncate(evWidth);
+      v.isExpanded = evIsExpanded;
 
       if (isStateStable) {
         v.stableHeight = v.height;
@@ -95,10 +95,14 @@ export class Viewport {
   }
 
   private readonly ee = new EventEmitter<ViewportEventsMap>();
-  private _height: number;
-  private _width: number;
-  private _stableHeight: number;
-  private _isExpanded: boolean;
+
+  #height: number;
+
+  #width: number;
+
+  #stableHeight: number;
+
+  #isExpanded: boolean;
 
   constructor(
     private readonly bridge: BridgeLike,
@@ -107,17 +111,17 @@ export class Viewport {
     stableHeight: number,
     isExpanded: boolean,
   ) {
-    this._height = truncate(height);
-    this._width = truncate(width);
-    this._stableHeight = truncate(stableHeight);
-    this._isExpanded = isExpanded;
+    this.#height = truncate(height);
+    this.#width = truncate(width);
+    this.#stableHeight = truncate(stableHeight);
+    this.#isExpanded = isExpanded;
   }
 
   private set height(value: number) {
-    if (this._height === value) {
+    if (this.#height === value) {
       return;
     }
-    this._height = value;
+    this.#height = value;
     this.ee.emit('heightChanged', value);
   }
 
@@ -142,14 +146,14 @@ export class Viewport {
    * @see stableHeight
    */
   get height(): number {
-    return this._height;
+    return this.#height;
   }
 
   private set stableHeight(value: number) {
-    if (this._stableHeight === value) {
+    if (this.#stableHeight === value) {
       return;
     }
-    this._stableHeight = value;
+    this.#stableHeight = value;
     this.ee.emit('stableHeightChanged', value);
   }
 
@@ -172,14 +176,14 @@ export class Viewport {
    * @see height
    */
   get stableHeight(): number {
-    return this._stableHeight;
+    return this.#stableHeight;
   }
 
   private set isExpanded(value: boolean) {
-    if (this._isExpanded === value) {
+    if (this.#isExpanded === value) {
       return;
     }
-    this._isExpanded = value;
+    this.#isExpanded = value;
     this.ee.emit('isExpandedChanged', value);
   }
 
@@ -190,14 +194,14 @@ export class Viewport {
    * @see expand
    */
   get isExpanded(): boolean {
-    return this._isExpanded;
+    return this.#isExpanded;
   }
 
   private set width(value: number) {
-    if (this._width === value) {
+    if (this.#width === value) {
       return;
     }
-    this._width = value;
+    this.#width = value;
     this.ee.emit('widthChanged', value);
   }
 
@@ -205,7 +209,7 @@ export class Viewport {
    * Current viewport width.
    */
   get width(): number {
-    return this._width;
+    return this.#width;
   }
 
   /**
@@ -223,7 +227,7 @@ export class Viewport {
    * change in the next moment.
    */
   get isStable(): boolean {
-    return this._stableHeight === this._height;
+    return this.#stableHeight === this.#height;
   }
 
   /**

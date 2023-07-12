@@ -1,5 +1,5 @@
-import {useComponent} from '../../provider';
-import {WebApp} from './types';
+import { useComponent } from '../../provider';
+import type { WebApp } from './types';
 
 /**
  * Returns WebApp component instance.

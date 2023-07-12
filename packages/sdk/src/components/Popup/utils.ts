@@ -1,6 +1,6 @@
-import {PopupButton, PopupParams as BridgePopupParams} from '@twa.js/bridge';
+import type { PopupButton, PopupParams as BridgePopupParams } from '@twa.js/bridge';
 
-import {PopupParams} from './types';
+import type { PopupParams } from './types';
 
 /**
  * Prepares popup parameters before sending them to native app.
@@ -29,31 +29,31 @@ export function preparePopupParams(params: PopupParams): BridgePopupParams {
 
   // Append button in case, there are no buttons passed.
   if (buttons.length === 0) {
-    preparedButtons = [{type: 'close', id: ''}];
+    preparedButtons = [{ type: 'close', id: '' }];
   } else {
     // Otherwise, check all the buttons.
-    preparedButtons = buttons.map(b => {
-      const {id = ''} = b;
+    preparedButtons = buttons.map((b) => {
+      const { id = '' } = b;
 
       // Check button ID.
       if (id.length > 64) {
         throw new Error(`Button ID has incorrect size: ${id}`);
       }
 
-      switch (b.type) {
-        case undefined:
-        case 'default':
-        case 'destructive':
-          b.text = b.text.trim();
+      if (b.type === undefined || b.type === 'default' || b.type === 'destructive') {
+        const text = b.text.trim();
 
-          if (b.text.length === 0 || b.text.length > 64) {
-            const type = b.type || 'default';
-            throw new Error(`Button text with type "${type}" has incorrect size: ${b.text.length}`);
-          }
-          break;
+        if (text.length === 0 || text.length > 64) {
+          const type = b.type || 'default';
+
+          throw new Error(`Button text with type "${type}" has incorrect size: ${b.text.length}`);
+        }
+
+        return { ...b, text, id };
       }
-      return {...b, id};
+
+      return { ...b, id };
     });
   }
-  return {title, message, buttons: preparedButtons};
+  return { title, message, buttons: preparedButtons };
 }

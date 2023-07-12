@@ -1,5 +1,5 @@
-import {describe, expect, it} from '@jest/globals';
-import {compareVersions} from '../src/version';
+import { describe, expect, it } from '@jest/globals';
+import { compareVersions } from '../src';
 
 describe('version.ts', () => {
   describe('compareVersions', () => {

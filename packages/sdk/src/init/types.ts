@@ -1,4 +1,4 @@
-import {Bridge, InitOptions as BridgeInitOptions} from '@twa.js/bridge';
+import { Bridge, type BridgeProps as BridgeInitOptions } from '@twa.js/bridge';
 
 import {
   BackButton,
@@ -29,7 +29,7 @@ export interface InitResult {
   webApp: WebApp;
 }
 
-export interface InitOptions extends Pick<BridgeInitOptions, 'targetOrigin'>{
+export interface InitOptions extends Pick<BridgeInitOptions, 'targetOrigin'> {
   /**
    * Should SDK accept scrollbar styles sent from the Telegram web application.
    * This option is only used in Web Z and Web K Telegram applications.

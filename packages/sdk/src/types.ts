@@ -1,4 +1,4 @@
-import {Bridge} from '@twa.js/bridge';
+import { Bridge } from '@twa.js/bridge';
 
 /**
  * Minimal set of properties SDK requires from bridge.

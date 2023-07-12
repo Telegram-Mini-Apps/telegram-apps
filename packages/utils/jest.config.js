@@ -5,7 +5,7 @@ export default {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.ts',
-    '!src/**/index.ts'
+    '!src/**/index.ts',
   ],
   coverageThreshold: {
     global: {
@@ -13,6 +13,6 @@ export default {
       functions: 90,
       lines: 90,
       statements: 0,
-    }
-  }
+    },
+  },
 };
