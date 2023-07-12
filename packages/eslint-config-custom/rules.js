@@ -8,4 +8,7 @@ module.exports = {
   // Enable default behavior of this rule.
   'object-curly-newline': ['error', { consistent: true }],
   'consistent-return': 0,
+  // We select line endings depending on current OS.
+  // See: https://stackoverflow.com/q/39114446/2771889
+  'linebreak-style': ['error', (process.platform === 'win32' ? 'windows' : 'unix')],
 };
