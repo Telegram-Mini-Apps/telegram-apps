@@ -1,0 +1,41 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "description": "Application to try packages functionality.",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-plugin-solid": "^0.12.1",
+    "solid-devtools": "^0.27.3",
+    "typescript": "^5.1.3",
+    "vite": "^4.3.9",
+    "vite-plugin-solid": "^2.7.0"
+  },
+  "dependencies": {
+    "@types/tmi.js": "^1.8.3",
+    "classnames": "^2.3.2",
+    "sass": "^1.63.6",
+    "solid-js": "^1.7.6",
+    "tmi.js": "^1.8.5",
+    "@twa.js/utils": "workspace:*",
+    "@twa.js/bridge": "workspace:*",
+    "@twa.js/init-data": "workspace:*",
+    "@twa.js/sdk": "workspace:*"
+  }
+}
