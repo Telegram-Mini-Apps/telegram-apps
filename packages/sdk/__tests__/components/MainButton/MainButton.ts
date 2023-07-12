@@ -1,4 +1,3 @@
-import { describe, expect, it, jest } from '@jest/globals';
 import { MainButton } from '../../../src';
 
 describe('components', () => {

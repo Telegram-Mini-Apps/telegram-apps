@@ -1,4 +1,3 @@
-import { afterEach, describe, expect, it, jest } from '@jest/globals';
 import { retrieveLaunchParams } from '../../src';
 
 describe('utils', () => {
@@ -39,10 +38,10 @@ describe('utils', () => {
         }).toString();
 
         const setItem = jest.fn();
-        jest.spyOn(global, 'sessionStorage', 'get').mockImplementation(() => ({
+        jest.spyOn(window, 'sessionStorage', 'get').mockImplementation(() => ({
           setItem,
         }) as any);
-        jest.spyOn(global, 'window', 'get').mockImplementation(() => ({
+        jest.spyOn(window, 'window', 'get').mockImplementation(() => ({
           location: { hash: `#${launchParams}` },
         }) as any);
 
@@ -106,10 +105,10 @@ describe('utils', () => {
         }).toString();
 
         const getItem = jest.fn(() => launchParams);
-        jest.spyOn(global, 'sessionStorage', 'get').mockImplementation(() => ({
+        jest.spyOn(window, 'sessionStorage', 'get').mockImplementation(() => ({
           getItem,
         }) as any);
-        jest.spyOn(global, 'window', 'get').mockImplementation(() => ({
+        jest.spyOn(window, 'window', 'get').mockImplementation(() => ({
           location: { hash: '' },
         }) as any);
 

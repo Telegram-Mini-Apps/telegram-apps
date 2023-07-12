@@ -1,4 +1,3 @@
-import { describe, expect, it } from '@jest/globals';
 import { InitData } from '../../../src';
 
 describe('components', () => {

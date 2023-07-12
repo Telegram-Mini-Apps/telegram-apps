@@ -1,4 +1,3 @@
-import { describe, expect, it } from '@jest/globals';
 import { compareVersions } from '../src';
 
 describe('version.ts', () => {

@@ -1,4 +1,3 @@
-import { describe, expect, it, jest } from '@jest/globals';
 import { ClosingConfirmation } from '../../../src';
 
 describe('components', () => {

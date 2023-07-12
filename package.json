@@ -11,11 +11,11 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
-    "@jest/globals": "^29.6.1",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-terser": "^0.4.3",
     "@rollup/plugin-typescript": "^11.1.2",
     "@turbo/gen": "^1.9.7",
+    "@types/jest": "^29.5.3",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.32.0",

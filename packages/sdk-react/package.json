@@ -31,7 +31,6 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest",
     "lint": "eslint -c .eslintrc.cjs src/**/*",
     "build": "rimraf dist && rollup --config rollup.config.js"
   },

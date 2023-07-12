@@ -1,4 +1,3 @@
-import { describe, jest, beforeEach, afterEach, it, expect } from '@jest/globals';
 import { postEvent } from '../../src';
 
 let windowSpy: ReturnType<typeof jest.spyOn>;
