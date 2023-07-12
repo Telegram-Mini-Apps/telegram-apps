@@ -1,4 +1,3 @@
-import { describe, expect, it } from '@jest/globals';
 import { parseInitData } from '../src';
 
 describe('parsing', () => {

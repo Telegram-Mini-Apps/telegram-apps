@@ -1,4 +1,3 @@
-import { describe, expect, it, jest } from '@jest/globals';
 import { Layout } from '../../../src';
 
 describe('components', () => {

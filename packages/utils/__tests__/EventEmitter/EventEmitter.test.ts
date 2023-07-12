@@ -1,4 +1,3 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { EventEmitter } from '../../src';
 
 interface EventsMap {

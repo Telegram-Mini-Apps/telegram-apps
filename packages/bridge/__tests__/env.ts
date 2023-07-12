@@ -1,4 +1,3 @@
-import { afterEach, describe, expect, it, jest } from '@jest/globals';
 import { hasExternal, hasNotify, hasInvoke, isIframe } from '../src';
 
 const windowSpy = jest.spyOn(window, 'window', 'get');

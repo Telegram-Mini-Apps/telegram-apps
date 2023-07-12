@@ -1,4 +1,3 @@
-import { describe, it, expect } from '@jest/globals';
 // import {emitDesktopEvent, mockDesktop} from '../../../tests';
 // import { Popup } from './Popup';
 // import {Bridge} from '@twa.js/bridge';

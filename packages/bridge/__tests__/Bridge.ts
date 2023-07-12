@@ -1,4 +1,3 @@
-import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { Bridge } from '../src';
 import * as postEventPackage from '../src/posting/postEvent';
 

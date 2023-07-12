@@ -1,4 +1,3 @@
-import { describe, expect, it, jest } from '@jest/globals';
 import { BackButton } from '../../../src';
 
 describe('components', () => {
