@@ -1,7 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
 import { defineConfig } from 'rollup';
 import terser from '@rollup/plugin-terser';
-import sourcemaps from 'rollup-plugin-sourcemaps';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { createRequire } from 'node:module';
 
@@ -19,7 +18,6 @@ export default [
     external: ['@twa.js/utils'],
     plugins: [
       typescript({ tsconfig: './tsconfig.main.json' }),
-      sourcemaps(),
       terser(),
     ],
   }),
@@ -35,7 +33,6 @@ export default [
     },
     plugins: [
       typescript({ tsconfig: './tsconfig.main.json' }),
-      sourcemaps(),
       nodeResolve(),
       terser(),
     ],
@@ -59,7 +56,6 @@ export default [
     external: ['@twa.js/utils', 'node:crypto'],
     plugins: [
       typescript({ tsconfig: './tsconfig.validation.json' }),
-      sourcemaps(),
       terser(),
     ],
   }),
