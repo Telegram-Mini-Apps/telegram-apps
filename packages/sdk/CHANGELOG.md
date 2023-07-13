@@ -1,5 +1,14 @@
 # @twa.js/sdk
 
+## 0.4.3
+
+### Patch Changes
+
+- 5879578: Add src folder to package. Also, inline source typescript source code.
+- Updated dependencies [5879578]
+  - @twa.js/init-data@0.2.6
+  - @twa.js/bridge@0.3.7
+
 ## 0.4.2
 
 ### Patch Changes

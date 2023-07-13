@@ -1,5 +1,11 @@
 # @twa.js/bridge
 
+## 0.3.7
+
+### Patch Changes
+
+- 5879578: Add src folder to package. Also, inline source typescript source code.
+
 ## 0.3.6
 
 ### Patch Changes
