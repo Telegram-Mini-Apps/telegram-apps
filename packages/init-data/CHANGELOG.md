@@ -1,5 +1,11 @@
 # @twa.js/init-data
 
+## 0.2.6
+
+### Patch Changes
+
+- 5879578: Add src folder to package. Also, inline source typescript source code.
+
 ## 0.2.5
 
 ### Patch Changes

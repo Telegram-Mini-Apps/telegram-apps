@@ -1,5 +1,14 @@
 # @twa.js/sdk-react
 
+## 0.3.3
+
+### Patch Changes
+
+- 5879578: Add src folder to package. Also, inline source typescript source code.
+- Updated dependencies [5879578]
+  - @twa.js/bridge@0.3.7
+  - @twa.js/sdk@0.4.3
+
 ## 0.3.2
 
 ### Patch Changes
