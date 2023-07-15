@@ -1,4 +1,4 @@
-import { schemaToParsers } from '../../src/parsing/shared';
+import { schemaToParsers } from '../../src/parsing/shared.js';
 
 describe('parsing', () => {
   describe('shared.ts', () => {

@@ -1,4 +1,4 @@
-import { isRGB, toRGB, isRGBShort } from '../../src';
+import { isRGB, toRGB, isRGBShort } from '../../src/index.js';
 
 describe('colors', () => {
   describe('rgb.ts', () => {

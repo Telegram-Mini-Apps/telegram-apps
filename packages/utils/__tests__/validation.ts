@@ -1,4 +1,4 @@
-import { isRecord } from '../src';
+import { isRecord } from '../src/index.js';
 
 describe('validation.ts', () => {
   describe('isRecord', () => {

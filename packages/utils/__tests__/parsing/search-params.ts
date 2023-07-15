@@ -1,4 +1,4 @@
-import { createSearchParamsParser } from '../../src';
+import { createSearchParamsParser } from '../../src/index.js';
 
 describe('parsing', () => {
   describe('search-params.ts', () => {

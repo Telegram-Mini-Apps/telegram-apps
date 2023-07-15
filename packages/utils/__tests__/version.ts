@@ -1,4 +1,4 @@
-import { compareVersions } from '../src';
+import { compareVersions } from '../src/index.js';
 
 describe('version.ts', () => {
   describe('compareVersions', () => {

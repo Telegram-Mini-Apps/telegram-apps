@@ -55,7 +55,8 @@
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
-    "eslint-config-custom": "workspace:*"
+    "eslint-config-custom": "workspace:*",
+    "jest-config-custom": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
