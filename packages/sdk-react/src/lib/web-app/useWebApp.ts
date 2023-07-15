@@ -1,5 +1,5 @@
-import { useComponent } from '../../provider';
-import type { WebApp } from './types';
+import { useComponent } from '../../provider/index.js';
+import type { WebApp } from './types.js';
 
 /**
  * Returns WebApp component instance.

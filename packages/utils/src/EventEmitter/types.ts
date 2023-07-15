@@ -1,4 +1,4 @@
-import type { IsNever } from '../types';
+import type { IsNever } from '../types.js';
 
 /**
  * Function accepting the list of passed arguments and returning nothing.

@@ -3,7 +3,7 @@ import type {
   EmptyEventName,
   EventListener, EventName,
   EventParams, NonEmptyEventName,
-} from './types';
+} from './types.js';
 
 /**
  * EventEmitter represents classic JavaScript event emitter. It allows usage

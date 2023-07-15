@@ -1,3 +1,3 @@
-export * from './types';
-export * from './useViewport';
-export * from './withViewport';
+export * from './types.js';
+export * from './useViewport.js';
+export * from './withViewport.js';

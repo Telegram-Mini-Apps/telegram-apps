@@ -1,5 +1,5 @@
-import { useComponent } from '../../provider';
-import type { Bridge } from './types';
+import { useComponent } from '../../provider/index.js';
+import type { Bridge } from './types.js';
 
 /**
  * Returns Bridge component instance.

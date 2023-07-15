@@ -1,1 +1,1 @@
-export * from './WebApp';
+export * from './WebApp.js';

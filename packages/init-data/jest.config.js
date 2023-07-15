@@ -1,6 +1,8 @@
+import tsConfig from 'jest-config-custom/ts';
+
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 export default {
-  preset: 'ts-jest',
+  ...tsConfig,
   testEnvironment: 'jsdom',
   collectCoverage: true,
   collectCoverageFrom: [
@@ -13,6 +15,6 @@ export default {
       functions: 90,
       lines: 90,
       statements: 0,
-    }
-  }
+    },
+  },
 };

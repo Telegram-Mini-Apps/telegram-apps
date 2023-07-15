@@ -2,8 +2,8 @@
 import { createSearchParamsParser } from '@twa.js/utils';
 import { parseInitData, type InitData } from '@twa.js/init-data';
 
-import { parseThemeParams, type ThemeParams } from './theme-params';
-import { type Platform } from '../types';
+import { parseThemeParams, type ThemeParams } from './theme-params.js';
+import { type Platform } from '../types.js';
 
 export interface LaunchParams {
   version: string;

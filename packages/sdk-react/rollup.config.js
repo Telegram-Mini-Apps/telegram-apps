@@ -7,10 +7,11 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
+const input = 'src/index.ts';
+
 export default [
-  // CJS, ESM.
   defineConfig({
-    input: 'src/index.ts',
+    input,
     output: [
       { file: pkg.main, format: 'commonjs', sourcemap: true },
       { file: pkg.module, format: 'esm', sourcemap: true },
@@ -19,9 +20,8 @@ export default [
     plugins: [typescript(), terser()],
   }),
 
-  // UMD.
   defineConfig({
-    input: 'src/index.ts',
+    input,
     output: {
       file: pkg.browser,
       format: 'umd',
@@ -31,5 +31,19 @@ export default [
     },
     external: ['react'],
     plugins: [typescript(), nodeResolve(), terser()],
+  }),
+
+  defineConfig({
+    input,
+    output: { file: pkg.types },
+    external: ['@twa.js/sdk', '@twa.js/bridge', 'react'],
+    plugins: [typescript({
+      compilerOptions: {
+        declaration: true,
+        emitDeclarationOnly: true,
+        sourceMap: false,
+        inlineSources: false,
+      },
+    }), terser()],
   }),
 ];

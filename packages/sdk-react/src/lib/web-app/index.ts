@@ -1,3 +1,3 @@
-export * from './types';
-export * from './useWebApp';
-export * from './withWebApp';
+export * from './types.js';
+export * from './useWebApp.js';
+export * from './withWebApp.js';

@@ -1,7 +1,7 @@
 import React, { type ComponentType } from 'react';
 
-import { useLayout } from './useLayout';
-import type { Layout } from './types';
+import { useLayout } from './useLayout.js';
+import type { Layout } from './types.js';
 
 /**
  * HOC which passes Layout SDK component to wrapped React component.

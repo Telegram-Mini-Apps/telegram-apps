@@ -1,9 +1,9 @@
 import { EventEmitter, type RGB, type Version } from '@twa.js/utils';
 import type { HeaderColorKey } from '@twa.js/bridge';
 
-import type { LayoutEventsMap } from './events';
-import type { BridgeLike, ColorScheme } from '../../types';
-import { createSupportsFunc, isColorDark, type SupportsFunc } from '../../utils';
+import type { LayoutEventsMap } from './events.js';
+import type { BridgeLike, ColorScheme } from '../../types.js';
+import { createSupportsFunc, isColorDark, type SupportsFunc } from '../../utils/index.js';
 
 /**
  * Class which provides information about current Web App layout.
@@ -71,8 +71,8 @@ export class Layout {
    * Updates current application background color.
    * FIXME: Has no effect on desktop, works incorrectly in Android.
    *  Issues:
-   *  https://github.com/Telegram-Web-Apps/twa/issues/9
-   *  https://github.com/Telegram-Web-Apps/twa/issues/8
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
    * @param color - new color.
    */
   setBackgroundColor(color: RGB): void {
@@ -95,8 +95,8 @@ export class Layout {
    * Updates current application header color.
    * FIXME: Has no effect on desktop, works incorrectly on Android.
    *  Issues:
-   *  https://github.com/Telegram-Web-Apps/twa/issues/9
-   *  https://github.com/Telegram-Web-Apps/twa/issues/8
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
    * @param color - settable color key.
    */
   setHeaderColor(color: HeaderColorKey): void {

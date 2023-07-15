@@ -1,6 +1,6 @@
 import type { PopupButton, PopupParams as BridgePopupParams } from '@twa.js/bridge';
 
-import type { PopupParams } from './types';
+import type { PopupParams } from './types.js';
 
 /**
  * Prepares popup parameters before sending them to native app.

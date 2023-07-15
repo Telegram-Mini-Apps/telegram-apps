@@ -1,7 +1,7 @@
 import React, { type ComponentType } from 'react';
 
-import { useThemeParams } from './useThemeParams';
-import type { ThemeParams } from './types';
+import { useThemeParams } from './useThemeParams.js';
+import type { ThemeParams } from './types.js';
 
 /**
  * HOC which passes ThemeParams SDK component to wrapped React component.

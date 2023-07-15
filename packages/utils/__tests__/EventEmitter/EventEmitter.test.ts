@@ -1,4 +1,4 @@
-import { EventEmitter } from '../../src';
+import { EventEmitter } from '../../src/index.js';
 
 interface EventsMap {
   test: (a: number, b: boolean) => void;

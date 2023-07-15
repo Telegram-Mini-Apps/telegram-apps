@@ -11,10 +11,10 @@ import {
   ThemeParams,
   Viewport,
   WebApp,
-} from '../components';
-import type { InitOptions, InitResult } from './types';
-import { BridgeScoped } from '../lib';
-import { retrieveLaunchParams } from '../utils';
+} from '../components/index.js';
+import type { InitOptions, InitResult } from './types.js';
+import { BridgeScoped } from '../lib/index.js';
+import { retrieveLaunchParams } from '../utils/index.js';
 
 /**
  * Initializes all SDK components.

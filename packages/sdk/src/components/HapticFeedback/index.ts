@@ -1,1 +1,1 @@
-export * from './HapticFeedback';
+export * from './HapticFeedback.js';

@@ -1,6 +1,6 @@
-import { useComponent } from '../../provider';
-import { useEventsTracking } from '../hooks';
-import type { Layout } from './types';
+import { useComponent } from '../../provider/index.js';
+import { useEventsTracking } from '../hooks.js';
+import type { Layout } from './types.js';
 
 /**
  * Returns Layout component instance.

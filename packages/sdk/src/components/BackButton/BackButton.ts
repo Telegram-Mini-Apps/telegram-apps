@@ -1,8 +1,8 @@
 import { EventEmitter, type Version } from '@twa.js/utils';
 
-import type { BackButtonEventListener, BackButtonEventsMap } from './events';
-import type { BridgeLike } from '../../types';
-import { createSupportsFunc, type SupportsFunc } from '../../utils';
+import type { BackButtonEventListener, BackButtonEventsMap } from './events.js';
+import type { BridgeLike } from '../../types.js';
+import { createSupportsFunc, type SupportsFunc } from '../../utils/index.js';
 
 type Emitter = EventEmitter<BackButtonEventsMap>;
 

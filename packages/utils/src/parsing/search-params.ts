@@ -4,7 +4,7 @@ import {
   type Parser,
   type Schema,
   schemaToParsers,
-} from './shared';
+} from './shared.js';
 
 /**
  * Information about types, known by search params parser. Key is type name

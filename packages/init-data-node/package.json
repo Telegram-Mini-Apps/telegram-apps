@@ -1,0 +1,71 @@
+{
+  "name": "@twa.js/init-data-node",
+  "version": "0.0.1",
+  "description": "TypeScript Node library to operate with Telegram init data.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.js.git",
+    "directory": "packages/init-data-node"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
+  },
+  "keywords": [
+    "telegram",
+    "telegram-web-apps",
+    "twa",
+    "init-data"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/lib/index.cjs",
+  "browser": "dist/lib/browser.js",
+  "module": "dist/lib/index.mjs",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/lib/index.mjs",
+      "require": "./dist/lib/index.cjs",
+      "default": "./dist/lib/index.cjs"
+    },
+    "./*": {
+      "types": "./dist/types/*.d.ts",
+      "import": "./dist/lib/*.mjs",
+      "require": "./dist/lib/*.cjs",
+      "default": "./dist/lib/*.cjs"
+    }
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
+    "build": "rimraf dist && rollup --config rollup.config.js"
+  },
+  "dependencies": {
+    "@twa.js/utils": "workspace:*",
+    "@twa.js/init-data": "workspace:*"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*",
+    "eslint-config-custom": "workspace:*",
+    "jest-config-custom": "workspace:*"
+  },
+  "peerDependencies": {
+    "@types/node": "^12.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/node": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

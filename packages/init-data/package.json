@@ -1,16 +1,16 @@
 {
   "name": "@twa.js/init-data",
   "version": "0.2.6",
-  "description": "Isomorphic TypeScript library to make work with Web Apps init data easier.",
+  "description": "Frontend TypeScript library to make work with Web Apps init data easier.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/twa.git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.js.git",
     "directory": "packages/init-data"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
   },
   "keywords": [
     "telegram",
@@ -25,20 +25,22 @@
     "dist",
     "src"
   ],
-  "main": "dist/index.cjs",
-  "browser": "dist/browser.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "dist/lib/index.cjs",
+  "browser": "dist/lib/browser.js",
+  "module": "dist/lib/index.mjs",
+  "types": "dist/types/index.d.ts",
   "exports": {
-    "./validation": {
-      "web": "./dist/validation.mjs",
-      "import": "./dist/validation.mjs",
-      "require": "./dist/validation.cjs"
-    },
     ".": {
-      "web": "./dist/index.mjs",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/lib/index.mjs",
+      "require": "./dist/lib/index.cjs",
+      "default": "./dist/lib/index.cjs"
+    },
+    "./*": {
+      "types": "./dist/types/*.d.ts",
+      "import": "./dist/lib/*.mjs",
+      "require": "./dist/lib/*.cjs",
+      "default": "./dist/lib/*.cjs"
     }
   },
   "scripts": {
@@ -47,12 +49,12 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
-    "@twa.js/utils": "workspace:*",
-    "@types/node": "^18.11.19"
+    "@twa.js/utils": "workspace:*"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
-    "eslint-config-custom": "workspace:*"
+    "eslint-config-custom": "workspace:*",
+    "jest-config-custom": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

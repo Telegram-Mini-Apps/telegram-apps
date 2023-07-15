@@ -1,1 +1,1 @@
-export * from './ClosingConfirmation';
+export * from './ClosingConfirmation.js';

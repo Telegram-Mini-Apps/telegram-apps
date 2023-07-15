@@ -1,9 +1,9 @@
 import type { BridgeEventListener } from '@twa.js/bridge';
 import { EventEmitter, type Version } from '@twa.js/utils';
 
-import { type QRScannerEventsMap } from './events';
-import { createSupportsFunc, type SupportsFunc } from '../../utils';
-import type { BridgeLike } from '../../types';
+import { type QRScannerEventsMap } from './events.js';
+import { createSupportsFunc, type SupportsFunc } from '../../utils/index.js';
+import type { BridgeLike } from '../../types.js';
 
 /**
  * Provides QR scanner functionality.

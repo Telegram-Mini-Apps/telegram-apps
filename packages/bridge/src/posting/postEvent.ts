@@ -2,8 +2,8 @@ import type {
   PostEmptyEventName, PostEventName,
   PostEventParams,
   PostNonEmptyEventName,
-} from './events';
-import { hasInvoke, hasNotify, hasExternal, isIframe } from '../env';
+} from './events.js';
+import { hasInvoke, hasNotify, hasExternal, isIframe } from '../env.js';
 
 interface PostEventOptions {
   /**
