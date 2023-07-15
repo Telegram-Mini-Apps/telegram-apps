@@ -1,5 +1,11 @@
 # @twa.js/init-data-node
 
+## 0.0.3
+
+### Patch Changes
+
+- cce13d9: Update readme.
+
 ## 0.0.2
 
 ### Patch Changes
