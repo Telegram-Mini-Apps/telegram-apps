@@ -3,14 +3,14 @@
   "version": "0.3.3",
   "description": "React bindings for Web Apps client SDK. Contains hooks, components and other useful tools which allow usage of React along with Web Apps client SDK.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/twa.git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.js.git",
     "directory": "packages/sdk-react"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
   },
   "keywords": [
     "telegram",

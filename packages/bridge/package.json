@@ -3,14 +3,14 @@
   "version": "0.3.7",
   "description": "Communication layer between Telegram and frontend applications.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Telegram-Web-Apps/twa.git",
+    "url": "git+https://github.com/Telegram-Web-Apps/twa.js.git",
     "directory": "packages/bridge"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
   },
   "keywords": [
     "telegram",

@@ -1,16 +1,16 @@
 {
   "name": "@twa.js/init-data",
   "version": "0.2.6",
-  "description": "Isomorphic TypeScript library to make work with Web Apps init data easier.",
+  "description": "Frontend TypeScript library to make work with Web Apps init data easier.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/twa#readme",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/twa.git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.js.git",
     "directory": "packages/init-data"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa/issues"
+    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
   },
   "keywords": [
     "telegram",
@@ -49,8 +49,7 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
-    "@twa.js/utils": "workspace:*",
-    "@types/node": "^18.11.19"
+    "@twa.js/utils": "workspace:*"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
