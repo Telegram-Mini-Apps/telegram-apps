@@ -1,17 +1,16 @@
-name: Pull Request check
+name: Finalize Pull Request
 
 on:
   workflow_dispatch:
   pull_request:
-    types: [opened, reopened]
+    types: [closed]
     branches:
       - "master"
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
-
 jobs:
-  release:
-    name: Check
+  validate:
+    if: github.event.pull_request.merged == true
+    name: Validate and create Pull Request
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -41,3 +40,14 @@ jobs:
 
       - name: Lint packages
         run: pnpm run packages:lint
+
+      - name: Create version Pull Request
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset publish
+          commit: 'chore(packages): version packages'
+          title: 'chore(packages): version packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

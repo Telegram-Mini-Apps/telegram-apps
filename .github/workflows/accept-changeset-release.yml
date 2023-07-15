@@ -1,21 +1,16 @@
-name: Release packages
+name: Accept changeset release
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - "master"
-    paths:
-      - ".changeset/**"
-
-concurrency: ${{ github.workflow }}-${{ github.ref }}
-
-env:
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 jobs:
-  release:
-    name: Release
+  publish:
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'changeset-release/')
+    name: Build and publish
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -40,13 +35,7 @@ jobs:
       - name: Build packages
         run: pnpm run packages:build
 
-      - name: Test packages
-        run: pnpm run packages:test
-
-      - name: Lint packages
-        run: pnpm run packages:lint
-
-      - name: Publish
+      - name: Publish packages
         uses: changesets/action@v1
         with:
           publish: pnpm changeset publish
