@@ -7,56 +7,41 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
+const input = 'src/index.ts';
+
 export default [
-  // Main functionality: CJS, ESM.
   defineConfig({
-    input: 'src/index.ts',
+    input,
     output: [
       { file: pkg.main, format: 'commonjs', sourcemap: true },
       { file: pkg.module, format: 'esm', sourcemap: true },
     ],
     external: ['@twa.js/utils'],
-    plugins: [
-      typescript({ tsconfig: './tsconfig.main.json' }),
-      terser(),
-    ],
+    plugins: [typescript(), terser()],
   }),
 
-  // Main functionality: Browser.
   defineConfig({
-    input: 'src/index.ts',
+    input,
     output: {
       file: pkg.browser,
       format: 'iife',
       name: 'TwaInitData',
       sourcemap: true,
     },
-    plugins: [
-      typescript({ tsconfig: './tsconfig.main.json' }),
-      nodeResolve(),
-      terser(),
-    ],
+    plugins: [typescript(), nodeResolve(), terser()],
   }),
 
-  // Validation: CJS, ESM.
   defineConfig({
-    input: 'src/validation.ts',
-    output: [
-      {
-        file: pkg.exports['./validation'].require,
-        format: 'commonjs',
-        sourcemap: true,
+    input,
+    output: { file: pkg.types },
+    external: ['@twa.js/utils'],
+    plugins: [typescript({
+      compilerOptions: {
+        declaration: true,
+        emitDeclarationOnly: true,
+        sourceMap: false,
+        inlineSources: false,
       },
-      {
-        file: pkg.exports['./validation'].import,
-        format: 'esm',
-        sourcemap: true,
-      },
-    ],
-    external: ['@twa.js/utils', 'node:crypto'],
-    plugins: [
-      typescript({ tsconfig: './tsconfig.validation.json' }),
-      terser(),
-    ],
+    }), terser()],
   }),
 ];

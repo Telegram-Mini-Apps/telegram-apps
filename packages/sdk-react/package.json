@@ -27,10 +27,24 @@
     "dist",
     "src"
   ],
-  "main": "dist/index.cjs",
-  "browser": "dist/browser.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "dist/lib/index.cjs",
+  "browser": "dist/lib/browser.js",
+  "module": "dist/lib/index.mjs",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/lib/index.mjs",
+      "require": "./dist/lib/index.cjs",
+      "default": "./dist/lib/index.cjs"
+    },
+    "./*": {
+      "types": "./dist/types/*.d.ts",
+      "import": "./dist/lib/*.mjs",
+      "require": "./dist/lib/*.cjs",
+      "default": "./dist/lib/*.cjs"
+    }
+  },
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
     "build": "rimraf dist && rollup --config rollup.config.js"
