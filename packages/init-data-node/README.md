@@ -10,7 +10,7 @@
 ![Size][size-badge]
 
 Package providing utilities connected with Telegram Web Apps init data. It
-allows init data validation and parse, works both in browser and NodeJS.
+allows init data validation and parsing, works in NodeJS.
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
 Apps. You can learn more about this package in this
