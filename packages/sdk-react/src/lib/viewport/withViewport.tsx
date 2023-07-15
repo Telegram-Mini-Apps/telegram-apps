@@ -1,7 +1,7 @@
 import React, { ComponentType } from 'react';
 
-import { useViewport } from './useViewport';
-import type { Viewport } from './types';
+import { useViewport } from './useViewport.js';
+import type { Viewport } from './types.js';
 
 /**
  * HOC which passes Viewport SDK component to wrapped React component.

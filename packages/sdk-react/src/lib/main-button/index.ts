@@ -1,3 +1,3 @@
-export * from './types';
-export * from './useMainButton';
-export * from './withMainButton';
+export * from './types.js';
+export * from './useMainButton.js';
+export * from './withMainButton.js';

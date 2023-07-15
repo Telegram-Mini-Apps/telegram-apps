@@ -1,3 +1,3 @@
-export * from './types';
-export * from './useBridge';
-export * from './withBridge';
+export * from './types.js';
+export * from './useBridge.js';
+export * from './withBridge.js';

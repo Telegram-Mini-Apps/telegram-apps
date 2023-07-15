@@ -1,2 +1,2 @@
-export * from './events';
-export * from './QRScanner';
+export * from './events.js';
+export * from './QRScanner.js';

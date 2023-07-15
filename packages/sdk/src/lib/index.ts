@@ -1,2 +1,2 @@
-export * from './BridgeScoped';
-export * from './MethodUnsupportedError';
+export * from './BridgeScoped.js';
+export * from './MethodUnsupportedError.js';

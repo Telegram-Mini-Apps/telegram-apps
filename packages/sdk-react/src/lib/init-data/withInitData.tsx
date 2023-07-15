@@ -1,7 +1,7 @@
 import React, { type ComponentType } from 'react';
 
-import { useInitData } from './useInitData';
-import type { InitData } from './types';
+import { useInitData } from './useInitData.js';
+import type { InitData } from './types.js';
 
 /**
  * HOC which passes InitData SDK component to wrapped React component.

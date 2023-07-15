@@ -1,2 +1,2 @@
-export * from './events';
-export * from './MainButton';
+export * from './events.js';
+export * from './MainButton.js';

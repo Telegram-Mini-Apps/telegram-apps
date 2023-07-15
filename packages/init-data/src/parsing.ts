@@ -1,5 +1,6 @@
 import { createSearchParamsParser, createJsonParser } from '@twa.js/utils';
-import type { InitData } from './types';
+
+import type { InitData } from './types.js';
 
 const user = createJsonParser({
   firstName: { type: 'string', from: 'first_name' },

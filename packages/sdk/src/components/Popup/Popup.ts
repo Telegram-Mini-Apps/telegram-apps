@@ -1,11 +1,11 @@
 import type { BridgeEventListener } from '@twa.js/bridge';
 import { EventEmitter, type Version } from '@twa.js/utils';
 
-import type { PopupParams } from './types';
-import type { PopupEventsMap } from './events';
-import { preparePopupParams } from './utils';
-import { createSupportsFunc, type SupportsFunc } from '../../utils';
-import type { BridgeLike } from '../../types';
+import type { PopupParams } from './types.js';
+import type { PopupEventsMap } from './events.js';
+import { preparePopupParams } from './utils.js';
+import { createSupportsFunc, type SupportsFunc } from '../../utils/index.js';
+import type { BridgeLike } from '../../types.js';
 
 /**
  * Controls currently displayed application popup. It allows developers to
@@ -54,7 +54,7 @@ export class Popup {
    * button, null will be returned.
    *
    * FIXME: In desktop, this function may work incorrectly.
-   *  Issue: https://github.com/Telegram-Web-Apps/twa/issues/7
+   *  Issue: https://github.com/Telegram-Web-Apps/twa.js/issues/7
    * @param params - popup parameters.
    * @throws {Error} Popup is already opened.
    */

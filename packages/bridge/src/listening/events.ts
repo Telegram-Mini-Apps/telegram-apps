@@ -5,7 +5,7 @@ import type {
   InvoiceClosedPayload,
   PopupClosedPayload, QrTextReceivedPayload,
   ThemeChangedPayload, ViewportChangedPayload,
-} from './payloads';
+} from './payloads.js';
 
 /**
  * Map where key is known event name, and value is its listener.

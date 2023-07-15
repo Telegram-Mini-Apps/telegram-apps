@@ -12,7 +12,7 @@ import {
   ThemeParams,
   Viewport,
   WebApp,
-} from '../components';
+} from '../components/index.js';
 
 export interface InitResult {
   backButton: BackButton;

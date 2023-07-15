@@ -1,3 +1,3 @@
-export * from './types';
-export * from './useThemeParams';
-export * from './withThemeParams';
+export * from './types.js';
+export * from './useThemeParams.js';
+export * from './withThemeParams.js';

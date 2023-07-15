@@ -1,8 +1,8 @@
 import { EventEmitter } from '@twa.js/utils';
 import type { BridgeEventListener } from '@twa.js/bridge';
 
-import type { ViewportEventsMap } from './events';
-import type { BridgeLike } from '../../types';
+import type { ViewportEventsMap } from './events.js';
+import type { BridgeLike } from '../../types.js';
 
 export interface RequestViewportResult {
   height: number;
@@ -29,7 +29,7 @@ export class Viewport {
    * FIXME: Be careful using this function in desktop version of Telegram as
    *  long as method web_app_request_viewport does not work on `tdesktop`
    *  and `macos` platforms.
-   * @see Issue: https://github.com/Telegram-Web-Apps/twa/issues/5
+   * @see Issue: https://github.com/Telegram-Web-Apps/twa.js/issues/5
    * @param bridge - bridge instance.
    */
   static request(bridge: BridgeLike): Promise<RequestViewportResult> {

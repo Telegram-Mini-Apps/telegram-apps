@@ -1,6 +1,6 @@
-import { useComponent } from '../../provider';
-import { useEventsTracking } from '../hooks';
-import type { ThemeParams } from './types';
+import { useComponent } from '../../provider/index.js';
+import { useEventsTracking } from '../hooks.js';
+import type { ThemeParams } from './types.js';
 
 /**
  * Returns ThemeParams component instance.

@@ -7,8 +7,8 @@ import React, {
 } from 'react';
 import { init, type InitOptions } from '@twa.js/sdk';
 
-import { sdkContext } from './context';
-import type { SDKComponents, SDKContext } from './types';
+import { sdkContext } from './context.js';
+import type { SDKComponents, SDKContext } from './types.js';
 
 export type SDKInitOptions = InitOptions;
 

@@ -1,12 +1,12 @@
-import { isRecord } from '../validation';
-import { isRGB, RGB } from '../colors';
+import { isRecord } from '../validation.js';
+import { isRGB, RGB } from '../colors.js';
 import {
   type NonOptionalField,
   type OptionalField,
   type Parser,
   type Schema,
   schemaToParsers,
-} from './shared';
+} from './shared.js';
 
 /**
  * Information about types, known by JSON parser. Key is type name and value

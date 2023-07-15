@@ -1,7 +1,7 @@
 import React, { type ComponentType } from 'react';
 
-import { useQRScanner } from './useQRScanner';
-import type { QRScanner } from './types';
+import { useQRScanner } from './useQRScanner.js';
+import type { QRScanner } from './types.js';
 
 /**
  * HOC which passes QRScanner SDK component to wrapped React component.

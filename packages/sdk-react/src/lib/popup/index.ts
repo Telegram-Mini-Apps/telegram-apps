@@ -1,3 +1,3 @@
-export * from './types';
-export * from './usePopup';
-export * from './withPopup';
+export * from './types.js';
+export * from './usePopup.js';
+export * from './withPopup.js';

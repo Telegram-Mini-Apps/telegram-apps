@@ -1,6 +1,7 @@
 import React, { type ComponentType } from 'react';
-import type { SDKContext } from './types';
-import { useSDK } from './hooks';
+
+import type { SDKContext } from './types.js';
+import { useSDK } from './hooks.js';
 
 /**
  * HOC which passes SDK context to wrapped React component.

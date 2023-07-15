@@ -1,7 +1,7 @@
 import { EventEmitter } from '@twa.js/utils';
 
-import type { ClosingConfirmationEventsMap } from './events';
-import type { BridgeLike } from '../../types';
+import type { ClosingConfirmationEventsMap } from './events.js';
+import type { BridgeLike } from '../../types.js';
 
 /**
  * Component responsible for controlling current closing confirmation

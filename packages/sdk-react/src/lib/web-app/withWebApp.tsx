@@ -1,7 +1,7 @@
 import React, { type ComponentType } from 'react';
 
-import { useWebApp } from './useWebApp';
-import type { WebApp } from './types';
+import { useWebApp } from './useWebApp.js';
+import type { WebApp } from './types.js';
 
 /**
  * HOC which passes WebApp SDK component to wrapped React component.

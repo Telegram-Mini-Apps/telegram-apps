@@ -1,7 +1,7 @@
 import React, { type ComponentType } from 'react';
 
-import { useMainButton } from './useMainButton';
-import type { MainButton } from './types';
+import { useMainButton } from './useMainButton.js';
+import type { MainButton } from './types.js';
 
 /**
  * HOC which passes MainButton SDK component to wrapped React component.

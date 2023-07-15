@@ -1,7 +1,7 @@
 import React, { type ComponentType } from 'react';
 
-import { useBridge } from './useBridge';
-import type { Bridge } from './types';
+import { useBridge } from './useBridge.js';
+import type { Bridge } from './types.js';
 
 /**
  * HOC which passes Bridge SDK component to wrapped React component.

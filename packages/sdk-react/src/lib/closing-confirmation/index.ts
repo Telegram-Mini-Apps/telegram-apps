@@ -1,3 +1,3 @@
-export * from './types';
-export * from './useClosingConfirmation';
-export * from './withClosingConfirmation';
+export * from './types.js';
+export * from './useClosingConfirmation.js';
+export * from './withClosingConfirmation.js';

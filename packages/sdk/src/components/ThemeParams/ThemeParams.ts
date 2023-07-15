@@ -1,13 +1,13 @@
 import { type RGB, EventEmitter } from '@twa.js/utils';
 import { type BridgeEventListener } from '@twa.js/bridge';
 
-import type { ThemeParamsEventsMap } from './events';
-import type { BridgeLike } from '../../types';
+import type { ThemeParamsEventsMap } from './events.js';
+import type { BridgeLike } from '../../types.js';
 import {
   isColorDark,
   parseThemeParams,
   type ThemeParams as TwaThemeParams,
-} from '../../utils';
+} from '../../utils/index.js';
 
 /**
  * Contains information about currently used theme by application.

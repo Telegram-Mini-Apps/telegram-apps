@@ -1,6 +1,6 @@
-import { useComponent } from '../../provider';
-import { useEventsTracking } from '../hooks';
-import type { Popup } from './types';
+import { useComponent } from '../../provider/index.js';
+import { useEventsTracking } from '../hooks.js';
+import type { Popup } from './types.js';
 
 /**
  * Returns Popup component instance.

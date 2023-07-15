@@ -1,1 +1,1 @@
-export * from './InitData';
+export * from './InitData.js';

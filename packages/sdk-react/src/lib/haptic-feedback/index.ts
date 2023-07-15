@@ -1,3 +1,3 @@
-export * from './types';
-export * from './useHapticFeedback';
-export * from './withHapticFeedback';
+export * from './types.js';
+export * from './useHapticFeedback.js';
+export * from './withHapticFeedback.js';

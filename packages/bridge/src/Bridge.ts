@@ -7,17 +7,17 @@ import {
   parseQrTextReceivedPayload,
   parseThemeChangedPayload,
   parseViewportChangedPayload,
-} from './parsing';
+} from './parsing.js';
 import {
   type PostEmptyEventName,
   type PostEventName,
   type PostEventParams,
   type PostNonEmptyEventName,
   postEvent,
-} from './posting';
-import { createEventsObserver } from './events-observer';
-import type { BridgeEventName, BridgeEventsMap } from './listening';
-import { defineEventsReceiver } from './events-receiver';
+} from './posting/index.js';
+import { createEventsObserver } from './events-observer.js';
+import type { BridgeEventName, BridgeEventsMap } from './listening/index.js';
+import { defineEventsReceiver } from './events-receiver.js';
 
 export interface BridgeProps {
   /**
@@ -104,7 +104,7 @@ export class Bridge {
 
         case 'popup_closed':
           // FIXME: Payloads are different on different platforms.
-          //  Issue: https://github.com/Telegram-Web-Apps/twa/issues/2
+          //  Issue: https://github.com/Telegram-Web-Apps/twa.js/issues/2
           if (
             // Sent on desktop.
             data === undefined

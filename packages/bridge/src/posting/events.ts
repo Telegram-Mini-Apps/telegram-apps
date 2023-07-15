@@ -1,11 +1,11 @@
 import type { IsNever } from '@twa.js/utils';
 
-import type { PopupParams } from './popup';
+import type { PopupParams } from './popup.js';
 import type {
   ImpactHapticFeedback,
   NotificationHapticFeedback,
   SelectionHapticFeedback,
-} from './haptic';
+} from './haptic.js';
 
 /**
  * Color key which could be used tot update header color.

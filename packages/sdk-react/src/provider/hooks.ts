@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
-import { sdkContext } from './context';
-import type { SDKComponent, SDKComponentName } from './types';
+import { sdkContext } from './context.js';
+import type { SDKComponent, SDKComponentName } from './types.js';
 
 /**
  * Returns current SDK information.

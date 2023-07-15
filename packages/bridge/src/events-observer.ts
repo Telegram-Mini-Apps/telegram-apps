@@ -1,5 +1,6 @@
 import { EventEmitter, createJsonParser } from '@twa.js/utils';
-import type { ViewportChangedPayload } from './listening';
+
+import type { ViewportChangedPayload } from './listening/index.js';
 
 export interface EventsObserverEventsMap {
   /**
@@ -47,7 +48,7 @@ export function createEventsObserver(): EventsObserver {
   // Desktop version of Telegram is sometimes not sending the viewport_changed
   // event. For example, when main button is shown. That's why we should
   // add our own listener to make sure, viewport information is always fresh.
-  // Issue: https://github.com/Telegram-Web-Apps/twa/issues/10
+  // Issue: https://github.com/Telegram-Web-Apps/twa.js/issues/10
   window.addEventListener('resize', () => {
     const payload: ViewportChangedPayload = {
       width: window.innerWidth,

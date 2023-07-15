@@ -1,2 +1,2 @@
-export * from './events';
-export * from './Viewport';
+export * from './events.js';
+export * from './Viewport.js';

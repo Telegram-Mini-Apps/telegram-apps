@@ -3,7 +3,8 @@ import {
   parseJsonValueAsNumber,
   parseJsonValueAsString,
 } from '@twa.js/utils';
-import type { ViewportChangedPayload } from './listening';
+
+import type { ViewportChangedPayload } from './listening/index.js';
 
 /**
  * Parses incoming value as ThemeChangedPayload.

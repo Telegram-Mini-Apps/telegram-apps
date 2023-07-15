@@ -1,5 +1,6 @@
 import { compareVersions, type Version } from '@twa.js/utils';
-import type { PostEventName } from './posting';
+
+import type { PostEventName } from './posting/index.js';
 
 /**
  * Returns true in case, specified method is supported in passed version.
