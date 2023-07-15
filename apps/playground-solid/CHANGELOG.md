@@ -1,5 +1,15 @@
 # playground
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [0f69488]
+  - @twa.js/init-data@0.2.7
+  - @twa.js/bridge@0.3.8
+  - @twa.js/utils@0.2.11
+  - @twa.js/sdk@0.4.4
+
 ## 1.0.2
 
 ### Patch Changes

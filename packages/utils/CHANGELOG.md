@@ -1,5 +1,11 @@
 # @twa.js/utils
 
+## 0.2.11
+
+### Patch Changes
+
+- 0f69488: Add exports property in package json.
+
 ## 0.2.10
 
 ### Patch Changes
