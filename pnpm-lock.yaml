@@ -148,9 +148,25 @@ importers:
       '@twa.js/utils':
         specifier: workspace:*
         version: link:../utils
+    devDependencies:
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+
+  packages/init-data-node:
+    dependencies:
+      '@twa.js/init-data':
+        specifier: workspace:*
+        version: link:../init-data
+      '@twa.js/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@types/node':
-        specifier: ^18.11.19
-        version: 18.11.19
+        specifier: ^12.0.0
+        version: 12.20.55
     devDependencies:
       eslint-config-custom:
         specifier: workspace:*
@@ -1919,10 +1935,10 @@ packages:
 
   /@types/node@12.20.55:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
-    dev: true
 
   /@types/node@18.11.19:
     resolution: {integrity: sha512-YUgMWAQBWLObABqrvx8qKO1enAvBUdjZOAWQ5grBAkp5LQv45jBvYKZ3oFS9iKRCQyFjqw6iuEa1vmFqtxYLZw==}
+    dev: true
 
   /@types/normalize-package-data@2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
