@@ -1,5 +1,15 @@
 # @twa.js/sdk
 
+## 0.4.4
+
+### Patch Changes
+
+- 0f69488: Add exports property in package json.
+- Updated dependencies [0f69488]
+  - @twa.js/init-data@0.2.7
+  - @twa.js/bridge@0.3.8
+  - @twa.js/utils@0.2.11
+
 ## 0.4.3
 
 ### Patch Changes
