@@ -1,6 +1,6 @@
 {
   "name": "playground",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Application to try packages functionality.",
   "private": true,
   "type": "module",

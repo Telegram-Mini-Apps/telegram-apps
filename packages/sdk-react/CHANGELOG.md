@@ -1,5 +1,13 @@
 # @twa.js/sdk-react
 
+## 0.3.5
+
+### Patch Changes
+
+- 684f0c0: Make init data optional launch parameter. This parameter could be missing in case, application was launched via inline keyboard button.
+- Updated dependencies [684f0c0]
+  - @twa.js/sdk@0.4.5
+
 ## 0.3.4
 
 ### Patch Changes
