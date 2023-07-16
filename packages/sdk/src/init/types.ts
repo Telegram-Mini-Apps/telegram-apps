@@ -19,7 +19,7 @@ export interface InitResult {
   bridge: Bridge;
   closingConfirmation: ClosingConfirmation;
   haptic: HapticFeedback;
-  initData: InitData;
+  initData?: InitData;
   layout: Layout;
   mainButton: MainButton;
   popup: Popup;

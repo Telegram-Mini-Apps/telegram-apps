@@ -4,6 +4,6 @@ import type { InitData } from './types.js';
 /**
  * Returns InitData component instance.
  */
-export function useInitData(): InitData {
-  return useComponent('initData');
+export function useInitData(): InitData | null {
+  return useComponent('initData') || null;
 }
