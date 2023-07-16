@@ -1,5 +1,11 @@
 # @twa.js/init-data-node
 
+## 0.0.4
+
+### Patch Changes
+
+- 5269b53: Allow any version of Node types to be used.
+
 ## 0.0.3
 
 ### Patch Changes
