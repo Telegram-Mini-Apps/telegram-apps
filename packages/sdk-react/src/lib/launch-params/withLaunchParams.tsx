@@ -1,12 +1,7 @@
-import React, { type ComponentType, useMemo } from 'react';
-import { type LaunchParams, retrieveLaunchParams } from '@twa.js/sdk';
+import React, { type ComponentType } from 'react';
 
-/**
- * The hook which returns launch parameters initially passed to Web App.
- */
-export function useLaunchParams(): LaunchParams {
-  return useMemo(retrieveLaunchParams, []);
-}
+import type { LaunchParams } from './types.js';
+import { useLaunchParams } from './useLaunchParams.js';
 
 /**
  * HOC which passes launch parameters to wrapped React component.
@@ -21,5 +16,3 @@ export function withLaunchParams<P extends { launchParams?: LaunchParams }>(
     return <Component {...p} />;
   };
 }
-
-export { LaunchParams };
