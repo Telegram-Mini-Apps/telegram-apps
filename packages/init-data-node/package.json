@@ -49,21 +49,13 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
-    "@twa.js/utils": "workspace:*",
     "@twa.js/init-data": "workspace:*"
   },
   "devDependencies": {
+    "@types/node": "^16.0.0",
     "tsconfig": "workspace:*",
     "eslint-config-custom": "workspace:*",
     "jest-config-custom": "workspace:*"
-  },
-  "peerDependencies": {
-    "@types/node": "*"
-  },
-  "peerDependenciesMeta": {
-    "@types/node": {
-      "optional": true
-    }
   },
   "publishConfig": {
     "access": "public"
