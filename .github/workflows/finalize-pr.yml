@@ -9,7 +9,7 @@ on:
 
 jobs:
   validate:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && !startsWith(github.head_ref, 'changeset-release/')
     name: Validate and create Pull Request
     runs-on: ubuntu-latest
     steps:
