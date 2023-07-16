@@ -58,7 +58,7 @@
     "jest-config-custom": "workspace:*"
   },
   "peerDependencies": {
-    "@types/node": "^12.0.0"
+    "@types/node": "*"
   },
   "peerDependenciesMeta": {
     "@types/node": {
