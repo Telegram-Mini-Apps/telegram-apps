@@ -1,1 +1,1 @@
-export { MainButton } from '@twa.js/sdk';
+export type { MainButton } from '@twa.js/sdk';

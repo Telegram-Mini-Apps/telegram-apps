@@ -1,1 +1,1 @@
-export { Layout } from '@twa.js/sdk';
+export type { Layout } from '@twa.js/sdk';

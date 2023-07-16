@@ -171,7 +171,7 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@types/node':
-        specifier: ^12.0.0
+        specifier: '*'
         version: 12.20.55
     devDependencies:
       eslint-config-custom:
