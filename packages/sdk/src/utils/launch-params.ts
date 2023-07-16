@@ -7,14 +7,16 @@ import { type Platform } from '../types.js';
 
 export interface LaunchParams {
   version: string;
-  initData: InitData;
+  initData?: InitData;
   platform: Platform;
   themeParams: ThemeParams;
 }
 
 const parseLaunchParams = createSearchParamsParser({
   version: { type: (value) => value, from: 'tgWebAppVersion' },
-  initData: { type: parseInitData, from: 'tgWebAppData' },
+  // This property is optional as long as it can be missing in case, application was
+  // launched via Inline Keyboard Button.
+  initData: { type: parseInitData, from: 'tgWebAppData', optional: true },
   platform: { type: (value) => value, from: 'tgWebAppPlatform' },
   themeParams: { type: parseThemeParams, from: 'tgWebAppThemeParams' },
 });

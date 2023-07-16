@@ -23,9 +23,9 @@ import { retrieveLaunchParams } from '../utils/index.js';
 export async function init(options: InitOptions = {}): Promise<InitResult> {
   const { checkCompat = true, acceptScrollbarStyle = true } = options;
 
-  // Get Web App data.
+  // Get Web App launch params.
   const {
-    initData: { authDate, hash, ...restInitData },
+    initData,
     version,
     platform,
     themeParams,
@@ -71,12 +71,11 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
       isExpanded: true,
     };
 
-  return {
+  const result: InitResult = {
     backButton: new BackButton(bridge, version),
     bridge: twaBridge,
     closingConfirmation: new ClosingConfirmation(bridge),
     haptic: new HapticFeedback(bridge, version),
-    initData: new InitData(authDate, hash, restInitData),
     layout: new Layout(bridge, version, 'bg_color', backgroundColor),
     mainButton: new MainButton(bridge, buttonColor, buttonTextColor),
     popup: new Popup(bridge, version),
@@ -85,4 +84,11 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
     viewport: Viewport.synced(bridge, height, width, isStateStable ? height : 0, isExpanded),
     webApp: new WebApp(bridge, version, platform),
   };
+
+  if (initData !== undefined) {
+    const { authDate, hash, ...restInitData } = initData;
+    result.initData = new InitData(authDate, hash, restInitData);
+  }
+
+  return result;
 }
