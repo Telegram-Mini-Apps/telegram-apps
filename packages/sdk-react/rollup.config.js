@@ -24,7 +24,7 @@ export default [
     input,
     output: {
       file: pkg.browser,
-      format: 'umd',
+      format: 'iife',
       name: 'TwaSDKReact',
       globals: { react: 'React' },
       sourcemap: true,
