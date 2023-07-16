@@ -1,5 +1,11 @@
 # @twa.js/init-data-node
 
+## 0.0.5
+
+### Patch Changes
+
+- 5451ecd: Move @types/node to dev dependencies. Remove @twa.js/utils dep
+
 ## 0.0.4
 
 ### Patch Changes
