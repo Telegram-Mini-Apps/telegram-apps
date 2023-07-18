@@ -1,5 +1,11 @@
 # @twa.js/bridge
 
+## 0.3.9
+
+### Patch Changes
+
+- d0dd3ad: Fix bug related to ios and macOS environment detection. We are now looking at window.TelegramWebviewProxy.postEvent function to send an event.
+
 ## 0.3.8
 
 ### Patch Changes
