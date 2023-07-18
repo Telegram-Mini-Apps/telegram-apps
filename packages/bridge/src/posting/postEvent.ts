@@ -3,7 +3,11 @@ import type {
   PostEventParams,
   PostNonEmptyEventName,
 } from './events.js';
-import { hasInvoke, hasNotify, hasExternal, isIframe } from '../env.js';
+import {
+  isIframe,
+  hasExternalNotify,
+  hasWebviewProxy,
+} from '../env.js';
 
 interface PostEventOptions {
   /**
@@ -77,17 +81,16 @@ export function postEvent(
     return;
   }
 
-  // Telegram for Windows Phone, iOS or Android.
-  if (hasExternal(window)) {
-    if (hasNotify(window.external)) {
-      window.external.notify(JSON.stringify({ eventType, eventData }));
-      return;
-    }
+  // Telegram for Windows Phone or Android.
+  if (hasExternalNotify(window)) {
+    window.external.notify(JSON.stringify({ eventType, eventData }));
+    return;
+  }
 
-    if (hasInvoke(window.external)) {
-      window.external.invoke(JSON.stringify([eventType, eventData]));
-      return;
-    }
+  // Telegram for iOS and macOS.
+  if (hasWebviewProxy(window)) {
+    window.TelegramWebviewProxy.postEvent(eventType, JSON.stringify(eventData));
+    return;
   }
 
   // Otherwise current environment is unknown, and we are not able to send
