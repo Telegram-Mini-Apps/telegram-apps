@@ -1,42 +1,29 @@
-import { hasExternal, hasNotify, hasInvoke, isIframe } from '../src';
+import { hasExternalNotify, hasWebviewProxy, isIframe } from '../src';
 
 const windowSpy = jest.spyOn(window, 'window', 'get');
+const emptyFunction = () => {
+};
 
 afterEach(() => {
   windowSpy.mockReset();
 });
 
 describe('env.ts', () => {
-  describe('hasExternal', () => {
-    it('should return true if passed object contains object '
-      + 'property "external". Otherwise, false.', () => {
-      expect(hasExternal({ external: {} })).toBe(true);
-      expect(hasExternal({ external: [] })).toBe(false);
-      expect(hasExternal({})).toBe(false);
+  describe('hasExternalNotify', () => {
+    it('should return true if passed object contains path property "external.notify" and "notify" is a function property.', () => {
+      expect(hasExternalNotify({})).toBe(false);
+      expect(hasExternalNotify({ external: {} })).toBe(false);
+      expect(hasExternalNotify({ external: { notify: [] } })).toBe(false);
+      expect(hasExternalNotify({ external: { notify: emptyFunction } })).toBe(true);
     });
   });
 
-  describe('hasNotify', () => {
-    it('should return true if passed object contains function '
-      + 'property "notify". Otherwise, false.', () => {
-      expect(hasNotify({
-        notify: () => {
-        },
-      })).toBe(true);
-      expect(hasNotify({ notify: {} })).toBe(false);
-      expect(hasNotify({})).toBe(false);
-    });
-  });
-
-  describe('hasInvoke', () => {
-    it('should return true if passed object contains function '
-      + 'property "invoke". Otherwise, false.', () => {
-      expect(hasInvoke({
-        invoke: () => {
-        },
-      })).toBe(true);
-      expect(hasInvoke({ invoke: {} })).toBe(false);
-      expect(hasInvoke({})).toBe(false);
+  describe('hasWebviewProxy', () => {
+    it('should return true if passed object contains path property "TelegramWebviewProxy.postEvent" and "postEvent" is a function property.', () => {
+      expect(hasWebviewProxy({})).toBe(false);
+      expect(hasWebviewProxy({ TelegramWebviewProxy: {} })).toBe(false);
+      expect(hasWebviewProxy({ TelegramWebviewProxy: { postEvent: [] } })).toBe(false);
+      expect(hasWebviewProxy({ TelegramWebviewProxy: { postEvent: emptyFunction } })).toBe(true);
     });
   });
 

@@ -66,19 +66,17 @@ describe('posting', () => {
         }), 'abc');
       });
 
-      it('should call "window.external.invoke" in case it exists. '
-        + 'Passed value is array, converted to string. This array should '
-        + 'contain event name and data.', () => {
+      it('should call "window.TelegramWebviewProxy.postEvent" in case this path exists. Function accepts event name (string) as the first argument and event data (object converted to string) as the second one.', () => {
         const spy = jest.fn();
         windowSpy.mockImplementation(() => ({
-          external: { invoke: spy },
+          TelegramWebviewProxy: { postEvent: spy },
         }) as any);
 
         // Without parameters.
         expect(spy).toHaveBeenCalledTimes(0);
         postEvent('web_app_close');
         expect(spy).toHaveBeenCalledTimes(1);
-        expect(spy).toHaveBeenCalledWith('["web_app_close",null]');
+        expect(spy).toHaveBeenCalledWith('web_app_close', undefined);
 
         spy.mockClear();
 
@@ -86,7 +84,7 @@ describe('posting', () => {
         expect(spy).toHaveBeenCalledTimes(0);
         postEvent('web_app_set_header_color', { color_key: 'bg_color' });
         expect(spy).toHaveBeenCalledTimes(1);
-        expect(spy).toHaveBeenCalledWith('["web_app_set_header_color",{"color_key":"bg_color"}]');
+        expect(spy).toHaveBeenCalledWith('web_app_set_header_color', '{"color_key":"bg_color"}');
       });
 
       it('should call "window.external.notify" in case it exists. '
