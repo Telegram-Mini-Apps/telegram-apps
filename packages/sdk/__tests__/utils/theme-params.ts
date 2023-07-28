@@ -1,8 +1,8 @@
-import { parseThemeParams } from '../../src/utils';
+import { themeParams } from '../../src/utils';
 
 describe('utils', () => {
   describe('theme-params.ts', () => {
-    describe('parseThemeParams', () => {
+    describe('themeParams', () => {
       const fields = `"${[
         'backgroundColor', 'buttonColor', 'buttonTextColor', 'hintColor',
         'linkColor', 'textColor',
@@ -20,7 +20,7 @@ describe('utils', () => {
         };
         const value2 = { ...value1, secondary_bg_color: '#ffaabb' };
 
-        expect(parseThemeParams(value1)).toStrictEqual({
+        expect(themeParams(value1)).toStrictEqual({
           backgroundColor: '#ffaabb',
           buttonColor: '#233312',
           buttonTextColor: '#ddaa21',
@@ -28,7 +28,7 @@ describe('utils', () => {
           linkColor: '#22314a',
           textColor: '#31344a',
         });
-        expect(parseThemeParams(value2)).toStrictEqual({
+        expect(themeParams(value2)).toStrictEqual({
           backgroundColor: '#ffaabb',
           buttonColor: '#233312',
           buttonTextColor: '#ddaa21',
@@ -41,7 +41,7 @@ describe('utils', () => {
 
       it('should throw an error in case, passed value does not '
         + 'satisfy schema', () => {
-        expect(() => parseThemeParams({
+        expect(() => themeParams({
           bg_color: 'I am wrong!',
           button_color: '#233312',
           button_text_color: '#ddaa21',

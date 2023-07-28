@@ -4,6 +4,9 @@ import tsConfig from 'jest-config-custom/ts';
 export default {
   ...tsConfig,
   testEnvironment: 'jsdom',
+  testPathIgnorePatterns: [
+    '__utils__',
+  ],
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.ts',

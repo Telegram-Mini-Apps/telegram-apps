@@ -1,54 +1,54 @@
 import {
-  parseJsonValueAsString,
-  parseJsonValueAsBoolean,
-  parseJsonValueAsNumber,
-  parseJsonValueAsRgb, createJsonParser,
-} from '../../src/index.js';
+  string,
+  boolean,
+  number,
+  rgb, json,
+} from '../../src';
 
 describe('parsing', () => {
   describe('json.ts', () => {
     describe('parseJsonValueAsString', () => {
       it('should return value in case, it has type string', () => {
-        expect(parseJsonValueAsString('abc')).toBe('abc');
+        expect(string('abc')).toBe('abc');
       });
 
       it('should throw an error in case, passed value is not of type string', () => {
-        expect(() => parseJsonValueAsString(true)).toThrow();
-        expect(() => parseJsonValueAsString({})).toThrow();
+        expect(() => string(true)).toThrow();
+        expect(() => string({})).toThrow();
       });
     });
 
     describe('parseJsonValueAsBoolean', () => {
       it('should return value in case, it has type boolean', () => {
-        expect(parseJsonValueAsBoolean(true)).toBe(true);
-        expect(parseJsonValueAsBoolean(false)).toBe(false);
+        expect(boolean(true)).toBe(true);
+        expect(boolean(false)).toBe(false);
       });
 
       it('should throw an error in case, passed value is not of type boolean', () => {
-        expect(() => parseJsonValueAsBoolean('true')).toThrow();
-        expect(() => parseJsonValueAsBoolean({})).toThrow();
+        expect(() => boolean('true')).toThrow();
+        expect(() => boolean({})).toThrow();
       });
     });
 
     describe('parseJsonValueAsNumber', () => {
       it('should return value in case, it has type number', () => {
-        expect(parseJsonValueAsNumber(9992)).toBe(9992);
+        expect(number(9992)).toBe(9992);
       });
 
       it('should throw an error in case, passed value is not of type number', () => {
-        expect(() => parseJsonValueAsNumber(true)).toThrow();
-        expect(() => parseJsonValueAsNumber({})).toThrow();
+        expect(() => number(true)).toThrow();
+        expect(() => number({})).toThrow();
       });
     });
 
     describe('parseJsonValueAsRgb', () => {
       it('should return value in case, it has #RRGGBB format', () => {
-        expect(parseJsonValueAsRgb('#992211')).toBe('#992211');
+        expect(rgb('#992211')).toBe('#992211');
       });
 
       it('should throw an error in case, passed value is not of type string or does not have #RRGGBB format', () => {
-        expect(() => parseJsonValueAsRgb(true)).toThrow();
-        expect(() => parseJsonValueAsRgb('#22ffA')).toThrow();
+        expect(() => rgb(true)).toThrow();
+        expect(() => rgb('#22ffA')).toThrow();
       });
     });
 
@@ -56,7 +56,7 @@ describe('parsing', () => {
       describe('returned function', () => {
         it('should throw an error in case, passed value is not JSON '
           + 'object or not JSON object converted to string', () => {
-          const parser = createJsonParser({});
+          const parser = json({});
           expect(() => parser('')).toThrow('Value is not JSON object converted to string.');
           expect(() => parser(true)).toThrow('Value is not JSON object.');
           expect(() => parser('{}')).not.toThrow();
@@ -65,13 +65,13 @@ describe('parsing', () => {
 
         it('should throw an error in case, passed value does not '
           + 'contain required field presented in schema', () => {
-          const parser = createJsonParser({ prop: 'string' });
+          const parser = json({ prop: 'string' });
           expect(() => parser({})).toThrowError('Unable to parse field "prop"');
         });
 
         it('should not throw an error in case, passed value '
           + 'does not contain optional field presented in schema', () => {
-          const parser = createJsonParser({
+          const parser = json({
             prop: {
               type: 'string',
               optional: true,
@@ -83,13 +83,13 @@ describe('parsing', () => {
 
         it('should throw an error in case, passed value contains '
           + 'field of different type presented in schema', () => {
-          const parser = createJsonParser({ prop: 'string' });
+          const parser = json({ prop: 'string' });
           expect(() => parser({ prop: 123 }))
             .toThrowError('Unable to parse field "prop"');
         });
 
         it('should correctly parse built-in types', () => {
-          const parser = createJsonParser({
+          const parser = json({
             bool: 'boolean',
             string: 'string',
             number: 'number',

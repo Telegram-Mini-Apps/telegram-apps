@@ -1,51 +1,32 @@
-import { createJsonParser, type RGB } from '@twa.js/utils';
+import { json, type RGB } from '@twa.js/utils';
 
 /**
  * Describes theme parameters which are passed to WebApp.
  * @see https://core.telegram.org/api/bots/webapps#theme-parameters
  */
 export interface ThemeParams {
+  backgroundColor?: RGB;
+  buttonColor?: RGB;
+  buttonTextColor?: RGB;
+  hintColor?: RGB;
+  linkColor?: RGB;
   /**
-   * Background color.
-   */
-  backgroundColor: RGB;
-  /**
-   * Button color.
-   */
-  buttonColor: RGB;
-  /**
-   * Button text color.
-   */
-  buttonTextColor: RGB;
-  /**
-   * Hint color.
-   */
-  hintColor: RGB;
-  /**
-   * Link color.
-   */
-  linkColor: RGB;
-  /**
-   * Secondary background color.
    * @since Web App version 6.1+
    */
   secondaryBackgroundColor?: RGB;
-  /**
-   * Text color.
-   */
-  textColor: RGB;
+  textColor?: RGB;
 }
 
 /**
  * Parses value as theme params.
  */
-export const parseThemeParams = createJsonParser({
-  backgroundColor: { type: 'rgb', from: 'bg_color' },
-  buttonColor: { type: 'rgb', from: 'button_color' },
-  buttonTextColor: { type: 'rgb', from: 'button_text_color' },
-  hintColor: { type: 'rgb', from: 'hint_color' },
-  linkColor: { type: 'rgb', from: 'link_color' },
-  textColor: { type: 'rgb', from: 'text_color' },
+export const themeParams = json({
+  backgroundColor: { type: 'rgb', from: 'bg_color', optional: true },
+  buttonColor: { type: 'rgb', from: 'button_color', optional: true },
+  buttonTextColor: { type: 'rgb', from: 'button_text_color', optional: true },
+  hintColor: { type: 'rgb', from: 'hint_color', optional: true },
+  linkColor: { type: 'rgb', from: 'link_color', optional: true },
+  textColor: { type: 'rgb', from: 'text_color', optional: true },
   secondaryBackgroundColor: {
     type: 'rgb',
     from: 'secondary_bg_color',

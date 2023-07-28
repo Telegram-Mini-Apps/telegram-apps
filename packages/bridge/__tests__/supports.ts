@@ -1,18 +1,18 @@
-import { supports, PostEventName } from '../src';
+import { supports, MethodName } from '../src/index.js';
 
 describe('supports.ts', () => {
   describe('supports', () => {
-    const methods61: PostEventName[] = [
+    const methods61: MethodName[] = [
       'web_app_open_tg_link', 'web_app_open_invoice', 'web_app_setup_back_button',
       'web_app_set_background_color', 'web_app_set_header_color',
       'web_app_trigger_haptic_feedback',
     ];
-    const methods62: PostEventName[] = ['web_app_open_popup'];
-    const methods64: PostEventName[] = [
+    const methods62: MethodName[] = ['web_app_open_popup'];
+    const methods64: MethodName[] = [
       'web_app_read_text_from_clipboard', 'web_app_close_scan_qr_popup',
       'web_app_close_scan_qr_popup',
     ];
-    const methodsAny: PostEventName[] = [
+    const methodsAny: MethodName[] = [
       'iframe_ready', 'web_app_close', 'web_app_data_send', 'web_app_expand',
       'web_app_open_link', 'web_app_ready', 'web_app_request_theme',
       'web_app_request_viewport', 'web_app_setup_main_button',

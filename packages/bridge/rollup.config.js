@@ -18,7 +18,7 @@ export default [
       { file: pkg.module, format: 'esm', sourcemap: true },
     ],
     external: ['@twa.js/utils'],
-    plugins: [typescript(), terser()],
+    plugins: [typescript({ tsconfig: './tsconfig.build.json' }), terser()],
   }),
 
   // Browser.
@@ -30,7 +30,7 @@ export default [
       name: 'TwaBridge',
       sourcemap: true,
     },
-    plugins: [typescript(), nodeResolve(), terser()],
+    plugins: [typescript({ tsconfig: './tsconfig.build.json' }), nodeResolve(), terser()],
   }),
 
   // Types.
@@ -39,6 +39,7 @@ export default [
     output: { file: pkg.types },
     external: ['@twa.js/utils'],
     plugins: [typescript({
+      tsconfig: './tsconfig.build.json',
       compilerOptions: {
         declaration: true,
         emitDeclarationOnly: true,

@@ -1,26 +1,9 @@
-/**
- * Information about BackButton supported events.
- */
-export interface BackButtonEventsMap {
-  /**
-   * Back button clicked.
-   */
+export interface BackButtonEvents {
   click: () => void;
-
-  /**
-   * Visibility changed.
-   * @param visible - current visibility state.
-   */
-  isVisibleChanged: (visible: boolean) => void;
+  isVisibleChanged: (value: boolean) => void;
 }
 
-/**
- * Known BackButton event name.
- */
-export type BackButtonEventName = keyof BackButtonEventsMap;
+export type BackButtonEventName = keyof BackButtonEvents;
 
-/**
- * Listener for specified BackButton event.
- */
 export type BackButtonEventListener<E extends BackButtonEventName> =
-  BackButtonEventsMap[E];
+  BackButtonEvents[E];

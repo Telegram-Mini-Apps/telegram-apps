@@ -1,8 +1,8 @@
 /* eslint-disable no-empty */
-import { createSearchParamsParser } from '@twa.js/utils';
+import { searchParams } from '@twa.js/utils';
 import { parseInitData, type InitData } from '@twa.js/init-data';
 
-import { parseThemeParams, type ThemeParams } from './theme-params.js';
+import { themeParams, type ThemeParams } from './theme-params.js';
 import { type Platform } from '../types.js';
 
 export interface LaunchParams {
@@ -12,13 +12,13 @@ export interface LaunchParams {
   themeParams: ThemeParams;
 }
 
-const parseLaunchParams = createSearchParamsParser({
+const launchParams = searchParams({
   version: { type: (value) => value, from: 'tgWebAppVersion' },
   // This property is optional as long as it can be missing in case, application was
   // launched via Inline Keyboard Button.
   initData: { type: parseInitData, from: 'tgWebAppData', optional: true },
   platform: { type: (value) => value, from: 'tgWebAppPlatform' },
-  themeParams: { type: parseThemeParams, from: 'tgWebAppThemeParams' },
+  themeParams: { type: themeParams, from: 'tgWebAppThemeParams' },
 });
 
 /**
@@ -32,7 +32,7 @@ export function retrieveLaunchParams(): LaunchParams {
   // hash always contains required parameters.
   try {
     const initParams = window.location.hash.slice(1);
-    const webAppData = parseLaunchParams(initParams);
+    const webAppData = launchParams(initParams);
     sessionStorage.setItem(sessionStorageKey, initParams);
 
     return webAppData;
@@ -44,7 +44,7 @@ export function retrieveLaunchParams(): LaunchParams {
   // called again. As the result, current window location will lose Web App
   // data. To solve this problem, we could use session storage.
   try {
-    return parseLaunchParams(sessionStorage.getItem(sessionStorageKey) || '');
+    return launchParams(sessionStorage.getItem(sessionStorageKey) || '');
   } catch (e) {
   }
   throw new Error('Unable to extract launch params.');

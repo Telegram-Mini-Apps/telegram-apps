@@ -1,11 +1,9 @@
-import { Bridge, type BridgeProps as BridgeInitOptions } from '@twa.js/bridge';
-
-import {
+import type { postEvent } from '@twa.js/bridge';
+import type {
   BackButton,
-  ClosingConfirmation,
+  ClosingBehaviour,
   HapticFeedback,
   InitData,
-  Layout,
   MainButton,
   Popup,
   QRScanner,
@@ -16,20 +14,19 @@ import {
 
 export interface InitResult {
   backButton: BackButton;
-  bridge: Bridge;
-  closingConfirmation: ClosingConfirmation;
+  closingBehavior: ClosingBehaviour;
   haptic: HapticFeedback;
   initData?: InitData;
-  layout: Layout;
   mainButton: MainButton;
   popup: Popup;
+  postEvent: typeof postEvent;
   qrScanner: QRScanner;
   themeParams: ThemeParams;
   viewport: Viewport;
   webApp: WebApp;
 }
 
-export interface InitOptions extends Pick<BridgeInitOptions, 'targetOrigin'> {
+export interface InitOptions {
   /**
    * Should SDK accept scrollbar styles sent from the Telegram web application.
    * This option is only used in Web Z and Web K Telegram applications.
@@ -41,12 +38,6 @@ export interface InitOptions extends Pick<BridgeInitOptions, 'targetOrigin'> {
   acceptScrollbarStyle?: boolean;
 
   /**
-   * Enable debug mode.
-   * @default false
-   */
-  debug?: boolean;
-
-  /**
    * Should SDK throw an error in case, unsupported by current version of
    * Web App method was called. It is highly recommended not to disable this
    * feature as long as it helps developer to find issues related to usage
@@ -54,4 +45,16 @@ export interface InitOptions extends Pick<BridgeInitOptions, 'targetOrigin'> {
    * @default true
    */
   checkCompat?: boolean;
+
+  /**
+   * Enable debug mode.
+   * @default false
+   */
+  debug?: boolean;
+
+  /**
+   * Sets new targetOrigin, used by bridge's `postEvent` function.
+   * @see setTargetOrigin
+   */
+  targetOrigin?: string;
 }

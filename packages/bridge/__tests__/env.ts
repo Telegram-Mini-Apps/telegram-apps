@@ -1,11 +1,15 @@
-import { hasExternalNotify, hasWebviewProxy, isIframe } from '../src';
+import { hasExternalNotify, hasWebviewProxy, isIframe } from '../src/index.js';
 
 const windowSpy = jest.spyOn(window, 'window', 'get');
 const emptyFunction = () => {
 };
 
 afterEach(() => {
-  windowSpy.mockReset();
+  jest.resetAllMocks();
+});
+
+afterAll(() => {
+  jest.restoreAllMocks();
 });
 
 describe('env.ts', () => {

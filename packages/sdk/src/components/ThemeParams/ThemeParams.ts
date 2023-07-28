@@ -1,13 +1,19 @@
 import { type RGB, EventEmitter } from '@twa.js/utils';
-import { type BridgeEventListener } from '@twa.js/bridge';
+import { on, postEvent as bridgePostEvent } from '@twa.js/bridge';
 
-import type { ThemeParamsEventsMap } from './events.js';
-import type { BridgeLike } from '../../types.js';
+import type { ThemeParamsEvents } from './events.js';
+import type { PostEvent } from '../../types.js';
 import {
   isColorDark,
-  parseThemeParams,
+  themeParams,
   type ThemeParams as TwaThemeParams,
 } from '../../utils/index.js';
+
+type LocalThemeParams = {
+  [K in keyof TwaThemeParams]-?: undefined extends TwaThemeParams[K]
+    ? TwaThemeParams[K] | null
+    : TwaThemeParams[K];
+};
 
 /**
  * Contains information about currently used theme by application.
@@ -16,49 +22,49 @@ import {
 export class ThemeParams {
   /**
    * Requests fresh information about current theme.
-   * @param bridge - bridge instance.
+   * @param postEvent - method which allows posting Telegram event.
    */
-  static request(bridge: BridgeLike): Promise<TwaThemeParams> {
-    // Emit event to receive theme information.
-    bridge.postEvent('web_app_request_theme');
+  static request(postEvent: PostEvent = bridgePostEvent): Promise<TwaThemeParams> {
+    postEvent('web_app_request_theme');
 
     return new Promise((res) => {
-      const listener: BridgeEventListener<'theme_changed'> = (payload) => {
-        // Remove previously bound listener.
-        bridge.off('theme_changed', listener);
-
-        // Resolve result.
-        res(parseThemeParams(payload.theme_params));
-      };
-
-      // Add listener which will resolve promise in case, theme information
-      // was received.
-      bridge.on('theme_changed', listener);
+      const off = on('theme_changed', ({ theme_params }) => {
+        off();
+        res(themeParams(theme_params));
+      });
     });
   }
 
   /**
    * Returns instance of ThemeParams which is synchronized with external
    * environment.
-   * @param bridge - bridge instance.
-   * @param params - theme parameters.
+   * @param postEvent - method which allows posting Telegram event.
    */
-  static synced(bridge: BridgeLike, params: TwaThemeParams): ThemeParams {
+  static async synced(postEvent: PostEvent = bridgePostEvent): Promise<ThemeParams> {
+    const params = await this.request(postEvent);
     const tp = new ThemeParams(params);
 
-    bridge.on('theme_changed', (event) => {
-      tp.assignThemeParams(parseThemeParams(event.theme_params), true);
+    on('theme_changed', (event) => {
+      tp.assignThemeParams(themeParams(event.theme_params), true);
     });
 
     return tp;
   }
 
-  private readonly ee = new EventEmitter<ThemeParamsEventsMap>();
+  readonly #ee = new EventEmitter<ThemeParamsEvents>();
 
-  private params: TwaThemeParams;
+  readonly #params: LocalThemeParams = {
+    backgroundColor: null,
+    linkColor: null,
+    hintColor: null,
+    buttonColor: null,
+    buttonTextColor: null,
+    textColor: null,
+    secondaryBackgroundColor: null,
+  };
 
   constructor(params: TwaThemeParams) {
-    this.params = params;
+    this.assignThemeParams(params, false);
   }
 
   /**
@@ -90,41 +96,41 @@ export class ThemeParams {
         return;
       }
       // Reassign current theme color.
-      this.params[color] = value;
+      this.#params[color] = value === undefined ? null : value;
       updated = true;
     });
 
     if (updated && emit) {
-      this.ee.emit('change');
+      this.#ee.emit('changed');
     }
   }
 
   /**
    * Returns background color.
    */
-  get backgroundColor(): RGB {
-    return this.params.backgroundColor;
+  get backgroundColor(): RGB | null {
+    return this.#params.backgroundColor;
   }
 
   /**
    * Returns button color.
    */
-  get buttonColor(): RGB {
-    return this.params.buttonColor;
+  get buttonColor(): RGB | null {
+    return this.#params.buttonColor;
   }
 
   /**
    * Returns button text color.
    */
-  get buttonTextColor(): RGB {
-    return this.params.buttonTextColor;
+  get buttonTextColor(): RGB | null {
+    return this.#params.buttonTextColor;
   }
 
   /**
    * Returns hint color.
    */
-  get hintColor(): RGB {
-    return this.params.hintColor;
+  get hintColor(): RGB | null {
+    return this.#params.hintColor;
   }
 
   /**
@@ -132,40 +138,38 @@ export class ThemeParams {
    * value is calculated according to theme background color.
    */
   get isDark(): boolean {
-    const bgColor = this.backgroundColor;
-
-    return bgColor === null || isColorDark(bgColor);
+    return this.backgroundColor === null || isColorDark(this.backgroundColor);
   }
 
   /**
    * Returns current link color.
    */
-  get linkColor(): RGB {
-    return this.params.linkColor;
+  get linkColor(): RGB | null {
+    return this.#params.linkColor || null;
   }
 
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on = this.#ee.on.bind(this.#ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off = this.#ee.off.bind(this.#ee);
 
   /**
    * Returns secondary background color.
    * @since Web App version 6.1+
    */
   get secondaryBackgroundColor(): RGB | null {
-    return this.params.secondaryBackgroundColor || null;
+    return this.#params.secondaryBackgroundColor || null;
   }
 
   /**
    * Returns text color.
    */
-  get textColor(): RGB {
-    return this.params.textColor;
+  get textColor(): RGB | null {
+    return this.#params.textColor || null;
   }
 }

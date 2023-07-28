@@ -1,8 +1,8 @@
 import { EventEmitter } from '@twa.js/utils';
-import type { BridgeEventListener } from '@twa.js/bridge';
+import { on, postEvent as bridgePostEvent } from '@twa.js/bridge';
 
 import type { ViewportEventsMap } from './events.js';
-import type { BridgeLike } from '../../types.js';
+import { PostEvent } from '../../types.js';
 
 export interface RequestViewportResult {
   height: number;
@@ -27,74 +27,59 @@ export class Viewport {
   /**
    * Requests fresh information about current viewport.
    * FIXME: Be careful using this function in desktop version of Telegram as
-   *  long as method web_app_request_viewport does not work on `tdesktop`
-   *  and `macos` platforms.
+   *  long as method web_app_request_viewport does not work on `macos` platform.
    * @see Issue: https://github.com/Telegram-Web-Apps/twa.js/issues/5
-   * @param bridge - bridge instance.
+   * @param postEvent - method which allows posting Telegram event.
    */
-  static request(bridge: BridgeLike): Promise<RequestViewportResult> {
-    // Emit event to receive viewport information.
-    bridge.postEvent('web_app_request_viewport');
+  static request(postEvent: PostEvent = bridgePostEvent): Promise<RequestViewportResult> {
+    postEvent('web_app_request_viewport');
 
     return new Promise((res) => {
-      const listener: BridgeEventListener<'viewport_changed'> = (payload) => {
-        // Remove previously bound listener.
-        bridge.off('viewport_changed', listener);
-
-        // Resolve result.
+      const off = on('viewport_changed', (payload) => {
         const {
           height,
           width,
           is_expanded: isExpanded,
           is_state_stable: isStateStable,
         } = payload;
-        res({ height, isExpanded, width, isStateStable });
-      };
 
-      // Add listener which will resolve promise in case, viewport information
-      // was received.
-      bridge.on('viewport_changed', listener);
+        off();
+        res({ height, isExpanded, width, isStateStable });
+      });
     });
   }
+
+  readonly #postEvent: PostEvent;
 
   /**
    * Returns initialized instance of Viewport which is synchronized with
    * its actual state in Web Apps.
-   * @param bridge - bridge instance.
-   * @param height - viewport height.
-   * @param width - viewport width.
-   * @param stableHeight - viewport stable height.
-   * @param isExpanded - viewport expansion status.
+   * @param postEvent - method which allows posting Telegram event.
    */
-  static synced(
-    bridge: BridgeLike,
-    height: number,
-    width: number,
-    stableHeight: number,
-    isExpanded: boolean,
-  ): Viewport {
-    const v = new Viewport(bridge, height, width, stableHeight, isExpanded);
+  static async synced(postEvent: PostEvent = bridgePostEvent): Promise<Viewport> {
+    const { height, isExpanded, width } = await this.request(postEvent);
+    const viewport = new Viewport(height, width, height, isExpanded, postEvent);
 
-    bridge.on('viewport_changed', (event) => {
+    on('viewport_changed', (event) => {
       const {
         height: evHeight,
         width: evWidth,
         is_expanded: evIsExpanded,
         is_state_stable: isStateStable,
       } = event;
-      v.height = truncate(evHeight);
-      v.width = truncate(evWidth);
-      v.isExpanded = evIsExpanded;
+      viewport.height = evHeight;
+      viewport.width = evWidth;
+      viewport.isExpanded = evIsExpanded;
 
       if (isStateStable) {
-        v.stableHeight = v.height;
+        viewport.stableHeight = viewport.height;
       }
     });
 
-    return v;
+    return viewport;
   }
 
-  private readonly ee = new EventEmitter<ViewportEventsMap>();
+  readonly #ee = new EventEmitter<ViewportEventsMap>();
 
   #height: number;
 
@@ -105,24 +90,28 @@ export class Viewport {
   #isExpanded: boolean;
 
   constructor(
-    private readonly bridge: BridgeLike,
     height: number,
     width: number,
     stableHeight: number,
     isExpanded: boolean,
+    postEvent: PostEvent = bridgePostEvent,
   ) {
     this.#height = truncate(height);
     this.#width = truncate(width);
     this.#stableHeight = truncate(stableHeight);
     this.#isExpanded = isExpanded;
+    this.#postEvent = postEvent;
   }
 
   private set height(value: number) {
-    if (this.#height === value) {
+    const formattedValue = truncate(value);
+
+    if (this.#height === formattedValue) {
       return;
     }
-    this.#height = value;
-    this.ee.emit('heightChanged', value);
+
+    this.#height = formattedValue;
+    this.#ee.emit('heightChanged', formattedValue);
   }
 
   /**
@@ -150,11 +139,14 @@ export class Viewport {
   }
 
   private set stableHeight(value: number) {
-    if (this.#stableHeight === value) {
+    const formattedValue = truncate(value);
+
+    if (this.#stableHeight === formattedValue) {
       return;
     }
-    this.#stableHeight = value;
-    this.ee.emit('stableHeightChanged', value);
+
+    this.#stableHeight = formattedValue;
+    this.#ee.emit('stableHeightChanged', formattedValue);
   }
 
   /**
@@ -183,8 +175,9 @@ export class Viewport {
     if (this.#isExpanded === value) {
       return;
     }
+
     this.#isExpanded = value;
-    this.ee.emit('isExpandedChanged', value);
+    this.#ee.emit('isExpandedChanged', value);
   }
 
   /**
@@ -198,11 +191,14 @@ export class Viewport {
   }
 
   private set width(value: number) {
-    if (this.#width === value) {
+    const formattedValue = truncate(value);
+
+    if (this.#width === formattedValue) {
       return;
     }
-    this.#width = value;
-    this.ee.emit('widthChanged', value);
+
+    this.#width = formattedValue;
+    this.#ee.emit('widthChanged', formattedValue);
   }
 
   /**
@@ -219,7 +215,7 @@ export class Viewport {
    * @see isExpanded
    */
   expand(): void {
-    this.bridge.postEvent('web_app_expand');
+    this.#postEvent('web_app_expand');
   }
 
   /**
@@ -233,10 +229,10 @@ export class Viewport {
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on = this.#ee.on.bind(this.#ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off = this.#ee.off.bind(this.#ee);
 }

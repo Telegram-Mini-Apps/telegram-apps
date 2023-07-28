@@ -1,24 +1,29 @@
-import type {
-  ImpactHapticFeedbackStyle,
-  NotificationHapticFeedbackType,
-} from '@twa.js/bridge';
 import type { Version } from '@twa.js/utils';
+import {
+  postEvent as bridgePostEvent,
+  type ImpactHapticFeedbackStyle,
+  type NotificationHapticFeedbackType,
+} from '@twa.js/bridge';
 
-import { createSupportsFunc, type SupportsFunc } from '../../utils/index.js';
-import type { BridgeLike } from '../../types.js';
+import type { PostEvent } from '../../types.js';
+import { WithSupports } from '../../lib/index.js';
 
 /**
  * Class which controls haptic feedback. It allows calling different types of
  * haptic notifications which usually occur after user interaction with
  * application.
  */
-export class HapticFeedback {
-  constructor(private readonly bridge: BridgeLike, version: Version) {
-    this.supports = createSupportsFunc(version, {
+export class HapticFeedback
+  extends WithSupports<'impactOccurred' | 'notificationOccurred' | 'selectionChanged'> {
+  readonly #postEvent: PostEvent;
+
+  constructor(version: Version, postEvent: PostEvent = bridgePostEvent) {
+    super(version, {
       impactOccurred: 'web_app_trigger_haptic_feedback',
       notificationOccurred: 'web_app_trigger_haptic_feedback',
       selectionChanged: 'web_app_trigger_haptic_feedback',
     });
+    this.#postEvent = postEvent;
   }
 
   /**
@@ -27,7 +32,7 @@ export class HapticFeedback {
    * @param style - impact style.
    */
   impactOccurred(style: ImpactHapticFeedbackStyle): void {
-    this.bridge.postEvent('web_app_trigger_haptic_feedback', {
+    this.#postEvent('web_app_trigger_haptic_feedback', {
       type: 'impact',
       impact_style: style,
     });
@@ -40,7 +45,7 @@ export class HapticFeedback {
    * @param type - notification type.
    */
   notificationOccurred(type: NotificationHapticFeedbackType): void {
-    this.bridge.postEvent('web_app_trigger_haptic_feedback', {
+    this.#postEvent('web_app_trigger_haptic_feedback', {
       type: 'notification',
       notification_type: type,
     });
@@ -54,14 +59,8 @@ export class HapticFeedback {
    * use it only when the selection changes.
    */
   selectionChanged(): void {
-    this.bridge.postEvent('web_app_trigger_haptic_feedback', {
+    this.#postEvent('web_app_trigger_haptic_feedback', {
       type: 'selection_change',
     });
   }
-
-  /**
-   * Returns true in case, specified method is supported by current component
-   * including Web Apps platform version.
-   */
-  supports: SupportsFunc<'impactOccurred' | 'notificationOccurred' | 'selectionChanged'>;
 }

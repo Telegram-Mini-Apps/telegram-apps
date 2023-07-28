@@ -44,14 +44,14 @@ export class InitData {
   }
 
   /**
-   * Returns init data generation date.
+   * Init data generation date.
    */
   get authDate(): Date {
     return this.#authDate;
   }
 
   /**
-   * Returns date after which a message can be sent via the answerWebAppQuery
+   * Date after which a message can be sent via the answerWebAppQuery
    * method.
    * @see https://core.telegram.org/bots/api#answerwebappquery
    */
@@ -60,7 +60,7 @@ export class InitData {
   }
 
   /**
-   * Returns an object containing data about the chat where the bot was
+   * An object containing data about the chat where the bot was
    * launched via the attachment menu. Returned for supergroups, channels and
    * group chats – only for Web Apps launched via the attachment menu.
    */
@@ -69,7 +69,7 @@ export class InitData {
   }
 
   /**
-   * Returns a hash of all passed parameters, which the bot server can use to
+   * A hash of all passed parameters, which the bot server can use to
    * check their validity.
    * @see https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app
    */
@@ -78,7 +78,7 @@ export class InitData {
   }
 
   /**
-   * Returns a unique identifier for the Web App session, required for sending
+   * A unique identifier for the Web App session, required for sending
    * messages via the `answerWebAppQuery` method.
    * @see https://core.telegram.org/bots/api#answerwebappquery
    */
@@ -87,7 +87,7 @@ export class InitData {
   }
 
   /**
-   * Returns an object containing data about the chat partner of the current
+   * An object containing data about the chat partner of the current
    * user in the chat where the bot was launched via the attachment menu.
    * Returned only for private chats and only for Web Apps launched
    * via the attachment menu.
@@ -97,7 +97,7 @@ export class InitData {
   }
 
   /**
-   * Returns the value of the `startattach` parameter, passed via link. Only
+   * The value of the `startattach` parameter, passed via link. Only
    * returned for Web Apps when launched from the attachment menu via link.
    */
   get startParam(): string | null {
@@ -105,7 +105,7 @@ export class InitData {
   }
 
   /**
-   * Returns an object containing data about the current user.
+   * An object containing data about the current user.
    */
   get user(): User | null {
     return this.#user;

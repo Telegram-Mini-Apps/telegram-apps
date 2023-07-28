@@ -1,8 +1,8 @@
-import { createSearchParamsParser, createJsonParser } from '@twa.js/utils';
+import { searchParams, json } from '@twa.js/utils';
 
 import type { InitData } from './types.js';
 
-const user = createJsonParser({
+const user = json({
   firstName: { type: 'string', from: 'first_name' },
   id: 'number',
   isBot: { type: 'boolean', from: 'is_bot', optional: true },
@@ -13,13 +13,13 @@ const user = createJsonParser({
   username: { type: 'string', optional: true },
 });
 
-const initData = createSearchParamsParser({
+const initDataSearchParams = searchParams({
   authDate: { type: 'date', from: 'auth_date' },
   hash: 'string',
   user: { type: user, optional: true },
   receiver: { type: user, optional: true },
   chat: {
-    type: createJsonParser({
+    type: json({
       id: 'number',
       type: 'string',
       title: 'string',
@@ -35,8 +35,8 @@ const initData = createSearchParamsParser({
 
 /**
  * Extracts init data from search params presented as a string.
- * @param searchParams - query parameters.
+ * @param sp - query parameters.
  */
-export function parseInitData(searchParams: string | URLSearchParams): InitData {
-  return initData(searchParams);
+export function initData(sp: string | URLSearchParams): InitData {
+  return initDataSearchParams(sp);
 }

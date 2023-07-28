@@ -9,18 +9,15 @@ import type { SDKComponent, SDKComponentName } from './types.js';
 export const useSDK = () => useContext(sdkContext);
 
 /**
- * Returns component by its name. Throws an error in case, SDK
- * is not initialized.
+ * Returns value by its field name from SDK init result.
  * @param name - component name.
  * @throws {Error} SDK is not initialized.
  */
-export function useComponent<N extends SDKComponentName>(
-  name: N,
-): SDKComponent<N> {
+export function useUnit<N extends SDKComponentName>(name: N): SDKComponent<N> {
   const { components } = useSDK();
 
   if (components === null) {
-    throw new Error(`Unable to get component "${name}" as long as SDK is not initialized.`);
+    throw new Error(`Unable to get unit "${name}" as long as SDK is not initialized.`);
   }
   return components[name];
 }

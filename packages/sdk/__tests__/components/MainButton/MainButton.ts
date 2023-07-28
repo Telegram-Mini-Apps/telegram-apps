@@ -5,10 +5,9 @@ describe('components', () => {
     describe('MainButton.ts', () => {
       describe('MainButton', () => {
         describe('disable', () => {
-          it('should call "web_app_setup_main_button" method '
-            + 'with parameter where "is_active" property equal to false', () => {
+          it('should call "web_app_setup_main_button" method with parameter where "is_active" property equal to false', () => {
             const postEvent = jest.fn();
-            const mainButton = new MainButton({ postEvent } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', postEvent);
             mainButton.setText('TEST');
             mainButton.enable();
             postEvent.mockClear();
@@ -22,7 +21,7 @@ describe('components', () => {
 
           it('should emit "isEnabledChanged" event with false value', () => {
             const listener = jest.fn();
-            const mainButton = new MainButton({ postEvent: jest.fn() } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', jest.fn());
             mainButton.setText('TEST');
             mainButton.enable();
 
@@ -35,10 +34,9 @@ describe('components', () => {
         });
 
         describe('enable', () => {
-          it('should call "web_app_setup_main_button" method '
-            + 'with parameter where "is_active" property equal to true', () => {
+          it('should call "web_app_setup_main_button" method with parameter where "is_active" property equal to true', () => {
             const postEvent = jest.fn();
-            const mainButton = new MainButton({ postEvent } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', postEvent);
             mainButton.setText('TEST');
             postEvent.mockClear();
 
@@ -51,7 +49,7 @@ describe('components', () => {
 
           it('should emit "isEnabledChanged" event with true value', () => {
             const listener = jest.fn();
-            const mainButton = new MainButton({ postEvent: jest.fn() } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', jest.fn());
             mainButton.setText('TEST');
 
             mainButton.on('isEnabledChanged', listener);
@@ -63,10 +61,9 @@ describe('components', () => {
         });
 
         describe('hide', () => {
-          it('should call "web_app_setup_main_button" method '
-            + 'with parameter where "is_visible" property equal to false', () => {
+          it('should call "web_app_setup_main_button" method with parameter where "is_visible" property equal to false', () => {
             const postEvent = jest.fn();
-            const mainButton = new MainButton({ postEvent } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', postEvent);
             mainButton.setText('TEST');
             mainButton.show();
             postEvent.mockClear();
@@ -80,7 +77,7 @@ describe('components', () => {
 
           it('should emit "isVisibleChanged" event with false value', () => {
             const listener = jest.fn();
-            const mainButton = new MainButton({ postEvent: jest.fn() } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', jest.fn());
             mainButton.setText('TEST');
             mainButton.show();
 
@@ -93,10 +90,9 @@ describe('components', () => {
         });
 
         describe('hideProgress', () => {
-          it('should call "web_app_setup_main_button" method '
-            + 'with parameter where "is_progress_visible" property equal to false', () => {
+          it('should call "web_app_setup_main_button" method with parameter where "is_progress_visible" property equal to false', () => {
             const postEvent = jest.fn();
-            const mainButton = new MainButton({ postEvent } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', postEvent);
             mainButton.setText('TEST');
             mainButton.showProgress();
             postEvent.mockClear();
@@ -110,7 +106,7 @@ describe('components', () => {
 
           it('should emit "isProgressVisibleChanged" event with false value', () => {
             const listener = jest.fn();
-            const mainButton = new MainButton({ postEvent: jest.fn() } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', jest.fn());
             mainButton.setText('TEST');
             mainButton.showProgress();
 
@@ -123,10 +119,9 @@ describe('components', () => {
         });
 
         describe('show', () => {
-          it('should call "web_app_setup_main_button" method '
-            + 'with parameter where "is_visible" property equal to true', () => {
+          it('should call "web_app_setup_main_button" method with parameter where "is_visible" property equal to true', () => {
             const postEvent = jest.fn();
-            const mainButton = new MainButton({ postEvent } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', postEvent);
             mainButton.setText('TEST');
             postEvent.mockClear();
 
@@ -139,7 +134,7 @@ describe('components', () => {
 
           it('should emit "isVisibleChanged" event with true value', () => {
             const listener = jest.fn();
-            const mainButton = new MainButton({ postEvent: jest.fn() } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', jest.fn());
             mainButton.setText('TEST');
 
             mainButton.on('isVisibleChanged', listener);
@@ -151,10 +146,9 @@ describe('components', () => {
         });
 
         describe('showProgress', () => {
-          it('should call "web_app_setup_main_button" method '
-            + 'with parameter where "is_progress_visible" property equal to true', () => {
+          it('should call "web_app_setup_main_button" method with parameter where "is_progress_visible" property equal to true', () => {
             const postEvent = jest.fn();
-            const mainButton = new MainButton({ postEvent } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', postEvent);
             mainButton.setText('TEST');
             postEvent.mockClear();
 
@@ -167,7 +161,7 @@ describe('components', () => {
 
           it('should emit "isProgressVisibleChanged" event with true value', () => {
             const listener = jest.fn();
-            const mainButton = new MainButton({ postEvent: jest.fn() } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', jest.fn());
             mainButton.setText('TEST');
 
             mainButton.on('isProgressVisibleChanged', listener);
@@ -179,10 +173,9 @@ describe('components', () => {
         });
 
         describe('setText', () => {
-          it('should call "web_app_setup_main_button" method '
-            + 'with parameter where "text" property equal to specified value', () => {
+          it('should call "web_app_setup_main_button" method with parameter where "text" property equal to specified value', () => {
             const postEvent = jest.fn();
-            const mainButton = new MainButton({ postEvent } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', postEvent);
 
             expect(postEvent).toHaveBeenCalledTimes(0);
             mainButton.setText('WOW');
@@ -193,7 +186,7 @@ describe('components', () => {
 
           it('should emit "textChanged" event with specified value', () => {
             const listener = jest.fn();
-            const mainButton = new MainButton({ postEvent: jest.fn() } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', jest.fn());
 
             mainButton.on('textChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
@@ -204,10 +197,9 @@ describe('components', () => {
         });
 
         describe('setTextColor', () => {
-          it('should call "web_app_setup_main_button" method '
-            + 'with parameter where "text_color" property equal to specified value', () => {
+          it('should call "web_app_setup_main_button" method with parameter where "text_color" property equal to specified value', () => {
             const postEvent = jest.fn();
-            const mainButton = new MainButton({ postEvent } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', postEvent);
             mainButton.setText('TEST');
             postEvent.mockClear();
 
@@ -220,7 +212,7 @@ describe('components', () => {
 
           it('should emit "textColorChanged" event with specified value', () => {
             const listener = jest.fn();
-            const mainButton = new MainButton({ postEvent: jest.fn() } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', jest.fn());
             mainButton.setText('TEST');
 
             mainButton.on('textColorChanged', listener);
@@ -232,28 +224,27 @@ describe('components', () => {
         });
 
         describe('setColor', () => {
-          it('should call "web_app_setup_main_button" method '
-            + 'with parameter where "color" property equal to specified value', () => {
+          it('should call "web_app_setup_main_button" method with parameter where "color" property equal to specified value', () => {
             const postEvent = jest.fn();
-            const mainButton = new MainButton({ postEvent } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', postEvent);
             mainButton.setText('TEST');
             postEvent.mockClear();
 
             expect(postEvent).toHaveBeenCalledTimes(0);
-            mainButton.setColor('#ffaacc');
+            mainButton.setBackgroundColor('#ffaacc');
             expect(postEvent).toHaveBeenCalledTimes(1);
             expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
             expect(postEvent.mock.calls[0][1]).toHaveProperty('color', '#ffaacc');
           });
 
-          it('should emit "colorChanged" event with specified value', () => {
+          it('should emit "backgroundColorChanged" event with specified value', () => {
             const listener = jest.fn();
-            const mainButton = new MainButton({ postEvent: jest.fn() } as any, '#000000', '#ffffff');
+            const mainButton = new MainButton('#000000', '#ffffff', jest.fn());
             mainButton.setText('TEST');
 
-            mainButton.on('colorChanged', listener);
+            mainButton.on('backgroundColorChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
-            mainButton.setColor('#aaaaaa');
+            mainButton.setBackgroundColor('#aaaaaa');
             expect(listener).toHaveBeenCalledTimes(1);
             expect(listener).toHaveBeenCalledWith('#aaaaaa');
           });

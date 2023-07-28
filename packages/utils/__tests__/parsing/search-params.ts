@@ -1,4 +1,4 @@
-import { createSearchParamsParser } from '../../src/index.js';
+import { searchParams } from '../../src';
 
 describe('parsing', () => {
   describe('search-params.ts', () => {
@@ -6,7 +6,7 @@ describe('parsing', () => {
       describe('function result', () => {
         it('should throw an error in case, passed value is not of type '
           + 'string or URLSearchParams', () => {
-          const parser = createSearchParamsParser({});
+          const parser = searchParams({});
           expect(() => parser(true)).toThrow();
           expect(() => parser({})).toThrow();
           expect(() => parser('true')).not.toThrow();
@@ -15,13 +15,13 @@ describe('parsing', () => {
 
         it('should throw an error in case, passed value does not '
           + 'contain required field presented in schema', () => {
-          const parser = createSearchParamsParser({ prop: 'string' });
+          const parser = searchParams({ prop: 'string' });
           expect(() => parser('abc=123')).toThrowError('Unable to parse field "prop"');
         });
 
         it('should not throw an error in case, passed value '
           + 'does not contain optional field presented in schema', () => {
-          const parser = createSearchParamsParser({
+          const parser = searchParams({
             prop: {
               type: 'string',
               optional: true,
@@ -33,13 +33,13 @@ describe('parsing', () => {
 
         it('should throw an error in case, passed value contains '
           + 'field of different type presented in schema', () => {
-          const parser = createSearchParamsParser({ prop: 'date' });
+          const parser = searchParams({ prop: 'date' });
           expect(() => parser('prop=abc'))
             .toThrowError('Unable to parse field "prop"');
         });
 
         it('should correctly parse built-in types', () => {
-          const parser = createSearchParamsParser({
+          const parser = searchParams({
             date: 'date',
             string: 'string',
           });

@@ -1,20 +1,7 @@
-/**
- * Information about Popup events.
- */
-export interface PopupEventsMap {
-  /**
-   * Open status changed.
-   * @param isOpened - current state.
-   */
+export interface PopupEvents {
   isOpenedChanged: (isOpened: boolean) => void;
 }
 
-/**
- * Known Popup event name.
- */
-export type PopupEventName = keyof PopupEventsMap;
+export type PopupEventName = keyof PopupEvents;
 
-/**
- * Listener for specified Popup event.
- */
-export type PopupEventListener<E extends PopupEventName> = PopupEventsMap[E];
+export type PopupEventListener<E extends PopupEventName> = PopupEvents[E];

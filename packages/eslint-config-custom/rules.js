@@ -1,4 +1,6 @@
 module.exports = {
+  // Works incorrectly in some IDEs. Should be equal to 2.
+  '@typescript-eslint/indent': 0,
   // We don't use default exports anywhere.
   'import/prefer-default-export': 0,
   // We have no problem related to extraneous dependencies.

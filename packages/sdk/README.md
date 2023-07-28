@@ -16,4 +16,4 @@ functionality.
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
 Apps. You can learn more about this package in this
-[documentation](https://docs.twa.dev/docs/libraries/twa-sdk/about).
+[documentation](https://docs.twa.dev/docs/libraries/twa-js-sdk/about).

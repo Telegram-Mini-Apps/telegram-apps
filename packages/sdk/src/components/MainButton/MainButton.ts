@@ -1,21 +1,21 @@
 import { EventEmitter, type RGB } from '@twa.js/utils';
+import { on, off, postEvent as bridgePostEvent } from '@twa.js/bridge';
 
-import type { MainButtonEventListener, MainButtonEventsMap } from './events.js';
-import type { BridgeLike } from '../../types.js';
+import type { MainButtonEventListener, MainButtonEvents } from './events.js';
+import type { PostEvent } from '../../types.js';
 
-type Emitter = EventEmitter<MainButtonEventsMap>;
+type Emitter = EventEmitter<MainButtonEvents>;
 
 /**
  * Controls the main button, which is displayed at the bottom
  * of the Web App in the Telegram interface.
- *
- * TODO: Desktop animation is rather bad in case, we call progress visibility
- *  right after click. It is not smooth.
  */
 export class MainButton {
-  private readonly ee: Emitter = new EventEmitter();
+  readonly #ee: Emitter = new EventEmitter();
 
-  #color: RGB;
+  readonly #postEvent: PostEvent;
+
+  #backgroundColor: RGB;
 
   #isEnabled = false;
 
@@ -27,22 +27,20 @@ export class MainButton {
 
   #textColor: RGB;
 
-  constructor(
-    private readonly bridge: BridgeLike,
-    color: RGB,
-    textColor: RGB,
-  ) {
-    this.#color = color;
+  constructor(backgroundColor: RGB, textColor: RGB, postEvent: PostEvent = bridgePostEvent) {
+    this.#postEvent = postEvent;
+    this.#backgroundColor = backgroundColor;
     this.#textColor = textColor;
   }
 
   private set isEnabled(value: boolean) {
-    if (this.#isEnabled === value) {
-      return;
-    }
+    const prev = this.#isEnabled;
     this.#isEnabled = value;
     this.commit();
-    this.ee.emit('isEnabledChanged', this.#isEnabled);
+
+    if (value !== prev) {
+      this.#ee.emit('isEnabledChanged', value);
+    }
   }
 
   /**
@@ -53,12 +51,13 @@ export class MainButton {
   }
 
   private set isProgressVisible(value: boolean) {
-    if (this.#isProgressVisible === value) {
-      return;
-    }
+    const prev = this.#isProgressVisible;
     this.#isProgressVisible = value;
     this.commit();
-    this.ee.emit('isProgressVisibleChanged', this.#isProgressVisible);
+
+    if (value !== prev) {
+      this.#ee.emit('isProgressVisibleChanged', value);
+    }
   }
 
   /**
@@ -69,12 +68,13 @@ export class MainButton {
   }
 
   private set isVisible(value: boolean) {
-    if (this.#isVisible === value) {
-      return;
-    }
+    const prev = this.#isVisible;
     this.#isVisible = value;
     this.commit();
-    this.ee.emit('isVisibleChanged', this.#isVisible);
+
+    if (value !== prev) {
+      this.#ee.emit('isVisibleChanged', value);
+    }
   }
 
   /**
@@ -94,12 +94,13 @@ export class MainButton {
     if (this.text === '') {
       return;
     }
-    this.bridge.postEvent('web_app_setup_main_button', {
+
+    this.#postEvent('web_app_setup_main_button', {
       is_visible: this.isVisible,
       is_active: this.isEnabled,
       is_progress_visible: this.isProgressVisible,
       text: this.text,
-      color: this.color,
+      color: this.backgroundColor,
       text_color: this.textColor,
     });
   }
@@ -107,8 +108,8 @@ export class MainButton {
   /**
    * Returns current main button background color.
    */
-  get color(): RGB {
-    return this.#color;
+  get backgroundColor(): RGB {
+    return this.#backgroundColor;
   }
 
   /**
@@ -170,9 +171,9 @@ export class MainButton {
    */
   on: Emitter['on'] = (event, listener) => {
     if (event === 'click') {
-      return this.bridge.on('main_button_pressed', listener as MainButtonEventListener<'click'>);
+      return on('main_button_pressed', listener as MainButtonEventListener<'click'>);
     }
-    this.ee.on(event, listener);
+    this.#ee.on(event, listener);
   };
 
   /**
@@ -182,9 +183,9 @@ export class MainButton {
    */
   off: Emitter['off'] = (event, listener) => {
     if (event === 'click') {
-      return this.bridge.off('main_button_pressed', listener as MainButtonEventListener<'click'>);
+      return off('main_button_pressed', listener as MainButtonEventListener<'click'>);
     }
-    this.ee.off(event, listener);
+    this.#ee.off(event, listener);
   };
 
   /**
@@ -216,14 +217,17 @@ export class MainButton {
    * Minimal length for text is 1 symbol, and maximum is 64 symbols.
    *
    * Returns current button instance for chaining.
-   * @param text - new text.
+   * @param value - new text.
    */
-  setText(text: string): this {
-    if (this.#text !== text) {
-      this.#text = text;
-      this.commit();
-      this.ee.emit('textChanged', text);
+  setText(value: string): this {
+    const prev = this.#text;
+    this.#text = value;
+    this.commit();
+
+    if (prev !== value) {
+      this.#ee.emit('textChanged', value);
     }
+
     return this;
   }
 
@@ -232,14 +236,17 @@ export class MainButton {
    * chaining.
    *
    * Returns current button instance for chaining.
-   * @param color - new text color.
+   * @param value - new text color.
    */
-  setTextColor(color: RGB): this {
-    if (this.#textColor !== color) {
-      this.#textColor = color;
-      this.commit();
-      this.ee.emit('textColorChanged', color);
+  setTextColor(value: RGB): this {
+    const prev = this.#textColor;
+    this.#textColor = value;
+    this.commit();
+
+    if (prev !== value) {
+      this.#ee.emit('textColorChanged', value);
     }
+
     return this;
   }
 
@@ -248,14 +255,17 @@ export class MainButton {
    * chaining.
    *
    * Returns current button instance for chaining.
-   * @param color - color to set.
+   * @param value - color to set.
    */
-  setColor(color: RGB): this {
-    if (this.#color !== color) {
-      this.#color = color;
-      this.commit();
-      this.ee.emit('colorChanged', this.#color);
+  setBackgroundColor(value: RGB): this {
+    const prev = this.#backgroundColor;
+    this.#backgroundColor = value;
+    this.commit();
+
+    if (prev !== value) {
+      this.#ee.emit('backgroundColorChanged', value);
     }
+
     return this;
   }
 }
