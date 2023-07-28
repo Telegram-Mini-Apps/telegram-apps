@@ -1,4 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
+import type { PostEvent } from '@twa.js/sdk/types';
+import { useUnit } from '../provider/index.js';
 
 interface Trackable {
   on: (event: any, ...args: any[]) => void;
@@ -38,4 +40,12 @@ export function useEventsTracking<T extends Trackable>(
     // On cleanup remove event listeners.
     return () => events.forEach((event) => trackable.off(event, forceUpdate));
   }, [trackable, forceUpdate, events]);
+}
+
+/**
+ * Returns event posting function which was created during SDK
+ * initialization.
+ */
+export function usePostEvent(): PostEvent {
+  return useUnit('postEvent');
 }
