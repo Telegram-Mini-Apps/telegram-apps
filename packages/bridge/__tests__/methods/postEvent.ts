@@ -1,21 +1,15 @@
-import { postEvent } from '../../src';
+import { postEvent, setTargetOrigin } from '../../src/index.js';
 
-let windowSpy: ReturnType<typeof jest.spyOn>;
+const windowSpy = jest.spyOn(window, 'window', 'get');
 
 beforeEach(() => {
-  windowSpy = jest.spyOn(window, 'window', 'get');
+  jest.resetAllMocks();
 });
 
-afterEach(() => {
-  windowSpy.mockRestore();
-});
-
-describe('posting', () => {
+describe('methods', () => {
   describe('postEvent.ts', () => {
     describe('postEvent', () => {
-      it('should call "window.parent.postMessage" with object '
-        + 'with properties {eventType: string, eventData: any} converted to '
-        + 'string in case, current environment is iframe', () => {
+      it('should call "window.parent.postMessage" with object with properties {eventType: string, eventData: any} converted to string in case, current environment is iframe', () => {
         const postMessageSpy = jest.fn();
         windowSpy.mockImplementation(() => ({
           self: 1000,
@@ -87,9 +81,7 @@ describe('posting', () => {
         expect(spy).toHaveBeenCalledWith('web_app_set_header_color', '{"color_key":"bg_color"}');
       });
 
-      it('should call "window.external.notify" in case it exists. '
-        + 'Passed value is object, converted to string. This object should '
-        + 'contain fields "eventType" and "eventData".', () => {
+      it('should call "window.external.notify" in case it exists. Passed value is object, converted to string. This object should contain fields "eventType" and "eventData".', () => {
         const spy = jest.fn();
         windowSpy.mockImplementation(() => ({
           external: { notify: spy },
@@ -113,6 +105,23 @@ describe('posting', () => {
       it('should throw an error in case, current environment is unknown', () => {
         expect(() => postEvent('web_app_close'))
           .toThrow('Unable to determine current environment and possible way to send event');
+      });
+
+      it('should use globally set target origin', () => {
+        const postMessageSpy = jest.fn();
+        windowSpy.mockImplementation(() => ({
+          self: 1000,
+          top: 900,
+          parent: { postMessage: postMessageSpy },
+        }) as any);
+
+        setTargetOrigin('here we go!');
+        postEvent('iframe_ready');
+
+        expect(postMessageSpy).toHaveBeenCalledWith(
+          JSON.stringify({ eventType: 'iframe_ready' }),
+          'here we go!',
+        );
       });
     });
   });
