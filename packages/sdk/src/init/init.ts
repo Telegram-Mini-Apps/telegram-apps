@@ -1,10 +1,17 @@
-import { isIframe, Bridge } from '@twa.js/bridge';
+import {
+  isIframe,
+  setDebug,
+  setTargetOrigin,
+  postEvent as bridgePostEvent,
+  supports,
+  on,
+} from '@twa.js/bridge';
 
 import {
   BackButton,
-  ClosingConfirmation,
+  ClosingBehaviour,
   HapticFeedback,
-  InitData, Layout,
+  InitData,
   MainButton,
   Popup,
   QRScanner,
@@ -13,15 +20,28 @@ import {
   WebApp,
 } from '../components/index.js';
 import type { InitOptions, InitResult } from './types.js';
-import { BridgeScoped } from '../lib/index.js';
 import { retrieveLaunchParams } from '../utils/index.js';
+import { MethodUnsupportedError } from '../lib/index.js';
 
 /**
  * Initializes all SDK components.
  * @param options - initialization options.
  */
 export async function init(options: InitOptions = {}): Promise<InitResult> {
-  const { checkCompat = true, acceptScrollbarStyle = true } = options;
+  const {
+    checkCompat = true,
+    acceptScrollbarStyle = true,
+    targetOrigin,
+    debug,
+  } = options;
+
+  if (typeof debug === 'boolean') {
+    setDebug(debug);
+  }
+
+  if (typeof targetOrigin === 'string') {
+    setTargetOrigin(targetOrigin);
+  }
 
   // Get Web App launch params.
   const {
@@ -36,9 +56,15 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
     buttonTextColor = '#ffffff',
   } = themeParams;
 
-  // Create Bridge instance.
-  const twaBridge = Bridge.init(options);
-  const bridge = checkCompat ? new BridgeScoped(twaBridge, version) : twaBridge;
+  // Wire postEvent if check compatibility is required.
+  const postEvent: typeof bridgePostEvent = checkCompat
+    ? (method: any, params?: any) => {
+      if (!supports(method, version)) {
+        throw new MethodUnsupportedError(method, version);
+      }
+      return postEvent(method, params);
+    }
+    : bridgePostEvent;
 
   // In case, we are currently in iframe, it is required to listen to
   // messages, coming from parent source to apply requested changes.
@@ -52,39 +78,34 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
     document.head.appendChild(styleElement);
 
     // Listen to custom style changes.
-    twaBridge.on('set_custom_style', (html) => {
+    on('set_custom_style', (html) => {
       styleElement.innerHTML = html;
     });
 
     // Notify Telegram, iframe is ready. This will result in sending style
     // tag html from native application.
-    twaBridge.postEvent('iframe_ready');
+    postEvent('iframe_ready');
   }
 
-  // Get viewport information.
-  const { width, isExpanded, height, isStateStable } = platform !== 'macos'
-    ? await Viewport.request(bridge)
-    : {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      isStateStable: true,
-      isExpanded: true,
-    };
-
   const result: InitResult = {
-    backButton: new BackButton(bridge, version),
-    bridge: twaBridge,
-    closingConfirmation: new ClosingConfirmation(bridge),
-    haptic: new HapticFeedback(bridge, version),
-    layout: new Layout(bridge, version, 'bg_color', backgroundColor),
-    mainButton: new MainButton(bridge, buttonColor, buttonTextColor),
-    popup: new Popup(bridge, version),
-    qrScanner: new QRScanner(bridge, version),
-    themeParams: ThemeParams.synced(bridge, themeParams),
-    viewport: Viewport.synced(bridge, height, width, isStateStable ? height : 0, isExpanded),
-    webApp: new WebApp(bridge, version, platform),
+    backButton: new BackButton(version, postEvent),
+    closingBehavior: new ClosingBehaviour(postEvent),
+    haptic: new HapticFeedback(version, postEvent),
+    mainButton: new MainButton(buttonColor, buttonTextColor, postEvent),
+    popup: new Popup(version, postEvent),
+    postEvent,
+    qrScanner: new QRScanner(version, postEvent),
+    themeParams: await ThemeParams.synced(postEvent),
+    viewport: platform === 'macos'
+      // MacOS version does not support requesting current viewport
+      // information used in Viewport.synced().
+      ? new Viewport(window.innerHeight, window.innerWidth, window.innerHeight, true, postEvent)
+      : await Viewport.synced(postEvent),
+    webApp: new WebApp(version, platform, 'bg_color', backgroundColor, postEvent),
   };
 
+  // Init data could be missing in cae, application was launched via
+  // InlineKeyboardButton.
   if (initData !== undefined) {
     const { authDate, hash, ...restInitData } = initData;
     result.initData = new InitData(authDate, hash, restInitData);

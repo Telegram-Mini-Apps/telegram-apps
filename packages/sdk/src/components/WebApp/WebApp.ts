@@ -1,34 +1,124 @@
-import { type Version, compareVersions } from '@twa.js/utils';
-import { type BridgeEventListener, type InvoiceStatus, supports } from '@twa.js/bridge';
+import {
+  type Version,
+  type RGB,
+  compareVersions,
+  EventEmitter,
+} from '@twa.js/utils';
+import {
+  type HeaderColorKey,
+  type InvoiceStatus,
+  on, postEvent as bridgePostEvent,
+  supports,
+} from '@twa.js/bridge';
 
-import { createSupportsFunc, formatURL, type SupportsFunc } from '../../utils/index.js';
-import type { BridgeLike, Platform } from '../../types.js';
+import { formatURL, isColorDark } from '../../utils/index.js';
+import type { ColorScheme, Platform, PostEvent } from '../../types.js';
+import type { WebAppEvents } from './events.js';
+import { WithSupports } from '../../lib/index.js';
 
 /**
  * Provides common Web Apps functionality not covered by other system
  * components.
  */
-export class WebApp {
-  #platform: Platform;
+export class WebApp
+  extends WithSupports<'openInvoice' | 'readTextFromClipboard' | 'setHeaderColor' | 'setBackgroundColor'> {
+  readonly #ee = new EventEmitter<WebAppEvents>();
+
+  readonly #platform: Platform;
+
+  readonly #postEvent: PostEvent;
+
+  readonly #version: Version;
+
+  #backgroundColor: RGB;
+
+  #headerColor: HeaderColorKey;
 
   constructor(
-    private readonly bridge: BridgeLike,
     version: Version,
     platform: Platform,
+    headerColor: HeaderColorKey,
+    backgroundColor: RGB,
+    postEvent: PostEvent = bridgePostEvent,
   ) {
-    this.#platform = platform;
-    this.supports = createSupportsFunc(version, {
+    super(version, {
       openInvoice: 'web_app_open_invoice',
       readTextFromClipboard: 'web_app_read_text_from_clipboard',
+      setHeaderColor: 'web_app_set_header_color',
+      setBackgroundColor: 'web_app_set_background_color',
     });
-    this.version = version;
+    this.#postEvent = postEvent;
+    this.#platform = platform;
+    this.#version = version;
+    this.#headerColor = headerColor;
+    this.#backgroundColor = backgroundColor;
   }
 
   /**
-   * Closes Web App.
+   * Returns current application background color.
+   */
+  get backgroundColor(): RGB {
+    return this.#backgroundColor;
+  }
+
+  /**
+   * Updates current application background color.
+   * FIXME: Has no effect on desktop, works incorrectly in Android.
+   *  Issues:
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
+   * @param color - new color.
+   */
+  set backgroundColor(color: RGB) {
+    this.#postEvent('web_app_set_background_color', { color });
+
+    if (this.#backgroundColor === color) {
+      return;
+    }
+
+    this.#backgroundColor = color;
+    this.#ee.emit('backgroundColorChanged', color);
+  }
+
+  /**
+   * Returns current application color scheme. This value is
+   * computed based on the current background color.
+   */
+  get colorScheme(): ColorScheme {
+    return isColorDark(this.backgroundColor) ? 'dark' : 'light';
+  }
+
+  /**
+   * Closes the Web App.
    */
   close(): void {
-    this.bridge.postEvent('web_app_close');
+    this.#postEvent('web_app_close');
+  }
+
+  /**
+   * Returns current application header color key.
+   */
+  get headerColor(): HeaderColorKey {
+    return this.#headerColor;
+  }
+
+  /**
+   * Updates current application header color.
+   * FIXME: Has no effect on desktop, works incorrectly on Android.
+   *  Issues:
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
+   * @param color - settable color key.
+   */
+  set headerColor(color: HeaderColorKey) {
+    this.#postEvent('web_app_set_header_color', { color_key: color });
+
+    if (this.#headerColor === color) {
+      return;
+    }
+
+    this.#headerColor = color;
+    this.#ee.emit('headerColorChanged', color);
   }
 
   /**
@@ -53,7 +143,7 @@ export class WebApp {
 
     // If method is supported by current version, open link via bridge event.
     if (supports('web_app_open_link', this.version)) {
-      return this.bridge.postEvent('web_app_open_link', { url: formattedUrl });
+      return this.#postEvent('web_app_open_link', { url: formattedUrl });
     }
     // Otherwise, do it in legacy way.
     window.open(formattedUrl, '_blank');
@@ -77,7 +167,7 @@ export class WebApp {
 
     // If method is supported by current version, open link via bridge event.
     if (supports('web_app_open_tg_link', this.version)) {
-      return this.bridge.postEvent('web_app_open_tg_link', {
+      return this.#postEvent('web_app_open_tg_link', {
         path_full: pathname + search,
       });
     }
@@ -105,22 +195,35 @@ export class WebApp {
     if (match === null) {
       throw new Error('Link pathname has incorrect format. Expected to receive "/invoice/slug" or "/$slug"');
     }
+    const [, , slug] = match;
+
     // Open invoice.
-    this.bridge.postEvent('web_app_open_invoice', { slug: match[2] });
+    this.#postEvent('web_app_open_invoice', { slug });
 
     return new Promise((res) => {
-      // Create event listener which will resolve invoice status.
-      const listener: BridgeEventListener<'invoice_closed'> = (a) => {
-        // Remove bound listener.
-        this.bridge.off('invoice_closed', listener);
-
-        // Resolve value.
-        res(a.status);
-      };
       // Add event listener to catch invoice status.
-      this.bridge.on('invoice_closed', listener);
+      const off = on('invoice_closed', ({ status, slug: eventSlug }) => {
+        // Ignore other invoices.
+        if (slug !== eventSlug) {
+          return;
+        }
+
+        // Remove event listener and resolve status.
+        off();
+        res(status);
+      });
     });
   }
+
+  /**
+   * Adds new event listener.
+   */
+  on = this.#ee.on.bind(this.#ee);
+
+  /**
+   * Removes event listener.
+   */
+  off = this.#ee.off.bind(this.#ee);
 
   /**
    * Returns current Web App platform.
@@ -140,7 +243,7 @@ export class WebApp {
    * the page fully loaded.
    */
   ready(): void {
-    this.bridge.postEvent('web_app_ready');
+    this.#postEvent('web_app_ready');
   }
 
   /**
@@ -157,14 +260,14 @@ export class WebApp {
     }
 
     return new Promise<string | null>((res) => {
-      const listener: BridgeEventListener<'clipboard_text_received'> = (payload) => {
-        if (payload.req_id === reqId) {
-          res(payload.data === undefined ? null : payload.data);
-          this.bridge.off('clipboard_text_received', listener);
+      const off = on('clipboard_text_received', ({ req_id, data }) => {
+        if (req_id === reqId) {
+          res(data === undefined ? null : data);
+          off();
         }
-      };
-      this.bridge.on('clipboard_text_received', listener);
-      this.bridge.postEvent('web_app_read_text_from_clipboard', { req_id: reqId });
+      });
+
+      this.#postEvent('web_app_read_text_from_clipboard', { req_id: reqId });
     });
   }
 
@@ -184,17 +287,14 @@ export class WebApp {
     if (size === 0 || size > 4096) {
       throw new Error(`Passed data has incorrect size: ${size}`);
     }
-    this.bridge.postEvent('web_app_data_send', { data });
+    this.#postEvent('web_app_data_send', { data });
   }
-
-  /**
-   * Returns true in case, specified method is supported by current WebApp.
-   */
-  supports: SupportsFunc<'openInvoice' | 'readTextFromClipboard'>;
 
   /**
    * Current Web App version. This property is used by other components to check if
    * some functionality is available on current device.
    */
-  version: Version;
+  get version(): Version {
+    return this.#version;
+  }
 }

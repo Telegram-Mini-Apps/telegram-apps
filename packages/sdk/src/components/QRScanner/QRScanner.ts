@@ -1,30 +1,33 @@
-import type { BridgeEventListener } from '@twa.js/bridge';
 import { EventEmitter, type Version } from '@twa.js/utils';
+import { on, postEvent as bridgePostEvent } from '@twa.js/bridge';
 
-import { type QRScannerEventsMap } from './events.js';
-import { createSupportsFunc, type SupportsFunc } from '../../utils/index.js';
-import type { BridgeLike } from '../../types.js';
+import type { QRScannerEvents } from './events.js';
+import type { PostEvent } from '../../types.js';
+import { WithSupports } from '../../lib/index.js';
 
 /**
  * Provides QR scanner functionality.
  */
-export class QRScanner {
+export class QRScanner extends WithSupports<'open' | 'close'> {
+  readonly #ee = new EventEmitter<QRScannerEvents>();
+
+  readonly #postEvent: PostEvent;
+
   #isOpened = false;
 
-  private readonly ee = new EventEmitter<QRScannerEventsMap>();
-
-  constructor(private readonly bridge: BridgeLike, version: Version) {
-    this.supports = createSupportsFunc(version, {
+  constructor(version: Version, postEvent: PostEvent = bridgePostEvent) {
+    super(version, {
       close: 'web_app_close_scan_qr_popup',
       open: 'web_app_open_scan_qr_popup',
     });
+    this.#postEvent = postEvent;
   }
 
   /**
    * Closes scanner.
    */
   close(): void {
-    this.bridge.postEvent('web_app_close_scan_qr_popup');
+    this.#postEvent('web_app_close_scan_qr_popup');
     this.isOpened = false;
   }
 
@@ -32,8 +35,9 @@ export class QRScanner {
     if (this.#isOpened === value) {
       return;
     }
+
     this.#isOpened = value;
-    this.ee.emit('isOpenedChanged', value);
+    this.#ee.emit('isOpenedChanged', value);
   }
 
   /**
@@ -54,43 +58,33 @@ export class QRScanner {
       throw new Error('QR scanner is already opened.');
     }
     // Try to call bridge method.
-    this.bridge.postEvent('web_app_open_scan_qr_popup', { text });
+    this.#postEvent('web_app_open_scan_qr_popup', { text });
 
     // Update local state.
     this.isOpened = true;
 
     return new Promise<string | null>((res) => {
-      // Define listeners which will catch result of QR scanner action.
-      const closeListener: BridgeEventListener<'scan_qr_popup_closed'> = () => {
-        res(null);
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        unbind();
-      };
-      const scanListener: BridgeEventListener<'qr_text_received'> = ({ data = null }) => {
+      const offScanned = on('qr_text_received', ({ data = null }) => {
         res(data);
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         unbind();
-      };
+      });
+
+      const offClosed = on('scan_qr_popup_closed', () => {
+        res(null);
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        unbind();
+      });
 
       // Define function which will unbind bound listeners.
       const unbind = () => {
-        this.bridge.off('scan_qr_popup_closed', closeListener);
-        this.bridge.off('qr_text_received', scanListener);
+        offClosed();
+        offScanned();
       };
-
-      // Add bridge listeners.
-      this.bridge.on('qr_text_received', scanListener);
-      this.bridge.on('scan_qr_popup_closed', closeListener);
     });
   }
 
-  on = this.ee.on.bind(this.ee);
+  on = this.#ee.on.bind(this.#ee);
 
-  off = this.ee.off.bind(this.ee);
-
-  /**
-   * Returns true in case, specified method is supported by current component
-   * including Web Apps platform version.
-   */
-  supports: SupportsFunc<'close' | 'open'>;
+  off = this.#ee.off.bind(this.#ee);
 }

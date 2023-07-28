@@ -1,31 +1,35 @@
-import type { BridgeEventListener } from '@twa.js/bridge';
 import { EventEmitter, type Version } from '@twa.js/utils';
+import { on, postEvent as bridgePostEvent } from '@twa.js/bridge';
 
 import type { PopupParams } from './types.js';
-import type { PopupEventsMap } from './events.js';
+import type { PopupEvents } from './events.js';
+import type { PostEvent } from '../../types.js';
 import { preparePopupParams } from './utils.js';
-import { createSupportsFunc, type SupportsFunc } from '../../utils/index.js';
-import type { BridgeLike } from '../../types.js';
+import { WithSupports } from '../../lib/index.js';
 
 /**
  * Controls currently displayed application popup. It allows developers to
  * open new custom popups and detect popup-connected events.
  */
-export class Popup {
-  private readonly ee = new EventEmitter<PopupEventsMap>();
+export class Popup extends WithSupports<'open'> {
+  readonly #ee = new EventEmitter<PopupEvents>();
+
+  readonly #postEvent: PostEvent;
 
   #isOpened = false;
 
-  constructor(private readonly bridge: BridgeLike, version: Version) {
-    this.supports = createSupportsFunc(version, { open: 'web_app_open_popup' });
+  constructor(version: Version, postEvent: PostEvent = bridgePostEvent) {
+    super(version, { open: 'web_app_open_popup' });
+    this.#postEvent = postEvent;
   }
 
   private set isOpened(value: boolean) {
     if (this.#isOpened === value) {
       return;
     }
+
     this.#isOpened = value;
-    this.ee.emit('isOpenedChanged', this.#isOpened);
+    this.#ee.emit('isOpenedChanged', this.#isOpened);
   }
 
   /**
@@ -38,12 +42,12 @@ export class Popup {
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on = this.#ee.on.bind(this.#ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off = this.#ee.off.bind(this.#ee);
 
   /**
    * A method that shows a native popup described by the `params` argument.
@@ -59,36 +63,19 @@ export class Popup {
    * @throws {Error} Popup is already opened.
    */
   open(params: PopupParams): Promise<string | null> {
-    // Don't allow opening several popups.
     if (this.isOpened) {
       throw new Error('Popup is already opened.');
     }
 
-    // Format all required parameters.
-    const preparedParams = preparePopupParams(params);
-
-    // Send bridge event to make popup show.
-    this.bridge.postEvent('web_app_open_popup', preparedParams);
-
-    // Update popup opened status.
+    this.#postEvent('web_app_open_popup', preparePopupParams(params));
     this.isOpened = true;
 
     return new Promise<string | null>((res) => {
-      // Create 'popup_closed' event listener to catch clicked button.
-      const listener: BridgeEventListener<'popup_closed'> = ({ button_id = null }) => {
-        this.bridge.off('popup_closed', listener);
-        res(button_id);
+      const off = on('popup_closed', ({ button_id = null }) => {
+        off();
         this.isOpened = false;
-      };
-
-      // Add listener which will resolve promise.
-      this.bridge.on('popup_closed', listener);
+        res(button_id);
+      });
     });
   }
-
-  /**
-   * Returns true in case, specified method is supported by current component
-   * including Web Apps platform version.
-   */
-  supports: SupportsFunc<'open'>;
 }
