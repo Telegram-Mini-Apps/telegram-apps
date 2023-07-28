@@ -75,23 +75,23 @@ function createTypeOfParser<Type extends 'string' | 'boolean' | 'number'>(
 /**
  * Parses Json value as string.
  */
-export const parseJsonValueAsString = createTypeOfParser('string');
+export const string = createTypeOfParser('string');
 
 /**
  * Parses Json value as boolean.
  */
-export const parseJsonValueAsBoolean = createTypeOfParser('boolean');
+export const boolean = createTypeOfParser('boolean');
 
 /**
  * Parses Json value as number.
  */
-export const parseJsonValueAsNumber = createTypeOfParser('number');
+export const number = createTypeOfParser('number');
 
 /**
  * Parses Json value as RGB color.
  */
-export function parseJsonValueAsRgb(value: unknown): RGB {
-  const str = parseJsonValueAsString(value);
+export function rgb(value: unknown): RGB {
+  const str = string(value);
 
   if (!isRGB(str)) {
     throw new TypeError(`Unable to parse value "${str}" as RGB.`);
@@ -102,43 +102,38 @@ export function parseJsonValueAsRgb(value: unknown): RGB {
 /**
  * Parsers used for known types.
  */
-const knownTypesParses = {
-  string: parseJsonValueAsString,
-  boolean: parseJsonValueAsBoolean,
-  number: parseJsonValueAsNumber,
-  rgb: parseJsonValueAsRgb,
-};
+const knownTypesParses = { string, boolean, number, rgb };
 
 /**
  * Creates new Json parser according to passed schema.
  * @param schema - object schema.
  */
-export function createJsonParser<S extends JsonSchema>(schema: S): SchemaParser<S> {
+export function json<S extends JsonSchema>(schema: S): SchemaParser<S> {
   // Transform schema to array of parsers.
   const parsers = schemaToParsers<FieldParser<any>, KnownTypeName, S>(schema, knownTypesParses);
 
   return (value) => {
-    let json: any = value;
+    let formattedValue: any = value;
 
     // Convert value to JSON in case, it is string. We expect value to be
     // JSON string.
-    if (typeof json === 'string') {
+    if (typeof formattedValue === 'string') {
       try {
-        json = JSON.parse(json);
+        formattedValue = JSON.parse(formattedValue);
       } catch (e) {
         throw new TypeError('Value is not JSON object converted to string.');
       }
     }
 
     // We expect json to be usual object.
-    if (!isRecord(json)) {
+    if (!isRecord(formattedValue)) {
       throw new TypeError('Value is not JSON object.');
     }
 
     return parsers.reduce((acc, {
       parser, optional, from, to,
     }) => {
-      const jsonValue = json[from];
+      const jsonValue = formattedValue[from];
 
       if (jsonValue === undefined) {
         if (!optional) {
