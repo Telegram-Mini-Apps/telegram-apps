@@ -1,5 +1,12 @@
 # @twa.js/sdk
 
+## 0.5.1
+
+### Patch Changes
+
+- Updated dependencies [43fe082]
+  - @twa.js/bridge@1.1.0
+
 ## 0.5.0
 
 ### Minor Changes

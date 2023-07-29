@@ -1,5 +1,11 @@
 # @twa.js/bridge
 
+## 1.1.0
+
+### Minor Changes
+
+- 43fe082: Add `subscribe` and `unsubscribe` functions.
+
 ## 1.0.0
 
 ### Major Changes
