@@ -1,5 +1,13 @@
 # @twa.js/init-data
 
+## 0.2.8
+
+### Patch Changes
+
+- 054d616: Fully rework bridge and release its first major update. Rename utilities in utils package. Make sdk components way better.
+- Updated dependencies [054d616]
+  - @twa.js/utils@0.2.12
+
 ## 0.2.7
 
 ### Patch Changes

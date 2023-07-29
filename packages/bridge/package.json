@@ -1,6 +1,6 @@
 {
   "name": "@twa.js/bridge",
-  "version": "0.3.9",
+  "version": "1.0.0",
   "description": "Communication layer between Telegram and frontend applications.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",

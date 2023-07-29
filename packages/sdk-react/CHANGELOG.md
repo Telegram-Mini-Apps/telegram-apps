@@ -1,5 +1,14 @@
 # @twa.js/sdk-react
 
+## 0.3.8
+
+### Patch Changes
+
+- 054d616: Fully rework bridge and release its first major update. Rename utilities in utils package. Make sdk components way better.
+- Updated dependencies [054d616]
+  - @twa.js/bridge@1.0.0
+  - @twa.js/sdk@0.5.0
+
 ## 0.3.7
 
 ### Patch Changes

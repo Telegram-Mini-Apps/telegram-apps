@@ -1,5 +1,16 @@
 # playground
 
+## 1.0.6
+
+### Patch Changes
+
+- 054d616: Fully rework bridge and release its first major update. Rename utilities in utils package. Make sdk components way better.
+- Updated dependencies [054d616]
+  - @twa.js/bridge@1.0.0
+  - @twa.js/sdk@0.5.0
+  - @twa.js/init-data@0.2.8
+  - @twa.js/utils@0.2.12
+
 ## 1.0.5
 
 ### Patch Changes
