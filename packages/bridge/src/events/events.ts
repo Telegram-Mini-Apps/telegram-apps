@@ -2,7 +2,7 @@ import type {
   EventEmitter as UtilEventEmitter,
   EventName as UtilEventName,
   EventListener as UtilEventListener,
-  EventParams as UtilEventParams,
+  EventParams as UtilEventParams, AnySubscribeListener,
 } from '@twa.js/utils';
 
 import type {
@@ -113,3 +113,10 @@ export type EventListener<E extends EventName> =
  * Event emitter, based describe events map.
  */
 export type EventEmitter = UtilEventEmitter<Events>;
+
+/**
+ * Event listener used in `subscribe` and `unsubscribe` functions.
+ */
+export type GlobalEventListener =
+  | AnySubscribeListener<Events>
+  | ((event: string, data: unknown) => void);
