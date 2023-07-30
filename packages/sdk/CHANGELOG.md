@@ -1,5 +1,11 @@
 # @twa.js/sdk
 
+## 0.5.2
+
+### Patch Changes
+
+- 450e85e: Use methods instead of setters for header and background colors
+
 ## 0.5.1
 
 ### Patch Changes
