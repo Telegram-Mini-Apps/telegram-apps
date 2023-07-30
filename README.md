@@ -86,8 +86,3 @@ allows init data validation and parse, works both in browser and NodeJS.
 Tree-shakeable set of useful utilities used by many other libraries of
 ecosystem. You probably don't need to install this package directly, but may
 find provided functionality useful in other contexts.
-
-## Contribution
-
-Any contribution is appreciated. Feel free to create new feature requests, bug
-reports etc.
