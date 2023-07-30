@@ -62,25 +62,6 @@ export class WebApp
   }
 
   /**
-   * Updates current application background color.
-   * FIXME: Has no effect on desktop, works incorrectly in Android.
-   *  Issues:
-   *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
-   *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
-   * @param color - new color.
-   */
-  set backgroundColor(color: RGB) {
-    this.#postEvent('web_app_set_background_color', { color });
-
-    if (this.#backgroundColor === color) {
-      return;
-    }
-
-    this.#backgroundColor = color;
-    this.#ee.emit('backgroundColorChanged', color);
-  }
-
-  /**
    * Returns current application color scheme. This value is
    * computed based on the current background color.
    */
@@ -100,25 +81,6 @@ export class WebApp
    */
   get headerColor(): HeaderColorKey {
     return this.#headerColor;
-  }
-
-  /**
-   * Updates current application header color.
-   * FIXME: Has no effect on desktop, works incorrectly on Android.
-   *  Issues:
-   *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
-   *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
-   * @param color - settable color key.
-   */
-  set headerColor(color: HeaderColorKey) {
-    this.#postEvent('web_app_set_header_color', { color_key: color });
-
-    if (this.#headerColor === color) {
-      return;
-    }
-
-    this.#headerColor = color;
-    this.#ee.emit('headerColorChanged', color);
   }
 
   /**
@@ -288,6 +250,44 @@ export class WebApp
       throw new Error(`Passed data has incorrect size: ${size}`);
     }
     this.#postEvent('web_app_data_send', { data });
+  }
+
+  /**
+   * Updates current application header color.
+   * FIXME: Has no effect on desktop, works incorrectly on Android.
+   *  Issues:
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
+   * @param color - settable color key.
+   */
+  setHeaderColor(color: HeaderColorKey) {
+    this.#postEvent('web_app_set_header_color', { color_key: color });
+
+    if (this.#headerColor === color) {
+      return;
+    }
+
+    this.#headerColor = color;
+    this.#ee.emit('headerColorChanged', color);
+  }
+
+  /**
+   * Updates current application background color.
+   * FIXME: Has no effect on desktop, works incorrectly in Android.
+   *  Issues:
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
+   *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
+   * @param color - new color.
+   */
+  setBackgroundColor(color: RGB) {
+    this.#postEvent('web_app_set_background_color', { color });
+
+    if (this.#backgroundColor === color) {
+      return;
+    }
+
+    this.#backgroundColor = color;
+    this.#ee.emit('backgroundColorChanged', color);
   }
 
   /**
