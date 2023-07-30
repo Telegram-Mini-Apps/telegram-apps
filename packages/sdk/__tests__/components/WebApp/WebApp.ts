@@ -10,7 +10,7 @@ describe('components', () => {
             const webApp = new WebApp('', '', 'bg_color', '#000000', jest.fn());
 
             expect(webApp.colorScheme).toBe('dark');
-            webApp.backgroundColor = '#ffffff';
+            webApp.setBackgroundColor('#ffffff');
             expect(webApp.colorScheme).toBe('light');
           });
         });
@@ -22,7 +22,7 @@ describe('components', () => {
             const webApp = new WebApp('', '', 'bg_color', '#000000', postEvent);
 
             expect(postEvent).toHaveBeenCalledTimes(0);
-            webApp.backgroundColor = '#ffaabb';
+            webApp.setBackgroundColor('#ffaabb');
             expect(postEvent).toHaveBeenCalledTimes(1);
             expect(postEvent).toHaveBeenCalledWith('web_app_set_background_color', { color: '#ffaabb' });
           });
@@ -33,7 +33,7 @@ describe('components', () => {
 
             webApp.on('backgroundColorChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
-            webApp.backgroundColor = '#ffaacc';
+            webApp.setBackgroundColor('#ffaacc');
             expect(listener).toHaveBeenCalledTimes(1);
             expect(listener).toHaveBeenCalledWith('#ffaacc');
           });
@@ -45,7 +45,7 @@ describe('components', () => {
             const webApp = new WebApp('', '', 'bg_color', '#000000', postEvent);
 
             expect(postEvent).toHaveBeenCalledTimes(0);
-            webApp.headerColor = 'secondary_bg_color';
+            webApp.setHeaderColor('secondary_bg_color');
             expect(postEvent).toHaveBeenCalledTimes(1);
             expect(postEvent).toHaveBeenCalledWith('web_app_set_header_color', { color_key: 'secondary_bg_color' });
           });
@@ -56,7 +56,7 @@ describe('components', () => {
 
             webApp.on('headerColorChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
-            webApp.headerColor = 'secondary_bg_color';
+            webApp.setHeaderColor('secondary_bg_color');
             expect(listener).toHaveBeenCalledTimes(1);
             expect(listener).toHaveBeenCalledWith('secondary_bg_color');
           });
@@ -71,14 +71,14 @@ describe('components', () => {
               webApp.on('backgroundColorChanged', listener);
 
               expect(listener).toHaveBeenCalledTimes(0);
-              webApp.backgroundColor = '#aaddcc';
+              webApp.setBackgroundColor('#aaddcc');
               expect(listener).toHaveBeenCalledTimes(1);
 
               webApp.off('backgroundColorChanged', listener);
               listener.mockClear();
 
               expect(listener).toHaveBeenCalledTimes(0);
-              webApp.backgroundColor = '#ffaaaa';
+              webApp.setBackgroundColor('#ffaaaa');
               expect(listener).toHaveBeenCalledTimes(0);
             });
           });
@@ -91,14 +91,14 @@ describe('components', () => {
               webApp.on('headerColorChanged', listener);
 
               expect(listener).toHaveBeenCalledTimes(0);
-              webApp.headerColor = 'secondary_bg_color';
+              webApp.setHeaderColor('secondary_bg_color');
               expect(listener).toHaveBeenCalledTimes(1);
 
               webApp.off('headerColorChanged', listener);
               listener.mockClear();
 
               expect(listener).toHaveBeenCalledTimes(0);
-              webApp.headerColor = 'bg_color';
+              webApp.setHeaderColor('bg_color');
               expect(listener).toHaveBeenCalledTimes(0);
             });
           });
