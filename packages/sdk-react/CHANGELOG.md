@@ -1,5 +1,12 @@
 # @twa.js/sdk-react
 
+## 0.3.11
+
+### Patch Changes
+
+- @twa.js/bridge@1.1.1
+- @twa.js/sdk@0.5.3
+
 ## 0.3.10
 
 ### Patch Changes

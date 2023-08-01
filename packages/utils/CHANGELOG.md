@@ -1,5 +1,11 @@
 # @twa.js/utils
 
+## 0.3.0
+
+### Minor Changes
+
+- 5868e9f: Add utilities related to class names
+
 ## 0.2.12
 
 ### Patch Changes
