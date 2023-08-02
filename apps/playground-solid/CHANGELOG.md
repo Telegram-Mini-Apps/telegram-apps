@@ -1,5 +1,12 @@
 # playground
 
+## 1.0.10
+
+### Patch Changes
+
+- Updated dependencies [04c2ce6]
+  - @twa.js/sdk@0.6.0
+
 ## 1.0.9
 
 ### Patch Changes

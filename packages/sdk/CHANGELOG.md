@@ -1,5 +1,11 @@
 # @twa.js/sdk
 
+## 0.6.0
+
+### Minor Changes
+
+- 04c2ce6: Add bug related to recursive calls of postEvent function. Allow usage of raw init data. Add an option to create global CSS variables.
+
 ## 0.5.3
 
 ### Patch Changes
