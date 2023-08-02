@@ -11,6 +11,19 @@ describe('utils', () => {
         + 'and save them in sessionStorage by key "__telegram-launch-params__"', () => {
         const version = '9.1';
         const platform = 'unbelievable';
+        const initData = new URLSearchParams({
+          hash: '68570a4968ca87b8bde6fae0e6a2e30486af899bf80982105d16dc42fe89b45d',
+          auth_date: '1672418130',
+          query_id: 'AAHdF6IQAAAAAN0XohASX1Fh',
+          user: JSON.stringify({
+            id: 279058397,
+            first_name: 'Vladislav',
+            last_name: 'Kibenko',
+            username: 'vdkfrost',
+            language_code: 'ru',
+            is_premium: true,
+          }),
+        }).toString();
         const launchParams = new URLSearchParams({
           tgWebAppVersion: version,
           tgWebAppPlatform: platform,
@@ -22,19 +35,7 @@ describe('utils', () => {
             link_color: '#22314a',
             text_color: '#31344a',
           }),
-          tgWebAppData: new URLSearchParams({
-            hash: '68570a4968ca87b8bde6fae0e6a2e30486af899bf80982105d16dc42fe89b45d',
-            auth_date: '1672418130',
-            query_id: 'AAHdF6IQAAAAAN0XohASX1Fh',
-            user: JSON.stringify({
-              id: 279058397,
-              first_name: 'Vladislav',
-              last_name: 'Kibenko',
-              username: 'vdkfrost',
-              language_code: 'ru',
-              is_premium: true,
-            }),
-          }).toString(),
+          tgWebAppData: initData,
         }).toString();
 
         const setItem = jest.fn();
@@ -60,6 +61,7 @@ describe('utils', () => {
               isPremium: true,
             },
           },
+          initDataRaw: initData,
           platform,
           themeParams: {
             backgroundColor: '#ffaabb',
@@ -78,6 +80,19 @@ describe('utils', () => {
         + 'in window.location.hash', () => {
         const version = '9.1';
         const platform = 'unbelievable';
+        const initData = new URLSearchParams({
+          hash: '68570a4968ca87b8bde6fae0e6a2e30486af899bf80982105d16dc42fe89b45d',
+          auth_date: '1672418130',
+          query_id: 'AAHdF6IQAAAAAN0XohASX1Fh',
+          user: JSON.stringify({
+            id: 279058397,
+            first_name: 'Vladislav',
+            last_name: 'Kibenko',
+            username: 'vdkfrost',
+            language_code: 'ru',
+            is_premium: true,
+          }),
+        }).toString();
         const launchParams = new URLSearchParams({
           tgWebAppVersion: version,
           tgWebAppPlatform: platform,
@@ -89,19 +104,7 @@ describe('utils', () => {
             link_color: '#22314a',
             text_color: '#31344a',
           }),
-          tgWebAppData: new URLSearchParams({
-            hash: '68570a4968ca87b8bde6fae0e6a2e30486af899bf80982105d16dc42fe89b45d',
-            auth_date: '1672418130',
-            query_id: 'AAHdF6IQAAAAAN0XohASX1Fh',
-            user: JSON.stringify({
-              id: 279058397,
-              first_name: 'Vladislav',
-              last_name: 'Kibenko',
-              username: 'vdkfrost',
-              language_code: 'ru',
-              is_premium: true,
-            }),
-          }).toString(),
+          tgWebAppData: initData,
         }).toString();
 
         const getItem = jest.fn(() => launchParams);
@@ -127,6 +130,7 @@ describe('utils', () => {
               isPremium: true,
             },
           },
+          initDataRaw: initData,
           platform,
           themeParams: {
             backgroundColor: '#ffaabb',

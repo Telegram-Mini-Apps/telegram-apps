@@ -12,11 +12,12 @@ import type {
   WebApp,
 } from '../components/index.js';
 
-export interface InitResult {
+export type InitResult = {
   backButton: BackButton;
   closingBehavior: ClosingBehaviour;
   haptic: HapticFeedback;
   initData?: InitData;
+  initDataRaw?: string;
   mainButton: MainButton;
   popup: Popup;
   postEvent: typeof postEvent;
@@ -24,7 +25,7 @@ export interface InitResult {
   themeParams: ThemeParams;
   viewport: Viewport;
   webApp: WebApp;
-}
+};
 
 export interface InitOptions {
   /**
@@ -33,6 +34,7 @@ export interface InitOptions {
    *
    * You could specify the `false` value to apply your own styles for the
    * scrollbar.
+   *
    * @default true
    */
   acceptScrollbarStyle?: boolean;
@@ -42,12 +44,23 @@ export interface InitOptions {
    * Web App method was called. It is highly recommended not to disable this
    * feature as long as it helps developer to find issues related to usage
    * of unsupported methods.
+   *
    * @default true
    */
   checkCompat?: boolean;
 
   /**
+   * Should SDK create global CSS variables related to current Telegram
+   * application colors.
+   *
+   * @see bindCSSVariables
+   * @default false
+   */
+  cssVars?: boolean;
+
+  /**
    * Enable debug mode.
+   *
    * @default false
    */
   debug?: boolean;

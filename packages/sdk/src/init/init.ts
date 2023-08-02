@@ -22,6 +22,7 @@ import {
 import type { InitOptions, InitResult } from './types.js';
 import { retrieveLaunchParams } from '../utils/index.js';
 import { MethodUnsupportedError } from '../lib/index.js';
+import { bindCSSVariables } from './css.js';
 
 /**
  * Initializes all SDK components.
@@ -30,6 +31,7 @@ import { MethodUnsupportedError } from '../lib/index.js';
 export async function init(options: InitOptions = {}): Promise<InitResult> {
   const {
     checkCompat = true,
+    cssVars = false,
     acceptScrollbarStyle = true,
     targetOrigin,
     debug,
@@ -46,6 +48,7 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
   // Get Web App launch params.
   const {
     initData,
+    initDataRaw,
     version,
     platform,
     themeParams,
@@ -62,7 +65,7 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
       if (!supports(method, version)) {
         throw new MethodUnsupportedError(method, version);
       }
-      return postEvent(method, params);
+      return bridgePostEvent(method, params);
     }
     : bridgePostEvent;
 
@@ -109,6 +112,11 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
   if (initData !== undefined) {
     const { authDate, hash, ...restInitData } = initData;
     result.initData = new InitData(authDate, hash, restInitData);
+    result.initDataRaw = initDataRaw;
+  }
+
+  if (cssVars) {
+    bindCSSVariables(result.webApp, result.themeParams);
   }
 
   return result;

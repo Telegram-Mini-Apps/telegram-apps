@@ -1,13 +1,14 @@
 /* eslint-disable no-empty */
-import { searchParams } from '@twa.js/utils';
+import { searchParams, string } from '@twa.js/utils';
 import { initData, type InitData } from '@twa.js/init-data';
 
 import { themeParams, type ThemeParams } from './theme-params.js';
-import { type Platform } from '../types.js';
+import type { Platform } from '../types.js';
 
 export interface LaunchParams {
   version: string;
   initData?: InitData;
+  initDataRaw?: string;
   platform: Platform;
   themeParams: ThemeParams;
 }
@@ -17,6 +18,7 @@ const launchParams = searchParams({
   // This property is optional as long as it can be missing in case, application was
   // launched via Inline Keyboard Button.
   initData: { type: initData, from: 'tgWebAppData', optional: true },
+  initDataRaw: { type: string, from: 'tgWebAppData', optional: true },
   platform: { type: (value) => value, from: 'tgWebAppPlatform' },
   themeParams: { type: themeParams, from: 'tgWebAppThemeParams' },
 });
