@@ -62,7 +62,7 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
       if (!supports(method, version)) {
         throw new MethodUnsupportedError(method, version);
       }
-      return postEvent(method, params);
+      return bridgePostEvent(method, params);
     }
     : bridgePostEvent;
 
