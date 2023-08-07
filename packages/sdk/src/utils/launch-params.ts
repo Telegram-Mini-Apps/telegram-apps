@@ -24,21 +24,32 @@ const launchParams = searchParams({
 });
 
 /**
+ * Parses query parameters as launch parameters.
+ * @param query - query parameters presented as string or URLSearchParams
+ * instance.
+ */
+export function parseLaunchParams(query: string | URLSearchParams): LaunchParams {
+  return launchParams(query);
+}
+
+/**
  * Extracts launch params from the current environment.
  */
 export function retrieveLaunchParams(): LaunchParams {
   const sessionStorageKey = '__telegram-launch-params__';
+  const errors: string[] = [];
 
   // Try to extract Web App data from search parameters. This block of code
   // covers usual flow, when application was firstly opened by user and its
   // hash always contains required parameters.
   try {
-    const initParams = window.location.hash.slice(1);
-    const webAppData = launchParams(initParams);
-    sessionStorage.setItem(sessionStorageKey, initParams);
+    const hash = window.location.hash.slice(1);
+    const webAppData = launchParams(hash);
+    sessionStorage.setItem(sessionStorageKey, hash);
 
     return webAppData;
   } catch (e) {
+    errors.push(e instanceof Error ? e.message : 'unknown error');
   }
 
   // Web Apps allows reloading current page. In this case,
@@ -48,6 +59,10 @@ export function retrieveLaunchParams(): LaunchParams {
   try {
     return launchParams(sessionStorage.getItem(sessionStorageKey) || '');
   } catch (e) {
+    errors.push(e instanceof Error ? e.message : 'unknown error');
   }
-  throw new Error('Unable to extract launch params.');
+
+  throw new Error(
+    `Unable to extract launch params. Occurred errors: "${errors.join('", "')}"`,
+  );
 }
