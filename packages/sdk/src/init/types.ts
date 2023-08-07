@@ -1,4 +1,5 @@
 import type { postEvent } from '@twa.js/bridge';
+
 import type {
   BackButton,
   ClosingBehaviour,
@@ -11,6 +12,7 @@ import type {
   Viewport,
   WebApp,
 } from '../components/index.js';
+import type { LaunchParams } from '../utils/index.js';
 
 export type InitResult = {
   backButton: BackButton;
@@ -64,6 +66,14 @@ export interface InitOptions {
    * @default false
    */
   debug?: boolean;
+
+  /**
+   * Launch parameters presented as query parameters or already parsed
+   * object. In case, this value is not specified, init
+   * function will try to retrieve launch parameters from window.location.hash
+   * via retrieveLaunchParams function.
+   */
+  launchParams?: string | URLSearchParams | LaunchParams;
 
   /**
    * Sets new targetOrigin, used by bridge's `postEvent` function.

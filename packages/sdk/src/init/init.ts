@@ -20,7 +20,11 @@ import {
   WebApp,
 } from '../components/index.js';
 import type { InitOptions, InitResult } from './types.js';
-import { retrieveLaunchParams } from '../utils/index.js';
+import {
+  type LaunchParams,
+  parseLaunchParams,
+  retrieveLaunchParams,
+} from '../utils/index.js';
 import { MethodUnsupportedError } from '../lib/index.js';
 import { bindCSSVariables } from './css.js';
 
@@ -35,6 +39,7 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
     acceptScrollbarStyle = true,
     targetOrigin,
     debug,
+    launchParams: launchParamsRaw,
   } = options;
 
   if (typeof debug === 'boolean') {
@@ -46,13 +51,23 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
   }
 
   // Get Web App launch params.
+  let launchParams: LaunchParams;
+
+  if (launchParamsRaw) {
+    launchParams = launchParamsRaw instanceof URLSearchParams || typeof launchParamsRaw === 'string'
+      ? parseLaunchParams(launchParamsRaw)
+      : launchParamsRaw;
+  } else {
+    launchParams = retrieveLaunchParams();
+  }
+
   const {
     initData,
     initDataRaw,
     version,
     platform,
     themeParams,
-  } = retrieveLaunchParams();
+  } = launchParams;
   const {
     backgroundColor = '#ffffff',
     buttonColor = '#000000',
