@@ -1,5 +1,11 @@
 # @twa.js/sdk
 
+## 0.7.0
+
+### Minor Changes
+
+- 8a0e39f: Allow passing custom launch parameters value into init function
+
 ## 0.6.0
 
 ### Minor Changes

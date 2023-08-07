@@ -1,5 +1,12 @@
 # @twa.js/sdk-react
 
+## 0.3.13
+
+### Patch Changes
+
+- Updated dependencies [8a0e39f]
+  - @twa.js/sdk@0.7.0
+
 ## 0.3.12
 
 ### Patch Changes
