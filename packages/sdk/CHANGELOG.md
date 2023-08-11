@@ -1,5 +1,11 @@
 # @twa.js/sdk
 
+## 0.7.1
+
+### Patch Changes
+
+- e71cea4: Add parseLaunchParams function to exports
+
 ## 0.7.0
 
 ### Minor Changes
