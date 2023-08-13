@@ -1,0 +1,69 @@
+{
+  "name": "@twa.js/sdk-solid",
+  "version": "0.0.0",
+  "description": "Solid JS bindings for Web Apps client SDK.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.js.git",
+    "directory": "packages/sdk-solid"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
+  },
+  "keywords": [
+    "telegram",
+    "telegram-web-apps",
+    "typescript",
+    "twa",
+    "sdk",
+    "solidjs"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "source": "src/index.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "solid": "./dist/source/index.js",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "node": "./dist/cjs/index.js",
+      "default": "./dist/cjs/index.js"
+    },
+    "./*": {
+      "types": "./dist/types/*.d.ts",
+      "solid": "./dist/source/*.js",
+      "import": "./dist/esm/*.js",
+      "require": "./dist/cjs/*.js",
+      "node": "./dist/cjs/*.js",
+      "default": "./dist/cjs/*.js"
+    }
+  },
+  "scripts": {
+    "lint": "eslint -c .eslintrc.cjs src/**/*",
+    "build": "rimraf dist && rollup --config rollup.config.js"
+  },
+  "dependencies": {
+    "@twa.js/sdk": "workspace:*"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -31,6 +31,7 @@
     "@twa.js/bridge": "workspace:*",
     "@twa.js/init-data": "workspace:*",
     "@twa.js/sdk": "workspace:*",
+    "@twa.js/sdk-solid": "workspace:*",
     "@twa.js/utils": "workspace:*",
     "@types/tmi.js": "^1.8.3",
     "classnames": "^2.3.2",
