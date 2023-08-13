@@ -1,5 +1,11 @@
 # @twa.js/sdk-solid
 
+## 0.0.2
+
+### Patch Changes
+
+- e8d3f28: Use terser during package build
+
 ## 0.0.1
 
 ### Patch Changes
