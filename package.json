@@ -24,6 +24,7 @@
     "rimraf": "^5.0.1",
     "rollup": "^3.26.2",
     "rollup-plugin-serve": "^2.0.2",
+    "rollup-preset-solid": "^2.0.1",
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.0",
     "turbo": "^1.9.7",
