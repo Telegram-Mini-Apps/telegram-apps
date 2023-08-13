@@ -1,5 +1,17 @@
 # playground
 
+## 1.0.13
+
+### Patch Changes
+
+- 894eccb: Implement @twa.js/sdk-solid package
+- Updated dependencies [894eccb]
+  - @twa.js/sdk-solid@0.0.1
+  - @twa.js/bridge@1.1.1
+  - @twa.js/init-data@0.2.9
+  - @twa.js/sdk@0.7.1
+  - @twa.js/utils@0.3.0
+
 ## 1.0.12
 
 ### Patch Changes

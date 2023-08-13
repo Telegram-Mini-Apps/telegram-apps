@@ -1,5 +1,11 @@
 # eslint-config-custom
 
+## 0.0.3
+
+### Patch Changes
+
+- 894eccb: Implement @twa.js/sdk-solid package
+
 ## 0.0.2
 
 ### Patch Changes
