@@ -6,17 +6,21 @@
     "declaration": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
     "inlineSources": true,
-    "lib": ["esnext"],
+    "isolatedModules": true,
+    "lib": [
+      "esnext"
+    ],
+    "module": "ESNext",
     "moduleResolution": "NodeNext",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "preserveWatchOutput": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true,
     "sourceMap": true,
-    "target": "ES6"
+    "strict": true,
+    "target": "ESNext"
   },
   "exclude": ["node_modules"]
 }
