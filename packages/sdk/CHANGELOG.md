@@ -1,5 +1,15 @@
 # @twa.js/sdk
 
+## 0.7.2
+
+### Patch Changes
+
+- 3c6bc51: Improve class names utilities. Re-export them in Solid SDK
+- Updated dependencies [3c6bc51]
+  - @twa.js/utils@0.4.0
+  - @twa.js/bridge@1.1.2
+  - @twa.js/init-data@0.2.10
+
 ## 0.7.1
 
 ### Patch Changes
