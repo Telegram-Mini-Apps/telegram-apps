@@ -1,0 +1,57 @@
+$horizontal-padding: 16px;
+$height: 44px;
+
+@mixin inherit-typography() {
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
+.root {
+  display: block;
+  position: relative;
+  background: #fff;
+  font-size: 17px;
+  letter-spacing: -0.4px;
+}
+
+.input {
+  @include inherit-typography();
+  display: block;
+  appearance: none;
+  background: transparent;
+  border: none;
+  box-sizing: border-box;
+  color: #000;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+
+  &:active, &:focus {
+    outline: none;
+  }
+}
+
+.placeholder {
+  @include inherit-typography();
+  color: #3C3C4399;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.clear {
+  position: absolute;
+  right: $horizontal-padding;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 17px;
+  height: 18px;
+
+  path {
+    fill: #8E8E93;
+  }
+}
