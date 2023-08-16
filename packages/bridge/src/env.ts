@@ -47,3 +47,5 @@ export function isIframe(): boolean {
     return true;
   }
 }
+
+export function isTelegramWeb
