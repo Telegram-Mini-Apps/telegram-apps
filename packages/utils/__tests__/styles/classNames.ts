@@ -3,22 +3,21 @@ import { classNames } from '../../src';
 describe('styles', () => {
   describe('classNames.ts', () => {
     describe('classNames', () => {
-      it('should ignore values undefined, null, boolean and empty strings', () => {
-        expect(classNames(undefined, null, true, false, '')).toBe('');
+      it('should ignore all non-empty strings and objects', () => {
+        expect(classNames('', 2, 'b', null, undefined, false, true, [], 'a', 'c')).toBe('b a c');
       });
 
-      it('should join with space non-empty strings and numbers', () => {
-        expect(classNames('a', 123)).toBe('a 123');
-      });
-
-      it('should pick only keys which values are true', () => {
+      it('should pick only keys which values are truthy', () => {
         expect(classNames({
           a: true,
           b: null,
           c: false,
           d: undefined,
-          e: true,
-        })).toBe('a e');
+          e: {},
+          f: 3,
+          g: 0,
+          h: '',
+        })).toBe('a e f');
       });
     });
   });

@@ -54,6 +54,7 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
+    "@twa.js/utils": "workspace:*",
     "@twa.js/sdk": "workspace:*"
   },
   "peerDependencies": {
