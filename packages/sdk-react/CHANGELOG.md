@@ -1,5 +1,13 @@
 # @twa.js/sdk-react
 
+## 0.3.15
+
+### Patch Changes
+
+- Updated dependencies [3c6bc51]
+  - @twa.js/sdk@0.7.2
+  - @twa.js/bridge@1.1.2
+
 ## 0.3.14
 
 ### Patch Changes
