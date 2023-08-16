@@ -1,39 +1,68 @@
-import { classNames, ClassNamesValue } from './classNames.js';
+import { classNames } from './classNames.js';
 
-type RequiredKeys<T extends {}> = {
-  [K in keyof T]-?: undefined extends T[K] ? never : K;
-}[keyof T];
-
-type OptionalKeys<T extends {}> = Exclude<keyof T, RequiredKeys<T>>;
-
-type MergeClassNames<A extends {}, B extends {}> = {
-  [K in RequiredKeys<A & B>]: string
-} & {
-  [K in OptionalKeys<A & B>]?: string;
-};
-
-type ClassNames = Record<string, ClassNamesValue>;
+type FilterUnion<U> = Exclude<U, number | string | null | undefined | any[] | boolean>;
 
 /**
- * Merges 2 sets of parameters. Before using this function, make sure `a`
- * and `b` are Record<string, ClassNamesValue>.
- * @see ClassNamesValue
- * @param a - first set of parameters.
- * @param b - second set of parameters.
+ * Returns union keys removing those, which values are not strings.
  */
-export function mergeClassNames<A extends ClassNames, B extends ClassNames>(
-  a: A,
-  b: B,
-): MergeClassNames<A, B> {
-  const keys = [...Object.keys(a), ...Object.keys(b)];
+type UnionFilteredKeys<U> = U extends U
+  ? {
+    [K in keyof U]: U[K] extends string ? K : never
+  }[keyof U]
+  : never;
 
-  return keys.reduce<MergeClassNames<A, B>>((acc, key) => {
-    const value = classNames(a[key], b[key]);
+/**
+ * Returns union required keys.
+ */
+type UnionRequiredKeys<U> = U extends U
+  ? {
+    [K in UnionFilteredKeys<U>]-?: ({} extends { [P in K]: U[K] } ? never : K)
+  }[UnionFilteredKeys<U>]
+  : never;
 
-    if (value.length > 0) {
-      (acc as any)[key] = value;
+/**
+ * Returns union optional keys.
+ */
+type UnionOptionalKeys<U> = Exclude<UnionFilteredKeys<U>, UnionRequiredKeys<U>>;
+
+type MergeClassNames<Tuple extends any[]> = Tuple[number] extends infer Union
+  ? FilterUnion<Union> extends infer UnionFiltered
+    ? {
+    [K in UnionRequiredKeys<UnionFiltered>]: string;
+  } & {
+    [K in UnionOptionalKeys<UnionFiltered>]?: string;
+  }
+    : never
+  : never;
+
+/**
+ * Returns true in case, passed value is Record.
+ * @param value
+ */
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(null);
+}
+
+/**
+ * Merges 2 sets of parameters. Function expects passing an array of objects with values, which
+ * could be passed to `classNames` function. As the result, it returns an object with keys
+ * from all objects with merged values.
+ * @see classNames
+ */
+export function mergeClassNames<T extends any[]>(...partials: T): MergeClassNames<T> {
+  return partials.reduce<MergeClassNames<T>>((acc, partial) => {
+    if (!isObject(partial)) {
+      return acc;
     }
 
+    Object.entries(partial).forEach(([key, value]) => {
+      const className = classNames((acc as any)[key], value);
+
+      if (className.length > 0) {
+        (acc as any)[key] = className;
+      }
+    });
+
     return acc;
-  }, {} as MergeClassNames<A, B>);
+  }, {} as MergeClassNames<T>);
 }
