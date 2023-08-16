@@ -1,5 +1,12 @@
 # @twa.js/init-data
 
+## 0.2.10
+
+### Patch Changes
+
+- Updated dependencies [3c6bc51]
+  - @twa.js/utils@0.4.0
+
 ## 0.2.9
 
 ### Patch Changes

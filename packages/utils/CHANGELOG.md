@@ -1,5 +1,11 @@
 # @twa.js/utils
 
+## 0.4.0
+
+### Minor Changes
+
+- 3c6bc51: Improve class names utilities. Re-export them in Solid SDK
+
 ## 0.3.0
 
 ### Minor Changes

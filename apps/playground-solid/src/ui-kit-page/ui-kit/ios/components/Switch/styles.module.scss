@@ -1,0 +1,35 @@
+$toggle-size: 27px;
+$padding: 2px;
+$width: 51px;
+
+.root {
+  display: inline-block;
+  background-color: rgba(120, 120, 128, 0.16);
+  width: $width;
+  height: $toggle-size + $padding * 2;
+  border-radius: 1000px;
+  position: relative;
+  padding: $padding;
+  box-sizing: border-box;
+  transition: 300ms padding-left, 300ms background-color;
+  vertical-align: top;
+  -webkit-tap-highlight-color: transparent;
+
+  &Checked {
+    background-color: #34C759;
+    padding-left: $width - $toggle-size - $padding;
+  }
+}
+
+.input {
+  display: none;
+}
+
+.track {
+  height: $toggle-size;
+  width: $toggle-size;
+  border-radius: 50%;
+  background-color: #fff;
+  display: block;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .15);
+}

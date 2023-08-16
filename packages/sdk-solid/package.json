@@ -1,6 +1,6 @@
 {
   "name": "@twa.js/sdk-solid",
-  "version": "0.0.0",
+  "version": "0.0.3",
   "description": "Solid JS bindings for Web Apps client SDK.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
@@ -54,6 +54,7 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
+    "@twa.js/utils": "workspace:*",
     "@twa.js/sdk": "workspace:*"
   },
   "peerDependencies": {

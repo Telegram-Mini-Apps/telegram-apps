@@ -241,6 +241,9 @@ importers:
       '@twa.js/sdk':
         specifier: workspace:*
         version: link:../sdk
+      '@twa.js/utils':
+        specifier: workspace:*
+        version: link:../utils
       solid-js:
         specifier: ^1.0.0
         version: 1.7.6

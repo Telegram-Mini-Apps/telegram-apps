@@ -1,0 +1,14 @@
+.root {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.divider {
+  height: 0.5px;
+  background-color: rgba(60, 60, 67, 0.36);
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
