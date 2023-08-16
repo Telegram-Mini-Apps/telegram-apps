@@ -1,5 +1,11 @@
 # @twa.js/sdk
 
+## 0.7.3
+
+### Patch Changes
+
+- 5339167: Export misc types related to the platform
+
 ## 0.7.2
 
 ### Patch Changes
