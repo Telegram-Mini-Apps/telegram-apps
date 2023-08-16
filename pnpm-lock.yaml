@@ -124,6 +124,37 @@ importers:
         specifier: ^2.7.0
         version: 2.7.0(solid-js@1.7.6)(vite@4.3.9)
 
+  apps/solid-sdk-example:
+    dependencies:
+      '@twa.js/sdk-solid':
+        specifier: workspace:*
+        version: link:../../packages/sdk-solid
+      solid-js:
+        specifier: ^1.7.6
+        version: 1.7.6
+    devDependencies:
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.27.5)(eslint@7.32.0)
+      eslint-config-airbnb-typescript:
+        specifier: ^17.0.0
+        version: 17.0.0(@typescript-eslint/eslint-plugin@5.61.0)(@typescript-eslint/parser@5.61.0)(eslint-plugin-import@2.27.5)(eslint@7.32.0)
+      eslint-plugin-solid:
+        specifier: ^0.12.1
+        version: 0.12.1(eslint@7.32.0)(typescript@5.1.6)
+      solid-devtools:
+        specifier: ^0.27.3
+        version: 0.27.3(solid-js@1.7.6)(vite@4.3.9)
+      typescript:
+        specifier: ^5.1.3
+        version: 5.1.6
+      vite:
+        specifier: ^4.3.9
+        version: 4.3.9(@types/node@16.18.38)(sass@1.63.6)
+      vite-plugin-solid:
+        specifier: ^2.7.0
+        version: 2.7.0(solid-js@1.7.6)(vite@4.3.9)
+
   packages/bridge:
     dependencies:
       '@twa.js/utils':
@@ -314,7 +345,7 @@ packages:
       '@babel/parser': 7.22.7
       '@babel/template': 7.22.5
       '@babel/traverse': 7.22.8
-      '@babel/types': 7.22.5
+      '@babel/types': 7.22.10
       '@nicolo-ribaudo/semver-v6': 6.3.3
       convert-source-map: 1.9.0
       debug: 4.3.4
@@ -4357,7 +4388,7 @@ packages:
       eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.61.0)(eslint@7.32.0)
       object.assign: 4.1.4
       object.entries: 1.1.6
-      semver: 6.3.0
+      semver: 6.3.1
 
   /eslint-config-airbnb-typescript@17.0.0(@typescript-eslint/eslint-plugin@5.61.0)(@typescript-eslint/parser@5.61.0)(eslint-plugin-import@2.27.5)(eslint@7.32.0):
     resolution: {integrity: sha512-elNiuzD0kPAPTXjFWg+lE24nMdHMtuxgYoD30OyMD6yrW1AhFZPAg27VX7d3tzOErw+dgJTNWfRSDqEcXb4V0g==}
@@ -5470,7 +5501,7 @@ packages:
       '@babel/parser': 7.22.7
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.0
-      semver: 6.3.0
+      semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -6235,7 +6266,7 @@ packages:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
     engines: {node: '>=8'}
     dependencies:
-      semver: 6.3.0
+      semver: 6.3.1
     dev: true
 
   /make-error@1.3.6:
@@ -7151,10 +7182,6 @@ packages:
     hasBin: true
     dev: true
 
-  /semver@6.3.0:
-    resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
-    hasBin: true
-
   /semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
@@ -7286,7 +7313,7 @@ packages:
     dependencies:
       '@babel/core': 7.22.8
       '@babel/plugin-syntax-typescript': 7.22.5(@babel/core@7.22.8)
-      '@babel/types': 7.22.5
+      '@babel/types': 7.22.10
       '@solid-devtools/debugger': 0.22.1(solid-js@1.7.6)
       '@solid-devtools/shared': 0.12.0(solid-js@1.7.6)
       solid-js: 1.7.6
