@@ -1,8 +1,12 @@
-import { EventEmitter } from '@twa.js/utils';
-import { on, postEvent as bridgePostEvent } from '@twa.js/bridge';
+import { EventEmitter, withTimeout } from '@twa.js/utils';
+import {
+  on,
+  postEvent as bridgePostEvent,
+  type ViewportChangedPayload,
+  type PostEvent,
+} from '@twa.js/bridge';
 
 import type { ViewportEventsMap } from './events.js';
-import { PostEvent } from '../../types.js';
 
 export interface RequestViewportResult {
   height: number;
@@ -30,54 +34,51 @@ export class Viewport {
    *  long as method web_app_request_viewport does not work on `macos` platform.
    * @see Issue: https://github.com/Telegram-Web-Apps/twa.js/issues/5
    * @param postEvent - method which allows posting Telegram event.
+   * @param timeout - request timeout.
    */
-  static request(postEvent: PostEvent = bridgePostEvent): Promise<RequestViewportResult> {
-    postEvent('web_app_request_viewport');
-
-    return new Promise((res) => {
+  static request(
+    postEvent: PostEvent = bridgePostEvent,
+    timeout?: number,
+  ): Promise<RequestViewportResult> {
+    const promise = new Promise<RequestViewportResult>((res) => {
       const off = on('viewport_changed', (payload) => {
-        const {
-          height,
-          width,
-          is_expanded: isExpanded,
-          is_state_stable: isStateStable,
-        } = payload;
-
         off();
-        res({ height, isExpanded, width, isStateStable });
+
+        const { is_expanded: isExpanded, is_state_stable: isStateStable, ...rest } = payload;
+        res({ ...rest, isExpanded, isStateStable });
       });
+
+      postEvent('web_app_request_viewport');
     });
+
+    return typeof timeout === 'number' ? withTimeout(promise, timeout) : promise;
   }
 
-  readonly #postEvent: PostEvent;
+  /**
+   * Synchronizes specified instance of Viewport with the actual value in the native
+   * application.
+   * @param viewport - Viewport instance.
+   */
+  static sync(viewport: Viewport): void {
+    on('viewport_changed', viewport.applyEventPayload.bind(viewport));
+  }
 
   /**
    * Returns initialized instance of Viewport which is synchronized with
    * its actual state in Web Apps.
    * @param postEvent - method which allows posting Telegram event.
+   * @param timeout - request timeout.
    */
-  static async synced(postEvent: PostEvent = bridgePostEvent): Promise<Viewport> {
-    const { height, isExpanded, width } = await this.request(postEvent);
+  static async synced(postEvent: PostEvent = bridgePostEvent, timeout?: number): Promise<Viewport> {
+    const { height, isExpanded, width } = await this.request(postEvent, timeout);
     const viewport = new Viewport(height, width, height, isExpanded, postEvent);
 
-    on('viewport_changed', (event) => {
-      const {
-        height: evHeight,
-        width: evWidth,
-        is_expanded: evIsExpanded,
-        is_state_stable: isStateStable,
-      } = event;
-      viewport.height = evHeight;
-      viewport.width = evWidth;
-      viewport.isExpanded = evIsExpanded;
-
-      if (isStateStable) {
-        viewport.stableHeight = viewport.height;
-      }
-    });
+    this.sync(viewport);
 
     return viewport;
   }
+
+  readonly #postEvent: PostEvent;
 
   readonly #ee = new EventEmitter<ViewportEventsMap>();
 
@@ -101,6 +102,22 @@ export class Viewport {
     this.#stableHeight = truncate(stableHeight);
     this.#isExpanded = isExpanded;
     this.#postEvent = postEvent;
+  }
+
+  private applyEventPayload(event: ViewportChangedPayload) {
+    const {
+      height: evHeight,
+      width: evWidth,
+      is_expanded: evIsExpanded,
+      is_state_stable: isStateStable,
+    } = event;
+    this.height = evHeight;
+    this.width = evWidth;
+    this.isExpanded = evIsExpanded;
+
+    if (isStateStable) {
+      this.stableHeight = this.height;
+    }
   }
 
   private set height(value: number) {

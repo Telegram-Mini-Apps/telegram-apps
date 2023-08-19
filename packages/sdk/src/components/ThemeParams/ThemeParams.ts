@@ -1,13 +1,13 @@
-import { type RGB, EventEmitter } from '@twa.js/utils';
-import { on, postEvent as bridgePostEvent } from '@twa.js/bridge';
+import { type RGB, EventEmitter, withTimeout } from '@twa.js/utils';
+import { on, postEvent as bridgePostEvent, type PostEvent } from '@twa.js/bridge';
 
-import type { ThemeParamsEvents } from './events.js';
-import type { PostEvent } from '../../types.js';
 import {
   isColorDark,
   themeParams,
   type ThemeParams as TwaThemeParams,
 } from '../../utils/index.js';
+
+import type { ThemeParamsEvents } from './events.js';
 
 type LocalThemeParams = {
   [K in keyof TwaThemeParams]-?: undefined extends TwaThemeParams[K]
@@ -22,16 +22,35 @@ type LocalThemeParams = {
 export class ThemeParams {
   /**
    * Requests fresh information about current theme.
+   * FIXME: Be careful using this function in desktop version of Telegram as
+   *  long as method web_app_request_theme does not work on `macos` platform.
    * @param postEvent - method which allows posting Telegram event.
+   * @param timeout - request timeout.
    */
-  static request(postEvent: PostEvent = bridgePostEvent): Promise<TwaThemeParams> {
-    postEvent('web_app_request_theme');
-
-    return new Promise((res) => {
+  static request(
+    postEvent: PostEvent = bridgePostEvent,
+    timeout?: number,
+  ): Promise<TwaThemeParams> {
+    const promise = new Promise<TwaThemeParams>((res) => {
       const off = on('theme_changed', ({ theme_params }) => {
         off();
         res(themeParams(theme_params));
       });
+
+      postEvent('web_app_request_theme');
+    });
+
+    return typeof timeout === 'number' ? withTimeout(promise, timeout) : promise;
+  }
+
+  /**
+   * Synchronizes specified instance of ThemeParams with the actual value in the native
+   * application.
+   * @param tp - ThemeParams instance.
+   */
+  static sync(tp: ThemeParams): void {
+    on('theme_changed', (event) => {
+      tp.assignThemeParams(themeParams(event.theme_params), true);
     });
   }
 
@@ -39,14 +58,16 @@ export class ThemeParams {
    * Returns instance of ThemeParams which is synchronized with external
    * environment.
    * @param postEvent - method which allows posting Telegram event.
+   * @param timeout - request timeout.
    */
-  static async synced(postEvent: PostEvent = bridgePostEvent): Promise<ThemeParams> {
-    const params = await this.request(postEvent);
+  static async synced(
+    postEvent: PostEvent = bridgePostEvent,
+    timeout?: number,
+  ): Promise<ThemeParams> {
+    const params = await this.request(postEvent, timeout);
     const tp = new ThemeParams(params);
 
-    on('theme_changed', (event) => {
-      tp.assignThemeParams(themeParams(event.theme_params), true);
-    });
+    this.sync(tp);
 
     return tp;
   }
