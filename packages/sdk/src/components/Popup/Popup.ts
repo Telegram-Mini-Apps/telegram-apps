@@ -1,11 +1,11 @@
 import { EventEmitter, type Version } from '@twa.js/utils';
-import { on, postEvent as bridgePostEvent } from '@twa.js/bridge';
+import { on, postEvent as bridgePostEvent, type PostEvent } from '@twa.js/bridge';
+
+import { preparePopupParams } from './utils.js';
+import { WithSupports } from '../../lib/index.js';
 
 import type { PopupParams } from './types.js';
 import type { PopupEvents } from './events.js';
-import type { PostEvent } from '../../types.js';
-import { preparePopupParams } from './utils.js';
-import { WithSupports } from '../../lib/index.js';
 
 /**
  * Controls currently displayed application popup. It allows developers to

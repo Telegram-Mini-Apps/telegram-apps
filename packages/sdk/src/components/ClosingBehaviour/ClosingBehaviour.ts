@@ -1,8 +1,7 @@
 import { EventEmitter } from '@twa.js/utils';
-import { postEvent as bridgePostEvent } from '@twa.js/bridge';
+import { postEvent as bridgePostEvent, type PostEvent } from '@twa.js/bridge';
 
 import type { ClosingBehaviourEvents } from './events.js';
-import type { PostEvent } from '../../types.js';
 
 type Emitter = EventEmitter<ClosingBehaviourEvents>;
 

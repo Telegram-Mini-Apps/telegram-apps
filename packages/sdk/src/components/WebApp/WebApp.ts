@@ -1,20 +1,22 @@
 import {
-  type Version,
-  type RGB,
   compareVersions,
   EventEmitter,
+  type Version,
+  type RGB,
 } from '@twa.js/utils';
 import {
-  type HeaderColorKey,
-  type InvoiceStatus,
   on, postEvent as bridgePostEvent,
   supports,
+  type HeaderColorKey,
+  type InvoiceStatus,
+  type PostEvent,
 } from '@twa.js/bridge';
 
 import { formatURL, isColorDark } from '../../utils/index.js';
-import type { ColorScheme, Platform, PostEvent } from '../../types.js';
-import type { WebAppEvents } from './events.js';
 import { WithSupports } from '../../lib/index.js';
+
+import type { ColorScheme, Platform } from '../../types.js';
+import type { WebAppEvents } from './events.js';
 
 /**
  * Provides common Web Apps functionality not covered by other system

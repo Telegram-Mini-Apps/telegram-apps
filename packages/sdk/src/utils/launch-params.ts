@@ -3,6 +3,7 @@ import { searchParams, string } from '@twa.js/utils';
 import { initData, type InitData } from '@twa.js/init-data';
 
 import { themeParams, type ThemeParams } from './theme-params.js';
+
 import type { Platform } from '../types.js';
 
 export interface LaunchParams {

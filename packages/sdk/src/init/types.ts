@@ -1,4 +1,4 @@
-import type { postEvent } from '@twa.js/bridge';
+import type { PostEvent } from '@twa.js/bridge';
 
 import type {
   BackButton,
@@ -22,7 +22,7 @@ export type InitResult = {
   initDataRaw?: string;
   mainButton: MainButton;
   popup: Popup;
-  postEvent: typeof postEvent;
+  postEvent: PostEvent;
   qrScanner: QRScanner;
   themeParams: ThemeParams;
   viewport: Viewport;
