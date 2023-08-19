@@ -80,4 +80,10 @@ export interface InitOptions {
    * @see setTargetOrigin
    */
   targetOrigin?: string;
+
+  /**
+   * Initialization process timeout.
+   * @default 1000
+   */
+  timeout?: number;
 }

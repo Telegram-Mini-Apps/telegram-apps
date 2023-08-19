@@ -6,6 +6,7 @@ import {
   supports,
   on,
 } from '@twa.js/bridge';
+import { withTimeout } from '@twa.js/utils';
 
 import {
   BackButton,
@@ -19,20 +20,51 @@ import {
   Viewport,
   WebApp,
 } from '../components/index.js';
-import type { InitOptions, InitResult } from './types.js';
 import {
-  type LaunchParams,
   parseLaunchParams,
   retrieveLaunchParams,
+  type LaunchParams,
+  type ThemeParams as TwaThemeParams,
 } from '../utils/index.js';
 import { MethodUnsupportedError } from '../lib/index.js';
 import { bindCSSVariables } from './css.js';
 
+import type { InitOptions, InitResult } from './types.js';
+import type { PostEvent } from '../types.js';
+
 /**
- * Initializes all SDK components.
- * @param options - initialization options.
+ * Creates synced instance of Viewport.
+ * @param postEvent
  */
-export async function init(options: InitOptions = {}): Promise<InitResult> {
+function createSyncedViewport(postEvent: PostEvent = bridgePostEvent): Viewport {
+  const viewport = new Viewport(
+    window.innerHeight,
+    window.innerWidth,
+    window.innerHeight,
+    true,
+    postEvent,
+  );
+  Viewport.sync(viewport);
+
+  return viewport;
+}
+
+/**
+ * Creates synced instance of ThemeParams.
+ * @param params
+ */
+function createSyncedThemeParams(params: TwaThemeParams): ThemeParams {
+  const themeParams = new ThemeParams(params);
+  ThemeParams.sync(themeParams);
+
+  return themeParams;
+}
+
+/**
+ * Represents actual init function.
+ * @param options
+ */
+async function actualInit(options: InitOptions = {}): Promise<InitResult> {
   const {
     checkCompat = true,
     cssVars = false,
@@ -105,6 +137,13 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
     postEvent('iframe_ready');
   }
 
+  // MacOS version does not support requesting current viewport information
+  // and theme parameters. That's why we should construct this data
+  // by ourselves.
+  const [viewportComponent, themeParamsComponent] = platform === 'macos'
+    ? [createSyncedViewport(postEvent), createSyncedThemeParams(themeParams)]
+    : await Promise.all([Viewport.synced(postEvent), ThemeParams.synced(postEvent)]);
+
   const result: InitResult = {
     backButton: new BackButton(version, postEvent),
     closingBehavior: new ClosingBehaviour(postEvent),
@@ -113,12 +152,8 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
     popup: new Popup(version, postEvent),
     postEvent,
     qrScanner: new QRScanner(version, postEvent),
-    themeParams: await ThemeParams.synced(postEvent),
-    viewport: platform === 'macos'
-      // MacOS version does not support requesting current viewport
-      // information used in Viewport.synced().
-      ? new Viewport(window.innerHeight, window.innerWidth, window.innerHeight, true, postEvent)
-      : await Viewport.synced(postEvent),
+    themeParams: themeParamsComponent,
+    viewport: viewportComponent,
     webApp: new WebApp(version, platform, 'bg_color', backgroundColor, postEvent),
   };
 
@@ -135,4 +170,12 @@ export async function init(options: InitOptions = {}): Promise<InitResult> {
   }
 
   return result;
+}
+
+/**
+ * Initializes all SDK components.
+ * @param options - initialization options.
+ */
+export function init(options: InitOptions = {}): Promise<InitResult> {
+  return withTimeout(actualInit(options), typeof options.timeout === 'number' ? options.timeout : 1000);
 }
