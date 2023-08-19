@@ -1,6 +1,6 @@
-import type { postEvent } from '@twa.js/bridge';
+import type { PostEvent as BridgePostEvent } from '@twa.js/bridge';
 
-export type PostEvent = typeof postEvent;
+export type PostEvent = BridgePostEvent;
 
 /**
  * Color scheme.

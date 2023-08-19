@@ -1,8 +1,7 @@
 import { EventEmitter, type RGB } from '@twa.js/utils';
-import { on, off, postEvent as bridgePostEvent } from '@twa.js/bridge';
+import { on, off, postEvent as bridgePostEvent, type PostEvent } from '@twa.js/bridge';
 
 import type { MainButtonEventListener, MainButtonEvents } from './events.js';
-import type { PostEvent } from '../../types.js';
 
 type Emitter = EventEmitter<MainButtonEvents>;
 

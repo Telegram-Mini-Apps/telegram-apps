@@ -1,9 +1,9 @@
 import { EventEmitter, type Version } from '@twa.js/utils';
-import { on, postEvent as bridgePostEvent } from '@twa.js/bridge';
+import { on, postEvent as bridgePostEvent, type PostEvent } from '@twa.js/bridge';
+
+import { WithSupports } from '../../lib/index.js';
 
 import type { QRScannerEvents } from './events.js';
-import type { PostEvent } from '../../types.js';
-import { WithSupports } from '../../lib/index.js';
 
 /**
  * Provides QR scanner functionality.

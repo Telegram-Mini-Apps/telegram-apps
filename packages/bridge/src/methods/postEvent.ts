@@ -1,14 +1,16 @@
-import type {
-  EmptyMethodName, MethodName,
-  MethodParams,
-  NonEmptyMethodName,
-} from './events.js';
 import {
   isIframe,
   hasExternalNotify,
   hasWebviewProxy,
 } from '../env.js';
 import { targetOrigin as globalTargetOrigin } from '../globals.js';
+
+import type {
+  EmptyMethodName,
+  MethodName,
+  MethodParams,
+  NonEmptyMethodName,
+} from './events.js';
 
 interface PostEventOptions {
   /**
@@ -19,6 +21,8 @@ interface PostEventOptions {
    */
   targetOrigin?: string;
 }
+
+export type PostEvent = typeof postEvent;
 
 /**
  * Sends event to native application which launched Web App. This function

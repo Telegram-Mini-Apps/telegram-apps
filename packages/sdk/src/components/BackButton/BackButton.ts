@@ -1,9 +1,9 @@
 import { EventEmitter, type Version } from '@twa.js/utils';
-import { on, off, postEvent as bridgePostEvent } from '@twa.js/bridge';
+import { on, off, postEvent as bridgePostEvent, type PostEvent } from '@twa.js/bridge';
+
+import { WithSupports } from '../../lib/index.js';
 
 import type { BackButtonEventListener, BackButtonEvents } from './events.js';
-import type { PostEvent } from '../../types.js';
-import { WithSupports } from '../../lib/index.js';
 
 type Emitter = EventEmitter<BackButtonEvents>;
 

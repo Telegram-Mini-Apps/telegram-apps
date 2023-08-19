@@ -1,5 +1,6 @@
-import type { EventName, EventListener } from './events.js';
 import { singletonEmitter } from './emitter.js';
+
+import type { EventName, EventListener } from './events.js';
 
 /**
  * Removes listener from specified event.

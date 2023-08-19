@@ -1,6 +1,5 @@
 import { EventEmitter as UtilEventEmitter, string } from '@twa.js/utils';
 
-import type { EventEmitter, EventName } from './events.js';
 import { log } from '../globals.js';
 import {
   clipboardTextReceivedPayload, invoiceClosedPayload,
@@ -9,6 +8,8 @@ import {
   viewportChangedPayload,
 } from './parsing.js';
 import { onTelegramEvent } from './onTelegramEvent.js';
+
+import type { EventEmitter, EventName } from './events.js';
 
 const CACHED_EMITTER = '__telegram-cached-emitter__';
 

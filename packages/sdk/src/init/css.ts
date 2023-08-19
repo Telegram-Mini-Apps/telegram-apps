@@ -1,4 +1,5 @@
 import type { RGB } from '@twa.js/utils';
+
 import type { ThemeParams, WebApp } from '../components/index.js';
 
 /**
