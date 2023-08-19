@@ -1,5 +1,13 @@
 # @twa.js/bridge
 
+## 1.1.3
+
+### Patch Changes
+
+- 2ba1d95: Refactor imports in @twa.js/bridge. Add withTimeout function to @twa.js/utils. Use timeouts during initialization process
+- Updated dependencies [2ba1d95]
+  - @twa.js/utils@0.5.0
+
 ## 1.1.2
 
 ### Patch Changes

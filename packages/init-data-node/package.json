@@ -1,6 +1,6 @@
 {
   "name": "@twa.js/init-data-node",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "TypeScript Node library to operate with Telegram init data.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
