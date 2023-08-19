@@ -1,5 +1,11 @@
 # @twa.js/init-data-node
 
+## 0.0.9
+
+### Patch Changes
+
+- @twa.js/init-data@0.2.11
+
 ## 0.0.8
 
 ### Patch Changes
