@@ -1,6 +1,7 @@
 import { singletonEmitter } from './emitter.js';
-import { GlobalEventListener } from './events.js';
 import { unsubscribe } from './unsubscribe.js';
+
+import type { GlobalEventListener } from './events.js';
 
 type StopListening = () => void;
 

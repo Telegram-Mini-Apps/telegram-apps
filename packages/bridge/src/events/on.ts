@@ -1,6 +1,7 @@
-import type { EventName, EventListener } from './events.js';
 import { singletonEmitter } from './emitter.js';
 import { off } from './off.js';
+
+import type { EventName, EventListener } from './events.js';
 
 type StopListening = () => void;
 

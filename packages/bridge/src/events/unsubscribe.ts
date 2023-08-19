@@ -1,5 +1,6 @@
 import { singletonEmitter } from './emitter.js';
-import { GlobalEventListener } from './events.js';
+
+import type { GlobalEventListener } from './events.js';
 
 /**
  * Removes global event listener.
