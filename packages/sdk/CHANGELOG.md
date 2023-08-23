@@ -1,5 +1,11 @@
 # @twa.js/sdk
 
+## 0.9.0
+
+### Minor Changes
+
+- 87d0a68: Add isTWA function which checks if current environment is Telegram Web Apps. Export more utilities and types
+
 ## 0.8.0
 
 ### Minor Changes
