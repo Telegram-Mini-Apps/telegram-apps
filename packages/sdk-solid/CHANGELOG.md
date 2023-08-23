@@ -1,5 +1,12 @@
 # @twa.js/sdk-solid
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [87d0a68]
+  - @twa.js/sdk@0.9.0
+
 ## 0.0.5
 
 ### Patch Changes
