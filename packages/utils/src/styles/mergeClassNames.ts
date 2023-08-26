@@ -3,27 +3,37 @@ import { classNames } from './classNames.js';
 type FilterUnion<U> = Exclude<U, number | string | null | undefined | any[] | boolean>;
 
 /**
+ * Returns those keys which have type string or undefined.
+ */
+type MaybeStringValueKeys<T> = {
+  [K in keyof T]-?: string extends T[K] ? K : never;
+}[keyof T];
+
+/**
+ * Returns those keys which are required and have string type.
+ */
+type UnionRequiredStringValueKeys<U> = U extends infer T
+  ? {
+    [K in keyof T]-?: T[K] extends string ? K : never
+  }[keyof T]
+  : never;
+
+/**
  * Returns union keys removing those, which values are not strings.
  */
-type UnionFilteredKeys<U> = U extends U
-  ? {
-    [K in keyof U]: U[K] extends string ? K : never
-  }[keyof U]
-  : never;
+type UnionMaybeStringValueKeys<U> = U extends infer T ? MaybeStringValueKeys<T> : never;
 
 /**
  * Returns union required keys.
  */
-type UnionRequiredKeys<U> = U extends U
-  ? {
-    [K in UnionFilteredKeys<U>]-?: ({} extends { [P in K]: U[K] } ? never : K)
-  }[UnionFilteredKeys<U>]
-  : never;
+type UnionRequiredKeys<U> = {
+  [K in UnionRequiredStringValueKeys<U>]-?: ({} extends { [P in K]: U[K] } ? never : K)
+}[UnionRequiredStringValueKeys<U>];
 
 /**
  * Returns union optional keys.
  */
-type UnionOptionalKeys<U> = Exclude<UnionFilteredKeys<U>, UnionRequiredKeys<U>>;
+type UnionOptionalKeys<U> = Exclude<UnionMaybeStringValueKeys<U>, UnionRequiredKeys<U>>;
 
 type MergeClassNames<Tuple extends any[]> = Tuple[number] extends infer Union
   ? FilterUnion<Union> extends infer UnionFiltered
