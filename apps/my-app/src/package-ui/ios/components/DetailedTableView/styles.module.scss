@@ -1,0 +1,39 @@
+$border-radius: 10px;
+
+.root {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+  color: #3C3C4399;
+}
+
+.title {
+  padding: 0 0 8px 16px;
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 600;
+
+  &SizeLarge {
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.5px;
+    font-weight: 600;
+  }
+}
+
+.description {
+  padding: 8px 16px 0;
+  margin: 0;
+}
+
+.item {
+  &First {
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+  }
+
+  &Last {
+    border-bottom-left-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+  }
+}

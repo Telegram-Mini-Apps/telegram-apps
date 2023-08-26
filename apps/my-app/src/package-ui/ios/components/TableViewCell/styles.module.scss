@@ -1,0 +1,64 @@
+$gap: 15px;
+$border-radius: 10px;
+$icon-width: 29px;
+$root-padding: 20px;
+
+.root {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: $gap;
+  background: #fff;
+  padding: 0 $root-padding;
+  color: #000;
+  height: 44px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.rootActiveElevation1 {
+  background-color: #E6E5EB;
+}
+
+.rootActiveElevation2 {
+  background-color: #D1D1D5;
+}
+
+.separator {
+  position: absolute;
+  left: $gap;
+  bottom: 0;
+  right: 0;
+  height: 0.5px;
+  background-color: rgba(60, 60, 67, 0.36);
+}
+
+.separatorHasIcon {
+  left: $gap * 2 + $icon-width;
+}
+
+.icon {
+  flex: 0 0 30px;
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+  flex: 1 0 0;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label {
+  margin: 0;
+  color: rgba(60, 60, 67, 0.60);
+}
+
+.chevron {
+  color: rgba(60, 60, 66, 0.3);
+}

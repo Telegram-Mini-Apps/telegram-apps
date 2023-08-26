@@ -1,0 +1,31 @@
+.root {
+  background-color: var(--detailed-table-view-cell-bg);
+}
+
+.title {
+  color: var(--detailed-table-view-cell-title-color);
+}
+
+.description {
+  color: var(--detailed-table-view-cell-description-color);
+}
+
+.rootActiveElevation1 {
+  background-color: var(--detailed-table-view-cell-root-active-elevation-1-bg);
+}
+
+.rootActiveElevation2 {
+  background-color: var(--detailed-table-view-cell-root-active-elevation-2-bg);
+}
+
+.separator {
+  background-color: var(--detailed-table-view-cell-separator-bg);
+}
+
+.label {
+  color: var(--detailed-table-view-cell-label-color);
+}
+
+.chevron {
+  color: var(--detailed-table-view-cell-chevron-color);
+}

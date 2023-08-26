@@ -1,0 +1,144 @@
+@use "sass:list";
+
+$default-variables: default-system-red, default-system-orange, default-system-yellow, 
+default-system-green, default-system-teal, default-system-blue, default-system-purple, 
+default-system-pink, default-system-indigo, default-system-gray, default-system-gray-02, 
+default-system-gray-03, default-system-gray-04, default-system-gray-05, default-system-gray-06;
+
+$accessible-variables: accessible-system-red, accessible-system-orange, accessible-system-yellow,
+accessible-system-green, accessible-system-teal, accessible-system-blue, accessible-system-purple,
+accessible-system-pink, accessible-system-indigo, accessible-system-gray, accessible-system-gray-02,
+accessible-system-gray-03, accessible-system-gray-04, accessible-system-gray-05, accessible-system-gray-06;
+
+$common-variables: system-background-primary, system-background-secondary;
+
+$misc-variables: label-color-primary, label-color-secondary, label-color-tertiary, separator-color-with-transparency;
+
+@function list-merge($lists...) {
+  $result: ();
+
+  @each $list in $lists {
+    @each $item in $list {
+      $result: list.append($result, $item)
+    }
+  }
+
+  @return $result
+}
+
+$variables: list-merge($default-variables, $accessible-variables, $common-variables, $misc-variables);
+
+@function use($name) {
+  @return var(#{name($name)});
+}
+
+@function name($name) {
+  @if not list.index($variables, $name) {
+    @error "#{$name} is unknown color key"
+  }
+  @return --#{$name};
+}
+
+@mixin define-many($colors) {
+  @each $key, $value in $colors {
+    #{name($key)}: #{$value};
+  }
+}
+
+@mixin default-light() {
+  @include define-many((
+    system-background-primary: #FFFFFF,
+    system-background-secondary: #F2F2F7,
+
+    label-color-primary: #000,
+    label-color-secondary: #3C3C4399,
+    label-color-tertiary: #3C3C434D,
+
+    separator-color-with-transparency: #3C3C435C,
+
+    // Palette default variables for light theme.
+    // https://www.figma.com/file/skT2zRtPpWWu603vK9mk1V/iOS-16-UI-Kit-for-Figma-(Community)?node-id=1006%3A5651&mode=dev
+    default-system-red: #FF3B30,
+    default-system-orange: #FF9500,
+    default-system-yellow: #FFCC00,
+    default-system-green: #34C759,
+    default-system-teal: #5AC8FA,
+    default-system-blue: #007AFF,
+    default-system-indigo: #5856D6,
+    default-system-purple: #AF52DE,
+    default-system-pink: #FF2D55,
+    default-system-gray: #8E8E93,
+    default-system-gray-02: #AEAEB2,
+    default-system-gray-03: #C7C7CC,
+    default-system-gray-04: #D1D1D6,
+    default-system-gray-05: #E5E5EA,
+    default-system-gray-06: #F2F2F7,
+
+    // Palette accessible variables for light theme.
+    // https://www.figma.com/file/skT2zRtPpWWu603vK9mk1V/iOS-16-UI-Kit-for-Figma-(Community)?node-id=1006%3A5690&mode=dev
+    accessible-system-red: #D70015,
+    accessible-system-orange: #C93400,
+    accessible-system-yellow: #B25000,
+    accessible-system-green: #248A3D,
+    accessible-system-teal: #0071A4,
+    accessible-system-blue: #0040DD,
+    accessible-system-indigo: #3634A3,
+    accessible-system-purple: #8944AB,
+    accessible-system-pink: #D30F45,
+    accessible-system-gray: #6C6C70,
+    accessible-system-gray-02: #8E8E93,
+    accessible-system-gray-03: #AEAEB2,
+    accessible-system-gray-04: #BCBCC0,
+    accessible-system-gray-05: #D8D8DC,
+    accessible-system-gray-06: #EBEBF0,
+  ));
+}
+
+@mixin default-dark() {
+  @include define-many((
+    system-background-primary: #1C1C1E,
+    system-background-secondary: #000,
+
+    label-color-primary: #fff,
+    label-color-secondary: #EBEBF599,
+    label-color-tertiary: #EBEBF54D,
+
+    separator-color-with-transparency: #3d3d40,
+
+    // Palette default variables for dark theme.
+    // https://www.figma.com/file/skT2zRtPpWWu603vK9mk1V/iOS-16-UI-Kit-for-Figma-(Community)?node-id=1006%3A5670&mode=dev
+    default-system-red: #FF453A,
+    default-system-orange: #FF9F0A,
+    default-system-yellow: #FFD60A,
+    default-system-green: #32D74B,
+    default-system-teal: #64D2FF,
+    default-system-blue: #0A84FF,
+    default-system-indigo: #5E5CE6,
+    default-system-purple: #BF5AF2,
+    default-system-pink: #FF2D55,
+    default-system-gray: #8E8E93,
+    default-system-gray-02: #636366,
+    default-system-gray-03: #48484A,
+    default-system-gray-04: #3A3A3C,
+    default-system-gray-05: #2C2C2E,
+    default-system-gray-06: #1C1C1E,
+
+    // Palette accessible variables for light theme.
+    // https://www.figma.com/file/skT2zRtPpWWu603vK9mk1V/iOS-16-UI-Kit-for-Figma-(Community)?node-id=1006%3A5709&mode=dev
+    accessible-system-red: #FF6961,
+    accessible-system-orange: #FFB340,
+    accessible-system-yellow: #FFD426,
+    accessible-system-green: #30DB5B,
+    accessible-system-teal: #70D7FF,
+    accessible-system-blue: #409CFF,
+    accessible-system-indigo: #7D7AFF,
+    accessible-system-purple: #DA8FFF,
+    accessible-system-pink: #FF6482,
+    accessible-system-gray: #AEAEB2,
+    accessible-system-gray-02: #7C7C80,
+    accessible-system-gray-03: #545456,
+    accessible-system-gray-04: #444446,
+    accessible-system-gray-05: #363638,
+    accessible-system-gray-06: #242426,
+  ));
+}

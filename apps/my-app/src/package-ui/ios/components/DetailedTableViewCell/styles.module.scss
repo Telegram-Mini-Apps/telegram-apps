@@ -1,0 +1,87 @@
+$border-radius: 10px;
+$icon-width: 29px;
+$horizontal-padding: 20px;
+
+$gap: 15px;
+$gap-large: 13px;
+
+.root {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: $gap;
+  background: #fff;
+  padding: 0 $horizontal-padding;
+  height: 58px;
+}
+
+.rootSizeLarge {
+  gap: $gap-large;
+  height: 73px;
+}
+
+.rootActiveElevation1 {
+  background-color: #E6E5EB;
+}
+
+.rootActiveElevation2 {
+  background-color: #D1D1D5;
+}
+
+.separator {
+  position: absolute;
+  left: $horizontal-padding;
+  bottom: 0;
+  right: 0;
+  height: 0.5px;
+  background-color: rgba(60, 60, 67, 0.36);
+}
+
+.separatorHasIcon {
+  left: $horizontal-padding + $icon-width + $gap;
+}
+
+.separatorHasIconSizeLarge {
+  left: $horizontal-padding + $icon-width + $gap-large;
+}
+
+.icon {
+  flex: 0 0 30px;
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  flex: 1 0 0;
+}
+
+.title {
+  color: #000;
+  margin: 0;
+}
+
+.titleSizeLarge {
+  font-weight: 600;
+}
+
+.description {
+  font-size: 12px;
+  line-height: 16px;
+  margin-top: 2px;
+  letter-spacing: 0;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label {
+  margin: 0;
+  color: rgba(60, 60, 67, 0.60);
+}
+
+.chevron {
+  color: rgba(60, 60, 66, 0.3);
+}
