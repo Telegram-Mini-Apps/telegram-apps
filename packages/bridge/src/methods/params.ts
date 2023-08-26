@@ -13,6 +13,29 @@ import type {
 export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
 
 /**
+ * Request identifier which should be generated locally. Native Telegram application
+ * uses it to generate a response to called method.
+ */
+export type RequestId = string;
+
+interface CreateInvokeCustomMethodParams<M extends string, Params extends object> {
+  /**
+   * Unique request identifier.
+   */
+  req_id: RequestId;
+
+  /**
+   * Method name.
+   */
+  method: M;
+
+  /**
+   * Method specific parameters.
+   */
+  params: Params;
+}
+
+/**
  * Describes list of events and their parameters that could be posted by
  * Bridge.
  * @see https://docs.twa.dev/docs/apps-communication/methods
@@ -160,8 +183,18 @@ export interface MethodsParams {
    * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_read_text_from_clipboard
    */
   web_app_read_text_from_clipboard: {
-    req_id: string;
+    req_id: RequestId;
   };
+
+  /**
+   * Invokes custom method.
+   */
+  web_app_invoke_custom_method:
+    | CreateInvokeCustomMethodParams<'deleteStorageValues', { keys: string }>
+    | CreateInvokeCustomMethodParams<'getStorageValues', { keys: string }>
+    | CreateInvokeCustomMethodParams<'getStorageKeys', {}>
+    | CreateInvokeCustomMethodParams<'saveStorageValue', { key: string, value: string }>
+    | CreateInvokeCustomMethodParams<string, any>;
 }
 
 /**

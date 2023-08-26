@@ -22,6 +22,8 @@ export function supports(method: MethodName, inVersion: Version): boolean {
     case 'web_app_open_scan_qr_popup':
     case 'web_app_read_text_from_clipboard':
       return compareVersions('6.4', inVersion) <= 0;
+    case 'web_app_invoke_custom_method':
+      return compareVersions('6.9', inVersion) <= 0;
     default:
       return true;
   }
