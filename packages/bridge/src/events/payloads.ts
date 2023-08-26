@@ -1,8 +1,17 @@
 import type { RGB } from '@twa.js/utils';
 
+import type { RequestId } from '../shared.js';
+
 export interface ClipboardTextReceivedPayload {
-  req_id: string;
+  req_id: RequestId;
   data?: string | null;
+}
+
+export interface CustomMethodInvokedPayload<R = unknown> {
+  req_id: RequestId;
+  result?: R;
+  // TODO: Describe this property. There are no docs related to this field.
+  error?: unknown;
 }
 
 export type InvoiceStatus =
@@ -42,4 +51,16 @@ export interface ViewportChangedPayload {
 
 export interface PopupClosedPayload {
   button_id?: string;
+}
+
+export type PhoneRequestedStatus = 'sent' | string;
+
+export interface PhoneRequestedPayload {
+  status: PhoneRequestedStatus;
+}
+
+export type WriteAccessRequestedStatus = 'allowed' | string;
+
+export interface WriteAccessRequestedPayload {
+  status: WriteAccessRequestedStatus;
 }

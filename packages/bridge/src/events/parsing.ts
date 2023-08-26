@@ -77,3 +77,28 @@ export const clipboardTextReceivedPayload = json({
     optional: true,
   },
 });
+
+/**
+ * Parses incoming value as WriteAccessRequestedPayload.
+ */
+export const writeAccessRequestedPayload = json({ status: 'string' });
+
+/**
+ * Parses incoming value as PhoneRequestedPayload.
+ */
+export const phoneRequestedPayload = json({ status: 'string' });
+
+/**
+ * Parses incoming value as CustomMethodInvokedPayload.
+ */
+export const customMethodInvokedPayload = json({
+  req_id: 'string',
+  result: {
+    type: (value) => value,
+    optional: true,
+  },
+  error: {
+    type: (value) => value,
+    optional: true,
+  },
+});
