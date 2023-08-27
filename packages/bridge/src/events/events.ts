@@ -7,11 +7,14 @@ import type {
 
 import type {
   ClipboardTextReceivedPayload,
+  CustomMethodInvokedPayload,
   InvoiceClosedPayload,
+  PhoneRequestedPayload,
   PopupClosedPayload,
   QrTextReceivedPayload,
   ThemeChangedPayload,
   ViewportChangedPayload,
+  WriteAccessRequestedPayload,
 } from './payloads.js';
 
 /**
@@ -32,6 +35,13 @@ export interface Events {
    */
   clipboard_text_received: (payload: ClipboardTextReceivedPayload) => void;
 
+  // TODO: Add description.
+  /**
+   * @param payload - event payload.
+   * @since 6.9
+   */
+  custom_method_invoked: (payload: CustomMethodInvokedPayload) => void;
+
   /**
    * Invoice was closed.
    * @param payload - invoice close information.
@@ -44,6 +54,13 @@ export interface Events {
    * @see https://docs.twa.dev/docs/apps-communication/events#main_button_pressed
    */
   main_button_pressed: () => void;
+
+  // TODO: Add description.
+  /**
+   * @param payload - event payload. - event payload.
+   * @since 6.9
+   */
+  phone_requested: (payload: PhoneRequestedPayload) => void;
 
   /**
    * Popup was closed.
@@ -91,6 +108,13 @@ export interface Events {
    * @see https://docs.twa.dev/docs/apps-communication/events#viewport_changed
    */
   viewport_changed: (payload: ViewportChangedPayload) => void;
+
+  // TODO: Add description.
+  /**
+   * @param payload - event payload.
+   * @since 6.9
+   */
+  write_access_requested: (payload: WriteAccessRequestedPayload) => void;
 }
 
 /**
