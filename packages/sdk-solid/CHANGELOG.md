@@ -1,5 +1,11 @@
 # @twa.js/sdk-solid
 
+## 0.0.7
+
+### Patch Changes
+
+- @twa.js/sdk@0.9.1
+
 ## 0.0.6
 
 ### Patch Changes
