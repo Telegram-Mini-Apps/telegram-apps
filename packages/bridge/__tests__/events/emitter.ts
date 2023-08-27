@@ -7,9 +7,9 @@ type TestCase<E extends EventName> =
   | EventParams<E>;
 
 type TestCases = {
-  [E in EventName]: EventParams<E> extends undefined
-    ? [E]
-    : [E, TestCase<E> | TestCase<E>[]];
+  [Event in EventName]: EventParams<Event> extends undefined
+    ? [Event]
+    : [Event, TestCase<Event> | TestCase<Event>[]];
 }[EventName][];
 
 mockWindow({
@@ -73,6 +73,12 @@ describe('events', () => {
             data: 'clipboard value',
           }],
           ['invoice_closed', { slug: '&&*Sh1j213kx', status: 'PAID' }],
+          ['phone_requested', { status: 'sent' }],
+          ['custom_method_invoked', [
+            [{ req_id: '1', result: 'My result' }],
+            [{ req_id: '2', error: 'Something is wrong' }],
+          ]],
+          ['write_access_requested', { status: 'allowed' }],
           ['unknown_event', [
             ['hello', 'hello'],
             [{ there: true }, { there: true }],
@@ -109,7 +115,7 @@ describe('events', () => {
             }
 
             // List of cases.
-            inputOrCaseOrCases.forEach(([input, expected]) => {
+            inputOrCaseOrCases.forEach(([input, expected = input]) => {
               dispatchWindowEvent(event, input);
               expect(spy).toBeCalledWith(expected);
             });

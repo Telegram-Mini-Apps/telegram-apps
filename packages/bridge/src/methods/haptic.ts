@@ -1,7 +1,7 @@
 /**
  * Generic type which creates new types of haptic feedback.
  */
-type HapticFeedback<T extends string, P> = { type: T } & P;
+type CreateHapticFeedbackParams<T extends string, P> = { type: T } & P;
 
 /**
  * Style of impact occurred haptic event.
@@ -29,14 +29,14 @@ export type NotificationHapticFeedbackType = 'error' | 'success' | 'warning';
 /**
  * `impactOccurred` haptic feedback.
  */
-export type ImpactHapticFeedback = HapticFeedback<'impact', {
+export type ImpactHapticFeedbackParams = CreateHapticFeedbackParams<'impact', {
   impact_style: ImpactHapticFeedbackStyle;
 }>;
 
 /**
  * `notificationOccurred` haptic feedback.
  */
-export type NotificationHapticFeedback = HapticFeedback<'notification', {
+export type NotificationHapticFeedbackParams = CreateHapticFeedbackParams<'notification', {
   notification_type: NotificationHapticFeedbackType;
 }>;
 
@@ -44,4 +44,9 @@ export type NotificationHapticFeedback = HapticFeedback<'notification', {
  * `selectionChanged` haptic feedback.
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type SelectionHapticFeedback = HapticFeedback<'selection_change', {}>;
+export type SelectionHapticFeedbackParams = CreateHapticFeedbackParams<'selection_change', {}>;
+
+export type AnyHapticFeedbackParams =
+  | ImpactHapticFeedbackParams
+  | NotificationHapticFeedbackParams
+  | SelectionHapticFeedbackParams;

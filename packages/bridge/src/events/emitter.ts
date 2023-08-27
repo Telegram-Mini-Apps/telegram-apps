@@ -2,10 +2,15 @@ import { EventEmitter as UtilEventEmitter, string } from '@twa.js/utils';
 
 import { log } from '../globals.js';
 import {
-  clipboardTextReceivedPayload, invoiceClosedPayload,
-  popupClosedPayload, qrTextReceivedPayload,
+  clipboardTextReceivedPayload,
+  customMethodInvokedPayload,
+  invoiceClosedPayload,
+  phoneRequestedPayload,
+  popupClosedPayload,
+  qrTextReceivedPayload,
   themeChangedPayload,
   viewportChangedPayload,
+  writeAccessRequestedPayload,
 } from './parsing.js';
 import { onTelegramEvent } from './onTelegramEvent.js';
 
@@ -69,18 +74,27 @@ export function createEmitter(): EventEmitter {
         case 'qr_text_received':
           return emit(eventType, qrTextReceivedPayload(eventData));
 
-        // Events which do not require any arguments.
-        case 'main_button_pressed':
-        case 'back_button_pressed':
-        case 'settings_button_pressed':
-        case 'scan_qr_popup_closed':
-          return emit(eventType);
-
         case 'clipboard_text_received':
           return emit(eventType, clipboardTextReceivedPayload(eventData));
 
         case 'invoice_closed':
           return emit(eventType, invoiceClosedPayload(eventData));
+
+        case 'phone_requested':
+          return emit('phone_requested', phoneRequestedPayload(eventData));
+
+        case 'custom_method_invoked':
+          return emit('custom_method_invoked', customMethodInvokedPayload(eventData));
+
+        case 'write_access_requested':
+          return emit('write_access_requested', writeAccessRequestedPayload(eventData));
+
+        // Events which have no parameters.
+        case 'main_button_pressed':
+        case 'back_button_pressed':
+        case 'settings_button_pressed':
+        case 'scan_qr_popup_closed':
+          return emit(eventType);
 
         // All other event listeners will receive unknown type of data.
         default:
