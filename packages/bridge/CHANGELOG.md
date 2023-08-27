@@ -1,5 +1,11 @@
 # @twa.js/bridge
 
+## 1.2.0
+
+### Minor Changes
+
+- 6ac7862: Implement new methods: web_app_request_write_access, web_app_request_phone, web_app_invoke_custom_method
+
 ## 1.1.3
 
 ### Patch Changes
