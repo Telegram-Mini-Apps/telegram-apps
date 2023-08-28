@@ -37,6 +37,7 @@
     "classnames": "^2.3.2",
     "sass": "^1.63.6",
     "solid-js": "^1.7.6",
+    "solid-transition-group": "^0.2.3",
     "tmi.js": "^1.8.5"
   }
 }

@@ -4,7 +4,7 @@ $border-radius: 10px;
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0;
-  color: #3C3C4399;
+  color: var(--detailed-table-view-text-color, #3C3C4399);
 }
 
 .title {

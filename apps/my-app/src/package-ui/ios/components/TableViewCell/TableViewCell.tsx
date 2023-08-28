@@ -4,7 +4,7 @@ import { createBox } from '../../../box/index.js';
 import { TableViewCellView } from './TableViewCellView.js';
 import { BOX_TYPE, type TableViewCellBox } from './box.js';
 
-import type { WithClasses, CreateClasses } from '../../../types.js';
+import type { WithClasses, CreateOptionalClasses } from '../../../types.js';
 
 export type TableViewCellClassName =
   | 'root'
@@ -18,7 +18,7 @@ export type TableViewCellClassName =
   | 'separator'
   | 'separatorHasIcon';
 
-export type TableViewCellClasses = CreateClasses<TableViewCellClassName>;
+export type TableViewCellClasses = CreateOptionalClasses<TableViewCellClassName>;
 
 export interface TableViewCellProps extends ParentProps, JSX.HTMLAttributes<HTMLDivElement>,
   WithClasses<TableViewCellClassName> {

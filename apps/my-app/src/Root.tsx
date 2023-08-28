@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal, onMount, Show, JSXElement } from 'solid-js';
+import { Component, createEffect, createSignal, onMount, Show } from 'solid-js';
 import { retrieveLaunchParams, isColorDark } from '@twa.js/sdk';
 
 import {
@@ -9,13 +9,15 @@ import {
   safePostEvent,
 } from './package-ui/index.js';
 import {
+  Alert,
+  AlertItem,
   TableViewCell,
   Switch,
   TableView,
   TextField,
   DetailedTableViewCell,
   DetailedTableView,
-} from './ui/index.js';
+} from './package-ui/index.js';
 
 import styles from './styles.module.scss';
 
@@ -121,62 +123,35 @@ function DetailedTableLarge() {
 }
 
 export const Root: Component = () => {
-  const [showAlert, setShowAlert] = createSignal(true);
+  const [showAlert, setShowAlert] = createSignal(false);
 
   onMount(() => {
     safePostEvent('web_app_expand');
+    safePostEvent('web_app_open_popup', {
+      title: 'Hello',
+      message: 'there',
+      buttons: [{type: 'ok', id: 'ok'}],
+    })
   });
-
-  // window.addEventListener('touchmove', e => e.preventDefault())
 
   return (
     <div class={styles.root}>
-      {/*<Show when={showAlert()}>*/}
-      {/*  <Alert title="Warning">*/}
-      {/*    <AlertItem text="Cancel"/>*/}
-      {/*    <AlertItem text="Apply"/>*/}
-      {/*  </Alert>*/}
-      {/*</Show>*/}
+      <Alert title="Warning" show={showAlert()}>
+        Here’s some alert text. It can span multiple lines if needed!
+        <AlertItem title="Apply" variant="primary" onClick={() => setShowAlert(false)}/>
+        <AlertItem title="Cancel"/>
+      </Alert>
+
       <ColorSchemeTable/>
       <ItemsWithIconsTable/>
       <TableView class={styles.table} title="Cells with children">
         <TableViewCell title="Name">
           <TextField placeholder="Your full name"/>
         </TableViewCell>
+        <TableViewCell title="Show alert" onClick={() => setShowAlert(true)} clickable/>
       </TableView>
       <DetailedTableSmall/>
       <DetailedTableLarge/>
     </div>
   );
-
-
-  // return (
-  //   <>
-  //     <TextField class={styles.element} placeholder={'Application name'}/>
-  //     <TextField class={styles.element} value={'Wallet'} placeholder={'Application name'} clear/>
-  //     <TextFieldDark class={styles.element} placeholder={'Application name'}/>
-  //     <TextFieldDark
-  //       class={styles.element}
-  //       value={'Wallet'}
-  //       placeholder={'Application name'}
-  //       clear
-  //     />
-  //     <Switch class={styles.element} checked={true}/>
-  //     <TableView class={styles.element} title={'TITLE'} description={'Text description here'}>
-  //       <TableViewCell title={'Title'} icon={<SoundIcon/>}/>
-  //       <TableViewCell title={'Title'} icon={<SoundIcon/>}>
-  //         <Switch/>
-  //       </TableViewCell>
-  //       <TableViewCell title={'Title'} label={'Label'} icon={<SoundIcon/>}/>
-  //       <TableViewCell title={'Title'} label={'Label'} icon={<SoundIcon/>} chevron/>
-  //       <TableViewCell title={'Title'} label={'Label'} icon={<SoundIcon/>}>
-  //         <CheckIcon/>
-  //       </TableViewCell>
-  //       <TableViewCell title={'Title'}/>
-  //       <TableViewCell title={'Title'}>
-  //         <CheckIcon/>
-  //       </TableViewCell>
-  //     </TableView>
-  //   </>
-  // );
 };

@@ -1,1 +1,1 @@
-export * from './AlertItem';
+export * from './AlertItem.js';
