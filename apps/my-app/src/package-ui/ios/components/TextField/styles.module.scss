@@ -1,6 +1,11 @@
 $horizontal-padding: 16px;
 $height: 44px;
 
+// Variables:
+$input-color: var(--text-field-input-color, #000);
+$caret-color: var(--text-field-caret-color, #446BF2);
+$placeholder-color: var(--text-field-placeholder-color, #3C3C4399);
+
 .root {
   display: inline-block;
   vertical-align: top;
@@ -17,11 +22,11 @@ $height: 44px;
   background: transparent;
   border: none;
   box-sizing: border-box;
-  color: #000;
+  color: $input-color;
   padding: 0;
   height: 100%;
   width: 100%;
-  caret-color: #446BF2;;
+  caret-color: $caret-color;
   -webkit-tap-highlight-color: transparent;
 
   &:active, &:focus {
@@ -30,7 +35,7 @@ $height: 44px;
 }
 
 .placeholder {
-  color: #3C3C4399;
+  color: $placeholder-color;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

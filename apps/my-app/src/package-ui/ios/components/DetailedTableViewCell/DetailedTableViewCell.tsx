@@ -4,7 +4,7 @@ import { createBox } from '../../../box/index.js';
 import { DetailedTableViewCellView } from './DetailedTableViewCellView.js';
 import { BOX_TYPE, DetailedTableViewCellBox } from './box.js';
 
-import type { CreateClasses, WithClasses } from '../../../types.js';
+import type { CreateOptionalClasses, WithClasses } from '../../../types.js';
 
 export type DetailedTableViewCellClassName =
   | 'root'
@@ -25,7 +25,7 @@ export type DetailedTableViewCellClassName =
   | 'separatorHasIcon'
   | 'separatorHasIconSizeLarge';
 
-export type DetailedTableViewCellClasses = CreateClasses<DetailedTableViewCellClassName>;
+export type DetailedTableViewCellClasses = CreateOptionalClasses<DetailedTableViewCellClassName>;
 
 export interface DetailedTableViewCellProps extends ParentProps, JSX.HTMLAttributes<HTMLDivElement>,
   WithClasses<DetailedTableViewCellClassName> {

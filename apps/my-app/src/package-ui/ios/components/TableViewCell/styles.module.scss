@@ -3,25 +3,34 @@ $border-radius: 10px;
 $icon-width: 29px;
 $root-padding: 20px;
 
+// Variables:
+$background: var(--table-view-cell-background, #fff);
+$text-color: var(--table-view-cell-text-color, #000);
+$root-active-elevation-1-bg: var(--table-view-cell-root-active-elevation-1-background, #E6E5EB);
+$root-active-elevation-2-bg: var(--table-view-cell-root-active-elevation-2-background, #D1D1D5);
+$separator-color: var(--table-view-cell-separator-color, #3C3C435B);
+$label-color: var(--table-view-cell-label-color, #3C3C4399);
+$chevron-color: var(--table-view-cell-chevron-color, #3C3C424C);
+
 .root {
   display: flex;
   align-items: center;
   position: relative;
   gap: $gap;
-  background: #fff;
+  background: $background;
   padding: 0 $root-padding;
-  color: #000;
+  color: $text-color;
   height: 44px;
-  -webkit-user-select: none;
-  user-select: none;
-}
 
-.rootActiveElevation1 {
-  background-color: #E6E5EB;
-}
+  &ActiveElevation {
+    &1 {
+      background-color: $root-active-elevation-1-bg;
+    }
 
-.rootActiveElevation2 {
-  background-color: #D1D1D5;
+    &2 {
+      background-color: $root-active-elevation-2-bg;
+    }
+  }
 }
 
 .separator {
@@ -30,11 +39,11 @@ $root-padding: 20px;
   bottom: 0;
   right: 0;
   height: 0.5px;
-  background-color: rgba(60, 60, 67, 0.36);
-}
+  background-color: $separator-color;
 
-.separatorHasIcon {
-  left: $gap * 2 + $icon-width;
+  &HasIcon {
+    left: $gap * 2 + $icon-width;
+  }
 }
 
 .icon {
@@ -56,9 +65,9 @@ $root-padding: 20px;
 
 .label {
   margin: 0;
-  color: rgba(60, 60, 67, 0.60);
+  color: $label-color;
 }
 
 .chevron {
-  color: rgba(60, 60, 66, 0.3);
+  color: $chevron-color;
 }

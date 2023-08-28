@@ -10,6 +10,9 @@ export type ExtendedHandler<F> = F extends JSX.EventHandlerUnion<infer A, infer 
   ? (...args: Parameters<JSX.EventHandler<A, B>>) => void
   : never;
 
+/**
+ * Handler which could be extended
+ */
 export type ExtendableHandler = JSX.EventHandlerUnion<any, any>;
 
 /**
@@ -18,7 +21,7 @@ export type ExtendableHandler = JSX.EventHandlerUnion<any, any>;
  * @param getHandler - original handler accessor.
  * @param getExtension - handler extension accessor.
  */
-export function createHandler<F extends ExtendableHandler>(
+export function createEventHandler<F extends ExtendableHandler>(
   getHandler: Accessor<F | undefined>,
   getExtension: Accessor<HandlerExtension<F>>,
 ): Accessor<ExtendedHandler<F>> {

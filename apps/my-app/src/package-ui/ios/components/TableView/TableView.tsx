@@ -11,9 +11,9 @@ import {
 import { mergeClassNames, classNames } from '@twa.js/utils';
 
 import { isTableViewCellBox, type TableViewCellBox } from '../TableViewCell/box.js';
-import { withDefault } from '../../styles/globals.js';
+import { withDefault } from '../../styles/index.js';
 
-import type { CreateClasses, WithClasses } from '../../../types.js';
+import type { CreateOptionalClasses, WithClasses } from '../../../types.js';
 
 import styles from './styles.module.scss';
 
@@ -28,7 +28,7 @@ export type TableViewClassName =
   | 'itemFirst'
   | 'itemLast';
 
-export type TableViewClasses = CreateClasses<TableViewClassName>;
+export type TableViewClasses = CreateOptionalClasses<TableViewClassName>;
 
 export interface TableViewProps extends ParentProps,
   Omit<JSX.HTMLAttributes<HTMLDivElement>, 'title'>,

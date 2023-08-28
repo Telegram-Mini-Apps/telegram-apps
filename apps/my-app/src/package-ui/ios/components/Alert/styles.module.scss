@@ -1,7 +1,48 @@
-.root {}
+// Variables:
+$backdrop: var(--alert-backdrop-color, #00000066);
+$background: var(--alert-background, #F2F2F2CC);
+$text-color: var(--alert-text-color, #000);
 
-.alert {}
+.root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $backdrop;
+}
 
-.title {}
+.children {
+  text-align: center;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: -0.078px;
+}
 
-.content {}
+.actions {}
+
+.alert {
+  position: absolute;
+  padding: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  width: 273px;
+  border-radius: 14px;
+  border: none;
+  background: $background;
+  color: $text-color;
+  backdrop-filter: blur(11px);
+  -webkit-backdrop-filter: blur(11px);
+}
+
+.title {
+  font-weight: 600;
+  margin: 0 0 2px;
+  text-align: center;
+}
+
+.content {
+  padding: 16px;
+}

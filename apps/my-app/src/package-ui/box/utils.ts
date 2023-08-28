@@ -6,7 +6,7 @@ const boxSymbol = Symbol('Box');
 
 /**
  * Returns true if passed object is any Box.
- * @param value
+ * @param value - value to check.
  */
 export function isBox(value: unknown): value is Box {
   return typeof value === 'object' && value !== null && 'box' in value && value.box === boxSymbol;
@@ -14,8 +14,8 @@ export function isBox(value: unknown): value is Box {
 
 /**
  * Returns true if passed object is Box of specified type.
- * @param value
- * @param type
+ * @param value - value to check.
+ * @param type - box target type identifier.
  */
 export function isBoxOfType<Type extends string>(value: unknown, type: Type): value is Box<Type> {
   return isBox(value) && value.type === type;
@@ -23,11 +23,13 @@ export function isBoxOfType<Type extends string>(value: unknown, type: Type): va
 
 /**
  * Creates new Box.
- * @param type - Box type identifier.
+ * @param type - box type identifier.
  * @param Component - component which should be rendered.
  * @param props - properties passed to original component.
  */
-export function createBox<Type extends string = string, Props extends object = {}, ViewProps extends object = Props>(
+export function createBox<Type extends string = string,
+  Props extends object = {},
+  ViewProps extends object = Props>(
   type: Type,
   Component: Component<ViewProps>,
   props: Props,

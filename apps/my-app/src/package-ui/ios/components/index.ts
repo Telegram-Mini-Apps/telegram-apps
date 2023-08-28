@@ -1,5 +1,5 @@
-// export * from './Alert/index.js';
-// export * from './AlertItem/index.js';
+export * from './Alert/index.js';
+export * from './AlertItem/index.js';
 export * from './DetailedTableView/index.js';
 export * from './DetailedTableViewCell/index.js';
 export * from './Switch/index.js';

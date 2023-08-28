@@ -2,7 +2,7 @@ import { postEvent } from '@twa.js/bridge';
 
 /**
  * Wrapper around bridge's postEvent function which calls original one catching an error.
- * @param args
+ * @param args - postEvent function arguments.
  */
 export const safePostEvent: typeof postEvent = (...args: any[]) => {
   try {

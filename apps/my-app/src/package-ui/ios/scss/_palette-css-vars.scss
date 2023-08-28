@@ -1,19 +1,25 @@
 @use "sass:list";
 
-$default-variables: default-system-red, default-system-orange, default-system-yellow, 
-default-system-green, default-system-teal, default-system-blue, default-system-purple, 
-default-system-pink, default-system-indigo, default-system-gray, default-system-gray-02, 
+// Default system color variables.
+$default-color-variables: default-system-red, default-system-orange, default-system-yellow,
+default-system-green, default-system-teal, default-system-blue, default-system-purple,
+default-system-pink, default-system-indigo, default-system-gray, default-system-gray-02,
 default-system-gray-03, default-system-gray-04, default-system-gray-05, default-system-gray-06;
 
-$accessible-variables: accessible-system-red, accessible-system-orange, accessible-system-yellow,
+// Color variables to which are assumed to be recognized as accessible.
+$accessible-color-variables: accessible-system-red, accessible-system-orange, accessible-system-yellow,
 accessible-system-green, accessible-system-teal, accessible-system-blue, accessible-system-purple,
 accessible-system-pink, accessible-system-indigo, accessible-system-gray, accessible-system-gray-02,
 accessible-system-gray-03, accessible-system-gray-04, accessible-system-gray-05, accessible-system-gray-06;
 
+// Common variables.
 $common-variables: system-background-primary, system-background-secondary;
 
-$misc-variables: label-color-primary, label-color-secondary, label-color-tertiary, separator-color-with-transparency;
+// Uncategorized variables.
+$misc-variables: label-color-primary, label-color-secondary, label-color-tertiary,
+separator-color-with-transparency;
 
+// Merges all passed lists into the single one.
 @function list-merge($lists...) {
   $result: ();
 
@@ -26,12 +32,16 @@ $misc-variables: label-color-primary, label-color-secondary, label-color-tertiar
   @return $result
 }
 
-$variables: list-merge($default-variables, $accessible-variables, $common-variables, $misc-variables);
+// List of all known variables.
+$variables: list-merge($default-color-variables, $accessible-color-variables, $common-variables, $misc-variables);
 
+// Returns string literal like "var({name})", where {name} is computed CSS
+// variable name.
 @function use($name) {
   @return var(#{name($name)});
 }
 
+// Returns complete CSS variable name by its key.
 @function name($name) {
   @if not list.index($variables, $name) {
     @error "#{$name} is unknown color key"
@@ -39,23 +49,22 @@ $variables: list-merge($default-variables, $accessible-variables, $common-variab
   @return --#{$name};
 }
 
+// Mixin which defines values for specified CSS variables.
 @mixin define-many($colors) {
   @each $key, $value in $colors {
     #{name($key)}: #{$value};
   }
 }
 
-@mixin default-light() {
+// Defines known CSS variables for light theme.
+@mixin define-default-light() {
   @include define-many((
     system-background-primary: #FFFFFF,
     system-background-secondary: #F2F2F7,
-
     label-color-primary: #000,
     label-color-secondary: #3C3C4399,
     label-color-tertiary: #3C3C434D,
-
     separator-color-with-transparency: #3C3C435C,
-
     // Palette default variables for light theme.
     // https://www.figma.com/file/skT2zRtPpWWu603vK9mk1V/iOS-16-UI-Kit-for-Figma-(Community)?node-id=1006%3A5651&mode=dev
     default-system-red: #FF3B30,
@@ -73,7 +82,6 @@ $variables: list-merge($default-variables, $accessible-variables, $common-variab
     default-system-gray-04: #D1D1D6,
     default-system-gray-05: #E5E5EA,
     default-system-gray-06: #F2F2F7,
-
     // Palette accessible variables for light theme.
     // https://www.figma.com/file/skT2zRtPpWWu603vK9mk1V/iOS-16-UI-Kit-for-Figma-(Community)?node-id=1006%3A5690&mode=dev
     accessible-system-red: #D70015,
@@ -94,17 +102,15 @@ $variables: list-merge($default-variables, $accessible-variables, $common-variab
   ));
 }
 
-@mixin default-dark() {
+// Defines known CSS variables for dark theme.
+@mixin define-default-dark() {
   @include define-many((
     system-background-primary: #1C1C1E,
     system-background-secondary: #000,
-
     label-color-primary: #fff,
     label-color-secondary: #EBEBF599,
     label-color-tertiary: #EBEBF54D,
-
     separator-color-with-transparency: #3d3d40,
-
     // Palette default variables for dark theme.
     // https://www.figma.com/file/skT2zRtPpWWu603vK9mk1V/iOS-16-UI-Kit-for-Figma-(Community)?node-id=1006%3A5670&mode=dev
     default-system-red: #FF453A,
@@ -122,7 +128,6 @@ $variables: list-merge($default-variables, $accessible-variables, $common-variab
     default-system-gray-04: #3A3A3C,
     default-system-gray-05: #2C2C2E,
     default-system-gray-06: #1C1C1E,
-
     // Palette accessible variables for light theme.
     // https://www.figma.com/file/skT2zRtPpWWu603vK9mk1V/iOS-16-UI-Kit-for-Figma-(Community)?node-id=1006%3A5709&mode=dev
     accessible-system-red: #FF6961,

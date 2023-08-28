@@ -98,6 +98,9 @@ importers:
       solid-js:
         specifier: ^1.7.6
         version: 1.7.6
+      solid-transition-group:
+        specifier: ^0.2.3
+        version: 0.2.3(solid-js@1.7.6)
       tmi.js:
         specifier: ^1.8.5
         version: 1.8.5
@@ -315,25 +318,6 @@ importers:
         version: link:../tsconfig
 
   packages/tsconfig: {}
-
-  packages/ui:
-    dependencies:
-      '@twa.js/bridge':
-        specifier: workspace:^
-        version: link:../bridge
-      '@twa.js/utils':
-        specifier: workspace:^
-        version: link:../utils
-      solid-js:
-        specifier: ^1.0.0
-        version: 1.7.6
-    devDependencies:
-      eslint-config-custom:
-        specifier: workspace:*
-        version: link:../eslint-config-custom
-      tsconfig:
-        specifier: workspace:*
-        version: link:../tsconfig
 
   packages/utils:
     devDependencies:
@@ -2883,6 +2867,15 @@ packages:
       solid-js: 1.7.6
     dev: true
 
+  /@solid-primitives/refs@1.0.5(solid-js@1.7.6):
+    resolution: {integrity: sha512-5hmYmYbm6rs43nMHHozyyUngGA7P7q2WtlaCLJEfmlUJf67GWI1PZmqAiol6m9F37XSMZRuvZLoQ7HA/0q3GYg==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/utils': 6.2.1(solid-js@1.7.6)
+      solid-js: 1.7.6
+    dev: false
+
   /@solid-primitives/resize-observer@2.0.18(solid-js@1.7.6):
     resolution: {integrity: sha512-k4jTqa2hQc1HBLGUUSy69ziVJF2xlBzglUp2Saeor7RrZiWudODGyoUMdNAY+PN3iH4zyH4eEa/Fs+9kIrREig==}
     peerDependencies:
@@ -2940,6 +2933,14 @@ packages:
       solid-js: 1.7.6
     dev: true
 
+  /@solid-primitives/transition-group@1.0.3(solid-js@1.7.6):
+    resolution: {integrity: sha512-TnFADZhx9sibdoW5gxkU1QmLabzV2H2OBKYGS2aR5IC61Q/+7v8wlxOJEevxXNbPiRo6qlE3STLU3L9XS8hDbA==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      solid-js: 1.7.6
+    dev: false
+
   /@solid-primitives/utils@6.2.0(solid-js@1.7.6):
     resolution: {integrity: sha512-T62WlLwKkbmicsw/xpwMQyv9MmZRSaVyutXfS5icc9v0cb8qGMUxRxr5LVvZHYQCZ9DEFboZB0r711xsbVBbeA==}
     peerDependencies:
@@ -2947,6 +2948,14 @@ packages:
     dependencies:
       solid-js: 1.7.6
     dev: true
+
+  /@solid-primitives/utils@6.2.1(solid-js@1.7.6):
+    resolution: {integrity: sha512-TsecNzxiO5bLfzqb4OOuzfUmdOROcssuGqgh5rXMMaasoFZ3GoveUgdY1wcf17frMJM7kCNGNuK34EjErneZkg==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      solid-js: 1.7.6
+    dev: false
 
   /@swc/core-darwin-arm64@1.3.78:
     resolution: {integrity: sha512-596KRua/d5Gx1buHKKchSyHuwoIL4S1BRD/wCvYNLNZ3xOzcuBBmXOjrDVigKi1ztNDeS07p30RO5UyYur0XAA==}
@@ -7784,6 +7793,17 @@ packages:
       '@babel/types': 7.22.5
       solid-js: 1.7.6
     dev: true
+
+  /solid-transition-group@0.2.3(solid-js@1.7.6):
+    resolution: {integrity: sha512-iB72c9N5Kz9ykRqIXl0lQohOau4t0dhel9kjwFvx81UZJbVwaChMuBuyhiZmK24b8aKEK0w3uFM96ZxzcyZGdg==}
+    engines: {node: '>=18.0.0', pnpm: '>=8.6.0'}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/refs': 1.0.5(solid-js@1.7.6)
+      '@solid-primitives/transition-group': 1.0.3(solid-js@1.7.6)
+      solid-js: 1.7.6
+    dev: false
 
   /source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
