@@ -2,8 +2,6 @@ import {
   isIframe,
   setDebug,
   setTargetOrigin,
-  postEvent as bridgePostEvent,
-  supports,
   on,
 } from '@twa.js/bridge';
 import { withTimeout } from '@twa.js/utils';
@@ -16,7 +14,6 @@ import {
   MainButton,
   Popup,
   QRScanner,
-  ThemeParams,
   Viewport,
   WebApp,
 } from '../components/index.js';
@@ -24,60 +21,45 @@ import {
   parseLaunchParams,
   retrieveLaunchParams,
   type LaunchParams,
-  type ThemeParams as TwaThemeParams,
 } from '../utils/index.js';
-import { MethodUnsupportedError } from '../lib/index.js';
-import { bindCSSVariables } from './css.js';
+import {
+  bindThemeCSSVariables,
+  bindViewportCSSVariables,
+  bindWebAppVariables,
+} from './css.js';
+import {
+  createPostEvent,
+  createSyncedThemeParams,
+  createSyncedViewport,
+  parseCSSVarsOptions,
+} from './utils.js';
 
-import type { InitOptions, InitResult } from './types.js';
-import type { PostEvent } from '../types.js';
-
-/**
- * Creates synced instance of Viewport.
- * @param postEvent
- */
-function createSyncedViewport(postEvent: PostEvent = bridgePostEvent): Viewport {
-  const viewport = new Viewport(
-    window.innerHeight,
-    window.innerWidth,
-    window.innerHeight,
-    true,
-    postEvent,
-  );
-  Viewport.sync(viewport);
-
-  return viewport;
-}
-
-/**
- * Creates synced instance of ThemeParams.
- * @param params
- */
-function createSyncedThemeParams(params: TwaThemeParams): ThemeParams {
-  const themeParams = new ThemeParams(params);
-  ThemeParams.sync(themeParams);
-
-  return themeParams;
-}
+import type {
+  InitOptions,
+  InitResult,
+} from './types.js';
 
 /**
  * Represents actual init function.
- * @param options
+ * @param options - init options.
  */
 async function actualInit(options: InitOptions = {}): Promise<InitResult> {
   const {
     checkCompat = true,
     cssVars = false,
     acceptScrollbarStyle = true,
+    acceptCustomStyles = acceptScrollbarStyle,
     targetOrigin,
-    debug,
+    debug = false,
     launchParams: launchParamsRaw,
   } = options;
 
-  if (typeof debug === 'boolean') {
+  // Set global debug mode.
+  if (debug) {
     setDebug(debug);
   }
 
+  // Set global target origin.
   if (typeof targetOrigin === 'string') {
     setTargetOrigin(targetOrigin);
   }
@@ -98,33 +80,52 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     initDataRaw,
     version,
     platform,
-    themeParams,
+    themeParams: lpThemeParams,
   } = launchParams;
   const {
     backgroundColor = '#ffffff',
     buttonColor = '#000000',
     buttonTextColor = '#ffffff',
-  } = themeParams;
+  } = lpThemeParams;
 
-  // Wire postEvent if check compatibility is required.
-  const postEvent: typeof bridgePostEvent = checkCompat
-    ? (method: any, params?: any) => {
-      if (!supports(method, version)) {
-        throw new MethodUnsupportedError(method, version);
-      }
-      return bridgePostEvent(method, params);
-    }
-    : bridgePostEvent;
+  const postEvent = createPostEvent(checkCompat, version);
+  const themeParams = createSyncedThemeParams(lpThemeParams);
+  const webApp = new WebApp(version, platform, 'bg_color', backgroundColor, postEvent);
+
+  const {
+    themeParams: createThemeParamsCSSVars,
+    viewport: createViewportCSSVars,
+    webApp: createWebAppCSSVars,
+  } = parseCSSVarsOptions(cssVars);
+
+  if (createWebAppCSSVars) {
+    bindWebAppVariables(webApp, themeParams);
+  }
+
+  if (createThemeParamsCSSVars) {
+    bindThemeCSSVariables(themeParams);
+  }
+
+  // MacOS version does not support requesting current viewport information. That's why we
+  // should construct Viewport instance by ourselves.
+  const viewport = platform === 'macos'
+    ? createSyncedViewport(postEvent)
+    : await Viewport.synced(postEvent);
+
+  // Apply viewport CSS variables.
+  if (createViewportCSSVars) {
+    bindViewportCSSVariables(viewport);
+  }
 
   // In case, we are currently in iframe, it is required to listen to
   // messages, coming from parent source to apply requested changes.
   // The only one case, when current application was placed into iframe is
   // web version of Telegram.
-  if (acceptScrollbarStyle && isIframe()) {
+  if (acceptCustomStyles && isIframe()) {
     // Create special style element which is responsible for application
     // style controlled by external app.
     const styleElement = document.createElement('style');
-    styleElement.id = '__tg-iframe-style__';
+    styleElement.id = 'telegram-custom-styles';
     document.head.appendChild(styleElement);
 
     // Listen to custom style changes.
@@ -137,13 +138,6 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     postEvent('iframe_ready');
   }
 
-  // MacOS version does not support requesting current viewport information
-  // and theme parameters. That's why we should construct this data
-  // by ourselves.
-  const [viewportComponent, themeParamsComponent] = platform === 'macos'
-    ? [createSyncedViewport(postEvent), createSyncedThemeParams(themeParams)]
-    : await Promise.all([Viewport.synced(postEvent), ThemeParams.synced(postEvent)]);
-
   const result: InitResult = {
     backButton: new BackButton(version, postEvent),
     closingBehavior: new ClosingBehaviour(postEvent),
@@ -152,21 +146,16 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     popup: new Popup(version, postEvent),
     postEvent,
     qrScanner: new QRScanner(version, postEvent),
-    themeParams: themeParamsComponent,
-    viewport: viewportComponent,
-    webApp: new WebApp(version, platform, 'bg_color', backgroundColor, postEvent),
+    themeParams,
+    viewport,
+    webApp,
   };
 
-  // Init data could be missing in cae, application was launched via
-  // InlineKeyboardButton.
+  // Init data could be missing in case, application was launched via InlineKeyboardButton.
   if (initData !== undefined) {
     const { authDate, hash, ...restInitData } = initData;
     result.initData = new InitData(authDate, hash, restInitData);
     result.initDataRaw = initDataRaw;
-  }
-
-  if (cssVars) {
-    bindCSSVariables(result.webApp, result.themeParams);
   }
 
   return result;
@@ -177,5 +166,5 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
  * @param options - initialization options.
  */
 export function init(options: InitOptions = {}): Promise<InitResult> {
-  return withTimeout(actualInit(options), typeof options.timeout === 'number' ? options.timeout : 1000);
+  return withTimeout(actualInit(options), options.timeout || 1000);
 }
