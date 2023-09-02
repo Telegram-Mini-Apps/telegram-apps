@@ -1,5 +1,12 @@
 # react-sdk-example
 
+## 0.0.4
+
+### Patch Changes
+
+- 562e0c1: Improve cssVars option
+  - @twa.js/sdk-react@0.3.20
+
 ## 0.0.3
 
 ### Patch Changes
