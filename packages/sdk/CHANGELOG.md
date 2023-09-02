@@ -1,5 +1,11 @@
 # @twa.js/sdk
 
+## 0.10.0
+
+### Minor Changes
+
+- 562e0c1: Improve cssVars option
+
 ## 0.9.1
 
 ### Patch Changes
