@@ -1,5 +1,12 @@
 # solid-sdk-example
 
+## 0.0.5
+
+### Patch Changes
+
+- 562e0c1: Improve cssVars option
+  - @twa.js/sdk-solid@0.0.8
+
 ## 0.0.4
 
 ### Patch Changes
