@@ -29,17 +29,55 @@ export type InitResult = {
   webApp: WebApp;
 };
 
+export type InitCSSVarsSpecificOption = {
+  /**
+   * Enables theme parameters CSS variables:
+   * - `--tg-theme-bg-color`
+   * - `--tg-theme-button-color`
+   * - `--tg-theme-button-text-color`
+   * - `--tg-theme-hint-color`
+   * - `--tg-theme-link-color`
+   * - `--tg-theme-secondary-bg-color`
+   * - `--tg-theme-text-color`
+   *
+   * @see bindThemeCSSVariables
+   */
+  themeParams?: true;
+
+  /**
+   * Enables viewport CSS variables:
+   * - `--tg-viewport-height`
+   * - `--tg-viewport-stable-height`
+   *
+   * @see bindViewportCSSVariables
+   */
+  viewport?: true;
+
+  /**
+   * Enables web app CSS variables:
+   * - `--tg-bg-color`
+   * - `--tg-header-color`
+   *
+   * @see bindWebAppVariables
+   */
+  webApp?: true;
+};
+
+export type InitCSSVarsOption = boolean | InitCSSVarsSpecificOption;
+
 export interface InitOptions {
   /**
-   * Should SDK accept scrollbar styles sent from the Telegram web application.
-   * This option is only used in Web Z and Web K Telegram applications.
-   *
-   * You could specify the `false` value to apply your own styles for the
-   * scrollbar.
+   * @deprecated Use acceptCustomStyles
+   */
+  acceptScrollbarStyle?: boolean;
+
+  /**
+   * Should SDK accept styles sent from the Telegram web application.
+   * This option is only used in Web versions of Telegram.
    *
    * @default true
    */
-  acceptScrollbarStyle?: boolean;
+  acceptCustomStyles?: boolean;
 
   /**
    * Should SDK throw an error in case, unsupported by current version of
@@ -55,10 +93,14 @@ export interface InitOptions {
    * Should SDK create global CSS variables related to current Telegram
    * application colors.
    *
-   * @see bindCSSVariables
+   * Possible values:
+   * - `false` - no CSS variables will be created.
+   * - `true` - all CSS variables will be created.
+   * - object - applies specific CSS variables.
+   *
    * @default false
    */
-  cssVars?: boolean;
+  cssVars?: InitCSSVarsOption;
 
   /**
    * Enable debug mode.
