@@ -74,7 +74,7 @@ function DisplayGate(props: ParentProps) {
  */
 export function Root() {
   return (
-    <SDKProvider initOptions={{ debug: true }}>
+    <SDKProvider initOptions={{ debug: true, cssVars: true }}>
       <DisplayGate>
         <InitData/>
       </DisplayGate>
