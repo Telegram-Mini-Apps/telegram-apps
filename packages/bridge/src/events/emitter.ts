@@ -1,4 +1,5 @@
-import { EventEmitter as UtilEventEmitter, string } from '@twa.js/utils';
+import { EventEmitter as UtilEventEmitter } from '@twa.js/utils';
+import { string } from '@twa.js/parsing';
 
 import { log } from '../globals.js';
 import {
@@ -50,10 +51,10 @@ export function createEmitter(): EventEmitter {
     try {
       switch (eventType) {
         case 'viewport_changed':
-          return emit(eventType, viewportChangedPayload(eventData));
+          return emit(eventType, viewportChangedPayload.parse(eventData));
 
         case 'theme_changed':
-          return emit(eventType, themeChangedPayload(eventData));
+          return emit(eventType, themeChangedPayload.parse(eventData));
 
         case 'popup_closed':
           // FIXME: Payloads are different on different platforms.
@@ -66,28 +67,28 @@ export function createEmitter(): EventEmitter {
           ) {
             return emit(eventType, {});
           }
-          return emit(eventType, popupClosedPayload(eventData));
+          return emit(eventType, popupClosedPayload.parse(eventData));
 
         case 'set_custom_style':
-          return emit(eventType, string(eventData));
+          return emit(eventType, string().parse(eventData));
 
         case 'qr_text_received':
-          return emit(eventType, qrTextReceivedPayload(eventData));
+          return emit(eventType, qrTextReceivedPayload.parse(eventData));
 
         case 'clipboard_text_received':
-          return emit(eventType, clipboardTextReceivedPayload(eventData));
+          return emit(eventType, clipboardTextReceivedPayload.parse(eventData));
 
         case 'invoice_closed':
-          return emit(eventType, invoiceClosedPayload(eventData));
+          return emit(eventType, invoiceClosedPayload.parse(eventData));
 
         case 'phone_requested':
-          return emit('phone_requested', phoneRequestedPayload(eventData));
+          return emit('phone_requested', phoneRequestedPayload.parse(eventData));
 
         case 'custom_method_invoked':
-          return emit('custom_method_invoked', customMethodInvokedPayload(eventData));
+          return emit('custom_method_invoked', customMethodInvokedPayload.parse(eventData));
 
         case 'write_access_requested':
-          return emit('write_access_requested', writeAccessRequestedPayload(eventData));
+          return emit('write_access_requested', writeAccessRequestedPayload.parse(eventData));
 
         // Events which have no parameters.
         case 'main_button_pressed':
