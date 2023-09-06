@@ -12,9 +12,9 @@ export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
 
 type Keys<T> = T extends T ? keyof T : never;
 
-type CreateParams<P = never, SupportCheck extends Keys<P> = never> = {
+type CreateParams<P = never, SupportCheckKey extends Keys<P> = never> = {
   params: P;
-  canCheckSupport: SupportCheck;
+  supportCheckKey: SupportCheckKey;
 };
 
 /**
@@ -232,10 +232,10 @@ export type NonEmptyMethodName = Exclude<MethodName, EmptyMethodName>;
  * Method names which could be used in supportsParam method.
  */
 export type HaveCheckSupportMethodName = {
-  [E in MethodName]: IsNever<MethodsParams[E]['canCheckSupport']> extends true ? never : E;
+  [E in MethodName]: IsNever<MethodsParams[E]['supportCheckKey']> extends true ? never : E;
 }[MethodName];
 
 /**
  * Method parameter which can be checked via support method.
  */
-export type HaveCheckSupportMethodParam<M extends HaveCheckSupportMethodName> = MethodsParams[M]['canCheckSupport'];
+export type HaveCheckSupportMethodParam<M extends HaveCheckSupportMethodName> = MethodsParams[M]['supportCheckKey'];
