@@ -49,7 +49,7 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
-    "@twa.js/utils": "workspace:*"
+    "@twa.js/parsing": "workspace:*"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
