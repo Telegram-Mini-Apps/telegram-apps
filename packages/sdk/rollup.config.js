@@ -8,7 +8,7 @@ const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
 const input = 'src/index.ts';
-const external = ['@twa.js/utils', '@twa.js/init-data', '@twa.js/bridge'];
+const external = ['@twa.js/utils', '@twa.js/init-data', '@twa.js/bridge', '@twa.js/parsing'];
 
 export default [
   defineConfig({
@@ -18,7 +18,7 @@ export default [
       { file: pkg.module, format: 'esm', sourcemap: true },
     ],
     external,
-    plugins: [typescript(), terser()],
+    plugins: [typescript({ tsconfig: './tsconfig.build.json' }), terser()],
   }),
 
   defineConfig({
@@ -29,7 +29,7 @@ export default [
       name: 'TwaSDK',
       sourcemap: true,
     },
-    plugins: [typescript(), nodeResolve(), terser()],
+    plugins: [typescript({ tsconfig: './tsconfig.build.json' }), nodeResolve(), terser()],
   }),
 
   defineConfig({
@@ -37,6 +37,7 @@ export default [
     output: { file: pkg.types },
     external,
     plugins: [typescript({
+      tsconfig: './tsconfig.build.json',
       compilerOptions: {
         declaration: true,
         emitDeclarationOnly: true,
