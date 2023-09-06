@@ -188,6 +188,9 @@ importers:
 
   packages/bridge:
     dependencies:
+      '@twa.js/parsing':
+        specifier: workspace:*
+        version: link:../parsing
       '@twa.js/utils':
         specifier: workspace:*
         version: link:../utils
@@ -219,9 +222,9 @@ importers:
 
   packages/init-data:
     dependencies:
-      '@twa.js/utils':
+      '@twa.js/parsing':
         specifier: workspace:*
-        version: link:../utils
+        version: link:../parsing
     devDependencies:
       eslint-config-custom:
         specifier: workspace:*
@@ -254,6 +257,18 @@ importers:
 
   packages/jest-config-custom: {}
 
+  packages/parsing:
+    devDependencies:
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      jest-config-custom:
+        specifier: workspace:*
+        version: link:../jest-config-custom
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+
   packages/sdk:
     dependencies:
       '@twa.js/bridge':
@@ -262,6 +277,9 @@ importers:
       '@twa.js/init-data':
         specifier: workspace:*
         version: link:../init-data
+      '@twa.js/parsing':
+        specifier: workspace:*
+        version: link:../parsing
       '@twa.js/utils':
         specifier: workspace:*
         version: link:../utils
