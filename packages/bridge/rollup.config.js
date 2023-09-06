@@ -17,7 +17,7 @@ export default [
       { file: pkg.main, format: 'commonjs', sourcemap: true },
       { file: pkg.module, format: 'esm', sourcemap: true },
     ],
-    external: ['@twa.js/utils'],
+    external: ['@twa.js/utils', '@twa.js/parsing'],
     plugins: [typescript({ tsconfig: './tsconfig.build.json' }), terser()],
   }),
 
@@ -37,7 +37,7 @@ export default [
   defineConfig({
     input,
     output: { file: pkg.types },
-    external: ['@twa.js/utils'],
+    external: ['@twa.js/utils', '@twa.js/parsing'],
     plugins: [typescript({
       tsconfig: './tsconfig.build.json',
       compilerOptions: {
