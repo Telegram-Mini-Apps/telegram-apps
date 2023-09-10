@@ -1,4 +1,4 @@
-import { boolean, date, json, number, searchParams, string } from '../src/index.js';
+import { boolean, date, json, number, rgb, searchParams, string } from '../src/index.js';
 
 describe('parsers.ts', () => {
   describe('string', () => {
@@ -20,6 +20,33 @@ describe('parsers.ts', () => {
       it('should throw an error in case, passed value is not of type string', () => {
         expect(() => string().parse(true)).toThrow();
         expect(() => string().parse({})).toThrow();
+      });
+    });
+  });
+
+  describe('rgb', () => {
+    describe('optional', () => {
+      it('should return undefined if value is undefined', () => {
+        expect(rgb().optional().parse(undefined)).toBe(undefined);
+      });
+
+      it('should return undefined is passed isEmpty function returned true', () => {
+        expect(rgb().optional((value) => value === null).parse(null)).toBe(undefined);
+      });
+    });
+
+    describe('required', () => {
+      it('should return value in case, it represents RGB color', () => {
+        expect(rgb().parse('#fff')).toBe('#ffffff');
+      });
+
+      it('should throw an error in case, passed value is not of type string', () => {
+        expect(() => rgb().parse(true)).toThrow();
+        expect(() => rgb().parse({})).toThrow();
+      });
+
+      it('should throw an error in case, passed value does not represent RGB string', () => {
+        expect(() => rgb().parse('my custom string')).toThrow();
       });
     });
   });
