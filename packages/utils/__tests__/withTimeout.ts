@@ -1,4 +1,4 @@
-import { isTimeoutError, TimeoutError, withTimeout } from '../src';
+import { isTimeoutError, TimeoutError, withTimeout } from '../src/index.js';
 
 jest.useFakeTimers();
 

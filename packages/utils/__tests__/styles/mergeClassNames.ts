@@ -1,4 +1,4 @@
-import { mergeClassNames } from '../../src';
+import { mergeClassNames } from '../../src/index.js';
 
 describe('styles', () => {
   describe('mergeClassNames.ts', () => {
