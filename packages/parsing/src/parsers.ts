@@ -1,5 +1,8 @@
-import type { Parser, Schema } from './shared.js';
+import { toRGB, type RGB } from '@twa.js/colors';
+
 import { ValueParser } from './ValueParser.js';
+
+import type { Parser, Schema } from './shared.js';
 
 /**
  * Information about types, known by JSON parser. Key is type name and value
@@ -116,6 +119,19 @@ export const date = createParserGenerator<Date>((value) => {
   }
 
   throw new TypeError(`Unable to parse value "${value}" as Date.`);
+});
+
+/**
+ * Parses incoming value as RGB color.
+ */
+export const rgb = createParserGenerator<RGB>((value) => {
+  const asStr = string().parse(value);
+
+  try {
+    return toRGB(asStr);
+  } catch (cause) {
+    throw new TypeError(`Unable to parse value "${asStr}" as RGB.`, { cause });
+  }
 });
 
 /**

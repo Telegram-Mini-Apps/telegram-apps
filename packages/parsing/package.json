@@ -48,6 +48,10 @@
     "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
+  "dependencies": {
+    "@twa.js/util-types": "workspace:*",
+    "@twa.js/colors": "workspace:*"
+  },
   "devDependencies": {
     "tsconfig": "workspace:*",
     "jest-config-custom": "workspace:*",

@@ -1,40 +1,6 @@
+import type { And, HasUndefined, If, IsOptional, Not, Or } from '@twa.js/util-types';
+
 import type { ValueParser } from './ValueParser.js';
-
-/**
- * Represents classic if condition.
- */
-type If<Cond extends boolean, True, False> = Cond extends true ? True : False;
-
-/**
- * Represents classic "not" bitwise operation.
- */
-type Not<Cond extends boolean> = If<Cond, false, true>;
-
-/**
- * Represents classic "and" bitwise operation.
- */
-type And<A extends boolean, B extends boolean> = A extends true
-  ? B extends true
-    ? true
-    : false
-  : false;
-
-/**
- * Represents classic "or" bitwise operation.
- */
-type Or<A extends boolean, B extends boolean> = A extends true
-  ? true
-  : (B extends true ? true : false);
-
-/**
- * True if value includes undefined.
- */
-type HasUndefined<T> = undefined extends T ? true : false;
-
-/**
- * Returns true if specified property in type is marked as optional.
- */
-type IsOptional<Type, Key extends keyof Type> = {} extends Pick<Type, Key> ? true : false;
 
 /**
  * Represents any known parser.
