@@ -1,4 +1,4 @@
-import type { IsNever } from '../types.js';
+import type { IsNever } from '@twa.js/util-types';
 
 /**
  * Function accepting the list of passed arguments and returning nothing.
