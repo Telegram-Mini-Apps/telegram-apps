@@ -1,0 +1,50 @@
+{
+  "name": "@twa.js/util-types",
+  "version": "0.0.0",
+  "description": "Utility types.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.js.git",
+    "directory": "packages/util-types"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
+  },
+  "keywords": [
+    "telegram-web-apps",
+    "telegram",
+    "twa",
+    "typescript"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts"
+    },
+    "./*": {
+      "types": "./dist/types/*.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
+    "build": "rimraf dist && rollup --config rollup.config.js"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*",
+    "jest-config-custom": "workspace:*",
+    "eslint-config-custom": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
