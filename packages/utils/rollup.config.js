@@ -16,13 +16,14 @@ export default [
       { file: pkg.browser, format: 'iife', name: 'TwaUtils', sourcemap: true },
       { file: pkg.module, format: 'esm', sourcemap: true },
     ],
-    plugins: [typescript(), terser()],
+    plugins: [typescript({ tsconfig: './tsconfig.build.json' }), terser()],
   }),
 
   defineConfig({
     input,
     output: { file: pkg.types },
     plugins: [typescript({
+      tsconfig: './tsconfig.build.json',
       compilerOptions: {
         declaration: true,
         emitDeclarationOnly: true,
