@@ -1,14 +1,16 @@
-import {
-  supports,
+import type {
   MethodName,
-  HaveCheckSupportMethodName,
-  HaveCheckSupportMethodParam,
+  HasCheckSupportMethodName,
+  HasCheckSupportMethodParam,
 } from '../src/index.js';
+import {
+  supports, detectSupportParams,
+} from '../src/supports.js';
 
 type Version = `${number}.${number}`;
 type HaveCheckSupportMethodTuple = {
-  [M in HaveCheckSupportMethodName]: [M, HaveCheckSupportMethodParam<M>]
-}[HaveCheckSupportMethodName];
+  [M in HasCheckSupportMethodName]: [M, HasCheckSupportMethodParam<M>]
+}[HasCheckSupportMethodName];
 
 type Test = [
   version: Version | 'any',
@@ -101,6 +103,24 @@ describe('supports.ts', () => {
           });
         }
       });
+    });
+  });
+
+  describe('detectSupportParams', () => {
+    it('should return ["try_instant_view"] in case, passed method is "web_app_open_link" and params argument contains property "try_instant_view"', () => {
+      expect(
+        detectSupportParams('web_app_open_link', { url: '', try_instant_view: true }),
+      ).toStrictEqual(['try_instant_view']);
+      expect(detectSupportParams('web_app_open_link', { url: '' })).toStrictEqual([]);
+    });
+
+    it('should return ["color"] in case, passed method is "web_app_set_header_color" and params argument contains property "color"', () => {
+      expect(
+        detectSupportParams('web_app_set_header_color', { color: '#abc' }),
+      ).toStrictEqual(['color']);
+      expect(
+        detectSupportParams('web_app_set_header_color', { color_key: 'bg_color' }),
+      ).toStrictEqual([]);
     });
   });
 });
