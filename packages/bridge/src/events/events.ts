@@ -35,8 +35,8 @@ export interface Events {
    */
   clipboard_text_received: (payload: ClipboardTextReceivedPayload) => void;
 
-  // TODO: Add description.
   /**
+   * Being called whenever custom method was invoked.
    * @param payload - event payload.
    * @since 6.9
    */
@@ -55,8 +55,8 @@ export interface Events {
    */
   main_button_pressed: () => void;
 
-  // TODO: Add description.
   /**
+   * Application received phone access request status.
    * @param payload - event payload. - event payload.
    * @since 6.9
    */
@@ -109,8 +109,8 @@ export interface Events {
    */
   viewport_changed: (payload: ViewportChangedPayload) => void;
 
-  // TODO: Add description.
   /**
+   * Application received write access requests status.
    * @param payload - event payload.
    * @since 6.9
    */
