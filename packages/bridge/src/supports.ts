@@ -1,13 +1,40 @@
 import { compareVersions, type Version } from '@twa.js/utils';
 
 import type {
+  HasCheckSupportMethodParam,
+  HasCheckSupportMethodName,
   MethodName,
-  HaveCheckSupportMethodName,
-  HaveCheckSupportMethodParam,
+  MethodParams,
+  NonEmptyMethodName,
 } from './methods/index.js';
 
 function lessOrEqual(a: Version, b: Version): boolean {
   return compareVersions(a, b) <= 0;
+}
+
+/**
+ * By specified method and parameters extracts properties which could be used by
+ * supports function as TWA method parameter.
+ * @param method - TWA method.
+ * @param params - method parameters.
+ */
+export function detectSupportParams<M extends NonEmptyMethodName>(
+  method: M,
+  params: MethodParams<M>,
+): HasCheckSupportMethodParam<HasCheckSupportMethodName>[] {
+  if (method === 'web_app_open_link') {
+    if ('try_instant_view' in params) {
+      return ['try_instant_view'];
+    }
+  }
+
+  if (method === 'web_app_set_header_color') {
+    if ('color' in params) {
+      return ['color'];
+    }
+  }
+
+  return [];
 }
 
 /**
@@ -16,9 +43,9 @@ function lessOrEqual(a: Version, b: Version): boolean {
  * @param param - method parameter
  * @param inVersion - platform version.
  */
-export function supports<M extends HaveCheckSupportMethodName>(
+export function supports<M extends HasCheckSupportMethodName>(
   method: M,
-  param: HaveCheckSupportMethodParam<M>,
+  param: HasCheckSupportMethodParam<M>,
   inVersion: Version,
 ): boolean;
 /**
