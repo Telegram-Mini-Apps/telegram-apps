@@ -1,11 +1,24 @@
 import type { And, HasUndefined, If, IsOptional, Not, Or } from '@twa.js/util-types';
 
-import type { ValueParser } from './ValueParser.js';
-
 /**
  * Represents any known parser.
  */
-type AnyParser<T> = ValueParser<T> | Parser<T>;
+export type AnyParser<T> = Parser<T> | { parse: Parser<T> };
+
+/**
+ * Describes function which returns true in case value should be recognized as empty.
+ */
+export type IsEmptyFunc = (value: unknown) => boolean;
+
+/**
+ * Describes function which returns default value.
+ */
+export type GetDefaultFunc<T> = () => T;
+
+/**
+ * Allowed types for "getDefault" method.
+ */
+export type AllowedGetDefault = GetDefaultFunc<any> | undefined;
 
 /**
  * Detailed schema field options.
