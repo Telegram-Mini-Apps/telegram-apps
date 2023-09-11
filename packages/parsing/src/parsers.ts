@@ -1,6 +1,7 @@
 import { toRGB, type RGB } from '@twa.js/colors';
 
 import { ValueParser } from './ValueParser.js';
+import { ArrayValueParser } from './ArrayValueParser.js';
 
 import type { Parser, Schema } from './shared.js';
 
@@ -19,7 +20,7 @@ interface KnownTypeMap {
  * @param parser - value parser.
  */
 export function createParserGenerator<T>(parser: Parser<T>) {
-  return () => new ValueParser<T>(parser);
+  return () => ValueParser.create(parser);
 }
 
 /**
@@ -138,8 +139,8 @@ export const rgb = createParserGenerator<RGB>((value) => {
  * Creates new Json parser according to passed schema.
  * @param schema - object schema.
  */
-export function json<T>(schema: Schema<T>): ValueParser<T> {
-  return new ValueParser<T>((value) => {
+export function json<T>(schema: Schema<T>): ValueParser<T, false, undefined> {
+  return ValueParser.create((value) => {
     let formattedValue: any = value;
 
     // Convert value to JSON in case, it is string. We expect value to be
@@ -169,8 +170,8 @@ export function json<T>(schema: Schema<T>): ValueParser<T> {
  * Creates new search params parser according to passed schema.
  * @param schema - object schema.
  */
-export function searchParams<T>(schema: Schema<T>): ValueParser<T> {
-  return new ValueParser<T>((value) => {
+export function searchParams<T>(schema: Schema<T>): ValueParser<T, false, undefined> {
+  return ValueParser.create((value) => {
     if (typeof value !== 'string' && !(value instanceof URLSearchParams)) {
       throw new TypeError('Value has not processable type.');
     }
@@ -185,4 +186,11 @@ export function searchParams<T>(schema: Schema<T>): ValueParser<T> {
       return paramsValue === null ? undefined : paramsValue;
     });
   });
+}
+
+/**
+ * Parses incoming value as an array.
+ */
+export function array() {
+  return new ArrayValueParser((value) => value, false, undefined);
 }

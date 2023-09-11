@@ -1,4 +1,4 @@
-import { boolean, date, json, number, rgb, searchParams, string } from '../src/index.js';
+import { array, boolean, date, json, number, rgb, searchParams, string } from '../src/index.js';
 
 describe('parsers.ts', () => {
   describe('string', () => {
@@ -202,6 +202,39 @@ describe('parsers.ts', () => {
       expect(parser.parse(params)).toEqual({
         date: new Date(66653332000),
         string: 'some string',
+      });
+    });
+  });
+
+  describe('array', () => {
+    describe('of', () => {
+      it('should correctly apply item parser', () => {
+        expect(array().of(string()).parse(['abc'])).toStrictEqual(['abc']);
+      });
+
+      it('should throw an error in case, item parser was unable to parse value', () => {
+        expect(() => array().of(string()).parse(['abc', 123])).toThrow();
+      });
+    });
+
+    describe('optional', () => {
+      it('should return undefined if value is undefined', () => {
+        expect(array().optional().parse(undefined)).toBe(undefined);
+      });
+
+      it('should return undefined is passed isEmpty function returned true', () => {
+        expect(array().optional((value) => value === null).parse(null)).toBe(undefined);
+      });
+    });
+
+    describe('required', () => {
+      it('should return value in case, it is array', () => {
+        expect(array().parse(['abc'])).toStrictEqual(['abc']);
+      });
+
+      it('should throw an error in case, passed value is not array', () => {
+        expect(() => array().parse(true)).toThrow();
+        expect(() => array().parse({})).toThrow();
       });
     });
   });
