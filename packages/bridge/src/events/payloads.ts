@@ -1,4 +1,4 @@
-import type { RGB } from '@twa.js/utils';
+import type { RGB } from '@twa.js/colors';
 
 import type { RequestId } from '../shared.js';
 
@@ -10,8 +10,7 @@ export interface ClipboardTextReceivedPayload {
 export interface CustomMethodInvokedPayload<R = unknown> {
   req_id: RequestId;
   result?: R;
-  // TODO: Describe this property. There are no docs related to this field.
-  error?: unknown;
+  error?: string;
 }
 
 export type InvoiceStatus =

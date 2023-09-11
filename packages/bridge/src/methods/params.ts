@@ -1,4 +1,5 @@
-import type { IsNever, RGB } from '@twa.js/utils';
+import type { RGB } from '@twa.js/colors';
+import type { IsNever, UnionKeys } from '@twa.js/util-types';
 
 import type { PopupParams } from './popup.js';
 import type { AnyHapticFeedbackParams } from './haptic.js';
@@ -10,9 +11,7 @@ import type { AnyInvokeCustomMethodParams } from './invoke-custom-method.js';
  */
 export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
 
-type Keys<T> = T extends T ? keyof T : never;
-
-type CreateParams<P = never, SupportCheckKey extends Keys<P> = never> = {
+type CreateParams<P = never, SupportCheckKey extends UnionKeys<P> = never> = {
   params: P;
   supportCheckKey: SupportCheckKey;
 };
@@ -38,6 +37,13 @@ export interface MethodsParams {
   web_app_close: CreateParams;
 
   /**
+   * Closes QR scanner.
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_close_scan_qr_popup
+   * @since 6.4
+   */
+  web_app_close_scan_qr_popup: CreateParams;
+
+  /**
    * Sends data to bot.
    * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_data_send
    * @since 6.0
@@ -50,6 +56,19 @@ export interface MethodsParams {
    * @since 6.0
    */
   web_app_expand: CreateParams;
+
+  /**
+   * Invokes custom method.
+   * @since 6.9
+   */
+  web_app_invoke_custom_method: CreateParams<AnyInvokeCustomMethodParams>;
+
+  /**
+   * Opens new invoice.
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_invoice
+   * @since 6.1
+   */
+  web_app_open_invoice: CreateParams<{ slug: string }>;
 
   /**
    * Opens link in default browser. Doesn't close application.
@@ -69,13 +88,6 @@ export interface MethodsParams {
   }, 'try_instant_view'>;
 
   /**
-   * Opens link which has format like "https://t.me/*".
-   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_tg_link
-   * @since 6.1
-   */
-  web_app_open_tg_link: CreateParams<{ path_full: string }>;
-
-  /**
    * Opens new popup.
    * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_popup
    * @since 6.2
@@ -83,11 +95,25 @@ export interface MethodsParams {
   web_app_open_popup: CreateParams<PopupParams>;
 
   /**
-   * Opens new invoice.
-   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_invoice
+   * Opens QR scanner.
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_scan_qr_popup
+   * @since 6.4
+   */
+  web_app_open_scan_qr_popup: CreateParams<{ text?: string }>;
+
+  /**
+   * Opens link which has format like "https://t.me/*".
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_tg_link
    * @since 6.1
    */
-  web_app_open_invoice: CreateParams<{ slug: string }>;
+  web_app_open_tg_link: CreateParams<{ path_full: string }>;
+
+  /**
+   * Reads text from clipboard.
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_read_text_from_clipboard
+   * @since 6.4
+   */
+  web_app_read_text_from_clipboard: CreateParams<{ req_id: RequestId }>;
 
   /**
    * Notifies Telegram about current application is ready to be shown.
@@ -95,6 +121,12 @@ export interface MethodsParams {
    * @since 6.0
    */
   web_app_ready: CreateParams;
+
+  /**
+   * Requests access to current user's phone.
+   * @since 6.9
+   */
+  web_app_request_phone: CreateParams;
 
   /**
    * Requests current theme from Telegram.
@@ -111,32 +143,10 @@ export interface MethodsParams {
   web_app_request_viewport: CreateParams;
 
   /**
-   * Updates current information about back button.
-   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_setup_back_button
-   * @since 6.1
+   * Requests write message access to current user.
+   * @since 6.9
    */
-  web_app_setup_back_button: CreateParams<{ is_visible: boolean }>;
-
-  /**
-   * Updates current information about main button.
-   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_setup_main_button
-   * @since 6.0
-   */
-  web_app_setup_main_button: CreateParams<{
-    is_visible?: boolean;
-    is_active?: boolean;
-    is_progress_visible?: boolean;
-    text?: string;
-    color?: string;
-    text_color?: string;
-  }>;
-
-  /**
-   * Changes current closing confirmation requirement status.
-   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_setup_closing_behavior
-   * @since 6.0
-   */
-  web_app_setup_closing_behavior: CreateParams<{ need_confirmation: boolean }>;
+  web_app_request_write_access: CreateParams;
 
   /**
    * Updates current background color.
@@ -160,50 +170,39 @@ export interface MethodsParams {
   }, 'color'>;
 
   /**
+   * Updates current information about back button.
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_setup_back_button
+   * @since 6.1
+   */
+  web_app_setup_back_button: CreateParams<{ is_visible: boolean }>;
+
+  /**
+   * Changes current closing confirmation requirement status.
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_setup_closing_behavior
+   * @since 6.0
+   */
+  web_app_setup_closing_behavior: CreateParams<{ need_confirmation: boolean }>;
+
+  /**
+   * Updates current information about main button.
+   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_setup_main_button
+   * @since 6.0
+   */
+  web_app_setup_main_button: CreateParams<{
+    is_visible?: boolean;
+    is_active?: boolean;
+    is_progress_visible?: boolean;
+    text?: string;
+    color?: string;
+    text_color?: string;
+  }>;
+
+  /**
    * Generates haptic feedback event.
    * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_trigger_haptic_feedback
    * @since 6.1
    */
   web_app_trigger_haptic_feedback: CreateParams<AnyHapticFeedbackParams>;
-
-  /**
-   * Opens QR scanner.
-   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_open_scan_qr_popup
-   * @since 6.4
-   */
-  web_app_open_scan_qr_popup: CreateParams<{ text?: string }>;
-
-  /**
-   * Closes QR scanner.
-   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_close_scan_qr_popup
-   * @since 6.4
-   */
-  web_app_close_scan_qr_popup: CreateParams;
-
-  /**
-   * Reads text from clipboard.
-   * @see https://docs.twa.dev/docs/apps-communication/methods#web_app_read_text_from_clipboard
-   * @since 6.4
-   */
-  web_app_read_text_from_clipboard: CreateParams<{ req_id: RequestId }>;
-
-  /**
-   * Invokes custom method.
-   * @since 6.9
-   */
-  web_app_invoke_custom_method: CreateParams<AnyInvokeCustomMethodParams>;
-
-  /**
-   * Requests access to current user's phone.
-   * @since 6.9
-   */
-  web_app_request_phone: CreateParams;
-
-  /**
-   * Requests write message access to current user.
-   * @since 6.9
-   */
-  web_app_request_write_access: CreateParams;
 }
 
 /**
@@ -231,11 +230,11 @@ export type NonEmptyMethodName = Exclude<MethodName, EmptyMethodName>;
 /**
  * Method names which could be used in supportsParam method.
  */
-export type HaveCheckSupportMethodName = {
+export type HasCheckSupportMethodName = {
   [E in MethodName]: IsNever<MethodsParams[E]['supportCheckKey']> extends true ? never : E;
 }[MethodName];
 
 /**
  * Method parameter which can be checked via support method.
  */
-export type HaveCheckSupportMethodParam<M extends HaveCheckSupportMethodName> = MethodsParams[M]['supportCheckKey'];
+export type HasCheckSupportMethodParam<M extends HasCheckSupportMethodName> = MethodsParams[M]['supportCheckKey'];
