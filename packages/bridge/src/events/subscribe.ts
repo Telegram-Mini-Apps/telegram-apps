@@ -12,6 +12,5 @@ type StopListening = () => void;
  */
 export function subscribe(listener: GlobalEventListener): StopListening {
   singletonEmitter().subscribe(listener);
-
   return () => unsubscribe(listener);
 }
