@@ -1,4 +1,3 @@
-export * from './EventEmitter/index.js';
 export * from './styles/index.js';
 export * from './logging.js';
 export * from './validation.js';
