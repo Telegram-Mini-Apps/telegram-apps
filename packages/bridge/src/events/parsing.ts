@@ -3,9 +3,8 @@ import {
   string,
   boolean,
   json,
-  createParserGenerator,
+  rgb,
 } from '@twa.js/parsing';
-import { toRGB, type RGB } from '@twa.js/utils';
 
 import type {
   ClipboardTextReceivedPayload, CustomMethodInvokedPayload,
@@ -18,16 +17,6 @@ import type {
 function isNullOrUndefined(value: unknown): boolean {
   return value === null || value === undefined;
 }
-
-const rgb = createParserGenerator<RGB>((value) => {
-  const asStr = string().parse(value);
-
-  try {
-    return toRGB(asStr);
-  } catch (cause) {
-    throw new TypeError(`Unable to parse value "${asStr}" as RGB.`, { cause });
-  }
-});
 
 /**
  * Parses incoming value as ThemeChangedPayload.
@@ -101,5 +90,5 @@ export const phoneRequestedPayload = json<PhoneRequestedPayload>({ status: strin
 export const customMethodInvokedPayload = json<CustomMethodInvokedPayload>({
   req_id: string(),
   result: (value) => value,
-  error: (value) => value,
+  error: string().optional(),
 });

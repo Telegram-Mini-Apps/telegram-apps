@@ -3,7 +3,7 @@ import type {
   EventName as UtilEventName,
   EventListener as UtilEventListener,
   EventParams as UtilEventParams, AnySubscribeListener,
-} from '@twa.js/utils';
+} from '@twa.js/event-emitter';
 
 import type {
   ClipboardTextReceivedPayload,

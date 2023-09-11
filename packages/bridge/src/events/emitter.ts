@@ -1,4 +1,4 @@
-import { EventEmitter as UtilEventEmitter } from '@twa.js/utils';
+import { EventEmitter as UtilEventEmitter } from '@twa.js/event-emitter';
 import { string } from '@twa.js/parsing';
 
 import { log } from '../globals.js';
