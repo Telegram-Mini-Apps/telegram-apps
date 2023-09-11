@@ -1,5 +1,5 @@
-export * from './haptic.js';
-export * from './invoke-custom-method.js';
-export * from './params.js';
-export * from './popup.js';
+export type * from './haptic.js';
+export type * from './invoke-custom-method.js';
+export type * from './params.js';
+export type * from './popup.js';
 export * from './postEvent.js';

@@ -47,10 +47,7 @@ export function postEvent<E extends NonEmptyMethodName>(
  * @throws {Error} Bridge could not determine current
  * environment and possible way to send event.
  */
-export function postEvent(
-  eventType: EmptyMethodName,
-  options?: PostEventOptions,
-): void;
+export function postEvent(eventType: EmptyMethodName, options?: PostEventOptions): void;
 
 export function postEvent(
   eventType: MethodName,
