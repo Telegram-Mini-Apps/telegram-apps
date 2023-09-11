@@ -9,6 +9,8 @@ const pkg = require('./package.json');
 
 const input = 'src/index.ts';
 
+const external = ['@twa.js/utils', '@twa.js/parsing', '@twa.js/event-emitter'];
+
 export default [
   // CJS, ESM.
   defineConfig({
@@ -17,7 +19,7 @@ export default [
       { file: pkg.main, format: 'commonjs', sourcemap: true },
       { file: pkg.module, format: 'esm', sourcemap: true },
     ],
-    external: ['@twa.js/utils', '@twa.js/parsing'],
+    external,
     plugins: [typescript({ tsconfig: './tsconfig.build.json' }), terser()],
   }),
 
@@ -37,7 +39,7 @@ export default [
   defineConfig({
     input,
     output: { file: pkg.types },
-    external: ['@twa.js/utils', '@twa.js/parsing'],
+    external,
     plugins: [typescript({
       tsconfig: './tsconfig.build.json',
       compilerOptions: {
