@@ -5,14 +5,19 @@ import type {
   EventParams, NonEmptyEventName,
 } from './types.js';
 
+type EmitterEventListener = EventListener<any> | {
+  listener: EventListener<any>;
+  once: true;
+};
+
 /**
  * EventEmitter represents classic JavaScript event emitter. It allows usage
  * both known and unknown events.
  */
 export class EventEmitter<Schema> {
-  private listeners: Record<string, EventListener<any[]>[]> = {};
+  private readonly listeners: Record<string, EmitterEventListener[]> = {};
 
-  private subscribeListeners: AnySubscribeListener<Schema>[] = [];
+  private readonly subscribeListeners: AnySubscribeListener<Schema>[] = [];
 
   /**
    * Emits known event which has no parameters.
@@ -30,29 +35,40 @@ export class EventEmitter<Schema> {
     ...args: EventParams<Schema[E]>
   ): void;
 
-  emit(event: string, ...args: any[]): void {
-    // Emit global listeners.
+  emit(event: EventName<Schema>, ...args: any[]): void {
     this.subscribeListeners.forEach((l) => (l as any)(event, ...args));
 
-    // Emit event specific listeners.
     const listeners = this.listeners[event];
     if (listeners === undefined) {
       return;
     }
-    listeners.forEach((l) => l(...args));
+
+    // In this array we store all event listeners which should be unbound. We don't unbind
+    // listeners right before call because "off" method will remove all listener entries
+    // in listeners array.
+    const toUnbind: EventListener<any>[] = [];
+
+    listeners.forEach((l) => {
+      if (typeof l === 'function') {
+        l(...args);
+        return;
+      }
+
+      if (l.once) {
+        toUnbind.push(l.listener);
+      }
+      l.listener(...args);
+    });
+
+    toUnbind.forEach((l) => this.off(event, l));
   }
 
   /**
-   * Adds new known event to be listened.
+   * Adds event listener.
    * @param event - event name.
    * @param listener - event listener.
    */
-  on<E extends EventName<Schema>>(
-    event: E,
-    listener: EventListener<Schema[E]>,
-  ): void;
-
-  on(event: string, listener: (...args: any[]) => any): void {
+  on<E extends EventName<Schema>>(event: E, listener: EventListener<Schema[E]>): void {
     const listeners = this.listeners[event];
 
     if (listeners === undefined) {
@@ -63,24 +79,40 @@ export class EventEmitter<Schema> {
   }
 
   /**
-   * Removes listener of known event.
+   * Adds event listener which will be called only once.
    * @param event - event name.
    * @param listener - event listener.
    */
-  off<E extends EventName<Schema>>(
-    event: E,
-    listener: EventListener<Schema[E]>,
-  ): void;
+  once<E extends EventName<Schema>>(event: E, listener: EventListener<Schema[E]>): void {
+    const listeners = this.listeners[event];
+    const addedListener = { listener, once: true as const };
 
-  off(event: string, listener: (...args: any[]) => any): void {
+    if (listeners === undefined) {
+      this.listeners[event] = [addedListener];
+    } else {
+      listeners.push(addedListener);
+    }
+  }
+
+  /**
+   * Removes event listener.
+   * @param event - event name.
+   * @param listener - event listener.
+   */
+  off<E extends EventName<Schema>>(event: E, listener: EventListener<Schema[E]>): void {
     const listeners = this.listeners[event];
     if (listeners === undefined) {
       return;
     }
 
-    const idx = listeners.indexOf(listener);
-    if (idx >= 0) {
-      listeners.splice(idx, 1);
+    for (let i = 0; i < listeners.length; i += 1) {
+      const l = listeners[i];
+      const currentListener = typeof l === 'function' ? l : l.listener;
+
+      if (listener === currentListener) {
+        listeners.splice(i, 1);
+        i -= 1;
+      }
     }
   }
 

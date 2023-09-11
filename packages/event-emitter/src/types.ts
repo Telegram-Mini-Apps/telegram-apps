@@ -32,7 +32,7 @@ export type EventListener<Params> = VoidFunc<EventParams<Params>>;
 /**
  * Returns event names.
  */
-export type EventName<Schema> = keyof Schema;
+export type EventName<Schema> = Extract<keyof Schema, string>;
 
 /**
  * Returns event names which do not require any arguments.
