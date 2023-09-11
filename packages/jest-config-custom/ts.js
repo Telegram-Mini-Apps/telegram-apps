@@ -6,5 +6,6 @@ export default {
   },
   transform: {
     '^.+\\.tsx?$': ['ts-jest', { useESM: true }],
+    "^.+\\.jsx?$": "babel-jest"
   },
 };
