@@ -51,7 +51,11 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
-    "@twa.js/utils": "workspace:*"
+    "@twa.js/utils": "workspace:*",
+    "@twa.js/event-emitter": "workspace:*",
+    "@twa.js/colors": "workspace:*",
+    "@twa.js/parsing": "workspace:*",
+    "@twa.js/util-types": "workspace:*"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",

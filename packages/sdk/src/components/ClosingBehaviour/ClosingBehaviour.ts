@@ -1,36 +1,29 @@
-import { EventEmitter } from '@twa.js/utils';
-import { postEvent as bridgePostEvent, type PostEvent } from '@twa.js/bridge';
+import { EventEmitter } from '@twa.js/event-emitter';
+import { postEvent as defaultPostEvent, type PostEvent } from '@twa.js/bridge';
 
-import type { ClosingBehaviourEvents } from './events.js';
+import { State } from '../../state/index.js';
 
-type Emitter = EventEmitter<ClosingBehaviourEvents>;
+import type { ClosingBehaviourEvents, ClosingBehaviourState } from './types.js';
 
 /**
  * Component responsible for controlling current closing confirmation
  * status.
  */
 export class ClosingBehaviour {
-  readonly #ee: Emitter = new EventEmitter();
+  private readonly ee = new EventEmitter<ClosingBehaviourEvents>();
 
-  readonly #postEvent: PostEvent;
+  private readonly state: State<ClosingBehaviourState>;
 
-  #isConfirmationNeeded = false;
-
-  constructor(postEvent: PostEvent = bridgePostEvent) {
-    this.#postEvent = postEvent;
+  constructor(
+    isConfirmationNeeded: boolean,
+    private readonly postEvent: PostEvent = defaultPostEvent,
+  ) {
+    this.state = new State({ isConfirmationNeeded }, this.ee);
   }
 
   private set isConfirmationNeeded(value: boolean) {
-    this.#postEvent('web_app_setup_closing_behavior', {
-      need_confirmation: value,
-    });
-
-    if (this.#isConfirmationNeeded === value) {
-      return;
-    }
-
-    this.#isConfirmationNeeded = value;
-    this.#ee.emit('isConfirmationNeededChanged', value);
+    this.state.set('isConfirmationNeeded', value);
+    this.postEvent('web_app_setup_closing_behavior', { need_confirmation: value });
   }
 
   /**
@@ -38,7 +31,7 @@ export class ClosingBehaviour {
    * to close the Web App.
    */
   get isConfirmationNeeded(): boolean {
-    return this.#isConfirmationNeeded;
+    return this.state.get('isConfirmationNeeded');
   }
 
   /**
@@ -60,10 +53,10 @@ export class ClosingBehaviour {
   /**
    * Adds new event listener.
    */
-  on = this.#ee.on.bind(this.#ee);
+  on: typeof this.ee.on = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.#ee.off.bind(this.#ee);
+  off: typeof this.ee.off = this.ee.off.bind(this.ee);
 }

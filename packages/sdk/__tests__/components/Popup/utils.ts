@@ -1,4 +1,4 @@
-import { preparePopupParams } from '../../../src/components/Popup/utils';
+import { preparePopupParams } from '../../../src/components/Popup/utils.js';
 
 /**
  * Creates test text.

@@ -1,53 +1,44 @@
-import { EventEmitter, type Version } from '@twa.js/utils';
-import { on, postEvent as bridgePostEvent, type PostEvent } from '@twa.js/bridge';
+import { EventEmitter } from '@twa.js/event-emitter';
+import { postEvent as defaultPostEvent, request, type PostEvent } from '@twa.js/bridge';
+
+import type { Version } from '@twa.js/utils';
 
 import { preparePopupParams } from './utils.js';
-import { WithSupports } from '../../lib/index.js';
+import { createSupportsFunc, type SupportsFunc } from '../../supports.js';
+import { State } from '../../state/index.js';
 
-import type { PopupParams } from './types.js';
-import type { PopupEvents } from './events.js';
+import type { PopupParams, PopupEvents, PopupState } from './types.js';
 
 /**
  * Controls currently displayed application popup. It allows developers to
  * open new custom popups and detect popup-connected events.
  */
-export class Popup extends WithSupports<'open'> {
-  readonly #ee = new EventEmitter<PopupEvents>();
+export class Popup {
+  private readonly ee = new EventEmitter<PopupEvents>();
 
-  readonly #postEvent: PostEvent;
+  private readonly state: State<PopupState>;
 
-  #isOpened = false;
-
-  constructor(version: Version, postEvent: PostEvent = bridgePostEvent) {
-    super(version, { open: 'web_app_open_popup' });
-    this.#postEvent = postEvent;
-  }
-
-  private set isOpened(value: boolean) {
-    if (this.#isOpened === value) {
-      return;
-    }
-
-    this.#isOpened = value;
-    this.#ee.emit('isOpenedChanged', this.#isOpened);
+  constructor(version: Version, private readonly postEvent: PostEvent = defaultPostEvent) {
+    this.state = new State({ isOpened: false }, this.ee);
+    this.supports = createSupportsFunc(version, { open: 'web_app_open_popup' });
   }
 
   /**
    * Shows whether popup is currently opened.
    */
   get isOpened(): boolean {
-    return this.#isOpened;
+    return this.state.get('isOpened');
   }
 
   /**
    * Adds new event listener.
    */
-  on = this.#ee.on.bind(this.#ee);
+  on: typeof this.ee.on = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.#ee.off.bind(this.#ee);
+  off: typeof this.ee.off = this.ee.off.bind(this.ee);
 
   /**
    * A method that shows a native popup described by the `params` argument.
@@ -62,20 +53,29 @@ export class Popup extends WithSupports<'open'> {
    * @param params - popup parameters.
    * @throws {Error} Popup is already opened.
    */
-  open(params: PopupParams): Promise<string | null> {
+  async open(params: PopupParams): Promise<string | null> {
     if (this.isOpened) {
       throw new Error('Popup is already opened.');
     }
 
-    this.#postEvent('web_app_open_popup', preparePopupParams(params));
-    this.isOpened = true;
+    this.state.set('isOpened', true);
 
-    return new Promise<string | null>((res) => {
-      const off = on('popup_closed', ({ button_id = null }) => {
-        off();
-        this.isOpened = false;
-        res(button_id);
-      });
-    });
+    try {
+      const { button_id: buttonId = null } = await request(
+        'web_app_open_popup',
+        preparePopupParams(params),
+        'popup_closed',
+        { postEvent: this.postEvent },
+      );
+
+      return buttonId;
+    } finally {
+      this.state.set('isOpened', false);
+    }
   }
+
+  /**
+   * Checks if specified method is supported by current component.
+   */
+  supports: SupportsFunc<'open'>;
 }

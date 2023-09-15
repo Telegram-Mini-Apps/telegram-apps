@@ -1,86 +1,74 @@
-import { EventEmitter, type RGB } from '@twa.js/utils';
-import { on, off, postEvent as bridgePostEvent, type PostEvent } from '@twa.js/bridge';
+import { EventEmitter } from '@twa.js/event-emitter';
+import { on, off, postEvent as defaultPostEvent, type PostEvent } from '@twa.js/bridge';
 
-import type { MainButtonEventListener, MainButtonEvents } from './events.js';
+import type { RGB } from '@twa.js/colors';
 
-type Emitter = EventEmitter<MainButtonEvents>;
+import { State } from '../../state/index.js';
+
+import type { MainButtonEventListener, MainButtonEvents, MainButtonState } from './types.js';
 
 /**
  * Controls the main button, which is displayed at the bottom
  * of the Web App in the Telegram interface.
  */
 export class MainButton {
-  readonly #ee: Emitter = new EventEmitter();
+  private readonly ee = new EventEmitter<MainButtonEvents>();
 
-  readonly #postEvent: PostEvent;
+  private readonly state: State<MainButtonState>;
 
-  #backgroundColor: RGB;
-
-  #isEnabled = false;
-
-  #isVisible = false;
-
-  #isProgressVisible = false;
-
-  #text = '';
-
-  #textColor: RGB;
-
-  constructor(backgroundColor: RGB, textColor: RGB, postEvent: PostEvent = bridgePostEvent) {
-    this.#postEvent = postEvent;
-    this.#backgroundColor = backgroundColor;
-    this.#textColor = textColor;
+  constructor(
+    backgroundColor: RGB,
+    isEnabled: boolean,
+    isVisible: boolean,
+    isProgressVisible: boolean,
+    text: string,
+    textColor: RGB,
+    private readonly postEvent: PostEvent = defaultPostEvent,
+  ) {
+    this.state = new State({
+      backgroundColor,
+      isEnabled,
+      isVisible,
+      isProgressVisible,
+      text,
+      textColor,
+    }, this.ee);
   }
 
   private set isEnabled(value: boolean) {
-    const prev = this.#isEnabled;
-    this.#isEnabled = value;
+    this.state.set('isEnabled', value);
     this.commit();
-
-    if (value !== prev) {
-      this.#ee.emit('isEnabledChanged', value);
-    }
   }
 
   /**
    * Returns true in case, MainButton is currently enabled.
    */
   get isEnabled(): boolean {
-    return this.#isEnabled;
+    return this.state.get('isEnabled');
   }
 
   private set isProgressVisible(value: boolean) {
-    const prev = this.#isProgressVisible;
-    this.#isProgressVisible = value;
+    this.state.set('isProgressVisible', value);
     this.commit();
-
-    if (value !== prev) {
-      this.#ee.emit('isProgressVisibleChanged', value);
-    }
   }
 
   /**
    * Returns true in case, MainButton loading progress is currently visible.
    */
   get isProgressVisible(): boolean {
-    return this.#isProgressVisible;
+    return this.state.get('isProgressVisible');
   }
 
   private set isVisible(value: boolean) {
-    const prev = this.#isVisible;
-    this.#isVisible = value;
+    this.state.set('isVisible', value);
     this.commit();
-
-    if (value !== prev) {
-      this.#ee.emit('isVisibleChanged', value);
-    }
   }
 
   /**
    * Returns true in case, MainButton is currently visible.
    */
   get isVisible(): boolean {
-    return this.#isVisible;
+    return this.state.get('isVisible');
   }
 
   /**
@@ -94,7 +82,7 @@ export class MainButton {
       return;
     }
 
-    this.#postEvent('web_app_setup_main_button', {
+    this.postEvent('web_app_setup_main_button', {
       is_visible: this.isVisible,
       is_active: this.isEnabled,
       is_progress_visible: this.isProgressVisible,
@@ -108,21 +96,21 @@ export class MainButton {
    * Returns current main button background color.
    */
   get backgroundColor(): RGB {
-    return this.#backgroundColor;
+    return this.state.get('backgroundColor');
   }
 
   /**
    * Returns current main button text.
    */
   get text(): string {
-    return this.#text;
+    return this.state.get('text');
   }
 
   /**
    * Returns current main button text color.
    */
   get textColor(): RGB {
-    return this.#textColor;
+    return this.state.get('textColor');
   }
 
   /**
@@ -168,11 +156,11 @@ export class MainButton {
    * @param event - event name.
    * @param listener - event listener.
    */
-  on: Emitter['on'] = (event, listener) => {
+  on: typeof this.ee.on = (event, listener) => {
     if (event === 'click') {
       return on('main_button_pressed', listener as MainButtonEventListener<'click'>);
     }
-    this.#ee.on(event, listener);
+    this.ee.on(event, listener);
   };
 
   /**
@@ -180,11 +168,11 @@ export class MainButton {
    * @param event - event name.
    * @param listener - event listener.
    */
-  off: Emitter['off'] = (event, listener) => {
+  off: typeof this.ee.off = (event, listener) => {
     if (event === 'click') {
       return off('main_button_pressed', listener as MainButtonEventListener<'click'>);
     }
-    this.#ee.off(event, listener);
+    this.ee.off(event, listener);
   };
 
   /**
@@ -219,13 +207,8 @@ export class MainButton {
    * @param value - new text.
    */
   setText(value: string): this {
-    const prev = this.#text;
-    this.#text = value;
+    this.state.set('text', value);
     this.commit();
-
-    if (prev !== value) {
-      this.#ee.emit('textChanged', value);
-    }
 
     return this;
   }
@@ -238,13 +221,8 @@ export class MainButton {
    * @param value - new text color.
    */
   setTextColor(value: RGB): this {
-    const prev = this.#textColor;
-    this.#textColor = value;
+    this.state.set('textColor', value);
     this.commit();
-
-    if (prev !== value) {
-      this.#ee.emit('textColorChanged', value);
-    }
 
     return this;
   }
@@ -257,13 +235,8 @@ export class MainButton {
    * @param value - color to set.
    */
   setBackgroundColor(value: RGB): this {
-    const prev = this.#backgroundColor;
-    this.#backgroundColor = value;
+    this.state.set('backgroundColor', value);
     this.commit();
-
-    if (prev !== value) {
-      this.#ee.emit('backgroundColorChanged', value);
-    }
 
     return this;
   }

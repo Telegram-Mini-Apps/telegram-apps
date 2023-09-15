@@ -1,53 +1,56 @@
+import type { HasUndefined, If } from '@twa.js/util-types';
 import type {
   Chat,
-  InitData as TwaInitData,
+  InitData as InitDataType,
   User,
 } from '@twa.js/init-data';
+
+import { State } from '../../state/index.js';
+
+type InitDataState = {
+  [K in keyof InitDataType]-?: If<
+    HasUndefined<InitDataType[K]>,
+    Exclude<InitDataType[K], undefined> | null,
+    InitDataType[K]
+  >;
+};
 
 /**
  * Class which is responsible for displaying Web Apps init data.
  */
 export class InitData {
-  readonly #authDate: Date;
-
-  readonly #canSendAfter: Date | null = null;
-
-  readonly #chat: Chat | null = null;
-
-  readonly #hash: string;
-
-  readonly #queryId: string | null = null;
-
-  readonly #receiver: User | null = null;
-
-  readonly #startParam: string | null = null;
-
-  readonly #user: User | null = null;
+  private readonly state: State<InitDataState>;
 
   constructor(
     authDate: Date,
     hash: string,
-    options: Omit<TwaInitData, 'authDate' | 'hash'> = {},
+    options: Omit<InitDataType, 'authDate' | 'hash'> = {},
   ) {
-    this.#authDate = authDate;
-    this.#hash = hash;
     const {
-      chat = null, user = null, queryId = null, receiver = null,
-      startParam = null, canSendAfter = null,
+      chat = null,
+      canSendAfter = null,
+      user = null,
+      queryId = null,
+      receiver = null,
+      startParam = null,
     } = options;
-    this.#canSendAfter = canSendAfter;
-    this.#chat = chat;
-    this.#user = user;
-    this.#queryId = queryId;
-    this.#receiver = receiver;
-    this.#startParam = startParam;
+    this.state = new State({
+      authDate,
+      canSendAfter,
+      chat,
+      user,
+      queryId,
+      receiver,
+      startParam,
+      hash,
+    });
   }
 
   /**
    * Init data generation date.
    */
   get authDate(): Date {
-    return this.#authDate;
+    return this.state.get('authDate');
   }
 
   /**
@@ -56,7 +59,7 @@ export class InitData {
    * @see https://core.telegram.org/bots/api#answerwebappquery
    */
   get canSendAfter(): Date | null {
-    return this.#canSendAfter;
+    return this.state.get('canSendAfter');
   }
 
   /**
@@ -65,7 +68,7 @@ export class InitData {
    * group chats – only for Web Apps launched via the attachment menu.
    */
   get chat(): Chat | null {
-    return this.#chat;
+    return this.state.get('chat');
   }
 
   /**
@@ -74,7 +77,7 @@ export class InitData {
    * @see https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app
    */
   get hash(): string {
-    return this.#hash;
+    return this.state.get('hash');
   }
 
   /**
@@ -83,7 +86,7 @@ export class InitData {
    * @see https://core.telegram.org/bots/api#answerwebappquery
    */
   get queryId(): string | null {
-    return this.#queryId;
+    return this.state.get('queryId');
   }
 
   /**
@@ -93,7 +96,7 @@ export class InitData {
    * via the attachment menu.
    */
   get receiver(): User | null {
-    return this.#receiver;
+    return this.state.get('receiver');
   }
 
   /**
@@ -101,13 +104,13 @@ export class InitData {
    * returned for Web Apps when launched from the attachment menu via link.
    */
   get startParam(): string | null {
-    return this.#startParam;
+    return this.state.get('startParam');
   }
 
   /**
    * An object containing data about the current user.
    */
   get user(): User | null {
-    return this.#user;
+    return this.state.get('user');
   }
 }

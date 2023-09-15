@@ -1,66 +1,63 @@
+import { EventEmitter } from '@twa.js/event-emitter';
+import { compareVersions, type Version } from '@twa.js/utils';
+import { isRGB, isColorDark, type RGB } from '@twa.js/colors';
 import {
-  compareVersions,
-  EventEmitter,
-  type Version,
-  type RGB,
-} from '@twa.js/utils';
-import {
-  on, postEvent as bridgePostEvent,
+  postEvent as defaultPostEvent,
   supports,
-  type HeaderColorKey,
+  request,
+  type PhoneRequestedStatus,
+  type WriteAccessRequestedStatus,
   type InvoiceStatus,
   type PostEvent,
 } from '@twa.js/bridge';
 
-import { formatURL, isColorDark } from '../../utils/index.js';
-import { WithSupports } from '../../lib/index.js';
+import { formatURL } from '../../url.js';
+import { State } from '../../state/index.js';
+import { createSupportsFunc, createSupportsParamFunc, type SupportsFunc } from '../../supports.js';
 
 import type { ColorScheme, Platform } from '../../types.js';
-import type { WebAppEvents } from './events.js';
+import type { WebAppEvents, WebAppHeaderColor, WebAppState } from './types.js';
 
 /**
  * Provides common Web Apps functionality not covered by other system
  * components.
  */
-export class WebApp
-  extends WithSupports<'openInvoice' | 'readTextFromClipboard' | 'setHeaderColor' | 'setBackgroundColor'> {
-  readonly #ee = new EventEmitter<WebAppEvents>();
+export class WebApp {
+  private readonly ee = new EventEmitter<WebAppEvents>();
 
-  readonly #platform: Platform;
-
-  readonly #postEvent: PostEvent;
-
-  readonly #version: Version;
-
-  #backgroundColor: RGB;
-
-  #headerColor: HeaderColorKey;
+  private readonly state: State<WebAppState>;
 
   constructor(
-    version: Version,
-    platform: Platform,
-    headerColor: HeaderColorKey,
+    headerColor: WebAppHeaderColor,
     backgroundColor: RGB,
-    postEvent: PostEvent = bridgePostEvent,
+    private readonly currentVersion: Version,
+    private readonly currentPlatform: Platform,
+    private readonly createRequestId: () => string,
+    private readonly postEvent: PostEvent = defaultPostEvent,
   ) {
-    super(version, {
+    this.state = new State({
+      backgroundColor,
+      headerColor,
+    }, this.ee);
+    this.supports = createSupportsFunc(currentVersion, {
       openInvoice: 'web_app_open_invoice',
       readTextFromClipboard: 'web_app_read_text_from_clipboard',
       setHeaderColor: 'web_app_set_header_color',
       setBackgroundColor: 'web_app_set_background_color',
+      requestPhoneAccess: 'web_app_request_phone',
+      requestWriteAccess: 'web_app_request_write_access',
     });
-    this.#postEvent = postEvent;
-    this.#platform = platform;
-    this.#version = version;
-    this.#headerColor = headerColor;
-    this.#backgroundColor = backgroundColor;
+    this.supportsParam = createSupportsParamFunc(currentVersion, {
+      'setHeaderColor.color': ['web_app_set_header_color', 'color'],
+      'openLink.tryInstantView': ['web_app_open_link', 'try_instant_view'],
+    });
   }
 
   /**
    * Returns current application background color.
    */
   get backgroundColor(): RGB {
-    return this.#backgroundColor;
+    return this.state.get('backgroundColor');
   }
 
   /**
@@ -75,14 +72,14 @@ export class WebApp
    * Closes the Web App.
    */
   close(): void {
-    this.#postEvent('web_app_close');
+    this.postEvent('web_app_close');
   }
 
   /**
-   * Returns current application header color key.
+   * Returns current application header color.
    */
-  get headerColor(): HeaderColorKey {
-    return this.#headerColor;
+  get headerColor(): WebAppHeaderColor {
+    return this.state.get('headerColor');
   }
 
   /**
@@ -101,16 +98,22 @@ export class WebApp
    * interaction with the Web App interface (e.g. click inside the Web App
    * or on the main button).
    * @param url - URL to be opened.
+   * @param tryInstantView
    */
-  openLink(url: string): void {
+  openLink(url: string, tryInstantView?: boolean): void {
     const formattedUrl = formatURL(url);
 
-    // If method is supported by current version, open link via bridge event.
-    if (supports('web_app_open_link', this.version)) {
-      return this.#postEvent('web_app_open_link', { url: formattedUrl });
+    // If method is not supported, we are doing it in legacy way.
+    if (!supports('web_app_open_link', this.version)) {
+      window.open(formattedUrl, '_blank');
+      return;
     }
-    // Otherwise, do it in legacy way.
-    window.open(formattedUrl, '_blank');
+
+    // Otherwise, do it normally.
+    return this.postEvent('web_app_open_link', {
+      url: formattedUrl,
+      ...(typeof tryInstantView === 'boolean' ? { try_instant_view: tryInstantView } : {}),
+    });
   }
 
   /**
@@ -122,21 +125,16 @@ export class WebApp
   openTelegramLink(url: string): void {
     const { hostname, pathname, search } = new URL(formatURL(url));
 
-    // We allow opening links with the only 1 hostname.
     if (hostname !== 't.me') {
-      throw new Error(
-        `URL has not allowed hostname: ${hostname}. Only "t.me" is allowed`,
-      );
+      throw new Error(`URL has not allowed hostname: ${hostname}. Only "t.me" is allowed`);
     }
 
-    // If method is supported by current version, open link via bridge event.
-    if (supports('web_app_open_tg_link', this.version)) {
-      return this.#postEvent('web_app_open_tg_link', {
-        path_full: pathname + search,
-      });
+    if (!supports('web_app_open_tg_link', this.version)) {
+      window.location.href = url;
+      return;
     }
-    // Otherwise, do it in legacy way.
-    window.location.href = url;
+
+    return this.postEvent('web_app_open_tg_link', { path_full: pathname + search });
   }
 
   /**
@@ -144,7 +142,7 @@ export class WebApp
    * with hostname "t.me".
    * @param url - invoice URL.
    */
-  openInvoice(url: string): Promise<InvoiceStatus> {
+  async openInvoice(url: string): Promise<InvoiceStatus> {
     // TODO: Allow opening with slug.
     const { hostname, pathname } = new URL(formatURL(url));
 
@@ -161,39 +159,29 @@ export class WebApp
     }
     const [, , slug] = match;
 
-    // Open invoice.
-    this.#postEvent('web_app_open_invoice', { slug });
-
-    return new Promise((res) => {
-      // Add event listener to catch invoice status.
-      const off = on('invoice_closed', ({ status, slug: eventSlug }) => {
-        // Ignore other invoices.
-        if (slug !== eventSlug) {
-          return;
-        }
-
-        // Remove event listener and resolve status.
-        off();
-        res(status);
-      });
+    const result = await request('web_app_open_invoice', { slug }, 'invoice_closed', {
+      postEvent: this.postEvent,
+      capture: ({ slug: eventSlug }) => slug === eventSlug,
     });
+
+    return result.status;
   }
 
   /**
    * Adds new event listener.
    */
-  on = this.#ee.on.bind(this.#ee);
+  on = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.#ee.off.bind(this.#ee);
+  off = this.ee.off.bind(this.ee);
 
   /**
    * Returns current Web App platform.
    */
   get platform(): Platform {
-    return this.#platform;
+    return this.currentPlatform;
   }
 
   /**
@@ -207,7 +195,7 @@ export class WebApp
    * the page fully loaded.
    */
   ready(): void {
-    this.#postEvent('web_app_ready');
+    this.postEvent('web_app_ready');
   }
 
   /**
@@ -216,23 +204,38 @@ export class WebApp
    * - Value in clipboard is not text
    * - Access to clipboard is not allowed
    */
-  readTextFromClipboard(): Promise<string | null> {
-    // Generate request identifier.
-    let reqId = '';
-    for (let i = 0; i < 32; i += 1) {
-      reqId += Math.ceil(Math.random() * 10).toString();
-    }
+  async readTextFromClipboard(): Promise<string | null> {
+    // TODO: Generate request id.
+    const { data = null } = await request(
+      'web_app_read_text_from_clipboard',
+      { req_id: this.createRequestId() },
+      'clipboard_text_received',
+      { postEvent: this.postEvent },
+    );
 
-    return new Promise<string | null>((res) => {
-      const off = on('clipboard_text_received', ({ req_id, data }) => {
-        if (req_id === reqId) {
-          res(data === undefined ? null : data);
-          off();
-        }
-      });
+    return data;
+  }
 
-      this.#postEvent('web_app_read_text_from_clipboard', { req_id: reqId });
+  /**
+   * Requests current user phone access.
+   */
+  async requestPhoneAccess(): Promise<PhoneRequestedStatus> {
+    const { status } = await request('web_app_request_phone', 'phone_requested', {
+      postEvent: this.postEvent,
     });
+
+    return status;
+  }
+
+  /**
+   * Requests write message access to current user.
+   */
+  async requestWriteAccess(): Promise<WriteAccessRequestedStatus> {
+    const { status } = await request('web_app_request_write_access', 'write_access_requested', {
+      postEvent: this.postEvent,
+    });
+
+    return status;
   }
 
   /**
@@ -251,7 +254,7 @@ export class WebApp
     if (size === 0 || size > 4096) {
       throw new Error(`Passed data has incorrect size: ${size}`);
     }
-    this.#postEvent('web_app_data_send', { data });
+    this.postEvent('web_app_data_send', { data });
   }
 
   /**
@@ -260,17 +263,11 @@ export class WebApp
    *  Issues:
    *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
    *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
-   * @param color - settable color key.
+   * @param color - color key or RGB color.
    */
-  setHeaderColor(color: HeaderColorKey) {
-    this.#postEvent('web_app_set_header_color', { color_key: color });
-
-    if (this.#headerColor === color) {
-      return;
-    }
-
-    this.#headerColor = color;
-    this.#ee.emit('headerColorChanged', color);
+  setHeaderColor(color: WebAppHeaderColor) {
+    this.postEvent('web_app_set_header_color', isRGB(color) ? { color } : { color_key: color });
+    this.state.set('headerColor', color);
   }
 
   /**
@@ -279,24 +276,35 @@ export class WebApp
    *  Issues:
    *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
    *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
-   * @param color - new color.
+   * @param color - RGB color.
    */
   setBackgroundColor(color: RGB) {
-    this.#postEvent('web_app_set_background_color', { color });
-
-    if (this.#backgroundColor === color) {
-      return;
-    }
-
-    this.#backgroundColor = color;
-    this.#ee.emit('backgroundColorChanged', color);
+    this.postEvent('web_app_set_background_color', { color });
+    this.state.set('backgroundColor', color);
   }
+
+  /**
+   * Checks if specified method is supported by current component.
+   */
+  supports: SupportsFunc<
+    | 'openInvoice'
+    | 'readTextFromClipboard'
+    | 'setHeaderColor'
+    | 'setBackgroundColor'
+    | 'requestWriteAccess'
+    | 'requestPhoneAccess'
+  >;
+
+  /**
+   * Checks if specified method parameter is supported by current component.
+   */
+  supportsParam: SupportsFunc<'setHeaderColor.color' | 'openLink.tryInstantView'>;
 
   /**
    * Current Web App version. This property is used by other components to check if
    * some functionality is available on current device.
    */
   get version(): Version {
-    return this.#version;
+    return this.currentVersion;
   }
 }

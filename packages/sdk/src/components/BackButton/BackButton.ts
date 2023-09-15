@@ -1,11 +1,12 @@
-import { EventEmitter, type Version } from '@twa.js/utils';
-import { on, off, postEvent as bridgePostEvent, type PostEvent } from '@twa.js/bridge';
+import { EventEmitter } from '@twa.js/event-emitter';
+import { on, off, postEvent as defaultPostEvent, type PostEvent } from '@twa.js/bridge';
 
-import { WithSupports } from '../../lib/index.js';
+import type { Version } from '@twa.js/utils';
 
-import type { BackButtonEventListener, BackButtonEvents } from './events.js';
+import { createSupportsFunc, type SupportsFunc } from '../../supports.js';
+import { State } from '../../state/index.js';
 
-type Emitter = EventEmitter<BackButtonEvents>;
+import type { BackButtonEvents, BackButtonState, BackButtonEventListener } from './types.js';
 
 /**
  * Class which controls the back button displayed in the header
@@ -13,37 +14,33 @@ type Emitter = EventEmitter<BackButtonEvents>;
  * you want to provide a way to go bach in routing history or "rollback" some
  * action.
  */
-export class BackButton extends WithSupports<'show' | 'hide'> {
-  readonly #ee: Emitter = new EventEmitter();
+export class BackButton {
+  private readonly ee = new EventEmitter<BackButtonEvents>();
 
-  readonly #postEvent: PostEvent;
+  private readonly state: State<BackButtonState>;
 
-  #isVisible = false;
-
-  constructor(version: Version, postEvent: PostEvent = bridgePostEvent) {
-    super(version, {
+  constructor(
+    isVisible: boolean,
+    version: Version,
+    private readonly postEvent: PostEvent = defaultPostEvent,
+  ) {
+    this.state = new State({ isVisible }, this.ee);
+    this.supports = createSupportsFunc(version, {
       show: 'web_app_setup_back_button',
       hide: 'web_app_setup_back_button',
     });
-    this.#postEvent = postEvent;
   }
 
   private set isVisible(visible: boolean) {
-    this.#postEvent('web_app_setup_back_button', { is_visible: visible });
-
-    if (this.#isVisible === visible) {
-      return;
-    }
-
-    this.#isVisible = visible;
-    this.#ee.emit('isVisibleChanged', visible);
+    this.state.set('isVisible', visible);
+    this.postEvent('web_app_setup_back_button', { is_visible: visible });
   }
 
   /**
    * True if BackButton is currently visible.
    */
   get isVisible(): boolean {
-    return this.#isVisible;
+    return this.state.get('isVisible');
   }
 
   /**
@@ -58,12 +55,12 @@ export class BackButton extends WithSupports<'show' | 'hide'> {
    * @param event - event name.
    * @param listener - event listener.
    */
-  on: Emitter['on'] = (event, listener) => {
+  on: typeof this.ee.on = (event, listener) => {
     if (event === 'click') {
       return on('back_button_pressed', listener as BackButtonEventListener<'click'>);
     }
 
-    this.#ee.on(event, listener);
+    this.ee.on(event, listener);
   };
 
   /**
@@ -71,12 +68,12 @@ export class BackButton extends WithSupports<'show' | 'hide'> {
    * @param event - event name.
    * @param listener - event listener.
    */
-  off: Emitter['off'] = (event, listener) => {
+  off: typeof this.ee.off = (event, listener) => {
     if (event === 'click') {
       return off('back_button_pressed', listener as BackButtonEventListener<'click'>);
     }
 
-    this.#ee.off(event, listener);
+    this.ee.off(event, listener);
   };
 
   /**
@@ -85,4 +82,9 @@ export class BackButton extends WithSupports<'show' | 'hide'> {
   show(): void {
     this.isVisible = true;
   }
+
+  /**
+   * Checks if specified method is supported by current component.
+   */
+  supports: SupportsFunc<'show' | 'hide'>;
 }

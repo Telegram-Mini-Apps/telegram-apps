@@ -27,7 +27,7 @@
     "rollup-preset-solid": "^2.0.1",
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.0",
-    "turbo": "^1.9.7",
+    "turbo": "^1.10.14",
     "typescript": "^5.1.6"
   },
   "packageManager": "pnpm@7.15.0",

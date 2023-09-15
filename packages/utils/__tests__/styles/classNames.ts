@@ -1,4 +1,4 @@
-import { classNames } from '../../src';
+import { classNames } from '../../src/index.js';
 
 describe('styles', () => {
   describe('classNames.ts', () => {

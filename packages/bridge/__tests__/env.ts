@@ -1,16 +1,7 @@
-import { hasExternalNotify, hasWebviewProxy, isIframe } from '../src/index.js';
+import { hasExternalNotify, hasWebviewProxy, isIframe } from '../src/env.js';
 
-const windowSpy = jest.spyOn(window, 'window', 'get');
 const emptyFunction = () => {
 };
-
-afterEach(() => {
-  jest.resetAllMocks();
-});
-
-afterAll(() => {
-  jest.restoreAllMocks();
-});
 
 describe('env.ts', () => {
   describe('hasExternalNotify', () => {
@@ -32,6 +23,16 @@ describe('env.ts', () => {
   });
 
   describe('isIframe', () => {
+    const windowSpy = jest.spyOn(window, 'window', 'get');
+
+    afterEach(() => {
+      windowSpy.mockReset();
+    });
+
+    afterAll(() => {
+      windowSpy.mockRestore();
+    });
+
     it('should return true in case window.self !== window.top. Otherwise, false.', () => {
       windowSpy.mockImplementation(() => ({ self: 900, top: 1000 }) as any);
       expect(isIframe()).toBe(true);

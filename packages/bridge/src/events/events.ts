@@ -3,7 +3,8 @@ import type {
   EventName as UtilEventName,
   EventListener as UtilEventListener,
   EventParams as UtilEventParams, AnySubscribeListener,
-} from '@twa.js/utils';
+} from '@twa.js/event-emitter';
+import type { IsNever, Not } from '@twa.js/util-types';
 
 import type {
   ClipboardTextReceivedPayload,
@@ -35,8 +36,8 @@ export interface Events {
    */
   clipboard_text_received: (payload: ClipboardTextReceivedPayload) => void;
 
-  // TODO: Add description.
   /**
+   * Being called whenever custom method was invoked.
    * @param payload - event payload.
    * @since 6.9
    */
@@ -55,8 +56,8 @@ export interface Events {
    */
   main_button_pressed: () => void;
 
-  // TODO: Add description.
   /**
+   * Application received phone access request status.
    * @param payload - event payload. - event payload.
    * @since 6.9
    */
@@ -109,8 +110,8 @@ export interface Events {
    */
   viewport_changed: (payload: ViewportChangedPayload) => void;
 
-  // TODO: Add description.
   /**
+   * Application received write access requests status.
    * @param payload - event payload.
    * @since 6.9
    */
@@ -137,6 +138,11 @@ export type EventListener<E extends EventName> =
  * Event emitter, based describe events map.
  */
 export type EventEmitter = UtilEventEmitter<Events>;
+
+/**
+ * Returns true in case, event has parameters.
+ */
+export type EventHasParams<E extends EventName> = Not<IsNever<EventParams<E>>>;
 
 /**
  * Event listener used in `subscribe` and `unsubscribe` functions.

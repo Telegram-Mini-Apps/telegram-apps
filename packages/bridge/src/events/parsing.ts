@@ -1,104 +1,94 @@
-import { number, string, json } from '@twa.js/utils';
+import {
+  number,
+  string,
+  boolean,
+  json,
+  rgb,
+} from '@twa.js/parsing';
 
-import type { ViewportChangedPayload } from './payloads.js';
+import type {
+  ClipboardTextReceivedPayload, CustomMethodInvokedPayload,
+  InvoiceClosedPayload, PhoneRequestedPayload,
+  PopupClosedPayload, QrTextReceivedPayload,
+  ThemeChangedPayload,
+  ViewportChangedPayload, WriteAccessRequestedPayload,
+} from './payloads.js';
+
+function isNullOrUndefined(value: unknown): boolean {
+  return value === null || value === undefined;
+}
 
 /**
  * Parses incoming value as ThemeChangedPayload.
  */
-export const themeChangedPayload = json({
-  theme_params: json({
-    bg_color: 'rgb',
-    text_color: 'rgb',
-    hint_color: 'rgb',
-    link_color: 'rgb',
-    button_color: 'rgb',
-    button_text_color: 'rgb',
-    secondary_bg_color: { type: 'rgb', optional: true },
+export const themeChangedPayload = json<ThemeChangedPayload>({
+  theme_params: json<ThemeChangedPayload['theme_params']>({
+    bg_color: rgb().optional(),
+    text_color: rgb().optional(),
+    hint_color: rgb().optional(),
+    link_color: rgb().optional(),
+    button_color: rgb().optional(),
+    button_text_color: rgb().optional(),
+    secondary_bg_color: rgb().optional(),
   }),
-});
-
-/**
- * Parses incoming value as ViewportChangedPayload with optional width.
- */
-const rawViewportChangedPayload = json({
-  height: 'number',
-  width: {
-    type: (value) => (value === null ? undefined : number(value)),
-    optional: true,
-  },
-  is_state_stable: 'boolean',
-  is_expanded: 'boolean',
 });
 
 /**
  * Parses incoming value as ViewportChangedPayload.
  * @param value - value to parse.
  */
-export function viewportChangedPayload(value: unknown): ViewportChangedPayload {
-  const {
-    width = window.innerWidth,
-    ...rest
-  } = rawViewportChangedPayload(value);
-  return { width, ...rest };
-}
+export const viewportChangedPayload = json<ViewportChangedPayload>({
+  height: number(),
+  width: number().optional(isNullOrUndefined).default(() => window.innerWidth),
+  is_state_stable: boolean(),
+  is_expanded: boolean(),
+});
 
 /**
  * Parses incoming value as PopupClosedPayload.
  */
-export const popupClosedPayload = json({
-  button_id: {
-    type: (value) => (value === null ? undefined : string(value)),
-    optional: true,
-  },
+export const popupClosedPayload = json<PopupClosedPayload>({
+  button_id: string().optional(isNullOrUndefined),
 });
 
 /**
  * Parses incoming value as QrTextReceivedPayload.
  */
-export const qrTextReceivedPayload = json({
-  data: { type: 'string', optional: true },
+export const qrTextReceivedPayload = json<QrTextReceivedPayload>({
+  data: string().optional(),
 });
 
 /**
  * Parses incoming value as InvoiceClosedPayload.
  */
-export const invoiceClosedPayload = json({
-  slug: 'string',
-  status: 'string',
+export const invoiceClosedPayload = json<InvoiceClosedPayload>({
+  slug: string(),
+  status: string(),
 });
 
 /**
  * Parses incoming value as clipboard text received payload.
  */
-export const clipboardTextReceivedPayload = json({
-  req_id: 'string',
-  data: {
-    type: (value) => (value === null ? value : string(value)),
-    optional: true,
-  },
+export const clipboardTextReceivedPayload = json<ClipboardTextReceivedPayload>({
+  req_id: string(),
+  data: (value) => (value === null ? value : string().optional().parse(value)),
 });
 
 /**
  * Parses incoming value as WriteAccessRequestedPayload.
  */
-export const writeAccessRequestedPayload = json({ status: 'string' });
+export const writeAccessRequestedPayload = json<WriteAccessRequestedPayload>({ status: string() });
 
 /**
  * Parses incoming value as PhoneRequestedPayload.
  */
-export const phoneRequestedPayload = json({ status: 'string' });
+export const phoneRequestedPayload = json<PhoneRequestedPayload>({ status: string() });
 
 /**
  * Parses incoming value as CustomMethodInvokedPayload.
  */
-export const customMethodInvokedPayload = json({
-  req_id: 'string',
-  result: {
-    type: (value) => value,
-    optional: true,
-  },
-  error: {
-    type: (value) => value,
-    optional: true,
-  },
+export const customMethodInvokedPayload = json<CustomMethodInvokedPayload>({
+  req_id: string(),
+  result: (value) => value,
+  error: string().optional(),
 });

@@ -1,19 +1,35 @@
-import { type RGB, EventEmitter, withTimeout } from '@twa.js/utils';
-import { on, postEvent as bridgePostEvent, type PostEvent } from '@twa.js/bridge';
+import { EventEmitter } from '@twa.js/event-emitter';
+import { on, request, type RequestOptions } from '@twa.js/bridge';
+import { isColorDark } from '@twa.js/colors';
 
-import {
-  isColorDark,
-  themeParams,
-  type ThemeParams as TwaThemeParams,
-} from '../../utils/index.js';
+import type { RGB } from '@twa.js/colors';
 
-import type { ThemeParamsEvents } from './events.js';
+import { parseThemeParams, type ThemeParamsType } from '../../theme-params.js';
+import { State } from '../../state/index.js';
 
-type LocalThemeParams = {
-  [K in keyof TwaThemeParams]-?: undefined extends TwaThemeParams[K]
-    ? TwaThemeParams[K] | null
-    : TwaThemeParams[K];
-};
+import type { ThemeParamsEvents, ThemeParamsState } from './types.js';
+
+function prepareThemeParams(value: ThemeParamsType): ThemeParamsState {
+  const {
+    backgroundColor = null,
+    buttonTextColor = null,
+    buttonColor = null,
+    hintColor = null,
+    linkColor = null,
+    textColor = null,
+    secondaryBackgroundColor = null,
+  } = value;
+
+  return {
+    backgroundColor,
+    buttonTextColor,
+    buttonColor,
+    hintColor,
+    linkColor,
+    textColor,
+    secondaryBackgroundColor,
+  };
+}
 
 /**
  * Contains information about currently used theme by application.
@@ -24,47 +40,36 @@ export class ThemeParams {
    * Requests fresh information about current theme.
    * FIXME: Be careful using this function in desktop version of Telegram as
    *  long as method web_app_request_theme does not work on `macos` platform.
-   * @param postEvent - method which allows posting Telegram event.
-   * @param timeout - request timeout.
+   * @param options - method options.
    */
-  static request(
-    postEvent: PostEvent = bridgePostEvent,
-    timeout?: number,
-  ): Promise<TwaThemeParams> {
-    const promise = new Promise<TwaThemeParams>((res) => {
-      const off = on('theme_changed', ({ theme_params }) => {
-        off();
-        res(themeParams(theme_params));
-      });
-
-      postEvent('web_app_request_theme');
+  static async request(options: RequestOptions = {}): Promise<ThemeParamsType> {
+    const { timeout = 1000, ...restOptions } = options;
+    const result = await request('web_app_request_theme', 'theme_changed', {
+      ...restOptions,
+      timeout,
     });
 
-    return typeof timeout === 'number' ? withTimeout(promise, timeout) : promise;
+    return parseThemeParams(result.theme_params);
   }
 
   /**
    * Synchronizes specified instance of ThemeParams with the actual value in the native
    * application.
-   * @param tp - ThemeParams instance.
+   * @param themeParams - ThemeParams instance.
    */
-  static sync(tp: ThemeParams): void {
+  static sync(themeParams: ThemeParams): void {
     on('theme_changed', (event) => {
-      tp.assignThemeParams(themeParams(event.theme_params), true);
+      themeParams.state.set(prepareThemeParams(parseThemeParams(event.theme_params)));
     });
   }
 
   /**
    * Returns instance of ThemeParams which is synchronized with external
    * environment.
-   * @param postEvent - method which allows posting Telegram event.
-   * @param timeout - request timeout.
+   * @param options - method options.
    */
-  static async synced(
-    postEvent: PostEvent = bridgePostEvent,
-    timeout?: number,
-  ): Promise<ThemeParams> {
-    const params = await this.request(postEvent, timeout);
+  static async synced(options?: RequestOptions): Promise<ThemeParams> {
+    const params = await this.request(options);
     const tp = new ThemeParams(params);
 
     this.sync(tp);
@@ -72,86 +77,40 @@ export class ThemeParams {
     return tp;
   }
 
-  readonly #ee = new EventEmitter<ThemeParamsEvents>();
+  private readonly ee = new EventEmitter<ThemeParamsEvents>();
 
-  readonly #params: LocalThemeParams = {
-    backgroundColor: null,
-    linkColor: null,
-    hintColor: null,
-    buttonColor: null,
-    buttonTextColor: null,
-    textColor: null,
-    secondaryBackgroundColor: null,
-  };
+  private readonly state: State<ThemeParamsState>;
 
-  constructor(params: TwaThemeParams) {
-    this.assignThemeParams(params, false);
-  }
-
-  /**
-   * Extracts required theme parameters passed from Telegram and stores them
-   * in current instance.
-   * @param params - Telegram theme parameters.
-   * @param emit - should update event be emitted in case changes were done.
-   * @private
-   */
-  private assignThemeParams(params: TwaThemeParams, emit: boolean): void {
-    // Iterate over all colors and assign to current theme instance.
-    const colors: (keyof TwaThemeParams)[] = [
-      'buttonColor', 'buttonTextColor', 'linkColor', 'textColor', 'hintColor',
-      'secondaryBackgroundColor', 'backgroundColor',
-    ];
-    // Flag which means, some changes were done.
-    let updated = false;
-
-    colors.forEach((color) => {
-      const value = params[color];
-
-      // We skip undefined values.
-      if (value === undefined) {
-        return;
-      }
-
-      // No changes will be done, leave iteration.
-      if (this[color] === value) {
-        return;
-      }
-      // Reassign current theme color.
-      this.#params[color] = value === undefined ? null : value;
-      updated = true;
-    });
-
-    if (updated && emit) {
-      this.#ee.emit('changed');
-    }
+  constructor(params: ThemeParamsType) {
+    this.state = new State(prepareThemeParams(params), this.ee);
   }
 
   /**
    * Returns background color.
    */
   get backgroundColor(): RGB | null {
-    return this.#params.backgroundColor;
+    return this.state.get('backgroundColor');
   }
 
   /**
    * Returns button color.
    */
   get buttonColor(): RGB | null {
-    return this.#params.buttonColor;
+    return this.state.get('buttonColor');
   }
 
   /**
    * Returns button text color.
    */
   get buttonTextColor(): RGB | null {
-    return this.#params.buttonTextColor;
+    return this.state.get('buttonTextColor');
   }
 
   /**
    * Returns hint color.
    */
   get hintColor(): RGB | null {
-    return this.#params.hintColor;
+    return this.state.get('hintColor');
   }
 
   /**
@@ -166,31 +125,30 @@ export class ThemeParams {
    * Returns current link color.
    */
   get linkColor(): RGB | null {
-    return this.#params.linkColor || null;
+    return this.state.get('linkColor');
   }
 
   /**
    * Adds new event listener.
    */
-  on = this.#ee.on.bind(this.#ee);
+  on = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.#ee.off.bind(this.#ee);
+  off = this.ee.off.bind(this.ee);
 
   /**
    * Returns secondary background color.
-   * @since Web App version 6.1+
    */
   get secondaryBackgroundColor(): RGB | null {
-    return this.#params.secondaryBackgroundColor || null;
+    return this.state.get('secondaryBackgroundColor');
   }
 
   /**
    * Returns text color.
    */
   get textColor(): RGB | null {
-    return this.#params.textColor || null;
+    return this.state.get('textColor');
   }
 }

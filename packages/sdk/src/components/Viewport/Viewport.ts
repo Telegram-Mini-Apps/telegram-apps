@@ -1,18 +1,15 @@
-import { EventEmitter, withTimeout } from '@twa.js/utils';
-import {
-  on,
-  postEvent as bridgePostEvent,
-  type ViewportChangedPayload,
-  type PostEvent,
-} from '@twa.js/bridge';
+import { EventEmitter } from '@twa.js/event-emitter';
+import { on, postEvent as defaultPostEvent, request, type RequestOptions, type PostEvent } from '@twa.js/bridge';
 
-import type { ViewportEventsMap } from './events.js';
+import { State } from '../../state/index.js';
+
+import type { ViewportEvents, ViewportState } from './types.js';
 
 export interface RequestViewportResult {
   height: number;
-  width: number;
   isStateStable: boolean;
   isExpanded: boolean;
+  width: number;
 }
 
 /**
@@ -33,25 +30,20 @@ export class Viewport {
    * FIXME: Be careful using this function in desktop version of Telegram as
    *  long as method web_app_request_viewport does not work on `macos` platform.
    * @see Issue: https://github.com/Telegram-Web-Apps/twa.js/issues/5
-   * @param postEvent - method which allows posting Telegram event.
-   * @param timeout - request timeout.
+   * @param options - method options.
    */
-  static request(
-    postEvent: PostEvent = bridgePostEvent,
-    timeout?: number,
-  ): Promise<RequestViewportResult> {
-    const promise = new Promise<RequestViewportResult>((res) => {
-      const off = on('viewport_changed', (payload) => {
-        off();
-
-        const { is_expanded: isExpanded, is_state_stable: isStateStable, ...rest } = payload;
-        res({ ...rest, isExpanded, isStateStable });
-      });
-
-      postEvent('web_app_request_viewport');
+  static async request(options: RequestOptions = {}): Promise<RequestViewportResult> {
+    const { timeout = 1000, ...restOptions } = options;
+    const {
+      is_expanded: isExpanded,
+      is_state_stable: isStateStable,
+      ...rest
+    } = await request('web_app_request_viewport', 'viewport_changed', {
+      ...restOptions,
+      timeout,
     });
 
-    return typeof timeout === 'number' ? withTimeout(promise, timeout) : promise;
+    return { ...rest, isExpanded, isStateStable };
   }
 
   /**
@@ -60,75 +52,55 @@ export class Viewport {
    * @param viewport - Viewport instance.
    */
   static sync(viewport: Viewport): void {
-    on('viewport_changed', viewport.applyEventPayload.bind(viewport));
+    on('viewport_changed', (event) => {
+      const {
+        height,
+        width,
+        is_expanded: isExpanded,
+        is_state_stable: isStateStable,
+      } = event;
+      const formattedHeight = truncate(height);
+
+      viewport.state.set({
+        height: formattedHeight,
+        isExpanded,
+        width: truncate(width),
+        stableHeight: isStateStable ? formattedHeight : undefined,
+      });
+    });
   }
 
   /**
    * Returns initialized instance of Viewport which is synchronized with
    * its actual state in Web Apps.
-   * @param postEvent - method which allows posting Telegram event.
-   * @param timeout - request timeout.
+   * @param options - method options.
    */
-  static async synced(postEvent: PostEvent = bridgePostEvent, timeout?: number): Promise<Viewport> {
-    const { height, isExpanded, width } = await this.request(postEvent, timeout);
-    const viewport = new Viewport(height, width, height, isExpanded, postEvent);
+  static async synced(options: RequestOptions = {}): Promise<Viewport> {
+    const { height, isExpanded, width } = await this.request(options);
+    const viewport = new Viewport(height, width, height, isExpanded, options.postEvent);
 
     this.sync(viewport);
 
     return viewport;
   }
 
-  readonly #postEvent: PostEvent;
+  private readonly ee = new EventEmitter<ViewportEvents>();
 
-  readonly #ee = new EventEmitter<ViewportEventsMap>();
-
-  #height: number;
-
-  #width: number;
-
-  #stableHeight: number;
-
-  #isExpanded: boolean;
+  private readonly state: State<ViewportState>;
 
   constructor(
     height: number,
     width: number,
     stableHeight: number,
     isExpanded: boolean,
-    postEvent: PostEvent = bridgePostEvent,
+    private readonly postEvent: PostEvent = defaultPostEvent,
   ) {
-    this.#height = truncate(height);
-    this.#width = truncate(width);
-    this.#stableHeight = truncate(stableHeight);
-    this.#isExpanded = isExpanded;
-    this.#postEvent = postEvent;
-  }
-
-  private applyEventPayload(event: ViewportChangedPayload) {
-    const {
-      height: evHeight,
-      width: evWidth,
-      is_expanded: evIsExpanded,
-      is_state_stable: isStateStable,
-    } = event;
-    this.height = evHeight;
-    this.width = evWidth;
-    this.isExpanded = evIsExpanded;
-
-    if (isStateStable) {
-      this.stableHeight = this.height;
-    }
-  }
-
-  private set height(value: number) {
-    const formattedValue = truncate(value);
-
-    if (this.#height === formattedValue) {
-      return;
-    }
-
-    this.#height = formattedValue;
-    this.#ee.emit('heightChanged', formattedValue);
+    this.state = new State({
+      height: truncate(height),
+      isExpanded,
+      stableHeight: truncate(stableHeight),
+      width: truncate(width),
+    }, this.ee);
   }
 
   /**
@@ -152,18 +124,7 @@ export class Viewport {
    * @see stableHeight
    */
   get height(): number {
-    return this.#height;
-  }
-
-  private set stableHeight(value: number) {
-    const formattedValue = truncate(value);
-
-    if (this.#stableHeight === formattedValue) {
-      return;
-    }
-
-    this.#stableHeight = formattedValue;
-    this.#ee.emit('stableHeightChanged', formattedValue);
+    return this.state.get('height');
   }
 
   /**
@@ -185,16 +146,7 @@ export class Viewport {
    * @see height
    */
   get stableHeight(): number {
-    return this.#stableHeight;
-  }
-
-  private set isExpanded(value: boolean) {
-    if (this.#isExpanded === value) {
-      return;
-    }
-
-    this.#isExpanded = value;
-    this.#ee.emit('isExpandedChanged', value);
+    return this.state.get('stableHeight');
   }
 
   /**
@@ -204,25 +156,14 @@ export class Viewport {
    * @see expand
    */
   get isExpanded(): boolean {
-    return this.#isExpanded;
-  }
-
-  private set width(value: number) {
-    const formattedValue = truncate(value);
-
-    if (this.#width === formattedValue) {
-      return;
-    }
-
-    this.#width = formattedValue;
-    this.#ee.emit('widthChanged', formattedValue);
+    return this.state.get('isExpanded');
   }
 
   /**
    * Current viewport width.
    */
   get width(): number {
-    return this.#width;
+    return this.state.get('width');
   }
 
   /**
@@ -232,7 +173,8 @@ export class Viewport {
    * @see isExpanded
    */
   expand(): void {
-    this.#postEvent('web_app_expand');
+    this.state.set('isExpanded', true);
+    this.postEvent('web_app_expand');
   }
 
   /**
@@ -240,16 +182,16 @@ export class Viewport {
    * change in the next moment.
    */
   get isStable(): boolean {
-    return this.#stableHeight === this.#height;
+    return this.stableHeight === this.height;
   }
 
   /**
    * Adds new event listener.
    */
-  on = this.#ee.on.bind(this.#ee);
+  on: typeof this.ee.on = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.#ee.off.bind(this.#ee);
+  off: typeof this.ee.off = this.ee.off.bind(this.ee);
 }

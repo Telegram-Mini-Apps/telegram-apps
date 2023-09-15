@@ -1,0 +1,63 @@
+{
+  "name": "@twa.js/parsing",
+  "version": "0.0.0",
+  "description": "Utilities made to parse different types of data.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Web-Apps/twa.js.git",
+    "directory": "packages/parsing"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
+  },
+  "keywords": [
+    "telegram-web-apps",
+    "telegram",
+    "twa",
+    "typescript"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/lib/index.cjs",
+  "browser": "dist/lib/browser.js",
+  "module": "dist/lib/index.mjs",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/lib/index.mjs",
+      "require": "./dist/lib/index.cjs",
+      "default": "./dist/lib/index.cjs"
+    },
+    "./*": {
+      "types": "./dist/types/*.d.ts",
+      "import": "./dist/lib/*.mjs",
+      "require": "./dist/lib/*.cjs",
+      "default": "./dist/lib/*.cjs"
+    }
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
+    "build": "rimraf dist && rollup --config rollup.config.js"
+  },
+  "dependencies": {
+    "@twa.js/util-types": "workspace:*",
+    "@twa.js/colors": "workspace:*"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*",
+    "jest-config-custom": "workspace:*",
+    "eslint-config-custom": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

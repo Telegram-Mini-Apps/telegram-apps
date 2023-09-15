@@ -35,22 +35,27 @@ describe('events', () => {
         ];
 
         values.forEach((value) => {
-          expect(themeChangedPayload(value)).toStrictEqual(value);
-          expect(themeChangedPayload(JSON.stringify(value))).toStrictEqual(value);
+          expect(themeChangedPayload.parse(value)).toStrictEqual(value);
+          expect(themeChangedPayload.parse(JSON.stringify(value))).toStrictEqual(value);
         });
       });
 
       it('should throw an error in case, passed value does not satisfy schema', () => {
-        expect(() => themeChangedPayload({})).toThrow();
+        expect(() => themeChangedPayload.parse({})).toThrow();
+        expect(() => themeChangedPayload.parse({
+          theme_params: {
+            bg_color: 'Hello there!',
+          },
+        })).toThrow();
       });
     });
 
     describe('viewportChangedPayload', () => {
       const windowSpy = jest.spyOn(window, 'window', 'get');
-      const innerWidth = 2000;
+      // const innerWidth = 2000;
 
       beforeEach(() => {
-        windowSpy.mockImplementation(() => ({ innerWidth }) as any);
+        windowSpy.mockImplementation(() => ({ innerWidth: 2000 }) as any);
       });
 
       afterEach(() => {
@@ -79,51 +84,51 @@ describe('events', () => {
         ];
 
         values.forEach((value) => {
-          const width = value.width === undefined || value.width === null
-            ? innerWidth : value.width;
-          expect(viewportChangedPayload(value))
-            .toStrictEqual({ ...value, width });
-          expect(viewportChangedPayload(JSON.stringify(value)))
-            .toStrictEqual({ ...value, width });
+          const width = !value.width ? window.innerWidth : value.width;
+          expect(viewportChangedPayload.parse(value)).toStrictEqual({ ...value, width });
+          expect(viewportChangedPayload.parse(JSON.stringify(value))).toStrictEqual({
+            ...value,
+            width,
+          });
         });
       });
 
       it('should throw an error in case, passed value does not satisfy schema', () => {
-        expect(() => viewportChangedPayload({})).toThrow();
+        expect(() => viewportChangedPayload.parse({})).toThrow();
       });
     });
 
     describe('popupClosedPayload', () => {
       it('should return parsed value in case, passed value satisfies schema', () => {
-        expect(popupClosedPayload({ button_id: 'ok' })).toStrictEqual({ button_id: 'ok' });
-        expect(popupClosedPayload({})).toStrictEqual({});
-        expect(popupClosedPayload({ button_id: null })).toStrictEqual({});
+        expect(popupClosedPayload.parse({ button_id: 'ok' })).toStrictEqual({ button_id: 'ok' });
+        expect(popupClosedPayload.parse({})).toStrictEqual({});
+        expect(popupClosedPayload.parse({ button_id: null })).toStrictEqual({});
       });
 
       it('should throw an error in case, passed value does not satisfy schema', () => {
-        expect(() => popupClosedPayload({ button_id: 100 })).toThrow();
+        expect(() => popupClosedPayload.parse({ button_id: 100 })).toThrow();
       });
     });
 
     describe('qrTextReceivedPayload', () => {
       it('should return parsed value in case, passed value satisfies schema', () => {
-        expect(qrTextReceivedPayload({ data: 'ok' })).toStrictEqual({ data: 'ok' });
-        expect(qrTextReceivedPayload({})).toStrictEqual({});
+        expect(qrTextReceivedPayload.parse({ data: 'ok' })).toStrictEqual({ data: 'ok' });
+        expect(qrTextReceivedPayload.parse({})).toStrictEqual({});
       });
 
       it('should throw an error in case, passed value does not satisfy schema', () => {
-        expect(() => qrTextReceivedPayload({ data: 100 })).toThrow();
+        expect(() => qrTextReceivedPayload.parse({ data: 100 })).toThrow();
       });
     });
 
     describe('invoiceClosedPayload', () => {
       it('should return parsed value in case, passed value satisfies schema', () => {
         const value = { slug: 'abc', status: 'def' };
-        expect(invoiceClosedPayload(value)).toStrictEqual(value);
+        expect(invoiceClosedPayload.parse(value)).toStrictEqual(value);
       });
 
       it('should throw an error in case, passed value does not satisfy schema', () => {
-        expect(() => invoiceClosedPayload({})).toThrow();
+        expect(() => invoiceClosedPayload.parse({})).toThrow();
       });
     });
 
@@ -135,14 +140,14 @@ describe('events', () => {
           { req_id: 'abc', data: null },
         ];
         cases.forEach((value) => {
-          expect(clipboardTextReceivedPayload(value)).toStrictEqual(value);
-          expect(clipboardTextReceivedPayload(JSON.stringify(value)))
+          expect(clipboardTextReceivedPayload.parse(value)).toStrictEqual(value);
+          expect(clipboardTextReceivedPayload.parse(JSON.stringify(value)))
             .toStrictEqual(value);
         });
       });
 
       it('should throw an error in case, passed value does not satisfy schema', () => {
-        expect(() => clipboardTextReceivedPayload({})).toThrow();
+        expect(() => clipboardTextReceivedPayload.parse({})).toThrow();
       });
     });
   });

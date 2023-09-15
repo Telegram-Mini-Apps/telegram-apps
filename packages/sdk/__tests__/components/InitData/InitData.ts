@@ -1,12 +1,10 @@
-import { InitData } from '../../../src';
+import { InitData } from '../../../src/index.js';
 
 describe('components', () => {
   describe('InitData', () => {
     describe('InitData.ts', () => {
       describe('InitData', () => {
-        it('should return fields specified in '
-          + 'constructor. In case, some properties are missing, they should '
-          + 'be equal to null in InitData', () => {
+        it('should return fields specified in constructor. In case, some properties are missing, they should be equal to null in InitData', () => {
           const authDate = new Date(123);
           const data1 = new InitData(authDate, 'hash');
           expect(data1.authDate).toBe(authDate);
