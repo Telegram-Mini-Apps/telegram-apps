@@ -1,6 +1,7 @@
-import type { RGB } from '@twa.js/utils';
+import type { RGB } from '@twa.js/colors';
 
 import type { ThemeParams, WebApp, Viewport } from '../components/index.js';
+import type { InitCSSVarsOption, InitCSSVarsSpecificOption } from './types.js';
 
 /**
  * Sets CSS variable.
@@ -149,4 +150,17 @@ export function bindViewportCSSVariables(viewport: Viewport): void {
 
   setHeight();
   setStableHeight();
+}
+
+/**
+ * Converts init cssVars option to more narrow type.
+ * @param option - option value.
+ */
+export function parseCSSVarsOptions(option: InitCSSVarsOption): InitCSSVarsSpecificOption {
+  if (typeof option === 'boolean') {
+    return option
+      ? { themeParams: true, viewport: true, webApp: true }
+      : {};
+  }
+  return option;
 }
