@@ -7,7 +7,6 @@ import {
 import { withTimeout } from '@twa.js/utils';
 
 import {
-  ClosingBehaviour,
   CloudStorage,
   HapticFeedback,
   InitData,
@@ -27,7 +26,7 @@ import {
   createBackButton,
   createMainButton,
   createViewport,
-  createWebApp, createRequestIdGenerator,
+  createWebApp, createRequestIdGenerator, createClosingBehavior,
 } from './creators/index.js';
 
 import type { InitOptions, InitResult } from './types.js';
@@ -130,7 +129,7 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
 
   const result: InitResult = {
     backButton: createBackButton(version, postEvent),
-    closingBehavior: new ClosingBehaviour(postEvent),
+    closingBehavior: createClosingBehavior(postEvent),
     cloudStorage: new CloudStorage(version, createRequestId, postEvent),
     haptic: new HapticFeedback(version, postEvent),
     mainButton: createMainButton(buttonColor, buttonTextColor, postEvent),
