@@ -1,7 +1,16 @@
 import { subscribe } from '../../src/index.js';
-import { dispatchWindowEvent, mockWindow } from '../__utils__/window.js';
+import { createWindow, type WindowSpy } from '../__utils__/createWindow.js';
+import { dispatchWindowMessageEvent } from '../__utils__/dispatchWindowMessageEvent.js';
 
-mockWindow();
+let windowSpy: WindowSpy;
+
+beforeEach(() => {
+  windowSpy = createWindow();
+});
+
+afterEach(() => {
+  windowSpy.mockReset();
+});
 
 describe('events', () => {
   describe('subscribe.ts', () => {
@@ -16,7 +25,7 @@ describe('events', () => {
           is_expanded: false,
           is_state_stable: false,
         };
-        dispatchWindowEvent('viewport_changed', eventData);
+        dispatchWindowMessageEvent('viewport_changed', eventData);
 
         expect(listener).toHaveBeenCalledTimes(1);
         expect(listener).toHaveBeenCalledWith('viewport_changed', eventData);
@@ -24,7 +33,7 @@ describe('events', () => {
 
       it('should remove listener in case, returned callback was called', () => {
         const listener = jest.fn();
-        const emit = () => dispatchWindowEvent('viewport_changed', {
+        const emit = () => dispatchWindowMessageEvent('viewport_changed', {
           height: 123,
           width: 321,
           is_expanded: false,

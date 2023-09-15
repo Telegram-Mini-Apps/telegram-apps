@@ -1,7 +1,16 @@
 import { onTelegramEvent } from '../../src/events/onTelegramEvent.js';
-import { dispatchWindowEvent, mockWindow } from '../__utils__/window.js';
+import { createWindow, type WindowSpy } from '../__utils__/createWindow.js';
+import { dispatchWindowMessageEvent } from '../__utils__/dispatchWindowMessageEvent.js';
 
-mockWindow();
+let windowSpy: WindowSpy;
+
+beforeEach(() => {
+  windowSpy = createWindow();
+});
+
+afterEach(() => {
+  windowSpy.mockReset();
+});
 
 describe('events', () => {
   describe('onTelegramEvent.ts', () => {
@@ -10,7 +19,7 @@ describe('events', () => {
         const callback = jest.fn();
         onTelegramEvent(callback);
 
-        dispatchWindowEvent('qr_text_received', {});
+        dispatchWindowMessageEvent('qr_text_received', {});
 
         expect(callback).toHaveBeenCalledTimes(1);
         expect(callback).toHaveBeenCalledWith('qr_text_received', {});
