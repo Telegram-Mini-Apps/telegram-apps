@@ -1,5 +1,25 @@
 # @twa.js/sdk
 
+## 0.11.0
+
+### Minor Changes
+
+- faaa346: Implement new CloudStorage component. Implement 6.9 methods. Make components restore from the session storage.
+
+### Patch Changes
+
+- Updated dependencies [5e23721]
+- Updated dependencies [53d1717]
+- Updated dependencies [251c527]
+- Updated dependencies [665dcf4]
+  - @twa.js/bridge@1.3.0
+  - @twa.js/utils@0.5.1
+  - @twa.js/event-emitter@0.0.1
+  - @twa.js/util-types@0.0.1
+  - @twa.js/parsing@0.0.1
+  - @twa.js/colors@0.0.1
+  - @twa.js/init-data@0.2.12
+
 ## 0.10.0
 
 ### Minor Changes

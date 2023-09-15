@@ -1,5 +1,12 @@
 # solid-sdk-example
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [8c4b10b]
+  - @twa.js/sdk-solid@0.1.0
+
 ## 0.0.5
 
 ### Patch Changes
