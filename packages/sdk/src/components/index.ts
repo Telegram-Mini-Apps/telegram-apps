@@ -1,5 +1,6 @@
 export * from './BackButton/index.js';
 export * from './ClosingBehaviour/index.js';
+export * from './CloudStorage/index.js';
 export * from './HapticFeedback/index.js';
 export * from './InitData/index.js';
 export * from './MainButton/index.js';
