@@ -16,10 +16,8 @@ describe('components', () => {
           });
 
           it('should emit "isVisibleChanged" event with false value', () => {
-            const backButton = new BackButton(false, '', jest.fn());
+            const backButton = new BackButton(true, '', jest.fn());
             const listener = jest.fn();
-
-            backButton.show();
 
             backButton.on('isVisibleChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
