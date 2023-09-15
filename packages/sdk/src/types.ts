@@ -21,3 +21,8 @@ export type Platform =
   | 'unigram'
   | 'unknown'
   | string;
+
+/**
+ * Function which generates unique request identifiers.
+ */
+export type CreateRequestIdFunc = () => string;
