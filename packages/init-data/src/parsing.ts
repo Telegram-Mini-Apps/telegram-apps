@@ -5,13 +5,12 @@ import {
   number,
   boolean,
   date,
-  type SchemaFieldDetailed,
-  type ValueParser,
+  type AnyParser,
 } from '@twa.js/parsing';
 
 import type { InitData, User } from './types.js';
 
-function field<T>(parser: ValueParser<T>, from?: string): SchemaFieldDetailed<T> {
+function field<P extends AnyParser<any>>(parser: P, from?: string) {
   return {
     from,
     type: parser,
