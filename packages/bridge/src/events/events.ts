@@ -4,6 +4,7 @@ import type {
   EventListener as UtilEventListener,
   EventParams as UtilEventParams, AnySubscribeListener,
 } from '@twa.js/event-emitter';
+import type { IsNever, Not } from '@twa.js/util-types';
 
 import type {
   ClipboardTextReceivedPayload,
@@ -137,6 +138,11 @@ export type EventListener<E extends EventName> =
  * Event emitter, based describe events map.
  */
 export type EventEmitter = UtilEventEmitter<Events>;
+
+/**
+ * Returns true in case, event has parameters.
+ */
+export type EventHasParams<E extends EventName> = Not<IsNever<EventParams<E>>>;
 
 /**
  * Event listener used in `subscribe` and `unsubscribe` functions.

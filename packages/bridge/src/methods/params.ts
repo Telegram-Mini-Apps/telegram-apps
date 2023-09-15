@@ -1,5 +1,5 @@
 import type { RGB } from '@twa.js/colors';
-import type { IsNever, UnionKeys } from '@twa.js/util-types';
+import type { IsNever, Not, UnionKeys } from '@twa.js/util-types';
 
 import type { PopupParams } from './popup.js';
 import type { AnyHapticFeedbackParams } from './haptic.js';
@@ -164,7 +164,7 @@ export interface MethodsParams {
     | { color_key: HeaderColorKey }
     | {
     /**
-     * @since 6.10
+     * @since 6.9
      */
     color: RGB
   }, 'color'>;
@@ -214,6 +214,11 @@ export type MethodName = keyof MethodsParams;
  * Returns parameters for specified post-available event.
  */
 export type MethodParams<E extends MethodName> = MethodsParams[E]['params'];
+
+/**
+ * Returns true in case, method has parameters.
+ */
+export type MethodHasParams<M extends MethodName> = Not<IsNever<MethodParams<M>>>;
 
 /**
  * Any post-available event name which does not require arguments.
