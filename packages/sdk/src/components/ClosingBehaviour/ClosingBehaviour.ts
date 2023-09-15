@@ -14,8 +14,11 @@ export class ClosingBehaviour {
 
   private readonly state: State<ClosingBehaviourState>;
 
-  constructor(private readonly postEvent: PostEvent = defaultPostEvent) {
-    this.state = new State({ isConfirmationNeeded: false }, this.ee);
+  constructor(
+    isConfirmationNeeded: boolean,
+    private readonly postEvent: PostEvent = defaultPostEvent,
+  ) {
+    this.state = new State({ isConfirmationNeeded }, this.ee);
   }
 
   private set isConfirmationNeeded(value: boolean) {

@@ -8,6 +8,9 @@ interface StorageParams {
   'back-button': {
     isVisible: boolean
   };
+  'closing-behavior': {
+    isConfirmationNeeded: boolean;
+  };
   'main-button': {
     backgroundColor: RGB;
     isEnabled: boolean;
