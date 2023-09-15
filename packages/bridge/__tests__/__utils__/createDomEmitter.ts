@@ -7,7 +7,7 @@ export interface DomEmitter {
 /**
  * Removes simple emitter, which could be used in tests.
  */
-export function domEmitter(): DomEmitter {
+export function createDomEmitter(): DomEmitter {
   const listeners: Record<string, ((...args: any) => any)[]> = {};
 
   return {
@@ -21,10 +21,5 @@ export function domEmitter(): DomEmitter {
       const cbs = listeners[event.type] || [];
       cbs.forEach((cb) => cb(event));
     },
-    // removeAllListeners: () => {
-    //   Object.keys(listeners).forEach((event) => {
-    //     delete listeners[event];
-    //   });
-    // },
   };
 }

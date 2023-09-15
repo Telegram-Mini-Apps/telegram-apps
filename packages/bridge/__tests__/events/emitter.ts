@@ -1,5 +1,7 @@
 import { createEmitter, singletonEmitter } from '../../src/events/emitter.js';
-import { dispatchWindowEvent, mockWindow } from '../__utils__/window.js';
+import { createWindow, type WindowSpy } from '../__utils__/createWindow.js';
+import { dispatchWindowMessageEvent } from '../__utils__/dispatchWindowMessageEvent.js';
+
 import type { EventName, EventParams } from '../../src/index.js';
 
 type TestCase<E extends EventName> =
@@ -12,9 +14,17 @@ type TestCases = {
     : [Event, TestCase<Event> | TestCase<Event>[]];
 }[EventName][];
 
-mockWindow({
-  innerWidth: 1920,
-  innerHeight: 1080,
+let windowSpy: WindowSpy;
+
+beforeEach(() => {
+  windowSpy = createWindow({
+    innerWidth: 1920,
+    innerHeight: 1080,
+  });
+});
+
+afterEach(() => {
+  windowSpy.mockReset();
 });
 
 describe('events', () => {
@@ -94,14 +104,14 @@ describe('events', () => {
 
             // No expected data to be passed to listener.
             if (inputOrCaseOrCases === undefined) {
-              dispatchWindowEvent(event);
+              dispatchWindowMessageEvent(event);
               expect(spy).toBeCalledWith();
               return;
             }
 
             // Input is equal to expected result.
             if (!Array.isArray(inputOrCaseOrCases)) {
-              dispatchWindowEvent(event, inputOrCaseOrCases);
+              dispatchWindowMessageEvent(event, inputOrCaseOrCases);
               expect(spy).toBeCalledWith(inputOrCaseOrCases);
               return;
             }
@@ -109,14 +119,14 @@ describe('events', () => {
             // Input differs from expected result.
             if (!Array.isArray(inputOrCaseOrCases[0])) {
               const [input, expected] = inputOrCaseOrCases;
-              dispatchWindowEvent(event, input);
+              dispatchWindowMessageEvent(event, input);
               expect(spy).toBeCalledWith(expected);
               return;
             }
 
             // List of cases.
             inputOrCaseOrCases.forEach(([input, expected = input]) => {
-              dispatchWindowEvent(event, input);
+              dispatchWindowMessageEvent(event, input);
               expect(spy).toBeCalledWith(expected);
             });
           });
@@ -128,7 +138,7 @@ describe('events', () => {
 
           emitter.on('viewport_changed', spy);
 
-          dispatchWindowEvent('viewport_changed', 'broken data');
+          dispatchWindowMessageEvent('viewport_changed', 'broken data');
 
           expect(spy).not.toBeCalled();
         });

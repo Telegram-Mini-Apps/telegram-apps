@@ -1,8 +1,12 @@
 import { postEvent, setTargetOrigin } from '../../src/index.js';
 
-const windowSpy = jest.spyOn(window, 'window', 'get');
+let windowSpy: jest.SpyInstance<Window & typeof globalThis>;
 
 beforeEach(() => {
+  windowSpy = jest.spyOn(window, 'window', 'get');
+});
+
+afterEach(() => {
   jest.resetAllMocks();
 });
 
