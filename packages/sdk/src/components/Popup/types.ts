@@ -1,3 +1,15 @@
+import type { StateEvents } from '../../state/index.js';
+
+export interface PopupState {
+  isOpened: boolean;
+}
+
+export type PopupEvents = StateEvents<PopupState>;
+
+export type PopupEventName = keyof PopupEvents;
+
+export type PopupEventListener<E extends PopupEventName> = PopupEvents[E];
+
 /**
  * This object describes the native popup.
  * @see https://core.telegram.org/bots/webapps#popupparams
