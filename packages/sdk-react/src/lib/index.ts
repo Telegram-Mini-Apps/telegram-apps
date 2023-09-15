@@ -9,4 +9,5 @@ export * from './qr-scanner/index.js';
 export * from './theme-params/index.js';
 export * from './viewport/index.js';
 export * from './web-app/index.js';
+export * from './cloud-storage.js';
 export { usePostEvent } from './hooks.js';
