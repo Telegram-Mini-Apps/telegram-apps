@@ -1,5 +1,13 @@
 # @twa.js/init-data
 
+## 0.2.12
+
+### Patch Changes
+
+- 665dcf4: Switch to new package parsing utilities
+- Updated dependencies [251c527]
+  - @twa.js/parsing@0.0.1
+
 ## 0.2.11
 
 ### Patch Changes

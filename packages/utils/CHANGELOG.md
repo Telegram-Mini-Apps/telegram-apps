@@ -1,5 +1,13 @@
 # @twa.js/utils
 
+## 0.5.1
+
+### Patch Changes
+
+- 53d1717: Move some utilities related to colors, events handling and some types to separate packages
+- Updated dependencies [251c527]
+  - @twa.js/util-types@0.0.1
+
 ## 0.5.0
 
 ### Minor Changes

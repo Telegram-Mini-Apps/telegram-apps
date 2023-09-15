@@ -1,5 +1,21 @@
 # @twa.js/bridge
 
+## 1.3.0
+
+### Minor Changes
+
+- 5e23721: Implement new method - request. It allows calling specified methods and capturing specified events.
+
+### Patch Changes
+
+- Updated dependencies [53d1717]
+- Updated dependencies [251c527]
+  - @twa.js/utils@0.5.1
+  - @twa.js/event-emitter@0.0.1
+  - @twa.js/util-types@0.0.1
+  - @twa.js/parsing@0.0.1
+  - @twa.js/colors@0.0.1
+
 ## 1.2.0
 
 ### Minor Changes
