@@ -1,4 +1,4 @@
-import { formatURL } from '../../src/utils';
+import { formatURL } from '../../src/index.js';
 
 describe('utils', () => {
   describe('url.ts', () => {

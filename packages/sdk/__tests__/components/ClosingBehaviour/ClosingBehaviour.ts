@@ -1,4 +1,4 @@
-import { ClosingBehaviour } from '../../../src';
+import { ClosingBehaviour } from '../../../src/index.js';
 
 describe('components', () => {
   describe('ClosingBehaviour', () => {
