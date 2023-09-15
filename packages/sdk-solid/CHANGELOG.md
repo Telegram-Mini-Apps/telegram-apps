@@ -1,5 +1,18 @@
 # @twa.js/sdk-solid
 
+## 0.1.0
+
+### Minor Changes
+
+- 8c4b10b: Implement CloudStorage utilities
+
+### Patch Changes
+
+- Updated dependencies [53d1717]
+- Updated dependencies [faaa346]
+  - @twa.js/utils@0.5.1
+  - @twa.js/sdk@0.11.0
+
 ## 0.0.8
 
 ### Patch Changes

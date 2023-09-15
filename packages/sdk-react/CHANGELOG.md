@@ -1,5 +1,18 @@
 # @twa.js/sdk-react
 
+## 0.4.0
+
+### Minor Changes
+
+- 8c4b10b: Implement CloudStorage utilities
+
+### Patch Changes
+
+- Updated dependencies [5e23721]
+- Updated dependencies [faaa346]
+  - @twa.js/bridge@1.3.0
+  - @twa.js/sdk@0.11.0
+
 ## 0.3.20
 
 ### Patch Changes
