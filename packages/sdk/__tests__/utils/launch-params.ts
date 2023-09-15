@@ -1,5 +1,4 @@
-import { retrieveLaunchParams } from '../../src';
-import { parseLaunchParams } from '../../src/utils';
+import { retrieveLaunchParams, parseLaunchParams } from '../../src/index.js';
 
 describe('utils', () => {
   describe('launch-params.ts', () => {
@@ -77,7 +76,7 @@ describe('utils', () => {
         jest.resetAllMocks();
       });
 
-      it('should extract launch parameters from window.location.hash and save them in sessionStorage by key "__telegram-launch-params__"', () => {
+      it('should extract launch parameters from window.location.hash and save them in sessionStorage by key "telegram-web-apps-launch-params"', () => {
         const version = '9.1';
         const platform = 'unbelievable';
         const initData = new URLSearchParams({
@@ -141,10 +140,10 @@ describe('utils', () => {
             textColor: '#31344a',
           },
         });
-        expect(setItem).toHaveBeenCalledWith('__telegram-launch-params__', launchParams);
+        expect(setItem).toHaveBeenCalledWith('telegram-web-apps-launch-params', JSON.stringify(launchParams));
       });
 
-      it('should returns launch parameters from sessionStorage key "__telegram-launch-params__" in case they are missing in window.location.hash', () => {
+      it('should returns launch parameters from sessionStorage key "telegram-web-apps-launch-params" in case they are missing in window.location.hash', () => {
         const version = '9.1';
         const platform = 'unbelievable';
         const initData = new URLSearchParams({
@@ -174,7 +173,7 @@ describe('utils', () => {
           tgWebAppData: initData,
         }).toString();
 
-        const getItem = jest.fn(() => launchParams);
+        const getItem = jest.fn(() => JSON.stringify(launchParams));
         jest.spyOn(window, 'sessionStorage', 'get').mockImplementation(() => ({
           getItem,
         }) as any);
@@ -208,7 +207,7 @@ describe('utils', () => {
             textColor: '#31344a',
           },
         });
-        expect(getItem).toHaveBeenCalledWith('__telegram-launch-params__');
+        expect(getItem).toHaveBeenCalledWith('telegram-web-apps-launch-params');
       });
     });
   });
