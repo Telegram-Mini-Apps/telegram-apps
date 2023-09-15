@@ -8,7 +8,14 @@ const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
 const input = 'src/index.ts';
-const external = ['@twa.js/utils', '@twa.js/init-data', '@twa.js/bridge', '@twa.js/parsing'];
+const external = [
+  '@twa.js/utils',
+  '@twa.js/init-data',
+  '@twa.js/bridge',
+  '@twa.js/parsing',
+  '@twa.js/colors',
+  '@twa.js/event-emitter',
+];
 
 export default [
   defineConfig({
