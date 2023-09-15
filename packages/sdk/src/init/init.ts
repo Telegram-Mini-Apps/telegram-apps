@@ -7,37 +7,30 @@ import {
 import { withTimeout } from '@twa.js/utils';
 
 import {
-  BackButton,
   ClosingBehaviour,
+  CloudStorage,
   HapticFeedback,
   InitData,
-  MainButton,
   Popup,
   QRScanner,
-  Viewport,
-  WebApp,
 } from '../components/index.js';
-import {
-  parseLaunchParams,
-  retrieveLaunchParams,
-  type LaunchParams,
-} from '../utils/index.js';
+import { parseLaunchParams, retrieveLaunchParams, type LaunchParams } from '../launch-params.js';
 import {
   bindThemeCSSVariables,
   bindViewportCSSVariables,
   bindWebAppVariables,
+  parseCSSVarsOptions,
 } from './css.js';
 import {
   createPostEvent,
   createSyncedThemeParams,
-  createSyncedViewport,
-  parseCSSVarsOptions,
-} from './utils.js';
+  createBackButton,
+  createMainButton,
+  createViewport,
+  createWebApp, createRequestIdGenerator,
+} from './creators/index.js';
 
-import type {
-  InitOptions,
-  InitResult,
-} from './types.js';
+import type { InitOptions, InitResult } from './types.js';
 
 /**
  * Represents actual init function.
@@ -88,9 +81,10 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     buttonTextColor = '#ffffff',
   } = lpThemeParams;
 
+  const createRequestId = createRequestIdGenerator();
   const postEvent = createPostEvent(checkCompat, version);
   const themeParams = createSyncedThemeParams(lpThemeParams);
-  const webApp = new WebApp(version, platform, 'bg_color', backgroundColor, postEvent);
+  const webApp = createWebApp(backgroundColor, version, platform, createRequestId, postEvent);
 
   const {
     themeParams: createThemeParamsCSSVars,
@@ -106,11 +100,7 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     bindThemeCSSVariables(themeParams);
   }
 
-  // MacOS version does not support requesting current viewport information. That's why we
-  // should construct Viewport instance by ourselves.
-  const viewport = platform === 'macos'
-    ? createSyncedViewport(postEvent)
-    : await Viewport.synced(postEvent);
+  const viewport = await createViewport(platform, postEvent);
 
   // Apply viewport CSS variables.
   if (createViewportCSSVars) {
@@ -139,10 +129,11 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
   }
 
   const result: InitResult = {
-    backButton: new BackButton(version, postEvent),
+    backButton: createBackButton(version, postEvent),
     closingBehavior: new ClosingBehaviour(postEvent),
+    cloudStorage: new CloudStorage(version, createRequestId, postEvent),
     haptic: new HapticFeedback(version, postEvent),
-    mainButton: new MainButton(buttonColor, buttonTextColor, postEvent),
+    mainButton: createMainButton(buttonColor, buttonTextColor, postEvent),
     popup: new Popup(version, postEvent),
     postEvent,
     qrScanner: new QRScanner(version, postEvent),

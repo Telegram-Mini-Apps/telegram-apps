@@ -3,6 +3,7 @@ import type { PostEvent } from '@twa.js/bridge';
 import type {
   BackButton,
   ClosingBehaviour,
+  CloudStorage,
   HapticFeedback,
   InitData,
   MainButton,
@@ -12,11 +13,12 @@ import type {
   Viewport,
   WebApp,
 } from '../components/index.js';
-import type { LaunchParams } from '../utils/index.js';
+import type { LaunchParams } from '../launch-params.js';
 
 export type InitResult = {
   backButton: BackButton;
   closingBehavior: ClosingBehaviour;
+  cloudStorage: CloudStorage;
   haptic: HapticFeedback;
   initData?: InitData;
   initDataRaw?: string;
