@@ -19,7 +19,7 @@ export class ClosingBehaviour {
   }
 
   private set isConfirmationNeeded(value: boolean) {
-    this.state.set('isConfirmationNeeded', true);
+    this.state.set('isConfirmationNeeded', value);
     this.postEvent('web_app_setup_closing_behavior', { need_confirmation: value });
   }
 
