@@ -18,8 +18,8 @@ interface CreateInvokeCustomMethodParams<M extends string, Params extends object
 }
 
 export type AnyInvokeCustomMethodParams =
-  | CreateInvokeCustomMethodParams<'deleteStorageValues', { keys: string }>
-  | CreateInvokeCustomMethodParams<'getStorageValues', { keys: string }>
+  | CreateInvokeCustomMethodParams<'deleteStorageValues', { keys: string | string[] }>
+  | CreateInvokeCustomMethodParams<'getStorageValues', { keys: string | string[] }>
   | CreateInvokeCustomMethodParams<'getStorageKeys', {}>
   | CreateInvokeCustomMethodParams<'saveStorageValue', { key: string, value: string }>
   | CreateInvokeCustomMethodParams<string, any>;
