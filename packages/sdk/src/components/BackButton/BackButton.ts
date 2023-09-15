@@ -32,7 +32,7 @@ export class BackButton {
   }
 
   private set isVisible(visible: boolean) {
-    this.state.set('isVisible', true);
+    this.state.set('isVisible', visible);
     this.postEvent('web_app_setup_back_button', { is_visible: visible });
   }
 
