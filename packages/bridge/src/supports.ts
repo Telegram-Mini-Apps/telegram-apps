@@ -69,7 +69,7 @@ export function supports(
 
     if (method === 'web_app_set_header_color') {
       if (paramOrVersion === 'color') {
-        return lessOrEqual('6.10', inVersion);
+        return lessOrEqual('6.9', inVersion);
       }
     }
   }
