@@ -70,6 +70,7 @@ export function useSDK(): SDK {
   return {
     backButton: useDynamicComponent(sdk, 'backButton', ['isVisibleChanged']),
     closingBehavior: useDynamicComponent(sdk, 'closingBehavior', ['isConfirmationNeededChanged']),
+    cloudStorage: useInitResultValue(sdk, 'cloudStorage'),
     haptic: useInitResultValue(sdk, 'haptic'),
     initData: useInitResultValue(sdk, 'initData'),
     initDataRaw: useInitResultValue(sdk, 'initDataRaw'),
