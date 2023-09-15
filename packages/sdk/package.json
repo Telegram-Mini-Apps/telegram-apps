@@ -51,9 +51,12 @@
   },
   "dependencies": {
     "@twa.js/bridge": "workspace:*",
+    "@twa.js/colors": "workspace:*",
     "@twa.js/init-data": "workspace:*",
     "@twa.js/utils": "workspace:*",
-    "@twa.js/parsing": "workspace:*"
+    "@twa.js/util-types": "workspace:*",
+    "@twa.js/parsing": "workspace:*",
+    "@twa.js/event-emitter": "workspace:*"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
