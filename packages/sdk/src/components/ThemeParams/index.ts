@@ -1,2 +1,2 @@
-export * from './events.js';
 export * from './ThemeParams.js';
+export * from './types.js';

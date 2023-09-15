@@ -1,2 +1,6 @@
 export * from './ClosingBehaviour.js';
-export * from './events.js';
+export type {
+  ClosingBehaviourEventName,
+  ClosingBehaviourEventListener,
+  ClosingBehaviourEvents,
+} from './types.js';

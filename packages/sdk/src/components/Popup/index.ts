@@ -1,3 +1,8 @@
-export * from './events.js';
 export * from './Popup.js';
-export * from './types.js';
+export type {
+  PopupParams,
+  PopupEvents,
+  PopupEventListener,
+  PopupEventName,
+  PopupButton,
+} from './types.js';
