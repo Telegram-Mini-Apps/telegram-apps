@@ -1,5 +1,13 @@
 # @twa.js/sdk-solid
 
+## 0.1.1
+
+### Patch Changes
+
+- e947423: Update readme
+- Updated dependencies [e947423]
+  - @twa.js/sdk@0.11.1
+
 ## 0.1.0
 
 ### Minor Changes

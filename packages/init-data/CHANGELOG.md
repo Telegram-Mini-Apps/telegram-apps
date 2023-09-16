@@ -1,5 +1,11 @@
 # @twa.js/init-data
 
+## 0.2.13
+
+### Patch Changes
+
+- e947423: Update readme
+
 ## 0.2.12
 
 ### Patch Changes
