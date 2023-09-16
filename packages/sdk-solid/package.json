@@ -1,6 +1,6 @@
 {
   "name": "@twa.js/sdk-solid",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Solid JS bindings for Web Apps client SDK.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
