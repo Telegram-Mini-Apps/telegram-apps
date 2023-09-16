@@ -1,88 +1,92 @@
+[code-badge]: https://img.shields.io/badge/source-black?logo=github
+
+[docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
+
+[react-badge]: https://img.shields.io/badge/React-244654?logo=react&logoColor=61DAFB
+
+[solid-badge]: https://img.shields.io/badge/Solid-203A59?logo=solid&logoColor=38659F
+
+[node-badge]: https://img.shields.io/badge/Node-1f491f?logo=node.js&logoColor=339933
+
 # @twa.js
 
-Mono-repository, containing all the packages, connected with comfortable and
-safe TypeScript development on Telegram Web Apps platform. To learn more,
-follow packages own documentations.
+Mono-repository, containing all the packages, connected with comfortable and safe TypeScript
+development on Telegram Mini Apps platform. To learn more, follow packages own documentations.
 
-## Before start
-
-Before using packages in this repository, it is recommended to learn
-how Telegram Web Apps platform works. You can find more information about
-platform in this [documentation](https://docs.twa.dev).
+To learn more, visit platform [documentation](https://docs.twa.dev).
 
 ## Packages
 
-### [@twa.js/sdk-react](packages/sdk-react)
+### `@twa.js/bridge`
 
-[sdk-react-npm-badge]: https://img.shields.io/npm/v/@twa.js/sdk-react.svg
+[bridge-code]: packages/bridge
 
-[sdk-react-npm-link]: https://npmjs.com/package/@twa.js/sdk-react
+[bridge-docs]: https://docs.twa.dev/docs/libraries/twa-js-bridge
 
-[sdk-react-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/sdk-react
+[![docs-badge]][bridge-docs]
+[![code-badge]][bridge-code]
 
-[![NPM][sdk-react-npm-badge]][sdk-react-npm-link]
-![Size][sdk-react-size-badge]
+Package which provides utilities to simplify communication flow between frontend and Telegram native
+applications. It also solves some across-platform data difference problems to protect developers
+code and save their time.
+
+### `@twa.js/init-data`
+
+[init-data-code]: packages/init-data
+
+[init-data-docs]: https://docs.twa.dev/docs/libraries/twa-js-init-data
+
+[![docs-badge]][init-data-docs]
+[![code-badge]][init-data-code]
+
+Package providing utilities connected with Telegram Mini Apps init data. It
+allows init data validation and parse, works both in browser and NodeJS.
+
+### `@twa.js/init-data-node` <sup>![node-badge]</sup>
+
+[init-data-node-code]: packages/init-data-node
+
+[init-data-node-docs]: https://docs.twa.dev/docs/libraries/twa-js-init-data-node
+
+[![docs-badge]][init-data-node-docs]
+[![code-badge]][init-data-node-code]
+
+Package providing utilities connected with Telegram Mini Apps init data. It
+allows init data validation and parse, works both in browser and NodeJS.
+
+### `@twa.js/sdk`
+
+[sdk-code]: packages/sdk
+
+[sdk-docs]: https://docs.twa.dev/docs/libraries/twa-js-sdk
+
+[![docs-badge]][sdk-docs]
+[![code-badge]][sdk-code]
+
+Made from scratch production-ready TypeScript Telegram Mini Apps Source Development Kit. It includes
+all features provided by other packages extending them with intuitively clear functionality.
+
+### `@twa.js/sdk-react` <sup>![react-badge]</sup>
+
+[sdk-react-code]: packages/sdk-react
+
+[sdk-react-docs]: https://docs.twa.dev/docs/libraries/twa-js-sdk-react
+
+[![docs-badge]][sdk-react-docs]
+[![code-badge]][sdk-react-code]
 
 React bindings for client SDK. Contains hooks, components and other
 useful tools which allow usage of React along with Web Apps client SDK.
 Tracks SDK components changes out of box.
 
-### [@twa.js/sdk](packages/sdk)
+### `@twa.js/sdk-solid` <sup>![solid-badge]</sup>
 
-[sdk-npm-badge]: https://img.shields.io/npm/v/@twa.js/sdk?logo=npm
+[sdk-solid-code]: packages/sdk-solid
 
-[sdk-npm-link]: https://npmjs.com/package/@twa.js/sdk
+[sdk-solid-docs]: https://docs.twa.dev/docs/libraries/twa-js-sdk-solid
 
-[sdk-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/sdk
+[![docs-badge]][sdk-react-docs]
+[![code-badge]][sdk-react-code]
 
-[![NPM][sdk-npm-badge]][sdk-npm-link]
-![Size][sdk-size-badge]
-
-Made from scratch production-ready TypeScript Telegram Web Apps
-Source Development Kit. It includes all features provided
-by other packages extending them with intuitively clear 
-functionality.
-
-### [@twa.js/bridge](packages/bridge)
-
-[bridge-npm-badge]: https://img.shields.io/npm/v/@twa.js/bridge?logo=npm
-
-[bridge-npm-link]: https://npmjs.com/package/@twa.js/bridge
-
-[bridge-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/bridge
-
-[![NPM][bridge-npm-badge]][bridge-npm-link]
-![Size][bridge-size-badge]
-
-Package which provides utilities to simplify communication flow between
-frontend and Telegram native applications. It also solves some across-platform
-data difference problems to protect developers code and save their time.
-
-### [@twa.js/init-data](packages/init-data)
-
-[init-data-npm-badge]: https://img.shields.io/npm/v/@twa.js/init-data?logo=npm
-
-[init-data-npm-link]: https://npmjs.com/package/@twa.js/init-data
-
-[init-data-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/init-data
-
-[![NPM][init-data-npm-badge]][init-data-npm-link]
-![Size][init-data-size-badge]
-
-Package providing utilities connected with Telegram Web Apps init data. It
-allows init data validation and parse, works both in browser and NodeJS.
-
-### [@twa.js/utils](packages/utils)
-
-[utils-npm-badge]: https://img.shields.io/npm/v/@twa.js/utils?logo=npm
-
-[utils-npm-link]: https://npmjs.com/package/@twa.js/utils
-
-[utils-size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/utils
-
-[![NPM][utils-npm-badge]][utils-npm-link]
-![Size][utils-size-badge]
-
-Tree-shakeable set of useful utilities used by many other libraries of
-ecosystem. You probably don't need to install this package directly, but may
-find provided functionality useful in other contexts.
+Solid JS bindings for client SDK. Provides signals, hooks and components to be used in Solid JS
+application.
