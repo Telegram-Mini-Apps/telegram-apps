@@ -1,5 +1,11 @@
 # @twa.js/bridge
 
+## 1.3.1
+
+### Patch Changes
+
+- e947423: Update readme
+
 ## 1.3.0
 
 ### Minor Changes

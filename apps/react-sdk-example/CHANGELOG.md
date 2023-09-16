@@ -1,5 +1,12 @@
 # react-sdk-example
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [e947423]
+  - @twa.js/sdk-react@0.4.1
+
 ## 0.0.5
 
 ### Patch Changes

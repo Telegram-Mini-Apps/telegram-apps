@@ -1,5 +1,14 @@
 # @twa.js/sdk-react
 
+## 0.4.1
+
+### Patch Changes
+
+- e947423: Update readme
+- Updated dependencies [e947423]
+  - @twa.js/bridge@1.3.1
+  - @twa.js/sdk@0.11.1
+
 ## 0.4.0
 
 ### Minor Changes
