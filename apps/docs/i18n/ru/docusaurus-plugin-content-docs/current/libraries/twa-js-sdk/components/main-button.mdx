@@ -1,0 +1,90 @@
+# `MainButton`
+
+Компонент, который контролирует Главную кнопку, расположенную в нижней части интерфейса приложения Telegram. Более подробно об этом компоненте можно прочитать в [документации](../../../ui/main-button.mdx).
+
+## Инициализация
+
+```typescript
+import { BackButton } from '@twa.js/sdk';
+
+const mainButton = new MainButton('#000000', '#ffffff');
+```
+
+## Методы и свойства
+
+### Видимость кнопки
+
+Для управления видимостью `MainButton` используются такие методы как `show()` и `hide()`. В свою очередь они изменяют свойство `isVisible`:
+
+```typescript  
+mainButton.show();  
+console.log(mainButton.isVisible); // true  
+  
+mainButton.hide();  
+console.log(mainButton.isVisible); // false  
+```
+
+### Загрузчик
+
+`MainButton` может отображать загрузчик внутри себя. Для управления его отображением используются методы `showProgress()` и `hideProgress()`. Они изменяют свойство `isProgressVisible`:
+
+```typescript
+mainButton.showProgress();
+console.log(mainButton.isProgressVisible); // true  
+
+mainButton.hideProgress();
+console.log(mainButton.isProgressVisible); // false
+```
+
+### Состояние активности
+
+`MainButton` можно включить и отключить при помощи методов `disable()` и `enable()`. Они изменяют свойство `isEnabled`:
+
+```typescript
+mainButton.enable();
+console.log(mainButton.isEnabled); // true  
+
+mainButton.disable();
+console.log(mainButton.isEnabled); // false
+```
+
+Включение кнопки позволит пользователю нажать на нее. Как результат, приложение получит событие `click`.
+
+### Цвет фона
+
+Для обновления фонового цвета кнопки используется метод `setBackgroundColor(color: RGB)`. Он обновит свойство `backgroundColor`:
+
+```typescript 
+mainButton.setBackgroundColor('#ffffaa');
+console.log(mainButton.color); // '#ffffaa'
+```
+
+### Цвет текста
+
+Для обновления цвета текста кнопки используется метод `setTextColor(color: RGB)`. Он обновит свойство `textColor`:
+
+```typescript 
+mainButton.setTextColor('#cca233');
+console.log(mainButton.textColor); // '#cca233'
+```
+
+### Текст
+
+Для обновления текста кнопки используется метод `setText(text: string)`. Он обновит свойство `text`:
+
+```typescript
+mainButton.setText('Submit');
+console.log(mainButton.text); // 'Submit'
+```
+
+## События
+
+<ComponentSupportedEvents events={{
+  backgroundColorChanged: '(color: RGB) => void',
+  click: '() => void',
+  isProgressVisibleChanged: '(isVisible: boolean) => void',
+  isEnabledChanged: '(isEnabled: boolean) => void',
+  isVisibleChanged: '(isVisible: boolean) => void',
+  textChanged: '(text: string) => void',
+  textColorChanged: '(color: RGB) => void',
+}} />

@@ -1,0 +1,131 @@
+---
+sidebar_label: "@twa.js/bridge"
+sidebar_position: 1
+---
+
+# @twa.js/bridge
+
+<LibraryBadges pkg={'@twa.js/bridge'}/>
+
+The package provides utilities to simplify communication between web applications and the Telegram native application. It also addresses cross-platform data differences, safeguarding developers' code and saving their time.
+
+Developers can utilize this package to create their software development kit (SDK), as it offers the utmost level of control over cross-application communication.
+
+## Installation
+
+<NpmInstall pkg={'@twa.js/bridge'}/>
+
+## Calling methods
+
+To call the Telegram Web Apps methods, you should use `postEvent` function:
+
+```typescript
+import { postEvent } from '@twa.js/bridge';
+
+postEvent('web_app_setup_back_button', {is_visible: true});
+```
+
+This function automatically finds the correct way to send this event based on the current environment features. For greater accuracy, it determines the current Telegram application type and selects the appropriate flow.
+
+## Listening to events
+
+### `on` and `off`
+
+To start working with events, we could use `on` and `off` functions. Here is how basic `on` function usage looks like:
+
+```typescript
+import { on } from '@twa.js/bridge';
+
+// Start listening to "viewport_changed" event. Returned value
+// is a function, which removes this event listener.
+const removeListener = on('viewport_changed', payload => {
+  console.log('Viewport changed:', payload);
+});
+
+// Remove this event listener.
+removeListener();
+```
+
+To stop listening to events, you could alternatively use `off` function:
+
+```typescript
+import { on, off, EventListener } from '@twa.js/bridge';
+
+const listener: EventListener<'viewport_changed'> = payload => {
+  console.log('Viewport changed:', payload);
+};
+
+// Start listening to event.
+on('viewport_changed', listener);
+
+// Remove event listener.
+off('viewport_changed', listener);
+```
+
+### `subscribe` and `unsubscribe`
+
+To listen to all events sent from the native Telegram application,
+we utilize such functions as `subscribe` and `unsubscribe`:
+
+```typescript
+import { subscribe, unsubscribe, GlobalEventListener } from '@twa.js/bridge';
+
+const listener: GlobalEventListener = (event, data) => {
+  console.log('Received event', event, 'with data', data);
+};
+
+// Listen to all events.
+subscribe(listener);
+
+// Remove this listener.
+unsubscribe(listener);
+```
+
+## Checking method support
+
+`postEvent` function itself is not checking if specified method supported by current native Telegram application. To do this, we could use `supports` function which accepts Telegram Web Apps method name and current platform version:
+
+```typescript
+import { supports } from '@twa.js/bridge';
+
+supports('web_app_trigger_haptic_feedback', '6.0'); // false
+supports('web_app_trigger_haptic_feedback', '6.1'); // true
+```
+
+:::tip
+
+It is recommended to use this function before calling Web Apps methods to prevent applications from stalling and other unexpected behavior.
+
+:::
+
+## Debugging
+
+Package supports enabling the debug mode, which leads to logging
+messages related to events handling. To change debug mode, use `setDebug`
+function:
+
+```typescript
+import { setDebug } from '@twa.js/bridge';
+
+setDebug(true);
+```
+
+## Target origin
+
+If the package is being used in a browser environment (iframe), we employ the function `window.parent.postMessage`. This function requires specifying the target origin to ensure events are only sent to trusted parent iframes. By default, the package utilizes `https://web.telegram.org` as the origin. To enable event transmission to other origins, you should utilize the `setTargetOrigin` function:
+
+```typescript
+import { setTargetOrigin } from '@twa.js/bridge';
+
+setTargetOrigin('https://myendpoint.org');
+```
+
+:::caution
+
+It is strongly recommended not to override this value as long as it could lead to security issues. Specify this value only for test purposes.
+
+:::
+
+## Higher-level control
+
+As long as the package provides only low-level control, we recommend using [SDK](./twa-js-sdk/about.mdx) which implements package methods. It also provides additional some automatic parameters checks, more intuitive method names, and easier usage.

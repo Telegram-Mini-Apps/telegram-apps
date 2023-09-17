@@ -4,6 +4,7 @@
     "commit": "git cz",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "docs:build": "turbo run build --filter=\"./apps/docs\"",
     "packages:build": "turbo run build --filter=\"./packages/*\"",
     "packages:test": "turbo run test --filter=\"./packages/*\"",
     "packages:lint": "turbo run lint --filter=\"./packages/*\""

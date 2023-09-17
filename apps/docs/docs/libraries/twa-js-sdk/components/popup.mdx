@@ -1,0 +1,32 @@
+# `Popup`
+
+The component which controls the currently displayed application popup. It allows developers to open new custom popups and detect popup-connected events. There is more information about this component in this [documentation](../../../ui/popup.mdx).
+
+## Initialization
+
+```typescript
+import { Popup } from '@twa.js/sdk';
+
+const popup = new Popup('6.3');
+```
+
+## Opening new popup
+
+The `open` function returns a promise which will be resolved in case, the opened popup was closed. `Popup` will resolve a button identifier in case, a user clicked it. Otherwise, `null` will be resolved.
+
+```typescript
+popup.open({
+  title: 'Hello!',
+  message: 'Here is a test message.',
+  buttons: [{id: 'my-id', type: 'default', text: 'Default text'}]
+});
+console.log(popup.isOpened); // true
+```
+
+## Events
+
+<ComponentSupportedEvents events={{ isOpenedChanged: '(isOpened: boolean) => void' }} />
+
+## Methods support
+
+<ComponentMethodsSupport methods={['open']} />
