@@ -1,0 +1,35 @@
+# `QRScanner`
+
+Компонент, который предоставляет доступ в функциональности сканнера QR-кодов.
+
+## Инициализация
+
+```typescript
+import { QRScanner } from '@twa.js/sdk';
+
+const scanner = new QRScanner('6.3');
+```
+
+## Открытие и закрытие
+
+Для открытия сканнера QR-кодов необходимо использовать метод `open()`. Он принимает опциональный текст, который будет отображен пользователю в сканнере. Результатом выполнения этой функции является Promise, содержащий контент сканированного QR-кода. В случае, если сканнер был закрыт, Promise возвращаемый из метода `open()` вернёт `null`.
+
+```typescript
+scanner.open().then(console.log); // some-data=22l&app=93...
+console.log(scanner.isOpened); // true
+```
+
+Для закрытия сканнера используется метод `close()`:
+
+```typescript
+scanner.close();
+console.log(scanner.isOpened); // false
+```
+
+## События
+
+<ComponentSupportedEvents events={{ isOpenedChanged: '(isOpened: boolean) => void' }} />
+
+## Поддержка методов
+
+<ComponentMethodsSupport methods={['open', 'close']} />

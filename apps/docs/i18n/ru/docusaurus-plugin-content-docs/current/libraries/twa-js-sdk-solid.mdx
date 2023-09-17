@@ -1,0 +1,148 @@
+# @twa.js/sdk-solid
+
+Биндинги Solid JS для [клиентского SDK](twa-js-sdk/about). Включает в себя хуки, компоненты и утилиты для комфортного использования Solid JS в рамках платформы Telegram Web Apps.
+
+<LibraryBadges pkg={'@twa.js/sdk-solid'}/>
+
+## Установка
+
+Прежде всего, предполагается, что вы уже установили пакет `solid-js`, поскольку он является обязательной зависимостью этого пакета. Установка самого SDK не требуется, так как он уже включен в `@twa.js/sdk-solid`.
+
+<NpmInstall pkg={'@twa.js/sdk-solid'}/>
+
+## Использование
+
+### SDKProvider
+
+Согласно [документации](twa-js-sdk/about) `@twa.js/sdk`, она состоит из набора компонентов, которые не инициализируются по умолчанию, разработчики должны делать это самостоятельно. Однако SDK предоставляет функцию `init`, которая упрощает процесс создания компонентов и использования стандартного алгоритма работы TWA. Она выполняет все необходимые действия для разработчиков.
+
+Чтобы сделать функциональность SDK доступной для приложения и разрешить инициализацию вновь созданных компонентов, нам нужно использовать компонент `SDKProvider`.
+
+```typescript jsx
+import { SDKProvider } from '@twa.js/sdk-solid';
+
+function Root() {
+  return (
+    <SDKProvider>
+      <div>My application!</div>
+    </SDKProvider>
+  );
+}
+```
+
+Внутри, `SDKProvider` использует функцию `init` из `@twa.js/sdk`. Она принимает опциональный список параметров при помощи свойства `initOptions`, описанного [здесь](twa-js-sdk/about#init).
+
+```typescript jsx
+import { SDKProvider, SDKInitOptions } from '@twa.js/sdk-solid';
+
+function Root() {
+  const options: SDKInitOptions = {
+    acceptScrollbarStyle: true,
+    checkCompat: true,
+    debug: true
+  };
+
+  return (
+    <SDKProvider initOptions={options}>
+      <div>My application!</div>
+    </SDKProvider>
+  );
+}
+```
+
+В большинстве случаев нет необходимости использовать `initOptions`, если у вас нет нестандартной логики в вашем приложении. Как правило, SDK обрабатывает все необходимое для разработчиков, поэтому нет необходимости в дополнительной настройке.
+
+### useSDKContext
+
+Используя компонент `SDKProvider`, дочерние компоненты могут использовать хук `useSDK` для доступа к основной информации SDK.
+
+```typescript jsx
+import { SDKProvider, useSDKContext } from '@twa.js/sdk-solid';
+
+function App() {
+  const sdk = useSDKContext();
+
+  // Здесь мы можем пользоваться информацией о процессе инициализации SDK.
+
+  return <div>My application!</div>;
+}
+
+function Root() {
+  return (
+    <SDKProvider>
+      <App/>
+    </SDKProvider>
+  );
+}
+```
+
+### useSDK
+
+Хук `useSDK` необходим для того, чтобы получить список предоставляемых SDK компонентов.
+
+:::caution
+
+`useSDK` выбросит ошибку в случае, если компоненты SDK ещё не готовы к использованию. Во избежание этой ситуации используйте `useSDKContext` для отслеживания статуса загрузки компонентов.
+
+:::
+
+```typescript jsx title="Пример использования"
+import { createMemo, Switch, Match, ParentProps } from 'solid-js';
+import { SDKProvider, useSDK, useSDKContext } from '@twa.js/sdk-solid';
+
+function App() {
+  const sdk = useSDK();
+
+  // Здесь useSDK не выбросит ошибку так как компонент App
+  // будет отображен только в случае готовности SDK к показу.
+
+  return <div>My application!</div>;
+}
+
+/**
+ * Компонент, который отвечает за контролирование процесса отображения приложения.
+ */
+function DisplayGate(props: ParentProps) {
+  const { loading, error } = useSDKContext();
+  const errorMessage = createMemo<null | string>(() => {
+    const err = error();
+
+    if (!err) {
+      return null;
+    }
+
+    return err instanceof Error ? err.message : 'Unknown error';
+  });
+
+  return (
+    <Switch fallback={props.children}>
+      <Match when={errorMessage()}>
+        <p>
+          SDK was unable to initialize. Probably, current application is being used
+          not in Telegram Web Apps environment.
+        </p>
+        <blockquote>
+          <p>{errorMessage()}</p>
+        </blockquote>
+      </Match>
+      <Match when={loading()}>
+        <div>Loading..</div>
+      </Match>
+    </Switch>
+  );
+}
+
+function Root() {
+  return (
+    <SDKProvider initOptions={{ debug: true }}>
+      <DisplayGate>
+        <App/>
+      </DisplayGate>
+    </SDKProvider>
+  );
+}
+```
+
+## Полноценный пример
+
+[Пример кода](https://github.com/Telegram-Web-Apps/twa.js/blob/master/apps/solid-sdk-example/src/Root.tsx) и использования данного пакета можно найти в [моно-репозитории](https://github.com/Telegram-Web-Apps/twa.js/tree/master/apps/solid-sdk-example).

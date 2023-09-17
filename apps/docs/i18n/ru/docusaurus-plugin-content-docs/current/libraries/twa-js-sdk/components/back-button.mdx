@@ -1,0 +1,34 @@
+# `BackButton`
+
+Контролирует кнопку Назад, которая расположена в шапке приложения. Она чаще всего используется в случаях, когда необходимо совершить переход назад в истории переходов, либо когда нужно отменить какое-либо действие. Подробнее об этой кнопке можно прочитать в [документации](../../../ui/back-button.mdx).
+
+## Инициализация
+
+```typescript
+import { BackButton } from '@twa.js/sdk';
+
+const backButton = new BackButton('6.3');
+```
+
+## Показ и скрытие
+
+Для показа и скрытия `BackButton` необходимо использовать методы `show()` и `hide()`. Эти методы обновляют свойство `isVisible` компонента:
+
+```typescript
+backButton.show();
+console.log(backButton.isVisible); // true
+
+backButton.hide();
+console.log(backButton.isVisible); // false
+```
+
+## События
+
+<ComponentSupportedEvents events={{
+  click: '() => void',
+  isVisibleChanged: '(isVisible: boolean) => void',
+}}/>
+
+## Поддержка методов
+
+<ComponentMethodsSupport methods={['show', 'hide']}/>

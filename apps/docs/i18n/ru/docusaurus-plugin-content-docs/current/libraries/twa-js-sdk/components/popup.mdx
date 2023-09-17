@@ -1,0 +1,32 @@
+# `Popup`
+
+Компонент, который контролирует текущий отображаемый поп-ап. Он позволяет разработчику открывать кастомные поп-апы и отслеживать связанные с ними события. Более подробно об этом компоненте можно узнать в [документации](../../../ui/popup.mdx).
+
+## Инициализация
+
+```typescript
+import { Popup } from '@twa.js/sdk';
+
+const popup = new Popup('6.3');
+```
+
+## Открытие нового поп-апа
+
+Метод `open` возвращает Promise, который будет выполнен в случае, если открытый поп-ап был закрыт. В качестве результата будет возвращен идентификатор нажатой кнопки в случае, если пользователь нажал на какую-либо из них. В противном случае будет возвращено значение `null`.
+
+```typescript
+popup.open({
+  title: 'Hello!',
+  message: 'Here is a test message.',
+  buttons: [{id: 'my-id', type: 'default', text: 'Default text'}]
+});
+console.log(popup.isOpened); // true
+```
+
+## События
+
+<ComponentSupportedEvents events={{ isOpenedChanged: '(isOpened: boolean) => void' }} />
+
+## Поддержка методов
+
+<ComponentMethodsSupport methods={['open']} />

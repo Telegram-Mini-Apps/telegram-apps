@@ -1,0 +1,27 @@
+# `ClosingBehaviour`
+
+Controls the application closing behavior. There is more  information about this functionality in this [documentation](../../../functionality/closing-behavior.mdx).
+
+## Initialization
+
+```typescript  
+import { ClosingBehaviour } from '@twa.js/sdk';   
+  
+const closingBehaviour = new ClosingBehaviour();  
+```
+
+## Closing confirmation
+
+To enable and disable closing confirmation, it is required to use `enableConfirmation()` and `disableConfirmation()` methods. These methods update `isConfirmationNeeded` property:
+
+```typescript  
+closingBehaviour.enableConfirmation();  
+console.log(closingBehaviour.isConfirmationNeeded); // true  
+
+closingBehaviour.disableConfirmation();  
+console.log(closingBehaviour.isConfirmationNeeded); // false
+```  
+
+## Events
+
+<ComponentSupportedEvents events={{ isConfirmationNeededChanged: '(value: boolean) => void' }} />

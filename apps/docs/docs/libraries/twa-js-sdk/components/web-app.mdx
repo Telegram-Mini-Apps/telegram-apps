@@ -1,0 +1,49 @@
+# `WebApp`
+
+The component which provides the common Web Apps functionality not covered by other system components.
+
+## Initialization
+
+```typescript
+import { WebApp } from '@twa.js/sdk';
+
+// Specify Web Apps version, platform name, header color key
+// and background color.
+const webApp = new WebApp('6.4', 'webz', 'bg_color', '#ffffff');
+```
+
+## Platform
+
+You could get current Web App platform (`tdesktop`, `webz` etc.) by getting `platform` property.
+
+## Opening links
+
+Here comes the list of methods, which allow opening links with help of Web App:
+
+- `openLink(url: string)` - opens link in external browser. Web App will not be closed.
+- `openTelegramLink(url: string)` - opens a Telegram link inside Telegram app. The Web App will be closed. It expects passing link in full format, with hostname "t.me".
+- `openInvoice(url: string)` - opens an invoice using its url. It expects passing link in full format, with hostname "t.me".
+
+## Header and background
+
+You are able to get and update header and background colors. To get current values of these blocks, you should refer to `headerColor` and `backgroundColor` properties. To update them, use `setHeaderColor(colorKey: HeaderColorKey)` and `setBackgroundColor(color: RGB)` methods.
+
+## Other methods
+
+- `close()` - closes Web App.
+- `isVersionAtLeast(version: string)` - checks if current `WebApp` instance version is higher than passed one.
+- `ready()` - should be called whenever Web App is ready to be displayed.
+- `readTextFromClipboard(): Promise<string | null>` - reads text
+  from clipboard and returns extracted data.
+- `sendData(data: string)` - sends data to Telegram bot.
+
+## Events
+
+<ComponentSupportedEvents events={{
+  backgroundColorChanged: '(color: RGB) => void',
+  headerColorChanged: '(color: HeaderColorKey) => void',
+}} />
+
+## Methods support
+
+<ComponentMethodsSupport methods={['openInvoice', 'readTextFromClipboard', 'setHeaderColor', 'setBackgroundColor']} />
