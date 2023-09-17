@@ -1,0 +1,48 @@
+# `WebApp`
+
+Компонент, который предоставляет доступ к функциональности Telegram Web Apps общего назначения.
+
+## Инициализация
+
+```typescript
+import { WebApp } from '@twa.js/sdk';
+
+// Указываем версию платформы, наименование, ключ цвета
+// заголовка и цвет фона.
+const webApp = new WebApp('6.4', 'webz', 'bg_color', '#ffffff');
+```
+
+## Платформа
+
+Вы можете получить текущее наименование платформы (`tdesktop`, `webz` и так далее) при помощи обращения к свойству `platform`
+
+## Открытие ссылок
+
+В данном списке представлены методы, которые позволяют открывать ссылки в рамках приложения:
+
+- `openLink(url: string)` - открывает ссылку во внешнем браузере. Текущее приложение будет закрыто.
+- `openTelegramLink(url: string)` - открывает ссылку внутри приложения Telegram. Метод ожидает передачи ссылки полного формата с hostname в качестве "t.me". Текущее приложение будет закрыто.
+- `openInvoice(url: string)` - открывает платежное окно используя его url. Метод ожидает передачи ссылки полного формата с hostname в качестве "t.me".
+
+## Заголовок и фон
+
+У вас есть возможность получать и обновлять цвета заголовка и фона. Для получения текущих значений необходимо обратиться к таким свойствам как `headerColor` и `backgroundColor`. Для их обновления используются методы `setHeaderColor(colorKey: HeaderColorKey)` и `setBackgroundColor(color: RGB)`.
+
+## Прочие методы
+
+- `close()` - закрывает текущее приложение.
+- `isVersionAtLeast(version: string)` - проверяет, является ли текущая версия в компоненте выше либо равной переданной.
+- `ready()` - сообщает приложению Telegram о том, что приложение разработчика готово к отображению.
+- `readTextFromClipboard(): Promise<string | null>` - извлекает текст из буфера обмена.
+- `sendData(data: string)` - отправляет данные боту Telegram.
+
+## События
+
+<ComponentSupportedEvents events={{
+  backgroundColorChanged: '(color: RGB) => void',
+  headerColorChanged: '(color: HeaderColorKey) => void',
+}} />
+
+## Поддержка методов
+
+<ComponentMethodsSupport methods={['openInvoice', 'readTextFromClipboard', 'setHeaderColor', 'setBackgroundColor']} />

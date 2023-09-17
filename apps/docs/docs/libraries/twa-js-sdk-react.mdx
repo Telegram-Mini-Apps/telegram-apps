@@ -1,0 +1,269 @@
+---
+sidebar_label: "@twa.js/sdk-react"
+sidebar_position: 5
+---
+
+# @twa.js/sdk-react
+
+React bindings for the [client SDK](twa-js-sdk/about). It includes hooks, components, and other useful tools that enable the use of React alongside the Web Apps client SDK. It automatically tracks changes to SDK components.
+
+<LibraryBadges pkg={'@twa.js/sdk-react'}/>
+
+## Installation
+
+Before anything else, it is assumed that you have already installed the `react` package, as it is a peer dependency of this package. The installation of the SDK itself is not required, as it is already included in `@twa.js/sdk-react`.
+
+<NpmInstall pkg={'@twa.js/sdk-react'}/>
+
+## Initialization
+
+### Using SDK provider
+
+According to the `@twa.js/sdk` [documentation](twa-js-sdk/about), it consists of a set of components that are not initialized by default. Developers are responsible for creating these components themselves. However, the SDK provides the `init` function, which simplifies the process of creating the components and using the standard TWA flow. It handles all the necessary steps for developers.
+
+To make the SDK functionality available to the application and allow the initialization of newly created components, we need to use the `SDKProvider` component.
+
+```typescript jsx
+import React from 'react';
+import { SDKProvider } from '@twa.js/sdk-react';
+
+function Root() {
+  return (
+    <SDKProvider>
+      <div>My application!</div>
+    </SDKProvider>
+  );
+}
+```
+
+Internally, the `SDKProvider` utilizes the `init` function from `@twa.js/sdk`. It accepts an optional list of parameters through the `initOptions` property, which is described [here](twa-js-sdk/about#init).
+
+```typescript jsx
+import React from 'react';
+import { SDKProvider, InitOptions } from '@twa.js/sdk-react';
+
+/**
+ * Root component for the whole project.
+ */
+export function Root() {
+  const options: InitOptions = {
+    acceptScrollbarStyle: true,
+    checkCompat: true,
+    debug: true
+  };
+
+  return (
+    <SDKProvider initOptions={options}>
+      <div>My application!</div>
+    </SDKProvider>
+  );
+}
+```
+
+Most of the time, there is no need to use `initOptions` unless you have specific logic in your application. Typically, the SDK handles everything necessary for developers, so there is no need for additional configuration.
+
+### Getting SDK context
+
+By using the `SDKProvider` component, the child elements are able to utilize the `useSDK` hook (or the `withSDK` higher-order component) to access core SDK information.
+
+```typescript jsx
+import React from 'react';
+import { SDKProvider, SDKContext, useSDK, withSDK } from '@twa.js/sdk-react';
+
+function App() {
+  const sdk = useSDK();
+
+  // Here, we can use SDK information.
+
+  return <div>My application!</div>;
+}
+
+// or
+
+interface Props {
+  sdk: SDKContext
+}
+
+function AppPure({ sdk }: Props) {
+  return <div>My application!</div>;
+}
+
+const AppWrapped = withSDK(AppPure);
+
+function Root() {
+  return (
+    <SDKProvider>
+      <App/>
+      {/* or */}
+      <AppWrapped/>
+    </SDKProvider>
+  );
+}
+```
+
+Let's enhance the previous example and introduce crucial logic associated with the SDK lifecycle:
+
+```typescript jsx
+import React, { PropsWithChildren, useEffect } from 'react';
+import { SDKProvider, useSDK, useBackButton, useWebApp } from '@twa.js/sdk-react';
+
+/**
+ * Part of the application which doesn't know anything about SDK initialization
+ * and which should be rendered only in case, SDK is already initialized and
+ * could provide Web Apps components.
+ */
+function App() {
+  const backButton = useBackButton();
+  const webApp = useWebApp();
+
+  // When App is attached to DOM, lets show back button and
+  // add "click" event handler, which should close current application.
+  useEffect(() => {
+    const listener = () => webApp.close();
+    backButton.on('click', listener);
+    backButton.show();
+
+    return () => {
+      backButton.off('click', listener);
+      backButton.hide();
+    };
+    // We know, that backButton and webApp will never change,
+    // but let's follow React rules.
+  }, [backButton, webApp]);
+
+  return <div>My application!</div>;
+}
+
+/**
+ * This component is the layer controlling the application display. It displays
+ * application in case, the SDK is initialized, displays an error if something
+ * went wrong, and a loader if the SDK is warming up.
+ */
+function Loader({children}: PropsWithChildren<{}>) {
+  const {didInit, components, error} = useSDK();
+
+  // There were no calls of SDK's init function. It means, we did not
+  // even try to do it.
+  if (!didInit) {
+    return <div>SDK init function is not yet called.</div>;
+  }
+
+  // Error occurred during SDK init.
+  if (error !== null) {
+    return <div>Something went wrong.</div>;
+  }
+
+  // If components is null, it means, SDK is not ready at the
+  // moment and currently initializing. Usually, it takes like
+  // several milliseconds or something like that, but we should
+  // have this check.
+  if (components === null) {
+    return <div>Warming up SDK.</div>;
+  }
+
+  // Safely render application.
+  return <>{children}</>;
+}
+
+/**
+ * Root component of the whole project.
+ */
+export function Root() {
+  return (
+    <SDKProvider>
+      <Loader>
+        <App/>
+      </Loader>
+    </SDKProvider>
+  );
+}
+```
+
+You might wonder why we need a component like `Loader`. The reason is that the SDK initialization process is asynchronous. Some of its components need to send requests to the Telegram application to fetch their current state. Due to this, we cannot determine the required properties for these components until the initialization is completed.
+
+As a result, all hooks that return component instances will throw an error because they cannot retrieve the necessary component from the `components` property. Therefore, these hooks should not be called until the SDK is fully initialized.
+
+### When init is done
+
+Once the initialization is successfully completed, developers should call the `webApp.ready` function. This function notifies the Telegram application that the current Web App is ready to be displayed.
+
+```typescript jsx
+import React, { useEffect } from 'react';
+import { useWebApp } from '@twa.js/sdk-react';
+
+function App() {
+  const webApp = useWebApp();
+
+  useEffect(() => {
+    webApp.ready();
+  }, [webApp]);
+
+  return <div>Here is my App</div>;
+}
+```
+
+## Hooks and HOCs
+
+### Launch parameters
+
+There may be cases where a developer needs to retrieve launch parameters without initializing the entire SDK. For example, they might want to access current theme parameters stored in `window.location`. In such cases, SDK initialization may not be necessary.
+
+To retrieve Web App launch parameters, the `useLaunchParams` hook (or the `withLaunchParams` higher-order component) can be used.
+
+```typescript jsx
+import React from 'react';
+import { useLaunchParams, withLaunchParams, LaunchParams } from '@twa.js/sdk-react';
+
+function DisplayLaunchParams() {
+  const launchParams = useLaunchParams();
+
+  return (
+    <pre>
+      <code>{JSON.stringify(launchParams, null, ' ')}</code>
+    </pre>
+  );
+}
+
+// or
+
+interface Props {
+  launchParams: LaunchParams;
+}
+
+function DisplayLaunchParamsPure({launchParams}: Props) {
+  return (
+    <pre>
+      <code>{JSON.stringify(launchParams, null, ' ')}</code>
+    </pre>
+  );
+}
+
+const DisplayLaunchParamsWrapped = withLaunchParams(DisplayLaunchParams);
+```
+
+It will return the result of the [`retrieveLaunchParams`](twa-js-sdk/about#launch-parameters) function.
+
+### Other
+
+The library provides a collection of simple hooks and higher-order components (HOCs) for each SDK component. The returned instances of these components remain the same, but force updates will be triggered if any changes occur in a component.
+
+:::caution
+
+If you are using higher-order components (HOCs), it's important to note that the passed components will always be the same instances. This can cause issues with React's `PureComponent` and `memo` components, as they won't detect any changes in the component references. To avoid problems, refrain from creating new component instances, as it can disrupt event listeners established during the SDK initialization process.
+
+:::
+
+List of hooks and HOCs of components:
+
+- `useBackButton` (`withBackButton`)
+- `useBridge` (`withBridge`)
+- `useClosingConfirmation` (`withClosingConfirmation`)
+- `useHapticFeedback` (`withHapticFeedback`)
+- `useInitData` (`withInitData`)
+- `useLayout` (`withLayout`)
+- `useMainButton` (`withMainButton`)
+- `usePopup` (`withPopup`)
+- `useQRScanner` (`withQRScanner`)
+- `useThemeParams` (`withThemeParams`)
+- `useViewport` (`withViewport`)
+- `useWebApp` (`withWebApp`)

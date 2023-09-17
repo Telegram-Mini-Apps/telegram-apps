@@ -1,0 +1,60 @@
+# `Viewport`
+
+The component which contains an information about the current Web App device viewport, its dimensions and state.
+
+## Initialization
+
+```typescript  
+import { Viewport } from '@twa.js/sdk';
+  
+// Specify height, width, stable height and expansion status.
+const viewport = new Viewport(390, 365, 300, false);
+```  
+
+## Dimensions
+
+The `Viewport` instance contains information about viewport dimensions. We can get current visible are height and width via `height` and `width` properties.
+
+The application can display just the top part of the Web App, with its lower part remaining outside the screen area. From this position, the user can "pull" the Web App to its maximum height, while the bot can do the same by calling `expand` method (use `isExpanded` prop to get current expansion state).  As the position of the Web App changes, the current height value of the visible area will be updated in real time.
+
+Please note that the refresh rate of this value is not sufficient to smoothly follow the lower border of the window. It should not be used to pin interface elements to the bottom of the visible area. It's more appropriate to use the value of the `stableHeight` field for this purpose.
+
+## Requesting actual data
+
+To get actual viewport information, you could use static `request()` function:
+
+```typescript
+import { Viewport } from '@twa.js/sdk';
+
+Viewport.request().then(console.log);
+
+// Output:
+// { height: 122, isExpanded: false, width: 375, isStateStable: true }
+```
+
+## Creating synchronized instance
+
+Class is capable of returning instance of `Viewport` which is synchronized with its actual state in Telegram application. To get it, use static `synced()` method:
+
+```typescript
+import { Viewport } from '@twa.js/sdk';
+
+const viewport = await Viewport.synced();
+
+console.log(viewport.height); // 390
+console.log(viewport.stableHeight); // 300
+console.log(viewport.width); // 365
+console.log(viewport.isExpanded); // false
+console.log(viewport.isStable); // false
+```
+
+Synchronized instance contains actual parameters values. It also being updated in case, parameters are changing in the native Telegram application.
+
+## Events
+
+<ComponentSupportedEvents events={{
+  heightChanged: '(height: number) => void',
+  isExpandedChanged: '(isExpanded: boolean) => void',
+  stableHeightChanged: '(stableHeight: number) => void',
+  widthChanged: '(width: number) => void',
+}} />

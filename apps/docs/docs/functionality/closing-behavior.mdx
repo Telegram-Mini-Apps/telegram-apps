@@ -1,0 +1,25 @@
+---
+sidebar_position: 2
+---
+
+# Closing behavior
+
+It is rather common for Web Apps, when user accidentally closes application
+during scrolling it to top. The problem is user could drag application block
+too much which will result in application close.
+
+To prevent user from doing this, you could use `closing behaviour`. Web Apps
+allows developer to prompt if user really wants to close application. This
+functionality could also be used during filling some big forms or something
+like that. Just not to lose progress.
+
+import imgURL from '../../static/img/ui/closing-behavior.png';
+
+<img
+  src={imgURL}
+  alt={'Closing behavior'}
+  style={{marginBottom: 20, maxWidth: '100%'}}
+  width={300}
+/>
+
+- [Web App method](../apps-communication/methods.mdx#web_app_setup_closing_behavior)

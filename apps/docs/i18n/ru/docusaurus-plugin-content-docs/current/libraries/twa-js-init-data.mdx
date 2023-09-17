@@ -1,0 +1,54 @@
+# @twa.js/init-data
+
+<LibraryBadges pkg={'@twa.js/init-data'}/>
+
+Пакет, который предоставляет утилиты для работы с данными инициализации Telegram Web Apps на клиентской стороне. Чтобы узнать больше о данных инициализации и их использовании, пожалуйста, обратитесь к [документации](../launch-params/init-data.mdx).
+
+## Установка
+
+<NpmInstall pkg={'@twa.js/init-data'}/>
+
+## Использование
+
+### Парсинг
+
+Эта библиотека включает в себя функцию `initData`, которая может извлекать информацию о данных инициализации из параметров запроса. Вот пример её использования:
+
+```typescript
+import { initData } from '@twa.js/init-data';
+
+// Представим, что мы имеем данные инициализации в сыром формате. Telegram отправляет
+// их именно в таком формате:
+const initDataString =
+  'query_id=AAHdF6IQAAAAAN0XohDhrOrc' +
+  '&user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%22%2C%22last_name%22%3A%22Kibenko%22%2C%22username%22%3A%22vdkfrost%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%7D' +
+  '&auth_date=1662771648' +
+  '&hash=c501b71e775f74ce10e377dea85a7ea24ecd640b223ea86dfe453e0eaed2e2b2';
+
+// Извлекаем данные инициализации.
+console.log(initData(initDataString));
+// или
+console.log(initData(new URLSearchParams(initDataString)));
+
+// Вывод:
+// {
+//   authDate: 2022-09-10T01:00:48.000Z,
+//   hash: 'c501b71e775f74ce10e377dea85a7ea24ecd640b223ea86dfe453e0eaed2e2b2',
+//   queryId: 'AAHdF6IQAAAAAN0XohDhrOrc',
+//   user: {
+//     id: 279058397,
+//     firstName: 'Vladislav',
+//     lastName: 'Kibenko',
+//     username: 'vdkfrost',
+//     languageCode: 'ru',
+//     isPremium: true
+//   }
+// }
+```
+
+Функция извлекает необходимые параметры и автоматически проверяет их типы. Если свойство имеет недопустимый тип или значение, она выдаст сообщение об ошибке.
+
+### Валидация
+
+Мы переместили утилиты проверки в отдельный [пакет TypeScript](twa-js-init-data-node.mdx). Эти утилиты необходимы только на стороне сервера, так как нет необходимости проверять данные
+инициализации на стороне клиента.
