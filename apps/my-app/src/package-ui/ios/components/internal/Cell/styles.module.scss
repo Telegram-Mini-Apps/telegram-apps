@@ -1,0 +1,27 @@
+$horizontal-padding: 20px;
+
+// CSS variables:
+$separator-color: var(--cell-separator-color, #3C3C435C);
+$background: var(--cell-background, #fff);
+
+.root {
+  display: flex;
+  align-items: stretch;
+  padding-left: $horizontal-padding;
+  background: $background;
+  gap: 15px;
+  height: 44px;
+}
+
+.before {
+}
+
+.after {
+  padding-right: $horizontal-padding;
+  box-sizing: border-box;
+  flex-grow: 1;
+
+  &HasSeparator {
+    box-shadow: 0 -0.5px 0 $separator-color;
+  }
+}

@@ -1,0 +1,17 @@
+$horizontal-padding: 20px;
+
+// CSS variables:
+$background-elevation-1: var(--interactive-cell-background-elevation-1, #E6E5EB);
+$background-elevation-2: var(--interactive-cell-background-elevation-2, #D1D1D5);
+
+.root {
+  &Elevation {
+    &1 {
+      background: $background-elevation-1;
+    }
+
+    &2 {
+      background: $background-elevation-2;
+    }
+  }
+}

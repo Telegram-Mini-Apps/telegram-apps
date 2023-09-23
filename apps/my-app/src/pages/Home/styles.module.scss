@@ -1,18 +1,23 @@
 .root {
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding: 28px 20px;
 }
 
 .image {
   width: 112px;
+  height: 112px;
   margin-bottom: 10px;
 }
 
-.title {}
+.title {
+  margin-bottom: 8px;
+}
 
-.subtitle {}
+.subtitle {
+  margin-bottom: 10px;
+}
 
 .button {}

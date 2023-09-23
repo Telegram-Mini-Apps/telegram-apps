@@ -1,0 +1,11 @@
+.enter {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: 300ms;
+  transform: translateX(100%);
+
+  &Active {
+    transform: translateX(0);
+  }
+}

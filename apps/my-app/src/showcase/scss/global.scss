@@ -2,13 +2,25 @@
 
 body {
   background-color: var(--background);
-  //height: 100vh;
-  //max-height: 100vh;
-  //overflow: hidden;
+  color: var(--text-color);
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeSpeed;
+}
+
+#root {
+  min-height: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 :root {
@@ -18,6 +30,7 @@ body {
   --alert-item-separator-color: #{palette-css-vars.use(separator-color-with-transparency)};
 
   --background: #{palette-css-vars.use(system-background-secondary)};
+  --text-color: #{palette-css-vars.use(label-color-primary)};
 
   --detailed-table-view-text-color: #{palette-css-vars.use(label-color-secondary)};
   --detailed-table-view-cell-background: #{palette-css-vars.use(system-background-primary)};

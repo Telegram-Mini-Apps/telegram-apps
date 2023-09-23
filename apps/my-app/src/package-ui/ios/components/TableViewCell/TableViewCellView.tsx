@@ -4,7 +4,7 @@ import { mergeClassNames, classNames } from '@twa.js/utils';
 import { withDefault } from '../../styles/index.js';
 import { createEventHandler } from '../../../createEventHandler.js';
 import { Chevron } from '../../icons/index.js';
-
+import {InteractiveCell} from '../internal/InteractiveCell/index.js';
 import type { TableViewCellClasses, TableViewCellProps } from './TableViewCell.js';
 
 import styles from './styles.module.scss';
@@ -15,7 +15,7 @@ export interface TableViewCellViewProps extends TableViewCellProps {
   /**
    * Activates current item.
    */
-  activate(): void;
+  onActivate(): void;
 
   /**
    * True if current element is active.
@@ -25,7 +25,7 @@ export interface TableViewCellViewProps extends TableViewCellProps {
   /**
    * Deactivates current item.
    */
-  deactivate(): void;
+  onDeactivate(): void;
 
   /**
    * True if element should have bottom separator.
@@ -34,9 +34,6 @@ export interface TableViewCellViewProps extends TableViewCellProps {
 }
 
 export function TableViewCellView(props: TableViewCellViewProps) {
-  const [rootRef, setRootRef] = createSignal<HTMLDivElement>();
-  const clickable = createMemo(() => props.clickable || false);
-  const elevation = createMemo(() => props.elevation || 1);
   const classes = createMemo(() => {
     const {
       root,
@@ -57,93 +54,28 @@ export function TableViewCellView(props: TableViewCellViewProps) {
     };
   });
 
-  const onActivate = createMemo(() => {
-    const activate = props.activate;
-    const active = props.active;
-    const isClickable = clickable();
-
-    return () => {
-      if (isClickable && !active) {
-        activate();
-      }
-    };
-  });
-
-  const onDeactivate = createMemo(() => {
-    const deactivate = props.deactivate;
-    const active = props.active;
-    const isClickable = clickable();
-
-    return () => {
-      if (isClickable && active) {
-        deactivate();
-      }
-    };
-  });
-
-  const onPointerDown = createEventHandler(() => props.onPointerDown, onActivate);
-  const onTouchCancel = createEventHandler(() => props.onTouchCancel, onDeactivate);
-  const onTouchEnd = createEventHandler(() => props.onTouchEnd, onDeactivate);
-
   const [, rootProps] = splitProps(
     props,
     [
       'icon', 'label', 'children', 'title', 'classes', 'chevron',
-      'elevation', 'separator', 'clickable', 'activate', 'deactivate', 'active',
+      'elevation', 'separator', 'active',
     ],
   );
 
-  // In case, component became active, we should add special listeners to document
-  // to deactivate this component.
-  createEffect(() => {
-    const deactivate = onDeactivate();
-    const events = ['scroll', 'pointerup'];
-
-    events.forEach(e => window.addEventListener(e, deactivate));
-
-    onCleanup(() => {
-      events.forEach(e => window.removeEventListener(e, deactivate));
-    });
-  });
-
-  // When component becomes active, we should check if touch left the root.
-  // In case it did, we are deactivating item.
-  createEffect(() => {
-    const deactivate = onDeactivate();
-    const ref = rootRef();
-
-    if (!props.active || !ref) {
-      return;
-    }
-
-    const onTouchMove = (e: TouchEvent) => {
-      const { clientX, clientY } = e.touches[0];
-      const { x, y, width, height } = ref.getBoundingClientRect();
-
-      if (clientX < x || x + width < clientX || clientY < y || y + height < clientY) {
-        deactivate();
-      }
-    };
-
-    window.addEventListener('touchmove', onTouchMove);
-
-    onCleanup(() => {
-      window.removeEventListener('touchmove', onTouchMove);
-    });
-  });
-
   return (
-    <div
-      {...rootProps}
-      ref={setRootRef}
-      class={classes().root}
-      onPointerDown={onPointerDown()}
-      onTouchCancel={onTouchCancel()}
-      onTouchEnd={onTouchEnd()}
+    <_TableViewCell
+      active={props.active}
+      elevation={props.elevation}
+      left={
+        <Show when={props.icon}>
+          <div class={classes().icon}>{props.icon}</div>
+        </Show>
+      }
+      onActivate={props.onActivate}
+      onDeactivate={props.onDeactivate}
+      separator={props.separator}
+      size="small"
     >
-      <Show when={props.icon}>
-        <div class={classes().icon}>{props.icon}</div>
-      </Show>
       <p class={classes().title}>{props.title}</p>
       <Show when={props.children || props.label || props.chevron}>
         <div class={classes().right}>
@@ -156,9 +88,6 @@ export function TableViewCellView(props: TableViewCellViewProps) {
           </Show>
         </div>
       </Show>
-      <Show when={props.separator}>
-        <div class={classes().separator}/>
-      </Show>
-    </div>
+    </_TableViewCell>
   );
 }

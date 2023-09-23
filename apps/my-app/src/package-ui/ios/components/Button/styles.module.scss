@@ -1,0 +1,14 @@
+// Variables:
+$plain-background: var(--button-plain-background, transparent);
+$plain-text-color: var(--button-plain-text-color, #007AFF);
+
+.root {
+  padding: 14px 20px;
+  appearance: none;
+  border: none;
+}
+
+.rootPlain {
+  background: $plain-background;
+  color: $plain-text-color;
+}

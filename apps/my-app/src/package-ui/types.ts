@@ -10,7 +10,9 @@ export type CreateOptionalClasses<ClassName extends string> = {
  * Same as CreateOptionalClasses but all fields are required.
  * @see CreateOptionalClasses
  */
-export type CreateRequiredClasses<ClassName extends string> = Required<CreateOptionalClasses<ClassName>>;
+export type CreateRequiredClasses<ClassName extends string> = {
+  [K in ClassName]: string;
+};
 
 /**
  * Mixin adding "classes" property, which is map with local and generated class names.

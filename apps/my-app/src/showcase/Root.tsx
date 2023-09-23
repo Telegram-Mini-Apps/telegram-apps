@@ -12,8 +12,9 @@ import {
 import {
   Alert,
   AlertItem,
-  TableViewCell,
   Switch,
+  TableViewCell,
+  Typography,
   TableView,
   TextField,
   DetailedTableViewCell,
@@ -128,11 +129,6 @@ export const Root: Component = () => {
 
   onMount(() => {
     safePostEvent('web_app_expand');
-    safePostEvent('web_app_open_popup', {
-      title: 'Hello',
-      message: 'there',
-      buttons: [{type: 'ok', id: 'ok'}],
-    })
   });
 
   return (

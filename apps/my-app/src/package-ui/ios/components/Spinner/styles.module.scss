@@ -1,0 +1,39 @@
+@use "sass:math";
+
+// Variables:
+$blade-color: var(--spinner-blade-color, #69717d);
+
+$animation-duration: 1s;
+$blades-count: 12;
+$blade-animation-delay: math.div($animation-duration, $blades-count);
+
+.root {
+  position: relative;
+}
+
+.blade {
+  position: absolute;
+  left: 0.4629em;
+  bottom: 0;
+  width: 0.074em;
+  height: 0.2777em;
+  border-radius: 0.0555em;
+  transform-origin: center -0.2222em;
+  animation: $animation-duration animate infinite linear;
+
+  @for $i from 1 through $blades-count {
+    &:nth-child(#{$i}) {
+      animation-delay: $blade-animation-delay * ($i - 1);
+      transform: rotate(30deg * ($i - 1));
+    }
+  }
+}
+
+@keyframes animate {
+  from {
+    background: $blade-color;
+  }
+  to {
+    background: transparent;
+  }
+}

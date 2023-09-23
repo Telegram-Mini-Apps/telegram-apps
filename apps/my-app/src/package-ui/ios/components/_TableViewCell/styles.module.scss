@@ -1,0 +1,52 @@
+$horizontal-padding: 20px;
+
+// CSS variables:
+$separator-color: var(--table-view-cell-separator-color, #3C3C435C);
+$background: var(--table-view-cell-background, #fff);
+$background-elevation-1: var(--table-view-cell-background-elevation-1, #E6E5EB);
+$background-elevation-2: var(--table-view-cell-background-elevation-2, #D1D1D5);
+
+.root {
+  display: flex;
+  align-items: stretch;
+  padding-left: $horizontal-padding;
+  background: $background;
+  gap: 15px;
+
+  &Elevation {
+    &1 {
+      background: $background-elevation-1;
+    }
+
+    &2 {
+      background: $background-elevation-2;
+    }
+  }
+
+  &Size {
+    &Small {
+      height: 44px;
+    }
+
+    &Medium {
+      height: 57px;
+    }
+
+    &Large {
+      height: 61px;
+    }
+  }
+}
+
+.left {
+}
+
+.right {
+  padding-right: $horizontal-padding;
+  box-sizing: border-box;
+  flex-grow: 1;
+
+  &HasSeparator {
+    box-shadow: 0 -0.5px 0 $separator-color;
+  }
+}

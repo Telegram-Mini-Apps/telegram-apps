@@ -22,12 +22,15 @@ export type TableViewCellClasses = CreateOptionalClasses<TableViewCellClassName>
 
 export interface TableViewCellProps extends ParentProps, JSX.HTMLAttributes<HTMLDivElement>,
   WithClasses<TableViewCellClassName> {
-  active?: boolean;
-
   /**
    * Should chevron be displayed in the end of the cell.
    */
   chevron?: boolean;
+
+  /**
+   * True if element can be activated.
+   */
+  clickable?: boolean;
 
   /**
    * Elevation level. Affects only cell background color when item becomes

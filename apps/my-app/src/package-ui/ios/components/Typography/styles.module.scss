@@ -1,0 +1,70 @@
+// Variables:
+$color: var(--typography-color, #000);
+
+@mixin settings($font-size, $line-height, $letter-spacing) {
+  font-size: $font-size;
+  line-height: $line-height;
+  letter-spacing: $letter-spacing;
+}
+
+.root {
+  margin: 0;
+
+  &Align {
+    &Center {
+      text-align: center;
+    }
+  }
+
+  &Bold {
+    font-weight: 700;
+  }
+
+  &Caption2 {
+    @include settings(11px, 13px, .066px);
+  }
+
+  &Caption1 {
+    @include settings(12px, 16px, 0);
+  }
+
+  &Footnote {
+    @include settings(13px, 18px, -0.078px);
+  }
+
+  &Subheadline {
+    @include settings(15px, 20px, -0.24px);
+  }
+
+  &Callout {
+    @include settings(16px, 21px, -0.32px);
+  }
+
+  &Body {
+    @include settings(17px, 22px, -0.408px);
+  }
+
+  &Headline {
+    @include settings(17px, 22px, -0.408px);
+  }
+
+  &Title3 {
+    @include settings(20px, 25px, 0.38px);
+  }
+
+  &Title2 {
+    @include settings(22px, 28px, 0.35px);
+  }
+
+  &Title1 {
+    @include settings(28px, 34px, 0.364px);
+  }
+
+  &LargeTitle {
+    @include settings(34px, 41px, 0.374px);
+  }
+}
+
+.displayFont {
+  font-family: "SF Pro Display", sans-serif;
+}

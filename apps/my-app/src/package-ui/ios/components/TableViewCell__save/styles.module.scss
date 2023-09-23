@@ -1,0 +1,73 @@
+$gap: 15px;
+$border-radius: 10px;
+$icon-width: 29px;
+$root-padding: 20px;
+
+// Variables:
+$background: var(--table-view-cell-background, #fff);
+$text-color: var(--table-view-cell-text-color, #000);
+$root-active-elevation-1-bg: var(--table-view-cell-root-active-elevation-1-background, #E6E5EB);
+$root-active-elevation-2-bg: var(--table-view-cell-root-active-elevation-2-background, #D1D1D5);
+$separator-color: var(--table-view-cell-separator-color, #3C3C435B);
+$label-color: var(--table-view-cell-label-color, #3C3C4399);
+$chevron-color: var(--table-view-cell-chevron-color, #3C3C424C);
+
+.root {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: $gap;
+  background: $background;
+  padding: 0 $root-padding;
+  color: $text-color;
+  height: 44px;
+
+  &ActiveElevation {
+    &1 {
+      background-color: $root-active-elevation-1-bg;
+    }
+
+    &2 {
+      background-color: $root-active-elevation-2-bg;
+    }
+  }
+}
+
+.separator {
+  position: absolute;
+  left: $gap;
+  bottom: 0;
+  right: 0;
+  height: 0.5px;
+  background-color: $separator-color;
+
+  &HasIcon {
+    left: $gap * 2 + $icon-width;
+  }
+}
+
+.icon {
+  flex: 0 0 30px;
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+  flex: 1 0 0;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label {
+  margin: 0;
+  color: $label-color;
+}
+
+.chevron {
+  color: $chevron-color;
+}
