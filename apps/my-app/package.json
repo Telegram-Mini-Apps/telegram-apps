@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@twa.js/bridge": "workspace:*",
+    "@twa.js/colors": "workspace:*",
     "@twa.js/init-data": "workspace:*",
     "@twa.js/sdk": "workspace:*",
     "@twa.js/sdk-solid": "workspace:*",

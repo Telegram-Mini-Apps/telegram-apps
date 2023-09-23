@@ -1,5 +1,6 @@
 import { Component, createEffect, createSignal, onMount, Show } from 'solid-js';
-import { retrieveLaunchParams, isColorDark } from '@twa.js/sdk';
+import { retrieveLaunchParams } from '@twa.js/sdk';
+import { isColorDark } from '@twa.js/colors';
 
 import {
   AirplaneMode,
