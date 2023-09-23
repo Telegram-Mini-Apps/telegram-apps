@@ -1,18 +1,18 @@
 import { createMemo, createSignal, JSX, splitProps } from 'solid-js';
-import { mergeClassNames } from '@twa.js/utils';
+import { mergeClassNames, classNames } from '@twa.js/utils';
 
-import { createEventHandler } from '../../../createEventHandler.js';
+import { createHandler } from '../../../createHandler.js';
 import { safePostEvent } from '../../../safePostEvent.js';
-import { withDefault } from '../../styles/index.js';
+import { withDefault } from '../../styles/globals.js';
 
-import type { CreateOptionalClasses, WithClasses } from '../../../types.js';
+import type { CreateClasses, WithClasses } from '../../../types.js';
 
 import styles from './styles.module.scss';
 
 const typedStyles = styles as Required<SwitchClasses>;
 
 export type SwitchClassName = 'root' | 'rootChecked' | 'input' | 'track';
-export type SwitchClasses = CreateOptionalClasses<SwitchClassName>;
+export type SwitchClasses = CreateClasses<SwitchClassName>;
 
 export interface SwitchProps extends JSX.InputHTMLAttributes<HTMLInputElement>,
   WithClasses<SwitchClassName> {
@@ -29,7 +29,7 @@ export function Switch(props: SwitchProps) {
     };
   });
 
-  const onChange = createEventHandler(() => props.onChange, () => {
+  const onChange = createHandler(() => props.onChange, () => {
     return e => {
       safePostEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
       setChecked(e.target.checked);

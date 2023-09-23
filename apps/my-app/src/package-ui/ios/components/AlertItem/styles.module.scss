@@ -1,18 +1,9 @@
-// Variables.
-$text-color: var(--alert-item-text-color, #007AFF);
-$separator-color: var(--alert-item-separator-color, #3C3C435B);
-
 .root {
   height: 44px;
   padding: 11px 8px;
-  box-sizing: border-box;
-  text-align: center;
-  color: $text-color;
-  border-top: 0.5px solid $separator-color;
 
   &Variant {
     &Primary {
-      font-weight: 600;
     }
 
     &Secondary {

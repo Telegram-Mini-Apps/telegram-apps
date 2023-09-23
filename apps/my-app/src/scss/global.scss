@@ -2,9 +2,9 @@
 
 body {
   background-color: var(--background);
-  //height: 100vh;
-  //max-height: 100vh;
-  //overflow: hidden;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -12,59 +12,51 @@ body {
 }
 
 :root {
-  --alert-text-color: #{palette-css-vars.use(label-color-primary)};
-
-  --alert-item-text-color: #{palette-css-vars.use(default-system-blue)};
-  --alert-item-separator-color: #{palette-css-vars.use(separator-color-with-transparency)};
-
   --background: #{palette-css-vars.use(system-background-secondary)};
 
-  --detailed-table-view-text-color: #{palette-css-vars.use(label-color-secondary)};
-  --detailed-table-view-cell-background: #{palette-css-vars.use(system-background-primary)};
-  --detailed-table-view-cell-title-color: #{palette-css-vars.use(label-color-primary)};
-  --detailed-table-view-cell-description-color: #{palette-css-vars.use(label-color-secondary)};
-  --detailed-table-view-cell-separator-color: #{palette-css-vars.use(separator-color-with-transparency)};
-  --detailed-table-view-cell-label-color: #{palette-css-vars.use(label-color-secondary)};
-  --detailed-table-view-cell-chevron-color: #{palette-css-vars.use(label-color-tertiary)};
+  --switch-bg: #77788029;
+  --switch-checked-bg: #{palette-css-vars.use(default-system-green)};
 
-  --switch-background: #77788029;
-  --switch-checked-background: #{palette-css-vars.use(default-system-green)};
+  --table-view-color: #{palette-css-vars.use(label-color-secondary)};
 
-  --table-view-text-color: #{palette-css-vars.use(label-color-secondary)};
-
-  --table-view-cell-background: #{palette-css-vars.use(system-background-primary)};
-  --table-view-cell-text-color: #{palette-css-vars.use(label-color-primary)};
-  --table-view-cell-separator-color: #{palette-css-vars.use(separator-color-with-transparency)};
+  --table-view-cell-bg: #{palette-css-vars.use(system-background-primary)};
+  --table-view-cell-color: #{palette-css-vars.use(label-color-primary)};
+  //--table-view-cell-root-active-level-1-bg: #E6E5EB;
+  //--table-view-cell-root-active-level-2-bg: #D1D1D5;
+  --table-view-cell-separator-bg: #{palette-css-vars.use(separator-color-with-transparency)};
   --table-view-cell-label-color: #{palette-css-vars.use(label-color-secondary)};
   --table-view-cell-chevron-color: #{palette-css-vars.use(label-color-tertiary)};
 
   --text-field-input-color: #{palette-css-vars.use(label-color-primary)};
   --text-field-caret-color: #446AF2CC;
   --text-field-placeholder-color: #{palette-css-vars.use(label-color-secondary)};
+
+  --detailed-table-view-color: #{palette-css-vars.use(label-color-secondary)};
+
+  --detailed-table-view-cell-bg: #{palette-css-vars.use(system-background-primary)};
+  --detailed-table-view-cell-title-color: #{palette-css-vars.use(label-color-primary)};
+  --detailed-table-view-cell-description-color: #{palette-css-vars.use(label-color-secondary)};
+  //--table-view-cell-root-active-level-1-bg: #E6E5EB;
+  //--table-view-cell-root-active-level-2-bg: #D1D1D5;
+  --detailed-table-view-cell-separator-bg: #{palette-css-vars.use(separator-color-with-transparency)};
+  --detailed-table-view-cell-label-color: #{palette-css-vars.use(label-color-secondary)};
+  --detailed-table-view-cell-chevron-color: #{palette-css-vars.use(label-color-tertiary)};
 }
 
 [color-scheme="light"] {
-  @include palette-css-vars.define-default-light;
+  @include palette-css-vars.default-light;
 
-  --alert-background: #F2F2F2CC;
-  --alert-backdrop-color: #00000066;
-
-  --table-view-cell-root-active-elevation-1-background: #E6E5EB;
-  --table-view-cell-root-active-elevation-2-background: #D1D1D5;
-
-  --detailed-table-view-cell-root-active-elevation-1-background: #E6E5EB;
-  --detailed-table-view-cell-root-active-elevation-2-background: #D1D1D5;
+  --table-view-cell-root-active-elevation-1-bg: #E6E5EB;
+  --table-view-cell-root-active-elevation-2-bg: #D1D1D5;
+  --detailed-table-view-cell-root-active-elevation-1-bg: #E6E5EB;
+  --detailed-table-view-cell-root-active-elevation-2-bg: #D1D1D5;
 }
 
 [color-scheme="dark"] {
-  @include palette-css-vars.define-default-dark;
+  @include palette-css-vars.default-dark;
 
-  --alert-background: #1E1E1EBF;
-  --alert-backdrop-color: #00000099;
-
-  --table-view-cell-root-active-elevation-1-background: #2C2C2E;
-  --table-view-cell-root-active-elevation-2-background: #272728;
-
-  --detailed-table-view-cell-root-active-elevation-1-background: #2C2C2E;
-  --detailed-table-view-cell-root-active-elevation-2-background: #272728;
+  --table-view-cell-root-active-elevation-1-bg: #2C2C2E;
+  --table-view-cell-root-active-elevation-2-bg: #272728;
+  --detailed-table-view-cell-root-active-elevation-1-bg: #2C2C2E;
+  --detailed-table-view-cell-root-active-elevation-2-bg: #272728;
 }

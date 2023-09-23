@@ -14,9 +14,9 @@ import {
   isDetailedTableViewCellBox,
   type DetailedTableViewCellBox,
 } from '../DetailedTableViewCell/box.js';
-import { withDefault } from '../../styles/index.js';
+import { withDefault } from '../../styles/globals.js';
 
-import type { CreateOptionalClasses, WithClasses } from '../../../types.js';
+import type { CreateClasses, WithClasses } from '../../../types.js';
 
 import styles from './styles.module.scss';
 
@@ -31,7 +31,7 @@ export type DetailedTableViewClassName =
   | 'itemFirst'
   | 'itemLast';
 
-export type DetailedTableViewClasses = CreateOptionalClasses<DetailedTableViewClassName>;
+export type DetailedTableViewClasses = CreateClasses<DetailedTableViewClassName>;
 
 export interface DetailedTableViewProps extends ParentProps,
   Omit<JSX.HTMLAttributes<HTMLDivElement>, 'title'>,

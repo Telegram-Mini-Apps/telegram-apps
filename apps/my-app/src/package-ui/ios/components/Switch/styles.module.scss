@@ -2,13 +2,9 @@ $toggle-size: 27px;
 $padding: 2px;
 $width: 51px;
 
-// Variables:
-$background: var(--switch-background, #78788028);
-$background-checked: var(--switch-checked-background, #34C759);
-
 .root {
   display: inline-block;
-  background: $background;
+  background-color: rgba(120, 120, 128, 0.16);
   width: $width;
   height: $toggle-size + $padding * 2;
   border-radius: 1000px;
@@ -20,7 +16,7 @@ $background-checked: var(--switch-checked-background, #34C759);
   -webkit-tap-highlight-color: transparent;
 
   &Checked {
-    background-color: $background-checked;
+    background-color: #34C759;
     padding-left: $width - $toggle-size - $padding;
   }
 }

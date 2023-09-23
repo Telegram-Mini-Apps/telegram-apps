@@ -1,8 +1,8 @@
 import { createEffect, createMemo, createSignal, onCleanup, Show, splitProps } from 'solid-js';
 import { mergeClassNames, classNames } from '@twa.js/utils';
 
-import { withDefault } from '../../styles/index.js';
-import { createEventHandler } from '../../../createEventHandler.js';
+import { withDefault } from '../../styles/globals.js';
+import { createHandler } from '../../../createHandler.js';
 import { Chevron } from '../../icons/index.js';
 
 import type { TableViewCellClasses, TableViewCellProps } from './TableViewCell.js';
@@ -81,9 +81,9 @@ export function TableViewCellView(props: TableViewCellViewProps) {
     };
   });
 
-  const onPointerDown = createEventHandler(() => props.onPointerDown, onActivate);
-  const onTouchCancel = createEventHandler(() => props.onTouchCancel, onDeactivate);
-  const onTouchEnd = createEventHandler(() => props.onTouchEnd, onDeactivate);
+  const onPointerDown = createHandler(() => props.onPointerDown, onActivate);
+  const onTouchCancel = createHandler(() => props.onTouchCancel, onDeactivate);
+  const onTouchEnd = createHandler(() => props.onTouchEnd, onDeactivate);
 
   const [, rootProps] = splitProps(
     props,

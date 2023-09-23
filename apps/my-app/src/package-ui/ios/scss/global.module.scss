@@ -1,0 +1,12 @@
+// Default font settings expected by any component.
+.font {
+  font-feature-settings: 'case' on;
+  font: 17px/22px "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.408px;
+}
+
+// Disables user selection.
+.noSelect {
+  user-select: none;
+  -webkit-user-select: none;
+}

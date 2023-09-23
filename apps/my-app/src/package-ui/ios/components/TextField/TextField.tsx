@@ -1,18 +1,18 @@
 import { createEffect, createMemo, createSignal, JSX, Show, splitProps } from 'solid-js';
 import { mergeClassNames } from '@twa.js/utils';
 
-import { createEventHandler } from '../../../createEventHandler.js';
+import { createHandler } from '../../../createHandler.js';
 import { Clear } from '../../icons/index.js';
-import { withDefault } from '../../styles/index.js';
+import { withDefault } from '../../styles/globals.js';
 
-import type { CreateOptionalClasses, WithClasses } from '../../../types.js';
+import type { CreateClasses, WithClasses } from '../../../types.js';
 
 import styles from './styles.module.scss';
 
 const typedStyles = styles as Required<TextFieldClasses>;
 
 export type TextFieldClassName = 'root' | 'input' | 'placeholder' | 'clear' | 'underline';
-export type TextFieldClasses = CreateOptionalClasses<TextFieldClassName>;
+export type TextFieldClasses = CreateClasses<TextFieldClassName>;
 
 export interface TextFieldProps extends JSX.InputHTMLAttributes<HTMLInputElement>, WithClasses<TextFieldClassName> {
   clear?: boolean;
@@ -34,11 +34,11 @@ export function TextField(props: TextFieldProps) {
     return value().length > 0 && (typeof props.onClear === 'function' || props.clear === true);
   });
 
-  const onInput = createEventHandler(() => props.onInput, () => {
+  const onInput = createHandler(() => props.onInput, () => {
     return e => setValue(e.target.value);
   });
 
-  const onClear = createEventHandler(() => props.onClear, () => {
+  const onClear = createHandler(() => props.onClear, () => {
     return () => setValue('');
   });
 

@@ -1,13 +1,10 @@
 $border-radius: 10px;
 
-// Variables:
-$text-color: var(--table-view-text-color, #3C3C4399);
-
 .root {
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0;
-  color: $text-color;
+  color: #3C3C4399;
 }
 
 .title {

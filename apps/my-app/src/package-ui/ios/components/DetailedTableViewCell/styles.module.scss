@@ -10,24 +10,22 @@ $gap-large: 13px;
   align-items: center;
   position: relative;
   gap: $gap;
-  background: var(--detailed-table-view-cell-background, #fff);
+  background: #fff;
   padding: 0 $horizontal-padding;
   height: 58px;
+}
 
-  &SizeLarge {
-    gap: $gap-large;
-    height: 73px;
-  }
+.rootSizeLarge {
+  gap: $gap-large;
+  height: 73px;
+}
 
-  &ActiveElevation {
-    &1 {
-      background: var(--detailed-table-view-cell-root-active-elevation-1-background, #E6E5EB);
-    }
+.rootActiveElevation1 {
+  background-color: #E6E5EB;
+}
 
-    &2 {
-      background: var(--detailed-table-view-cell-root-active-elevation-2-background, #D1D1D5);
-    }
-  }
+.rootActiveElevation2 {
+  background-color: #D1D1D5;
 }
 
 .separator {
@@ -36,15 +34,15 @@ $gap-large: 13px;
   bottom: 0;
   right: 0;
   height: 0.5px;
-  background-color: var(--detailed-table-view-cell-separator-color, #3C3C435B);
+  background-color: rgba(60, 60, 67, 0.36);
+}
 
-  &HasIcon {
-    left: $horizontal-padding + $icon-width + $gap;
+.separatorHasIcon {
+  left: $horizontal-padding + $icon-width + $gap;
+}
 
-    &SizeLarge {
-      left: $horizontal-padding + $icon-width + $gap-large;
-    }
-  }
+.separatorHasIconSizeLarge {
+  left: $horizontal-padding + $icon-width + $gap-large;
 }
 
 .icon {
@@ -58,12 +56,12 @@ $gap-large: 13px;
 }
 
 .title {
-  color: var(--detailed-table-view-cell-title-color, #000);
+  color: #000;
   margin: 0;
+}
 
-  &SizeLarge {
-    font-weight: 600;
-  }
+.titleSizeLarge {
+  font-weight: 600;
 }
 
 .description {
@@ -71,7 +69,6 @@ $gap-large: 13px;
   line-height: 16px;
   margin-top: 2px;
   letter-spacing: 0;
-  color: var(--detailed-table-view-cell-description-color, #000);
 }
 
 .right {
@@ -82,9 +79,9 @@ $gap-large: 13px;
 
 .label {
   margin: 0;
-  color: var(--detailed-table-view-cell-label-color, #3C3C4399);
+  color: rgba(60, 60, 67, 0.60);
 }
 
 .chevron {
-  color: var(--detailed-table-view-cell-chevron-color, #3C3C424C);
+  color: rgba(60, 60, 66, 0.3);
 }

@@ -3,34 +3,25 @@ $border-radius: 10px;
 $icon-width: 29px;
 $root-padding: 20px;
 
-// Variables:
-$background: var(--table-view-cell-background, #fff);
-$text-color: var(--table-view-cell-text-color, #000);
-$root-active-elevation-1-bg: var(--table-view-cell-root-active-elevation-1-background, #E6E5EB);
-$root-active-elevation-2-bg: var(--table-view-cell-root-active-elevation-2-background, #D1D1D5);
-$separator-color: var(--table-view-cell-separator-color, #3C3C435B);
-$label-color: var(--table-view-cell-label-color, #3C3C4399);
-$chevron-color: var(--table-view-cell-chevron-color, #3C3C424C);
-
 .root {
   display: flex;
   align-items: center;
   position: relative;
   gap: $gap;
-  background: $background;
+  background: #fff;
   padding: 0 $root-padding;
-  color: $text-color;
+  color: #000;
   height: 44px;
+  -webkit-user-select: none;
+  user-select: none;
+}
 
-  &ActiveElevation {
-    &1 {
-      background-color: $root-active-elevation-1-bg;
-    }
+.rootActiveElevation1 {
+  background-color: #E6E5EB;
+}
 
-    &2 {
-      background-color: $root-active-elevation-2-bg;
-    }
-  }
+.rootActiveElevation2 {
+  background-color: #D1D1D5;
 }
 
 .separator {
@@ -39,11 +30,11 @@ $chevron-color: var(--table-view-cell-chevron-color, #3C3C424C);
   bottom: 0;
   right: 0;
   height: 0.5px;
-  background-color: $separator-color;
+  background-color: rgba(60, 60, 67, 0.36);
+}
 
-  &HasIcon {
-    left: $gap * 2 + $icon-width;
-  }
+.separatorHasIcon {
+  left: $gap * 2 + $icon-width;
 }
 
 .icon {
@@ -65,9 +56,9 @@ $chevron-color: var(--table-view-cell-chevron-color, #3C3C424C);
 
 .label {
   margin: 0;
-  color: $label-color;
+  color: rgba(60, 60, 67, 0.60);
 }
 
 .chevron {
-  color: $chevron-color;
+  color: rgba(60, 60, 66, 0.3);
 }
