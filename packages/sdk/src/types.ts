@@ -16,8 +16,8 @@ export type Platform =
   | 'ios'
   | 'macos'
   | 'tdesktop'
-  | 'webk'
-  | 'webz'
+  | 'web'
+  | 'weba'
   | 'unigram'
   | 'unknown'
   | string;
