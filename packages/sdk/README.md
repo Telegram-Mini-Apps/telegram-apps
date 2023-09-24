@@ -2,7 +2,7 @@
 
 [code-badge]: https://img.shields.io/badge/source-black?logo=github
 
-[code-link]: https://github.com/Telegram-Web-Apps/twa.js/tree/master/packages/sdk
+[code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk
 
 [docs-link]: https://docs.twa.dev/docs/libraries/twa-js-sdk
 

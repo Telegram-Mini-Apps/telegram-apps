@@ -49,7 +49,7 @@ export class Popup {
    * button, null will be returned.
    *
    * FIXME: In desktop, this function may work incorrectly.
-   *  Issue: https://github.com/Telegram-Web-Apps/twa.js/issues/7
+   *  Issue: https://github.com/Telegram-Mini-Apps/tma.js/issues/7
    * @param params - popup parameters.
    * @throws {Error} Popup is already opened.
    */
