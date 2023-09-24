@@ -27,9 +27,9 @@ export async function createViewport(platform: Platform, postEvent: PostEvent): 
     return viewport;
   };
 
-  // MacOS version does not support requesting current viewport information. That's why we
+  // MacOS and Web K versions do not support requesting current viewport information. That's why we
   // should construct Viewport instance by ourselves.
-  const component = platform === 'macos'
+  const component = platform === 'macos' || platform === 'web'
     ? createSynced()
     : await Viewport.synced({ postEvent });
 

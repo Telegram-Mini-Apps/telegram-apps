@@ -29,7 +29,7 @@ export class Viewport {
    * Requests fresh information about current viewport.
    * FIXME: Be careful using this function in desktop version of Telegram as
    *  long as method web_app_request_viewport does not work on `macos` platform.
-   * @see Issue: https://github.com/Telegram-Web-Apps/twa.js/issues/5
+   * @see Issue: https://github.com/Telegram-Mini-Apps/tma.js/issues/5
    * @param options - method options.
    */
   static async request(options: RequestOptions = {}): Promise<RequestViewportResult> {

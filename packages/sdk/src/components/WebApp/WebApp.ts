@@ -261,8 +261,8 @@ export class WebApp {
    * Updates current application header color.
    * FIXME: Has no effect on desktop, works incorrectly on Android.
    *  Issues:
-   *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
-   *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
+   *  https://github.com/Telegram-Mini-Apps/tma.js/issues/9
+   *  https://github.com/Telegram-Mini-Apps/tma.js/issues/8
    * @param color - color key or RGB color.
    */
   setHeaderColor(color: WebAppHeaderColor) {
@@ -274,8 +274,8 @@ export class WebApp {
    * Updates current application background color.
    * FIXME: Has no effect on desktop, works incorrectly in Android.
    *  Issues:
-   *  https://github.com/Telegram-Web-Apps/twa.js/issues/9
-   *  https://github.com/Telegram-Web-Apps/twa.js/issues/8
+   *  https://github.com/Telegram-Mini-Apps/tma.js/issues/9
+   *  https://github.com/Telegram-Mini-Apps/tma.js/issues/8
    * @param color - RGB color.
    */
   setBackgroundColor(color: RGB) {

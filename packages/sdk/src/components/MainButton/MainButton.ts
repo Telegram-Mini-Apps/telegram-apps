@@ -152,7 +152,7 @@ export class MainButton {
    * Adds new event listener.
    * FIXME: Event 'main_button_pressed' is still being received on Android
    *  even if the main button is disabled.
-   *  Issue: https://github.com/Telegram-Web-Apps/twa.js/issues/3
+   *  Issue: https://github.com/Telegram-Mini-Apps/tma.js/issues/3
    * @param event - event name.
    * @param listener - event listener.
    */
