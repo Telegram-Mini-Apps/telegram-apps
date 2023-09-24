@@ -1,5 +1,11 @@
 # @twa.js/sdk
 
+## 0.11.2
+
+### Patch Changes
+
+- f1675d2: Fix viewport request in init function for Web K version.
+
 ## 0.11.1
 
 ### Patch Changes
