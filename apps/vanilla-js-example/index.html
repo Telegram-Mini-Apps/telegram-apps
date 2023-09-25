@@ -1,0 +1,49 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+  >
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Telegram Mini Apps example</title>
+  <script src="https://cdn.jsdelivr.net/npm/@twa.js/sdk"></script>
+</head>
+<body>
+  <script>
+    const { init } = window.TwaSDK;
+
+    function onInit({ mainButton, backButton }) {
+      let counter = 0;
+
+      const setCounter = (value) => {
+        counter = value;
+
+        if (counter === 0) {
+          backButton.hide();
+        } else {
+          backButton.show();
+        }
+
+        mainButton.setText(`Counter: ${counter}`);
+      }
+
+      backButton.on('click', () => setCounter(counter - 1));
+      mainButton.on('click', () => setCounter(counter + 1));
+      mainButton.setText('Click me').enable().show();
+    }
+
+    function onError(e) {
+      const div = document.createElement('div');
+      div.innerText = e instanceof Error ? e.message : JSON.stringify(e);
+
+      document.body.appendChild(div);
+    }
+
+    // Initialize SDK with debug mode on.
+    init({ debug: true })
+      .then(onInit)
+      .catch(onError);
+  </script>
+</body>
+</html>
