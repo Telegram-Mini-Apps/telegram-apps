@@ -4,6 +4,12 @@ Pure JavaScript SDK usage example.
 
 ## Trying it out
 
+### Externally
+
+This example is already deployed and can be viewed right in Telegram, just follow the [link](https://t.me/tmajsbot/vanilla_js_example).
+
+### Locally
+
 1. Install dependencies:
 
 ```bash
