@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Telegram Mini Apps documentation',
-  tagline: 'Documentation by Telegram Web Apps enthusiasts covering all aspects of development on the platform. Provides lowest level information, guides and useful links.',
+  tagline: 'Documentation by Telegram Mini Apps enthusiasts covering all aspects of development on the platform. Provides lowest level information, guides and useful links.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -19,7 +19,7 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'telegram-mini-apps',
-  projectName: 'twa.js', // Usually your repo name.
+  projectName: 'tma.js', // Usually your repo name.
   trailingSlash: false,
   deploymentBranch: 'gh-pages-docs',
 
@@ -41,7 +41,7 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/telegram-mini-apps/twa.js/tree/master/',
+          editUrl: 'https://github.com/telegram-mini-apps/tma.js/tree/master/',
         },
         blog: false,
       }),
@@ -74,7 +74,7 @@ const config = {
           type: 'localeDropdown',
           position: 'right',
         }, {
-          href: 'https://github.com/twa-dev/docs',
+          href: 'https://github.com/Telegram-Mini-Apps/tma.js/tree/master/apps/docs',
           position: 'right',
           html: 'GitHub',
         }],

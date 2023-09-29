@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Поддерживаемые приложения
 
-На данный момент технология Telegram Web Apps представлена на достаточно
+На данный момент технология Telegram Mini Apps представлена на достаточно
 широком списке приложений Telegram:
 
 - [Telegram Android](https://github.com/DrKLO/Telegram) `android`;

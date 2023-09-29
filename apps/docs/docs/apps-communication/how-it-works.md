@@ -12,7 +12,7 @@ environment for the Web App. For developers, it is enough to know, that this
 environment is web-based, but nevertheless, each of them has its own
 communication way between the Telegram application and Web App.
 
-To be more accurate, Telegram Web Apps is not new technology even in the world
+To be more accurate, Telegram Mini Apps is not new technology even in the world
 of Telegram. Messenger already has such technology as Telegram Games, which is,
 internally, almost the same platform as Web Apps. At least, it uses the same way
 of communication with the front-end app.

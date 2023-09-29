@@ -49,7 +49,7 @@ Telegram to the TWA application.
 
 ### `tgWebAppVersion`
 
-The current Telegram Web Apps version used by the native application. This
+The current Telegram Mini Apps version used by the native application. This
 parameter is important to use, for example, before calling the
 TWA [methods](../apps-communication/methods.mdx) to make sure, they are
 supported.

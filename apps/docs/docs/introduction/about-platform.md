@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # About platform
 
-Telegram Web Apps is a technology created by developers of the famous messenger
+Telegram Mini Apps is a technology created by developers of the famous messenger
 Telegram.
 The main it’s purpose is to provide developers more flexible communication
 channel with Telegram users.
