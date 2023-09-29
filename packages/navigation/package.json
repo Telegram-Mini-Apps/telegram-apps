@@ -44,7 +44,7 @@
     }
   },
   "scripts": {
-    "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
+    "lint": "eslint -c .eslintrc.cjs src/**/*",
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
