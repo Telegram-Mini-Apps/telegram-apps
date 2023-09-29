@@ -1,10 +1,10 @@
-import type { Version } from '@twa.js/utils';
+import type { Version } from '@tma.js/utils';
 import {
   supports,
   type MethodName,
   type HasCheckSupportMethodName,
   type HasCheckSupportMethodParam,
-} from '@twa.js/bridge';
+} from '@tma.js/bridge';
 
 export type SupportsFunc<M extends string> = (method: M) => boolean;
 
@@ -37,8 +37,8 @@ export function createSupportsParamFunc<P extends string>(
   schema: Record<P, HasCheckSupportMethodTuple>,
 ): SupportsFunc<P> {
   return (method) => {
-    const [twaMethod, param] = schema[method];
+    const [tmaMethod, param] = schema[method];
 
-    return supports(twaMethod, param, version);
+    return supports(tmaMethod, param, version);
   };
 }

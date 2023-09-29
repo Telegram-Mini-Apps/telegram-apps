@@ -1,21 +1,19 @@
 {
-  "name": "@twa.js/colors",
+  "name": "@tma.js/colors",
   "version": "0.0.1",
   "description": "Utilities connected with colors.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/twa.js.git",
+    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
     "directory": "packages/colors"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
   },
   "keywords": [
-    "telegram-web-apps",
-    "telegram",
-    "twa",
+    "telegram-mini-apps",
     "typescript"
   ],
   "license": "MIT",

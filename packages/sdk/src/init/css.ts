@@ -1,4 +1,4 @@
-import type { RGB } from '@twa.js/colors';
+import type { RGB } from '@tma.js/colors';
 
 import type { ThemeParams, WebApp, Viewport } from '../components/index.js';
 import type { InitCSSVarsOption, InitCSSVarsSpecificOption } from './types.js';

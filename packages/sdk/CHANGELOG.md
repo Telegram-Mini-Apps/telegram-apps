@@ -1,4 +1,4 @@
-# @twa.js/sdk
+# @tma.js/sdk
 
 ## 0.11.2
 

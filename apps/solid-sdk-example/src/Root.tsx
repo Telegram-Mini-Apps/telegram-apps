@@ -1,5 +1,5 @@
 import { createMemo, Switch, Match, ParentProps } from 'solid-js';
-import { SDKProvider, useSDK, useSDKContext } from '@twa.js/sdk-solid';
+import { SDKProvider, useSDK, useSDKContext } from '@tma.js/sdk-solid';
 
 /**
  * Displays current application init data.

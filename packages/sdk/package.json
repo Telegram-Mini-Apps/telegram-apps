@@ -1,5 +1,5 @@
 {
-  "name": "@twa.js/sdk",
+  "name": "@tma.js/sdk",
   "version": "0.11.2",
   "description": "TypeScript Source Development Kit for Telegram Web Apps client application.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
@@ -13,9 +13,7 @@
     "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
   },
   "keywords": [
-    "telegram",
-    "telegram-web-apps",
-    "twa",
+    "telegram-mini-apps",
     "typescript",
     "sdk"
   ],
@@ -50,13 +48,13 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
-    "@twa.js/bridge": "workspace:*",
-    "@twa.js/colors": "workspace:*",
-    "@twa.js/init-data": "workspace:*",
-    "@twa.js/utils": "workspace:*",
-    "@twa.js/util-types": "workspace:*",
-    "@twa.js/parsing": "workspace:*",
-    "@twa.js/event-emitter": "workspace:*"
+    "@tma.js/bridge": "workspace:*",
+    "@tma.js/colors": "workspace:*",
+    "@tma.js/init-data": "workspace:*",
+    "@tma.js/utils": "workspace:*",
+    "@tma.js/util-types": "workspace:*",
+    "@tma.js/parsing": "workspace:*",
+    "@tma.js/event-emitter": "workspace:*"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",

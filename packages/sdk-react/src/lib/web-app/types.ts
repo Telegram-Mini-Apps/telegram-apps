@@ -1,1 +1,1 @@
-export type { WebApp } from '@twa.js/sdk';
+export type { WebApp } from '@tma.js/sdk';

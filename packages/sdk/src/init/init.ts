@@ -3,8 +3,8 @@ import {
   setDebug,
   setTargetOrigin,
   on,
-} from '@twa.js/bridge';
-import { withTimeout } from '@twa.js/utils';
+} from '@tma.js/bridge';
+import { withTimeout } from '@tma.js/utils';
 
 import {
   CloudStorage,

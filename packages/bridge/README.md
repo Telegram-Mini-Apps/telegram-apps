@@ -1,18 +1,18 @@
-# @twa.js/bridge
+# @tma.js/bridge
 
-[code-link]: https://github.com/Telegram-Web-Apps/twa.js/tree/master/packages/bridge
+[code-link]: https://github.com/Telegram-Web-Apps/tma.js/tree/master/packages/bridge
 
 [code-badge]: https://img.shields.io/badge/source-black?logo=github
 
-[docs-link]: https://docs.twa.dev/docs/libraries/twa-js-bridge
+[docs-link]: https://docs.telegram-mini-apps.com/docs/libraries/twa-js-bridge
 
 [docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
 
-[npm-link]: https://npmjs.com/package/@twa.js/bridge
+[npm-link]: https://npmjs.com/package/@tma.js/bridge
 
-[npm-badge]: https://img.shields.io/npm/v/@twa.js/bridge?logo=npm
+[npm-badge]: https://img.shields.io/npm/v/@tma.js/bridge?logo=npm
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/@twa.js/bridge
+[size-badge]: https://img.shields.io/bundlephobia/minzip/@tma.js/bridge
 
 [![npm-badge]][npm-link]
 ![size-badge]
@@ -25,4 +25,4 @@ data difference problems to protect developers code and save their time.
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
 Apps. You can learn more about this package in this
-[documentation](https://docs.twa.dev/docs/libraries/twa-js-bridge).
+[documentation](https://docs.telegram-mini-apps.com/docs/libraries/twa-js-bridge).

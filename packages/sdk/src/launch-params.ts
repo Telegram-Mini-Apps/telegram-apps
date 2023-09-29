@@ -1,5 +1,5 @@
-import { searchParams, string } from '@twa.js/parsing';
-import { initData, type InitData } from '@twa.js/init-data';
+import { searchParams, string } from '@tma.js/parsing';
+import { initData, type InitData } from '@tma.js/init-data';
 
 import { parseThemeParams, type ThemeParamsType } from './theme-params.js';
 import { saveStorageValue, getStorageValue } from './storage.js';

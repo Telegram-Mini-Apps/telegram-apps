@@ -1,6 +1,6 @@
-import { withTimeout, isRecord } from '@twa.js/utils';
+import { withTimeout, isRecord } from '@tma.js/utils';
 
-import type { And, If, IsNever } from '@twa.js/util-types';
+import type { And, If, IsNever } from '@tma.js/util-types';
 
 import { postEvent as defaultPostEvent, type PostEvent } from './methods/postEvent.js';
 import { on, type EventName, type EventParams, type EventHasParams } from './events/index.js';

@@ -1,4 +1,4 @@
-import { toRGB, type RGB } from '@twa.js/colors';
+import { toRGB, type RGB } from '@tma.js/colors';
 
 import { ValueParser } from './ValueParser.js';
 import { ArrayValueParser } from './ArrayValueParser.js';

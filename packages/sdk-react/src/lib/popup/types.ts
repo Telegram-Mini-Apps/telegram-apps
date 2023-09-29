@@ -1,1 +1,1 @@
-export type { Popup } from '@twa.js/sdk';
+export type { Popup } from '@tma.js/sdk';

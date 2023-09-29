@@ -1,6 +1,6 @@
 // import {emitDesktopEvent, mockDesktop} from '../../../tests';
 // import { Popup } from './Popup';
-// import {Bridge} from '@twa.js/bridge';
+// import {Bridge} from '@tma.js/bridge';
 // import {PopupParams} from './types';
 // import {preparePopupParams} from './utils';
 

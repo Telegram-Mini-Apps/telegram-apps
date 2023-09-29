@@ -1,4 +1,4 @@
-import type { InitResult, InitOptions } from '@twa.js/sdk';
+import type { InitResult, InitOptions } from '@tma.js/sdk';
 import { Accessor } from 'solid-js';
 
 export type SDKInitOptions = InitOptions;

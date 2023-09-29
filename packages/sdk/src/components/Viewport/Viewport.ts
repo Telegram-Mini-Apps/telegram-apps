@@ -1,5 +1,5 @@
-import { EventEmitter } from '@twa.js/event-emitter';
-import { on, postEvent as defaultPostEvent, request, type RequestOptions, type PostEvent } from '@twa.js/bridge';
+import { EventEmitter } from '@tma.js/event-emitter';
+import { on, postEvent as defaultPostEvent, request, type RequestOptions, type PostEvent } from '@tma.js/bridge';
 
 import { State } from '../../state/index.js';
 

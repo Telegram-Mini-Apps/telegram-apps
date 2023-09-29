@@ -1,22 +1,21 @@
 {
-  "name": "@twa.js/init-data",
+  "name": "@tma.js/init-data",
   "version": "0.2.13",
   "description": "Frontend TypeScript library to make work with Web Apps init data easier.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/twa.js.git",
+    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
     "directory": "packages/init-data"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
   },
   "keywords": [
-    "telegram",
-    "telegram-web-apps",
-    "twa",
-    "init-data"
+    "telegram-mini-apps",
+    "init-data",
+    "typescript"
   ],
   "license": "MIT",
   "type": "module",
@@ -49,7 +48,7 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
-    "@twa.js/parsing": "workspace:*"
+    "@tma.js/parsing": "workspace:*"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",

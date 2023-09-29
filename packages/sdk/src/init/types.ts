@@ -1,4 +1,4 @@
-import type { PostEvent } from '@twa.js/bridge';
+import type { PostEvent } from '@tma.js/bridge';
 
 import type {
   BackButton,

@@ -1,22 +1,20 @@
 {
-  "name": "@twa.js/sdk-solid",
+  "name": "@tma.js/sdk-solid",
   "version": "0.1.2",
   "description": "Solid JS bindings for Web Apps client SDK.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/twa.js.git",
+    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
     "directory": "packages/sdk-solid"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
   },
   "keywords": [
-    "telegram",
-    "telegram-web-apps",
+    "telegram-mini-apps",
     "typescript",
-    "twa",
     "sdk",
     "solidjs"
   ],
@@ -54,8 +52,8 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
-    "@twa.js/utils": "workspace:*",
-    "@twa.js/sdk": "workspace:*"
+    "@tma.js/utils": "workspace:*",
+    "@tma.js/sdk": "workspace:*"
   },
   "peerDependencies": {
     "solid-js": "^1.0.0"

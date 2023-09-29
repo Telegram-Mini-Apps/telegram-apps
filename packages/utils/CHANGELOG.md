@@ -1,4 +1,4 @@
-# @twa.js/utils
+# @tma.js/utils
 
 ## 0.5.1
 

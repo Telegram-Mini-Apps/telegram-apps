@@ -1,4 +1,4 @@
-import { log as utilLog } from '@twa.js/utils';
+import { log as utilLog } from '@tma.js/logger';
 
 let currentDebug = false;
 let currentTargetOrigin = 'https://web.telegram.org';

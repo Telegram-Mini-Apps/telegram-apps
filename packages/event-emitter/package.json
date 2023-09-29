@@ -1,21 +1,19 @@
 {
-  "name": "@twa.js/event-emitter",
+  "name": "@tma.js/event-emitter",
   "version": "0.0.1",
   "description": "Event emitter class implementation.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Web-Apps/twa.js.git",
+    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
     "directory": "packages/event-emitter"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
   },
   "keywords": [
-    "telegram-web-apps",
-    "telegram",
-    "twa",
+    "telegram-mini-apps",
     "typescript"
   ],
   "license": "MIT",
@@ -49,7 +47,7 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
-    "@twa.js/util-types": "workspace:*"
+    "@tma.js/util-types": "workspace:*"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",

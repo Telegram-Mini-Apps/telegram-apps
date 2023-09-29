@@ -5,7 +5,7 @@ import React, {
   useState,
   type PropsWithChildren,
 } from 'react';
-import { init, type InitOptions } from '@twa.js/sdk';
+import { init, type InitOptions } from '@tma.js/sdk';
 
 import { sdkContext } from './context.js';
 import type { SDKComponents, SDKContext } from './types.js';

@@ -3,8 +3,8 @@ import {
   postEvent as defaultPostEvent,
   detectSupportParams,
   type PostEvent,
-} from '@twa.js/bridge';
-import { isRecord } from '@twa.js/utils';
+} from '@tma.js/bridge';
+import { isRecord } from '@tma.js/utils';
 
 import { MethodNotSupportedError, ParameterUnsupportedError } from '../../errors/index.js';
 

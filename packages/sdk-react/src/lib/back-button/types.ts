@@ -1,1 +1,1 @@
-export type { BackButton } from '@twa.js/sdk';
+export type { BackButton } from '@tma.js/sdk';

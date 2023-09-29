@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { retrieveLaunchParams } from '@twa.js/sdk';
+import { retrieveLaunchParams } from '@tma.js/sdk';
 
 import type { LaunchParams } from './types.js';
 

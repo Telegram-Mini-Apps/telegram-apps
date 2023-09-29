@@ -1,7 +1,7 @@
-import { EventEmitter } from '@twa.js/event-emitter';
-import { postEvent as defaultPostEvent, request, type PostEvent } from '@twa.js/bridge';
+import { EventEmitter } from '@tma.js/event-emitter';
+import { postEvent as defaultPostEvent, request, type PostEvent } from '@tma.js/bridge';
 
-import type { Version } from '@twa.js/utils';
+import type { Version } from '@tma.js/utils';
 
 import { preparePopupParams } from './utils.js';
 import { createSupportsFunc, type SupportsFunc } from '../../supports.js';

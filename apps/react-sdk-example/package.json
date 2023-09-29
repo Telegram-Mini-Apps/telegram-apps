@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@twa.js/sdk-react": "workspace:*"
+    "@tma.js/sdk-react": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

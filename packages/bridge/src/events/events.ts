@@ -3,8 +3,8 @@ import type {
   EventName as UtilEventName,
   EventListener as UtilEventListener,
   EventParams as UtilEventParams, AnySubscribeListener,
-} from '@twa.js/event-emitter';
-import type { IsNever, Not } from '@twa.js/util-types';
+} from '@tma.js/event-emitter';
+import type { IsNever, Not } from '@tma.js/util-types';
 
 import type {
   ClipboardTextReceivedPayload,
@@ -20,19 +20,19 @@ import type {
 
 /**
  * Map where key is known event name, and value is its listener.
- * @see Documentation https://docs.twa.dev/docs/apps-communication/events
+ * @see Documentation https://docs.telegram-mini-apps.com/docs/apps-communication/events
  */
 export interface Events {
   /**
    * User clicked back button.
-   * @see https://docs.twa.dev/docs/apps-communication/events#back_button_pressed
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#back_button_pressed
    */
   back_button_pressed: () => void;
 
   /**
    * Text was extracted from clipboard.
    * @param payload - event information.
-   * @see https://docs.twa.dev/docs/apps-communication/events#clipboard_text_received
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#clipboard_text_received
    */
   clipboard_text_received: (payload: ClipboardTextReceivedPayload) => void;
 
@@ -46,13 +46,13 @@ export interface Events {
   /**
    * Invoice was closed.
    * @param payload - invoice close information.
-   * @see https://docs.twa.dev/docs/apps-communication/events#invoice_closed
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#invoice_closed
    */
   invoice_closed: (payload: InvoiceClosedPayload) => void;
 
   /**
    * User clicked main button.
-   * @see https://docs.twa.dev/docs/apps-communication/events#main_button_pressed
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#main_button_pressed
    */
   main_button_pressed: () => void;
 
@@ -66,32 +66,32 @@ export interface Events {
   /**
    * Popup was closed.
    * @param payload - popup close information.
-   * @see https://docs.twa.dev/docs/apps-communication/events#main_button_pressed
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#main_button_pressed
    */
   popup_closed: (payload: PopupClosedPayload) => void;
 
   /**
    * Data from QR was extracted.
-   * @see https://docs.twa.dev/docs/apps-communication/events#qr_text_received
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#qr_text_received
    */
   qr_text_received: (payload: QrTextReceivedPayload) => void;
 
   /**
    * QR scanner was closed.
-   * @see https://docs.twa.dev/docs/apps-communication/events#scan_qr_popup_closed
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#scan_qr_popup_closed
    */
   scan_qr_popup_closed: () => void;
 
   /**
    * Telegram requested to update current application style.
    * @param html - `style` tag inner HTML.
-   * @see https://docs.twa.dev/docs/apps-communication/events#set_custom_style
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#set_custom_style
    */
   set_custom_style: (html: string) => void;
 
   /**
    * Occurs when the Settings item in context menu is pressed.
-   * @see https://docs.twa.dev/docs/apps-communication/events#settings_button_pressed
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#settings_button_pressed
    */
   settings_button_pressed: () => void;
 
@@ -99,14 +99,14 @@ export interface Events {
    * Occurs whenever theme settings are changed in the user's Telegram app
    * (including switching to night mode).
    * @param payload - theme information.
-   * @see https://docs.twa.dev/docs/apps-communication/events#theme_changed
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#theme_changed
    */
   theme_changed: (payload: ThemeChangedPayload) => void;
 
   /**
    * Viewport was changed.
    * @param payload - viewport information.
-   * @see https://docs.twa.dev/docs/apps-communication/events#viewport_changed
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#viewport_changed
    */
   viewport_changed: (payload: ViewportChangedPayload) => void;
 

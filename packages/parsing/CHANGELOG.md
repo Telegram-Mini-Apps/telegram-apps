@@ -1,4 +1,4 @@
-# @twa.js/parsing
+# @tma.js/parsing
 
 ## 0.0.1
 

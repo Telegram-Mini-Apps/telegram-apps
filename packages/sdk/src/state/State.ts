@@ -1,4 +1,4 @@
-import type { EventEmitter } from '@twa.js/event-emitter';
+import type { EventEmitter } from '@tma.js/event-emitter';
 
 import type { StateEvents, StringKeys } from './types.js';
 

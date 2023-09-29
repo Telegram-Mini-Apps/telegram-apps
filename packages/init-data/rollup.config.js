@@ -17,7 +17,7 @@ export default [
       { file: pkg.main, format: 'commonjs', sourcemap: true },
       { file: pkg.module, format: 'esm', sourcemap: true },
     ],
-    external: ['@twa.js/parsing'],
+    external: ['@tma.js/parsing'],
     plugins: [typescript({ tsconfig }), terser()],
   }),
 
@@ -26,7 +26,7 @@ export default [
     output: {
       file: pkg.browser,
       format: 'iife',
-      name: 'TwaInitData',
+      name: '@tma.js/init-data',
       sourcemap: true,
     },
     plugins: [typescript({ tsconfig }), nodeResolve(), terser()],
@@ -35,7 +35,7 @@ export default [
   defineConfig({
     input,
     output: { file: pkg.types },
-    external: ['@twa.js/parsing'],
+    external: ['@tma.js/parsing'],
     plugins: [typescript({
       tsconfig,
       compilerOptions: {

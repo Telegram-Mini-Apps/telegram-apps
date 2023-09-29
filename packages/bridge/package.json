@@ -1,21 +1,19 @@
 {
-  "name": "@twa.js/bridge",
+  "name": "@tma.js/bridge",
   "version": "1.3.1",
   "description": "Communication layer between Telegram and frontend applications.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Web-Apps/twa.js#readme",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Telegram-Web-Apps/twa.js.git",
+    "url": "git+https://github.com/Telegram-Mini-Apps/tma.js.git",
     "directory": "packages/bridge"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Web-Apps/twa.js/issues"
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
   },
   "keywords": [
-    "telegram",
-    "telegram-web-apps",
-    "twa",
+    "telegram-mini-apps",
     "typescript",
     "bridge",
     "webview"
@@ -51,11 +49,12 @@
     "build": "rimraf dist && rollup --config rollup.config.js"
   },
   "dependencies": {
-    "@twa.js/utils": "workspace:*",
-    "@twa.js/event-emitter": "workspace:*",
-    "@twa.js/colors": "workspace:*",
-    "@twa.js/parsing": "workspace:*",
-    "@twa.js/util-types": "workspace:*"
+    "@tma.js/utils": "workspace:*",
+    "@tma.js/logger": "workspace:*",
+    "@tma.js/event-emitter": "workspace:*",
+    "@tma.js/colors": "workspace:*",
+    "@tma.js/parsing": "workspace:*",
+    "@tma.js/util-types": "workspace:*"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",

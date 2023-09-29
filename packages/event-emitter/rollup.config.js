@@ -25,7 +25,7 @@ export default [
     output: {
       file: pkg.browser,
       format: 'iife',
-      name: 'TwaEventEmitter',
+      name: '@tma.js/event-emitter',
       sourcemap: true,
     },
     plugins: [typescript({ tsconfig: './tsconfig.build.json' }), nodeResolve(), terser()],

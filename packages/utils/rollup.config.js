@@ -13,7 +13,7 @@ export default [
     input,
     output: [
       { file: pkg.main, format: 'commonjs', sourcemap: true },
-      { file: pkg.browser, format: 'iife', name: 'TwaUtils', sourcemap: true },
+      { file: pkg.browser, format: 'iife', name: '@tma.js/utils', sourcemap: true },
       { file: pkg.module, format: 'esm', sourcemap: true },
     ],
     plugins: [typescript({ tsconfig: './tsconfig.build.json' }), terser()],

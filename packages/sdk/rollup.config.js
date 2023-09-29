@@ -9,12 +9,12 @@ const pkg = require('./package.json');
 
 const input = 'src/index.ts';
 const external = [
-  '@twa.js/utils',
-  '@twa.js/init-data',
-  '@twa.js/bridge',
-  '@twa.js/parsing',
-  '@twa.js/colors',
-  '@twa.js/event-emitter',
+  '@tma.js/utils',
+  '@tma.js/init-data',
+  '@tma.js/bridge',
+  '@tma.js/parsing',
+  '@tma.js/colors',
+  '@tma.js/event-emitter',
 ];
 
 export default [
@@ -33,7 +33,7 @@ export default [
     output: {
       file: pkg.browser,
       format: 'iife',
-      name: 'TwaSDK',
+      name: '@tma.js/sdk',
       sourcemap: true,
     },
     plugins: [typescript({ tsconfig: './tsconfig.build.json' }), nodeResolve(), terser()],

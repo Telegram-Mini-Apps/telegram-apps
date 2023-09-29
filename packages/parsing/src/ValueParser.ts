@@ -1,4 +1,4 @@
-import type { HasUndefined, If } from '@twa.js/util-types';
+import type { HasUndefined, If } from '@tma.js/util-types';
 
 import type { AllowedGetDefault, GetDefaultFunc, IsEmptyFunc, Parser } from './shared.js';
 

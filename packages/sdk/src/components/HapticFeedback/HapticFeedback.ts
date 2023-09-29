@@ -1,10 +1,10 @@
-import type { Version } from '@twa.js/utils';
+import type { Version } from '@tma.js/utils';
 import {
   postEvent as defaultPostEvent,
   type PostEvent,
   type ImpactHapticFeedbackStyle,
   type NotificationHapticFeedbackType,
-} from '@twa.js/bridge';
+} from '@tma.js/bridge';
 
 import { createSupportsFunc, type SupportsFunc } from '../../supports.js';
 

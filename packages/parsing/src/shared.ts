@@ -1,4 +1,4 @@
-import type { And, HasUndefined, If, IsOptional, Not, Or } from '@twa.js/util-types';
+import type { And, HasUndefined, If, IsOptional, Not, Or } from '@tma.js/util-types';
 
 /**
  * Represents any known parser.

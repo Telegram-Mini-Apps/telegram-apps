@@ -1,4 +1,4 @@
-import type { RGB } from '@twa.js/colors';
+import type { RGB } from '@tma.js/colors';
 
 import { WebApp } from '../../../src/index.js';
 

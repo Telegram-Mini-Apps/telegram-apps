@@ -1,1 +1,1 @@
-export type { QRScanner } from '@twa.js/sdk';
+export type { QRScanner } from '@tma.js/sdk';

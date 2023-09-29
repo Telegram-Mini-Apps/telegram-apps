@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react';
-import type { PostEvent } from '@twa.js/sdk/types';
+import type { PostEvent } from '@tma.js/sdk/types';
 import { useUnit } from '../provider/index.js';
 
 interface Trackable {

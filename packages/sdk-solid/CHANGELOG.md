@@ -1,4 +1,4 @@
-# @twa.js/sdk-solid
+# @tma.js/sdk-solid
 
 ## 0.1.2
 

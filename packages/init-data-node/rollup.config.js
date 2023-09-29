@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
 const input = 'src/index.ts';
-const external = ['@twa.js/init-data', 'crypto', 'url'];
+const external = ['@tma.js/init-data', 'crypto', 'url'];
 
 export default [
   defineConfig({

@@ -1,7 +1,7 @@
-import { EventEmitter } from '@twa.js/event-emitter';
-import { on, off, postEvent as defaultPostEvent, type PostEvent } from '@twa.js/bridge';
+import { EventEmitter } from '@tma.js/event-emitter';
+import { on, off, postEvent as defaultPostEvent, type PostEvent } from '@tma.js/bridge';
 
-import type { Version } from '@twa.js/utils';
+import type { Version } from '@tma.js/utils';
 
 import { createSupportsFunc, type SupportsFunc } from '../../supports.js';
 import { State } from '../../state/index.js';

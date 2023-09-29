@@ -6,7 +6,7 @@ import {
   boolean,
   date,
   type AnyParser,
-} from '@twa.js/parsing';
+} from '@tma.js/parsing';
 
 import type { InitData, User } from './types.js';
 

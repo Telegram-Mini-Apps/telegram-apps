@@ -1,4 +1,4 @@
-# @twa.js/sdk-react
+# @tma.js/sdk-react
 
 ## 0.4.2
 
