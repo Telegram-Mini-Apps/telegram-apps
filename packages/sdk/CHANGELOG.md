@@ -1,5 +1,19 @@
 # @tma.js/sdk
 
+## 0.11.3
+
+### Patch Changes
+
+- 21c4632: Update docs URLs. Rename packages to @tma.js. Update deps
+- Updated dependencies [21c4632]
+  - @tma.js/event-emitter@0.0.2
+  - @tma.js/util-types@0.0.2
+  - @tma.js/init-data@0.2.14
+  - @tma.js/parsing@0.0.2
+  - @tma.js/bridge@1.3.2
+  - @tma.js/colors@0.0.2
+  - @tma.js/utils@0.5.2
+
 ## 0.11.2
 
 ### Patch Changes

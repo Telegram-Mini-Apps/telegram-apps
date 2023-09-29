@@ -1,5 +1,13 @@
 # @tma.js/init-data
 
+## 0.2.14
+
+### Patch Changes
+
+- 21c4632: Update docs URLs. Rename packages to @tma.js. Update deps
+- Updated dependencies [21c4632]
+  - @tma.js/parsing@0.0.2
+
 ## 0.2.13
 
 ### Patch Changes

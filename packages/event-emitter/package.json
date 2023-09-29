@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/event-emitter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Event emitter class implementation.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",

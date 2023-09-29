@@ -1,5 +1,13 @@
 # @tma.js/init-data-node
 
+## 0.0.12
+
+### Patch Changes
+
+- 21c4632: Update docs URLs. Rename packages to @tma.js. Update deps
+- Updated dependencies [21c4632]
+  - @tma.js/init-data@0.2.14
+
 ## 0.0.11
 
 ### Patch Changes

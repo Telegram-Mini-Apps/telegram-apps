@@ -1,5 +1,11 @@
 # @tma.js/utils
 
+## 0.5.2
+
+### Patch Changes
+
+- 21c4632: Update docs URLs. Rename packages to @tma.js. Update deps
+
 ## 0.5.1
 
 ### Patch Changes
