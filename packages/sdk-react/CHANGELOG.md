@@ -1,5 +1,14 @@
 # @tma.js/sdk-react
 
+## 0.4.3
+
+### Patch Changes
+
+- 21c4632: Update docs URLs. Rename packages to @tma.js. Update deps
+- Updated dependencies [21c4632]
+  - @tma.js/bridge@1.3.2
+  - @tma.js/sdk@0.11.3
+
 ## 0.4.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # react-sdk-example
 
+## 0.0.8
+
+### Patch Changes
+
+- 21c4632: Update docs URLs. Rename packages to @tma.js. Update deps
+- Updated dependencies [21c4632]
+  - @tma.js/sdk-react@0.4.3
+
 ## 0.0.7
 
 ### Patch Changes
