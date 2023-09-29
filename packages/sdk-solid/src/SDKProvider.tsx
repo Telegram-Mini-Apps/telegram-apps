@@ -1,5 +1,5 @@
 import { createMemo, createResource, ParentProps } from 'solid-js';
-import { init } from '@twa.js/sdk';
+import { init } from '@tma.js/sdk';
 
 import { SDKContext } from './context.js';
 import type { SDKInitOptions } from './types.js';

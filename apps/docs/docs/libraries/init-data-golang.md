@@ -4,12 +4,12 @@ sidebar_position: 100
 
 # init-data-golang
 
-The package provides utilities to work with the initialization data of Telegram Web Apps. To learn more about the initialization data and its usage, please refer to the [documentation](../launch-params/init-data.mdx).
+The package provides utilities to work with the initialization data of Telegram Mini Apps. To learn more about the initialization data and its usage, please refer to the [documentation](../launch-params/init-data.mdx).
 
 ## Installation
 
 ```bash
-go get github.com/telegram-web-apps/init-data-golang
+go get github.com/telegram-mini-apps/init-data-golang
 ```
 
 ## Validation
@@ -21,7 +21,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/Telegram-Web-Apps/init-data-golang"
+	"github.com/Telegram-Mini-Apps/init-data-golang"
 	"time"
 )
 
@@ -50,7 +50,7 @@ package main
 
 import (
     "fmt"
-    "github.com/Telegram-Web-Apps/init-data-golang"
+    "github.com/Telegram-Mini-Apps/init-data-golang"
 )
 
 func main() {
@@ -73,7 +73,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/Telegram-Web-Apps/init-data-golang"
+	"github.com/Telegram-Mini-Apps/init-data-golang"
 	"time"
 )
 
@@ -101,4 +101,4 @@ func main() {
 
 ## GoDoc
 
-To see GoDoc documentation, visit [this link](https://pkg.go.dev/github.com/telegram-web-apps/init-data-golang).
+To see GoDoc documentation, visit [this link](https://pkg.go.dev/github.com/telegram-mini-apps/init-data-golang).

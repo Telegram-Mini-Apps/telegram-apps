@@ -9,7 +9,7 @@ const pkg = require('./package.json');
 
 const input = 'src/index.ts';
 
-const external = ['@twa.js/utils', '@twa.js/parsing', '@twa.js/event-emitter'];
+const external = ['@tma.js/utils', '@tma.js/parsing', '@tma.js/event-emitter', '@tma.js/logger'];
 
 export default [
   // CJS, ESM.
@@ -29,7 +29,7 @@ export default [
     output: {
       file: pkg.browser,
       format: 'iife',
-      name: 'TwaBridge',
+      name: '@tma.js/bridge',
       sourcemap: true,
     },
     plugins: [typescript({ tsconfig: './tsconfig.build.json' }), nodeResolve(), terser()],

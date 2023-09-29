@@ -1,1 +1,1 @@
-export type { InitData } from '@twa.js/sdk';
+export type { InitData } from '@tma.js/sdk';

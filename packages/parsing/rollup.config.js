@@ -16,7 +16,7 @@ export default [
       { file: pkg.main, format: 'commonjs', sourcemap: true },
       { file: pkg.module, format: 'esm', sourcemap: true },
     ],
-    external: ['@twa.js/colors'],
+    external: ['@tma.js/colors'],
     plugins: [typescript({ tsconfig: './tsconfig.build.json' }), terser()],
   }),
 
@@ -26,7 +26,7 @@ export default [
     output: {
       file: pkg.browser,
       format: 'iife',
-      name: 'TwaParsing',
+      name: '@tma.js/parsing',
       sourcemap: true,
     },
     plugins: [typescript({ tsconfig: './tsconfig.build.json' }), nodeResolve(), terser()],
@@ -35,7 +35,7 @@ export default [
   defineConfig({
     input,
     output: { file: pkg.types },
-    external: ['@twa.js/colors'],
+    external: ['@tma.js/colors'],
     plugins: [typescript({
       tsconfig: './tsconfig.build.json',
       compilerOptions: {

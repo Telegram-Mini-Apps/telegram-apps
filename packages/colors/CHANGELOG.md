@@ -1,4 +1,4 @@
-# @twa.js/colors
+# @tma.js/colors
 
 ## 0.0.1
 

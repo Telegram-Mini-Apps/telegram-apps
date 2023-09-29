@@ -1,1 +1,1 @@
-export type { HapticFeedback } from '@twa.js/sdk';
+export type { HapticFeedback } from '@tma.js/sdk';

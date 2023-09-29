@@ -1,4 +1,4 @@
-# @twa.js/init-data-node
+# @tma.js/init-data-node
 
 ## 0.0.11
 

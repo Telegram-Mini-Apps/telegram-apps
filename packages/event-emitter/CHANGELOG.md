@@ -1,4 +1,4 @@
-# @twa.js/event-emitter
+# @tma.js/event-emitter
 
 ## 0.0.1
 

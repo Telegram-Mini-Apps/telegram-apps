@@ -1,7 +1,7 @@
-import { EventEmitter } from '@twa.js/event-emitter';
-import { on, off, postEvent as defaultPostEvent, type PostEvent } from '@twa.js/bridge';
+import { EventEmitter } from '@tma.js/event-emitter';
+import { on, off, postEvent as defaultPostEvent, type PostEvent } from '@tma.js/bridge';
 
-import type { RGB } from '@twa.js/colors';
+import type { RGB } from '@tma.js/colors';
 
 import { State } from '../../state/index.js';
 

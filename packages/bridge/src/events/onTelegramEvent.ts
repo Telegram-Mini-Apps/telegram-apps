@@ -1,4 +1,4 @@
-import { json, string } from '@twa.js/parsing';
+import { json, string } from '@tma.js/parsing';
 
 /**
  * Extracts event data from native application event.

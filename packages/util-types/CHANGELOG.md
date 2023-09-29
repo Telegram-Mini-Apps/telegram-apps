@@ -1,4 +1,4 @@
-# @twa.js/util-types
+# @tma.js/util-types
 
 ## 0.0.1
 

@@ -1,6 +1,6 @@
-import { EventEmitter } from '@twa.js/event-emitter';
-import { compareVersions, type Version } from '@twa.js/utils';
-import { isRGB, isColorDark, type RGB } from '@twa.js/colors';
+import { EventEmitter } from '@tma.js/event-emitter';
+import { compareVersions, type Version } from '@tma.js/utils';
+import { isRGB, isColorDark, type RGB } from '@tma.js/colors';
 import {
   postEvent as defaultPostEvent,
   supports,
@@ -9,7 +9,7 @@ import {
   type WriteAccessRequestedStatus,
   type InvoiceStatus,
   type PostEvent,
-} from '@twa.js/bridge';
+} from '@tma.js/bridge';
 
 import { formatURL } from '../../url.js';
 import { State } from '../../state/index.js';

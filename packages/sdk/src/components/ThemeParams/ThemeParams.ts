@@ -1,8 +1,8 @@
-import { EventEmitter } from '@twa.js/event-emitter';
-import { on, request, type RequestOptions } from '@twa.js/bridge';
-import { isColorDark } from '@twa.js/colors';
+import { EventEmitter } from '@tma.js/event-emitter';
+import { on, request, type RequestOptions } from '@tma.js/bridge';
+import { isColorDark } from '@tma.js/colors';
 
-import type { RGB } from '@twa.js/colors';
+import type { RGB } from '@tma.js/colors';
 
 import { parseThemeParams, type ThemeParamsType } from '../../theme-params.js';
 import { State } from '../../state/index.js';

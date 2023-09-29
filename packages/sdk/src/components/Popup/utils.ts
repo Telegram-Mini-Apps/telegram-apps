@@ -1,4 +1,4 @@
-import type { PopupButton, PopupParams as BridgePopupParams } from '@twa.js/bridge';
+import type { PopupButton, PopupParams as BridgePopupParams } from '@tma.js/bridge';
 
 import type { PopupParams } from './types.js';
 

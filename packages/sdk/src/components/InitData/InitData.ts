@@ -1,9 +1,9 @@
-import type { HasUndefined, If } from '@twa.js/util-types';
+import type { HasUndefined, If } from '@tma.js/util-types';
 import type {
   Chat,
   InitData as InitDataType,
   User,
-} from '@twa.js/init-data';
+} from '@tma.js/init-data';
 
 import { State } from '../../state/index.js';
 

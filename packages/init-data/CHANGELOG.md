@@ -1,4 +1,4 @@
-# @twa.js/init-data
+# @tma.js/init-data
 
 ## 0.2.13
 

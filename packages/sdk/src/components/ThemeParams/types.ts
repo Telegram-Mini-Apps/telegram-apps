@@ -1,4 +1,4 @@
-import type { HasUndefined, If } from '@twa.js/util-types';
+import type { HasUndefined, If } from '@tma.js/util-types';
 
 import type { ThemeParamsType } from '../../theme-params.js';
 import type { StateEvents } from '../../state/index.js';

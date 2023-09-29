@@ -1,4 +1,4 @@
-import { isRecord } from '@twa.js/utils';
+import { isRecord } from '@tma.js/utils';
 
 type AnyFunc = (...args: unknown[]) => unknown;
 

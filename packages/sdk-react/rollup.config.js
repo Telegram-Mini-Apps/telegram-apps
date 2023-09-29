@@ -16,7 +16,7 @@ export default [
       { file: pkg.main, format: 'commonjs', sourcemap: true },
       { file: pkg.module, format: 'esm', sourcemap: true },
     ],
-    external: ['@twa.js/sdk', '@twa.js/bridge', 'react'],
+    external: ['@tma.js/sdk', '@tma.js/bridge', 'react'],
     plugins: [typescript(), terser()],
   }),
 
@@ -25,7 +25,7 @@ export default [
     output: {
       file: pkg.browser,
       format: 'iife',
-      name: 'TwaSDKReact',
+      name: '@tma.js/sdk-react',
       globals: { react: 'React' },
       sourcemap: true,
     },
@@ -36,7 +36,7 @@ export default [
   defineConfig({
     input,
     output: { file: pkg.types },
-    external: ['@twa.js/sdk', '@twa.js/bridge', 'react'],
+    external: ['@tma.js/sdk', '@tma.js/bridge', 'react'],
     plugins: [typescript({
       compilerOptions: {
         declaration: true,

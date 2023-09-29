@@ -1,6 +1,6 @@
 import React, { type ComponentType } from 'react';
 
-import type { CloudStorage } from '@twa.js/sdk';
+import type { CloudStorage } from '@tma.js/sdk';
 
 import { useUnit } from '../provider/index.js';
 

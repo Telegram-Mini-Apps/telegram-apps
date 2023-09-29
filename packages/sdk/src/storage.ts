@@ -1,5 +1,5 @@
-import type { HeaderColorKey } from '@twa.js/bridge';
-import type { RGB } from '@twa.js/colors';
+import type { HeaderColorKey } from '@tma.js/bridge';
+import type { RGB } from '@tma.js/colors';
 
 /**
  * Describes storage keys and according values.

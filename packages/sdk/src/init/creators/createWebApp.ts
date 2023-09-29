@@ -1,5 +1,5 @@
-import type { RGB } from '@twa.js/colors';
-import type { PostEvent } from '@twa.js/bridge';
+import type { RGB } from '@tma.js/colors';
+import type { PostEvent } from '@tma.js/bridge';
 
 import { WebApp } from '../../components/index.js';
 

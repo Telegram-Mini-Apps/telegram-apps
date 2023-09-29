@@ -2,10 +2,10 @@ import {
   postEvent as defaultPostEvent,
   request,
   type RequestOptions,
-} from '@twa.js/bridge';
-import { array, json, string } from '@twa.js/parsing';
+} from '@tma.js/bridge';
+import { array, json, string } from '@tma.js/parsing';
 
-import type { Version } from '@twa.js/utils';
+import type { Version } from '@tma.js/utils';
 
 import { createSupportsFunc, type SupportsFunc } from '../../supports.js';
 

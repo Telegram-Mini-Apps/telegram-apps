@@ -1,0 +1,64 @@
+{
+  "name": "@tma.js/navigation",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Custom router to be used in Telegram Mini Apps",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Telegram-Mini-Apps/tma.js.git",
+    "directory": "packages/navigation"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
+  },
+  "keywords": [
+    "telegram-mini-apps",
+    "navigation",
+    "typescript"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/lib/index.cjs",
+  "browser": "dist/lib/browser.js",
+  "module": "dist/lib/index.mjs",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/lib/index.mjs",
+      "require": "./dist/lib/index.cjs",
+      "default": "./dist/lib/index.cjs"
+    },
+    "./*": {
+      "types": "./dist/types/*.d.ts",
+      "import": "./dist/lib/*.mjs",
+      "require": "./dist/lib/*.cjs",
+      "default": "./dist/lib/*.cjs"
+    }
+  },
+  "scripts": {
+    "lint": "eslint -c .eslintrc.cjs src/**/*",
+    "build": "rimraf dist && rollup --config rollup.config.js"
+  },
+  "dependencies": {
+    "@tma.js/bridge": "workspace:*",
+    "@tma.js/parsing": "workspace:*",
+    "@tma.js/event-emitter": "workspace:*",
+    "@tma.js/logger": "workspace:*"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*",
+    "eslint-config-custom": "workspace:*",
+    "jest-config-custom": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

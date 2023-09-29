@@ -1,1 +1,1 @@
-export type { Viewport } from '@twa.js/sdk';
+export type { Viewport } from '@tma.js/sdk';

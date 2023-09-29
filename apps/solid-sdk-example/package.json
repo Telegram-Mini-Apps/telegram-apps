@@ -24,7 +24,7 @@
     "vite-plugin-solid": "^2.7.0"
   },
   "dependencies": {
-    "@twa.js/sdk-solid": "workspace:*",
+    "@tma.js/sdk-solid": "workspace:*",
     "solid-js": "^1.7.6"
   }
 }

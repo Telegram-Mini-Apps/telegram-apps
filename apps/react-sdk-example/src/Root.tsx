@@ -1,5 +1,5 @@
 import { PropsWithChildren, useMemo } from 'react';
-import { SDKProvider, useSDK, useInitData } from '@twa.js/sdk-react';
+import { SDKProvider, useSDK, useInitData } from '@tma.js/sdk-react';
 
 /**
  * Displays current application init data.

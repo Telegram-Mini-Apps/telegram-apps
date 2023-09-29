@@ -4,7 +4,7 @@ import {
   boolean,
   json,
   rgb,
-} from '@twa.js/parsing';
+} from '@tma.js/parsing';
 
 import type {
   ClipboardTextReceivedPayload, CustomMethodInvokedPayload,

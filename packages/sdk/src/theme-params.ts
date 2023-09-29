@@ -1,6 +1,6 @@
-import { json, rgb } from '@twa.js/parsing';
+import { json, rgb } from '@tma.js/parsing';
 
-import type { RGB } from '@twa.js/colors';
+import type { RGB } from '@tma.js/colors';
 
 /**
  * Application theme parameters. Defines palette used by the Telegram application.

@@ -1,4 +1,4 @@
-import type { PostEvent as BridgePostEvent } from '@twa.js/bridge';
+import type { PostEvent as BridgePostEvent } from '@tma.js/bridge';
 
 export type PostEvent = BridgePostEvent;
 

@@ -1,4 +1,4 @@
-import { compareVersions, type Version } from '@twa.js/utils';
+import { compareVersions, type Version } from '@tma.js/utils';
 
 import type {
   HasCheckSupportMethodParam,

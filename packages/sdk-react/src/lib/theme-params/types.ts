@@ -1,1 +1,1 @@
-export type { ThemeParams } from '@twa.js/sdk';
+export type { ThemeParams } from '@tma.js/sdk';

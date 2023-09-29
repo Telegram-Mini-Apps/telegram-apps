@@ -1,1 +1,1 @@
-export type { ClosingBehaviour } from '@twa.js/sdk';
+export type { ClosingBehaviour } from '@tma.js/sdk';

@@ -108,7 +108,7 @@ importers:
 
   apps/react-sdk-example:
     dependencies:
-      '@twa.js/sdk-react':
+      '@tma.js/sdk-react':
         specifier: workspace:*
         version: link:../../packages/sdk-react
       react:
@@ -136,7 +136,7 @@ importers:
 
   apps/solid-sdk-example:
     dependencies:
-      '@twa.js/sdk-solid':
+      '@tma.js/sdk-solid':
         specifier: workspace:*
         version: link:../../packages/sdk-solid
       solid-js:
@@ -176,19 +176,22 @@ importers:
 
   packages/bridge:
     dependencies:
-      '@twa.js/colors':
+      '@tma.js/colors':
         specifier: workspace:*
         version: link:../colors
-      '@twa.js/event-emitter':
+      '@tma.js/event-emitter':
         specifier: workspace:*
         version: link:../event-emitter
-      '@twa.js/parsing':
+      '@tma.js/logger':
+        specifier: workspace:*
+        version: link:../logger
+      '@tma.js/parsing':
         specifier: workspace:*
         version: link:../parsing
-      '@twa.js/util-types':
+      '@tma.js/util-types':
         specifier: workspace:*
         version: link:../util-types
-      '@twa.js/utils':
+      '@tma.js/utils':
         specifier: workspace:*
         version: link:../utils
     devDependencies:
@@ -231,7 +234,7 @@ importers:
 
   packages/event-emitter:
     dependencies:
-      '@twa.js/util-types':
+      '@tma.js/util-types':
         specifier: workspace:*
         version: link:../util-types
     devDependencies:
@@ -247,7 +250,7 @@ importers:
 
   packages/init-data:
     dependencies:
-      '@twa.js/parsing':
+      '@tma.js/parsing':
         specifier: workspace:*
         version: link:../parsing
     devDependencies:
@@ -263,7 +266,7 @@ importers:
 
   packages/init-data-node:
     dependencies:
-      '@twa.js/init-data':
+      '@tma.js/init-data':
         specifier: workspace:*
         version: link:../init-data
     devDependencies:
@@ -289,12 +292,49 @@ importers:
         specifier: ^29.6.4
         version: 29.6.4(@babel/core@7.22.20)
 
+  packages/logger:
+    devDependencies:
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      jest-config-custom:
+        specifier: workspace:*
+        version: link:../jest-config-custom
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+
+  packages/navigation:
+    dependencies:
+      '@tma.js/bridge':
+        specifier: workspace:*
+        version: link:../bridge
+      '@tma.js/event-emitter':
+        specifier: workspace:*
+        version: link:../event-emitter
+      '@tma.js/logger':
+        specifier: workspace:*
+        version: link:../logger
+      '@tma.js/parsing':
+        specifier: workspace:*
+        version: link:../parsing
+    devDependencies:
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      jest-config-custom:
+        specifier: workspace:*
+        version: link:../jest-config-custom
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+
   packages/parsing:
     dependencies:
-      '@twa.js/colors':
+      '@tma.js/colors':
         specifier: workspace:*
         version: link:../colors
-      '@twa.js/util-types':
+      '@tma.js/util-types':
         specifier: workspace:*
         version: link:../util-types
     devDependencies:
@@ -310,25 +350,25 @@ importers:
 
   packages/sdk:
     dependencies:
-      '@twa.js/bridge':
+      '@tma.js/bridge':
         specifier: workspace:*
         version: link:../bridge
-      '@twa.js/colors':
+      '@tma.js/colors':
         specifier: workspace:*
         version: link:../colors
-      '@twa.js/event-emitter':
+      '@tma.js/event-emitter':
         specifier: workspace:*
         version: link:../event-emitter
-      '@twa.js/init-data':
+      '@tma.js/init-data':
         specifier: workspace:*
         version: link:../init-data
-      '@twa.js/parsing':
+      '@tma.js/parsing':
         specifier: workspace:*
         version: link:../parsing
-      '@twa.js/util-types':
+      '@tma.js/util-types':
         specifier: workspace:*
         version: link:../util-types
-      '@twa.js/utils':
+      '@tma.js/utils':
         specifier: workspace:*
         version: link:../utils
     devDependencies:
@@ -344,10 +384,10 @@ importers:
 
   packages/sdk-react:
     dependencies:
-      '@twa.js/bridge':
+      '@tma.js/bridge':
         specifier: workspace:*
         version: link:../bridge
-      '@twa.js/sdk':
+      '@tma.js/sdk':
         specifier: workspace:*
         version: link:../sdk
       '@types/react':
@@ -366,10 +406,10 @@ importers:
 
   packages/sdk-solid:
     dependencies:
-      '@twa.js/sdk':
+      '@tma.js/sdk':
         specifier: workspace:*
         version: link:../sdk
-      '@twa.js/utils':
+      '@tma.js/utils':
         specifier: workspace:*
         version: link:../utils
       solid-js:
@@ -395,10 +435,6 @@ importers:
         version: link:../tsconfig
 
   packages/utils:
-    dependencies:
-      '@twa.js/util-types':
-        specifier: workspace:*
-        version: link:../util-types
     devDependencies:
       eslint-config-custom:
         specifier: workspace:*

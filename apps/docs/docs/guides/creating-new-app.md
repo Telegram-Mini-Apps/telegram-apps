@@ -1,7 +1,7 @@
 # Creating new app
 
 In this article, we will delve into the process of developing a new application on the
-Telegram Web Apps platform, we will find out exactly what actions need to be performed to create it,
+Telegram Mini Apps platform, we will find out exactly what actions need to be performed to create it,
 as well as give advice on improving the process of creating an application.
 
 The process of creating an application usually consists of the following basic steps:
@@ -31,7 +31,7 @@ bots, the bot [BotFather](https://t.me/botfather) and use the command
 `/newbot`, then go through the proposed process, specifying all the necessary data.
 
 When the bot is created, it is required then to use the command `/newapp` and again go
-through the procedure of creating another entity - the Telegram Web Apps application,
+through the procedure of creating another entity - the Telegram Mini Apps application,
 linking it to the Telegram bot. From now on, the created application will
 be available via a direct link of the form `https://t.me/{mybot}/{myapp}`.
 

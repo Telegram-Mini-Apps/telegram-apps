@@ -1,6 +1,6 @@
 /**
  * Describes user information.
- * @see https://docs.twa.dev/docs/launch-params/init-data#user
+ * @see https://docs.telegram-mini-apps.com/docs/launch-params/init-data#user
  */
 export interface User {
   /**
@@ -50,7 +50,7 @@ export interface User {
 
 /**
  * Describes chat information.
- * @see https://docs.twa.dev/docs/launch-params/init-data#chat
+ * @see https://docs.telegram-mini-apps.com/docs/launch-params/init-data#chat
  */
 export interface Chat {
   /**
@@ -82,7 +82,7 @@ export interface Chat {
 
 /**
  * Describes parsed initial data sent from Web App.
- * @see https://docs.twa.dev/docs/launch-params/init-data#parameters-list
+ * @see https://docs.telegram-mini-apps.com/docs/launch-params/init-data#parameters-list
  */
 export interface InitData {
   /**

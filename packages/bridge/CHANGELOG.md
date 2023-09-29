@@ -1,4 +1,4 @@
-# @twa.js/bridge
+# @tma.js/bridge
 
 ## 1.3.1
 
@@ -16,7 +16,7 @@
 
 - Updated dependencies [53d1717]
 - Updated dependencies [251c527]
-  - @twa.js/utils@0.5.1
+  - @tma.js/utils@0.5.1
   - @twa.js/event-emitter@0.0.1
   - @twa.js/util-types@0.0.1
   - @twa.js/parsing@0.0.1
