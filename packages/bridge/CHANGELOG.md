@@ -1,5 +1,11 @@
 # @tma.js/bridge
 
+## 1.3.3
+
+### Patch Changes
+
+- 654891f: Add logging in case resize event occured
+
 ## 1.3.2
 
 ### Patch Changes

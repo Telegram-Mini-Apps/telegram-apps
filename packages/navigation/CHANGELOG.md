@@ -1,5 +1,12 @@
 # @tma.js/navigation
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [654891f]
+  - @tma.js/bridge@1.3.3
+
 ## 0.0.1
 
 ### Patch Changes
