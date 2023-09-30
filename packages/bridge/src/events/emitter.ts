@@ -35,7 +35,7 @@ export function createEmitter(): EventEmitter {
   // add our own listener to make sure, viewport information is always fresh.
   // Issue: https://github.com/Telegram-Web-Apps/tma.js/issues/10
   window.addEventListener('resize', () => {
-    emitter.emit('viewport_changed', {
+    emit('viewport_changed', {
       width: window.innerWidth,
       height: window.innerHeight,
       is_state_stable: true,
