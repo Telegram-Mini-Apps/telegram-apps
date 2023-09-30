@@ -1,5 +1,12 @@
 # @tma.js/sdk-solid
 
+## 0.1.4
+
+### Patch Changes
+
+- 230e77a: Fix a bug with incorrect components events tracking
+  - @tma.js/sdk@0.11.4
+
 ## 0.1.3
 
 ### Patch Changes

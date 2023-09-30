@@ -1,5 +1,11 @@
 # react-sdk-example
 
+## 0.0.9
+
+### Patch Changes
+
+- @tma.js/sdk-react@0.4.4
+
 ## 0.0.8
 
 ### Patch Changes
