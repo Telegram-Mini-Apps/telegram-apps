@@ -1,13 +1,14 @@
+import { expect, test } from 'vitest';
 import { mergeClassNames } from '../../src/index.js';
 
-describe('styles', () => {
-  describe('mergeClassNames.ts', () => {
-    describe('mergeClassNames', () => {
-      it('should ignore non-object values', () => {
+test('styles', () => {
+  test('mergeClassNames.ts', () => {
+    test('mergeClassNames', () => {
+      test('should ignore non-object values', () => {
         expect(mergeClassNames({}, null, undefined, false, true, {}));
       });
 
-      it('should merge objects keys by values applying classNames function', () => {
+      test('should merge objects keys by values applying classNames function', () => {
         expect(mergeClassNames(
           { a: 'hey there', b: 'space' },
           { a: 'John', b: 'station' },

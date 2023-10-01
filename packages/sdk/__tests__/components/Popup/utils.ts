@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { preparePopupParams } from '../../../src/components/Popup/utils.js';
 
 /**
@@ -8,11 +10,11 @@ function createText(length: number): string {
   return new Array(length).fill('a').join('');
 }
 
-describe('components', () => {
-  describe('Popup', () => {
-    describe('utils', () => {
-      describe('preparePopupParams', () => {
-        it(
+test('components', () => {
+  test('Popup', () => {
+    test('utils', () => {
+      test('preparePopupParams', () => {
+       test(
           'should throw an error in case, title length is more than 64 symbols',
           () => {
             expect(() => preparePopupParams({
@@ -27,7 +29,7 @@ describe('components', () => {
           },
         );
 
-        it(
+       test(
           'should throw an error in case, message length is zero or more than 256 symbols',
           () => {
             expect(() => preparePopupParams({
@@ -44,7 +46,7 @@ describe('components', () => {
           },
         );
 
-        it('should throw an error in case, buttons count is more than 3', () => {
+       test('should throw an error in case, buttons count is more than 3', () => {
           expect(() => preparePopupParams({
             message: 'a',
             buttons: new Array(4).fill({ type: 'close' }),
@@ -56,14 +58,14 @@ describe('components', () => {
           })).not.toThrow();
         });
 
-        it('should append button type "close" in case, buttons array is empty', () => {
+       test('should append button type "close" in case, buttons array is empty', () => {
           expect(preparePopupParams({ message: 'a' }).buttons).toStrictEqual([{
             type: 'close',
             id: '',
           }]);
         });
 
-        it('should throw an error in case, some button text length '
+       test('should throw an error in case, some button text length '
           + 'size is zero or more than 64 symbols', () => {
           expect(() => preparePopupParams({
             message: 'A',
@@ -81,7 +83,7 @@ describe('components', () => {
           })).not.toThrow();
         });
 
-        it('should fulfill all optional popup parameters', () => {
+       test('should fulfill all optional popup parameters', () => {
           expect(preparePopupParams({
             message: 'Message',
             buttons: [{ type: 'default', text: 'Wow!' }, { type: 'close' }],

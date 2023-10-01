@@ -1,4 +1,5 @@
-import { createDomEmitter } from './createDomEmitter.js';
+import { vi, type SpyInstance } from 'vitest';
+import { createDomEmitter } from './createDomEmitter';
 
 interface CreateWindowOptions {
   innerWidth?: number;
@@ -6,7 +7,7 @@ interface CreateWindowOptions {
   env?: 'iframe';
 }
 
-export type WindowSpy = jest.SpyInstance<Window & typeof globalThis>;
+export type WindowSpy = SpyInstance<[], Window & typeof globalThis>;
 
 /**
  * Mocks window and returns created spy.
@@ -14,7 +15,7 @@ export type WindowSpy = jest.SpyInstance<Window & typeof globalThis>;
  */
 export function createWindow(options: CreateWindowOptions = {}): WindowSpy {
   const { innerWidth, innerHeight, env } = options;
-  const postMessageSpy = jest.fn();
+  const postMessageSpy = vi.fn();
   const wnd = {
     innerHeight,
     innerWidth,
@@ -26,15 +27,15 @@ export function createWindow(options: CreateWindowOptions = {}): WindowSpy {
     } : {}),
   };
 
-  return jest.spyOn(window, 'window', 'get').mockImplementation(() => wnd as any);
+  return vi.spyOn(window, 'window', 'get').mockImplementation(() => wnd as any);
 }
 
 // export function mockWindow(
 //   options: MockWindowOptions = {},
-// ): jest.SpyInstance<Window & typeof globalThis> {
+// ): vi.SpyInstance<Window & typeof globalThis> {
 //   const { innerWidth, innerHeight, env } = options;
-//   const spy = jest.spyOn(window, 'window', 'get');
-//   const postMessageSpy = jest.fn();
+//   const spy = vi.spyOn(window, 'window', 'get');
+//   const postMessageSpy = vi.fn();
 //
 //   beforeEach(() => {
 //     const wnd = {

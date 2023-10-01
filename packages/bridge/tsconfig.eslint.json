@@ -3,6 +3,7 @@
   "include": [
     "src",
     "__tests__",
+    "__test-utils__",
     "*.ts",
     "*.js"
   ]

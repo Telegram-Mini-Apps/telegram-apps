@@ -1,6 +1,8 @@
+import { expect, test, vi, beforeEach, afterEach } from 'vitest';
+
 import { createEmitter, singletonEmitter } from '../../src/events/emitter.js';
-import { createWindow, type WindowSpy } from '../__utils__/createWindow.js';
-import { dispatchWindowMessageEvent } from '../__utils__/dispatchWindowMessageEvent.js';
+import { createWindow, type WindowSpy } from '../../__test-utils__/createWindow.js';
+import { dispatchWindowMessageEvent } from '../../__test-utils__/dispatchWindowMessageEvent.js';
 
 import type { EventName, EventParams } from '../../src/index.js';
 
@@ -27,12 +29,12 @@ afterEach(() => {
   windowSpy.mockReset();
 });
 
-describe('events', () => {
-  describe('emitter.ts', () => {
-    describe('createEmitter', () => {
-      it('should emit "viewport_changed" event in case, window changed its size', () => {
+test('events', () => {
+  test('emitter.ts', () => {
+    test('createEmitter', () => {
+     test('should emit "viewport_changed" event in case, window changed its size', () => {
         const emitter = createEmitter();
-        const spy = jest.fn();
+        const spy = vi.fn();
 
         emitter.on('viewport_changed', spy);
 
@@ -47,7 +49,7 @@ describe('events', () => {
         });
       });
 
-      describe('events handling', () => {
+      test('events handling', () => {
         const testCases: TestCases = [
           ['viewport_changed', {
             height: 120,
@@ -96,8 +98,8 @@ describe('events', () => {
         ];
 
         testCases.forEach(([event, inputOrCaseOrCases]) => {
-          it(`should correctly handle "${event}" event data`, () => {
-            const spy = jest.fn();
+         test(`should correctly handle "${event}" event data`, () => {
+            const spy = vi.fn();
             const emitter = createEmitter();
 
             emitter.on(event, spy);
@@ -132,8 +134,8 @@ describe('events', () => {
           });
         });
 
-        it('should not emit event in case, it contains incorrect payload', () => {
-          const spy = jest.fn();
+       test('should not emit event in case, it contains incorrect payload', () => {
+          const spy = vi.fn();
           const emitter = createEmitter();
 
           emitter.on('viewport_changed', spy);
@@ -145,8 +147,8 @@ describe('events', () => {
       });
     });
 
-    describe('singletonEmitter', () => {
-      it('should return the same instance of emitter', () => {
+    test('singletonEmitter', () => {
+     test('should return the same instance of emitter', () => {
         expect(singletonEmitter()).toEqual(singletonEmitter());
       });
     });

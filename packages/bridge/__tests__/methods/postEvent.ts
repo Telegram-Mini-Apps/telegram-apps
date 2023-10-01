@@ -1,20 +1,22 @@
+import { expect, test, vi, beforeEach, afterEach, type SpyInstance } from 'vitest';
+
 import { postEvent, setTargetOrigin } from '../../src/index.js';
 
-let windowSpy: jest.SpyInstance<Window & typeof globalThis>;
+let windowSpy: SpyInstance<[], Window & typeof globalThis>;
 
 beforeEach(() => {
-  windowSpy = jest.spyOn(window, 'window', 'get');
+  windowSpy = vi.spyOn(window, 'window', 'get');
 });
 
 afterEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 });
 
-describe('methods', () => {
-  describe('postEvent.ts', () => {
-    describe('postEvent', () => {
-      it('should call "window.parent.postMessage" with object with properties {eventType: string, eventData: any} converted to string in case, current environment is iframe', () => {
-        const postMessageSpy = jest.fn();
+test('methods', () => {
+  test('postEvent.ts', () => {
+    test('postEvent', () => {
+     test('should call "window.parent.postMessage" with object with properties {eventType: string, eventData: any} converted to string in case, current environment is iframe', () => {
+        const postMessageSpy = vi.fn();
         windowSpy.mockImplementation(() => ({
           self: 1000,
           top: 900,
@@ -64,8 +66,8 @@ describe('methods', () => {
         }), 'abc');
       });
 
-      it('should call "window.TelegramWebviewProxy.postEvent" in case this path exists. Function accepts event name (string) as the first argument and event data (object converted to string) as the second one.', () => {
-        const spy = jest.fn();
+     test('should call "window.TelegramWebviewProxy.postEvent" in case this path exists. Function accepts event name (string) as the first argument and event data (object converted to string) as the second one.', () => {
+        const spy = vi.fn();
         windowSpy.mockImplementation(() => ({
           TelegramWebviewProxy: { postEvent: spy },
         }) as any);
@@ -85,8 +87,8 @@ describe('methods', () => {
         expect(spy).toHaveBeenCalledWith('web_app_set_header_color', '{"color_key":"bg_color"}');
       });
 
-      it('should call "window.external.notify" in case it exists. Passed value is object, converted to string. This object should contain fields "eventType" and "eventData".', () => {
-        const spy = jest.fn();
+     test('should call "window.external.notify" in case it exists. Passed value is object, converted to string. This object should contain fields "eventType" and "eventData".', () => {
+        const spy = vi.fn();
         windowSpy.mockImplementation(() => ({
           external: { notify: spy },
         }) as any);
@@ -106,13 +108,13 @@ describe('methods', () => {
         expect(spy).toHaveBeenCalledWith('{"eventType":"web_app_set_header_color","eventData":{"color_key":"bg_color"}}');
       });
 
-      it('should throw an error in case, current environment is unknown', () => {
+     test('should throw an error in case, current environment is unknown', () => {
         expect(() => postEvent('web_app_close'))
           .toThrow('Unable to determine current environment and possible way to send event');
       });
 
-      it('should use globally set target origin', () => {
-        const postMessageSpy = jest.fn();
+     test('should use globally set target origin', () => {
+        const postMessageSpy = vi.fn();
         windowSpy.mockImplementation(() => ({
           self: 1000,
           top: 900,

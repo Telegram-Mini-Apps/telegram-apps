@@ -1,105 +1,107 @@
+import { expect, test } from 'vitest';
+
 import { array, boolean, date, json, number, rgb, searchParams, string } from '../src/index.js';
 
-describe('parsers.ts', () => {
-  describe('string', () => {
-    describe('optional', () => {
-      it('should return undefined if value is undefined', () => {
+test('parsers.ts', () => {
+  test('string', () => {
+    test('optional', () => {
+     test('should return undefined if value is undefined', () => {
         expect(string().optional().parse(undefined)).toBe(undefined);
       });
 
-      it('should return undefined is passed isEmpty function returned true', () => {
+     test('should return undefined is passed isEmpty function returned true', () => {
         expect(string().optional((value) => value === null).parse(null)).toBe(undefined);
       });
     });
 
-    describe('required', () => {
-      it('should return value in case, it has type string', () => {
+    test('required', () => {
+     test('should return value in case, it has type string', () => {
         expect(string().parse('abc')).toBe('abc');
       });
 
-      it('should throw an error in case, passed value is not of type string', () => {
+     test('should throw an error in case, passed value is not of type string', () => {
         expect(() => string().parse(true)).toThrow();
         expect(() => string().parse({})).toThrow();
       });
     });
   });
 
-  describe('rgb', () => {
-    describe('optional', () => {
-      it('should return undefined if value is undefined', () => {
+  test('rgb', () => {
+    test('optional', () => {
+     test('should return undefined if value is undefined', () => {
         expect(rgb().optional().parse(undefined)).toBe(undefined);
       });
 
-      it('should return undefined is passed isEmpty function returned true', () => {
+     test('should return undefined is passed isEmpty function returned true', () => {
         expect(rgb().optional((value) => value === null).parse(null)).toBe(undefined);
       });
     });
 
-    describe('required', () => {
-      it('should return value in case, it represents RGB color', () => {
+    test('required', () => {
+     test('should return value in case, it represents RGB color', () => {
         expect(rgb().parse('#fff')).toBe('#ffffff');
       });
 
-      it('should throw an error in case, passed value is not of type string', () => {
+     test('should throw an error in case, passed value is not of type string', () => {
         expect(() => rgb().parse(true)).toThrow();
         expect(() => rgb().parse({})).toThrow();
       });
 
-      it('should throw an error in case, passed value does not represent RGB string', () => {
+     test('should throw an error in case, passed value does not represent RGB string', () => {
         expect(() => rgb().parse('my custom string')).toThrow();
       });
     });
   });
 
-  describe('boolean', () => {
-    describe('optional', () => {
-      it('should return undefined if value is undefined', () => {
+  test('boolean', () => {
+    test('optional', () => {
+     test('should return undefined if value is undefined', () => {
         expect(boolean().optional().parse(undefined)).toBe(undefined);
       });
 
-      it('should return undefined is passed isEmpty function returned true', () => {
+     test('should return undefined is passed isEmpty function returned true', () => {
         expect(boolean().optional((value) => value === null).parse(null)).toBe(undefined);
       });
     });
 
-    describe('required', () => {
-      it('should return value in case, it has type boolean', () => {
+    test('required', () => {
+     test('should return value in case, it has type boolean', () => {
         expect(boolean().parse(true)).toBe(true);
         expect(boolean().parse(false)).toBe(false);
       });
 
-      it('should throw an error in case, passed value is not of type boolean', () => {
+     test('should throw an error in case, passed value is not of type boolean', () => {
         expect(() => boolean().parse('true')).toThrow();
         expect(() => boolean().parse({})).toThrow();
       });
     });
   });
 
-  describe('number', () => {
-    describe('optional', () => {
-      it('should return undefined if value is undefined', () => {
+  test('number', () => {
+    test('optional', () => {
+     test('should return undefined if value is undefined', () => {
         expect(number().optional().parse(undefined)).toBe(undefined);
       });
 
-      it('should return undefined is passed isEmpty function returned true', () => {
+     test('should return undefined is passed isEmpty function returned true', () => {
         expect(number().optional((value) => value === null).parse(null)).toBe(undefined);
       });
     });
 
-    describe('required', () => {
-      it('should return value in case, it has type number', () => {
+    test('required', () => {
+     test('should return value in case, it has type number', () => {
         expect(number().parse(9992)).toBe(9992);
       });
 
-      it('should throw an error in case, passed value is not of type number', () => {
+     test('should throw an error in case, passed value is not of type number', () => {
         expect(() => number().parse(true)).toThrow();
         expect(() => number().parse({})).toThrow();
       });
     });
   });
 
-  describe('json', () => {
-    it('should throw an error in case, passed value is not JSON object or not JSON object converted to string', () => {
+  test('json', () => {
+   test('should throw an error in case, passed value is not JSON object or not JSON object converted to string', () => {
       const parser = json({});
       expect(() => parser.parse('')).toThrow('Value is not JSON object converted to string.');
       expect(() => parser.parse(true)).toThrow('Value is not JSON object.');
@@ -107,17 +109,17 @@ describe('parsers.ts', () => {
       expect(() => parser.parse({})).not.toThrow();
     });
 
-    it('should throw an error in case, passed value does not contain required field presented in schema', () => {
+   test('should throw an error in case, passed value does not contain required field presented in schema', () => {
       const parser = json({ prop: string() });
       expect(() => parser.parse({})).toThrowError('Unable to parse field "prop"');
     });
 
-    it('should ignore field in case its value is undefined', () => {
+   test('should ignore field in case its value is undefined', () => {
       const parser = json<{ prop?: string }>({ prop: undefined });
       expect(parser.parse({})).toStrictEqual({});
     });
 
-    it('should properly process detailed field options', () => {
+   test('should properly process detailed field options', () => {
       const parser = json<{ a: undefined, b?: undefined; c: string }>({
         a: {
           type: () => undefined,
@@ -137,19 +139,19 @@ describe('parsers.ts', () => {
       })).toStrictEqual({ a: undefined, c: 'Hello!' });
     });
 
-    it('should correctly work with custom parser', () => {
+   test('should correctly work with custom parser', () => {
       const parser = json({
         prop: () => 'value',
       });
       expect(parser.parse({ prop: 999 })).toStrictEqual({ prop: 'value' });
     });
 
-    it('should throw an error in case, passed value contains field of different type presented in schema', () => {
+   test('should throw an error in case, passed value contains field of different type presented in schema', () => {
       const parser = json({ prop: string() });
       expect(() => parser.parse({ prop: 123 })).toThrowError('Unable to parse field "prop"');
     });
 
-    it('should correctly parse built-in types', () => {
+   test('should correctly parse built-in types', () => {
       const parser = json({
         bool: boolean(),
         string: string(),
@@ -164,8 +166,8 @@ describe('parsers.ts', () => {
     });
   });
 
-  describe('searchParams', () => {
-    it('should throw an error in case, passed value is not of type string or URLSearchParams', () => {
+  test('searchParams', () => {
+   test('should throw an error in case, passed value is not of type string or URLSearchParams', () => {
       const parser = searchParams({});
       expect(() => parser.parse(true)).toThrow();
       expect(() => parser.parse({})).toThrow();
@@ -173,12 +175,12 @@ describe('parsers.ts', () => {
       expect(() => parser.parse(new URLSearchParams())).not.toThrow();
     });
 
-    it('should throw an error in case, passed value does not contain required field presented in schema', () => {
+   test('should throw an error in case, passed value does not contain required field presented in schema', () => {
       const parser = searchParams({ prop: string() });
       expect(() => parser.parse('abc=123')).toThrowError('Unable to parse field "prop"');
     });
 
-    it('should not throw an error in case, passed value does not contain optional field presented in schema', () => {
+   test('should not throw an error in case, passed value does not contain optional field presented in schema', () => {
       const parser = searchParams<{ prop?: string }>({
         prop: string().optional(),
       });
@@ -186,12 +188,12 @@ describe('parsers.ts', () => {
       expect(parser.parse('prop=abc')).toEqual({ prop: 'abc' });
     });
 
-    it('should throw an error in case, passed value contains field of different type presented in schema', () => {
+   test('should throw an error in case, passed value contains field of different type presented in schema', () => {
       const parser = searchParams({ prop: date() });
       expect(() => parser.parse('prop=abc')).toThrowError('Unable to parse field "prop"');
     });
 
-    it('should correctly parse built-in types', () => {
+   test('should correctly parse built-in types', () => {
       const parser = searchParams({
         date: date(),
         string: string(),
@@ -206,33 +208,33 @@ describe('parsers.ts', () => {
     });
   });
 
-  describe('array', () => {
-    describe('of', () => {
-      it('should correctly apply item parser', () => {
+  test('array', () => {
+    test('of', () => {
+     test('should correctly apply item parser', () => {
         expect(array().of(string()).parse(['abc'])).toStrictEqual(['abc']);
       });
 
-      it('should throw an error in case, item parser was unable to parse value', () => {
+     test('should throw an error in case, item parser was unable to parse value', () => {
         expect(() => array().of(string()).parse(['abc', 123])).toThrow();
       });
     });
 
-    describe('optional', () => {
-      it('should return undefined if value is undefined', () => {
+    test('optional', () => {
+     test('should return undefined if value is undefined', () => {
         expect(array().optional().parse(undefined)).toBe(undefined);
       });
 
-      it('should return undefined is passed isEmpty function returned true', () => {
+     test('should return undefined is passed isEmpty function returned true', () => {
         expect(array().optional((value) => value === null).parse(null)).toBe(undefined);
       });
     });
 
-    describe('required', () => {
-      it('should return value in case, it is array', () => {
+    test('required', () => {
+     test('should return value in case, it is array', () => {
         expect(array().parse(['abc'])).toStrictEqual(['abc']);
       });
 
-      it('should throw an error in case, passed value is not array', () => {
+     test('should throw an error in case, passed value is not array', () => {
         expect(() => array().parse(true)).toThrow();
         expect(() => array().parse({})).toThrow();
       });

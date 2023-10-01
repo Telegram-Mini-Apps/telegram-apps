@@ -1,3 +1,4 @@
+import { expect, test, vi } from 'vitest';
 import type { RGB } from '@tma.js/colors';
 
 import { WebApp } from '../../../src/index.js';
@@ -15,8 +16,8 @@ interface CreateWebAppOptions {
 
 function createWebApp(options: CreateWebAppOptions = {}): WebApp {
   const {
-    createRequestId = jest.fn(),
-    postEvent = jest.fn(),
+    createRequestId = vi.fn(),
+    postEvent = vi.fn(),
     backgroundColor = '#000000',
     headerColor = 'bg_color',
     version = '6.0',
@@ -26,12 +27,12 @@ function createWebApp(options: CreateWebAppOptions = {}): WebApp {
   return new WebApp(headerColor, backgroundColor, version, platform, createRequestId, postEvent);
 }
 
-describe('components', () => {
-  describe('WebApp', () => {
-    describe('WebApp.ts', () => {
-      describe('WebApp', () => {
-        describe('colorScheme', () => {
-          it('should return "dark" in case, WebApp background color is recognized as dark. "light" otherwise', () => {
+test('components', () => {
+  test('WebApp', () => {
+    test('WebApp.ts', () => {
+      test('WebApp', () => {
+        test('colorScheme', () => {
+         test('should return "dark" in case, WebApp background color is recognized as dark. "light" otherwise', () => {
             const webApp = createWebApp({ backgroundColor: '#000000' });
 
             expect(webApp.colorScheme).toBe('dark');
@@ -40,9 +41,9 @@ describe('components', () => {
           });
         });
 
-        describe('setBackgroundColor', () => {
-          it('should call "web_app_set_background_color" method with { color: {{color}} }', () => {
-            const postEvent = jest.fn();
+        test('setBackgroundColor', () => {
+         test('should call "web_app_set_background_color" method with { color: {{color}} }', () => {
+            const postEvent = vi.fn();
             const webApp = createWebApp({ postEvent });
 
             expect(postEvent).toHaveBeenCalledTimes(0);
@@ -51,9 +52,9 @@ describe('components', () => {
             expect(postEvent).toHaveBeenCalledWith('web_app_set_background_color', { color: '#ffaabb' });
           });
 
-          it('should emit "backgroundColorChanged" event with specified value', () => {
+         test('should emit "backgroundColorChanged" event with specified value', () => {
             const webApp = createWebApp({ backgroundColor: '#ffffff' });
-            const listener = jest.fn();
+            const listener = vi.fn();
 
             webApp.on('backgroundColorChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
@@ -63,9 +64,9 @@ describe('components', () => {
           });
         });
 
-        describe('setHeaderColor', () => {
-          it('should call "web_app_set_header_color" method with { color_key: {{color_key}} }', () => {
-            const postEvent = jest.fn();
+        test('setHeaderColor', () => {
+         test('should call "web_app_set_header_color" method with { color_key: {{color_key}} }', () => {
+            const postEvent = vi.fn();
             const webApp = createWebApp({ postEvent, headerColor: 'bg_color' });
 
             expect(postEvent).toHaveBeenCalledTimes(0);
@@ -74,9 +75,9 @@ describe('components', () => {
             expect(postEvent).toHaveBeenCalledWith('web_app_set_header_color', { color_key: 'secondary_bg_color' });
           });
 
-          it('should emit "headerColorChanged" event with specified value', () => {
+         test('should emit "headerColorChanged" event with specified value', () => {
             const webApp = createWebApp({ headerColor: 'bg_color' });
-            const listener = jest.fn();
+            const listener = vi.fn();
 
             webApp.on('headerColorChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
@@ -86,10 +87,10 @@ describe('components', () => {
           });
         });
 
-        describe('off', () => {
-          describe('"backgroundColorChanged" event', () => {
-            it('should remove event listener from event', () => {
-              const listener = jest.fn();
+        test('off', () => {
+          test('"backgroundColorChanged" event', () => {
+           test('should remove event listener from event', () => {
+              const listener = vi.fn();
               const webApp = createWebApp({ backgroundColor: '#ffffff' });
 
               webApp.on('backgroundColorChanged', listener);
@@ -107,9 +108,9 @@ describe('components', () => {
             });
           });
 
-          describe('"headerColorChanged" event', () => {
-            it('should remove event listener from event', () => {
-              const listener = jest.fn();
+          test('"headerColorChanged" event', () => {
+           test('should remove event listener from event', () => {
+              const listener = vi.fn();
               const webApp = createWebApp({ headerColor: 'bg_color' });
 
               webApp.on('headerColorChanged', listener);
@@ -128,9 +129,9 @@ describe('components', () => {
           });
         });
 
-        describe('supports', () => {
-          describe('setHeaderColor / setBackgroundColor', () => {
-            it('should return true in case, WebApp version is 6.1 or higher. False, otherwise', () => {
+        test('supports', () => {
+          test('setHeaderColor / setBackgroundColor', () => {
+           test('should return true in case, WebApp version is 6.1 or higher. False, otherwise', () => {
               const webApp1 = createWebApp({ version: '6.0' });
               expect(webApp1.supports('setHeaderColor')).toBe(false);
               expect(webApp1.supports('setBackgroundColor')).toBe(false);

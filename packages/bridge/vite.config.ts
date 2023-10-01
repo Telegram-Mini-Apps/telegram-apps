@@ -16,4 +16,7 @@ export default createViteConfig({
   formats: ['es', 'umd'],
   external,
   globals: createUMDGlobals(external),
+  test: {
+    environment: 'happy-dom',
+  },
 });

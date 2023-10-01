@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type {
   MethodName,
   HasCheckSupportMethodName,
@@ -33,8 +35,8 @@ function increaseVersion(version: Version, amount: number): string {
   return `${version.slice(0, lastDotIndex + 1)}${lastPart + amount}`;
 }
 
-describe('supports.ts', () => {
-  describe('supports', () => {
+test('supports.ts', () => {
+  test('supports', () => {
     const tests: Test[] = [
       ['any', [
         'iframe_ready', 'web_app_close', 'web_app_data_send', 'web_app_expand',
@@ -64,13 +66,13 @@ describe('supports.ts', () => {
           if (Array.isArray(methodOrTuple)) {
             const [method, param] = methodOrTuple;
 
-            it(`should return true in case, passed method is "${method}", parameter is "${param}" and version is 1`, () => {
+           test(`should return true in case, passed method is "${method}", parameter is "${param}" and version is 1`, () => {
               expect(supports(method, param, '1')).toBe(true);
             });
           } else {
             const method = methodOrTuple;
 
-            it(`should return true in case, passed method is "${method}" and version is 1`, () => {
+           test(`should return true in case, passed method is "${method}" and version is 1`, () => {
               expect(supports(method, '1')).toBe(true);
             });
           }
@@ -82,23 +84,23 @@ describe('supports.ts', () => {
         if (Array.isArray(methodOrTuple)) {
           const [method, param] = methodOrTuple;
 
-          it(`should return true in case, passed method is "${method}", parameter is "${param}" and version is ${version} or higher`, () => {
+         test(`should return true in case, passed method is "${method}", parameter is "${param}" and version is ${version} or higher`, () => {
             expect(supports(method, param, version)).toBe(true);
             expect(supports(method, param, increaseVersion(version, 1))).toBe(true);
           });
 
-          it(`should return false in case, passed method is "${method}", parameter is "${param}" and version is lower than ${version}`, () => {
+         test(`should return false in case, passed method is "${method}", parameter is "${param}" and version is lower than ${version}`, () => {
             expect(supports(method, param, increaseVersion(version, -1))).toBe(false);
           });
         } else {
           const method = methodOrTuple;
 
-          it(`should return true in case, passed method is "${method}" and version is ${version} or higher`, () => {
+         test(`should return true in case, passed method is "${method}" and version is ${version} or higher`, () => {
             expect(supports(method, version)).toBe(true);
             expect(supports(method, increaseVersion(version, 1))).toBe(true);
           });
 
-          it(`should return false in case, passed method is "${method}" and version is lower than ${version}`, () => {
+         test(`should return false in case, passed method is "${method}" and version is lower than ${version}`, () => {
             expect(supports(method, increaseVersion(version, -1))).toBe(false);
           });
         }
@@ -106,15 +108,15 @@ describe('supports.ts', () => {
     });
   });
 
-  describe('detectSupportParams', () => {
-    it('should return ["try_instant_view"] in case, passed method is "web_app_open_link" and params argument contains property "try_instant_view"', () => {
+  test('detectSupportParams', () => {
+   test('should return ["try_instant_view"] in case, passed method is "web_app_open_link" and params argument contains property "try_instant_view"', () => {
       expect(
         detectSupportParams('web_app_open_link', { url: '', try_instant_view: true }),
       ).toStrictEqual(['try_instant_view']);
       expect(detectSupportParams('web_app_open_link', { url: '' })).toStrictEqual([]);
     });
 
-    it('should return ["color"] in case, passed method is "web_app_set_header_color" and params argument contains property "color"', () => {
+   test('should return ["color"] in case, passed method is "web_app_set_header_color" and params argument contains property "color"', () => {
       expect(
         detectSupportParams('web_app_set_header_color', { color: '#abc' }),
       ).toStrictEqual(['color']);

@@ -1,3 +1,5 @@
+import { expect, test, beforeEach, vi } from 'vitest';
+
 import { EventEmitter } from '../src/index.js';
 
 interface EventsMap {
@@ -11,19 +13,19 @@ beforeEach(() => {
   ee = new EventEmitter<EventsMap>();
 });
 
-describe('EventEmitter.ts', () => {
-  describe('EventEmitter', () => {
-    describe('on', () => {
-      it('should emit bound listener with specified arguments', () => {
-        const listener = jest.fn();
+test('EventEmitter.ts', () => {
+  test('EventEmitter', () => {
+    test('on', () => {
+      test('should emit bound listener with specified arguments', () => {
+        const listener = vi.fn();
         ee.on('test', listener);
         ee.emit('test', 1, true);
         expect(listener).toBeCalledWith(1, true);
       });
 
-      it('should not remove previously added listeners', () => {
-        const listener1 = jest.fn();
-        const listener2 = jest.fn();
+      test('should not remove previously added listeners', () => {
+        const listener1 = vi.fn();
+        const listener2 = vi.fn();
         ee.on('test', listener1);
         ee.on('test', listener2);
         ee.emit('test', 1, true);
@@ -31,17 +33,17 @@ describe('EventEmitter.ts', () => {
         expect(listener2).toBeCalledWith(1, true);
       });
 
-      it('should not emit bound listener in case, event name does not match', () => {
-        const listener = jest.fn();
+      test('should not emit bound listener in case, event name does not match', () => {
+        const listener = vi.fn();
         ee.on('test', listener);
         ee.emit('hey');
         expect(listener).not.toBeCalled();
       });
     });
 
-    describe('once', () => {
-      it('should call listener only once', () => {
-        const listener = jest.fn();
+    test('once', () => {
+      test('should call listener only once', () => {
+        const listener = vi.fn();
         ee.once('test', listener);
         ee.emit('test', 1, true);
         ee.emit('test', 1, true);
@@ -50,8 +52,8 @@ describe('EventEmitter.ts', () => {
         expect(listener).toHaveBeenCalledWith(1, true);
       });
 
-      it('should remove all same listeners bound to the same event', () => {
-        const listener = jest.fn();
+      test('should remove all same listeners bound to the same event', () => {
+        const listener = vi.fn();
         ee.once('test', listener);
         ee.once('test', listener);
         ee.emit('test', 1, true);
@@ -61,24 +63,24 @@ describe('EventEmitter.ts', () => {
       });
     });
 
-    describe('off', () => {
-      it('should not emit bound listener in case, it was unbound', () => {
-        const listener = jest.fn();
+    test('off', () => {
+      test('should not emit bound listener in case, it was unbound', () => {
+        const listener = vi.fn();
         ee.on('test', listener);
         ee.off('test', listener);
         ee.emit('test', 1, true);
         expect(listener).not.toBeCalled();
       });
 
-      it('should not do anything in case, event has no listeners', () => {
+      test('should not do anything in case, event has no listeners', () => {
         expect(() => {
-          const listener = jest.fn();
+          const listener = vi.fn();
           ee.off('test', listener);
         }).not.toThrow();
       });
 
-      it('should remove event listener bound via "once" method', () => {
-        const listener = jest.fn();
+      test('should remove event listener bound via "once" method', () => {
+        const listener = vi.fn();
         ee.once('test', listener);
         ee.off('test', listener);
         ee.emit('test', 1, true);
@@ -86,9 +88,9 @@ describe('EventEmitter.ts', () => {
       });
     });
 
-    describe('subscribe', () => {
-      it('should emit any event', () => {
-        const listener = jest.fn();
+    test('subscribe', () => {
+      test('should emit any event', () => {
+        const listener = vi.fn();
         ee.subscribe(listener);
         ee.emit('test', 1, true);
         ee.emit('hey');
@@ -96,9 +98,9 @@ describe('EventEmitter.ts', () => {
       });
     });
 
-    describe('unsubscribe', () => {
-      it('should not emit event if it was unbound', () => {
-        const listener = jest.fn();
+    test('unsubscribe', () => {
+      test('should not emit event if it was unbound', () => {
+        const listener = vi.fn();
         ee.subscribe(listener);
         ee.unsubscribe(listener);
         ee.emit('test', 1, true);
