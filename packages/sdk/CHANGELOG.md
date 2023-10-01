@@ -1,5 +1,23 @@
 # @tma.js/sdk
 
+## 0.11.5
+
+### Patch Changes
+
+- 3c6ed39: - Start using Vite instead of pure Rollup
+  - Update all package.json files in all packages
+  - Implement `build-utils` package to share build utilities across all packages
+  - Refactor tsconfig.json files
+  - Complicate examples for React and SDK
+- Updated dependencies [3c6ed39]
+  - @tma.js/event-emitter@0.0.3
+  - @tma.js/util-types@0.0.3
+  - @tma.js/init-data@0.2.15
+  - @tma.js/parsing@0.0.3
+  - @tma.js/bridge@1.3.4
+  - @tma.js/colors@0.0.3
+  - @tma.js/utils@0.5.3
+
 ## 0.11.4
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/parsing",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Utilities made to parse different types of data.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
