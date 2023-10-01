@@ -1,4 +1,4 @@
-import { expect, test, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import { createEmitter, singletonEmitter } from '../../src/events/emitter.js';
 import { createWindow, type WindowSpy } from '../../__test-utils__/createWindow.js';
@@ -26,13 +26,13 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  windowSpy.mockReset();
+  windowSpy.mockRestore();
 });
 
-test('events', () => {
-  test('emitter.ts', () => {
-    test('createEmitter', () => {
-     test('should emit "viewport_changed" event in case, window changed its size', () => {
+describe('events', () => {
+  describe('emitter.ts', () => {
+    describe('createEmitter', () => {
+      it('should emit "viewport_changed" event in case, window changed its size', () => {
         const emitter = createEmitter();
         const spy = vi.fn();
 
@@ -49,7 +49,7 @@ test('events', () => {
         });
       });
 
-      test('events handling', () => {
+      describe('events handling', () => {
         const testCases: TestCases = [
           ['viewport_changed', {
             height: 120,
@@ -98,7 +98,7 @@ test('events', () => {
         ];
 
         testCases.forEach(([event, inputOrCaseOrCases]) => {
-         test(`should correctly handle "${event}" event data`, () => {
+          it(`should correctly handle "${event}" event data`, () => {
             const spy = vi.fn();
             const emitter = createEmitter();
 
@@ -134,7 +134,7 @@ test('events', () => {
           });
         });
 
-       test('should not emit event in case, it contains incorrect payload', () => {
+        it('should not emit event in case, it contains incorrect payload', () => {
           const spy = vi.fn();
           const emitter = createEmitter();
 
@@ -147,8 +147,8 @@ test('events', () => {
       });
     });
 
-    test('singletonEmitter', () => {
-     test('should return the same instance of emitter', () => {
+    describe('singletonEmitter', () => {
+      it('should return the same instance of emitter', () => {
         expect(singletonEmitter()).toEqual(singletonEmitter());
       });
     });

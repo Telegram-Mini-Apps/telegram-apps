@@ -1,17 +1,17 @@
-import { expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { ValueParser } from '../src/index.js';
 
-test('ValueParser.ts', () => {
-  test('ValueParser', () => {
-    test('parse', () => {
-     test('should return value from parser', () => {
+describe('ValueParser.ts', () => {
+  describe('ValueParser', () => {
+    describe('parse', () => {
+      it('should return value from parser', () => {
         const parser = ValueParser.create(() => 'my value');
 
         expect(parser.parse('abc')).toBe('my value');
       });
 
-     test('should throw an error in case, wrapped parser was unable to parse value', () => {
+      it('should throw an error in case, wrapped parser was unable to parse value', () => {
         const parser = ValueParser.create((v) => {
           if (v === 'throw') {
             throw new Error('I am throwing');
@@ -23,14 +23,14 @@ test('ValueParser.ts', () => {
       });
     });
 
-    test('optional', () => {
-     test('should return undefined in case, passed value is undefined', () => {
+    describe('optional', () => {
+      it('should return undefined in case, passed value is undefined', () => {
         const parser = ValueParser.create(() => 'does not matter').optional();
 
         expect(parser.parse(undefined)).toBe(undefined);
       });
 
-     test('should return undefined in case, passed value satisfies passed isEmpty function', () => {
+      it('should return undefined in case, passed value satisfies passed isEmpty function', () => {
         const parser = ValueParser.create(() => 'does not matter').optional(
           (v) => v === null || v === undefined,
         );
@@ -41,8 +41,8 @@ test('ValueParser.ts', () => {
       });
     });
 
-    test('default', () => {
-     test('should return undefined in case, passed value is undefined and default was not specified', () => {
+    describe('default', () => {
+      it('should return undefined in case, passed value is undefined and default was not specified', () => {
         const parser = ValueParser.create(() => 'does not matter').optional(
           (v) => v === null || v === undefined,
         );
@@ -52,7 +52,7 @@ test('ValueParser.ts', () => {
         expect(parser.parse('abc')).toBe('does not matter');
       });
 
-     test('should return value from passed default function in case value is empty', () => {
+      it('should return value from passed default function in case value is empty', () => {
         const parser = ValueParser.create(() => 'does not matter')
           .optional((v) => v === null || v === undefined)
           .default(() => 'my value');

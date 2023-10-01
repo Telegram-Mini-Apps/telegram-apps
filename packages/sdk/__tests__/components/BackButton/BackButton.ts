@@ -1,13 +1,13 @@
-import { expect, test, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { BackButton } from '../../../src/index.js';
 
-test('components', () => {
-  test('BackButton', () => {
-    test('BackButton.ts', () => {
-      test('BackButton', () => {
-        test('hide', () => {
-         test('should call "web_app_setup_back_button" method with "is_visible" equal to false', () => {
+describe('components', () => {
+  describe('BackButton', () => {
+    describe('BackButton.ts', () => {
+      describe('BackButton', () => {
+        describe('hide', () => {
+          it('should call "web_app_setup_back_button" method with "is_visible" equal to false', () => {
             const postEvent = vi.fn();
             const backButton = new BackButton(false, '', postEvent);
 
@@ -17,7 +17,7 @@ test('components', () => {
             expect(postEvent).toHaveBeenCalledWith('web_app_setup_back_button', { is_visible: false });
           });
 
-         test('should emit "isVisibleChanged" event with false value', () => {
+          it('should emit "isVisibleChanged" event with false value', () => {
             const backButton = new BackButton(true, '', vi.fn());
             const listener = vi.fn();
 
@@ -29,8 +29,8 @@ test('components', () => {
           });
         });
 
-        test('show', () => {
-         test('should call "web_app_setup_back_button" method with "is_visible" equal to true', () => {
+        describe('show', () => {
+          it('should call "web_app_setup_back_button" method with "is_visible" equal to true', () => {
             const postEvent = vi.fn();
             const backButton = new BackButton(false, '', postEvent);
 
@@ -40,7 +40,7 @@ test('components', () => {
             expect(postEvent).toHaveBeenCalledWith('web_app_setup_back_button', { is_visible: true });
           });
 
-         test('should emit "isVisibleChanged" event with true value', () => {
+          it('should emit "isVisibleChanged" event with true value', () => {
             const backButton = new BackButton(false, '', vi.fn());
             const listener = vi.fn();
 
@@ -53,9 +53,9 @@ test('components', () => {
         });
 
         // FIXME
-        // test('on', () => {
-        //   test('"click" event', () => {
-        //    test('should add event listener to bridge\'s '
+        // it('on', () => {
+        //   it('"click" event', () => {
+        //    it('should add event listener to bridge\'s '
         //       + '"back_button_pressed" event', () => {
         //       const on = vi.fn();
         //       const backButton = new BackButton({ on } as any, '');
@@ -69,10 +69,10 @@ test('components', () => {
         //   });
         // });
 
-        test('off', () => {
+        describe('off', () => {
           // FIXME
-          // test('"click" event', () => {
-          //  test('should remove event listener from bridge\'s '
+          // it('"click" event', () => {
+          //  it('should remove event listener from bridge\'s '
           //     + '"back_button_pressed" event', () => {
           //     const on = vi.fn();
           //     const off = vi.fn();
@@ -94,8 +94,8 @@ test('components', () => {
           //   });
           // });
 
-          test('"isVisibleChanged" event', () => {
-           test('should remove event listener from event', () => {
+          describe('"isVisibleChanged" event', () => {
+            it('should remove event listener from event', () => {
               const listener = vi.fn();
               const backButton = new BackButton(false, '', vi.fn());
 
@@ -114,9 +114,9 @@ test('components', () => {
           });
         });
 
-        test('supports', () => {
-          test('show / hide', () => {
-           test('should return true in case, BackButton version is 6.1 or higher. False, otherwise', () => {
+        describe('supports', () => {
+          describe('show / hide', () => {
+            it('should return true in case, BackButton version is 6.1 or higher. False, otherwise', () => {
               const backButton1 = new BackButton(false, '6.0');
               expect(backButton1.supports('show')).toBe(false);
               expect(backButton1.supports('hide')).toBe(false);

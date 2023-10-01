@@ -1,12 +1,12 @@
-import { expect, test, vi, afterEach, afterAll } from 'vitest';
+import { expect, it, vi, afterEach, afterAll, describe } from 'vitest';
 import { hasExternalNotify, hasWebviewProxy, isIframe } from '../src/env.js';
 
 const emptyFunction = () => {
 };
 
-test('env.ts', () => {
-  test('hasExternalNotify', () => {
-   test('should return true if passed object contains path property "external.notify" and "notify" is a function property.', () => {
+describe('env.ts', () => {
+  describe('hasExternalNotify', () => {
+    it('should return true if passed object contains path property "external.notify" and "notify" is a function property.', () => {
       expect(hasExternalNotify({})).toBe(false);
       expect(hasExternalNotify({ external: {} })).toBe(false);
       expect(hasExternalNotify({ external: { notify: [] } })).toBe(false);
@@ -14,8 +14,8 @@ test('env.ts', () => {
     });
   });
 
-  test('hasWebviewProxy', () => {
-   test('should return true if passed object contains path property "TelegramWebviewProxy.postEvent" and "postEvent" is a function property.', () => {
+  describe('hasWebviewProxy', () => {
+    it('should return true if passed object contains path property "TelegramWebviewProxy.postEvent" and "postEvent" is a function property.', () => {
       expect(hasWebviewProxy({})).toBe(false);
       expect(hasWebviewProxy({ TelegramWebviewProxy: {} })).toBe(false);
       expect(hasWebviewProxy({ TelegramWebviewProxy: { postEvent: [] } })).toBe(false);
@@ -23,7 +23,7 @@ test('env.ts', () => {
     });
   });
 
-  test('isIframe', () => {
+  describe('isIframe', () => {
     const windowSpy = vi.spyOn(window, 'window', 'get');
 
     afterEach(() => {
@@ -34,7 +34,7 @@ test('env.ts', () => {
       windowSpy.mockRestore();
     });
 
-   test('should return true in case window.self !== window.top. Otherwise, false.', () => {
+    it('should return true in case window.self !== window.top. Otherwise, false.', () => {
       windowSpy.mockImplementation(() => ({ self: 900, top: 1000 }) as any);
       expect(isIframe()).toBe(true);
 
@@ -42,7 +42,7 @@ test('env.ts', () => {
       expect(isIframe()).toBe(false);
     });
 
-   test('should return true in case window.self getter threw an error', () => {
+    it('should return true in case window.self getter threw an error', () => {
       windowSpy.mockImplementation(() => ({
         get self() {
           throw new Error();

@@ -1,4 +1,4 @@
-import { expect, test, vi, beforeEach, afterEach } from 'vitest';
+import { expect, vi, beforeEach, afterEach, describe, it } from 'vitest';
 
 import {
   clipboardTextReceivedPayload,
@@ -8,10 +8,10 @@ import {
   viewportChangedPayload,
 } from '../../src/events/parsing.js';
 
-test('events', () => {
-  test('parsing.ts', () => {
-    test('themeChangedPayload', () => {
-     test('should return parsed value in case, passed value satisfies schema', () => {
+describe('events', () => {
+  describe('parsing.ts', () => {
+    describe('themeChangedPayload', () => {
+      it('should return parsed value in case, passed value satisfies schema', () => {
         const values = [
           {
             theme_params: {
@@ -42,7 +42,7 @@ test('events', () => {
         });
       });
 
-     test('should throw an error in case, passed value does not satisfy schema', () => {
+      it('should throw an error in case, passed value does not satisfy schema', () => {
         expect(() => themeChangedPayload.parse({})).toThrow();
         expect(() => themeChangedPayload.parse({
           theme_params: {
@@ -52,7 +52,7 @@ test('events', () => {
       });
     });
 
-    test('viewportChangedPayload', () => {
+    describe('viewportChangedPayload', () => {
       const windowSpy = vi.spyOn(window, 'window', 'get');
       // const innerWidth = 2000;
 
@@ -64,7 +64,7 @@ test('events', () => {
         windowSpy.mockRestore();
       });
 
-     test('should return parsed value in case, passed value satisfies schema', () => {
+      it('should return parsed value in case, passed value satisfies schema', () => {
         const values = [
           {
             height: 900,
@@ -95,52 +95,53 @@ test('events', () => {
         });
       });
 
-     test('should throw an error in case, passed value does not satisfy schema', () => {
+      it('should throw an error in case, passed value does not satisfy schema', () => {
         expect(() => viewportChangedPayload.parse({})).toThrow();
       });
     });
 
-    test('popupClosedPayload', () => {
-     test('should return parsed value in case, passed value satisfies schema', () => {
+    describe('popupClosedPayload', () => {
+      it('should return parsed value in case, passed value satisfies schema', () => {
         expect(popupClosedPayload.parse({ button_id: 'ok' })).toStrictEqual({ button_id: 'ok' });
         expect(popupClosedPayload.parse({})).toStrictEqual({});
         expect(popupClosedPayload.parse({ button_id: null })).toStrictEqual({});
       });
 
-     test('should throw an error in case, passed value does not satisfy schema', () => {
+      it('should throw an error in case, passed value does not satisfy schema', () => {
         expect(() => popupClosedPayload.parse({ button_id: 100 })).toThrow();
       });
     });
 
-    test('qrTextReceivedPayload', () => {
-     test('should return parsed value in case, passed value satisfies schema', () => {
+    describe('qrTextReceivedPayload', () => {
+      it('should return parsed value in case, passed value satisfies schema', () => {
         expect(qrTextReceivedPayload.parse({ data: 'ok' })).toStrictEqual({ data: 'ok' });
         expect(qrTextReceivedPayload.parse({})).toStrictEqual({});
       });
 
-     test('should throw an error in case, passed value does not satisfy schema', () => {
+      it('should throw an error in case, passed value does not satisfy schema', () => {
         expect(() => qrTextReceivedPayload.parse({ data: 100 })).toThrow();
       });
     });
 
-    test('invoiceClosedPayload', () => {
-     test('should return parsed value in case, passed value satisfies schema', () => {
+    describe('invoiceClosedPayload', () => {
+      it('should return parsed value in case, passed value satisfies schema', () => {
         const value = { slug: 'abc', status: 'def' };
         expect(invoiceClosedPayload.parse(value)).toStrictEqual(value);
       });
 
-     test('should throw an error in case, passed value does not satisfy schema', () => {
+      it('should throw an error in case, passed value does not satisfy schema', () => {
         expect(() => invoiceClosedPayload.parse({})).toThrow();
       });
     });
 
-    test('clipboardTextReceivedPayload', () => {
-     test('should return parsed value in case, passed value satisfies schema', () => {
+    describe('clipboardTextReceivedPayload', () => {
+      it('should return parsed value in case, passed value satisfies schema', () => {
         const cases = [
           { req_id: 'abc', data: 'ok' },
           { req_id: 'abc' },
           { req_id: 'abc', data: null },
         ];
+
         cases.forEach((value) => {
           expect(clipboardTextReceivedPayload.parse(value)).toStrictEqual(value);
           expect(clipboardTextReceivedPayload.parse(JSON.stringify(value)))
@@ -148,7 +149,7 @@ test('events', () => {
         });
       });
 
-     test('should throw an error in case, passed value does not satisfy schema', () => {
+      it('should throw an error in case, passed value does not satisfy schema', () => {
         expect(() => clipboardTextReceivedPayload.parse({})).toThrow();
       });
     });

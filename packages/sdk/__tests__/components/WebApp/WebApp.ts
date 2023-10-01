@@ -1,4 +1,4 @@
-import { expect, test, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { RGB } from '@tma.js/colors';
 
 import { WebApp } from '../../../src/index.js';
@@ -27,12 +27,12 @@ function createWebApp(options: CreateWebAppOptions = {}): WebApp {
   return new WebApp(headerColor, backgroundColor, version, platform, createRequestId, postEvent);
 }
 
-test('components', () => {
-  test('WebApp', () => {
-    test('WebApp.ts', () => {
-      test('WebApp', () => {
-        test('colorScheme', () => {
-         test('should return "dark" in case, WebApp background color is recognized as dark. "light" otherwise', () => {
+describe('components', () => {
+  describe('WebApp', () => {
+    describe('WebApp.ts', () => {
+      describe('WebApp', () => {
+        describe('colorScheme', () => {
+          it('should return "dark" in case, WebApp background color is recognized as dark. "light" otherwise', () => {
             const webApp = createWebApp({ backgroundColor: '#000000' });
 
             expect(webApp.colorScheme).toBe('dark');
@@ -41,8 +41,8 @@ test('components', () => {
           });
         });
 
-        test('setBackgroundColor', () => {
-         test('should call "web_app_set_background_color" method with { color: {{color}} }', () => {
+        describe('setBackgroundColor', () => {
+          it('should call "web_app_set_background_color" method with { color: {{color}} }', () => {
             const postEvent = vi.fn();
             const webApp = createWebApp({ postEvent });
 
@@ -52,7 +52,7 @@ test('components', () => {
             expect(postEvent).toHaveBeenCalledWith('web_app_set_background_color', { color: '#ffaabb' });
           });
 
-         test('should emit "backgroundColorChanged" event with specified value', () => {
+          it('should emit "backgroundColorChanged" event with specified value', () => {
             const webApp = createWebApp({ backgroundColor: '#ffffff' });
             const listener = vi.fn();
 
@@ -64,8 +64,8 @@ test('components', () => {
           });
         });
 
-        test('setHeaderColor', () => {
-         test('should call "web_app_set_header_color" method with { color_key: {{color_key}} }', () => {
+        describe('setHeaderColor', () => {
+          it('should call "web_app_set_header_color" method with { color_key: {{color_key}} }', () => {
             const postEvent = vi.fn();
             const webApp = createWebApp({ postEvent, headerColor: 'bg_color' });
 
@@ -75,7 +75,7 @@ test('components', () => {
             expect(postEvent).toHaveBeenCalledWith('web_app_set_header_color', { color_key: 'secondary_bg_color' });
           });
 
-         test('should emit "headerColorChanged" event with specified value', () => {
+          it('should emit "headerColorChanged" event with specified value', () => {
             const webApp = createWebApp({ headerColor: 'bg_color' });
             const listener = vi.fn();
 
@@ -87,9 +87,9 @@ test('components', () => {
           });
         });
 
-        test('off', () => {
-          test('"backgroundColorChanged" event', () => {
-           test('should remove event listener from event', () => {
+        describe('off', () => {
+          describe('"backgroundColorChanged" event', () => {
+            it('should remove event listener from event', () => {
               const listener = vi.fn();
               const webApp = createWebApp({ backgroundColor: '#ffffff' });
 
@@ -108,8 +108,8 @@ test('components', () => {
             });
           });
 
-          test('"headerColorChanged" event', () => {
-           test('should remove event listener from event', () => {
+          describe('"headerColorChanged" event', () => {
+            it('should remove event listener from event', () => {
               const listener = vi.fn();
               const webApp = createWebApp({ headerColor: 'bg_color' });
 
@@ -129,9 +129,9 @@ test('components', () => {
           });
         });
 
-        test('supports', () => {
-          test('setHeaderColor / setBackgroundColor', () => {
-           test('should return true in case, WebApp version is 6.1 or higher. False, otherwise', () => {
+        describe('supports', () => {
+          describe('setHeaderColor / setBackgroundColor', () => {
+            it('should return true in case, WebApp version is 6.1 or higher. False, otherwise', () => {
               const webApp1 = createWebApp({ version: '6.0' });
               expect(webApp1.supports('setHeaderColor')).toBe(false);
               expect(webApp1.supports('setBackgroundColor')).toBe(false);

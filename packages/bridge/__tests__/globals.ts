@@ -1,4 +1,4 @@
-import { expect, test, vi, afterEach } from 'vitest';
+import { expect, it, vi, afterEach, describe } from 'vitest';
 
 import {
   log,
@@ -11,9 +11,9 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-test('globals.ts', () => {
-  test('log', () => {
-   test('should log message in case, debug mode is enabled. Otherwise no output should be shown', () => {
+describe('globals.ts', () => {
+  describe('log', () => {
+    it('should log message in case, debug mode is enabled. Otherwise no output should be shown', () => {
       const spy = vi.spyOn(console, 'log').mockImplementation(() => {
       });
 
@@ -30,8 +30,8 @@ test('globals.ts', () => {
     });
   });
 
-  test('setTargetOrigin', () => {
-   test('should return set value via targetOrigin() function', () => {
+  describe('setTargetOrigin', () => {
+    it('should return set value via targetOrigin() function', () => {
       setTargetOrigin('my test');
       expect(targetOrigin()).toEqual('my test');
     });

@@ -1,24 +1,24 @@
-import { expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { ArrayValueParser } from '../src/index.js';
 
-test('ArrayValueParser.ts', () => {
-  test('ArrayValueParser', () => {
-    test('parse', () => {
-     test('should return value from parser', () => {
+describe('ArrayValueParser.ts', () => {
+  describe('ArrayValueParser', () => {
+    describe('parse', () => {
+      it('should return value from parser', () => {
         const parser = new ArrayValueParser((value) => value, false, undefined);
 
         expect(parser.parse([1, 2, 3])).toStrictEqual([1, 2, 3]);
         expect(parser.parse('[3,2,1]')).toStrictEqual([3, 2, 1]);
       });
 
-     test('should throw an error in case, array parser was unable to parse value', () => {
+      it('should throw an error in case, array parser was unable to parse value', () => {
         const parser = new ArrayValueParser((v) => v, false, undefined);
 
         expect(() => parser.parse('throw')).toThrow(/Passed value does not satisfy any of known formats/);
       });
 
-     test('should throw an error in case, wrapped parser was unable to parse value', () => {
+      it('should throw an error in case, wrapped parser was unable to parse value', () => {
         const parser = new ArrayValueParser((v) => {
           if (v === 'throw') {
             throw new Error('I am throwing');
@@ -30,14 +30,14 @@ test('ArrayValueParser.ts', () => {
       });
     });
 
-    test('optional', () => {
-     test('should return undefined in case, passed value is undefined', () => {
+    describe('optional', () => {
+      it('should return undefined in case, passed value is undefined', () => {
         const parser = new ArrayValueParser(() => 'does not matter', false, undefined).optional();
 
         expect(parser.parse(undefined)).toBe(undefined);
       });
 
-     test('should return undefined in case, passed value satisfies passed isEmpty function', () => {
+      it('should return undefined in case, passed value satisfies passed isEmpty function', () => {
         const parser = new ArrayValueParser(() => 'does not matter', false, undefined).optional(
           (v) => v === null || v === undefined,
         );
@@ -48,8 +48,8 @@ test('ArrayValueParser.ts', () => {
       });
     });
 
-    test('default', () => {
-     test('should return undefined in case, passed value is undefined and default was not specified', () => {
+    describe('default', () => {
+      it('should return undefined in case, passed value is undefined and default was not specified', () => {
         const parser = new ArrayValueParser(() => 'does not matter', false, undefined).optional(
           (v) => v === null || v === undefined,
         );
@@ -58,7 +58,7 @@ test('ArrayValueParser.ts', () => {
         expect(parser.parse(null)).toBe(undefined);
       });
 
-     test('should return value from passed default function in case value is empty', () => {
+      it('should return value from passed default function in case value is empty', () => {
         const parser = new ArrayValueParser(() => 'does not matter', false, undefined)
           .optional((v) => v === null || v === undefined)
           .default(() => ['my value']);

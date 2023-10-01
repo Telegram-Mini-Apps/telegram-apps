@@ -1,6 +1,6 @@
 import dts from 'vite-plugin-dts';
 import type { LibraryFormats, PluginOption, UserConfig } from 'vite';
-import type { VitestEnvironment } from 'vitest';
+import type { InlineConfig } from 'vitest';
 
 interface Options {
   /**
@@ -28,9 +28,7 @@ interface Options {
   /**
    * Test options.
    */
-  test?: {
-    environment?: VitestEnvironment;
-  };
+  test?: InlineConfig;
 }
 
 export function createViteConfig(options: Options): UserConfig {
@@ -41,14 +39,11 @@ export function createViteConfig(options: Options): UserConfig {
     external,
     globals,
     plugins = [],
-    test: { environment } = {},
+    test,
   } = options;
 
   return {
-    test: {
-      include: ['__tests__/**/*.ts'],
-      environment,
-    },
+    test,
     plugins: [
       // Creates typescript declarations.
       // https://www.npmjs.com/package/vite-plugin-dts

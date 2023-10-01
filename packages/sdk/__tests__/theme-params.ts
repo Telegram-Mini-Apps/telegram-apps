@@ -1,15 +1,15 @@
-import { expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { parseThemeParams } from '../src/index.js';
 
-test('theme-params.ts', () => {
-  test('parseThemeParams', () => {
+describe('theme-params.ts', () => {
+  describe('parseThemeParams', () => {
     const fields = `"${[
       'backgroundColor', 'buttonColor', 'buttonTextColor', 'hintColor',
       'linkColor', 'textColor',
     ].join('", "')}"`;
 
-   test(`should return object with fields ${fields} in case, passed value satisfies required schema`, () => {
+    it(`should return object with fields ${fields} in case, passed value satisfies required schema`, () => {
       const value1 = {
         bg_color: '#ffaabb',
         button_color: '#233312',
@@ -39,7 +39,7 @@ test('theme-params.ts', () => {
       });
     });
 
-   test('should throw an error in case, passed value does not satisfy schema', () => {
+    it('should throw an error in case, passed value does not satisfy schema', () => {
       expect(() => parseThemeParams({
         bg_color: 'I am wrong!',
         button_color: '#233312',

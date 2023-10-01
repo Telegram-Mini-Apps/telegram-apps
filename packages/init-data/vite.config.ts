@@ -1,4 +1,4 @@
-import { createUMDGlobals, createViteConfig } from 'build-utils';
+import { createUMDGlobals, createViteConfig, createVitestConfig } from 'build-utils';
 
 import packageJson from './package.json';
 
@@ -9,4 +9,12 @@ export default createViteConfig({
   formats: ['es', 'umd'],
   external: ['@tma.js/parsing'],
   globals: createUMDGlobals(external),
+  test: createVitestConfig({
+    coverage: {
+      branches: 100,
+      functions: 100,
+      statements: 100,
+      lines: 100,
+    },
+  }),
 });

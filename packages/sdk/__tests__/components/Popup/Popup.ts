@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 // import {emitDesktopEvent, mockDesktop} from '../../../tests';
 // import { Popup } from './Popup';
@@ -8,13 +8,13 @@ import { expect, test } from 'vitest';
 
 // beforeAll(mockDesktop);
 
-test('components', () => {
-  test('Popup', () => {
-   test('should be fine', () => {
+describe('components', () => {
+  describe('Popup', () => {
+    it('should be fine', () => {
       expect(true).toBe(true);
     });
-    // test('isOpened', () => {
-    //  test('should emit event "openChange" with specified value in setter', () => {
+    // it('isOpened', () => {
+    //  it('should emit event "openChange" with specified value in setter', () => {
     //     const popup = new Popup('7');
     //     const spy = vi.spyOn((popup as any).ee, 'emit');
     //     (popup as any).isOpened = true;
@@ -25,13 +25,13 @@ test('components', () => {
     //   });
     // });
     //
-    // test('show', () => {
-    //  test('should throw an error in case, current version is less than 6.2', () => {
+    // it('show', () => {
+    //  it('should throw an error in case, current version is less than 6.2', () => {
     //     expect(() => new Popup('6.1').show({message: 'Hey!'})).toThrow();
     //     expect(() => new Popup('6.2').show({message: 'Hey!'})).not.toThrow();
     //   });
     //
-    //  test('should call bridge event "web_app_open_popup" with prepared parameters', () => {
+    //  it('should call bridge event "web_app_open_popup" with prepared parameters', () => {
     //     const bridge = new Bridge();
     //     const spy = vi.spyOn(bridge, 'postEvent');
     //     const popup = new Popup('7', {bridge});
@@ -41,7 +41,7 @@ test('components', () => {
     //     expect(spy).toHaveBeenCalledWith('web_app_open_popup', prepared);
     //   });
     //
-    //  test('should emit event "open" with prepared params', () => {
+    //  it('should emit event "open" with prepared params', () => {
     //     const popup = new Popup('7');
     //     const spy = vi.spyOn((popup as any).ee, 'emit');
     //     const params: PopupParams = {message: 'Message'};
@@ -50,14 +50,14 @@ test('components', () => {
     //     expect(spy).toHaveBeenCalledWith('open', prepared);
     //   });
     //
-    //  test('should set "isOpened" property to true', () => {
+    //  it('should set "isOpened" property to true', () => {
     //     const popup = new Popup('7');
     //     expect(popup.isOpened).toBe(false);
     //     popup.show({message: 'Message'});
     //     expect(popup.isOpened).toBe(true);
     //   });
     //
-    //  test('should set "isOpened" property to false when promise is resolved', async () => {
+    //  it('should set "isOpened" property to false when promise is resolved', async () => {
     //     const popup = new Popup('7');
     //     const promise = popup.show({message: 'Message'});
     //
@@ -66,13 +66,13 @@ test('components', () => {
     //     expect(popup.isOpened).toBe(false);
     //   });
     //
-    //  test('should set "isOpened" property to true', () => {
+    //  it('should set "isOpened" property to true', () => {
     //     const popup = new Popup('7');
     //     popup.show({message: 'Message'});
     //     expect(popup.isOpened).toBe(true);
     //   });
     //
-    //  test('should emit close event with specified button_id when promise is resolved',
+    //  it('should emit close event with specified button_id when promise is resolved',
     //   async () => {
     //     const popup = new Popup('7');
     //     const spy = vi.spyOn((popup as any).ee, 'emit');
@@ -83,8 +83,8 @@ test('components', () => {
     //   });
     // });
     //
-    // test('showAlert', () => {
-    //  test('should call "show" with passed message and buttons = [{type: "close"}]', () => {
+    // it('showAlert', () => {
+    //  it('should call "show" with passed message and buttons = [{type: "close"}]', () => {
     //     const popup = new Popup('7');
     //     const spy = vi.spyOn(popup, 'show');
     //
@@ -97,7 +97,7 @@ test('components', () => {
     //   });
     // });
     //
-    // test('showConfirm', () => {
+    // it('showConfirm', () => {
     //  test(
     //     'should call "show" with passed message and ' +
     //     'buttons = [{type: "ok", id: "ok"}, {id: "cancel", type: "cancel"}]',
@@ -114,13 +114,13 @@ test('components', () => {
     //     },
     //   );
     //
-    //  test('should resolve true in case, user pressed button with id "ok"', async () => {
+    //  it('should resolve true in case, user pressed button with id "ok"', async () => {
     //     const promise = new Popup('7').showConfirm('Message');
     //     emitDesktopEvent('popup_closed', {button_id: 'ok'});
     //     expect(await promise).toBe(true);
     //   });
     //
-    //  test('should resolve false in case, user pressed any other button', async () => {
+    //  it('should resolve false in case, user pressed any other button', async () => {
     //     const promise = new Popup('7').showConfirm('Message');
     //     emitDesktopEvent('popup_closed', {button_id: 'cancel'});
     //     await expect(promise).resolves.toBe(false);

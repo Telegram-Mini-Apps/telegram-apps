@@ -1,16 +1,17 @@
-import { expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { formatURL } from '../src/index.js';
 
-test('url.ts', () => {
-  test('formatURL', () => {
-   test('should convert URL to its form', () => {
-      expect(formatURL('tg')).toBe('http://localhost/tg');
+describe('url.ts', () => {
+  describe('formatURL', () => {
+    it('should convert URL to its form', () => {
+      const { origin, pathname, protocol } = window.location;
+      expect(formatURL('tg')).toBe(`${origin}${pathname}tg`);
       expect(formatURL('https://domain.com/')).toBe('https://domain.com/');
-      expect(formatURL('//domain.com')).toBe('http://domain.com/');
+      expect(formatURL('//domain.com')).toBe(`${protocol}//domain.com/`);
     });
 
-   test('should throw an error in case, URL protocol different from "http" not "https"', () => {
+    it('should throw an error in case, URL protocol different from "http" not "https"', () => {
       expect(() => formatURL('fs://telegram.org')).toThrow(
         'URL protocol is not supported by OS, or link has '
         + 'not allowed protocol: fs',

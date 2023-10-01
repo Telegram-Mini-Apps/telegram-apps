@@ -16,8 +16,7 @@ export function formatURL(url: string): string {
   // Check if protocol is correct.
   if (anchor.protocol !== 'http:' && anchor.protocol !== 'https:') {
     throw Error(
-      'URL protocol is not supported by OS, or link has not allowed '
-      + `protocol: ${anchor.protocol}`,
+      `URL protocol is not supported by OS, or link has not allowed protocol: ${anchor.protocol}`,
     );
   }
   return anchor.href;

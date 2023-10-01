@@ -1,5 +1,6 @@
 import { vi, type SpyInstance } from 'vitest';
-import { createDomEmitter } from './createDomEmitter';
+
+import { createDomEmitter } from './createDomEmitter.js';
 
 interface CreateWindowOptions {
   innerWidth?: number;

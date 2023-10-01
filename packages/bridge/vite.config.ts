@@ -1,4 +1,4 @@
-import { createUMDGlobals, createViteConfig } from 'build-utils';
+import { createUMDGlobals, createViteConfig, createVitestConfig } from 'build-utils';
 
 import packageJson from './package.json';
 
@@ -16,7 +16,13 @@ export default createViteConfig({
   formats: ['es', 'umd'],
   external,
   globals: createUMDGlobals(external),
-  test: {
+  test: createVitestConfig({
     environment: 'happy-dom',
-  },
+    coverage: {
+      branches: 100,
+      functions: 100,
+      statements: 100,
+      lines: 100,
+    },
+  }),
 });

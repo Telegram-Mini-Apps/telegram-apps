@@ -1,31 +1,57 @@
 /* eslint-disable */
-import { expect, test, vi, SpyInstance, beforeEach, afterEach } from 'vitest';
+import {
+  expect,
+  it,
+  vi,
+  SpyInstance,
+  beforeEach,
+  afterEach,
+  describe,
+  beforeAll,
+  afterAll,
+} from 'vitest';
 
 import { createWindow } from '../__test-utils__/createWindow.js';
-import { request } from '../src/index.js';
+import { request, type PostEvent } from '../src/index.js';
 import { postEvent as globalPostEvent } from '../src/methods/postEvent.js';
 import { dispatchWindowMessageEvent } from '../__test-utils__/dispatchWindowMessageEvent.js';
 
+vi.mock('../src/methods/postEvent.js', async () => {
+  const { postEvent: actualPostEvent } = await vi
+    .importActual('../src/methods/postEvent.js') as { postEvent: PostEvent };
+
+  return {
+    postEvent: vi.fn(actualPostEvent),
+  };
+});
+
 let windowSpy: SpyInstance<[], Window & typeof globalThis>;
 
-beforeEach(() => {
-  windowSpy = createWindow({ env: 'iframe' });
+beforeAll(() => {
   vi.useFakeTimers();
 });
 
+afterAll(() => {
+  vi.useRealTimers();
+});
+
+beforeEach(() => {
+  windowSpy = createWindow({ env: 'iframe' });
+});
+
 afterEach(() => {
-  windowSpy.mockReset();
+  windowSpy.mockRestore();
 });
 
 function emptyCatch() {
 
 }
 
-test('request.ts', () => {
-  test('request', () => {
-    test('options', () => {
-      test('timeout', () => {
-       test('should throw an error in case, timeout was reached', () => {
+describe('request.ts', () => {
+  describe('request', () => {
+    describe('options', () => {
+      describe('timeout', () => {
+        it('should throw an error in case, timeout was reached', () => {
           const promise = request('web_app_request_phone', 'phone_requested', {
             timeout: 1000,
           });
@@ -37,7 +63,7 @@ test('request.ts', () => {
           });
         });
 
-       test('should not throw an error in case, data was received before timeout', () => {
+        it('should not throw an error in case, data was received before timeout', () => {
           const promise = request('web_app_request_phone', 'phone_requested', {
             timeout: 1000,
           });
@@ -52,19 +78,19 @@ test('request.ts', () => {
         });
       });
 
-      test('postEvent', () => {
-       test('should use specified postEvent property', () => {
+      describe('postEvent', () => {
+        it('should use specified postEvent property', () => {
           const postEvent = vi.fn();
           request('web_app_request_phone', 'phone_requested', { postEvent });
           expect(postEvent).toHaveBeenCalledWith('web_app_request_phone', undefined);
         });
 
-       test('should use global postEvent function if according property was not specified', () => {
+        it('should use global postEvent function if according property was not specified', () => {
           request('web_app_request_phone', 'phone_requested');
           expect(globalPostEvent).toHaveBeenCalledWith('web_app_request_phone', undefined);
         });
 
-       test('should reject promise in case, postEvent threw an error', () => {
+        it('should reject promise in case, postEvent threw an error', () => {
           const promise = request('web_app_request_phone', 'phone_requested', {
             postEvent: () => {
               throw new Error('Nope!');
@@ -74,8 +100,8 @@ test('request.ts', () => {
         });
       });
 
-      test('capture', () => {
-       test('should capture an event in case, capture method returned true', () => {
+      describe('capture', () => {
+        it('should capture an event in case, capture method returned true', () => {
           const promise = request('web_app_request_phone', 'phone_requested', {
             timeout: 1000,
             capture: ({ status }) => status === 'allowed',
@@ -90,7 +116,7 @@ test('request.ts', () => {
           });
         });
 
-       test('should not capture an event in case, capture method returned false', () => {
+        it('should not capture an event in case, capture method returned false', () => {
           const promise = request('web_app_request_phone', 'phone_requested', {
             timeout: 500,
             capture: ({ status }) => status === 'allowed',
@@ -106,8 +132,8 @@ test('request.ts', () => {
       });
     });
 
-    test('with request id', () => {
-     test('should ignore event with the different request id', () => {
+    describe('with request id', () => {
+      it('should ignore event with the different request id', () => {
         const promise = request('web_app_read_text_from_clipboard', { req_id: 'a' }, 'clipboard_text_received', {
           timeout: 1000,
         });
@@ -120,7 +146,7 @@ test('request.ts', () => {
         });
       });
 
-     test('should capture event with the same request id', () => {
+      it('should capture event with the same request id', () => {
         const promise = request('web_app_read_text_from_clipboard', { req_id: 'a' }, 'clipboard_text_received', {
           timeout: 1000,
         });
@@ -140,9 +166,9 @@ test('request.ts', () => {
       });
     });
 
-    test('multiple events', () => {
-      test('no params', () => {
-       test('should handle any of the specified events', () => {
+    describe('multiple events', () => {
+      describe('no params', () => {
+        it('should handle any of the specified events', () => {
           const promise = request(
             'web_app_request_phone',
             ['phone_requested', 'write_access_requested'],
@@ -168,8 +194,8 @@ test('request.ts', () => {
         });
       });
 
-      test('with params', () => {
-       test('should handle any of the specified events', () => {
+      describe('with params', () => {
+        it('should handle any of the specified events', () => {
           const promise = request(
             'web_app_data_send',
             { data: 'abc' },
@@ -198,11 +224,11 @@ test('request.ts', () => {
       });
     });
 
-    // test('no params methods', () => {
-    //  test('should properly handle ')
+    // it('no params methods', () => {
+    //  it('should properly handle ')
     // });
 
-    // test('with request id', () => {
+    // it('with request id', () => {
     //   const promise = request('web_app_read_text_from_clipboard', { req_id: 'a' }, 'clipboard_text_received');
     //
     //   dispatchWindowEvent('clipboard_text_received', { req_id: 'b' });

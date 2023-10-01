@@ -1,13 +1,13 @@
-import { expect, test, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { ClosingBehaviour } from '../../../src/index.js';
 
-test('components', () => {
-  test('ClosingBehaviour', () => {
-    test('ClosingBehaviour.ts', () => {
-      test('ClosingBehaviour', () => {
-        test('disable', () => {
-         test('should call "web_app_setup_closing_behavior" method with "need_confirmation" equal to false', () => {
+describe('components', () => {
+  describe('ClosingBehaviour', () => {
+    describe('ClosingBehaviour.ts', () => {
+      describe('ClosingBehaviour', () => {
+        describe('disable', () => {
+          it('should call "web_app_setup_closing_behavior" method with "need_confirmation" equal to false', () => {
             const postEvent = vi.fn();
             const confirmation = new ClosingBehaviour(true, postEvent);
 
@@ -17,7 +17,7 @@ test('components', () => {
             expect(postEvent).toHaveBeenCalledWith('web_app_setup_closing_behavior', { need_confirmation: false });
           });
 
-         test('should emit "isConfirmationNeededChanged" event with false value', () => {
+          it('should emit "isConfirmationNeededChanged" event with false value', () => {
             const confirmation = new ClosingBehaviour(true, vi.fn());
             const listener = vi.fn();
 
@@ -29,8 +29,8 @@ test('components', () => {
           });
         });
 
-        test('enable', () => {
-         test('should call "web_app_setup_closing_behavior" method with "need_confirmation" equal to true', () => {
+        describe('enable', () => {
+          it('should call "web_app_setup_closing_behavior" method with "need_confirmation" equal to true', () => {
             const postEvent = vi.fn();
             const confirmation = new ClosingBehaviour(false, postEvent);
 
@@ -40,7 +40,7 @@ test('components', () => {
             expect(postEvent).toHaveBeenCalledWith('web_app_setup_closing_behavior', { need_confirmation: true });
           });
 
-         test('should emit "isConfirmationNeededChanged" event with true value', () => {
+          it('should emit "isConfirmationNeededChanged" event with true value', () => {
             const confirmation = new ClosingBehaviour(false, vi.fn());
             const listener = vi.fn();
 
@@ -52,9 +52,9 @@ test('components', () => {
           });
         });
 
-        test('on', () => {
-          test('"isConfirmationNeededChanged" event', () => {
-           test('should add event listener to event', () => {
+        describe('on', () => {
+          describe('"isConfirmationNeededChanged" event', () => {
+            it('should add event listener to event', () => {
               const listener = vi.fn();
               const confirmation = new ClosingBehaviour(false, vi.fn());
 
@@ -67,9 +67,9 @@ test('components', () => {
           });
         });
 
-        test('off', () => {
-          test('"isConfirmationNeededChanged" event', () => {
-           test('should remove event listener from event', () => {
+        describe('off', () => {
+          describe('"isConfirmationNeededChanged" event', () => {
+            it('should remove event listener from event', () => {
               const listener = vi.fn();
               const confirmation = new ClosingBehaviour(false, vi.fn());
 

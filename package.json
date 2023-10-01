@@ -12,6 +12,9 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
     "@turbo/gen": "^1.9.7",
+    "@vitest/coverage-istanbul": "^0.34.6",
+    "@vitest/coverage-v8": "^0.34.6",
+    "@vitest/ui": "^0.34.6",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.32.0",

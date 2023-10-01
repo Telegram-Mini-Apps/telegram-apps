@@ -1,13 +1,13 @@
-import { expect, test, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { HapticFeedback } from '../../../src/index.js';
 
-test('components', () => {
-  test('HapticFeedback', () => {
-    test('HapticFeedback.ts', () => {
-      test('HapticFeedback', () => {
-        test('impactOccurred', () => {
-         test('should call "web_app_trigger_haptic_feedback" method with { type: "impact", style: {{style}} }', () => {
+describe('components', () => {
+  describe('HapticFeedback', () => {
+    describe('HapticFeedback.ts', () => {
+      describe('HapticFeedback', () => {
+        describe('impactOccurred', () => {
+          it('should call "web_app_trigger_haptic_feedback" method with { type: "impact", style: {{style}} }', () => {
             const postEvent = vi.fn();
             const haptic = new HapticFeedback('', postEvent);
 
@@ -21,8 +21,8 @@ test('components', () => {
           });
         });
 
-        test('notificationOccurred', () => {
-         test('should call "web_app_trigger_haptic_feedback" method with { type: "notification", notification_type: {{type}} }', () => {
+        describe('notificationOccurred', () => {
+          it('should call "web_app_trigger_haptic_feedback" method with { type: "notification", notification_type: {{type}} }', () => {
             const postEvent = vi.fn();
             const haptic = new HapticFeedback('', postEvent);
 
@@ -36,8 +36,8 @@ test('components', () => {
           });
         });
 
-        test('selectionChanged', () => {
-         test('should call "web_app_trigger_haptic_feedback" method with { type: "selection_change" }', () => {
+        describe('selectionChanged', () => {
+          it('should call "web_app_trigger_haptic_feedback" method with { type: "selection_change" }', () => {
             const postEvent = vi.fn();
             const haptic = new HapticFeedback('', postEvent);
 
@@ -50,9 +50,9 @@ test('components', () => {
           });
         });
 
-        test('supports', () => {
-          test('impactOccurred / notificationOccurred / selectionChanged', () => {
-           test('should return true in case, HapticFeedback version is 6.1 or higher. False, otherwise', () => {
+        describe('supports', () => {
+          describe('impactOccurred / notificationOccurred / selectionChanged', () => {
+            it('should return true in case, HapticFeedback version is 6.1 or higher. False, otherwise', () => {
               const haptic1 = new HapticFeedback('6.0');
               expect(haptic1.supports('impactOccurred')).toBe(false);
               expect(haptic1.supports('notificationOccurred')).toBe(false);
