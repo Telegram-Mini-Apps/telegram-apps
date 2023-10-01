@@ -1,5 +1,12 @@
 # solid-sdk-example
 
+## 0.0.11
+
+### Patch Changes
+
+- Updated dependencies [3c6ed39]
+  - @tma.js/sdk-solid@0.1.5
+
 ## 0.0.10
 
 ### Patch Changes
