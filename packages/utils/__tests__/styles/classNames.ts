@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { classNames } from '../../src/index.js';
 
 describe('styles', () => {

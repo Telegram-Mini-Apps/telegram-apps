@@ -36,7 +36,7 @@
     }
   },
   "scripts": {
-    "test": "jest",
+    "test": "vitest",
     "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
     "build": "vite build"
   },

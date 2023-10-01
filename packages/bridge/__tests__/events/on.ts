@@ -1,6 +1,8 @@
+import { expect, it, vi, afterEach, describe, beforeEach } from 'vitest';
+
 import { on } from '../../src/index.js';
-import { createWindow, type WindowSpy } from '../__utils__/createWindow.js';
-import { dispatchWindowMessageEvent } from '../__utils__/dispatchWindowMessageEvent.js';
+import { createWindow, type WindowSpy } from '../../__test-utils__/createWindow.js';
+import { dispatchWindowMessageEvent } from '../../__test-utils__/dispatchWindowMessageEvent.js';
 
 let windowSpy: WindowSpy;
 
@@ -9,14 +11,14 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  windowSpy.mockReset();
+  windowSpy.mockRestore();
 });
 
 describe('events', () => {
   describe('on.ts', () => {
     describe('on', () => {
       it('should call listener in case, Telegram event was created', () => {
-        const listener = jest.fn();
+        const listener = vi.fn();
         on('viewport_changed', listener);
 
         const eventData = {
@@ -32,7 +34,7 @@ describe('events', () => {
       });
 
       it('should remove listener in case, returned callback was called', () => {
-        const listener = jest.fn();
+        const listener = vi.fn();
         const emit = () => dispatchWindowMessageEvent('viewport_changed', {
           height: 123,
           width: 321,

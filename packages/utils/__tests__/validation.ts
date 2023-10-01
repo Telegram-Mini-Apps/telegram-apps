@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { isRecord } from '../src/index.js';
 
 describe('validation.ts', () => {

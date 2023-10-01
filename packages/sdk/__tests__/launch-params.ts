@@ -1,4 +1,19 @@
+import { expect, it, afterEach, vi, describe, type SpyInstance, beforeAll } from 'vitest';
+
 import { retrieveLaunchParams, parseLaunchParams } from '../src/index.js';
+
+let sessionStorageSpy: SpyInstance<[], Storage>;
+let windowSpy: SpyInstance<[], typeof globalThis & Window>;
+
+beforeAll(() => {
+  sessionStorageSpy = vi.spyOn(window, 'sessionStorage', 'get');
+  windowSpy = vi.spyOn(window, 'window', 'get');
+});
+
+afterEach(() => {
+  sessionStorageSpy.mockReset();
+  windowSpy.mockReset();
+});
 
 describe('launch-params.ts', () => {
   describe('parseLaunchParams', () => {
@@ -71,10 +86,6 @@ describe('launch-params.ts', () => {
   });
 
   describe('retrieveLaunchParams', () => {
-    afterEach(() => {
-      jest.resetAllMocks();
-    });
-
     it('should extract launch parameters from window.location.hash and save them in sessionStorage by key "telegram-web-apps-launch-params"', () => {
       const version = '9.1';
       const platform = 'unbelievable';
@@ -105,12 +116,12 @@ describe('launch-params.ts', () => {
         tgWebAppData: initData,
       }).toString();
 
-      const setItem = jest.fn();
-      jest.spyOn(window, 'sessionStorage', 'get').mockImplementation(() => ({
-        setItem,
-      }) as any);
-      jest.spyOn(window, 'window', 'get').mockImplementation(() => ({
-        location: { hash: `#${launchParams}` },
+      const setItem = vi.fn();
+      sessionStorageSpy.mockImplementation(() => ({ setItem }) as any);
+      windowSpy.mockImplementation(() => ({
+        location: {
+          hash: `#${launchParams}`,
+        },
       }) as any);
 
       expect(retrieveLaunchParams()).toStrictEqual({
@@ -172,12 +183,14 @@ describe('launch-params.ts', () => {
         tgWebAppData: initData,
       }).toString();
 
-      const getItem = jest.fn(() => JSON.stringify(launchParams));
-      jest.spyOn(window, 'sessionStorage', 'get').mockImplementation(() => ({
+      const getItem = vi.fn(() => JSON.stringify(launchParams));
+      sessionStorageSpy.mockImplementation(() => ({
         getItem,
       }) as any);
-      jest.spyOn(window, 'window', 'get').mockImplementation(() => ({
-        location: { hash: '' },
+      windowSpy.mockImplementation(() => ({
+        location: {
+          hash: '',
+        },
       }) as any);
 
       expect(retrieveLaunchParams()).toStrictEqual({

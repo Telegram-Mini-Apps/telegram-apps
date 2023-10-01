@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 import { HapticFeedback } from '../../../src/index.js';
 
 describe('components', () => {
@@ -6,7 +8,7 @@ describe('components', () => {
       describe('HapticFeedback', () => {
         describe('impactOccurred', () => {
           it('should call "web_app_trigger_haptic_feedback" method with { type: "impact", style: {{style}} }', () => {
-            const postEvent = jest.fn();
+            const postEvent = vi.fn();
             const haptic = new HapticFeedback('', postEvent);
 
             expect(postEvent).toHaveBeenCalledTimes(0);
@@ -21,7 +23,7 @@ describe('components', () => {
 
         describe('notificationOccurred', () => {
           it('should call "web_app_trigger_haptic_feedback" method with { type: "notification", notification_type: {{type}} }', () => {
-            const postEvent = jest.fn();
+            const postEvent = vi.fn();
             const haptic = new HapticFeedback('', postEvent);
 
             expect(postEvent).toHaveBeenCalledTimes(0);
@@ -36,7 +38,7 @@ describe('components', () => {
 
         describe('selectionChanged', () => {
           it('should call "web_app_trigger_haptic_feedback" method with { type: "selection_change" }', () => {
-            const postEvent = jest.fn();
+            const postEvent = vi.fn();
             const haptic = new HapticFeedback('', postEvent);
 
             expect(postEvent).toHaveBeenCalledTimes(0);

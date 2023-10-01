@@ -1,4 +1,6 @@
-import { initData } from '../src';
+import { it, expect, describe } from 'vitest';
+
+import { initData } from '../src/index.js';
 
 describe('parsing', () => {
   describe('initData', () => {

@@ -1,3 +1,4 @@
+import { expect, it, vi, afterEach, afterAll, describe } from 'vitest';
 import { hasExternalNotify, hasWebviewProxy, isIframe } from '../src/env.js';
 
 const emptyFunction = () => {
@@ -23,7 +24,7 @@ describe('env.ts', () => {
   });
 
   describe('isIframe', () => {
-    const windowSpy = jest.spyOn(window, 'window', 'get');
+    const windowSpy = vi.spyOn(window, 'window', 'get');
 
     afterEach(() => {
       windowSpy.mockReset();

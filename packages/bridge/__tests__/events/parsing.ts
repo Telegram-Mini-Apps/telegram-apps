@@ -1,3 +1,5 @@
+import { expect, vi, beforeEach, afterEach, describe, it } from 'vitest';
+
 import {
   clipboardTextReceivedPayload,
   invoiceClosedPayload,
@@ -51,7 +53,7 @@ describe('events', () => {
     });
 
     describe('viewportChangedPayload', () => {
-      const windowSpy = jest.spyOn(window, 'window', 'get');
+      const windowSpy = vi.spyOn(window, 'window', 'get');
       // const innerWidth = 2000;
 
       beforeEach(() => {
@@ -139,6 +141,7 @@ describe('events', () => {
           { req_id: 'abc' },
           { req_id: 'abc', data: null },
         ];
+
         cases.forEach((value) => {
           expect(clipboardTextReceivedPayload.parse(value)).toStrictEqual(value);
           expect(clipboardTextReceivedPayload.parse(JSON.stringify(value)))

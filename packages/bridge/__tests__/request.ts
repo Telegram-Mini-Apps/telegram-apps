@@ -1,28 +1,46 @@
 /* eslint-disable */
-import { createWindow } from './__utils__/createWindow.js';
-import { request } from '../src/index.js';
-import { postEvent as globalPostEvent } from '../src/methods/postEvent.js';
-import { dispatchWindowMessageEvent } from './__utils__/dispatchWindowMessageEvent.js';
+import {
+  expect,
+  it,
+  vi,
+  SpyInstance,
+  beforeEach,
+  afterEach,
+  describe,
+  beforeAll,
+  afterAll,
+} from 'vitest';
 
-let windowSpy: jest.SpyInstance<Window & typeof globalThis>;
+import { createWindow } from '../__test-utils__/createWindow.js';
+import { request, type PostEvent } from '../src/index.js';
+import { postEvent as globalPostEvent } from '../src/methods/postEvent.js';
+import { dispatchWindowMessageEvent } from '../__test-utils__/dispatchWindowMessageEvent.js';
+
+vi.mock('../src/methods/postEvent.js', async () => {
+  const { postEvent: actualPostEvent } = await vi
+    .importActual('../src/methods/postEvent.js') as { postEvent: PostEvent };
+
+  return {
+    postEvent: vi.fn(actualPostEvent),
+  };
+});
+
+let windowSpy: SpyInstance<[], Window & typeof globalThis>;
+
+beforeAll(() => {
+  vi.useFakeTimers();
+});
+
+afterAll(() => {
+  vi.useRealTimers();
+});
 
 beforeEach(() => {
   windowSpy = createWindow({ env: 'iframe' });
-  jest.useFakeTimers();
 });
 
 afterEach(() => {
-  windowSpy.mockReset();
-});
-
-jest.mock('../src/methods/postEvent.js', () => {
-  const { postEvent: actualPostEvent, ...rest } = jest.requireActual('../src/methods/postEvent.js');
-
-  return {
-    __esModule: true,
-    ...rest,
-    postEvent: jest.fn(actualPostEvent),
-  };
+  windowSpy.mockRestore();
 });
 
 function emptyCatch() {
@@ -38,7 +56,7 @@ describe('request.ts', () => {
             timeout: 1000,
           });
 
-          jest.advanceTimersByTime(1500);
+          vi.advanceTimersByTime(1500);
 
           return promise.catch(emptyCatch).finally(() => {
             expect(promise).rejects.toEqual(new Error('Async call timeout exceeded. Timeout: 1000'));
@@ -50,9 +68,9 @@ describe('request.ts', () => {
             timeout: 1000,
           });
 
-          jest.advanceTimersByTime(500);
+          vi.advanceTimersByTime(500);
           dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
-          jest.advanceTimersByTime(1000);
+          vi.advanceTimersByTime(1000);
 
           return promise.catch(emptyCatch).finally(() => {
             expect(promise).resolves.toStrictEqual({ status: 'allowed' });
@@ -62,7 +80,7 @@ describe('request.ts', () => {
 
       describe('postEvent', () => {
         it('should use specified postEvent property', () => {
-          const postEvent = jest.fn();
+          const postEvent = vi.fn();
           request('web_app_request_phone', 'phone_requested', { postEvent });
           expect(postEvent).toHaveBeenCalledWith('web_app_request_phone', undefined);
         });
@@ -89,9 +107,9 @@ describe('request.ts', () => {
             capture: ({ status }) => status === 'allowed',
           });
 
-          jest.advanceTimersByTime(500);
+          vi.advanceTimersByTime(500);
           dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
-          jest.advanceTimersByTime(1000);
+          vi.advanceTimersByTime(1000);
 
           return promise.catch(emptyCatch).finally(() => {
             expect(promise).resolves.toStrictEqual({ status: 'allowed' });
@@ -105,7 +123,7 @@ describe('request.ts', () => {
           });
 
           dispatchWindowMessageEvent('phone_requested', { status: 'declined' });
-          jest.advanceTimersByTime(1000);
+          vi.advanceTimersByTime(1000);
 
           return promise.catch(emptyCatch).finally(() => {
             expect(promise).rejects.toEqual(new Error('Async call timeout exceeded. Timeout: 500'));
@@ -121,7 +139,7 @@ describe('request.ts', () => {
         });
 
         dispatchWindowMessageEvent('clipboard_text_received', { req_id: 'b' });
-        jest.advanceTimersByTime(1500);
+        vi.advanceTimersByTime(1500);
 
         return promise.catch(emptyCatch).finally(() => {
           expect(promise).rejects.toEqual(new Error('Async call timeout exceeded. Timeout: 1000'));
@@ -137,7 +155,7 @@ describe('request.ts', () => {
           req_id: 'a',
           data: 'from clipboard',
         });
-        jest.advanceTimersByTime(1500);
+        vi.advanceTimersByTime(1500);
 
         return promise.catch(emptyCatch).finally(() => {
           expect(promise).resolves.toStrictEqual({
@@ -164,7 +182,7 @@ describe('request.ts', () => {
 
           dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
           dispatchWindowMessageEvent('write_access_requested', { status: 'declined' });
-          jest.advanceTimersByTime(1500);
+          vi.advanceTimersByTime(1500);
 
           return Promise
             .all([promise, promise2])
@@ -193,7 +211,7 @@ describe('request.ts', () => {
 
           dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
           dispatchWindowMessageEvent('write_access_requested', { status: 'declined' });
-          jest.advanceTimersByTime(1500);
+          vi.advanceTimersByTime(1500);
 
           return Promise
             .all([promise, promise2])
@@ -206,11 +224,11 @@ describe('request.ts', () => {
       });
     });
 
-    // describe('no params methods', () => {
-    //   it('should properly handle ')
+    // it('no params methods', () => {
+    //  it('should properly handle ')
     // });
 
-    // describe('with request id', () => {
+    // it('with request id', () => {
     //   const promise = request('web_app_read_text_from_clipboard', { req_id: 'a' }, 'clipboard_text_received');
     //
     //   dispatchWindowEvent('clipboard_text_received', { req_id: 'b' });

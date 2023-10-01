@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { compareVersions } from '../src/index.js';
 
 describe('version.ts', () => {

@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { preparePopupParams } from '../../../src/components/Popup/utils.js';
 
 /**
@@ -12,37 +14,31 @@ describe('components', () => {
   describe('Popup', () => {
     describe('utils', () => {
       describe('preparePopupParams', () => {
-        it(
-          'should throw an error in case, title length is more than 64 symbols',
-          () => {
-            expect(() => preparePopupParams({
-              title: createText(65),
-              message: 'Hey!',
-            })).toThrow(/^Title has incorrect size/);
+        it('should throw an error in case, title length is more than 64 symbols', () => {
+          expect(() => preparePopupParams({
+            title: createText(65),
+            message: 'Hey!',
+          })).toThrow(/^Title has incorrect size/);
 
-            expect(() => preparePopupParams({
-              title: createText(64),
-              message: 'Hey!',
-            })).not.toThrow();
-          },
-        );
+          expect(() => preparePopupParams({
+            title: createText(64),
+            message: 'Hey!',
+          })).not.toThrow();
+        });
 
-        it(
-          'should throw an error in case, message length is zero or more than 256 symbols',
-          () => {
-            expect(() => preparePopupParams({
-              message: '',
-            })).toThrow(/^Message has incorrect size/);
+        it('should throw an error in case, message length is zero or more than 256 symbols', () => {
+          expect(() => preparePopupParams({
+            message: '',
+          })).toThrow(/^Message has incorrect size/);
 
-            expect(() => preparePopupParams({
-              message: createText(257),
-            })).toThrow(/^Message has incorrect size/);
+          expect(() => preparePopupParams({
+            message: createText(257),
+          })).toThrow(/^Message has incorrect size/);
 
-            expect(() => preparePopupParams({
-              message: createText(256),
-            })).not.toThrow();
-          },
-        );
+          expect(() => preparePopupParams({
+            message: createText(256),
+          })).not.toThrow();
+        });
 
         it('should throw an error in case, buttons count is more than 3', () => {
           expect(() => preparePopupParams({
@@ -63,8 +59,7 @@ describe('components', () => {
           }]);
         });
 
-        it('should throw an error in case, some button text length '
-          + 'size is zero or more than 64 symbols', () => {
+        it('should throw an error in case, some button text length size is zero or more than 64 symbols', () => {
           expect(() => preparePopupParams({
             message: 'A',
             buttons: [{ type: 'default', text: createText(65) }],

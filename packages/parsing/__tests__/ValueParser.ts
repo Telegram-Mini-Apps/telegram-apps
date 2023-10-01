@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { ValueParser } from '../src/index.js';
 
 describe('ValueParser.ts', () => {

@@ -2,6 +2,7 @@
   "extends": "tsconfig/esnext-dom.json",
   "include": [
     "src",
+    "__test-utils__",
     "__tests__",
     "*.ts"
   ]

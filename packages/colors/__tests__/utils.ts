@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { isRGB, toRGB, isRGBShort, isColorDark } from '../src/index.js';
 
 describe('utils.ts', () => {

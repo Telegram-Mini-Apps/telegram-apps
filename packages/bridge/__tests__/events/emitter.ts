@@ -1,6 +1,8 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
 import { createEmitter, singletonEmitter } from '../../src/events/emitter.js';
-import { createWindow, type WindowSpy } from '../__utils__/createWindow.js';
-import { dispatchWindowMessageEvent } from '../__utils__/dispatchWindowMessageEvent.js';
+import { createWindow, type WindowSpy } from '../../__test-utils__/createWindow.js';
+import { dispatchWindowMessageEvent } from '../../__test-utils__/dispatchWindowMessageEvent.js';
 
 import type { EventName, EventParams } from '../../src/index.js';
 
@@ -24,7 +26,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  windowSpy.mockReset();
+  windowSpy.mockRestore();
 });
 
 describe('events', () => {
@@ -32,7 +34,7 @@ describe('events', () => {
     describe('createEmitter', () => {
       it('should emit "viewport_changed" event in case, window changed its size', () => {
         const emitter = createEmitter();
-        const spy = jest.fn();
+        const spy = vi.fn();
 
         emitter.on('viewport_changed', spy);
 
@@ -97,7 +99,7 @@ describe('events', () => {
 
         testCases.forEach(([event, inputOrCaseOrCases]) => {
           it(`should correctly handle "${event}" event data`, () => {
-            const spy = jest.fn();
+            const spy = vi.fn();
             const emitter = createEmitter();
 
             emitter.on(event, spy);
@@ -133,7 +135,7 @@ describe('events', () => {
         });
 
         it('should not emit event in case, it contains incorrect payload', () => {
-          const spy = jest.fn();
+          const spy = vi.fn();
           const emitter = createEmitter();
 
           emitter.on('viewport_changed', spy);

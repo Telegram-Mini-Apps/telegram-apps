@@ -1,11 +1,14 @@
+import { describe, expect, it } from 'vitest';
+
 import { formatURL } from '../src/index.js';
 
 describe('url.ts', () => {
   describe('formatURL', () => {
     it('should convert URL to its form', () => {
-      expect(formatURL('tg')).toBe('http://localhost/tg');
+      const { origin, pathname, protocol } = window.location;
+      expect(formatURL('tg')).toBe(`${origin}${pathname}tg`);
       expect(formatURL('https://domain.com/')).toBe('https://domain.com/');
-      expect(formatURL('//domain.com')).toBe('http://domain.com/');
+      expect(formatURL('//domain.com')).toBe(`${protocol}//domain.com/`);
     });
 
     it('should throw an error in case, URL protocol different from "http" not "https"', () => {

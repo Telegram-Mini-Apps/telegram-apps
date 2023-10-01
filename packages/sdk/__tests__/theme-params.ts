@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { parseThemeParams } from '../src/index.js';
 
 describe('theme-params.ts', () => {

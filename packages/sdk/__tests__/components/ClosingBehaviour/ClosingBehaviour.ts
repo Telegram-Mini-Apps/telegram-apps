@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 import { ClosingBehaviour } from '../../../src/index.js';
 
 describe('components', () => {
@@ -6,7 +8,7 @@ describe('components', () => {
       describe('ClosingBehaviour', () => {
         describe('disable', () => {
           it('should call "web_app_setup_closing_behavior" method with "need_confirmation" equal to false', () => {
-            const postEvent = jest.fn();
+            const postEvent = vi.fn();
             const confirmation = new ClosingBehaviour(true, postEvent);
 
             expect(postEvent).toHaveBeenCalledTimes(0);
@@ -16,8 +18,8 @@ describe('components', () => {
           });
 
           it('should emit "isConfirmationNeededChanged" event with false value', () => {
-            const confirmation = new ClosingBehaviour(true, jest.fn());
-            const listener = jest.fn();
+            const confirmation = new ClosingBehaviour(true, vi.fn());
+            const listener = vi.fn();
 
             confirmation.on('isConfirmationNeededChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
@@ -29,7 +31,7 @@ describe('components', () => {
 
         describe('enable', () => {
           it('should call "web_app_setup_closing_behavior" method with "need_confirmation" equal to true', () => {
-            const postEvent = jest.fn();
+            const postEvent = vi.fn();
             const confirmation = new ClosingBehaviour(false, postEvent);
 
             expect(postEvent).toHaveBeenCalledTimes(0);
@@ -39,8 +41,8 @@ describe('components', () => {
           });
 
           it('should emit "isConfirmationNeededChanged" event with true value', () => {
-            const confirmation = new ClosingBehaviour(false, jest.fn());
-            const listener = jest.fn();
+            const confirmation = new ClosingBehaviour(false, vi.fn());
+            const listener = vi.fn();
 
             confirmation.on('isConfirmationNeededChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
@@ -53,8 +55,8 @@ describe('components', () => {
         describe('on', () => {
           describe('"isConfirmationNeededChanged" event', () => {
             it('should add event listener to event', () => {
-              const listener = jest.fn();
-              const confirmation = new ClosingBehaviour(false, jest.fn());
+              const listener = vi.fn();
+              const confirmation = new ClosingBehaviour(false, vi.fn());
 
               confirmation.on('isConfirmationNeededChanged', listener);
 
@@ -68,8 +70,8 @@ describe('components', () => {
         describe('off', () => {
           describe('"isConfirmationNeededChanged" event', () => {
             it('should remove event listener from event', () => {
-              const listener = jest.fn();
-              const confirmation = new ClosingBehaviour(false, jest.fn());
+              const listener = vi.fn();
+              const confirmation = new ClosingBehaviour(false, vi.fn());
 
               confirmation.on('isConfirmationNeededChanged', listener);
 

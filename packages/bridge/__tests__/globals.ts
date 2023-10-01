@@ -1,3 +1,5 @@
+import { expect, it, vi, afterEach, describe } from 'vitest';
+
 import {
   log,
   setDebug,
@@ -6,13 +8,13 @@ import {
 } from '../src/globals.js';
 
 afterEach(() => {
-  jest.restoreAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe('globals.ts', () => {
   describe('log', () => {
     it('should log message in case, debug mode is enabled. Otherwise no output should be shown', () => {
-      const spy = jest.spyOn(console, 'log').mockImplementation(() => {
+      const spy = vi.spyOn(console, 'log').mockImplementation(() => {
       });
 
       log('log', 123);

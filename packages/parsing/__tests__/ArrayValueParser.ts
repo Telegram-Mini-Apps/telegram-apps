@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { ArrayValueParser } from '../src/index.js';
 
 describe('ArrayValueParser.ts', () => {

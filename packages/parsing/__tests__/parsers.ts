@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { array, boolean, date, json, number, rgb, searchParams, string } from '../src/index.js';
 
 describe('parsers.ts', () => {

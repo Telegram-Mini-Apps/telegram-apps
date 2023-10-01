@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 import { BackButton } from '../../../src/index.js';
 
 describe('components', () => {
@@ -6,7 +8,7 @@ describe('components', () => {
       describe('BackButton', () => {
         describe('hide', () => {
           it('should call "web_app_setup_back_button" method with "is_visible" equal to false', () => {
-            const postEvent = jest.fn();
+            const postEvent = vi.fn();
             const backButton = new BackButton(false, '', postEvent);
 
             expect(postEvent).toHaveBeenCalledTimes(0);
@@ -16,8 +18,8 @@ describe('components', () => {
           });
 
           it('should emit "isVisibleChanged" event with false value', () => {
-            const backButton = new BackButton(true, '', jest.fn());
-            const listener = jest.fn();
+            const backButton = new BackButton(true, '', vi.fn());
+            const listener = vi.fn();
 
             backButton.on('isVisibleChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
@@ -29,7 +31,7 @@ describe('components', () => {
 
         describe('show', () => {
           it('should call "web_app_setup_back_button" method with "is_visible" equal to true', () => {
-            const postEvent = jest.fn();
+            const postEvent = vi.fn();
             const backButton = new BackButton(false, '', postEvent);
 
             expect(postEvent).toHaveBeenCalledTimes(0);
@@ -39,8 +41,8 @@ describe('components', () => {
           });
 
           it('should emit "isVisibleChanged" event with true value', () => {
-            const backButton = new BackButton(false, '', jest.fn());
-            const listener = jest.fn();
+            const backButton = new BackButton(false, '', vi.fn());
+            const listener = vi.fn();
 
             backButton.on('isVisibleChanged', listener);
             expect(listener).toHaveBeenCalledTimes(0);
@@ -51,13 +53,13 @@ describe('components', () => {
         });
 
         // FIXME
-        // describe('on', () => {
-        //   describe('"click" event', () => {
-        //     it('should add event listener to bridge\'s '
+        // it('on', () => {
+        //   it('"click" event', () => {
+        //    it('should add event listener to bridge\'s '
         //       + '"back_button_pressed" event', () => {
-        //       const on = jest.fn();
+        //       const on = vi.fn();
         //       const backButton = new BackButton({ on } as any, '');
-        //       const listener = jest.fn();
+        //       const listener = vi.fn();
         //
         //       expect(on).toHaveBeenCalledTimes(0);
         //       backButton.on('click', listener);
@@ -69,13 +71,13 @@ describe('components', () => {
 
         describe('off', () => {
           // FIXME
-          // describe('"click" event', () => {
-          //   it('should remove event listener from bridge\'s '
+          // it('"click" event', () => {
+          //  it('should remove event listener from bridge\'s '
           //     + '"back_button_pressed" event', () => {
-          //     const on = jest.fn();
-          //     const off = jest.fn();
+          //     const on = vi.fn();
+          //     const off = vi.fn();
           //     const backButton = new BackButton({ on, off } as any, '');
-          //     const listener = jest.fn();
+          //     const listener = vi.fn();
           //
           //     expect(on).toHaveBeenCalledTimes(0);
           //     backButton.on('click', listener);
@@ -94,8 +96,8 @@ describe('components', () => {
 
           describe('"isVisibleChanged" event', () => {
             it('should remove event listener from event', () => {
-              const listener = jest.fn();
-              const backButton = new BackButton(false, '', jest.fn());
+              const listener = vi.fn();
+              const backButton = new BackButton(false, '', vi.fn());
 
               backButton.on('isVisibleChanged', listener);
 
