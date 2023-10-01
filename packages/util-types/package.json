@@ -34,11 +34,12 @@
   },
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
-    "build": "rimraf dist && rollup --config rollup.config.js"
+    "build": "vite build"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
-    "eslint-config-custom": "workspace:*"
+    "eslint-config-custom": "workspace:*",
+    "build-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

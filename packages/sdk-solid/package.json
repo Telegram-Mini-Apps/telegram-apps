@@ -49,7 +49,7 @@
   },
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
-    "build": "rimraf dist && rollup --config rollup.config.js"
+    "build": "vite build"
   },
   "dependencies": {
     "@tma.js/utils": "workspace:*",
@@ -60,7 +60,8 @@
   },
   "devDependencies": {
     "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "build-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

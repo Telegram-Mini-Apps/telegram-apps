@@ -45,7 +45,7 @@
   },
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
-    "build": "rimraf dist && rollup --config rollup.config.js"
+    "build": "vite build"
   },
   "peerDependencies": {
     "@types/react": "^17.0.0 || ^18.0.0",
@@ -62,7 +62,8 @@
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
-    "eslint-config-custom": "workspace:*"
+    "eslint-config-custom": "workspace:*",
+    "build-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

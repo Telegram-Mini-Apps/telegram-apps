@@ -45,7 +45,7 @@
   },
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
-    "build": "rimraf dist && rollup --config rollup.config.js"
+    "build": "vite build"
   },
   "dependencies": {
     "@tma.js/bridge": "workspace:*",
@@ -56,7 +56,8 @@
   "devDependencies": {
     "tsconfig": "workspace:*",
     "eslint-config-custom": "workspace:*",
-    "jest-config-custom": "workspace:*"
+    "jest-config-custom": "workspace:*",
+    "build-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
