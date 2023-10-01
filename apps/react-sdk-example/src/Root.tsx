@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type PropsWithChildren } from 'react';
 import { SDKProvider, useSDK, useMainButton, useBackButton, useInitData } from '@tma.js/sdk-react';
 
 function MainButtonTest() {
@@ -8,8 +8,8 @@ function MainButtonTest() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const onMainButtonClick = () => setCount((count) => count + 1);
-    const onBackButtonClick = () => setCount((count) => count - 1);
+    const onMainButtonClick = () => setCount((prevCount) => prevCount + 1);
+    const onBackButtonClick = () => setCount((prevCount) => prevCount - 1);
 
     mainButton.enable().show();
     mainButton.on('click', onMainButtonClick);
@@ -20,6 +20,7 @@ function MainButtonTest() {
       mainButton.hide();
       backButton.off('click', onBackButtonClick);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -115,7 +116,7 @@ function DisplayGate({ children }: PropsWithChildren) {
   }
 
   // Safely render application.
-  return <>{children}</>;
+  return children;
 }
 
 /**
@@ -125,8 +126,8 @@ export function Root() {
   return (
     <SDKProvider initOptions={{ debug: true, cssVars: true }}>
       <DisplayGate>
-        <InitData/>
-        <MainButtonTest/>
+        <InitData />
+        <MainButtonTest />
       </DisplayGate>
     </SDKProvider>
   );
