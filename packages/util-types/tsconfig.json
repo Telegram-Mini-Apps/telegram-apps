@@ -4,6 +4,9 @@
     "outDir": "dist",
   },
   "include": [
-    "*"
+    "src",
+    "__tests__",
+    "*.ts",
+    "*.js"
   ]
 }
