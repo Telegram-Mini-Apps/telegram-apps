@@ -20,7 +20,8 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "useDefineForClassFields": true
   },
   "exclude": ["node_modules"]
 }

@@ -25,28 +25,22 @@
     "dist",
     "src"
   ],
-  "main": "dist/lib/index.cjs",
-  "browser": "dist/lib/browser.js",
-  "module": "dist/lib/index.mjs",
-  "types": "dist/types/index.d.ts",
+  "main": "./dist/index.umd.cjs",
+  "browser": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/dts/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/lib/index.mjs",
-      "require": "./dist/lib/index.cjs",
-      "default": "./dist/lib/index.cjs"
-    },
-    "./*": {
-      "types": "./dist/types/*.d.ts",
-      "import": "./dist/lib/*.mjs",
-      "require": "./dist/lib/*.cjs",
-      "default": "./dist/lib/*.cjs"
+      "types": "./dist/dts/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs",
+      "default": "./dist/index.umd.cjs"
     }
   },
   "scripts": {
     "test": "jest",
     "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
-    "build": "rimraf dist && rollup --config rollup.config.js"
+    "build": "vite build"
   },
   "dependencies": {
     "@tma.js/utils": "workspace:*",
@@ -59,7 +53,8 @@
   "devDependencies": {
     "tsconfig": "workspace:*",
     "eslint-config-custom": "workspace:*",
-    "jest-config-custom": "workspace:*"
+    "jest-config-custom": "workspace:*",
+    "build-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

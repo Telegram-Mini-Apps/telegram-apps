@@ -1,0 +1,26 @@
+{
+  "name": "build-utils",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "build": "vite build --ssr --outDir dist"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "vite-plugin-dts": "^3.6.0"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*"
+  }
+}

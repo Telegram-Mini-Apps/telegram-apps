@@ -1,5 +1,41 @@
-import { PropsWithChildren, useMemo } from 'react';
-import { SDKProvider, useSDK, useInitData } from '@tma.js/sdk-react';
+import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { SDKProvider, useSDK, useMainButton, useBackButton, useInitData } from '@tma.js/sdk-react';
+
+function MainButtonTest() {
+  const mainButton = useMainButton();
+  const backButton = useBackButton();
+
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const onMainButtonClick = () => setCount((count) => count + 1);
+    const onBackButtonClick = () => setCount((count) => count - 1);
+
+    mainButton.enable().show();
+    mainButton.on('click', onMainButtonClick);
+    backButton.on('click', onBackButtonClick);
+
+    return () => {
+      mainButton.off('click', onMainButtonClick);
+      mainButton.hide();
+      backButton.off('click', onBackButtonClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    mainButton.setText(`Count is ${count}`);
+  }, [mainButton, count]);
+
+  useEffect(() => {
+    if (count === 0) {
+      backButton.hide();
+      return;
+    }
+    backButton.show();
+  }, [backButton, count]);
+
+  return null;
+}
 
 /**
  * Displays current application init data.
@@ -90,6 +126,7 @@ export function Root() {
     <SDKProvider initOptions={{ debug: true, cssVars: true }}>
       <DisplayGate>
         <InitData/>
+        <MainButtonTest/>
       </DisplayGate>
     </SDKProvider>
   );

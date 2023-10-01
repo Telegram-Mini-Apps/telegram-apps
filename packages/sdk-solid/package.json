@@ -25,31 +25,21 @@
     "dist",
     "src"
   ],
-  "source": "src/index.ts",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
+  "main": "./dist/index.umd.cjs",
+  "browser": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/dts/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
-      "solid": "./dist/source/index.js",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "node": "./dist/cjs/index.js",
-      "default": "./dist/cjs/index.js"
-    },
-    "./*": {
-      "types": "./dist/types/*.d.ts",
-      "solid": "./dist/source/*.js",
-      "import": "./dist/esm/*.js",
-      "require": "./dist/cjs/*.js",
-      "node": "./dist/cjs/*.js",
-      "default": "./dist/cjs/*.js"
+      "types": "./dist/dts/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs",
+      "default": "./dist/index.umd.cjs"
     }
   },
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
-    "build": "rimraf dist && rollup --config rollup.config.js"
+    "build": "vite build"
   },
   "dependencies": {
     "@tma.js/utils": "workspace:*",
@@ -60,7 +50,8 @@
   },
   "devDependencies": {
     "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "build-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

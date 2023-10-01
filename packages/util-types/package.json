@@ -23,22 +23,20 @@
     "dist",
     "src"
   ],
-  "types": "dist/types/index.d.ts",
+  "types": "./dist/dts/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts"
-    },
-    "./*": {
-      "types": "./dist/types/*.d.ts"
+      "types": "./dist/dts/index.d.ts"
     }
   },
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
-    "build": "rimraf dist && rollup --config rollup.config.js"
+    "build": "vite build"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
-    "eslint-config-custom": "workspace:*"
+    "eslint-config-custom": "workspace:*",
+    "build-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

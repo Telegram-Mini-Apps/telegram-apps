@@ -1,5 +1,51 @@
-import { createMemo, Switch, Match, ParentProps } from 'solid-js';
+import {
+  createMemo,
+  Switch,
+  Match,
+  ParentProps,
+  createSignal,
+  createEffect,
+  onMount, onCleanup,
+} from 'solid-js';
 import { SDKProvider, useSDK, useSDKContext } from '@tma.js/sdk-solid';
+
+function MainButtonTest() {
+  const { mainButton, backButton } = useSDK();
+
+  const [count, setCount] = createSignal(0);
+
+  onMount(() => {
+    const bb = backButton();
+    const mb = mainButton();
+
+    const onMainButtonClick = () => setCount((count) => count + 1);
+    const onBackButtonClick = () => setCount((count) => count - 1);
+
+    mb.enable().show().on('click', onMainButtonClick);
+    bb.on('click', onBackButtonClick);
+
+    onCleanup(() => {
+      mb.hide().off('click', onMainButtonClick);
+      bb.off('click', onBackButtonClick);
+    });
+  });
+
+  createEffect(() => {
+    mainButton().setText(`Count is ${count()}`);
+  });
+
+  createEffect(() => {
+    const bb = backButton();
+
+    if (count() === 0) {
+      bb.hide();
+      return;
+    }
+    bb.show();
+  });
+
+  return null;
+}
 
 /**
  * Displays current application init data.
@@ -74,9 +120,10 @@ function DisplayGate(props: ParentProps) {
  */
 export function Root() {
   return (
-    <SDKProvider initOptions={{ debug: true, cssVars: true }}>
+    <SDKProvider initOptions={{ debug: true, cssVars: true, timeout: 1000 }}>
       <DisplayGate>
         <InitData/>
+        <MainButtonTest/>
       </DisplayGate>
     </SDKProvider>
   );
