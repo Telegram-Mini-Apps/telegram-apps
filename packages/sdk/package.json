@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/sdk",
-  "version": "0.11.5",
+  "version": "0.11.6",
   "description": "TypeScript Source Development Kit for Telegram Web Apps client application.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",

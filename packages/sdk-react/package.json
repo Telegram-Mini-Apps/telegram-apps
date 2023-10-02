@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/sdk-react",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "React bindings for Web Apps client SDK. Contains hooks, components and other useful tools which allow usage of React along with Web Apps client SDK.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
