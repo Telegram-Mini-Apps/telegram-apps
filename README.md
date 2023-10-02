@@ -11,9 +11,10 @@
 # @tma.js
 
 Mono-repository, containing all the packages, connected with comfortable and safe TypeScript
-development on Telegram Mini Apps platform. To learn more, follow packages own documentations.
+development on Telegram Mini Apps platform. To learn more about specific packages, follow 
+their own documentations.
 
-To learn more, visit platform [documentation](https://docs.telegram-mini-apps.com).
+To learn more about platform itself, visit its [documentation](https://docs.telegram-mini-apps.com).
 
 ## Packages
 
