@@ -198,6 +198,15 @@ export interface MethodsParams {
   }>;
 
   /**
+   * Updates current information about Settings Button.
+   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/methods#web_app_setup_settings_button
+   * @since 6.10
+   */
+  web_app_setup_settings_button: CreateParams<{
+    is_visible: boolean;
+  }>;
+
+  /**
    * Generates haptic feedback event.
    * @see https://docs.telegram-mini-apps.com/docs/apps-communication/methods#web_app_trigger_haptic_feedback
    * @since 6.1

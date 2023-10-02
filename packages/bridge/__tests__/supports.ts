@@ -58,6 +58,7 @@ describe('supports.ts', () => {
         'web_app_invoke_custom_method', 'web_app_request_write_access', 'web_app_request_phone',
         ['web_app_set_header_color', 'color'],
       ]],
+      ['6.10', ['web_app_setup_settings_button']],
     ];
 
     tests.forEach(([version, methods]) => {

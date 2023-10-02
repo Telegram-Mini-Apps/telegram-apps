@@ -93,6 +93,8 @@ export function supports(
     case 'web_app_request_write_access':
     case 'web_app_request_phone':
       return lessOrEqual('6.9', paramOrVersion);
+    case 'web_app_setup_settings_button':
+      return lessOrEqual('6.10', paramOrVersion);
     default:
       return true;
   }
