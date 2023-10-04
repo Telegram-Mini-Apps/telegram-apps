@@ -1,13 +1,13 @@
 import type { HasUndefined, If } from '@tma.js/util-types';
+import type { ThemeParams } from '@tma.js/theme-params';
 
-import type { ThemeParamsType } from '../../theme-params.js';
 import type { StateEvents } from '../../state/index.js';
 
 export type ThemeParamsState = {
-  [K in keyof ThemeParamsType]-?: If<
-    HasUndefined<ThemeParamsType[K]>,
-    Exclude<ThemeParamsType[K], undefined> | null,
-    ThemeParamsType[K]
+  [K in keyof ThemeParams]-?: If<
+    HasUndefined<ThemeParams[K]>,
+    Exclude<ThemeParams[K], undefined> | null,
+    ThemeParams[K]
   >;
 };
 

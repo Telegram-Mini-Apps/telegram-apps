@@ -1,10 +1,10 @@
 import { EventEmitter } from '@tma.js/event-emitter';
+import { parse, type ThemeParams as ThemeParamsType } from '@tma.js/theme-params';
 import { on, request, type RequestOptions } from '@tma.js/bridge';
 import { isColorDark } from '@tma.js/colors';
 
 import type { RGB } from '@tma.js/colors';
 
-import { parseThemeParams, type ThemeParamsType } from '../../theme-params.js';
 import { State } from '../../state/index.js';
 
 import type { ThemeParamsEvents, ThemeParamsState } from './types.js';
@@ -49,7 +49,7 @@ export class ThemeParams {
       timeout,
     });
 
-    return parseThemeParams(result.theme_params);
+    return parse(result.theme_params);
   }
 
   /**
@@ -59,7 +59,7 @@ export class ThemeParams {
    */
   static sync(themeParams: ThemeParams): void {
     on('theme_changed', (event) => {
-      themeParams.state.set(prepareThemeParams(parseThemeParams(event.theme_params)));
+      themeParams.state.set(prepareThemeParams(parse(event.theme_params)));
     });
   }
 
