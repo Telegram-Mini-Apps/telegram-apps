@@ -1,4 +1,5 @@
 import type { PostEvent } from '@tma.js/bridge';
+import type { LaunchParams } from '@tma.js/launch-params';
 
 import type {
   BackButton,
@@ -13,9 +14,8 @@ import type {
   Viewport,
   WebApp,
 } from '../components/index.js';
-import type { LaunchParams } from '../launch-params.js';
 
-export type InitResult = {
+export interface InitResult {
   backButton: BackButton;
   closingBehavior: ClosingBehaviour;
   cloudStorage: CloudStorage;
@@ -29,9 +29,9 @@ export type InitResult = {
   themeParams: ThemeParams;
   viewport: Viewport;
   webApp: WebApp;
-};
+}
 
-export type InitCSSVarsSpecificOption = {
+export interface InitCSSVarsSpecificOption {
   /**
    * Enables theme parameters CSS variables:
    * - `--tg-theme-bg-color`
@@ -63,7 +63,7 @@ export type InitCSSVarsSpecificOption = {
    * @see bindWebAppVariables
    */
   webApp?: true;
-};
+}
 
 export type InitCSSVarsOption = boolean | InitCSSVarsSpecificOption;
 
