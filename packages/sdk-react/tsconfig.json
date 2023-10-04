@@ -1,8 +1,5 @@
 {
-  "extends": "tsconfig/react-library.json",
-  "compilerOptions": {
-    "outDir": "dist"
-  },
+  "extends": "./tsconfig.build.json",
   "include": [
     "src",
     "__tests__",

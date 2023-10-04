@@ -11,10 +11,11 @@
     "lib": [
       "esnext"
     ],
-    "module": "ESNext",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "outDir": "dist",
     "preserveWatchOutput": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,

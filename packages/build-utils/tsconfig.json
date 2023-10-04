@@ -1,8 +1,5 @@
 {
-  "extends": "tsconfig/base.json",
-  "compilerOptions": {
-    "types": ["vitest"]
-  },
+  "extends": "./tsconfig.build.json",
   "include": [
     "src",
     "__tests__",

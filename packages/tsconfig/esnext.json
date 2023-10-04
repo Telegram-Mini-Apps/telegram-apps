@@ -6,8 +6,6 @@
     "lib": [
       "esnext"
     ],
-    "outDir": "dist",
-    "module": "ESNext",
     "target": "ESNext"
   }
 }

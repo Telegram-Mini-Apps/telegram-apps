@@ -1,10 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Solid JS Library",
-  "extends": "./base.json",
+  "extends": "./solid-library.json",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js"
+    "lib": [
+      "esnext",
+      "dom"
+    ]
   }
 }
