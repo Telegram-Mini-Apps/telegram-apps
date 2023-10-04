@@ -19,9 +19,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "vite-plugin-dts": "^3.6.0"
-  },
   "devDependencies": {
     "tsconfig": "workspace:*"
   }
