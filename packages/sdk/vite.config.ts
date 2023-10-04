@@ -10,6 +10,8 @@ const external = [
   '@tma.js/util-types',
   '@tma.js/parsing',
   '@tma.js/event-emitter',
+  '@tma.js/theme-params',
+  '@tma.js/launch-params',
 ];
 
 export default createViteConfig({
