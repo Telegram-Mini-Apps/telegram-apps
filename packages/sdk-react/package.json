@@ -53,6 +53,8 @@
     }
   },
   "dependencies": {
+    "@tma.js/launch-params": "workspace:*",
+    "@tma.js/theme-params": "workspace:*",
     "@tma.js/bridge": "workspace:*",
     "@tma.js/sdk": "workspace:*"
   },
