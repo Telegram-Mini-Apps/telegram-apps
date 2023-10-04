@@ -37,8 +37,10 @@
   },
   "scripts": {
     "test": "vitest",
-    "lint": "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
-    "build": "vite build"
+    "lint": "eslint -c .eslintrc.cjs src/**/* tests/**/*",
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "build": "vite build",
+    "rollup": "pnpm run typecheck && pnpm run build"
   },
   "dependencies": {
     "@tma.js/util-types": "workspace:*",
@@ -46,7 +48,6 @@
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
-    "jest-config-custom": "workspace:*",
     "eslint-config-custom": "workspace:*",
     "build-utils": "workspace:*"
   },

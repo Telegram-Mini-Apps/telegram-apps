@@ -39,7 +39,9 @@
   },
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
-    "build": "vite build"
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "build": "vite build",
+    "rollup": "pnpm run typecheck && pnpm run build"
   },
   "peerDependencies": {
     "@types/react": "^17.0.0 || ^18.0.0",
@@ -51,6 +53,8 @@
     }
   },
   "dependencies": {
+    "@tma.js/launch-params": "workspace:*",
+    "@tma.js/theme-params": "workspace:*",
     "@tma.js/bridge": "workspace:*",
     "@tma.js/sdk": "workspace:*"
   },

@@ -33,7 +33,7 @@ jobs:
         run: pnpm i
 
       - name: Build packages
-        run: pnpm run packages:build
+        run: pnpm run packages:rollup
 
       - name: Test packages
         run: pnpm run packages:test

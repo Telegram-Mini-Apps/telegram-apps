@@ -8,11 +8,13 @@ import { getStorageValue, saveStorageValue } from '../../storage.js';
 /**
  * Creates MainButton instance using last locally saved data also saving each state in
  * the storage.
+ * @param isPageReload - was current page reloaded.
  * @param backgroundColor - background color.
  * @param textColor - text color.
  * @param postEvent - Bridge postEvent function
  */
 export function createMainButton(
+  isPageReload: boolean,
   backgroundColor: RGB,
   textColor: RGB,
   postEvent: PostEvent,
@@ -24,7 +26,7 @@ export function createMainButton(
     isProgressVisible = false,
     textColor: stateTextColor = textColor,
     text = '',
-  } = getStorageValue('main-button') || {};
+  } = isPageReload ? getStorageValue('main-button') || {} : {};
 
   const component = new MainButton(
     stateBackgroundColor,

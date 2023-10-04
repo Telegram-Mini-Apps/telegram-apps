@@ -10,12 +10,13 @@ import {
   type InvoiceStatus,
   type PostEvent,
 } from '@tma.js/bridge';
+import type { Platform } from '@tma.js/launch-params';
 
 import { formatURL } from '../../url.js';
 import { State } from '../../state/index.js';
 import { createSupportsFunc, createSupportsParamFunc, type SupportsFunc } from '../../supports.js';
 
-import type { ColorScheme, Platform } from '../../types.js';
+import type { ColorScheme } from '../../types.js';
 import type { WebAppEvents, WebAppHeaderColor, WebAppState } from './types.js';
 
 /**

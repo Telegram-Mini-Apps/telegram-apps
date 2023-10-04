@@ -1,7 +1,7 @@
 import React, { type ComponentType } from 'react';
 
-import type { LaunchParams } from './types.js';
 import { useLaunchParams } from './useLaunchParams.js';
+import type { LaunchParams } from './types.js';
 
 /**
  * HOC which passes launch parameters to wrapped React component.

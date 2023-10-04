@@ -3,8 +3,14 @@
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "dependsOn": ["^build"]
+    },
+    "rollup": {
+      "dependsOn": ["^rollup"]
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"],
+      "cache": true
     },
     "test": {
       "cache": true

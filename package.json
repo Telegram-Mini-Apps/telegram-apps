@@ -6,6 +6,8 @@
     "lint": "turbo run lint",
     "docs:build": "turbo run build --filter=\"./apps/docs\"",
     "packages:build": "turbo run build --filter=\"./packages/*\"",
+    "packages:rollup": "turbo run rollup --filter=\"./packages/*\"",
+    "packages:typecheck": "turbo run typecheck --filter=\"./packages/*\"",
     "packages:test": "vitest",
     "packages:lint": "turbo run lint --filter=\"./packages/*\""
   },
@@ -24,6 +26,7 @@
     "turbo": "^1.10.14",
     "typescript": "^5.1.6",
     "vite": "^4.4.9",
+    "vite-plugin-dts": "^3.6.0",
     "vite-plugin-solid": "^2.7.0",
     "vitest": "^0.34.6"
   },

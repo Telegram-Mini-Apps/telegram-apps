@@ -1,15 +1,17 @@
 import type { RGB } from '@tma.js/colors';
 import type { PostEvent } from '@tma.js/bridge';
+import type { Platform } from '@tma.js/launch-params';
 
 import { WebApp } from '../../components/index.js';
 
 import { getStorageValue, saveStorageValue } from '../../storage.js';
 
-import type { CreateRequestIdFunc, Platform } from '../../types.js';
+import type { CreateRequestIdFunc } from '../../types.js';
 
 /**
  * Creates WebApp instance using last locally saved data also saving each state in
  * the storage.
+ * @param isPageReload - was current page reloaded.
  * @param backgroundColor - web app background color.
  * @param version - platform version.
  * @param platform - Telegram Web Apps platform name.
@@ -17,6 +19,7 @@ import type { CreateRequestIdFunc, Platform } from '../../types.js';
  * @param postEvent - Bridge postEvent function
  */
 export function createWebApp(
+  isPageReload: boolean,
   backgroundColor: RGB,
   version: string,
   platform: Platform,
@@ -26,7 +29,7 @@ export function createWebApp(
   const {
     backgroundColor: stateBackgroundColor = backgroundColor,
     headerColor = 'bg_color',
-  } = getStorageValue('web-app') || {};
+  } = isPageReload ? getStorageValue('web-app') || {} : {};
 
   const component = new WebApp(
     headerColor,

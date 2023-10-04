@@ -1,7 +1,18 @@
 import React, { type ComponentType } from 'react';
+import type { ThemeParams } from '@tma.js/sdk';
 
-import { useThemeParams } from './useThemeParams.js';
-import type { ThemeParams } from './types.js';
+import { useUnit } from '../provider/index.js';
+import { useEventsTracking } from './hooks.js';
+
+/**
+ * Returns ThemeParams component instance.
+ */
+export function useThemeParams(): ThemeParams {
+  const theme = useUnit('themeParams');
+  useEventsTracking(theme, ['changed']);
+
+  return theme;
+}
 
 /**
  * HOC which passes ThemeParams SDK component to wrapped React component.

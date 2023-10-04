@@ -1,8 +1,8 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.build.json",
   "include": [
     "src",
-    "__tests__",
+    "tests",
     "__test-utils__",
     "*.ts",
     "*.js"

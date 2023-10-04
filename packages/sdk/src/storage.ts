@@ -29,7 +29,6 @@ interface StorageParams {
     backgroundColor: RGB;
     headerColor: HeaderColorKey | RGB;
   };
-  'launch-params': string;
 }
 
 /**
@@ -42,7 +41,7 @@ type StorageKey = keyof StorageParams;
  * @param key - session storage key.
  */
 function formatKey(key: StorageKey): string {
-  return `telegram-web-apps-${key}`;
+  return `telegram-mini-apps-${key}`;
 }
 
 /**

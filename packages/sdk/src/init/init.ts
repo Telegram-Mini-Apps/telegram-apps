@@ -5,6 +5,12 @@ import {
   on,
 } from '@tma.js/bridge';
 import { withTimeout } from '@tma.js/utils';
+import type { LaunchParams } from '@tma.js/launch-params';
+import {
+  parse as parseLaunchParams,
+  saveToStorage as saveLaunchParamsToStorage,
+  retrieveFromStorage,
+} from '@tma.js/launch-params';
 
 import {
   CloudStorage,
@@ -13,7 +19,6 @@ import {
   Popup,
   QRScanner,
 } from '../components/index.js';
-import { parseLaunchParams, retrieveLaunchParams, type LaunchParams } from '../launch-params.js';
 import {
   bindThemeCSSVariables,
   bindViewportCSSVariables,
@@ -22,14 +27,47 @@ import {
 } from './css.js';
 import {
   createPostEvent,
-  createSyncedThemeParams,
+  createThemeParams,
   createBackButton,
   createMainButton,
   createViewport,
   createWebApp, createRequestIdGenerator, createClosingBehavior,
 } from './creators/index.js';
+import { retrieveLaunchParams } from '../launch-params.js';
 
 import type { InitOptions, InitResult } from './types.js';
+
+/**
+ * Returns true in case, current session was created due to native location reload.
+ */
+function isNativePageReload(): boolean {
+  return (
+    window
+      .performance
+      .getEntriesByType('navigation') as PerformanceNavigationTiming[]
+  ).some((entry) => entry.type === 'reload');
+}
+
+/**
+ * Returns true if current page was reloaded.
+ * @param launchParamsFromStorage - launch parameters from sessionStorage.
+ * @param currentLaunchParams - actual launch parameters.
+ */
+function computePageReload(
+  launchParamsFromStorage: LaunchParams | null,
+  currentLaunchParams: LaunchParams,
+): boolean {
+  // To check if page was reloaded, we should check if previous init data hash equals to the
+  // current one. Nevertheless, there are some cases, when init data is missing. For example,
+  // when app was launched via KeyboardButton. In this case we try to use the native way of
+  // checking if current page was reloaded (which could still return incorrect result).
+  // Issue: https://github.com/Telegram-Mini-Apps/issues/issues/12
+  if (!launchParamsFromStorage) {
+    return false;
+  }
+
+  return launchParamsFromStorage.initData?.hash === currentLaunchParams.initData?.hash;
+}
 
 /**
  * Represents actual init function.
@@ -43,29 +81,31 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     acceptCustomStyles = acceptScrollbarStyle,
     targetOrigin,
     debug = false,
-    launchParams: launchParamsRaw,
+    launchParams: optionsLaunchParams = retrieveLaunchParams(),
   } = options;
 
-  // Set global debug mode.
+  // Set global settings.
   if (debug) {
     setDebug(debug);
   }
 
-  // Set global target origin.
   if (typeof targetOrigin === 'string') {
     setTargetOrigin(targetOrigin);
   }
 
-  // Get Web App launch params.
-  let launchParams: LaunchParams;
+  // Get Web App launch params and save them to session storage, so they will be accessible from
+  // anywhere.
+  const launchParamsFromStorage = retrieveFromStorage();
+  const launchParams = optionsLaunchParams instanceof URLSearchParams || typeof optionsLaunchParams === 'string'
+    ? parseLaunchParams(optionsLaunchParams)
+    : optionsLaunchParams;
 
-  if (launchParamsRaw) {
-    launchParams = launchParamsRaw instanceof URLSearchParams || typeof launchParamsRaw === 'string'
-      ? parseLaunchParams(launchParamsRaw)
-      : launchParamsRaw;
-  } else {
-    launchParams = retrieveLaunchParams();
-  }
+  saveLaunchParamsToStorage(launchParams);
+
+  // Compute if page was reloaded. We will need it to decide if SDK components should be restored
+  // or created from scratch.
+  const isPageReload = isNativePageReload()
+    || computePageReload(launchParamsFromStorage, launchParams);
 
   const {
     initData,
@@ -82,8 +122,15 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
 
   const createRequestId = createRequestIdGenerator();
   const postEvent = createPostEvent(checkCompat, version);
-  const themeParams = createSyncedThemeParams(lpThemeParams);
-  const webApp = createWebApp(backgroundColor, version, platform, createRequestId, postEvent);
+  const themeParams = createThemeParams(lpThemeParams);
+  const webApp = createWebApp(
+    isPageReload,
+    backgroundColor,
+    version,
+    platform,
+    createRequestId,
+    postEvent,
+  );
 
   const {
     themeParams: createThemeParamsCSSVars,
@@ -99,7 +146,7 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     bindThemeCSSVariables(themeParams);
   }
 
-  const viewport = await createViewport(platform, postEvent);
+  const viewport = await createViewport(isPageReload, platform, postEvent);
 
   // Apply viewport CSS variables.
   if (createViewportCSSVars) {
@@ -128,11 +175,11 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
   }
 
   const result: InitResult = {
-    backButton: createBackButton(version, postEvent),
-    closingBehavior: createClosingBehavior(postEvent),
+    backButton: createBackButton(isPageReload, version, postEvent),
+    closingBehavior: createClosingBehavior(isPageReload, postEvent),
     cloudStorage: new CloudStorage(version, createRequestId, postEvent),
     haptic: new HapticFeedback(version, postEvent),
-    mainButton: createMainButton(buttonColor, buttonTextColor, postEvent),
+    mainButton: createMainButton(isPageReload, buttonColor, buttonTextColor, postEvent),
     popup: new Popup(version, postEvent),
     postEvent,
     qrScanner: new QRScanner(version, postEvent),

@@ -12,13 +12,12 @@
   },
   "type": "module",
   "scripts": {
-    "build": "vite build --ssr --outDir dist"
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "build": "vite build --ssr --outDir dist",
+    "rollup": "pnpm run typecheck && pnpm run build"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "vite-plugin-dts": "^3.6.0"
   },
   "devDependencies": {
     "tsconfig": "workspace:*"

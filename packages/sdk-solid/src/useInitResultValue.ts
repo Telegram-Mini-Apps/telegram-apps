@@ -1,5 +1,5 @@
-import { SDKInitResult, SDKInitResultKey, SDKInitResultValue } from './types.js';
-import { Accessor, createMemo } from 'solid-js';
+import { createMemo, type Accessor } from 'solid-js';
+import type { SDKInitResult, SDKInitResultKey, SDKInitResultValue } from './types.js';
 
 /**
  * Extracts value from the SDK init result by key.

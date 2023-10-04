@@ -1,0 +1,57 @@
+{
+  "name": "@tma.js/theme-params",
+  "version": "0.0.0",
+  "description": "Utilities to work with Telegram Mini Apps theme parameters.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
+    "directory": "packages/theme-params"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
+  },
+  "keywords": [
+    "telegram-mini-apps",
+    "typescript"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "./dist/index.umd.cjs",
+  "browser": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/dts/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs",
+      "default": "./dist/index.umd.cjs"
+    }
+  },
+  "scripts": {
+    "test": "vitest",
+    "lint": "eslint -c .eslintrc.cjs src/**/* tests/**/*",
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "build": "vite build",
+    "rollup": "pnpm run typecheck && pnpm run build"
+  },
+  "dependencies": {
+    "@tma.js/colors": "workspace:*",
+    "@tma.js/parsing": "workspace:*"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*",
+    "eslint-config-custom": "workspace:*",
+    "build-utils": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -31,7 +31,9 @@
   },
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
-    "build": "vite build"
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "build": "vite build",
+    "rollup": "pnpm run typecheck && pnpm run build"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",

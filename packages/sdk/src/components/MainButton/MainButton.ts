@@ -119,7 +119,7 @@ export class MainButton {
   disable(): this {
     // FIXME: This method does not work on Android. Event "main_button_pressed"
     //  keeps getting received even in case, button is disabled.
-    //  Issue: https://github.com/Telegram-Web-Apps/documentation/issues/1
+    //  Issue: https://github.com/Telegram-Mini-Apps/documentation/issues/1
     this.isEnabled = false;
     return this;
   }

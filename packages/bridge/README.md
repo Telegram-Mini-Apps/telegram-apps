@@ -1,6 +1,6 @@
 # @tma.js/bridge
 
-[code-link]: https://github.com/Telegram-Web-Apps/tma.js/tree/master/packages/bridge
+[code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/bridge
 
 [code-badge]: https://img.shields.io/badge/source-black?logo=github
 

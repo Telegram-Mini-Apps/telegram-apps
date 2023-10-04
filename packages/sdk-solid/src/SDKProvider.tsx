@@ -1,4 +1,4 @@
-import { createMemo, createResource, ParentProps } from 'solid-js';
+import { createMemo, createResource, type ParentProps } from 'solid-js';
 import { init } from '@tma.js/sdk';
 
 import { SDKContext } from './context.js';
