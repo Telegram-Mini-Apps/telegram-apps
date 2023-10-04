@@ -41,7 +41,7 @@ var package_default = {
   },
   scripts: {
     test: "vitest",
-    lint: "eslint -c .eslintrc.cjs src/**/* __tests__/**/*",
+    lint: "eslint -c .eslintrc.cjs src/**/* tests/**/*",
     typecheck: "tsc --noEmit -p tsconfig.build.json",
     build: "vite build",
     rollup: "pnpm run typecheck && pnpm run build"
