@@ -12,7 +12,9 @@
   },
   "type": "module",
   "scripts": {
-    "build": "vite build --ssr --outDir dist"
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "build": "vite build --ssr --outDir dist",
+    "rollup": "pnpm run typecheck && pnpm run build"
   },
   "publishConfig": {
     "access": "public"
