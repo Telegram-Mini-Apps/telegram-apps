@@ -1,5 +1,16 @@
 # @tma.js/sdk-react
 
+## 0.4.7
+
+### Patch Changes
+
+- 997c12a: Add new deps @tma.js/launch-params and @tma.js/theme-params
+- Updated dependencies [4df61ce]
+- Updated dependencies [e7add9d]
+  - @tma.js/launch-params@0.0.1
+  - @tma.js/theme-params@0.0.1
+  - @tma.js/sdk@0.12.0
+
 ## 0.4.6
 
 ### Patch Changes
