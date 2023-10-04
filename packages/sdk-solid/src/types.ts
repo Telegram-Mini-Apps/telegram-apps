@@ -1,5 +1,5 @@
 import type { InitResult, InitOptions } from '@tma.js/sdk';
-import { Accessor } from 'solid-js';
+import type { Accessor } from 'solid-js';
 
 export type SDKInitOptions = InitOptions;
 export type SDKInitResult = InitResult;

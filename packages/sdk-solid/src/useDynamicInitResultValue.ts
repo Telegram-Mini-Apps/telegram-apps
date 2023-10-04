@@ -1,6 +1,6 @@
-import { Accessor, createEffect, createSignal, onCleanup } from 'solid-js';
-import { SDKInitResult, SDKInitResultKey, SDKInitResultValue } from './types.js';
+import { createEffect, createSignal, onCleanup, type Accessor } from 'solid-js';
 import { useInitResultValue } from './useInitResultValue.js';
+import type { SDKInitResult, SDKInitResultKey, SDKInitResultValue } from './types.js';
 
 interface Trackable {
   on: (event: any, ...args: any[]) => void;
