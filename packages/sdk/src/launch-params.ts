@@ -1,70 +1,29 @@
-import { searchParams, string } from '@tma.js/parsing';
-import { initData, type InitData } from '@tma.js/init-data';
-
-import { parseThemeParams, type ThemeParamsType } from './theme-params.js';
-import { saveStorageValue, getStorageValue } from './storage.js';
-
-import type { Platform } from './types.js';
-
-export interface LaunchParams {
-  version: string;
-  initData?: InitData;
-  initDataRaw?: string;
-  platform: Platform;
-  themeParams: ThemeParamsType;
-}
-
-const launchParamsParser = searchParams<LaunchParams>({
-  version: { type: string(), from: 'tgWebAppVersion' },
-  initData: { type: initData.optional(), from: 'tgWebAppData' },
-  initDataRaw: { type: string().optional(), from: 'tgWebAppData' },
-  platform: { type: string(), from: 'tgWebAppPlatform' },
-  themeParams: { type: parseThemeParams, from: 'tgWebAppThemeParams' },
-});
+import { parse, retrieveFromStorage } from '@tma.js/launch-params';
+import type { LaunchParams } from '@tma.js/launch-params';
 
 /**
- * Parses query parameters as launch parameters.
- * @param query - query parameters presented as string or URLSearchParams
- * instance.
- */
-export function parseLaunchParams(query: string | URLSearchParams): LaunchParams {
-  return launchParamsParser.parse(query);
-}
-
-/**
- * Extracts launch params from the current environment.
+ * Attempts to extract launch params from window.location.hash. In case, window.location.hash
+ * lacks of valid data, function attempts to extract launch params from the sessionStorage.
  */
 export function retrieveLaunchParams(): LaunchParams {
-  const errors: string[] = [];
+  let error: unknown | undefined;
 
-  // Try to extract Web App data from hash. This block of code  covers usual flow, when
+  // Try to extract Mini App data from hash. This block of code  covers usual flow, when
   // application was firstly opened by the user and its hash always contains required parameters.
   try {
-    const launchParamsRaw = window.location.hash.slice(1);
-    const launchParamsParsed = parseLaunchParams(launchParamsRaw);
-
-    // Previous line of code worked fine. Then, we can save taken launch params raw value.
-    saveStorageValue('launch-params', launchParamsRaw);
-
-    return launchParamsParsed;
+    return parse(window.location.hash.slice(1));
   } catch (e) {
-    errors.push(e instanceof Error ? e.message : 'unknown error');
+    error = e;
   }
 
-  // Web Apps allows reloading current page. In this case, window.location.reload() will be
+  // Mini Apps allows reloading current page. In this case, window.location.reload() will be
   // called which means, that init will be called again. As the result, current window
-  // location will lose Web App data. To solve this problem, we are extracting launch
+  // location will lose Mini App data. To solve this problem, we are extracting launch
   // params saved previously.
-  try {
-    const launchParamsRaw = getStorageValue('launch-params');
-    if (launchParamsRaw) {
-      return parseLaunchParams(launchParamsRaw);
-    }
-
-    errors.push('Launch params are missing in local storage');
-  } catch (e) {
-    errors.push(e instanceof Error ? e.message : 'unknown error');
+  const fromStorage = retrieveFromStorage();
+  if (fromStorage) {
+    return fromStorage;
   }
 
-  throw new Error(`Unable to extract launch params. Errors: "${errors.join('", "')}"`);
+  throw new Error('Unable to extract launch params', { cause: error });
 }
