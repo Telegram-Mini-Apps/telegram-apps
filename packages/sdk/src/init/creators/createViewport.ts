@@ -1,24 +1,28 @@
 import type { PostEvent } from '@tma.js/bridge';
+import type { Platform } from '@tma.js/launch-params';
 
 import { Viewport } from '../../components/index.js';
 
 import { getStorageValue, saveStorageValue } from '../../storage.js';
 
-import type { Platform } from '../../types.js';
-
 /**
  * Creates Viewport instance using last locally saved data also saving each state in
  * the storage.
+ * @param isPageReload - was current page reloaded.
  * @param platform - Telegram Web Apps platform name.
  * @param postEvent - Bridge postEvent function
  */
-export async function createViewport(platform: Platform, postEvent: PostEvent): Promise<Viewport> {
+export async function createViewport(
+  isPageReload: boolean,
+  platform: Platform,
+  postEvent: PostEvent,
+): Promise<Viewport> {
   const {
     height = window.innerHeight,
     stableHeight = window.innerHeight,
     width = window.innerWidth,
     isExpanded = false,
-  } = getStorageValue('viewport') || {};
+  } = isPageReload ? getStorageValue('viewport') || {} : {};
 
   const createSynced = () => {
     const viewport = new Viewport(height, width, stableHeight, isExpanded, postEvent);
