@@ -50,7 +50,6 @@
     "@types/node": "^16.0.0",
     "tsconfig": "workspace:*",
     "eslint-config-custom": "workspace:*",
-    "jest-config-custom": "workspace:*",
     "build-utils": "workspace:*"
   },
   "publishConfig": {
