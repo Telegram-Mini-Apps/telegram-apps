@@ -1,5 +1,17 @@
 # @tma.js/sdk
 
+## 0.12.0
+
+### Minor Changes
+
+- e7add9d: Restore components state only in case, current page was reloaded.
+
+### Patch Changes
+
+- Updated dependencies [4df61ce]
+  - @tma.js/launch-params@0.0.1
+  - @tma.js/theme-params@0.0.1
+
 ## 0.11.6
 
 ### Patch Changes
