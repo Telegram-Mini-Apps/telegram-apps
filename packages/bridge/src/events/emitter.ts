@@ -33,7 +33,7 @@ export function createEmitter(): EventEmitter {
   // Desktop version of Telegram is sometimes not sending the viewport_changed
   // event. For example, when main button is shown. That's why we should
   // add our own listener to make sure, viewport information is always fresh.
-  // Issue: https://github.com/Telegram-Web-Apps/tma.js/issues/10
+  // Issue: https://github.com/Telegram-Mini-Apps/tma.js/issues/10
   window.addEventListener('resize', () => {
     emit('viewport_changed', {
       width: window.innerWidth,
@@ -58,7 +58,7 @@ export function createEmitter(): EventEmitter {
 
         case 'popup_closed':
           // FIXME: Payloads are different on different platforms.
-          //  Issue: https://github.com/Telegram-Web-Apps/tma.js/issues/2
+          //  Issue: https://github.com/Telegram-Mini-Apps/tma.js/issues/2
           if (
             // Sent on desktop.
             eventData === undefined
