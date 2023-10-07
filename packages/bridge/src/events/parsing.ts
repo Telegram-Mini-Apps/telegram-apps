@@ -4,6 +4,7 @@ import {
   boolean,
   json,
   rgb,
+  createValueParserGen,
 } from '@tma.js/parsing';
 
 import type {
@@ -18,18 +19,25 @@ function isNullOrUndefined(value: unknown): boolean {
   return value === null || value === undefined;
 }
 
+const rgbOptional = rgb().optional();
+const num = number();
+
+const windowWidthParser = createValueParserGen((value) => (value === null || value === undefined
+  ? window.innerWidth
+  : num.parse(value)));
+
 /**
  * Parses incoming value as ThemeChangedPayload.
  */
 export const themeChangedPayload = json<ThemeChangedPayload>({
-  theme_params: json<ThemeChangedPayload['theme_params']>({
-    bg_color: rgb().optional(),
-    text_color: rgb().optional(),
-    hint_color: rgb().optional(),
-    link_color: rgb().optional(),
-    button_color: rgb().optional(),
-    button_text_color: rgb().optional(),
-    secondary_bg_color: rgb().optional(),
+  theme_params: json({
+    bg_color: rgbOptional,
+    text_color: rgbOptional,
+    hint_color: rgbOptional,
+    link_color: rgbOptional,
+    button_color: rgbOptional,
+    button_text_color: rgbOptional,
+    secondary_bg_color: rgbOptional,
   }),
 });
 
@@ -39,7 +47,7 @@ export const themeChangedPayload = json<ThemeChangedPayload>({
  */
 export const viewportChangedPayload = json<ViewportChangedPayload>({
   height: number(),
-  width: number().optional(isNullOrUndefined).default(() => window.innerWidth),
+  width: windowWidthParser(),
   is_state_stable: boolean(),
   is_expanded: boolean(),
 });
@@ -48,7 +56,7 @@ export const viewportChangedPayload = json<ViewportChangedPayload>({
  * Parses incoming value as PopupClosedPayload.
  */
 export const popupClosedPayload = json<PopupClosedPayload>({
-  button_id: string().optional(isNullOrUndefined),
+  button_id: string({ isEmpty: isNullOrUndefined }).optional(),
 });
 
 /**
