@@ -1,5 +1,13 @@
 # @tma.js/init-data
 
+## 0.2.16
+
+### Patch Changes
+
+- 8ef4f81: Add chatType and chatInstance properties. Fix type of canSendAfter property
+- Updated dependencies [bfbde56]
+  - @tma.js/parsing@0.1.0
+
 ## 0.2.15
 
 ### Patch Changes

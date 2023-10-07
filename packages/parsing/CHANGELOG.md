@@ -1,5 +1,11 @@
 # @tma.js/parsing
 
+## 0.1.0
+
+### Minor Changes
+
+- bfbde56: Simplify parsing utilities and related types
+
 ## 0.0.3
 
 ### Patch Changes
