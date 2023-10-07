@@ -2,6 +2,8 @@ import dts from 'vite-plugin-dts';
 import type { LibraryFormats, PluginOption, UserConfig } from 'vite';
 import type { InlineConfig } from 'vitest';
 
+import { formatTmaJSPackageName } from './formatTmaJSPackageName.js';
+
 interface Options {
   /**
    * Required package formats.
@@ -64,14 +66,25 @@ export function createViteConfig(options: Options): UserConfig {
       },
 
       // We want source maps to let other developers see the source code. Their bundlers will
-      // automatically remove them if needed.
+      // automatically remove sourcemaps if needed.
       sourcemap: true,
 
       lib: {
-        name: packageName,
+        name: formatTmaJSPackageName(packageName),
         entry: 'src/index.ts',
         formats,
-        fileName: 'index',
+        fileName(format, entry) {
+          switch (format) {
+            case 'cjs':
+              return 'index.cjs';
+            case 'umd':
+              return 'index.umd.js';
+            case 'es':
+              return 'index.mjs';
+            default:
+              return entry;
+          }
+        }
       },
     },
   };
