@@ -1,5 +1,17 @@
 # @tma.js/sdk
 
+## 0.12.1
+
+### Patch Changes
+
+- Updated dependencies [8ef4f81]
+- Updated dependencies [bfbde56]
+  - @tma.js/init-data@0.2.16
+  - @tma.js/parsing@0.1.0
+  - @tma.js/launch-params@0.0.2
+  - @tma.js/bridge@1.3.6
+  - @tma.js/theme-params@0.0.2
+
 ## 0.12.0
 
 ### Minor Changes

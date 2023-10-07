@@ -1,5 +1,12 @@
 # @tma.js/bridge
 
+## 1.3.6
+
+### Patch Changes
+
+- Updated dependencies [bfbde56]
+  - @tma.js/parsing@0.1.0
+
 ## 1.3.5
 
 ### Patch Changes
