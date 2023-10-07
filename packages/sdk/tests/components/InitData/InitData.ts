@@ -18,7 +18,7 @@ describe('components', () => {
           expect(data1.startParam).toBe(null);
           expect(data1.user).toBe(null);
 
-          const canSendAfter = new Date(999);
+          const canSendAfter = 1;
           const data2 = new InitData(authDate, 'joke', {
             canSendAfter,
             chat: {
@@ -49,7 +49,8 @@ describe('components', () => {
             },
           });
           expect(data2.authDate).toBe(authDate);
-          expect(data2.canSendAfter).toBe(canSendAfter);
+          expect(data2.canSendAfter)
+            .toStrictEqual(new Date(authDate.getTime() + canSendAfter * 1000));
           expect(data2.chat).toStrictEqual({
             id: 999,
             photoUrl: 'photo',
