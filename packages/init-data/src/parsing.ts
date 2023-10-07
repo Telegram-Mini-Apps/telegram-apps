@@ -17,33 +17,56 @@ function field<P extends AnyParser<any>>(parser: P, from?: string) {
   };
 }
 
-const user = json<User>({
-  firstName: field(string(), 'first_name'),
-  id: number(),
-  isBot: field(boolean().optional(), 'is_bot'),
-  isPremium: field(boolean().optional(), 'is_premium'),
-  lastName: field(string().optional(), 'last_name'),
-  languageCode: field(string().optional(), 'language_code'),
-  photoUrl: field(string().optional(), 'photo_url'),
-  username: string().optional(),
-});
+const str = string();
+const strOptional = string().optional();
+const num = number();
+const numOptional = number().optional();
+const boolOptional = boolean().optional();
+
+function user() {
+  return json<User>({
+    firstName: field(str, 'first_name'),
+    id: num,
+    isBot: field(boolOptional, 'is_bot'),
+    isPremium: field(boolOptional, 'is_premium'),
+    lastName: field(strOptional, 'last_name'),
+    languageCode: field(strOptional, 'language_code'),
+    photoUrl: field(strOptional, 'photo_url'),
+    username: strOptional,
+  });
+}
+
+function chat() {
+  return json({
+    id: num,
+    type: str,
+    title: str,
+    photoUrl: field(strOptional, 'photo_url'),
+    username: strOptional,
+  });
+}
 
 /**
  * Parser used to parse init data, presented as search params.
+ * @deprecated Use `parse` method instead.
  */
 export const initData = searchParams<InitData>({
   authDate: field(date(), 'auth_date'),
-  hash: string(),
-  user: user.optional(),
-  receiver: user.optional(),
-  chat: json<InitData['chat']>({
-    id: number(),
-    type: string(),
-    title: string(),
-    photoUrl: field(string().optional(), 'photo_url'),
-    username: string().optional(),
-  }).optional(),
-  canSendAfter: field(date().optional(), 'can_send_after'),
-  queryId: field(string().optional(), 'query_id'),
-  startParam: field(string().optional(), 'start_param'),
+  hash: str,
+  user: user().optional(),
+  receiver: user().optional(),
+  chat: chat().optional(),
+  chatType: field(strOptional, 'chat_type'),
+  chatInstance: field(strOptional, 'chat_instance'),
+  canSendAfter: field(numOptional, 'can_send_after'),
+  queryId: field(strOptional, 'query_id'),
+  startParam: field(strOptional, 'start_param'),
 });
+
+/**
+ * Parses incoming value as init data.
+ * @param value - value to parse.
+ */
+export function parse(value: string | URLSearchParams): InitData {
+  return initData.parse(value);
+}
