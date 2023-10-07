@@ -8,11 +8,13 @@ import type {
 import { State } from '../../state/index.js';
 
 type InitDataState = {
-  [K in keyof InitDataType]-?: If<
-    HasUndefined<InitDataType[K]>,
-    Exclude<InitDataType[K], undefined> | null,
-    InitDataType[K]
-  >;
+  [K in keyof InitDataType]-?: 'canSendAfter' extends K
+    ? Date | null
+    : If<
+      HasUndefined<InitDataType[K]>,
+      Exclude<InitDataType[K], undefined> | null,
+      InitDataType[K]
+    >;
 };
 
 /**
@@ -29,6 +31,8 @@ export class InitData {
     const {
       chat = null,
       canSendAfter = null,
+      chatType = null,
+      chatInstance = null,
       user = null,
       queryId = null,
       receiver = null,
@@ -36,8 +40,12 @@ export class InitData {
     } = options;
     this.state = new State({
       authDate,
-      canSendAfter,
+      canSendAfter: canSendAfter === null
+        ? null
+        : new Date(authDate.getTime() + canSendAfter * 1000),
       chat,
+      chatType,
+      chatInstance,
       user,
       queryId,
       receiver,

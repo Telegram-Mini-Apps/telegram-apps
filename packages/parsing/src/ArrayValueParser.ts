@@ -1,41 +1,35 @@
+import { ParsingError } from './ParsingError.js';
 import { ValueParser } from './ValueParser.js';
+import type { AnyParser, Parser, IsEmptyFunc } from './types.js';
+import type { ValueParserOverrides, ParseResult } from './ValueParser.js';
 
-import type { ValueParserOverrides } from './ValueParser.js';
-import type { AnyParser, Parser, IsEmptyFunc, AllowedGetDefault } from './shared.js';
-
-export type OfResult<
+export type OfResult<BaseClass, ItemType, IsOptional extends boolean> = ArrayParserType<
   BaseClass,
   ItemType,
-  IsOptional extends boolean,
-  GetDefault extends AllowedGetDefault,
-> = ArrayParserType<BaseClass, ItemType, IsOptional, GetDefault>;
+  IsOptional
+>;
 
 export interface ArrayParserOverrides<
   BaseClass,
   ItemType,
   IsOptional extends boolean,
-  GetDefault extends AllowedGetDefault,
-> extends ValueParserOverrides<BaseClass, ItemType[], IsOptional, GetDefault> {
+> extends ValueParserOverrides<BaseClass, ItemType[], IsOptional> {
   /**
    * Specifies parser for each array item.
    * @param parser - item parser.
    */
-  of<Item>(parser: AnyParser<Item>): OfResult<BaseClass, Item, IsOptional, GetDefault>;
+  of<Item>(parser: AnyParser<Item>): OfResult<BaseClass, Item, IsOptional>;
 }
 
-export type ArrayParserType<
-  BaseClass,
-  ItemType,
-  IsOptional extends boolean,
-  GetDefault extends AllowedGetDefault,
-> = Omit<BaseClass, keyof ArrayParserOverrides<any, any, any, any>>
-  & ArrayParserOverrides<BaseClass, ItemType, IsOptional, GetDefault>;
+export type ArrayParserType<BaseClass, ItemType, IsOptional extends boolean> =
+  Omit<BaseClass, keyof ArrayParserOverrides<any, any, any>>
+  & ArrayParserOverrides<BaseClass, ItemType, IsOptional>;
 
 /**
  * Parses incoming value as array.
  * @param value - value to parse.
  */
-function parseArray(value: unknown): any[] {
+function parseArray(value: unknown): unknown[] {
   if (Array.isArray(value)) {
     return value;
   }
@@ -52,36 +46,31 @@ function parseArray(value: unknown): any[] {
     }
   }
 
-  throw new Error(`Passed value does not satisfy any of known formats: ${JSON.stringify(value)}`);
+  throw new ParsingError(value, { type: 'array' });
 }
 
-/**
- * Wraps array parser around passed item parser.
- * @param parser - item parser.
- */
-function withArrayParser<ItemType>(parser: AnyParser<ItemType>): Parser<ItemType[]> {
-  const exactParser = typeof parser === 'function' ? parser : parser.parse.bind(parser);
+export class ArrayValueParser<ItemType, IsOptional extends boolean>
+  extends ValueParser<unknown[], IsOptional> {
+  private itemParser: Parser<any>;
 
-  return (value) => parseArray(value).map(exactParser);
-}
+  constructor(itemParser: AnyParser<ItemType>, isOptional: IsOptional, isEmpty: IsEmptyFunc) {
+    super(parseArray, isOptional, isEmpty);
 
-export class ArrayValueParser<
-  ItemType,
-  IsOptional extends boolean,
-  GetDefault extends AllowedGetDefault,
-> extends ValueParser<ItemType[], any, any> {
-  constructor(
-    itemParser: Parser<ItemType>,
-    isOptional: IsOptional,
-    getDefault: GetDefault,
-    isEmpty: IsEmptyFunc = (value: unknown) => value === undefined,
-  ) {
-    super(withArrayParser(itemParser), isOptional, getDefault, isEmpty);
+    this.itemParser = typeof itemParser === 'function'
+      ? itemParser
+      : itemParser.parse.bind(itemParser);
   }
 
-  of<Item>(parser: AnyParser<Item>): OfResult<this, Item, IsOptional, GetDefault> {
-    this.parser = withArrayParser(parser) as any;
+  override parse(value: unknown): ParseResult<ItemType[], IsOptional> {
+    const arr = super.parse(value);
+    return arr === undefined ? arr : arr.map(this.itemParser);
+  }
 
-    return this as unknown as OfResult<this, Item, IsOptional, GetDefault>;
+  of<Item>(itemParser: AnyParser<Item>): OfResult<this, Item, IsOptional> {
+    this.itemParser = typeof itemParser === 'function'
+      ? itemParser
+      : itemParser.parse.bind(itemParser);
+
+    return this as OfResult<this, Item, IsOptional>;
   }
 }

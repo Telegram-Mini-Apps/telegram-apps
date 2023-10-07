@@ -105,10 +105,7 @@ describe('events', () => {
         expect(popupClosedPayload.parse({ button_id: 'ok' })).toStrictEqual({ button_id: 'ok' });
         expect(popupClosedPayload.parse({})).toStrictEqual({});
         expect(popupClosedPayload.parse({ button_id: null })).toStrictEqual({});
-      });
-
-      it('should throw an error in case, passed value does not satisfy schema', () => {
-        expect(() => popupClosedPayload.parse({ button_id: 100 })).toThrow();
+        expect(popupClosedPayload.parse({ button_id: 100 })).toStrictEqual({ button_id: '100' });
       });
     });
 
@@ -116,10 +113,7 @@ describe('events', () => {
       it('should return parsed value in case, passed value satisfies schema', () => {
         expect(qrTextReceivedPayload.parse({ data: 'ok' })).toStrictEqual({ data: 'ok' });
         expect(qrTextReceivedPayload.parse({})).toStrictEqual({});
-      });
-
-      it('should throw an error in case, passed value does not satisfy schema', () => {
-        expect(() => qrTextReceivedPayload.parse({ data: 100 })).toThrow();
+        expect(qrTextReceivedPayload.parse({ data: 100 })).toStrictEqual({ data: '100' });
       });
     });
 

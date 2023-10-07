@@ -1,4 +1,15 @@
 /**
+ * Known type of chat.
+ */
+export type ChatType =
+  | 'sender'
+  | 'private'
+  | 'group'
+  | 'supergroup'
+  | 'channel'
+  | string;
+
+/**
  * Describes user information.
  * @see https://docs.telegram-mini-apps.com/docs/launch-params/init-data#user
  */
@@ -91,10 +102,10 @@ export interface InitData {
   authDate: Date;
 
   /**
-   * Date after which a message can be sent via the answerWebAppQuery method.
+   * The number of seconds after which a message can be sent via the method answerWebAppQuery.
    * @see https://core.telegram.org/bots/api#answerwebappquery
    */
-  canSendAfter?: Date;
+  canSendAfter?: number;
 
   /**
    * An object containing data about the chat where the bot was launched via
@@ -102,6 +113,17 @@ export interface InitData {
    * chats – only for Web Apps launched via the attachment menu.
    */
   chat?: Chat;
+
+  /**
+   * The type of chat from which Mini App was opened.
+   */
+  chatType?: ChatType;
+
+  /**
+   * A global identifier indicating the chat from which Mini App was
+   * opened. Returned only for applications opened by direct link.
+   */
+  chatInstance?: string;
 
   /**
    * A hash of all passed parameters, which the bot server can use to

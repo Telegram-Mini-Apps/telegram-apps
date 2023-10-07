@@ -1,4 +1,5 @@
+export * from './parsers/index.js';
 export * from './ArrayValueParser.js';
-export * from './parsers.js';
-export * from './shared.js';
+export * from './ParsingError.js';
+export * from './types.js';
 export * from './ValueParser.js';

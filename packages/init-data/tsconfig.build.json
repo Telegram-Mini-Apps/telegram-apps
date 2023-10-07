@@ -1,5 +1,5 @@
 {
-  "extends": "tsconfig/esnext.json",
+  "extends": "tsconfig/esnext-dom.json",
   "include": [
     "src"
   ]
