@@ -12,6 +12,8 @@ describe('components', () => {
           expect(data1.authDate).toBe(authDate);
           expect(data1.canSendAfter).toBe(null);
           expect(data1.chat).toBe(null);
+          expect(data1.chatType).toBe(null);
+          expect(data1.chatInstance).toBe(null);
           expect(data1.hash).toBe('hash');
           expect(data1.queryId).toBe(null);
           expect(data1.receiver).toBe(null);
@@ -27,6 +29,8 @@ describe('components', () => {
               type: 'group',
               title: 'Title',
             },
+            chatType: 'sender',
+            chatInstance: 'abc',
             queryId: 'query id',
             receiver: {
               id: 1000,
@@ -57,6 +61,8 @@ describe('components', () => {
             type: 'group',
             title: 'Title',
           });
+          expect(data2.chatType).toBe('sender');
+          expect(data2.chatInstance).toBe('abc');
           expect(data2.hash).toBe('joke');
           expect(data2.queryId).toBe('query id');
           expect(data2.receiver).toStrictEqual({

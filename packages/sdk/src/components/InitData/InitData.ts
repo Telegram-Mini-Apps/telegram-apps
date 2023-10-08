@@ -1,6 +1,7 @@
 import type { HasUndefined, If } from '@tma.js/util-types';
 import type {
   Chat,
+  ChatType,
   InitData as InitDataType,
   User,
 } from '@tma.js/init-data';
@@ -77,6 +78,21 @@ export class InitData {
    */
   get chat(): Chat | null {
     return this.state.get('chat');
+  }
+
+  /**
+   * The type of chat from which Mini App was opened.
+   */
+  get chatType(): ChatType | null {
+    return this.state.get('chatType');
+  }
+
+  /**
+   * A global identifier indicating the chat from which Mini App was
+   * opened. Returned only for applications opened by direct link.
+   */
+  get chatInstance(): ChatType | null {
+    return this.state.get('chatInstance');
   }
 
   /**
