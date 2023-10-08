@@ -1,5 +1,11 @@
 # @tma.js/utils
 
+## 0.5.4
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+
 ## 0.5.3
 
 ### Patch Changes

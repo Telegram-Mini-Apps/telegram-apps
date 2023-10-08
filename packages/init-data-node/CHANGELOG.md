@@ -1,5 +1,13 @@
 # @tma.js/init-data-node
 
+## 0.0.15
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+- Updated dependencies [3eafb45]
+  - @tma.js/init-data@0.2.17
+
 ## 0.0.14
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @tma.js/launch-params
 
+## 0.0.3
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+- Updated dependencies [3eafb45]
+  - @tma.js/theme-params@0.0.3
+  - @tma.js/init-data@0.2.17
+  - @tma.js/parsing@0.1.1
+
 ## 0.0.2
 
 ### Patch Changes

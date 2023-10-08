@@ -1,5 +1,21 @@
 # @tma.js/sdk
 
+## 0.12.2
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+- Updated dependencies [3eafb45]
+  - @tma.js/event-emitter@0.0.4
+  - @tma.js/launch-params@0.0.3
+  - @tma.js/theme-params@0.0.3
+  - @tma.js/init-data@0.2.17
+  - @tma.js/parsing@0.1.1
+  - @tma.js/bridge@1.3.7
+  - @tma.js/colors@0.0.4
+  - @tma.js/utils@0.5.4
+  - @tma.js/util-types@0.0.3
+
 ## 0.12.1
 
 ### Patch Changes
