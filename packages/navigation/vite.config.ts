@@ -6,7 +6,7 @@ const external = ['@tma.js/bridge', '@tma.js/parsing', '@tma.js/event-emitter', 
 
 export default createViteConfig({
   packageName: packageJson.name,
-  formats: ['es', 'umd'],
+  formats: ['es', 'umd', 'cjs'],
   external,
   globals: createUMDGlobals(external),
 });

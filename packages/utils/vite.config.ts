@@ -4,7 +4,7 @@ import packageJson from './package.json';
 
 export default createViteConfig({
   packageName: packageJson.name,
-  formats: ['es', 'umd'],
+  formats: ['es', 'umd', 'cjs'],
   test: createVitestConfig({
     coverage: {
       branches: 100,

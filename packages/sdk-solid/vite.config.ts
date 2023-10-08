@@ -7,7 +7,7 @@ const external = ['@tma.js/utils', '@tma.js/sdk', 'solid-js'];
 
 export default createViteConfig({
   packageName: packageJson.name,
-  formats: ['es', 'umd'],
+  formats: ['es', 'umd', 'cjs'],
   external,
   globals: createUMDGlobals(external),
   plugins: [solidPlugin()],

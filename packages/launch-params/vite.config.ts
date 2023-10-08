@@ -6,7 +6,7 @@ const external = ['@tma.js/parsing', '@tma.js/init-data', '@tma.js/theme-params'
 
 export default createViteConfig({
   packageName: packageJson.name,
-  formats: ['es', 'umd'],
+  formats: ['es', 'umd', 'cjs'],
   external,
   globals: createUMDGlobals(external),
   test: createVitestConfig({
