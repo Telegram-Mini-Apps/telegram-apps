@@ -1,5 +1,16 @@
 # @tma.js/sdk-react
 
+## 0.4.9
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+- Updated dependencies [3eafb45]
+  - @tma.js/launch-params@0.0.3
+  - @tma.js/theme-params@0.0.3
+  - @tma.js/bridge@1.3.7
+  - @tma.js/sdk@0.12.2
+
 ## 0.4.8
 
 ### Patch Changes

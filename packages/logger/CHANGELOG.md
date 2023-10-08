@@ -1,5 +1,11 @@
 # @tma.js/logger
 
+## 0.0.3
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+
 ## 0.0.2
 
 ### Patch Changes

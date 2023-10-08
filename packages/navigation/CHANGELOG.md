@@ -1,5 +1,16 @@
 # @tma.js/navigation
 
+## 0.0.6
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+- Updated dependencies [3eafb45]
+  - @tma.js/event-emitter@0.0.4
+  - @tma.js/parsing@0.1.1
+  - @tma.js/bridge@1.3.7
+  - @tma.js/logger@0.0.3
+
 ## 0.0.5
 
 ### Patch Changes

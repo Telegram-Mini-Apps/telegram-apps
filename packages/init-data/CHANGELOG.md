@@ -1,5 +1,13 @@
 # @tma.js/init-data
 
+## 0.2.17
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+- Updated dependencies [3eafb45]
+  - @tma.js/parsing@0.1.1
+
 ## 0.2.16
 
 ### Patch Changes

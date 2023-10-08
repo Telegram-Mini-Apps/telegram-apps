@@ -1,5 +1,12 @@
 # @tma.js/event-emitter
 
+## 0.0.4
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+  - @tma.js/util-types@0.0.3
+
 ## 0.0.3
 
 ### Patch Changes

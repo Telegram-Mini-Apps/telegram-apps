@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/utils",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Web Apps core TypeScript utilities reused by other packages of ecosystem.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",

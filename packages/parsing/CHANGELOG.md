@@ -1,5 +1,14 @@
 # @tma.js/parsing
 
+## 0.1.1
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+- Updated dependencies [3eafb45]
+  - @tma.js/colors@0.0.4
+  - @tma.js/util-types@0.0.3
+
 ## 0.1.0
 
 ### Minor Changes

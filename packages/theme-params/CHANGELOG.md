@@ -1,5 +1,14 @@
 # @tma.js/theme-params
 
+## 0.0.3
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+- Updated dependencies [3eafb45]
+  - @tma.js/parsing@0.1.1
+  - @tma.js/colors@0.0.4
+
 ## 0.0.2
 
 ### Patch Changes

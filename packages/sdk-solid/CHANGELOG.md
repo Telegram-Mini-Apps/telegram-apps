@@ -1,5 +1,14 @@
 # @tma.js/sdk-solid
 
+## 0.1.9
+
+### Patch Changes
+
+- 3eafb45: Update package.json and fix entries for different modules.
+- Updated dependencies [3eafb45]
+  - @tma.js/utils@0.5.4
+  - @tma.js/sdk@0.12.2
+
 ## 0.1.8
 
 ### Patch Changes

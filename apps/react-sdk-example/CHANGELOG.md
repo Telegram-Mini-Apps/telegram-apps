@@ -1,5 +1,12 @@
 # react-sdk-example
 
+## 0.0.14
+
+### Patch Changes
+
+- Updated dependencies [3eafb45]
+  - @tma.js/sdk-react@0.4.9
+
 ## 0.0.13
 
 ### Patch Changes
