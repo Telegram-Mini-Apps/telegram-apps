@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 0.12.3
+
+### Patch Changes
+
+- c890f2d: Add missing chatType and chatInstance properties
+
 ## 0.12.2
 
 ### Patch Changes
