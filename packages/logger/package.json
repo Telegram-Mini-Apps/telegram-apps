@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/logger",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Logger implementation used across @tma.js packages.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",

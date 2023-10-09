@@ -1,5 +1,14 @@
 # @tma.js/sdk-solid
 
+## 0.1.11
+
+### Patch Changes
+
+- 3171451: Build packages in IIFE format
+- Updated dependencies [3171451]
+  - @tma.js/utils@0.5.5
+  - @tma.js/sdk@0.12.4
+
 ## 0.1.10
 
 ### Patch Changes

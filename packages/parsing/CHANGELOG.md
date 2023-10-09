@@ -1,5 +1,13 @@
 # @tma.js/parsing
 
+## 0.1.2
+
+### Patch Changes
+
+- 3171451: Build packages in IIFE format
+- Updated dependencies [3171451]
+  - @tma.js/colors@0.0.5
+
 ## 0.1.1
 
 ### Patch Changes

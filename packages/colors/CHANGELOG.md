@@ -1,5 +1,11 @@
 # @tma.js/colors
 
+## 0.0.5
+
+### Patch Changes
+
+- 3171451: Build packages in IIFE format
+
 ## 0.0.4
 
 ### Patch Changes

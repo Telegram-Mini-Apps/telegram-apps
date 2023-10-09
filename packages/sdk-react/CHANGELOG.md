@@ -1,5 +1,16 @@
 # @tma.js/sdk-react
 
+## 0.4.11
+
+### Patch Changes
+
+- 3171451: Build packages in IIFE format
+- Updated dependencies [3171451]
+  - @tma.js/launch-params@0.0.4
+  - @tma.js/theme-params@0.0.4
+  - @tma.js/bridge@1.3.8
+  - @tma.js/sdk@0.12.4
+
 ## 0.4.10
 
 ### Patch Changes

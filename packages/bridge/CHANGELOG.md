@@ -1,5 +1,17 @@
 # @tma.js/bridge
 
+## 1.3.8
+
+### Patch Changes
+
+- 3171451: Build packages in IIFE format
+- Updated dependencies [3171451]
+  - @tma.js/event-emitter@0.0.5
+  - @tma.js/parsing@0.1.2
+  - @tma.js/colors@0.0.5
+  - @tma.js/logger@0.0.4
+  - @tma.js/utils@0.5.5
+
 ## 1.3.7
 
 ### Patch Changes

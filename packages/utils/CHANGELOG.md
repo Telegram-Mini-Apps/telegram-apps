@@ -1,5 +1,11 @@
 # @tma.js/utils
 
+## 0.5.5
+
+### Patch Changes
+
+- 3171451: Build packages in IIFE format
+
 ## 0.5.4
 
 ### Patch Changes
