@@ -1,31 +1,36 @@
 # Vanilla JS example
 
-Pure JavaScript SDK usage example.
+> ⚠️ Please, avoid using vanilla JavaScript if possible on Telegram Mini Apps
+> platform. It is better to use ES modules at least. [Learn more](../../README.md#iife) 
+
+Vanilla JavaScript SDK usage example.
 
 ## Trying it out
 
-### Externally
+### Live
 
-This example is already deployed and can be viewed right in Telegram, just follow the [link](https://t.me/tmajsbot/vanilla_js_example).
+This example is already deployed and can be viewed right in Telegram, just follow
+the [link](https://t.me/tmajsbot/vanilla_js_example).
 
 ### Locally
 
-1. Install dependencies:
+Install dependencies:
 
 ```bash
 pnpm i
 ```
 
-2. Serve `index.html`:
+Serve `index.html`:
 
 ```bash
 pnpm run serve
 ```
 
-3. Run tunnel to locally launched HTTP server:
+Run tunnel to locally launched HTTP server:
 
 ```bash
 pnpm run tunnel
 ```
 
-Tunnel command will return a URL which has to be used by [@BotFather](https://t.me/botfather). Bind it to your Mini App and open the application.
+`tunnel` command will return a URL which has to be used by [@BotFather](https://t.me/botfather). Bind
+it to your Mini App and open the application.

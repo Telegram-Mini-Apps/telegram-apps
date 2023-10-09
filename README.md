@@ -20,9 +20,10 @@ To learn more about platform itself, visit its [documentation](https://docs.tele
 
 This repository provides the list of examples, using different frontend technologies:
 
-- [Vanilla JavaScript](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/apps/vanilla-js-example)
-- [React and Vite](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/apps/react-sdk-example)
-- [Solid and Vite](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/apps/solid-sdk-example)
+- [TypeScript and Vite](./apps/typescript-example)
+- [React and Vite](./apps/react-sdk-example)
+- [Solid and Vite](./apps/solid-sdk-example)
+- [Vanilla JavaScript](./apps/vanilla-js-example) `⚠️ not recommended`
 
 ## Packages formats
 
@@ -87,8 +88,11 @@ Loaded packages of `@tma.js` in IIFE format are accessible by path `window.tmajs
 ```
 
 > ⚠️ In this example we did not specify the exact version of required package. In this case,
-> JSDelivr CDN will return the latest version of the package which in some cases may lead to 
+> JSDelivr CDN will return the latest version of the package which in some cases may lead to
 > unexpected behavior. To prevent such case, specify the exact version.
+
+In case, you've met some problems related to using IIFE packages in browser, take a look at [Vanilla
+JavaScript example](./apps/vanilla-js-example) utilizing IIFE packages.
 
 ## Packages
 
@@ -151,7 +155,8 @@ code and save their time.
 [![docs-badge]][launch-params-docs]
 [![code-badge]][launch-params-code]
 
-Package which contains utilities to work with Telegram Mini Apps [launch parameters](https://docs.telegram-mini-apps.com/docs/launch-params/about).
+Package which contains utilities to work with Telegram Mini
+Apps [launch parameters](https://docs.telegram-mini-apps.com/docs/launch-params/about).
 
 ### `@tma.js/theme-params`
 
