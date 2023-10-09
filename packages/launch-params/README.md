@@ -1,15 +1,15 @@
-# @tma.js/parsing
+# @tma.js/launch-params
 
-[npm-badge]: https://img.shields.io/npm/v/@tma.js/parsing?logo=npm
+[npm-badge]: https://img.shields.io/npm/v/@tma.js/launch-params?logo=npm
 
-[npm-link]: https://npmjs.com/package/@tma.js/parsing
+[npm-link]: https://npmjs.com/package/@tma.js/launch-params
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/@tma.js/parsing
+[size-badge]: https://img.shields.io/bundlephobia/minzip/@tma.js/launch-params
 
 [![NPM][npm-badge]][npm-link] 
 ![Size][size-badge]
 
-Set of parsing utilities used by other languages of ecosystem.
+Package which contains utilities to work with Telegram Mini Apps [launch parameters](https://docs.telegram-mini-apps.com/docs/launch-params/about).
 
 This library is a part of TypeScript packages ecosystem around Telegram Web 
 Apps. To see full documentation and other libraries, please, visit 
@@ -18,11 +18,11 @@ Apps. To see full documentation and other libraries, please, visit
 ## Installation
 
 ```bash  
-npm i @tma.js/parsing
+npm i @tma.js/launch-params
 ```  
 
 or
 
 ```bash  
-yarn add @tma.js/parsing
+yarn add @tma.js/launch-params
 ```

@@ -26,7 +26,6 @@
     "src"
   ],
   "main": "./dist/index.cjs",
-  "browser": "./dist/index.umd.js",
   "module": "./dist/index.mjs",
   "types": "./dist/dts/index.d.ts",
   "exports": {

@@ -4,44 +4,57 @@ import type { InlineConfig } from 'vitest';
 
 import { formatTmaJSPackageName } from './formatTmaJSPackageName.js';
 
-interface Options {
+export interface CreateViteConfigOptions {
   /**
-   * Required package formats.
+   * Should d.ts files be emitted.
+   * @default true
    */
-  formats: LibraryFormats[];
+  declarations?: boolean;
+
   /**
    * External dependencies.
    */
   external?: string[];
-  globals?: Record<string, string>;
+
   /**
-   * Additional plugins.
+   * Should Vite clear output directory.
+   * @default true
    */
-  plugins?: PluginOption[];
+  emptyOutDir?: boolean;
+
+  /**
+   * Required package formats.
+   */
+  formats: LibraryFormats[];
+
+  globals?: Record<string, string>;
+
   /**
    * NPM package name.
    */
   packageName: string;
+
   /**
-   * Path to tsconfig.json.
-   * @default "./tsconfig.build.json"
+   * Additional plugins.
    */
-  tsconfigPath?: string;
+  plugins?: PluginOption[];
+
   /**
    * Test options.
    */
   test?: InlineConfig;
 }
 
-export function createViteConfig(options: Options): UserConfig {
+export function createViteConfig(options: CreateViteConfigOptions): UserConfig {
   const {
     packageName,
     formats,
-    tsconfigPath = './tsconfig.build.json',
     external,
     globals,
     plugins = [],
     test,
+    declarations = true,
+    emptyOutDir = true,
   } = options;
 
   return {
@@ -49,16 +62,18 @@ export function createViteConfig(options: Options): UserConfig {
     plugins: [
       // Creates typescript declarations.
       // https://www.npmjs.com/package/vite-plugin-dts
-      dts({
+      declarations && dts({
         outDir: 'dist/dts',
-        tsconfigPath,
+        tsconfigPath: './tsconfig.build.json',
       }),
       ...plugins,
     ],
     build: {
       outDir: 'dist',
+      emptyOutDir,
 
       rollupOptions: {
+        input: 'src/index.ts',
         external,
         output: {
           globals,
@@ -73,18 +88,18 @@ export function createViteConfig(options: Options): UserConfig {
         name: formatTmaJSPackageName(packageName),
         entry: 'src/index.ts',
         formats,
-        fileName(format, entry) {
+        fileName(format) {
           switch (format) {
             case 'cjs':
               return 'index.cjs';
-            case 'umd':
-              return 'index.umd.js';
             case 'es':
               return 'index.mjs';
+            case 'iife':
+              return 'index.iife.js';
             default:
-              return entry;
+              return 'index';
           }
-        }
+        },
       },
     },
   };

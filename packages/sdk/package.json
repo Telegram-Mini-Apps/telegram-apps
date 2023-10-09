@@ -25,7 +25,7 @@
     "src"
   ],
   "main": "./dist/index.cjs",
-  "browser": "./dist/index.umd.js",
+  "browser": "./dist/index.iife.js",
   "module": "./dist/index.mjs",
   "types": "./dist/dts/index.d.ts",
   "exports": {
@@ -40,7 +40,9 @@
     "test": "vitest",
     "lint": "eslint -c .eslintrc.cjs src/**/* tests/**/*",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
-    "build": "vite build",
+    "build": "pnpm run build:default && pnpm run build:iife",
+    "build:default": "vite build --config vite.config.ts",
+    "build:iife": "vite build --config vite.iife.config.ts",
     "rollup": "pnpm run typecheck && pnpm run build"
   },
   "dependencies": {

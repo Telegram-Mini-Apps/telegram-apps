@@ -1,21 +1,18 @@
-import { createUMDGlobals, createViteConfig } from 'build-utils';
+import { createViteConfig } from 'build-utils';
 
 import packageJson from './package.json';
 
-const external = [
-  '@tma.js/theme-params',
-  '@tma.js/launch-params',
-  '@tma.js/bridge',
-  '@tma.js/sdk',
-  'react',
-];
-
 export default createViteConfig({
   packageName: packageJson.name,
-  formats: ['es', 'umd', 'cjs'],
-  external,
+  formats: ['es', 'cjs'],
+  external: [
+    '@tma.js/theme-params',
+    '@tma.js/launch-params',
+    '@tma.js/bridge',
+    '@tma.js/sdk',
+    'react',
+  ],
   globals: {
-    ...createUMDGlobals(external),
     react: 'React',
   },
 });

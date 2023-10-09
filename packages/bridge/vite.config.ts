@@ -1,21 +1,18 @@
-import { createUMDGlobals, createViteConfig, createVitestConfig } from 'build-utils';
+import { createViteConfig, createVitestConfig } from 'build-utils';
 
 import packageJson from './package.json';
 
-const external = [
-  '@tma.js/utils',
-  '@tma.js/logger',
-  '@tma.js/event-emitter',
-  '@tma.js/colors',
-  '@tma.js/parsing',
-  '@tma.js/util-types',
-];
-
 export default createViteConfig({
   packageName: packageJson.name,
-  formats: ['es', 'umd', 'cjs'],
-  external,
-  globals: createUMDGlobals(external),
+  formats: ['es', 'cjs'],
+  external: [
+    '@tma.js/utils',
+    '@tma.js/logger',
+    '@tma.js/event-emitter',
+    '@tma.js/colors',
+    '@tma.js/parsing',
+    '@tma.js/util-types',
+  ],
   test: createVitestConfig({
     environment: 'happy-dom',
     coverage: {
