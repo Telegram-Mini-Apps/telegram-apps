@@ -1,8 +1,9 @@
 /**
- * Replaces "@tma.js/" with "tmajs.". We usually do this to make better experience
- * during UMD format package usage.
- * @param value
+ * Formats passed value making it a path to a global variable.
+ * @param value - value to format.
  */
 export function formatTmaJSPackageName(value: string): string {
-  return value.replace(/^@tma\.js\//, 'tmajs.');
+  return value
+    .replace(/^@tma\.js\//, 'tmajs.')
+    .replace(/-[a-z]/, match => match[1].toUpperCase());
 }
