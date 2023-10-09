@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/init-data",
-  "version": "0.2.17",
+  "version": "0.2.18",
   "description": "Frontend TypeScript library to make work with Web Apps init data easier.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",

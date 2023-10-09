@@ -1,5 +1,13 @@
 # @tma.js/init-data
 
+## 0.2.18
+
+### Patch Changes
+
+- 3171451: Build packages in IIFE format
+- Updated dependencies [3171451]
+  - @tma.js/parsing@0.1.2
+
 ## 0.2.17
 
 ### Patch Changes

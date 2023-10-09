@@ -1,5 +1,20 @@
 # @tma.js/sdk
 
+## 0.12.4
+
+### Patch Changes
+
+- 3171451: Build packages in IIFE format
+- Updated dependencies [3171451]
+  - @tma.js/event-emitter@0.0.5
+  - @tma.js/launch-params@0.0.4
+  - @tma.js/theme-params@0.0.4
+  - @tma.js/init-data@0.2.18
+  - @tma.js/parsing@0.1.2
+  - @tma.js/bridge@1.3.8
+  - @tma.js/colors@0.0.5
+  - @tma.js/utils@0.5.5
+
 ## 0.12.3
 
 ### Patch Changes

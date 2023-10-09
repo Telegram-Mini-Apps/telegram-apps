@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/launch-params",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Utilities to work with Telegram Mini Apps launch params.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",

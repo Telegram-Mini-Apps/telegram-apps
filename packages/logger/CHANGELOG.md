@@ -1,5 +1,11 @@
 # @tma.js/logger
 
+## 0.0.4
+
+### Patch Changes
+
+- 3171451: Build packages in IIFE format
+
 ## 0.0.3
 
 ### Patch Changes
