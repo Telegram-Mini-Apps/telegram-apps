@@ -1,14 +1,11 @@
-import { createUMDGlobals, createViteConfig } from 'build-utils';
-
-import packageJson from './package.json';
+import { createViteConfig } from 'build-utils';
 import solidPlugin from 'vite-plugin-solid';
 
-const external = ['@tma.js/utils', '@tma.js/sdk', 'solid-js'];
+import packageJson from './package.json';
 
 export default createViteConfig({
   packageName: packageJson.name,
-  formats: ['es', 'umd', 'cjs'],
-  external,
-  globals: createUMDGlobals(external),
+  formats: ['es', 'cjs'],
+  external: ['@tma.js/utils', '@tma.js/sdk', 'solid-js'],
   plugins: [solidPlugin()],
 });

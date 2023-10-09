@@ -26,7 +26,7 @@
     "src"
   ],
   "main": "./dist/index.cjs",
-  "browser": "./dist/index.umd.js",
+  "browser": "./dist/index.iife.js",
   "module": "./dist/index.mjs",
   "types": "./dist/dts/index.d.ts",
   "exports": {
@@ -41,21 +41,23 @@
     "test": "vitest",
     "lint": "eslint -c .eslintrc.cjs src/**/* tests/**/*",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
-    "build": "vite build",
+    "build": "pnpm run build:default && pnpm run build:iife",
+    "build:default": "vite build --config vite.config.ts",
+    "build:iife": "vite build --config vite.iife.config.ts",
     "rollup": "pnpm run typecheck && pnpm run build"
   },
   "dependencies": {
-    "@tma.js/utils": "workspace:*",
-    "@tma.js/logger": "workspace:*",
-    "@tma.js/event-emitter": "workspace:*",
     "@tma.js/colors": "workspace:*",
+    "@tma.js/event-emitter": "workspace:*",
+    "@tma.js/logger": "workspace:*",
     "@tma.js/parsing": "workspace:*",
-    "@tma.js/util-types": "workspace:*"
+    "@tma.js/util-types": "workspace:*",
+    "@tma.js/utils": "workspace:*"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*",
+    "build-utils": "workspace:*",
     "eslint-config-custom": "workspace:*",
-    "build-utils": "workspace:*"
+    "tsconfig": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
