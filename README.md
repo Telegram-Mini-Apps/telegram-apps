@@ -140,6 +140,8 @@ format in browser.
 Despite the fact that `@tma.js` is generated in IIFE format and available in browser, it is **highly
 recommended** not to use it.
 
+##### Dependencies
+
 Some of the packages use other `@tma.js` packages as dependencies. In this case there are 2
 ways of importing them:
 
@@ -153,6 +155,15 @@ developer gets here, is bundler is unable to
 use [tree shaking](https://stackoverflow.com/questions/45884414/what-is-tree-shaking-and-why-would-i-need-it),
 making browser to load the code not used in the application. Imagine using the only 1 function from
 some library like `lodash`, but fully load it.
+
+##### Unknown target
+
+The other problem developer can face is IIFE packages are built for the specific browser of specific 
+version. So, the package author does not know which target he should choose as long as he doesn't know it
+when creating such package. That's why the the package target should be lowered to support most part
+of browsers, but this also make final bunlde bigger.
+
+##### Conclusion
 
 Unfortunately, developer is unable to avoid these problems when using IIFE format. This is the
 reason why it is recommended to use modern technologies along with ESM format.
@@ -191,4 +202,4 @@ Loaded packages of `@tma.js` in IIFE format are accessible by path `window.tmajs
 > unexpected behavior. To prevent such case, specify the exact version.
 
 In case, you've met some problems related to using IIFE packages in browser, take a look at [Vanilla
-JavaScript example](./apps/vanilla-js-example) utilizing IIFE packages.
+JavaScript example](./apps/vanilla-js-example) utilizing them.
