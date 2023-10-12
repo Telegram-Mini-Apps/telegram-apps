@@ -23,7 +23,7 @@ This repository provides the list of examples, using different frontend technolo
 - [TypeScript and Vite](./apps/typescript-example)
 - [React and Vite](./apps/react-sdk-example)
 - [Solid and Vite](./apps/solid-sdk-example)
-- [Vanilla JavaScript](./apps/vanilla-js-example) `⚠️ not recommended`
+- [Vanilla JavaScript](./apps/vanilla-js-example) _(not recommended, see [iife section](#iife) ⚠️)_
 
 ## Packages
 
