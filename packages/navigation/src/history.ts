@@ -1,16 +1,27 @@
+import { withTimeout } from '@tma.js/utils';
+
 /**
  * Performs window.history.go operation waiting for it to be completed.
  * @param delta - history change delta.
  */
-export function go(delta: number): Promise<void> {
-  return delta === 0 ? Promise.resolve() : new Promise((res) => {
-    window.addEventListener('popstate', function listener() {
-      window.removeEventListener('popstate', listener);
-      res();
-    });
+export async function go(delta: number): Promise<boolean> {
+  if (delta === 0) {
+    return true;
+  }
 
-    window.history.go(delta);
-  });
+  return withTimeout(
+    new Promise<void>((res) => {
+      window.addEventListener('popstate', function listener() {
+        window.removeEventListener('popstate', listener);
+        res();
+      });
+
+      window.history.go(delta);
+    }),
+    10,
+  )
+    .then(() => true)
+    .catch(() => false);
 }
 
 /**
