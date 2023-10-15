@@ -36,5 +36,14 @@ export async function drop(): Promise<void> {
   // call of history.go will move us to the first browser history entry.
   window.history.pushState(null, '');
 
-  return go(1 - window.history.length);
+  const goPerformed = await go(1 - window.history.length);
+  if (goPerformed) {
+    return;
+  }
+
+  let shouldGoBack = await go(-1);
+  while (shouldGoBack) {
+    // eslint-disable-next-line no-await-in-loop
+    shouldGoBack = await go(-1);
+  }
 }
