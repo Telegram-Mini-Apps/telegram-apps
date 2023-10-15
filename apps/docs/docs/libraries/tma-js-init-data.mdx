@@ -20,7 +20,7 @@ The package provides utilities to work with the initialization data of Telegram 
 This library includes the function `initData`, which can extract initialization data information from query parameters. Here is an example of its usage:
 
 ```typescript
-import { initData } from '@tma.js/init-data';
+import { parse } from '@tma.js/init-data';
 
 // Let's imagine, we have init data in a raw format like this. Web Apps are
 // sending it in the exact same format.
@@ -31,9 +31,9 @@ const initDataString =
   '&hash=c501b71e775f74ce10e377dea85a7ea24ecd640b223ea86dfe453e0eaed2e2b2';
 
 // Extract init data.
-console.log(initData(initDataString));
+console.log(parse(initDataString));
 // or
-console.log(initData(new URLSearchParams(initDataString)));
+console.log(parse(new URLSearchParams(initDataString)));
 
 // Output:
 // {
