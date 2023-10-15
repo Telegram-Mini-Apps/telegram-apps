@@ -1,0 +1,156 @@
+# Motivation
+
+This document describes the motivation that inspired us to create `@tma.js`.
+
+### Outdated format
+
+The Telegram SDK is provided as an IIFE package, which may lead to a variety
+of [potential issues](#iife). Modern development typically avoids this format unless it is genuinely
+necessary. Developers tend to prefer more contemporary technologies and formats. The world of
+development has advanced significantly beyond the ES5 standard and traditional JavaScript.
+
+#### Solution
+
+Despite the issues associated with IIFE, `@tma.js` is available in three formats: CommonJS (CJS),
+ECMAScript Modules (ESM), and IIFE. Developers have the flexibility to choose any of these formats,
+and they can reap the benefits of selecting ESM.
+
+All project packages are available on [npm.js](https://www.npmjs.com/org/tma.js) and can be
+installed in the standard manner via `npm i`, `pnpm i`, `yarn add`, etc.
+
+### No public review
+
+Developers are unable to track file changes in the usual and familiar way. They must rely on
+third-party software such as Telegram Crawler or similar tools to monitor the modifications made.
+Additionally, developers are unable to report some problems in code or suggest an enhancement.
+
+#### Solution
+
+`@tma.js` uses GitHub as its codebase repository. Every developer can track changes made to any
+files and review them.
+
+### Pure JavaScript
+
+The Telegram SDK is written in ES5 JavaScript, which appears unsuitable for large projects that
+necessitate type definitions. While there are external projects that address this issue, the problem
+is that **they are external** and might become outdated. The Telegram SDK should be written in
+TypeScript, offering type support out of the box.
+
+#### Solution
+
+`@tma.js` is written in TypeScript and doesn't require help of other packages to provide typings.
+
+### Possible security issues
+
+A year later, Telegram SDK still contains "code for testing purposes" (lines 140-143):
+
+```javascript
+var trustedTarget = 'https://web.telegram.org';
+// For now we don't restrict target, for testing purposes
+trustedTarget = '*';
+window.parent.postMessage(JSON.stringify({
+  eventType: eventType,
+  eventData: eventData
+}), trustedTarget);
+```
+
+This section of code determines which parent iframes can receive `message` events from the
+developer's application. For typical developers, this means determining which iframes are capable of
+receiving [Telegram Mini Apps methods](https://docs.telegram-mini-apps.com/docs/apps-communication/methods)
+data
+along with their parameters. Despite the fact that the average developer does not need to disable
+this security mechanism, Telegram does it for them for "testing purposes".
+
+#### Solution
+
+`@tma.js` does not disable any security mechanisms. If a developer needs to configure the list of
+allowed parent iframe origins, the package provides corresponding methods.
+
+### Mixed code quality
+
+The current code format suggests that there were numerous developers from Telegram involved in its
+development. The issue is that the coding approach varies between different parts, giving the
+impression that both frontend and backend (or more likely, C++) developers were working on
+implementing new features and re-implementing mechanisms and utilities that are already included in
+web browsers.
+
+The absence of code comments makes it difficult for external developers to quickly comprehend what
+is happening in the code, which, in turn, makes it more challenging to contribute.
+
+#### Solution
+
+`@tma.js` code is extensively documented with various types of comments and documentation. The
+project follows well-established and widely
+recognized [ESLint rules as described by Airbnb](https://github.com/airbnb/javascript). External
+developers are welcome to explore the code and propose improvements.
+
+### Code is not compressed
+
+The SDK provided by Telegram appears more like source code for the package rather than a
+production-ready version. In typical web project development, code minification is employed to
+reduce the amount of data loaded by browsers. However, it seems that this has not been implemented
+here.
+
+#### Solution
+
+`@tma.js` packages are built using Vite (Rollup), which minifies the code and provides ready-to-use
+libraries.
+
+### CSS variables are forced
+
+Developers are unable to prevent the creation of CSS variables that could potentially impact
+application performance. For instance, the Telegram SDK generates a CSS variable
+called `--tg-viewport-height`, which is updated each time a user moves a Mini App window. During
+extensive changes in viewport height, the SDK updates this variable frequently, which could
+potentially result in a decrease in application performance.
+
+This is not a particularly crucial point of motivation because, in most cases, applications are not
+actively processing changes in viewport height. However, it appears that this behavior could be made
+configurable.
+
+#### Solution
+
+CSS variables feature is configurable in `@tma.js` packages.
+
+### Components state is not consistent
+
+The Telegram SDK does not preserve component states between application refreshes (using the 'Reload
+Page' button in the top-right three dots menu). It assumes that all components have their initial
+states, but this is not always the case.
+
+To verify this, developers can perform the following steps:
+
+1. Open the [Durger King Bot](https://t.me/DurgerKingBot) application (by clicking the Menu Button).
+2. Open the console and enter `window.Telegram.WebApp.BackButton.isVisible`. It will return `false`.
+3. Add any product and click the MainButton ('View order'). The BackButton should become visible.
+4. Click the three dots in the top-right corner of the application interface and select 'Reload
+   Page.'
+5. Repeat step #2. It will return `false` again, even though the BackButton is currently visible.
+
+So, the SDK lacks awareness of the actual state of components.
+
+#### Solution
+
+`@tma.js` packages consistently provide the current component state.
+
+### 1700 lines of code in a single file
+
+Telegram SDK is provided as a single file with 1700 lines of code, which makes it research
+way too hard, decreasing code understanding and external developers code contribution.
+
+#### Solution
+
+`@tma.js` packages are finely detailed, with each package being responsible for its specific part of
+the platform and having an intuitive file structure.
+
+### Unused code
+
+Including the fact, that code of Telegram SDK is not compressed, it also contains the code which
+could not be reached in common applications. At the first look, this code is only used by Telegram
+developers during library development.
+
+initParams.tgWebAppDebug, updateDebugButton
+
+### Implicit methods inactivity
+
+supports, console.warn

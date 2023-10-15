@@ -16,6 +16,21 @@ their own documentations.
 
 To learn more about platform itself, visit its [documentation](https://docs.telegram-mini-apps.com).
 
+## Motivation
+
+Why bother creating a project like `@tma.js` when there are existing solutions from the developers
+who own the platform? The answer is rather simple: the currently provided solution (SDK) does not
+seem to meet the required minimum quality standards. Of course, the term 'quality' is rather
+specific and subjective, but this section should make it more objective.
+
+This project was born during the research of a solution provided by
+Telegram - [telegram-web-app.js](https://telegram.org/js/telegram-web-app.js), which is considered
+the only existing SDK for Telegram Mini Apps by Telegram. Therefore, all the points described in
+this section will be related to this package.
+
+Because of the large section size, the complete motivation description has been moved to a [separate
+document](./MOTIVATION.md).
+
 ## Examples
 
 This repository provides the list of examples, using different frontend technologies:
@@ -158,8 +173,9 @@ some library like `lodash`, but fully load it.
 
 ##### Unknown target
 
-The other problem developer can face is IIFE packages are built for the specific browser of specific 
-version. So, the package author does not know which target he should choose as long as he doesn't know it
+The other problem developer can face is IIFE packages are built for the specific browser of specific
+version. So, the package author does not know which target he should choose as long as he doesn't
+know it
 when creating such package. That's why the the package target should be lowered to support most part
 of browsers, but this also make final bunlde bigger.
 
