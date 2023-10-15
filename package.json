@@ -29,6 +29,7 @@
     "vite": "^4.4.9",
     "vite-plugin-dts": "^3.6.0",
     "vite-plugin-solid": "^2.7.0",
+    "vite-tsconfig-paths": "^4.2.1",
     "vitest": "^0.34.6"
   },
   "packageManager": "pnpm@7.15.0",
