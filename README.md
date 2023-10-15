@@ -25,8 +25,8 @@ specific and subjective, but this section should make it more objective.
 
 This project was born during the research of a solution provided by
 Telegram - [telegram-web-app.js](https://telegram.org/js/telegram-web-app.js), which is considered
-the only existing SDK for Telegram Mini Apps by Telegram. Therefore, all the points described in
-this section will be related to this package.
+the only existing official SDK for Telegram Mini Apps by Telegram. Therefore, all the points
+described in this section will be related to this package.
 
 Because of the large section size, the complete motivation description has been moved to a [separate
 document](./MOTIVATION.md).

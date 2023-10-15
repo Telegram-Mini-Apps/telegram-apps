@@ -145,12 +145,63 @@ the platform and having an intuitive file structure.
 
 ### Unused code
 
-Including the fact, that code of Telegram SDK is not compressed, it also contains the code which
-could not be reached in common applications. At the first look, this code is only used by Telegram
-developers during library development.
+In addition to the fact that the Telegram SDK code is not compressed, it also includes code that is
+typically inaccessible in common applications. At first glance, this code appears to be exclusively
+utilized by Telegram developers during library development.
 
-initParams.tgWebAppDebug, updateDebugButton
+To identify this type of code, developers can examine line 743 using a "debug button" that relies on
+a launch parameter, such as `tgWebAppDebug`, which is not present in normal applications.
+
+```typescript
+ if (initParams.tgWebAppDebug) {
+  debugBtn = document.createElement('tg-main-button');
+  debugBtnStyle = {
+    font: '600 14px/18px sans-serif',
+    display: 'none',
+    width: '100%',
+    height: '48px',
+    borderRadius: '0',
+    background: 'no-repeat right center',
+    position: 'fixed',
+    left: '0',
+// ...
+```
+
+This parameter also involves the definition of certain large functions that are exclusively
+associated with this button.
+
+While it is possible to explore further to uncover additional unused code, this particular case is
+already a concern.
+
+#### Solution
+
+`@tma.js` does not contain any code specifically oriented towards a distinct group of developers.
+The functionality it provides covers scenarios that all developers are likely to encounter.
 
 ### Implicit methods inactivity
 
-supports, console.warn
+The Telegram SDK does not offer any functions to check if the called Telegram Mini Apps methods are
+supported by the current platform version. Even though each SDK method checks if it's supported,
+developers are unable to reuse this type of functionality.
+
+The related issue here is that calling SDK methods does not inform a developer when something is not
+functioning as expected. In other words, the called method either performs an action or does
+nothing, but developers have no way of knowing it. There will only be a warning in the console,
+which cannot and should not be handled by a developer.
+
+Instead, SDK methods should throw an error if the method is unsupported. With this behavior, a
+developer will be certain that the method does not work. Otherwise, a developer will either hope
+that the called method will work or be required to investigate which methods are supported by which
+platform versions and implement the corresponding functionality themselves.
+
+#### Solution
+
+The `@tma.js/bridge` package offers utilities to verify whether a specific Telegram Mini Apps method
+is supported in a specified platform version. This ensures that the developer can be confident the
+method call will work as intended. It also allows checking if specified method **parameter** is 
+supported by specified version.
+
+The `@tma.js/sdk` package provides higher-level components that make use of Telegram Mini Apps. Each
+component has a special method, `supports`, which returns `true` if the component's method is
+supported in the current platform version. By default, calling methods that are not supported in the
+current platform version will result in an error.
