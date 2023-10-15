@@ -2,9 +2,8 @@ import { log } from '@tma.js/logger';
 import { EventEmitter } from '@tma.js/event-emitter';
 import { postEvent, on, off } from '@tma.js/bridge';
 
-import { ensurePrefixSlash, formatSearch, mergePathnames, toPathname } from './utils.js';
+import { formatSearch, mergePathnames, toPathname } from './utils.js';
 import { drop, go } from './history.js';
-import { parseAsHistoryCurrentState } from './parsing.js';
 
 import type {
   HistoryCurrentState,
@@ -22,31 +21,6 @@ const CURSOR_FORWARD = 2;
  * Represents a navigator which can be used in Telegram Mini Apps to provide stable routing.
  */
 export class Navigator {
-  /**
-   * Attempts to create a navigator from the current browser history. This will properly work
-   * in case, the last time browser history was managed by some navigator.
-   *
-   * Method returns true in case, it was unable to create Navigator.
-   * @param options - options passed to constructor.
-   */
-  static fromHistory(options?: NavigatorOptions): Navigator | null {
-    const state = parseAsHistoryCurrentState(window.history.state);
-
-    return state ? new Navigator(state.history, state.cursor, options) : null;
-  }
-
-  /**
-   * Creates navigator from current window location.
-   * @param options - options passed to constructor.
-   */
-  static fromLocation(options?: NavigatorOptions): Navigator {
-    const { search, pathname } = new URL(
-      `${origin}${ensurePrefixSlash(window.location.hash.slice(1))}`,
-    );
-
-    return new Navigator([{ search, pathname: pathname as Pathname }], 0, options);
-  }
-
   private readonly ee = new EventEmitter<NavigatorEventsMap>();
 
   private readonly debug: boolean;
