@@ -2,14 +2,27 @@
 
 This document describes the motivation that inspired us to create `@tma.js`.
 
-### Outdated format
+1. [Unproductive package format](#unproductive-package-format)
+2. [No public review](#no-public-review)
+3. [Vanilla JavaScript](#vanilla-javascript)
+4. [Possible security issues](#possible-security-issues)
+5. [Mixed code quality](#mixed-code-quality)
+6. [Bundle size](#bundle-size)
+7. [Forced CSS variables](#forced-css-variables)
+8. [Inconsistent components state](#inconsistent-components-state)
+9. [1700 lines of code, single file](#1700-lines-of-code-single-file)
+10. [Unused code](#unused-code)
+11. [Implicit methods inactivity](#implicit-methods-inactivity)
+12. [Uncontrolled initialization](#uncontrolled-initialization)
+
+## Unproductive package format
 
 The Telegram SDK is provided as an IIFE package, which may lead to a variety
 of [potential issues](#iife). Modern development typically avoids this format unless it is genuinely
 necessary. Developers tend to prefer more contemporary technologies and formats. The world of
 development has advanced significantly beyond the ES5 standard and traditional JavaScript.
 
-#### Solution
+### Solution
 
 Despite the issues associated with IIFE, `@tma.js` is available in three formats: CommonJS (CJS),
 ECMAScript Modules (ESM), and IIFE. Developers have the flexibility to choose any of these formats,
@@ -18,29 +31,29 @@ and they can reap the benefits of selecting ESM.
 All project packages are available on [npm.js](https://www.npmjs.com/org/tma.js) and can be
 installed in the standard manner via `npm i`, `pnpm i`, `yarn add`, etc.
 
-### No public review
+## No public review
 
 Developers are unable to track file changes in the usual and familiar way. They must rely on
 third-party software such as Telegram Crawler or similar tools to monitor the modifications made.
 Additionally, developers are unable to report some problems in code or suggest an enhancement.
 
-#### Solution
+### Solution
 
 `@tma.js` uses GitHub as its codebase repository. Every developer can track changes made to any
 files and review them.
 
-### Pure JavaScript
+## Vanilla JavaScript
 
 The Telegram SDK is written in ES5 JavaScript, which appears unsuitable for large projects that
 necessitate type definitions. While there are external projects that address this issue, the problem
 is that **they are external** and might become outdated. The Telegram SDK should be written in
 TypeScript, offering type support out of the box.
 
-#### Solution
+### Solution
 
 `@tma.js` is written in TypeScript and doesn't require help of other packages to provide typings.
 
-### Possible security issues
+## Possible security issues
 
 A year later, Telegram SDK still contains "code for testing purposes" (lines 140-143):
 
@@ -61,12 +74,12 @@ data
 along with their parameters. Despite the fact that the average developer does not need to disable
 this security mechanism, Telegram does it for them for "testing purposes".
 
-#### Solution
+### Solution
 
 `@tma.js` does not disable any security mechanisms. If a developer needs to configure the list of
 allowed parent iframe origins, the package provides corresponding methods.
 
-### Mixed code quality
+## Mixed code quality
 
 The current code format suggests that there were numerous developers from Telegram involved in its
 development. The issue is that the coding approach varies between different parts, giving the
@@ -77,26 +90,26 @@ web browsers.
 The absence of code comments makes it difficult for external developers to quickly comprehend what
 is happening in the code, which, in turn, makes it more challenging to contribute.
 
-#### Solution
+### Solution
 
 `@tma.js` code is extensively documented with various types of comments and documentation. The
 project follows well-established and widely
 recognized [ESLint rules as described by Airbnb](https://github.com/airbnb/javascript). External
 developers are welcome to explore the code and propose improvements.
 
-### Code is not compressed
+## Bundle size
 
 The SDK provided by Telegram appears more like source code for the package rather than a
 production-ready version. In typical web project development, code minification is employed to
 reduce the amount of data loaded by browsers. However, it seems that this has not been implemented
 here.
 
-#### Solution
+### Solution
 
 `@tma.js` packages are built using Vite (Rollup), which minifies the code and provides ready-to-use
 libraries.
 
-### CSS variables are forced
+## Forced CSS variables
 
 Developers are unable to prevent the creation of CSS variables that could potentially impact
 application performance. For instance, the Telegram SDK generates a CSS variable
@@ -108,11 +121,11 @@ This is not a particularly crucial point of motivation because, in most cases, a
 actively processing changes in viewport height. However, it appears that this behavior could be made
 configurable.
 
-#### Solution
+### Solution
 
 CSS variables feature is configurable in `@tma.js` packages.
 
-### Components state is not consistent
+## Inconsistent components state
 
 The Telegram SDK does not preserve component states between application refreshes (using the 'Reload
 Page' button in the top-right three dots menu). It assumes that all components have their initial
@@ -129,21 +142,21 @@ To verify this, developers can perform the following steps:
 
 So, the SDK lacks awareness of the actual state of components.
 
-#### Solution
+### Solution
 
 `@tma.js` packages consistently provide the current component state.
 
-### 1700 lines of code in a single file
+## 1700 lines of code, single file
 
 Telegram SDK is provided as a single file with 1700 lines of code, which makes it research
 way too hard, decreasing code understanding and external developers code contribution.
 
-#### Solution
+### Solution
 
 `@tma.js` packages are finely detailed, with each package being responsible for its specific part of
 the platform and having an intuitive file structure.
 
-### Unused code
+## Unused code
 
 In addition to the fact that the Telegram SDK code is not compressed, it also includes code that is
 typically inaccessible in common applications. At first glance, this code appears to be exclusively
@@ -173,12 +186,12 @@ associated with this button.
 While it is possible to explore further to uncover additional unused code, this particular case is
 already a concern.
 
-#### Solution
+### Solution
 
 `@tma.js` does not contain any code specifically oriented towards a distinct group of developers.
 The functionality it provides covers scenarios that all developers are likely to encounter.
 
-### Implicit methods inactivity
+## Implicit methods inactivity
 
 The Telegram SDK does not offer any functions to check if the called Telegram Mini Apps methods are
 supported by the current platform version. Even though each SDK method checks if it's supported,
@@ -194,7 +207,7 @@ developer will be certain that the method does not work. Otherwise, a developer 
 that the called method will work or be required to investigate which methods are supported by which
 platform versions and implement the corresponding functionality themselves.
 
-#### Solution
+### Solution
 
 The `@tma.js/bridge` package offers utilities to verify whether a specific Telegram Mini Apps method
 is supported in a specified platform version. This ensures that the developer can be confident the
@@ -205,3 +218,21 @@ The `@tma.js/sdk` package provides higher-level components that make use of Tele
 component has a special method, `supports`, which returns `true` if the component's method is
 supported in the current platform version. By default, calling methods that are not supported in the
 current platform version will result in an error.
+
+## Uncontrolled initialization
+
+The process of SDK initialization cannot be controlled by the developer. SDK initialization itself
+is synchronous, but it cannot technically be considered as such as long as Telegram Mini Apps does
+not provide a synchronous way to receive the state of its components (for example, MainButton, 
+BackButton, Viewport, etc.). That's why the initialization process is asynchronous - it will take 
+some time for the code to retrieve the actual state from the Telegram application.
+
+The resulting problem here is that the developer cannot be sure if the current component state 
+they are working with is up-to-date, and not the initial one. There is no way to know if the 
+initialization has been completed.
+
+### Solution
+
+`@tma.js` provides asynchronous initialization to ensure that developers are working with 
+components in their actual state. However, it does not restrict developers from implementing 
+their own initialization process.
