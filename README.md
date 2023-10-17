@@ -16,7 +16,7 @@ their own documentations.
 
 To learn more about platform itself, visit its [documentation](https://docs.telegram-mini-apps.com).
 
-## Motivation or comparison with Telegram SDK
+## Why not Telegram SDK
 
 Why bother creating a project like `@tma.js` when there are existing solutions from the developers
 who own the platform? The answer is rather simple: the currently provided solution (SDK) does not
