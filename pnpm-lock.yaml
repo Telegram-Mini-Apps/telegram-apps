@@ -349,9 +349,6 @@ importers:
       '@tma.js/parsing':
         specifier: workspace:*
         version: link:../parsing
-      '@tma.js/utils':
-        specifier: workspace:^
-        version: link:../utils
     devDependencies:
       build-utils:
         specifier: workspace:*
