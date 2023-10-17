@@ -217,7 +217,7 @@ supported by specified version.
 The `@tma.js/sdk` package provides higher-level components that make use of Telegram Mini Apps. Each
 component has a special method, `supports`, which returns `true` if the component's method is
 supported in the current platform version. By default, calling methods that are not supported in the
-current platform version will result in an error.
+current platform version will result in an error. Nevertheless, this type of behavior is configurable.
 
 ## Uncontrolled initialization
 
