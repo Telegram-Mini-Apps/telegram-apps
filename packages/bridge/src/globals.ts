@@ -1,7 +1,8 @@
-import { log as utilLog } from '@tma.js/logger';
+import { Logger } from '@tma.js/logger';
 
-let currentDebug = false;
 let currentTargetOrigin = 'https://web.telegram.org';
+
+export const logger = new Logger('[Bridge]', false);
 
 /**
  * Sets new debug mode. Enabling debug mode leads to printing
@@ -10,7 +11,11 @@ let currentTargetOrigin = 'https://web.telegram.org';
  * @param value - should debug mode be enabled.
  */
 export function setDebug(value: boolean): void {
-  currentDebug = value;
+  if (value) {
+    logger.enable();
+    return;
+  }
+  logger.disable();
 }
 
 /**
@@ -31,14 +36,3 @@ export function setTargetOrigin(value: string): void {
 export function targetOrigin(): string {
   return currentTargetOrigin;
 }
-
-/**
- * Logs message in case, debug mode is enabled.
- * @param level - log level
- * @param args - values to print.
- */
-export const log: typeof utilLog = (level, ...args) => {
-  if (currentDebug) {
-    utilLog(level, '[Bridge]', ...args);
-  }
-};

@@ -1,7 +1,7 @@
 import { EventEmitter as UtilEventEmitter } from '@tma.js/event-emitter';
 import { string } from '@tma.js/parsing';
 
-import { log } from '../globals.js';
+import { logger } from '../globals.js';
 import {
   clipboardTextReceivedPayload,
   customMethodInvokedPayload,
@@ -26,7 +26,7 @@ const CACHED_EMITTER = '__telegram-cached-emitter__';
 export function createEmitter(): EventEmitter {
   const emitter: EventEmitter = new UtilEventEmitter();
   const emit: EventEmitter['emit'] = (event: any, ...data: any[]) => {
-    log('log', 'Emitting processed event:', event, ...data);
+    logger.log('Emitting processed event:', event, ...data);
     emitter.emit(event, ...data);
   };
 
@@ -46,7 +46,7 @@ export function createEmitter(): EventEmitter {
   // In case, any Telegram event was received, we should prepare data before
   // passing it to emitter.
   onTelegramEvent((eventType: EventName | string, eventData): void => {
-    log('log', 'Received raw event:', eventType, eventData);
+    logger.log('Received raw event:', eventType, eventData);
 
     try {
       switch (eventType) {
@@ -102,7 +102,7 @@ export function createEmitter(): EventEmitter {
           return emit(eventType as any, eventData);
       }
     } catch (cause) {
-      log('error', 'Error processing event:', cause);
+      logger.error('Error processing event:', cause);
     }
   });
 
