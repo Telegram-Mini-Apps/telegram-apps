@@ -1,7 +1,5 @@
-export type Pathname = `/${string}`;
-
 export interface HistoryEntry {
-  pathname: Pathname;
+  pathname: string;
   search: string;
 }
 
@@ -28,3 +26,11 @@ export interface NavigatorEventsMap {
    */
   change: (event: HistoryEntry) => void;
 }
+
+/**
+ * Entry information allowed to be used in push and replace Navigator methods.
+ */
+export type AllowedEntry = string | {
+  pathname?: string;
+  search?: string;
+};

@@ -1,8 +1,8 @@
-import { log } from '@tma.js/logger';
+import { Logger } from '@tma.js/logger';
 import { EventEmitter } from '@tma.js/event-emitter';
 import { postEvent, on, off } from '@tma.js/bridge';
 
-import { formatSearch, mergePathnames, toPathname } from './utils.js';
+import { ensurePrefix } from './ensurePrefix.js';
 import { drop, go } from './history.js';
 
 import type {
@@ -10,7 +10,7 @@ import type {
   HistoryEntry,
   NavigatorEventsMap,
   NavigatorOptions,
-  Pathname,
+  AllowedEntry,
 } from './types.js';
 
 const CURSOR_VOID = 0;
@@ -21,9 +21,9 @@ const CURSOR_FORWARD = 2;
  * Represents a navigator which can be used in Telegram Mini Apps to provide stable routing.
  */
 export class Navigator {
-  private readonly ee = new EventEmitter<NavigatorEventsMap>();
+  private readonly logger: Logger;
 
-  private readonly debug: boolean;
+  private readonly ee = new EventEmitter<NavigatorEventsMap>();
 
   private isAttached = false;
 
@@ -40,30 +40,28 @@ export class Navigator {
       throw new Error('Cursor should be less than or equal to history length');
     }
 
-    this.debug = debug;
-  }
-
-  /**
-   * Logs a message in case, debug mode is enabled.
-   */
-  private log(...args: any[]) {
-    if (this.debug) {
-      log('log', '[Navigator]', ...args);
-    }
+    this.logger = new Logger('[Navigator]', debug);
   }
 
   /**
    * Creates browser history state associated with the current navigator state.
    */
   private createCurrentState(): HistoryCurrentState {
-    return { cursor: this.cursor, history: this.history };
+    return {
+      cursor: this.cursor,
+      history: this.history,
+    };
   }
 
   /**
    * Synchronizes current navigator state with browser history.
    */
   private async syncHistory(): Promise<void> {
-    this.log('Synchronizing with browser history');
+    if (!this.isAttached) {
+      return;
+    }
+
+    this.logger.log('Synchronizing with browser history');
 
     // Remove history change event listener to get rid of side effects related to possible
     // future calls of history.go.
@@ -81,7 +79,7 @@ export class Navigator {
     if (this.canGoBack() && this.canGoForward()) {
       // We have both previous and next elements. History should be:
       // [back, *current*, forward]
-      this.log('Setting up history: [back, current, forward]');
+      this.logger.log('Setting up history: [back, current, forward]');
 
       window.history.replaceState(CURSOR_BACK, '');
       window.history.pushState(currentState, '', hash);
@@ -90,14 +88,14 @@ export class Navigator {
     } else if (this.canGoBack()) {
       // We have only previous element. History should be:
       // [back, *current*]
-      this.log('Setting up history: [back, current]');
+      this.logger.log('Setting up history: [back, current]');
 
       window.history.replaceState(CURSOR_BACK, '');
       window.history.pushState(currentState, '', hash);
     } else if (this.canGoForward()) {
       // We have only next element. History should be:
       // [*current*, forward]
-      this.log('Setting up history: [current, forward]');
+      this.logger.log('Setting up history: [current, forward]');
 
       window.history.replaceState(currentState, hash);
       window.history.pushState(CURSOR_FORWARD, '');
@@ -105,7 +103,7 @@ export class Navigator {
     } else {
       // We have no back and next elements. History should be:
       // [void, *current*]
-      this.log('Setting up history: [void, current]');
+      this.logger.log('Setting up history: [void, current]');
 
       window.history.replaceState(CURSOR_VOID, '');
       window.history.pushState(currentState, '', hash);
@@ -132,17 +130,16 @@ export class Navigator {
    * Converts externally specified history entry data to the history item.
    * @param entry - entry data
    */
-  private entryToHistoryItem(entry: Partial<HistoryEntry> = {}): HistoryEntry {
-    const { search = '', pathname = this.pathname } = entry;
+  private entryToHistoryItem(entry: AllowedEntry): HistoryEntry {
+    const absolutePath = `${window.location.origin}${this.path}`;
+    const { search, pathname } = new URL(
+      typeof entry === 'string'
+        ? entry
+        : `${entry.pathname || ''}${ensurePrefix(entry.search || '', '?')}`,
+      absolutePath,
+    );
 
-    return {
-      pathname: pathname.startsWith('/')
-        // Full path from the root. Example: /a/b/c
-        ? toPathname(pathname)
-        // Otherwise, it's the relative path. We should merge it with the current one.
-        : mergePathnames(toPathname(pathname), this.pathname),
-      search: search || '',
-    };
+    return { pathname, search };
   }
 
   /**
@@ -150,7 +147,14 @@ export class Navigator {
    * @param state - event state.
    */
   private onPopState = async ({ state }: PopStateEvent) => {
-    this.log('Received state', state);
+    this.logger.log('Received state', state);
+
+    // In case state is null, we recognize current event as occurring whenever user clicks
+    // any anchor.
+    // TODO: Should we do it?
+    if (state === null) {
+      return this.push(window.location.hash.slice(1));
+    }
 
     // There is only one case when state can be CURSOR_VOID - when history contains
     // only one element. In this case, we should return user to the current history element.
@@ -178,15 +182,20 @@ export class Navigator {
     const prevCursor = this.cursor;
     this.cursor = value;
 
-    this.log('Setting up cursor', prevCursor, '->', this.cursor);
+    this.logger.log('Setting up cursor', prevCursor, '->', this.cursor);
 
     // Notify listeners about state change.
-    this.ee.emit('change', { pathname: this.pathname, search: this.search });
+    this.ee.emit('change', {
+      pathname: this.pathname,
+      search: this.search,
+    });
 
     // Cursor did not change, but setCursor could be called after calling the replace method, what
     // means, we should actualize current URL.
     if (prevCursor === this.cursor) {
-      window.history.replaceState(this.createCurrentState(), '', `#${this.path}`);
+      if (this.isAttached) {
+        window.history.replaceState(this.createCurrentState(), '', `#${this.path}`);
+      }
       return;
     }
 
@@ -200,9 +209,8 @@ export class Navigator {
     if (this.isAttached) {
       return;
     }
+    this.logger.log('Attaching', this);
     this.isAttached = true;
-
-    this.log('Attaching navigator', this);
     on('back_button_pressed', this.back);
     return this.syncHistory();
   }
@@ -216,9 +224,7 @@ export class Navigator {
    * Detaches current navigator from the browser history.
    */
   detach() {
-    this.log('Detaching navigator', this);
-
-    // When detaching, we just remove all event listeners.
+    this.logger.log('Detaching', this);
     this.isAttached = false;
     window.removeEventListener('popstate', this.onPopState);
     off('back_button_pressed', this.back);
@@ -233,9 +239,17 @@ export class Navigator {
 
   /**
    * Goes in history by specified delta.
-   * @param delta
+   * @param delta - history change delta.
    */
   async go(delta = 0): Promise<void> {
+    // Reproducing the native behavior.
+    if (delta === 0) {
+      if (this.isAttached) {
+        window.location.reload();
+      }
+      return;
+    }
+
     // Cursor should be in bounds: [0, this.history.length - 1].
     const cursor = Math.min(
       this.history.length - 1,
@@ -259,8 +273,21 @@ export class Navigator {
    * Pushes new entry in history. It removes all history entries after the current one and
    * inserts new one.
    * @param entry - entry data.
+   *
+   * @example Pushing absolute pathname.
+   * push("/absolute-path"); // "/absolute-path"
+   *
+   * @example Pushing relative pathname.
+   * // Pushing relative path replaces N last path parts, where N is pushed pathname parts count.
+   * // Pushing empty path is recognized as relative, but not replacing the last pathname part.
+   * push("relative"); // "/home/root" -> "/home/relative"
+   *
+   * @example Pushing query parameters.
+   * push("/absolute?my-param=1"); // "/home" -> "/absolute?my-param=1"
+   * push("relative?my-param=1"); // "/home/root" -> "/home/relative?my-param=1"
+   * push("?my-param=1"); // "/home" -> "/home?my-param=1"
    */
-  push(entry?: Partial<HistoryEntry>): Promise<void> {
+  push(entry: AllowedEntry): Promise<void> {
     // In case, current cursor refers not to the last one element in the history, we should
     // remove everything after the cursor.
     if (this.cursor !== this.history.length - 1) {
@@ -268,38 +295,54 @@ export class Navigator {
     }
 
     this.history.push(this.entryToHistoryItem(entry));
-    this.log('Pushed new entry', this.history[this.history.length - 1]);
+    this.logger.log('Pushed new entry', this.history[this.history.length - 1]);
 
     return this.setCursor(this.cursor + 1);
   }
 
   /**
    * Returns current full path including pathname and query parameters.
+   *
+   * @example
+   * "/abc?param=1"
    */
   get path(): string {
-    return `${this.pathname}${formatSearch(this.search)}`;
+    return `${this.pathname}${this.search}`;
   }
 
   /**
    * Returns current pathname.
+   *
+   * @example
+   * "/abc"
    */
-  get pathname(): Pathname {
+  get pathname(): string {
     return this.history[this.cursor].pathname;
   }
 
   /**
-   * Replaces current entry.
+   * Replaces current entry. Has the same logic as "push" method does.
    * @param entry - entry data.
+   * @see push
    */
-  replace(entry?: Partial<HistoryEntry>): Promise<void> {
-    this.history[this.cursor] = this.entryToHistoryItem(entry);
-    this.log('Replace current entry with', this.history[this.cursor]);
-
+  replace(entry: AllowedEntry): Promise<void> {
+    const historyItem = this.entryToHistoryItem(entry);
+    this.logger.log('Replacing current entry. Current:', this.history[this.cursor], 'Incoming:', historyItem);
+    this.history[this.cursor] = historyItem;
     return this.setCursor(this.cursor);
   }
 
   /**
    * Returns current query parameters.
+   *
+   * @example
+   * ""
+   *
+   * @example
+   * "?"
+   *
+   * @example
+   * "?param=1"
    */
   get search(): string {
     return this.history[this.cursor].search;
