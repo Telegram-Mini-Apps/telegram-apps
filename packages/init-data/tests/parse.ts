@@ -1,11 +1,8 @@
-/* eslint-disable */
 import { it, expect, describe } from 'vitest';
 
 import { parse } from '../src/index.js';
 
-// TODO: Complete tests.
-
-describe('parsing.ts', () => {
+describe('parse.ts', () => {
   describe('parse', () => {
     describe('auth_date', () => {
       it('should throw an error in case property is missing in source', () => {
