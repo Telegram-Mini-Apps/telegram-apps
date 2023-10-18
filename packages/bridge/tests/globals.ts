@@ -1,7 +1,7 @@
 import { expect, it, vi, afterEach, describe } from 'vitest';
 
 import {
-  log,
+  logger,
   setDebug,
   setTargetOrigin,
   targetOrigin,
@@ -12,20 +12,20 @@ afterEach(() => {
 });
 
 describe('globals.ts', () => {
-  describe('log', () => {
+  describe('logger', () => {
     it('should log message in case, debug mode is enabled. Otherwise no output should be shown', () => {
       const spy = vi.spyOn(console, 'log').mockImplementation(() => {
       });
 
-      log('log', 123);
+      logger.log(123);
       expect(spy).not.toHaveBeenCalled();
 
       setDebug(true);
-      log('log', 'Some log');
+      logger.log('Some log');
       expect(spy).toHaveBeenCalledTimes(1);
 
       setDebug(false);
-      log('log', 'Another log');
+      logger.log('Another log');
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });

@@ -47,14 +47,14 @@
   },
   "dependencies": {
     "@tma.js/bridge": "workspace:*",
-    "@tma.js/parsing": "workspace:*",
     "@tma.js/event-emitter": "workspace:*",
-    "@tma.js/logger": "workspace:*"
+    "@tma.js/logger": "workspace:*",
+    "@tma.js/parsing": "workspace:*"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*",
+    "build-utils": "workspace:*",
     "eslint-config-custom": "workspace:*",
-    "build-utils": "workspace:*"
+    "tsconfig": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

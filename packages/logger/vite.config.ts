@@ -6,6 +6,7 @@ export default createViteConfig({
   packageName: packageJson.name,
   formats: ['es', 'cjs'],
   test: createVitestConfig({
+    environment: 'happy-dom',
     coverage: {
       branches: 100,
       functions: 100,
