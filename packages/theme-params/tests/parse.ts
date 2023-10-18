@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { parse } from '../src/index.js';
 
 describe('parse.ts', () => {
@@ -9,12 +10,12 @@ describe('parse.ts', () => {
       ['button_text_color', 'buttonTextColor'],
       ['hint_color', 'hintColor'],
       ['link_color', 'linkColor'],
-      ['text_color', 'textColor'],
       ['secondary_bg_color', 'secondaryBackgroundColor'],
+      ['text_color', 'textColor'],
     ];
 
     mapping.forEach(([from, to]) => {
-      describe(`check "${to}" property`, () => {
+      describe(to, () => {
         it(`should omit if "${from}" property is missing`, () => {
           expect(parse({})).toStrictEqual({});
         });
