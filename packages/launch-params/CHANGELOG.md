@@ -1,5 +1,14 @@
 # @tma.js/launch-params
 
+## 0.0.5
+
+### Patch Changes
+
+- f39bb65: Implement "serialize" function in launch-params, theme-params and init-data packages. Refactor packages code and tests. Fix a bug related to launch params session storage save
+- Updated dependencies [f39bb65]
+  - @tma.js/theme-params@0.0.5
+  - @tma.js/init-data@0.2.19
+
 ## 0.0.4
 
 ### Patch Changes
