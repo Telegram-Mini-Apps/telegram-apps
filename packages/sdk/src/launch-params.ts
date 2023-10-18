@@ -1,5 +1,4 @@
-import { parse, retrieveFromStorage } from '@tma.js/launch-params';
-import type { LaunchParams } from '@tma.js/launch-params';
+import { parse, retrieveFromStorage, type LaunchParams } from '@tma.js/launch-params';
 
 /**
  * Attempts to extract launch params from window.location.hash. In case, window.location.hash

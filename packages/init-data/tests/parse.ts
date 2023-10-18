@@ -1,11 +1,8 @@
-/* eslint-disable */
 import { it, expect, describe } from 'vitest';
 
 import { parse } from '../src/index.js';
 
-// TODO: Complete tests.
-
-describe('parsing.ts', () => {
+describe('parse.ts', () => {
   describe('parse', () => {
     describe('auth_date', () => {
       it('should throw an error in case property is missing in source', () => {
@@ -57,6 +54,7 @@ describe('parsing.ts', () => {
     //       expect(() => parse(`hash=abc&auth_date=1&${createChat({ title: '123' })}`)).toThrow();
     //     });
     //
+    // eslint-disable-next-line max-len
     //     it('should throw an error in case property has value which is not a number presented as string', () => {
     //       expect(() => parse(`hash=abc&auth_date=5&${createChat({
     //         title: '123',
@@ -64,6 +62,7 @@ describe('parsing.ts', () => {
     //       })}`)).toThrow();
     //     });
     //
+    // eslint-disable-next-line max-len
     //     it('should map property from source to "chat.id" result property converting number presented as string to number', () => {
     //       console.log(`hash=abc&auth_date=5&${createChat({
     //         id: 1000,
@@ -105,6 +104,7 @@ describe('parsing.ts', () => {
     // });
     //
     // it('should return result in case, passed value matches schema', () => {
+    // eslint-disable-next-line max-len
     //   const initDataString = 'auth_date=1672418130&hash=68570a4968ca87b8bde6fae0e6a2e30486af899bf80982105d16dc42fe89b45d&query_id=AAHdF6IQAAAAAN0XohASX1Fh&user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%22%2C%22last_name%22%3A%22Kibenko%22%2C%22username%22%3A%22vdkfrost%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%7D';
     //   expect(initData.parse(initDataString)).toStrictEqual({
     //     hash: '68570a4968ca87b8bde6fae0e6a2e30486af899bf80982105d16dc42fe89b45d',

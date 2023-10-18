@@ -24,19 +24,23 @@ export interface LaunchParams {
    * Current Mini Apps version.
    */
   version: string;
+
   /**
    * Current launch init data. Can be missing in case, application was launched via
    * KeyboardButton.
    */
   initData?: InitData;
+
   /**
    * The same as initData but in initial, raw format.
    */
   initDataRaw?: string;
+
   /**
    * Current Telegram application identifier.
    */
   platform: Platform;
+
   /**
    * Mini App palette settings.
    */
