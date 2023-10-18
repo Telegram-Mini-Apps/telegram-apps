@@ -81,7 +81,7 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     acceptCustomStyles = acceptScrollbarStyle,
     targetOrigin,
     debug = false,
-    launchParams: optionsLaunchParams = retrieveLaunchParams(),
+    launchParams: optionsLaunchParams,
   } = options;
 
   // Set global settings.
@@ -98,7 +98,7 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
   const launchParamsFromStorage = retrieveFromStorage();
   const launchParams = optionsLaunchParams instanceof URLSearchParams || typeof optionsLaunchParams === 'string'
     ? parseLaunchParams(optionsLaunchParams)
-    : optionsLaunchParams;
+    : retrieveLaunchParams();
 
   saveLaunchParamsToStorage(launchParams);
 
