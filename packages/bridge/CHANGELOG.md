@@ -1,5 +1,13 @@
 # @tma.js/bridge
 
+## 1.3.9
+
+### Patch Changes
+
+- 631a430: Replace log function from "@tma.js/logger" with Logger class
+- Updated dependencies [631a430]
+  - @tma.js/logger@0.0.5
+
 ## 1.3.8
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @tma.js/sdk
 
+## 0.12.5
+
+### Patch Changes
+
+- Updated dependencies [631a430]
+  - @tma.js/bridge@1.3.9
+
 ## 0.12.4
 
 ### Patch Changes
