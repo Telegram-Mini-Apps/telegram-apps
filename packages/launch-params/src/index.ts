@@ -1,4 +1,5 @@
+export * from './launchParams.js';
 export * from './parse.js';
-export * from './retrieveFromStorage.js';
-export * from './saveToStorage.js';
+export * from './serialize.js';
+export * from './storage.js';
 export * from './types.js';
