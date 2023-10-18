@@ -1,5 +1,11 @@
 # @tma.js/sdk-react
 
+## 0.4.13
+
+### Patch Changes
+
+- 3f86496: Just bump version to sync with npmjs.
+
 ## 0.4.12
 
 ### Patch Changes
