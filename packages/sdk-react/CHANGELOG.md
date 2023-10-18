@@ -1,5 +1,13 @@
 # @tma.js/sdk-react
 
+## 0.4.12
+
+### Patch Changes
+
+- Updated dependencies [631a430]
+  - @tma.js/bridge@1.3.9
+  - @tma.js/sdk@0.12.5
+
 ## 0.4.11
 
 ### Patch Changes

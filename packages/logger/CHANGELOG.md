@@ -1,5 +1,11 @@
 # @tma.js/logger
 
+## 0.0.5
+
+### Patch Changes
+
+- 631a430: Replace log function from "@tma.js/logger" with Logger class
+
 ## 0.0.4
 
 ### Patch Changes

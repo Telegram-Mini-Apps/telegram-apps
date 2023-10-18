@@ -1,5 +1,14 @@
 # @tma.js/navigation
 
+## 0.0.8
+
+### Patch Changes
+
+- f9bbd6f: Reimplement package
+- Updated dependencies [631a430]
+  - @tma.js/bridge@1.3.9
+  - @tma.js/logger@0.0.5
+
 ## 0.0.7
 
 ### Patch Changes
