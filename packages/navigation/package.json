@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/navigation",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Custom router to be used in Telegram Mini Apps",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
