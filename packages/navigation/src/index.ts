@@ -1,4 +1,3 @@
-export * from './fromHistory.js';
-export * from './fromLocation.js';
-export * from './Navigator.js';
+export * from './hash/index.js';
+export * from './BasicNavigator.js';
 export * from './types.js';

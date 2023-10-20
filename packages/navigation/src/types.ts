@@ -1,4 +1,4 @@
-export interface HistoryEntry {
+export interface NavigationEntry {
   pathname: string;
   search: string;
 }
@@ -6,9 +6,9 @@ export interface HistoryEntry {
 /**
  * Browser history state which associates with navigator state.
  */
-export interface HistoryCurrentState {
+export interface NavigatorState {
   cursor: number;
-  history: HistoryEntry[];
+  entries: NavigationEntry[];
 }
 
 export interface NavigatorOptions {
@@ -24,11 +24,12 @@ export interface NavigatorEventsMap {
    * Being called whenever current history changes.
    * @param event - occurred event.
    */
-  change: (event: HistoryEntry) => void;
+  change: (event: NavigationEntry) => void;
 }
 
 /**
  * Entry information allowed to be used in push and replace Navigator methods.
+ * Should be either path or object partially describing it.
  */
 export type AllowedEntry = string | {
   pathname?: string;
