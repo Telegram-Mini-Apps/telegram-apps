@@ -1,0 +1,59 @@
+{
+  "name": "@tma.js/solid-router-integration",
+  "version": "0.0.0",
+  "description": "@solidjs/router integration for navigation.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
+    "directory": "packages/solid-router-integration"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
+  },
+  "keywords": [
+    "telegram-mini-apps",
+    "typescript",
+    "navigation",
+    "solidjs"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/dts/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "lint": "eslint -c .eslintrc.cjs src/**/*",
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "build": "vite build",
+    "rollup": "pnpm run typecheck && pnpm run build"
+  },
+  "dependencies": {
+    "@tma.js/navigation": "workspace:*"
+  },
+  "peerDependencies": {
+    "@solidjs/router": "^0.x"
+  },
+  "devDependencies": {
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "build-utils": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
