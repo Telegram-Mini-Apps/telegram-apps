@@ -14,4 +14,6 @@ module.exports = {
   // We select line endings depending on current OS.
   // See: https://stackoverflow.com/q/39114446/2771889
   'linebreak-style': ['error', (process.platform === 'win32' ? 'windows' : 'unix')],
+  // Sometimes we need to write "void promise".
+  'no-void': 0
 };
