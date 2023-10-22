@@ -1,8 +1,8 @@
 # @tma.js/navigation
 
-[code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/navigation
-
 [code-badge]: https://img.shields.io/badge/source-black?logo=github
+
+[code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/navigation
 
 [docs-link]: https://docs.telegram-mini-apps.com/docs/libraries/tma-js-navigation
 
@@ -14,19 +14,11 @@
 
 [size-badge]: https://img.shields.io/bundlephobia/minzip/@tma.js/navigation
 
-[![npm-badge]][npm-link]
-![size-badge]
+[![NPM][npm-badge]][npm-link]
+![Size][size-badge]
 [![docs-badge]][docs-link]
 [![code-badge]][code-link]
 
-[//]: # (Package which provides utilities to simplify communication flow between)
+Custom navigation classes and utilities which could be used to control Mini App navigation.
 
-[//]: # (frontend and Telegram native applications. It also solves some across-platform)
-
-[//]: # (data difference problems to protect developers code and save their time.)
-
-[//]: # (This library is a part of TypeScript packages ecosystem around Telegram Web)
-
-[//]: # (Apps. You can learn more about this package in this)
-
-[//]: # ([documentation]&#40;https://docs.telegram-mini-apps.com/docs/libraries/tma-js-navigation&#41;.)
+This library is a part of TypeScript packages ecosystem around Telegram Web Apps. You can learn more about this package in this [documentation](https://docs.telegram-mini-apps.com/docs/libraries/tma-js-navigation).
