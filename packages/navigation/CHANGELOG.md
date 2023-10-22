@@ -1,5 +1,11 @@
 # @tma.js/navigation
 
+## 0.0.10
+
+### Patch Changes
+
+- e3524fa: Make `HashNavigator.back()` not method but property. This made TMA BackButton click handling work incorrectly.
+
 ## 0.0.9
 
 ### Patch Changes
