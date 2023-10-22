@@ -1,0 +1,22 @@
+.line {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  font-weight: bold;
+  padding: 8px 10px;
+}
+
+.colorWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.color {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #555;
+  border-radius: 50%;
+  margin-right: 5px;
+}
