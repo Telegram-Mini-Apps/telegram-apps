@@ -149,9 +149,7 @@ export class HashNavigator {
    * Goes back in history.
    * @returns Promise which will be resolved when transition was completed.
    */
-  back(): Promise<void> {
-    return this.go(-1);
-  }
+  back = (): Promise<void> => this.go(-1);
 
   /**
    * Detaches current navigator from the browser history.
