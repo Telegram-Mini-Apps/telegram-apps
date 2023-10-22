@@ -13,10 +13,10 @@ function getServerOptions(): ServerOptions {
   const dir = dirname(fileURLToPath(import.meta.url));
 
   return {
-    port: 3000,
+    port: 443,
     https: {
-      cert: readFileSync(resolve(dir, ' ../../https-cert.pem')),
-      key: readFileSync(resolve(dir, ' ../../https-key.pem')),
+      cert: readFileSync(resolve(dir, '../../https-cert.pem')),
+      key: readFileSync(resolve(dir, '../../https-key.pem')),
     },
     host: 'tma.internal',
   };

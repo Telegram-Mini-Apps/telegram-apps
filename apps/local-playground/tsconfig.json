@@ -22,7 +22,8 @@
     "strict": true,
     "target": "ESNext",
     "paths": {
-      "@navigation/*": ["../../packages/navigation/src/*"]
+      "@/*": ["../../packages/*/src/index.ts"],
+      "@packages/*": ["../../packages/*"]
     }
   },
   "exclude": ["node_modules"]
