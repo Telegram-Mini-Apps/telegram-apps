@@ -178,9 +178,18 @@ importers:
       '@solidjs/router':
         specifier: ^0.8.3
         version: 0.8.3(solid-js@1.7.6)
+      '@tma.js/colors':
+        specifier: ^0.0.5
+        version: link:../../packages/colors
+      '@tma.js/init-data':
+        specifier: ^0.2.19
+        version: link:../../packages/init-data
       '@tma.js/navigation':
         specifier: workspace:*
         version: link:../../packages/navigation
+      '@tma.js/sdk':
+        specifier: ^0.12.6
+        version: link:../../packages/sdk
       '@tma.js/sdk-solid':
         specifier: ^0.1.13
         version: link:../../packages/sdk-solid
