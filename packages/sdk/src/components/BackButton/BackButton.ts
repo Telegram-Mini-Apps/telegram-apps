@@ -55,13 +55,11 @@ export class BackButton {
    * @param event - event name.
    * @param listener - event listener.
    */
-  on: typeof this.ee.on = (event, listener) => {
-    if (event === 'click') {
-      return on('back_button_pressed', listener as BackButtonEventListener<'click'>);
-    }
-
-    this.ee.on(event, listener);
-  };
+  on: typeof this.ee.on = (event, listener) => (
+    event === 'click'
+      ? on('back_button_pressed', listener as BackButtonEventListener<'click'>)
+      : this.ee.on(event, listener)
+  );
 
   /**
    * Removes event listener.
