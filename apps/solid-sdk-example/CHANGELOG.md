@@ -1,5 +1,17 @@
 # solid-sdk-example
 
+## 0.0.20
+
+### Patch Changes
+
+- Updated dependencies [a0e88b6]
+- Updated dependencies [c69b4c6]
+- Updated dependencies [b9dff7a]
+  - @tma.js/solid-router-integration@0.0.1
+  - @tma.js/sdk@0.12.7
+  - @tma.js/navigation@0.0.11
+  - @tma.js/sdk-solid@0.1.14
+
 ## 0.0.19
 
 ### Patch Changes

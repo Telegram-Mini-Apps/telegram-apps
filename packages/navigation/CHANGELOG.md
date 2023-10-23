@@ -1,5 +1,14 @@
 # @tma.js/navigation
 
+## 0.0.11
+
+### Patch Changes
+
+- b9dff7a: Implement `getHash` method.
+- Updated dependencies [8e5c7d4]
+  - @tma.js/event-emitter@0.1.0
+  - @tma.js/bridge@1.3.10
+
 ## 0.0.10
 
 ### Patch Changes
