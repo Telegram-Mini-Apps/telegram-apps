@@ -1,5 +1,14 @@
 # @tma.js/sdk
 
+## 0.12.7
+
+### Patch Changes
+
+- c69b4c6: `BackButton.on` and `MainButton.on` now return function which removes event listener.
+- Updated dependencies [8e5c7d4]
+  - @tma.js/event-emitter@0.1.0
+  - @tma.js/bridge@1.3.10
+
 ## 0.12.6
 
 ### Patch Changes

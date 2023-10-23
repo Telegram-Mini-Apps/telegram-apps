@@ -1,5 +1,11 @@
 # @tma.js/event-emitter
 
+## 0.1.0
+
+### Minor Changes
+
+- 8e5c7d4: Improve `emit` method code. Return remove event listener function from `on` and `once` methods. Do the same with `subscribe` method. `off` and `unsubscribe` methods now remove only 1 listener, not all its instances.
+
 ## 0.0.5
 
 ### Patch Changes
