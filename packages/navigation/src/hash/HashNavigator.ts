@@ -133,7 +133,7 @@ export class HashNavigator {
   }
 
   /**
-   * Attaches current navigator to the browser history.
+   * Attaches current navigator to the browser history allowing navigator to manipulate it.
    */
   async attach(): Promise<void> {
     if (this.attached) {
