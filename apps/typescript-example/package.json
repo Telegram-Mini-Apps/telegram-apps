@@ -18,6 +18,6 @@
     "vite": "^4.4.11"
   },
   "dependencies": {
-    "@tma.js/sdk": "0.12.7"
+    "@tma.js/sdk": "^0.12.7"
   }
 }

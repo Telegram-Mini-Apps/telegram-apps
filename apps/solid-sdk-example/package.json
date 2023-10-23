@@ -27,10 +27,10 @@
     "@solidjs/router": "^0.8.3",
     "@tma.js/colors": "^0.0.5",
     "@tma.js/init-data": "^0.2.19",
-    "@tma.js/navigation": "workspace:*",
+    "@tma.js/navigation": "^0.0.11",
     "@tma.js/sdk": "^0.12.7",
     "@tma.js/sdk-solid": "^0.1.14",
-    "@tma.js/solid-router-integration": "workspace:*",
+    "@tma.js/solid-router-integration": "^0.0.1",
     "solid-js": "^1.7.6"
   }
 }
