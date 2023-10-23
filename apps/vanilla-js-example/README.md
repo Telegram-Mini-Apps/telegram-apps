@@ -10,7 +10,7 @@ Vanilla JavaScript SDK usage example.
 ### Live
 
 This example is already deployed and can be viewed right in Telegram, just follow
-the [link](https://t.me/tmajsbot/vanilla_js_example).
+the [link](https://t.me/tmajsbot/vanilla_example).
 
 ### Locally
 

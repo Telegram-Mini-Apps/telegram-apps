@@ -36,8 +36,8 @@ document](./MOTIVATION.md).
 This repository provides the list of examples, using different frontend technologies:
 
 - [TypeScript and Vite](./apps/typescript-example)
-- [React and Vite](./apps/react-sdk-example)
-- [Solid and Vite](./apps/solid-sdk-example)
+- [React and Vite](./apps/react-example)
+- [Solid and Vite](./apps/solid-example)
 - [Vanilla JavaScript](./apps/vanilla-js-example) _(not recommended, see [iife section](#iife))_
 
 ## Packages
