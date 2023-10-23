@@ -24,7 +24,13 @@
     "vite-plugin-solid": "^2.7.0"
   },
   "dependencies": {
-    "@tma.js/sdk-solid": "workspace:*",
+    "@solidjs/router": "^0.8.3",
+    "@tma.js/colors": "^0.0.5",
+    "@tma.js/init-data": "^0.2.19",
+    "@tma.js/navigation": "workspace:*",
+    "@tma.js/sdk": "^0.12.6",
+    "@tma.js/sdk-solid": "^0.1.13",
+    "@tma.js/solid-router-integration": "workspace:*",
     "solid-js": "^1.7.6"
   }
 }
