@@ -1,21 +1,22 @@
 {
-  "name": "@tma.js/navigation",
-  "version": "0.0.10",
-  "description": "Custom navigation classes and utilities which could be used to control Mini App navigation.",
+  "name": "@tma.js/solid-router-integration",
+  "version": "0.0.0",
+  "description": "@solidjs/router integration for navigation.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Telegram-Mini-Apps/tma.js.git",
-    "directory": "packages/navigation"
+    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
+    "directory": "packages/solid-router-integration"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
   },
   "keywords": [
     "telegram-mini-apps",
+    "typescript",
     "navigation",
-    "typescript"
+    "solidjs"
   ],
   "license": "MIT",
   "type": "module",
@@ -25,7 +26,6 @@
     "src"
   ],
   "main": "./dist/index.cjs",
-  "browser": "./dist/index.iife.js",
   "module": "./dist/index.mjs",
   "types": "./dist/dts/index.d.ts",
   "exports": {
@@ -39,21 +39,19 @@
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
-    "build": "pnpm run build:default && pnpm run build:iife",
-    "build:default": "vite build --config vite.config.ts",
-    "build:iife": "vite build --config vite.iife.config.ts",
+    "build": "vite build",
     "rollup": "pnpm run typecheck && pnpm run build"
   },
   "dependencies": {
-    "@tma.js/bridge": "workspace:*",
-    "@tma.js/event-emitter": "workspace:*",
-    "@tma.js/logger": "workspace:*",
-    "@tma.js/parsing": "workspace:*"
+    "@tma.js/navigation": "workspace:*"
+  },
+  "peerDependencies": {
+    "@solidjs/router": "^0.x"
   },
   "devDependencies": {
-    "build-utils": "workspace:*",
     "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "build-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

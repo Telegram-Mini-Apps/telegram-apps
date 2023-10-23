@@ -53,3 +53,8 @@ export type NonEmptyEventName<Schema> =
 export type AnySubscribeListener<Schema> = {
   [E in keyof Schema]: (event: E, ...args: EventParams<Schema[E]>) => void;
 }[keyof Schema];
+
+/**
+ * Function which removes event listener.
+ */
+export type RemoveEventListener = () => void;

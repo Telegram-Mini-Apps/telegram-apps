@@ -15,7 +15,6 @@
     "@changesets/cli": "^2.26.2",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@turbo/gen": "^1.9.7",
-    "@vitest/coverage-istanbul": "^0.34.6",
     "@vitest/coverage-v8": "^0.34.6",
     "@vitest/ui": "^0.34.6",
     "commitizen": "^4.3.0",

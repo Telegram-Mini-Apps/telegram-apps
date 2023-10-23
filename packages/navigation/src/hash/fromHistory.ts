@@ -18,6 +18,9 @@ const parser = json<NavigatorState>({
  * properly work in case, the last time browser history was managed by some other `Navigator`.
  *
  * Method returns null in case, it was unable to create `Navigator`.
+ *
+ * FIXME: This method will not work as expected in Telegram Web. Learn more:
+ *  https://github.com/Telegram-Mini-Apps/tma.js/issues/150
  * @param options - options passed to constructor.
  */
 export function fromHistory(options?: NavigatorOptions): HashNavigator | null {

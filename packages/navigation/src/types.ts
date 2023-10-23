@@ -1,3 +1,5 @@
+import type { EventName } from '@tma.js/event-emitter';
+
 export interface NavigationEntry {
   pathname: string;
   search: string;
@@ -26,6 +28,16 @@ export interface NavigatorEventsMap {
    */
   change: (event: NavigationEntry) => void;
 }
+
+/**
+ * Navigator event name.
+ */
+export type NavigatorEventName = EventName<NavigatorEventsMap>;
+
+/**
+ * Navigator event listener.
+ */
+export type NavigatorEventListener<E extends NavigatorEventName> = NavigatorEventsMap[E];
 
 /**
  * Entry information allowed to be used in push and replace Navigator methods.
