@@ -1,3 +1,7 @@
+---
+outline: [2, 3]
+---
+
 # Events
 
 Events are signals, sent from Telegram native application in case, when
@@ -89,7 +93,28 @@ This section contains the list of events, sent from Telegram: their names,
 description, and parameters. Section title means minimal version, from which
 events inside the section could be sent.
 
-#### `invoice_closed`
+### `back_button_pressed`
+
+Available since: **v6.1**
+
+User clicked the [Back Button](../ui/back-button).
+
+### `clipboard_text_received`
+
+Available since: **v6.4**
+
+Telegram application attempted to extract text from clipboard.
+
+| Field  | Type               | Description                                                                                                                                                |
+|--------|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| req_id | `string`           | Passed during the [`web_app_read_text_from_clipboard`](methods#web_app_read_text_from_clipboard) method invocation `req_id` value                          |
+| data   | `string` or `null` | _Optional_. Data extracted from the clipboard. The returned value will have the type `string` only in the case, application has an access to the clipboard |
+
+[//]: # (TODO: custom_method_invoked)
+
+### `invoice_closed`
+
+[//]: # (TODO: <a href/> works incorrectly)
 
 An invoice was closed.
 
@@ -109,7 +134,7 @@ An invoice was closed.
    </td>
     <td>
       Passed during the&nbsp;
-      <a href="./methods.md#web_app_open_invoice">
+      <a href="./methods#web_app_open_invoice">
         <code>web_app_open_invoice</code>
       </a>&nbsp;
       method invocation <code>slug</code> value
@@ -145,6 +170,8 @@ An invoice was closed.
 
 User clicked the [Main Button](../ui/back-button).
 
+[//]: # (TODO: phone_requested)
+
 ### `popup_closed`
 
 [Popup](../ui/popup) was closed.
@@ -153,11 +180,33 @@ User clicked the [Main Button](../ui/back-button).
 |-----------|----------|----------------------------------------------------------------------------------------------------------------------------------------|
 | button_id | `string` | _Optional_. Identifier of the clicked button. In case, the popup was closed without clicking any button, this property will be omitted |
 
+### `qr_text_received`
+
+Available since: **v6.4**
+
+The QR scanner scanned some QR and extracted its content.
+
+| Field | Type     | Description                            |
+|-------|----------|----------------------------------------|
+| data  | `string` | _Optional_. Data extracted from the QR |
+
+### `scan_qr_popup_closed`
+
+Available since: **v6.4**
+
+QR scanner was closed.
+
 ### `set_custom_style`
 
 The event which is usually sent by the Telegram web application. Its payload represents `<style/>`
 tag html content, a developer could use. The stylesheet described in the payload will help the
 developer to stylize the app scrollbar (but he is still able to do it himself).
+
+### `settings_button_pressed`
+
+Available since: **v6.1**
+
+Occurs when the `Settings` item in context menu was pressed. Not all applications have this button.
 
 ### `theme_changed`
 
@@ -188,41 +237,5 @@ this problem in another way.
 
 :::
 
-### `back_button_pressed`
 
-Available since: **v6.1**
-
-User clicked the [Back Button](../ui/back-button).
-
-### `settings_button_pressed`
-
-Available since: **v6.1**
-
-Occurs when the `Settings` item in context menu was pressed. Not all applications have this button.
-
-### `qr_text_received`
-
-Available since: **v6.4**
-
-The QR scanner scanned some QR and extracted its content.
-
-| Field | Type     | Description                            |
-|-------|----------|----------------------------------------|
-| data  | `string` | _Optional_. Data extracted from the QR |
-
-### `scan_qr_popup_closed`
-
-Available since: **v6.4**
-
-QR scanner was closed.
-
-### `clipboard_text_received`
-
-Available since: **v6.4**
-
-Telegram application attempted to extract text from clipboard.
-
-| Field  | Type               | Description                                                                                                                                                |
-|--------|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| req_id | `string`           | Passed during the [`web_app_read_text_from_clipboard`](methods#web_app_read_text_from_clipboard) method invocation `req_id` value                          |
-| data   | `string` or `null` | _Optional_. Data extracted from the clipboard. The returned value will have the type `string` only in the case, application has an access to the clipboard |
+[//]: # (TODO: write_access_requested)

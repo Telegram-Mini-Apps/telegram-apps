@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+outline: [2, 3]
 ---
 
 # Methods
@@ -20,12 +20,12 @@ the [@tma.js/bridge](/libraries/tma-js-bridge) package.
 
 ## Web
 
-As long as the web version of Telegram displays the front-end application in
-`<iframe/>` tag, it uses the default way of communication between 2 iframes -
-sending messages through `window.parent.postMessage` function.
+As long as the web version of Telegram displays the front-end application in `<iframe/>` tag, it
+uses the default way of communication between 2 iframes - sending messages
+through `window.parent.postMessage` function.
 
-As the first parameter, you should pass a JSON object
-**converted to a string**. The object should have this interface:
+As the first parameter, you should pass a JSON object **converted to a string**. The object should
+have this interface:
 
 ```typescript
 interface MessageJSON {
@@ -34,15 +34,15 @@ interface MessageJSON {
 }
 ```
 
-The second parameter is `targetOrigin` - allowed parent iframe origin. We
-recommend avoiding the usage of wildcard `*` as long as it is not secure - your
-application could be inserted not by Telegram, but by another iframe that will
-still be able to communicate with your app and receive some data.
+The second parameter is `targetOrigin` - allowed parent iframe origin. We recommend avoiding the
+usage of wildcard `*` as long as it is not secure - your application could be inserted not by
+Telegram, but by another iframe that will still be able to communicate with your app and receive
+some data.
 
 As a default value, you could use `https://web.telegram.org`.
 
-So, as you see, each method has its own name expressed by `eventType` and
-parameters stored in `eventData` property. Here is the usage example:
+So, as you see, each method has its own name expressed by `eventType` and parameters stored
+in `eventData` property. Here is the usage example:
 
 ```typescript
 window.parent.postMessage(JSON.stringify({
@@ -51,17 +51,15 @@ window.parent.postMessage(JSON.stringify({
 }), 'https://web.telegram.org');
 ```
 
-This code will make the Telegram back button appear. We will define the back
-button and other components in the next sections of the documentation.
+This code will make the Telegram [BackButton](../ui/back-button) appear.
 
 ## Desktop and mobile
 
-Unlike the web, desktop and mobile applications use a bit more unusual way of
-calling methods. Both of these platforms will create a global
-function `window.TelegramWebviewProxy.postEvent(eventType: string, eventData: string)`.
+Unlike the web, desktop and mobile applications use a bit more unusual way of calling methods. Both
+of these platforms will create a global function `window.TelegramWebviewProxy.postEvent`.
 
-As the first argument, this function accepts the event name. The second one -
-the parameters object, converted to a string. Here is how it works:
+As the first argument, this function accepts the event name. The second one - the parameters object,
+converted to a string. Here is how it works:
 
 ```typescript
 window.TelegramWebviewProxy.postEvent('web_app_setup_back_button', JSON.stringify({
@@ -71,9 +69,8 @@ window.TelegramWebviewProxy.postEvent('web_app_setup_back_button', JSON.stringif
 
 ## Windows Phone
 
-Telegram Windows Phone app provides such function
-as `window.external.notify(message: string)`. It accepts the same parameter as
-the web version does:
+Telegram Windows Phone app provides such function as `window.external.notify`. It accepts the same
+parameter as the web version does:
 
 ```typescript
 window.external.notify(JSON.stringify({
@@ -84,26 +81,32 @@ window.external.notify(JSON.stringify({
 
 ## Available methods
 
-This section contains a list of available methods to call with their names,
-description, and parameters. Section title means minimal Web App version to call
-methods inside it. In case, Web App does not satisfy the minimal method version
-requirement, nothing will happen. The native app just doesn't know which method
-should be called as long as it is not defined.
+This section contains a list of available methods to call with their names, description, and
+parameters. In case, Mini App does not satisfy the minimal method version requirement, nothing will
+happen. The native app just doesn't know which method should be called as long as it is not defined
+internally.
 
 ### `iframe_ready`
 
 Notifies parent iframe about the current frame is ready. This method is only used in the Web version
-of Telegram. As a result, Web App will receive [`set_custom_style`](./events.md#set_custom_style)
+of Telegram. As a result, Mini App will receive [`set_custom_style`](./events.md#set_custom_style)
 event.
 
 ### `web_app_close`
 
-Closes Web App.
+Closes Mini App.
+
+### `web_app_close_scan_qr_popup`
+
+Available since: **v6.4**
+
+Closes a QR scanner. The Telegram application creates
+the [`scan_qr_popup_closed`](./events.md#scan_qr_popup_closed) event.
 
 ### `web_app_data_send`
 
 Sends data to the bot. When this method is called, a service message is sent to the bot containing
-the data of the length up to 4096 bytes. Then, Web App will be closed.
+the data of the length up to 4096 bytes. Then, Mini App will be closed.
 
 To get more information, take a look at `web_app_data` field in the
 class [Message](https://core.telegram.org/bots/api#message).
@@ -114,63 +117,9 @@ class [Message](https://core.telegram.org/bots/api#message).
 
 ### `web_app_expand`
 
-[Expands](../ui/viewport) the Web App.
+[Expands](../ui/viewport) the Mini App.
 
-### `web_app_open_link`
-
-Opens link in the default browser. Web App will not be closed.
-
-| Field | Type     | Description                                                                             |
-|-------|----------|-----------------------------------------------------------------------------------------|
-| url   | `string` | URL to be opened by Telegram application. Should be a full path with `https`  protocol. |
-
-### `web_app_ready`
-
-Notifies Telegram about current application is ready to be shown. This method will make Telegram to
-remove application loader and display Web App.
-
-### `web_app_request_theme`
-
-Requests current [theme](../ui/theme-params) from Telegram. As a result, Telegram will
-create [`theme_changed`](./events.md#theme_changed) event.
-
-### `web_app_request_viewport`
-
-Requests current [viewport](../ui/viewport) information from Telegram. As a result, Telegram will
-create [`viewport_changed`](./events.md#viewport_changed) event.
-
-### `web_app_setup_main_button`
-
-Updates the [Main Button](../ui/main-button) settings.
-
-| Field               | Type      | Description                                                                                                                                                        |
-|---------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| is_visible          | `boolean` | _Optional_. Should the Main Button be displayed.                                                                                                                   |
-| is_active           | `boolean` | _Optional_. Should the Main Button be enabled.                                                                                                                     |
-| is_progress_visible | `boolean` | _Optional_. Should loader inside the Main Button be displayed. Use this property in case, some opertaion takes time. This loader will make user notified about it. |
-| text                | `string`  | _Optional_. Text inside the Main Button.                                                                                                                           |
-| color               | `string`  | _Optional_. The Main Button background color in `#RRGGBB` format.                                                                                                  |
-| color               | `string`  | _Optional_. The Main Button background color in `#RRGGBB` format.                                                                                                  |
-| text_color          | `string`  | _Optional_. The Main Button text color in `#RRGGBB` format.                                                                                                        |
-
-### `web_app_setup_closing_behavior`
-
-Updates current [closing behavior](../functionality/closing-behavior).
-
-| Field             | Type      | Description                                                          |
-|-------------------|-----------|----------------------------------------------------------------------|
-| need_confirmation | `boolean` | Will user be prompted in case, an application is going to be closed. |
-
-### `web_app_open_tg_link`
-
-Available since: **v6.1**
-
-Opens the Telegram link by its pathname and query parameters. The link will be opened in the
-Telegram app, Web App will be closed.
-
-| Field     | Type     | Description                                                                                                                  |
-|-----------|----------|------------------------------------------------------------------------------------------------------------------------------|
-| path_full | `string` | Should be a value taken from the link of this format: `https://t.me/{path_full}`. Can additionally contain query parameters. |
+[//]: # (TODO: web_app_invoke_custom_method)
 
 ### `web_app_open_invoice`
 
@@ -183,124 +132,15 @@ this [documentation](https://core.telegram.org/bots/payments).
 |-------|----------|----------------------------|
 | slug  | `string` | Invoice unique identifier. |
 
-### `web_app_setup_back_button`
+### `web_app_open_link`
 
-Available since: **v6.1**
+Opens link in the default browser. Mini App will not be closed.
 
-Updates the [Back Button](../ui/back-button) settings.
+[//]: # (TODO: try_instant_view)
 
-| Field      | Type      | Description                        |
-|------------|-----------|------------------------------------|
-| is_visible | `boolean` | Should the Back Button be visible. |
-
-### `web_app_set_background_color`
-
-Available since: **v6.1**
-
-Updates the Web App [background color](../ui/theme-params#background-and-header-colors).
-
-| Field | Type     | Description                                       |
-|-------|----------|---------------------------------------------------|
-| color | `string` | The Web App background color in `#RRGGBB` format. |
-
-### `web_app_set_header_color`
-
-Available since: **v6.1**
-
-Updates the Web App [header color](../ui/theme-params#background-and-header-colors).
-
-| Field     | Type     | Description                                                                       |
-|-----------|----------|-----------------------------------------------------------------------------------|
-| color_key | `string` | The Web App header color key. Could be either `bg_color` or `secondary_bg_color`. |
-
-### `web_app_trigger_haptic_feedback`
-
-Available since: **v6.1**
-
-Generates the [haptic feedback](../functionality/haptic-feedback) event.
-
-<table>
-  <thead>
-  <tr>
-    <th>Field</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td>type</td>
-    <td>
-      <code>string</code>
-    </td>
-    <td>
-      <p>Type of haptic event. Values:</p>
-      <ul>
-        <li>
-          <code>impact</code>
-        </li>
-        <li>
-          <code>notification</code>
-        </li>
-        <li>
-          <code>selection_change</code>
-        </li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td>impact_style</td>
-    <td>
-      <code>string</code>
-    </td>
-    <td>
-      <p>
-        Required when <code>type</code> is <code>impact</code>. Values:
-      </p>
-      <ul>
-        <li>
-          <code>light</code>, indicates a collision between small or lightweight UI objects
-        </li>
-        <li>
-          <code>medium</code>, indicates a collision between medium-sized or medium-weight UI
-          objects
-        </li>
-        <li>
-          <code>heavy</code>, indicates a collision between large or heavyweight UI objects
-        </li>
-        <li>
-          <code>rigid</code>, indicates a collision between hard or inflexible UI objects
-        </li>
-        <li>
-          <code>soft</code>, indicates a collision between soft or flexible UI objects
-        </li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td>notification_type</td>
-    <td>
-      <code>string</code>
-    </td>
-    <td>
-      <p>
-        Required when <code>type</code> is <code>notification</code>. Values:
-      </p>
-      <ul>
-        <li>
-          <code>error</code>, indicates that a task or action has failed
-        </li>
-        <li>
-          <code>success</code>, indicates that a task or action has completed successfully
-        </li>
-        <li>
-          <code>warning</code>, indicates that a task or action produced a warning
-        </li>
-      </ul>
-    </td>
-  </tr>
-  </tbody>
-</table>
+| Field | Type     | Description                                                                             |
+|-------|----------|-----------------------------------------------------------------------------------------|
+| url   | `string` | URL to be opened by Telegram application. Should be a full path with `https`  protocol. |
 
 ### `web_app_open_popup`
 
@@ -417,12 +257,16 @@ Telegram creates the [`qr_text_received`](./events.md#qr_text_received) event.
 |-------|----------|----------------------------------------------------|
 | text  | `string` | _Optional_. Text to be displayed in the QR scanner |
 
-### `web_app_close_scan_qr_popup`
+### `web_app_open_tg_link`
 
-Available since: **v6.4**
+Available since: **v6.1**
 
-Closes a QR scanner. The Telegram application creates
-the [`scan_qr_popup_closed`](./events.md#scan_qr_popup_closed) event.
+Opens the Telegram link by its pathname and query parameters. The link will be opened in the
+Telegram app, Mini App will be closed.
+
+| Field     | Type     | Description                                                                                                                  |
+|-----------|----------|------------------------------------------------------------------------------------------------------------------------------|
+| path_full | `string` | Should be a value taken from the link of this format: `https://t.me/{path_full}`. Can additionally contain query parameters. |
 
 ### `web_app_read_text_from_clipboard`
 
@@ -436,4 +280,166 @@ the [`qr_text_received`](./events.md#qr_text_received) event.
 |--------|----------|----------------------------------------------------------------------------------------------------|
 | req_id | `string` | Unique request identifier. Should be any unique string to handle the generated event appropriately |
 
+### `web_app_ready`
 
+Notifies Telegram about current application is ready to be shown. This method will make Telegram to
+remove application loader and display Mini App.
+
+[//]: # (TODO: web_app_request_phone)
+
+### `web_app_request_theme`
+
+Requests current [theme](../ui/theme-params) from Telegram. As a result, Telegram will
+create [`theme_changed`](./events.md#theme_changed) event.
+
+### `web_app_request_viewport`
+
+Requests current [viewport](../ui/viewport) information from Telegram. As a result, Telegram will
+create [`viewport_changed`](./events.md#viewport_changed) event.
+
+[//]: # (TODO: web_app_request_write_access)
+
+### `web_app_set_background_color`
+
+Available since: **v6.1**
+
+Updates the Mini App [background color](../ui/theme-params#background-and-header-colors).
+
+| Field | Type     | Description                                        |
+|-------|----------|----------------------------------------------------|
+| color | `string` | The Mini App background color in `#RRGGBB` format. |
+
+### `web_app_set_header_color`
+
+Available since: **v6.1**
+
+Updates the Mini App [header color](../ui/theme-params#background-and-header-colors).
+
+[//]: # (TODO: color)
+
+| Field     | Type     | Description                                                                        |
+|-----------|----------|------------------------------------------------------------------------------------|
+| color_key | `string` | The Mini App header color key. Could be either `bg_color` or `secondary_bg_color`. |
+
+### `web_app_setup_back_button`
+
+Available since: **v6.1**
+
+Updates the [Back Button](../ui/back-button) settings.
+
+| Field      | Type      | Description                        |
+|------------|-----------|------------------------------------|
+| is_visible | `boolean` | Should the Back Button be visible. |
+
+### `web_app_setup_closing_behavior`
+
+Updates current [closing behavior](../functionality/closing-behavior).
+
+| Field             | Type      | Description                                                          |
+|-------------------|-----------|----------------------------------------------------------------------|
+| need_confirmation | `boolean` | Will user be prompted in case, an application is going to be closed. |
+
+### `web_app_setup_main_button`
+
+Updates the [Main Button](../ui/main-button) settings.
+
+| Field               | Type      | Description                                                                                                                                                        |
+|---------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| is_visible          | `boolean` | _Optional_. Should the Main Button be displayed.                                                                                                                   |
+| is_active           | `boolean` | _Optional_. Should the Main Button be enabled.                                                                                                                     |
+| is_progress_visible | `boolean` | _Optional_. Should loader inside the Main Button be displayed. Use this property in case, some opertaion takes time. This loader will make user notified about it. |
+| text                | `string`  | _Optional_. Text inside the Main Button.                                                                                                                           |
+| color               | `string`  | _Optional_. The Main Button background color in `#RRGGBB` format.                                                                                                  |
+| color               | `string`  | _Optional_. The Main Button background color in `#RRGGBB` format.                                                                                                  |
+| text_color          | `string`  | _Optional_. The Main Button text color in `#RRGGBB` format.                                                                                                        |
+
+[//]: # (TODO: web_app_setup_settings_button)
+
+### `web_app_trigger_haptic_feedback`
+
+Available since: **v6.1**
+
+Generates the [haptic feedback](../functionality/haptic-feedback) event.
+
+<table>
+  <thead>
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>type</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      <p>Type of haptic event. Values:</p>
+      <ul>
+        <li>
+          <code>impact</code>
+        </li>
+        <li>
+          <code>notification</code>
+        </li>
+        <li>
+          <code>selection_change</code>
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>impact_style</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      <p>
+        Required when <code>type</code> is <code>impact</code>. Values:
+      </p>
+      <ul>
+        <li>
+          <code>light</code>, indicates a collision between small or lightweight UI objects
+        </li>
+        <li>
+          <code>medium</code>, indicates a collision between medium-sized or medium-weight UI
+          objects
+        </li>
+        <li>
+          <code>heavy</code>, indicates a collision between large or heavyweight UI objects
+        </li>
+        <li>
+          <code>rigid</code>, indicates a collision between hard or inflexible UI objects
+        </li>
+        <li>
+          <code>soft</code>, indicates a collision between soft or flexible UI objects
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>notification_type</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      <p>
+        Required when <code>type</code> is <code>notification</code>. Values:
+      </p>
+      <ul>
+        <li>
+          <code>error</code>, indicates that a task or action has failed
+        </li>
+        <li>
+          <code>success</code>, indicates that a task or action has completed successfully
+        </li>
+        <li>
+          <code>warning</code>, indicates that a task or action produced a warning
+        </li>
+      </ul>
+    </td>
+  </tr>
+  </tbody>
+</table>
