@@ -82,6 +82,14 @@ export default defineConfig({
           { text: 'Events', link: '/apps-communication/events' },
         ],
       },
+
+      {
+        text: 'Launch parameters',
+        items: [
+          { text: 'Common information', link: '/launch-parameters/common-information' },
+          { text: 'Init data', link: '/launch-parameters/init-data' },
+        ],
+      },
     ],
 
     socialLinks: [
