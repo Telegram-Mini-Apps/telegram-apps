@@ -16,17 +16,17 @@ export default defineConfig({
       label: 'English',
       lang: 'en',
     },
-    ru: {
-      label: 'Русский',
-      lang: 'ru',
-      description: 'Документация, покрывающая все аспекты платформы Telegram - Telegram Mini Apps.',
-      themeConfig: {
-        editLink: {
-          text: 'Редактировать эту страницу на GitHub',
-          pattern: 'https://github.com/telegram-mini-apps/tma.js/edit/master/apps/docs/src/:path',
-        },
-      },
-    },
+    // ru: {
+    //   label: 'Русский',
+    //   lang: 'ru',
+    //   description: 'Документация, покрывающая все аспекты платформы Telegram - Telegram Mini Apps.',
+    //   themeConfig: {
+    //     editLink: {
+    //       text: 'Редактировать эту страницу на GitHub',
+    //       pattern: 'https://github.com/telegram-mini-apps/tma.js/edit/master/apps/docs/src/:path',
+    //     },
+    //   },
+    // },
   },
 
   // Show when each page content was last updated.
@@ -99,29 +99,29 @@ export default defineConfig({
     search: {
       // TODO: Probably replace with Algolia.
       provider: 'local',
-      options: {
-        locales: {
-          ru: {
-            translations: {
-              button: {
-                buttonText: 'Поиск',
-                buttonAriaLabel: 'Поиск',
-              },
-              modal: {
-                noResultsText: 'Не удалось ничего найти по запросу',
-                backButtonTitle: 'закрыть',
-                displayDetails: 'Отобразить подробные данные',
-                resetButtonTitle: 'Сбросить',
-                footer: {
-                  selectText: 'выбрать',
-                  navigateText: 'для навигации',
-                  closeText: 'закрыть',
-                },
-              },
-            },
-          },
-        },
-      },
+      // options: {
+      //   locales: {
+      //     ru: {
+      //       translations: {
+      //         button: {
+      //           buttonText: 'Поиск',
+      //           buttonAriaLabel: 'Поиск',
+      //         },
+      //         modal: {
+      //           noResultsText: 'Не удалось ничего найти по запросу',
+      //           backButtonTitle: 'закрыть',
+      //           displayDetails: 'Отобразить подробные данные',
+      //           resetButtonTitle: 'Сбросить',
+      //           footer: {
+      //             selectText: 'выбрать',
+      //             navigateText: 'для навигации',
+      //             closeText: 'закрыть',
+      //           },
+      //         },
+      //       },
+      //     },
+      //   },
+      // },
     },
   },
 });
