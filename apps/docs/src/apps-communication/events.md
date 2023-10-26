@@ -4,9 +4,8 @@ outline: [2, 3]
 
 # Events
 
-Events are signals, sent from Telegram native application in case, when
-some external action was done. Like methods, each event has its unique
-name and parameters.
+Events are signals, sent from Telegram native application in case, when some external action was
+done. Like methods, each event has its unique name and parameters.
 
 ::: tip
 
@@ -21,18 +20,17 @@ the [@tma.js/bridge](/libraries/tma-js-bridge) package.
 
 ## Web
 
-As mentioned before, the web version uses a standard way of communication
-between iframes. It means, the parent iframe is able to send events
-through `window.postMessage` function. To handle this type of message, it is enough to
-add `message` event listener on the global `window` object:
+As mentioned before, the web version uses a standard way of communication between iframes. It means,
+the parent iframe is able to send events through `window.postMessage` function. To handle this type
+of message, it is enough to add `message` event listener on the global `window` object:
 
 ```typescript
 window.addEventListener('message', ...);
 ```
 
-The native application will send an event with `data: string` which represents a
-JSON object converted to string. This object has the same interface as we
-defined in the [Methods](./methods.md#web) section:
+The native application will send an event with `data: string` which represents a JSON object
+converted to string. This object has the same interface as we defined in
+the [Methods](./methods.md#web) section:
 
 ```typescript
 interface MessageJSON {
@@ -52,19 +50,18 @@ window.addEventListener('message', ({ data }) => {
 
 ::: warning
 
-In this code, we assumed, that the `message` event is sent only by the native
-application which is not always true in real applications. Additionally, we
-didn't check if `data` is really of type `string`. Don't forget to check each
-type and appropriately process incoming events.
+In this code, we assumed, that the `message` event is sent only by the native application which is
+not always true in real applications. Additionally, we didn't check if `data` is really of
+type `string`. Don't forget to check each type and appropriately process incoming events.
 
 :::
 
 ## Desktop, mobile and Windows Phone
 
-Desktop, mobile, and Windows Phone versions of Telegram don’t use the method,
-described in the previous section. They do it in a bit unusual way. The first
-thing developer should know, is in case, when Telegram needs to emit an event,
-it will insert JavaScript code, which calls a globally defined function.
+Desktop, mobile, and Windows Phone versions of Telegram don’t use the method, described in the
+previous section. They do it in a bit unusual way. The first thing developer should know, is in
+case, when Telegram needs to emit an event, it will insert JavaScript code, which calls a globally
+defined function.
 
 Here is an example:
 
@@ -84,20 +81,19 @@ All of these functions have the same signature:
 type ReceiveEvent = (eventType: string, eventData: unknown) => void;
 ```
 
-So, the solution is rather simple. To handle incoming events we should create a
-function of this type and assign it to all 3 paths.
+So, the solution is rather simple. To handle incoming events we should create a function of this
+type and assign it to all 3 paths.
 
 ## Available events
 
-This section contains the list of events, sent from Telegram: their names,
-description, and parameters. Section title means minimal version, from which
-events inside the section could be sent.
+This section contains the list of events, sent from Telegram: their names, description, and
+parameters. Section title means minimal version, from which events inside the section could be sent.
 
 ### `back_button_pressed`
 
 Available since: **v6.1**
 
-User clicked the [Back Button](../ui/back-button).
+User clicked the [Back Button](../interface#back-button).
 
 ### `clipboard_text_received`
 
@@ -105,28 +101,39 @@ Available since: **v6.4**
 
 Telegram application attempted to extract text from clipboard.
 
-| Field  | Type               | Description                                                                                                                                                |
-|--------|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| req_id | `string`           | Passed during the [`web_app_read_text_from_clipboard`](methods#web_app_read_text_from_clipboard) method invocation `req_id` value                          |
-| data   | `string` or `null` | _Optional_. Data extracted from the clipboard. The returned value will have the type `string` only in the case, application has an access to the clipboard |
+| Field  | Type               | Description                                                                                                                                              |
+|--------|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| req_id | `string`           | Passed during the [`web_app_read_text_from_clipboard`](methods#web-app-read-text-from-clipboard) method invocation `req_id` value.                       |
+| data   | `string` or `null` | _Optional_. Data extracted from the clipboard. The returned value will have the type `string` only in the case, application has access to the clipboard. |
 
-[//]: # (TODO: custom_method_invoked)
+### `custom_method_invoked`
+
+Available since: **v6.9**
+
+Custom method invocation completed.
+
+| Field  | Type      | Description                                      |
+|--------|-----------|--------------------------------------------------|
+| req_id | `string`  | Unique identifier of this invocation.            |
+| result | `unknown` | _Optional_. Method invocation successful result. |
+| error  | `string`  | _Optional_. Method invocation error code.        |
 
 ### `invoice_closed`
-
-[//]: # (TODO: <a href/> works incorrectly)
 
 An invoice was closed.
 
 <table>
   <thead>
+
   <tr>
     <th>Field</th>
     <th>Type</th>
     <th>Description</th>
   </tr>
+
   </thead>
   <tbody>
+
   <tr>
     <td>slug</td>
     <td>
@@ -134,12 +141,13 @@ An invoice was closed.
    </td>
     <td>
       Passed during the&nbsp;
-      <a href="./methods#web_app_open_invoice">
+      <a href="./methods#web-app-open-invoice">
         <code>web_app_open_invoice</code>
       </a>&nbsp;
-      method invocation <code>slug</code> value
+      method invocation <code>slug</code> value.
     </td>
   </tr>
+
   <tr>
     <td>status</td>
     <td>
@@ -163,22 +171,31 @@ An invoice was closed.
       </ul>
     </td>
   </tr>
+
   </tbody>
 </table>
 
 ### `main_button_pressed`
 
-User clicked the [Main Button](../ui/back-button).
+User clicked the [Main Button](../interface#main-button).
 
-[//]: # (TODO: phone_requested)
+### `phone_requested`
+
+Available since: **v6.9**
+
+Application received phone access request status.
+
+| Field  | Type     | Description                         |
+|--------|----------|-------------------------------------|
+| status | `string` | Request status. Can only be `sent`. |
 
 ### `popup_closed`
 
-[Popup](../ui/popup) was closed.
+[Popup](../interface#popup) was closed.
 
-| Field     | Type     | Description                                                                                                                            |
-|-----------|----------|----------------------------------------------------------------------------------------------------------------------------------------|
-| button_id | `string` | _Optional_. Identifier of the clicked button. In case, the popup was closed without clicking any button, this property will be omitted |
+| Field     | Type     | Description                                                                                                                             |
+|-----------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| button_id | `string` | _Optional_. Identifier of the clicked button. In case, the popup was closed without clicking any button, this property will be omitted. |
 
 ### `qr_text_received`
 
@@ -186,9 +203,9 @@ Available since: **v6.4**
 
 The QR scanner scanned some QR and extracted its content.
 
-| Field | Type     | Description                            |
-|-------|----------|----------------------------------------|
-| data  | `string` | _Optional_. Data extracted from the QR |
+| Field | Type     | Description                             |
+|-------|----------|-----------------------------------------|
+| data  | `string` | _Optional_. Data extracted from the QR. |
 
 ### `scan_qr_popup_closed`
 
@@ -206,30 +223,30 @@ developer to stylize the app scrollbar (but he is still able to do it himself).
 
 Available since: **v6.1**
 
-Occurs when the `Settings` item in context menu was pressed. Not all applications have this button.
+Occurs when the [Settings Button](../interface#settings-button) was pressed.
 
 ### `theme_changed`
 
 Occurs whenever [the theme](../ui/theme-params) was changed in the user's Telegram app (including
 switching to night mode).
 
-| Field        | Type                     | Description                                                                                           |
-|--------------|--------------------------|-------------------------------------------------------------------------------------------------------|
-| theme_params | `Record<string, string>` | Map where the key is a theme stylesheet key and value is  the corresponding color in `#RRGGBB` format |
+| Field        | Type                     | Description                                                                                            |
+|--------------|--------------------------|--------------------------------------------------------------------------------------------------------|
+| theme_params | `Record<string, string>` | Map where the key is a theme stylesheet key and value is  the corresponding color in `#RRGGBB` format. |
 
 ### `viewport_changed`
 
 Occurs whenever the [viewport](../ui/viewport) has been changed. For example, when the user started
 dragging the application or called the expansion method.
 
-| Field           | Type      | Description                                                                     |
-|-----------------|-----------|---------------------------------------------------------------------------------|
-| height          | `number`  | The viewport height                                                             |
-| width           | `number`  | _Optional_. The viewport width                                                  |
-| is_expanded     | `boolean` | Is the viewport currently expanded                                              |
-| is_state_stable | `boolean` | Is the viewport current state stable and not going to change in the next moment |
+| Field           | Type      | Description                                                                      |
+|-----------------|-----------|----------------------------------------------------------------------------------|
+| height          | `number`  | The viewport height.                                                             |
+| width           | `number`  | _Optional_. The viewport width.                                                  |
+| is_expanded     | `boolean` | Is the viewport currently expanded.                                              |
+| is_state_stable | `boolean` | Is the viewport current state stable and not going to change in the next moment. |
 
-::: info
+::: tip
 
 Pay attention to the fact, that send rate of this method is not enough to smoothly resize the
 application window. You should probably use a stable height instead of the current one, or handle
@@ -237,5 +254,12 @@ this problem in another way.
 
 :::
 
+### `write_access_requested`
 
-[//]: # (TODO: write_access_requested)
+Available since: **v6.9**
+
+Application received write access request status.
+
+| Field  | Type     | Description                            |
+|--------|----------|----------------------------------------|
+| status | `string` | Request status. Can only be `allowed`. |

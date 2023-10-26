@@ -1,4 +1,4 @@
-# Definition
+# Flow definition
 
 To understand how to use Web Apps functionality, we should start by learning how
 Telegram native application communicates with Web App.

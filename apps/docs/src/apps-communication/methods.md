@@ -89,7 +89,7 @@ internally.
 ### `iframe_ready`
 
 Notifies parent iframe about the current frame is ready. This method is only used in the Web version
-of Telegram. As a result, Mini App will receive [`set_custom_style`](./events.md#set_custom_style)
+of Telegram. As a result, Mini App will receive [`set_custom_style`](./events#set-custom-style)
 event.
 
 ### `web_app_close`
@@ -101,7 +101,7 @@ Closes Mini App.
 Available since: **v6.4**
 
 Closes a QR scanner. The Telegram application creates
-the [`scan_qr_popup_closed`](./events.md#scan_qr_popup_closed) event.
+the [`scan_qr_popup_closed`](./events#scan-qr-popup-closed) event.
 
 ### `web_app_data_send`
 
@@ -119,7 +119,15 @@ class [Message](https://core.telegram.org/bots/api#message).
 
 [Expands](../ui/viewport) the Mini App.
 
-[//]: # (TODO: web_app_invoke_custom_method)
+### `web_app_invoke_custom_method`
+
+Available since: **v6.9**
+
+| Field  | Type      | Description                           |
+|--------|-----------|---------------------------------------|
+| req_id | `string`  | Current invocation unique identifier. |
+| method | `string`  | Method name.                          |
+| params | `unknown` | Parameters according to `method`.     |
 
 ### `web_app_open_invoice`
 
@@ -136,28 +144,30 @@ this [documentation](https://core.telegram.org/bots/payments).
 
 Opens link in the default browser. Mini App will not be closed.
 
-[//]: # (TODO: try_instant_view)
-
-| Field | Type     | Description                                                                             |
-|-------|----------|-----------------------------------------------------------------------------------------|
-| url   | `string` | URL to be opened by Telegram application. Should be a full path with `https`  protocol. |
+| Field            | Type      | Description                                                                                            | Available since |
+|------------------|-----------|--------------------------------------------------------------------------------------------------------|-----------------|
+| url              | `string`  | URL to be opened by Telegram application. Should be a full path with `https` protocol.                 |                 |
+| try_instant_view | `boolean` | _Optional_. Link will be opened in [Instant View](https://instantview.telegram.org/) mode if possible. | `v6.4`          |
 
 ### `web_app_open_popup`
 
 Available since: **v6.2**
 
 Opens a new [popup](../ui/popup). When user closes the popup, Telegram creates
-the [`popup_closed`](./events.md#popup_closed) event.
+the [`popup_closed`](./events.md#popup-closed) event.
 
 <table>
   <thead>
+
   <tr>
     <th>Field</th>
     <th>Type</th>
     <th>Description</th>
   </tr>
+
   </thead>
   <tbody>
+
   <tr>
     <td>title</td>
     <td>
@@ -165,6 +175,7 @@ the [`popup_closed`](./events.md#popup_closed) event.
     </td>
     <td>The text to be displayed in the popup title, 0-64 characters</td>
   </tr>
+
   <tr>
     <td>message</td>
     <td>
@@ -174,6 +185,7 @@ the [`popup_closed`](./events.md#popup_closed) event.
       The message to be displayed in the body of the popup, 1-256 characters
     </td>
   </tr>
+
   <tr>
     <td>buttons</td>
     <td>
@@ -183,6 +195,7 @@ the [`popup_closed`](./events.md#popup_closed) event.
     </td>
     <td>List of buttons to be displayed in the popup, 1-3 buttons</td>
   </tr>
+
   </tbody>
 </table>
 
@@ -190,13 +203,16 @@ the [`popup_closed`](./events.md#popup_closed) event.
 
 <table>
   <thead>
+
   <tr>
     <th>Field</th>
     <th>Type</th>
     <th>Description</th>
   </tr>
+
   </thead>
   <tbody>
+
   <tr>
     <td>id</td>
     <td>
@@ -204,13 +220,14 @@ the [`popup_closed`](./events.md#popup_closed) event.
     </td>
     <td>Identifier of the button, 0-64 characters.</td>
   </tr>
+
   <tr>
     <td>type</td>
     <td>
       <code>string</code>
     </td>
     <td>
-      <p>Type of the button. Values:</p>
+      Type of the button. Values:
       <ul>
         <li>
           <code>default</code>, a button with the default style
@@ -231,6 +248,7 @@ the [`popup_closed`](./events.md#popup_closed) event.
       </ul>
     </td>
   </tr>
+
   <tr>
     <td>text</td>
     <td>
@@ -250,12 +268,12 @@ the [`popup_closed`](./events.md#popup_closed) event.
 Available since: **v6.4**
 
 Opens a QR scanner. When the scanner was closed, the Telegram application creates
-the [`scan_qr_popup_closed`](./events.md#scan_qr_popup_closed) event. When the scanner reads QR,
-Telegram creates the [`qr_text_received`](./events.md#qr_text_received) event.
+the [`scan_qr_popup_closed`](./events.md#scan-qr-popup-closed) event. When the scanner reads QR,
+Telegram creates the [`qr_text_received`](./events.md#qr-text-received) event.
 
-| Field | Type     | Description                                        |
-|-------|----------|----------------------------------------------------|
-| text  | `string` | _Optional_. Text to be displayed in the QR scanner |
+| Field | Type     | Description                                         |
+|-------|----------|-----------------------------------------------------|
+| text  | `string` | _Optional_. Text to be displayed in the QR scanner. |
 
 ### `web_app_open_tg_link`
 
@@ -274,30 +292,40 @@ Available since: **v6.4**
 
 Reads text from the clipboard. The method accepts a request identifier which is used to
 appropriately retrieve the method execution result from
-the [`qr_text_received`](./events.md#qr_text_received) event.
+the [`clipboard_text_received`](./events.md#clipboard-text-received) event.
 
-| Field  | Type     | Description                                                                                        |
-|--------|----------|----------------------------------------------------------------------------------------------------|
-| req_id | `string` | Unique request identifier. Should be any unique string to handle the generated event appropriately |
+| Field  | Type     | Description                                                                                         |
+|--------|----------|-----------------------------------------------------------------------------------------------------|
+| req_id | `string` | Unique request identifier. Should be any unique string to handle the generated event appropriately. |
 
 ### `web_app_ready`
 
 Notifies Telegram about current application is ready to be shown. This method will make Telegram to
 remove application loader and display Mini App.
 
-[//]: # (TODO: web_app_request_phone)
+### `web_app_request_phone`
+
+Available since: **v6.9**
+
+[//]: # (TODO: Check if it is right. It probably requests other user phone.)
+
+Requests access to current user's phone.
 
 ### `web_app_request_theme`
 
 Requests current [theme](../ui/theme-params) from Telegram. As a result, Telegram will
-create [`theme_changed`](./events.md#theme_changed) event.
+create [`theme_changed`](./events.md#theme-changed) event.
 
 ### `web_app_request_viewport`
 
 Requests current [viewport](../ui/viewport) information from Telegram. As a result, Telegram will
-create [`viewport_changed`](./events.md#viewport_changed) event.
+create [`viewport_changed`](./events.md#viewport-changed) event.
 
-[//]: # (TODO: web_app_request_write_access)
+### `web_app_request_write_access`
+
+Available since: **v6.9**
+
+Requests write message access to current user.
 
 ### `web_app_set_background_color`
 
@@ -313,19 +341,19 @@ Updates the Mini App [background color](../ui/theme-params#background-and-header
 
 Available since: **v6.1**
 
-Updates the Mini App [header color](../ui/theme-params#background-and-header-colors).
+Updates the Mini App [header color](../ui/theme-params#background-and-header-colors). This method
+should accept `color_key` or `color` property.
 
-[//]: # (TODO: color)
-
-| Field     | Type     | Description                                                                        |
-|-----------|----------|------------------------------------------------------------------------------------|
-| color_key | `string` | The Mini App header color key. Could be either `bg_color` or `secondary_bg_color`. |
+| Field     | Type     | Description                                                                        | Available since |
+|-----------|----------|------------------------------------------------------------------------------------|-----------------|
+| color_key | `string` | The Mini App header color key. Could be either `bg_color` or `secondary_bg_color`. |                 |
+| color     | `string` | Color in RGB format.                                                               | `v6.9`          |
 
 ### `web_app_setup_back_button`
 
 Available since: **v6.1**
 
-Updates the [Back Button](../ui/back-button) settings.
+Updates the [Back Button](../interface#back-button) settings.
 
 | Field      | Type      | Description                        |
 |------------|-----------|------------------------------------|
@@ -341,19 +369,85 @@ Updates current [closing behavior](../functionality/closing-behavior).
 
 ### `web_app_setup_main_button`
 
-Updates the [Main Button](../ui/main-button) settings.
+Updates the [Main Button](../interface#main-button) settings.
 
 | Field               | Type      | Description                                                                                                                                                        |
 |---------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | is_visible          | `boolean` | _Optional_. Should the Main Button be displayed.                                                                                                                   |
 | is_active           | `boolean` | _Optional_. Should the Main Button be enabled.                                                                                                                     |
-| is_progress_visible | `boolean` | _Optional_. Should loader inside the Main Button be displayed. Use this property in case, some opertaion takes time. This loader will make user notified about it. |
+| is_progress_visible | `boolean` | _Optional_. Should loader inside the Main Button be displayed. Use this property in case, some operation takes time. This loader will make user notified about it. |
 | text                | `string`  | _Optional_. Text inside the Main Button.                                                                                                                           |
-| color               | `string`  | _Optional_. The Main Button background color in `#RRGGBB` format.                                                                                                  |
 | color               | `string`  | _Optional_. The Main Button background color in `#RRGGBB` format.                                                                                                  |
 | text_color          | `string`  | _Optional_. The Main Button text color in `#RRGGBB` format.                                                                                                        |
 
-[//]: # (TODO: web_app_setup_settings_button)
+### `web_app_setup_settings_button`
+
+Available since: **v6.10**
+
+Updates current state of [Settings Button](../interface#settings-button).
+
+| Field      | Type      | Description                              |
+|------------|-----------|------------------------------------------|
+| is_visible | `boolean` | Should the Settings Button be displayed. |
+
+### `web_app_switch_inline_query`
+
+Available since: **v6.7**
+
+Inserts the bot's username and the specified inline query in the current chat's input field.
+Query may be empty, in which case only the bot's username will be inserted. The client prompts
+the user to choose a specific chat, then opens that chat and inserts the bot's username and
+the specified inline query in the input field.
+
+<table>
+  <thead>
+
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+
+  </thead>
+  <tbody>
+
+  <tr>
+    <td>query</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      Text which should be inserted in the input after the current bot name. Max length is 
+      <b>256</b> symbols.
+    </td>
+  </tr>
+
+  <tr>
+    <td>chat_types</td>
+    <td>
+      <code>string[]</code>
+    </td>
+    <td>
+      List of chat types which could be chosen to send the message. Could be empty list. Values:
+      <ul>
+        <li>
+          <code>users</code> 
+        </li>
+        <li>
+          <code>bots</code>
+        </li>
+        <li>
+          <code>groups</code>
+        </li>
+        <li>
+          <code>channels</code>
+        </li>
+      </ul>
+    </td>
+  </tr>
+
+  </tbody>
+</table>
 
 ### `web_app_trigger_haptic_feedback`
 
@@ -363,20 +457,23 @@ Generates the [haptic feedback](../functionality/haptic-feedback) event.
 
 <table>
   <thead>
+
   <tr>
     <th>Field</th>
     <th>Type</th>
     <th>Description</th>
   </tr>
+
   </thead>
   <tbody>
+
   <tr>
     <td>type</td>
     <td>
       <code>string</code>
     </td>
     <td>
-      <p>Type of haptic event. Values:</p>
+      Type of haptic event. Values:
       <ul>
         <li>
           <code>impact</code>
@@ -390,15 +487,14 @@ Generates the [haptic feedback](../functionality/haptic-feedback) event.
       </ul>
     </td>
   </tr>
+
   <tr>
     <td>impact_style</td>
     <td>
       <code>string</code>
     </td>
     <td>
-      <p>
-        Required when <code>type</code> is <code>impact</code>. Values:
-      </p>
+      Required when <code>type</code> is <code>impact</code>. Values:
       <ul>
         <li>
           <code>light</code>, indicates a collision between small or lightweight UI objects
@@ -425,9 +521,7 @@ Generates the [haptic feedback](../functionality/haptic-feedback) event.
       <code>string</code>
     </td>
     <td>
-      <p>
-        Required when <code>type</code> is <code>notification</code>. Values:
-      </p>
+      Required when <code>type</code> is <code>notification</code>. Values:
       <ul>
         <li>
           <code>error</code>, indicates that a task or action has failed
