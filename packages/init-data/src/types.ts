@@ -15,6 +15,16 @@ export type ChatType =
  */
 export interface User {
   /**
+   * True, if this user added the bot to the attachment menu.
+   */
+  addedToAttachmentMenu?: boolean;
+
+  /**
+   * True, if this user allowed the bot to message them.
+   */
+  allowsWriteToPm?: boolean;
+
+  /**
    * First name of the user or bot.
    */
   firstName: string;

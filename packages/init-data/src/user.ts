@@ -7,6 +7,14 @@ import type { User } from './types.js';
  */
 export function user() {
   return json<User>({
+    addedToAttachmentMenu: {
+      type: boolean().optional(),
+      from: 'added_to_attachment_menu',
+    },
+    allowsWriteToPm: {
+      type: boolean().optional(),
+      from: 'allows_write_to_pm',
+    },
     firstName: {
       type: string(),
       from: 'first_name',
@@ -20,13 +28,13 @@ export function user() {
       type: boolean().optional(),
       from: 'is_premium',
     },
-    lastName: {
-      type: string().optional(),
-      from: 'last_name',
-    },
     languageCode: {
       type: string().optional(),
       from: 'language_code',
+    },
+    lastName: {
+      type: string().optional(),
+      from: 'last_name',
     },
     photoUrl: {
       type: string().optional(),
