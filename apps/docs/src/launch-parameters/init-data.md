@@ -1,7 +1,7 @@
 # Init data
 
-In the list of [launch parameters](./common-information.md), initialization data is located in
-the `tgWebAppData` parameter. They are a set of data mostly related to a specific user who launched
+In the list of [launch parameters](common-information), initialization data is located in
+the `tgWebAppData` parameter. It is a set of data mostly related to a specific user who launched
 the Mini App.
 
 A striking feature of init data is the fact that it can be used as an authentication or
@@ -14,9 +14,9 @@ This section provides detailed information about an essential aspect of Telegram
 relates to application security for developers. We recommend utilizing well-established and tested
 packages:
 
-- For browser: [@tma.js/init-data](/libraries/tma-js-init-data)
-- For Node: [@tma.js/init-data-node](/libraries/tma-js-init-data-node)
-- For GoLang: [init-data-golang](/libraries/init-data-golang)
+- For browser: [@tma.js/init-data](../libraries/tma-js-init-data)
+- For Node: [@tma.js/init-data-node](../libraries/tma-js-init-data-node)
+- For GoLang: [init-data-golang](../libraries/init-data-golang)
 
 :::
 
@@ -52,6 +52,8 @@ Also, the signature verification operation is fast enough and does not require l
 resources. More information about the data signature and verification algorithm can be found
 in [this](https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app)
 documentation.
+
+[//]: # (TODO: Move signing flow to our docs)
 
 ## Sending to server
 
