@@ -107,4 +107,15 @@ const theme = {
 ```
 
 Theme parameters can also be obtained via Telegram Mini
-Apps [method](../apps-communication/methods.md#web_app_request_theme).
+Apps [method](../apps-communication/methods#web-app-request-theme).
+
+### `tgWebAppShowSettings`
+
+`tgWebAppShowSettings` is used only by Telegram SDK to show settings button on startup. It has
+no other meaning to external developers.
+
+### `tgWebAppBotInline`
+
+This parameter is being added in case the current application is launched in inline mode. This
+allows calling such Telegram Mini Apps method
+as [`web_app_switch_inline_query`](../apps-communication/methods#web-app-switch-inline-query).
