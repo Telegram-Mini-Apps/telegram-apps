@@ -10,8 +10,8 @@ This section describes not only the list of launch parameters but also provides 
 how to manage the lifecycle related to this entity.
 
 To avoid implementing this flow manually, it is recommended to
-use [@tma.js/launch-params](/libraries/tma-js-launch-params)
-or [@tma.js/sdk](/libraries/tma-js-sdk).
+use [@tma.js/launch-params](../libraries/tma-js-launch-params)
+or [@tma.js/sdk](../libraries/tma-js-sdk).
 
 :::
 
@@ -60,12 +60,12 @@ This section provides a list of parameters sent by the Telegram native applicati
 
 The current Telegram Mini Apps version used by the native application. This parameter is important
 to use, for example, before calling the Telegram Mini
-Apps [methods](../apps-communication/methods.md) to make sure, they are supported.
+Apps [methods](../apps-communication/methods) to make sure, they are supported.
 
 ### `tgWebAppData`
 
 Contains data describing the current user, data sign, and also some useful values. To learn more,
-visit the [Init Data](./init-data.md) page.
+visit the [Init Data](./init-data) page.
 
 This parameter is passed as query parameters, so in order to get a more user-friendly value, a
 developer need to use the `URLSearchParams` constructor:
@@ -82,7 +82,7 @@ const initData = new URLSearchParams(params.get('tgWebAppData'));
 
 ### `tgWebAppPlatform`
 
-[Telegram application identifier](../supported-applications.md). It can be used as a factor
+[Telegram application identifier](../supported-applications). It can be used as a factor
 determining the visual style of the application, for example, when, depending on the device, the
 developer needs to display components that are different visually.
 
