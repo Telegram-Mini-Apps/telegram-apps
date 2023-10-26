@@ -90,6 +90,27 @@ export default defineConfig({
           { text: 'Init data', link: '/launch-parameters/init-data' },
         ],
       },
+
+      {
+        text: 'Functionality',
+        items: [
+          { text: 'Theme', link: '/functionality/theme' },
+          { text: 'Closing behavior', link: '/functionality/closing-behavior' },
+          { text: 'Viewport', link: '/functionality/viewport' },
+          { text: 'Haptic feedback', link: '/functionality/haptic-feedback' },
+        ],
+      },
+
+      {
+        text: 'UI',
+        items: [
+          { text: 'Back Button', link: '/interface/back-button' },
+          { text: 'Main Button', link: '/interface/main-button' },
+          // { text: 'More Button', link: '/interface/more-button' },
+          // { text: 'Settings Button', link: '/interface/settings-button' },
+          { text: 'Popup', link: '/interface/popup' },
+        ],
+      },
     ],
 
     socialLinks: [
