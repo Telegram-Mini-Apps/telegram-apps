@@ -1,6 +1,4 @@
----
-sidebar_position: 3
----
+[//]: # (FIXME: This page needs better screenshots of components. Current are horrible.)
 
 # Popup
 
@@ -16,17 +14,14 @@ following:
 
 - ID
 - Text
-- Type. Defines the color scheme of the button, and also provides the ability
-to specify localized text for typical cases
-
-import imgURL from '../../static/img/ui/popup.png';
+- Type. Defines the color scheme of the button, and also provides the ability to specify localized
+  text for typical cases
 
 <img
-  src={imgURL}
-  alt={'Popup'}
-  style={{marginBottom: 20, maxWidth: '100%'}}
-  width={300}
+  src="/components/popup.png"
+  alt="Main Button"
+  width="300"
 />
 
-- [Related method](../apps-communication/methods.mdx#web_app_open_popup)
-- [Popup closed generated event](../apps-communication/events.mdx#popup_closed)
+- [Related method](../apps-communication/methods#web-app-open-popup)
+- [Popup closed generated event](../apps-communication/events#popup-closed)
