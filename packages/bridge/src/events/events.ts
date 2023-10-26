@@ -20,100 +20,112 @@ import type {
 
 /**
  * Map where key is known event name, and value is its listener.
- * @see Documentation https://docs.telegram-mini-apps.com/docs/apps-communication/events
+ * @see https://docs.telegram-mini-apps.com/apps-communication/events
  */
 export interface Events {
   /**
    * User clicked back button.
-   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#back_button_pressed
+   * @since v6.1
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#back-button-pressed
    */
   back_button_pressed: () => void;
 
   /**
-   * Text was extracted from clipboard.
-   * @param payload - event information.
-   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#clipboard_text_received
+   * Telegram application attempted to extract text from clipboard.
+   * @param payload - event payload.
+   * @since v6.4
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#clipboard-text-received
    */
   clipboard_text_received: (payload: ClipboardTextReceivedPayload) => void;
 
   /**
-   * Being called whenever custom method was invoked.
+   * Custom method invocation completed.
    * @param payload - event payload.
-   * @since 6.9
+   * @since v6.9
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#custom-method-invoked
    */
   custom_method_invoked: (payload: CustomMethodInvokedPayload) => void;
 
   /**
-   * Invoice was closed.
+   * An invoice was closed.
    * @param payload - invoice close information.
-   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#invoice_closed
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#invoice-closed
    */
   invoice_closed: (payload: InvoiceClosedPayload) => void;
 
   /**
-   * User clicked main button.
-   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#main_button_pressed
+   * User clicked the Main Button.
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#main-button-pressed
    */
   main_button_pressed: () => void;
 
   /**
    * Application received phone access request status.
-   * @param payload - event payload. - event payload.
-   * @since 6.9
+   * @param payload - event payload.
+   * @since v6.9
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#phone-requested
    */
   phone_requested: (payload: PhoneRequestedPayload) => void;
 
   /**
    * Popup was closed.
-   * @param payload - popup close information.
-   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#main_button_pressed
+   * @param payload - event payload.
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#popup-closed
    */
   popup_closed: (payload: PopupClosedPayload) => void;
 
   /**
-   * Data from QR was extracted.
-   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#qr_text_received
+   * The QR scanner scanned some QR and extracted its content.
+   * @param payload - event payload.
+   * @since v6.4
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#qr-text-received
    */
   qr_text_received: (payload: QrTextReceivedPayload) => void;
 
   /**
    * QR scanner was closed.
-   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#scan_qr_popup_closed
+   * @since v6.4
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#scan-qr-popup-closed
    */
   scan_qr_popup_closed: () => void;
 
   /**
-   * Telegram requested to update current application style.
+   * The event which is usually sent by the Telegram web application. Its payload represents
+   * `<style/>` tag html content, a developer could use. The stylesheet described in the payload
+   * will help the developer to stylize the app scrollbar (but he is still able to do it himself).
    * @param html - `style` tag inner HTML.
-   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#set_custom_style
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#set-custom-style
    */
   set_custom_style: (html: string) => void;
 
   /**
-   * Occurs when the Settings item in context menu is pressed.
-   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#settings_button_pressed
+   * Occurs when the Settings Button was pressed.
+   * @since v6.1
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#settings-button-pressed
    */
   settings_button_pressed: () => void;
 
   /**
    * Occurs whenever theme settings are changed in the user's Telegram app
    * (including switching to night mode).
-   * @param payload - theme information.
-   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#theme_changed
+   * @param payload - event payload.
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#theme-changed
    */
   theme_changed: (payload: ThemeChangedPayload) => void;
 
   /**
-   * Viewport was changed.
-   * @param payload - viewport information.
-   * @see https://docs.telegram-mini-apps.com/docs/apps-communication/events#viewport_changed
+   * Occurs whenever the viewport has been changed. For example, when the user started
+   * dragging the application or called the expansion method.
+   * @param payload - event payload.
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#viewport-changed
    */
   viewport_changed: (payload: ViewportChangedPayload) => void;
 
   /**
-   * Application received write access requests status.
+   * Application received write access request status.
    * @param payload - event payload.
-   * @since 6.9
+   * @since v6.9
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#write-access-requested
    */
   write_access_requested: (payload: WriteAccessRequestedPayload) => void;
 }
