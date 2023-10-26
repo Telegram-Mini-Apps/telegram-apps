@@ -62,7 +62,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' },
+      { text: 'Reference', link: '/introduction' },
     ],
 
     // https://vitepress.dev/reference/default-theme-sidebar
@@ -77,7 +77,7 @@ export default defineConfig({
       {
         text: 'Apps communication',
         items: [
-          { text: 'Definition', link: '/apps-communication/definition' },
+          { text: 'Flow definition', link: '/apps-communication/flow-definition' },
           { text: 'Methods', link: '/apps-communication/methods' },
           { text: 'Events', link: '/apps-communication/events' },
         ],
