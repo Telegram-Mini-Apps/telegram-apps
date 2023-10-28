@@ -5,10 +5,6 @@ export default defineConfig({
   title: 'Telegram Mini Apps',
   description: 'Documentation covering all aspects of Telegram platform - Telegram Mini Apps.',
 
-  // Rewire source directory in order not to clog up the root folder.
-  // https://vitepress.dev/guide/routing#source-directory
-  srcDir: 'src',
-
   // Internationalization.
   // https://vitepress.dev/guide/i18n
   locales: {
@@ -62,7 +58,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Reference', link: '/introduction' },
+      { text: 'Reference', link: '/about-platform' },
     ],
 
     // https://vitepress.dev/reference/default-theme-sidebar
@@ -70,7 +66,7 @@ export default defineConfig({
       {
         text: 'Common information',
         items: [
-          { text: 'Introduction', link: '/introduction' },
+          { text: 'About platform', link: '/about-platform' },
           { text: 'Supported applications', link: '/supported-applications' },
         ],
       },

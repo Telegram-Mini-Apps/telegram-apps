@@ -30,7 +30,7 @@ window.addEventListener('message', ...);
 
 The native application will send an event with `data: string` which represents a JSON object
 converted to string. This object has the same interface as we defined in
-the [Methods](./methods.md#web) section:
+the [Methods](methods.md#web) section:
 
 ```typescript
 interface MessageJSON {
