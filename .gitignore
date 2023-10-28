@@ -42,5 +42,5 @@ yarn-error.log*
 # App for local development
 apps/.local
 
-.vitepress/cache
-.vitepress/dist
+apps/docs/.vitepress/cache
+apps/docs/.vitepress/dist
