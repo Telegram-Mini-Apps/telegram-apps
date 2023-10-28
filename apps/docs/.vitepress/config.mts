@@ -50,6 +50,12 @@ export default defineConfig({
   themeConfig: {
     logo: '/logo.png',
 
+    // https://vitepress.dev/reference/default-theme-footer#footer
+    footer: {
+      message: 'Released under the MIT License.',
+      copyright: 'Copyright © 2022-present Vladislav Kibenko and Contributors'
+    },
+
     editLink: {
       text: 'Edit this page on GitHub',
       pattern: 'https://github.com/telegram-mini-apps/tma.js/edit/master/apps/docs/src/:path',
@@ -58,7 +64,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Reference', link: '/about-platform' },
+      { text: 'Documentation', link: '/about-platform' },
     ],
 
     // https://vitepress.dev/reference/default-theme-sidebar
