@@ -4,17 +4,6 @@ The launch parameters are the list of parameters that is passed by the native Te
 to the Mini App. It helps the developer to find out the characteristics of the Telegram application,
 the current device, get basic information about the user and much more.
 
-::: tip
-
-This section describes not only the list of launch parameters but also provides recommendations on
-how to manage the lifecycle related to this entity.
-
-To avoid implementing this flow manually, it is recommended to
-use [@tma.js/launch-params](../libraries/tma-js-launch-params)
-or [@tma.js/sdk](../libraries/tma-js-sdk).
-
-:::
-
 ## Transmission method
 
 It's easy to guess, but in a web environment, one of the simplest and most instantaneous ways to
