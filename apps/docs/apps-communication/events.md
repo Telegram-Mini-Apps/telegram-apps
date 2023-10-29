@@ -49,11 +49,9 @@ window.addEventListener('message', ({ data }) => {
 ```
 
 ::: warning
-
 In this code, we assumed, that the `message` event is sent only by the native application which is
 not always true in real applications. Additionally, we didn't check if `data` is really of
 type `string`. Don't forget to check each type and appropriately process incoming events.
-
 :::
 
 ## Desktop, mobile and Windows Phone
@@ -93,7 +91,7 @@ parameters. Section title means minimal version, from which events inside the se
 
 Available since: **v6.1**
 
-User clicked the [Back Button](../interface#back-button).
+User clicked the [Back Button](../ui/back-button.md).
 
 ### `clipboard_text_received`
 
@@ -103,7 +101,7 @@ Telegram application attempted to extract text from clipboard.
 
 | Field  | Type               | Description                                                                                                                                              |
 |--------|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| req_id | `string`           | Passed during the [`web_app_read_text_from_clipboard`](methods#web-app-read-text-from-clipboard) method invocation `req_id` value.                       |
+| req_id | `string`           | Passed during the [`web_app_read_text_from_clipboard`](methods.md#web-app-read-text-from-clipboard) method invocation `req_id` value.                    |
 | data   | `string` or `null` | _Optional_. Data extracted from the clipboard. The returned value will have the type `string` only in the case, application has access to the clipboard. |
 
 ### `custom_method_invoked`
@@ -177,7 +175,7 @@ An invoice was closed.
 
 ### `main_button_pressed`
 
-User clicked the [Main Button](../interface#main-button).
+User clicked the [Main Button](../ui/main-button.md).
 
 ### `phone_requested`
 
@@ -191,7 +189,7 @@ Application received phone access request status.
 
 ### `popup_closed`
 
-[Popup](../interface#popup) was closed.
+[Popup](../ui/popup.md) was closed.
 
 | Field     | Type     | Description                                                                                                                             |
 |-----------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
@@ -223,12 +221,12 @@ developer to stylize the app scrollbar (but he is still able to do it himself).
 
 Available since: **v6.1**
 
-Occurs when the [Settings Button](../interface#settings-button) was pressed.
+Occurs when the [Settings Button](../ui/settings-button.md) was pressed.
 
 ### `theme_changed`
 
-Occurs whenever [the theme](../ui/theme-params) was changed in the user's Telegram app (including
-switching to night mode).
+Occurs whenever [the theme](../functionality/theme.md) was changed in the user's Telegram app (
+including switching to night mode).
 
 | Field        | Type                     | Description                                                                                            |
 |--------------|--------------------------|--------------------------------------------------------------------------------------------------------|
@@ -236,8 +234,8 @@ switching to night mode).
 
 ### `viewport_changed`
 
-Occurs whenever the [viewport](../ui/viewport) has been changed. For example, when the user started
-dragging the application or called the expansion method.
+Occurs whenever the [viewport](../functionality/viewport.md) has been changed. For example, when the
+user started dragging the application or called the expansion method.
 
 | Field           | Type      | Description                                                                      |
 |-----------------|-----------|----------------------------------------------------------------------------------|
@@ -247,11 +245,9 @@ dragging the application or called the expansion method.
 | is_state_stable | `boolean` | Is the viewport current state stable and not going to change in the next moment. |
 
 ::: tip
-
 Pay attention to the fact, that send rate of this method is not enough to smoothly resize the
 application window. You should probably use a stable height instead of the current one, or handle
 this problem in another way.
-
 :::
 
 ### `write_access_requested`

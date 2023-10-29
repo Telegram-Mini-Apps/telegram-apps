@@ -11,10 +11,8 @@ There are currently 3 types of notifications which are used in separate cases. S
 of the section for more information.
 
 ::: tip
-
 Use this method carefully. Emitting haptic events too often can make an effect
 on user's mobile device battery.
-
 :::
 
-- [Telegram Mini Apps method](../apps-communication/methods#web-app-trigger-haptic-feedback)
+- [Telegram Mini Apps method](../apps-communication/methods.md#web-app-trigger-haptic-feedback)

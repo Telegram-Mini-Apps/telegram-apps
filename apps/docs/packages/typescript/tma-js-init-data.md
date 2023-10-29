@@ -13,7 +13,6 @@ the [documentation](../../launch-parameters/common-information.md).
 ## Installation
 
 ::: code-group
-
 ```bash [pnpm]
 pnpm i @tma.js/init-data
 ```
@@ -25,7 +24,6 @@ npm i @tma.js/init-data
 ```bash [yarn]
 yarn add @tma.js/init-data
 ```
-
 :::
 
 ## Usage

@@ -45,11 +45,9 @@ console.log(params.get('tgWebAppVersion')); // "6.2"
 ```
 
 ::: tip
-
 However, users have the capability to refresh the current application without exiting it. If the
 application uses hash routing, it may lose the initial hash after some time. Therefore, it's
 advisable to save this data during the initial launch of the application.
-
 :::
 
 ## Parameters list
@@ -60,7 +58,7 @@ This section provides a list of parameters sent by the Telegram native applicati
 
 The current Telegram Mini Apps version used by the native application. This parameter is important
 to use, for example, before calling the Telegram Mini
-Apps [methods](../apps-communication/methods) to make sure, they are supported.
+Apps [methods](../apps-communication/methods.md) to make sure, they are supported.
 
 ### `tgWebAppData`
 
@@ -88,8 +86,8 @@ developer needs to display components that are different visually.
 
 ### `tgWebAppThemeParams`
 
-Parameters of the native Telegram application [theme](../ui/theme-params.mdx). This parameter can be
-used to style the application even at the moment of rendering the loader.
+Parameters of the native Telegram application [theme](../functionality/theme.md). This parameter can
+be used to style the application even at the moment of rendering the loader.
 
 The value of this parameter is a JSON object converted to the string. To get a more user-friendly
 value, it is enough to use the `JSON.parse` method.
@@ -107,7 +105,7 @@ const theme = {
 ```
 
 Theme parameters can also be obtained via Telegram Mini
-Apps [method](../apps-communication/methods#web-app-request-theme).
+Apps [method](../apps-communication/methods.md#web-app-request-theme).
 
 ### `tgWebAppShowSettings`
 
@@ -118,4 +116,4 @@ no other meaning to external developers.
 
 This parameter is being added in case the current application is launched in inline mode. This
 allows calling such Telegram Mini Apps method
-as [`web_app_switch_inline_query`](../apps-communication/methods#web-app-switch-inline-query).
+as [`web_app_switch_inline_query`](../apps-communication/methods.md#web-app-switch-inline-query).

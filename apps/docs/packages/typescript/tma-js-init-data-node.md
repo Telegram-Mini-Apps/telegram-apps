@@ -11,16 +11,13 @@ server side. To learn more about the initialization data and its usage, please r
 the [documentation](../../launch-parameters/common-information.md).
 
 ::: info
-
 This package extends the functionality of [`@tma.js/init-data`](tma-js-init-data.md), including all
 its types and utilities. Therefore, there is no need to install both packages separately.
-
 :::
 
 ## Installation
 
 ::: code-group
-
 ```bash [pnpm]
 pnpm i @tma.js/init-data-node
 ```
@@ -32,14 +29,13 @@ npm i @tma.js/init-data-node
 ```bash [yarn]
 yarn add @tma.js/init-data-node
 ```
-
 :::
 
 ## Usage
 
 ### Parsing
 
-You can learn more about parsing utilities in [`@tma.js/init-data`](tma-js-init-data#parsing)
+You can learn more about parsing utilities in [`@tma.js/init-data`](tma-js-init-data.md#parsing)
 documentation.
 
 ### Validation

@@ -51,7 +51,7 @@ window.parent.postMessage(JSON.stringify({
 }), 'https://web.telegram.org');
 ```
 
-This code will make the Telegram [BackButton](../ui/back-button) appear.
+This code will make the Telegram [BackButton](../ui/back-button.md) appear.
 
 ## Desktop and mobile
 
@@ -89,7 +89,7 @@ internally.
 ### `iframe_ready`
 
 Notifies parent iframe about the current frame is ready. This method is only used in the Web version
-of Telegram. As a result, Mini App will receive [`set_custom_style`](./events#set-custom-style)
+of Telegram. As a result, Mini App will receive [`set_custom_style`](events.md#set-custom-style)
 event.
 
 ### `web_app_close`
@@ -101,7 +101,7 @@ Closes Mini App.
 Available since: **v6.4**
 
 Closes a QR scanner. The Telegram application creates
-the [`scan_qr_popup_closed`](./events#scan-qr-popup-closed) event.
+the [`scan_qr_popup_closed`](events.md#scan-qr-popup-closed) event.
 
 ### `web_app_data_send`
 
@@ -117,7 +117,7 @@ class [Message](https://core.telegram.org/bots/api#message).
 
 ### `web_app_expand`
 
-[Expands](../ui/viewport) the Mini App.
+[Expands](../functionality/viewport.md) the Mini App.
 
 ### `web_app_invoke_custom_method`
 
@@ -313,13 +313,13 @@ Requests access to current user's phone.
 
 ### `web_app_request_theme`
 
-Requests current [theme](../ui/theme-params) from Telegram. As a result, Telegram will
+Requests current [theme](../functionality/theme.md) from Telegram. As a result, Telegram will
 create [`theme_changed`](events.md#theme-changed) event.
 
 ### `web_app_request_viewport`
 
-Requests current [viewport](../ui/viewport) information from Telegram. As a result, Telegram will
-create [`viewport_changed`](events.md#viewport-changed) event.
+Requests current [viewport](../functionality/viewport.md) information from Telegram. As a result,
+Telegram will create [`viewport_changed`](events.md#viewport-changed) event.
 
 ### `web_app_request_write_access`
 
@@ -331,7 +331,7 @@ Requests write message access to current user.
 
 Available since: **v6.1**
 
-Updates the Mini App [background color](../ui/theme-params#background-and-header-colors).
+Updates the Mini App [background color](../functionality/theme.md#background-and-header-colors).
 
 | Field | Type     | Description                                        |
 |-------|----------|----------------------------------------------------|
@@ -341,8 +341,8 @@ Updates the Mini App [background color](../ui/theme-params#background-and-header
 
 Available since: **v6.1**
 
-Updates the Mini App [header color](../ui/theme-params#background-and-header-colors). This method
-should accept `color_key` or `color` property.
+Updates the Mini App [header color](../functionality/theme.md#background-and-header-colors). This
+method should accept `color_key` or `color` property.
 
 | Field     | Type     | Description                                                                        | Available since |
 |-----------|----------|------------------------------------------------------------------------------------|-----------------|
@@ -353,7 +353,7 @@ should accept `color_key` or `color` property.
 
 Available since: **v6.1**
 
-Updates the [Back Button](../interface#back-button) settings.
+Updates the [Back Button](../ui/back-button.md) settings.
 
 | Field      | Type      | Description                        |
 |------------|-----------|------------------------------------|
@@ -361,7 +361,7 @@ Updates the [Back Button](../interface#back-button) settings.
 
 ### `web_app_setup_closing_behavior`
 
-Updates current [closing behavior](../functionality/closing-behavior).
+Updates current [closing behavior](../functionality/closing-behavior.md).
 
 | Field             | Type      | Description                                                          |
 |-------------------|-----------|----------------------------------------------------------------------|
@@ -369,7 +369,7 @@ Updates current [closing behavior](../functionality/closing-behavior).
 
 ### `web_app_setup_main_button`
 
-Updates the [Main Button](../interface#main-button) settings.
+Updates the [Main Button](../ui/main-button.md) settings.
 
 | Field               | Type      | Description                                                                                                                                                        |
 |---------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -384,7 +384,7 @@ Updates the [Main Button](../interface#main-button) settings.
 
 Available since: **v6.10**
 
-Updates current state of [Settings Button](../interface#settings-button).
+Updates current state of [Settings Button](../ui/settings-button.md).
 
 | Field      | Type      | Description                              |
 |------------|-----------|------------------------------------------|
@@ -453,7 +453,7 @@ the specified inline query in the input field.
 
 Available since: **v6.1**
 
-Generates the [haptic feedback](../functionality/haptic-feedback) event.
+Generates the [haptic feedback](../functionality/haptic-feedback.md) event.
 
 <table>
   <thead>

@@ -12,5 +12,5 @@ Button and allows him to handle the component click event as required in the app
   width="300"
 />
 
-- [Related method](../apps-communication/methods#web-app-setup-back-button)
-- [Button click generated event](../apps-communication/events#back-button-pressed)
+- [Related method](../apps-communication/methods.md#web-app-setup-back-button)
+- [Button click generated event](../apps-communication/events.md#back-button-pressed)

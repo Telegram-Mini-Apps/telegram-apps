@@ -16,4 +16,4 @@ during filling some big forms or something like that. Just not to lose progress.
   width="300"
 />
 
-- [Telegram Mini Apps method](../apps-communication/methods#web-app-setup-closing-behavior)
+- [Telegram Mini Apps method](../apps-communication/methods.md#web-app-setup-closing-behavior)

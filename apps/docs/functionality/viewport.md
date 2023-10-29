@@ -18,7 +18,7 @@ upper bound of the screen, but developer is able to do it programmatically too.
 
 By default, application is minimized (not expanded), it has minimal allowed height. To expand
 application via code, developer should
-call [`web_app_expand`](../apps-communication/methods#web-app-expand) method.
+call [`web_app_expand`](../apps-communication/methods.md#web-app-expand) method.
 
 During the process of dragging, viewport is considered not stable. For developer, it means, that he
 should not probably do any resizes or something like that, as long as viewport dimensions could
@@ -27,4 +27,4 @@ change in the next moment.
 ## Other platforms
 
 Other platforms open Mini App already maximized in medium-size window and call
-of [`web_app_expand`](../apps-communication/methods#web-app-expand) method will have no effect.
+of [`web_app_expand`](../apps-communication/methods.md#web-app-expand) method will have no effect.

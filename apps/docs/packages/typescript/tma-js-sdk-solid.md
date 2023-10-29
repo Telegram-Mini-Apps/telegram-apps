@@ -35,10 +35,11 @@ yarn add @tma.js/sdk-solid
 
 ### SDKProvider
 
-According to the `@tma.js/sdk` [documentation](tma-js-sdk/about), it consists of a set of components
-that are not initialized by default. Developers are responsible for creating these components
-themselves. However, the SDK provides the `init` function, which simplifies the process of creating
-the components and using the standard TWA flow. It handles all the necessary steps for developers.
+According to the `@tma.js/sdk` [documentation](tma-js-sdk/about.md), it consists of a set of
+components that are not initialized by default. Developers are responsible for creating these
+components themselves. However, the SDK provides the `init` function, which simplifies the process
+of creating the components and using the standard TWA flow. It handles all the necessary steps for
+developers.
 
 To make the SDK functionality available to the application and allow the initialization of newly
 created components, we need to use the `SDKProvider` component.
@@ -111,10 +112,8 @@ function Root() {
 Hook `useSDK` is used to gain access to provided SDK components.
 
 ::: warning
-
 `useSDK` will throw an error in case, SDK is not yet ready to be used. To avoid this problem
 use `useSDKContext` to track the SDK init process.
-
 :::
 
 ```jsx
@@ -136,7 +135,7 @@ function App() {
  */
 function DisplayGate(props: ParentProps) {
   const { loading, error } = useSDKContext();
-  const errorMessage = createMemo<null | string>(() => {
+  const errorMessage = createMemo < null | string > (() => {
     const err = error();
 
     if (!err) {

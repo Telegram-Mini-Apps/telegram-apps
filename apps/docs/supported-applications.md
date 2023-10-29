@@ -15,9 +15,7 @@ support it too poorly. This will probably be useful in the next sections of the
 documentation.
 
 ::: info
-
 As long as all applications are being developed separately, there may be variations in how they
 implement the platform. If you encounter unexpected differences, please consider reporting
 an [issue](https://github.com/Telegram-Mini-Apps/issues).
-
 :::

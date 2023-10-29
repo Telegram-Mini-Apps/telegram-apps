@@ -17,7 +17,6 @@ peer dependency of this package. The installation of the SDK itself is not requi
 already included in `@tma.js/sdk-react`.
 
 ::: code-group
-
 ```bash [pnpm]
 pnpm i @tma.js/sdk-react
 ```
@@ -29,7 +28,6 @@ npm i @tma.js/sdk-react
 ```bash [yarn]
 yarn add @tma.js/sdk-react
 ```
-
 :::
 
 ### Using SDK provider
@@ -276,7 +274,7 @@ function DisplayLaunchParamsPure({ launchParams }: Props) {
 const DisplayLaunchParamsWrapped = withLaunchParams(DisplayLaunchParams);
 ```
 
-It will return the result of the [`retrieveLaunchParams`](tma-js-sdk/about#launch-parameters)
+It will return the result of the [`retrieveLaunchParams`](tma-js-sdk/about.md#launch-parameters)
 function.
 
 ### Other
@@ -285,14 +283,12 @@ The library provides a collection of simple hooks and higher-order components (H
 component. The returned instances of these components remain the same, but force updates will be
 triggered if any changes occur in a component.
 
-:::caution
-
+::: warning
 If you are using higher-order components (HOCs), it's important to note that the passed components
 will always be the same instances. This can cause issues with React's `PureComponent` and `memo`
 components, as they won't detect any changes in the component references. To avoid problems, refrain
 from creating new component instances, as it can disrupt event listeners established during the SDK
 initialization process.
-
 :::
 
 List of hooks and HOCs of components:

@@ -103,7 +103,7 @@ services:
 
 However, the developer can also use any other hosting. It is important to remember that the link to
 the application must work on the `https` protocol and have a valid SSL certificate. To get a free
-one, consider [certbot](https://cert bat.eff.org /).
+one, consider [certbot](https://certbot.eff.org/pages/about).
 
 ### Applying link
 

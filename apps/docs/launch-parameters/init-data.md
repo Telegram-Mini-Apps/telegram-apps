@@ -1,6 +1,6 @@
 # Init data
 
-In the list of [launch parameters](common-information), initialization data is located in
+In the list of [launch parameters](common-information.md), initialization data is located in
 the `tgWebAppData` parameter. It is a set of data mostly related to a specific user who launched
 the Mini App.
 
@@ -14,9 +14,9 @@ This section provides detailed information about an essential aspect of Telegram
 relates to application security for developers. We recommend utilizing well-established and tested
 packages:
 
-- For browser: [@tma.js/init-data](../libraries/tma-js-init-data)
-- For Node: [@tma.js/init-data-node](../libraries/tma-js-init-data-node)
-- For GoLang: [init-data-golang](../libraries/init-data-golang)
+- For browser: [@tma.js/init-data](../packages/typescript/tma-js-init-data.md)
+- For Node: [@tma.js/init-data-node](../packages/typescript/tma-js-init-data-node.md)
+- For GoLang: [init-data-golang](../packages/golang/init-data-golang.md)
 
 :::
 

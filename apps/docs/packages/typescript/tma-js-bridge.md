@@ -16,7 +16,6 @@ utmost level of control over cross-application communication.
 ## Installation
 
 ::: code-group
-
 ```bash [pnpm]
 pnpm i @tma.js/bridge
 ```
@@ -28,7 +27,6 @@ npm i @tma.js/bridge
 ```bash [yarn]
 yarn add @tma.js/bridge
 ```
-
 :::
 
 ## Calling methods
@@ -113,11 +111,9 @@ supports('web_app_trigger_haptic_feedback', '6.0'); // false
 supports('web_app_trigger_haptic_feedback', '6.1'); // true
 ```
 
-:::tip
-
+::: tip
 It is recommended to use this function before calling Web Apps methods to prevent applications from
 stalling and other unexpected behavior.
-
 :::
 
 ## Debugging
@@ -147,14 +143,12 @@ setTargetOrigin('https://myendpoint.org');
 ```
 
 ::: warning
-
 It is strongly recommended not to override this value as long as it could lead to security issues.
 Specify this value only for test purposes.
-
 :::
 
 ## Higher-level control
 
 As long as the package provides only low-level control, we recommend
-using [SDK](./tma-js-sdk/about.md) which implements package methods. It also provides additional
+using [SDK](tma-js-sdk/about.md) which implements package methods. It also provides additional
 some automatic parameters checks, more intuitive method names, and easier usage.

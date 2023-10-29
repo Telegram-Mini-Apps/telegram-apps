@@ -23,5 +23,5 @@ following:
   width="300"
 />
 
-- [Related method](../apps-communication/methods#web-app-open-popup)
-- [Popup closed generated event](../apps-communication/events#popup-closed)
+- [Related method](../apps-communication/methods.md#web-app-open-popup)
+- [Popup closed generated event](../apps-communication/events.md#popup-closed)

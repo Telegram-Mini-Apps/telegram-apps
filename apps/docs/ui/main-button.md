@@ -34,5 +34,5 @@ application is not frozen and is currently performing an operation.
 
 :::
 
-- [Related method](../apps-communication/methods#web-app-setup-main-button)
-- [Button click generated event](../apps-communication/events#main-button-pressed)
+- [Related method](../apps-communication/methods.md#web-app-setup-main-button)
+- [Button click generated event](../apps-communication/events.md#main-button-pressed)

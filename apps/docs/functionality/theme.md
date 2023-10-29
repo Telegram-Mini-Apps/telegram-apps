@@ -12,11 +12,11 @@ should be used by Mini App to look consistently with native application.
 
 To start working with theme parameters, developers are allowed to [extract them from launch
 parameters](../launch-parameters/common-information#tgwebappthemeparams), or call
-special [Telegram Mini Apps method](../apps-communication/methods#web-app-request-theme).
+special [Telegram Mini Apps method](../apps-communication/methods.md#web-app-request-theme).
 
 ## Background and header colors
 
 The developer's application is displayed in a native component, which consists of 2 parts: header
 and body. To control their background colors, developers can utilize such Telegram Mini Apps
-methods as [web_app_set_header_color](../apps-communication/methods#web-app-set-header-color)
-and [web_app_set_background_color](../apps-communication/methods#web-app-set-background-color)
+methods as [web_app_set_header_color](../apps-communication/methods.md#web-app-set-header-color)
+and [web_app_set_background_color](../apps-communication/methods.md#web-app-set-background-color)

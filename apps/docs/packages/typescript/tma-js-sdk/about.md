@@ -20,7 +20,6 @@ platform.
 ## Installation
 
 ::: code-group
-
 ```bash [pnpm]
 pnpm i @tma.js/sdk
 ```
@@ -32,7 +31,6 @@ npm i @tma.js/sdk
 ```bash [yarn]
 yarn add @tma.js/sdk
 ```
-
 :::
 
 ## Initialization
@@ -173,10 +171,8 @@ console.log(isTWA()); // true or false
 ```
 
 ::: info
-
 `isTWA` utilizes `retrieveLaunchParams` function which attempts to extract the current launch
 parameters.
-
 :::
 
 ## Components
