@@ -34,10 +34,14 @@ So, as you see, each method has its own name expressed by `eventType` and parame
 in `eventData` property. Here is the usage example:
 
 ```typescript
-window.parent.postMessage(JSON.stringify({
+const data = JSON.stringify({
   eventType: 'web_app_setup_back_button',
-  eventData: { is_visible: true },
-}), 'https://web.telegram.org');
+  eventData: {
+    is_visible: true,
+  },
+});
+
+window.parent.postMessage(data, 'https://web.telegram.org');
 ```
 
 This code will make the Telegram [BackButton](../ui/back-button.md) appear.
@@ -51,9 +55,11 @@ As the first argument, this function accepts the event name. The second one - th
 converted to a string. Here is how it works:
 
 ```typescript
-window.TelegramWebviewProxy.postEvent('web_app_setup_back_button', JSON.stringify({
-  is_visible: true
-}));
+const data = JSON.stringify({ is_visible: true });
+
+window
+  .TelegramWebviewProxy
+  .postEvent('web_app_setup_back_button', data);
 ```
 
 ## Windows Phone
@@ -62,10 +68,12 @@ Telegram Windows Phone app provides such function as `window.external.notify`. I
 parameter as the web version does:
 
 ```typescript
-window.external.notify(JSON.stringify({
+const data = JSON.stringify({
   eventType: 'web_app_setup_back_button',
   eventData: { is_visible: true },
-}))
+});
+
+window.external.notify(data);
 ```
 
 ## Available methods
