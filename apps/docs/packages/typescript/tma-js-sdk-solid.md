@@ -1,29 +1,49 @@
----
-sidebar_label: "@tma.js/sdk-solid"
-sidebar_position: 6
----
-
 # @tma.js/sdk-solid
 
-Solid JS bindings for [client SDK](tma-js-sdk/about). Includes hooks, components and utilities for comfortable usage of Solid JS on the Telegram Mini Apps platform.
+[npm-link]: https://npmjs.com/package/@tma.js/sdk-solid
 
-<LibraryBadges pkg={'@tma.js/sdk-solid'}/>
+[npm-shield]: https://img.shields.io/npm/v/@tma.js/sdk-solid?logo=npm
+
+![[npm-link]][npm-shield]
+
+Solid JS bindings for [client SDK](tma-js-sdk/about.md). Includes hooks, components and utilities
+for comfortable usage of Solid JS on the Telegram Mini Apps platform.
 
 ## Installation
 
-Before anything else, it is assumed that you have already installed the `solid-js` package, as it is a peer dependency of this package. The installation of the SDK itself is not required, as it is already included in `@tma.js/sdk-solid`.
+Before anything else, it is assumed that you have already installed the `solid-js` package, as it is
+a peer dependency of this package. The installation of the SDK itself is not required, as it is
+already included in `@tma.js/sdk-solid`.
 
-<NpmInstall pkg={'@tma.js/sdk-solid'}/>
+::: code-group
+
+```bash [pnpm]
+pnpm i @tma.js/sdk-solid
+```
+
+```bash [npm]
+npm i @tma.js/sdk-solid
+```
+
+```bash [yarn]
+yarn add @tma.js/sdk-solid
+```
+
+:::
 
 ## Usage
 
 ### SDKProvider
 
-According to the `@tma.js/sdk` [documentation](tma-js-sdk/about), it consists of a set of components that are not initialized by default. Developers are responsible for creating these components themselves. However, the SDK provides the `init` function, which simplifies the process of creating the components and using the standard TWA flow. It handles all the necessary steps for developers.
+According to the `@tma.js/sdk` [documentation](tma-js-sdk/about), it consists of a set of components
+that are not initialized by default. Developers are responsible for creating these components
+themselves. However, the SDK provides the `init` function, which simplifies the process of creating
+the components and using the standard TWA flow. It handles all the necessary steps for developers.
 
-To make the SDK functionality available to the application and allow the initialization of newly created components, we need to use the `SDKProvider` component.
+To make the SDK functionality available to the application and allow the initialization of newly
+created components, we need to use the `SDKProvider` component.
 
-```typescript jsx
+```jsx
 import { SDKProvider } from '@tma.js/sdk-solid';
 
 function Root() {
@@ -35,9 +55,11 @@ function Root() {
 }
 ```
 
-Internally, the `SDKProvider` utilizes the `init` function from `@tma.js/sdk`. It accepts an optional list of parameters through the `initOptions` property, which is described [here](tma-js-sdk/about#init).
+Internally, the `SDKProvider` utilizes the `init` function from `@tma.js/sdk`. It accepts an
+optional list of parameters through the `initOptions` property, which is
+described [here](tma-js-sdk/about.md#initialization).
 
-```typescript jsx
+```jsx
 import { SDKProvider, SDKInitOptions } from '@tma.js/sdk-solid';
 
 function Root() {
@@ -55,13 +77,16 @@ function Root() {
 }
 ```
 
-Most of the time, there is no need to use `initOptions` unless you have specific logic in your application. Typically, the SDK handles everything necessary for developers, so there is no need for additional configuration.
+Most of the time, there is no need to use `initOptions` unless you have specific logic in your
+application. Typically, the SDK handles everything necessary for developers, so there is no need for
+additional configuration.
 
 ### useSDKContext
 
-By using the `SDKProvider` component, the child elements are able to utilize the `useSDK` hook to access core SDK information.
+By using the `SDKProvider` component, the child elements are able to utilize the `useSDK` hook to
+access core SDK information.
 
-```typescript jsx
+```jsx
 import { SDKProvider, useSDKContext } from '@tma.js/sdk-solid';
 
 function App() {
@@ -85,13 +110,14 @@ function Root() {
 
 Hook `useSDK` is used to gain access to provided SDK components.
 
-:::caution
+::: warning
 
-`useSDK` will throw an error in case, SDK is not yet ready to be used. To avoid this problem use `useSDKContext` to track the SDK init process.
+`useSDK` will throw an error in case, SDK is not yet ready to be used. To avoid this problem
+use `useSDKContext` to track the SDK init process.
 
 :::
 
-```typescript jsx title="Usage example"
+```jsx
 import { createMemo, Switch, Match, ParentProps } from 'solid-js';
 import { SDKProvider, useSDK, useSDKContext } from '@tma.js/sdk-solid';
 
@@ -148,7 +174,3 @@ function Root() {
   );
 }
 ```
-
-## Complete example
-
-[Code](https://github.com/Telegram-Mini-Apps/tma.js/blob/master/apps/solid-sdk-example/src/Root.tsx) and package usage example could be found in [monorepo](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/apps/solid-sdk-example).

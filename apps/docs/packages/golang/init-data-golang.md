@@ -1,10 +1,8 @@
----
-sidebar_position: 100
----
-
 # init-data-golang
 
-The package provides utilities to work with the initialization data of Telegram Mini Apps. To learn more about the initialization data and its usage, please refer to the [documentation](../launch-params/init-data.mdx).
+The package provides utilities to work with the initialization data of Telegram Mini Apps. To learn
+more about the initialization data and its usage, please refer to
+the [documentation](../../launch-parameters/common-information.md).
 
 ## Installation
 
@@ -14,7 +12,9 @@ go get github.com/telegram-mini-apps/init-data-golang
 
 ## Validation
 
-If the expiration time is set to `0`, the function will skip the expiration time check. However, it is recommended to specify a non-zero value, as this check is considered important in preventing the usage of old stolen initialization data.
+If the expiration time is set to `0`, the function will skip the expiration time check. However, it
+is recommended to specify a non-zero value, as this check is considered important in preventing the
+usage of old stolen initialization data.
 
 ```go
 package main
@@ -43,7 +43,9 @@ func main() {
 
 ## Parsing
 
-It is important to note that the `Parse` function does not perform the same checks as the `Validate` function. Therefore, this function solely parses incoming data without conducting validations for the hash or expiration time.
+It is important to note that the `Parse` function does not perform the same checks as the `Validate`
+function. Therefore, this function solely parses incoming data without conducting validations for
+the hash or expiration time.
 
 ```go
 package main
@@ -66,7 +68,9 @@ func main() {
 
 ## Signing
 
-The functions that sign data remove parameters such as `hash` and `auth_date` since it is assumed that the `hash` will be returned by the function and the `auth_date` will be set by the function itself.
+The functions that sign data remove parameters such as `hash` and `auth_date` since it is assumed
+that the `hash` will be returned by the function and the `auth_date` will be set by the function
+itself.
 
 ```go
 package main
@@ -101,4 +105,5 @@ func main() {
 
 ## GoDoc
 
-To see GoDoc documentation, visit [this link](https://pkg.go.dev/github.com/telegram-mini-apps/init-data-golang).
+To see GoDoc documentation,
+visit [this link](https://pkg.go.dev/github.com/telegram-mini-apps/init-data-golang).

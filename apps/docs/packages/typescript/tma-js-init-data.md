@@ -1,23 +1,39 @@
----
-sidebar_label: "@tma.js/init-data"
-sidebar_position: 2
----
-
 # @tma.js/init-data
 
-<LibraryBadges pkg={'@tma.js/init-data'}/>
+[npm-link]: https://npmjs.com/package/@tma.js/init-data
 
-The package provides utilities to work with the initialization data of Telegram Mini Apps on the client side. To learn more about the initialization data and its usage, please refer to the [documentation](../launch-params/init-data.mdx).
+[npm-shield]: https://img.shields.io/npm/v/@tma.js/init-data?logo=npm
+
+![[npm-link]][npm-shield]
+
+The package provides utilities to work with the initialization data of Telegram Mini Apps on the
+client side. To learn more about the initialization data and its usage, please refer to
+the [documentation](../../launch-parameters/common-information.md).
 
 ## Installation
 
-<NpmInstall pkg={'@tma.js/init-data'}/>
+::: code-group
+
+```bash [pnpm]
+pnpm i @tma.js/init-data
+```
+
+```bash [npm]
+npm i @tma.js/init-data
+```
+
+```bash [yarn]
+yarn add @tma.js/init-data
+```
+
+:::
 
 ## Usage
 
 ### Parsing
 
-This library includes the function `initData`, which can extract initialization data information from query parameters. Here is an example of its usage:
+This library includes the function `initData`, which can extract initialization data information
+from query parameters. Here is an example of its usage:
 
 ```typescript
 import { parse } from '@tma.js/init-data';
@@ -51,8 +67,11 @@ console.log(parse(new URLSearchParams(initDataString)));
 // }
 ```
 
-The function extracts the required parameters and automatically validates their types. If a property has an invalid type or value, it will throw an error.
+The function extracts the required parameters and automatically validates their types. If a property
+has an invalid type or value, it will throw an error.
 
 ### Validation
 
-We have moved the validation utilities to a separate [TypeScript package](tma-js-init-data-node.mdx). These utilities are only needed on the server side, as there is no need to validate initialization data on the client side.
+We have moved the validation utilities to a
+separate [TypeScript package](tma-js-init-data-node.md). These utilities are only needed on the
+server side, as there is no need to validate initialization data on the client side.

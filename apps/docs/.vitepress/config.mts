@@ -113,6 +113,47 @@ export default defineConfig({
           { text: 'Popup', link: '/ui/popup' },
         ],
       },
+
+      {
+        text: 'Packages',
+        items: [
+          {
+            text: 'TypeScript',
+            collapsed: true,
+            items: [
+              { text: '@tma.js/bridge', link: '/packages/typescript/tma-js-bridge' },
+              { text: '@tma.js/init-data', link: '/packages/typescript/tma-js-init-data' },
+              {
+                text: '@tma.js/init-data-node',
+                link: '/packages/typescript/tma-js-init-data-node',
+              },
+              {
+                text: '@tma.js/sdk',
+                collapsed: true,
+                items: [
+                  { text: 'About', link: '/packages/typescript/tma-js-sdk/about' },
+                ],
+              },
+              { text: '@tma.js/sdk-react', link: '/packages/typescript/tma-js-sdk-react' },
+              { text: '@tma.js/sdk-solid', link: '/packages/typescript/tma-js-sdk-solid' },
+            ],
+          },
+          {
+            text: 'GoLang',
+            collapsed: true,
+            items: [
+              { text: 'init-data-golang', link: '/packages/golang/init-data-golang' },
+            ],
+          },
+        ],
+      },
+
+      {
+        text: 'Guides',
+        items: [
+          { text: 'Creating new app', link: '/guides/creating-new-app' },
+        ],
+      },
     ],
 
     socialLinks: [
