@@ -53,7 +53,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-footer#footer
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2022-present Vladislav Kibenko and Contributors'
+      copyright: 'Copyright © 2022-present Vladislav Kibenko and Contributors',
     },
 
     editLink: {
@@ -74,8 +74,10 @@ export default defineConfig({
         items: [
           { text: 'About platform', link: '/about-platform' },
           { text: 'Supported applications', link: '/supported-applications' },
+          { text: 'Test environment', link: '/test-environment' },
         ],
       },
+
       {
         text: 'Apps communication',
         items: [
