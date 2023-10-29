@@ -7,17 +7,6 @@ outline: [2, 3]
 Telegram Mini Apps methods are events, which execute some predefined action. They are always called
 by a Mini App.
 
-::: tip
-
-The following sections describe how a developer can call Telegram Mini Apps methods on various
-devices. However, this information is not necessary unless you plan to implement your own library
-that replicates the described communication.
-
-To start using Telegram Mini Apps methods immediately, we recommend using
-the [@tma.js/bridge](/libraries/tma-js-bridge) package.
-
-:::
-
 ## Web
 
 As long as the web version of Telegram displays the front-end application in `<iframe/>` tag, it

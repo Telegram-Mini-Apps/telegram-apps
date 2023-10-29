@@ -7,17 +7,6 @@ outline: [2, 3]
 Events are signals, sent from Telegram native application in case, when some external action was
 done. Like methods, each event has its unique name and parameters.
 
-::: tip
-
-The following sections describe how a developer can handle Telegram Mini Apps events on various
-devices. However, this information is not necessary unless you plan to implement your own library
-that replicates the described handling flow.
-
-To start working with Telegram Mini Apps events immediately, we recommend using
-the [@tma.js/bridge](/libraries/tma-js-bridge) package.
-
-:::
-
 ## Web
 
 As mentioned before, the web version uses a standard way of communication between iframes. It means,
