@@ -98,7 +98,7 @@ export default defineConfig({
       {
         text: 'Functionality',
         items: [
-          { text: 'Theme', link: '/functionality/theme' },
+          { text: 'Theming', link: '/functionality/theming' },
           { text: 'Closing behavior', link: '/functionality/closing-behavior' },
           { text: 'Viewport', link: '/functionality/viewport' },
           { text: 'Haptic feedback', link: '/functionality/haptic-feedback' },
@@ -110,9 +110,8 @@ export default defineConfig({
         items: [
           { text: 'Back Button', link: '/ui/back-button' },
           { text: 'Main Button', link: '/ui/main-button' },
-          // { text: 'More Button', link: '/interface/more-button' },
-          // { text: 'Settings Button', link: '/interface/settings-button' },
           { text: 'Popup', link: '/ui/popup' },
+          // { text: 'Settings Button', link: '/interface/settings-button' },
         ],
       },
 
