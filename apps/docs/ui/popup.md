@@ -1,27 +1,13 @@
-[//]: # (FIXME: This page needs better screenshots of components. Current are horrible.)
-
 # Popup
 
-Popup is a component that is located on top of the TWA application. Its
-classic use case is a request for user confirmation to perform an action.
+![Popup](/components/popup.png)
 
-The developer is allowed to specify a title, message and a list of buttons,
-which should be displayed inside to popup.
+Popup is a component that is located on top of the Mini App. Its classic use case is a request for
+user confirmation to perform an action. Telegram Mini Apps allows specifying popup title, message
+and the list of up to 3 configurable buttons.
 
-Speaking of buttons, it is important to note that each of them
-is also customizable. Among the fields available for modification are the
-following:
-
-- ID
-- Text
-- Type. Defines the color scheme of the button, and also provides the ability to specify localized
-  text for typical cases
-
-<img
-  src="/components/popup.png"
-  alt="Main Button"
-  width="300"
-/>
-
-- [Related method](../apps-communication/methods.md#web-app-open-popup)
-- [Popup closed generated event](../apps-communication/events.md#popup-closed)
+To show the popup, developer can utilize
+the [web_app_open_popup](../apps-communication/methods.md#web-app-open-popup) Telegram Mini Apps
+method. When user presses any popup button, Telegram application emits
+the [popup_closed](../apps-communication/events.md#popup-closed) event passing the identifier of the
+clicked button.
