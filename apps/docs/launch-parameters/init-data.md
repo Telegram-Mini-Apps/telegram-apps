@@ -20,7 +20,7 @@ packages:
 
 :::
 
-## Extraction
+## Retrieving
 
 To extract init data, it is required to firstly get the launch parameters, then extract parameter
 with name `tgWebAppData` and pass it to the `URLSearchParams` constructor:

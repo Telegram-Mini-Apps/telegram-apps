@@ -41,8 +41,6 @@ advisable to save this data during the initial launch of the application.
 
 ## Parameters list
 
-This section provides a list of parameters sent by the Telegram native application to a Mini App.
-
 ### `tgWebAppVersion`
 
 The current Telegram Mini Apps version used by the native application. This parameter is important
@@ -95,11 +93,11 @@ const theme = {
 
 ### `tgWebAppShowSettings`
 
-`tgWebAppShowSettings` is used only by Telegram SDK to show settings button on startup. It has
+Parameter used only by Telegram SDK to show the Settings Button on startup. It has
 no other meaning to external developers.
 
 ### `tgWebAppBotInline`
 
 This parameter is being added in case the current application is launched in inline mode. This
 allows calling such Telegram Mini Apps method
-as [`web_app_switch_inline_query`](../apps-communication/methods.md#web-app-switch-inline-query).
+as [web_app_switch_inline_query](../apps-communication/methods.md#web-app-switch-inline-query).
