@@ -310,7 +310,7 @@ Requests access to current user's phone.
 
 ### `web_app_request_theme`
 
-Requests current [theme](../functionality/theme.md) from Telegram. As a result, Telegram will
+Requests current [theme](../functionality/theming.md) from Telegram. As a result, Telegram will
 create [`theme_changed`](events.md#theme-changed) event.
 
 ### `web_app_request_viewport`
@@ -328,7 +328,7 @@ Requests write message access to current user.
 
 Available since: **v6.1**
 
-Updates the Mini App [background color](../functionality/theme.md#background-and-header-colors).
+Updates the Mini App [background color](../functionality/theming.md#background-and-header-colors).
 
 | Field | Type     | Description                                        |
 |-------|----------|----------------------------------------------------|
@@ -338,7 +338,7 @@ Updates the Mini App [background color](../functionality/theme.md#background-and
 
 Available since: **v6.1**
 
-Updates the Mini App [header color](../functionality/theme.md#background-and-header-colors). This
+Updates the Mini App [header color](../functionality/theming.md#background-and-header-colors). This
 method should accept `color_key` or `color` property.
 
 | Field     | Type     | Description                                                                        | Available since |

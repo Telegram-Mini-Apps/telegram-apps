@@ -214,7 +214,7 @@ Occurs when the [Settings Button](../ui/settings-button.md) was pressed.
 
 ### `theme_changed`
 
-Occurs whenever [the theme](../functionality/theme.md) was changed in the user's Telegram app (
+Occurs whenever [the theme](../functionality/theming.md) was changed in the user's Telegram app (
 including switching to night mode).
 
 | Field        | Type                     | Description                                                                                            |

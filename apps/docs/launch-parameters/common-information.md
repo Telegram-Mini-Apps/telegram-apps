@@ -75,8 +75,8 @@ developer needs to display components that are different visually.
 
 ### `tgWebAppThemeParams`
 
-Parameters of the native Telegram application [theme](../functionality/theme.md). This parameter can
-be used to style the application even at the moment of rendering the loader.
+Parameters of the native Telegram application [theme](../functionality/theming.md). This parameter
+can be used to style the application even at the moment of rendering the loader.
 
 The value of this parameter is a JSON object converted to the string. To get a more user-friendly
 value, it is enough to use the `JSON.parse` method.
@@ -92,9 +92,6 @@ const theme = {
   secondary_bg_color: '#0f0f0f',
 };
 ```
-
-Theme parameters can also be obtained via Telegram Mini
-Apps [method](../apps-communication/methods.md#web-app-request-theme).
 
 ### `tgWebAppShowSettings`
 
