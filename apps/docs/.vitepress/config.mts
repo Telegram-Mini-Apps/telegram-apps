@@ -111,7 +111,7 @@ export default defineConfig({
           { text: 'Back Button', link: '/ui/back-button' },
           { text: 'Main Button', link: '/ui/main-button' },
           { text: 'Popup', link: '/ui/popup' },
-          // { text: 'Settings Button', link: '/interface/settings-button' },
+          { text: 'Settings Button', link: '/ui/settings-button' },
         ],
       },
 
