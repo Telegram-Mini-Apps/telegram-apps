@@ -274,7 +274,7 @@ function DisplayLaunchParamsPure({ launchParams }: Props) {
 const DisplayLaunchParamsWrapped = withLaunchParams(DisplayLaunchParams);
 ```
 
-It will return the result of the [`retrieveLaunchParams`](tma-js-sdk/about.md#launch-parameters)
+It will return the result of the [retrieveLaunchParams](tma-js-sdk/about.md#launch-parameters)
 function.
 
 ### Other

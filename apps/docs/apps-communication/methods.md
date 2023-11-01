@@ -86,7 +86,7 @@ internally.
 ### `iframe_ready`
 
 Notifies parent iframe about the current frame is ready. This method is only used in the Web version
-of Telegram. As a result, Mini App will receive [`set_custom_style`](events.md#set-custom-style)
+of Telegram. As a result, Mini App will receive [set_custom_style](events.md#set-custom-style)
 event.
 
 ### `web_app_close`
@@ -98,7 +98,7 @@ Closes Mini App.
 Available since: **v6.4**
 
 Closes a QR scanner. The Telegram application creates
-the [`scan_qr_popup_closed`](events.md#scan-qr-popup-closed) event.
+the [scan_qr_popup_closed](events.md#scan-qr-popup-closed) event.
 
 ### `web_app_data_send`
 
@@ -150,8 +150,8 @@ Opens link in the default browser. Mini App will not be closed.
 
 Available since: **v6.2**
 
-Opens a new [popup](../ui/popup). When user closes the popup, Telegram creates
-the [`popup_closed`](events.md#popup-closed) event.
+Opens a new [popup](../ui/popup.md). When user closes the popup, Telegram creates
+the [popup_closed](events.md#popup-closed) event.
 
 <table>
   <thead>
@@ -265,8 +265,8 @@ the [`popup_closed`](events.md#popup-closed) event.
 Available since: **v6.4**
 
 Opens a QR scanner. When the scanner was closed, the Telegram application creates
-the [`scan_qr_popup_closed`](events.md#scan-qr-popup-closed) event. When the scanner reads QR,
-Telegram creates the [`qr_text_received`](events.md#qr-text-received) event.
+the [scan_qr_popup_closed](events.md#scan-qr-popup-closed) event. When the scanner reads QR,
+Telegram creates the [qr_text_received](events.md#qr-text-received) event.
 
 | Field | Type     | Description                                         |
 |-------|----------|-----------------------------------------------------|
@@ -289,7 +289,7 @@ Available since: **v6.4**
 
 Reads text from the clipboard. The method accepts a request identifier which is used to
 appropriately retrieve the method execution result from
-the [`clipboard_text_received`](events.md#clipboard-text-received) event.
+the [clipboard_text_received](events.md#clipboard-text-received) event.
 
 | Field  | Type     | Description                                                                                         |
 |--------|----------|-----------------------------------------------------------------------------------------------------|
@@ -311,12 +311,12 @@ Requests access to current user's phone.
 ### `web_app_request_theme`
 
 Requests current [theme](../functionality/theming.md) from Telegram. As a result, Telegram will
-create [`theme_changed`](events.md#theme-changed) event.
+create [theme_changed](events.md#theme-changed) event.
 
 ### `web_app_request_viewport`
 
 Requests current [viewport](../functionality/viewport.md) information from Telegram. As a result,
-Telegram will create [`viewport_changed`](events.md#viewport-changed) event.
+Telegram will create [viewport_changed](events.md#viewport-changed) event.
 
 ### `web_app_request_write_access`
 

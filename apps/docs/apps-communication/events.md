@@ -88,9 +88,9 @@ Available since: **v6.4**
 
 Telegram application attempted to extract text from clipboard.
 
-| Field  | Type               | Description                                                                                                                                              |
-|--------|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| req_id | `string`           | Passed during the [`web_app_read_text_from_clipboard`](methods.md#web-app-read-text-from-clipboard) method invocation `req_id` value.                    |
+| Field  | Type               | Description                                                                                                                                            |
+|--------|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| req_id | `string`           | Passed during the [web_app_read_text_from_clipboard](methods.md#web-app-read-text-from-clipboard) method invocation `req_id` value.                    |
 | data   | `string` or `null` | _Optional_. Data extracted from the clipboard. The returned value will have the type `string` only in the case, application has access to the clipboard. |
 
 ### `custom_method_invoked`
