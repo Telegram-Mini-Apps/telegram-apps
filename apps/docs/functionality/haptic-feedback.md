@@ -7,12 +7,17 @@ Interacting with application (clicking buttons, closing popups etc.), it is allo
 notifications. Commonly, this process is called **_haptic feedback_**. In simple words, these events
 are just mobile device vibrations. Usage of haptic feedback can make user's experience much better.
 
-There are currently 3 types of notifications which are used in separate cases. See links at the end
-of the section for more information.
+There are currently three types of notifications used in different cases:
 
-::: tip
-Use this method carefully. Emitting haptic events too often can make an effect
-on user's mobile device battery.
+- `impact`, when there's a collision involving UI components.
+- `selection_change`, when the user changes their selection.
+- `notification`, when some action execution has been completed.
+
+To produce haptic feedback, Telegram Mini Apps
+provides [web_app_trigger_haptic_feedback](../apps-communication/methods.md#web-app-trigger-haptic-feedback)
+method.
+
+::: warning
+Use this method carefully. Emitting haptic events too often can make an effect on user's mobile
+device battery.
 :::
-
-- [Telegram Mini Apps method](../apps-communication/methods.md#web-app-trigger-haptic-feedback)

@@ -1,6 +1,6 @@
 # Theming
 
-![Theme Parameters](/theming.png)
+![Theming](/functionality/theming.png)
 
 Mini Apps are web applications designed to have a native appearance. This includes not only the use
 of components that mimic native elements but also the adoption of the parent application's color

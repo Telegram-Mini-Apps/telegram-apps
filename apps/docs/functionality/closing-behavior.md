@@ -1,19 +1,14 @@
-[//]: # (FIXME: This page needs better screenshots of components. Current are horrible.)
-
 # Closing behavior
 
-It is rather common for Mini Apps, when user accidentally closes application during scrolling it to
-top. The problem is user could drag application block too much which will result in application
-close.
+![Closing confirmation](/functionality/closing-confirmation.png)
 
-To prevent user from doing this, you could use closing behaviour. Telegram Mini Apps allows
-developer to prompt if user really wants to close application. This functionality could also be used
-during filling some big forms or something like that. Just not to lose progress.
+Mini Apps are intended to handle different, and at times, complex scenarios where the user can
+navigate deep into the application architecture. It's a common situation when a user is following a
+specific workflow, such as purchasing an airplane ticket, which involves multiple steps.
 
-<img
-  src="/components/closing-confirmation.png"
-  alt="Closing confirmation"
-  width="300"
-/>
+Accidentally closing a Mini App with data loss can be a significant disappointment for the user. To
+prevent this, developers have the option to configure the closing behavior and prompt the user
+before closing the application.
 
-- [Telegram Mini Apps method](../apps-communication/methods.md#web-app-setup-closing-behavior)
+To enable closing confirmation, Telegram Mini Apps provides a method
+called [web_app_setup_closing_behavior](../apps-communication/methods.md#web-app-setup-closing-behavior).
