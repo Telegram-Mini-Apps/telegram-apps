@@ -98,10 +98,10 @@ export default defineConfig({
       {
         text: 'Functionality',
         items: [
-          { text: 'Theming', link: '/functionality/theming' },
           { text: 'Closing behavior', link: '/functionality/closing-behavior' },
-          { text: 'Viewport', link: '/functionality/viewport' },
           { text: 'Haptic feedback', link: '/functionality/haptic-feedback' },
+          { text: 'Theming', link: '/functionality/theming' },
+          { text: 'Viewport', link: '/functionality/viewport' },
         ],
       },
 
