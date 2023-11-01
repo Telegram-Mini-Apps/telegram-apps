@@ -123,7 +123,16 @@ export default defineConfig({
             collapsed: true,
             items: [
               { text: '@tma.js/bridge', link: '/packages/typescript/tma-js-bridge' },
-              { text: '@tma.js/init-data', link: '/packages/typescript/tma-js-init-data' },
+              {
+                text: '@tma.js/init-data',
+                collapsed: true,
+                items: [
+                  { text: 'About', link: '/packages/typescript/tma-js-init-data/about' },
+                  { text: 'InitData', link: '/packages/typescript/tma-js-init-data/init-data' },
+                  { text: 'Chat', link: '/packages/typescript/tma-js-init-data/chat' },
+                  { text: 'User', link: '/packages/typescript/tma-js-init-data/user' },
+                ],
+              },
               {
                 text: '@tma.js/init-data-node',
                 link: '/packages/typescript/tma-js-init-data-node',

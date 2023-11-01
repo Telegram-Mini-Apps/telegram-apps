@@ -8,11 +8,12 @@
 
 The package provides utilities to work with the initialization data of Telegram Mini Apps on the
 client side. To learn more about the initialization data and its usage, please refer to
-the [documentation](../../launch-parameters/common-information.md).
+the [documentation](../../../launch-parameters/common-information.md).
 
 ## Installation
 
 ::: code-group
+
 ```bash [pnpm]
 pnpm i @tma.js/init-data
 ```
@@ -24,13 +25,12 @@ npm i @tma.js/init-data
 ```bash [yarn]
 yarn add @tma.js/init-data
 ```
+
 :::
 
-## Usage
+## Parsing
 
-### Parsing
-
-This library includes the function `initData`, which can extract initialization data information
+This library includes the function `parse`, which can extract initialization data information
 from query parameters. Here is an example of its usage:
 
 ```typescript
@@ -66,10 +66,11 @@ console.log(parse(new URLSearchParams(initDataString)));
 ```
 
 The function extracts the required parameters and automatically validates their types. If a property
-has an invalid type or value, it will throw an error.
+has an invalid type or value, it will throw an error. To learn more about returned type, refer
+to [InitData type](init-data.md) page.
 
-### Validation
+## Validation
 
 We have moved the validation utilities to a
-separate [TypeScript package](tma-js-init-data-node.md). These utilities are only needed on the
-server side, as there is no need to validate initialization data on the client side.
+separate [TypeScript package](../tma-js-init-data-node.md). These utilities are only needed on the
+server side, as there is no need to validate initialization data on the client side.**
