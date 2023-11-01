@@ -473,13 +473,13 @@ Generates the [haptic feedback](../functionality/haptic-feedback.md) event.
       Type of haptic event. Values:
       <ul>
         <li>
-          <code>impact</code>
+          <code>impact</code>, when there's a collision involving UI components.
         </li>
         <li>
-          <code>notification</code>
+          <code>notification</code>, when some action execution has been completed.
         </li>
         <li>
-          <code>selection_change</code>
+          <code>selection_change</code>, when the user changes their selection.
         </li>
       </ul>
     </td>
