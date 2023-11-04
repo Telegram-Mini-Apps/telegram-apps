@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tma.js/sdk-react": "^0.4.15",
+    "@tma.js/sdk-react": "0.4.15",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

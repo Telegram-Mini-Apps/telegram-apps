@@ -74,8 +74,8 @@ importers:
   apps/next-js-example:
     dependencies:
       '@tma.js/sdk-react':
-        specifier: ^0.4.15
-        version: link:../../packages/sdk-react
+        specifier: 0.4.15
+        version: 0.4.15(@types/react@18.2.15)(react@18.2.0)
       next:
         specifier: 13.5.6
         version: 13.5.6(@babel/core@7.22.20)(react-dom@18.2.0)(react@18.2.0)
@@ -117,8 +117,8 @@ importers:
   apps/react-example:
     dependencies:
       '@tma.js/sdk-react':
-        specifier: ^0.4.15
-        version: link:../../packages/sdk-react
+        specifier: 0.4.15
+        version: 0.4.15(@types/react@18.2.15)(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -151,28 +151,28 @@ importers:
   apps/solid-example:
     dependencies:
       '@solidjs/router':
-        specifier: ^0.8.3
+        specifier: 0.8.3
         version: 0.8.3(solid-js@1.7.6)
       '@tma.js/colors':
-        specifier: ^0.0.5
+        specifier: 0.0.5
         version: link:../../packages/colors
       '@tma.js/init-data':
-        specifier: ^0.2.19
-        version: link:../../packages/init-data
+        specifier: 0.2.19
+        version: 0.2.19
       '@tma.js/navigation':
-        specifier: ^0.0.11
+        specifier: 0.0.12
         version: link:../../packages/navigation
       '@tma.js/sdk':
-        specifier: ^0.12.7
-        version: link:../../packages/sdk
+        specifier: 0.12.7
+        version: 0.12.7
       '@tma.js/sdk-solid':
-        specifier: ^0.1.14
+        specifier: 0.1.15
         version: link:../../packages/sdk-solid
       '@tma.js/solid-router-integration':
-        specifier: ^0.0.1
+        specifier: 0.0.2
         version: link:../../packages/solid-router-integration
       solid-js:
-        specifier: ^1.7.6
+        specifier: 1.7.6
         version: 1.7.6
     devDependencies:
       eslint-config-airbnb-base:
@@ -2224,6 +2224,98 @@ packages:
       tslib: 2.6.2
     dev: false
 
+  /@tma.js/bridge@1.3.10:
+    resolution: {integrity: sha512-tr48T8vkX99yCKJIT5k/6+RrL6z0+G5s9o0mnGZzZ1ikasCNpMfEphvcu6YEAa7QSl8qwBFt2ed1ONFtcTClog==}
+    dependencies:
+      '@tma.js/colors': 0.0.5
+      '@tma.js/event-emitter': 0.1.0
+      '@tma.js/logger': 0.0.5
+      '@tma.js/parsing': 0.1.2
+      '@tma.js/util-types': 0.0.3
+      '@tma.js/utils': 0.5.5
+    dev: false
+
+  /@tma.js/colors@0.0.5:
+    resolution: {integrity: sha512-2O4Z/2TzSuhlJhuIvGZTN/qt+XFADU+gGFtKp5dCEkarR0XvV4cDOs5VQC/gJc0Cy0qElkUIBgPhTOnKSUgRPA==}
+    dev: false
+
+  /@tma.js/event-emitter@0.1.0:
+    resolution: {integrity: sha512-06ximJ22jovIhxezHimPQP/McBzGEDoxBHdvko9671GmWR8KctYz0MPNCU+dfRX/gchWRBhAnP5ZOdHo8YZywQ==}
+    dependencies:
+      '@tma.js/util-types': 0.0.3
+    dev: false
+
+  /@tma.js/init-data@0.2.19:
+    resolution: {integrity: sha512-rrYM2QrVnvndDlCe+pXzNChx8WLLDX9i89ASuskRte/oH5fGnzC/qpC4gIsc1vQn4IyzEoyoOzHZ1ElMTt8nqw==}
+    dependencies:
+      '@tma.js/parsing': 0.1.2
+    dev: false
+
+  /@tma.js/launch-params@0.0.5:
+    resolution: {integrity: sha512-l+6xTIOm4xbBFeoP6YSViQzEWJw+hEppf6j+9daGxtqLeBKTCUx1ccogjrIhVSiVeXyr8pD9c1Az5E/zYly4fA==}
+    dependencies:
+      '@tma.js/init-data': 0.2.19
+      '@tma.js/parsing': 0.1.2
+      '@tma.js/theme-params': 0.0.5
+    dev: false
+
+  /@tma.js/logger@0.0.5:
+    resolution: {integrity: sha512-9Nb1ODh27oJZ5XaajhLibu41elarRVuweEV8TTDmuOzLFL0C0fOlUu9FsETqor88+UOBKlKjvnbMnjMj/An9jw==}
+    dev: false
+
+  /@tma.js/parsing@0.1.2:
+    resolution: {integrity: sha512-ifKZAyRA1uT8PERwuSWRqu547lTcTzn/6j71w/fL29yeyhR/Bnt0jJ9R5tzlvacxc4j+lh8SvGzrcbnOhAwzYg==}
+    dependencies:
+      '@tma.js/colors': 0.0.5
+      '@tma.js/util-types': 0.0.3
+    dev: false
+
+  /@tma.js/sdk-react@0.4.15(@types/react@18.2.15)(react@18.2.0):
+    resolution: {integrity: sha512-HL0sGcLis2YNHL3arBNGv0sRJYRal2hp9AHw8CoiH4yN8/h5GDgibTqcSHPd6RbfxbqYD28tfhZWjTw/5aQepQ==}
+    peerDependencies:
+      '@types/react': ^17.0.0 || ^18.0.0
+      react: ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@tma.js/bridge': 1.3.10
+      '@tma.js/launch-params': 0.0.5
+      '@tma.js/sdk': 0.12.7
+      '@tma.js/theme-params': 0.0.5
+      '@types/react': 18.2.15
+      react: 18.2.0
+    dev: false
+
+  /@tma.js/sdk@0.12.7:
+    resolution: {integrity: sha512-WKrAkPoxf9+1ToZT02Rss30AegB2b6LOSWr3VsNB7n4mHlA3bjoy0Fw6dc4/1sAwmibAoGMJIAkghTwdeqCd7A==}
+    dependencies:
+      '@tma.js/bridge': 1.3.10
+      '@tma.js/colors': 0.0.5
+      '@tma.js/event-emitter': 0.1.0
+      '@tma.js/init-data': 0.2.19
+      '@tma.js/launch-params': 0.0.5
+      '@tma.js/parsing': 0.1.2
+      '@tma.js/theme-params': 0.0.5
+      '@tma.js/util-types': 0.0.3
+      '@tma.js/utils': 0.5.5
+    dev: false
+
+  /@tma.js/theme-params@0.0.5:
+    resolution: {integrity: sha512-BAhUc1fj7TraLFUO3Hi1nYKyXfBsLXZYvCxPG6hR2wlqjv1zHyrsjd+N+r3lVypEN8xvsMVXczzVqnFbiLfM4Q==}
+    dependencies:
+      '@tma.js/colors': 0.0.5
+      '@tma.js/parsing': 0.1.2
+    dev: false
+
+  /@tma.js/util-types@0.0.3:
+    resolution: {integrity: sha512-9hYutR7Ee4F3dgZlztTL31w8ljs3loRQ0pnzox0EG/Ey2CmbXTbLc9UIJuXzyKBiJKNJEoB3NNoAIy7mBaLRIQ==}
+    dev: false
+
+  /@tma.js/utils@0.5.5:
+    resolution: {integrity: sha512-YaOXviR/Cw8hVa2pLUveIjSCrw4AcKtA90jocwj0XVktS0vEpiKLEyL1K655TrRszPFu6s/F30GDkN4G2QBpmQ==}
+    dev: false
+
   /@tsconfig/node10@1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
     dev: true
@@ -2404,7 +2496,6 @@ packages:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
       csstype: 3.1.2
-    dev: true
 
   /@types/react@18.2.28:
     resolution: {integrity: sha512-ad4aa/RaaJS3hyGz0BGegdnSRXQBkd1CCYDCdNjBPg90UUpLgo+WlJqb9fMYUxtehmzF3PJaTWqRZjko6BRzBg==}
@@ -2424,7 +2515,6 @@ packages:
 
   /@types/scheduler@0.16.3:
     resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}
-    dev: true
 
   /@types/semver@7.5.0:
     resolution: {integrity: sha512-G8hZ6XJiHnuhQKR7ZmysCeJWE08o8T0AXtk5darsCaTVsYZhhgUrq53jizaR2FvsoeCwJhlmwTjkXBY5Pn/ZHw==}
