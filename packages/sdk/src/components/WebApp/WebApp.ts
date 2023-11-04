@@ -20,7 +20,7 @@ import type { ColorScheme } from '../../types.js';
 import type { WebAppEvents, WebAppHeaderColor, WebAppState } from './types.js';
 
 /**
- * Provides common Web Apps functionality not covered by other system
+ * Provides common Mini Apps functionality not covered by other system
  * components.
  */
 export class WebApp {
@@ -70,7 +70,7 @@ export class WebApp {
   }
 
   /**
-   * Closes the Web App.
+   * Closes the Mini App.
    */
   close(): void {
     this.postEvent('web_app_close');
@@ -85,7 +85,7 @@ export class WebApp {
 
   /**
    * Returns true if passed version is more than or equal to current
-   * Web App version.
+   * Mini App version.
    * @param version - compared version.
    */
   isVersionAtLeast(version: Version): boolean {
@@ -93,10 +93,10 @@ export class WebApp {
   }
 
   /**
-   * Opens a link in an external browser. The Web App will not be closed.
+   * Opens a link in an external browser. The Mini App will not be closed.
    *
    * Note that this method can be called only in response to the user
-   * interaction with the Web App interface (e.g. click inside the Web App
+   * interaction with the Mini App interface (e.g. click inside the Mini App
    * or on the main button).
    * @param url - URL to be opened.
    * @param tryInstantView
@@ -118,7 +118,7 @@ export class WebApp {
   }
 
   /**
-   * Opens a Telegram link inside Telegram app. The Web App will be closed.
+   * Opens a Telegram link inside Telegram app. The Mini App will be closed.
    * It expects passing link in full format, with hostname "t.me".
    * @param url - URL to be opened.
    * @throws {Error} URL has not allowed hostname.
@@ -179,18 +179,18 @@ export class WebApp {
   off = this.ee.off.bind(this.ee);
 
   /**
-   * Returns current Web App platform.
+   * Returns current Mini App platform.
    */
   get platform(): Platform {
     return this.currentPlatform;
   }
 
   /**
-   * Informs the Telegram app that the Web App is ready to be displayed.
+   * Informs the Telegram app that the Mini App is ready to be displayed.
    *
    * It is recommended to call this method as early as possible, as soon as
    * all essential interface elements loaded. Once this method called,
-   * the loading placeholder is hidden and the Web App shown.
+   * the loading placeholder is hidden and the Mini App shown.
    *
    * If the method not called, the placeholder will be hidden only when
    * the page fully loaded.
@@ -242,10 +242,10 @@ export class WebApp {
   /**
    * A method used to send data to the bot. When this method called, a
    * service message sent to the bot containing the data of the
-   * length up to 4096 bytes, and the Web App closed. See the field
+   * length up to 4096 bytes, and the Mini App closed. See the field
    * `web_app_data` in the class Message.
    *
-   * This method is only available for Web Apps launched via a Keyboard button.
+   * This method is only available for Mini Apps launched via a Keyboard button.
    * @param data - data to send to bot.
    * @throws {Error} data has incorrect size.
    */
@@ -302,7 +302,7 @@ export class WebApp {
   supportsParam: SupportsFunc<'setHeaderColor.color' | 'openLink.tryInstantView'>;
 
   /**
-   * Current Web App version. This property is used by other components to check if
+   * Current Mini App version. This property is used by other components to check if
    * some functionality is available on current device.
    */
   get version(): Version {

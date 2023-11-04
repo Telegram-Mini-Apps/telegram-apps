@@ -9,7 +9,7 @@ import type { MainButtonEventListener, MainButtonEvents, MainButtonState } from 
 
 /**
  * Controls the main button, which is displayed at the bottom
- * of the Web App in the Telegram interface.
+ * of the Mini App in the Telegram interface.
  */
 export class MainButton {
   private readonly ee = new EventEmitter<MainButtonEvents>();
@@ -175,8 +175,8 @@ export class MainButton {
   };
 
   /**
-   * Shows the button. Note that opening the Web App from the attachment
-   * menu hides the main button until the user interacts with the Web App
+   * Shows the button. Note that opening the Mini App from the attachment
+   * menu hides the main button until the user interacts with the Mini App
    * interface.
    *
    * Returns current button instance for chaining.

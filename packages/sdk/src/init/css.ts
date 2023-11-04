@@ -58,7 +58,7 @@ function createThemeVariables(themeParams: ThemeParams): void {
 }
 
 /**
- * Creates CSS variables based on Web App background and header colors with
+ * Creates CSS variables based on Mini App background and header colors with
  * theme parameters.
  * @param webApp - WebApp instance.
  * @param themeParams - theme parameters.

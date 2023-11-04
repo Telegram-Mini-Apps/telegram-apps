@@ -93,7 +93,7 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     setTargetOrigin(targetOrigin);
   }
 
-  // Get Web App launch params and save them to session storage, so they will be accessible from
+  // Get Mini App launch params and save them to session storage, so they will be accessible from
   // anywhere.
   const launchParamsFromStorage = retrieveFromStorage();
   const launchParams = optionsLaunchParams instanceof URLSearchParams || typeof optionsLaunchParams === 'string'

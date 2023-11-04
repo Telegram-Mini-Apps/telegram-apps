@@ -9,7 +9,7 @@ import { getStorageValue, saveStorageValue } from '../../storage.js';
  * Creates Viewport instance using last locally saved data also saving each state in
  * the storage.
  * @param isPageReload - was current page reloaded.
- * @param platform - Telegram Web Apps platform name.
+ * @param platform - Telegram Mini Apps platform name.
  * @param postEvent - Bridge postEvent function
  */
 export async function createViewport(
