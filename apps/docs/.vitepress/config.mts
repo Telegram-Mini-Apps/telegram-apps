@@ -73,7 +73,6 @@ export default defineConfig({
         text: 'Common information',
         items: [
           { text: 'About platform', link: '/about-platform' },
-          { text: 'Supported applications', link: '/supported-applications' },
           { text: 'Test environment', link: '/test-environment' },
         ],
       },
