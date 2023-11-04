@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 0.12.9
+
+### Patch Changes
+
+- 9d3956a: Fix the type of InitData.chatInstance property
+
 ## 0.12.8
 
 ### Patch Changes
