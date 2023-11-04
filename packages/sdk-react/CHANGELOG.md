@@ -1,5 +1,16 @@
 # @tma.js/sdk-react
 
+## 0.5.0
+
+### Minor Changes
+
+- 2978287: Add `useInitDataRaw` utility to retrieve init data raw representation.
+
+### Patch Changes
+
+- Updated dependencies [9d3956a]
+  - @tma.js/sdk@0.12.9
+
 ## 0.4.16
 
 ### Patch Changes
