@@ -112,8 +112,8 @@ supports('web_app_trigger_haptic_feedback', '6.1'); // true
 ```
 
 ::: tip
-It is recommended to use this function before calling Web Apps methods to prevent applications from
-stalling and other unexpected behavior.
+It is recommended to use this function before calling Telegram Mini Apps methods to prevent 
+applications from stalling and other unexpected behavior.
 :::
 
 ## Debugging

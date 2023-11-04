@@ -7,7 +7,7 @@
 ![[npm-link]][npm-shield]
 
 React bindings for the [client SDK](tma-js-sdk/about.md). It includes hooks, components, and other
-useful tools that enable the use of React alongside the Web Apps client SDK. It automatically tracks
+useful tools that enable the use of React alongside the Mini Apps client SDK. It automatically tracks
 changes to SDK components.
 
 ## Installation

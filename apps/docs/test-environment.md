@@ -1,9 +1,9 @@
 # Test environment
 
 Telegram provides the special environment for development with some specific features. For example,
-a developer will be allowed to create a new Telegram bot and specify a Web Apps link with `http`
+a developer will be allowed to create a new Telegram bot and specify a Mini Apps link with `http`
 protocol or even IP. As opposed to the test environment, in production, a developer is only allowed
-to specify links with `https` protocol. That's why this step is important during the Web App
+to specify links with `https` protocol. That's why this step is important during the Mini App
 development process.
 
 ::: info

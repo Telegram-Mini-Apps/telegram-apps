@@ -11,7 +11,7 @@ Unique identifier for this chat.
 Type: `string`, _optional_
 
 URL of the chat’s photo. The photo can be in .jpeg or .svg formats.
-Only returned for Web Apps launched from the attachment menu.
+Only returned for Mini Apps launched from the attachment menu.
 
 ### `type`
 
