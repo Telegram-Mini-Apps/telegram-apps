@@ -14,7 +14,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "build": "vite build --ssr --outDir dist",
-    "rollup": "pnpm run typecheck && pnpm run build"
+    "validate": "pnpm run typecheck && pnpm run build"
   },
   "publishConfig": {
     "access": "public"

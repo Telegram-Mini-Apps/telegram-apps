@@ -32,8 +32,7 @@
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
-    "build": "vite build",
-    "rollup": "pnpm run typecheck && pnpm run build"
+    "build": "vite build"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",

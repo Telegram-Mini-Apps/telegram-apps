@@ -41,8 +41,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "build": "pnpm run build:default && pnpm run build:iife",
     "build:default": "vite build --config vite.config.ts",
-    "build:iife": "vite build --config vite.iife.config.ts",
-    "rollup": "pnpm run typecheck && pnpm run build"
+    "build:iife": "vite build --config vite.iife.config.ts"
   },
   "dependencies": {
     "@tma.js/colors": "workspace:*",
