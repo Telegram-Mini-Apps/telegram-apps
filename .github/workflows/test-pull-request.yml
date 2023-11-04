@@ -1,4 +1,4 @@
-name: Test Pull Request
+name: Test pull request
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   validate:
-    name: Validate packages
+    name: Test pull request
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -28,14 +28,17 @@ jobs:
           version: 7
           run_install: false
 
-      - name: Install dependencies
-        run: pnpm i
-
-      - name: Build packages
-        run: pnpm run packages:rollup
-
-      - name: Test packages
-        run: pnpm run packages:test
+      - name: Install packages dependencies only
+        run: pnpm run ci:packages:install-deps
 
       - name: Lint packages
-        run: pnpm run packages:lint
+        run: pnpm run ci:packages:lint
+
+      - name: Check packages types
+        run: pnpm run ci:packages:typecheck
+
+      - name: Build packages
+        run: pnpm run ci:packages:build
+
+      - name: Test packages
+        run: pnpm run ci:packages:test

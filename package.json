@@ -1,15 +1,20 @@
 {
   "private": true,
   "scripts": {
+    "ci:docs:build": "pnpm run docs:build",
+    "ci:packages:build": "pnpm run packages:build",
+    "ci:packages:install-deps": "pnpm i --filter {packages/*}",
+    "ci:packages:lint": "pnpm run packages:lint",
+    "ci:packages:test": "vitest --run",
+    "ci:packages:typecheck": "pnpm run packages:typecheck",
     "commit": "git cz",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
     "docs:build": "turbo run build --filter=\"./apps/docs\"",
+    "lint": "turbo run lint",
     "packages:build": "turbo run build --filter=\"./packages/*\"",
-    "packages:rollup": "turbo run rollup --filter=\"./packages/*\"",
-    "packages:typecheck": "turbo run typecheck --filter=\"./packages/*\"",
+    "packages:lint": "turbo run lint --filter=\"./packages/*\"",
     "packages:test": "vitest",
-    "packages:lint": "turbo run lint --filter=\"./packages/*\""
+    "packages:typecheck": "turbo run typecheck --filter=\"./packages/*\""
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",

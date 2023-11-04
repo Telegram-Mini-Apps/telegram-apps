@@ -39,8 +39,7 @@
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
-    "build": "vite build",
-    "rollup": "pnpm run typecheck && pnpm run build"
+    "build": "vite build"
   },
   "peerDependencies": {
     "@types/react": "^17.0.0 || ^18.0.0",
