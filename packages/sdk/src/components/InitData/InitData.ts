@@ -90,7 +90,7 @@ export class InitData {
    * A global identifier indicating the chat from which Mini App was opened. Returned only for
    * applications opened by direct link.
    */
-  get chatInstance(): ChatType | null {
+  get chatInstance(): string | null {
     return this.state.get('chatInstance');
   }
 
