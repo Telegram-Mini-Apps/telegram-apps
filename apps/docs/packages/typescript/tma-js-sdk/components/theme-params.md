@@ -1,12 +1,16 @@
 # `ThemeParams`
 
-The component which contains an information about currently used theme by the application. There is more information about this component in this [documentation](../../../ui/theme-params.mdx).
+The component which contains an information about currently
+used [theme](../../../../functionality/theming.md) by the Telegram application.
 
 ## Initialization
 
+Component constructor accepts an object with where each key describes the palette key and
+value specifies its color.
+
 ```typescript  
 import { ThemeParams } from '@tma.js/sdk';
-  
+
 const themeParams = new ThemeParams({
   backgroundColor: '#ffaabb',
   buttonColor: '#113222',
@@ -33,7 +37,8 @@ ThemeParams.request().then(console.log);
 
 ## Creating synchronized instance
 
-The `ThemeParams` is capable of returning an instance of `ThemeParams` which is synchronized with its actual state in the Telegram application. To get it, use static the `synced()` method:
+The `ThemeParams` is capable of returning an instance of `ThemeParams` which is synchronized with
+its actual state in the Telegram application. To get it, use static the `synced()` method:
 
 ```typescript
 import { ThemeParams } from '@tma.js/sdk';
@@ -41,7 +46,8 @@ import { ThemeParams } from '@tma.js/sdk';
 const themeParams = await ThemeParams.synced();
 ```
 
-Synchronized instance contains actual parameters values. It also being updated in case, parameters are changing in the native Telegram application.
+Synchronized instance contains actual parameters values. It is also being updated in case,
+parameters are changing in the native Telegram application.
 
 ## Colors
 
@@ -57,4 +63,6 @@ List of colors, provided by `ThemeParams`:
 
 ## Events
 
-<ComponentSupportedEvents events={{ changed: '() => void' }} />
+List of events, which could be used in `on` and `off` component instance methods:
+
+- `changed: () => void`

@@ -141,6 +141,53 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: 'About', link: '/packages/typescript/tma-js-sdk/about' },
+                  {
+                    text: 'Components',
+                    collapsed: true,
+                    items: [
+                      {
+                        text: 'BackButton',
+                        link: '/packages/typescript/tma-js-sdk/components/back-button',
+                      },
+                      {
+                        text: 'ClosingBehavior',
+                        link: '/packages/typescript/tma-js-sdk/components/closing-behaviour',
+                      },
+                      {
+                        text: 'HapticFeedback',
+                        link: '/packages/typescript/tma-js-sdk/components/haptic-feedback',
+                      },
+                      {
+                        text: 'InitData',
+                        link: '/packages/typescript/tma-js-sdk/components/init-data',
+                      },
+                      {
+                        text: 'MainButton',
+                        link: '/packages/typescript/tma-js-sdk/components/main-button',
+                      },
+                      {
+                        text: 'Popup',
+                        link: '/packages/typescript/tma-js-sdk/components/popup',
+                      },
+                      {
+                        text: 'QRScanner',
+                        link: '/packages/typescript/tma-js-sdk/components/qr-scanner',
+                      },
+                      {
+                        text: 'ThemeParams',
+                        link: '/packages/typescript/tma-js-sdk/components/theme-params',
+                      },
+                      {
+                        text: 'Viewport',
+                        link: '/packages/typescript/tma-js-sdk/components/viewport',
+                      },
+                      // TODO: Rename?
+                      {
+                        text: 'WebApp',
+                        link: '/packages/typescript/tma-js-sdk/components/web-app',
+                      },
+                    ],
+                  },
                 ],
               },
               { text: '@tma.js/sdk-react', link: '/packages/typescript/tma-js-sdk-react' },
