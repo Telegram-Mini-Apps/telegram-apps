@@ -4,7 +4,7 @@
 
 [code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/solid-router-integration
 
-[docs-link]: https://docs.telegram-mini-apps.com/docs/libraries/tma-js-solid-router-integration
+[docs-link]: https://docs.telegram-mini-apps.com/packages/typescript/tma-js-solid-router-integration
 
 [docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
 
@@ -21,4 +21,5 @@
 
 [@solidjs/router](https://www.npmjs.com/package/@solidjs/router) integration for navigation.
 
-This library is a part of TypeScript packages ecosystem around Telegram Web Apps. You can learn more about this package in this [documentation](https://docs.telegram-mini-apps.com/docs/libraries/tma-js-solid-router-integration).
+This library is a part of TypeScript packages ecosystem around Telegram Mini Apps. You can learn more
+about this package in this [documentation][docs-link].

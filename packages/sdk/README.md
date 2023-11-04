@@ -4,7 +4,7 @@
 
 [code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk
 
-[docs-link]: https://docs.telegram-mini-apps.com/docs/libraries/tma-js-sdk
+[docs-link]: https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk/about
 
 [docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
 
@@ -26,4 +26,4 @@ functionality.
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
 Apps. You can learn more about this package in this
-[documentation](https://docs.telegram-mini-apps.com/docs/libraries/tma-js-sdk/about).
+[documentation][docs-link].

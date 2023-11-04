@@ -4,7 +4,7 @@
 
 [code-badge]: https://img.shields.io/badge/source-black?logo=github
 
-[docs-link]: https://docs.telegram-mini-apps.com/docs/libraries/tma-js-init-data
+[docs-link]: https://docs.telegram-mini-apps.com/packages/typescript/tma-js-init-data/about
 
 [docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
 
@@ -25,4 +25,4 @@ allows init data parsing, works in browser only.
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
 Apps. You can learn more about this package in this
-[documentation](https://docs.telegram-mini-apps.com/docs/libraries/tma-js-init-data).
+[documentation][docs-link].

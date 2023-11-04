@@ -4,7 +4,7 @@
 
 [code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/init-data-node
 
-[docs-link]: https://docs.telegram-mini-apps.com/docs/libraries/tma-js-init-data-node
+[docs-link]: https://docs.telegram-mini-apps.com/packages/typescript/tma-js-init-data-node
 
 [docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
 
@@ -24,4 +24,4 @@ allows init data validation and parsing, works in NodeJS.
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
 Apps. You can learn more about this package in this
-[documentation](https://docs.telegram-mini-apps.com/docs/libraries/tma-js-init-data-node).
+[documentation][docs-link].

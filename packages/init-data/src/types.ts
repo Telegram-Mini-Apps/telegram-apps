@@ -10,8 +10,7 @@ export type ChatType =
   | string;
 
 /**
- * Describes user information.
- * @see https://docs.telegram-mini-apps.com/docs/launch-params/init-data#user
+ * Describes Telegram Mini Apps [User](https://docs.telegram-mini-apps.com/launch-parameters/init-data#user) type.
  */
 export interface User {
   /**
@@ -70,8 +69,7 @@ export interface User {
 }
 
 /**
- * Describes chat information.
- * @see https://docs.telegram-mini-apps.com/docs/launch-params/init-data#chat
+ * Describes Telegram Mini Apps [Chat](https://docs.telegram-mini-apps.com/launch-parameters/init-data#chat) type.
  */
 export interface Chat {
   /**
@@ -102,8 +100,8 @@ export interface Chat {
 }
 
 /**
- * Describes parsed initial data sent from Web App.
- * @see https://docs.telegram-mini-apps.com/docs/launch-params/init-data#parameters-list
+ * Describes Telegram Mini Apps [InitData](https://docs.telegram-mini-apps.com/launch-parameters/init-data#parameters-list)
+ * type.
  */
 export interface InitData {
   /**
