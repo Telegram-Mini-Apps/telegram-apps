@@ -33,6 +33,7 @@ describe('launch-params.ts', () => {
           authDate: new Date(1691441944000),
           hash: 'a867b5c7c9944dee3890edffd8cd89244eeec7a3d145f1681',
           user: {
+            allowsWriteToPm: true,
             id: 279058397,
             firstName: 'Vladislav',
             lastName: 'Kibenko',
@@ -75,6 +76,7 @@ describe('launch-params.ts', () => {
           authDate: new Date(1691441944000),
           hash: 'a867b5c7c9944dee3890edffd8cd89244eeec7a3d145f1681',
           user: {
+            allowsWriteToPm: true,
             id: 279058397,
             firstName: 'Vladislav',
             lastName: 'Kibenko',
