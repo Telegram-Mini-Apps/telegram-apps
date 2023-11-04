@@ -29,13 +29,6 @@ jobs:
           version: 7
           run_install: false
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        id: pnpm-install
-        with:
-          version: 7
-          run_install: false
-
       - name: Install packages dependencies only
         run: pnpm run ci:packages:install-deps
 
