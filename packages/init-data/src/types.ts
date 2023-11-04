@@ -50,15 +50,14 @@ export interface User {
   lastName?: string;
 
   /**
-   * IETF language tag of the user's language. Returns in user field only.
-   * TODO: Specify expected values.
-   * @see https://en.wikipedia.org/wiki/IETF_language_tag
+   * [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) of the user's language.
+   * Returns in user field only.
    */
   languageCode?: string;
 
   /**
    * URL of the user’s profile photo. The photo can be in .jpeg or .svg
-   * formats. Only returned for Web Apps launched from the attachment menu.
+   * formats. Only returned for Mini Apps launched from the attachment menu.
    */
   photoUrl?: string;
 
@@ -79,7 +78,7 @@ export interface Chat {
 
   /**
    * URL of the chat’s photo. The photo can be in .jpeg or .svg formats.
-   * Only returned for Web Apps launched from the attachment menu.
+   * Only returned for Mini Apps launched from the attachment menu.
    */
   photoUrl?: string;
 
@@ -110,15 +109,14 @@ export interface InitData {
   authDate: Date;
 
   /**
-   * The number of seconds after which a message can be sent via the method answerWebAppQuery.
-   * @see https://core.telegram.org/bots/api#answerwebappquery
+   * The number of seconds after which a message can be sent via the method [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery).
    */
   canSendAfter?: number;
 
   /**
    * An object containing data about the chat where the bot was launched via
    * the attachment menu. Returned for supergroups, channels and group
-   * chats – only for Web Apps launched via the attachment menu.
+   * chats – only for Mini Apps launched via the attachment menu.
    */
   chat?: Chat;
 
@@ -135,31 +133,27 @@ export interface InitData {
 
   /**
    * A hash of all passed parameters, which the bot server can use to
-   * check their validity.
-   *
-   * @see https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app
+   * check their [validity](https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app).
    */
   hash: string;
 
   /**
-   * A unique identifier for the Web App session, required for sending
-   * messages via the answerWebAppQuery method.
-   *
-   * @see https://core.telegram.org/bots/api#answerwebappquery
+   * A unique identifier for the Mini App session, required for sending
+   * messages via the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) method.
    */
   queryId?: string;
 
   /**
    * An object containing data about the chat partner of the current user in
    * the chat where the bot was launched via the attachment menu.
-   * Returned only for private chats and only for Web Apps launched
+   * Returned only for private chats and only for Mini Apps launched
    * via the attachment menu.
    */
   receiver?: User;
 
   /**
-   * The value of the startattach parameter, passed via link. Only returned for
-   * Web Apps when launched from the attachment menu via link.
+   * The value of the `startattach` parameter, passed via link. Only returned for
+   * Mini Apps when launched from the attachment menu via link.
    */
   startParam?: string;
 
