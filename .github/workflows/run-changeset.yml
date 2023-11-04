@@ -32,14 +32,14 @@ jobs:
       - name: Install packages dependencies only
         run: pnpm run ci:packages:install-deps
 
+      - name: Build packages
+        run: pnpm run ci:packages:build
+
       - name: Lint packages
         run: pnpm run ci:packages:lint
 
       - name: Check packages types
         run: pnpm run ci:packages:typecheck
-
-      - name: Build packages
-        run: pnpm run ci:packages:build
 
       - name: Test packages
         run: pnpm run ci:packages:test
