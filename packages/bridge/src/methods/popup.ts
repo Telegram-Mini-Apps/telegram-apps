@@ -1,6 +1,5 @@
 /**
  * Describes the native popup.
- * @see https://core.telegram.org/bots/webapps#popupparams
  */
 export interface PopupParams {
   /**
@@ -21,35 +20,34 @@ export interface PopupParams {
 
 /**
  * Describes the native popup button.
- * @see https://core.telegram.org/bots/webapps#popupbutton
+ * @see https://docs.telegram-mini-apps.com/apps-communication/methods#popupbutton
  */
 export type PopupButton = {
   /**
    * Identifier of the button, 0-64 characters.
    */
   id: string;
-} & (
-  {
-    /**
-     * Type of the button:
-     * - `default`, a button with the default style;
-     * - `destructive`, a button with a style that indicates a destructive
-     * action (e.g. "Remove", "Delete", etc.).
-     *
-     * @default "default"
-     */
-    type?: 'default' | 'destructive';
+} & ({
+  /**
+   * Type of the button:
+   * - `default`, a button with the default style;
+   * - `destructive`, a button with a style that indicates a destructive
+   * action (e.g. "Remove", "Delete", etc.).
+   *
+   * @default "default"
+   */
+  type?: 'default' | 'destructive';
 
-    /**
-     * The text to be displayed on the button, 0-64 characters.
-     */
-    text: string;
-  } | {
+  /**
+   * The text to be displayed on the button, 0-64 characters.
+   */
+  text: string;
+} | {
   /**
    * Type of the button:
    * - `ok`, a button with the localized text "OK";
    * - `close`, a button with the localized text "Close";
    * - `cancel`, a button with the localized text "Cancel".
    */
-    type: 'ok' | 'close' | 'cancel';
-  });
+  type: 'ok' | 'close' | 'cancel';
+});

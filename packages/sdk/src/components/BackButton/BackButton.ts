@@ -10,7 +10,7 @@ import type { BackButtonEvents, BackButtonState, BackButtonEventListener } from 
 
 /**
  * Class which controls the back button displayed in the header
- * of the Web App in the Telegram interface. It is mostly used in case, when
+ * of the Mini App in the Telegram interface. It is mostly used in case, when
  * you want to provide a way to go bach in routing history or "rollback" some
  * action.
  */

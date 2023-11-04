@@ -28,7 +28,7 @@ export class ClosingBehaviour {
 
   /**
    * Returns true, if the confirmation dialog enabled while the user is trying
-   * to close the Web App.
+   * to close the Mini App.
    */
   get isConfirmationNeeded(): boolean {
     return this.state.get('isConfirmationNeeded');
@@ -36,7 +36,7 @@ export class ClosingBehaviour {
 
   /**
    * Disables the confirmation dialog while the user is trying to close the
-   * Web App.
+   * Mini App.
    */
   disableConfirmation(): void {
     this.isConfirmationNeeded = false;
@@ -44,7 +44,7 @@ export class ClosingBehaviour {
 
   /**
    * Enables the confirmation dialog while the user is trying to close the
-   * Web App.
+   * Mini App.
    */
   enableConfirmation(): void {
     this.isConfirmationNeeded = true;

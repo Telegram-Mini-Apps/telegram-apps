@@ -14,7 +14,7 @@ import type { CreateRequestIdFunc } from '../../types.js';
  * @param isPageReload - was current page reloaded.
  * @param backgroundColor - web app background color.
  * @param version - platform version.
- * @param platform - Telegram Web Apps platform name.
+ * @param platform - Telegram Mini Apps platform name.
  * @param createRequestId - function which generates request identifiers.
  * @param postEvent - Bridge postEvent function
  */

@@ -89,6 +89,8 @@ export function supports(
     case 'web_app_open_scan_qr_popup':
     case 'web_app_read_text_from_clipboard':
       return lessOrEqual('6.4', paramOrVersion);
+    case 'web_app_switch_inline_query':
+      return lessOrEqual('6.7', paramOrVersion);
     case 'web_app_invoke_custom_method':
     case 'web_app_request_write_access':
     case 'web_app_request_phone':

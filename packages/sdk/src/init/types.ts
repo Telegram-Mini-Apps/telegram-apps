@@ -83,7 +83,7 @@ export interface InitOptions {
 
   /**
    * Should SDK throw an error in case, unsupported by current version of
-   * Web App method was called. It is highly recommended not to disable this
+   * Mini App method was called. It is highly recommended not to disable this
    * feature as long as it helps developer to find issues related to usage
    * of unsupported methods.
    *

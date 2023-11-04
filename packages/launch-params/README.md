@@ -6,13 +6,14 @@
 
 [size-badge]: https://img.shields.io/bundlephobia/minzip/@tma.js/launch-params
 
-[![NPM][npm-badge]][npm-link] 
+[![NPM][npm-badge]][npm-link]
 ![Size][size-badge]
 
-Package which contains utilities to work with Telegram Mini Apps [launch parameters](https://docs.telegram-mini-apps.com/docs/launch-params/about).
+Package which contains utilities to work with Telegram Mini
+Apps [launch parameters](https://docs.telegram-mini-apps.com/launch-parameters/common-information).
 
-This library is a part of TypeScript packages ecosystem around Telegram Web 
-Apps. To see full documentation and other libraries, please, visit 
+This library is a part of TypeScript packages ecosystem around Telegram Web
+Apps. To see full documentation and other libraries, please, visit
 [this](https://docs.telegram-mini-apps.com/) link.
 
 ## Installation

@@ -25,7 +25,7 @@ interface PostEventOptions {
 export type PostEvent = typeof postEvent;
 
 /**
- * Sends event to native application which launched Web App. This function
+ * Sends event to native application which launched Mini App. This function
  * accepts only events, which require arguments.
  * @param eventType - event name.
  * @param params - event parameters.
@@ -40,7 +40,7 @@ export function postEvent<E extends NonEmptyMethodName>(
 ): void;
 
 /**
- * Sends event to native application which launched Web App. This function
+ * Sends event to native application which launched Mini App. This function
  * accepts only events, which require arguments.
  * @param eventType - event name.
  * @param options - posting options.

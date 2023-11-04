@@ -72,7 +72,7 @@ export class Viewport {
 
   /**
    * Returns initialized instance of Viewport which is synchronized with
-   * its actual state in Web Apps.
+   * its actual state in Mini Apps.
    * @param options - method options.
    */
   static async synced(options: RequestOptions = {}): Promise<Viewport> {
@@ -104,12 +104,12 @@ export class Viewport {
   }
 
   /**
-   * The current height of the visible area of the Web App.
+   * The current height of the visible area of the Mini App.
    *
-   * The application can display just the top part of the Web App, with its
+   * The application can display just the top part of the Mini App, with its
    * lower part remaining outside the screen area. From this position, the
-   * user can "pull" the Web App to its maximum height, while the bot can do
-   * the same by calling `expand` method. As the position of the Web App
+   * user can "pull" the Mini App to its maximum height, while the bot can do
+   * the same by calling `expand` method. As the position of the Mini App
    * changes, the current height value of the visible area will be updated
    * in real time.
    *
@@ -128,18 +128,18 @@ export class Viewport {
   }
 
   /**
-   * The height of the visible area of the Web App in its last stable state.
+   * The height of the visible area of the Mini App in its last stable state.
    *
-   * The application can display just the top part of the Web App, with its
+   * The application can display just the top part of the Mini App, with its
    * lower part remaining outside the screen area. From this position,
-   * the user can "pull" the Web App to its maximum height, while the bot can
+   * the user can "pull" the Mini App to its maximum height, while the bot can
    * do the same by calling `expand` method.
    *
    * Unlike the value of `height`, the value of `stableHeight`
-   * does not change as the position of the Web App changes with user
+   * does not change as the position of the Mini App changes with user
    * gestures or during animations. The value of `stableHeight`
    * will be updated after all gestures and animations are completed and
-   * the Web App reaches its final size.
+   * the Mini App reaches its final size.
    *
    * @see init
    * @see expand
@@ -150,8 +150,8 @@ export class Viewport {
   }
 
   /**
-   * Returns true if the Web App is expanded to the maximum available height.
-   * Otherwise, if the Web App occupies part of the screen and can be expanded
+   * Returns true if the Mini App is expanded to the maximum available height.
+   * Otherwise, if the Mini App occupies part of the screen and can be expanded
    * to the full height using `expand` method.
    * @see expand
    */
@@ -167,8 +167,8 @@ export class Viewport {
   }
 
   /**
-   * A method that expands the Web App to the maximum available height. To
-   * find out if the Web App is expanded to the maximum height, refer to the
+   * A method that expands the Mini App to the maximum available height. To
+   * find out if the Mini App is expanded to the maximum height, refer to the
    * value of the `isExpanded`.
    * @see isExpanded
    */

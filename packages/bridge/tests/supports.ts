@@ -54,6 +54,7 @@ describe('supports.ts', () => {
         'web_app_read_text_from_clipboard', 'web_app_close_scan_qr_popup',
         'web_app_close_scan_qr_popup', ['web_app_open_link', 'try_instant_view'],
       ]],
+      ['6.7', ['web_app_switch_inline_query']],
       ['6.9', [
         'web_app_invoke_custom_method', 'web_app_request_write_access', 'web_app_request_phone',
         ['web_app_set_header_color', 'color'],

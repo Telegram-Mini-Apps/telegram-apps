@@ -19,7 +19,7 @@ type InitDataState = {
 };
 
 /**
- * Class which is responsible for displaying Web Apps init data.
+ * Class which is responsible for displaying Mini Apps init data.
  */
 export class InitData {
   private readonly state: State<InitDataState>;
@@ -63,18 +63,17 @@ export class InitData {
   }
 
   /**
-   * Date after which a message can be sent via the answerWebAppQuery
-   * method.
-   * @see https://core.telegram.org/bots/api#answerwebappquery
+   * Date after which a message can be sent via the
+   * [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) method.
    */
   get canSendAfter(): Date | null {
     return this.state.get('canSendAfter');
   }
 
   /**
-   * An object containing data about the chat where the bot was
-   * launched via the attachment menu. Returned for supergroups, channels and
-   * group chats – only for Web Apps launched via the attachment menu.
+   * An object containing data about the chat where the bot was launched via the attachment
+   * menu. Returned for supergroups, channels and group chats – only for Mini Apps launched via
+   * the attachment menu.
    */
   get chat(): Chat | null {
     return this.state.get('chat');
@@ -88,8 +87,8 @@ export class InitData {
   }
 
   /**
-   * A global identifier indicating the chat from which Mini App was
-   * opened. Returned only for applications opened by direct link.
+   * A global identifier indicating the chat from which Mini App was opened. Returned only for
+   * applications opened by direct link.
    */
   get chatInstance(): ChatType | null {
     return this.state.get('chatInstance');
@@ -105,7 +104,7 @@ export class InitData {
   }
 
   /**
-   * A unique identifier for the Web App session, required for sending
+   * A unique identifier for the Mini App session, required for sending
    * messages via the `answerWebAppQuery` method.
    * @see https://core.telegram.org/bots/api#answerwebappquery
    */
@@ -116,7 +115,7 @@ export class InitData {
   /**
    * An object containing data about the chat partner of the current
    * user in the chat where the bot was launched via the attachment menu.
-   * Returned only for private chats and only for Web Apps launched
+   * Returned only for private chats and only for Mini Apps launched
    * via the attachment menu.
    */
   get receiver(): User | null {
@@ -125,7 +124,7 @@ export class InitData {
 
   /**
    * The value of the `startattach` parameter, passed via link. Only
-   * returned for Web Apps when launched from the attachment menu via link.
+   * returned for Mini Apps when launched from the attachment menu via link.
    */
   get startParam(): string | null {
     return this.state.get('startParam');
