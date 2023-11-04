@@ -67,7 +67,7 @@ const initData = new URLSearchParams(params.get('tgWebAppData'));
 
 ### `tgWebAppPlatform`
 
-[Telegram application identifier](../supported-applications.md). It can be used as a factor
+[Telegram application identifier](../about-platform.md#supported-applications). It can be used as a factor
 determining the visual style of the application, for example, when, depending on the device, the
 developer needs to display components that are different visually.
 

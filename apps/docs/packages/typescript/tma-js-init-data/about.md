@@ -36,7 +36,7 @@ from query parameters. Here is an example of its usage:
 ```typescript
 import { parse } from '@tma.js/init-data';
 
-// Let's imagine, we have init data in a raw format like this. Web Apps are
+// Let's imagine, we have init data in a raw format like this. Telegram application is
 // sending it in the exact same format.
 const initDataString =
   'query_id=AAHdF6IQAAAAAN0XohDhrOrc' +

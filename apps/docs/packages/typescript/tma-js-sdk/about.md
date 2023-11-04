@@ -20,6 +20,7 @@ platform.
 ## Installation
 
 ::: code-group
+
 ```bash [pnpm]
 pnpm i @tma.js/sdk
 ```
@@ -31,6 +32,7 @@ npm i @tma.js/sdk
 ```bash [yarn]
 yarn add @tma.js/sdk
 ```
+
 :::
 
 ## Initialization
@@ -114,7 +116,7 @@ more about this option, please refer to the [documentation](../tma-js-bridge.md#
 
 #### `timeout: number`
 
-*Default: 1000*
+Default: _1000_
 
 The duration, in milliseconds, in which initialization should be completed. If the timeout is
 reached, an error will be thrown.
@@ -156,24 +158,7 @@ console.log(retrieveLaunchParams());
 This function needs no SDK initialization or something like that. It attempts to extract the launch
 parameters from the `window.location`. In case, they are invalid or missing, the function will try
 to extract these parameters from the `sessionStorage`. This function is safe to be used when a user
-reloads Web App via the `Reload Page` application button.
-
-## Detecting current environment
-
-Sometimes, it can be useful to check if the current environment is Telegram Mini Apps. To determine
-whether an application is running in Telegram Mini Apps, a developer could utilize the `isTWA`
-function:
-
-```typescript
-import { isTWA } from '@tma.js/sdk';
-
-console.log(isTWA()); // true or false
-```
-
-::: info
-`isTWA` utilizes `retrieveLaunchParams` function which attempts to extract the current launch
-parameters.
-:::
+reloads Mini App via the `Reload Page` application button.
 
 ## Components
 

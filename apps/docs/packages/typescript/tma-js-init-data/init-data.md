@@ -15,7 +15,7 @@ method [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery)
 
 ### `chat`
 
-Type: [Chat](chat.md), _optional_
+Type: [`Chat`](chat.md), _optional_
 
 An object containing data about the chat where the bot was launched via
 the attachment menu. Returned for supergroups, channels and group
@@ -50,7 +50,7 @@ messages via the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwe
 
 ### `receiver`
 
-Type: [User](user.md), _optional_
+Type: [`User`](user.md), _optional_
 
 An object containing data about the chat partner of the current user in
 the chat where the bot was launched via the attachment menu.
@@ -66,6 +66,6 @@ Mini Apps when launched from the attachment menu via link.
 
 ### `user`
 
-Type: [User](user.md), _optional_
+Type: [`User`](user.md), _optional_
 
 An object containing data about the current user.

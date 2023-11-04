@@ -94,13 +94,11 @@ If this algorithm is successful, the server part of the application can trust th
 initialization data.
 
 ::: tip
-
 In real-world applications, it is recommended to use additional mechanisms for verifying
 initialization data. For example, add their expiration date. This check can be implemented using
 the `auth_date` parameter, which is responsible for the date when the parameters were created. This
 solution will allow in case of theft of initialization data to prevent their constant use by an
 attacker.
-
 :::
 
 ## Parameters list
