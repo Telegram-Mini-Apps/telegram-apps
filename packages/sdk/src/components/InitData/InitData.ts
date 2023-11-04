@@ -63,9 +63,8 @@ export class InitData {
   }
 
   /**
-   * Date after which a message can be sent via the answerWebAppQuery
-   * method.
-   * @see https://core.telegram.org/bots/api#answerwebappquery
+   * Date after which a message can be sent via the
+   * [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) method.
    */
   get canSendAfter(): Date | null {
     return this.state.get('canSendAfter');
@@ -88,8 +87,8 @@ export class InitData {
   }
 
   /**
-   * A global identifier indicating the chat from which Mini App was
-   * opened. Returned only for applications opened by direct link.
+   * A global identifier indicating the chat from which Mini App was opened. Returned only for
+   * applications opened by direct link.
    */
   get chatInstance(): ChatType | null {
     return this.state.get('chatInstance');
