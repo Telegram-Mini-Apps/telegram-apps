@@ -1,5 +1,5 @@
 /**
- * Web App version in format like "\d+.\d+".
+ * Telegram Mini Apps version in format like "\d+.\d+".
  */
 export type Version = string;
 

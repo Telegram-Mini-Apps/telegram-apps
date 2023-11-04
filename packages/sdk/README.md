@@ -19,7 +19,7 @@
 [![docs-badge]][docs-link]
 [![code-badge]][code-link]
 
-Made from scratch production-ready TypeScript Telegram Web Apps
+Made from scratch production-ready TypeScript Telegram Mini Apps
 Source Development Kit. It includes all features provided
 by other packages extending them with intuitively clear
 functionality.

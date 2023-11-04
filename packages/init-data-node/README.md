@@ -19,7 +19,7 @@
 [![docs-badge]][docs-link]
 [![code-badge]][code-link]
 
-Package providing utilities connected with Telegram Web Apps init data. It
+Package providing utilities connected with Telegram Mini Apps init data. It
 allows init data validation and parsing, works in NodeJS.
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
