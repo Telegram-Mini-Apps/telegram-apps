@@ -17,7 +17,8 @@ export type Platform =
   | string;
 
 /**
- * Mini App basic launch parameters.
+ * Telegram Mini Apps launch parameters.
+ * @see https://docs.telegram-mini-apps.com/launch-parameters/common-information
  */
 export interface LaunchParams {
   /**
