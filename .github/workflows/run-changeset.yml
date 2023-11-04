@@ -1,4 +1,4 @@
-name: Create release pull request
+name: Run changeset
 
 on:
   workflow_dispatch:
@@ -9,8 +9,8 @@ on:
       - ".changeset/**.md"
 
 jobs:
-  validate:
-    name: Validate and create Pull Request
+  run-changeset:
+    name: Run changeset
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -29,19 +29,29 @@ jobs:
           version: 7
           run_install: false
 
-      - name: Install dependencies
-        run: pnpm i
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
 
-      - name: Build packages
-        run: pnpm run packages:rollup
-
-      - name: Test packages
-        run: pnpm run packages:test
+      - name: Install packages dependencies only
+        run: pnpm run ci:packages:install-deps
 
       - name: Lint packages
-        run: pnpm run packages:lint
+        run: pnpm run ci:packages:lint
 
-      - name: Create version pull request
+      - name: Check packages types
+        run: pnpm run ci:packages:typecheck
+
+      - name: Build packages
+        run: pnpm run ci:packages:build
+
+      - name: Test packages
+        run: pnpm run ci:packages:test
+
+      - name: Run changeset
         uses: changesets/action@v1
         with:
           publish: pnpm changeset publish
