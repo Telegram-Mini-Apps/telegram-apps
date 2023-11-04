@@ -13,9 +13,8 @@ The code of this library is designed to simplify the process of developers inter
 Mini Apps. It consists of several individual components, each responsible for a specific aspect of
 the Telegram Mini Apps ecosystem.
 
-Before you begin using the SDK, we highly recommend familiarizing yourself with the Web
-Apps [documentation](../../../about-platform.md) to grasp the fundamental concepts of the
-platform.
+Before you begin using the SDK, we highly recommend familiarizing yourself with the Telegram Mini
+Apps [documentation](../../../about-platform.md) to grasp the fundamental concepts of the platform.
 
 ## Installation
 
@@ -84,7 +83,7 @@ not specified, `init` will utilize the `retrieveLaunchParams` function.
 
 #### `checkCompat: boolean`
 
-Enabling the mode in which calls to methods not supported by the current version of the Web App will
+Enabling the mode in which calls to methods not supported by the current version of the Mini App will
 result in throwing an error is recommended and enabled by default.
 
 #### `cssVars: boolean`
@@ -93,7 +92,7 @@ Creates global CSS variables connected to the current application theme paramete
 colors. The created variables are automatically updated when corresponding values in the theme
 parameters or web app change.
 
-Web App variables:
+Mini App variables:
 
 - `--tg-bg-color`
 - `--tg-header-color`
@@ -123,7 +122,7 @@ reached, an error will be thrown.
 
 ## Launch parameters
 
-The launch parameters are the initial parameters passed to the Web App. You can find more
+The launch parameters are the initial parameters passed to the Mini App. You can find more
 information about them in the [documentation](../../../launch-parameters/common-information.md).
 
 Developers can retrieve the launch parameters by using the `retrieveLaunchParams` function. This
@@ -177,7 +176,7 @@ initialized components that are sufficient for use across the application.
 
 ### Events
 
-Component instances use the common way of events listening through the `on` and `off` functions.
+Component instances use the common way of events listening through the `on` and `off` methods.
 Here is the example with the `BackButton` component:
 
 ```typescript
@@ -194,8 +193,8 @@ You can find the list of supported events in components own documentations.
 
 ### Methods support
 
-Almost each component is capable of checking whether its method is supported by the current Web Apps
-version or not. To check if some methods are supported, developer should use the component
+Almost each component is capable of checking whether its method is supported by the current Telegram
+Mini Apps version or not. To check if some methods are supported, developer should use the component
 instance `supports()` function. For example:
 
 ```typescript

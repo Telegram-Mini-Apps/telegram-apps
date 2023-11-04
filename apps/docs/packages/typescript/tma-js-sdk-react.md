@@ -133,7 +133,7 @@ import { SDKProvider, useSDK, useBackButton, useWebApp } from '@tma.js/sdk-react
 /**
  * Part of the application which doesn't know anything about SDK initialization
  * and which should be rendered only in case, SDK is already initialized and
- * could provide Web Apps components.
+ * could provide Telegram Mini Apps components.
  */
 function App() {
   const backButton = useBackButton();
@@ -214,7 +214,7 @@ be called until the SDK is fully initialized.
 ### When init is done
 
 Once the initialization is successfully completed, developers should call the `webApp.ready`
-function. This function notifies the Telegram application that the current Web App is ready to be
+function. This function notifies the Telegram application that the current Mini App is ready to be
 displayed.
 
 ```jsx
@@ -240,7 +240,7 @@ There may be cases where a developer needs to retrieve launch parameters without
 entire SDK. For example, they might want to access current theme parameters stored
 in `window.location`. In such cases, SDK initialization may not be necessary.
 
-To retrieve Web App launch parameters, the `useLaunchParams` hook (or the `withLaunchParams`
+To retrieve Mini App launch parameters, the `useLaunchParams` hook (or the `withLaunchParams`
 higher-order component) can be used.
 
 ```jsx
