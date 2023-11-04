@@ -1,7 +1,6 @@
 export * from './back-button/index.js';
 export * from './closing-behavior/index.js';
 export * from './haptic-feedback/index.js';
-export * from './init-data/index.js';
 export * from './launch-params/index.js';
 export * from './main-button/index.js';
 export * from './popup/index.js';
@@ -10,4 +9,5 @@ export * from './viewport/index.js';
 export * from './web-app/index.js';
 export * from './cloud-storage.js';
 export { usePostEvent } from './hooks.js';
+export * from './init-data.js';
 export * from './theme-params.js';
