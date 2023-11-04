@@ -1,5 +1,14 @@
 # @tma.js/bridge
 
+## 1.3.11
+
+### Patch Changes
+
+- 6469933: Actualize links and comments
+- Updated dependencies [6469933]
+  - @tma.js/parsing@0.1.3
+  - @tma.js/utils@0.5.6
+
 ## 1.3.10
 
 ### Patch Changes

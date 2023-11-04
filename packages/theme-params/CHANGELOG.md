@@ -1,5 +1,12 @@
 # @tma.js/theme-params
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [6469933]
+  - @tma.js/parsing@0.1.3
+
 ## 0.0.5
 
 ### Patch Changes
