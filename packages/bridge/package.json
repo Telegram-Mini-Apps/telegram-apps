@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/bridge",
-  "version": "1.3.10",
+  "version": "1.3.11",
   "description": "Communication layer between Telegram and frontend applications.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",

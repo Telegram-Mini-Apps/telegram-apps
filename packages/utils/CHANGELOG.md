@@ -1,5 +1,11 @@
 # @tma.js/utils
 
+## 0.5.6
+
+### Patch Changes
+
+- 6469933: Actualize links and comments
+
 ## 0.5.5
 
 ### Patch Changes

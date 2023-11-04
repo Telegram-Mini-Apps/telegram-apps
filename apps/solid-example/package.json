@@ -1,6 +1,6 @@
 {
   "name": "solid-example",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "private": true,
   "type": "module",
   "main": "index.js",
@@ -26,11 +26,11 @@
   "dependencies": {
     "@solidjs/router": "^0.8.3",
     "@tma.js/colors": "^0.0.5",
-    "@tma.js/init-data": "^0.2.19",
-    "@tma.js/navigation": "^0.0.11",
-    "@tma.js/sdk": "^0.12.7",
-    "@tma.js/sdk-solid": "^0.1.14",
-    "@tma.js/solid-router-integration": "^0.0.1",
+    "@tma.js/init-data": "^0.2.20",
+    "@tma.js/navigation": "^0.0.12",
+    "@tma.js/sdk": "^0.12.8",
+    "@tma.js/sdk-solid": "^0.1.15",
+    "@tma.js/solid-router-integration": "^0.0.2",
     "solid-js": "^1.7.6"
   }
 }

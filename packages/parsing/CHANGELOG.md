@@ -1,5 +1,11 @@
 # @tma.js/parsing
 
+## 0.1.3
+
+### Patch Changes
+
+- 6469933: Actualize links and comments
+
 ## 0.1.2
 
 ### Patch Changes

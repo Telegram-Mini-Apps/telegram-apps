@@ -1,5 +1,15 @@
 # @tma.js/launch-params
 
+## 0.0.6
+
+### Patch Changes
+
+- 6469933: Actualize links and comments
+- Updated dependencies [6469933]
+  - @tma.js/init-data@0.2.20
+  - @tma.js/parsing@0.1.3
+  - @tma.js/theme-params@0.0.6
+
 ## 0.0.5
 
 ### Patch Changes
