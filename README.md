@@ -14,9 +14,15 @@ Mono-repository, containing all the packages, connected with comfortable and saf
 development on Telegram Mini Apps platform. To learn more about specific packages, follow
 their own [documentations](https://docs.telegram-mini-apps.com).
 
-The list of templates developer can use can be found in
-the [Links](https://github.com/Telegram-Mini-Apps#links) section of the Telegram Mini Apps GitHub
-organization.
+## Templates
+
+The list of Mini Apps templates, using different frontend technologies:
+
+- [React and Vite](https://github.com/Telegram-Mini-Apps/reactjs-template)
+- [TypeScript and Vite](https://github.com/Telegram-Mini-Apps/typescript-template)
+- [Vanilla JavaScript](https://github.com/Telegram-Mini-Apps/vanillajs-template)
+- [Solid and Vite](https://github.com/Telegram-Mini-Apps/solidjs-template)
+- [Next JS](https://github.com/Telegram-Mini-Apps/nextjs-template)
 
 ## Why not Telegram SDK
 
