@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 
-import { serialize } from '../src/index.js';
+import { themeParams } from '../src/index.js';
 
-describe('serialize.ts', () => {
-  describe('serialize', () => {
+describe('themeParams.ts', () => {
+  describe('themeParams', () => {
     [
       ['accent_text_color', 'accentTextColor'],
       ['bg_color', 'backgroundColor'],
@@ -18,14 +18,14 @@ describe('serialize.ts', () => {
       ['section_bg_color', 'sectionBackgroundColor'],
       ['subtitle_text_color', 'subtitleTextColor'],
       ['text_color', 'textColor'],
-    ].forEach(([to, from]) => {
-      describe(from, () => {
-        it(`should omit the "${to}" property in case this property is missing`, () => {
-          expect(serialize({})).not.toMatch(`"${to}"`);
+    ].forEach(([from, to]) => {
+      describe(to, () => {
+        it(`should throw if "${from}" property contains not a string in format "#RRGGBB"`, () => {
+          expect(() => themeParams().parse({ [from]: 999 })).toThrow();
         });
 
-        it(`should map this property to "${to}" property`, () => {
-          expect(serialize({ [from]: '#aabbcc' })).toBe(`{"${to}":"#aabbcc"}`);
+        it(`should map to "${to}" property parsing it as string in "#RRGGBB" format`, () => {
+          expect(themeParams().parse({ [from]: '#aabbcc' })).toStrictEqual({ [to]: '#aabbcc' });
         });
       });
     });
