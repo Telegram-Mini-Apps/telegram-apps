@@ -38,16 +38,16 @@ function setUser(params: URLSearchParams, key: string, value: User | undefined) 
  */
 export function serialize(value: InitData): string {
   const {
+    authDate,
+    canSendAfter,
     chat,
-    chatType,
     chatInstance,
+    chatType,
     hash,
-    user,
     queryId,
     receiver,
     startParam,
-    canSendAfter,
-    authDate,
+    user,
   } = value;
 
   const params = new URLSearchParams();
