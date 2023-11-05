@@ -1,13 +1,3 @@
-[code-badge]: https://img.shields.io/badge/source-black?logo=github
-
-[docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
-
-[react-badge]: https://img.shields.io/badge/React-244654?logo=react&logoColor=61DAFB
-
-[solid-badge]: https://img.shields.io/badge/Solid-203A59?logo=solid&logoColor=38659F
-
-[node-badge]: https://img.shields.io/badge/Node-1f491f?logo=node.js&logoColor=339933
-
 # @tma.js
 
 Mono-repository, containing all the packages, connected with comfortable and safe TypeScript
