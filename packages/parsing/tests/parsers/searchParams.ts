@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { date, searchParams, string } from '../../src/index.js';
 
 describe('parsers', () => {
@@ -14,7 +15,24 @@ describe('parsers', () => {
 
       it('should throw an error in case, passed value does not contain required field presented in schema', () => {
         const parser = searchParams({ prop: string() });
-        expect(() => parser.parse('abc=123')).toThrowError('Unable to parse field "prop"');
+
+        try {
+          parser.parse('abc=123');
+        } catch (e) {
+          expect(e).toMatchObject({
+            message: 'Unable to parse value',
+            cause: {
+              message: 'Unable to parse field "prop" as string',
+              cause: {
+                message: 'Unable to parse value as string',
+                cause: {
+                  message: 'Value has unexpected type',
+                },
+              },
+            },
+          });
+        }
+        expect.assertions(1);
       });
 
       it('should not throw an error in case, passed value does not contain optional field presented in schema', () => {
@@ -25,9 +43,52 @@ describe('parsers', () => {
         expect(parser.parse('prop=abc')).toEqual({ prop: 'abc' });
       });
 
+      it('should use parser with unspecified type', () => {
+        const parser = searchParams<{ prop: unknown }>({
+          prop: () => {
+            throw new Error('Just an error');
+          },
+        });
+
+        try {
+          parser.parse('prop=');
+        } catch (e) {
+          expect(e).toMatchObject({
+            message: 'Unable to parse value',
+            cause: {
+              message: 'Unable to parse field "prop"',
+              cause: {
+                message: 'Just an error',
+              },
+            },
+          });
+        }
+        expect.assertions(1);
+      });
+
       it('should throw an error in case, passed value contains field of different type presented in schema', () => {
         const parser = searchParams({ prop: date() });
-        expect(() => parser.parse('prop=abc')).toThrowError('Unable to parse field "prop"');
+
+        try {
+          parser.parse('prop=abc');
+        } catch (e) {
+          expect(e).toMatchObject({
+            message: 'Unable to parse value',
+            cause: {
+              message: 'Unable to parse field "prop" as Date',
+              cause: {
+                message: 'Unable to parse value as Date',
+                cause: {
+                  message: 'Unable to parse value as number',
+                  cause: {
+                    message: 'Value has unexpected type',
+                  },
+                },
+              },
+            },
+          });
+        }
+        expect.assertions(1);
       });
 
       it('should correctly parse built-in types', () => {
