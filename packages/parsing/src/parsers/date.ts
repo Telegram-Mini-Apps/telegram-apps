@@ -1,20 +1,15 @@
-import { ParsingError } from '../ParsingError.js';
+import { createValueParserGenerator } from '../createValueParserGenerator.js';
 import { number } from './number.js';
-import { createValueParserGen } from './shared.js';
 
 const num = number();
 
 /**
  * Returns parser to parse value as Date.
  */
-export const date = createValueParserGen<Date>((value) => {
-  if (value instanceof Date) {
-    return value;
-  }
-
-  try {
-    return new Date(num.parse(value) * 1000);
-  } catch (cause) {
-    throw new ParsingError(value, { type: 'Date', error: cause });
-  }
+export const date = createValueParserGenerator<Date>((value) => (
+  value instanceof Date
+    ? value
+    : new Date(num.parse(value) * 1000)
+), {
+  type: 'Date',
 });

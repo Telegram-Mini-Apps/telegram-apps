@@ -3,7 +3,8 @@ import { isUndefined } from '../isUndefined.js';
 
 /**
  * Parses incoming value as an array.
+ * @param type - parser type name.
  */
-export function array(): ArrayValueParser<unknown, false> {
-  return new ArrayValueParser((value) => value, false, isUndefined);
+export function array(type?: string): ArrayValueParser<unknown, false> {
+  return new ArrayValueParser((value) => value, false, isUndefined, type);
 }
