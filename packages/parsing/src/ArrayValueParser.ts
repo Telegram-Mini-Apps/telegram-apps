@@ -45,8 +45,7 @@ function parseArray(value: unknown): unknown[] {
     } catch (e) {
     }
   }
-
-  throw new ParsingError(value, { type: 'array' });
+  throw unexpectedTypeError();
 }
 
 export class ArrayValueParser<ItemType, IsOptional extends boolean>

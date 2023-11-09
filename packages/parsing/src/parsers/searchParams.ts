@@ -30,7 +30,7 @@ export function searchParams<T>(schema: Schema<T>, options: Options = {}): Value
 
   return new ValueParser((value) => {
     if (typeof value !== 'string' && !(value instanceof URLSearchParams)) {
-      throw new ParsingError(value, { type, error: unknownTypeError() });
+      throw unexpectedTypeError();
     }
 
     const params = typeof value === 'string' ? new URLSearchParams(value) : value;

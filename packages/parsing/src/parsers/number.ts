@@ -17,5 +17,7 @@ export const number = createValueParserGen<number>((value) => {
     }
   }
 
-  throw new ParsingError(value, { type: 'number', error: unknownTypeError() });
+  throw unexpectedTypeError();
+}, {
+  type: 'number',
 });

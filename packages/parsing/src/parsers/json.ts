@@ -47,7 +47,7 @@ export function json<T>(schema: Schema<T>, options: Options = {}): ValueParser<T
       || formattedValue === null
       || Array.isArray(formattedValue)
     ) {
-      throw new ParsingError(value, { type, error: unknownTypeError() });
+      throw unexpectedTypeError();
     }
 
     return parseBySchema(schema, (field) => formattedValue[field]);

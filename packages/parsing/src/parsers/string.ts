@@ -8,5 +8,7 @@ export const string = createValueParserGen<string>((value) => {
   if (typeof value === 'string' || typeof value === 'number') {
     return value.toString();
   }
-  throw new ParsingError(value, { type: 'string', error: unknownTypeError() });
+  throw unexpectedTypeError();
+}, {
+  type: 'string',
 });

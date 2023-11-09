@@ -18,5 +18,7 @@ export const boolean = createValueParserGen<boolean>((value) => {
     return false;
   }
 
-  throw new ParsingError(value, { type: 'boolean', error: unknownTypeError() });
+  throw unexpectedTypeError();
+}, {
+  type: 'boolean',
 });
