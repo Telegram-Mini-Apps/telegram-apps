@@ -13,5 +13,7 @@ export function chat() {
       from: 'photo_url',
     },
     username: string().optional(),
+  }, {
+    type: 'Chat',
   });
 }
