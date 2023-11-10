@@ -29,5 +29,7 @@ export function themeParams() {
     sectionBackgroundColor: field('section_bg_color'),
     subtitleTextColor: field('subtitle_text_color'),
     textColor: field('text_color'),
+  }, {
+    type: 'ThemeParams',
   });
 }
