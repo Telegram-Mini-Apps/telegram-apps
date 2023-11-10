@@ -50,7 +50,8 @@
   "devDependencies": {
     "tsconfig": "workspace:*",
     "eslint-config-custom": "workspace:*",
-    "build-utils": "workspace:*"
+    "build-utils": "workspace:*",
+    "test-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
