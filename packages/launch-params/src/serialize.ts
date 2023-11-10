@@ -7,7 +7,14 @@ import type { LaunchParams } from './types.js';
  * @param value - launch parameters.
  */
 export function serialize(value: LaunchParams): string {
-  const { initDataRaw, themeParams, platform, version } = value;
+  const {
+    initDataRaw,
+    themeParams,
+    platform,
+    version,
+    showSettings,
+    botInline,
+  } = value;
 
   const params = new URLSearchParams();
 
@@ -17,6 +24,14 @@ export function serialize(value: LaunchParams): string {
   params.set('tgWebAppPlatform', platform);
   params.set('tgWebAppThemeParams', serializeThemeParams(themeParams));
   params.set('tgWebAppVersion', version);
+
+  if (typeof showSettings === 'boolean') {
+    params.set('tgWebAppShowSettings', showSettings ? '1' : '0');
+  }
+
+  if (typeof botInline === 'boolean') {
+    params.set('tgWebAppBotInline', botInline ? '1' : '0');
+  }
 
   return params.toString();
 }
