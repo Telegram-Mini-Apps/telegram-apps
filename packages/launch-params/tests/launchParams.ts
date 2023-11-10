@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { toSearchParams } from 'test-utils';
 
-import { parse } from '../src/index.js';
+import { launchParams } from '../src/index.js';
 
-describe('parse', () => {
+describe('launchParams', () => {
   describe('botInline', () => {
     it('should extract "tgWebAppBotInline" and parse it as boolean', () => {
       expect(
-        parse(toSearchParams({
+        launchParams().parse(toSearchParams({
           tgWebAppPlatform: 'webz',
           tgWebAppThemeParams: {},
           tgWebAppVersion: '6.9',
@@ -22,7 +22,7 @@ describe('parse', () => {
   describe('initData', () => {
     it('should extract "tgWebAppData" property and parse it as InitData', () => {
       expect(
-        parse(toSearchParams({
+        launchParams().parse(toSearchParams({
           tgWebAppPlatform: 'webz',
           tgWebAppThemeParams: {},
           tgWebAppVersion: '6.9',
@@ -43,7 +43,7 @@ describe('parse', () => {
   describe('initDataRaw', () => {
     it('should extract "tgWebAppData" property and parse it as string', () => {
       expect(
-        parse(toSearchParams({
+        launchParams().parse(toSearchParams({
           tgWebAppPlatform: 'webz',
           tgWebAppThemeParams: {},
           tgWebAppVersion: '6.9',
@@ -61,7 +61,7 @@ describe('parse', () => {
   describe('platform', () => {
     it('should throw an error in case "tgWebAppPlatform" is missing', () => {
       expect(
-        () => parse(toSearchParams({
+        () => launchParams().parse(toSearchParams({
           tgWebAppThemeParams: {},
           tgWebAppVersion: '6.9',
         })),
@@ -70,7 +70,7 @@ describe('parse', () => {
 
     it('should extract "tgWebAppPlatform" and parse it as string', () => {
       expect(
-        parse(toSearchParams({
+        launchParams().parse(toSearchParams({
           tgWebAppPlatform: 'webz',
           tgWebAppThemeParams: {},
           tgWebAppVersion: '6.9',
@@ -84,7 +84,7 @@ describe('parse', () => {
   describe('showSettings', () => {
     it('should extract "tgWebAppShowSettings" and parse it as boolean', () => {
       expect(
-        parse(toSearchParams({
+        launchParams().parse(toSearchParams({
           tgWebAppPlatform: 'webz',
           tgWebAppThemeParams: {},
           tgWebAppVersion: '6.9',
@@ -99,7 +99,7 @@ describe('parse', () => {
   describe('themeParams', () => {
     it('should throw an error in case, "tgWebAppThemeParams" property is missing', () => {
       expect(
-        () => parse(toSearchParams({
+        () => launchParams().parse(toSearchParams({
           tgWebAppPlatform: 'webz',
           tgWebAppVersion: '6.9',
         })),
@@ -108,7 +108,7 @@ describe('parse', () => {
 
     it('should extract "tgWebAppThemeParams" property and parse it as ThemeParams', () => {
       expect(
-        parse(toSearchParams({
+        launchParams().parse(toSearchParams({
           tgWebAppPlatform: 'webz',
           tgWebAppThemeParams: {
             bg_color: '#aaf132',
@@ -126,7 +126,7 @@ describe('parse', () => {
   describe('version', () => {
     it('should throw an error in case "tgWebAppVersion" is missing', () => {
       expect(
-        () => parse(toSearchParams({
+        () => launchParams().parse(toSearchParams({
           tgWebAppPlatform: 'webz',
           tgWebAppThemeParams: {},
         })),
@@ -135,7 +135,7 @@ describe('parse', () => {
 
     it('should extract "tgWebAppVersion" and parse it as string', () => {
       expect(
-        parse(toSearchParams({
+        launchParams().parse(toSearchParams({
           tgWebAppPlatform: 'webz',
           tgWebAppThemeParams: {},
           tgWebAppVersion: '6.9',
