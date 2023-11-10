@@ -4,7 +4,7 @@ import {
   boolean,
   json,
   rgb,
-  createValueParserGen,
+  createValueParserGenerator,
 } from '@tma.js/parsing';
 
 import type {
@@ -22,9 +22,11 @@ function isNullOrUndefined(value: unknown): boolean {
 const rgbOptional = rgb().optional();
 const num = number();
 
-const windowWidthParser = createValueParserGen((value) => (value === null || value === undefined
-  ? window.innerWidth
-  : num.parse(value)));
+const windowWidthParser = createValueParserGenerator(
+  (value) => (value === null || value === undefined
+    ? window.innerWidth
+    : num.parse(value)),
+);
 
 /**
  * Parses incoming value as ThemeChangedPayload.
