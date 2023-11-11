@@ -5,12 +5,7 @@ import {
   on,
 } from '@tma.js/bridge';
 import { withTimeout } from '@tma.js/utils';
-import type { LaunchParams } from '@tma.js/launch-params';
-import {
-  parse as parseLaunchParams,
-  saveToStorage as saveLaunchParamsToStorage,
-  retrieveFromStorage,
-} from '@tma.js/launch-params';
+import { parse, retrieveLaunchData } from '@tma.js/launch-params';
 
 import {
   CloudStorage,
@@ -33,41 +28,8 @@ import {
   createViewport,
   createWebApp, createRequestIdGenerator, createClosingBehavior,
 } from './creators/index.js';
-import { retrieveLaunchParams } from '../launch-params.js';
 
 import type { InitOptions, InitResult } from './types.js';
-
-/**
- * Returns true in case, current session was created due to native location reload.
- */
-function isNativePageReload(): boolean {
-  return (
-    window
-      .performance
-      .getEntriesByType('navigation') as PerformanceNavigationTiming[]
-  ).some((entry) => entry.type === 'reload');
-}
-
-/**
- * Returns true if current page was reloaded.
- * @param launchParamsFromStorage - launch parameters from sessionStorage.
- * @param currentLaunchParams - actual launch parameters.
- */
-function computePageReload(
-  launchParamsFromStorage: LaunchParams | null,
-  currentLaunchParams: LaunchParams,
-): boolean {
-  // To check if page was reloaded, we should check if previous init data hash equals to the
-  // current one. Nevertheless, there are some cases, when init data is missing. For example,
-  // when app was launched via KeyboardButton. In this case we try to use the native way of
-  // checking if current page was reloaded (which could still return incorrect result).
-  // Issue: https://github.com/Telegram-Mini-Apps/issues/issues/12
-  if (!launchParamsFromStorage) {
-    return false;
-  }
-
-  return launchParamsFromStorage.initData?.hash === currentLaunchParams.initData?.hash;
-}
 
 /**
  * Represents actual init function.
@@ -80,8 +42,8 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     acceptScrollbarStyle = true,
     acceptCustomStyles = acceptScrollbarStyle,
     targetOrigin,
+    launchParams: launchParamsOption,
     debug = false,
-    launchParams: optionsLaunchParams,
   } = options;
 
   // Set global settings.
@@ -93,19 +55,12 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     setTargetOrigin(targetOrigin);
   }
 
-  // Get Mini App launch params and save them to session storage, so they will be accessible from
-  // anywhere.
-  const launchParamsFromStorage = retrieveFromStorage();
-  const launchParams = optionsLaunchParams instanceof URLSearchParams || typeof optionsLaunchParams === 'string'
-    ? parseLaunchParams(optionsLaunchParams)
-    : retrieveLaunchParams();
-
-  saveLaunchParamsToStorage(launchParams);
-
-  // Compute if page was reloaded. We will need it to decide if SDK components should be restored
-  // or created from scratch.
-  const isPageReload = isNativePageReload()
-    || computePageReload(launchParamsFromStorage, launchParams);
+  // Retrieve launch data.
+  const { launchParams, isPageReload } = retrieveLaunchData({
+    currentLaunchParams: typeof launchParamsOption === 'string' || launchParamsOption instanceof URLSearchParams
+      ? parse(launchParamsOption)
+      : launchParamsOption,
+  });
 
   const {
     initData,
