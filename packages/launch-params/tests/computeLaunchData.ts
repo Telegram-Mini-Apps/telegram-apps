@@ -82,12 +82,6 @@ function mockPerformanceLaunchParams(launchParams: string) {
  */
 function mockIframe() {
   vi
-    .spyOn(window, 'self', 'get')
-    .mockImplementation(() => {
-      throw new Error('access violation');
-    });
-
-  vi
     .spyOn(window, 'top', 'get')
     .mockImplementation(() => {
       throw new Error('access violation');

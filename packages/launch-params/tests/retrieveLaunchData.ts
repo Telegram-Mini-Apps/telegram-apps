@@ -33,7 +33,7 @@ describe('retrieveLaunchData', () => {
   });
 
   it('should create property window.tmajsLaunchData and save the result of computeLaunchData function', () => {
-    mockWindow();
+    mockWindow({} as any);
     const launchData = {
       launchParams: {
         themeParams: {},
@@ -49,7 +49,7 @@ describe('retrieveLaunchData', () => {
   });
 
   it('should call saveToStorage function with launch data launch parameters to save data', () => {
-    mockWindow();
+    mockWindow({} as any);
     const launchData = {
       launchParams: {
         themeParams: {},
@@ -66,7 +66,7 @@ describe('retrieveLaunchData', () => {
   });
 
   it('should return result of computeLaunchData', () => {
-    mockWindow();
+    mockWindow({} as any);
     const launchData = {
       launchParams: {
         themeParams: {},
