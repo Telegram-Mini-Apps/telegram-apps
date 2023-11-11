@@ -1,7 +1,19 @@
 import { retrieveFromStorage } from './storage.js';
 import { retrieveCurrent } from './retrieveCurrent.js';
 import { computePageReload } from './computePageReload.js';
-import type { LaunchData } from './types.js';
+import type { LaunchData, LaunchParams } from './types.js';
+
+export interface ComputeLaunchDataOptions {
+  /**
+   * Previous known launch parameters. If not passed, function attempts to extract them by
+   * itself.
+   */
+  previousLaunchParams?: LaunchParams;
+  /**
+   * Currently known launch parameters.
+   */
+  currentLaunchParams?: LaunchParams;
+}
 
 /**
  * Returns true in case, current environment is iframe.
@@ -19,15 +31,17 @@ function isIframe(): boolean {
  * Computes launch data information. Extracts both previous and current launch parameters
  * to compute current list of them. Additionally, computes if page was reloaded.
  */
-export function computeLaunchData(): LaunchData {
+export function computeLaunchData(options: ComputeLaunchDataOptions = {}): LaunchData {
+  const {
+    // Retrieve launch parameters from the session storage. We consider this value as the launch
+    // parameters saved previously, in the previous runtime session (before the page reload).
+    previousLaunchParams: lpPrevious = retrieveFromStorage(),
+
+    // Currently used launch parameters passed to the Mini App.
+    currentLaunchParams: lpCurrent = retrieveCurrent(),
+  } = options;
+
   const isPageReload = computePageReload();
-
-  // Retrieve launch parameters from the session storage. We consider this value as the launch
-  // parameters saved previously, in the previous runtime session (before the page reload).
-  const lpPrevious = retrieveFromStorage();
-
-  // Currently used launch parameters passed to the Mini App.
-  const lpCurrent = retrieveCurrent();
 
   if (lpPrevious) {
     if (lpCurrent) {

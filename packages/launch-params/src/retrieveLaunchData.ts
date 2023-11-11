@@ -1,13 +1,16 @@
 import { saveToStorage } from './storage.js';
-import { computeLaunchData } from './computeLaunchData.js';
+import { computeLaunchData, type ComputeLaunchDataOptions } from './computeLaunchData.js';
 import type { LaunchData } from './types.js';
 
 const WINDOW_KEY = 'tmajsLaunchData';
 
+export type RetrieveLaunchDataOptions = ComputeLaunchDataOptions;
+
 /**
- * Returns launch information.
+ * Returns launch data information. Function ignores passed options in case, it was already
+ * called. It caches the last returned value.
  */
-export function retrieveLaunchData(): LaunchData {
+export function retrieveLaunchData(options?: RetrieveLaunchDataOptions): LaunchData {
   // Return previously cached value.
   const cached = (window as any)[WINDOW_KEY];
   if (cached) {
@@ -15,7 +18,7 @@ export function retrieveLaunchData(): LaunchData {
   }
 
   // Get current launch data.
-  const launchData = computeLaunchData();
+  const launchData = computeLaunchData(options);
 
   // To prevent the additional computation of launch data and possible break of the code
   // logic, we store this data in the window. Several calls of retrieveLaunchData will surely
