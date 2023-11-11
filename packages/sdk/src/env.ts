@@ -1,17 +1,22 @@
-import { retrieveLaunchParams } from './launch-params.js';
+import { retrieveLaunchData } from '@tma.js/launch-params';
 
 /**
  * Returns true in case, current environment is Telegram Mini Apps.
- *
- * `isTWA` utilizes such function as `retrieveLaunchParams`, which attempts to retrieve
- * launch parameters from the current environment.
- * @see retrieveLaunchParams
  */
-export function isTWA(): boolean {
+export function isTMA(): boolean {
   try {
-    retrieveLaunchParams();
+    retrieveLaunchData();
     return true;
   } catch (e) {
     return false;
   }
+}
+
+/**
+ * Returns true in case, current environment is Telegram Mini Apps.
+ * @see computeLaunchData
+ * @deprecated Use `isTMA`
+ */
+export function isTWA(): boolean {
+  return isTMA();
 }
