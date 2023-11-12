@@ -15,24 +15,23 @@ describe('events', () => {
         const values = [
           {
             theme_params: {
+              accent_text_color: '#aaccbb',
               bg_color: '#ffaabb',
-              text_color: '#bbaadd',
-              hint_color: '#113322',
-              link_color: '#882133',
               button_color: '#faaafa',
               button_text_color: '#666271',
+              destructive_text_color: '#111332',
+              header_bg_color: '#aab133',
+              hint_color: '#113322',
+              link_color: '#882133',
               secondary_bg_color: '#2231aa',
+              section_bg_color: '#111332',
+              section_header_text_color: '#111332',
+              subtitle_text_color: '#111332',
+              text_color: '#bbaadd',
             },
           },
           {
-            theme_params: {
-              bg_color: '#ffaabb',
-              text_color: '#bbaadd',
-              hint_color: '#113322',
-              link_color: '#882133',
-              button_color: '#faaafa',
-              button_text_color: '#666271',
-            },
+            theme_params: {},
           },
         ];
 

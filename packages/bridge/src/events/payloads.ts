@@ -54,19 +54,28 @@ export interface QrTextReceivedPayload {
   data?: string;
 }
 
+export type ThemeParamsKey =
+  | 'accent_text_color'
+  | 'bg_color'
+  | 'button_color'
+  | 'button_text_color'
+  | 'destructive_text_color'
+  | 'header_bg_color'
+  | 'hint_color'
+  | 'link_color'
+  | 'secondary_bg_color'
+  | 'section_header_text_color'
+  | 'section_bg_color'
+  | 'subtitle_text_color'
+  | 'text_color';
+
 export interface ThemeChangedPayload {
   /**
    * Map where the key is a theme stylesheet key and value is  the corresponding color in
    * `#RRGGBB` format.
    */
   theme_params: {
-    bg_color?: RGB;
-    text_color?: RGB;
-    hint_color?: RGB;
-    link_color?: RGB;
-    button_color?: RGB;
-    button_text_color?: RGB;
-    secondary_bg_color?: RGB;
+    [Key in ThemeParamsKey]?: RGB;
   };
 }
 
