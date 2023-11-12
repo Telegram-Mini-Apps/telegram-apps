@@ -1,8 +1,8 @@
 import { compareVersions, type Version } from '@tma.js/utils';
 
 import type {
-  HasCheckSupportMethodParam,
-  HasCheckSupportKeyMethod,
+  MethodVersionedParams,
+  MethodWithVersionedParams,
   MethodName,
 } from './methods/index.js';
 
@@ -21,9 +21,9 @@ function versionLessOrEqual(a: Version, b: Version): boolean {
  * @param param - method parameter
  * @param inVersion - platform version.
  */
-export function supports<M extends HasCheckSupportKeyMethod>(
+export function supports<M extends MethodWithVersionedParams>(
   method: M,
-  param: HasCheckSupportMethodParam<M>,
+  param: MethodVersionedParams<M>,
   inVersion: Version,
 ): boolean;
 

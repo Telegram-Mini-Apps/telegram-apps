@@ -16,9 +16,9 @@ export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
  */
 export type SwitchInlineQueryChatType = 'users' | 'bots' | 'groups' | 'channels';
 
-interface CreateParams<Params = undefined, SupportCheckKey extends UnionKeys<Params> = never> {
+interface CreateParams<Params = undefined, VersionedParam extends UnionKeys<Params> = never> {
   params: Params;
-  supportCheckKey: SupportCheckKey;
+  versionedParams: VersionedParam;
 }
 
 /**
@@ -360,14 +360,14 @@ export type NonEmptyMethodName = {
 }[MethodName];
 
 /**
- * Method names which could be used in supportsParam method.
+ * Method names which have versioned params.
  */
-export type HasCheckSupportKeyMethod = {
-  [M in MethodName]: IsNever<Methods[M]['supportCheckKey']> extends true ? never : M;
+export type MethodWithVersionedParams = {
+  [M in MethodName]: IsNever<Methods[M]['versionedParams']> extends true ? never : M;
 }[MethodName];
 
 /**
- * Method parameter which can be checked via support method.
+ * Method parameters which appear only in the specific Telegram Mini Apps version.
  */
-export type HasCheckSupportMethodParam<M extends HasCheckSupportKeyMethod> =
-  Methods[M]['supportCheckKey'];
+export type MethodVersionedParams<M extends MethodWithVersionedParams> =
+  Methods[M]['versionedParams'];

@@ -4,13 +4,13 @@ import type { Version } from '@tma.js/utils';
 import { supports } from '../src/supports.js';
 import type {
   MethodName,
-  HasCheckSupportKeyMethod,
-  HasCheckSupportMethodParam,
+  MethodWithVersionedParams,
+  MethodVersionedParams,
 } from '../src/index.js';
 
 type HaveCheckSupportMethodTuple = {
-  [M in HasCheckSupportKeyMethod]: [M, HasCheckSupportMethodParam<M>]
-}[HasCheckSupportKeyMethod];
+  [M in MethodWithVersionedParams]: [M, MethodVersionedParams<M>]
+}[MethodWithVersionedParams];
 
 /**
  * Increases specified version by amount of updates.
