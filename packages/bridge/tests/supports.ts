@@ -35,32 +35,51 @@ function increaseVersion(version: Version, amount: number): string {
   return `${version.slice(0, lastDotIndex + 1)}${lastPart + amount}`;
 }
 
-describe('supports.ts', () => {
-  describe('supports', () => {
-    const tests: Test[] = [
-      ['any', [
-        'iframe_ready', 'web_app_close', 'web_app_data_send', 'web_app_expand',
-        'web_app_open_link', 'web_app_ready', 'web_app_request_theme',
-        'web_app_request_viewport', 'web_app_setup_main_button',
-        'web_app_setup_closing_behavior',
-      ]],
-      ['6.1', [
-        'web_app_open_tg_link', 'web_app_open_invoice', 'web_app_setup_back_button',
-        'web_app_set_background_color', 'web_app_set_header_color',
-        'web_app_trigger_haptic_feedback',
-      ]],
-      ['6.2', ['web_app_open_popup']],
-      ['6.4', [
-        'web_app_read_text_from_clipboard', 'web_app_close_scan_qr_popup',
-        'web_app_close_scan_qr_popup', ['web_app_open_link', 'try_instant_view'],
-      ]],
-      ['6.7', ['web_app_switch_inline_query']],
-      ['6.9', [
-        'web_app_invoke_custom_method', 'web_app_request_write_access', 'web_app_request_phone',
-        ['web_app_set_header_color', 'color'],
-      ]],
-      ['6.10', ['web_app_setup_settings_button']],
-    ];
+describe('supports', () => {
+  const tests: Test[] = [
+    ['any', [
+      'iframe_ready',
+      'iframe_will_reload',
+      'web_app_close',
+      'web_app_data_send',
+      'web_app_expand',
+      'web_app_open_link',
+      'web_app_ready',
+      'web_app_request_theme',
+      'web_app_request_viewport',
+      'web_app_setup_main_button',
+      'web_app_setup_closing_behavior',
+    ]],
+    ['6.1', [
+      'web_app_open_tg_link',
+      'web_app_open_invoice',
+      'web_app_setup_back_button',
+      'web_app_set_background_color',
+      'web_app_set_header_color',
+      'web_app_trigger_haptic_feedback',
+    ]],
+    ['6.2', [
+      'web_app_open_popup',
+    ]],
+    ['6.4', [
+      'web_app_read_text_from_clipboard',
+      'web_app_close_scan_qr_popup',
+      'web_app_close_scan_qr_popup',
+      ['web_app_open_link', 'try_instant_view'],
+    ]],
+    ['6.7', [
+      'web_app_switch_inline_query',
+    ]],
+    ['6.9', [
+      'web_app_invoke_custom_method',
+      'web_app_request_write_access',
+      'web_app_request_phone',
+      ['web_app_set_header_color', 'color'],
+    ]],
+    ['6.10', [
+      'web_app_setup_settings_button',
+    ]],
+  ];
 
     tests.forEach(([version, methods]) => {
       if (version === 'any') {

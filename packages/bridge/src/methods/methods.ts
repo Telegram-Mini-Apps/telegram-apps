@@ -31,7 +31,18 @@ export interface MethodsParams {
    * version of Telegram. As a result, Mini App will receive `set_custom_style` event.
    * @see https://docs.telegram-mini-apps.com/apps-communication/methods#iframe-ready
    */
-  iframe_ready: CreateParams;
+  iframe_ready: CreateParams<{
+    /**
+     * True, if current Mini App supports native reloading.
+     */
+    reload_supported?: boolean;
+  } | undefined>;
+
+  /**
+   * Notifies parent iframe about the current iframe is going to reload.
+   * @see https://docs.telegram-mini-apps.com/apps-communication/methods#iframe-will-reload
+   */
+  iframe_will_reload: CreateParams;
 
   /**
    * Closes Mini App.

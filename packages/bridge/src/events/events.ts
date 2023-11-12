@@ -75,6 +75,12 @@ export interface Events {
   popup_closed: (payload: PopupClosedPayload) => void;
 
   /**
+   * Parent iframe requested current iframe reload.
+   * @see https://docs.telegram-mini-apps.com/apps-communication/events#reload-iframe
+   */
+  reload_iframe: () => void;
+
+  /**
    * The QR scanner scanned some QR and extracted its content.
    * @param payload - event payload.
    * @since v6.4
