@@ -1,8 +1,8 @@
-import { ParsingError } from '../ParsingError.js';
-import { parseBySchema, unknownTypeError } from './shared.js';
 import { ValueParser } from '../ValueParser.js';
-import type { Schema, IsEmptyFunc } from '../types.js';
 import { isUndefined } from '../isUndefined.js';
+import { unexpectedTypeError } from '../unexpectedTypeError.js';
+import { parseBySchema } from '../parseBySchema.js';
+import type { Schema, IsEmptyFunc } from '../types.js';
 
 interface Options {
   /**
@@ -30,7 +30,7 @@ export function searchParams<T>(schema: Schema<T>, options: Options = {}): Value
 
   return new ValueParser((value) => {
     if (typeof value !== 'string' && !(value instanceof URLSearchParams)) {
-      throw new ParsingError(value, { type, error: unknownTypeError() });
+      throw unexpectedTypeError();
     }
 
     const params = typeof value === 'string' ? new URLSearchParams(value) : value;
@@ -39,5 +39,5 @@ export function searchParams<T>(schema: Schema<T>, options: Options = {}): Value
       const paramValue = params.get(field);
       return paramValue === null ? undefined : paramValue;
     });
-  }, false, isEmpty);
+  }, false, isEmpty, type);
 }

@@ -1,5 +1,5 @@
-import { ParsingError } from './ParsingError.js';
 import { ValueParser } from './ValueParser.js';
+import { unexpectedTypeError } from './unexpectedTypeError.js';
 import type { AnyParser, Parser, IsEmptyFunc } from './types.js';
 import type { ValueParserOverrides, ParseResult } from './ValueParser.js';
 
@@ -45,16 +45,20 @@ function parseArray(value: unknown): unknown[] {
     } catch (e) {
     }
   }
-
-  throw new ParsingError(value, { type: 'array' });
+  throw unexpectedTypeError();
 }
 
 export class ArrayValueParser<ItemType, IsOptional extends boolean>
   extends ValueParser<unknown[], IsOptional> {
   private itemParser: Parser<any>;
 
-  constructor(itemParser: AnyParser<ItemType>, isOptional: IsOptional, isEmpty: IsEmptyFunc) {
-    super(parseArray, isOptional, isEmpty);
+  constructor(
+    itemParser: AnyParser<ItemType>,
+    isOptional: IsOptional,
+    isEmpty: IsEmptyFunc,
+    type?: string,
+  ) {
+    super(parseArray, isOptional, isEmpty, type);
 
     this.itemParser = typeof itemParser === 'function'
       ? itemParser

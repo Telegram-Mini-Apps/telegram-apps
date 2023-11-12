@@ -1,10 +1,10 @@
-import { ParsingError } from '../ParsingError.js';
-import { unknownTypeError, createValueParserGen } from './shared.js';
+import { createValueParserGenerator } from '../createValueParserGenerator.js';
+import { unexpectedTypeError } from '../unexpectedTypeError.js';
 
 /**
  * Returns parser to parse value as boolean.
  */
-export const boolean = createValueParserGen<boolean>((value) => {
+export const boolean = createValueParserGenerator<boolean>((value) => {
   if (typeof value === 'boolean') {
     return value;
   }
@@ -18,5 +18,7 @@ export const boolean = createValueParserGen<boolean>((value) => {
     return false;
   }
 
-  throw new ParsingError(value, { type: 'boolean', error: unknownTypeError() });
+  throw unexpectedTypeError();
+}, {
+  type: 'boolean',
 });

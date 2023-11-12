@@ -3,8 +3,7 @@ import {
   hasExternalNotify,
   hasWebviewProxy,
 } from '../env.js';
-import { targetOrigin as globalTargetOrigin } from '../globals.js';
-
+import { logger, targetOrigin as globalTargetOrigin } from '../globals.js';
 import type {
   EmptyMethodName,
   MethodName,
@@ -30,8 +29,7 @@ export type PostEvent = typeof postEvent;
  * @param eventType - event name.
  * @param params - event parameters.
  * @param options - posting options.
- * @throws {Error} Bridge could not determine current
- * environment and possible way to send event.
+ * @throws {Error} Bridge could not determine current environment and possible way to send event.
  */
 export function postEvent<E extends NonEmptyMethodName>(
   eventType: E,
@@ -44,8 +42,7 @@ export function postEvent<E extends NonEmptyMethodName>(
  * accepts only events, which require arguments.
  * @param eventType - event name.
  * @param options - posting options.
- * @throws {Error} Bridge could not determine current
- * environment and possible way to send event.
+ * @throws {Error} Bridge could not determine current environment and possible way to send event.
  */
 export function postEvent(eventType: EmptyMethodName, options?: PostEventOptions): void;
 
@@ -74,6 +71,8 @@ export function postEvent(
   }
   const { targetOrigin = globalTargetOrigin() } = postOptions;
 
+  logger.log(`Calling method "${eventType}"`, eventData);
+
   // Telegram Web.
   if (isIframe()) {
     window.parent.postMessage(JSON.stringify({
@@ -95,8 +94,7 @@ export function postEvent(
     return;
   }
 
-  // Otherwise current environment is unknown, and we are not able to send
-  // event.
+  // Otherwise current environment is unknown, and we are not able to send event.
   throw new Error(
     'Unable to determine current environment and possible way to send event.',
   );

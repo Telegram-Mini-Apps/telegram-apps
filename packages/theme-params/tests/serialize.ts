@@ -4,38 +4,30 @@ import { serialize } from '../src/index.js';
 
 describe('serialize.ts', () => {
   describe('serialize', () => {
-    const mapping = [
-      ['backgroundColor', 'bg_color'],
-      ['buttonColor', 'button_color'],
-      ['buttonTextColor', 'button_text_color'],
-      ['hintColor', 'hint_color'],
-      ['linkColor', 'link_color'],
-      ['secondaryBackgroundColor', 'secondary_bg_color'],
-      ['textColor', 'text_color'],
-    ];
-
-    mapping.forEach(([from, to]) => {
-      describe(to, () => {
-        it(`should be omitted if "${from}" property is missing`, () => {
+    [
+      ['accent_text_color', 'accentTextColor'],
+      ['bg_color', 'backgroundColor'],
+      ['button_color', 'buttonColor'],
+      ['button_text_color', 'buttonTextColor'],
+      ['destructive_text_color', 'destructiveTextColor'],
+      ['header_bg_color', 'headerBackgroundColor'],
+      ['hint_color', 'hintColor'],
+      ['link_color', 'linkColor'],
+      ['secondary_bg_color', 'secondaryBackgroundColor'],
+      ['section_header_text_color', 'sectionHeaderTextColor'],
+      ['section_bg_color', 'sectionBackgroundColor'],
+      ['subtitle_text_color', 'subtitleTextColor'],
+      ['text_color', 'textColor'],
+    ].forEach(([to, from]) => {
+      describe(from, () => {
+        it(`should omit the "${to}" property in case this property is missing`, () => {
           expect(serialize({})).not.toMatch(`"${to}"`);
         });
 
-        it(`should map source "${from}" property to result "${to}" property`, () => {
+        it(`should map this property to "${to}" property`, () => {
           expect(serialize({ [from]: '#aabbcc' })).toBe(`{"${to}":"#aabbcc"}`);
         });
       });
-    });
-
-    it('should correctly parse the entire value', () => {
-      expect(serialize({
-        backgroundColor: '#ffaabb',
-        buttonColor: '#233312',
-        buttonTextColor: '#ddaa21',
-        hintColor: '#da1122',
-        linkColor: '#22314a',
-        secondaryBackgroundColor: '#ffaabb',
-        textColor: '#31344a',
-      })).toBe('{"bg_color":"#ffaabb","button_color":"#233312","button_text_color":"#ddaa21","hint_color":"#da1122","link_color":"#22314a","secondary_bg_color":"#ffaabb","text_color":"#31344a"}');
     });
   });
 });

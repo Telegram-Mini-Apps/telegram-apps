@@ -1,0 +1,23 @@
+@media (max-width: 768px) {
+  /* In mobile version we would like to move hashtag ("#") to the right side of section title. */
+  .vp-doc h1,
+  .vp-doc h2,
+  .vp-doc h3,
+  .vp-doc h4,
+  .vp-doc h5,
+  .vp-doc h6 {
+    padding-right: 1em;
+  }
+
+  .vp-doc h1 .header-anchor,
+  .vp-doc h2 .header-anchor,
+  .vp-doc h3 .header-anchor,
+  .vp-doc h4 .header-anchor,
+  .vp-doc h5 .header-anchor,
+  .vp-doc h6 .header-anchor {
+    left: auto;
+    top: auto;
+    bottom: 0;
+    margin-left: .3em;
+  }
+}

@@ -1,29 +1,17 @@
 import { describe, expect, it } from 'vitest';
+import { toSearchParams } from 'test-utils';
 
 import { initData } from '../src/index.js';
-
-function createSearchParams(json: Record<string, unknown>): string {
-  const params = new URLSearchParams();
-
-  Object.entries(json).forEach(([key, value]) => {
-    params.set(
-      key,
-      typeof value === 'object' ? JSON.stringify(value) : String(value),
-    );
-  });
-
-  return params.toString();
-}
 
 describe('initData.ts', () => {
   describe('initData', () => {
     describe('auth_date', () => {
       it('should throw an error in case, this property is missing', () => {
-        expect(() => initData().parse(createSearchParams({ hash: 'abcd' }))).toThrow();
+        expect(() => initData().parse(toSearchParams({ hash: 'abcd' }))).toThrow();
       });
 
       it('should parse source property as Date and pass it to the "authDate" property', () => {
-        expect(initData().parse(createSearchParams({ auth_date: 1, hash: 'abcd' }))).toMatchObject({
+        expect(initData().parse(toSearchParams({ auth_date: 1, hash: 'abcd' }))).toMatchObject({
           authDate: new Date(1000),
         });
       });
@@ -32,7 +20,7 @@ describe('initData.ts', () => {
     describe('can_send_after', () => {
       it('should parse source property as Date and pass it to the "canSendAfter" property', () => {
         expect(
-          initData().parse(createSearchParams({
+          initData().parse(toSearchParams({
             auth_date: 1,
             hash: 'abcd',
             can_send_after: 8882,
@@ -46,7 +34,7 @@ describe('initData.ts', () => {
     describe('chat', () => {
       it('should parse source property as Chat and pass it to the "chat" property', () => {
         expect(
-          initData().parse(createSearchParams({
+          initData().parse(toSearchParams({
             auth_date: 1,
             hash: 'abcd',
             chat: {
@@ -72,7 +60,7 @@ describe('initData.ts', () => {
     describe('hash', () => {
       it('should throw an error in case, this property is missing', () => {
         expect(
-          () => initData().parse(createSearchParams({
+          () => initData().parse(toSearchParams({
             auth_date: 1,
           })),
         ).toThrow();
@@ -80,7 +68,7 @@ describe('initData.ts', () => {
 
       it('should parse source property as string and pass it to the "hash" property', () => {
         expect(
-          initData().parse(createSearchParams({
+          initData().parse(toSearchParams({
             auth_date: 1,
             hash: 'abcd',
           })),
@@ -99,7 +87,7 @@ describe('initData.ts', () => {
       describe(from, () => {
         it(`should parse source property as string and pass it to the "${to}" property`, () => {
           expect(
-            initData().parse(createSearchParams({
+            initData().parse(toSearchParams({
               auth_date: 1,
               hash: 'abcd',
               [from]: 'my custom property',
@@ -115,7 +103,7 @@ describe('initData.ts', () => {
       describe(property, () => {
         it('should parse source property as User and pass it to the property with the same name', () => {
           expect(
-            initData().parse(createSearchParams({
+            initData().parse(toSearchParams({
               auth_date: 1,
               hash: 'abcd',
               [property]: {

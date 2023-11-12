@@ -46,4 +46,26 @@ export interface LaunchParams {
    * Mini App palette settings.
    */
   themeParams: ThemeParams;
+
+  /**
+   * True if Mini App is currently launched in inline mode.
+   */
+  botInline?: boolean;
+
+  /**
+   * True if application is required to show the Settings Button.
+   */
+  showSettings?: boolean;
+}
+
+export interface LaunchData {
+  /**
+   * Was current application reloaded.
+   */
+  isPageReload: boolean;
+
+  /**
+   * Current application launch parameters.
+   */
+  launchParams: LaunchParams;
 }

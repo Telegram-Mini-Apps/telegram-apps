@@ -1,123 +1,147 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import { toSearchParams } from 'test-utils';
 
 import { parse } from '../src/index.js';
-import type { LaunchParams } from '../src/index.js';
 
-type ConstructLaunchParamsOptions = Partial<Omit<LaunchParams, 'initData'>>;
-
-/**
- * Constructs search params representing launch parameters.
- * @param lp
- */
-function constructLaunchParams(lp: ConstructLaunchParamsOptions = {}): URLSearchParams {
-  const {
-    version,
-    themeParams,
-    platform,
-    initDataRaw,
-  } = lp;
-  const params = new URLSearchParams();
-
-  if (themeParams) {
-    const {
-      backgroundColor,
-      secondaryBackgroundColor,
-      buttonTextColor,
-      textColor,
-      linkColor,
-      hintColor,
-      buttonColor,
-    } = themeParams;
-    params.set('tgWebAppThemeParams', JSON.stringify({
-      bg_color: backgroundColor,
-      secondary_bg_color: secondaryBackgroundColor,
-      button_text_color: buttonTextColor,
-      text_color: textColor,
-      link_color: linkColor,
-      hint_color: hintColor,
-      button_color: buttonColor,
-    }));
-  }
-
-  if (version) {
-    params.set('tgWebAppVersion', version);
-  }
-
-  if (platform) {
-    params.set('tgWebAppPlatform', platform);
-  }
-
-  if (initDataRaw) {
-    params.set('tgWebAppData', initDataRaw);
-  }
-
-  return params;
-}
-
-describe('parse.ts', () => {
-  describe('parse', () => {
-    it('should throw if tgWebAppVersion, tgWebAppPlatform or tgWebAppThemeParams are missing', () => {
-      expect(() => parse('')).toThrow();
-      expect(() => parse(constructLaunchParams({
-        version: '6.10',
-      }))).toThrow();
-      expect(() => parse(constructLaunchParams({
-        version: '6.10',
-        platform: 'macos',
-      }))).toThrow();
-      expect(() => parse(constructLaunchParams({
-        version: '6.10',
-        themeParams: {},
-      }))).toThrow();
-
-      expect(() => parse(constructLaunchParams({
-        version: '6.10',
-        platform: 'macos',
-        themeParams: {},
-      }))).not.toThrow();
-    });
-
-    describe('tgWebAppVersion', () => {
-      it('should map property to property with name "version"', () => {
-        const params = 'tgWebAppVersion=6.10&tgWebAppPlatform=macos&tgWebAppThemeParams={}';
-        expect(parse(params)).toMatchObject({ version: '6.10' });
+describe('parse', () => {
+  describe('botInline', () => {
+    it('should extract "tgWebAppBotInline" and parse it as boolean', () => {
+      expect(
+        parse(toSearchParams({
+          tgWebAppPlatform: 'webz',
+          tgWebAppThemeParams: {},
+          tgWebAppVersion: '6.9',
+          tgWebAppBotInline: true,
+        })),
+      ).toMatchObject({
+        botInline: true,
       });
     });
+  });
 
-    describe('tgWebAppPlatform', () => {
-      it('should map property to property with name "platform"', () => {
-        const params = 'tgWebAppVersion=6.10&tgWebAppPlatform=macos&tgWebAppThemeParams={}';
-        expect(parse(params)).toMatchObject({ platform: 'macos' });
+  describe('initData', () => {
+    it('should extract "tgWebAppData" property and parse it as InitData', () => {
+      expect(
+        parse(toSearchParams({
+          tgWebAppPlatform: 'webz',
+          tgWebAppThemeParams: {},
+          tgWebAppVersion: '6.9',
+          tgWebAppData: toSearchParams({
+            hash: 'myhash',
+            auth_date: 1,
+          }),
+        })),
+      ).toMatchObject({
+        initData: {
+          hash: 'myhash',
+          authDate: new Date(1000),
+        },
       });
     });
+  });
 
-    describe('tgWebAppThemeParams', () => {
-      it('should map property to property with name "themeParams" applying theme params parser', () => {
-        const params = 'tgWebAppVersion=6.10&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23ffffff%22%7D';
-        expect(parse(params)).toMatchObject({
-          themeParams: {
-            backgroundColor: '#ffffff',
+  describe('initDataRaw', () => {
+    it('should extract "tgWebAppData" property and parse it as string', () => {
+      expect(
+        parse(toSearchParams({
+          tgWebAppPlatform: 'webz',
+          tgWebAppThemeParams: {},
+          tgWebAppVersion: '6.9',
+          tgWebAppData: toSearchParams({
+            hash: 'myhash',
+            auth_date: 1,
+          }),
+        })),
+      ).toMatchObject({
+        initDataRaw: 'hash=myhash&auth_date=1',
+      });
+    });
+  });
+
+  describe('platform', () => {
+    it('should throw an error in case "tgWebAppPlatform" is missing', () => {
+      expect(
+        () => parse(toSearchParams({
+          tgWebAppThemeParams: {},
+          tgWebAppVersion: '6.9',
+        })),
+      ).toThrow();
+    });
+
+    it('should extract "tgWebAppPlatform" and parse it as string', () => {
+      expect(
+        parse(toSearchParams({
+          tgWebAppPlatform: 'webz',
+          tgWebAppThemeParams: {},
+          tgWebAppVersion: '6.9',
+        })),
+      ).toMatchObject({
+        platform: 'webz',
+      });
+    });
+  });
+
+  describe('showSettings', () => {
+    it('should extract "tgWebAppShowSettings" and parse it as boolean', () => {
+      expect(
+        parse(toSearchParams({
+          tgWebAppPlatform: 'webz',
+          tgWebAppThemeParams: {},
+          tgWebAppVersion: '6.9',
+          tgWebAppShowSettings: true,
+        })),
+      ).toMatchObject({
+        showSettings: true,
+      });
+    });
+  });
+
+  describe('themeParams', () => {
+    it('should throw an error in case, "tgWebAppThemeParams" property is missing', () => {
+      expect(
+        () => parse(toSearchParams({
+          tgWebAppPlatform: 'webz',
+          tgWebAppVersion: '6.9',
+        })),
+      ).toThrow();
+    });
+
+    it('should extract "tgWebAppThemeParams" property and parse it as ThemeParams', () => {
+      expect(
+        parse(toSearchParams({
+          tgWebAppPlatform: 'webz',
+          tgWebAppThemeParams: {
+            bg_color: '#aaf132',
           },
-        });
+          tgWebAppVersion: '6.9',
+        })),
+      ).toMatchObject({
+        themeParams: {
+          backgroundColor: '#aaf132',
+        },
       });
     });
+  });
 
-    describe('tgWebAppData', () => {
-      it('should map property to property with name "initData" applying init data parser', () => {
-        const params = 'tgWebAppVersion=6.10&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23ffffff%22%7D&tgWebAppData=auth_date%3D1696440047%26hash%3Dabc';
-        expect(parse(params)).toMatchObject({
-          initData: {
-            authDate: new Date(1696440047000),
-            hash: 'abc',
-          },
-        });
-      });
+  describe('version', () => {
+    it('should throw an error in case "tgWebAppVersion" is missing', () => {
+      expect(
+        () => parse(toSearchParams({
+          tgWebAppPlatform: 'webz',
+          tgWebAppThemeParams: {},
+        })),
+      ).toThrow();
+    });
 
-      it('should map property to property with name "initDataRaw" saving string format', () => {
-        const params = 'tgWebAppVersion=6.10&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23ffffff%22%7D&tgWebAppData=auth_date%3D1696440047%26hash%3Dabc';
-        expect(parse(params)).toMatchObject({
-          initDataRaw: 'auth_date=1696440047&hash=abc',
-        });
+    it('should extract "tgWebAppVersion" and parse it as string', () => {
+      expect(
+        parse(toSearchParams({
+          tgWebAppPlatform: 'webz',
+          tgWebAppThemeParams: {},
+          tgWebAppVersion: '6.9',
+        })),
+      ).toMatchObject({
+        version: '6.9',
       });
     });
   });

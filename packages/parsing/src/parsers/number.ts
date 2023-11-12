@@ -1,10 +1,10 @@
-import { ParsingError } from '../ParsingError.js';
-import { createValueParserGen, unknownTypeError } from './shared.js';
+import { createValueParserGenerator } from '../createValueParserGenerator.js';
+import { unexpectedTypeError } from '../unexpectedTypeError.js';
 
 /**
  * Returns parser to parse value as number.
  */
-export const number = createValueParserGen<number>((value) => {
+export const number = createValueParserGenerator<number>((value) => {
   if (typeof value === 'number') {
     return value;
   }
@@ -17,5 +17,7 @@ export const number = createValueParserGen<number>((value) => {
     }
   }
 
-  throw new ParsingError(value, { type: 'number', error: unknownTypeError() });
+  throw unexpectedTypeError();
+}, {
+  type: 'number',
 });

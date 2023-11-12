@@ -11,23 +11,35 @@ import type { ThemeParamsEvents, ThemeParamsState } from './types.js';
 
 function prepareThemeParams(value: ThemeParamsType): ThemeParamsState {
   const {
+    accentTextColor = null,
     backgroundColor = null,
-    buttonTextColor = null,
     buttonColor = null,
+    buttonTextColor = null,
+    destructiveTextColor = null,
+    headerBackgroundColor = null,
     hintColor = null,
     linkColor = null,
-    textColor = null,
     secondaryBackgroundColor = null,
+    sectionBackgroundColor = null,
+    sectionHeaderTextColor = null,
+    subtitleTextColor = null,
+    textColor = null,
   } = value;
 
   return {
+    accentTextColor,
     backgroundColor,
-    buttonTextColor,
     buttonColor,
+    buttonTextColor,
+    destructiveTextColor,
+    headerBackgroundColor,
     hintColor,
     linkColor,
-    textColor,
     secondaryBackgroundColor,
+    sectionBackgroundColor,
+    sectionHeaderTextColor,
+    subtitleTextColor,
+    textColor,
   };
 }
 
