@@ -1,5 +1,23 @@
 # @tma.js/parsing
 
+## 1.0.0
+
+### Major Changes
+
+- 6b97921: This is the first `@tma.js/parsing` package major update.
+
+  - Implement `ParsingError` and `ParseSchemaFieldError` classes to provide better understanding of the error
+  - Allow specifying parser type name to improve error messages
+  - Fix minor problems in throwing errors
+  - Actualize tests
+  - Set type names for all built-in types
+
+### Minor Changes
+
+- 44ed697: - Add new types of errors
+  - Add ability to specify parser type name
+  - Improve schema parsing be throwing more accurate errors
+
 ## 0.1.3
 
 ### Patch Changes

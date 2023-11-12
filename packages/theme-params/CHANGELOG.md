@@ -1,5 +1,19 @@
 # @tma.js/theme-params
 
+## 0.1.0
+
+### Minor Changes
+
+- 7c1c7a2: - Implement new 6.10 palette keys
+  - Add parser type name
+  - Allow specifying previous and current launch parameters in launch data computation methods
+
+### Patch Changes
+
+- Updated dependencies [44ed697]
+- Updated dependencies [6b97921]
+  - @tma.js/parsing@1.0.0
+
 ## 0.0.6
 
 ### Patch Changes

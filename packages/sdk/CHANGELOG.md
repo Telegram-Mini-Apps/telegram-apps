@@ -1,5 +1,25 @@
 # @tma.js/sdk
 
+## 0.13.0
+
+### Minor Changes
+
+- a4fd5b8: - Actualize theme parameters list
+  - Simplify init process
+
+### Patch Changes
+
+- Updated dependencies [44ed697]
+- Updated dependencies [6b97921]
+- Updated dependencies [7a6549c]
+- Updated dependencies [92848a6]
+- Updated dependencies [7c1c7a2]
+  - @tma.js/parsing@1.0.0
+  - @tma.js/bridge@1.3.12
+  - @tma.js/init-data@0.2.21
+  - @tma.js/theme-params@0.1.0
+  - @tma.js/launch-params@0.0.7
+
 ## 0.12.9
 
 ### Patch Changes
