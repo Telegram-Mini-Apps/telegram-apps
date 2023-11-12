@@ -1,8 +1,8 @@
 import type {
   EventEmitter as UtilEventEmitter,
-  EventName as UtilEventName,
   EventListener as UtilEventListener,
-  EventParams as UtilEventParams, AnySubscribeListener,
+  EventParams as UtilEventParams,
+  AnySubscribeListener,
 } from '@tma.js/event-emitter';
 import type { IsNever, Not } from '@tma.js/util-types';
 
@@ -139,7 +139,7 @@ export interface Events {
 /**
  * Any known event name.
  */
-export type EventName = UtilEventName<Events>;
+export type EventName = keyof Events;
 
 /**
  * Parameters of specified event.
@@ -149,8 +149,7 @@ export type EventParams<E extends EventName> = UtilEventParams<Events[E]>[0];
 /**
  * Returns event listener for specified event name.
  */
-export type EventListener<E extends EventName> =
-  UtilEventListener<Events[E]>;
+export type EventListener<E extends EventName> = UtilEventListener<Events[E]>;
 
 /**
  * Event emitter, based describe events map.
