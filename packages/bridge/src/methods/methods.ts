@@ -16,22 +16,33 @@ export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
  */
 export type SwitchInlineQueryChatType = 'users' | 'bots' | 'groups' | 'channels';
 
-type CreateParams<P = never, SupportCheckKey extends UnionKeys<P> = never> = {
-  params: P;
-  supportCheckKey: SupportCheckKey;
-};
+interface CreateParams<Params = undefined, VersionedParam extends UnionKeys<Params> = never> {
+  params: Params;
+  versionedParams: VersionedParam;
+}
 
 /**
  * Describes list of events and their parameters that could be posted by Bridge.
  * @see https://docs.telegram-mini-apps.com/apps-communication/methods
  */
-export interface MethodsParams {
+export interface Methods {
   /**
    * Notifies parent iframe about the current frame is ready. This method is only used in the Web
    * version of Telegram. As a result, Mini App will receive `set_custom_style` event.
    * @see https://docs.telegram-mini-apps.com/apps-communication/methods#iframe-ready
    */
-  iframe_ready: CreateParams;
+  iframe_ready: CreateParams<{
+    /**
+     * True, if current Mini App supports native reloading.
+     */
+    reload_supported?: boolean;
+  } | undefined>;
+
+  /**
+   * Notifies parent iframe about the current iframe is going to reload.
+   * @see https://docs.telegram-mini-apps.com/apps-communication/methods#iframe-will-reload
+   */
+  iframe_will_reload: CreateParams;
 
   /**
    * Closes Mini App.
@@ -319,40 +330,44 @@ export interface MethodsParams {
 }
 
 /**
- * Any post-available event name.
+ * Any Telegram Mini Apps known method name.
  */
-export type MethodName = keyof MethodsParams;
+export type MethodName = keyof Methods;
 
 /**
  * Returns parameters for specified post-available event.
  */
-export type MethodParams<E extends MethodName> = MethodsParams[E]['params'];
+export type MethodParams<M extends MethodName> = Methods[M]['params'];
 
 /**
- * Returns true in case, method has parameters.
+ * True if specified method accepts parameters.
  */
-export type MethodHasParams<M extends MethodName> = Not<IsNever<MethodParams<M>>>;
+export type MethodAcceptParams<M extends MethodName> =
+  Not<IsNever<Exclude<MethodParams<M>, undefined>>>;
 
 /**
  * Any post-available event name which does not require arguments.
  */
 export type EmptyMethodName = {
-  [E in MethodName]: IsNever<MethodParams<E>> extends true ? E : never;
+  [M in MethodName]: undefined extends MethodParams<M> ? M : never;
 }[MethodName];
 
 /**
  * Any post-available event name which require arguments.
  */
-export type NonEmptyMethodName = Exclude<MethodName, EmptyMethodName>;
-
-/**
- * Method names which could be used in supportsParam method.
- */
-export type HasCheckSupportMethodName = {
-  [E in MethodName]: IsNever<MethodsParams[E]['supportCheckKey']> extends true ? never : E;
+export type NonEmptyMethodName = {
+  [M in MethodName]: MethodAcceptParams<M> extends true ? M : never;
 }[MethodName];
 
 /**
- * Method parameter which can be checked via support method.
+ * Method names which have versioned params.
  */
-export type HasCheckSupportMethodParam<M extends HasCheckSupportMethodName> = MethodsParams[M]['supportCheckKey'];
+export type MethodWithVersionedParams = {
+  [M in MethodName]: IsNever<Methods[M]['versionedParams']> extends true ? never : M;
+}[MethodName];
+
+/**
+ * Method parameters which appear only in the specific Telegram Mini Apps version.
+ */
+export type MethodVersionedParams<M extends MethodWithVersionedParams> =
+  Methods[M]['versionedParams'];

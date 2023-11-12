@@ -2,15 +2,15 @@ import type { Version } from '@tma.js/utils';
 import {
   supports,
   type MethodName,
-  type HasCheckSupportMethodName,
-  type HasCheckSupportMethodParam,
+  type MethodVersionedParams,
+  type MethodWithVersionedParams,
 } from '@tma.js/bridge';
 
 export type SupportsFunc<M extends string> = (method: M) => boolean;
 
 type HasCheckSupportMethodTuple = {
-  [M in HasCheckSupportMethodName]: [M, HasCheckSupportMethodParam<M>]
-}[HasCheckSupportMethodName];
+  [M in MethodWithVersionedParams]: [M, MethodVersionedParams<M>]
+}[MethodWithVersionedParams];
 
 /**
  * Returns function, which accepts predefined method name and checks if it is supported

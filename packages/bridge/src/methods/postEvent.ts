@@ -9,7 +9,7 @@ import type {
   MethodName,
   MethodParams,
   NonEmptyMethodName,
-} from './params.js';
+} from './methods.js';
 
 interface PostEventOptions {
   /**

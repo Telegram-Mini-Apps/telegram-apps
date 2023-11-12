@@ -95,6 +95,7 @@ export function createEmitter(): EventEmitter {
         case 'back_button_pressed':
         case 'settings_button_pressed':
         case 'scan_qr_popup_closed':
+        case 'reload_iframe':
           return emit(eventType);
 
         // All other event listeners will receive unknown type of data.

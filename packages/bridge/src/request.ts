@@ -1,24 +1,24 @@
 import { withTimeout, isRecord } from '@tma.js/utils';
-
 import type { And, If, IsNever } from '@tma.js/util-types';
 
 import { postEvent as defaultPostEvent, type PostEvent } from './methods/postEvent.js';
 import { on, type EventName, type EventParams, type EventHasParams } from './events/index.js';
 
 import type {
-  EmptyMethodName, MethodHasParams,
+  EmptyMethodName,
+  MethodAcceptParams,
   MethodName,
   MethodParams,
   NonEmptyMethodName,
-} from './methods/params.js';
+} from './methods/methods.js';
 
 /**
  * Names of methods, which require passing "req_id" parameter.
  */
-type MethodNameWithRequestId = {
-  [Method in MethodName]: If<
-    And<MethodHasParams<Method>, MethodParams<Method> extends { req_id: string } ? true : false>,
-    Method,
+type MethodWithRequestId = {
+  [M in MethodName]: If<
+    And<MethodAcceptParams<M>, MethodParams<M> extends { req_id: string } ? true : false>,
+    M,
     never
   >;
 }[MethodName];
@@ -26,10 +26,10 @@ type MethodNameWithRequestId = {
 /**
  * Names of events, which contain "req_id" parameter.
  */
-type EventNameWithRequestId = {
-  [Event in EventName]: If<
-    And<EventHasParams<Event>, EventParams<Event> extends { req_id: string } ? true : false>,
-    Event,
+type EventWithRequestId = {
+  [E in EventName]: If<
+    And<EventHasParams<E>, EventParams<E> extends { req_id: string } ? true : false>,
+    E,
     never
   >;
 }[EventName];
@@ -64,15 +64,12 @@ export interface RequestOptionsAdvanced<EventPayload> extends RequestOptions {
  * @param event - event or events to listen.
  * @param options - additional execution options.
  */
-export function request<
-  Method extends MethodNameWithRequestId,
-  Event extends EventNameWithRequestId,
->(
-  method: Method,
-  params: MethodParams<Method>,
-  event: Event | Event[],
+export function request<M extends MethodWithRequestId, E extends EventWithRequestId>(
+  method: M,
+  params: MethodParams<M>,
+  event: E | E[],
   options?: RequestOptions,
-): Promise<EventParams<Event>>;
+): Promise<EventParams<E>>;
 
 /**
  * Calls specified TWA method and captures one of the specified events. Returns promise
@@ -81,11 +78,11 @@ export function request<
  * @param event - event or events to listen.
  * @param options - additional execution options.
  */
-export function request<Method extends EmptyMethodName, Event extends EventName>(
-  method: Method,
-  event: Event | Event[],
-  options?: RequestOptionsAdvanced<EventParams<Event>>,
-): Promise<EventParams<Event>>;
+export function request<M extends EmptyMethodName, E extends EventName>(
+  method: M,
+  event: E | E[],
+  options?: RequestOptionsAdvanced<EventParams<E>>,
+): Promise<EventParams<E>>;
 
 /**
  * Calls specified TWA method and captures one of the specified events. Returns promise
@@ -95,12 +92,12 @@ export function request<Method extends EmptyMethodName, Event extends EventName>
  * @param event - event or events to listen
  * @param options - additional execution options.
  */
-export function request<Method extends NonEmptyMethodName, Event extends EventName>(
-  method: Method,
-  params: MethodParams<Method>,
-  event: Event | Event[],
-  options?: RequestOptionsAdvanced<EventParams<Event>>,
-): Promise<EventParams<Event>>;
+export function request<M extends NonEmptyMethodName, E extends EventName>(
+  method: M,
+  params: MethodParams<M>,
+  event: E | E[],
+  options?: RequestOptionsAdvanced<EventParams<E>>,
+): Promise<EventParams<E>>;
 
 export function request(
   method: MethodName,

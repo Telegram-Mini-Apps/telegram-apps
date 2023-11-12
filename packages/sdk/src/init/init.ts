@@ -3,6 +3,8 @@ import {
   setDebug,
   setTargetOrigin,
   on,
+  createPostEvent,
+  postEvent as bridgePostEvent,
 } from '@tma.js/bridge';
 import { withTimeout } from '@tma.js/utils';
 import { parse, retrieveLaunchData } from '@tma.js/launch-params';
@@ -21,12 +23,13 @@ import {
   parseCSSVarsOptions,
 } from './css.js';
 import {
-  createPostEvent,
   createThemeParams,
   createBackButton,
   createMainButton,
   createViewport,
-  createWebApp, createRequestIdGenerator, createClosingBehavior,
+  createWebApp,
+  createRequestIdGenerator,
+  createClosingBehavior,
 } from './creators/index.js';
 
 import type { InitOptions, InitResult } from './types.js';
@@ -76,7 +79,9 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
   } = lpThemeParams;
 
   const createRequestId = createRequestIdGenerator();
-  const postEvent = createPostEvent(checkCompat, version);
+  const postEvent = checkCompat
+    ? createPostEvent(version)
+    : bridgePostEvent;
   const themeParams = createThemeParams(lpThemeParams);
   const webApp = createWebApp(
     isPageReload,

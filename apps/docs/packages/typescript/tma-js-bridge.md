@@ -16,6 +16,7 @@ utmost level of control over cross-application communication.
 ## Installation
 
 ::: code-group
+
 ```bash [pnpm]
 pnpm i @tma.js/bridge
 ```
@@ -27,6 +28,7 @@ npm i @tma.js/bridge
 ```bash [yarn]
 yarn add @tma.js/bridge
 ```
+
 :::
 
 ## Calling methods
@@ -111,10 +113,41 @@ supports('web_app_trigger_haptic_feedback', '6.0'); // false
 supports('web_app_trigger_haptic_feedback', '6.1'); // true
 ```
 
+The `supports` function also allows checking if specified parameter in method parameters is
+supported:
+
+```typescript
+import { supports } from '@tma.js/bridge';
+
+supports('web_app_open_link', 'try_instant_view', '6.0'); // false
+supports('web_app_open_link', 'try_instant_view', '6.7'); // true
+```
+
 ::: tip
-It is recommended to use this function before calling Telegram Mini Apps methods to prevent 
+It is recommended to use this function before calling Telegram Mini Apps methods to prevent
 applications from stalling and other unexpected behavior.
 :::
+
+### Creating safer `postEvent`
+
+This package includes a function named `createPostEvent` that takes the current Telegram Mini Apps
+version as input. It returns the `postEvent` function, which internally checks if the specified
+method and parameters are supported. If they are not, the function will throw an error.
+
+```typescript
+import { createPostEvent } from '@tma.js/bridge';
+
+const postEvent = createPostEvent('6.5');
+
+// Will work fine.
+postEvent('web_app_read_text_from_clipboard');
+
+// Will throw an error.
+postEvent('web_app_request_phone');
+```
+
+It is highly recommended to use this `postEvent` generator to ensure that method calls work as
+expected.
 
 ## Debugging
 

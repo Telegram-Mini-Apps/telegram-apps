@@ -33,13 +33,19 @@ const windowWidthParser = createValueParserGenerator(
  */
 export const themeChangedPayload = json<ThemeChangedPayload>({
   theme_params: json({
+    accent_text_color: rgbOptional,
     bg_color: rgbOptional,
-    text_color: rgbOptional,
-    hint_color: rgbOptional,
-    link_color: rgbOptional,
     button_color: rgbOptional,
     button_text_color: rgbOptional,
+    destructive_text_color: rgbOptional,
+    header_bg_color: rgbOptional,
+    hint_color: rgbOptional,
+    link_color: rgbOptional,
     secondary_bg_color: rgbOptional,
+    section_bg_color: rgbOptional,
+    section_header_text_color: rgbOptional,
+    subtitle_text_color: rgbOptional,
+    text_color: rgbOptional,
   }),
 });
 
