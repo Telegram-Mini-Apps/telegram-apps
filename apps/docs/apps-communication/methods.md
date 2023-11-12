@@ -89,6 +89,14 @@ Notifies parent iframe about the current frame is ready. This method is only use
 of Telegram. As a result, Mini App will receive [set_custom_style](events.md#set-custom-style)
 event.
 
+| Field            | Type      | Description                                                      |
+|------------------|-----------|------------------------------------------------------------------|
+| reload_supported | `boolean` | _Optional_. True, if current Mini App supports native reloading. |
+
+### `iframe_will_reload`
+
+Notifies parent iframe about the current iframe is going to reload.
+
 ### `web_app_close`
 
 Closes Mini App.
