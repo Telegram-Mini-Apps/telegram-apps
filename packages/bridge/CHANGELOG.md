@@ -1,5 +1,14 @@
 # @tma.js/bridge
 
+## 1.4.0
+
+### Minor Changes
+
+- 57f0b23: - Support `reload_iframe` event, `iframe_will_reload` method and `iframe_ready` `reload_supported` parameter
+  - Implement `createPostEvent` method
+  - Add error classes
+  - Add new theme parameters
+
 ## 1.3.12
 
 ### Patch Changes
