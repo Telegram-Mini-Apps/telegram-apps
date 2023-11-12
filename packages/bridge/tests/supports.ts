@@ -1,42 +1,35 @@
 import { describe, expect, it } from 'vitest';
+import type { Version } from '@tma.js/utils';
 
+import { supports } from '../src/supports.js';
 import type {
   MethodName,
-  HasCheckSupportMethodName,
+  HasCheckSupportKeyMethod,
   HasCheckSupportMethodParam,
 } from '../src/index.js';
-import {
-  supports, detectSupportParams,
-} from '../src/supports.js';
 
-type Version = `${number}.${number}`;
 type HaveCheckSupportMethodTuple = {
-  [M in HasCheckSupportMethodName]: [M, HasCheckSupportMethodParam<M>]
-}[HasCheckSupportMethodName];
-
-type Test = [
-  version: Version | 'any',
-  methods: (MethodName | HaveCheckSupportMethodTuple)[],
-];
+  [M in HasCheckSupportKeyMethod]: [M, HasCheckSupportMethodParam<M>]
+}[HasCheckSupportKeyMethod];
 
 /**
  * Increases specified version by amount of updates.
  * @param version - initial version.
- * @param amount - count of bumps to add.
+ * @param amount - count of bumps.
  */
 function increaseVersion(version: Version, amount: number): string {
-  const lastDotIndex = version.lastIndexOf('.');
-  const lastPart = parseInt(version.slice(lastDotIndex + 1), 10);
-
-  if (Number.isNaN(lastPart)) {
+  const match = version.match(/(.+\.)(\d+)$/);
+  if (!match) {
     throw new Error(`Invalid version: ${version}`);
   }
-
-  return `${version.slice(0, lastDotIndex + 1)}${lastPart + amount}`;
+  return `${match[1]}${parseInt(match[2], 10) + amount}`;
 }
 
 describe('supports', () => {
-  const tests: Test[] = [
+  const tests: [
+    version: Version | 'any',
+    methods: (MethodName | HaveCheckSupportMethodTuple)[],
+  ][] = [
     ['any', [
       'iframe_ready',
       'iframe_will_reload',
@@ -81,69 +74,52 @@ describe('supports', () => {
     ]],
   ];
 
-    tests.forEach(([version, methods]) => {
-      if (version === 'any') {
-        methods.forEach((methodOrTuple) => {
-          if (Array.isArray(methodOrTuple)) {
-            const [method, param] = methodOrTuple;
-
-            it(`should return true in case, passed method is "${method}", parameter is "${param}" and version is 1`, () => {
-              expect(supports(method, param, '1')).toBe(true);
-            });
-          } else {
-            const method = methodOrTuple;
-
-            it(`should return true in case, passed method is "${method}" and version is 1`, () => {
-              expect(supports(method, '1')).toBe(true);
-            });
-          }
-        });
-        return;
-      }
-
+  tests.forEach(([version, methods]) => {
+    if (version === 'any') {
       methods.forEach((methodOrTuple) => {
         if (Array.isArray(methodOrTuple)) {
           const [method, param] = methodOrTuple;
-
-          it(`should return true in case, passed method is "${method}", parameter is "${param}" and version is ${version} or higher`, () => {
-            expect(supports(method, param, version)).toBe(true);
-            expect(supports(method, param, increaseVersion(version, 1))).toBe(true);
+          it(`should return true in case, passed method is "${method}", parameter is "${param}" and version is 1`, () => {
+            expect(supports(method, param, '1')).toBe(true);
           });
 
-          it(`should return false in case, passed method is "${method}", parameter is "${param}" and version is lower than ${version}`, () => {
-            expect(supports(method, param, increaseVersion(version, -1))).toBe(false);
-          });
-        } else {
-          const method = methodOrTuple;
-
-          it(`should return true in case, passed method is "${method}" and version is ${version} or higher`, () => {
-            expect(supports(method, version)).toBe(true);
-            expect(supports(method, increaseVersion(version, 1))).toBe(true);
-          });
-
-          it(`should return false in case, passed method is "${method}" and version is lower than ${version}`, () => {
-            expect(supports(method, increaseVersion(version, -1))).toBe(false);
-          });
+          return;
         }
+
+        const method = methodOrTuple;
+        it(`should return true in case, passed method is "${method}" and version is 1`, () => {
+          expect(supports(method, '1')).toBe(true);
+        });
       });
-    });
-  });
+      return;
+    }
 
-  describe('detectSupportParams', () => {
-    it('should return ["try_instant_view"] in case, passed method is "web_app_open_link" and params argument contains property "try_instant_view"', () => {
-      expect(
-        detectSupportParams('web_app_open_link', { url: '', try_instant_view: true }),
-      ).toStrictEqual(['try_instant_view']);
-      expect(detectSupportParams('web_app_open_link', { url: '' })).toStrictEqual([]);
-    });
+    methods.forEach((methodOrTuple) => {
+      if (Array.isArray(methodOrTuple)) {
+        const [method, param] = methodOrTuple;
 
-    it('should return ["color"] in case, passed method is "web_app_set_header_color" and params argument contains property "color"', () => {
-      expect(
-        detectSupportParams('web_app_set_header_color', { color: '#abc' }),
-      ).toStrictEqual(['color']);
-      expect(
-        detectSupportParams('web_app_set_header_color', { color_key: 'bg_color' }),
-      ).toStrictEqual([]);
+        it(`should return true in case, passed method is "${method}", parameter is "${param}" and version is ${version} or higher`, () => {
+          expect(supports(method, param, version)).toBe(true);
+          expect(supports(method, param, increaseVersion(version, 1))).toBe(true);
+        });
+
+        it(`should return false in case, passed method is "${method}", parameter is "${param}" and version is lower than ${version}`, () => {
+          expect(supports(method, param, increaseVersion(version, -1))).toBe(false);
+        });
+
+        return;
+      }
+
+      const method = methodOrTuple;
+
+      it(`should return true in case, passed method is "${method}" and version is ${version} or higher`, () => {
+        expect(supports(method, version)).toBe(true);
+        expect(supports(method, increaseVersion(version, 1))).toBe(true);
+      });
+
+      it(`should return false in case, passed method is "${method}" and version is lower than ${version}`, () => {
+        expect(supports(method, increaseVersion(version, -1))).toBe(false);
+      });
     });
   });
 });

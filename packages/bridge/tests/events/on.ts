@@ -1,8 +1,8 @@
 import { expect, it, vi, afterEach, describe, beforeEach } from 'vitest';
 
 import { on } from '../../src/index.js';
-import { createWindow, type WindowSpy } from '../../__test-utils__/createWindow.js';
-import { dispatchWindowMessageEvent } from '../../__test-utils__/dispatchWindowMessageEvent.js';
+import { createWindow, type WindowSpy } from '../../test-utils/createWindow.js';
+import { dispatchWindowMessageEvent } from '../../test-utils/dispatchWindowMessageEvent.js';
 
 let windowSpy: WindowSpy;
 
