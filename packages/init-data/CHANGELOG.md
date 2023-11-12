@@ -1,5 +1,14 @@
 # @tma.js/init-data
 
+## 0.2.21
+
+### Patch Changes
+
+- 92848a6: - Specify parsers type names
+- Updated dependencies [44ed697]
+- Updated dependencies [6b97921]
+  - @tma.js/parsing@1.0.0
+
 ## 0.2.20
 
 ### Patch Changes

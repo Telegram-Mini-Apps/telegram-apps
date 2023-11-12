@@ -1,5 +1,14 @@
 # @tma.js/bridge
 
+## 1.3.12
+
+### Patch Changes
+
+- 7a6549c: - Add `logger.log` call in postEvent
+- Updated dependencies [44ed697]
+- Updated dependencies [6b97921]
+  - @tma.js/parsing@1.0.0
+
 ## 1.3.11
 
 ### Patch Changes
