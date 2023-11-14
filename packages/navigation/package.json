@@ -47,8 +47,7 @@
   "dependencies": {
     "@tma.js/bridge": "workspace:*",
     "@tma.js/event-emitter": "workspace:*",
-    "@tma.js/logger": "workspace:*",
-    "@tma.js/parsing": "workspace:*"
+    "@tma.js/logger": "workspace:*"
   },
   "devDependencies": {
     "build-utils": "workspace:*",
