@@ -137,6 +137,7 @@ export default defineConfig({
                 link: '/packages/typescript/tma-js-init-data-node',
               },
               { text: '@tma.js/launch-params', link: '/packages/typescript/tma-js-launch-params' },
+              { text: '@tma.js/navigation', link: '/packages/typescript/tma-js-navigation' },
               {
                 text: '@tma.js/sdk',
                 collapsed: true,
