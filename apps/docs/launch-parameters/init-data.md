@@ -216,9 +216,9 @@ This section provides a complete list of parameters used in initialization data.
       </a>
     </td>
     <td>
-      <i>Optional</i>. An object containing information about the user-the interlocutor of the
-      current user. It is returned only for private chats, as well as for Mini App opened 
-      through the attachments menu.
+      <i>Optional</i>. An object containing data about the chat partner of the current user in 
+      the chat where the bot was launched via the attachment menu. Returned only for private chats 
+      and only for Mini Apps launched via the attachment menu.
     </td>
   </tr>
 
@@ -230,7 +230,7 @@ This section provides a complete list of parameters used in initialization data.
     <td>
       <i>Optional</i>. The value of the <code>startattach</code> or <code>startapp</code> query 
       parameter specified in the link. It is returned only for Mini Apps opened through the 
-      attachments menu.
+      attachment menu.
     </td>
   </tr>
 
@@ -329,16 +329,16 @@ Describes the chat information.
 
 Describes information about a user or bot.
 
-| Property                 | Type      | Description                                                                                                                                                       |
-|--------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| added_to_attachment_menu | `boolean` | _Optional_. True, if this user added the bot to the attachment menu.                                                                                              |
-| allows_write_to_pm       | `boolean` | _Optional_. True, if this user allowed the bot to message them.                                                                                                   |
-| is_premium               | `boolean` | _Optional_. Has the user purchased Telegram Premium.                                                                                                              |
-| first_name               | `string`  | Bot or user name.                                                                                                                                                 |
-| id                       | `number`  | Bot or user ID.                                                                                                                                                   |
-| is_bot                   | `boolean` | _Optional_. Is the user a bot.                                                                                                                                    |
-| is_premium               | `boolean` | _Optional_. Has the user purchased Telegram Premium.                                                                                                              |
-| last_name                | `string`  | _Optional_. User's last name.                                                                                                                                     |
-| language_code            | `string`  | _Optional_. [IETF](https://en.wikipedia.org/wiki/IETF_language_tag) user's language.                                                                              |
-| photo_url                | `string`  | _Optional_. Link to the user's or bot's photo. Photos can have formats `.jpeg` and `.svg'. It is returned only for Mini Apps opened through the attachments menu. |
-| username                 | `string`  | _Optional_. Login of the bot or user.                                                                                                                             |
+| Property                 | Type      | Description                                                                                                                                                      |
+|--------------------------|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| added_to_attachment_menu | `boolean` | _Optional_. True, if this user added the bot to the attachment menu.                                                                                             |
+| allows_write_to_pm       | `boolean` | _Optional_. True, if this user allowed the bot to message them.                                                                                                  |
+| is_premium               | `boolean` | _Optional_. Has the user purchased Telegram Premium.                                                                                                             |
+| first_name               | `string`  | Bot or user name.                                                                                                                                                |
+| id                       | `number`  | Bot or user ID.                                                                                                                                                  |
+| is_bot                   | `boolean` | _Optional_. Is the user a bot.                                                                                                                                   |
+| is_premium               | `boolean` | _Optional_. Has the user purchased Telegram Premium.                                                                                                             |
+| last_name                | `string`  | _Optional_. User's last name.                                                                                                                                    |
+| language_code            | `string`  | _Optional_. [IETF](https://en.wikipedia.org/wiki/IETF_language_tag) user's language.                                                                             |
+| photo_url                | `string`  | _Optional_. Link to the user's or bot's photo. Photos can have formats `.jpeg` and `.svg`. It is returned only for Mini Apps opened through the attachment menu. |
+| username                 | `string`  | _Optional_. Login of the bot or user.                                                                                                                            |
