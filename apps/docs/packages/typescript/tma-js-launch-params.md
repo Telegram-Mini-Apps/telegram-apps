@@ -139,8 +139,9 @@ serialize({
 This package enables the extraction of launch parameters from the current environment using
 the [retrieveFromLocation](#retrievefromlocation), [retrieveFromPerformance](#retrievefromperformance),
 and [retrieveFromStorage](#retrievefromstorage) functions. Developer is also able
-to use `retrieveLaunchData` to surely extract launch parameters and determine if current page was
-reloaded. Each of these functions throws an error if the source contains invalid data.
+to use [retrieveLaunchData](#retrievelaunchdata) to surely extract launch parameters and determine
+if current page was reloaded. Each of these functions throws an error if the source contains invalid
+data.
 
 ### `retrieveLaunchData`
 
@@ -165,7 +166,10 @@ Extracts launch parameters from `sessionStorage`. This method expects that launc
 been saved in the `sessionStorage` via the `saveToStorage` method.
 
 ```typescript
-import { retrieveFromStorage, saveToStorage } from '@tma.js/launch-params';
+import {
+  retrieveFromStorage,
+  saveToStorage,
+} from '@tma.js/launch-params';
 
 saveToStorage({
   initData: {
