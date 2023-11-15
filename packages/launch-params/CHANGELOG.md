@@ -1,5 +1,11 @@
 # @tma.js/launch-params
 
+## 1.0.0
+
+### Major Changes
+
+- 302a294: First major release.
+
 ## 0.0.7
 
 ### Patch Changes
