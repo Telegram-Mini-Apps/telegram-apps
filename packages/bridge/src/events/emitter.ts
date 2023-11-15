@@ -3,16 +3,16 @@ import { string } from '@tma.js/parsing';
 
 import { logger } from '../globals.js';
 import {
-  clipboardTextReceivedPayload,
-  customMethodInvokedPayload,
-  invoiceClosedPayload,
-  phoneRequestedPayload,
-  popupClosedPayload,
-  qrTextReceivedPayload,
-  themeChangedPayload,
-  viewportChangedPayload,
-  writeAccessRequestedPayload,
-} from './parsing.js';
+  clipboardTextReceived,
+  customMethodInvoked,
+  invoiceClosed,
+  phoneRequested,
+  popupClosed,
+  qrTextReceived,
+  themeChanged,
+  viewportChanged,
+  writeAccessRequested,
+} from './parsers/index.js';
 import { onTelegramEvent } from './onTelegramEvent.js';
 
 import type { EventEmitter, EventName } from './events.js';
@@ -51,10 +51,10 @@ export function createEmitter(): EventEmitter {
     try {
       switch (eventType) {
         case 'viewport_changed':
-          return emit(eventType, viewportChangedPayload.parse(eventData));
+          return emit(eventType, viewportChanged().parse(eventData));
 
         case 'theme_changed':
-          return emit(eventType, themeChangedPayload.parse(eventData));
+          return emit(eventType, themeChanged().parse(eventData));
 
         case 'popup_closed':
           // FIXME: Payloads are different on different platforms.
@@ -67,28 +67,28 @@ export function createEmitter(): EventEmitter {
           ) {
             return emit(eventType, {});
           }
-          return emit(eventType, popupClosedPayload.parse(eventData));
+          return emit(eventType, popupClosed().parse(eventData));
 
         case 'set_custom_style':
           return emit(eventType, string().parse(eventData));
 
         case 'qr_text_received':
-          return emit(eventType, qrTextReceivedPayload.parse(eventData));
+          return emit(eventType, qrTextReceived().parse(eventData));
 
         case 'clipboard_text_received':
-          return emit(eventType, clipboardTextReceivedPayload.parse(eventData));
+          return emit(eventType, clipboardTextReceived().parse(eventData));
 
         case 'invoice_closed':
-          return emit(eventType, invoiceClosedPayload.parse(eventData));
+          return emit(eventType, invoiceClosed().parse(eventData));
 
         case 'phone_requested':
-          return emit('phone_requested', phoneRequestedPayload.parse(eventData));
+          return emit('phone_requested', phoneRequested().parse(eventData));
 
         case 'custom_method_invoked':
-          return emit('custom_method_invoked', customMethodInvokedPayload.parse(eventData));
+          return emit('custom_method_invoked', customMethodInvoked().parse(eventData));
 
         case 'write_access_requested':
-          return emit('write_access_requested', writeAccessRequestedPayload.parse(eventData));
+          return emit('write_access_requested', writeAccessRequested().parse(eventData));
 
         // Events which have no parameters.
         case 'main_button_pressed':

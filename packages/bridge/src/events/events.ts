@@ -16,7 +16,7 @@ import type {
   ThemeChangedPayload,
   ViewportChangedPayload,
   WriteAccessRequestedPayload,
-} from './payloads.js';
+} from './parsers/index.js';
 
 /**
  * Map where key is known event name, and value is its listener.
