@@ -37,7 +37,5 @@ export function initData() {
       from: 'start_param',
     },
     user: user().optional(),
-  }, {
-    type: 'InitData',
-  });
+  }, 'InitData');
 }
