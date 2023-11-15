@@ -5,11 +5,12 @@ import {
   createIntegration as createRouterIntegration,
   type RouterIntegration,
 } from '@solidjs/router';
-import {
-  getHash,
-  type HashNavigator,
-  type NavigatorEventListener,
+import type {
+  HashNavigator,
+  HashNavigatorEventListener,
 } from '@tma.js/navigation';
+
+import { getHash } from './getHash.js';
 
 type Accessor<T> = () => T;
 
@@ -45,19 +46,19 @@ function scrollToHash(hash: string, fallbackTop: boolean) {
 
 /**
  * Creates integration for `@solidjs/router` package.
- * @param getNavigator - HashNavigator accessor.
+ * @param navigator - HashNavigator accessor.
  */
-export function createIntegration(getNavigator: Accessor<HashNavigator>): RouterIntegration {
+export function createIntegration(navigator: Accessor<HashNavigator>): RouterIntegration {
   return createRouterIntegration(
     // Router calls this getter whenever it wants to get actual navigation state.
-    () => getNavigator().path,
+    () => navigator().path,
 
     // Setter is called when some of the router functionality was used. For example, <Navigate/>.
     ({ scroll = false, value = '', replace = false }) => {
       if (replace) {
-        getNavigator().replace(value);
+        void navigator().replace(value);
       } else {
-        void getNavigator().push(value);
+        void navigator().push(value);
       }
       const hash = getHash(value);
       if (!hash) {
@@ -74,19 +75,23 @@ export function createIntegration(getNavigator: Accessor<HashNavigator>): Router
     // This function is called when Router context is initialized. It is the best place to
     // bind to navigator state changes, which could occur outside.
     (notify: (value: string) => void) => {
-      const onChange: NavigatorEventListener<'change'> = ({ search, pathname }) => {
-        notify(`${pathname}${search}`);
-      };
-      const navigator = getNavigator();
-      navigator.on('change', onChange);
+      const onChange: HashNavigatorEventListener<'change'> = (event) => {
+        const {
+          to: {
+            hash,
+            pathname,
+            search,
+          },
+        } = event;
 
-      return () => {
-        navigator.off('change', onChange);
+        notify(`${pathname}${search}${hash}`);
       };
+
+      return navigator().on('change', onChange);
     },
     {
       go(delta: number) {
-        getNavigator().go(delta);
+        void navigator().go(delta);
       },
       renderPath: (path: string) => `#${path}`,
       parsePath: (str: string) => {
