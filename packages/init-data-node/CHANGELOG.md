@@ -1,5 +1,11 @@
 # @tma.js/init-data-node
 
+## 0.0.20
+
+### Patch Changes
+
+- @tma.js/init-data@0.2.22
+
 ## 0.0.19
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @tma.js/init-data
 
+## 0.2.22
+
+### Patch Changes
+
+- Updated dependencies [b8e9f9d]
+  - @tma.js/parsing@1.0.1
+
 ## 0.2.21
 
 ### Patch Changes

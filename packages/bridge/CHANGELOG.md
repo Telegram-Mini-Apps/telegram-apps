@@ -1,5 +1,13 @@
 # @tma.js/bridge
 
+## 1.4.1
+
+### Patch Changes
+
+- a861e65: Better parsing for theme_changed event.
+- Updated dependencies [b8e9f9d]
+  - @tma.js/parsing@1.0.1
+
 ## 1.4.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # @tma.js/theme-params
 
+## 1.0.0
+
+### Major Changes
+
+- a63953f: First major release. Better working utilities and types.
+
+### Patch Changes
+
+- Updated dependencies [b8e9f9d]
+  - @tma.js/parsing@1.0.1
+
 ## 0.1.0
 
 ### Minor Changes

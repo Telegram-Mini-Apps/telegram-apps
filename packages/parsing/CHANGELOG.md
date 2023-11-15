@@ -1,5 +1,11 @@
 # @tma.js/parsing
 
+## 1.0.1
+
+### Patch Changes
+
+- b8e9f9d: Remove functionality related to determining if value is empty
+
 ## 1.0.0
 
 ### Major Changes

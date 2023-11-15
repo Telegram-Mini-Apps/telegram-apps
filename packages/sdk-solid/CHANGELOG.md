@@ -1,5 +1,11 @@
 # @tma.js/sdk-solid
 
+## 0.1.20
+
+### Patch Changes
+
+- @tma.js/sdk@0.13.3
+
 ## 0.1.19
 
 ### Patch Changes

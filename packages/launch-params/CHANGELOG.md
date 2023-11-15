@@ -1,5 +1,15 @@
 # @tma.js/launch-params
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [a63953f]
+- Updated dependencies [b8e9f9d]
+  - @tma.js/theme-params@1.0.0
+  - @tma.js/parsing@1.0.1
+  - @tma.js/init-data@0.2.22
+
 ## 1.0.0
 
 ### Major Changes
