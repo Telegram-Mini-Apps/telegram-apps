@@ -9,40 +9,6 @@ import { State } from '../../state/index.js';
 
 import type { ThemeParamsEvents, ThemeParamsState } from './types.js';
 
-function prepareThemeParams(value: ThemeParamsType): ThemeParamsState {
-  const {
-    accentTextColor = null,
-    backgroundColor = null,
-    buttonColor = null,
-    buttonTextColor = null,
-    destructiveTextColor = null,
-    headerBackgroundColor = null,
-    hintColor = null,
-    linkColor = null,
-    secondaryBackgroundColor = null,
-    sectionBackgroundColor = null,
-    sectionHeaderTextColor = null,
-    subtitleTextColor = null,
-    textColor = null,
-  } = value;
-
-  return {
-    accentTextColor,
-    backgroundColor,
-    buttonColor,
-    buttonTextColor,
-    destructiveTextColor,
-    headerBackgroundColor,
-    hintColor,
-    linkColor,
-    secondaryBackgroundColor,
-    sectionBackgroundColor,
-    sectionHeaderTextColor,
-    subtitleTextColor,
-    textColor,
-  };
-}
-
 /**
  * Contains information about currently used theme by application.
  * @see https://core.telegram.org/bots/webapps#themeparams
@@ -71,7 +37,7 @@ export class ThemeParams {
    */
   static sync(themeParams: ThemeParams): void {
     on('theme_changed', (event) => {
-      themeParams.state.set(prepareThemeParams(parse(event.theme_params)));
+      themeParams.state.set(parse(event.theme_params));
     });
   }
 
@@ -94,35 +60,59 @@ export class ThemeParams {
   private readonly state: State<ThemeParamsState>;
 
   constructor(params: ThemeParamsType) {
-    this.state = new State(prepareThemeParams(params), this.ee);
+    this.state = new State(params, this.ee);
+  }
+
+  get accentTextColor(): RGB | null {
+    return this.get('accentTextColor');
   }
 
   /**
    * Returns background color.
    */
   get backgroundColor(): RGB | null {
-    return this.state.get('backgroundColor');
+    return this.get('backgroundColor');
   }
 
   /**
    * Returns button color.
    */
   get buttonColor(): RGB | null {
-    return this.state.get('buttonColor');
+    return this.get('buttonColor');
   }
 
   /**
    * Returns button text color.
    */
   get buttonTextColor(): RGB | null {
-    return this.state.get('buttonTextColor');
+    return this.get('buttonTextColor');
+  }
+
+  get destructiveTextColor(): RGB | null {
+    return this.get('destructiveTextColor');
+  }
+
+  /**
+   * Retrieves palette color value by its name.
+   * @param key - palette key name.
+   */
+  get(key: keyof ThemeParamsType): RGB | null {
+    return this.state.get(key) || null;
+  }
+
+  getState(): ThemeParamsType {
+    return this.state.getState();
+  }
+
+  get headerBackgroundColor(): RGB | null {
+    return this.get('headerBackgroundColor');
   }
 
   /**
    * Returns hint color.
    */
   get hintColor(): RGB | null {
-    return this.state.get('hintColor');
+    return this.get('hintColor');
   }
 
   /**
@@ -137,7 +127,7 @@ export class ThemeParams {
    * Returns current link color.
    */
   get linkColor(): RGB | null {
-    return this.state.get('linkColor');
+    return this.get('linkColor');
   }
 
   /**
@@ -154,13 +144,25 @@ export class ThemeParams {
    * Returns secondary background color.
    */
   get secondaryBackgroundColor(): RGB | null {
-    return this.state.get('secondaryBackgroundColor');
+    return this.get('secondaryBackgroundColor');
+  }
+
+  get sectionBackgroundColor(): RGB | null {
+    return this.get('sectionBackgroundColor');
+  }
+
+  get sectionHeaderTextColor(): RGB | null {
+    return this.get('sectionHeaderTextColor');
+  }
+
+  get subtitleTextColor(): RGB | null {
+    return this.get('subtitleTextColor');
   }
 
   /**
    * Returns text color.
    */
   get textColor(): RGB | null {
-    return this.state.get('textColor');
+    return this.get('textColor');
   }
 }

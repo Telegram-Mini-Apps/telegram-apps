@@ -34,30 +34,6 @@ function setSizeVariable(name: string, size: number) {
 }
 
 /**
- * Creates CSS variables based on theme parameters.
- * @param themeParams - ThemeParams instance.
- */
-function createThemeVariables(themeParams: ThemeParams): void {
-  const {
-    backgroundColor,
-    buttonTextColor,
-    secondaryBackgroundColor,
-    hintColor,
-    buttonColor,
-    linkColor,
-    textColor,
-  } = themeParams;
-
-  setColorVariable('--tg-theme-bg-color', backgroundColor);
-  setColorVariable('--tg-theme-button-color', buttonColor);
-  setColorVariable('--tg-theme-button-text-color', buttonTextColor);
-  setColorVariable('--tg-theme-hint-color', hintColor);
-  setColorVariable('--tg-theme-link-color', linkColor);
-  setColorVariable('--tg-theme-secondary-bg-color', secondaryBackgroundColor);
-  setColorVariable('--tg-theme-text-color', textColor);
-}
-
-/**
  * Creates CSS variables based on Mini App background and header colors with
  * theme parameters.
  * @param webApp - WebApp instance.
@@ -72,16 +48,9 @@ function createWebAppVariables(webApp: WebApp, themeParams: ThemeParams): void {
 }
 
 /**
- * Creates CSS variables connected with theme parameters.
- *
- * Created variables:
- * - `--tg-theme-bg-color`
- * - `--tg-theme-button-color`
- * - `--tg-theme-button-text-color`
- * - `--tg-theme-hint-color`
- * - `--tg-theme-link-color`
- * - `--tg-theme-secondary-bg-color`
- * - `--tg-theme-text-color`
+ * Creates CSS variables connected with theme parameters. Created CSS variables names are
+ * following the pattern "--tg-theme-{name}". {name} is a theme parameters key name converted
+ * from snake to kebab case.
  *
  * Variables are being automatically updated in case, corresponding properties
  * updated in passed ThemeParams instance.
@@ -89,7 +58,14 @@ function createWebAppVariables(webApp: WebApp, themeParams: ThemeParams): void {
  * @param themeParams - ThemeParams instance.
  */
 export function bindThemeCSSVariables(themeParams: ThemeParams): void {
-  const actualize = () => createThemeVariables(themeParams);
+  const actualize = () => {
+    const state = themeParams.getState();
+
+    Object.entries(state).forEach(([k, v]) => {
+      const key = k.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
+      setColorVariable(`--tg-theme-${key}`, v || null);
+    });
+  };
 
   themeParams.on('changed', actualize);
 
