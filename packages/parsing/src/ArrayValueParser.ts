@@ -1,6 +1,6 @@
 import { ValueParser } from './ValueParser.js';
 import { unexpectedTypeError } from './unexpectedTypeError.js';
-import type { AnyParser, Parser, IsEmptyFunc } from './types.js';
+import type { AnyParser, Parser } from './types.js';
 import type { ValueParserOverrides, ParseResult } from './ValueParser.js';
 
 export type OfResult<BaseClass, ItemType, IsOptional extends boolean> = ArrayParserType<
@@ -55,10 +55,9 @@ export class ArrayValueParser<ItemType, IsOptional extends boolean>
   constructor(
     itemParser: AnyParser<ItemType>,
     isOptional: IsOptional,
-    isEmpty: IsEmptyFunc,
     type?: string,
   ) {
-    super(parseArray, isOptional, isEmpty, type);
+    super(parseArray, isOptional, type);
 
     this.itemParser = typeof itemParser === 'function'
       ? itemParser

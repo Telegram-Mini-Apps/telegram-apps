@@ -4,11 +4,6 @@
 export type AnyParser<T> = Parser<T> | { parse: Parser<T> };
 
 /**
- * Describes function which returns true in case value should be recognized as empty.
- */
-export type IsEmptyFunc = (value: unknown) => boolean;
-
-/**
  * Detailed schema field options.
  */
 export interface SchemaFieldDetailed<T> {

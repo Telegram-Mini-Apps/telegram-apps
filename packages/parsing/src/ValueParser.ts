@@ -1,7 +1,7 @@
 import type { If } from '@tma.js/util-types';
 
 import { ParseError } from './ParseError.js';
-import type { IsEmptyFunc, Parser } from './types.js';
+import type { Parser } from './types.js';
 
 /**
  * Result of "parse" function.
@@ -46,7 +46,6 @@ export class ValueParser<ResultType, IsOptional extends boolean> {
   constructor(
     protected parser: Parser<ResultType>,
     protected isOptional: IsOptional,
-    protected isEmpty: IsEmptyFunc,
     protected type?: string,
   ) {
   }
@@ -54,7 +53,7 @@ export class ValueParser<ResultType, IsOptional extends boolean> {
   parse(value: unknown): ParseResult<ResultType, IsOptional> {
     // In case, parsing result is specified as optional, and passed value is considered as empty,
     // we can return undefined. Otherwise, pass to parser.
-    if (this.isOptional && this.isEmpty(value)) {
+    if (this.isOptional && value === undefined) {
       return undefined as ParseResult<ResultType, IsOptional>;
     }
 
