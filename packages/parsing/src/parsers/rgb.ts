@@ -9,6 +9,4 @@ const str = string();
 /**
  * Returns parser to parse value as RGB color.
  */
-export const rgb = createValueParserGenerator<RGB>((value) => toRGB(str.parse(value)), {
-  type: 'rgb',
-});
+export const rgb = createValueParserGenerator<RGB>((value) => toRGB(str.parse(value)), 'rgb');

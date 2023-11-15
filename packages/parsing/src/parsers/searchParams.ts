@@ -1,33 +1,14 @@
 import { ValueParser } from '../ValueParser.js';
-import { isUndefined } from '../isUndefined.js';
 import { unexpectedTypeError } from '../unexpectedTypeError.js';
 import { parseBySchema } from '../parseBySchema.js';
-import type { Schema, IsEmptyFunc } from '../types.js';
-
-interface Options {
-  /**
-   * Described type name.
-   */
-  type?: string;
-
-  /**
-   * Should return true if passed value is recognized empty for this parser.
-   * @default Function which returns true if value is undefined or null.
-   */
-  isEmpty?: IsEmptyFunc;
-}
+import type { Schema } from '../types.js';
 
 /**
  * Creates new search params parser according to passed schema.
  * @param schema - object schema.
- * @param options - additional options.
+ * @param type - parser type name.
  */
-export function searchParams<T>(schema: Schema<T>, options: Options = {}): ValueParser<T, false> {
-  const {
-    type,
-    isEmpty = isUndefined,
-  } = options;
-
+export function searchParams<T>(schema: Schema<T>, type?: string): ValueParser<T, false> {
   return new ValueParser((value) => {
     if (typeof value !== 'string' && !(value instanceof URLSearchParams)) {
       throw unexpectedTypeError();
@@ -39,5 +20,5 @@ export function searchParams<T>(schema: Schema<T>, options: Options = {}): Value
       const paramValue = params.get(field);
       return paramValue === null ? undefined : paramValue;
     });
-  }, false, isEmpty, type);
+  }, false, type);
 }

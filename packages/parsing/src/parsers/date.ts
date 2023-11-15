@@ -10,6 +10,4 @@ export const date = createValueParserGenerator<Date>((value) => (
   value instanceof Date
     ? value
     : new Date(num.parse(value) * 1000)
-), {
-  type: 'Date',
-});
+), 'Date');
