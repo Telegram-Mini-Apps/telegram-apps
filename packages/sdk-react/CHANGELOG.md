@@ -1,5 +1,16 @@
 # @tma.js/sdk-react
 
+## 0.5.4
+
+### Patch Changes
+
+- Updated dependencies [a63953f]
+- Updated dependencies [a861e65]
+  - @tma.js/theme-params@1.0.0
+  - @tma.js/bridge@1.4.1
+  - @tma.js/launch-params@1.0.1
+  - @tma.js/sdk@0.13.3
+
 ## 0.5.3
 
 ### Patch Changes
