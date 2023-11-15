@@ -237,9 +237,6 @@ importers:
       '@tma.js/logger':
         specifier: workspace:*
         version: link:../logger
-      '@tma.js/parsing':
-        specifier: workspace:*
-        version: link:../parsing
     devDependencies:
       build-utils:
         specifier: workspace:*
