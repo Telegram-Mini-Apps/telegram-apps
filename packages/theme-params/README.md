@@ -1,19 +1,17 @@
 # @tma.js/theme-params
 
-[npm-badge]: https://img.shields.io/npm/v/@tma.js/theme-params?logo=npm
-
 [npm-link]: https://npmjs.com/package/@tma.js/theme-params
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/@tma.js/theme-params
+[npm-shield]: https://img.shields.io/npm/v/@tma.js/theme-params?logo=npm
 
-[![NPM][npm-badge]][npm-link] 
-![Size][size-badge]
+![[npm-link]][npm-shield]
 
-Utilities to work with Telegram Mini Apps theme parameters.
+Provides utilities to work with Telegram Mini
+Apps [theme](https://docs.telegram-mini-apps.com/functionality/theming).
 
-This library is a part of TypeScript packages ecosystem around Telegram Web 
-Apps. To see full documentation and other libraries, please, visit 
-[this](https://docs.telegram-mini-apps.com/) link.
+This library is a part of TypeScript packages ecosystem around Telegram Web
+Apps. To see full documentation and other libraries, please, visit
+[this](https://docs.telegram-mini-apps.com/packages/typescript/tma-js-theme-params) link.
 
 ## Installation
 

@@ -18,6 +18,4 @@ export const number = createValueParserGenerator<number>((value) => {
   }
 
   throw unexpectedTypeError();
-}, {
-  type: 'number',
-});
+}, 'number');

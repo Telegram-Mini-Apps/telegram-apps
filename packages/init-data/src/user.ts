@@ -41,7 +41,5 @@ export function user() {
       from: 'photo_url',
     },
     username: string().optional(),
-  }, {
-    type: 'User',
-  });
+  }, 'User');
 }

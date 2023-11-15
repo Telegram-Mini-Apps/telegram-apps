@@ -37,7 +37,5 @@ export function launchParams() {
       type: string(),
       from: 'tgWebAppVersion',
     },
-  }, {
-    type: 'LaunchParams',
-  });
+  }, 'LaunchParams');
 }

@@ -9,6 +9,4 @@ export const string = createValueParserGenerator<string>((value) => {
     return value.toString();
   }
   throw unexpectedTypeError();
-}, {
-  type: 'string',
-});
+}, 'string');

@@ -1,6 +1,6 @@
 import type { EventEmitter } from '@tma.js/event-emitter';
 
-import type { StateEvents, StringKeys } from './types.js';
+import type { StateEvents } from './types.js';
 
 /**
  * Represents state which is observable via passed EventEmitter.
@@ -15,18 +15,18 @@ export class State<S extends object> {
     }
   }
 
-  private internalSet<K extends StringKeys<S>>(key: K, value: S[K]): boolean {
+  private internalSet<K extends keyof S>(key: K, value: S[K]): boolean {
     if (this.state[key] === value) {
       return false;
     }
 
     this.state[key] = value;
-    this.emit(`${key}Changed`, value);
+    this.emit(`${String(key)}Changed`, value);
 
     return true;
   }
 
-  set<K extends StringKeys<S>>(key: K, value: S[K]): void;
+  set<K extends keyof S>(key: K, value: S[K]): void;
   set(state: Partial<S>): void;
   set(keyOrState: any, value?: any): void {
     let didChange = false;
@@ -47,7 +47,11 @@ export class State<S extends object> {
     }
   }
 
-  get<K extends StringKeys<S>>(key: K): Readonly<S[K]> {
+  get<K extends keyof S>(key: K): Readonly<S[K]> {
     return this.state[key];
+  }
+
+  getState() {
+    return { ...this.state };
   }
 }

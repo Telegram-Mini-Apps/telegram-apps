@@ -1,4 +1,4 @@
-import { expect, vi, beforeEach, afterEach, describe, it } from 'vitest';
+import { expect, vi, beforeEach, afterEach, it } from 'vitest';
 
 import { on, off } from '../../src/index.js';
 import { createWindow, type WindowSpy } from '../../test-utils/createWindow.js';
@@ -14,26 +14,20 @@ afterEach(() => {
   windowSpy.mockRestore();
 });
 
-describe('events', () => {
-  describe('off.ts', () => {
-    describe('off', () => {
-      it('should remove listener', () => {
-        const listener = vi.fn();
-        const emit = () => dispatchWindowMessageEvent('viewport_changed', {
-          height: 123,
-          width: 321,
-          is_expanded: false,
-          is_state_stable: false,
-        });
-
-        on('viewport_changed', listener);
-        emit();
-        expect(listener).toHaveBeenCalledTimes(1);
-
-        off('viewport_changed', listener);
-        emit();
-        expect(listener).toHaveBeenCalledTimes(1);
-      });
-    });
+it('should remove listener', () => {
+  const listener = vi.fn();
+  const emit = () => dispatchWindowMessageEvent('viewport_changed', {
+    height: 123,
+    width: 321,
+    is_expanded: false,
+    is_state_stable: false,
   });
+
+  on('viewport_changed', listener);
+  emit();
+  expect(listener).toHaveBeenCalledTimes(1);
+
+  off('viewport_changed', listener);
+  emit();
+  expect(listener).toHaveBeenCalledTimes(1);
 });

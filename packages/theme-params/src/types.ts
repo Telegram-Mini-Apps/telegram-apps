@@ -36,4 +36,5 @@ export interface ThemeParams {
    */
   subtitleTextColor?: RGB;
   textColor?: RGB;
+  [key: string]: RGB | undefined; // Future unknown palette keys.
 }
