@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/navigation",
-  "version": "0.0.14",
+  "version": "1.0.0",
   "description": "Custom navigation classes and utilities which could be used to control Mini App navigation.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
