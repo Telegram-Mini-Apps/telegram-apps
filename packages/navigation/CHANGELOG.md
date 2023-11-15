@@ -1,5 +1,11 @@
 # @tma.js/navigation
 
+## 1.0.0
+
+### Major Changes
+
+- 657c2b1: First major package release.
+
 ## 0.0.14
 
 ### Patch Changes

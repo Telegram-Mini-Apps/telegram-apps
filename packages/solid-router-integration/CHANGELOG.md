@@ -1,5 +1,12 @@
 # @tma.js/solid-router-integration
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [657c2b1]
+  - @tma.js/navigation@1.0.0
+
 ## 0.0.4
 
 ### Patch Changes
