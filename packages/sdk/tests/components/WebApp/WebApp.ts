@@ -26,7 +26,15 @@ function createWebApp(options: CreateWebAppOptions = {}): WebApp {
     botInline = false,
   } = options;
 
-  return new WebApp(headerColor, backgroundColor, version, platform, botInline, createRequestId, postEvent);
+  return new WebApp(
+    headerColor,
+    backgroundColor,
+    version,
+    platform,
+    botInline,
+    createRequestId,
+    postEvent,
+  );
 }
 
 describe('components', () => {
