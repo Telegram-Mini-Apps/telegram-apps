@@ -54,6 +54,8 @@ use `setHeaderColor(colorKey: HeaderColorKey)` and `setBackgroundColor(color: RG
 - `readTextFromClipboard(): Promise<string | null>` - reads text
   from clipboard and returns extracted data.
 - `sendData(data: string)` - sends data to Telegram bot.
+- `switchInlineQuery(text: string, chatTypes: string[])` - sends bot username and specified text
+  to the chat, selected by user.
 
 ## Events
 
