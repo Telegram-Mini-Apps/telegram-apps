@@ -15,6 +15,7 @@ import type { CreateRequestIdFunc } from '../../types.js';
  * @param backgroundColor - web app background color.
  * @param version - platform version.
  * @param platform - Telegram Mini Apps platform name.
+ * @param botInline - is Mini App in inline mode.
  * @param createRequestId - function which generates request identifiers.
  * @param postEvent - Bridge postEvent function
  */
@@ -23,6 +24,7 @@ export function createWebApp(
   backgroundColor: RGB,
   version: string,
   platform: Platform,
+  botInline: boolean,
   createRequestId: CreateRequestIdFunc,
   postEvent: PostEvent,
 ): WebApp {
@@ -36,6 +38,7 @@ export function createWebApp(
     stateBackgroundColor,
     version,
     platform,
+    botInline,
     createRequestId,
     postEvent,
   );
