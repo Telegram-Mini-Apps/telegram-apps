@@ -1,6 +1,6 @@
 # `MainButton`
 
-The component which controls the [Main Button](../../../../docs/ui/main-button.md).
+The component which controls the [Main Button](../../../../platform/ui/main-button.md).
 
 ## Initialization
 

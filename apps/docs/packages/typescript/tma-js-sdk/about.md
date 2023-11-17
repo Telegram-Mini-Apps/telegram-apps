@@ -14,7 +14,7 @@ Mini Apps. It consists of several individual components, each responsible for a 
 the Telegram Mini Apps ecosystem.
 
 Before you begin using the SDK, we highly recommend familiarizing yourself with the Telegram Mini
-Apps [documentation](../../../docs/about-platform.md) to grasp the fundamental concepts of the platform.
+Apps [documentation](../../../platform/about-platform.md) to grasp the fundamental concepts of the platform.
 
 ## Installation
 
@@ -123,7 +123,7 @@ reached, an error will be thrown.
 ## Launch parameters
 
 The launch parameters are the initial parameters passed to the Mini App. You can find more
-information about them in the [documentation](../../../docs/launch-parameters/common-information.md).
+information about them in the [documentation](../../../platform/launch-parameters/common-information.md).
 
 Developers can retrieve the launch parameters by using the `retrieveLaunchParams` function. This
 function parses the parameters that begin with the `tgWebApp` prefix.

@@ -2,7 +2,7 @@
 
 The package provides utilities to work with the initialization data of Telegram Mini Apps. To learn
 more about the initialization data and its usage, please refer to
-the [documentation](../../docs/launch-parameters/common-information.md).
+the [documentation](../../platform/launch-parameters/common-information.md).
 
 ## Installation
 

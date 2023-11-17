@@ -1,7 +1,7 @@
 # `ClosingBehaviour`
 
 Controls the application closing behavior. There is more information about this functionality in
-this [documentation](../../../../docs/functionality/closing-behavior.md).
+this [documentation](../../../../platform/functionality/closing-behavior.md).
 
 ## Initialization
 
