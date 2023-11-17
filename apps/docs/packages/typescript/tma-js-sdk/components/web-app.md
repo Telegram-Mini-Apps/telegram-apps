@@ -26,7 +26,7 @@ const webApp = new WebApp(
 ## Platform
 
 You could get current Telegram Mini
-Apps [platform](../../../../about-platform.md#supported-applications) by getting `platform`
+Apps [platform](../../../../docs/about-platform.md#supported-applications) by getting `platform`
 property.
 
 ## Opening links

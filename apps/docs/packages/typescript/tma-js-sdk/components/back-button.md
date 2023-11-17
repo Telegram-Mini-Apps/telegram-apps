@@ -1,6 +1,6 @@
 # `BackButton`
 
-Controls the [Back Button](../../../../ui/back-button.md) displayed in the header of the Mini App in
+Controls the [Back Button](../../../../docs/ui/back-button.md) displayed in the header of the Mini App in
 the Telegram interface.
 
 ## Initialization

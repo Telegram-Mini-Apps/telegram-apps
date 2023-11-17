@@ -1,6 +1,6 @@
 # `Popup`
 
-The component which controls the currently displayed application [popup](../../../../ui/popup.md).
+The component which controls the currently displayed application [popup](../../../../docs/ui/popup.md).
 
 ## Initialization
 

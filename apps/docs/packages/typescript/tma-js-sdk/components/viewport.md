@@ -1,7 +1,7 @@
 # `Viewport`
 
 The component which contains an information about the current Mini App
-device [viewport](../../../../functionality/viewport.md), its dimensions and state.
+device [viewport](../../../../docs/functionality/viewport.md), its dimensions and state.
 
 ## Initialization
 

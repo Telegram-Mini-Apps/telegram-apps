@@ -5,7 +5,7 @@ outline: [2, 3]
 # `InitData`
 
 The component which is responsible for displaying the Telegram Mini
-Apps [init data](../../../../launch-parameters/init-data.md). This class represents object with
+Apps [init data](../../../../docs/launch-parameters/init-data.md). This class represents object with
 readonly properties. To create its new instance, a developer could use the class constructor as
 follows:
 

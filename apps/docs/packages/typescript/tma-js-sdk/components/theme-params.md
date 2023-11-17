@@ -1,7 +1,7 @@
 # `ThemeParams`
 
 The component which contains an information about currently
-used [theme](../../../../functionality/theming.md) by the Telegram application.
+used [theme](../../../../docs/functionality/theming.md) by the Telegram application.
 
 ## Initialization
 

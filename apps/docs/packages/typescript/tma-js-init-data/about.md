@@ -8,7 +8,7 @@
 
 The package provides utilities to work with the initialization data of Telegram Mini Apps on the
 client side. To learn more about the initialization data and its usage, please refer to
-the [documentation](../../../launch-parameters/common-information.md).
+the [documentation](../../../docs/launch-parameters/common-information.md).
 
 ## Installation
 
@@ -72,5 +72,5 @@ to [InitData type](init-data.md) page.
 ## Validation
 
 We have moved the validation utilities to a
-separate [TypeScript package](../tma-js-init-data-node.md). These utilities are only needed on the
+separate [TypeScript package](../../node/tma-js-init-data-node.md). These utilities are only needed on the
 server side, as there is no need to validate initialization data on the client side.**
