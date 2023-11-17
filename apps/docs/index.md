@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: Documentation
-      link: /about-platform
+      link: /platform/about-platform
 
 features:
   - icon: 💻

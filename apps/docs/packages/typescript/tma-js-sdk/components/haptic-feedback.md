@@ -2,7 +2,7 @@
 
 Controls the haptic feedback. It allows calling different types of haptic notifications which
 usually occur after the user interaction with the application. There is more information about this
-component in this [documentation](../../../../docs/functionality/haptic-feedback.md).
+component in this [documentation](../../../../platform/functionality/haptic-feedback.md).
 
 ## Initialization
 

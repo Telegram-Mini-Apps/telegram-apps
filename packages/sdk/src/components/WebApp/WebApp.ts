@@ -9,6 +9,7 @@ import {
   type WriteAccessRequestedStatus,
   type InvoiceStatus,
   type PostEvent,
+  type SwitchInlineQueryChatType,
 } from '@tma.js/bridge';
 import type { Platform } from '@tma.js/launch-params';
 
@@ -33,6 +34,7 @@ export class WebApp {
     backgroundColor: RGB,
     private readonly currentVersion: Version,
     private readonly currentPlatform: Platform,
+    private readonly botInline: boolean,
     private readonly createRequestId: () => string,
     private readonly postEvent: PostEvent = defaultPostEvent,
   ) {
@@ -40,14 +42,31 @@ export class WebApp {
       backgroundColor,
       headerColor,
     }, this.ee);
-    this.supports = createSupportsFunc(currentVersion, {
+    const webAppSupports = createSupportsFunc(currentVersion, {
       openInvoice: 'web_app_open_invoice',
       readTextFromClipboard: 'web_app_read_text_from_clipboard',
       setHeaderColor: 'web_app_set_header_color',
       setBackgroundColor: 'web_app_set_background_color',
+      switchInlineQuery: 'web_app_switch_inline_query',
       requestPhoneAccess: 'web_app_request_phone',
       requestWriteAccess: 'web_app_request_write_access',
     });
+
+    this.supports = (method) => {
+      const supported = webAppSupports(method);
+      if (!supported) {
+        return supported;
+      }
+
+      // web_app_switch_inline_query requires a Mini App to be in inline mode, that's why we
+      // add 1 more check here.
+      if (method === 'switchInlineQuery' && !botInline) {
+        return false;
+      }
+
+      return true;
+    };
+
     this.supportsParam = createSupportsParamFunc(currentVersion, {
       'setHeaderColor.color': ['web_app_set_header_color', 'color'],
       'openLink.tryInstantView': ['web_app_open_link', 'try_instant_view'],
@@ -206,7 +225,6 @@ export class WebApp {
    * - Access to clipboard is not allowed
    */
   async readTextFromClipboard(): Promise<string | null> {
-    // TODO: Generate request id.
     const { data = null } = await request(
       'web_app_read_text_from_clipboard',
       { req_id: this.createRequestId() },
@@ -292,6 +310,7 @@ export class WebApp {
     | 'readTextFromClipboard'
     | 'setHeaderColor'
     | 'setBackgroundColor'
+    | 'switchInlineQuery'
     | 'requestWriteAccess'
     | 'requestPhoneAccess'
   >;
@@ -300,6 +319,26 @@ export class WebApp {
    * Checks if specified method parameter is supported by current component.
    */
   supportsParam: SupportsFunc<'setHeaderColor.color' | 'openLink.tryInstantView'>;
+
+  /**
+   * Inserts the bot's username and the specified inline query in the current chat's input field.
+   * Query may be empty, in which case only the bot's username will be inserted. The client prompts
+   * the user to choose a specific chat, then opens that chat and inserts the bot's username and
+   * the specified inline query in the input field.
+   * @param text - text which should be inserted in the input after the current bot name. Max
+   * length is 256 symbols.
+   * @param chatTypes - List of chat types which could be chosen to send the message. Could be
+   * empty list.
+   */
+  switchInlineQuery(text: string, chatTypes: SwitchInlineQueryChatType[] = []): void {
+    if (!this.supports('switchInlineQuery') && !this.botInline) {
+      throw new Error('Method is unsupported because Mini App should be launched in inline mode.');
+    }
+    this.postEvent('web_app_switch_inline_query', {
+      query: text,
+      chat_types: chatTypes,
+    });
+  }
 
   /**
    * Current Mini App version. This property is used by other components to check if

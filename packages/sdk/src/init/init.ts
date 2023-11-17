@@ -88,6 +88,7 @@ async function actualInit(options: InitOptions = {}): Promise<InitResult> {
     backgroundColor,
     version,
     platform,
+    launchParams.botInline || false,
     createRequestId,
     postEvent,
   );
