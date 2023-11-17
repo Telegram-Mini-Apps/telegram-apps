@@ -7,7 +7,7 @@
 ![[npm-link]][npm-shield]
 
 Provides utilities to work with Telegram Mini
-Apps [launch parameters](../../launch-parameters/common-information.md).
+Apps [launch parameters](../../docs/launch-parameters/common-information.md).
 
 ## Installation
 

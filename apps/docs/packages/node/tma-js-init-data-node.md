@@ -8,10 +8,10 @@
 
 The package provides utilities to work with the initialization data of Telegram Mini Apps on the
 server side. To learn more about the initialization data and its usage, please refer to
-the [documentation](../../launch-parameters/common-information.md).
+the [documentation](../../docs/launch-parameters/common-information.md).
 
 ::: info
-This package extends the functionality of [@tma.js/init-data](tma-js-init-data/about.md), including all
+This package extends the functionality of [@tma.js/init-data](../typescript/tma-js-init-data/about.md), including all
 its types and utilities. Therefore, there is no need to install both packages separately.
 :::
 
@@ -35,7 +35,7 @@ yarn add @tma.js/init-data-node
 
 ### Parsing
 
-You can learn more about parsing utilities in [@tma.js/init-data](tma-js-init-data/about.md#parsing)
+You can learn more about parsing utilities in [@tma.js/init-data](../typescript/tma-js-init-data/about.md#parsing)
 documentation.
 
 ### Validation

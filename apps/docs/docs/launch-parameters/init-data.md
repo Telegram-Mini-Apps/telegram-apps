@@ -14,9 +14,9 @@ This section provides detailed information about an essential aspect of Telegram
 relates to application security for developers. We recommend utilizing well-established and tested
 packages:
 
-- For browser: [@tma.js/init-data](../packages/typescript/tma-js-init-data/about.md)
-- For Node: [@tma.js/init-data-node](../packages/typescript/tma-js-init-data-node.md)
-- For GoLang: [init-data-golang](../packages/golang/init-data-golang.md)
+- For browser: [@tma.js/init-data](../../packages/typescript/tma-js-init-data/about.md)
+- For Node: [@tma.js/init-data-node](../../packages/node/tma-js-init-data-node.md)
+- For GoLang: [init-data-golang](../../packages/golang/init-data-golang.md)
 
 :::
 

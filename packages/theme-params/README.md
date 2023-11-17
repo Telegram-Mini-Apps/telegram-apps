@@ -7,7 +7,7 @@
 ![[npm-link]][npm-shield]
 
 Provides utilities to work with Telegram Mini
-Apps [theme](https://docs.telegram-mini-apps.com/functionality/theming).
+Apps [theme](https://docs.telegram-mini-apps.com/platform/functionality/theming).
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
 Apps. To see full documentation and other libraries, please, visit

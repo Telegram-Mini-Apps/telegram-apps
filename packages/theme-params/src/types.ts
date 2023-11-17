@@ -1,7 +1,7 @@
 import type { RGB } from '@tma.js/colors';
 
 /**
- * Application [theme parameters](https://docs.telegram-mini-apps.com/functionality/theming).
+ * Application [theme parameters](https://docs.telegram-mini-apps.com/platform/functionality/theming).
  * Defines palette used by the Telegram application.
  */
 export interface ThemeParams {

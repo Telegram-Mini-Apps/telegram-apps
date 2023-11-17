@@ -6,7 +6,7 @@
 
 ![[npm-link]][npm-shield]
 
-Provides utilities to work with Telegram Mini Apps [theme](../../functionality/theming.md).
+Provides utilities to work with Telegram Mini Apps [theme](../../docs/functionality/theming.md).
 
 ## Installation
 

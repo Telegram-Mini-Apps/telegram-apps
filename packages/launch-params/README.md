@@ -7,7 +7,7 @@
 ![[npm-link]][npm-shield]
 
 Provides utilities to work with Telegram Mini
-Apps [launch parameters](https://docs.telegram-mini-apps.com/launch-parameters/common-information).
+Apps [launch parameters](https://docs.telegram-mini-apps.com/platform/launch-parameters/common-information).
 
 This library is a part of TypeScript packages ecosystem around Telegram Web
 Apps. To see full documentation and other libraries, please, visit
