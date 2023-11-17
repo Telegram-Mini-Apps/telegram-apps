@@ -225,7 +225,6 @@ export class WebApp {
    * - Access to clipboard is not allowed
    */
   async readTextFromClipboard(): Promise<string | null> {
-    // TODO: Generate request id.
     const { data = null } = await request(
       'web_app_read_text_from_clipboard',
       { req_id: this.createRequestId() },
