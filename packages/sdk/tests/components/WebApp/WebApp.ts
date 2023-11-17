@@ -10,6 +10,7 @@ interface CreateWebAppOptions {
   createRequestId?: CreateRequestIdFunc;
   headerColor?: WebAppHeaderColor;
   platform?: string;
+  botInline?: boolean;
   postEvent?: PostEvent;
   version?: string;
 }
@@ -22,9 +23,10 @@ function createWebApp(options: CreateWebAppOptions = {}): WebApp {
     headerColor = 'bg_color',
     version = '6.0',
     platform = 'unknown',
+    botInline = false,
   } = options;
 
-  return new WebApp(headerColor, backgroundColor, version, platform, createRequestId, postEvent);
+  return new WebApp(headerColor, backgroundColor, version, platform, botInline, createRequestId, postEvent);
 }
 
 describe('components', () => {
