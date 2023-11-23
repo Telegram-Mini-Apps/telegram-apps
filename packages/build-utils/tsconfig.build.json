@@ -1,9 +1,0 @@
-{
-  "extends": "tsconfig/esnext.json",
-  "compilerOptions": {
-    "types": ["vitest"]
-  },
-  "include": [
-    "src"
-  ]
-}
