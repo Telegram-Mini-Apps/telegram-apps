@@ -89,7 +89,8 @@ export function createViewportSync(
       postEvent,
       timeout: 100,
     })
-    .catch(e => {
+    .catch((e) => {
+      // eslint-disable-next-line no-console
       console.error('Unable to actualize viewport state', e);
     });
 
