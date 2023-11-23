@@ -38,7 +38,7 @@
   },
   "scripts": {
     "lint": "eslint -c .eslintrc.cjs src/**/*",
-    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
     "build": "vite build"
   },
   "peerDependencies": {

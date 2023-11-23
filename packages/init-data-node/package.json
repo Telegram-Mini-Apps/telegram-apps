@@ -37,9 +37,9 @@
     }
   },
   "scripts": {
-    "test": "vitest",
-    "lint": "eslint -c .eslintrc.cjs src/**/* tests/**/*",
-    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "test": "vitest --run",
+    "lint": "eslint -c .eslintrc.cjs src/**/*",
+    "typecheck": "tsc --noEmit",
     "build": "vite build"
   },
   "dependencies": {
