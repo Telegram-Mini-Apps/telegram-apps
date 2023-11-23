@@ -42,9 +42,6 @@
     "typecheck": "tsc --noEmit",
     "build": "vite build"
   },
-  "dependencies": {
-    "@tma.js/init-data": "workspace:*"
-  },
   "devDependencies": {
     "@types/node": "^16.0.0",
     "tsconfig": "workspace:*",

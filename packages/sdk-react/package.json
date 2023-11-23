@@ -51,15 +51,12 @@
     }
   },
   "dependencies": {
-    "@tma.js/launch-params": "workspace:*",
-    "@tma.js/theme-params": "workspace:*",
-    "@tma.js/bridge": "workspace:*",
     "@tma.js/sdk": "workspace:*"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*",
+    "build-utils": "workspace:*",
     "eslint-config-custom": "workspace:*",
-    "build-utils": "workspace:*"
+    "tsconfig": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

@@ -42,7 +42,6 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@tma.js/utils": "workspace:*",
     "@tma.js/sdk": "workspace:*"
   },
   "peerDependencies": {

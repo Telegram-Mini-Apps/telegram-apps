@@ -42,7 +42,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@tma.js/navigation": "workspace:*"
+    "@tma.js/sdk": "workspace:*"
   },
   "peerDependencies": {
     "@solidjs/router": "^0.x"
