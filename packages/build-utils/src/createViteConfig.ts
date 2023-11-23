@@ -1,5 +1,6 @@
 import dts from 'vite-plugin-dts';
-import type { LibraryFormats, PluginOption, UserConfig } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import type { LibraryFormats, PluginOption, UserConfig, AliasOptions } from 'vite';
 import type { InlineConfig } from 'vitest';
 
 import { formatTmaJSPackageName } from './formatTmaJSPackageName.js';
@@ -43,6 +44,11 @@ export interface CreateViteConfigOptions {
    * Test options.
    */
   test?: InlineConfig;
+
+  /**
+   * Alias options.
+   */
+  alias?: AliasOptions;
 }
 
 export function createViteConfig(options: CreateViteConfigOptions): UserConfig {
@@ -55,19 +61,24 @@ export function createViteConfig(options: CreateViteConfigOptions): UserConfig {
     test,
     declarations = true,
     emptyOutDir = true,
+    alias,
   } = options;
 
   return {
     test,
     plugins: [
+      tsconfigPaths(),
       // Creates typescript declarations.
       // https://www.npmjs.com/package/vite-plugin-dts
       declarations && dts({
         outDir: 'dist/dts',
-        tsconfigPath: './tsconfig.build.json',
+        tsconfigPath: './tsconfig.json',
       }),
       ...plugins,
     ],
+    resolve: {
+      alias,
+    },
     build: {
       outDir: 'dist',
       emptyOutDir,
