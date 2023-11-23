@@ -1,99 +1,79 @@
-import type { PostEvent } from '@tma.js/bridge';
-import type { LaunchParams } from '@tma.js/launch-params';
-
-import type {
-  BackButton,
-  ClosingBehaviour,
-  CloudStorage,
-  HapticFeedback,
-  InitData,
-  MainButton,
-  Popup,
-  QRScanner,
-  ThemeParams,
-  Viewport,
-  WebApp,
-} from '../components/index.js';
+import type { BackButton } from '~/back-button/index.js';
+import type { PostEvent } from '~/bridge/index.js';
+import type { ClosingBehavior } from '~/closing-behavior/index.js';
+import type { CloudStorage } from '~/cloud-storage/index.js';
+import type { HapticFeedback } from '~/haptic-feedback/index.js';
+import type { InitData } from '~/init-data/index.js';
+import type { Invoice } from '~/invoice/index.js';
+import type { MainButton } from '~/main-button/index.js';
+import type { MiniApp } from '~/mini-app/index.js';
+import type { Popup } from '~/popup/index.js';
+import type { QRScanner } from '~/qr-scanner/index.js';
+import type { ThemeParams } from '~/theme-params/index.js';
+import type { CreateRequestIdFunc } from '~/types/index.js';
+import type { Viewport } from '~/viewport/index.js';
 
 export interface InitResult {
   backButton: BackButton;
-  closingBehavior: ClosingBehaviour;
+  closingBehavior: ClosingBehavior;
   cloudStorage: CloudStorage;
-  haptic: HapticFeedback;
+  createRequestId: CreateRequestIdFunc;
+  hapticFeedback: HapticFeedback;
   initData?: InitData;
   initDataRaw?: string;
+  invoice: Invoice;
   mainButton: MainButton;
+  miniApp: MiniApp;
   popup: Popup;
   postEvent: PostEvent;
   qrScanner: QRScanner;
   themeParams: ThemeParams;
   viewport: Viewport;
-  webApp: WebApp;
 }
 
 export interface InitCSSVarsSpecificOption {
   /**
-   * Enables theme parameters CSS variables:
-   * - `--tg-theme-bg-color`
-   * - `--tg-theme-button-color`
-   * - `--tg-theme-button-text-color`
-   * - `--tg-theme-hint-color`
-   * - `--tg-theme-link-color`
-   * - `--tg-theme-secondary-bg-color`
-   * - `--tg-theme-text-color`
-   *
-   * @see bindThemeCSSVariables
+   * Enables theme parameters CSS variables.
+   * @see bindThemeCSSVars
+   * @default false
    */
-  themeParams?: true;
+  themeParams?: boolean;
 
   /**
-   * Enables viewport CSS variables:
-   * - `--tg-viewport-height`
-   * - `--tg-viewport-stable-height`
-   *
-   * @see bindViewportCSSVariables
+   * Enables viewport CSS variables.
+   * @see bindViewportCSSVars
+   * @default false
    */
-  viewport?: true;
+  viewport?: boolean;
 
   /**
-   * Enables web app CSS variables:
-   * - `--tg-bg-color`
-   * - `--tg-header-color`
-   *
-   * @see bindWebAppVariables
+   * Enables mini app CSS variables.
+   * @see bindMiniAppCSSVars
+   * @default false
    */
-  webApp?: true;
+  miniApp?: boolean;
 }
 
 export type InitCSSVarsOption = boolean | InitCSSVarsSpecificOption;
 
 export interface InitOptions {
   /**
-   * @deprecated Use acceptCustomStyles
+   * True if synchronization must be performed asynchronously. This allows init function to
+   * perform async operations. One of them is the actual viewport state retrieving from the
+   * Telegram application. Otherwise, viewport state will be retrieved later.
+   * @default false
    */
-  acceptScrollbarStyle?: boolean;
+  async?: boolean;
 
   /**
-   * Should SDK accept styles sent from the Telegram web application.
-   * This option is only used in Web versions of Telegram.
-   *
-   * @default true
+   * Should SDK accept styles sent from the Telegram web application. This option is only used in
+   * web versions of Telegram.
+   * @default false
    */
   acceptCustomStyles?: boolean;
 
   /**
-   * Should SDK throw an error in case, unsupported by current version of
-   * Mini App method was called. It is highly recommended not to disable this
-   * feature as long as it helps developer to find issues related to usage
-   * of unsupported methods.
-   *
-   * @default true
-   */
-  checkCompat?: boolean;
-
-  /**
-   * Should SDK create global CSS variables related to current Telegram
-   * application colors.
+   * Should SDK create global CSS variables related to current Telegram application colors.
    *
    * Possible values:
    * - `false` - no CSS variables will be created.
@@ -103,31 +83,4 @@ export interface InitOptions {
    * @default false
    */
   cssVars?: InitCSSVarsOption;
-
-  /**
-   * Enable debug mode.
-   *
-   * @default false
-   */
-  debug?: boolean;
-
-  /**
-   * Launch parameters presented as query parameters or already parsed
-   * object. In case, this value is not specified, init
-   * function will try to retrieve launch parameters from window.location.hash
-   * via retrieveLaunchParams function.
-   */
-  launchParams?: string | URLSearchParams | LaunchParams;
-
-  /**
-   * Sets new targetOrigin, used by bridge's `postEvent` function.
-   * @see setTargetOrigin
-   */
-  targetOrigin?: string;
-
-  /**
-   * Initialization process timeout.
-   * @default 1000
-   */
-  timeout?: number;
 }

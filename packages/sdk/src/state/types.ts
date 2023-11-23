@@ -1,12 +1,9 @@
+import type { StringKeys } from '~/types/index.js';
+
 /**
  * Computes state property changed event.
  */
 export type PropChangedEvent<K extends string> = `${K}Changed`;
-
-/**
- * Returns object string keys.
- */
-export type StringKeys<T extends object> = Extract<keyof T, string>;
 
 /**
  * Extracts state property type by its computed change event name.

@@ -1,14 +1,15 @@
-import type { ThemeParams as ThemeParamsType } from '@tma.js/theme-params';
-
-import { ThemeParams } from '../../components/index.js';
+import {
+  ThemeParams,
+  type ThemeParamsParsed,
+} from '~/theme-params/index.js';
 
 /**
  * Creates synced instance of ThemeParams.
  * @param params - theme parameters.
  */
-export function createThemeParams(params: ThemeParamsType): ThemeParams {
+export function createThemeParams(params: ThemeParamsParsed): ThemeParams {
   const themeParams = new ThemeParams(params);
-  ThemeParams.sync(themeParams);
+  themeParams.sync();
 
   return themeParams;
 }
