@@ -1,6 +1,8 @@
-export * from './context.js';
-export * from './hooks.js';
-export * from './SDKProvider.jsx';
-export * from './types.js';
-export * from './useSDK.js';
-export { classNames, mergeClassNames } from '@tma.js/utils';
+export * from './components/index.js';
+export {
+  useSDKContext,
+  type SDKInitResult,
+  type SDKInitOptions,
+  SDKProvider,
+  type SDKProviderProps,
+} from './provider/index.js';
