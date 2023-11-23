@@ -10,5 +10,8 @@ module.exports = {
     'solid'
   ],
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.json',
+  },
   rules: require('./rules'),
 };

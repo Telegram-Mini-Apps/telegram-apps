@@ -3,6 +3,9 @@ module.exports = {
     'airbnb-base',
     'airbnb-typescript/base',
   ],
+  parserOptions: {
+    project: './tsconfig.json',
+  },
   plugins: [
     'simple-import-sort',
     'import',
