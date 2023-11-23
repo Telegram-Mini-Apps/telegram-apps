@@ -1,5 +1,5 @@
 {
-  "extends": "tsconfig/esnext.json",
+  "extends": "tsconfig/esnext-dom.json",
   "compilerOptions": {
     "composite": true,
     "paths": {
@@ -12,6 +12,8 @@
     }
   },
   "include": [
+    "src",
+    "test-utils",
     "tests"
   ]
 }
