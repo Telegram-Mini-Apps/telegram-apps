@@ -1,47 +1,67 @@
-import React, {
-  memo,
-  useEffect,
-  useMemo,
-  useState,
-  type PropsWithChildren,
-} from 'react';
-import { init, type InitOptions } from '@tma.js/sdk';
+import {
+  init,
+  type InitResult,
+} from '@tma.js/sdk';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import { sdkContext } from './context.js';
-import type { SDKComponents, SDKContext } from './types.js';
+import { SDKContext } from './SDKContext.js';
+import type {
+  SDKContextType,
+  SDKInitResult,
+  SDKProviderProps,
+} from './types.js';
 
-export type SDKInitOptions = InitOptions;
-
-export type SDKProviderProps = PropsWithChildren<{ initOptions?: SDKInitOptions }>;
-
-/**
- * Component which provides access to SDK components.
- */
-export const SDKProvider = memo<SDKProviderProps>((props) => {
-  const { children, initOptions } = props;
-  const [didInit, setDidInit] = useState(false);
+function AsyncProvider({ options, children }: SDKProviderProps) {
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | unknown>(null);
-  const [components, setComponents] = useState<SDKComponents | null>(null);
+  const [initResult, setInitResult] = useState<SDKInitResult | null>(null);
 
-  // Initialize SDK on DOM attach.
   useEffect(() => {
-    // Update init status.
-    setDidInit(true);
+    setLoading(true);
 
-    // Init SDK.
-    init(initOptions)
-      .then(setComponents)
-      .catch(setError);
+    init({ ...options, async: true })
+      .then(setInitResult)
+      .catch(setError)
+      .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const context = useMemo<SDKContext>(() => ({
-    components,
-    didInit,
+  const context = useMemo<SDKContextType>(() => ({
     error,
-  }), [didInit, components, error]);
+    initResult,
+    loading,
+  }), [loading, initResult, error]);
 
-  return <sdkContext.Provider value={context}>{children}</sdkContext.Provider>;
-});
+  return <SDKContext.Provider value={context}>{children}</SDKContext.Provider>;
+}
 
-SDKProvider.displayName = 'SDKProvider';
+function SyncProvider({ options = {}, children }: SDKProviderProps) {
+  const context = useMemo<SDKContextType>(() => {
+    let initResult: InitResult | null = null;
+    let error: unknown;
+
+    try {
+      initResult = init({ ...options, async: false });
+    } catch (e) {
+      error = e;
+    }
+
+    return {
+      error,
+      initResult,
+      loading: true,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return <SDKContext.Provider value={context}>{children}</SDKContext.Provider>;
+}
+
+/**
+ * Component which provides access to SDK initialization state.
+ */
+export function SDKProvider(props: SDKProviderProps) {
+  return props.options?.async
+    ? <AsyncProvider {...props}/>
+    : <SyncProvider {...props}/>;
+}

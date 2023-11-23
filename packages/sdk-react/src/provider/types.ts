@@ -1,34 +1,43 @@
-import type { InitResult } from '@tma.js/sdk';
+import type { InitOptions, InitResult } from '@tma.js/sdk';
+import type { PropsWithChildren } from 'react';
 
 /**
  * List of provided SDK components.
  */
-export type SDKComponents = InitResult;
+export type SDKInitResult = InitResult;
 
 /**
  * Known SDK component name.
  */
-export type SDKComponentName = keyof SDKComponents;
+export type SDKInitResultKey = keyof SDKInitResult;
+
+export type SDKInitOptions = InitOptions;
+
+export type SDKProviderProps = PropsWithChildren<{
+  /**
+   * Init function options.
+   */
+  options?: SDKInitOptions;
+}>;
 
 /**
  * Returns SDK component type by its name.
  */
-export type SDKComponent<N extends SDKComponentName> = SDKComponents[N];
+export type SDKInitResultValue<K extends SDKInitResultKey> = SDKInitResult[K];
 
-export interface SDKContext {
-  /**
-   * Components ready to use. This value will be null until initialization
-   * is done.
-   */
-  components: SDKComponents | null;
-
-  /**
-   * States, that SDK called `init()` method.
-   */
-  didInit: boolean;
-
+export interface SDKContextType {
   /**
    * Error occurred during initialization.
    */
   error: unknown | null;
+
+  /**
+   * Initialization result.
+   */
+  initResult: SDKInitResult | null;
+
+  /**
+   * True if SDK is loading.
+   */
+  loading: boolean;
 }
