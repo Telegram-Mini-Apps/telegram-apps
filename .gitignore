@@ -39,8 +39,8 @@ yarn-error.log*
 .idea
 .docusaurus
 
-# App for local development
-apps/.local
+# Apps for local development.
+apps-local
 
 apps/docs/.vitepress/cache
 apps/docs/.vitepress/dist
