@@ -7,6 +7,8 @@ module.exports = {
   'import/first': 'error',
   'import/newline-after-import': 'error',
   'import/no-duplicates': 'error',
+  // We have extraneous deps, because we have workspace.
+  'import/no-extraneous-dependencies': 0,
   // We don't use default exports anywhere.
   'import/prefer-default-export': 0,
   // We select line endings depending on current OS.
