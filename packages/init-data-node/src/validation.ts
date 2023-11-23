@@ -1,5 +1,5 @@
-import { createHmac } from 'crypto';
-import { URLSearchParams } from 'url';
+import { createHmac } from 'node:crypto';
+import { URLSearchParams } from 'node:url';
 
 export interface ValidateOptions {
   /**
