@@ -22,7 +22,7 @@ export async function go(delta: number): Promise<boolean> {
 
     // Usually, it takes about 1ms to emit this event, but we use some buffer.
     new Promise((res) => {
-      setTimeout(res, 10, false);
+      setTimeout(res, 50, false);
     }),
   ]);
 }
