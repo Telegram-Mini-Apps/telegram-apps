@@ -1,0 +1,9 @@
+{
+  "extends": "tsconfig/solid-library.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "vite.config.ts"
+  ]
+}

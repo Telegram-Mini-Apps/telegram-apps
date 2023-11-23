@@ -1,0 +1,17 @@
+{
+  "extends": "tsconfig/esnext.json",
+  "compilerOptions": {
+    "composite": true,
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ],
+      "~test-utils/*": [
+        "./test-utils/*"
+      ]
+    }
+  },
+  "include": [
+    "tests"
+  ]
+}

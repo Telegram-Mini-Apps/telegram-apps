@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Solid JS Library",
+  "extends": "./solid-library.json",
+  "compilerOptions": {
+    "lib": [
+      "esnext",
+      "dom"
+    ]
+  }
+}

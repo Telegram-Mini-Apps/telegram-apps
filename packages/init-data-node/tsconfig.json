@@ -1,8 +1,11 @@
 {
-  "extends": "./tsconfig.build.json",
+  "extends": "tsconfig/base.json",
   "include": [
-    "src",
-    "tests",
-    "*.ts"
+    "src"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

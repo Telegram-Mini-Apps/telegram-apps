@@ -1,8 +1,24 @@
 {
-  "extends": "./tsconfig.build.json",
+  "extends": "tsconfig/esnext-dom.json",
+  "compilerOptions": {
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ],
+      "~test-utils/*": [
+        "./test-utils/*"
+      ]
+    }
+  },
   "include": [
-    "src",
-    "tests",
-    "*.ts"
+    "src"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.test.json"
+    }
   ]
 }
