@@ -45,10 +45,10 @@
     "build:iife": "vite build --config vite.iife.config.ts"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*",
-    "eslint-config-custom": "workspace:*",
     "build-utils": "workspace:*",
-    "test-utils": "workspace:*"
+    "eslint-config-custom": "workspace:*",
+    "test-utils": "workspace:*",
+    "tsconfig": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
