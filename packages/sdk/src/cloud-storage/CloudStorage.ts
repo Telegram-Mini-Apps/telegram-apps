@@ -66,7 +66,7 @@ export class CloudStorage {
     );
 
     if (error) {
-      throw new Error(typeof error === 'string' ? error : `Unknown error: ${JSON.stringify(error)}`);
+      throw new Error(error);
     }
 
     return result;
