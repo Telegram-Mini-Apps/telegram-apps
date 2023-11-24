@@ -8,7 +8,11 @@ import { EventEmitter } from '~/event-emitter/index.js';
 import { State } from '~/state/index.js';
 import type { RGB } from '~/colors/index.js';
 
-import type { MainButtonEvents, MainButtonState } from './types.js';
+import type {
+  MainButtonEvents,
+  MainButtonProps,
+  MainButtonState,
+} from './types.js';
 
 type Emitter = EventEmitter<MainButtonEvents>;
 
@@ -21,15 +25,20 @@ export class MainButton {
 
   private readonly state: State<MainButtonState>;
 
-  constructor(
-    backgroundColor: RGB,
-    isEnabled: boolean,
-    isVisible: boolean,
-    isProgressVisible: boolean,
-    text: string,
-    textColor: RGB,
-    private readonly postEvent: PostEvent = defaultPostEvent,
-  ) {
+  private readonly postEvent: PostEvent;
+
+  constructor(props: MainButtonProps) {
+    const {
+      postEvent = defaultPostEvent,
+      text,
+      textColor,
+      backgroundColor,
+      isEnabled,
+      isVisible,
+      isProgressVisible,
+    } = props;
+
+    this.postEvent = postEvent;
     this.state = new State({
       backgroundColor,
       isEnabled,
