@@ -1,5 +1,3 @@
-import { State } from '~/state/index.js';
-
 import { initDataParser } from './initDataParser.js';
 import { serializeInitData } from './serializeInitData.js';
 import type { Chat, ChatType, InitDataParsed, User } from './types.js';
@@ -16,24 +14,21 @@ export class InitData {
     return initDataParser().parse(value);
   }
 
-  private readonly state: State<InitDataParsed>;
-
-  constructor(initData: InitDataParsed) {
-    this.state = new State(initData);
+  constructor(private readonly initData: InitDataParsed) {
   }
 
   /**
    * @see InitDataParsed.authDate
    */
   get authDate(): Date {
-    return this.state.get('authDate');
+    return this.initData.authDate;
   }
 
   /**
    * @see InitDataParsed.canSendAfter
    */
   get canSendAfter(): number | undefined {
-    return this.state.get('canSendAfter');
+    return this.initData.canSendAfter;
   }
 
   /**
@@ -52,62 +47,62 @@ export class InitData {
    * @see InitDataParsed.chat
    */
   get chat(): Chat | undefined {
-    return this.state.get('chat');
+    return this.initData.chat;
   }
 
   /**
    * @see InitDataParsed.chatType
    */
   get chatType(): ChatType | undefined {
-    return this.state.get('chatType');
+    return this.initData.chatType;
   }
 
   /**
    * @see InitDataParsed.chatInstance
    */
   get chatInstance(): string | undefined {
-    return this.state.get('chatInstance');
+    return this.initData.chatInstance;
   }
 
   /**
    * @see InitDataParsed.hash
    */
   get hash(): string {
-    return this.state.get('hash');
+    return this.initData.hash;
   }
 
   /**
    * @see InitDataParsed.queryId
    */
   get queryId(): string | undefined {
-    return this.state.get('queryId');
+    return this.initData.queryId;
   }
 
   /**
    * @see InitDataParsed.receiver
    */
   get receiver(): User | undefined {
-    return this.state.get('receiver');
+    return this.initData.receiver;
   }
 
   /**
    * @see InitDataParsed.startParam
    */
   get startParam(): string | undefined {
-    return this.state.get('startParam');
+    return this.initData.startParam;
   }
 
   /**
    * Serializes this instance to value, sent from the Telegram application.
    */
   serialize(): string {
-    return serializeInitData(this.state.clone());
+    return serializeInitData(this.initData);
   }
 
   /**
    * @see InitDataParsed.user
    */
   get user(): User | undefined {
-    return this.state.get('user');
+    return this.initData.user;
   }
 }
