@@ -88,13 +88,6 @@ export class InitData {
   }
 
   /**
-   * Serializes this instance to value, sent from the Telegram application.
-   */
-  serialize(): string {
-    return serializeInitData(this.initData);
-  }
-
-  /**
    * @see InitDataParsed.user
    */
   get user(): User | undefined {
