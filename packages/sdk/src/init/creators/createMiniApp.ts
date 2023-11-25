@@ -2,7 +2,7 @@ import { MiniApp } from '~/mini-app/index.js';
 import { getStorageValue, saveStorageValue } from '~/storage.js';
 import type { PostEvent } from '~/bridge/index.js';
 import type { RGB } from '~/colors/index.js';
-import type { CreateRequestIdFunc, Platform } from '~/types/index.js';
+import type { Version } from '~/version/index.js';
 
 /**
  * Creates MiniApp instance using last locally saved data also saving each state in
@@ -10,18 +10,14 @@ import type { CreateRequestIdFunc, Platform } from '~/types/index.js';
  * @param isPageReload - was current page reloaded.
  * @param backgroundColor - web app background color.
  * @param version - platform version.
- * @param platform - platform identifier.
  * @param botInline - is Mini App launched in inline mode.
- * @param createRequestId - function which generates request identifiers.
  * @param postEvent - Bridge postEvent function
  */
 export function createMiniApp(
   isPageReload: boolean,
   backgroundColor: RGB,
-  version: string,
-  platform: Platform,
+  version: Version,
   botInline: boolean,
-  createRequestId: CreateRequestIdFunc,
   postEvent: PostEvent,
 ): MiniApp {
   const {
@@ -29,15 +25,13 @@ export function createMiniApp(
     headerColor = 'bg_color',
   } = isPageReload ? getStorageValue('mini-app') || {} : {};
 
-  const component = new MiniApp(
+  const component = new MiniApp({
     headerColor,
-    stateBackgroundColor,
+    backgroundColor: stateBackgroundColor,
     version,
-    platform,
     botInline,
-    createRequestId,
     postEvent,
-  );
+  });
 
   const saveState = () => saveStorageValue('mini-app', {
     backgroundColor: component.backgroundColor,
