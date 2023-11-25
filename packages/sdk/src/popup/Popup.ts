@@ -23,7 +23,10 @@ export class Popup {
 
   private readonly state: State<PopupState>;
 
-  constructor(version: Version, private readonly postEvent: PostEvent = defaultPostEvent) {
+  constructor(
+    version: Version,
+    private readonly postEvent: PostEvent = defaultPostEvent,
+  ) {
     this.state = new State({ isOpened: false }, this.ee);
     this.supports = createSupportsFunc(version, { open: 'web_app_open_popup' });
   }
