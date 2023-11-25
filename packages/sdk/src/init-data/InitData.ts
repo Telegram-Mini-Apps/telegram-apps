@@ -27,7 +27,7 @@ export class InitData {
   }
 
   /**
-   * Returns date after which it is allowed to call
+   * Date after which it is allowed to call
    * the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) method.
    */
   get canSendAfterDate(): Date | undefined {
