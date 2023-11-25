@@ -2,32 +2,18 @@ import {
   on,
   type PostEvent,
   postEvent as defaultPostEvent,
-  request,
   type RequestOptions,
 } from '~/bridge/index.js';
 import { EventEmitter } from '~/event-emitter/index.js';
 import { State } from '~/state/index.js';
+import { requestViewport } from '~/viewport/requestViewport.js';
 
 import type {
   ViewportEvents,
   ViewportProps,
   ViewportState,
 } from './types.js';
-
-export interface RequestViewportResult {
-  height: number;
-  isStateStable: boolean;
-  isExpanded: boolean;
-  width: number;
-}
-
-/**
- * Formats value to make it stay in bounds [0, +Inf).
- * @param value - value to format.
- */
-function truncate(value: number): number {
-  return value < 0 ? 0 : value;
-}
+import { truncate } from './utils.js';
 
 /**
  * Contains information about current WebApp device viewport, its dimensions
