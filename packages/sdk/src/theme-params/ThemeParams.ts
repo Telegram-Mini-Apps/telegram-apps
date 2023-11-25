@@ -109,17 +109,10 @@ export class ThemeParams {
   }
 
   /**
-   * Serializes theme parameters to representation sent from the Telegram application.
+   * Starts listening to theme changes and applies them.
+   * @returns Function to stop listening.
    */
-  serialize(): string {
-    return serializeThemeParams(this.getState());
-  }
-
-  /**
-   * Synchronizes current instance with the Telegram application. Returns handler to remove
-   * event listener.
-   */
-  sync() {
+  listen() {
     return on('theme_changed', (event) => {
       this.state.set(parseThemeParams(event.theme_params));
     });
