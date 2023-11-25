@@ -1,9 +1,9 @@
 module.exports = {
   '@typescript-eslint/consistent-type-imports': 'error',
-  '@typescript-eslint/indent': [2, 2],
+  '@typescript-eslint/indent': ['error', 2],
   'consistent-return': 0,
-  // We use special module resolution, that's why we need extensions.
   'import/extensions': 0,
+  // We use special module resolution, that's why we need extensions.
   'import/first': 'error',
   'import/newline-after-import': 'error',
   'import/no-duplicates': 'error',
@@ -11,6 +11,8 @@ module.exports = {
   'import/no-extraneous-dependencies': 0,
   // We don't use default exports anywhere.
   'import/prefer-default-export': 0,
+  // Should be disabled to make @typescript-eslint/indent work.
+  'indent': 0,
   // We select line endings depending on current OS.
   // See: https://stackoverflow.com/q/39114446/2771889
   'linebreak-style': ['error', (process.platform === 'win32' ? 'windows' : 'unix')],
