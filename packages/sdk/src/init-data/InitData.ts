@@ -1,19 +1,14 @@
-import { initDataParser } from './initDataParser.js';
-import { serializeInitData } from './serializeInitData.js';
-import type { Chat, ChatType, InitDataParsed, User } from './types.js';
+import type {
+  Chat,
+  ChatType,
+  InitDataParsed,
+  User,
+} from './types.js';
 
 /**
  * Class which is responsible for displaying Mini Apps init data.
  */
 export class InitData {
-  /**
-   * Parses incoming value as init data.
-   * @param value - value to parse.
-   */
-  static parse(value: unknown): InitDataParsed {
-    return initDataParser().parse(value);
-  }
-
   constructor(private readonly initData: InitDataParsed) {
   }
 
