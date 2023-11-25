@@ -1,6 +1,15 @@
-import type { HeaderColorKey } from '~/bridge/index.js';
+import type { HeaderColorKey, PostEvent } from '~/bridge/index.js';
 import type { RGB } from '~/colors/index.js';
 import type { StateEvents } from '~/state/index.js';
+import type { Version } from '~/version/index.js';
+
+export interface MiniAppProps {
+  headerColor: MiniAppHeaderColor;
+  backgroundColor: RGB;
+  version: Version;
+  botInline: boolean;
+  postEvent?: PostEvent;
+}
 
 export type MiniAppHeaderColor = HeaderColorKey | RGB;
 
