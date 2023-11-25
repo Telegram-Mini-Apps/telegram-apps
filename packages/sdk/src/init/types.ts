@@ -66,8 +66,8 @@ export interface InitOptions {
   async?: boolean;
 
   /**
-   * Should SDK accept styles sent from the Telegram web application. This option is only used in
-   * web versions of Telegram.
+   * True if SDK should accept styles sent from the Telegram web application. This option is only
+   * used in web versions of Telegram.
    * @default false
    */
   acceptCustomStyles?: boolean;
