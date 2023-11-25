@@ -6,7 +6,6 @@ import { ThemeParams, type ThemeParamsParsed } from '~/theme-params/index.js';
  */
 export function createThemeParams(params: ThemeParamsParsed): ThemeParams {
   const themeParams = new ThemeParams(params);
-  themeParams.sync();
-
+  themeParams.listen();
   return themeParams;
 }
