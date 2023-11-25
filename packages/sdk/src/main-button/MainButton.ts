@@ -10,6 +10,7 @@ import type { RGB } from '~/colors/index.js';
 
 import type {
   MainButtonEvents,
+  MainButtonParams,
   MainButtonProps,
   MainButtonState,
 } from './types.js';
@@ -35,7 +36,7 @@ export class MainButton {
       backgroundColor,
       isEnabled,
       isVisible,
-      isProgressVisible,
+      isLoaderVisible,
     } = props;
 
     this.postEvent = postEvent;
@@ -43,50 +44,14 @@ export class MainButton {
       backgroundColor,
       isEnabled,
       isVisible,
-      isProgressVisible,
+      isLoaderVisible,
       text,
       textColor,
     }, this.ee);
   }
 
-  private set isEnabled(value: boolean) {
-    this.state.set('isEnabled', value);
-    this.commit();
-  }
-
   /**
-   * Returns true in case, MainButton is currently enabled.
-   */
-  get isEnabled(): boolean {
-    return this.state.get('isEnabled');
-  }
-
-  private set isProgressVisible(value: boolean) {
-    this.state.set('isProgressVisible', value);
-    this.commit();
-  }
-
-  /**
-   * Returns true in case, MainButton loading progress is currently visible.
-   */
-  get isProgressVisible(): boolean {
-    return this.state.get('isProgressVisible');
-  }
-
-  private set isVisible(value: boolean) {
-    this.state.set('isVisible', value);
-    this.commit();
-  }
-
-  /**
-   * Returns true in case, MainButton is currently visible.
-   */
-  get isVisible(): boolean {
-    return this.state.get('isVisible');
-  }
-
-  /**
-   * Sends current local button state to Telegram application.
+   * Sends current local state to Telegram application.
    */
   private commit(): void {
     // We should not commit changes until payload is correct. We could
@@ -99,38 +64,69 @@ export class MainButton {
     this.postEvent('web_app_setup_main_button', {
       is_visible: this.isVisible,
       is_active: this.isEnabled,
-      is_progress_visible: this.isProgressVisible,
+      is_progress_visible: this.isLoaderVisible,
       text: this.text,
       color: this.backgroundColor,
       text_color: this.textColor,
     });
   }
 
-  // TODO: set params
+  private set isEnabled(isEnabled: boolean) {
+    this.setParams({ isEnabled });
+  }
 
   /**
-   * Returns current main button background color.
+   * True if the Main Button is currently enabled.
+   */
+  get isEnabled(): boolean {
+    return this.state.get('isEnabled');
+  }
+
+  private set isLoaderVisible(isLoaderVisible: boolean) {
+    this.setParams({ isLoaderVisible });
+  }
+
+  /**
+   * True if the Main Button loader is currently visible.
+   */
+  get isLoaderVisible(): boolean {
+    return this.state.get('isLoaderVisible');
+  }
+
+  private set isVisible(isVisible: boolean) {
+    this.setParams({ isVisible });
+  }
+
+  /**
+   * True if the Main Button is currently visible.
+   */
+  get isVisible(): boolean {
+    return this.state.get('isVisible');
+  }
+
+  /**
+   * The Main Button background color.
    */
   get backgroundColor(): RGB {
     return this.state.get('backgroundColor');
   }
 
   /**
-   * Returns current main button text.
+   * The Main Button text.
    */
   get text(): string {
     return this.state.get('text');
   }
 
   /**
-   * Returns current main button text color.
+   * The Main Button text color.
    */
   get textColor(): RGB {
     return this.state.get('textColor');
   }
 
   /**
-   * Disables button. Returns current button instance for chaining.
+   * Disables the Main Button.
    */
   disable(): this {
     // FIXME: This method does not work on Android. Event "main_button_pressed"
@@ -141,7 +137,7 @@ export class MainButton {
   }
 
   /**
-   * Enables button. Returns current button instance for chaining.
+   * Enables the Main Button.
    */
   enable(): this {
     this.isEnabled = true;
@@ -149,7 +145,7 @@ export class MainButton {
   }
 
   /**
-   * Hides button. Returns current button instance for chaining.
+   * Hides the Main Button.
    */
   hide(): this {
     this.isVisible = false;
@@ -157,22 +153,22 @@ export class MainButton {
   }
 
   /**
-   * Hides button progress. Returns current button instance for chaining.
+   * Hides the Main Button loader.
    */
-  hideProgress(): this {
-    this.isProgressVisible = false;
+  hideLoader(): this {
+    this.isLoaderVisible = false;
     return this;
   }
 
   /**
    * Adds new event listener.
-   * FIXME: Event 'main_button_pressed' is still being received on Android
-   *  even if the main button is disabled.
-   *  Issue: https://github.com/Telegram-Mini-Apps/tma.js/issues/3
    * @param event - event name.
    * @param listener - event listener.
    */
   on: Emitter['on'] = (event, listener) => (
+    // FIXME: Event 'main_button_pressed' is still being received on Android
+    //  even if the main button is disabled.
+    //  Issue: https://github.com/Telegram-Mini-Apps/tma.js/issues/3
     event === 'click'
       ? on('main_button_pressed', listener)
       : this.ee.on(event, listener)
@@ -190,11 +186,8 @@ export class MainButton {
   );
 
   /**
-   * Shows the button. Note that opening the Mini App from the attachment
-   * menu hides the main button until the user interacts with the Mini App
-   * interface.
-   *
-   * Returns current button instance for chaining.
+   * Shows the Main Button. Note that opening the Mini App from the attachment menu hides the
+   * main button until the user interacts with the Mini App interface.
    */
   show(): this {
     this.isVisible = true;
@@ -202,56 +195,45 @@ export class MainButton {
   }
 
   /**
-   * A method to show a loading indicator on the button.
-   * It is recommended to display loading progress if the action tied to the
-   * button may take a long time.
-   *
-   * Returns current button instance for chaining.
+   * A method to show a loading indicator on the Main Button. It is recommended to display
+   * loader if the action tied to the button may take a long time.
    */
-  showProgress(): this {
-    this.isProgressVisible = true;
+  showLoader(): this {
+    this.isLoaderVisible = true;
     return this;
   }
 
   /**
-   * Sets new main button text. Returns current button instance for chaining.
-   * Minimal length for text is 1 symbol, and maximum is 64 symbols.
-   *
-   * Returns current button instance for chaining.
-   * @param value - new text.
+   * Sets new Main Button text. Minimal length for text is 1 symbol, and maximum is 64 symbols.
+   * @param text - new text.
    */
-  setText(value: string): this {
-    this.state.set('text', value);
-    this.commit();
-
-    return this;
+  setText(text: string): this {
+    return this.setParams({ text });
   }
 
   /**
-   * Sets new main button text color. Returns current button instance for
-   * chaining.
-   *
-   * Returns current button instance for chaining.
-   * @param value - new text color.
+   * Sets new Main Button text color.
+   * @param textColor - new text color.
    */
-  setTextColor(value: RGB): this {
-    this.state.set('textColor', value);
-    this.commit();
-
-    return this;
+  setTextColor(textColor: RGB): this {
+    return this.setParams({ textColor });
   }
 
   /**
-   * Updates current button color. Returns current button instance for
-   * chaining.
-   *
-   * Returns current button instance for chaining.
-   * @param value - color to set.
+   * Updates current Main Button color.
+   * @param backgroundColor - color to set.
    */
-  setBackgroundColor(value: RGB): this {
-    this.state.set('backgroundColor', value);
-    this.commit();
+  setBackgroundColor(backgroundColor: RGB): this {
+    return this.setParams({ backgroundColor });
+  }
 
+  /**
+   * Allows setting multiple Main Button parameters.
+   * @param params - Main Button parameters.
+   */
+  setParams(params: MainButtonParams): this {
+    this.state.set(params);
+    this.commit();
     return this;
   }
 }
