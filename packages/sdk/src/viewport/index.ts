@@ -1,3 +1,4 @@
+export * from './requestViewport.js';
 export type {
   ViewportProps,
   ViewportEventListener,
