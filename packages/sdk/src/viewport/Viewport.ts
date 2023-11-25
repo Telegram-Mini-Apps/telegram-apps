@@ -98,10 +98,10 @@ export class Viewport {
   }
 
   /**
-   * Synchronizes specified instance of Viewport with the actual value in the native
-   * application. Returns function to stop synchronization.
+   * Starts listening to viewport changes and applies them.
+   * @returns Function to stop listening.
    */
-  sync() {
+  listen() {
     return on('viewport_changed', (event) => {
       const {
         height,
