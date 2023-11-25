@@ -147,8 +147,8 @@ export class Viewport {
    * @see isExpanded
    */
   expand(): void {
-    this.state.set('isExpanded', true);
     this.postEvent('web_app_expand');
+    this.state.set('isExpanded', true);
   }
 
   /**
