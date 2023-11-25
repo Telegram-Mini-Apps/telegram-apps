@@ -16,8 +16,8 @@ interface StorageParams {
   'main-button': {
     backgroundColor: RGB;
     isEnabled: boolean;
+    isLoaderVisible: boolean;
     isVisible: boolean;
-    isProgressVisible: boolean;
     text: string;
     textColor: RGB;
   };
