@@ -14,7 +14,7 @@ export class State<S extends object> {
   }
 
   private internalSet<K extends StringKeys<S>>(key: K, value: S[K]): boolean {
-    if (this.state[key] === value) {
+    if (this.state[key] === value || value === undefined) {
       return false;
     }
 
