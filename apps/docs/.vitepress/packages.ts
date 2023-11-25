@@ -12,31 +12,51 @@ export const packagesSidebar = {
     {
       text: 'TypeScript',
       items: [
-        { text: '@tma.js/bridge', link: prefixed('/typescript/tma-js-bridge') },
-        {
-          text: '@tma.js/init-data',
-          collapsed: true,
-          items: [
-            { text: 'About', link: prefixed('/typescript/tma-js-init-data/about') },
-            { text: 'InitData', link: prefixed('/typescript/tma-js-init-data/init-data') },
-            { text: 'Chat', link: prefixed('/typescript/tma-js-init-data/chat') },
-            { text: 'User', link: prefixed('/typescript/tma-js-init-data/user') },
-          ],
-        },
-        {
-          text: '@tma.js/launch-params',
-          link: prefixed('/typescript/tma-js-launch-params'),
-        },
-        { text: '@tma.js/theme-params', link: prefixed('/typescript/tma-js-theme-params') },
-        { text: '@tma.js/navigation', link: prefixed('/typescript/tma-js-navigation') },
         {
           text: '@tma.js/sdk',
-          collapsed: true,
+          link: prefixed('/typescript/tma-js-sdk/about'),
           items: [
-            { text: 'About', link: prefixed('/typescript/tma-js-sdk/about') },
+            {
+              text: 'Initialization',
+              link: prefixed('/typescript/tma-js-sdk/init'),
+            },
+            {
+              text: 'Methods and events',
+              link: prefixed('/typescript/tma-js-sdk/methods-and-events'),
+            },
+            {
+              text: 'Launch parameters',
+              link: prefixed('/typescript/tma-js-sdk/launch-parameters'),
+            },
+            {
+              text: 'Theme parameters',
+              link: prefixed('/typescript/tma-js-sdk/theme-parameters'),
+            },
+            {
+              text: 'Init data',
+              link: prefixed('/typescript/tma-js-sdk/init-data/about'),
+              items: [
+                {
+                  text: 'InitData',
+                  link: prefixed('/typescript/tma-js-sdk/init-data/init-data')
+                },
+                {
+                  text: 'Chat',
+                  link: prefixed('/typescript/tma-js-sdk/init-data/chat')
+                },
+                {
+                  text: 'User',
+                  link: prefixed('/typescript/tma-js-sdk/init-data/user')
+                },
+              ],
+            },
+            {
+              text: 'Navigation',
+              link: prefixed('/typescript/tma-js-sdk/navigation'),
+            },
             {
               text: 'Components',
-              collapsed: true,
+              link: prefixed('/typescript/tma-js-sdk/components/about'),
               items: [
                 {
                   text: 'BackButton',
@@ -44,7 +64,11 @@ export const packagesSidebar = {
                 },
                 {
                   text: 'ClosingBehavior',
-                  link: prefixed('/typescript/tma-js-sdk/components/closing-behaviour'),
+                  link: prefixed('/typescript/tma-js-sdk/components/closing-behavior'),
+                },
+                {
+                  text: 'CloudStorage',
+                  link: prefixed('/typescript/tma-js-sdk/components/cloud-storage'),
                 },
                 {
                   text: 'HapticFeedback',
@@ -55,8 +79,16 @@ export const packagesSidebar = {
                   link: prefixed('/typescript/tma-js-sdk/components/init-data'),
                 },
                 {
+                  text: 'Invoice',
+                  link: prefixed('/typescript/tma-js-sdk/components/invoice'),
+                },
+                {
                   text: 'MainButton',
                   link: prefixed('/typescript/tma-js-sdk/components/main-button'),
+                },
+                {
+                  text: 'MiniApp',
+                  link: prefixed('/typescript/tma-js-sdk/components/mini-app'),
                 },
                 {
                   text: 'Popup',
@@ -71,13 +103,12 @@ export const packagesSidebar = {
                   link: prefixed('/typescript/tma-js-sdk/components/theme-params'),
                 },
                 {
+                  text: 'Utils',
+                  link: prefixed('/typescript/tma-js-sdk/components/utils'),
+                },
+                {
                   text: 'Viewport',
                   link: prefixed('/typescript/tma-js-sdk/components/viewport'),
-                },
-                // TODO: Rename?
-                {
-                  text: 'WebApp',
-                  link: prefixed('/typescript/tma-js-sdk/components/web-app'),
                 },
               ],
             },
@@ -97,6 +128,28 @@ export const packagesSidebar = {
       text: 'GoLang',
       items: [
         { text: 'init-data-golang', link: prefixed('/golang/init-data-golang') },
+      ],
+    },
+    {
+      text: 'Deprecated',
+      items: [
+        { text: '@tma.js/bridge', link: prefixed('/typescript/tma-js-bridge') },
+        {
+          text: '@tma.js/init-data',
+          collapsed: true,
+          items: [
+            { text: 'About', link: prefixed('/typescript/tma-js-init-data/about') },
+            { text: 'InitData', link: prefixed('/typescript/tma-js-init-data/init-data') },
+            { text: 'Chat', link: prefixed('/typescript/tma-js-init-data/chat') },
+            { text: 'User', link: prefixed('/typescript/tma-js-init-data/user') },
+          ],
+        },
+        {
+          text: '@tma.js/launch-params',
+          link: prefixed('/typescript/tma-js-launch-params'),
+        },
+        { text: '@tma.js/theme-params', link: prefixed('/typescript/tma-js-theme-params') },
+        { text: '@tma.js/navigation', link: prefixed('/typescript/tma-js-navigation') },
       ],
     },
   ],
