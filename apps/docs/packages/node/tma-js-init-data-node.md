@@ -10,11 +10,6 @@ The package provides utilities to work with the initialization data of Telegram 
 server side. To learn more about the initialization data and its usage, please refer to
 the [documentation](../../platform/launch-parameters/common-information.md).
 
-::: info
-This package extends the functionality of [@tma.js/init-data](../typescript/tma-js-init-data/about.md), including all
-its types and utilities. Therefore, there is no need to install both packages separately.
-:::
-
 ## Installation
 
 ::: code-group
