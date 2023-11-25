@@ -4,7 +4,7 @@ function prefixed(value: string): string {
 
 export const packagesNavItem = {
   text: 'Packages',
-  link: prefixed('/typescript/tma-js-bridge'),
+  link: prefixed('/typescript/tma-js-sdk/about'),
 };
 
 export const packagesSidebar = {
