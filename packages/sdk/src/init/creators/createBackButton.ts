@@ -17,7 +17,7 @@ export function createBackButton(
   const { isVisible = false } = isPageReload ? getStorageValue('back-button') || {} : {};
   const component = new BackButton(isVisible, version, postEvent);
 
-  component.on('isVisibleChanged', () => {
+  component.on('change', () => {
     saveStorageValue('back-button', { isVisible: component.isVisible });
   });
 

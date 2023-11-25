@@ -44,8 +44,7 @@ export function createMiniApp(
     headerColor: component.headerColor,
   });
 
-  component.on('backgroundColorChanged', saveState);
-  component.on('headerColorChanged', saveState);
+  component.on('change', saveState);
 
   return component;
 }

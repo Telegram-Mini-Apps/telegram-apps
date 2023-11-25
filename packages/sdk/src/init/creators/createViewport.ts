@@ -54,10 +54,7 @@ function bind(viewport: Viewport): Viewport {
   });
 
   // TODO: Should probably use throttle for height.
-  viewport.on('heightChanged', saveState);
-  viewport.on('isExpandedChanged', saveState);
-  viewport.on('stableHeightChanged', saveState);
-  viewport.on('widthChanged', saveState);
+  viewport.on('change', saveState);
 
   return viewport;
 }

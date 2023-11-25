@@ -45,12 +45,7 @@ export function createMainButton(
     textColor: component.textColor,
   });
 
-  component.on('backgroundColorChanged', saveState);
-  component.on('isEnabledChanged', saveState);
-  component.on('isVisibleChanged', saveState);
-  component.on('isProgressVisibleChanged', saveState);
-  component.on('textColorChanged', saveState);
-  component.on('textChanged', saveState);
+  component.on('change', saveState);
 
   return component;
 }
