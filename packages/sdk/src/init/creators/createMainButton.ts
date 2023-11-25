@@ -21,26 +21,26 @@ export function createMainButton(
     backgroundColor: stateBackgroundColor = backgroundColor,
     isEnabled = false,
     isVisible = false,
-    isProgressVisible = false,
+    isLoaderVisible = false,
     textColor: stateTextColor = textColor,
     text = '',
   } = isPageReload ? getStorageValue('main-button') || {} : {};
 
-  const component = new MainButton(
-    stateBackgroundColor,
+  const component = new MainButton({
+    backgroundColor: stateBackgroundColor,
     isEnabled,
+    isLoaderVisible,
     isVisible,
-    isProgressVisible,
-    text,
-    stateTextColor,
     postEvent,
-  );
+    text,
+    textColor: stateTextColor,
+  });
 
   const saveState = () => saveStorageValue('main-button', {
     backgroundColor: component.backgroundColor,
     isEnabled: component.isEnabled,
+    isLoaderVisible: component.isLoaderVisible,
     isVisible: component.isVisible,
-    isProgressVisible: component.isProgressVisible,
     text: component.text,
     textColor: component.textColor,
   });
