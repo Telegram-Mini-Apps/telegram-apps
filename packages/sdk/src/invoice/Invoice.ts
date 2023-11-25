@@ -12,6 +12,30 @@ import {
 } from '~/supports/index.js';
 import type { Version } from '~/version/index.js';
 
+import type { InvoiceEvents, InvoiceState } from './types.js';
+
+/**
+ * Extracts invoice slug from URL.
+ * @param url - url to extract slug from.
+ */
+function slugFromUrl(url: string): string {
+  const { hostname, pathname } = new URL(url, window.location.href);
+  if (hostname !== 't.me') {
+    throw new Error(`Incorrect hostname: ${hostname}`);
+  }
+
+  // Valid examples:
+  // "/invoice/my-slug"
+  // "/$my-slug"
+  const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
+
+  if (match === null) {
+    // eslint-disable-next-line no-template-curly-in-string
+    throw new Error('Link pathname has incorrect format. Expected to receive "/invoice/{slug}" or "/${slug}"');
+  }
+  return match[2];
+}
+
 /**
  * Controls currently displayed invoice.
  */
@@ -50,41 +74,46 @@ export class Invoice {
   off = this.ee.off.bind(this.ee);
 
   /**
-   * Opens an invoice using its url. It expects passing link in full format,
-   * with hostname "t.me".
-   * @param url - invoice URL.
+   * Opens an invoice using its slug.
+   * @param slug - invoice slug.
+   * @throws {Error} Invoice is already opened.
    */
-  open(url: string): Promise<InvoiceStatus> {
+  open(slug: string): Promise<InvoiceStatus>;
+
+  /**
+   * Opens an invoice using its url. It expects passing link in full format, with hostname "t.me".
+   * @param url - invoice URL.
+   * @param type - value type.
+   * @throws {Error} Invoice is already opened.
+   */
+  open(url: string, type: 'url'): Promise<InvoiceStatus>;
+
+  async open(urlOrSlug: string, type?: 'url'): Promise<InvoiceStatus> {
     if (this.isOpened) {
       throw new Error('Invoice is already opened');
     }
 
-    // TODO: Allow opening with slug.
-    const { hostname, pathname } = new URL(url, window.location.href);
-    if (hostname !== 't.me') {
-      throw new Error(`Incorrect hostname: ${hostname}`);
-    }
-
-    // Valid examples:
-    // "/invoice/my-slug"
-    // "/$my-slug"
-    const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
-
-    if (match === null) {
-      throw new Error('Link pathname has incorrect format. Expected to receive "/invoice/slug" or "/$slug"');
-    }
-    const [, , slug] = match;
+    const slug = type ? slugFromUrl(urlOrSlug) : urlOrSlug;
 
     this.isOpened = true;
 
-    return request('web_app_open_invoice', { slug }, 'invoice_closed', {
-      postEvent: this.postEvent,
-      capture: ({ slug: eventSlug }) => slug === eventSlug,
-    })
-      .then((data) => data.status)
-      .finally(() => {
-        this.isOpened = false;
-      });
+    try {
+      const result = await request(
+        'web_app_open_invoice',
+        { slug },
+        'invoice_closed',
+        {
+          postEvent: this.postEvent,
+          capture(data) {
+            return slug === data.slug;
+          },
+        },
+      );
+
+      return result.status;
+    } finally {
+      this.isOpened = false;
+    }
   }
 
   /**
