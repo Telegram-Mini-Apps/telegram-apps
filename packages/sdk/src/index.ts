@@ -19,6 +19,7 @@ export {
 export * from './logger/index.js';
 export * from './main-button/index.js';
 export * from './mini-app/index.js';
+export * from './misc/index.js';
 export * from './navigation/index.js';
 export * from './parsing/index.js';
 export * from './popup/index.js';
