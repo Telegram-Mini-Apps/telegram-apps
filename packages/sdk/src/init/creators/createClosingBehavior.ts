@@ -16,7 +16,7 @@ export function createClosingBehavior(
 
   const component = new ClosingBehavior(isConfirmationNeeded, postEvent);
 
-  component.on('isConfirmationNeededChanged', () => saveStorageValue('closing-behavior', {
+  component.on('change', () => saveStorageValue('closing-behavior', {
     isConfirmationNeeded: component.isConfirmationNeeded,
   }));
 
