@@ -8,7 +8,11 @@ import {
 import { EventEmitter } from '~/event-emitter/index.js';
 import { State } from '~/state/index.js';
 
-import type { ViewportEvents, ViewportState } from './types.js';
+import type {
+  ViewportEvents,
+  ViewportProps,
+  ViewportState,
+} from './types.js';
 
 export interface RequestViewportResult {
   height: number;
@@ -76,13 +80,17 @@ export class Viewport {
 
   private readonly state: State<ViewportState>;
 
-  constructor(
-    height: number,
-    width: number,
-    stableHeight: number,
-    isExpanded: boolean,
-    private readonly postEvent: PostEvent = defaultPostEvent,
-  ) {
+  private readonly postEvent: PostEvent;
+
+  constructor(props: ViewportProps) {
+    const {
+      height,
+      isExpanded,
+      width,
+      stableHeight,
+      postEvent = defaultPostEvent,
+    } = props;
+    this.postEvent = postEvent;
     this.state = new State({
       height: truncate(height),
       isExpanded,

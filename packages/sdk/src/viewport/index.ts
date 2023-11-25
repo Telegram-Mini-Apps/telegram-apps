@@ -1,4 +1,5 @@
 export type {
+  ViewportProps,
   ViewportEventListener,
   ViewportEventName,
   ViewportEvents,

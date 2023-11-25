@@ -1,4 +1,13 @@
+import type { PostEvent } from '~/bridge/index.js';
 import type { StateEvents } from '~/state/index.js';
+
+export interface ViewportProps {
+  height: number;
+  width: number;
+  stableHeight: number;
+  isExpanded: boolean;
+  postEvent?: PostEvent;
+}
 
 export interface ViewportState {
   height: number;
