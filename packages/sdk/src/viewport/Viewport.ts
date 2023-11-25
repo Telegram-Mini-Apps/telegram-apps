@@ -34,48 +34,6 @@ function truncate(value: number): number {
  * and state.
  */
 export class Viewport {
-  /**
-   * Requests fresh information about current viewport.
-   * @param options - method options.
-   */
-  static async request(
-    { timeout = 1000, ...rest }: RequestOptions = {},
-  ): Promise<RequestViewportResult> {
-    const {
-      is_expanded: isExpanded,
-      is_state_stable: isStateStable,
-      ...restViewport
-    } = await request('web_app_request_viewport', 'viewport_changed', {
-      ...rest,
-      timeout,
-    });
-
-    return {
-      ...restViewport,
-      isExpanded,
-      isStateStable,
-    };
-  }
-
-  /**
-   * Returns initialized instance of Viewport which is synchronized with
-   * its actual state in Mini Apps.
-   * @param options - method options.
-   */
-  static async synced(options: RequestOptions = {}): Promise<Viewport> {
-    const { height, isExpanded, width } = await this.request(options);
-    const viewport = new Viewport(
-      height,
-      width,
-      height,
-      isExpanded,
-      options.postEvent,
-    );
-    viewport.sync();
-
-    return viewport;
-  }
-
   private readonly ee = new EventEmitter<ViewportEvents>();
 
   private readonly state: State<ViewportState>;
