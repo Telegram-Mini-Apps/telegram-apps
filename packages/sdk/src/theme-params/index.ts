@@ -6,7 +6,6 @@ export * from './themeParamsParser.js';
 export type {
   ThemeParamsEventListener,
   ThemeParamsEventName,
-  ThemeParamsEvents,
   ThemeParamsKey,
   ThemeParamsParsed,
 } from './types.js';
