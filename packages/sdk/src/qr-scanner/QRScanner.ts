@@ -21,7 +21,10 @@ export class QRScanner {
 
   private readonly state: State<QRScannerState>;
 
-  constructor(version: Version, private readonly postEvent: PostEvent = defaultPostEvent) {
+  constructor(
+    version: Version,
+    private readonly postEvent: PostEvent = defaultPostEvent,
+  ) {
     this.state = new State({ isOpened: false }, this.ee);
     this.supports = createSupportsFunc(version, {
       close: 'web_app_close_scan_qr_popup',
