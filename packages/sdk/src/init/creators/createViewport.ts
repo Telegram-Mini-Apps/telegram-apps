@@ -1,5 +1,5 @@
 import { getStorageValue, saveStorageValue } from '~/storage.js';
-import { Viewport } from '~/viewport/index.js';
+import { requestViewport, Viewport } from '~/viewport/index.js';
 import type { PostEvent } from '~/bridge/index.js';
 import type { Platform } from '~/types/index.js';
 
@@ -15,24 +15,18 @@ function tryCreate(
   postEvent: PostEvent,
 ): Viewport | null {
   if (isPageReload || platform === 'macos' || platform === 'web' || platform === 'weba') {
-    return new Viewport(
-      window.innerHeight,
-      window.innerWidth,
-      window.innerHeight,
-      true,
+    return new Viewport({
+      height: window.innerHeight,
+      isExpanded: true,
       postEvent,
-    );
+      stableHeight: window.innerHeight,
+      width: window.innerWidth,
+    });
   }
 
   const state = getStorageValue('viewport');
   if (state) {
-    return new Viewport(
-      state.height,
-      state.width,
-      state.stableHeight,
-      state.isExpanded,
-      postEvent,
-    );
+    return new Viewport({ ...state, postEvent });
   }
 
   return null;
@@ -44,17 +38,15 @@ function tryCreate(
  * @param viewport - Viewport instance.
  */
 function bind(viewport: Viewport): Viewport {
-  viewport.sync();
+  viewport.listen();
 
-  const saveState = () => saveStorageValue('viewport', {
+  // TODO: Should probably use throttle for height.
+  viewport.on('change', () => saveStorageValue('viewport', {
     height: viewport.height,
     isExpanded: viewport.isExpanded,
     stableHeight: viewport.stableHeight,
     width: viewport.width,
-  });
-
-  // TODO: Should probably use throttle for height.
-  viewport.on('change', saveState);
+  }));
 
   return viewport;
 }
@@ -72,24 +64,19 @@ export function createViewportSync(
   postEvent: PostEvent,
 ): Viewport {
   const viewport = bind(
-    tryCreate(isPageReload, platform, postEvent) || new Viewport(
-      0,
-      0,
-      0,
-      false,
+    tryCreate(isPageReload, platform, postEvent) || new Viewport({
+      width: 0,
+      height: 0,
+      isExpanded: false,
       postEvent,
-    ),
+      stableHeight: 0,
+    }),
   );
 
-  viewport
-    .actualize({
-      postEvent,
-      timeout: 100,
-    })
-    .catch((e) => {
-      // eslint-disable-next-line no-console
-      console.error('Unable to actualize viewport state', e);
-    });
+  viewport.sync({ postEvent, timeout: 100 }).catch((e) => {
+    // eslint-disable-next-line no-console
+    console.error('Unable to actualize viewport state', e);
+  });
 
   return viewport;
 }
@@ -100,23 +87,18 @@ export function createViewportSync(
  * @param platform - platform identifier.
  * @param postEvent - Bridge postEvent function.
  */
-export function createViewportAsync(
+export async function createViewportAsync(
   isPageReload: boolean,
   platform: Platform,
   postEvent: PostEvent,
 ): Promise<Viewport> {
-  const viewport = tryCreate(isPageReload, platform, postEvent);
-
-  return viewport
-    ? Promise.resolve(viewport)
-    : Viewport
-      .request({ postEvent, timeout: 100 })
-      .then(({ height, isExpanded, width, isStateStable }) => new Viewport(
+  return bind(
+    tryCreate(isPageReload, platform, postEvent)
+    || await requestViewport({ postEvent, timeout: 100 })
+      .then(({ height, isStateStable, ...rest }) => new Viewport({
+        ...rest,
         height,
-        width,
-        isStateStable ? height : 0,
-        isExpanded,
-        postEvent,
-      ))
-      .then(bind);
+        stableHeight: isStateStable ? height : 0,
+      })),
+  );
 }
