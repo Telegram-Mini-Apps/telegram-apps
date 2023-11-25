@@ -48,17 +48,15 @@ export class Viewport {
    * instance.
    * @param options - options to request fresh data.
    */
-  actualize(options?: RequestOptions): Promise<void> {
-    return Viewport
-      .request(options)
-      .then(({ height, isExpanded, width, isStateStable }) => {
-        this.state.set({
-          height,
-          width,
-          isExpanded,
-          stableHeight: isStateStable ? height : this.state.get('stableHeight'),
-        });
+  sync(options?: RequestOptions): Promise<void> {
+    return requestViewport(options).then(({ height, isExpanded, width, isStateStable }) => {
+      this.state.set({
+        height,
+        width,
+        isExpanded,
+        stableHeight: isStateStable ? height : this.state.get('stableHeight'),
       });
+    });
   }
 
   /**
