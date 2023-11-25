@@ -126,8 +126,8 @@ export interface InitDataParsed {
   chatType?: ChatType;
 
   /**
-   * A global identifier indicating the chat from which Mini App was
-   * opened. Returned only for applications opened by direct link.
+   * A global identifier indicating the chat from which Mini App was opened. Returned only for
+   * applications opened by direct link.
    */
   chatInstance?: string;
 
