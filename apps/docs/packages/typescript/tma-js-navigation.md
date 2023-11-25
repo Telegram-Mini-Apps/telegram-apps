@@ -12,6 +12,11 @@ outline: [2, 3]
 
 Package for manipulating Mini App navigation on the Telegram Mini Apps platform.
 
+::: danger
+This project has been deprecated. All its functionality was moved to
+the [@tma.js/sdk](./tma-js-sdk/about.md) package.
+:::
+
 ## Installation
 
 ::: code-group

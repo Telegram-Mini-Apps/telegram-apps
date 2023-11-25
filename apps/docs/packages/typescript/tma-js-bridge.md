@@ -13,6 +13,11 @@ and saving their time.
 Developers can utilize this package to create their software development kit (SDK), as it offers the
 utmost level of control over cross-application communication.
 
+::: danger
+This project has been deprecated. All its functionality was moved to
+the [@tma.js/sdk](./tma-js-sdk/about.md) package.
+:::
+
 ## Installation
 
 ::: code-group

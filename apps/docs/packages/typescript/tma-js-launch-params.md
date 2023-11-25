@@ -9,6 +9,11 @@
 Provides utilities to work with Telegram Mini
 Apps [launch parameters](../../platform/launch-parameters/common-information.md).
 
+::: danger
+This project has been deprecated. All its functionality was moved to
+the [@tma.js/sdk](./tma-js-sdk/about.md) package.
+:::
+
 ## Installation
 
 ::: code-group
