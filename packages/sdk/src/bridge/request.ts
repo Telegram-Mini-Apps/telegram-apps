@@ -1,5 +1,5 @@
+import { isRecord } from '~/misc/index.js';
 import { withTimeout } from '~/timeout/index.js';
-import { isRecord } from '~/utils/index.js';
 import type { And, If, IsNever } from '~/types/index.js';
 
 import {

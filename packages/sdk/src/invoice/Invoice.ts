@@ -1,4 +1,6 @@
 import {
+  type InvoiceStatus,
+  type PostEvent,
   postEvent as defaultPostEvent,
   request,
 } from '~/bridge/index.js';
@@ -8,8 +10,6 @@ import {
   createSupportsFunc,
   type SupportsFunc,
 } from '~/supports/index.js';
-import type { InvoiceStatus, PostEvent } from '~/bridge/index.js';
-import type { InvoiceEvents, InvoiceState } from '~/invoice/types.js';
 import type { Version } from '~/version/index.js';
 
 /**

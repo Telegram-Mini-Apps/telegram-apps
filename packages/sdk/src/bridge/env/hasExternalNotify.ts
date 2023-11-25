@@ -1,4 +1,4 @@
-import { isRecord } from '~/utils/index.js';
+import { isRecord } from '~/misc/index.js';
 
 type WithExternalNotify<T> = T & {
   external: {

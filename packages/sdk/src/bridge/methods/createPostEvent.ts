@@ -1,5 +1,5 @@
+import { isRecord } from '~/misc/index.js';
 import { supports } from '~/supports/index.js';
-import { isRecord } from '~/utils/index.js';
 import type { Version } from '~/version/index.js';
 
 import { type PostEvent, postEvent } from './postEvent.js';

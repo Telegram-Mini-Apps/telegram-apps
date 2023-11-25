@@ -1,2 +1,7 @@
 export * from './MiniApp.js';
-export * from './types.js';
+export type {
+  MiniAppProps,
+  MiniAppEventListener,
+  MiniAppEventName,
+  MiniAppHeaderColor,
+} from './types.js';

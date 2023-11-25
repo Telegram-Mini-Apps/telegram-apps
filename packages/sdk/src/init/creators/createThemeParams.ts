@@ -1,7 +1,4 @@
-import {
-  ThemeParams,
-  type ThemeParamsParsed,
-} from '~/theme-params/index.js';
+import { ThemeParams, type ThemeParamsParsed } from '~/theme-params/index.js';
 
 /**
  * Creates synced instance of ThemeParams.
