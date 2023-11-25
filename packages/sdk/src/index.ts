@@ -1,32 +1,169 @@
-export * from './back-button/index.js';
-export * from './bridge/index.js';
-export * from './classnames/index.js';
-export * from './closing-behavior/index.js';
-export * from './cloud-storage/index.js';
-export * from './colors/index.js';
-export * from './event-emitter/index.js';
-export * from './haptic-feedback/index.js';
-export * from './init/index.js';
-export * from './init-data/index.js';
-export * from './invoice/index.js';
 export {
-  serializeLaunchParams,
-  retrieveLaunchData,
+  BackButton,
+  type BackButtonEventName,
+  type BackButtonEventListener,
+} from './back-button/index.js';
+export {
+  createPostEvent,
+  isIframe,
+  on,
+  off,
+  once,
+  postEvent,
+  request,
+  setTargetOrigin,
+  setDebug,
+  subscribe,
+  unsubscribe,
+  MethodUnsupportedError,
+  ParameterUnsupportedError,
+  type HeaderColorKey,
+  type InvoiceStatus,
+  type ImpactHapticFeedbackStyle,
+  type MiniAppsMethodName,
+  type MiniAppsEventName,
+  type MiniAppsEventParams,
+  type MiniAppsEventListener,
+  type MiniAppsGlobalEventListener,
+  type MiniAppsEmptyMethodName,
+  type MiniAppsMethodAcceptParams,
+  type MiniAppsMethodParams,
+  type MiniAppsNonEmptyMethodName,
+  type MiniAppsMethods,
+  type MiniAppsEventEmitter,
+  type MiniAppsEventHasParams,
+  type MiniAppsEvents,
+  type NotificationHapticFeedbackType,
+  type PhoneRequestedStatus,
+  type PostEvent,
+  type RequestOptions,
+  type SwitchInlineQueryChatType,
+  type WriteAccessRequestedStatus,
+} from './bridge/index.js';
+export {
+  classNames,
+  mergeClassNames,
+} from './classnames/index.js';
+export {
+  ClosingBehavior,
+  type ClosingBehaviorEventListener,
+  type ClosingBehaviorEventName,
+  type ClosingBehaviorEvents,
+} from './closing-behavior/index.js';
+export { CloudStorage } from './cloud-storage/index.js';
+export {
+  isRGB,
+  isRGBShort,
+  isColorDark,
+  toRGB,
+  type RGB,
+  type RGBShort,
+} from './colors/index.js';
+export { HapticFeedback } from './haptic-feedback/index.js';
+export {
+  init,
+  type InitOptions,
+  type InitResult,
+} from './init/index.js';
+export {
+  chatParser,
+  InitData,
+  initDataParser,
+  parseInitData,
+  userParser,
+  type Chat,
+  type ChatType,
+  type InitDataParsed,
+  type User,
+} from './init-data/index.js';
+export {
+  Invoice,
+  type InvoiceEvents,
+  type InvoiceEventListener,
+  type InvoiceEventName,
+} from './invoice/index.js';
+export {
   launchParamsParser,
+  parseLaunchParams,
+  retrieveLaunchData,
+  serializeLaunchParams,
   type LaunchParams,
   type LaunchData,
 } from './launch-params/index.js';
-export * from './logger/index.js';
-export * from './main-button/index.js';
-export * from './mini-app/index.js';
-export * from './misc/index.js';
-export * from './navigation/index.js';
-export * from './parsing/index.js';
-export * from './popup/index.js';
-export * from './qr-scanner/index.js';
-export * from './supports/index.js';
-export * from './theme-params/index.js';
-export * from './types/index.js';
-export * from './utils/index.js';
-export * from './version/index.js';
-export * from './viewport/index.js';
+export {
+  MainButton,
+  type MainButtonParams,
+  type MainButtonProps,
+  type MainButtonEvents,
+  type MainButtonEventName,
+  type MainButtonEventListener,
+} from './main-button/index.js';
+export {
+  MiniApp,
+  type MiniAppHeaderColor,
+  type MiniAppEventName,
+  type MiniAppEventListener,
+  type MiniAppEvents,
+  type MiniAppProps,
+} from './mini-app/index.js';
+export {
+  isTMA,
+  isRecord,
+} from './misc/index.js';
+export {
+  getHash,
+  HashNavigator,
+  Navigator,
+  type NavigationEntry,
+  type NavigatorConEntry,
+  type NavigatorOptions,
+  type HashNavigatorOptions,
+  type HashNavigatorEventsMap,
+  type HashNavigatorEventListener,
+  type HashNavigatorEventName,
+} from './navigation/index.js';
+export {
+  Popup,
+  type PopupEventName,
+  type PopupEventListener,
+  type PopupEvents,
+  type OpenPopupOptions,
+  type OpenPopupOptionsButton,
+} from './popup/index.js';
+export {
+  QRScanner,
+  type QRScannerEventListener,
+  type QRScannerEventName,
+  type QRScannerEvents,
+} from './qr-scanner/index.js';
+export { supports } from './supports/index.js';
+export {
+  parseThemeParams,
+  requestThemeParams,
+  serializeThemeParams,
+  themeParamsParser,
+  ThemeParams,
+  type ThemeParamsEventListener,
+  type ThemeParamsEventName,
+  type ThemeParamsEvents,
+  type ThemeParamsKey,
+  type ThemeParamsParsed,
+} from './theme-params/index.js';
+export type {
+  RequestId,
+  CreateRequestIdFunc,
+} from './types/index.js';
+export { Utils } from './utils/index.js';
+export {
+  compareVersions,
+  type Version,
+} from './version/index.js';
+export {
+  requestViewport,
+  Viewport,
+  type RequestViewportResult,
+  type ViewportProps,
+  type ViewportEventName,
+  type ViewportEventListener,
+  type ViewportEvents,
+} from './viewport/index.js';
