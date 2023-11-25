@@ -40,10 +40,10 @@ export class CloudStorage {
     private readonly postEvent = defaultPostEvent,
   ) {
     this.supports = createSupportsFunc(version, {
-      deleteKeys: 'web_app_invoke_custom_method',
+      delete: 'web_app_invoke_custom_method',
+      get: 'web_app_invoke_custom_method',
       getKeys: 'web_app_invoke_custom_method',
-      getValues: 'web_app_invoke_custom_method',
-      saveValue: 'web_app_invoke_custom_method',
+      set: 'web_app_invoke_custom_method',
     });
   }
 
@@ -73,11 +73,12 @@ export class CloudStorage {
   }
 
   /**
-   * Deletes specified keys from the CloudStorage.
-   * @param keys - keys list.
+   * Deletes specified key or keys from the cloud storage.
+   * @param keyOrKeys - key or keys to delete.
    * @param options - request execution options.
    */
-  async deleteKeys(keys: string[], options?: WiredRequestOptions): Promise<void> {
+  async delete(keyOrKeys: string | string[], options?: WiredRequestOptions): Promise<void> {
+    const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
     if (keys.length === 0) {
       return;
     }
@@ -86,7 +87,7 @@ export class CloudStorage {
   }
 
   /**
-   * Returns list of all keys presented in CloudStorage.
+   * Returns list of all keys presented in the cloud storage.
    * @param options - request execution options.
    */
   async getKeys(options?: WiredRequestOptions): Promise<string[]> {
@@ -101,20 +102,37 @@ export class CloudStorage {
    * @param keys - keys list.
    * @param options - request execution options.
    */
-  async getValues<K extends string>(
+  get<K extends string>(
     keys: K[],
     options?: WiredRequestOptions,
-  ): Promise<Record<K, string>> {
+  ): Promise<Record<K, string>>;
+
+  /**
+   * Returns value of the specified key.
+   * @param key - cloud storage key.
+   * @param options - request execution options.
+   * @return Value of the specified key. In case, key was not created previously, function
+   * will return empty string.
+   */
+  get(key: string, options?: WiredRequestOptions): Promise<string>;
+
+  async get(
+    keyOrKeys: string | string[],
+    options?: WiredRequestOptions,
+  ): Promise<string | Record<string, string>> {
+    const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
     if (keys.length === 0) {
-      return objectFromKeys(keys, '');
+      return objectFromKeys<string, string>(keys, '');
     }
 
-    const schema = json<Record<K, string>>(
-      objectFromKeys(keys, string()) as any, // fixme
+    const schema = json(
+      objectFromKeys(keys, string()),
     );
-    const result = await this.invokeCustomMethod('getStorageValues', { keys }, options);
+    const result = await this
+      .invokeCustomMethod('getStorageValues', { keys }, options)
+      .then((data) => schema.parse(data));
 
-    return schema.parse(result);
+    return Array.isArray(keyOrKeys) ? result : result[keyOrKeys];
   }
 
   /**
@@ -123,7 +141,7 @@ export class CloudStorage {
    * @param value - storage value.
    * @param options - request execution options.
    */
-  async saveValue(key: string, value: string, options?: WiredRequestOptions): Promise<void> {
+  async set(key: string, value: string, options?: WiredRequestOptions): Promise<void> {
     await this.invokeCustomMethod('saveStorageValue', { key, value }, options);
   }
 
@@ -131,9 +149,9 @@ export class CloudStorage {
    * Checks if specified method is supported by current component.
    */
   supports: SupportsFunc<
-  | 'deleteKeys'
+  | 'delete'
+  | 'get'
   | 'getKeys'
-  | 'getValues'
-  | 'saveValue'
+  | 'set'
   >;
 }
