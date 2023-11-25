@@ -1,52 +1,16 @@
-import {
-  on,
-  request,
-  type RequestOptions,
-} from '~/bridge/index.js';
-import {
-  isColorDark,
-  type RGB,
-} from '~/colors/index.js';
+import { on } from '~/bridge/index.js';
+import { isColorDark, type RGB } from '~/colors/index.js';
 import { EventEmitter } from '~/event-emitter/index.js';
 import { State } from '~/state/index.js';
 
 import { parseThemeParams } from './parseThemeParams.js';
-import { serializeThemeParams } from './serializeThemeParams.js';
 import type {
   ThemeParamsEvents,
   ThemeParamsParsed,
   ThemeParamsState,
 } from './types.js';
 
-/**
- * Application [theme parameters](https://docs.telegram-mini-apps.com/platform/functionality/theming).
- * Defines palette used by the Telegram application.
- */
 export class ThemeParams {
-  /**
-   * Requests fresh information about current theme from the Telegram application.
-   * @param options - method options.
-   */
-  static request({ timeout = 1000, ...rest }: RequestOptions = {}): Promise<ThemeParamsParsed> {
-    return request('web_app_request_theme', 'theme_changed', {
-      ...rest,
-      timeout,
-    }).then(parseThemeParams);
-  }
-
-  /**
-   * Returns instance of ThemeParams which is synchronized with external
-   * environment.
-   * @param options - method options.
-   */
-  static async synced(options?: RequestOptions): Promise<ThemeParams> {
-    const params = await this.request(options);
-    const tp = new ThemeParams(params);
-    tp.sync();
-
-    return tp;
-  }
-
   private readonly ee = new EventEmitter<ThemeParamsEvents>();
 
   private readonly state: State<ThemeParamsState>;
@@ -62,30 +26,18 @@ export class ThemeParams {
     return this.get('accentTextColor');
   }
 
-  /**
-   * Returns background color.
-   */
   get backgroundColor(): RGB | undefined {
     return this.get('backgroundColor');
   }
 
-  /**
-   * Returns button color.
-   */
   get buttonColor(): RGB | undefined {
     return this.get('buttonColor');
   }
 
-  /**
-   * Returns button text color.
-   */
   get buttonTextColor(): RGB | undefined {
     return this.get('buttonTextColor');
   }
 
-  /**
-   * @since v6.10
-   */
   get destructiveTextColor(): RGB | undefined {
     return this.get('destructiveTextColor');
   }
@@ -94,10 +46,13 @@ export class ThemeParams {
    * Retrieves palette color value by its name.
    * @param key - palette key name.
    */
-  get(key: keyof ThemeParamsParsed): RGB | undefined {
+  get(key: Extract<keyof ThemeParamsParsed, string>): RGB | undefined {
     return this.state.get(key);
   }
 
+  /**
+   * Returns the copy of the internal state of the current component instance.
+   */
   getState(): ThemeParamsParsed {
     return this.state.clone();
   }
@@ -109,9 +64,6 @@ export class ThemeParams {
     return this.get('headerBackgroundColor');
   }
 
-  /**
-   * Returns hint color.
-   */
   get hintColor(): RGB | undefined {
     return this.get('hintColor');
   }
@@ -124,9 +76,6 @@ export class ThemeParams {
     return !this.backgroundColor || isColorDark(this.backgroundColor);
   }
 
-  /**
-   * Returns current link color.
-   */
   get linkColor(): RGB | undefined {
     return this.get('linkColor');
   }
@@ -141,9 +90,6 @@ export class ThemeParams {
    */
   off = this.ee.off.bind(this.ee);
 
-  /**
-   * Returns secondary background color.
-   */
   get secondaryBackgroundColor(): RGB | undefined {
     return this.get('secondaryBackgroundColor');
   }
@@ -186,9 +132,6 @@ export class ThemeParams {
     return this.get('subtitleTextColor');
   }
 
-  /**
-   * Returns text color.
-   */
   get textColor(): RGB | undefined {
     return this.get('textColor');
   }
