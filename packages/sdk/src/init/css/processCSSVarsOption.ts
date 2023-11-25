@@ -49,7 +49,7 @@ export function processCSSVars(
 
   if (cssVarsOptions.viewport) {
     if (viewportOrPromise instanceof Promise) {
-      Promise.resolve(viewportOrPromise).then(bindViewportCSSVars);
+      viewportOrPromise.then(bindViewportCSSVars);
     } else {
       bindViewportCSSVars(viewportOrPromise);
     }

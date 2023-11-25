@@ -39,9 +39,9 @@ export function bindMiniAppCSSVars(miniApp: MiniApp, themeParams: ThemeParams): 
     }
   };
 
-  themeParams.on('changed', actualizeHeader);
-  miniApp.on('backgroundColorChanged', actualizeBackground);
-  miniApp.on('headerColorChanged', actualizeHeader);
+  themeParams.on('change', actualizeHeader);
+  miniApp.on('change:backgroundColor', actualizeBackground);
+  miniApp.on('change:headerColor', actualizeHeader);
 
   actualizeBackground();
   actualizeHeader();

@@ -12,6 +12,7 @@ import { setCSSVar } from './setCSSVar.js';
  *
  * Variables:
  * - `--tg-viewport-height`
+ * - `--tg-viewport-width`
  * - `--tg-viewport-stable-height`
  *
  * Variables are being automatically updated in case, corresponding properties
@@ -20,17 +21,16 @@ import { setCSSVar } from './setCSSVar.js';
  * @param viewport - Viewport instance.
  */
 export function bindViewportCSSVars(viewport: Viewport): void {
-  const setHeight = () => {
-    setCSSVar('--tg-viewport-height', `${viewport.height}px`);
-  };
+  const setHeight = () => setCSSVar('--tg-viewport-height', `${viewport.height}px`);
+  const setWidth = () => setCSSVar('--tg-viewport-width', `${viewport.width}px`);
+  const setStableHeight = () => setCSSVar('--tg-viewport-height', `${viewport.stableHeight}px`);
 
-  const setStableHeight = () => {
-    setCSSVar('--tg-viewport-stable-height', `${viewport.stableHeight}px`);
-  };
-
-  viewport.on('heightChanged', setHeight);
-  viewport.on('stableHeightChanged', setStableHeight);
+  // TODO: Should probably add debounce or throttle.
+  viewport.on('change:height', setHeight);
+  viewport.on('change:width', setWidth);
+  viewport.on('change:stableHeight', setStableHeight);
 
   setHeight();
+  setWidth();
   setStableHeight();
 }

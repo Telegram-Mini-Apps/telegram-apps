@@ -17,15 +17,15 @@ export function bindThemeCSSVars(themeParams: ThemeParams): void {
     const state = themeParams.getState();
 
     Object.entries(state).forEach(([k, v]) => {
-      if (!v) {
-        return;
+      if (v) {
+        const key = k
+          .replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
+        setCSSVar(`--tg-theme-${key}`, v);
       }
-      const key = k.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
-      setCSSVar(`--tg-theme-${key}`, v);
     });
   };
 
-  themeParams.on('changed', actualize);
+  themeParams.on('change', actualize);
 
   actualize();
 }
