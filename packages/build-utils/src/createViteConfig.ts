@@ -7,21 +7,26 @@ import { formatTmaJSPackageName } from './formatTmaJSPackageName.js';
 
 export interface CreateViteConfigOptions {
   /**
+   * Alias options.
+   */
+  alias?: AliasOptions;
+
+  /**
    * Should d.ts files be emitted.
    * @default true
    */
   declarations?: boolean;
 
   /**
-   * External dependencies.
-   */
-  external?: string[];
-
-  /**
    * Should Vite clear output directory.
    * @default true
    */
   emptyOutDir?: boolean;
+
+  /**
+   * External dependencies.
+   */
+  external?: string[];
 
   /**
    * Required package formats.
@@ -46,9 +51,10 @@ export interface CreateViteConfigOptions {
   test?: InlineConfig;
 
   /**
-   * Alias options.
+   * Path to tsconfig file.
+   * @default './tsconfig.json'
    */
-  alias?: AliasOptions;
+  tsconfigPath?: string;
 }
 
 export function createViteConfig(options: CreateViteConfigOptions): UserConfig {
@@ -62,6 +68,7 @@ export function createViteConfig(options: CreateViteConfigOptions): UserConfig {
     declarations = true,
     emptyOutDir = true,
     alias,
+    tsconfigPath = './tsconfig.json'
   } = options;
 
   return {
@@ -72,7 +79,7 @@ export function createViteConfig(options: CreateViteConfigOptions): UserConfig {
       // https://www.npmjs.com/package/vite-plugin-dts
       declarations && dts({
         outDir: 'dist/dts',
-        tsconfigPath: './tsconfig.json',
+        tsconfigPath,
       }),
       ...plugins,
     ],
