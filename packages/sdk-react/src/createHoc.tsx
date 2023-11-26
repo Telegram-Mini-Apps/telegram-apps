@@ -1,17 +1,18 @@
 import React, { type ComponentType } from 'react';
 
-import type { SDKInitResultKey, SDKInitResultValue } from './provider/index.js';
-import { Hook } from './createHook.js';
+import type { InitResultKey, InitResultValue } from './types.js';
+import type { Hook } from './createHook.js';
 
-type HOC<K extends SDKInitResultKey> =
-  <P extends { [Key in K]?: SDKInitResultValue<Key> }>(
-    Component: ComponentType<P>,
-  ) => ComponentType<P>
+export type Hoc<K extends InitResultKey> = <P extends { [Key in K]?: InitResultValue<K> }>(
+  Component: ComponentType<P>,
+) => ComponentType<P>;
 
-export function createHoc<K extends SDKInitResultKey>(
-  initResultKey: SDKInitResultKey,
-  hook: Hook<K>,
-): HOC<K> {
+/**
+ * Creates HOC for static init result value.
+ * @param initResultKey - init result key.
+ * @param hook - hook which returns init result value.
+ */
+export function createHoc<K extends InitResultKey>(initResultKey: K, hook: Hook<K>): Hoc<K> {
   return (Component: ComponentType<any>) => {
     function Wrapper(props: Record<string, unknown>) {
       const wrappedProps = {
@@ -23,7 +24,7 @@ export function createHoc<K extends SDKInitResultKey>(
     }
 
     Object.defineProperty(Wrapper, 'name', {
-      value: initResultKey[0].toUpperCase() + initResultKey.slice(1),
+      value: `With${initResultKey[0].toUpperCase()}${initResultKey.slice(1)}`,
     });
 
     return Wrapper;
