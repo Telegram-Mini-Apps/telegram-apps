@@ -7,7 +7,8 @@ import {
   type SpyInstance,
 } from 'vitest';
 
-import { postEvent, setTargetOrigin } from '~/bridge/index.js';
+import { postEvent } from '~/bridge/index.js';
+import { setTargetOrigin } from '~/globals.js';
 
 let windowSpy: SpyInstance<[], Window & typeof globalThis>;
 

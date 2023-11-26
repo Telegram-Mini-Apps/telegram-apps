@@ -1,11 +1,11 @@
-import { expect, it, vi, afterEach, describe } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   logger,
   setDebug,
   setTargetOrigin,
   targetOrigin,
-} from '~/bridge/globals.js';
+} from '~/globals.js';
 
 afterEach(() => {
   vi.restoreAllMocks();
