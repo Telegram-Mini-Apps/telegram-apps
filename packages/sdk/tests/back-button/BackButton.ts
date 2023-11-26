@@ -17,7 +17,7 @@ describe('hide', () => {
     const backButton = new BackButton(true, '', vi.fn());
     const listener = vi.fn();
 
-    backButton.on('isVisibleChanged', listener);
+    backButton.on('change:isVisible', listener);
     expect(listener).toHaveBeenCalledTimes(0);
     backButton.hide();
     expect(listener).toHaveBeenCalledTimes(1);
@@ -40,7 +40,7 @@ describe('show', () => {
     const backButton = new BackButton(false, '', vi.fn());
     const listener = vi.fn();
 
-    backButton.on('isVisibleChanged', listener);
+    backButton.on('change:isVisible', listener);
     expect(listener).toHaveBeenCalledTimes(0);
     backButton.show();
     expect(listener).toHaveBeenCalledTimes(1);
@@ -95,13 +95,13 @@ describe('off', () => {
       const listener = vi.fn();
       const backButton = new BackButton(false, '', vi.fn());
 
-      backButton.on('isVisibleChanged', listener);
+      backButton.on('change:isVisible', listener);
 
       expect(listener).toHaveBeenCalledTimes(0);
       backButton.show();
       expect(listener).toHaveBeenCalledTimes(1);
 
-      backButton.off('isVisibleChanged', listener);
+      backButton.off('change:isVisible', listener);
 
       expect(listener).toHaveBeenCalledTimes(1);
       backButton.hide();

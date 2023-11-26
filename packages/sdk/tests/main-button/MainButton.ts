@@ -5,26 +5,36 @@ import { MainButton } from '~/main-button/index.js';
 describe('disable', () => {
   it('should call "web_app_setup_main_button" method with parameter where "is_active" property equal to false', () => {
     const postEvent = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', postEvent);
-    mainButton.setText('TEST');
-    mainButton.enable();
-    postEvent.mockClear();
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent,
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    expect(postEvent).toHaveBeenCalledTimes(0);
     mainButton.disable();
     expect(postEvent).toHaveBeenCalledTimes(1);
     expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
     expect(postEvent.mock.calls[0][1]).toHaveProperty('is_active', false);
   });
 
-  it('should emit "isEnabledChanged" event with false value', () => {
+  it('should emit "change:isEnabled" event with false value', () => {
     const listener = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', vi.fn());
-    mainButton.setText('TEST');
-    mainButton.enable();
+    const postEvent = vi.fn();
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent,
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: true,
+    });
 
-    mainButton.on('isEnabledChanged', listener);
-    expect(listener).toHaveBeenCalledTimes(0);
+    mainButton.on('change:isEnabled', listener);
     mainButton.disable();
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith(false);
@@ -34,24 +44,35 @@ describe('disable', () => {
 describe('enable', () => {
   it('should call "web_app_setup_main_button" method with parameter where "is_active" property equal to true', () => {
     const postEvent = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', postEvent);
-    mainButton.setText('TEST');
-    postEvent.mockClear();
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent,
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    expect(postEvent).toHaveBeenCalledTimes(0);
     mainButton.enable();
     expect(postEvent).toHaveBeenCalledTimes(1);
     expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
     expect(postEvent.mock.calls[0][1]).toHaveProperty('is_active', true);
   });
 
-  it('should emit "isEnabledChanged" event with true value', () => {
+  it('should emit "change:isEnabled" event with true value', () => {
     const listener = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', vi.fn());
-    mainButton.setText('TEST');
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent: vi.fn(),
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    mainButton.on('isEnabledChanged', listener);
-    expect(listener).toHaveBeenCalledTimes(0);
+    mainButton.on('change:isEnabled', listener);
     mainButton.enable();
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith(true);
@@ -61,56 +82,74 @@ describe('enable', () => {
 describe('hide', () => {
   it('should call "web_app_setup_main_button" method with parameter where "is_visible" property equal to false', () => {
     const postEvent = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', postEvent);
-    mainButton.setText('TEST');
-    mainButton.show();
-    postEvent.mockClear();
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent,
+      isLoaderVisible: false,
+      isVisible: true,
+      isEnabled: false,
+    });
 
-    expect(postEvent).toHaveBeenCalledTimes(0);
     mainButton.hide();
     expect(postEvent).toHaveBeenCalledTimes(1);
     expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
     expect(postEvent.mock.calls[0][1]).toHaveProperty('is_visible', false);
   });
 
-  it('should emit "isVisibleChanged" event with false value', () => {
+  it('should emit "change:isVisible" event with false value', () => {
     const listener = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', vi.fn());
-    mainButton.setText('TEST');
-    mainButton.show();
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent: vi.fn(),
+      isLoaderVisible: false,
+      isVisible: true,
+      isEnabled: false,
+    });
 
-    mainButton.on('isVisibleChanged', listener);
-    expect(listener).toHaveBeenCalledTimes(0);
+    mainButton.on('change:isVisible', listener);
     mainButton.hide();
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith(false);
   });
 });
 
-describe('hideProgress', () => {
+describe('hideLoader', () => {
   it('should call "web_app_setup_main_button" method with parameter where "is_progress_visible" property equal to false', () => {
     const postEvent = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', postEvent);
-    mainButton.setText('TEST');
-    mainButton.showProgress();
-    postEvent.mockClear();
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent,
+      isLoaderVisible: true,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    expect(postEvent).toHaveBeenCalledTimes(0);
-    mainButton.hideProgress();
+    mainButton.hideLoader();
     expect(postEvent).toHaveBeenCalledTimes(1);
     expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
     expect(postEvent.mock.calls[0][1]).toHaveProperty('is_progress_visible', false);
   });
 
-  it('should emit "isProgressVisibleChanged" event with false value', () => {
+  it('should emit "change:isLoaderVisible" event with false value', () => {
     const listener = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', vi.fn());
-    mainButton.setText('TEST');
-    mainButton.showProgress();
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent: vi.fn(),
+      isLoaderVisible: true,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    mainButton.on('isProgressVisibleChanged', listener);
-    expect(listener).toHaveBeenCalledTimes(0);
-    mainButton.hideProgress();
+    mainButton.on('change:isLoaderVisible', listener);
+    mainButton.hideLoader();
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith(false);
   });
@@ -119,52 +158,74 @@ describe('hideProgress', () => {
 describe('show', () => {
   it('should call "web_app_setup_main_button" method with parameter where "is_visible" property equal to true', () => {
     const postEvent = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', postEvent);
-    mainButton.setText('TEST');
-    postEvent.mockClear();
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent,
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    expect(postEvent).toHaveBeenCalledTimes(0);
     mainButton.show();
     expect(postEvent).toHaveBeenCalledTimes(1);
     expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
     expect(postEvent.mock.calls[0][1]).toHaveProperty('is_visible', true);
   });
 
-  it('should emit "isVisibleChanged" event with true value', () => {
+  it('should emit "change:isVisible" event with true value', () => {
     const listener = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', vi.fn());
-    mainButton.setText('TEST');
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent: vi.fn(),
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    mainButton.on('isVisibleChanged', listener);
-    expect(listener).toHaveBeenCalledTimes(0);
+    mainButton.on('change:isVisible', listener);
     mainButton.show();
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith(true);
   });
 });
 
-describe('showProgress', () => {
+describe('showLoader', () => {
   it('should call "web_app_setup_main_button" method with parameter where "is_progress_visible" property equal to true', () => {
     const postEvent = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', postEvent);
-    mainButton.setText('TEST');
-    postEvent.mockClear();
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent,
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    expect(postEvent).toHaveBeenCalledTimes(0);
-    mainButton.showProgress();
+    mainButton.showLoader();
     expect(postEvent).toHaveBeenCalledTimes(1);
     expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
     expect(postEvent.mock.calls[0][1]).toHaveProperty('is_progress_visible', true);
   });
 
-  it('should emit "isProgressVisibleChanged" event with true value', () => {
+  it('should emit "change:isLoaderVisible" event with true value', () => {
     const listener = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', vi.fn());
-    mainButton.setText('TEST');
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent: vi.fn(),
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    mainButton.on('isProgressVisibleChanged', listener);
-    expect(listener).toHaveBeenCalledTimes(0);
-    mainButton.showProgress();
+    mainButton.on('change:isLoaderVisible', listener);
+    mainButton.showLoader();
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith(true);
   });
@@ -173,21 +234,35 @@ describe('showProgress', () => {
 describe('setText', () => {
   it('should call "web_app_setup_main_button" method with parameter where "text" property equal to specified value', () => {
     const postEvent = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', postEvent);
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent,
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    expect(postEvent).toHaveBeenCalledTimes(0);
     mainButton.setText('WOW');
     expect(postEvent).toHaveBeenCalledTimes(1);
     expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
     expect(postEvent.mock.calls[0][1]).toHaveProperty('text', 'WOW');
   });
 
-  it('should emit "textChanged" event with specified value', () => {
+  it('should emit "change:text" event with specified value', () => {
     const listener = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', vi.fn());
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent: vi.fn(),
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    mainButton.on('textChanged', listener);
-    expect(listener).toHaveBeenCalledTimes(0);
+    mainButton.on('change:text', listener);
     mainButton.setText('Punch');
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith('Punch');
@@ -197,24 +272,35 @@ describe('setText', () => {
 describe('setTextColor', () => {
   it('should call "web_app_setup_main_button" method with parameter where "text_color" property equal to specified value', () => {
     const postEvent = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', postEvent);
-    mainButton.setText('TEST');
-    postEvent.mockClear();
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent,
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    expect(postEvent).toHaveBeenCalledTimes(0);
     mainButton.setTextColor('#ffaacc');
     expect(postEvent).toHaveBeenCalledTimes(1);
     expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
     expect(postEvent.mock.calls[0][1]).toHaveProperty('text_color', '#ffaacc');
   });
 
-  it('should emit "textColorChanged" event with specified value', () => {
+  it('should emit "change:textColor" event with specified value', () => {
     const listener = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', vi.fn());
-    mainButton.setText('TEST');
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent: vi.fn(),
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    mainButton.on('textColorChanged', listener);
-    expect(listener).toHaveBeenCalledTimes(0);
+    mainButton.on('change:textColor', listener);
     mainButton.setTextColor('#aaaaaa');
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith('#aaaaaa');
@@ -224,24 +310,35 @@ describe('setTextColor', () => {
 describe('setColor', () => {
   it('should call "web_app_setup_main_button" method with parameter where "color" property equal to specified value', () => {
     const postEvent = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', postEvent);
-    mainButton.setText('TEST');
-    postEvent.mockClear();
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent,
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    expect(postEvent).toHaveBeenCalledTimes(0);
     mainButton.setBackgroundColor('#ffaacc');
     expect(postEvent).toHaveBeenCalledTimes(1);
     expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
     expect(postEvent.mock.calls[0][1]).toHaveProperty('color', '#ffaacc');
   });
 
-  it('should emit "backgroundColorChanged" event with specified value', () => {
+  it('should emit "change:backgroundColor" event with specified value', () => {
     const listener = vi.fn();
-    const mainButton = new MainButton('#000000', false, false, false, '', '#ffffff', vi.fn());
-    mainButton.setText('TEST');
+    const mainButton = new MainButton({
+      text: 'Test',
+      textColor: '#000000',
+      backgroundColor: '#ffffff',
+      postEvent: vi.fn(),
+      isLoaderVisible: false,
+      isVisible: false,
+      isEnabled: false,
+    });
 
-    mainButton.on('backgroundColorChanged', listener);
-    expect(listener).toHaveBeenCalledTimes(0);
+    mainButton.on('change:backgroundColor', listener);
     mainButton.setBackgroundColor('#aaaaaa');
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith('#aaaaaa');

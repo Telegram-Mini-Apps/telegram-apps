@@ -17,7 +17,7 @@ describe('disable', () => {
     const confirmation = new ClosingBehavior(true, vi.fn());
     const listener = vi.fn();
 
-    confirmation.on('isConfirmationNeededChanged', listener);
+    confirmation.on('change:isConfirmationNeeded', listener);
     expect(listener).toHaveBeenCalledTimes(0);
     confirmation.disableConfirmation();
     expect(listener).toHaveBeenCalledTimes(1);
@@ -40,7 +40,7 @@ describe('enable', () => {
     const confirmation = new ClosingBehavior(false, vi.fn());
     const listener = vi.fn();
 
-    confirmation.on('isConfirmationNeededChanged', listener);
+    confirmation.on('change:isConfirmationNeeded', listener);
     expect(listener).toHaveBeenCalledTimes(0);
     confirmation.enableConfirmation();
     expect(listener).toHaveBeenCalledTimes(1);
@@ -54,7 +54,7 @@ describe('on', () => {
       const listener = vi.fn();
       const confirmation = new ClosingBehavior(false, vi.fn());
 
-      confirmation.on('isConfirmationNeededChanged', listener);
+      confirmation.on('change:isConfirmationNeeded', listener);
 
       expect(listener).toHaveBeenCalledTimes(0);
       confirmation.enableConfirmation();
@@ -69,13 +69,13 @@ describe('off', () => {
       const listener = vi.fn();
       const confirmation = new ClosingBehavior(false, vi.fn());
 
-      confirmation.on('isConfirmationNeededChanged', listener);
+      confirmation.on('change:isConfirmationNeeded', listener);
 
       expect(listener).toHaveBeenCalledTimes(0);
       confirmation.enableConfirmation();
       expect(listener).toHaveBeenCalledTimes(1);
 
-      confirmation.off('isConfirmationNeededChanged', listener);
+      confirmation.off('change:isConfirmationNeeded', listener);
       listener.mockClear();
 
       expect(listener).toHaveBeenCalledTimes(0);
