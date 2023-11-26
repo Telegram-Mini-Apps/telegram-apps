@@ -1,31 +1,30 @@
 # `MainButton`
 
-The component which controls the [Main Button](../../../../platform/ui/main-button.md).
+Implements Telegram Mini Apps [Main Button](../../../../platform/ui/main-button.md).
 
 ## Initialization
 
-Component constructor accepts background color, activity state, visibility state, progress
-visibility state, text and its color. It also accepts optional function to call Telegram Mini Apps
-methods.
+The component constructor accepts an object with a specified background color, activity state,
+visibility state, progress visibility state, text, and its color. It also accepts an optional
+function to call Telegram Mini Apps methods.
 
 ```typescript
-import { postEvent } from '@tma.js/bridge';
-import { BackButton } from '@tma.js/sdk';
+import { BackButton, postEvent } from '@tma.js/sdk';
 
-const mainButton = new MainButton(
-  '#aaddfe',
-  false,
-  false,
-  false,
-  'SUBMIT',
-  '#ffffff',
+const mainButton = new MainButton({
+  backgroundColor: '#aaddfe',
+  isEnabled: false,
+  isVisible: false,
+  isLoaderVisible: false,
+  text: 'SUBMIT',
+  textColor: '#ffffff',
   postEvent,
-);
+});
 ```
 
 ## Button visibility
 
-To control the `MainButton` visibility, develoepr could use such methods as `show()` and `hide()`.
+To control the Main Button visibility, developer could use such methods as `show()` and `hide()`.
 Both of them update component's `isVisible` property:
 
 ```typescript  
@@ -38,20 +37,20 @@ console.log(mainButton.isVisible); // false
 
 ## Loader
 
-The `MainButton` could display a loader inside of it. To control its visibility,
-use `showProgress()` and `hideProgress()` methods. The `isProgressVisible` property will be changed.
+The Main Button could display a loader inside of it. To control its visibility,
+use `showLoader()` and `hideLoader()` methods. The `isLoaderVisible` property will be changed.
 
 ```typescript
-mainButton.showProgress();
-console.log(mainButton.isProgressVisible); // true  
+mainButton.showLoader();
+console.log(mainButton.isLoaderVisible); // true  
 
-mainButton.hideProgress();
-console.log(mainButton.isProgressVisible); // false
+mainButton.hideLoader();
+console.log(mainButton.isLoaderVisible); // false
 ```
 
 ## Active state
 
-The `MainButton` can be enabled and disabled by calling `disable()` and `enable()` methods. Both of
+The Main Button can be enabled and disabled by calling `disable()` and `enable()` methods. Both of
 the methods will update the `isEnabled` property.
 
 ```typescript
@@ -62,12 +61,12 @@ mainButton.disable();
 console.log(mainButton.isEnabled); // false
 ```
 
-Enabling the `MainButton` will allow a user to click it. As the result, the `MainButton` will
-receive the `click` event. Otherwise, no event will be received.
+Enabling the Main Button will allow a user to click it. As the result, the Main Button will
+receive the `click` event.
 
 ## Background color
 
-To update the `MainButton` background color, use the `setBackgroundColor(color: RGB)` method. It
+To update the Main Button background color, use the `setBackgroundColor(color: RGB)` method. It
 will update the `backgroundColor` property.
 
 ```typescript 
@@ -77,7 +76,7 @@ console.log(mainButton.color); // '#ffffaa'
 
 ## Text color
 
-To update the `MainButton` text color, use the `setTextColor(color: RGB)` method. It will update
+To update the Main Button text color, use the `setTextColor(color: RGB)` method. It will update
 the `textColor` property.
 
 ```typescript 
@@ -87,7 +86,7 @@ console.log(mainButton.textColor); // '#cca233'
 
 ## Text
 
-To update the `MainButton` text, use the `setText(text: string)` method. It will update the `text`
+To update the Main Button text, use the `setText(text: string)` method. It will update the `text`
 property.
 
 ```typescript
@@ -95,14 +94,30 @@ mainButton.setText('Submit');
 console.log(mainButton.text); // 'Submit'
 ```
 
+## Setting multiple properties
+
+Sometimes, a consecutive set of several Main Button parameters may lead to problematic artifacts in
+the UI. To avoid this issue, it is allowed to use the `setParams` method:
+
+```typescript
+mainButton.setParams({
+  backgroundColor: '#aa1388',
+  text: 'Stop',
+  isVisible: true,
+});
+```
+
 ## Events
 
 List of events, which could be used in `on` and `off` component instance methods:
 
-- `backgroundColorChanged: (color: RGB) => void`
-- `click: () => void`
-- `isProgressVisibleChanged: (isVisible: boolean) => void`
-- `isEnabledChanged: (isEnabled: boolean) => void`
-- `isVisibleChanged: (isVisible: boolean) => void`
-- `textChanged: (text: string) => void`
-- `textColorChanged: (color: RGB) => void`
+| Event                  | Listener                   | Triggered when                     |
+|------------------------|----------------------------|------------------------------------|
+| click                  | `() => void`               | Main Button was clicked            |
+| change                 | `() => void`               | Something in component changed     |
+| change:backgroundColor | `(value: RGB) => void`     | `backgroundColor` property changed |
+| change:isLoaderVisible | `(value: boolean) => void` | `isLoaderVisible` property changed |
+| change:isEnabled       | `(value: boolean) => void` | `isEnabled` property changed       |
+| change:isVisible       | `(value: boolean) => void` | `isVisible` property changed       |
+| change:text            | `(value: string) => void`  | `text` property changed            |
+| change:textColor       | `(value: RGB) => void`     | `textColor` property changed       |

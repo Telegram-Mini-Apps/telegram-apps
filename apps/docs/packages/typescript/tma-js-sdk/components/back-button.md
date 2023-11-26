@@ -1,7 +1,6 @@
 # `BackButton`
 
-Controls the [Back Button](../../../../platform/ui/back-button.md) displayed in the header of the Mini App in
-the Telegram interface.
+Implements Telegram Mini Apps [Back Button](../../../../platform/ui/back-button.md).
 
 ## Initialization
 
@@ -9,8 +8,7 @@ Component constructor accepts visibility state, Telegram Mini Apps version and o
 to call Telegram Mini Apps methods.
 
 ```typescript
-import { postEvent } from '@tma.js/bridge';
-import { BackButton } from '@tma.js/sdk';
+import { BackButton, postEvent } from '@tma.js/sdk';
 
 const backButton = new BackButton(false, '6.3', postEvent);  
 ```  
@@ -32,12 +30,23 @@ console.log(backButton.isVisible); // false
 
 List of events, which could be used in `on` and `off` component instance methods:
 
-- `click: () => void`
-- `isVisibleChanged: (isVisible: boolean) => void`
+| Event            | Listener                   | Triggered when                 |
+|------------------|----------------------------|--------------------------------|
+| click            | `() => void`               | Back Button was clicked        |
+| change           | `() => void`               | Something in component changed |
+| change:isVisible | `(value: boolean) => void` | `isVisible` property changed   |
 
 ## Methods support
 
 List of methods, which could be used in `supports` component instance method:
 
-- `show` - to check if the `show` method supported.
-- `hide` - to check if the `hide` method supported.
+- `show`
+- `hide`
+
+```typescript
+import { BackButton } from '@tma.js/sdk';
+
+const backButton = new BackButton(...);
+backButton.supports('show');
+backButton.supports('hide');
+```

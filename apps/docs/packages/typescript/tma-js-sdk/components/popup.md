@@ -1,6 +1,6 @@
 # `Popup`
 
-The component which controls the currently displayed application [popup](../../../../platform/ui/popup.md).
+Implements Telegram Mini Apps [popup](../../../../platform/ui/popup.md).
 
 ## Initialization
 
@@ -8,17 +8,15 @@ Component constructor accepts Telegram Mini Apps version and optional function t
 Apps methods.
 
 ```typescript
-import { postEvent } from '@tma.js/bridge';
-import { Popup } from '@tma.js/sdk';
+import { Popup, postEvent } from '@tma.js/sdk';
 
 const popup = new Popup('6.3', postEvent);
 ```
 
 ## Opening new popup
 
-The `open` function returns a promise which will be resolved in case, the opened popup was
-closed. `Popup` will resolve a button identifier in case, a user clicked it. Otherwise, `null` will
-be resolved.
+To open a popup, it is required to call the `open` method specifying popup properties: title,
+message, and a list of up to 3 buttons.
 
 ```typescript
 popup.open({
@@ -29,15 +27,27 @@ popup.open({
 console.log(popup.isOpened); // true
 ```
 
+This method returns a promise, which will be fulfilled with the clicked button identifier. In the
+case where the user didn't click any button, the method will return `null`.
+
 ## Events
 
 List of events, which could be used in `on` and `off` component instance methods:
 
-- `isOpenedChanged: (isOpened: boolean) => void`
+| Event            | Listener                   | Triggered when                 |
+|------------------|----------------------------|--------------------------------|
+| changed          | `() => void`               | Something in component changed |
+| changed:isOpened | `(value: boolean) => void` | `isOpened` property changed    |
 
 ## Methods support
 
 List of methods, which could be used in `supports` component instance method:
 
-- `open` - to check if the `open` method supported.
-- `hide` - to check if the `hide` method supported.
+- `open`
+
+```typescript
+import { Popup } from '@tma.js/sdk';
+
+const popup = new Popup(...);
+popup.supports('open');
+```

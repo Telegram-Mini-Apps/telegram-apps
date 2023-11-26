@@ -1,7 +1,7 @@
-# `ClosingBehaviour`
+# `ClosingBehavior`
 
-Controls the application closing behavior. There is more information about this functionality in
-this [documentation](../../../../platform/functionality/closing-behavior.md).
+Implements Telegram Mini
+Apps [closing behavior](../../../../platform/functionality/closing-behavior.md) functionality.
 
 ## Initialization
 
@@ -9,10 +9,9 @@ Component constructor accepts closing confirmation needed flag and optional func
 Telegram Mini Apps methods.
 
 ```typescript
-import { postEvent } from '@tma.js/bridge';
-import { ClosingBehaviour } from '@tma.js/sdk';
+import { ClosingBehavior, postEvent } from '@tma.js/sdk';
 
-const closingBehaviour = new ClosingBehaviour(false, postEvent);  
+const closingBehaviour = new ClosingBehavior(false, postEvent);  
 ```
 
 ## Closing confirmation
@@ -26,10 +25,13 @@ console.log(closingBehaviour.isConfirmationNeeded); // true
 
 closingBehaviour.disableConfirmation();
 console.log(closingBehaviour.isConfirmationNeeded); // false
-```  
+```
 
 ## Events
 
 List of events, which could be used in `on` and `off` component instance methods:
 
-- `isConfirmationNeededChanged: (isConfirmationNeeded: boolean) => void`
+| Event                        | Listener                   | Triggered when                          |
+|------------------------------|----------------------------|-----------------------------------------|
+| changed                      | `() => void`               | Something in component changed          |
+| changed:isConfirmationNeeded | `(value: boolean) => void` | `isConfirmationNeeded` property changed |

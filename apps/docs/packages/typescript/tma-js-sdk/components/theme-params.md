@@ -24,45 +24,67 @@ const themeParams = new ThemeParams({
 
 ## Requesting actual data
 
-To get the actual theme parameters information, developer could use the `request()` static method:
+To get the actual theme parameters information, developer could use the `requestThemeParams`
+function:
 
 ```typescript
-import { ThemeParams } from '@tma.js/sdk';
+import { requestThemeParams } from '@tma.js/sdk';
 
-ThemeParams.request().then(console.log);
+requestThemeParams.then(console.log);
 
 // Output:
 // { backgroundColor: '#ffaabb', ... }
 ```
 
-## Creating synchronized instance
-
-The `ThemeParams` is capable of returning an instance of `ThemeParams` which is synchronized with
-its actual state in the Telegram application. To get it, use static the `synced()` method:
-
-```typescript
-import { ThemeParams } from '@tma.js/sdk';
-
-const themeParams = await ThemeParams.synced();
-```
-
-Synchronized instance contains actual parameters values. It is also being updated in case,
-parameters are changing in the native Telegram application.
-
 ## Colors
 
-List of colors, provided by `ThemeParams`:
+The developer can retrieve the theme color by using the `get` method:
 
-- `backgroundColor: RGB | null`
-- `buttonColor: RGB | null`
-- `buttonTextColor: RGB | null`
-- `hintColor: RGB | null`
-- `linkColor: RGB | null`
-- `secondaryBackgroundColor: RGB | null`
-- `textColor: RGB | null`
+```typescript
+themeParams.get('backgroundColor');
+themeParams.get('packageUnknownColor');
+```
+
+To retrieve all colors via one object, use `getState` method:
+
+```typescript
+themeParams.getState();
+// Output:
+// {
+//   accentTextColor: '#aa1399',
+//   backgroundColor: '#baac12',
+//   linkColor: '#887722'
+//   packageUnknownColor: '#676767,
+// }
+```
+
+The `ThemeParams` component provides direct access to the list of colors:
+
+- `accentTextColor: RGB | undefined`
+- `backgroundColor: RGB | undefined`
+- `buttonColor: RGB | undefined`
+- `buttonTextColor: RGB | undefined`
+- `destructiveTextColor: RGB | undefined`
+- `headerBackgroundColor: RGB | undefined`
+- `hintColor: RGB | undefined`
+- `linkColor: RGB | undefined`
+- `secondaryBackgroundColor: RGB | undefined`
+- `sectionBackgroundColor: RGB | undefined`
+- `sectionHeaderTextColor: RGB | undefined`
+- `subtitleTextColor: RGB | undefined`
+- `textColor: RGB | undefined`
+
+Example:
+
+```typescript
+themeParams.accentTextColor; // '#aa1399'
+```
 
 ## Events
 
 List of events, which could be used in `on` and `off` component instance methods:
 
-- `changed: () => void`
+| Event                | Listener               | Triggered when                   |
+|----------------------|------------------------|----------------------------------|
+| change               | `() => void`           | Something in component changed   |
+| change:\{theme_key\} | `(value: RGB) => void` | Color with specified key changed |

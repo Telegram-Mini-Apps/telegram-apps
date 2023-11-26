@@ -1,8 +1,7 @@
 # `HapticFeedback`
 
-Controls the haptic feedback. It allows calling different types of haptic notifications which
-usually occur after the user interaction with the application. There is more information about this
-component in this [documentation](../../../../platform/functionality/haptic-feedback.md).
+Implements Telegram Mini
+Apps [haptic feedback](../../../../platform/functionality/haptic-feedback.md) functionality.
 
 ## Initialization
 
@@ -10,8 +9,7 @@ Component constructor accepts Telegram Mini Apps version and optional function t
 Telegram Mini Apps methods.
 
 ```typescript
-import { postEvent } from '@tma.js/bridge';
-import { HapticFeedback } from '@tma.js/sdk';
+import { HapticFeedback, postEvent } from '@tma.js/sdk';
 
 const haptic = new HapticFeedback('6.3', postEvent);
 ```
@@ -62,6 +60,15 @@ haptic.selectionChanged();
 
 List of methods, which could be used in `supports` component instance method:
 
-- `notificationOccurred` - to check if the `notificationOccurred` method supported.
-- `impactOccurred` - to check if the `impactOccurred` method supported.
-- `selectionChanged` - to check if the `selectionChanged` method supported.
+- `notificationOccurred`
+- `impactOccurred`
+- `selectionChanged`
+
+```typescript
+import { HapticFeedback } from '@tma.js/sdk';
+
+const hapticFeedback = new HapticFeedback(...);
+hapticFeedback.supports('notificationOccurred');
+hapticFeedback.supports('impactOccurred');
+hapticFeedback.supports('selectionChanged');
+```
