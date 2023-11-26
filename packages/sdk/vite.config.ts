@@ -13,4 +13,5 @@ export default createViteConfig({
   test: createVitestConfig({
     environment: 'happy-dom',
   }),
+  tsconfigPath: './tsconfig.build.json',
 });
