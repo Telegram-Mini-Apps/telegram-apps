@@ -34,8 +34,12 @@ export const packagesSidebar = {
             },
             {
               text: 'Init data',
-              link: prefixed('/typescript/tma-js-sdk/init-data/about'),
+              collapsed: true,
               items: [
+                {
+                  text: 'About',
+                  link: prefixed('/typescript/tma-js-sdk/init-data/about'),
+                },
                 {
                   text: 'InitData',
                   link: prefixed('/typescript/tma-js-sdk/init-data/init-data')
@@ -56,8 +60,12 @@ export const packagesSidebar = {
             },
             {
               text: 'Components',
-              link: prefixed('/typescript/tma-js-sdk/components/about'),
+              collapsed: true,
               items: [
+                {
+                  text: 'About components',
+                  link: prefixed('/typescript/tma-js-sdk/components/about'),
+                },
                 {
                   text: 'BackButton',
                   link: prefixed('/typescript/tma-js-sdk/components/back-button'),
