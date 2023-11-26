@@ -5,10 +5,11 @@ import { SDKContext } from './SDKContext.js';
 import type { SDKProviderProps } from './types.js';
 
 export function SDKProvider(props: SDKProviderProps) {
-  const options = createMemo(() => props.options || {});
-  const [data] = createResource(options, init);
+  const [data] = createResource(() => props.options, init);
 
-  const initResult = createMemo(() => (data.state === 'ready' ? data() : null));
+  const initResult = createMemo(() => {
+    return data.state === 'ready' ? data() : undefined;
+  });
   const loading = createMemo(() => data.loading);
   const error = createMemo(() => (data.error === undefined ? null : data.error));
 

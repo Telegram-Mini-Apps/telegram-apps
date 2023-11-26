@@ -13,3 +13,4 @@ export * from './post-event.js';
 export * from './qr-scanner.js';
 export * from './theme-params.js';
 export * from './viewport.js';
+export * from './utils.js';

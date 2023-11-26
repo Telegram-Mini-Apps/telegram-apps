@@ -1,8 +1,28 @@
-export * from './components/index.js';
+export {
+  useThemeParams,
+  useInitData,
+  useBackButton,
+  useClosingBehavior,
+  useInitDataRaw,
+  useCloudStorage,
+  useLaunchParams,
+  useMainButton,
+  useHapticFeedback,
+  useInvoice,
+  useMiniApp,
+  usePopup,
+  usePostEvent,
+  useQRScanner,
+  useUtils,
+  useViewport,
+} from './tools/index.js';
 export {
   useSDKContext,
-  type SDKInitResult,
-  type SDKInitOptions,
   SDKProvider,
   type SDKProviderProps,
+  type SDKContextType,
 } from './provider/index.js';
+export type {
+  InitOptions,
+  InitResult,
+} from './types.js';

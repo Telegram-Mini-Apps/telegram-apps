@@ -1,19 +1,18 @@
 import { type Accessor, createMemo } from 'solid-js';
 
-import type { SDKInitResultKey, SDKInitResultValue } from './types.js';
 import { useSDKContext } from './useSDKContext.js';
+import type { InitResultKey, InitResultValue } from '../types.js';
 
 /**
  * Returns value by its field name from SDK init result.
  * @param key - init result key.
  * @throws {Error} SDK is not initialized.
  */
-export function useSDKInitResultValue<K extends SDKInitResultKey>(
-  key: K,
-): Accessor<SDKInitResultValue<K>> {
+export function useInitResultValue<K extends InitResultKey>(key: K): Accessor<InitResultValue<K>> {
   const { initResult } = useSDKContext();
 
-  return createMemo<SDKInitResultValue<K>>(() => {
+  // eslint-disable-next-line solid/reactivity
+  return createMemo<InitResultValue<K>>(() => {
     const result = initResult();
 
     if (!result) {
