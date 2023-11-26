@@ -1,5 +1,17 @@
 # @tma.js/sdk-react
 
+## 1.0.0
+
+### Major Changes
+
+- a17f3f0: The first packages major releases. Their implementation was simplified as much as possible. Moreover, they look more similar now.
+
+### Patch Changes
+
+- Updated dependencies [ea7be2b]
+- Updated dependencies [2a0349a]
+  - @tma.js/sdk@1.0.0
+
 ## 0.5.4
 
 ### Patch Changes

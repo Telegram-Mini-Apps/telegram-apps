@@ -1,5 +1,14 @@
 # @tma.js/solid-router-integration
 
+## 0.0.7
+
+### Patch Changes
+
+- f64ca63: The first package major version. It now references @tma.js/sdk for utilities.
+- Updated dependencies [ea7be2b]
+- Updated dependencies [2a0349a]
+  - @tma.js/sdk@1.0.0
+
 ## 0.0.6
 
 ### Patch Changes
