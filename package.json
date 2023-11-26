@@ -11,9 +11,9 @@
     "dev": "turbo run dev",
     "docs:build": "turbo run build --filter=\"./apps/docs\"",
     "docs:dev": "turbo run dev --filter=\"./apps/docs\"",
-    "lint": "turbo run lint",
     "packages:build": "turbo run build --filter=\"./packages/*\"",
     "packages:lint": "turbo run lint --filter=\"./packages/*\"",
+    "packages:lint:fix": "turbo run lint:fix --filter=\"./packages/*\"",
     "packages:test": "vitest",
     "packages:typecheck": "turbo run typecheck --filter=\"./packages/*\""
   },
