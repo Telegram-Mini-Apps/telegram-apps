@@ -1,7 +1,7 @@
 import React, { type ComponentType } from 'react';
 
-import type { InitResultKey, InitResultValue } from './types.js';
 import type { Hook } from './createHook.js';
+import type { InitResultKey, InitResultValue } from './types.js';
 
 export type Hoc<K extends InitResultKey> = <P extends { [Key in K]?: InitResultValue<K> }>(
   Component: ComponentType<P>,
