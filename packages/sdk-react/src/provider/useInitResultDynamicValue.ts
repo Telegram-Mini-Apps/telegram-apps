@@ -21,7 +21,7 @@ export function useInitResultDynamicValue<K extends DynamicInitResultKey>(
   const initial = useInitResultValue(initResultKey);
 
   // Create value which will be returned to the external environment.
-  const [proxy, setCopy] = useState(shallowCopy(initial));
+  const [copy, setCopy] = useState(shallowCopy(initial));
 
   // Effect which listens to change event and calls update.
   useEffect(() => {
@@ -30,5 +30,5 @@ export function useInitResultDynamicValue<K extends DynamicInitResultKey>(
     });
   }, [initial]);
 
-  return proxy;
+  return copy;
 }
