@@ -1,5 +1,15 @@
 # @tma.js/sdk
 
+## 1.0.0
+
+### Major Changes
+
+- 2a0349a: The first package major release. This time, it was fully reworked. All other @tma.js packages were moved to this package.
+
+### Minor Changes
+
+- ea7be2b: Implement WebApp.switchInlineQuery method
+
 ## 0.13.3
 
 ### Patch Changes

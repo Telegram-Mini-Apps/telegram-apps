@@ -1,5 +1,11 @@
 # @tma.js/init-data-node
 
+## 1.0.0
+
+### Major Changes
+
+- 2974dc1: The first package major release. Just setting a stable version.
+
 ## 0.0.20
 
 ### Patch Changes
