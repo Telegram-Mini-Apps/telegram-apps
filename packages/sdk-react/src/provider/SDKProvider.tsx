@@ -1,20 +1,14 @@
-import {
-  init,
-  type InitResult,
-} from '@tma.js/sdk';
+import { init } from '@tma.js/sdk';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { SDKContext } from './SDKContext.js';
-import type {
-  SDKContextType,
-  SDKInitResult,
-  SDKProviderProps,
-} from './types.js';
+import type { SDKContextType, SDKProviderProps } from './types.js';
+import type { InitResult } from '../types.js';
 
 function AsyncProvider({ options, children }: SDKProviderProps) {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<null | unknown>(null);
-  const [initResult, setInitResult] = useState<SDKInitResult | null>(null);
+  const [error, setError] = useState<unknown | undefined>();
+  const [initResult, setInitResult] = useState<InitResult | undefined>();
 
   useEffect(() => {
     setLoading(true);
@@ -26,31 +20,33 @@ function AsyncProvider({ options, children }: SDKProviderProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const context = useMemo<SDKContextType>(() => ({
-    error,
-    initResult,
-    loading,
-  }), [loading, initResult, error]);
+  const context = useMemo<SDKContextType>(() => {
+    const result: SDKContextType = { loading };
+    if (error) {
+      result.error = error;
+    }
+
+    if (initResult) {
+      result.initResult = initResult;
+    }
+
+    return result;
+  }, [loading, initResult, error]);
 
   return <SDKContext.Provider value={context}>{children}</SDKContext.Provider>;
 }
 
 function SyncProvider({ options = {}, children }: SDKProviderProps) {
   const context = useMemo<SDKContextType>(() => {
-    let initResult: InitResult | null = null;
-    let error: unknown;
+    const result: SDKContextType = { loading: false };
 
     try {
-      initResult = init({ ...options, async: false });
+      result.initResult = init({ ...options, async: false });
     } catch (e) {
-      error = e;
+      result.error = e;
     }
 
-    return {
-      error,
-      initResult,
-      loading: true,
-    };
+    return result;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -61,7 +57,8 @@ function SyncProvider({ options = {}, children }: SDKProviderProps) {
  * Component which provides access to SDK initialization state.
  */
 export function SDKProvider(props: SDKProviderProps) {
+  // eslint-disable-next-line react/destructuring-assignment
   return props.options?.async
-    ? <AsyncProvider {...props}/>
-    : <SyncProvider {...props}/>;
+    ? <AsyncProvider {...props} />
+    : <SyncProvider {...props} />;
 }

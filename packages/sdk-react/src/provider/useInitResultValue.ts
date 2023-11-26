@@ -1,12 +1,12 @@
-import type { SDKInitResultKey, SDKInitResultValue } from './types.js';
 import { useSDKContext } from './useSDKContext.js';
+import type { InitResultKey, InitResultValue } from '../types.js';
 
 /**
  * Returns value by its field name from SDK init result.
  * @param key - init result key.
  * @throws {Error} SDK is not initialized.
  */
-export function useSDKInitResultValue<K extends SDKInitResultKey>(key: K): SDKInitResultValue<K> {
+export function useInitResultValue<K extends InitResultKey>(key: K): InitResultValue<K> {
   const { initResult } = useSDKContext();
 
   if (!initResult) {
