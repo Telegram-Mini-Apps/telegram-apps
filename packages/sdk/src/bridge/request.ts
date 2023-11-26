@@ -23,12 +23,12 @@ import {
  */
 type MethodWithRequestId = {
   [M in MiniAppsMethodName]: If<
-  And<
-  MiniAppsMethodAcceptParams<M>,
-  MiniAppsMethodParams<M> extends { req_id: string } ? true : false
-  >,
-  M,
-  never
+    And<
+      MiniAppsMethodAcceptParams<M>,
+      MiniAppsMethodParams<M> extends { req_id: string } ? true : false
+    >,
+    M,
+    never
   >;
 }[MiniAppsMethodName];
 
@@ -37,11 +37,11 @@ type MethodWithRequestId = {
  */
 type EventWithRequestId = {
   [E in MiniAppsEventName]: If<
-  And<MiniAppsEventHasParams<E>, MiniAppsEventParams<E> extends {
-    req_id: string
-  } ? true : false>,
-  E,
-  never
+    And<MiniAppsEventHasParams<E>, MiniAppsEventParams<E> extends {
+      req_id: string
+    } ? true : false>,
+    E,
+    never
   >;
 }[MiniAppsEventName];
 
@@ -114,10 +114,10 @@ export function request(
   method: MiniAppsMethodName,
   eventOrParams: MiniAppsEventName | MiniAppsEventName[] | MiniAppsEventParams<any>,
   eventOrOptions?:
-  | MiniAppsEventName
-  | MiniAppsEventName[]
-  | RequestOptions
-  | RequestOptionsAdvanced<any>,
+    | MiniAppsEventName
+    | MiniAppsEventName[]
+    | RequestOptions
+    | RequestOptionsAdvanced<any>,
   options?: RequestOptions | RequestOptionsAdvanced<any>,
 ): Promise<any> {
   let executionOptions: RequestOptions | RequestOptionsAdvanced<any> | undefined;

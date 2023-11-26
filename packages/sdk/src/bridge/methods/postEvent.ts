@@ -4,12 +4,12 @@ import type {
   MiniAppsMethodParams,
   MiniAppsNonEmptyMethodName,
 } from './methods.js';
+import { logger, targetOrigin as globalTargetOrigin } from '../../globals.js';
 import {
   hasExternalNotify,
   hasWebviewProxy,
   isIframe,
 } from '../env/index.js';
-import { logger, targetOrigin as globalTargetOrigin } from '../globals.js';
 
 interface PostEventOptions {
   /**

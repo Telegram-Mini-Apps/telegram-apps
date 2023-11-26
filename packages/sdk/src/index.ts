@@ -11,8 +11,6 @@ export {
   once,
   postEvent,
   request,
-  setTargetOrigin,
-  setDebug,
   subscribe,
   unsubscribe,
   MethodUnsupportedError,
@@ -167,3 +165,7 @@ export {
   type ViewportEventListener,
   type ViewportEvents,
 } from './viewport/index.js';
+export {
+  setTargetOrigin,
+  setDebug,
+} from './globals.js';

@@ -2,7 +2,7 @@ import { Logger } from '~/logger/index.js';
 
 let currentTargetOrigin = 'https://web.telegram.org';
 
-export const logger = new Logger('[Bridge]', false);
+export const logger = new Logger('[SDK]', false);
 
 /**
  * Sets new debug mode. Enabling debug mode leads to printing
