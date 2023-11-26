@@ -17,6 +17,7 @@ import { Invoice } from '~/invoice/index.js';
 import { retrieveLaunchData } from '~/launch-params/index.js';
 import { Popup } from '~/popup/index.js';
 import { QRScanner } from '~/qr-scanner/index.js';
+import { Utils } from '~/utils/index.js';
 
 import type { InitOptions, InitResult } from './types.js';
 
@@ -83,6 +84,7 @@ export function init<O extends InitOptions>(options: O): ComputedInitResult<O> {
     postEvent,
     qrScanner: new QRScanner(version, postEvent),
     themeParams: createThemeParams(themeParams),
+    utils: new Utils(version, createRequestId, postEvent),
     ...(initData
       // Init data could be missing in case, application was launched via InlineKeyboardButton.
       ? {
