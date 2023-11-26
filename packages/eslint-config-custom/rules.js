@@ -1,6 +1,8 @@
 module.exports = {
   '@typescript-eslint/consistent-type-imports': 'error',
   '@typescript-eslint/indent': ['error', 2],
+  // Sometimes this rule decreases readability.
+  'arrow-body-style': 0,
   'consistent-return': 0,
   'import/extensions': 0,
   // We use special module resolution, that's why we need extensions.
