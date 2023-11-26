@@ -1,8 +1,6 @@
-import type { PostEvent } from '@tma.js/bridge';
-
-import { ClosingBehaviour } from '../../components/index.js';
-
-import { getStorageValue, saveStorageValue } from '../../storage.js';
+import { ClosingBehavior } from '~/closing-behavior/index.js';
+import { getStorageValue, saveStorageValue } from '~/storage.js';
+import type { PostEvent } from '~/bridge/index.js';
 
 /**
  * Creates ClosingBehaviour instance using last locally saved data also saving each state in
@@ -13,12 +11,12 @@ import { getStorageValue, saveStorageValue } from '../../storage.js';
 export function createClosingBehavior(
   isPageReload: boolean,
   postEvent: PostEvent,
-): ClosingBehaviour {
+): ClosingBehavior {
   const { isConfirmationNeeded = false } = isPageReload ? getStorageValue('closing-behavior') || {} : {};
 
-  const component = new ClosingBehaviour(isConfirmationNeeded, postEvent);
+  const component = new ClosingBehavior(isConfirmationNeeded, postEvent);
 
-  component.on('isConfirmationNeededChanged', () => saveStorageValue('closing-behavior', {
+  component.on('change', () => saveStorageValue('closing-behavior', {
     isConfirmationNeeded: component.isConfirmationNeeded,
   }));
 

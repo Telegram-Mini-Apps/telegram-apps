@@ -12,12 +12,9 @@
   },
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
     "build": "vite build --ssr --outDir dist",
     "validate": "pnpm run typecheck && pnpm run build"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "devDependencies": {
     "tsconfig": "workspace:*"

@@ -8,6 +8,11 @@
 
 Provides utilities to work with Telegram Mini Apps [theme](../../platform/functionality/theming.md).
 
+::: danger
+This project has been deprecated. All its functionality was moved to
+the [@tma.js/sdk](./tma-js-sdk/about.md) package.
+:::
+
 ## Installation
 
 ::: code-group

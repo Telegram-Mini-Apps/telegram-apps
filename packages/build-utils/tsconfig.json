@@ -1,8 +1,11 @@
 {
-  "extends": "./tsconfig.build.json",
+  "extends": "tsconfig/esnext.json",
+  "compilerOptions": {
+    "types": [
+      "vitest"
+    ]
+  },
   "include": [
-    "src",
-    "tests",
-    "*.ts"
+    "src"
   ]
 }

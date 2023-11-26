@@ -1,5 +1,7 @@
-import type { HeaderColorKey } from '@tma.js/bridge';
-import type { RGB } from '@tma.js/colors';
+import type { HeaderColorKey } from '~/bridge/index.js';
+import type { RGB } from '~/colors/index.js';
+
+// fixme: components-related. Should probably rename
 
 /**
  * Describes storage keys and according values.
@@ -14,8 +16,8 @@ interface StorageParams {
   'main-button': {
     backgroundColor: RGB;
     isEnabled: boolean;
+    isLoaderVisible: boolean;
     isVisible: boolean;
-    isProgressVisible: boolean;
     text: string;
     textColor: RGB;
   };
@@ -25,7 +27,7 @@ interface StorageParams {
     stableHeight: number;
     width: number;
   };
-  'web-app': {
+  'mini-app': {
     backgroundColor: RGB;
     headerColor: HeaderColorKey | RGB;
   };

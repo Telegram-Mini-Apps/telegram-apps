@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     // Creates typescript declarations.
     // https://www.npmjs.com/package/vite-plugin-dts
-    dts({ tsconfigPath: 'tsconfig.build.json' }),
+    dts({ tsconfigPath: 'tsconfig.json' }),
   ],
   build: {
     lib: {

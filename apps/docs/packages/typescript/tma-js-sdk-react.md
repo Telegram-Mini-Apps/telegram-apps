@@ -1,3 +1,7 @@
+---
+outline: [2, 3]
+---
+
 # @tma.js/sdk-react
 
 [npm-link]: https://npmjs.com/package/@tma.js/sdk-react
@@ -6,17 +10,16 @@
 
 ![[npm-link]][npm-shield]
 
-React bindings for the [client SDK](tma-js-sdk/about.md). It includes hooks, components, and other
-useful tools that enable the use of React alongside the Mini Apps client SDK. It automatically tracks
-changes to SDK components.
+React JS bindings for [client SDK](tma-js-sdk/about.md). Includes hooks, components and utilities
+for comfortable usage of React JS on the Telegram Mini Apps platform.
 
 ## Installation
 
 Before anything else, it is assumed that you have already installed the `react` package, as it is a
-peer dependency of this package. The installation of the SDK itself is not required, as it is
-already included in `@tma.js/sdk-react`.
+peer dependency of this package.
 
 ::: code-group
+
 ```bash [pnpm]
 pnpm i @tma.js/sdk-react
 ```
@@ -28,96 +31,132 @@ npm i @tma.js/sdk-react
 ```bash [yarn]
 yarn add @tma.js/sdk-react
 ```
+
 :::
 
-### Using SDK provider
+## Initialization
 
-According to the `@tma.js/sdk` [documentation](tma-js-sdk/about.md), it consists of a set of
-components that are not initialized by default. Developers are responsible for creating these
-components themselves. However, the SDK provides the `init` function, which simplifies the process
-of creating the components and using the standard TWA flow. It handles all the necessary steps for
-developers.
-
-To make the SDK functionality available to the application and allow the initialization of newly
-created components, we need to use the `SDKProvider` component.
+`SDKProvider` is a component responsible for providing the SDK functionality. Internally, it
+utilizes the `init` function from [@tma.js/sdk](tma-js-sdk/about.md). It accepts an optional list of
+parameters through the [options](tma-js-sdk/init.md#options) property.
 
 ```jsx
-import React from 'react';
-import { SDKProvider } from '@tma.js/sdk-react';
-
-function Root() {
-  return (
-    <SDKProvider>
-      <div>My application!</div>
-    </SDKProvider>
-  );
-}
-```
-
-Internally, the `SDKProvider` utilizes the `init` function from `@tma.js/sdk`. It accepts an
-optional list of parameters through the `initOptions` property, which is
-described [here](tma-js-sdk/about.md#initialization).
-
-```jsx
-import React from 'react';
-import { SDKProvider, InitOptions } from '@tma.js/sdk-react';
+import { SDKProvider, type InitOptions } from '@tma.js/sdk-react';
 
 /**
  * Root component for the whole project.
  */
 export function Root() {
   const options: InitOptions = {
-    acceptScrollbarStyle: true,
-    checkCompat: true,
-    debug: true
+    acceptCustomStyles: true,
+    cssVars: true,
   };
 
   return (
-    <SDKProvider initOptions={options}>
+    <SDKProvider options={options}>
       <div>My application!</div>
     </SDKProvider>
   );
 }
 ```
 
-Most of the time, there is no need to use `initOptions` unless you have specific logic in your
-application. Typically, the SDK handles everything necessary for developers, so there is no need for
-additional configuration.
+### Asynchronous
 
-### Getting SDK context
+SDK initialization is considered asynchronous in case the `async` init option equals `true`. In this
+case, `SDKProvider` will start initialization using the React `useEffect` hook. This mode is useful
+in case the developer is using Server-Side Rendering or when the valid state of all components is
+required.
 
-By using the `SDKProvider` component, the child elements are able to utilize the `useSDK` hook (or
-the `withSDK` higher-order component) to access core SDK information.
+Nevertheless, as long as this process is asynchronous, developers should be careful when calling
+package-specific component hooks, such as `useBackButton`, `useMainButton`, etc. When the SDK is not
+yet initialized, these hooks will throw an error as long as they will be unable to retrieve
+the component from the SDK.
 
 ```jsx
-import React from 'react';
-import { SDKProvider, SDKContext, useSDK, withSDK } from '@tma.js/sdk-react';
+import {
+  SDKProvider,
+  useMainButton,
+  type SDKInitOptions,
+} from '@tma.js/sdk-react';
 
 function App() {
-  const sdk = useSDK();
+  const mainButton = useMainButton();
+  // We will get an error here as long as SDK is not yet initialized.
+  // The solution will be provided further.
+  return <div>My application!</div>;
+}
 
+/**
+ * Root component for the whole project.
+ */
+export function Root() {
+  return (
+    <SDKProvider options={{ async: true }}>
+      <App/>
+    </SDKProvider>
+  );
+}
+```
+
+### Synchronous
+
+SDK initialization is considered synchronous in case the `async` init option is omitted or
+equals `false`. In this case, `SDKProvider` will call the `init` function on the first render
+(before the mount). This simplifies the application structure and allows avoiding the
+definition of intermediate components.
+
+```jsx
+import { SDKProvider, useMainButton } from '@tma.js/sdk-react';
+
+function App() {
+  const mainButton = useMainButton();
+  // There will be no error here as long as initialization is synchronous
+  // and at this moment SDK is already initialized.
+  return <div>My application!</div>;
+}
+
+/**
+ * Root component for the whole project.
+ */
+export function Root() {
+  return (
+    <SDKProvider>
+      <App/>
+    </SDKProvider>
+  );
+}
+```
+
+## Getting SDK context
+
+Retrieving the SDK context is important in asynchronous mode to prevent the application from
+crashing. To get the current SDK context, it is required to use the `useSDKContext` hook or
+the `withSDKContext` higher-order component.
+
+```jsx
+import {
+  SDKProvider,
+  useSDKContext,
+  withSDKContext,
+  type SDKContextType,
+} from '@tma.js/sdk-react';
+
+function App() {
+  const sdk = useSDKContext();
   // Here, we can use SDK information.
-
   return <div>My application!</div>;
 }
 
 // or
-
-interface Props {
-  sdk: SDKContext
-}
-
-function AppPure({ sdk }: Props) {
+const AppWrapped = withSDK(({ sdk }) => {
+  // Here, we can use SDK information.
   return <div>My application!</div>;
-}
-
-const AppWrapped = withSDK(AppPure);
+});
 
 function Root() {
   return (
     <SDKProvider>
       <App/>
-      {/* or */}
       <AppWrapped/>
     </SDKProvider>
   );
@@ -127,60 +166,54 @@ function Root() {
 Let's enhance the previous example and introduce crucial logic associated with the SDK lifecycle:
 
 ```jsx
-import React, { PropsWithChildren, useEffect } from 'react';
-import { SDKProvider, useSDK, useBackButton, useWebApp } from '@tma.js/sdk-react';
+import { useEffect, type PropsWithChildren } from 'react';
+import {
+  SDKProvider,
+  useSDKContext,
+  useBackButton,
+  useMiniApp,
+} from '@tma.js/sdk-react';
 
 /**
- * Part of the application which doesn't know anything about SDK initialization
- * and which should be rendered only in case, SDK is already initialized and
- * could provide Telegram Mini Apps components.
+ * Part of the application which doesn't know anything about SDK
+ * initialization and which should be rendered only in case, SDK is already
+ * initialized and could provide init result.
  */
 function App() {
   const backButton = useBackButton();
-  const webApp = useWebApp();
+  const miniApp = useMiniApp();
 
   // When App is attached to DOM, lets show back button and
   // add "click" event handler, which should close current application.
+  // When component will unmount, listener will be removed.
   useEffect(() => {
-    const listener = () => webApp.close();
-    backButton.on('click', listener);
     backButton.show();
-
-    return () => {
-      backButton.off('click', listener);
-      backButton.hide();
-    };
-    // We know, that backButton and webApp will never change,
-    // but let's follow React rules.
-  }, [backButton, webApp]);
+    return backButton.on('click', () => miniApp.close());
+  }, []);
 
   return <div>My application!</div>;
 }
 
 /**
- * This component is the layer controlling the application display. It displays
- * application in case, the SDK is initialized, displays an error if something
- * went wrong, and a loader if the SDK is warming up.
+ * This component is the layer controlling the application display.
+ * It displays application in case, the SDK is initialized, displays an error
+ * if something went wrong, and a loader if the SDK is warming up.
  */
-function Loader({ children }: PropsWithChildren<{}>) {
-  const { didInit, components, error } = useSDK();
+function Loader({ children }: PropsWithChildren) {
+  const { loading, initResult, error } = useSDKContext();
 
-  // There were no calls of SDK's init function. It means, we did not
-  // even try to do it.
-  if (!didInit) {
+  // Each value is falsy. It means, init function was not called.
+  if (!loading && !error && !initResult) {
     return <div>SDK init function is not yet called.</div>;
   }
 
   // Error occurred during SDK init.
-  if (error !== null) {
+  if (error) {
     return <div>Something went wrong.</div>;
   }
 
-  // If components is null, it means, SDK is not ready at the
-  // moment and currently initializing. Usually, it takes like
-  // several milliseconds or something like that, but we should
-  // have this check.
-  if (components === null) {
+  // SDK is currently initializing.
+  if (loading) {
     return <div>Warming up SDK.</div>;
   }
 
@@ -193,7 +226,7 @@ function Loader({ children }: PropsWithChildren<{}>) {
  */
 export function Root() {
   return (
-    <SDKProvider>
+    <SDKProvider options={{ async: true }}>
       <Loader>
         <App/>
       </Loader>
@@ -203,30 +236,30 @@ export function Root() {
 ```
 
 You might wonder why we need a component like `Loader`. The reason is that the SDK initialization
-process is asynchronous. Some of its components need to send requests to the Telegram application to
-fetch their current state. Due to this, we cannot determine the required properties for these
-components until the initialization is completed.
+process can be asynchronous. Some of its components need to send requests to the Telegram
+application to fetch their current state. Due to this, we cannot determine the required properties
+for these components until the initialization is completed.
 
 As a result, all hooks that return component instances will throw an error because they cannot
-retrieve the necessary component from the `components` property. Therefore, these hooks should not
+retrieve the necessary component from the `initResult` property. Therefore, these hooks should not
 be called until the SDK is fully initialized.
 
 ### When init is done
 
-Once the initialization is successfully completed, developers should call the `webApp.ready`
-function. This function notifies the Telegram application that the current Mini App is ready to be
+Once the initialization is successfully completed, developers should call the `miniApp.ready()`
+method. It notifies the Telegram application that the current Mini App is ready to be
 displayed.
 
 ```jsx
-import React, { useEffect } from 'react';
-import { useWebApp } from '@tma.js/sdk-react';
+import { useEffect } from 'react';
+import { useMiniApp } from '@tma.js/sdk-react';
 
 function App() {
-  const webApp = useWebApp();
+  const miniApp = useMiniApp();
 
   useEffect(() => {
-    webApp.ready();
-  }, [webApp]);
+    miniApp.ready();
+  }, []);
 
   return <div>Here is my App</div>;
 }
@@ -244,64 +277,70 @@ To retrieve Mini App launch parameters, the `useLaunchParams` hook (or the `with
 higher-order component) can be used.
 
 ```jsx
-import React from 'react';
-import { useLaunchParams, withLaunchParams, LaunchParams } from '@tma.js/sdk-react';
+import {
+  useLaunchParams,
+  withLaunchParams,
+  type LaunchParams,
+} from '@tma.js/sdk-react';
 
 function DisplayLaunchParams() {
   const launchParams = useLaunchParams();
-
-  return (
-    <pre>
-      <code>{JSON.stringify(launchParams, null, ' ')}</code>
-    </pre>
-  );
+  return <pre><code>{JSON.stringify(launchParams, null, ' ')}</code></pre>;
 }
 
 // or
 
-interface Props {
-  launchParams: LaunchParams;
-}
-
-function DisplayLaunchParamsPure({ launchParams }: Props) {
-  return (
-    <pre>
-      <code>{JSON.stringify(launchParams, null, ' ')}</code>
-    </pre>
-  );
-}
-
-const DisplayLaunchParamsWrapped = withLaunchParams(DisplayLaunchParams);
+const DisplayLaunchParamsWrapped = withLaunchParams(({ launchParams }) => {
+  return <pre><code>{JSON.stringify(launchParams, null, ' ')}</code></pre>;
+});
 ```
 
-It will return the result of the [retrieveLaunchParams](tma-js-sdk/about.md#launch-parameters)
-function.
+### Init result related
 
-### Other
+The library provides a collection of simple hooks and higher-order components (HOCs) for each init
+result value. Here is the list of following hooks and corresponding higher-order components:
 
-The library provides a collection of simple hooks and higher-order components (HOCs) for each SDK
-component. The returned instances of these components remain the same, but force updates will be
-triggered if any changes occur in a component.
+- `useBackButton`, `withBackButton`. Returns the [BackButton](tma-js-sdk/components/back-button.md)
+  component
+- `useClosingBehavior`, `withClosingBehavior`. Returns
+  the [ClosingBehavior](tma-js-sdk/components/closing-behavior.md) component
+- `useCloudStorage`, `withCloudStorage`. Returns
+  the [CloudStorage](tma-js-sdk/components/cloud-storage.md) component
+- `useHapticFeedback`, `withHapticFeedback`. Returns
+  the [HapticFeedback](tma-js-sdk/components/haptic-feedback.md) component
+- `useInitData`, `withInitData`. Returns
+  the [InitData](tma-js-sdk/components/init-data.md) component
+- `useInitDataRaw`, `withInitDataraw`. Returns init data raw representation
+- `useInvoice`, `withInvoice`. Returns
+  the [Invoice](tma-js-sdk/components/invoice.md) component
+- `useMainButton`, `withMainButton`. Returns
+  the [MainButton](tma-js-sdk/components/main-button.md) component
+- `useMiniApp`, `withMiniApp`. Returns
+  the [MiniApp](tma-js-sdk/components/mini-app.md) component
+- `usePopup`, `withPopup`. Returns
+  the [Popup](tma-js-sdk/components/popup.md) component
+- `usePostEvent`, `withPostEvent`. Returns the `postEvent` function to call Telegram Mini Apps
+  methods
+- `useQRScanner`, `withQRScanner`. Returns
+  the [QRScanner](tma-js-sdk/components/qr-scanner.md) component
+- `useThemeParams`, `withThemeParams`. Returns
+  the [ThemeParams](tma-js-sdk/components/theme-params.md) component
+- `useUtils`, `withUtils`. Returns
+  the [Utils](tma-js-sdk/components/utils.md) component
+- `useViewport`, `withViewport`. Returns
+  the [Viewport](tma-js-sdk/components/viewport.md) component
 
-::: warning
-If you are using higher-order components (HOCs), it's important to note that the passed components
-will always be the same instances. This can cause issues with React's `PureComponent` and `memo`
-components, as they won't detect any changes in the component references. To avoid problems, refrain
-from creating new component instances, as it can disrupt event listeners established during the SDK
-initialization process.
+::: tip
+
+Each of these hooks and higher-order components returns SDK components that are automatically
+updated if some of their properties change. As a result, the hook or HOC will return a new instance
+of the component.
+
 :::
 
-List of hooks and HOCs of components:
+::: danger
 
-- `useBackButton` (`withBackButton`)
-- `useBridge` (`withBridge`)
-- `useClosingConfirmation` (`withClosingConfirmation`)
-- `useHapticFeedback` (`withHapticFeedback`)
-- `useInitData` (`withInitData`)
-- `useLayout` (`withLayout`)
-- `useMainButton` (`withMainButton`)
-- `usePopup` (`withPopup`)
-- `useQRScanner` (`withQRScanner`)
-- `useThemeParams` (`withThemeParams`)
-- `useViewport` (`withViewport`)
-- `useWebApp` (`withWebApp`)
+Using these hooks and higher-order components with an uninitialized SDK will result in throwing a
+corresponding error.
+
+:::

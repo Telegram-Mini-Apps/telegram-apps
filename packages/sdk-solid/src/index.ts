@@ -1,6 +1,28 @@
-export * from './context.js';
-export * from './hooks.js';
-export * from './SDKProvider.jsx';
-export * from './types.js';
-export * from './useSDK.js';
-export { classNames, mergeClassNames } from '@tma.js/utils';
+export {
+  useThemeParams,
+  useInitData,
+  useBackButton,
+  useClosingBehavior,
+  useInitDataRaw,
+  useCloudStorage,
+  useLaunchParams,
+  useMainButton,
+  useHapticFeedback,
+  useInvoice,
+  useMiniApp,
+  usePopup,
+  usePostEvent,
+  useQRScanner,
+  useUtils,
+  useViewport,
+} from './tools/index.js';
+export {
+  useSDKContext,
+  SDKProvider,
+  type SDKProviderProps,
+  type SDKContextType,
+} from './provider/index.js';
+export type {
+  InitOptions,
+  InitResult,
+} from './types.js';

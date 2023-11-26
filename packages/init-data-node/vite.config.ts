@@ -5,7 +5,7 @@ import packageJson from './package.json';
 export default createViteConfig({
   packageName: packageJson.name,
   formats: ['es', 'cjs'],
-  external: ['@tma.js/init-data', 'crypto', 'url'],
+  external: ['node:crypto', 'node:url'],
   test: createVitestConfig({
     coverage: {
       branches: 100,

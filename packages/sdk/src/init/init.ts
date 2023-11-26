@@ -1,168 +1,125 @@
+import { createPostEvent, isIframe, on } from '~/bridge/index.js';
+import { CloudStorage } from '~/cloud-storage/index.js';
+import { HapticFeedback } from '~/haptic-feedback/index.js';
+import { catchCustomStyles } from '~/init/catchCustomStyles.js';
 import {
-  isIframe,
-  setDebug,
-  setTargetOrigin,
-  on,
-  createPostEvent,
-  postEvent as bridgePostEvent,
-} from '@tma.js/bridge';
-import { withTimeout } from '@tma.js/utils';
-import { parse, retrieveLaunchData } from '@tma.js/launch-params';
-
-import {
-  CloudStorage,
-  HapticFeedback,
-  InitData,
-  Popup,
-  QRScanner,
-} from '../components/index.js';
-import {
-  bindThemeCSSVariables,
-  bindViewportCSSVariables,
-  bindWebAppVariables,
-  parseCSSVarsOptions,
-} from './css.js';
-import {
-  createThemeParams,
   createBackButton,
-  createMainButton,
-  createViewport,
-  createWebApp,
-  createRequestIdGenerator,
   createClosingBehavior,
-} from './creators/index.js';
+  createMainButton,
+  createMiniApp,
+  createRequestIdGenerator,
+  createThemeParams, createViewportAsync,
+  createViewportSync,
+} from '~/init/creators/index.js';
+import { processCSSVars } from '~/init/css/index.js';
+import { InitData } from '~/init-data/index.js';
+import { Invoice } from '~/invoice/index.js';
+import { retrieveLaunchData } from '~/launch-params/index.js';
+import { Popup } from '~/popup/index.js';
+import { QRScanner } from '~/qr-scanner/index.js';
+import { Utils } from '~/utils/index.js';
 
 import type { InitOptions, InitResult } from './types.js';
 
-/**
- * Represents actual init function.
- * @param options - init options.
- */
-async function actualInit(options: InitOptions = {}): Promise<InitResult> {
+type ComputedInitResult<O> = O extends { async: true } ? Promise<InitResult> : InitResult;
+
+export function init<O extends InitOptions>(options: O): ComputedInitResult<O> {
   const {
-    checkCompat = true,
+    async = false,
     cssVars = false,
-    acceptScrollbarStyle = true,
-    acceptCustomStyles = acceptScrollbarStyle,
-    targetOrigin,
-    launchParams: launchParamsOption,
-    debug = false,
+    acceptCustomStyles = false,
   } = options;
 
-  // Set global settings.
-  if (debug) {
-    setDebug(debug);
-  }
-
-  if (typeof targetOrigin === 'string') {
-    setTargetOrigin(targetOrigin);
-  }
-
   // Retrieve launch data.
-  const { launchParams, isPageReload } = retrieveLaunchData({
-    currentLaunchParams: typeof launchParamsOption === 'string' || launchParamsOption instanceof URLSearchParams
-      ? parse(launchParamsOption)
-      : launchParamsOption,
-  });
-
   const {
-    initData,
-    initDataRaw,
-    version,
-    platform,
-    themeParams: lpThemeParams,
-  } = launchParams;
-  const {
-    backgroundColor = '#ffffff',
-    buttonColor = '#000000',
-    buttonTextColor = '#ffffff',
-  } = lpThemeParams;
+    launchParams: {
+      initData,
+      initDataRaw,
+      version,
+      platform,
+      themeParams,
+      botInline = false,
+    },
+    isPageReload,
+  } = retrieveLaunchData();
 
   const createRequestId = createRequestIdGenerator();
-  const postEvent = checkCompat
-    ? createPostEvent(version)
-    : bridgePostEvent;
-  const themeParams = createThemeParams(lpThemeParams);
-  const webApp = createWebApp(
-    isPageReload,
-    backgroundColor,
-    version,
-    platform,
-    launchParams.botInline || false,
-    createRequestId,
-    postEvent,
-  );
+  const postEvent = createPostEvent(version);
 
-  const {
-    themeParams: createThemeParamsCSSVars,
-    viewport: createViewportCSSVars,
-    webApp: createWebAppCSSVars,
-  } = parseCSSVarsOptions(cssVars);
+  // In Telegram web version we should listen to special event sent from the Telegram application
+  // to know, when we should reload the Mini App.
+  if (isIframe()) {
+    if (acceptCustomStyles) {
+      catchCustomStyles();
+    }
 
-  if (createWebAppCSSVars) {
-    bindWebAppVariables(webApp, themeParams);
+    // Notify Telegram, iframe is ready. This will result in sending style tag html from native
+    // application which is used in catchCustomStyles function. We should call this method also
+    // to start receiving "reload_iframe" events from the Telegram application.
+    postEvent('iframe_ready', { reload_supported: true });
+    on('reload_iframe', () => window.location.reload());
   }
 
-  if (createThemeParamsCSSVars) {
-    bindThemeCSSVariables(themeParams);
-  }
-
-  const viewport = await createViewport(isPageReload, platform, postEvent);
-
-  // Apply viewport CSS variables.
-  if (createViewportCSSVars) {
-    bindViewportCSSVariables(viewport);
-  }
-
-  // In case, we are currently in iframe, it is required to listen to
-  // messages, coming from parent source to apply requested changes.
-  // The only one case, when current application was placed into iframe is
-  // web version of Telegram.
-  if (acceptCustomStyles && isIframe()) {
-    // Create special style element which is responsible for application
-    // style controlled by external app.
-    const styleElement = document.createElement('style');
-    styleElement.id = 'telegram-custom-styles';
-    document.head.appendChild(styleElement);
-
-    // Listen to custom style changes.
-    on('set_custom_style', (html) => {
-      styleElement.innerHTML = html;
-    });
-
-    // Notify Telegram, iframe is ready. This will result in sending style
-    // tag html from native application.
-    postEvent('iframe_ready');
-  }
-
-  const result: InitResult = {
+  const result: Omit<InitResult, 'viewport'> = {
     backButton: createBackButton(isPageReload, version, postEvent),
     closingBehavior: createClosingBehavior(isPageReload, postEvent),
     cloudStorage: new CloudStorage(version, createRequestId, postEvent),
-    haptic: new HapticFeedback(version, postEvent),
-    mainButton: createMainButton(isPageReload, buttonColor, buttonTextColor, postEvent),
+    createRequestId,
+    hapticFeedback: new HapticFeedback(version, postEvent),
+    invoice: new Invoice(version, postEvent),
+    mainButton: createMainButton(
+      isPageReload,
+      themeParams.buttonColor || '#000000',
+      themeParams.buttonTextColor || '#ffffff',
+      postEvent,
+    ),
+    miniApp: createMiniApp(
+      isPageReload,
+      themeParams.backgroundColor || '#ffffff',
+      version,
+      botInline,
+      postEvent,
+    ),
     popup: new Popup(version, postEvent),
     postEvent,
     qrScanner: new QRScanner(version, postEvent),
-    themeParams,
-    viewport,
-    webApp,
+    themeParams: createThemeParams(themeParams),
+    utils: new Utils(version, createRequestId, postEvent),
+    ...(initData
+      // Init data could be missing in case, application was launched via InlineKeyboardButton.
+      ? {
+        initData: new InitData(initData),
+        initDataRaw,
+      }
+      : {}),
   };
 
-  // Init data could be missing in case, application was launched via InlineKeyboardButton.
-  if (initData !== undefined) {
-    const { authDate, hash, ...restInitData } = initData;
-    result.initData = new InitData(authDate, hash, restInitData);
-    result.initDataRaw = initDataRaw;
+  const viewport = async
+    ? createViewportAsync(isPageReload, platform, postEvent)
+    : createViewportSync(isPageReload, platform, postEvent);
+
+  if (viewport instanceof Promise) {
+    return viewport.then((vp) => {
+      processCSSVars(
+        cssVars,
+        result.miniApp,
+        result.themeParams,
+        vp,
+      );
+
+      return {
+        ...result,
+        viewport: vp,
+      };
+    }) as ComputedInitResult<O>;
   }
 
-  return result;
-}
+  processCSSVars(
+    cssVars,
+    result.miniApp,
+    result.themeParams,
+    viewport,
+  );
 
-/**
- * Initializes all SDK components.
- * @param options - initialization options.
- */
-export function init(options: InitOptions = {}): Promise<InitResult> {
-  return withTimeout(actualInit(options), options.timeout || 1000);
+  return { ...result, viewport } as ComputedInitResult<O>;
 }

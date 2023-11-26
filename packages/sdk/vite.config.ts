@@ -1,22 +1,17 @@
 import { createViteConfig, createVitestConfig } from 'build-utils';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import packageJson from './package.json';
 
 export default createViteConfig({
   packageName: packageJson.name,
   formats: ['es', 'cjs'],
-  external: [
-    '@tma.js/bridge',
-    '@tma.js/colors',
-    '@tma.js/init-data',
-    '@tma.js/utils',
-    '@tma.js/util-types',
-    '@tma.js/parsing',
-    '@tma.js/event-emitter',
-    '@tma.js/theme-params',
-    '@tma.js/launch-params',
-  ],
+  alias: {
+    '~': resolve(dirname(fileURLToPath(import.meta.url)), 'src'),
+  },
   test: createVitestConfig({
     environment: 'happy-dom',
   }),
+  tsconfigPath: './tsconfig.build.json',
 });

@@ -37,12 +37,13 @@
     }
   },
   "scripts": {
-    "lint": "eslint -c .eslintrc.cjs src/**/*",
-    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "lint": "eslint src/**/*",
+    "lint:fix": "pnpm run lint --fix",
+    "typecheck": "tsc --noEmit",
     "build": "vite build"
   },
   "dependencies": {
-    "@tma.js/navigation": "workspace:*"
+    "@tma.js/sdk": "workspace:*"
   },
   "peerDependencies": {
     "@solidjs/router": "^0.x"

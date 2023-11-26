@@ -1,16 +1,12 @@
 import {
-  // @ts-ignore
-  // FIXME: For some reason TypeScript cannot find '@solidjs/router' dependency
-  //  so we have to ignore TS here :(
   createIntegration as createRouterIntegration,
   type RouterIntegration,
 } from '@solidjs/router';
-import type {
-  HashNavigator,
-  HashNavigatorEventListener,
-} from '@tma.js/navigation';
-
-import { getHash } from './getHash.js';
+import {
+  getHash,
+  type HashNavigator,
+  type HashNavigatorEventListener,
+} from '@tma.js/sdk';
 
 type Accessor<T> = () => T;
 

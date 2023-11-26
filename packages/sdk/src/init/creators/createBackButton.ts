@@ -1,8 +1,6 @@
-import type { PostEvent } from '@tma.js/bridge';
-
-import { BackButton } from '../../components/index.js';
-
-import { getStorageValue, saveStorageValue } from '../../storage.js';
+import { BackButton } from '~/back-button/index.js';
+import { getStorageValue, saveStorageValue } from '~/storage.js';
+import type { PostEvent } from '~/bridge/index.js';
 
 /**
  * Creates BackButton instance using last locally saved data also saving each state in
@@ -19,7 +17,7 @@ export function createBackButton(
   const { isVisible = false } = isPageReload ? getStorageValue('back-button') || {} : {};
   const component = new BackButton(isVisible, version, postEvent);
 
-  component.on('isVisibleChanged', () => {
+  component.on('change', () => {
     saveStorageValue('back-button', { isVisible: component.isVisible });
   });
 

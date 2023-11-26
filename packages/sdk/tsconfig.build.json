@@ -1,5 +1,15 @@
 {
   "extends": "tsconfig/esnext-dom.json",
+  "compilerOptions": {
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ],
+      "~test-utils/*": [
+        "./test-utils/*"
+      ]
+    }
+  },
   "include": [
     "src"
   ]

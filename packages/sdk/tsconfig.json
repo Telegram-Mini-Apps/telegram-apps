@@ -2,7 +2,12 @@
   "extends": "./tsconfig.build.json",
   "include": [
     "src",
-    "tests",
-    "*.ts"
+    "test-utils",
+    "tests"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

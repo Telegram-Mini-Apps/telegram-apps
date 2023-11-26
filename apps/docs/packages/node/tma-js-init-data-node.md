@@ -10,11 +10,6 @@ The package provides utilities to work with the initialization data of Telegram 
 server side. To learn more about the initialization data and its usage, please refer to
 the [documentation](../../platform/launch-parameters/common-information.md).
 
-::: info
-This package extends the functionality of [@tma.js/init-data](../typescript/tma-js-init-data/about.md), including all
-its types and utilities. Therefore, there is no need to install both packages separately.
-:::
-
 ## Installation
 
 ::: code-group
@@ -31,14 +26,12 @@ yarn add @tma.js/init-data-node
 ```
 :::
 
-## Usage
+## Parsing
 
-### Parsing
-
-You can learn more about parsing utilities in [@tma.js/init-data](../typescript/tma-js-init-data/about.md#parsing)
+You can learn more about parsing utilities in [@tma.js/sdk](../typescript/tma-js-sdk/init-data/about#parsing)
 documentation.
 
-### Validation
+## Validation
 
 To validate the signature of the initialization data, the `validate` function is used. It expects
 the initialization data to be passed in raw format (search parameters) and throws an error in

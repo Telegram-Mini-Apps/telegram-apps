@@ -37,28 +37,19 @@
     }
   },
   "scripts": {
-    "test": "vitest",
-    "lint": "eslint -c .eslintrc.cjs src/**/* tests/**/*",
+    "test": "vitest --run",
+    "lint": "eslint src/**/*",
+    "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "build": "pnpm run build:default && pnpm run build:iife",
     "build:default": "vite build --config vite.config.ts",
     "build:iife": "vite build --config vite.iife.config.ts"
   },
-  "dependencies": {
-    "@tma.js/bridge": "workspace:*",
-    "@tma.js/colors": "workspace:*",
-    "@tma.js/init-data": "workspace:*",
-    "@tma.js/utils": "workspace:*",
-    "@tma.js/util-types": "workspace:*",
-    "@tma.js/parsing": "workspace:*",
-    "@tma.js/theme-params": "workspace:*",
-    "@tma.js/launch-params": "workspace:*",
-    "@tma.js/event-emitter": "workspace:*"
-  },
   "devDependencies": {
-    "tsconfig": "workspace:*",
+    "build-utils": "workspace:*",
     "eslint-config-custom": "workspace:*",
-    "build-utils": "workspace:*"
+    "test-utils": "workspace:*",
+    "tsconfig": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
