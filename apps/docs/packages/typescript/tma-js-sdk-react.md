@@ -142,7 +142,7 @@ import {
 } from '@tma.js/sdk-react';
 
 function App() {
-  const sdk = useSDK();
+  const sdk = useSDKContext();
   // Here, we can use SDK information.
   return <div>My application!</div>;
 }
@@ -226,7 +226,7 @@ function Loader({ children }: PropsWithChildren) {
  */
 export function Root() {
   return (
-    <SDKProvider>
+    <SDKProvider options={{ async: true }}>
       <Loader>
         <App/>
       </Loader>
