@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.0.1
+
+### Patch Changes
+
+- e8f2cb1: Fix error catch in init function
+
 ## 1.0.0
 
 ### Major Changes
