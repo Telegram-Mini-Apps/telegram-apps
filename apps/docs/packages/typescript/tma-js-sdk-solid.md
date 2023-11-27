@@ -163,7 +163,12 @@ import {
   Match,
   type ParentProps,
 } from 'solid-js';
-import { SDKProvider, useSDKContext } from '@tma.js/sdk-solid';
+import { 
+  SDKProvider,
+  useSDKContext,
+  useBackButton,
+  useMiniApp,
+} from '@tma.js/sdk-solid';
 
 /**
  * Part of the application which doesn't know anything about SDK
