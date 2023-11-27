@@ -30,96 +30,103 @@ export function init<O extends InitOptions>(options: O): ComputedInitResult<O> {
     acceptCustomStyles = false,
   } = options;
 
-  // Retrieve launch data.
-  const {
-    launchParams: {
-      initData,
-      initDataRaw,
-      version,
-      platform,
-      themeParams,
-      botInline = false,
-    },
-    isPageReload,
-  } = retrieveLaunchData();
+  try {
+    // Retrieve launch data.
+    const {
+      launchParams: {
+        initData,
+        initDataRaw,
+        version,
+        platform,
+        themeParams,
+        botInline = false,
+      },
+      isPageReload,
+    } = retrieveLaunchData();
 
-  const createRequestId = createRequestIdGenerator();
-  const postEvent = createPostEvent(version);
+    const createRequestId = createRequestIdGenerator();
+    const postEvent = createPostEvent(version);
 
-  // In Telegram web version we should listen to special event sent from the Telegram application
-  // to know, when we should reload the Mini App.
-  if (isIframe()) {
-    if (acceptCustomStyles) {
-      catchCustomStyles();
+    // In Telegram web version we should listen to special event sent from the Telegram application
+    // to know, when we should reload the Mini App.
+    if (isIframe()) {
+      if (acceptCustomStyles) {
+        catchCustomStyles();
+      }
+
+      // Notify Telegram, iframe is ready. This will result in sending style tag html from native
+      // application which is used in catchCustomStyles function. We should call this method also
+      // to start receiving "reload_iframe" events from the Telegram application.
+      postEvent('iframe_ready', { reload_supported: true });
+      on('reload_iframe', () => window.location.reload());
     }
 
-    // Notify Telegram, iframe is ready. This will result in sending style tag html from native
-    // application which is used in catchCustomStyles function. We should call this method also
-    // to start receiving "reload_iframe" events from the Telegram application.
-    postEvent('iframe_ready', { reload_supported: true });
-    on('reload_iframe', () => window.location.reload());
-  }
-
-  const result: Omit<InitResult, 'viewport'> = {
-    backButton: createBackButton(isPageReload, version, postEvent),
-    closingBehavior: createClosingBehavior(isPageReload, postEvent),
-    cloudStorage: new CloudStorage(version, createRequestId, postEvent),
-    createRequestId,
-    hapticFeedback: new HapticFeedback(version, postEvent),
-    invoice: new Invoice(version, postEvent),
-    mainButton: createMainButton(
-      isPageReload,
-      themeParams.buttonColor || '#000000',
-      themeParams.buttonTextColor || '#ffffff',
+    const result: Omit<InitResult, 'viewport'> = {
+      backButton: createBackButton(isPageReload, version, postEvent),
+      closingBehavior: createClosingBehavior(isPageReload, postEvent),
+      cloudStorage: new CloudStorage(version, createRequestId, postEvent),
+      createRequestId,
+      hapticFeedback: new HapticFeedback(version, postEvent),
+      invoice: new Invoice(version, postEvent),
+      mainButton: createMainButton(
+        isPageReload,
+        themeParams.buttonColor || '#000000',
+        themeParams.buttonTextColor || '#ffffff',
+        postEvent,
+      ),
+      miniApp: createMiniApp(
+        isPageReload,
+        themeParams.backgroundColor || '#ffffff',
+        version,
+        botInline,
+        postEvent,
+      ),
+      popup: new Popup(version, postEvent),
       postEvent,
-    ),
-    miniApp: createMiniApp(
-      isPageReload,
-      themeParams.backgroundColor || '#ffffff',
-      version,
-      botInline,
-      postEvent,
-    ),
-    popup: new Popup(version, postEvent),
-    postEvent,
-    qrScanner: new QRScanner(version, postEvent),
-    themeParams: createThemeParams(themeParams),
-    utils: new Utils(version, createRequestId, postEvent),
-    ...(initData
-      // Init data could be missing in case, application was launched via InlineKeyboardButton.
-      ? {
-        initData: new InitData(initData),
-        initDataRaw,
-      }
-      : {}),
-  };
+      qrScanner: new QRScanner(version, postEvent),
+      themeParams: createThemeParams(themeParams),
+      utils: new Utils(version, createRequestId, postEvent),
+      ...(initData
+        // Init data could be missing in case, application was launched via InlineKeyboardButton.
+        ? {
+          initData: new InitData(initData),
+          initDataRaw,
+        }
+        : {}),
+    };
 
-  const viewport = async
-    ? createViewportAsync(isPageReload, platform, postEvent)
-    : createViewportSync(isPageReload, platform, postEvent);
+    const viewport = async
+      ? createViewportAsync(isPageReload, platform, postEvent)
+      : createViewportSync(isPageReload, platform, postEvent);
 
-  if (viewport instanceof Promise) {
-    return viewport.then((vp) => {
-      processCSSVars(
-        cssVars,
-        result.miniApp,
-        result.themeParams,
-        vp,
-      );
+    if (viewport instanceof Promise) {
+      return viewport.then((vp) => {
+        processCSSVars(
+          cssVars,
+          result.miniApp,
+          result.themeParams,
+          vp,
+        );
 
-      return {
-        ...result,
-        viewport: vp,
-      };
-    }) as ComputedInitResult<O>;
+        return {
+          ...result,
+          viewport: vp,
+        };
+      }) as ComputedInitResult<O>;
+    }
+
+    processCSSVars(
+      cssVars,
+      result.miniApp,
+      result.themeParams,
+      viewport,
+    );
+
+    return { ...result, viewport } as ComputedInitResult<O>;
+  } catch (e) {
+    if (async) {
+      return Promise.reject(e) as unknown as ComputedInitResult<O>;
+    }
+    throw e;
   }
-
-  processCSSVars(
-    cssVars,
-    result.miniApp,
-    result.themeParams,
-    viewport,
-  );
-
-  return { ...result, viewport } as ComputedInitResult<O>;
 }
