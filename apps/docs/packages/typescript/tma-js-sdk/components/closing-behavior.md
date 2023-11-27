@@ -31,7 +31,7 @@ console.log(closingBehaviour.isConfirmationNeeded); // false
 
 List of events, which could be used in `on` and `off` component instance methods:
 
-| Event                        | Listener                   | Triggered when                          |
-|------------------------------|----------------------------|-----------------------------------------|
-| changed                      | `() => void`               | Something in component changed          |
-| changed:isConfirmationNeeded | `(value: boolean) => void` | `isConfirmationNeeded` property changed |
+| Event                       | Listener                   | Triggered when                          |
+|-----------------------------|----------------------------|-----------------------------------------|
+| change                      | `() => void`               | Something in component changed          |
+| change:isConfirmationNeeded | `(value: boolean) => void` | `isConfirmationNeeded` property changed |
