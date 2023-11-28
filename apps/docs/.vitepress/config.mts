@@ -117,6 +117,9 @@ export default defineConfig({
     addOg('image:type', 'image/png');
     addOg('locale', lang.replace(/-/, '_'));
 
+    // To make it correctly display in Telegram.
+    addOg('twitter:card', 'summary_large_image');
+
     if (description) {
       addOg('description', description);
     }
