@@ -24,8 +24,6 @@ interface Methods {
   saveStorageValue: { key: string; value: string };
 }
 
-const stringArray = array().of(string());
-
 function objectFromKeys<K extends string, V>(keys: K[], value: V): Record<K, V> {
   return keys.reduce<Record<K, V>>((acc, key) => {
     acc[key] = value;
@@ -93,7 +91,7 @@ export class CloudStorage {
   async getKeys(options?: WiredRequestOptions): Promise<string[]> {
     const result = await this.invokeCustomMethod('getStorageKeys', {}, options);
 
-    return stringArray.parse(result);
+    return array().of(string()).parse(result);
   }
 
   /**
