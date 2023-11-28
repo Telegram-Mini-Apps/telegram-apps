@@ -2,26 +2,24 @@
 
 [code-badge]: https://img.shields.io/badge/source-black?logo=github
 
-[code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk-solid
-
-[docs-link]: https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk-solid
-
 [docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
 
-[npm-link]: https://npmjs.com/package/@tma.js/sdk-solid
+[sdk-solid-code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk-solid
 
-[npm-badge]: https://img.shields.io/npm/v/@tma.js/sdk-solid?logo=npm
+[sdk-solid-docs-link]: https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk-solid
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/@tma.js/sdk-solid
+[sdk-solid-npm-link]: https://npmjs.com/package/@tma.js/sdk-solid
 
-[![NPM][npm-badge]][npm-link]
-![Size][size-badge]
-[![docs-badge]][docs-link]
-[![code-badge]][code-link]
+[sdk-solid-npm-badge]: https://img.shields.io/npm/v/@tma.js/sdk-solid?logo=npm
 
-Solid JS bindings for client SDK. Contains hooks, components and other useful tools which allow
-usage of Solid JS along with Mini Apps client SDK. Tracks SDK components changes out of box.
+[sdk-solid-size-badge]: https://img.shields.io/bundlephobia/minzip/@tma.js/sdk-solid
 
-This library is a part of TypeScript packages ecosystem around Telegram Mini Apps. You can learn more
-about this package in
-this [documentation][docs-link].
+[![NPM][sdk-solid-npm-badge]][sdk-solid-npm-link]
+![Size][sdk-solid-size-badge]
+[![docs-badge]][sdk-solid-docs-link]
+[![code-badge]][sdk-solid-code-link]
+
+Solid JS bindings
+for [client SDK](https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk/about). Includes
+hooks, components and utilities
+for comfortable usage of Solid JS on the Telegram Mini Apps platform.

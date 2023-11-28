@@ -2,27 +2,24 @@
 
 [code-badge]: https://img.shields.io/badge/source-black?logo=github
 
-[code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk-react
-
-[docs-link]: https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk-react
-
 [docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
 
-[npm-link]: https://npmjs.com/package/@tma.js/sdk-react
+[sdk-react-code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk-react
 
-[npm-badge]: https://img.shields.io/npm/v/@tma.js/sdk-react?logo=npm
+[sdk-react-docs-link]: https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk-react
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/@tma.js/sdk-react
+[sdk-react-npm-link]: https://npmjs.com/package/@tma.js/sdk-react
 
-[![NPM][npm-badge]][npm-link]
-![Size][size-badge]
-[![docs-badge]][docs-link]
-[![code-badge]][code-link]
+[sdk-react-npm-badge]: https://img.shields.io/npm/v/@tma.js/sdk-react?logo=npm
 
-React bindings for client SDK. Contains hooks, components and other
-useful tools which allow usage of React along with Mini Apps client SDK.
-Tracks SDK components changes out of box.
+[sdk-react-size-badge]: https://img.shields.io/bundlephobia/minzip/@tma.js/sdk-react
 
-This library is a part of TypeScript packages ecosystem around Telegram Web
-Apps. You can learn more about this package in this
-[documentation][docs-link].
+[![NPM][sdk-react-npm-badge]][sdk-react-npm-link]
+![Size][sdk-react-size-badge]
+[![docs-badge]][sdk-react-docs-link]
+[![code-badge]][sdk-react-code-link]
+
+React JS bindings
+for [client SDK](https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk/about). Includes
+hooks, components and utilities for comfortable usage of React JS on the Telegram Mini Apps
+platform.
