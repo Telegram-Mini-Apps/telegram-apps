@@ -72,14 +72,68 @@ export default defineConfig({
     }],
 
     search: {
-      // TODO: Probably replace with Algolia.
       provider: 'algolia',
       options: {
         apiKey: '2d6f370231694c71de2955f974e54986',
         appId: 'QRZA56E4H6',
         indexName: 'telegram-mini-apps',
-        insights: true
-      }
+        insights: true,
+      },
     },
+  },
+
+  transformPageData(pageData, { siteConfig }) {
+    const {
+      frontmatter,
+      filePath,
+      title,
+      description,
+      lastUpdated,
+    } = pageData;
+    const {
+      site: {
+        title: siteTitle,
+        base,
+        lang,
+      },
+      sitemap: {
+        hostname,
+      },
+    } = siteConfig;
+    const isHome = frontmatter.layout === 'home';
+    const siteBase = `${hostname}${base}`;
+    frontmatter.head ??= [];
+
+    const addOg = (prop: string, content: string) => frontmatter.head.push([
+      'meta',
+      { property: `og:${prop}`, content },
+    ]);
+
+    addOg('title', isHome ? siteTitle : `${title} | ${siteTitle}`);
+    addOg('site_name', 'Telegram Mini Apps Platform Documentation');
+    addOg('image', `${siteBase}thumbnail-1200x630.b47f7147927cc113522893dc23b7a33c.png`);
+    addOg('image:width', '1200');
+    addOg('image:height', '630');
+    addOg('image:type', 'image/png');
+    addOg('locale', lang.replace(/-/, '_'));
+
+    if (description) {
+      addOg('description', description);
+    }
+
+    if (isHome) {
+      addOg('url', siteBase);
+      addOg('type', 'website');
+    } else {
+      addOg('url', `${siteBase}${filePath.replace(/\.md$/, '')}`);
+      addOg('type', 'article');
+      if (lastUpdated) {
+        addOg('article:modified_time', new Date(lastUpdated).toISOString());
+      }
+    }
+  },
+
+  transformHtml(code) {
+    return code.replace(/<html /, '<html prefix="og: http://ogp.me/ns#" ');
   },
 });
