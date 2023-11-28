@@ -7,7 +7,7 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
-    "directory": "packages/parsing"
+    "directory": "packages-deprecated/parsing"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"

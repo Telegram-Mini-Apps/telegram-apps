@@ -7,7 +7,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Telegram-Mini-Apps/tma.js.git",
-    "directory": "packages/bridge"
+    "directory": "packages-deprecated/bridge"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"

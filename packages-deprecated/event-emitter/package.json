@@ -7,7 +7,7 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
-    "directory": "packages/event-emitter"
+    "directory": "packages-deprecated/event-emitter"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
