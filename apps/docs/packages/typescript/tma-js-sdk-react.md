@@ -344,3 +344,196 @@ Using these hooks and higher-order components with an uninitialized SDK will res
 corresponding error.
 
 :::
+
+## Declarative vs Imperative
+
+This package does not offer declarative components that can be used during development. This section
+of the documentation provides information on why this solution was chosen.
+
+The main difference between declarative and imperative approaches is that the declarative approach
+hides the implementation behind a simple entity. In contrast, the imperative approach requires
+describing the process step-by-step.
+
+This makes the imperative approach more flexible and intuitive, as long as the developer can see
+each step hidden behind the process.
+
+### Declarative
+
+Let's start from the example of how we could use the declarative approach in this package:
+
+```jsx
+import { MainButton } from '@tma.js/sdk-react';
+
+function App() {
+  return (
+    <div>
+      <p>Just an example</p>
+      <MainButton text='Submit' textColor='#aabb01'/>
+    </div>
+  );
+}
+```
+
+This code will have to display the Main Button, set text `Submit` and the color of text equal
+to `#aabb01`. This usage of the component seems comfortable.
+
+### Imperative
+
+Now, let's see the imperative alternative of the same code:
+
+```jsx
+import { useEffect } from 'react';
+import { useMainButton } from '@tma.js/sdk-react';
+
+function App() {
+  const mainButton = useMainButton();
+
+  useEffect(() => {
+    mainButton.setParams({
+      text: 'Submit',
+      textColor: '#aabb01'
+    });
+  }, []);
+
+  return (
+    <div>
+      <p>Just an example</p>
+    </div>
+  );
+}
+```
+
+As you can see, the imperative approach requires writing more code. Nevertheless, this implication
+has more advantages than disadvantages.
+
+### Comparison
+
+The declarative approach seems more comfortable, requiring less code to write but has at least one
+disadvantage, which becomes more visible in larger projects. This drawback manifests when there are
+several application components using the MainButton component. All these parent components could be
+placed anywhere in the application.
+
+You can imagine such a case with a simplified structure like this:
+
+```jsx
+import { MainButton } from '@tma.js/sdk-react';
+
+function ComponentA() {
+  return (
+    <MainButton
+      text='Submit'
+      textColor='#aabb01'
+      onClick={...}
+    />
+  );
+}
+
+function ComponentB() {
+  return (
+    <MainButton
+      text='Cancel'
+      textColor='#010101'
+      onClick={...}
+      backgroundColor='#000000'
+    />
+  );
+}
+
+function ParentOfA() {
+  return (
+    <div>
+      ...
+      <ComponentA/>
+    </div>
+  );
+}
+
+function Root() {
+  return (
+    <div>
+      <ParentOfA/>
+      ...
+      <div>
+        ...
+        <div>
+          ...
+          <ComponentB/>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+In this case, you don't really know what would happen if `ComponentA` or `ComponentB` were
+re-rendered. Will `MainButton` update all properties, or only the changed ones? Will they ever
+update anything in the Main Button? Which properties of the `MainButton` component would be applied?
+Well, there is no intuitive answer to these questions.
+
+That's why we prefer using the imperative approach which directly notifies the developer of
+what action will be performed. This also allows developer to select the strategy he really needs -
+update all properties or maybe just some of them:
+
+```jsx
+import { useEffect } from 'react';
+import { useMainButton } from '@tma.js/sdk-react';
+
+function ComponentA() {
+  const mb = useMainButton();
+
+  useEffect(() => {
+    mb.setParams({
+      text: 'Submit',
+      textColor: '#aabb01',
+    });
+
+    return mb.on('click', ...);
+  }, []);
+
+  return null;
+}
+
+function ComponentB() {
+  const mb = useMainButton();
+
+  useEffect(() => {
+    mb.setParams({
+      text: 'Cancel',
+      textColor: '#010101',
+      backgroundColor: '#000000',
+    });
+
+    return mb.on('click', ...);
+  }, []);
+
+  return null;
+}
+
+function ParentOfA() {
+  return (
+    <div>
+      ...
+      <ComponentA/>
+    </div>
+  );
+}
+
+function Root() {
+  return (
+    <div>
+      <ParentOfA/>
+      ...
+      <div>
+        ...
+        <div>
+          ...
+          <ComponentB/>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+In this case, we know that when ComponentA and ComponentB are mounted, they will try to set
+specified parameters. No other re-renders will have an effect on the Main Button.
