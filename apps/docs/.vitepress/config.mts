@@ -104,10 +104,11 @@ export default defineConfig({
     const siteBase = `${hostname}${base}`;
     frontmatter.head ??= [];
 
-    const addOg = (prop: string, content: string) => frontmatter.head.push([
-      'meta',
-      { property: `og:${prop}`, content },
+    const addMeta = (property: string, content: string) => frontmatter.head.push([
+      'meta', { property, content },
     ]);
+
+    const addOg = (prop: string, content: string) => addMeta(`og:${prop}`, content);
 
     addOg('title', isHome ? siteTitle : `${title} | ${siteTitle}`);
     addOg('site_name', 'Telegram Mini Apps Platform Documentation');
@@ -118,7 +119,7 @@ export default defineConfig({
     addOg('locale', lang.replace(/-/, '_'));
 
     // To make it correctly display in Telegram.
-    addOg('twitter:card', 'summary_large_image');
+    addMeta('twitter:card', 'summary_large_image');
 
     if (description) {
       addOg('description', description);
@@ -131,12 +132,20 @@ export default defineConfig({
       addOg('url', `${siteBase}${filePath.replace(/\.md$/, '')}`);
       addOg('type', 'article');
       if (lastUpdated) {
-        addOg('article:modified_time', new Date(lastUpdated).toISOString());
+        addMeta('article:modified_time', new Date(lastUpdated).toISOString());
       }
     }
   },
 
   transformHtml(code) {
-    return code.replace(/<html /, '<html prefix="og: http://ogp.me/ns#" ');
+    const prefix = [
+      ['og', 'https://ogp.me/ns#'],
+      ['article', 'https://ogp.me/article#'],
+      ['website', 'https://ogp.me/ns/website#']
+    ]
+      .map(line => line.join(': '))
+      .join('\n');
+
+    return code.replace(/<html /, `<html prefix="${prefix}" `);
   },
 });
