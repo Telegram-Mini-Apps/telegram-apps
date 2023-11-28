@@ -1,5 +1,11 @@
 # @tma.js/init-data-node
 
+## 1.0.1
+
+### Patch Changes
+
+- d6e6e59: Actualize readme
+
 ## 1.0.0
 
 ### Major Changes

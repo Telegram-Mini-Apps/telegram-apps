@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.0.2
+
+### Patch Changes
+
+- f065e23: Get rid of some side effects
+
 ## 1.0.1
 
 ### Patch Changes
