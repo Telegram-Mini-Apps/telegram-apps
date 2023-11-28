@@ -126,6 +126,12 @@ export function Root() {
 }
 ```
 
+::: info
+
+The default initialization accepted by the package is synchronous.
+
+:::
+
 ## Getting SDK context
 
 Retrieving the SDK context is important in asynchronous mode to prevent the application from
