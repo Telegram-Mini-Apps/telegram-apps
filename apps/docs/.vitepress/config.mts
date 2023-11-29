@@ -37,6 +37,13 @@ export default defineConfig({
     // Add favicon.
     // https://vitepress.dev/reference/site-config#example-adding-a-favicon
     ['link', { rel: 'icon', href: '/favicon.ico' }],
+    // Add analytics:
+    // https://vercel.com/docs/analytics/quickstart
+    ['script',
+      {},
+      'window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };',
+    ],
+    ['script', { defer: '', src: '/_vercel/insights/script.js' }],
   ],
 
   themeConfig: {
@@ -141,7 +148,7 @@ export default defineConfig({
     const prefix = [
       ['og', 'https://ogp.me/ns#'],
       ['article', 'https://ogp.me/article#'],
-      ['website', 'https://ogp.me/ns/website#']
+      ['website', 'https://ogp.me/ns/website#'],
     ]
       .map(line => line.join(': '))
       .join('\n');
