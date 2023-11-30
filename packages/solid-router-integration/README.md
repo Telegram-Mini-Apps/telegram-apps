@@ -19,4 +19,5 @@
 [![docs-badge]][solid-router-integration-docs-link]
 [![code-badge]][solid-router-integration-code-link]
 
-[@solidjs/router](https://www.npmjs.com/package/@solidjs/router) integration for navigation.
+Telegram Mini Apps [Navigator](http://localhost:5173/packages/typescript/tma-js-sdk/navigation)
+integration for [@solidjs/router](https://www.npmjs.com/package/@solidjs/router).
