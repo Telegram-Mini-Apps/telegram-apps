@@ -77,13 +77,14 @@ the [documentation](https://docs.telegram-mini-apps.com/platform/launch-paramete
 
 ### [`@tma.js/solid-router-integration`](https://docs.telegram-mini-apps.com/packages/typescript/tma-js-solid-router-integration)
 
-[solid-router-integration-npm-badge]: https://img.shields.io/npm/v/@tma.js/solid-router-integration?logo=npm 
+[solid-router-integration-npm-badge]: https://img.shields.io/npm/v/@tma.js/solid-router-integration?logo=npm
 
 [![solid-router-integration-npm-badge]](https://npmjs.com/package/@tma.js/solid-router-integration)
 ![Size](https://img.shields.io/bundlephobia/minzip/@tma.js/solid-router-integration)
 [![code-badge]](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/solid-router-integration)
 
-[@solidjs/router](https://www.npmjs.com/package/@solidjs/router) integration for navigation.
+Telegram Mini Apps [Navigator](http://localhost:5173/packages/typescript/tma-js-sdk/navigation)
+integration for [@solidjs/router](https://www.npmjs.com/package/@solidjs/router).
 
 ## Why not Telegram SDK
 
