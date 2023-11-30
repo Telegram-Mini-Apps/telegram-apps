@@ -22,7 +22,7 @@ const utils = new Utils(
 ### `openLink`
 
 `MiniApp` class is capable of opening links of different types. For example, it can open a link
-in an external browser closing current Mini App, using method `openLink`:
+in an external browser not closing current Mini App, using method `openLink`:
 
 ```typescript
 utils.openLink('https://google.com');
