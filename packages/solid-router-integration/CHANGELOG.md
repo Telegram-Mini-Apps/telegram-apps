@@ -1,5 +1,11 @@
 # @tma.js/solid-router-integration
 
+## 1.0.0
+
+### Major Changes
+
+- 04d2b18: The first package major version
+
 ## 0.0.9
 
 ### Patch Changes
