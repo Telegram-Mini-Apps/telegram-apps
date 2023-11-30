@@ -42,15 +42,15 @@ export const packagesSidebar = {
                 },
                 {
                   text: 'InitData',
-                  link: prefixed('/typescript/tma-js-sdk/init-data/init-data')
+                  link: prefixed('/typescript/tma-js-sdk/init-data/init-data'),
                 },
                 {
                   text: 'Chat',
-                  link: prefixed('/typescript/tma-js-sdk/init-data/chat')
+                  link: prefixed('/typescript/tma-js-sdk/init-data/chat'),
                 },
                 {
                   text: 'User',
-                  link: prefixed('/typescript/tma-js-sdk/init-data/user')
+                  link: prefixed('/typescript/tma-js-sdk/init-data/user'),
                 },
               ],
             },
@@ -124,6 +124,10 @@ export const packagesSidebar = {
         },
         { text: '@tma.js/sdk-react', link: prefixed('/typescript/tma-js-sdk-react') },
         { text: '@tma.js/sdk-solid', link: prefixed('/typescript/tma-js-sdk-solid') },
+        {
+          text: '@tma.js/solid-router-integration',
+          link: prefixed('/typescript/tma-js-solid-router-integration'),
+        },
       ],
     },
     {

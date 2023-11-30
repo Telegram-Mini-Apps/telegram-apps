@@ -1,10 +1,14 @@
 # @tma.js/sdk
 
-[npm-link]: https://npmjs.com/package/@tma.js/sdk
-
-[npm-shield]: https://img.shields.io/npm/v/@tma.js/sdk?logo=npm
-
-![[npm-link]][npm-shield]
+<p style="display: inline-flex; gap: 8px">
+  <a href="https://npmjs.com/package/@tma.js/sdk">
+    <img src="https://img.shields.io/npm/v/@tma.js/sdk?logo=npm"/>
+  </a>
+  <img src="https://img.shields.io/bundlephobia/minzip/@tma.js/sdk"/>
+  <a href="https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk">
+    <img src="https://img.shields.io/badge/source-black?logo=github"/>
+  </a>
+</p>
 
 Made from scratch TypeScript library for seamless communication with Telegram Mini Apps
 functionality.

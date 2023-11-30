@@ -4,11 +4,15 @@ outline: [2, 3]
 
 # @tma.js/sdk-solid
 
-[npm-link]: https://npmjs.com/package/@tma.js/sdk-solid
-
-[npm-shield]: https://img.shields.io/npm/v/@tma.js/sdk-solid?logo=npm
-
-![[npm-link]][npm-shield]
+<p style="display: inline-flex; gap: 8px">
+  <a href="https://npmjs.com/package/@tma.js/sdk-solid">
+    <img src="https://img.shields.io/npm/v/@tma.js/sdk-solid?logo=npm"/>
+  </a>
+  <img src="https://img.shields.io/bundlephobia/minzip/@tma.js/sdk-solid"/>
+  <a href="https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk-solid">
+    <img src="https://img.shields.io/badge/source-black?logo=github"/>
+  </a>
+</p>
 
 Solid JS bindings for [client SDK](tma-js-sdk/about.md). Includes hooks, components and utilities
 for comfortable usage of Solid JS on the Telegram Mini Apps platform.
@@ -336,3 +340,8 @@ their properties change.
 Using these hooks with an uninitialized SDK will result in throwing a corresponding error.
 
 :::
+
+## Template
+
+We have already created a [template](https://github.com/Telegram-Mini-Apps/solidjs-template) for
+Solid JS that utilizes the current package, so you can use it.

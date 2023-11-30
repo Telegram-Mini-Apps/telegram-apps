@@ -4,11 +4,15 @@ outline: [2, 3]
 
 # @tma.js/sdk-react
 
-[npm-link]: https://npmjs.com/package/@tma.js/sdk-react
-
-[npm-shield]: https://img.shields.io/npm/v/@tma.js/sdk-react?logo=npm
-
-![[npm-link]][npm-shield]
+<p style="display: inline-flex; gap: 8px">
+  <a href="https://npmjs.com/package/@tma.js/sdk-react">
+    <img src="https://img.shields.io/npm/v/@tma.js/sdk-react?logo=npm"/>
+  </a>
+  <img src="https://img.shields.io/bundlephobia/minzip/@tma.js/sdk-react"/>
+  <a href="https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk-react">
+    <img src="https://img.shields.io/badge/source-black?logo=github"/>
+  </a>
+</p>
 
 React JS bindings for [client SDK](tma-js-sdk/about.md). Includes hooks, components and utilities
 for comfortable usage of React JS on the Telegram Mini Apps platform.
