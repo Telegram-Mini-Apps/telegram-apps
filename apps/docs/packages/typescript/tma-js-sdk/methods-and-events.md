@@ -40,9 +40,9 @@ removeListener();
 To stop listening to events, developer could alternatively use `off` function:
 
 ```typescript
-import { on, off, type EventListener } from '@tma.js/sdk';
+import { on, off, type MiniAppsEventListener } from '@tma.js/sdk';
 
-const listener: EventListener<'viewport_changed'> = payload => {
+const listener: MiniAppsEventListener<'viewport_changed'> = payload => {
   console.log('Viewport changed:', payload);
 };
 
@@ -62,10 +62,10 @@ such functions as `subscribe` and `unsubscribe`:
 import {
   subscribe,
   unsubscribe,
-  type GlobalEventListener,
+  type MiniAppsGlobalEventListener,
 } from '@tma.js/sdk';
 
-const listener: GlobalEventListener = (event, data) => {
+const listener: MiniAppsGlobalEventListener = (event, data) => {
   console.log('Received event', event, 'with data', data);
 };
 
