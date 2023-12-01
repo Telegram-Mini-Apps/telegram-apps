@@ -83,7 +83,7 @@ the [documentation](https://docs.telegram-mini-apps.com/platform/launch-paramete
 ![Size](https://img.shields.io/bundlephobia/minzip/@tma.js/solid-router-integration)
 [![code-badge]](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/solid-router-integration)
 
-Telegram Mini Apps [Navigator](http://localhost:5173/packages/typescript/tma-js-sdk/navigation)
+Telegram Mini Apps [Navigator](https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk/navigation)
 integration for [@solidjs/router](https://www.npmjs.com/package/@solidjs/router).
 
 ## Why not Telegram SDK
