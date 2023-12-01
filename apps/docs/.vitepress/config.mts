@@ -57,7 +57,7 @@ export default defineConfig({
 
     editLink: {
       text: 'Edit this page on GitHub',
-      pattern: 'https://github.com/telegram-mini-apps/tma.js/edit/master/apps/docs/src/:path',
+      pattern: 'https://github.com/telegram-mini-apps/tma.js/edit/master/apps/docs/:path',
     },
 
     // https://vitepress.dev/reference/default-theme-config
