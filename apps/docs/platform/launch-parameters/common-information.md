@@ -1,10 +1,10 @@
-# Common information
+# Common Information
 
 The launch parameters are the list of parameters that is passed by the native Telegram application
 to the Mini App. It helps the developer to find out the characteristics of the Telegram application,
 the current device, get basic information about the user and much more.
 
-## Transmission method
+## Transmission Method
 
 It's easy to guess, but in a web environment, one of the simplest and most instantaneous ways to
 transfer data in a local environment is to specify them in the address bar of the application. Thus,
@@ -34,12 +34,14 @@ console.log(params.get('tgWebAppVersion')); // "6.2"
 ```
 
 ::: tip
+
 However, users have the capability to refresh the current application without exiting it. If the
 application uses hash routing, it may lose the initial hash after some time. Therefore, it's
 advisable to save this data during the initial launch of the application.
+
 :::
 
-## Parameters list
+## Parameters List
 
 ### `tgWebAppVersion`
 

@@ -11,7 +11,7 @@ These colors should be utilized by Mini Apps to ensure a consistent and native l
 
 ## Retrieving
 
-### Launch parameter
+### Launch Parameter
 
 Telegram Mini Apps provides theming data through a launch parameter known
 as [tgWebAppThemeParams](../launch-parameters/common-information.md#tgwebappthemeparams). This
@@ -38,7 +38,7 @@ Here is a complete example of the parameter value:
 }
 ```
 
-### Telegram Mini Apps method
+### Telegram Mini Apps Method
 
 Nevertheless, retrieving theming data via launch parameters is not the only way. Telegram Mini Apps
 also permits obtaining the theme through a method
@@ -48,7 +48,7 @@ As a result of calling this method, Telegram will emit an event
 named [theme_changed](../apps-communication/events.md#theme-changed). The payload of this event
 contains a property called `theme_params`, which has the format described in the previous section.
 
-## Background and header colors
+## Background and Header Colors
 
 As long as a Mini App is always displayed within a native component, which consists of parts such
 as the _header_ and _body_, Telegram Mini Apps also allows changing their colors.

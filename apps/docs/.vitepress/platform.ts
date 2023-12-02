@@ -12,15 +12,15 @@ export const platformSidebar = {
     {
       text: 'Common information',
       items: [
-        { text: 'About platform', link: prefixed('/about-platform') },
-        { text: 'Test environment', link: prefixed('/test-environment') },
+        { text: 'About Platform', link: prefixed('/about-platform') },
+        { text: 'Test Environment', link: prefixed('/test-environment') },
       ],
     },
 
     {
       text: 'Apps communication',
       items: [
-        { text: 'Flow definition', link: prefixed('/apps-communication/flow-definition') },
+        { text: 'Flow Definition', link: prefixed('/apps-communication/flow-definition') },
         { text: 'Methods', link: prefixed('/apps-communication/methods') },
         { text: 'Events', link: prefixed('/apps-communication/events') },
       ],
@@ -29,16 +29,16 @@ export const platformSidebar = {
     {
       text: 'Launch parameters',
       items: [
-        { text: 'Common information', link: prefixed('/launch-parameters/common-information') },
-        { text: 'Init data', link: prefixed('/launch-parameters/init-data') },
+        { text: 'Common Information', link: prefixed('/launch-parameters/common-information') },
+        { text: 'Init Data', link: prefixed('/launch-parameters/init-data') },
       ],
     },
 
     {
       text: 'Functionality',
       items: [
-        { text: 'Closing behavior', link: prefixed('/functionality/closing-behavior') },
-        { text: 'Haptic feedback', link: prefixed('/functionality/haptic-feedback') },
+        { text: 'Closing Behavior', link: prefixed('/functionality/closing-behavior') },
+        { text: 'Haptic Feedback', link: prefixed('/functionality/haptic-feedback') },
         { text: 'Theming', link: prefixed('/functionality/theming') },
         { text: 'Viewport', link: prefixed('/functionality/viewport') },
       ],

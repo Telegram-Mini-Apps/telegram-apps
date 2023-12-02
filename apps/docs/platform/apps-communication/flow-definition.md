@@ -1,4 +1,4 @@
-# Flow definition
+# Flow Definition
 
 To understand how to use Mini Apps functionality, we should start by learning how Telegram native
 application communicates with Mini App.
@@ -11,7 +11,7 @@ To be more accurate, Telegram Mini Apps is not new technology even in the world 
 Messenger already has such technology as Telegram Games, which is, internally, almost the same
 platform as Mini Apps. At least, it uses the same way of communication with the front-end app.
 
-## Methods and events
+## Methods and Events
 
 The next thing important to know is there are 2 terms that are usually used in the context of apps
 communication:

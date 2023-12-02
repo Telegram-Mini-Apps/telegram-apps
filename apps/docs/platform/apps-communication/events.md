@@ -38,12 +38,14 @@ window.addEventListener('message', ({ data }) => {
 ```
 
 ::: warning
+
 In this code, we assumed, that the `message` event is sent only by the native application which is
 not always true in real applications. Additionally, we didn't check if `data` is really of
 type `string`. Don't forget to check each type and appropriately process incoming events.
+
 :::
 
-## Desktop, mobile and Windows Phone
+## Desktop, Mobile and Windows Phone
 
 Desktop, mobile, and Windows Phone versions of Telegram don’t use the method, described in the
 previous section. They do it in a bit unusual way. The first thing developer should know, is in
@@ -71,7 +73,7 @@ type ReceiveEvent = (eventType: string, eventData: unknown) => void;
 So, the solution is rather simple. To handle incoming events we should create a function of this
 type and assign it to all 3 paths.
 
-## Available events
+## Available Events
 
 This section contains the list of events, sent from Telegram: their names, description, and
 parameters. Section title means minimal version, from which events inside the section could be sent.

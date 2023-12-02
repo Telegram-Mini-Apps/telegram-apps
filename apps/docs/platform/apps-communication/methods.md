@@ -46,7 +46,7 @@ window.parent.postMessage(data, 'https://web.telegram.org');
 
 This code will make the Telegram [BackButton](../ui/back-button.md) appear.
 
-## Desktop and mobile
+## Desktop and Mobile
 
 Unlike the web, desktop and mobile applications use a bit more unusual way of calling methods. Both
 of these platforms will create a global function `window.TelegramWebviewProxy.postEvent`.
@@ -76,7 +76,7 @@ const data = JSON.stringify({
 window.external.notify(data);
 ```
 
-## Available methods
+## Available Methods
 
 This section contains a list of available methods to call with their names, description, and
 parameters. In case, Mini App does not satisfy the minimal method version requirement, nothing will

@@ -1,4 +1,4 @@
-# Closing behavior
+# Closing Behavior
 
 ![Closing confirmation](/functionality/closing-confirmation.png)
 

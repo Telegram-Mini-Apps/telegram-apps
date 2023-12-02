@@ -20,7 +20,9 @@ When user clicks the Main Button, Telegram application emits
 the [main_button_pressed](../apps-communication/events.md#main-button-pressed) event.
 
 ::: tip
+
 If clicking the button produces an action that takes some time to complete, it is recommended to
 display the loader inside the Main Button. This will allow the user to understand that the
 application is not frozen and is currently performing an operation.
+
 :::

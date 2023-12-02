@@ -1,4 +1,4 @@
-# Haptic feedback
+# Haptic Feedback
 
 Native mobile applications are always filled with interactive components, which allow user to
 communicate with its functionality. Such components are mostly popups, buttons and many others.
@@ -18,6 +18,8 @@ provides [web_app_trigger_haptic_feedback](../apps-communication/methods.md#web-
 method.
 
 ::: warning
+
 Use this method carefully. Emitting haptic events too often can make an effect on user's mobile
 device battery.
+
 :::
