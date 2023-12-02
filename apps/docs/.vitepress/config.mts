@@ -46,6 +46,7 @@ export default defineConfig({
     ['script', { defer: '', src: '/_vercel/insights/script.js' }],
   ],
 
+  // https://vitepress.dev/reference/default-theme-config
   themeConfig: {
     logo: '/logo.png',
 
@@ -60,7 +61,6 @@ export default defineConfig({
       pattern: 'https://github.com/telegram-mini-apps/tma.js/edit/master/apps/docs/:path',
     },
 
-    // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
       platformNavItem,
