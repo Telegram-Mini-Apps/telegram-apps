@@ -57,7 +57,8 @@ export const platformSidebar = {
     {
       text: 'Guides',
       items: [
-        { text: 'Creating new app', link: prefixed('/guides/creating-new-app') },
+        { text: 'Creating New App', link: prefixed('/guides/creating-new-app') },
+        { text: 'Getting App Link', link: prefixed('/guides/getting-app-link') },
       ],
     },
   ],
