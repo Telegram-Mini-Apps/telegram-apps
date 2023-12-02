@@ -41,7 +41,7 @@ domain, as well as access the current server and devices on the same network as 
 As a result, you will get an IP that could be used in BotFather and will be accessible by the
 current device and all devices on the same network.
 
-### Remove Development Link
+### Remote Development Link
 
 A remote development link refers to a temporary link that can be used to gain access to a
 development server, even for devices located in another network.
@@ -133,4 +133,4 @@ services:
 
 However, the developer can also use any other hosting. It is important to remember that the link to
 the application must work on the HTTPS protocol and have a valid SSL certificate. To get a free
-one, consider [certbot](https://certbot.eff.org/pages/about).
+one, consider using [certbot](https://certbot.eff.org/pages/about).
