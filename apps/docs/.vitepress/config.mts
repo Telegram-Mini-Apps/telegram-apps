@@ -37,13 +37,9 @@ export default defineConfig({
     // Add favicon.
     // https://vitepress.dev/reference/site-config#example-adding-a-favicon
     ['link', { rel: 'icon', href: '/favicon.ico' }],
-    // Add analytics:
-    // https://vercel.com/docs/analytics/quickstart
-    ['script',
-      {},
-      'window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };',
-    ],
-    ['script', { defer: '', src: '/_vercel/insights/script.js' }],
+    // Add Mixpanel analytics:
+    // https://docs.mixpanel.com/docs/quickstart/connect-your-data?sdk=javascript
+    ['script', { defer: '', src: '/analytics.js' }],
   ],
 
   // https://vitepress.dev/reference/default-theme-config
