@@ -4,3 +4,9 @@ mixpanel.init('c1cc78f9ae899f378fa6802a3b48702a', {
   track_pageview: true,
   persistence: 'localStorage',
 });
+
+const orig = window.history.pushState;
+window.history.pushState = function() {
+  orig.apply(window.history, arguments);
+  mixpanel.track_pageview();
+}
