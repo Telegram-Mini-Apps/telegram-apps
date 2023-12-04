@@ -2,6 +2,9 @@
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
+title: Home
+description: Documentation home page.
+
 hero:
   name: "Telegram Mini Apps"
   text: "Full fledged web applications inside Telegram"
