@@ -1,9 +1,9 @@
 # Test Environment
 
 Telegram provides the special environment for development with some specific features. For example,
-a developer will be allowed to create a new Telegram bot and specify a Mini Apps link with `http`
+a developer will be allowed to create a new Telegram bot and specify a Mini Apps link with HTTP
 protocol or even IP. As opposed to the test environment, in production, a developer is only allowed
-to specify links with `https` protocol. That's why this step is important during the Mini App
+to specify links with HTTPS protocol. That's why this step is important during the Mini App
 development process.
 
 ::: info
@@ -14,9 +14,7 @@ versions of Telegram.
 
 :::
 
-[//]: # (TODO: Other platforms?)
-
-### Telegram iOS
+### Telegram for iOS
 
 - Fastly tap `Settings` section 10 times;
 - Tap `Accounts` button;
@@ -30,4 +28,10 @@ versions of Telegram.
 - Expand the menu item, where current username is specified;
 - Hold `Shift` + `Alt` and press **right** mouse button on `Add Account` button;
 - Select `Test Server`;
+- Link the account created in the test environment.
+
+### Telegram for macOS
+
+- Fastly tap Settings icon 10 times to open the Debug Menu;
+- Hold `cmd` and click `Add Account` button;
 - Link the account created in the test environment.
