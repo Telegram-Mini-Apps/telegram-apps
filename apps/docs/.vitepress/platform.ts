@@ -14,6 +14,7 @@ export const platformSidebar = {
       items: [
         { text: 'About Platform', link: prefixed('/about-platform') },
         { text: 'Test Environment', link: prefixed('/test-environment') },
+        { text: 'Debugging', link: prefixed('/debugging') },
       ],
     },
 
