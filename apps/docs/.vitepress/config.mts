@@ -141,6 +141,7 @@ export default defineConfig({
   },
 
   transformHtml(code) {
+    // To make meta tags work properly, we should add specific prefixes to html tag.
     const prefix = [
       ['og', 'https://ogp.me/ns#'],
       ['article', 'https://ogp.me/article#'],
