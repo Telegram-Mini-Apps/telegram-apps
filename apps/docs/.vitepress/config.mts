@@ -39,7 +39,7 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     // Add Mixpanel analytics:
     // https://docs.mixpanel.com/docs/quickstart/connect-your-data?sdk=javascript
-    ['script', { defer: '', src: '/analytics.js' }],
+    ['script', { async: '', src: '/analytics.js' }],
   ],
 
   // https://vitepress.dev/reference/default-theme-config
