@@ -34,7 +34,12 @@ As well as in Telegram Desktop, `Inspect Element` option will appear in the cont
 - Connect your phone to your computer and open `chrome://inspect/#devices` in Chrome – you will see
   your Mini App there when you launch it on your phone.
 
-### Eruda
+### Telegram for iOS
+
+Currently, the Telegram for iOS application doesn't have a built-in way to debug the application.
+Nevertheless, to access debugging features, refer to the [Eruda](#eruda) section.
+
+## Eruda
 
 [Eruda](https://www.npmjs.com/package/eruda) is a technology that provides a lightweight console in
 the web. We typically use such packages in environments that don't offer their own consoles.
