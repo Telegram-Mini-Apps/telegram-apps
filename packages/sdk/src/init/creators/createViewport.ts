@@ -4,6 +4,15 @@ import type { PostEvent } from '~/bridge/index.js';
 import type { Platform } from '~/types/index.js';
 
 /**
+ * Returns true in case, specified platform supports calling Mini Apps
+ * "web_app_request_viewport" method.
+ * @param platform - platform identifier.
+ */
+function isRequestSupportedPlatform(platform: Platform): boolean {
+  return !['macos', 'web', 'weba'].includes(platform);
+}
+
+/**
  * Attempts to create Viewport instance using known parameters and local storage.
  * @param isPageReload - was page reloaded.
  * @param platform - platform identifier.
@@ -14,7 +23,7 @@ function tryCreate(
   platform: Platform,
   postEvent: PostEvent,
 ): Viewport | null {
-  if (isPageReload || platform === 'macos' || platform === 'web' || platform === 'weba') {
+  if (isPageReload || !isRequestSupportedPlatform(platform)) {
     return new Viewport({
       height: window.innerHeight,
       isExpanded: true,
@@ -73,10 +82,12 @@ export function createViewportSync(
     }),
   );
 
-  viewport.sync({ postEvent, timeout: 100 }).catch((e) => {
-    // eslint-disable-next-line no-console
-    console.error('Unable to actualize viewport state', e);
-  });
+  if (isRequestSupportedPlatform(platform)) {
+    viewport.sync({ postEvent, timeout: 100 }).catch((e) => {
+      // eslint-disable-next-line no-console
+      console.error('Unable to actualize viewport state', e);
+    });
+  }
 
   return viewport;
 }

@@ -21,6 +21,9 @@ interface StorageParams {
     text: string;
     textColor: RGB;
   };
+  'settings-button': {
+    isVisible: boolean
+  };
   viewport: {
     height: number;
     isExpanded: boolean;

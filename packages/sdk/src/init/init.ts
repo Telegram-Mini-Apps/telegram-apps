@@ -7,7 +7,7 @@ import {
   createClosingBehavior,
   createMainButton,
   createMiniApp,
-  createRequestIdGenerator,
+  createRequestIdGenerator, createSettingsButton,
   createThemeParams, createViewportAsync,
   createViewportSync,
 } from '~/init/creators/index.js';
@@ -23,7 +23,9 @@ import type { InitOptions, InitResult } from './types.js';
 
 type ComputedInitResult<O> = O extends { async: true } ? Promise<InitResult> : InitResult;
 
-export function init<O extends InitOptions>(options: O): ComputedInitResult<O> {
+export function init(): InitResult;
+export function init<O extends InitOptions>(options: O): ComputedInitResult<O>;
+export function init(options: InitOptions = {}): InitResult | Promise<InitResult> {
   const {
     async = false,
     cssVars = false,
@@ -84,6 +86,7 @@ export function init<O extends InitOptions>(options: O): ComputedInitResult<O> {
       popup: new Popup(version, postEvent),
       postEvent,
       qrScanner: new QRScanner(version, postEvent),
+      settingsButton: createSettingsButton(isPageReload, version, postEvent),
       themeParams: createThemeParams(themeParams),
       utils: new Utils(version, createRequestId, postEvent),
       ...(initData
@@ -112,7 +115,7 @@ export function init<O extends InitOptions>(options: O): ComputedInitResult<O> {
           ...result,
           viewport: vp,
         };
-      }) as ComputedInitResult<O>;
+      });
     }
 
     processCSSVars(
@@ -122,10 +125,10 @@ export function init<O extends InitOptions>(options: O): ComputedInitResult<O> {
       viewport,
     );
 
-    return { ...result, viewport } as ComputedInitResult<O>;
+    return { ...result, viewport };
   } catch (e) {
     if (async) {
-      return Promise.reject(e) as unknown as ComputedInitResult<O>;
+      return Promise.reject(e);
     }
     throw e;
   }
