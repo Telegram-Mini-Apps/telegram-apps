@@ -134,6 +134,12 @@ export {
   type QRScannerEventName,
   type QRScannerEvents,
 } from './qr-scanner/index.js';
+export {
+  SettingsButton,
+  type SettingsButtonEventName,
+  type SettingsButtonEventListener,
+  type SettingsButtonEvents,
+} from './settings-button/index.js';
 export { supports } from './supports/index.js';
 export {
   parseThemeParams,

@@ -3,5 +3,6 @@ export * from './createClosingBehavior.js';
 export * from './createMainButton.js';
 export * from './createMiniApp.js';
 export * from './createRequestIdGenerator.js';
+export * from './createSettingsButton.js';
 export * from './createThemeParams.js';
 export * from './createViewport.js';

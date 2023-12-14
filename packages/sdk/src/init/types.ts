@@ -9,6 +9,7 @@ import type { MainButton } from '~/main-button/index.js';
 import type { MiniApp } from '~/mini-app/index.js';
 import type { Popup } from '~/popup/index.js';
 import type { QRScanner } from '~/qr-scanner/index.js';
+import type { SettingsButton } from '~/settings-button/index.js';
 import type { ThemeParams } from '~/theme-params/index.js';
 import type { CreateRequestIdFunc } from '~/types/index.js';
 import type { Utils } from '~/utils/index.js';
@@ -28,6 +29,7 @@ export interface InitResult {
   popup: Popup;
   postEvent: PostEvent;
   qrScanner: QRScanner;
+  settingsButton: SettingsButton;
   themeParams: ThemeParams;
   utils: Utils;
   viewport: Viewport;
