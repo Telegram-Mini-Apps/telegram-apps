@@ -84,6 +84,11 @@ To install a direct link to the application, you must complete the following ste
 Now when the user clicks on a link in format `https://t.me/{mybot}/{myapp}`, Telegram
 will display the web component with the source address as the URL specified in the settings.
 
+## Debugging Application
+
+Sometimes, it is necessary to debug the developed application. To learn more, refer
+to [this](../debugging.md) article.
+
 [//]: # (## Additional)
 
 [//]: # ()
