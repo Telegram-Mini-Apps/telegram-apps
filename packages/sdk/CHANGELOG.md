@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.1.0
+
+### Minor Changes
+
+- 0c7646c: Implement SettingsButton component
+
 ## 1.0.2
 
 ### Patch Changes
