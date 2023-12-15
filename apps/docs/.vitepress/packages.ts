@@ -107,6 +107,10 @@ export const packagesSidebar = {
                   link: prefixed('/typescript/tma-js-sdk/components/qr-scanner'),
                 },
                 {
+                  text: 'SettingsButton',
+                  link: prefixed('/typescript/tma-js-sdk/components/settings-button'),
+                },
+                {
                   text: 'ThemeParams',
                   link: prefixed('/typescript/tma-js-sdk/components/theme-params'),
                 },
