@@ -6,6 +6,7 @@ export {
 export {
   createPostEvent,
   isIframe,
+  invokeCustomMethod,
   on,
   off,
   once,
@@ -35,6 +36,7 @@ export {
   type PhoneRequestedStatus,
   type PostEvent,
   type RequestOptions,
+  type RequestOptionsAdvanced,
   type SwitchInlineQueryChatType,
   type WriteAccessRequestedStatus,
 } from './bridge/index.js';
