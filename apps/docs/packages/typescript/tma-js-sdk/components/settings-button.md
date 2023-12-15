@@ -36,7 +36,7 @@ List of events, which could be used in `on` and `off` component instance methods
 | change           | `() => void`               | Something in component changed |
 | change:isVisible | `(value: boolean) => void` | `isVisible` property changed   |
 
-## Methods support
+## Methods Support
 
 List of methods, which could be used in `supports` component instance method:
 

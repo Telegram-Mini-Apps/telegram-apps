@@ -30,7 +30,7 @@ backButton.on('click', () => {
 
 You can find the list of supported events in components own documentations.
 
-## Methods support
+## Methods Support
 
 Almost each component is capable of checking whether its method is supported by the current Telegram
 Mini Apps version or not. To check if some methods are supported, developer should use the component

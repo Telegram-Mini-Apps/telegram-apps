@@ -56,7 +56,7 @@ A method tells that the user has changed a selection.
 haptic.selectionChanged();
 ```
 
-## Methods support
+## Methods Support
 
 List of methods, which could be used in `supports` component instance method:
 

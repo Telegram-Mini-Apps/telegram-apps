@@ -57,7 +57,7 @@ utils.readTextFromClipboard().then((data) => {
 });
 ```
 
-## Methods support
+## Methods Support
 
 List of methods, which could be used in `supports` component instance method:
 
@@ -67,7 +67,7 @@ List of methods, which could be used in `supports` component instance method:
 utils.supports('readTextFromClipboard');
 ```
 
-## Method parameters support
+## Method Parameters Support
 
 List of method parameters, which could be used in `supportsParam` component instance method:
 

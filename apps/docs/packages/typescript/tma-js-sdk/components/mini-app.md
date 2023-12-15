@@ -63,7 +63,7 @@ if current palette is dark, developer should use `isDark` property:
 console.log(miniApp.isDark); // false
 ```
 
-## Access requests
+## Access Requests
 
 Starting from Telegram Mini Apps version 6.9, Mini Apps are allowed to request access to the phone
 number and request access to write the current user. To do so, developers are allowed to use
@@ -118,7 +118,7 @@ the `isBotInline` property:
 console.log(miniApp.isBotInline); // false
 ```
 
-## Lifecycle methods
+## Lifecycle Methods
 
 ### `ready`
 
@@ -141,7 +141,7 @@ Closes the Mini App.
 miniApp.close();
 ```
 
-## Other methods
+## Other Methods
 
 ### `sendData`
 
@@ -159,7 +159,7 @@ List of events, which could be used in `on` and `off` component instance methods
 | change:backgroundColor | `(value: RGB) => void`                   | `backgroundColor` property changed |
 | change:headerColor     | `(value: HeaderColorKey or RGB) => void` | `headerColor` property changed     |
 
-## Methods support
+## Methods Support
 
 List of methods, which could be used in `supports` component instance method:
 
@@ -177,7 +177,7 @@ miniApp.supports('setHeaderColor');
 miniApp.supports('setBackgroundColor'); 
 ```
 
-## Method parameters support
+## Method Parameters Support
 
 List of method parameters, which could be used in `supportsParam` component instance method:
 
