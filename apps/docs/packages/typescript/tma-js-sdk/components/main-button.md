@@ -9,7 +9,7 @@ visibility state, progress visibility state, text, and its color. It also accept
 function to call Telegram Mini Apps methods.
 
 ```typescript
-import { BackButton, postEvent } from '@tma.js/sdk';
+import { MainButton, postEvent } from '@tma.js/sdk';
 
 const mainButton = new MainButton({
   backgroundColor: '#aaddfe',
