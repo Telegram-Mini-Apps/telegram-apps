@@ -13,6 +13,7 @@ export {
   usePopup,
   usePostEvent,
   useQRScanner,
+  useSettingsButton,
   useUtils,
   useViewport,
   withBackButton,
@@ -29,6 +30,7 @@ export {
   withPopup,
   withThemeParams,
   withQRScanner,
+  withSettingsButton,
   withUtils,
   withViewport,
 } from './tools/index.js';

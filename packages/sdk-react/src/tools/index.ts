@@ -10,6 +10,7 @@ export * from './main-button.js';
 export * from './mini-app.js';
 export * from './popup.js';
 export * from './post-event.js';
+export * from './settings-button.js';
 export * from './qr-scanner.js';
 export * from './theme-params.js';
 export * from './utils.js';
