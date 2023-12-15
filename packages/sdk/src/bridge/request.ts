@@ -1,6 +1,6 @@
 import { isRecord } from '~/misc/index.js';
 import { withTimeout } from '~/timeout/index.js';
-import type { And, If, IsNever } from '~/types/index.js';
+import type { And, ExecuteWithOptions, If, IsNever } from '~/types/index.js';
 
 import {
   type MiniAppsEventHasParams,
@@ -14,7 +14,6 @@ import {
   type MiniAppsMethodName,
   type MiniAppsMethodParams,
   type MiniAppsNonEmptyMethodName,
-  type PostEvent,
   postEvent as defaultPostEvent,
 } from './methods/index.js';
 
@@ -45,17 +44,7 @@ type EventWithRequestId = {
   >;
 }[MiniAppsEventName];
 
-export interface RequestOptions {
-  /**
-   * Bridge postEvent method.
-   * @default Global postEvent method.
-   */
-  postEvent?: PostEvent;
-
-  /**
-   * Execution timeout.
-   */
-  timeout?: number;
+export interface RequestOptions extends ExecuteWithOptions {
 }
 
 export interface RequestOptionsAdvanced<EventPayload> extends RequestOptions {
@@ -149,37 +138,39 @@ export function request(
     ? executionOptions.capture
     : null;
 
-  const promise = new Promise((res, rej) => {
-    // Iterate over each event and create event listener.
-    const stoppers = events.map((ev) => on(ev, (data?) => {
-      // If request identifier was specified, we are waiting for event with the same value
-      // to occur.
-      if (typeof requestId === 'string' && (!isRecord(data) || data.req_id !== requestId)) {
-        return;
+  const execute = () => {
+    return new Promise((res, rej) => {
+      // Iterate over each event and create event listener.
+      const stoppers = events.map((ev) => on(ev, (data?) => {
+        // If request identifier was specified, we are waiting for event with the same value
+        // to occur.
+        if (requestId && (!isRecord(data) || data.req_id !== requestId)) {
+          return;
+        }
+
+        if (typeof capture === 'function' && !capture(data)) {
+          return;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        stopListening();
+        res(data);
+      }));
+
+      // Function which removes all event listeners.
+      const stopListening = () => stoppers.forEach((stop) => stop());
+
+      try {
+        // We are wrapping this call in try catch, because it can throw errors in case,
+        // compatibility check was enabled. We want an error to be captured by promise, not by
+        // another one external try catch.
+        postEvent(method as any, methodParams);
+      } catch (e) {
+        stopListening();
+        rej(e);
       }
+    });
+  };
 
-      if (typeof capture === 'function' && !capture(data)) {
-        return;
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      stopListening();
-      res(data);
-    }));
-
-    // Function which removes all event listeners.
-    const stopListening = () => stoppers.forEach((stop) => stop());
-
-    try {
-      // We are wrapping this call in try catch, because it can throw errors in case,
-      // compatibility check was enabled. We want an error to be captured by promise, not by
-      // another one external try catch.
-      postEvent(method as any, methodParams);
-    } catch (e) {
-      stopListening();
-      rej(e);
-    }
-  });
-
-  return typeof timeout === 'number' ? withTimeout(promise, timeout) : promise;
+  return typeof timeout === 'number' ? withTimeout(execute, timeout) : execute();
 }
