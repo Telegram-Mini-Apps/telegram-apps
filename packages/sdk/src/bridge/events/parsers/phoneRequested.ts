@@ -1,6 +1,6 @@
 import { json, string } from '~/parsing/index.js';
 
-export type PhoneRequestedStatus = 'sent' | string;
+export type PhoneRequestedStatus = 'sent' | 'cancelled' | string;
 
 export interface PhoneRequestedPayload {
   /**
