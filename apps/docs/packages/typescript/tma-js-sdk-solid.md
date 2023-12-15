@@ -78,8 +78,8 @@ the component from the SDK.
 ```jsx
 import {
   SDKProvider,
+  DisplayGate,
   useMainButton,
-  type SDKInitOptions,
 } from '@tma.js/sdk-solid';
 
 function App() {
@@ -95,7 +95,106 @@ function App() {
 export function Root() {
   return (
     <SDKProvider options={{ async: true }}>
-      <App/>
+      <DisplayGate>
+        <App/>
+      </DisplayGate>
+    </SDKProvider>
+  );
+}
+```
+
+You might wonder why we need a component like `DisplayGate`. The reason is that the SDK
+initialization process can be asynchronous. Some of its components need to send requests to the
+Telegram application to fetch their current state. Due to this, we cannot determine the required
+properties for these components until the initialization is completed.
+
+As a result, all hooks that return component instances will throw an error because they cannot
+retrieve the necessary component from the SDK initialization result. Therefore, these hooks should
+not be called until the SDK is fully initialized.
+
+`DisplayGate` is the built-in component which encapsulates logic related to application display.
+It provides 3 optional properties, such as `initial`, `error` and `loading`. Each of them could
+either be a `JSX.Element` or Solid component accepting no properties.
+
+`error` property is allowed to accept Solid component, which accepts property `error: unknown`.
+Here is the complete example:
+
+```jsx
+import { createMemo, createEffect } from 'solid-js';
+import {
+  SDKProvider,
+  DisplayGate,
+  useBackButton,
+  useMiniApp,
+} from '@tma.js/sdk-solid';
+
+/**
+ * Part of the application which doesn't know anything about SDK
+ * initialization and which should be rendered only in case, SDK is already
+ * initialized and could provide init result.
+ */
+function App() {
+  const backButton = useBackButton();
+  const miniApp = useMiniApp();
+
+  // When App is attached to DOM, lets show back button and
+  // add "click" event handler, which should close current application.
+  // When component will unmount, listener will be removed.
+  createEffect(() => {
+    const bb = backButton();
+    const ma = miniApp();
+
+    bb().show();
+    return bb().on('click', () => ma.close());
+  });
+
+  return <div>My application!</div>;
+}
+
+interface SDKProviderErrorProps {
+  error: unknown;
+}
+
+function SDKProviderError(props: SDKProviderErrorProps) {
+  const message = () => {
+    return props.error instanceof Error
+      ? props.error.message
+      : JSON.stringify(props.error);
+  }
+
+  return (
+    <div>
+      Oops. Something went wrong.
+      <blockquote>
+        <code>
+          {message()}
+        </code>
+      </blockquote>
+    </div>
+  );
+}
+
+function SDKProviderLoading() {
+  return <div>SDK is loading.</div>;
+}
+
+function SDKInitialState() {
+  return <div>Waiting for initialization to start.</div>;
+}
+
+/**
+ * Root component of the whole project.
+ */
+export function Root() {
+  return (
+    <SDKProvider options={{ async: true }}>
+      <DisplayGate
+        error={SDKProviderError}
+        loading={SDKProviderLoading}
+        initial={SDKInitialState}
+      >
+        <App/>
+      </DisplayGate>
     </SDKProvider>
   );
 }
@@ -136,157 +235,9 @@ The default initialization accepted by the package is synchronous.
 
 :::
 
-## Getting SDK context
-
-Retrieving the SDK context is important in asynchronous mode to prevent the application from
-crashing. To get the current SDK context, it is required to use the `useSDKContext` hook.
-
-```jsx
-import {
-  SDKProvider,
-  useSDKContext,
-  type SDKContextType,
-} from '@tma.js/sdk-solid';
-
-function App() {
-  const sdk = useSDKContext();
-  // Here, we can use SDK information.
-  return <div>My application!</div>;
-}
-
-function Root() {
-  return (
-    <SDKProvider>
-      <App/>
-    </SDKProvider>
-  );
-}
-```
-
-Let's enhance the previous example and introduce crucial logic associated with the SDK lifecycle:
-
-```jsx
-import {
-  createMemo,
-  createEffect,
-  Switch,
-  Match,
-  type ParentProps,
-} from 'solid-js';
-import { 
-  SDKProvider,
-  useSDKContext,
-  useBackButton,
-  useMiniApp,
-} from '@tma.js/sdk-solid';
-
-/**
- * Part of the application which doesn't know anything about SDK
- * initialization and which should be rendered only in case, SDK is already
- * initialized and could provide init result.
- */
-function App() {
-  const backButton = useBackButton();
-  const miniApp = useMiniApp();
-
-  // When App is attached to DOM, lets show back button and
-  // add "click" event handler, which should close current application.
-  // When component will unmount, listener will be removed.
-  createEffect(() => {
-    const bb = backButton();
-    const ma = miniApp();
-
-    bb().show();
-    return bb().on('click', () => ma.close());
-  });
-
-  return <div>My application!</div>;
-}
-
-/**
- * This component is the layer controlling the application display.
- * It displays application in case, the SDK is initialized, displays an error
- * if something went wrong, and a loader if the SDK is warming up.
- */
-function Loader(props: ParentProps) {
-  const { loading, error, initResult } = useSDKContext();
-  const errorMessage = createMemo(() => {
-    const err = error();
-    if (!err) {
-      return null;
-    }
-
-    return err instanceof Error ? err.message : 'Unknown error';
-  });
-
-  return (
-    <Switch fallback={props.children}>
-      <Match when={errorMessage()}>
-        <p>
-          SDK was unable to initialize. Probably, current application
-          is being used not in Telegram Mini Apps environment.
-        </p>
-        <blockquote>
-          <p>{errorMessage()}</p>
-        </blockquote>
-      </Match>
-      <Match when={loading()}>
-        <div>Loading..</div>
-      </Match>
-      <Match when={!loading() && !error() && !initResult()}>
-        <div>SDK init function is not yet called.</div>
-      </Match>
-    </Switch>
-  );
-}
-
-/**
- * Root component of the whole project.
- */
-export function Root() {
-  return (
-    <SDKProvider options={{ async: true }}>
-      <Loader>
-        <App/>
-      </Loader>
-    </SDKProvider>
-  );
-}
-```
-
-You might wonder why we need a component like `Loader`. The reason is that the SDK initialization
-process can be asynchronous. Some of its components need to send requests to the Telegram
-application to fetch their current state. Due to this, we cannot determine the required properties
-for these components until the initialization is completed.
-
-As a result, all hooks that return component instances will throw an error because they cannot
-retrieve the necessary component from the `initResult` property. Therefore, these hooks should not
-be called until the SDK is fully initialized.
-
-### When init is done
-
-Once the initialization is successfully completed, developers should call the `miniApp.ready()`
-method. It notifies the Telegram application that the current Mini App is ready to be
-displayed.
-
-```jsx
-import { createEffect } from 'solid-js';
-import { useMiniApp } from '@tma.js/sdk-react';
-
-function App() {
-  const miniApp = useMiniApp();
-
-  createEffect(() => {
-    miniApp().ready();
-  });
-
-  return <div>Here is my App</div>;
-}
-```
-
 ## Hooks
 
-### Launch parameters
+### Launch Parameters
 
 There may be cases where a developer needs to retrieve launch parameters without initializing the
 entire SDK. For example, they might want to access current theme parameters stored
@@ -295,7 +246,7 @@ in `window.location`. In such cases, SDK initialization may not be necessary.
 To retrieve Mini App launch parameters, the `useLaunchParams` hook can be used.
 
 ```jsx
-import { useLaunchParams, type LaunchParams } from '@tma.js/sdk-react';
+import { useLaunchParams, type LaunchParams } from '@tma.js/sdk-solid';
 
 function DisplayLaunchParams() {
   const launchParams = useLaunchParams();
@@ -303,7 +254,7 @@ function DisplayLaunchParams() {
 }
 ```
 
-### Init result related
+### Init Result Related
 
 The library provides a collection of simple hooks and higher-order components (HOCs) for each init
 result value. Here is the list of following hooks and corresponding higher-order components:
@@ -323,6 +274,8 @@ result value. Here is the list of following hooks and corresponding higher-order
 - `usePopup`. Returns the [Popup](tma-js-sdk/components/popup.md) component accessor
 - `usePostEvent`. Returns the `postEvent` function accessor to call Telegram Mini Apps methods
 - `useQRScanner`. Returns the [QRScanner](tma-js-sdk/components/qr-scanner.md) component accessor
+- `useSettingsButton`. Returns the [SettingsButton](tma-js-sdk/components/settings-button.md)
+  component accessor
 - `useThemeParams`. Returns the [ThemeParams](tma-js-sdk/components/theme-params.md) component
   accessor
 - `useUtils`. Returns the [Utils](tma-js-sdk/components/utils.md) component accessor

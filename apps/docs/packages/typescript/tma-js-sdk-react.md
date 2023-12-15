@@ -79,8 +79,8 @@ the component from the SDK.
 ```jsx
 import {
   SDKProvider,
+  DisplayGate,
   useMainButton,
-  type SDKInitOptions,
 } from '@tma.js/sdk-react';
 
 function App() {
@@ -96,10 +96,90 @@ function App() {
 export function Root() {
   return (
     <SDKProvider options={{ async: true }}>
-      <App/>
+      <DisplayGate>
+        <App/>
+      </DisplayGate>
     </SDKProvider>
   );
 }
+```
+
+You might wonder why we need a component like `DisplayGate`. The reason is that the SDK
+initialization process can be asynchronous. Some of its components need to send requests to the
+Telegram application to fetch their current state. Due to this, we cannot determine the required
+properties for these components until the initialization is completed.
+
+As a result, all hooks that return component instances will throw an error because they cannot
+retrieve the necessary component from the SDK initialization result. Therefore, these hooks should
+not be called until the SDK is fully initialized.
+
+`DisplayGate` is the built-in component which encapsulates logic related to application display.
+It provides 3 optional properties, such as `initial`, `error` and `loading`. Each of them could
+either be a `ReactNode` (React element, string, number, null, etc.) or React component accepting
+no properties.
+
+`error` property is allowed to accept React component, which accepts property `error: unknown`.
+Here is the complete example:
+
+```jsx
+import {
+  SDKProvider,
+  DisplayGate,
+  useMainButton,
+  type SDKInitOptions,
+} from '@tma.js/sdk-react';
+
+function App() {
+  const mainButton = useMainButton();
+  // We will get an error here as long as SDK is not yet initialized.
+  // The solution will be provided further.
+  return <div>My application!</div>;
+}
+
+interface SDKProviderErrorProps {
+  error: unknown;
+}
+
+function SDKProviderError({ error }: SDKProviderErrorProps) {
+  return (
+    <div>
+      Oops. Something went wrong.
+      <blockquote>
+        <code>
+          {error instanceof Error
+            ? error.message
+            : JSON.stringify(error)}
+        </code>
+      </blockquote>
+    </div>
+  );
+}
+
+function SDKProviderLoading() {
+  return <div>SDK is loading.</div>;
+}
+
+function SDKInitialState() {
+  return <div>Waiting for initialization to start.</div>;
+}
+
+/**
+ * Root component of the whole project.
+ */
+export function Root() {
+  return (
+    <SDKProvider options={{ async: true }}>
+      <DisplayGate
+        error={SDKProviderError}
+        loading={SDKProviderLoading}
+        initial={SDKInitialState}
+      >
+        <App/>
+      </DisplayGate>
+    </SDKProvider>
+  );
+}
+
 ```
 
 ### Synchronous
@@ -114,8 +194,8 @@ import { SDKProvider, useMainButton } from '@tma.js/sdk-react';
 
 function App() {
   const mainButton = useMainButton();
-  // There will be no error here as long as initialization is synchronous
-  // and at this moment SDK is already initialized.
+  // There will be no error here as long as initialization is 
+  // synchronous and at this moment SDK is already initialized.
   return <div>My application!</div>;
 }
 
@@ -137,124 +217,7 @@ The default initialization accepted by the package is synchronous.
 
 :::
 
-## Getting SDK context
-
-Retrieving the SDK context is important in asynchronous mode to prevent the application from
-crashing. To get the current SDK context, it is required to use the `useSDKContext` hook or
-the `withSDKContext` higher-order component.
-
-```jsx
-import {
-  SDKProvider,
-  useSDKContext,
-  withSDKContext,
-  type SDKContextType,
-} from '@tma.js/sdk-react';
-
-function App() {
-  const sdk = useSDKContext();
-  // Here, we can use SDK information.
-  return <div>My application!</div>;
-}
-
-// or
-const AppWrapped = withSDK(({ sdk }) => {
-  // Here, we can use SDK information.
-  return <div>My application!</div>;
-});
-
-function Root() {
-  return (
-    <SDKProvider>
-      <App/>
-      <AppWrapped/>
-    </SDKProvider>
-  );
-}
-```
-
-Let's enhance the previous example and introduce crucial logic associated with the SDK lifecycle:
-
-```jsx
-import { useEffect, type PropsWithChildren } from 'react';
-import {
-  SDKProvider,
-  useSDKContext,
-  useBackButton,
-  useMiniApp,
-} from '@tma.js/sdk-react';
-
-/**
- * Part of the application which doesn't know anything about SDK
- * initialization and which should be rendered only in case, SDK is already
- * initialized and could provide init result.
- */
-function App() {
-  const backButton = useBackButton();
-  const miniApp = useMiniApp();
-
-  // When App is attached to DOM, lets show back button and
-  // add "click" event handler, which should close current application.
-  // When component will unmount, listener will be removed.
-  useEffect(() => {
-    backButton.show();
-    return backButton.on('click', () => miniApp.close());
-  }, []);
-
-  return <div>My application!</div>;
-}
-
-/**
- * This component is the layer controlling the application display.
- * It displays application in case, the SDK is initialized, displays an error
- * if something went wrong, and a loader if the SDK is warming up.
- */
-function Loader({ children }: PropsWithChildren) {
-  const { loading, initResult, error } = useSDKContext();
-
-  // Each value is falsy. It means, init function was not called.
-  if (!loading && !error && !initResult) {
-    return <div>SDK init function is not yet called.</div>;
-  }
-
-  // Error occurred during SDK init.
-  if (error) {
-    return <div>Something went wrong.</div>;
-  }
-
-  // SDK is currently initializing.
-  if (loading) {
-    return <div>Warming up SDK.</div>;
-  }
-
-  // Safely render application.
-  return <>{children}</>;
-}
-
-/**
- * Root component of the whole project.
- */
-export function Root() {
-  return (
-    <SDKProvider options={{ async: true }}>
-      <Loader>
-        <App/>
-      </Loader>
-    </SDKProvider>
-  );
-}
-```
-
-You might wonder why we need a component like `Loader`. The reason is that the SDK initialization
-process can be asynchronous. Some of its components need to send requests to the Telegram
-application to fetch their current state. Due to this, we cannot determine the required properties
-for these components until the initialization is completed.
-
-As a result, all hooks that return component instances will throw an error because they cannot
-retrieve the necessary component from the `initResult` property. Therefore, these hooks should not
-be called until the SDK is fully initialized.
-
-### When init is done
+### When Init is Done
 
 Once the initialization is successfully completed, developers should call the `miniApp.ready()`
 method. It notifies the Telegram application that the current Mini App is ready to be
@@ -277,7 +240,7 @@ function App() {
 
 ## Hooks and HOCs
 
-### Launch parameters
+### Launch Parameters
 
 There may be cases where a developer needs to retrieve launch parameters without initializing the
 entire SDK. For example, they might want to access current theme parameters stored
@@ -295,17 +258,25 @@ import {
 
 function DisplayLaunchParams() {
   const launchParams = useLaunchParams();
-  return <pre><code>{JSON.stringify(launchParams, null, ' ')}</code></pre>;
+  return (
+    <pre>
+      <code>{JSON.stringify(launchParams, null, ' ')}</code>
+    </pre>
+  );
 }
 
 // or
 
-const DisplayLaunchParamsWrapped = withLaunchParams(({ launchParams }) => {
-  return <pre><code>{JSON.stringify(launchParams, null, ' ')}</code></pre>;
+const DisplayLaunchParamsWrapped = withLaunchParams(props => {
+  return (
+    <pre>
+      <code>{JSON.stringify(props.launchParams, null, ' ')}</code>
+    </pre>
+  );
 });
 ```
 
-### Init result related
+### Init Result Related
 
 The library provides a collection of simple hooks and higher-order components (HOCs) for each init
 result value. Here is the list of following hooks and corresponding higher-order components:
@@ -333,6 +304,8 @@ result value. Here is the list of following hooks and corresponding higher-order
   methods
 - `useQRScanner`, `withQRScanner`. Returns
   the [QRScanner](tma-js-sdk/components/qr-scanner.md) component
+- `useSettingsButton`, `withSettingsButton`. Returns
+  the [SettingsButton](tma-js-sdk/components/settings-button.md) component
 - `useThemeParams`, `withThemeParams`. Returns
   the [ThemeParams](tma-js-sdk/components/theme-params.md) component
 - `useUtils`, `withUtils`. Returns
@@ -547,3 +520,8 @@ function Root() {
 
 In this case, we know that when ComponentA and ComponentB are mounted, they will try to set
 specified parameters. No other re-renders will have an effect on the Main Button.
+
+## Template
+
+We have already created a [template](https://github.com/Telegram-Mini-Apps/reactjs-template) for
+React JS that utilizes the current package, so you can use it.

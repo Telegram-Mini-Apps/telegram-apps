@@ -13,6 +13,7 @@ export {
   usePopup,
   usePostEvent,
   useQRScanner,
+  useSettingsButton,
   useUtils,
   useViewport,
 } from './tools/index.js';
@@ -22,6 +23,10 @@ export {
   type SDKProviderProps,
   type SDKContextType,
 } from './provider/index.js';
+export {
+  DisplayGate,
+  type DisplayGateProps
+} from './DisplayGate.js';
 export type {
   InitOptions,
   InitResult,

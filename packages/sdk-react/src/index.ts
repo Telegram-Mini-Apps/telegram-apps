@@ -13,6 +13,7 @@ export {
   usePopup,
   usePostEvent,
   useQRScanner,
+  useSettingsButton,
   useUtils,
   useViewport,
   withBackButton,
@@ -29,6 +30,7 @@ export {
   withPopup,
   withThemeParams,
   withQRScanner,
+  withSettingsButton,
   withUtils,
   withViewport,
 } from './tools/index.js';
@@ -39,6 +41,10 @@ export {
   type SDKProviderProps,
   type SDKContextType,
 } from './provider/index.js';
+export {
+  DisplayGate,
+  type DisplayGateProps,
+} from './DisplayGate.js';
 export type {
   InitOptions,
   InitResult,
