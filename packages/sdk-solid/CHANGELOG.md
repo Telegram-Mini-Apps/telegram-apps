@@ -1,5 +1,11 @@
 # @tma.js/sdk-solid
 
+## 1.1.0
+
+### Minor Changes
+
+- c47e905: Add DisplayGate component. Add utilities to work with the SettingsButton
+
 ## 1.0.4
 
 ### Patch Changes
