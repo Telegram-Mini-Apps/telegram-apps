@@ -1,4 +1,5 @@
 import {
+  invokeCustomMethod,
   type PhoneRequestedStatus,
   type PostEvent,
   postEvent as defaultPostEvent,
@@ -18,11 +19,14 @@ import {
   createSupportsParamFunc,
   type SupportsFunc,
 } from '~/supports/index.js';
+import { sleep, withTimeout } from '~/timeout/index.js';
+import type { CreateRequestIdFunc, ExecuteWithTimeout } from '~/types/index.js';
 
+import { contactParser } from './contactParser.js';
 import type {
   MiniAppEvents,
   MiniAppHeaderColor, MiniAppProps,
-  MiniAppState,
+  MiniAppState, RequestedContact,
 } from './types.js';
 
 /**
@@ -37,6 +41,12 @@ export class MiniApp {
 
   private readonly postEvent: PostEvent;
 
+  private readonly createRequestId: CreateRequestIdFunc;
+
+  private requestingPhoneAccess = false;
+
+  private requestingWriteAccess = false;
+
   constructor(props: MiniAppProps) {
     const {
       postEvent = defaultPostEvent,
@@ -44,6 +54,7 @@ export class MiniApp {
       backgroundColor,
       version,
       botInline,
+      createRequestId,
     } = props;
 
     const isSupported = createSupportsFunc(version, {
@@ -56,6 +67,7 @@ export class MiniApp {
 
     this.postEvent = postEvent;
     this.botInline = botInline;
+    this.createRequestId = createRequestId;
     this.supports = (method) => {
       if (!isSupported(method)) {
         return false;
@@ -66,7 +78,6 @@ export class MiniApp {
       if (method === 'switchInlineQuery' && !botInline) {
         return false;
       }
-
       return true;
     };
 
@@ -74,6 +85,22 @@ export class MiniApp {
     this.supportsParam = createSupportsParamFunc(version, {
       'setHeaderColor.color': ['web_app_set_header_color', 'color'],
     });
+  }
+
+  /**
+   * Attempts to get requested contact.
+   */
+  private async getRequestedContact(): Promise<RequestedContact> {
+    return invokeCustomMethod(
+      'getRequestedContact',
+      {},
+      this.createRequestId(),
+      {
+        postEvent: this.postEvent,
+        timeout: 10000,
+      },
+    )
+      .then((data) => contactParser.parse(data));
   }
 
   /**
@@ -112,6 +139,20 @@ export class MiniApp {
   }
 
   /**
+   * True if phone access is currently being requested.
+   */
+  get isRequestingPhoneAccess(): boolean {
+    return this.requestingPhoneAccess;
+  }
+
+  /**
+   * True if write access is currently being requested.
+   */
+  get isRequestingWriteAccess(): boolean {
+    return this.requestingWriteAccess;
+  }
+
+  /**
    * Adds new event listener.
    */
   on = this.ee.on.bind(this.ee);
@@ -135,25 +176,95 @@ export class MiniApp {
   }
 
   /**
-   * Requests current user phone access.
+   * Requests current user contact information. In contrary to requestPhoneAccess, this method
+   * returns promise with contact information that rejects in case, user denied access, or request
+   * failed.
+   * @param options - additional options.
    */
-  requestPhoneAccess(): Promise<PhoneRequestedStatus> {
-    return request(
-      'web_app_request_phone',
-      'phone_requested',
-      { postEvent: this.postEvent },
-    ).then((data) => data.status);
+  async requestContact({ timeout = 5000 }: ExecuteWithTimeout = {}): Promise<RequestedContact> {
+    // First of all, let's try to get the requested contact. Probably, we already requested
+    // it before.
+    try {
+      return await this.getRequestedContact();
+    } catch (e) { /* empty */
+    }
+
+    // Then, request access to user's phone.
+    const status = await this.requestPhoneAccess();
+    if (status !== 'sent') {
+      throw new Error('Access denied.');
+    }
+
+    // Expected deadline.
+    const deadlineAt = Date.now() + timeout;
+
+    // Time to wait before executing the next request.
+    let sleepTime = 50;
+
+    return withTimeout(async () => {
+      // We are trying to retrieve the requested contact until deadline was reached.
+      while (Date.now() < deadlineAt) {
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          return await this.getRequestedContact();
+        } catch (e) { /* empty */
+        }
+
+        // Sleep for some time.
+        // eslint-disable-next-line no-await-in-loop
+        await sleep(sleepTime);
+
+        // Increase the sleep time not to kill the backend service.
+        sleepTime += 50;
+      }
+
+      throw new Error('Unable to retrieve requested contact.');
+    }, timeout);
+  }
+
+  /**
+   * Requests current user phone access. Method returns promise, which resolves
+   * status of the request. In case, user accepted the request, Mini App bot will receive
+   * the according notification.
+   *
+   * To obtain the retrieved information instead, utilize the requestContact method.
+   * @param options - additional options.
+   * @see requestContact
+   */
+  requestPhoneAccess(options: ExecuteWithTimeout = {}): Promise<PhoneRequestedStatus> {
+    if (this.requestingPhoneAccess) {
+      throw new Error('Phone access is already being requested.');
+    }
+    this.requestingPhoneAccess = true;
+
+    return request('web_app_request_phone', 'phone_requested', {
+      ...options,
+      postEvent: this.postEvent,
+    })
+      .then((data) => data.status)
+      .finally(() => {
+        this.requestingPhoneAccess = false;
+      });
   }
 
   /**
    * Requests write message access to current user.
+   * @param options - additional options.
    */
-  requestWriteAccess(): Promise<WriteAccessRequestedStatus> {
-    return request(
-      'web_app_request_write_access',
-      'write_access_requested',
-      { postEvent: this.postEvent },
-    ).then((data) => data.status);
+  requestWriteAccess(options: ExecuteWithTimeout = {}): Promise<WriteAccessRequestedStatus> {
+    if (this.requestingWriteAccess) {
+      throw new Error('Write access is already being requested.');
+    }
+    this.requestingWriteAccess = true;
+
+    return request('web_app_request_write_access', 'write_access_requested', {
+      ...options,
+      postEvent: this.postEvent,
+    })
+      .then((data) => data.status)
+      .finally(() => {
+        this.requestingWriteAccess = false;
+      });
   }
 
   /**
@@ -203,11 +314,11 @@ export class MiniApp {
    * Checks if specified method is supported by current component.
    */
   supports: SupportsFunc<
-  | 'requestWriteAccess'
-  | 'requestPhoneAccess'
-  | 'switchInlineQuery'
-  | 'setHeaderColor'
-  | 'setBackgroundColor'
+    | 'requestWriteAccess'
+    | 'requestPhoneAccess'
+    | 'switchInlineQuery'
+    | 'setHeaderColor'
+    | 'setBackgroundColor'
   >;
 
   /**
