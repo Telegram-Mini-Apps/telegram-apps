@@ -1,9 +1,9 @@
-# Methods and events
+# Methods and Events
 
 This section of SDK covers the topic related
 to [apps communication](../../../platform/apps-communication/flow-definition.md).
 
-## Calling methods
+## Calling Methods
 
 To call the Telegram Mini Apps methods, developer should use `postEvent` function:
 
@@ -216,7 +216,7 @@ subscribe(listener);
 unsubscribe(listener);
 ```
 
-## Checking method support
+## Checking Method Support
 
 `postEvent` function itself is not checking if specified method supported by current native Telegram
 application. To do this, developer could use `supports` function which accepts Telegram Mini Apps
@@ -276,7 +276,7 @@ import { setDebug } from '@tma.js/sdk';
 setDebug(true);
 ```
 
-## Target origin
+## Target Origin
 
 If the package is being used in a browser environment (iframe), packages employs the
 function `window.parent.postMessage`. This function requires specifying the target origin to ensure
