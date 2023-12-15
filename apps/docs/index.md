@@ -15,7 +15,7 @@ hero:
       link: /platform/about-platform
     - theme: alt
       text: Packages
-      link: /packages/tma-js-sdk
+      link: /packages/typescript/tma-js-sdk/about
 
 features:
   - icon: 💻
