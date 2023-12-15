@@ -1,7 +1,6 @@
 import {
+  invokeCustomMethod,
   postEvent as defaultPostEvent,
-  request,
-  type RequestOptions,
 } from '~/bridge/index.js';
 import {
   array,
@@ -12,17 +11,8 @@ import {
   createSupportsFunc,
   type SupportsFunc,
 } from '~/supports/index.js';
-import type { CreateRequestIdFunc } from '~/types/index.js';
+import type { CreateRequestIdFunc, ExecuteWithTimeout } from '~/types/index.js';
 import type { Version } from '~/version/index.js';
-
-type WiredRequestOptions = Omit<RequestOptions, 'postEvent'>;
-
-interface Methods {
-  deleteStorageValues: { keys: string | string[] };
-  getStorageValues: { keys: string | string[] };
-  getStorageKeys: {};
-  saveStorageValue: { key: string; value: string };
-}
 
 function objectFromKeys<K extends string, V>(keys: K[], value: V): Record<K, V> {
   return keys.reduce<Record<K, V>>((acc, key) => {
@@ -46,50 +36,35 @@ export class CloudStorage {
   }
 
   /**
-   * Invokes custom method related to CloudStorage.
-   * @param method - method name.
-   * @param params - method parameters.
-   * @param options - execution options.
-   */
-  private async invokeCustomMethod<M extends keyof Methods>(
-    method: M,
-    params: Methods[M],
-    options: WiredRequestOptions = {},
-  ): Promise<unknown> {
-    const { result, error } = await request(
-      'web_app_invoke_custom_method',
-      { method, params, req_id: this.createRequestId() },
-      'custom_method_invoked',
-      { ...options, postEvent: this.postEvent },
-    );
-
-    if (error) {
-      throw new Error(error);
-    }
-
-    return result;
-  }
-
-  /**
    * Deletes specified key or keys from the cloud storage.
    * @param keyOrKeys - key or keys to delete.
    * @param options - request execution options.
    */
-  async delete(keyOrKeys: string | string[], options?: WiredRequestOptions): Promise<void> {
+  async delete(keyOrKeys: string | string[], options: ExecuteWithTimeout = {}): Promise<void> {
     const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
     if (keys.length === 0) {
       return;
     }
 
-    await this.invokeCustomMethod('deleteStorageValues', { keys }, options);
+    await invokeCustomMethod(
+      'deleteStorageValues',
+      { keys },
+      this.createRequestId(),
+      { ...options, postEvent: this.postEvent },
+    );
   }
 
   /**
    * Returns list of all keys presented in the cloud storage.
    * @param options - request execution options.
    */
-  async getKeys(options?: WiredRequestOptions): Promise<string[]> {
-    const result = await this.invokeCustomMethod('getStorageKeys', {}, options);
+  async getKeys(options: ExecuteWithTimeout = {}): Promise<string[]> {
+    const result = await invokeCustomMethod(
+      'getStorageKeys',
+      {},
+      this.createRequestId(),
+      { ...options, postEvent: this.postEvent },
+    );
 
     return array().of(string()).parse(result);
   }
@@ -102,7 +77,7 @@ export class CloudStorage {
    */
   get<K extends string>(
     keys: K[],
-    options?: WiredRequestOptions,
+    options?: ExecuteWithTimeout,
   ): Promise<Record<K, string>>;
 
   /**
@@ -112,11 +87,11 @@ export class CloudStorage {
    * @return Value of the specified key. In case, key was not created previously, function
    * will return empty string.
    */
-  get(key: string, options?: WiredRequestOptions): Promise<string>;
+  get(key: string, options?: ExecuteWithTimeout): Promise<string>;
 
   async get(
     keyOrKeys: string | string[],
-    options?: WiredRequestOptions,
+    options: ExecuteWithTimeout = {},
   ): Promise<string | Record<string, string>> {
     const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
     if (keys.length === 0) {
@@ -126,9 +101,12 @@ export class CloudStorage {
     const schema = json(
       objectFromKeys(keys, string()),
     );
-    const result = await this
-      .invokeCustomMethod('getStorageValues', { keys }, options)
-      .then((data) => schema.parse(data));
+    const result = await invokeCustomMethod(
+      'getStorageValues',
+      { keys },
+      this.createRequestId(),
+      { ...options, postEvent: this.postEvent },
+    ).then((data) => schema.parse(data));
 
     return Array.isArray(keyOrKeys) ? result : result[keyOrKeys];
   }
@@ -139,17 +117,22 @@ export class CloudStorage {
    * @param value - storage value.
    * @param options - request execution options.
    */
-  async set(key: string, value: string, options?: WiredRequestOptions): Promise<void> {
-    await this.invokeCustomMethod('saveStorageValue', { key, value }, options);
+  async set(key: string, value: string, options: ExecuteWithTimeout = {}): Promise<void> {
+    await invokeCustomMethod(
+      'saveStorageValue',
+      { key, value },
+      this.createRequestId(),
+      { ...options, postEvent: this.postEvent },
+    );
   }
 
   /**
    * Checks if specified method is supported by current component.
    */
   supports: SupportsFunc<
-  | 'delete'
-  | 'get'
-  | 'getKeys'
-  | 'set'
+    | 'delete'
+    | 'get'
+    | 'getKeys'
+    | 'set'
   >;
 }

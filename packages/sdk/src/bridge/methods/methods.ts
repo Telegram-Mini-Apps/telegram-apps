@@ -1,8 +1,8 @@
 import type { RGB } from '~/colors/index.js';
 import type { IsNever, Not, RequestId, UnionKeys } from '~/types/index.js';
 
+import type { AnyInvokeCustomMethodParams } from './custom-methods.js';
 import type { AnyHapticFeedbackParams } from './haptic.js';
-import type { AnyInvokeCustomMethodParams } from './invoke-custom-method.js';
 import type { PopupParams } from './popup.js';
 
 /**
@@ -78,7 +78,6 @@ export interface MiniAppsMethods {
    */
   web_app_expand: CreateParams;
 
-  // TODO: 'getRequestedContact'. https://telegram.org/js/telegram-web-app.js
   /**
    * Invokes custom method.
    * @since v6.9
@@ -173,7 +172,6 @@ export interface MiniAppsMethods {
    */
   web_app_ready: CreateParams;
 
-  // TODO: Check if it is right. It probably requests other user phone.
   /**
    * Requests access to current user's phone.
    * @since v6.9
@@ -219,13 +217,13 @@ export interface MiniAppsMethods {
    * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-set-header-color
    */
   web_app_set_header_color: CreateParams<
-  | {
+    | {
     /**
      * The Mini App header color key.
      */
     color_key: HeaderColorKey
   }
-  | {
+    | {
     /**
      * Color in RGB format.
      * @since v6.9

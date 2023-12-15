@@ -81,6 +81,7 @@ export function init(options: InitOptions = {}): InitResult | Promise<InitResult
         themeParams.backgroundColor || '#ffffff',
         version,
         botInline,
+        createRequestId,
         postEvent,
       ),
       popup: new Popup(version, postEvent),
