@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.2.0
+
+### Minor Changes
+
+- d90f521: Implemented MiniApp.requestContact method, reworked MiniApp.requestWriteAccess and MiniApp.requestPhoneAccess methods. Add invokeCustomMethod function.
+
 ## 1.1.0
 
 ### Minor Changes
