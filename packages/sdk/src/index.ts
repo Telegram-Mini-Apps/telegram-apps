@@ -149,6 +149,7 @@ export {
   type ThemeParamsKey,
   type ThemeParamsParsed,
 } from './theme-params/index.js';
+export { withTimeout, TimeoutError, isTimeoutError } from './timeout/index.js';
 export type { RequestId, CreateRequestIdFunc } from './types/index.js';
 export { Utils } from './utils/index.js';
 export { compareVersions, type Version } from './version/index.js';
