@@ -11,8 +11,11 @@ hero:
   tagline: Simple, flexible, native-like web applications to enhance user experience
   actions:
     - theme: brand
-      text: Documentation
+      text: Platform
       link: /platform/about-platform
+    - theme: alt
+      text: Packages
+      link: /packages/tma-js-sdk
 
 features:
   - icon: 💻
