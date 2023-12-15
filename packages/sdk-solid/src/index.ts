@@ -13,6 +13,7 @@ export {
   usePopup,
   usePostEvent,
   useQRScanner,
+  useSettingsButton,
   useUtils,
   useViewport,
 } from './tools/index.js';
