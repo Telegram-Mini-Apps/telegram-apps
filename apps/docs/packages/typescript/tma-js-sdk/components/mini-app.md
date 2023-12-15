@@ -79,7 +79,25 @@ miniApp.requestWriteAccess().then(() => {
 });
 ```
 
-## Inline mode
+To request the contact information (the phone number, for example), utilize the `requestContact`
+method:
+
+```typescript
+miniApp.requestContact().then(contact => {
+  console.log(contact);
+  // Output:
+  // {
+  //   authDate: Date(...),
+  //   hash: '...',
+  //   contact: {
+  //     firstName: '...',
+  //     phoneNumber: '+38291789233',
+  //   },
+  // };
+});
+```
+
+## Inline Mode
 
 Mini Apps are available to be launched in [inline mode](https://core.telegram.org/bots/inline). When
 a Mini App is launched in such a mode, the developer is allowed to use the `switchInlineQuery`
