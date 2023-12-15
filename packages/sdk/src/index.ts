@@ -40,10 +40,7 @@ export {
   type SwitchInlineQueryChatType,
   type WriteAccessRequestedStatus,
 } from './bridge/index.js';
-export {
-  classNames,
-  mergeClassNames,
-} from './classnames/index.js';
+export { classNames, mergeClassNames } from './classnames/index.js';
 export {
   ClosingBehavior,
   type ClosingBehaviorEventListener,
@@ -106,10 +103,7 @@ export {
   type MiniAppEvents,
   type MiniAppProps,
 } from './mini-app/index.js';
-export {
-  isTMA,
-  isRecord,
-} from './misc/index.js';
+export { isTMA, isRecord } from './misc/index.js';
 export {
   getHash,
   HashNavigator,
@@ -155,15 +149,9 @@ export {
   type ThemeParamsKey,
   type ThemeParamsParsed,
 } from './theme-params/index.js';
-export type {
-  RequestId,
-  CreateRequestIdFunc,
-} from './types/index.js';
+export type { RequestId, CreateRequestIdFunc } from './types/index.js';
 export { Utils } from './utils/index.js';
-export {
-  compareVersions,
-  type Version,
-} from './version/index.js';
+export { compareVersions, type Version } from './version/index.js';
 export {
   requestViewport,
   Viewport,
@@ -173,7 +161,4 @@ export {
   type ViewportEventListener,
   type ViewportEvents,
 } from './viewport/index.js';
-export {
-  setTargetOrigin,
-  setDebug,
-} from './globals.js';
+export { setTargetOrigin, setDebug } from './globals.js';
