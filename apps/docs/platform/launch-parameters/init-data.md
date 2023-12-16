@@ -50,7 +50,7 @@ signature of the parameters and make sure that they were indeed issued to the sp
 
 Also, the signature verification operation is fast enough and does not require large server
 resources. More information about the data signature and verification algorithm can be found
-in [this](https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app)
+in [this](https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app)
 documentation.
 
 [//]: # (TODO: Move signing flow to our docs)
