@@ -31,7 +31,7 @@ export interface RequestedContact {
     userId: number;
     phoneNumber: string;
     firstName: string;
-    lastName: string;
+    lastName?: string;
   };
   authDate: Date;
   hash: string;

@@ -17,7 +17,7 @@ export const contactParser = searchParams<RequestedContact>({
       from: 'first_name',
     },
     lastName: {
-      type: string(),
+      type: string().optional(),
       from: 'last_name',
     },
   }),
