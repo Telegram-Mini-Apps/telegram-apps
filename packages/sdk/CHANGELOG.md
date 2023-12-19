@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.2.1
+
+### Patch Changes
+
+- d3c14b7: Fix miniApp.requestContact data parser
+
 ## 1.2.0
 
 ### Minor Changes
