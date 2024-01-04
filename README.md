@@ -7,7 +7,8 @@ development on Telegram Mini Apps platform. To learn more about specific package
 their own [documentations](https://docs.telegram-mini-apps.com).
 
 > ⚠️ Working with @tma.js packages, you must not install SDK from Telegram presented by
-> single file - telegram-web-app.js.
+> single file - telegram-web-app.js. Using both @tma.js packages and telegram-web-app.js
+> will surely lead to bugs.
 
 ## Templates
 
@@ -103,3 +104,7 @@ described in this section will be related to this package.
 
 Because of the large section size, the complete motivation description has been moved to a [separate
 document](./MOTIVATION.md).
+
+## Contribution
+
+Any contribution is appreaciated. To start contributing, please, follow the [Contribution Guidelines](./CONTRIBUTING.md).
