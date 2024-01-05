@@ -62,10 +62,7 @@ export type InitCSSVarsOption = boolean | InitCSSVarsSpecificOption;
 
 export interface InitOptions {
   /**
-   * True if synchronization must be performed asynchronously. This allows init function to
-   * perform async operations. One of them is the actual viewport state retrieving from the
-   * Telegram application. Otherwise, viewport state will be retrieved later.
-   * @default false
+   * @deprecated This option name was considered inappropriate. Use `complete` instead.
    */
   async?: boolean;
 
@@ -87,4 +84,11 @@ export interface InitOptions {
    * @default false
    */
   cssVars?: InitCSSVarsOption;
+
+  /**
+   * True if initialization must be performed completely. This includes retrieving some components
+   * state from the Telegram application, and as a result, this makes initialization asynchronous.
+   * @default false
+   */
+  complete?: boolean;
 }
