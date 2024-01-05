@@ -154,6 +154,7 @@ export type { RequestId, CreateRequestIdFunc } from './types/index.js';
 export { Utils } from './utils/index.js';
 export { compareVersions, type Version } from './version/index.js';
 export {
+  isStableViewportPlatform,
   requestViewport,
   Viewport,
   type RequestViewportResult,
