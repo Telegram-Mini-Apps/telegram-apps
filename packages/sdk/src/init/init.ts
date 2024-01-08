@@ -23,7 +23,7 @@ import { Utils } from '~/utils/index.js';
 import type { InitOptions, InitResult } from './types.js';
 
 type ComputedInitResult<O> = O extends { async: true } | { complete: true }
-  ? (InitResult | Promise<InitResult>)
+  ? Promise<InitResult>
   : InitResult;
 
 export function init(): InitResult;
@@ -104,22 +104,17 @@ export function init(options: InitOptions = {}): InitResult | Promise<InitResult
     };
 
     const viewport = createViewport(isPageReload, platform, postEvent, complete);
+    if (viewport instanceof Promise || complete) {
+      return Promise.resolve(viewport).then((vp) => {
+        processCSSVars(
+          cssVars,
+          result.miniApp,
+          result.themeParams,
+          vp,
+        );
 
-    if (viewport instanceof Promise) {
-      return viewport
-        .then((vp) => {
-          processCSSVars(
-            cssVars,
-            result.miniApp,
-            result.themeParams,
-            vp,
-          );
-
-          return {
-            ...result,
-            viewport: vp,
-          };
-        });
+        return { ...result, viewport: vp };
+      });
     }
 
     processCSSVars(
