@@ -1,29 +1,44 @@
 import { getStorageValue, saveStorageValue } from '~/storage.js';
-import { requestViewport, Viewport } from '~/viewport/index.js';
+import {
+  isStableViewportPlatform,
+  requestViewport,
+  Viewport,
+} from '~/viewport/index.js';
 import type { PostEvent } from '~/bridge/index.js';
 import type { Platform } from '~/types/index.js';
 
 /**
- * Returns true in case, specified platform supports calling Mini Apps
- * "web_app_request_viewport" method.
- * @param platform - platform identifier.
+ * Synchronizes specified Viewport instance with Telegram application and always saves its state
+ * in local storage.
+ * @param viewport - Viewport instance.
  */
-function isRequestSupportedPlatform(platform: Platform): boolean {
-  return !['macos', 'web', 'weba'].includes(platform);
+function bind(viewport: Viewport): void {
+  // TODO: Should probably use throttle for height.
+  viewport.on('change', () => saveStorageValue('viewport', {
+    height: viewport.height,
+    isExpanded: viewport.isExpanded,
+    stableHeight: viewport.stableHeight,
+    width: viewport.width,
+  }));
+
+  viewport.listen();
 }
 
-/**
- * Attempts to create Viewport instance using known parameters and local storage.
- * @param isPageReload - was page reloaded.
- * @param platform - platform identifier.
- * @param postEvent - Bridge postEvent function.
- */
-function tryCreate(
+function create(
   isPageReload: boolean,
   platform: Platform,
   postEvent: PostEvent,
-): Viewport | null {
-  if (isPageReload || !isRequestSupportedPlatform(platform)) {
+  complete: boolean,
+): Viewport | Promise<Viewport> {
+  // If page was reloaded, we expect viewport to be restored from the storage.
+  const state = isPageReload ? getStorageValue('viewport') : null;
+  if (state) {
+    return new Viewport({ ...state, postEvent });
+  }
+
+  // If platform has a stable viewport, it means we could instantiate Viewport using
+  // the window global object properties.
+  if (isStableViewportPlatform(platform)) {
     return new Viewport({
       height: window.innerHeight,
       isExpanded: true,
@@ -33,63 +48,27 @@ function tryCreate(
     });
   }
 
-  const state = getStorageValue('viewport');
-  if (state) {
-    return new Viewport({ ...state, postEvent });
-  }
-
-  return null;
-}
-
-/**
- * Synchronizes specified Viewport instance with Telegram application and always saves its state
- * in local storage.
- * @param viewport - Viewport instance.
- */
-function bind(viewport: Viewport): Viewport {
-  viewport.listen();
-
-  // TODO: Should probably use throttle for height.
-  viewport.on('change', () => saveStorageValue('viewport', {
-    height: viewport.height,
-    isExpanded: viewport.isExpanded,
-    stableHeight: viewport.stableHeight,
-    width: viewport.width,
-  }));
-
-  return viewport;
-}
-
-/**
- * Creates Viewport instance using its actual state from the storage. Otherwise, creates it
- * with default parameters.
- * @param isPageReload - was page reloaded.
- * @param platform - platform identifier.
- * @param postEvent - Bridge postEvent function.
- */
-export function createViewportSync(
-  isPageReload: boolean,
-  platform: Platform,
-  postEvent: PostEvent,
-): Viewport {
-  const viewport = bind(
-    tryCreate(isPageReload, platform, postEvent) || new Viewport({
+  return complete
+    // If initialization is complete, we have to create Viewport instance using its actual
+    // state from the Telegram application..
+    ? requestViewport({
+      postEvent,
+      timeout: 5000,
+    })
+      .then(({ height, isStateStable, ...rest }) => new Viewport({
+        ...rest,
+        height,
+        stableHeight: isStateStable ? height : 0,
+      }))
+    // Otherwise we have no sources to get viewport properties from. In this case we just
+    // return some "empty" Viewport instance.
+    : new Viewport({
       width: 0,
       height: 0,
       isExpanded: false,
       postEvent,
       stableHeight: 0,
-    }),
-  );
-
-  if (isRequestSupportedPlatform(platform)) {
-    viewport.sync({ postEvent, timeout: 100 }).catch((e) => {
-      // eslint-disable-next-line no-console
-      console.error('Unable to actualize viewport state', e);
     });
-  }
-
-  return viewport;
 }
 
 /**
@@ -97,19 +76,36 @@ export function createViewportSync(
  * @param isPageReload - was page reloaded.
  * @param platform - platform identifier.
  * @param postEvent - Bridge postEvent function.
+ * @param complete - is initialization complete.
  */
-export async function createViewportAsync(
+export function createViewport(
   isPageReload: boolean,
   platform: Platform,
   postEvent: PostEvent,
-): Promise<Viewport> {
-  return bind(
-    tryCreate(isPageReload, platform, postEvent)
-    || await requestViewport({ postEvent, timeout: 100 })
-      .then(({ height, isStateStable, ...rest }) => new Viewport({
-        ...rest,
-        height,
-        stableHeight: isStateStable ? height : 0,
-      })),
-  );
+  complete: boolean,
+): Viewport | Promise<Viewport> {
+  // Instantiate Viewport.
+  const viewport = create(isPageReload, platform, postEvent, complete);
+
+  // If viewport appeared to be instance of Promise, it needs no synchronization. We wait for
+  // the viewport data to be retrieved and start listening to its changes.
+  if (viewport instanceof Promise) {
+    return viewport.then((v) => {
+      bind(v);
+      return v;
+    });
+  }
+
+  // Viewport is not a promise. We start listening to its changes and in case, platform
+  // doesn't have a stable viewport, we are synchronizing it with the Telegram application.
+  bind(viewport);
+
+  if (!isStableViewportPlatform(platform)) {
+    viewport.sync({ postEvent, timeout: 5000 }).catch((e) => {
+      // eslint-disable-next-line no-console
+      console.error('Unable to actualize viewport state', e);
+    });
+  }
+
+  return viewport;
 }
