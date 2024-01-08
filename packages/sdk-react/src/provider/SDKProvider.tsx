@@ -13,7 +13,7 @@ function AsyncProvider({ options, children }: SDKProviderProps) {
   useEffect(() => {
     setLoading(true);
 
-    init({ ...options, async: true })
+    init({ ...options, complete: true })
       .then(setInitResult)
       .catch(setError)
       .finally(() => setLoading(false));
@@ -41,7 +41,7 @@ function SyncProvider({ options = {}, children }: SDKProviderProps) {
     const result: SDKContextType = { loading: false };
 
     try {
-      result.initResult = init({ ...options, async: false });
+      result.initResult = init({ ...options, complete: false });
     } catch (e) {
       result.error = e;
     }
@@ -57,8 +57,14 @@ function SyncProvider({ options = {}, children }: SDKProviderProps) {
  * Component which provides access to SDK initialization state.
  */
 export function SDKProvider(props: SDKProviderProps) {
-  // eslint-disable-next-line react/destructuring-assignment
-  return props.options?.async
+  const {
+    options: {
+      async,
+      complete,
+    } = {},
+  } = props;
+
+  return async || complete
     ? <AsyncProvider {...props} />
     : <SyncProvider {...props} />;
 }

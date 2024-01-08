@@ -1,5 +1,6 @@
 import type { InitOptions, InitResult } from '@tma.js/sdk';
 
+// TODO: Remove in the future.
 export { InitOptions, InitResult };
 
 export interface Trackable {
