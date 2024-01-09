@@ -38,7 +38,7 @@
   },
   "scripts": {
     "test": "vitest --run",
-    "lint": "eslint --ignore-pattern src/**/__tests__/**/* src/**/*",
+    "lint": "eslint src/**/*",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "build": "pnpm run build:default && pnpm run build:iife",
