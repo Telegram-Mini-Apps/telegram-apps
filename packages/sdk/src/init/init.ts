@@ -7,9 +7,10 @@ import {
   createClosingBehavior,
   createMainButton,
   createMiniApp,
-  createRequestIdGenerator, createSettingsButton,
-  createThemeParams, createViewportAsync,
-  createViewportSync,
+  createRequestIdGenerator,
+  createSettingsButton,
+  createThemeParams,
+  createViewport,
 } from '~/init/creators/index.js';
 import { processCSSVars } from '~/init/css/index.js';
 import { InitData } from '~/init-data/index.js';
@@ -21,13 +22,16 @@ import { Utils } from '~/utils/index.js';
 
 import type { InitOptions, InitResult } from './types.js';
 
-type ComputedInitResult<O> = O extends { async: true } ? Promise<InitResult> : InitResult;
+type ComputedInitResult<O> = O extends { async: true } | { complete: true }
+  ? Promise<InitResult>
+  : InitResult;
 
 export function init(): InitResult;
 export function init<O extends InitOptions>(options: O): ComputedInitResult<O>;
 export function init(options: InitOptions = {}): InitResult | Promise<InitResult> {
   const {
     async = false,
+    complete = async,
     cssVars = false,
     acceptCustomStyles = false,
   } = options;
@@ -99,12 +103,9 @@ export function init(options: InitOptions = {}): InitResult | Promise<InitResult
         : {}),
     };
 
-    const viewport = async
-      ? createViewportAsync(isPageReload, platform, postEvent)
-      : createViewportSync(isPageReload, platform, postEvent);
-
-    if (viewport instanceof Promise) {
-      return viewport.then((vp) => {
+    const viewport = createViewport(isPageReload, platform, postEvent, complete);
+    if (viewport instanceof Promise || complete) {
+      return Promise.resolve(viewport).then((vp) => {
         processCSSVars(
           cssVars,
           result.miniApp,
@@ -112,10 +113,7 @@ export function init(options: InitOptions = {}): InitResult | Promise<InitResult
           vp,
         );
 
-        return {
-          ...result,
-          viewport: vp,
-        };
+        return { ...result, viewport: vp };
       });
     }
 
@@ -128,7 +126,7 @@ export function init(options: InitOptions = {}): InitResult | Promise<InitResult
 
     return { ...result, viewport };
   } catch (e) {
-    if (async) {
+    if (complete) {
       return Promise.reject(e);
     }
     throw e;

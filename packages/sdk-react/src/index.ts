@@ -38,8 +38,11 @@ export {
   useSDKContext,
   withSDKContext,
   SDKProvider,
+  SDKContext,
   type SDKProviderProps,
   type SDKContextType,
+  type SDKInitOptions,
+  type SDKInitResult,
 } from './provider/index.js';
 export {
   DisplayGate,

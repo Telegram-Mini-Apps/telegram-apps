@@ -45,13 +45,13 @@ utilizes the `init` function from [@tma.js/sdk](tma-js-sdk/about.md). It accepts
 parameters through the [options](tma-js-sdk/init.md#options) property.
 
 ```jsx
-import { SDKProvider, type InitOptions } from '@tma.js/sdk-react';
+import { SDKProvider, type SDKInitOptions } from '@tma.js/sdk-react';
 
 /**
  * Root component for the whole project.
  */
 export function Root() {
-  const options: InitOptions = {
+  const options: SDKInitOptions = {
     acceptCustomStyles: true,
     cssVars: true,
   };
@@ -66,10 +66,10 @@ export function Root() {
 
 ### Asynchronous
 
-SDK initialization is considered asynchronous in case the `async` init option equals `true`. In this
-case, `SDKProvider` will start initialization using the React `useEffect` hook. This mode is useful
-in case the developer is using Server-Side Rendering or when the valid state of all components is
-required.
+SDK initialization is considered asynchronous in case the `async` SDKProvider component property
+or initialization option `complete` equal `true`. In this case, `SDKProvider` will start
+initialization using the React `useEffect` hook. This mode is useful in case the developer is using
+Server-Side Rendering or when the valid state of all components is required.
 
 Nevertheless, as long as this process is asynchronous, developers should be careful when calling
 package-specific component hooks, such as `useBackButton`, `useMainButton`, etc. When the SDK is not
@@ -105,9 +105,10 @@ export function Root() {
 ```
 
 You might wonder why we need a component like `DisplayGate`. The reason is that the SDK
-initialization process can be asynchronous. Some of its components need to send requests to the
-Telegram application to fetch their current state. Due to this, we cannot determine the required
-properties for these components until the initialization is completed.
+initialization process can be asynchronous (when `complete` initialization option is `true`).
+Some of its components need to send requests to the Telegram application to fetch their current
+state. Due to this, we cannot determine the required properties for these components until the
+initialization is completed.
 
 As a result, all hooks that return component instances will throw an error because they cannot
 retrieve the necessary component from the SDK initialization result. Therefore, these hooks should
@@ -168,7 +169,7 @@ function SDKInitialState() {
  */
 export function Root() {
   return (
-    <SDKProvider options={{ async: true }}>
+    <SDKProvider options={{ async: true, complete: true }}>
       <DisplayGate
         error={SDKProviderError}
         loading={SDKProviderLoading}

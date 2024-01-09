@@ -7,8 +7,8 @@ export type Platform =
   | 'ios'
   | 'macos'
   | 'tdesktop'
-  | 'web'
-  | 'weba'
   | 'unigram'
   | 'unknown'
+  | 'web'
+  | 'weba'
   | string;
