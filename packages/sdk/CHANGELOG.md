@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.3.0
+
+### Minor Changes
+
+- ec65262: Replace "async" option with "complete". Increase viewport timeout and rework related flow.
+
 ## 1.2.1
 
 ### Patch Changes
