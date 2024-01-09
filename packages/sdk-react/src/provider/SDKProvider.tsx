@@ -57,14 +57,9 @@ function SyncProvider({ options = {}, children }: SDKProviderProps) {
  * Component which provides access to SDK initialization state.
  */
 export function SDKProvider(props: SDKProviderProps) {
-  const {
-    options: {
-      async,
-      complete,
-    } = {},
-  } = props;
+  const { options = {}, async } = props;
 
-  return async || complete
+  return options.async || options.complete || async
     ? <AsyncProvider {...props} />
     : <SyncProvider {...props} />;
 }
