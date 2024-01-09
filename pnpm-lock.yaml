@@ -99,6 +99,10 @@ importers:
         version: 0.13.0(eslint@8.54.0)(typescript@5.3.2)
 
   packages/init-data-node:
+    dependencies:
+      '@tma.js/sdk':
+        specifier: workspace:^
+        version: link:../sdk
     devDependencies:
       '@types/node':
         specifier: ^16.0.0
