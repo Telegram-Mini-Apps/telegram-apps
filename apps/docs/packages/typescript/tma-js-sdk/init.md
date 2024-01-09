@@ -40,20 +40,35 @@ import { init } from '@tma.js/sdk';
 init(options);
 ```
 
-### `async`
+### `complete`
 
 Type: `boolean`, default: `false`
 
-The SDK initialization process supports two modes: synchronous and asynchronous.
+The SDK initialization process supports two modes: complete and incomplete.
 
-Asynchronous initialization differs from the synchronous way in only one aspect: it performs all
+Complete initialization differs from the incomplete in only one aspect: it performs all
 asynchronous operations and waits for their completion. For example, the init function retrieves
-actual viewport information, and async initialization will return actual viewport data. The
-synchronous way would return the viewport with default values.
+actual viewport information, and complete initialization will return actual viewport data. The
+incomplete way would return the viewport with default values.
 
 ::: code-group
 
-```typescript [Synchronous]
+```typescript [Complete]
+import { init } from '@tma.js/sdk';
+
+init({ complete: true }).then((result) => {
+  console.log(result.viewport);
+  // Output:
+  // Viewport {
+  //   height: 390,
+  //   width: 365,
+  //   isExpanded: true,
+  //   stableHeight: 390,
+  // };
+});
+```
+
+```typescript [Incomplete]
 import { init } from '@tma.js/sdk';
 
 const result = init();
@@ -67,21 +82,6 @@ console.log(result.viewport);
 // };
 ```
 
-```typescript [Asynchronous]
-import { init } from '@tma.js/sdk';
-
-init({ async: true }).then((result) => {
-  console.log(result.viewport);
-  // Output:
-  // Viewport {
-  //   height: 390,
-  //   width: 365,
-  //   isExpanded: true,
-  //   stableHeight: 390,
-  // };
-});
-```
-
 :::
 
 ::: info
@@ -90,8 +90,13 @@ Currently, there is only one asynchronous operation performed in the `init` func
 the current viewport state. In case you don't need that data, you can choose synchronous
 initialization.
 
-Nevertheless, it is recommended to follow the asynchronous way to prepare the code for new possible
-future asynchronous operations.
+:::
+
+::: warning
+
+It is recommended to follow the asynchronous way to prepare the code for new possible
+future asynchronous operations. The next major update is going to remove this option and make
+initialization completely async.
 
 :::
 
