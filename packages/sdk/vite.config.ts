@@ -21,6 +21,7 @@ export default createViteConfig({
       //  of the folders or files from the coverage. To be done in the future.
       exclude: [
         prefix('**/index.ts'),
+        prefix('**/__tests__'),
         prefix('back-button/BackButton.ts'),
         prefix('bridge/invoke-custom-method.ts'),
         prefix('closing-behavior/ClosingBehavior.ts'),

@@ -2,8 +2,7 @@
   "extends": "./tsconfig.build.json",
   "include": [
     "src",
-    "test-utils",
-    "tests"
+    "test-utils"
   ],
   "references": [
     {
