@@ -1,9 +1,9 @@
 import {
-  Match,
-  Switch,
   type Component,
-  type ParentProps,
   type JSX,
+  Match,
+  type ParentProps,
+  Switch,
 } from 'solid-js';
 
 import { useSDKContext } from './provider/index.js';
