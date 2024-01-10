@@ -11,4 +11,5 @@ module.exports = {
     'import',
   ],
   rules: require('./rules'),
+  ignorePatterns: ['**/__tests__/*'],
 };

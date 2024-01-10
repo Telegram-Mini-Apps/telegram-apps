@@ -38,18 +38,21 @@
   },
   "scripts": {
     "test": "vitest --run",
-    "lint": "eslint src/**/*",
+    "lint": "eslint src",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit",
     "build": "vite build"
   },
   "devDependencies": {
     "@types/node": "^16.0.0",
-    "tsconfig": "workspace:*",
+    "build-utils": "workspace:*",
     "eslint-config-custom": "workspace:*",
-    "build-utils": "workspace:*"
+    "tsconfig": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@tma.js/sdk": "workspace:^"
   }
 }

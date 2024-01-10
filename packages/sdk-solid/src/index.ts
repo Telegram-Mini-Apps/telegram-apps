@@ -25,7 +25,7 @@ export {
 } from './provider/index.js';
 export {
   DisplayGate,
-  type DisplayGateProps
+  type DisplayGateProps,
 } from './DisplayGate.js';
 export type {
   InitOptions,

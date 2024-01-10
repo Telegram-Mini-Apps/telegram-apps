@@ -29,7 +29,7 @@ yarn add @tma.js/init-data-node
 ## Parsing
 
 You can learn more about parsing utilities in [@tma.js/sdk](../typescript/tma-js-sdk/init-data/about#parsing)
-documentation.
+documentation. This package re-exports the `parseInitData` function as `parse`.
 
 ## Validation
 

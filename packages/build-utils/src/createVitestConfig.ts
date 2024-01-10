@@ -11,7 +11,7 @@ export function createVitestConfig(options: Options = {}): InlineConfig {
     coverage,
   } = options;
   const config: InlineConfig = {
-    include: ['tests/**/*.ts'],
+    include: ['src/**/__tests__/**/*.ts'],
   };
 
   if (environment) {
@@ -23,7 +23,10 @@ export function createVitestConfig(options: Options = {}): InlineConfig {
       enabled: true,
       provider: 'v8',
       include: ['src/**/*.ts'],
-      exclude: ['src/**/index.ts'],
+      exclude: [
+        'src/**/index.ts',
+        'src/**/__tests__/**/*',
+      ],
       ...coverage,
     };
   }

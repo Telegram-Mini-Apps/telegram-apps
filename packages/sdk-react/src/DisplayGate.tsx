@@ -23,7 +23,7 @@ export interface DisplayGateProps extends PropsWithChildren {
 function render(Component: ReactNode | ComponentType): ReactNode;
 function render<T extends object>(Component: ReactNode | ComponentType<T>, props: T): ReactNode;
 function render(Component: ReactNode | ComponentType, props = {}): ReactNode {
-  return typeof Component === 'function' ? <Component {...props}/> : Component;
+  return typeof Component === 'function' ? <Component {...props} /> : Component;
 }
 
 /**
@@ -34,9 +34,10 @@ function render(Component: ReactNode | ComponentType, props = {}): ReactNode {
 export function DisplayGate(props: DisplayGateProps): ReactNode {
   const { loading, initResult, error } = useSDKContext();
 
-  return initResult
-    ? props.children
-    : error
-      ? render(props.error, { error })
-      : render(loading ? props.loading : props.initial);
+  if (initResult) {
+    return props.children;
+  }
+  return error
+    ? render(props.error, { error })
+    : render(loading ? props.loading : props.initial);
 }

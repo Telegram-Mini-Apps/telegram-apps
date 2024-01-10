@@ -25,7 +25,7 @@
     "@vitest/ui": "^0.34.6",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.54.0",
+    "eslint": "^8.56.0",
     "happy-dom": "^12.5.0",
     "prettier": "^2.5.1",
     "tslib": "^2.6.0",
