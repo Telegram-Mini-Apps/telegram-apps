@@ -1,5 +1,11 @@
 # @tma.js/init-data-node
 
+## 1.1.0
+
+### Minor Changes
+
+- 5208306: Export "parse" function.
+
 ## 1.0.1
 
 ### Patch Changes
