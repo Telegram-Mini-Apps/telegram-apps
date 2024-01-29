@@ -75,14 +75,18 @@ export default defineConfig({
     }],
 
     search: {
-      provider: 'algolia',
-      options: {
-        apiKey: '2d6f370231694c71de2955f974e54986',
-        appId: 'QRZA56E4H6',
-        indexName: 'telegram-mini-apps',
-        insights: true,
-      },
+      provider: 'local'
     },
+
+    // search: {
+    //   provider: 'algolia',
+    //   options: {
+    //     apiKey: '2d6f370231694c71de2955f974e54986',
+    //     appId: 'QRZA56E4H6',
+    //     indexName: 'telegram-mini-apps',
+    //     insights: true,
+    //   },
+    // },
   },
 
   transformPageData(pageData, { siteConfig }) {
