@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.4.1
+
+### Patch Changes
+
+- 118380f: Re-export parsing utils
+
 ## 1.4.0
 
 ### Minor Changes
