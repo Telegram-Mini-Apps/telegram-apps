@@ -8,9 +8,9 @@ import type { Platform } from '~/types/index.js';
  */
 export interface LaunchParams {
   /**
-   * Current Mini Apps version.
+   * True if Mini App is currently launched in inline mode.
    */
-  version: string;
+  botInline?: boolean;
 
   /**
    * Current launch init data. Can be missing in case, application was launched via
@@ -29,19 +29,24 @@ export interface LaunchParams {
   platform: Platform;
 
   /**
+   * True if application is required to show the Settings Button.
+   */
+  showSettings?: boolean;
+
+  /**
+   * Start parameter passed in the application link.
+   */
+  startParam?: string;
+
+  /**
    * Mini App palette settings.
    */
   themeParams: ThemeParamsParsed;
 
   /**
-   * True if Mini App is currently launched in inline mode.
+   * Current Mini Apps version.
    */
-  botInline?: boolean;
-
-  /**
-   * True if application is required to show the Settings Button.
-   */
-  showSettings?: boolean;
+  version: string;
 }
 
 export interface LaunchData {
