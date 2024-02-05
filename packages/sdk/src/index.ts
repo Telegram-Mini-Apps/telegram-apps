@@ -117,6 +117,18 @@ export {
   type HashNavigatorEventName,
 } from './navigation/index.js';
 export {
+  boolean,
+  searchParams,
+  string,
+  rgb,
+  array,
+  date,
+  json,
+  number,
+  ParseError,
+  ParseSchemaFieldError,
+} from './parsing/index.js';
+export {
   Popup,
   type PopupEventName,
   type PopupEventListener,
