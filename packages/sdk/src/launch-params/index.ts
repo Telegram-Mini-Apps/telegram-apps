@@ -6,6 +6,7 @@ export * from './parseLaunchParams.js';
 export * from './retrieveCurrent.js';
 export * from './retrieveFromLocation.js';
 export * from './retrieveFromPerformance.js';
+export * from './retrieveFromUrl.js';
 export * from './retrieveLaunchData.js';
 export * from './serializeLaunchParams.js';
 export * from './storage.js';
