@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.4.0
+
+### Minor Changes
+
+- c2de1d4: Implement retrieveFromUrl launch params function.
+
 ## 1.3.0
 
 ### Minor Changes
