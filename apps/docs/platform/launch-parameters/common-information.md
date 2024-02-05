@@ -103,3 +103,22 @@ no other meaning to external developers.
 This parameter is being added in case the current application is launched in inline mode. This
 allows calling such Telegram Mini Apps method
 as [web_app_switch_inline_query](../apps-communication/methods.md#web-app-switch-inline-query).
+
+### `tgWebAppStartParam`
+
+This parameter is being included in case, bot link contains such query parameter as `startattach`,
+or Direct Link contains the `startapp` query parameter.
+
+Here are the examples:
+
+- `https://t.me/botusername?startattach=PARAM`
+- `https://t.me/botusername/appname?startapp=PARAM`
+
+In both of these cases, `tgWebAppStartParam` will be set to `"PARAM"`.
+
+::: info
+
+This launch parameter is not included in the location hash. Instead, it can be found in a
+URL query parameters.
+
+:::
