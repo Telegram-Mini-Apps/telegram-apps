@@ -1,5 +1,5 @@
 import { getFirstNavigationEntry } from './getFirstNavigationEntry.js';
-import { parseLaunchParams } from './parseLaunchParams.js';
+import { retrieveFromUrl } from './retrieveFromUrl.js';
 import type { LaunchParams } from './types.js';
 
 /**
@@ -14,10 +14,5 @@ export function retrieveFromPerformance(): LaunchParams {
     throw new Error('Unable to get first navigation entry.');
   }
 
-  const hashMatch = navigationEntry.name.match(/#(.*)/);
-  if (!hashMatch) {
-    throw new Error('First navigation entry does not contain hash part.');
-  }
-
-  return parseLaunchParams(hashMatch[1]);
+  return retrieveFromUrl(navigationEntry.name);
 }

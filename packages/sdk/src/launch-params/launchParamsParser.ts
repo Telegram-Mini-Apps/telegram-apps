@@ -29,6 +29,10 @@ export function launchParamsParser() {
       type: boolean().optional(),
       from: 'tgWebAppShowSettings',
     },
+    startParam: {
+      type: string().optional(),
+      from: 'tgWebAppStartParam',
+    },
     themeParams: {
       type: themeParamsParser(),
       from: 'tgWebAppThemeParams',

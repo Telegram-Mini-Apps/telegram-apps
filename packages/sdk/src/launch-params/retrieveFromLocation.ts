@@ -1,4 +1,4 @@
-import { parseLaunchParams } from './parseLaunchParams.js';
+import { retrieveFromUrl } from './retrieveFromUrl.js';
 import type { LaunchParams } from './types.js';
 
 /**
@@ -6,5 +6,5 @@ import type { LaunchParams } from './types.js';
  * @throws {Error} window.location.hash contains invalid data.
  */
 export function retrieveFromLocation(): LaunchParams {
-  return parseLaunchParams(window.location.hash.slice(1));
+  return retrieveFromUrl(window.location.href);
 }
