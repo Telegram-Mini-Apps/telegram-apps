@@ -337,7 +337,6 @@ Describes information about a user or bot.
 | first_name               | `string`  | Bot or user name.                                                                                                                                                |
 | id                       | `number`  | Bot or user ID.                                                                                                                                                  |
 | is_bot                   | `boolean` | _Optional_. Is the user a bot.                                                                                                                                   |
-| is_premium               | `boolean` | _Optional_. Has the user purchased Telegram Premium.                                                                                                             |
 | last_name                | `string`  | _Optional_. User's last name.                                                                                                                                    |
 | language_code            | `string`  | _Optional_. [IETF](https://en.wikipedia.org/wiki/IETF_language_tag) user's language.                                                                             |
 | photo_url                | `string`  | _Optional_. Link to the user's or bot's photo. Photos can have formats `.jpeg` and `.svg`. It is returned only for Mini Apps opened through the attachment menu. |
