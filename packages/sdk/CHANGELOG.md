@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.4.2
+
+### Patch Changes
+
+- 4d7006d: Implement parseMessage method
+
 ## 1.4.1
 
 ### Patch Changes
