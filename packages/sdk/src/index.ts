@@ -10,6 +10,7 @@ export {
   on,
   off,
   once,
+  parseMessage,
   postEvent,
   request,
   subscribe,
