@@ -21,7 +21,7 @@ export {
 } from './tools/index.js';
 export {
   createSDK,
-  type SDKPluginProps,
+  type SDKPluginOptions,
   useInitResultValue,
 } from './plugin/index.js';
 

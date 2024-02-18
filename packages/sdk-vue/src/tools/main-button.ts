@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve MainButton component.
+ * Composable to retrieve MainButton component.
  */
-export const useMainButton = createHook('mainButton');
+export const useMainButton = createComposable('mainButton');

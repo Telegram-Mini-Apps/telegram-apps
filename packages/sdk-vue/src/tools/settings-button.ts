@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve SettingsButton component.
+ * Composable to retrieve SettingsButton component.
  */
-export const useSettingsButton = createHook('settingsButton');
+export const useSettingsButton = createComposable('settingsButton');

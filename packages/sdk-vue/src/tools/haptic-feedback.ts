@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve HapticFeedback component.
+ * Composable to retrieve HapticFeedback component.
  */
-export const useHapticFeedback = createHook('hapticFeedback');
+export const useHapticFeedback = createComposable('hapticFeedback');

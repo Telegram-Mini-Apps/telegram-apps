@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve Invoice component.
+ * Composable to retrieve Invoice component.
  */
-export const useInvoice = createHook('invoice');
+export const useInvoice = createComposable('invoice');

@@ -1,14 +1,14 @@
 import type { InitOptions, InitResult } from '@tma.js/sdk';
 import type { Ref } from 'vue';
 
-export type SDKPluginProps = {
+export type SDKPluginOptions = {
   /**
    * Init function options.
    */
   options?: InitOptions;
 };
 
-export interface SDKContextType {
+export interface SDKInjectionType {
   /**
    * Error occurred during initialization.
    */

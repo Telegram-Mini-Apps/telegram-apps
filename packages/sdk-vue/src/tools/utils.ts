@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve Utils component.
+ * Composable to retrieve Utils component.
  */
-export const useUtils = createHook('utils');
+export const useUtils = createComposable('utils');

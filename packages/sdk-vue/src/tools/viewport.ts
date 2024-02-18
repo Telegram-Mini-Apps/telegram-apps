@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve Viewport component.
+ * Composable to retrieve Viewport component.
  */
-export const useViewport = createHook('viewport');
+export const useViewport = createComposable('viewport');

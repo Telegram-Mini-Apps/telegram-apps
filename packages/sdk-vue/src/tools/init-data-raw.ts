@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve init data raw representation.
+ * Composable to retrieve init data raw representation.
  */
-export const useInitDataRaw = createHook('initDataRaw');
+export const useInitDataRaw = createComposable('initDataRaw');

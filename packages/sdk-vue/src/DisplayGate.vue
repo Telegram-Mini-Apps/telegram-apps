@@ -10,7 +10,7 @@ defineOptions()
 
 defineSlots<{
   /**
-   * Element or component, which will be displayed in case, SDK is not loading, didn't receive
+   * Slot which will be displayed in case, SDK is not loading, didn't receive
    * any error during initialization as well as the initialization result.
    */
   initial(): any;

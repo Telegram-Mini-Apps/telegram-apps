@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve Popup component.
+ * Composable to retrieve Popup component.
  */
-export const usePopup = createHook('popup');
+export const usePopup = createComposable('popup');

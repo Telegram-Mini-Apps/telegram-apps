@@ -4,9 +4,9 @@ import type { App } from 'vue';
 import { readonly, ref } from 'vue';
 
 import { SDKInjection } from './SDKInjection.js';
-import type { SDKPluginProps } from './types.js';
+import type { SDKPluginOptions } from './types.js';
 
-export function createSDK(props: SDKPluginProps) {
+export function createSDK(props: SDKPluginOptions) {
   return {
     install(app: App) {
       const initResult = ref<InitResult>();

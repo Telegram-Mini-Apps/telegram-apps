@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve QRScanner component.
+ * Composable to retrieve QRScanner component.
  */
-export const useQRScanner = createHook('qrScanner');
+export const useQRScanner = createComposable('qrScanner');

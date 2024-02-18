@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve ClosingBehavior component.
+ * Composable to retrieve ClosingBehavior component.
  */
-export const useClosingBehavior = createHook('closingBehavior');
+export const useClosingBehavior = createComposable('closingBehavior');

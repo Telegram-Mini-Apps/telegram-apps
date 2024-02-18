@@ -1,12 +1,12 @@
 import { inject } from 'vue';
 
 import { SDKInjection } from './SDKInjection.js';
-import type { SDKContextType } from './types.js';
+import type { SDKInjectionType } from './types.js';
 
 /**
  * Returns current SDK information.
  */
-export function useSDK(): SDKContextType {
+export function useSDK(): SDKInjectionType {
   const context = inject(SDKInjection);
 
   if (!context) {

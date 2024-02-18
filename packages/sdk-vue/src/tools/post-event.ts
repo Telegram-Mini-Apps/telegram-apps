@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve postEvent function.
+ * Composable to retrieve postEvent function.
  */
-export const usePostEvent = createHook('postEvent');
+export const usePostEvent = createComposable('postEvent');

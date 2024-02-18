@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve CloudStorage component.
+ * Composable to retrieve CloudStorage component.
  */
-export const useCloudStorage = createHook('cloudStorage');
+export const useCloudStorage = createComposable('cloudStorage');

@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve MiniApp component.
+ * Composable to retrieve MiniApp component.
  */
-export const useMiniApp = createHook('miniApp');
+export const useMiniApp = createComposable('miniApp');

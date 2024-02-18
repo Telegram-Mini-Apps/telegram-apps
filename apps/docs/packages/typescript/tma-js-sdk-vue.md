@@ -14,7 +14,7 @@ outline: [2, 3]
   </a>
 </p>
 
-Vue bindings for [client SDK](tma-js-sdk/about.md). Includes hooks, components and utilities
+Vue bindings for [client SDK](tma-js-sdk/about.md). Includes composables, components and utilities
 for comfortable usage of Vue on the Telegram Mini Apps platform.
 
 ## Installation
@@ -65,8 +65,8 @@ This mode is useful in case the developer is using Server-Side Rendering or when
 all components is required.
 
 Nevertheless, as long as this process is asynchronous, developers should be careful when calling
-package-specific component hooks, such as `useBackButton`, `useMainButton`, etc. When the SDK is not
-yet initialized, these hooks will throw an error as long as they will be unable to retrieve
+package-specific component composables, such as `useBackButton`, `useMainButton`, etc. When the SDK is not
+yet initialized, these composables will throw an error as long as they will be unable to retrieve
 the component from the SDK.
 
 ```vue
@@ -110,8 +110,8 @@ initialization process can be asynchronous. Some of its components need to send 
 Telegram application to fetch their current state. Due to this, we cannot determine the required
 properties for these components until the initialization is completed.
 
-As a result, all hooks that return component instances will throw an error because they cannot
-retrieve the necessary component from the SDK initialization result. Therefore, these hooks should
+As a result, all composables that return component instances will throw an error because they cannot
+retrieve the necessary component from the SDK initialization result. Therefore, these composables should
 not be called until the SDK is fully initialized.
 
 `DisplayGate` is the built-in component which encapsulates logic related to application display.
@@ -222,7 +222,7 @@ The default initialization accepted by the package is synchronous.
 
 :::
 
-## Hooks
+## Composables
 
 ### Launch Parameters
 
@@ -230,7 +230,7 @@ There may be cases where a developer needs to retrieve launch parameters without
 entire SDK. For example, they might want to access current theme parameters stored
 in `window.location`. In such cases, SDK initialization may not be necessary.
 
-To retrieve Mini App launch parameters, the `useLaunchParams` hook can be used.
+To retrieve Mini App launch parameters, the `useLaunchParams` composable can be used.
 
 ```vue
 <script>
@@ -250,8 +250,8 @@ const launchParams = useLaunchParams();
 
 ### Init Result Related
 
-The library provides a collection of simple hooks for each init
-result value. Here is the list of following hooks and corresponding higher-order components:
+The library provides a collection of simple composables for each init
+result value. Here is the list of following composables and corresponding higher-order components:
 
 - `useBackButton`. Returns the [BackButton](tma-js-sdk/components/back-button.md) component accessor
 - `useClosingBehavior`. Returns the [ClosingBehavior](tma-js-sdk/components/closing-behavior.md)
@@ -277,14 +277,14 @@ result value. Here is the list of following hooks and corresponding higher-order
 
 ::: tip
 
-Each of these hooks returns SDK components signals which are automatically triggered if some of
+Each of these composables returns SDK components signals which are automatically triggered if some of
 their properties change.
 
 :::
 
 ::: danger
 
-Using these hooks with an uninitialized SDK will result in throwing a corresponding error.
+Using these composables with an uninitialized SDK will result in throwing a corresponding error.
 
 :::
 

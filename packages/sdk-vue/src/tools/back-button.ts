@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve BackButton component.
+ * Composable to retrieve BackButton component.
  */
-export const useBackButton = createHook('backButton');
+export const useBackButton = createComposable('backButton');

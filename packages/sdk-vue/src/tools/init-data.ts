@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve InitData component.
+ * Composable to retrieve InitData component.
  */
-export const useInitData = createHook('initData');
+export const useInitData = createComposable('initData');

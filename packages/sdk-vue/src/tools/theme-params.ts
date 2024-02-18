@@ -1,6 +1,6 @@
-import { createHook } from '../createHook.js';
+import { createComposable } from '../createComposable.js';
 
 /**
- * Hook to retrieve ThemeParams component.
+ * Composable to retrieve ThemeParams component.
  */
-export const useThemeParams = createHook('themeParams');
+export const useThemeParams = createComposable('themeParams');

@@ -8,22 +8,22 @@ import type {
   StaticInitResultKey,
 } from './types.js';
 
-export type Hook<K extends InitResultKey> = () => ComputedRef<InitResultValue<K>>;
+export type Composable<K extends InitResultKey> = () => ComputedRef<InitResultValue<K>>;
 
 /**
  * Creates hook to retrieve static init result value.
  * @param initResultKey - init result key.
  */
-export function createHook<K extends StaticInitResultKey>(initResultKey: K): Hook<K>;
+export function createComposable<K extends StaticInitResultKey>(initResultKey: K): Composable<K>;
 
 /**
  * Creates hook to retrieve dynamic init result value.
  * @param initResultKey - init result key.
  */
-export function createHook<K extends DynamicInitResultKey>(
+export function createComposable<K extends DynamicInitResultKey>(
   initResultKey: K,
-): Hook<K>;
+): Composable<K>;
 
-export function createHook(initResultKey: InitResultKey): Hook<any> {
+export function createComposable(initResultKey: InitResultKey): Composable<any> {
   return () => useInitResultValue(initResultKey);
 }
