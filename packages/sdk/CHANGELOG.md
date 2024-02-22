@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.4.3
+
+### Patch Changes
+
+- 9f0a8ca: Add source = window.parent in emitEvent function. Fix types in merge class names utility
+
 ## 1.4.2
 
 ### Patch Changes
