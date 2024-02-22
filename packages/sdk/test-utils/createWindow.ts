@@ -1,4 +1,4 @@
-import { vi, type SpyInstance } from 'vitest';
+import { type SpyInstance, vi } from 'vitest';
 
 import { createDomEmitter } from './createDomEmitter.js';
 
@@ -20,11 +20,12 @@ export function createWindow(options: CreateWindowOptions = {}): WindowSpy {
   const wnd = {
     innerHeight,
     innerWidth,
+    // We need this property to correctly re-emit received event from Telegram.
+    parent: { postMessage: postMessageSpy },
     ...createDomEmitter(),
     ...(env === 'iframe' ? {
       top: 1,
       self: 2,
-      parent: { postMessage: postMessageSpy },
     } : {}),
   };
 

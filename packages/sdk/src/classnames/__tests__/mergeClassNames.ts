@@ -3,7 +3,7 @@ import { expect, it } from 'vitest';
 import { mergeClassNames } from '../mergeClassNames';
 
 it('should ignore non-object values', () => {
-  expect(mergeClassNames({}, null, undefined, false, true, {}));
+  expect(mergeClassNames({}, null, undefined, false, true, { tma: 'good' })).toStrictEqual({ tma: 'good' });
 });
 
 it('should merge objects keys by values applying classNames function', () => {

@@ -1,13 +1,13 @@
-import { classNames } from './classNames.js';
+import { isRecord } from '~/misc/index.js';
 
-type FilterUnion<U> = Exclude<U, number | string | null | undefined | any[] | boolean>;
+import { classNames } from './classNames.js';
 
 /**
  * Returns union keys removing those, which values are not strings.
  */
-type UnionFilteredKeys<U> = U extends U
+type UnionStringKeys<U> = U extends U
   ? {
-    [K in keyof U]: U[K] extends string ? K : never
+    [K in keyof U]-?: U[K] extends string | undefined ? K : never;
   }[keyof U]
   : never;
 
@@ -16,32 +16,24 @@ type UnionFilteredKeys<U> = U extends U
  */
 type UnionRequiredKeys<U> = U extends U
   ? {
-    [K in UnionFilteredKeys<U>]-?: ({} extends { [P in K]: U[K] } ? never : K)
-  }[UnionFilteredKeys<U>]
+    [K in UnionStringKeys<U>]: ({} extends Pick<U, K> ? never : K)
+  }[UnionStringKeys<U>]
   : never;
 
 /**
  * Returns union optional keys.
  */
-type UnionOptionalKeys<U> = Exclude<UnionFilteredKeys<U>, UnionRequiredKeys<U>>;
+type UnionOptionalKeys<U> = Exclude<UnionStringKeys<U>, UnionRequiredKeys<U>>;
 
-type MergeClassNames<Tuple extends any[]> = Tuple[number] extends infer Union
-  ? FilterUnion<Union> extends infer UnionFiltered
+type MergeClassNames<Tuple extends any[]> =
+  // Removes all types from union which will be ignored by the mergeClassNames function.
+  Exclude<Tuple[number], number | string | null | undefined | any[] | boolean> extends infer Union
     ? {
-      [K in UnionRequiredKeys<UnionFiltered>]: string;
-    } & {
-      [K in UnionOptionalKeys<UnionFiltered>]?: string;
-    }
-    : never
-  : never;
-
-/**
- * Returns true in case, passed value is Record.
- * @param value
- */
-function isObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(null);
-}
+    [K in UnionRequiredKeys<Union>]: string;
+  } & {
+    [K in UnionOptionalKeys<Union>]?: string;
+  }
+    : never;
 
 /**
  * Merges 2 sets of parameters. Function expects passing an array of objects with values, which
@@ -51,7 +43,7 @@ function isObject(value: unknown): value is Record<string, unknown> {
  */
 export function mergeClassNames<T extends any[]>(...partials: T): MergeClassNames<T> {
   return partials.reduce<MergeClassNames<T>>((acc, partial) => {
-    if (!isObject(partial)) {
+    if (!isRecord(partial)) {
       return acc;
     }
 
