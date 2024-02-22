@@ -31,7 +31,6 @@ it('should call passed callback with event type and data in case, external envir
   createWindow();
   const callback = vi.fn();
   onTelegramEvent(callback);
-  console.log(window);
 
   (window as any).TelegramGameProxy_receiveEvent('test', false);
 
