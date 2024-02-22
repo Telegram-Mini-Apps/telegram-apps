@@ -7,5 +7,6 @@
 export function dispatchWindowMessageEvent(eventType: string, eventData?: unknown): void {
   window.dispatchEvent(new MessageEvent('message', {
     data: JSON.stringify({ eventType, eventData }),
+    source: window.parent,
   }));
 }
