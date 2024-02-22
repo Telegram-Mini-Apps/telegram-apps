@@ -4,13 +4,15 @@ import { parseMessage } from '~/bridge/parseMessage.js';
  * Emits event sent from Telegram native application like it was sent in
  * default web environment between 2 iframes. It dispatches new MessageEvent
  * and expects it to be handled via `window.addEventListener('message', ...)`
- * as developer would do it to handle messages sent from parent iframe.
+ * as developer would do it to handle messages sent from the parent iframe.
  * @param eventType - event name.
  * @param eventData - event payload.
  */
 function emitEvent(eventType: string, eventData: unknown): void {
   window.dispatchEvent(new MessageEvent('message', {
     data: JSON.stringify({ eventType, eventData }),
+    // We specify window.parent to imitate the case, it sent us this event.
+    source: window.parent,
   }));
 }
 
@@ -65,6 +67,10 @@ export function onTelegramEvent(cb: (eventType: string, eventData: unknown) => v
 
   // We expect Telegram to send us new event through "message" event.
   window.addEventListener('message', (event) => {
+    if (event.source !== window.parent) {
+      return;
+    }
+
     try {
       const { eventType, eventData } = parseMessage(event.data);
       cb(eventType, eventData);

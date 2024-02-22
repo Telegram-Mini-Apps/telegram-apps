@@ -4,17 +4,12 @@ import { createWindow, type WindowSpy } from '../../../../test-utils/createWindo
 import { dispatchWindowMessageEvent } from '../../../../test-utils/dispatchWindowMessageEvent';
 import { onTelegramEvent } from '../onTelegramEvent';
 
-let windowSpy: WindowSpy;
-
-beforeEach(() => {
-  windowSpy = createWindow();
-});
-
 afterEach(() => {
-  windowSpy.mockRestore();
+  vi.restoreAllMocks()
 });
 
 it('should call passed callback with event type and data in case, window generated "message" event with data, presented as object with properties "eventType" (string) and "eventData" (unknown). Object is converted to string.', () => {
+  createWindow({ env: 'iframe' });
   const callback = vi.fn();
   onTelegramEvent(callback);
 
@@ -25,6 +20,7 @@ it('should call passed callback with event type and data in case, window generat
 });
 
 it('should not define event handlers twice in case, window object contains "TelegramGameProxy_receiveEvent" property.', () => {
+  createWindow();
   (window as any).TelegramGameProxy_receiveEvent = true;
 
   onTelegramEvent(vi.fn());
@@ -32,8 +28,10 @@ it('should not define event handlers twice in case, window object contains "Tele
 });
 
 it('should call passed callback with event type and data in case, external environment generated event.', () => {
+  createWindow();
   const callback = vi.fn();
   onTelegramEvent(callback);
+  console.log(window);
 
   (window as any).TelegramGameProxy_receiveEvent('test', false);
 
@@ -42,6 +40,7 @@ it('should call passed callback with event type and data in case, external envir
 });
 
 it('should ignore a message event with unexpected data', () => {
+  createWindow();
   const callback = vi.fn();
   onTelegramEvent(callback);
 
