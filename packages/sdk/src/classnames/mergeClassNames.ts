@@ -1,4 +1,4 @@
-import { isRecord } from '~/misc';
+import { isRecord } from '~/misc/index.js';
 
 import { classNames } from './classNames.js';
 
