@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.4.4
+
+### Patch Changes
+
+- 9792afa: Move css utils to the separate folder. Write tests. Fix a bug in viewport stable height CSS var
+
 ## 1.4.3
 
 ### Patch Changes
