@@ -1,4 +1,5 @@
-import { setCSSVar } from '~/init/css/setCSSVar.js';
+import { isRGB } from '~/colors/index.js';
+import { setCSSVar } from '~/css/setCSSVar.js';
 import type { MiniApp } from '~/mini-app/index.js';
 import type { ThemeParams } from '~/theme-params/index.js';
 
@@ -26,16 +27,18 @@ export function bindMiniAppCSSVars(miniApp: MiniApp, themeParams: ThemeParams): 
       secondaryBackgroundColor,
     } = themeParams;
 
-    if (miniApp.headerColor === 'bg_color') {
-      if (backgroundColor) {
-        setCSSVar('--tg-header-color', backgroundColor);
-      }
-    } else if (miniApp.headerColor === 'secondary_bg_color') {
-      if (secondaryBackgroundColor) {
-        setCSSVar('--tg-header-color', secondaryBackgroundColor);
-      }
-    } else {
+    if (isRGB(miniApp.headerColor)) {
       setCSSVar('--tg-header-color', miniApp.headerColor);
+      return;
+    }
+
+    if (miniApp.headerColor === 'bg_color' && backgroundColor) {
+      setCSSVar('--tg-header-color', backgroundColor);
+      return;
+    }
+
+    if (miniApp.headerColor === 'secondary_bg_color' && secondaryBackgroundColor) {
+      setCSSVar('--tg-header-color', secondaryBackgroundColor);
     }
   };
 

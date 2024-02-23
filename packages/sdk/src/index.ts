@@ -57,6 +57,12 @@ export {
   type RGB,
   type RGBShort,
 } from './colors/index.js';
+export {
+  setCSSVar,
+  bindMiniAppCSSVars,
+  bindThemeCSSVars,
+  bindViewportCSSVars,
+} from './css/index.js';
 export { HapticFeedback } from './haptic-feedback/index.js';
 export {
   init,

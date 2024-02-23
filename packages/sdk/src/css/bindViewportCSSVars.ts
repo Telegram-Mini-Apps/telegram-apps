@@ -23,7 +23,7 @@ import { setCSSVar } from './setCSSVar.js';
 export function bindViewportCSSVars(viewport: Viewport): void {
   const setHeight = () => setCSSVar('--tg-viewport-height', `${viewport.height}px`);
   const setWidth = () => setCSSVar('--tg-viewport-width', `${viewport.width}px`);
-  const setStableHeight = () => setCSSVar('--tg-viewport-height', `${viewport.stableHeight}px`);
+  const setStableHeight = () => setCSSVar('--tg-viewport-stable-height', `${viewport.stableHeight}px`);
 
   // TODO: Should probably add debounce or throttle.
   viewport.on('change:height', setHeight);
