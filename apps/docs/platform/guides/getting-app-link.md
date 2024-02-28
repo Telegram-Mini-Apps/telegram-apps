@@ -1,5 +1,5 @@
 ---
-outline: [2, 3]
+outline: [ 2, 3 ]
 ---
 
 # Getting App Link
@@ -97,54 +97,32 @@ and [localtunnel](https://localtunnel.github.io/www/).
 
 #### Ngrok
 
-In order to start using ngrok, you need to go through the registration stage and then proceed to
-the [settings](https://dashboard.ngrok.com/get-started/setup) stage.
+In order to start using [ngrok](https://ngrok.com/), you need to go through the registration stage and then proceed to
+the [settings page](https://dashboard.ngrok.com/get-started/setup).
 
-Next, you need to create a tunnel to your development server. If the development server was started
-at the address `http://localhost:5432` or `http://127.0.0.1:5432`, then the command to create a
-tunnel will look like this:
+Next, you need to create a tunnel to your development server. Each user has at least 1 free static domain,
+which could be used in BotFather. To find your own, use this [link](https://dashboard.ngrok.com/cloud-edge/domains).
 
-```bash
-ngrok http 5432
-```
-
-As a result, the package will return a link that can be used in BotFather. When users open the
-Mini App, they will use this link, leading to a server for development.
-
-::: tip
-
-It should be noted that the returned link has the HTTPS protocol, which allows you to use it outside
-the test environment as well.
-
-:::
-
-As you can notice, the returned link will change each time you run this command. This makes the
-technology usage not as comfortable as it could be because you have to change the Mini App link each
-time this URL changes.
-
-In case you are subscribed to a paid plan, you are allowed to use a custom subdomain, which solves
-the problem related to a dynamic URL. To create such a type of link, you should use the following
-command:
+When a static domain was retrieved, create a tunnel using the command:
 
 ```bash
-ngrok http --subdomain mysubdomain 5432
+ngrok http --domain={YOUR_STATIC_DOMAIN} {YOU_DEV_SERVER_PORT}
 ```
 
-In this case you will receive the following link:
+So, if the static domain is `example.free.ngrok.app` and your dev server is
+launched at `http://127.0.0.1:5432`, the command will be:
 
+```bash
+ngrok http --domain=example.free.ngrok.app 5432
 ```
-https://mysubdomain.ngrok.io
-```
+
+After the tunnel is established, users opening the Mini App will be forwarded to your development
+server.
 
 #### Localtunnel
 
-Unlike ngrok, localtunnel is a completely free alternative that provides even the paid functionality
-we need from ngrok.
-
-As you can imagine, for this reason, localtunnel may be a more popular technology with fewer
-resources. This may lead to its temporary inoperability.
-
-To start using localtunnel, you need to install the appropriate package using npm:
+[Localtunnel](https://localtunnel.github.io/www/) is a completely free ngrok alternative. To start using localtunnel,
+you need to install the according package using npm:
 
 ```bash
 npm install -g localtunnel
@@ -156,7 +134,7 @@ Next, use the command to create a tunnel:
 lt -s mysubdomain --port 5432
 ```
 
-The technology will return the following URL:
+The package will return the following URL which could be used in BotFather:
 
 ```
 https://mysubdomain.loca.lt
