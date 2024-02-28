@@ -8,34 +8,15 @@ A striking feature of init data is the fact that it can be used as an authentica
 authorization factor. For this reason, do not forget about the security of the application
 and init data specifically.
 
-::: tip
-
-This section provides detailed information about an essential aspect of Telegram Mini Apps, which
-relates to application security for developers. We recommend utilizing well-established and tested
-packages:
-
-- For browser: [@tma.js/init-data](../../packages/typescript/tma-js-init-data/about.md)
-- For Node: [@tma.js/init-data-node](../../packages/node/tma-js-init-data-node.md)
-- For GoLang: [init-data-golang](../../packages/golang/init-data-golang.md)
-
-:::
-
 ## Retrieving
 
-To extract init data, it is required to firstly get the launch parameters, then extract parameter
-with name `tgWebAppData` and pass it to the `URLSearchParams` constructor:
+To extract init data, developer can use `retrieveLaunchData` function
+from [@tma.js/sdk](../../packages/typescript/tma-js-sdk/about.md).
 
 ```typescript
-// Get launch parameters.
-const params = new URLSearchParams(window.location.hash.slice(1));
-const initDataRaw = params.get('tgWebAppData'); // user=...&query_id=...&...
+import { retrieveLaunchData } from '@tma.js/sdk';
 
-const initData = new URLSearchParams(initDataRaw);
-// ['user', '{"id":279058397,"first_name":"Vladislav", ... }']
-// ['chat_instance', '8428209589180549439']
-// ['chat_type', 'sender']
-// ['auth_date', '1698272211']
-// ['hash', 'ddc15fc7419ae9cb9a597b98efee42ea0']
+const { initDataRaw, initData } = retrieveLaunchData().launchParams;
 ```
 
 ## Authorization and Authentication
@@ -49,11 +30,7 @@ Thus, knowing the secret key of the Telegram bot, the developer has the opportun
 signature of the parameters and make sure that they were indeed issued to the specified user.
 
 Also, the signature verification operation is fast enough and does not require large server
-resources. More information about the data signature and verification algorithm can be found
-in [this](https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app)
-documentation.
-
-[//]: # (TODO: Move signing flow to our docs)
+resources.
 
 ## Sending to Server
 
@@ -62,25 +39,18 @@ data that was specified when launching the Mini App. To make life easier for you
 developer can transmit them at each request to the server, after which the signature verification is
 carried out on the server side.
 
-Here comes the example with the usage of such package
-as [axios](https://www.npmjs.com/package/axios):
+Here is how a developer could send init data to server:
 
 ```typescript
-import axios from 'axios';
+import { retrieveLaunchData } from '@tma.js/sdk';
 
-const initData = new URLSearchParams(window.location.hash.slice(1))
-  .get('tgWebAppData');
+const { initDataRaw } = retrieveLaunchData().launchParams;
 
-if (initData === null) {
-  throw new Error('Ooof! Something is wrong. Init data is missing');
-}
-
-// Create axios instance.  
-const http = axios.create({
-  headers: {
-    // Append authorization header. 
-    Authorization: `tma ${initData}`,
-  }
+fetch('https://example.com/api', {
+    method: 'POST',
+    headers: {
+        Authorization: `tma ${initDataRaw}`
+    },
 });
 ```
 
@@ -88,10 +58,31 @@ In turn, the following actions must be performed on the server side:
 
 1. Get the value of the `Authorization` header;
 2. Check that the first part of it is equal to `tma`;
-3. Get initialization data and verify its signature.
+3. Get init data and [validate](#validating) its signature.
 
 If this algorithm is successful, the server part of the application can trust the transmitted
-initialization data.
+init data.
+
+## Validating
+
+Init data validation is one of the most important parts in communication
+between client and server. It's validity guarantees, that init data can be trusted
+and used in the future code execution.
+
+Knowing, that init data is presented as query parameters list, to validate
+them, developer should follow the steps:
+
+1. Iterate over all key-value pairs and create an array of string values in
+   format `{key}={value}`. Key `hash` should be excluded, but memoized. It
+   represents the init data sign and will be used in the final step of the validation process.
+2. Sort the computed array in the alphabetical order.
+3. Create HMAC-SHA256 using key `WebAppData` and apply it to the Telegram Bot
+   token, that is bound to your Mini App.
+4. Create HMAC-SHA256 using the result of the 3-rd step as a key. Apply
+   it to the pairs array joined with linebreak (`\n`) received in the 2-nd step
+   and present the result as hex symbols sequence.
+5. Compare the `hash` value received in the 1-st step with the result of the 4-th step.
+6. If these values are equal, passed init data can be trusted.
 
 ::: tip
 In real-world applications, it is recommended to use additional mechanisms for verifying
@@ -100,6 +91,76 @@ the `auth_date` parameter, which is responsible for the date when the parameters
 solution will allow in case of theft of initialization data to prevent their constant use by an
 attacker.
 :::
+
+::: tip
+
+To avoid possible problems related to the init data validation process, we recommend utilizing well-established and
+tested packages:
+
+- For Node: [@tma.js/init-data-node](../../packages/node/tma-js-init-data-node.md)
+- For GoLang: [init-data-golang](../../packages/golang/init-data-golang.md)
+
+:::
+
+### Example
+
+Let's imagine, we have this input:
+
+```
+Telegram Bot token:
+5768337691:AAGDAe6rjxu1cUgxK4BizYi--Utc3J9v5AU
+
+Init data:
+user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%22%2C%22last_name%22%3A%22Kibenko%22%2C%22username%22%3A%22vdkfrost%22%2C%22language_code%22%3A%22en%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%7D
+&chat_instance=-3788475317572404878
+&chat_type=private
+&auth_date=1709144340
+&hash=371697738012ebd26a111ace4aff23ee265596cd64026c8c3677956a85ca1827
+```
+
+After the 1-st and 2-nd steps we should receive the following data:
+
+```js
+// Sorted pairs.
+[
+    'auth_date=1709144340',
+    'chat_instance=-3788475317572404878',
+    'chat_type=private',
+    'user={"id":279058397,"first_name":"Vladislav","last_name":"Kibenko","username":"vdkfrost","language_code":"en","is_premium":true,"allows_write_to_pm":true}'
+]
+
+// Hash.
+'371697738012ebd26a111ace4aff23ee265596cd64026c8c3677956a85ca1827'
+```
+
+Then, create HMAC-SHA256 required in the 3-rd step. It should be based on the
+`WebAppData` string literal value and Telegram Bot token.
+
+```
+HMAC-SHA256(
+  "WebAppData", 
+  "5768337691:AAGDAe6rjxu1cUgxK4BizYi--Utc3J9v5AU"
+) = "aa492a44bdf019c759defb1698c1d77690189973945491a756051cdc1207a449"
+```
+
+Finally, let's compute the init data sign using the sorted pairs received in
+the 2-nd step and the value from the 3-rd step:
+
+```
+joined_pairs =
+   "auth_date=1709144340
+   chat_instance=-3788475317572404878
+   chat_type=private
+   user={\"id\":279058397,\"first_name\":\"Vladislav\",\"last_name\":\"Kibenko\",\"username\":\"vdkfrost\",\"language_code\":\"en\",\"is_premium\":true,\"allows_write_to_pm\":true}"
+
+HMAC-SHA256(
+  "aa492a44bdf019c759defb1698c1d77690189973945491a756051cdc1207a449",
+  joined_pairs,
+) = "371697738012ebd26a111ace4aff23ee265596cd64026c8c3677956a85ca1827"
+```
+
+Now, comparing the last received result with the `hash` value from the 1-st step,
+we can see, that they are equal. It means, we can trust the passed init data.
 
 ## Parameters List
 
