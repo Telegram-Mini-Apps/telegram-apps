@@ -8,14 +8,15 @@ This document describes the motivation that inspired us to create `@tma.js`.
 4. [Possible security issues](#possible-security-issues)
 5. [Mixed code quality](#mixed-code-quality)
 6. [Bundle size](#bundle-size)
-7. [Forced CSS variables](#forced-css-variables)
-8. [Inconsistent components state](#inconsistent-components-state)
-9. [1700 lines of code, single file](#1700-lines-of-code-single-file)
-10. [Unused code](#unused-code)
-11. [Implicit methods inactivity](#implicit-methods-inactivity)
-12. [Uncontrolled initialization](#uncontrolled-initialization)
+7. [Inconsistent components state](#inconsistent-components-state)
+8. [1700 lines of code, single file](#1700-lines-of-code-single-file)
+9. [Unused code](#unused-code)
+10. [Implicit methods inactivity](#implicit-methods-inactivity)
+11. [Uncontrolled initialization](#uncontrolled-initialization)
+12. [Forced CSS variables](#forced-css-variables)
+13. [Forced logs](#forced-logs)
 
-## Unproductive package format
+## Unproductive Package Format
 
 The Telegram SDK is provided as an IIFE package, which may lead to a variety
 of [potential issues](#iife). Modern development typically avoids this format unless it is genuinely
@@ -31,7 +32,7 @@ and they can reap the benefits of selecting ESM.
 All project packages are available on [npm.js](https://www.npmjs.com/org/tma.js) and can be
 installed in the standard manner via `npm i`, `pnpm i`, `yarn add`, etc.
 
-## No public review
+## No Public Review
 
 Developers are unable to track file changes in the usual and familiar way. They must rely on
 third-party software such as Telegram Crawler or similar tools to monitor the modifications made.
@@ -53,7 +54,7 @@ TypeScript, offering type support out of the box.
 
 `@tma.js` is written in TypeScript and doesn't require help of other packages to provide typings.
 
-## Possible security issues
+## Possible Security Issues
 
 A year later, Telegram SDK still contains "code for testing purposes" (lines 140-143):
 
@@ -62,16 +63,15 @@ var trustedTarget = 'https://web.telegram.org';
 // For now we don't restrict target, for testing purposes
 trustedTarget = '*';
 window.parent.postMessage(JSON.stringify({
-  eventType: eventType,
-  eventData: eventData
+    eventType: eventType,
+    eventData: eventData
 }), trustedTarget);
 ```
 
 This section of code determines which parent iframes can receive `message` events from the
 developer's application. For typical developers, this means determining which iframes are capable of
-receiving [Telegram Mini Apps methods](https://docs.telegram-mini-apps.com/docs/apps-communication/methods)
-data
-along with their parameters. Despite the fact that the average developer does not need to disable
+receiving [Telegram Mini Apps methods](https://docs.telegram-mini-apps.com/docs/apps-communication/methods) data along
+with their parameters. Despite the fact that the average developer does not need to disable
 this security mechanism, Telegram does it for them for "testing purposes".
 
 ### Solution
@@ -79,7 +79,7 @@ this security mechanism, Telegram does it for them for "testing purposes".
 `@tma.js` does not disable any security mechanisms. If a developer needs to configure the list of
 allowed parent iframe origins, the package provides corresponding methods.
 
-## Mixed code quality
+## Mixed Code Quality
 
 The current code format suggests that there were numerous developers from Telegram involved in its
 development. The issue is that the coding approach varies between different parts, giving the
@@ -97,7 +97,7 @@ project follows well-established and widely
 recognized [ESLint rules as described by Airbnb](https://github.com/airbnb/javascript). External
 developers are welcome to explore the code and propose improvements.
 
-## Bundle size
+## Bundle Size
 
 The SDK provided by Telegram appears more like source code for the package rather than a
 production-ready version. In typical web project development, code minification is employed to
@@ -109,23 +109,7 @@ here.
 `@tma.js` packages are built using Vite (Rollup), which minifies the code and provides ready-to-use
 libraries.
 
-## Forced CSS variables
-
-Developers are unable to prevent the creation of CSS variables that could potentially impact
-application performance. For instance, the Telegram SDK generates a CSS variable
-called `--tg-viewport-height`, which is updated each time a user moves a Mini App window. During
-extensive changes in viewport height, the SDK updates this variable frequently, which could
-potentially result in a decrease in application performance.
-
-This is not a particularly crucial point of motivation because, in most cases, applications are not
-actively processing changes in viewport height. However, it appears that this behavior could be made
-configurable.
-
-### Solution
-
-CSS variables feature is configurable in `@tma.js` packages.
-
-## Inconsistent components state
+## Inconsistent Components State
 
 The Telegram SDK does not preserve component states between application refreshes (using the 'Reload
 Page' button in the top-right three dots menu). It assumes that all components have their initial
@@ -146,7 +130,7 @@ So, the SDK lacks awareness of the actual state of components.
 
 `@tma.js` packages consistently provide the current component state.
 
-## 1700 lines of code, single file
+## 1700 Lines of Code, Single File
 
 Telegram SDK is provided as a single file with 1700 lines of code, which makes it research
 way too hard, decreasing code understanding and external developers code contribution.
@@ -156,7 +140,7 @@ way too hard, decreasing code understanding and external developers code contrib
 `@tma.js` packages are finely detailed, with each package being responsible for its specific part of
 the platform and having an intuitive file structure.
 
-## Unused code
+## Unused Code
 
 In addition to the fact that the Telegram SDK code is not compressed, it also includes code that is
 typically inaccessible in common applications. At first glance, this code appears to be exclusively
@@ -167,16 +151,16 @@ a launch parameter, such as `tgWebAppDebug`, which is not present in normal appl
 
 ```typescript
  if (initParams.tgWebAppDebug) {
-  debugBtn = document.createElement('tg-main-button');
-  debugBtnStyle = {
-    font: '600 14px/18px sans-serif',
-    display: 'none',
-    width: '100%',
-    height: '48px',
-    borderRadius: '0',
-    background: 'no-repeat right center',
-    position: 'fixed',
-    left: '0',
+    debugBtn = document.createElement('tg-main-button');
+    debugBtnStyle = {
+        font: '600 14px/18px sans-serif',
+        display: 'none',
+        width: '100%',
+        height: '48px',
+        borderRadius: '0',
+        background: 'no-repeat right center',
+        position: 'fixed',
+        left: '0',
 // ...
 ```
 
@@ -191,7 +175,7 @@ already a concern.
 `@tma.js` does not contain any code specifically oriented towards a distinct group of developers.
 The functionality it provides covers scenarios that all developers are likely to encounter.
 
-## Implicit methods inactivity
+## Implicit Methods Inactivity
 
 The Telegram SDK does not offer any functions to check if the called Telegram Mini Apps methods are
 supported by the current platform version. Even though each SDK method checks if it's supported,
@@ -211,7 +195,7 @@ platform versions and implement the corresponding functionality themselves.
 
 The `@tma.js/bridge` package offers utilities to verify whether a specific Telegram Mini Apps method
 is supported in a specified platform version. This ensures that the developer can be confident the
-method call will work as intended. It also allows checking if specified method **parameter** is 
+method call will work as intended. It also allows checking if specified method **parameter** is
 supported by specified version.
 
 The `@tma.js/sdk` package provides higher-level components that make use of Telegram Mini Apps. Each
@@ -219,20 +203,46 @@ component has a special method, `supports`, which returns `true` if the componen
 supported in the current platform version. By default, calling methods that are not supported in the
 current platform version will result in an error. Nevertheless, this type of behavior is configurable.
 
-## Uncontrolled initialization
+## Uncontrolled Initialization
 
 The process of SDK initialization cannot be controlled by the developer. SDK initialization itself
 is synchronous, but it cannot technically be considered as such as long as Telegram Mini Apps does
-not provide a synchronous way to receive the state of its components (for example, MainButton, 
-BackButton, Viewport, etc.). That's why the initialization process is asynchronous - it will take 
+not provide a synchronous way to receive the state of its components (for example, MainButton,
+BackButton, Viewport, etc.). That's why the initialization process is asynchronous - it will take
 some time for the code to retrieve the actual state from the Telegram application.
 
-The resulting problem here is that the developer cannot be sure if the current component state 
-they are working with is up-to-date, and not the initial one. There is no way to know if the 
+The resulting problem here is that the developer cannot be sure if the current component state
+they are working with is up-to-date, and not the initial one. There is no way to know if the
 initialization has been completed.
 
 ### Solution
 
-`@tma.js` provides asynchronous initialization to ensure that developers are working with 
-components in their actual state. However, it does not restrict developers from implementing 
+`@tma.js` provides asynchronous initialization to ensure that developers are working with
+components in their actual state. However, it does not restrict developers from implementing
 their own initialization process.
+
+## Forced CSS Variables
+
+Developers are unable to prevent the creation of CSS variables that could potentially impact
+application performance. For instance, the Telegram SDK generates a CSS variable
+called `--tg-viewport-height`, which is updated each time a user moves a Mini App window. During
+extensive changes in viewport height, the SDK updates this variable frequently, which could
+potentially result in a decrease in application performance.
+
+This is not a particularly crucial point of motivation because, in most cases, applications are not
+actively processing changes in viewport height. However, it appears that this behavior could be made
+configurable.
+
+### Solution
+
+CSS variables feature is configurable in `@tma.js` packages.
+
+## Forced Logs
+
+Developers are unable to disable logs, related to the package lifecycle.
+This makes application debugging a bit harder, and sometimes, may lead
+to sending unnecessary logs to external services.
+
+### Solution
+
+`@tma.js/sdk` supports enabling and disabling lifecycle logs.
