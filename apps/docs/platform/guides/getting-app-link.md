@@ -41,6 +41,46 @@ domain, as well as access the current server and devices on the same network as 
 As a result, you will get an IP that could be used in BotFather and will be accessible by the
 current device and all devices on the same network.
 
+#### mkcert
+
+[mkcert](https://github.com/FiloSottile/mkcert) is a tool, which allows developers to generate
+SSL certificate along with the related private key. It also creates a Certificate Authority
+which makes a local device trust the generated certificate.
+
+Let's say, you would like to access the `tma.internal` domain as a development domain, it should
+refer to the localhost. You should run the mkcert tool specifying this domain and receive 2 files:
+SSL certificate and a private key. Then, both of this files should be used during
+creation of a development server.
+
+Here is the example of [Vite](https://vitejs.dev) development server configuration:
+
+```typescript
+import { defineConfig, type ServerOptions } from 'vite';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+import { readFileSync } from 'node:fs';
+
+export default defineConfig(() => {
+    const dir = dirname(fileURLToPath(import.meta.url));
+
+    return {
+        server: {
+            port: 443,
+            https: {
+                // Certificate returned by mkcert.
+                cert: readFileSync(resolve(dir, './tma.internal.cert.pem')),
+                // Private key returned by mkcert.
+                key: readFileSync(resolve(dir, './tma.internal.key.pem')),
+            },
+            host: 'tma.internal',
+        }
+    };
+});
+```
+
+For the installation guide, refer to
+the [official documentation](https://github.com/FiloSottile/mkcert?tab=readme-ov-file#installation).
+
 ### Remote Development Link
 
 A remote development link refers to a temporary link that can be used to gain access to a
