@@ -1,5 +1,13 @@
 # @tma.js/solid-router-integration
 
+## 1.0.10
+
+### Patch Changes
+
+- 64e5fa1: Remove sourcemaps.
+- Updated dependencies [64e5fa1]
+  - @tma.js/sdk@1.4.5
+
 ## 1.0.9
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @tma.js/sdk-react
 
+## 1.1.8
+
+### Patch Changes
+
+- 64e5fa1: Remove sourcemaps.
+- Updated dependencies [64e5fa1]
+  - @tma.js/sdk@1.4.5
+
 ## 1.1.7
 
 ### Patch Changes
