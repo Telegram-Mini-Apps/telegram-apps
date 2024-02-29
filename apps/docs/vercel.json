@@ -3,10 +3,12 @@
     {
       "source": "/:path*",
       "destination": "/:path*.html"
-    },
+    }
+  ],
+  "redirects": [
     {
       "source": "/platform/about-platform",
-      "destination": "/platform/about.html"
+      "destination": "/platform/about"
     }
   ]
 }
