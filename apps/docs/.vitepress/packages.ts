@@ -146,27 +146,5 @@ export const packagesSidebar = {
         { text: 'init-data-golang', link: prefixed('/init-data-golang') },
       ],
     },
-    {
-      text: 'Deprecated',
-      items: [
-        { text: '@tma.js/bridge', link: prefixed('/tma-js-bridge') },
-        {
-          text: '@tma.js/init-data',
-          collapsed: true,
-          items: [
-            { text: 'About', link: prefixed('/tma-js-init-data/about') },
-            { text: 'InitData', link: prefixed('/tma-js-init-data/init-data') },
-            { text: 'Chat', link: prefixed('/tma-js-init-data/chat') },
-            { text: 'User', link: prefixed('/tma-js-init-data/user') },
-          ],
-        },
-        {
-          text: '@tma.js/launch-params',
-          link: prefixed('/tma-js-launch-params'),
-        },
-        { text: '@tma.js/theme-params', link: prefixed('/tma-js-theme-params') },
-        { text: '@tma.js/navigation', link: prefixed('/tma-js-navigation') },
-      ],
-    },
   ],
 };
