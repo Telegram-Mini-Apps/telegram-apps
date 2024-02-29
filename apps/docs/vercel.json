@@ -3,6 +3,10 @@
     {
       "source": "/:path*",
       "destination": "/:path*.html"
+    },
+    {
+      "source": "/platform/about-platform",
+      "destination": "/platform/about.html"
     }
   ]
 }

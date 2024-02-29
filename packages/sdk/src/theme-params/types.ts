@@ -17,7 +17,7 @@ export type ThemeParamsKey =
   | 'textColor';
 
 /**
- * Application [theme parameters](https://docs.telegram-mini-apps.com/platform/functionality/theming).
+ * Application [theme parameters](https://docs.telegram-mini-apps.com/platform/theming).
  * Defines palette used by the Telegram application.
  */
 export interface ThemeParamsParsed {

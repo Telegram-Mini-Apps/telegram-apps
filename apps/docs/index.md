@@ -12,10 +12,10 @@ hero:
   actions:
     - theme: brand
       text: Platform
-      link: /platform/about-platform
+      link: /platform/about
     - theme: alt
       text: Packages
-      link: /packages/typescript/tma-js-sdk/about
+      link: /packages/tma-js-sdk
 
 features:
   - icon: 💻

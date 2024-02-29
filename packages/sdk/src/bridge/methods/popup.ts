@@ -20,7 +20,7 @@ export interface PopupParams {
 
 /**
  * Describes the native popup button.
- * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#popupbutton
+ * @see https://docs.telegram-mini-apps.com/platform/methods#popupbutton
  */
 export type PopupButton = {
   /**
