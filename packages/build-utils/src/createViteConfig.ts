@@ -98,10 +98,6 @@ export function createViteConfig(options: CreateViteConfigOptions): UserConfig {
         },
       },
 
-      // We want source maps to let other developers see the source code. Their bundlers will
-      // automatically remove sourcemaps if needed.
-      sourcemap: true,
-
       lib: {
         name: formatTmaJSPackageName(packageName),
         entry: 'src/index.ts',
