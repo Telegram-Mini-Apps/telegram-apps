@@ -15,9 +15,9 @@ the ability to control the button text, its active state, button and inner loade
 also possible to update text and background colors.
 
 To update any of the Main Button properties, Telegram Mini Apps provides the
-[web_app_setup_main_button](../apps-communication/methods.md#web-app-setup-main-button) method.
+[web_app_setup_main_button](methods.md#web-app-setup-main-button) method.
 When user clicks the Main Button, Telegram application emits
-the [main_button_pressed](../apps-communication/events.md#main-button-pressed) event.
+the [main_button_pressed](events.md#main-button-pressed) event.
 
 ::: tip
 

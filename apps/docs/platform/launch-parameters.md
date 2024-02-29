@@ -1,4 +1,4 @@
-# Common Information
+# Launch Parameters
 
 The launch parameters are the list of parameters that is passed by the native Telegram application
 to the Mini App. It helps the developer to find out the characteristics of the Telegram application,
@@ -47,35 +47,23 @@ advisable to save this data during the initial launch of the application.
 
 The current Telegram Mini Apps version used by the native application. This parameter is important
 to use, for example, before calling the Telegram Mini
-Apps [methods](../apps-communication/methods.md) to make sure, they are supported.
+Apps [methods](methods.md) to make sure, they are supported.
 
 ### `tgWebAppData`
 
 Contains data describing the current user, data sign, and also some useful values. To learn more,
 visit the [Init Data](./init-data) page.
 
-This parameter is passed as query parameters, so in order to get a more user-friendly value, a
-developer need to use the `URLSearchParams` constructor:
-
-```typescript
-const initData = new URLSearchParams(params.get('tgWebAppData'));
-
-// ['user', '{"id":279058397,"first_name":"Vladislav", ... }']
-// ['chat_instance', '8428209589180549439']
-// ['chat_type', 'sender']
-// ['auth_date', '1698272211']
-// ['hash', 'ddc15fc7419ae9cb9a597b98efee42ea0']
-```
-
 ### `tgWebAppPlatform`
 
-[Telegram application identifier](../about-platform.md#supported-applications). It can be used as a factor
+[Telegram application identifier](about-platform.md#supported-applications). It can be used as a
+factor
 determining the visual style of the application, for example, when, depending on the device, the
 developer needs to display components that are different visually.
 
 ### `tgWebAppThemeParams`
 
-Parameters of the native Telegram application [theme](../functionality/theming.md). This parameter
+Parameters of the native Telegram application [theme](theming.md). This parameter
 can be used to style the application even at the moment of rendering the loader.
 
 The value of this parameter is a JSON object converted to the string. To get a more user-friendly
@@ -102,23 +90,9 @@ no other meaning to external developers.
 
 This parameter is being added in case the current application is launched in inline mode. This
 allows calling such Telegram Mini Apps method
-as [web_app_switch_inline_query](../apps-communication/methods.md#web-app-switch-inline-query).
+as [web_app_switch_inline_query](methods.md#web-app-switch-inline-query).
 
 ### `tgWebAppStartParam`
 
-This parameter is being included in case, bot link contains such query parameter as `startattach`,
-or Direct Link contains the `startapp` query parameter.
-
-Here are the examples:
-
-- `https://t.me/botusername?startattach=PARAM`
-- `https://t.me/botusername/appname?startapp=PARAM`
-
-In both of these cases, `tgWebAppStartParam` will be set to `"PARAM"`.
-
-::: info
-
-This launch parameter is not included in the location hash. Instead, it can be found in a
-URL query parameters.
-
-:::
+Parameter that contains a custom string value passed in the bot or application
+link. [Learn more](start-parameter.md).

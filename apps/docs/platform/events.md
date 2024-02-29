@@ -82,7 +82,7 @@ parameters. Section title means minimal version, from which events inside the se
 
 Available since: **v6.1**
 
-User clicked the [Back Button](../ui/back-button.md).
+User clicked the [Back Button](back-button.md).
 
 ### `clipboard_text_received`
 
@@ -166,7 +166,7 @@ An invoice was closed.
 
 ### `main_button_pressed`
 
-User clicked the [Main Button](../ui/main-button.md).
+User clicked the [Main Button](main-button.md).
 
 ### `phone_requested`
 
@@ -180,7 +180,7 @@ Application received phone access request status.
 
 ### `popup_closed`
 
-[Popup](../ui/popup.md) was closed.
+[Popup](popup.md) was closed.
 
 | Field     | Type     | Description                                                                                                                             |
 |-----------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
@@ -216,11 +216,11 @@ developer to stylize the app scrollbar (but he is still able to do it himself).
 
 Available since: **v6.1**
 
-Occurs when the [Settings Button](../ui/settings-button.md) was pressed.
+Occurs when the [Settings Button](settings-button.md) was pressed.
 
 ### `theme_changed`
 
-Occurs whenever [the theme](../functionality/theming.md) was changed in the user's Telegram app (
+Occurs whenever [the theme](theming.md) was changed in the user's Telegram app (
 including switching to night mode).
 
 | Field        | Type                     | Description                                                                                            |
@@ -229,7 +229,7 @@ including switching to night mode).
 
 ### `viewport_changed`
 
-Occurs whenever the [viewport](../functionality/viewport.md) has been changed. For example, when the
+Occurs whenever the [viewport](viewport.md) has been changed. For example, when the
 user started dragging the application or called the expansion method.
 
 | Field           | Type      | Description                                                                      |

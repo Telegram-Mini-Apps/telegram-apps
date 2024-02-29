@@ -11,7 +11,7 @@ components, clicking it does not inherently trigger any built-in action. Its han
 responsibility of the developer.
 
 To show the Back Button, it is required to
-call [web_app_setup_back_button](../apps-communication/methods.md#web-app-setup-back-button)
+call [web_app_setup_back_button](methods.md#web-app-setup-back-button)
 method. When user clicks this component, Telegram application
-emits [back_button_pressed](../apps-communication/events.md#back-button-pressed) event.
+emits [back_button_pressed](events.md#back-button-pressed) event.
 

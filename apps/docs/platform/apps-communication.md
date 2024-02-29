@@ -1,4 +1,4 @@
-# Flow Definition
+# Apps Communication
 
 To understand how to use Mini Apps functionality, we should start by learning how Telegram native
 application communicates with Mini App.

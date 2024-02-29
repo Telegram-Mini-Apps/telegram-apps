@@ -10,7 +10,7 @@ storage to place the developer's application, and it is the responsibility of a 
 storage for their application and obtain its URL.
 
 Recall that Telegram accepts only those links that have a valid SSL certificate and use the HTTPS
-protocol. Unlike the production environment, the [test environment](../test-environment.md) allows
+protocol. Unlike the production environment, the [test environment](test-environment.md) allows
 using an IP directly, and this is the environment we will use in this article.
 
 ## Development Mode

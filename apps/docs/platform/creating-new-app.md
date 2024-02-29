@@ -17,7 +17,7 @@ entities related to development in the production environment_. Development with
 environment is a sign of bad taste, so use it strictly if you can't avoid it.
 
 To create an application we should use test environment. You can learn more about switching to it
-in [this](../test-environment.md) article.
+in [this](test-environment.md) article.
 
 Speaking of advantages a developer gets from the test environment, it is important to mention an
 opportunity of usage of HTTP links instead of HTTPS, as well as IPs directly. Production
@@ -87,7 +87,7 @@ will display the web component with the source address as the URL specified in t
 ## Debugging Application
 
 Sometimes, it is necessary to debug the developed application. To learn more, refer
-to [this](../debugging.md) article.
+to [this](debugging.md) article.
 
 [//]: # (## Additional)
 

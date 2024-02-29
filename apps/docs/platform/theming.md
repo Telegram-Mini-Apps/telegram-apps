@@ -14,7 +14,7 @@ These colors should be utilized by Mini Apps to ensure a consistent and native l
 ### Launch Parameter
 
 Telegram Mini Apps provides theming data through a launch parameter known
-as [tgWebAppThemeParams](../launch-parameters/common-information.md#tgwebappthemeparams). This
+as [tgWebAppThemeParams](../launch-parameters#tgwebappthemeparams). This
 parameter represents a serialized JSON object containing a list of optional properties, with each
 property describing one of the palette colors.
 
@@ -42,10 +42,10 @@ Here is a complete example of the parameter value:
 
 Nevertheless, retrieving theming data via launch parameters is not the only way. Telegram Mini Apps
 also permits obtaining the theme through a method
-called [web_app_request_theme](../apps-communication/methods.md#web-app-request-theme).
+called [web_app_request_theme](methods.md#web-app-request-theme).
 
 As a result of calling this method, Telegram will emit an event
-named [theme_changed](../apps-communication/events.md#theme-changed). The payload of this event
+named [theme_changed](events.md#theme-changed). The payload of this event
 contains a property called `theme_params`, which has the format described in the previous section.
 
 ## Background and Header Colors
@@ -54,9 +54,9 @@ As long as a Mini App is always displayed within a native component, which consi
 as the _header_ and _body_, Telegram Mini Apps also allows changing their colors.
 
 To change the header color, developers should utilize
-the [web_app_set_header_color](../apps-communication/methods.md#web-app-set-header-color) method,
+the [web_app_set_header_color](methods.md#web-app-set-header-color) method,
 which provides a way to set the color either by using a theme key or a custom RGB string.
 
 To update the body color, it is required to use
-the [web_app_set_background_color](../apps-communication/methods.md#web-app-set-background-color)
+the [web_app_set_background_color](methods.md#web-app-set-background-color)
 method.

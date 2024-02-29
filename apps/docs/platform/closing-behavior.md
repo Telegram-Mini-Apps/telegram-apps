@@ -11,4 +11,4 @@ prevent this, developers have the option to configure the closing behavior and p
 before closing the application.
 
 To enable closing confirmation, Telegram Mini Apps provides a method
-called [web_app_setup_closing_behavior](../apps-communication/methods.md#web-app-setup-closing-behavior).
+called [web_app_setup_closing_behavior](methods.md#web-app-setup-closing-behavior).

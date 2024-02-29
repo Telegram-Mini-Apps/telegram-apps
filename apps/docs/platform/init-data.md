@@ -1,6 +1,6 @@
 # Init Data
 
-In the list of [launch parameters](common-information.md), initialization data is located in
+In the list of [launch parameters](launch-parameters), initialization data is located in
 the `tgWebAppData` parameter. It is a set of data mostly related to a specific user who launched
 the Mini App.
 
@@ -11,7 +11,7 @@ and init data specifically.
 ## Retrieving
 
 To extract init data, developer can use `retrieveLaunchData` function
-from [@tma.js/sdk](../../packages/typescript/tma-js-sdk/about.md).
+from [@tma.js/sdk](../packages/typescript/tma-js-sdk/about.md).
 
 ```typescript
 import { retrieveLaunchData } from '@tma.js/sdk';
@@ -97,8 +97,8 @@ attacker.
 To avoid possible problems related to the init data validation process, we recommend utilizing well-established and
 tested packages:
 
-- For Node: [@tma.js/init-data-node](../../packages/node/tma-js-init-data-node.md)
-- For GoLang: [init-data-golang](../../packages/golang/init-data-golang.md)
+- For Node: [@tma.js/init-data-node](../packages/node/tma-js-init-data-node.md)
+- For GoLang: [init-data-golang](../packages/golang/init-data-golang.md)
 
 :::
 
