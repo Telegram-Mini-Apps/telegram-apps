@@ -10,56 +10,63 @@ export const platformNavItem = {
 export const platformSidebar = {
   [prefixed('/')]: [
     {
-      text: 'Common information',
+      text: 'Introduction',
       items: [
         { text: 'About Platform', link: prefixed('/about-platform') },
-        { text: 'Test Environment', link: prefixed('/test-environment') },
+      ],
+    },
+
+    {
+      text: 'Functional Features',
+      items: [
+        { text: 'Closing Behavior', link: prefixed('/closing-behavior') },
+        { text: 'Haptic Feedback', link: prefixed('/haptic-feedback') },
+      ],
+    },
+
+    {
+      text: 'Apps Communication',
+      items: [
+        { text: 'Flow Definition', link: prefixed('/apps-communication') },
+        { text: 'Methods', link: prefixed('/methods') },
+        { text: 'Events', link: prefixed('/events') },
+      ],
+    },
+
+    {
+      text: 'Launch Parameters',
+      items: [
+        { text: 'About', link: prefixed('/launch-parameters') },
+        { text: 'Start Parameter', link: prefixed('/start-parameter') },
+        { text: 'Init Data', link: prefixed('/init-data') },
+      ],
+    },
+
+    {
+      text: 'Development',
+      items: [
         { text: 'Debugging', link: prefixed('/debugging') },
-      ],
-    },
-
-    {
-      text: 'Apps communication',
-      items: [
-        { text: 'Flow Definition', link: prefixed('/apps-communication/flow-definition') },
-        { text: 'Methods', link: prefixed('/apps-communication/methods') },
-        { text: 'Events', link: prefixed('/apps-communication/events') },
-      ],
-    },
-
-    {
-      text: 'Launch parameters',
-      items: [
-        { text: 'Common Information', link: prefixed('/launch-parameters/common-information') },
-        { text: 'Init Data', link: prefixed('/launch-parameters/init-data') },
-      ],
-    },
-
-    {
-      text: 'Functionality',
-      items: [
-        { text: 'Closing Behavior', link: prefixed('/functionality/closing-behavior') },
-        { text: 'Haptic Feedback', link: prefixed('/functionality/haptic-feedback') },
-        { text: 'Theming', link: prefixed('/functionality/theming') },
-        { text: 'Viewport', link: prefixed('/functionality/viewport') },
+        { text: 'Test Environment', link: prefixed('/test-environment') },
       ],
     },
 
     {
       text: 'UI',
       items: [
-        { text: 'Back Button', link: prefixed('/ui/back-button') },
-        { text: 'Main Button', link: prefixed('/ui/main-button') },
-        { text: 'Popup', link: prefixed('/ui/popup') },
-        { text: 'Settings Button', link: prefixed('/ui/settings-button') },
+        { text: 'Back Button', link: prefixed('/back-button') },
+        { text: 'Main Button', link: prefixed('/main-button') },
+        { text: 'Popup', link: prefixed('/popup') },
+        { text: 'Settings Button', link: prefixed('/settings-button') },
+        { text: 'Theming', link: prefixed('/theming') },
+        { text: 'Viewport', link: prefixed('/viewport') },
       ],
     },
 
     {
       text: 'Guides',
       items: [
-        { text: 'Creating New App', link: prefixed('/guides/creating-new-app') },
-        { text: 'Getting App Link', link: prefixed('/guides/getting-app-link') },
+        { text: 'Creating New App', link: prefixed('/creating-new-app') },
+        { text: 'Getting App Link', link: prefixed('/getting-app-link') },
       ],
     },
   ],
