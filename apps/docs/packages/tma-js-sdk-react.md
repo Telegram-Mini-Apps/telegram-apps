@@ -14,7 +14,7 @@ outline: [2, 3]
   </a>
 </p>
 
-React JS bindings for [client SDK](tma-js-sdk/about.md). Includes hooks, components and utilities
+React JS bindings for [client SDK](tma-js-sdk.md). Includes hooks, components and utilities
 for comfortable usage of React JS on the Telegram Mini Apps platform.
 
 ## Installation
@@ -41,7 +41,7 @@ yarn add @tma.js/sdk-react
 ## Initialization
 
 `SDKProvider` is a component responsible for providing the SDK functionality. Internally, it
-utilizes the `init` function from [@tma.js/sdk](tma-js-sdk/about.md). It accepts an optional list of
+utilizes the `init` function from [@tma.js/sdk](tma-js-sdk.md). It accepts an optional list of
 parameters through the [options](tma-js-sdk/init.md#options) property.
 
 ```jsx

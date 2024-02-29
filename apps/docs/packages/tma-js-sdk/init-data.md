@@ -1,7 +1,7 @@
-# Init data
+# Init Data
 
 This section of SDK provides utilities to work with Telegram Mini
-Apps [init data](../../../platform/init-data.md).
+Apps [init data](../../platform/init-data.md).
 
 ## Parsing
 
@@ -42,9 +42,9 @@ console.log(parseInitData(new URLSearchParams(initDataString)));
 
 The function extracts the required parameters and automatically validates their types. If a property
 has an invalid type or value, it will throw an error. To learn more about returned type, refer
-to [InitData](init-data.md) type page.
+to [InitData](init-data/init-data.md) type page.
 
 ## Validation
 
 Validation utilities has been moved to the separate
-package - [@tma.js/init-data-node](../../tma-js-init-data-node.md).
+package - [@tma.js/init-data-node](../tma-js-init-data-node.md).

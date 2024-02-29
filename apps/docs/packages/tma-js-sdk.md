@@ -18,7 +18,7 @@ Mini Apps. It consists of several individual components, each responsible for a 
 the Telegram Mini Apps ecosystem.
 
 Before you begin using the SDK, we highly recommend familiarizing yourself with the Telegram Mini
-Apps [documentation](../../platform/about-platform.md) to grasp the fundamental concepts of the platform.
+Apps [documentation](../platform/about.md) to grasp the fundamental concepts of the platform.
 
 ## Installation
 

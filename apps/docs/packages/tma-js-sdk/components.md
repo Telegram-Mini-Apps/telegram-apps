@@ -1,4 +1,4 @@
-# About components
+# Components
 
 All components in this package are supposed to be used as singletons. This means that you should not
 create multiple instances of the same component and use them, even if it is not explicitly

@@ -11,7 +11,7 @@ and init data specifically.
 ## Retrieving
 
 To extract init data, developer can use `retrieveLaunchData` function
-from [@tma.js/sdk](../packages/tma-js-sdk/about.md).
+from [@tma.js/sdk](../packages/tma-js-sdk.md).
 
 ```typescript
 import { retrieveLaunchData } from '@tma.js/sdk';

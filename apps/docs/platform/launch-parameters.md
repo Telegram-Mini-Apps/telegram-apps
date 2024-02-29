@@ -52,11 +52,11 @@ Apps [methods](methods.md) to make sure, they are supported.
 ### `tgWebAppData`
 
 Contains data describing the current user, data sign, and also some useful values. To learn more,
-visit the [Init Data](./init-data) page.
+visit the [Init Data](init-data.md) page.
 
 ### `tgWebAppPlatform`
 
-[Telegram application identifier](about-platform.md#supported-applications). It can be used as a
+[Telegram application identifier](about.md#supported-applications). It can be used as a
 factor
 determining the visual style of the application, for example, when, depending on the device, the
 developer needs to display components that are different visually.

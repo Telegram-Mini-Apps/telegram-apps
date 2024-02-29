@@ -12,7 +12,7 @@ export const platformSidebar = {
     {
       text: 'Introduction',
       items: [
-        { text: 'About Platform', link: prefixed('/about-platform') },
+        { text: 'About Platform', link: prefixed('/about') },
       ],
     },
 

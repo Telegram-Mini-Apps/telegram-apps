@@ -4,7 +4,7 @@ function prefixed(value: string): string {
 
 export const packagesNavItem = {
   text: 'Packages',
-  link: prefixed('/tma-js-sdk/about'),
+  link: prefixed('/tma-js-sdk'),
 };
 
 export const packagesSidebar = {
@@ -14,7 +14,7 @@ export const packagesSidebar = {
       items: [
         {
           text: '@tma.js/sdk',
-          link: prefixed('/tma-js-sdk/about'),
+          link: prefixed('/tma-js-sdk'),
           items: [
             {
               text: 'Initialization',
@@ -34,12 +34,9 @@ export const packagesSidebar = {
             },
             {
               text: 'Init data',
+              link: prefixed('/tma-js-sdk/init-data'),
               collapsed: true,
               items: [
-                {
-                  text: 'About',
-                  link: prefixed('/tma-js-sdk/init-data/about'),
-                },
                 {
                   text: 'InitData',
                   link: prefixed('/tma-js-sdk/init-data/init-data'),
@@ -61,11 +58,8 @@ export const packagesSidebar = {
             {
               text: 'Components',
               collapsed: true,
+              link: prefixed('/tma-js-sdk/components'),
               items: [
-                {
-                  text: 'About components',
-                  link: prefixed('/tma-js-sdk/components/about'),
-                },
                 {
                   text: 'BackButton',
                   link: prefixed('/tma-js-sdk/components/back-button'),
@@ -134,12 +128,14 @@ export const packagesSidebar = {
         },
       ],
     },
+
     {
       text: 'Node',
       items: [
         { text: '@tma.js/init-data-node', link: prefixed('/tma-js-init-data-node') },
       ],
     },
+
     {
       text: 'GoLang',
       items: [
