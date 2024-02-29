@@ -1,6 +1,6 @@
 # `SettingsButton`
 
-Implements Telegram Mini Apps [Settings Button](../../../../platform/ui/settings-button.md).
+Implements Telegram Mini Apps [Settings Button](../../../platform/settings-button.md).
 
 ## Initialization
 

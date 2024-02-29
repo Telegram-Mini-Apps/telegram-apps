@@ -1,40 +1,12 @@
-# @tma.js/theme-params
+# Theme parameters
 
-[npm-link]: https://npmjs.com/package/@tma.js/theme-params
-
-[npm-shield]: https://img.shields.io/npm/v/@tma.js/theme-params?logo=npm
-
-![[npm-link]][npm-shield]
-
-Provides utilities to work with Telegram Mini Apps [theme](../../platform/functionality/theming.md).
-
-::: danger
-This project has been deprecated. All its functionality was moved to
-the [@tma.js/sdk](./tma-js-sdk/about.md) package.
-:::
-
-## Installation
-
-::: code-group
-
-```bash [pnpm]
-pnpm i @tma.js/theme-params
-```
-
-```bash [npm]
-npm i @tma.js/theme-params
-```
-
-```bash [yarn]
-yarn add @tma.js/theme-params
-```
-
-:::
+This section of SDK covers the topic related
+to [theme parameters](../../platform/theming.md).
 
 ## Parsing
 
-To parse value as theme parameters, package provides method `parse` and parser `themeParams`
-which is being utilized by `parse`.
+To parse value as theme parameters, package provides method `parseThemeParams` and
+parser `themeParamsParser` which is being utilized by `parseThemeParams`.
 
 Method and parser accept JSON object as a string or a JavaScript object, returning the
 `ThemeParams` interface. It throws an error if the passed data is invalid.
@@ -42,7 +14,7 @@ Method and parser accept JSON object as a string or a JavaScript object, returni
 ::: code-group
 
 ```typescript [Usage example]
-import { parse, themeParams } from '@tma.js/theme-params';
+import { parseThemeParams, themeParamsParser } from '@tma.js/sdk';
 
 const json = {
   accent_text_color: "#6ab2f2",
@@ -60,9 +32,9 @@ const json = {
   text_color: "#f5f5f5"
 };
 
-const tp = parse(json);
+const tp = parseThemeParams(json);
 // or
-const tp = themeParams().parse(json);
+const tp = themeParamsParser().parse(json);
 ```
 
 ```typescript [Expected result]
@@ -85,18 +57,18 @@ const result = {
 
 :::
 
-Assuming each property is written using snake case, the parsing function replaces the word 'bg'
-with 'background' and converts the resulting key to camel case.
+Assuming each property is written using snake case, the parsing function replaces the word `bg`
+with `background` and converts the resulting key to camel case.
 
 ## Serializing
 
 To convert the theme parameters object representation to a string, developers should use
-the `serialize` function:
+the `serializeThemeParams` function:
 
 ```typescript
-import { serialize } from '@tma.js/theme-params';
+import { serializeThemeParams } from '@tma.js/sdk';
 
-serialize({
+serializeThemeParams({
   accentTextColor: "#6ab2f2",
   backgroundColor: "#17212b",
   buttonColor: "#5288c1",

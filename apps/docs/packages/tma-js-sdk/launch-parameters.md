@@ -1,41 +1,12 @@
-# @tma.js/launch-params
+# Launch parameters
 
-[npm-link]: https://npmjs.com/package/@tma.js/launch-params
-
-[npm-shield]: https://img.shields.io/npm/v/@tma.js/launch-params?logo=npm
-
-![[npm-link]][npm-shield]
-
-Provides utilities to work with Telegram Mini
-Apps [launch parameters](../../platform/launch-parameters/common-information.md).
-
-::: danger
-This project has been deprecated. All its functionality was moved to
-the [@tma.js/sdk](./tma-js-sdk/about.md) package.
-:::
-
-## Installation
-
-::: code-group
-
-```bash [pnpm]
-pnpm i @tma.js/launch-params
-```
-
-```bash [npm]
-npm i @tma.js/launch-params
-```
-
-```bash [yarn]
-yarn add @tma.js/launch-params
-```
-
-:::
+This section of SDK covers the topic related
+to [launch parameters](../../../platform/launch-parameters).
 
 ## Parsing
 
-To parse value as launch parameters, package provides method `parse` and parser `launchParams`
-which is being utilized by `parse`.
+To parse value as launch parameters, package provides method `parseLaunchParams` and parser
+`launchParamsParser` which is being utilized by `parseLaunchParams`.
 
 Method and parser accept query parameters presented as a string or an instance of `URLSearchParams`,
 returning the `LaunchParams` interface. It throws an error if the passed data is invalid.
@@ -43,7 +14,7 @@ returning the `LaunchParams` interface. It throws an error if the passed data is
 ::: code-group
 
 ```typescript [Usage example]
-import { parse, launchParams } from '@tma.js/launch-params';
+import { parseLaunchParams, launchParamsParser } from '@tma.js/sdk';
 
 const searchParams = new URLSearchParams([
   ['tgWebAppVersion', '6.7'],
@@ -74,9 +45,9 @@ const searchParams = new URLSearchParams([
   })],
 ]);
 
-const lp = parse(searchParams);
+const lp = parseLaunchParams(searchParams);
 // or
-const lp = launchParams().parse(searchParams);
+const lp = launchParamsParser().parse(searchParams);
 ```
 
 ```typescript [Expected result]
@@ -116,12 +87,12 @@ const result = {
 ## Serializing
 
 To convert the launch parameters object representation to a string, developers should use
-the `serialize` function:
+the `serializeLaunchParams` function:
 
 ```typescript
-import { serialize } from '@tma.js/launch-params';
+import { serializeLaunchParams } from '@tma.js/sdk';
 
-serialize({
+serializeLaunchParams({
   version: '6.7',
   platform: 'tdesktop',
   themeParams: {
@@ -142,72 +113,11 @@ serialize({
 ## Retrieving
 
 This package enables the extraction of launch parameters from the current environment using
-the [retrieveFromLocation](#retrievefromlocation), [retrieveFromPerformance](#retrievefromperformance),
-and [retrieveFromStorage](#retrievefromstorage) functions. Developer is also able
-to use [retrieveLaunchData](#retrievelaunchdata) to surely extract launch parameters and determine
-if current page was reloaded. Each of these functions throws an error if the source contains invalid
-data.
-
-### `retrieveLaunchData`
-
-Extracts actual launch parameters and page reload flag.
+the `retrieveLaunchData` function which surely extracts launch parameters and determines if current
+page was reloaded. This function throws an error if all known sources contain invalid data.
 
 ```typescript
-import { retrieveLaunchData } from '@tma.js/launch-params';
+import { retrieveLaunchData } from '@tma.js/sdk';
 
 const { launchParams, isPageReload } = retrieveLaunchData();
-```
-
-::: info
-
-This function is more likely to be used by developers because it offers a stable way of retrieving
-the actual launch parameters.
-
-:::
-
-### `retrieveFromStorage`
-
-Extracts launch parameters from `sessionStorage`. This method expects that launch parameters have
-been saved in the `sessionStorage` via the `saveToStorage` method.
-
-```typescript
-import {
-  retrieveFromStorage,
-  saveToStorage,
-} from '@tma.js/launch-params';
-
-saveToStorage({
-  initData: {
-    authDate: new Date(16552413000),
-    hash: 'hash',
-  },
-  initDataRaw: 'auth_date=16552413&hash=hash',
-  themeParams: {},
-  version: '7.0',
-  platform: 'macos',
-});
-
-const launchParameters = retrieveFromStorage();
-```
-
-### `retrieveFromLocation`
-
-Extracts launch parameters from `window.location.hash`:
-
-```typescript
-import { retrieveFromLocation } from '@tma.js/launch-params';
-
-const launchParameters = retrieveFromLocation();
-```
-
-### `retrieveFromPerformance`
-
-Extracts launch parameters from `window.performance`. This function allows retrieving launch
-parameters
-using [performance navigation entries](https://developer.mozilla.org/en-US/docs/Web/Performance/Navigation_and_resource_timings).
-
-```typescript
-import { retrieveFromPerformance } from '@tma.js/launch-params';
-
-const launchParameters = retrieveFromPerformance();
 ```

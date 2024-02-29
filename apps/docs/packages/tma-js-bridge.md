@@ -15,7 +15,7 @@ utmost level of control over cross-application communication.
 
 ::: danger
 This project has been deprecated. All its functionality was moved to
-the [@tma.js/sdk](./tma-js-sdk/about.md) package.
+the [@tma.js/sdk](tma-js-sdkbout.md) package.
 :::
 
 ## Installation

@@ -1,6 +1,6 @@
 # `BackButton`
 
-Implements Telegram Mini Apps [Back Button](../../../../platform/ui/back-button.md).
+Implements Telegram Mini Apps [Back Button](../../../platform/back-button.md).
 
 ## Initialization
 

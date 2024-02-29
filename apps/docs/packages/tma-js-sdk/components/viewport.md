@@ -1,7 +1,7 @@
 # `Viewport`
 
 Implements Telegram Mini
-Apps [viewport](../../../../platform/functionality/viewport.md) functionality.
+Apps [viewport](../../../platform/viewport.md) functionality.
 
 ## Initialization
 

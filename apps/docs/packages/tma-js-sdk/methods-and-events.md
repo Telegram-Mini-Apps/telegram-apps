@@ -1,7 +1,7 @@
 # Methods and Events
 
 This section of SDK covers the topic related
-to [apps communication](../../../platform/apps-communication/flow-definition.md).
+to [apps communication](../../platform/apps-communication.md).
 
 ## Calling Methods
 
@@ -21,8 +21,8 @@ selects the appropriate flow.
 
 `request` function should be used in case, it is required to call some Telegram Mini Apps method
 and receive specified event. For example, developer would like to
-call [web_app_request_viewport](../../../platform/apps-communication/methods.md#web-app-request-viewport)
-method and catch [viewport_changed](../../../platform/apps-communication/events.md#viewport-changed)
+call [web_app_request_viewport](../../platform/methods.md#web-app-request-viewport)
+method and catch [viewport_changed](../../platform/events.md#viewport-changed)
 event, to receive actual viewport data.
 
 ```typescript

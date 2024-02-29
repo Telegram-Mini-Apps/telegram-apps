@@ -1,7 +1,7 @@
 # Init data
 
 This section of SDK provides utilities to work with Telegram Mini
-Apps [init data](../../../../platform/launch-parameters/init-data.md).
+Apps [init data](../../../platform/init-data.md).
 
 ## Parsing
 
@@ -47,4 +47,4 @@ to [InitData](init-data.md) type page.
 ## Validation
 
 Validation utilities has been moved to the separate
-package - [@tma.js/init-data-node](../../../node/tma-js-init-data-node.md).
+package - [@tma.js/init-data-node](../../tma-js-init-data-node.md).

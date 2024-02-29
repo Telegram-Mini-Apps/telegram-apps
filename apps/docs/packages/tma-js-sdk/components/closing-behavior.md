@@ -1,7 +1,7 @@
 # `ClosingBehavior`
 
 Implements Telegram Mini
-Apps [closing behavior](../../../../platform/functionality/closing-behavior.md) functionality.
+Apps [closing behavior](../../../platform/closing-behavior.md) functionality.
 
 ## Initialization
 

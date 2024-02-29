@@ -1,6 +1,6 @@
 # `MainButton`
 
-Implements Telegram Mini Apps [Main Button](../../../../platform/ui/main-button.md).
+Implements Telegram Mini Apps [Main Button](../../../platform/main-button.md).
 
 ## Initialization
 

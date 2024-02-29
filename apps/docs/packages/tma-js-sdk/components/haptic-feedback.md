@@ -1,7 +1,7 @@
 # `HapticFeedback`
 
 Implements Telegram Mini
-Apps [haptic feedback](../../../../platform/functionality/haptic-feedback.md) functionality.
+Apps [haptic feedback](../../../platform/haptic-feedback.md) functionality.
 
 ## Initialization
 

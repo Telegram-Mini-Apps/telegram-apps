@@ -1,6 +1,6 @@
 # `Popup`
 
-Implements Telegram Mini Apps [popup](../../../../platform/ui/popup.md).
+Implements Telegram Mini Apps [popup](../../../platform/popup.md).
 
 ## Initialization
 
