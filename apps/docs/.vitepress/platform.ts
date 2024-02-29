@@ -4,7 +4,7 @@ function prefixed(value: string): string {
 
 export const platformNavItem = {
   text: 'Platform',
-  link: prefixed('/about-platform'),
+  link: prefixed('/about'),
 };
 
 export const platformSidebar = {
