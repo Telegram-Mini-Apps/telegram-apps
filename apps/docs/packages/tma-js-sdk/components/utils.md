@@ -1,4 +1,4 @@
-# Utils
+# `Utils`
 
 Implements functionality that doesn't require state and can't be categorized.
 
