@@ -21,8 +21,7 @@
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "main": "./dist/index.cjs",
   "browser": "./dist/index.iife.js",
