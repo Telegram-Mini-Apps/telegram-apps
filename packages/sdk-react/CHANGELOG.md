@@ -1,5 +1,13 @@
 # @tma.js/sdk-react
 
+## 1.1.9
+
+### Patch Changes
+
+- 12a99ae: Remove src folder from package json files.
+- Updated dependencies [12a99ae]
+  - @tma.js/sdk@1.4.6
+
 ## 1.1.8
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @tma.js/solid-router-integration
 
+## 1.0.11
+
+### Patch Changes
+
+- 12a99ae: Remove src folder from package json files.
+- Updated dependencies [12a99ae]
+  - @tma.js/sdk@1.4.6
+
 ## 1.0.10
 
 ### Patch Changes
