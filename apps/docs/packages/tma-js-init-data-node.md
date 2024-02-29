@@ -8,7 +8,7 @@
 
 The package provides utilities to work with the initialization data of Telegram Mini Apps on the
 server side. To learn more about the initialization data and its usage, please refer to
-the [documentation](../../platform/launch-parameters).
+the [documentation](../platform/launch-parameters.md).
 
 ## Installation
 
@@ -28,7 +28,7 @@ yarn add @tma.js/init-data-node
 
 ## Parsing
 
-You can learn more about parsing utilities in [@tma.js/sdk](../typescript/tma-js-sdk/init-data/about#parsing)
+You can learn more about parsing utilities in [@tma.js/sdk](tma-js-sdk/init-data.md#parsing)
 documentation. This package re-exports the `parseInitData` function as `parse`.
 
 ## Validation

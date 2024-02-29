@@ -68,7 +68,7 @@ the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) me
 
 ### `chat`
 
-Type: [`Chat`](../../tma-js-init-data/chat.md), _optional_
+Type: [`Chat`](../init-data/chat.md), _optional_
 
 An object containing data about the chat where the bot was launched via the attachment menu.
 Returned for supergroups, channels and group chats – only for Mini Apps launched via the attachment
@@ -103,7 +103,7 @@ messages via the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwe
 
 ### `receiver`
 
-Type: [`User`](../../tma-js-init-data/user.md), _optional_
+Type: [`User`](../init-data/user.md), _optional_
 
 An object containing data about the chat partner of the current user in the chat where the bot was
 launched via the attachment menu. Returned only for private chats and only for Mini Apps launched
@@ -118,6 +118,6 @@ Mini Apps when launched from the attachment menu via link.
 
 ### `user`
 
-Type: [`User`](../../tma-js-init-data/user.md), _optional_
+Type: [`User`](../init-data/user.md), _optional_
 
 An object containing data about the current user.

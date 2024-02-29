@@ -1,7 +1,7 @@
 # Launch parameters
 
 This section of SDK covers the topic related
-to [launch parameters](../../../platform/launch-parameters).
+to [launch parameters](../../platform/launch-parameters.md).
 
 ## Parsing
 

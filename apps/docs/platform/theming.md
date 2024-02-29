@@ -14,7 +14,7 @@ These colors should be utilized by Mini Apps to ensure a consistent and native l
 ### Launch Parameter
 
 Telegram Mini Apps provides theming data through a launch parameter known
-as [tgWebAppThemeParams](../launch-parameters#tgwebappthemeparams). This
+as [tgWebAppThemeParams](launch-parameters.md#tgwebappthemeparams). This
 parameter represents a serialized JSON object containing a list of optional properties, with each
 property describing one of the palette colors.
 
