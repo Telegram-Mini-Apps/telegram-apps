@@ -39,7 +39,7 @@ console.log(viewport);
 // };
 ```
 
-In case, Telegram Mini Apps accepts parameters, you should pass them as the second argument:
+In case, Telegram Mini Apps method accepts parameters, you should pass them as the second argument:
 
 ```typescript
 import { request } from '@tma.js/sdk';
