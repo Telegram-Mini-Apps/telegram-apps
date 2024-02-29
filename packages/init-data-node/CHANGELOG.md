@@ -1,5 +1,13 @@
 # @tma.js/init-data-node
 
+## 1.1.6
+
+### Patch Changes
+
+- 64e5fa1: Remove sourcemaps.
+- Updated dependencies [64e5fa1]
+  - @tma.js/sdk@1.4.5
+
 ## 1.1.5
 
 ### Patch Changes

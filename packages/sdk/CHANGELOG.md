@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.4.5
+
+### Patch Changes
+
+- 64e5fa1: Remove sourcemaps.
+
 ## 1.4.4
 
 ### Patch Changes
