@@ -4,7 +4,7 @@ import type { Platform } from '~/types/index.js';
 
 /**
  * Telegram Mini Apps launch parameters.
- * @see https://docs.telegram-mini-apps.com/platform/launch-parameters/common-information
+ * @see https://docs.telegram-mini-apps.com/platform/launch-parameters
  */
 export interface LaunchParams {
   /**

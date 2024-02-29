@@ -6,7 +6,7 @@
 
 [sdk-react-code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk-react
 
-[sdk-react-docs-link]: https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk-react
+[sdk-react-docs-link]: https://docs.telegram-mini-apps.com/packages/tma-js-sdk-react
 
 [sdk-react-npm-link]: https://npmjs.com/package/@tma.js/sdk-react
 
@@ -20,6 +20,6 @@
 [![code-badge]][sdk-react-code-link]
 
 React JS bindings
-for [client SDK](https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk/about). Includes
+for [client SDK](https://docs.telegram-mini-apps.com/packages/tma-js-sdk). Includes
 hooks, components and utilities for comfortable usage of React JS on the Telegram Mini Apps
 platform.

@@ -6,7 +6,7 @@
 
 [init-data-node-code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/init-data-node
 
-[init-data-node-docs-link]: https://docs.telegram-mini-apps.com/packages/node/tma-js-init-data-node
+[init-data-node-docs-link]: https://docs.telegram-mini-apps.com/packages/tma-js-init-data-node
 
 [init-data-node-npm-link]: https://npmjs.com/package/@tma.js/init-data-node
 
@@ -21,4 +21,4 @@
 
 The package provides utilities to work with the initialization data of Telegram Mini Apps on the
 server side. To learn more about the initialization data and its usage, please refer to
-the [documentation](https://docs.telegram-mini-apps.com/platform/launch-parameters/common-information).
+the [documentation](https://docs.telegram-mini-apps.com/platform/launch-parameters).

@@ -6,7 +6,7 @@
 
 [solid-router-integration-code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/solid-router-integration
 
-[solid-router-integration-docs-link]: https://docs.telegram-mini-apps.com/packages/typescript/tma-js-solid-router-integration
+[solid-router-integration-docs-link]: https://docs.telegram-mini-apps.com/packages/tma-js-solid-router-integration
 
 [solid-router-integration-npm-link]: https://npmjs.com/package/@tma.js/solid-router-integration
 
@@ -19,5 +19,5 @@
 [![docs-badge]][solid-router-integration-docs-link]
 [![code-badge]][solid-router-integration-code-link]
 
-Telegram Mini Apps [Navigator](https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk/navigation)
+Telegram Mini Apps [Navigator](https://docs.telegram-mini-apps.com/packages/tma-js-sdk/navigation)
 integration for [@solidjs/router](https://www.npmjs.com/package/@solidjs/router).

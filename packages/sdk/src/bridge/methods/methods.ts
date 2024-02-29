@@ -22,13 +22,13 @@ interface CreateParams<Params = undefined, VersionedParam extends UnionKeys<Para
 
 /**
  * Describes list of events and their parameters that could be posted by Bridge.
- * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods
+ * @see https://docs.telegram-mini-apps.com/platform/methods
  */
 export interface MiniAppsMethods {
   /**
    * Notifies parent iframe about the current frame is ready. This method is only used in the Web
    * version of Telegram. As a result, Mini App will receive `set_custom_style` event.
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#iframe-ready
+   * @see https://docs.telegram-mini-apps.com/platform/methods#iframe-ready
    */
   iframe_ready: CreateParams<{
     /**
@@ -39,20 +39,20 @@ export interface MiniAppsMethods {
 
   /**
    * Notifies parent iframe about the current iframe is going to reload.
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#iframe-will-reload
+   * @see https://docs.telegram-mini-apps.com/platform/methods#iframe-will-reload
    */
   iframe_will_reload: CreateParams;
 
   /**
    * Closes Mini App.
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-close
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-close
    */
   web_app_close: CreateParams;
 
   /**
    * Closes a QR scanner. The Telegram application creates `scan_qr_popup_closed` event.
    * @since v6.4
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-close-scan-qr-popup
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-close-scan-qr-popup
    */
   web_app_close_scan_qr_popup: CreateParams;
 
@@ -63,7 +63,7 @@ export interface MiniAppsMethods {
    * To get more information, take a look at `web_app_data` field in the
    * class [Message](https://core.telegram.org/bots/api#message).
    *
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-data-send
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-data-send
    */
   web_app_data_send: CreateParams<{
     /**
@@ -74,14 +74,14 @@ export interface MiniAppsMethods {
 
   /**
    * Expands the Mini App.
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-expand
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-expand
    */
   web_app_expand: CreateParams;
 
   /**
    * Invokes custom method.
    * @since v6.9
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-invoke-custom-method
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-invoke-custom-method
    */
   web_app_invoke_custom_method: CreateParams<AnyInvokeCustomMethodParams>;
 
@@ -89,7 +89,7 @@ export interface MiniAppsMethods {
    * Opens an invoice by its specified slug. More information about invoices in
    * this [documentation](https://core.telegram.org/bots/payments).
    * @since v6.1
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-open-invoice
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-open-invoice
    */
   web_app_open_invoice: CreateParams<{
     /**
@@ -100,7 +100,7 @@ export interface MiniAppsMethods {
 
   /**
    * Opens link in the default browser. Mini App will not be closed.
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-open-link
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-open-link
    */
   web_app_open_link: CreateParams<{
     /**
@@ -119,7 +119,7 @@ export interface MiniAppsMethods {
   /**
    * Opens a new popup. When user closes the popup, Telegram creates the `popup_closed` event.
    * @since v6.2
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-open-popup
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-open-popup
    */
   web_app_open_popup: CreateParams<PopupParams>;
 
@@ -128,7 +128,7 @@ export interface MiniAppsMethods {
    * the `scan_qr_popup_closed` event. When the scanner reads QR, Telegram creates the
    * `qr_text_received` event.
    * @since v6.4
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-open-scan-qr-popup
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-open-scan-qr-popup
    */
   web_app_open_scan_qr_popup: CreateParams<{
     /**
@@ -141,7 +141,7 @@ export interface MiniAppsMethods {
    * Opens the Telegram link by its pathname and query parameters. The link will be opened in the
    * Telegram app, Mini App will be closed.
    * @since v6.1
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-open-tg-link
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-open-tg-link
    */
   web_app_open_tg_link: CreateParams<{
     /**
@@ -155,7 +155,7 @@ export interface MiniAppsMethods {
    * Reads text from the clipboard. The method accepts a request identifier which is used to
    * appropriately retrieve the method execution result from the `clipboard_text_received` event.
    * @since v6.4
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-read-text-from-clipboard
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-read-text-from-clipboard
    */
   web_app_read_text_from_clipboard: CreateParams<{
     /**
@@ -168,41 +168,41 @@ export interface MiniAppsMethods {
   /**
    * Notifies Telegram about current application is ready to be shown. This method will make
    * Telegram to remove application loader and display Mini App.
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-ready
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-ready
    */
   web_app_ready: CreateParams;
 
   /**
    * Requests access to current user's phone.
    * @since v6.9
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-request-phone
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-phone
    */
   web_app_request_phone: CreateParams;
 
   /**
    * Requests current theme from Telegram. As a result, Telegram will create `theme_changed` event.
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-request-theme
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-theme
    */
   web_app_request_theme: CreateParams;
 
   /**
    * Requests current viewport information from Telegram. As a result, Telegram will create
    * `viewport_changed` event.
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-request-viewport
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-viewport
    */
   web_app_request_viewport: CreateParams;
 
   /**
    * Requests write message access to current user.
    * @since v6.9
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-rqeuest-write-access
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-rqeuest-write-access
    */
   web_app_request_write_access: CreateParams;
 
   /**
    * Updates the Mini App background color.
    * @since v6.1
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-set-background-color
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-set-background-color
    */
   web_app_set_background_color: CreateParams<{
     /**
@@ -214,7 +214,7 @@ export interface MiniAppsMethods {
   /**
    * Updates the Mini App header color.
    * @since v6.1
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-set-header-color
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-set-header-color
    */
   web_app_set_header_color: CreateParams<
     | {
@@ -234,7 +234,7 @@ export interface MiniAppsMethods {
   /**
    * Updates the Back Button settings.
    * @since v6.1
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-setup-back-button
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-setup-back-button
    */
   web_app_setup_back_button: CreateParams<{
     /**
@@ -245,7 +245,7 @@ export interface MiniAppsMethods {
 
   /**
    * Updates current closing behavior.
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-setup-closing-behavior
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-setup-closing-behavior
    */
   web_app_setup_closing_behavior: CreateParams<{
     /**
@@ -256,7 +256,7 @@ export interface MiniAppsMethods {
 
   /**
    * Updates the Main Button settings.
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-setup-main-button
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-setup-main-button
    */
   web_app_setup_main_button: CreateParams<{
     /**
@@ -289,7 +289,7 @@ export interface MiniAppsMethods {
   /**
    * Updates current state of Settings Button.
    * @since v6.10
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-setup-settings-button
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-setup-settings-button
    */
   web_app_setup_settings_button: CreateParams<{
     /**
@@ -304,7 +304,7 @@ export interface MiniAppsMethods {
    * the user to choose a specific chat, then opens that chat and inserts the bot's username and
    * the specified inline query in the input field.
    * @since v6.7
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-switch-inline-query
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-switch-inline-query
    */
   web_app_switch_inline_query: CreateParams<{
     /**
@@ -321,7 +321,7 @@ export interface MiniAppsMethods {
   /**
    * Generates haptic feedback event.
    * @since v6.1
-   * @see https://docs.telegram-mini-apps.com/platform/apps-communication/methods#web-app-trigger-haptic-feedback
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-trigger-haptic-feedback
    */
   web_app_trigger_haptic_feedback: CreateParams<AnyHapticFeedbackParams>;
 }

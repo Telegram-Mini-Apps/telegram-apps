@@ -6,7 +6,7 @@
 
 [sdk-code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk
 
-[sdk-docs-link]: https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk/about
+[sdk-docs-link]: https://docs.telegram-mini-apps.com/packages/tma-js-sdk
 
 [sdk-npm-link]: https://npmjs.com/package/@tma.js/sdk
 
@@ -27,5 +27,5 @@ Mini Apps. It consists of several individual components, each responsible for a 
 the Telegram Mini Apps ecosystem.
 
 Before you begin using the SDK, we highly recommend familiarizing yourself with the Telegram Mini
-Apps [documentation](https://docs.telegram-mini-apps.com/platform/about-platform)
+Apps [documentation](https://docs.telegram-mini-apps.com/platform/about)
 to grasp the fundamental concepts of the platform.
