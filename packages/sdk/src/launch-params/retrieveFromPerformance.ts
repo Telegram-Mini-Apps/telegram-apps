@@ -1,12 +1,12 @@
-import { getFirstNavigationEntry } from './getFirstNavigationEntry.js';
+import { getFirstNavigationEntry } from '~/misc/getFirstNavigationEntry.js';
+
 import { retrieveFromUrl } from './retrieveFromUrl.js';
 import type { LaunchParams } from './types.js';
 
 /**
- * Attempts to read launch parameters using window.performance data.
- * @throws {Error} Unable to get first navigation entry.
- * @throws {Error} First navigation entry does not contain hash part.
- * @throws {TypeError} Unable to parse value.
+ * @returns Launch parameters based on the first navigation entry.
+ * @throws Error if function was unable to extract launch parameters from the navigation
+ * entry.
  */
 export function retrieveFromPerformance(): LaunchParams {
   const navigationEntry = getFirstNavigationEntry();

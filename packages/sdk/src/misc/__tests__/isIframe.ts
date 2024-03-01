@@ -1,6 +1,6 @@
 import { afterAll, afterEach, expect, it, vi } from 'vitest';
 
-import { isIframe } from '../isIframe.js';
+import { isIframe } from '../isIframe';
 
 const windowSpy = vi.spyOn(window, 'window', 'get');
 

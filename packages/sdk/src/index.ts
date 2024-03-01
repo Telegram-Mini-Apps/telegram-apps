@@ -5,7 +5,6 @@ export {
 } from './back-button/index.js';
 export {
   createPostEvent,
-  isIframe,
   invokeCustomMethod,
   on,
   off,
@@ -90,6 +89,7 @@ export {
   launchParamsParser,
   parseLaunchParams,
   retrieveLaunchData,
+  retrieveLaunchParams,
   serializeLaunchParams,
   type LaunchParams,
   type LaunchData,
@@ -110,7 +110,12 @@ export {
   type MiniAppEvents,
   type MiniAppProps,
 } from './mini-app/index.js';
-export { isTMA, isRecord } from './misc/index.js';
+export {
+  isTMA,
+  isRecord,
+  isIframe,
+  isPageReload,
+} from './misc/index.js';
 export {
   getHash,
   HashNavigator,

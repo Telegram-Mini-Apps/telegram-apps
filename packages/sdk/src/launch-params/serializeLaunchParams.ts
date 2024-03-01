@@ -13,6 +13,7 @@ export function serializeLaunchParams(value: LaunchParams): string {
     platform,
     version,
     showSettings,
+    startParam,
     botInline,
   } = value;
 
@@ -24,6 +25,10 @@ export function serializeLaunchParams(value: LaunchParams): string {
   params.set('tgWebAppPlatform', platform);
   params.set('tgWebAppThemeParams', serializeThemeParams(themeParams));
   params.set('tgWebAppVersion', version);
+
+  if (startParam) {
+    params.set('tgWebAppStartParam', version);
+  }
 
   if (typeof showSettings === 'boolean') {
     params.set('tgWebAppShowSettings', showSettings ? '1' : '0');
