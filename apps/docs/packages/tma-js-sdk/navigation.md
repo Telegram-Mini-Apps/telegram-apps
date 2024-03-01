@@ -300,11 +300,11 @@ navigator.canGoForward; // true
 Here is the example how developer could instantiate the stable instance of `HashNavigator`.
 
 ```typescript
-import { 
+import {
+  retrieveLaunchData,
   HashNavigator,
   type HashNavigatorOptions,
 } from '@tma.js/sdk';
-import { retrieveLaunchData } from '@tma.js/launch-params';
 
 function createNavigator() {
   let navigator: HashNavigator | undefined;
