@@ -106,7 +106,6 @@ function App() {
 
 ```typescript [createNavigator.ts]
 import {
-  retrieveLaunchParams,
   isPageReload,
   HashNavigator,
   type HashNavigatorOptions,
