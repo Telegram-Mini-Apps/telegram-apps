@@ -109,7 +109,6 @@ request(
   { slug: 'jjKSJnm1k23lodd' },
   'invoice_closed',
   {
-    postEvent: this.postEvent,
     capture(data) {
       return slug === data.slug;
     },
@@ -122,8 +121,8 @@ In this case, `request` function will capture the event only in case, it has the
 ## Invoking Custom Methods
 
 Custom methods are methods, which could be used by Telegram Mini Apps 
-`web_app_invoke_custom_method` method. It only simplifies usage of such methods and reuses the
-`request` function. 
+`web_app_invoke_custom_method` method. `invokeCustomMethod` function simplifies usage of such methods and 
+reuses the `request` function. 
 
 Here is the code example without using this function:
 
@@ -133,7 +132,7 @@ import { request } from '@tma.js/sdk';
 request(
   'web_app_invoke_custom_method',
   {
-    req_id: 'request_id_1',
+    req_id: '1',
     method: 'deleteStorageValues',
     params: { keys: ['a'] },
   },
@@ -146,11 +145,7 @@ And that is how we could rewrite it using the `invokeCustomMethod` function:
 ```typescript
 import { invokeCustomMethod } from '@tma.js/sdk';
 
-invokeCustomMethod(
-  'deleteStorageValues',
-  { keys: ['a'] },
-  'request_id_1',
-);
+invokeCustomMethod('deleteStorageValues', { keys: ['a'] }, '1');
 ```
 
 In contrary to the `request` function, the `invokeCustomMethod` function parses the result and 
