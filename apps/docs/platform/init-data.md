@@ -10,13 +10,13 @@ and init data specifically.
 
 ## Retrieving
 
-To extract init data, developer can use `retrieveLaunchData` function
+To extract init data, developer can use the `retrieveLaunchParams` function
 from [@tma.js/sdk](../packages/tma-js-sdk.md).
 
 ```typescript
-import { retrieveLaunchData } from '@tma.js/sdk';
+import { retrieveLaunchParams } from '@tma.js/sdk';
 
-const { initDataRaw, initData } = retrieveLaunchData().launchParams;
+const { initDataRaw, initData } = retrieveLaunchParams();
 ```
 
 ## Authorization and Authentication
@@ -42,9 +42,9 @@ carried out on the server side.
 Here is how a developer could send init data to server:
 
 ```typescript
-import { retrieveLaunchData } from '@tma.js/sdk';
+import { retrieveLaunchParams } from '@tma.js/sdk';
 
-const { initDataRaw } = retrieveLaunchData().launchParams;
+const { initDataRaw } = retrieveLaunchParams();
 
 fetch('https://example.com/api', {
     method: 'POST',

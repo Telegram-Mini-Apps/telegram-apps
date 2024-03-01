@@ -1,11 +1,11 @@
-import { type LaunchParams, retrieveLaunchData } from '@tma.js/sdk';
+import { type LaunchParams, retrieveLaunchParams } from '@tma.js/sdk';
 import React, { type ComponentType, useMemo } from 'react';
 
 /**
  * Hooks to retrieve launch parameters.
  */
 export function useLaunchParams(): LaunchParams {
-  return useMemo(() => retrieveLaunchData().launchParams, []);
+  return useMemo(retrieveLaunchParams, []);
 }
 
 /**

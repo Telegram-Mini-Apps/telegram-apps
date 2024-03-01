@@ -1,9 +1,10 @@
-import { parseLaunchParams } from '~/launch-params/parseLaunchParams.js';
-import type { LaunchParams } from '~/launch-params/types.js';
+import { parseLaunchParams } from './parseLaunchParams.js';
+import type { LaunchParams } from './types.js';
 
 /**
- * Retrieves launch parameters from the specified URL.
  * @param url - URL to extract launch parameters from.
+ * @returns Launch parameters from the specified URL.
+ * @throws Error if function was unable to extract launch parameters from the passed URL.
  */
 export function retrieveFromUrl(url: string): LaunchParams {
   const queryParams = url.includes('?')

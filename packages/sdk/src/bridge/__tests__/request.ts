@@ -16,9 +16,9 @@ import { type PostEvent, postEvent as globalPostEvent } from '../methods/postEve
 import { createWindow } from '../../../test-utils/createWindow';
 import { dispatchWindowMessageEvent } from '../../../test-utils/dispatchWindowMessageEvent';
 
-vi.mock('../methods/postEvent.js', async () => {
+vi.mock('../methods/postEvent', async () => {
   const { postEvent: actualPostEvent } = await vi
-    .importActual('../methods/postEvent.js') as { postEvent: PostEvent };
+    .importActual('../methods/postEvent') as { postEvent: PostEvent };
 
   return {
     postEvent: vi.fn(actualPostEvent),

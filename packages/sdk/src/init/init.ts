@@ -1,4 +1,4 @@
-import { createPostEvent, isIframe, on } from '~/bridge/index.js';
+import { createPostEvent, on } from '~/bridge/index.js';
 import { CloudStorage } from '~/cloud-storage/index.js';
 import { HapticFeedback } from '~/haptic-feedback/index.js';
 import { catchCustomStyles } from '~/init/catchCustomStyles.js';
@@ -15,7 +15,8 @@ import {
 import { processCSSVars } from '~/init/css/index.js';
 import { InitData } from '~/init-data/index.js';
 import { Invoice } from '~/invoice/index.js';
-import { retrieveLaunchData } from '~/launch-params/index.js';
+import { retrieveLaunchParams } from '~/launch-params/index.js';
+import { isIframe, isPageReload } from '~/misc/index.js';
 import { Popup } from '~/popup/index.js';
 import { QRScanner } from '~/qr-scanner/index.js';
 import { Utils } from '~/utils/index.js';
@@ -37,18 +38,15 @@ export function init(options: InitOptions = {}): InitResult | Promise<InitResult
   } = options;
 
   try {
-    // Retrieve launch data.
     const {
-      launchParams: {
-        initData,
-        initDataRaw,
-        version,
-        platform,
-        themeParams,
-        botInline = false,
-      },
-      isPageReload,
-    } = retrieveLaunchData();
+      initData,
+      initDataRaw,
+      version,
+      platform,
+      themeParams,
+      botInline = false,
+    } = retrieveLaunchParams();
+    const isPageReloaded = isPageReload();
 
     const createRequestId = createRequestIdGenerator();
     const postEvent = createPostEvent(version);
@@ -68,20 +66,20 @@ export function init(options: InitOptions = {}): InitResult | Promise<InitResult
     }
 
     const result: Omit<InitResult, 'viewport'> = {
-      backButton: createBackButton(isPageReload, version, postEvent),
-      closingBehavior: createClosingBehavior(isPageReload, postEvent),
+      backButton: createBackButton(isPageReloaded, version, postEvent),
+      closingBehavior: createClosingBehavior(isPageReloaded, postEvent),
       cloudStorage: new CloudStorage(version, createRequestId, postEvent),
       createRequestId,
       hapticFeedback: new HapticFeedback(version, postEvent),
       invoice: new Invoice(version, postEvent),
       mainButton: createMainButton(
-        isPageReload,
+        isPageReloaded,
         themeParams.buttonColor || '#000000',
         themeParams.buttonTextColor || '#ffffff',
         postEvent,
       ),
       miniApp: createMiniApp(
-        isPageReload,
+        isPageReloaded,
         themeParams.backgroundColor || '#ffffff',
         version,
         botInline,
@@ -91,7 +89,7 @@ export function init(options: InitOptions = {}): InitResult | Promise<InitResult
       popup: new Popup(version, postEvent),
       postEvent,
       qrScanner: new QRScanner(version, postEvent),
-      settingsButton: createSettingsButton(isPageReload, version, postEvent),
+      settingsButton: createSettingsButton(isPageReloaded, version, postEvent),
       themeParams: createThemeParams(themeParams),
       utils: new Utils(version, createRequestId, postEvent),
       ...(initData
@@ -103,7 +101,7 @@ export function init(options: InitOptions = {}): InitResult | Promise<InitResult
         : {}),
     };
 
-    const viewport = createViewport(isPageReload, platform, postEvent, complete);
+    const viewport = createViewport(isPageReloaded, platform, postEvent, complete);
     if (viewport instanceof Promise || complete) {
       return Promise.resolve(viewport).then((vp) => {
         processCSSVars(

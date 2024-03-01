@@ -113,11 +113,11 @@ serializeLaunchParams({
 ## Retrieving
 
 This package enables the extraction of launch parameters from the current environment using
-the `retrieveLaunchData` function which surely extracts launch parameters and determines if current
-page was reloaded. This function throws an error if all known sources contain invalid data.
+the `retrieveLaunchParams` function which surely extracts launch parameters. This function 
+throws an error if all known sources contain invalid data.
 
 ```typescript
-import { retrieveLaunchData } from '@tma.js/sdk';
+import { retrieveLaunchParams } from '@tma.js/sdk';
 
-const { launchParams, isPageReload } = retrieveLaunchData();
+const launchParams = retrieveLaunchParams();
 ```
