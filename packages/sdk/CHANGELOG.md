@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.4.7
+
+### Patch Changes
+
+- 7a952b3: Deprecate retrieveLaunchData function
+
 ## 1.4.6
 
 ### Patch Changes
