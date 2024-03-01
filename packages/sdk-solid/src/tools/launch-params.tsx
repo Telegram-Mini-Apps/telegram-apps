@@ -1,8 +1,8 @@
-import { type LaunchParams, retrieveLaunchData } from '@tma.js/sdk';
+import { type LaunchParams, retrieveLaunchParams } from '@tma.js/sdk';
 
 /**
- * Hooks to retrieve launch parameters.
+ * Hook to retrieve launch parameters.
  */
 export function useLaunchParams(): LaunchParams {
-  return retrieveLaunchData().launchParams;
+  return retrieveLaunchParams();
 }
