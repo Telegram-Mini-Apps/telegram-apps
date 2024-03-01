@@ -1,5 +1,13 @@
 # @tma.js/sdk-react
 
+## 1.1.10
+
+### Patch Changes
+
+- 7a952b3: Deprecate retrieveLaunchData function
+- Updated dependencies [7a952b3]
+  - @tma.js/sdk@1.4.7
+
 ## 1.1.9
 
 ### Patch Changes
