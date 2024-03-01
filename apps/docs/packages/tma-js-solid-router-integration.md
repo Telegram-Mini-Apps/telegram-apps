@@ -106,7 +106,8 @@ function App() {
 
 ```typescript [createNavigator.ts]
 import {
-  retrieveLaunchData,
+  retrieveLaunchParams,
+  isPageReload,
   HashNavigator,
   type HashNavigatorOptions,
 } from '@tma.js/sdk';
@@ -119,7 +120,7 @@ export function createNavigator(): HashNavigator {
 
   // If page was reloaded, we assume that navigator had to previously save
   // its state in the session storage.
-  if (retrieveLaunchData().isPageReload) {
+  if (isPageReload()) {
     const stateRaw = sessionStorage.getItem('hash-navigator-state');
     if (stateRaw) {
       try {
