@@ -1,4 +1,4 @@
-export type ClassesClassName = string | undefined | null;
+export type ClassesClassName = string | boolean | undefined | null;
 
 export type ComputeClassNamesFn<Props> = (props: Props) => ClassesClassName | ClassesClassName[];
 

@@ -63,6 +63,7 @@
     "eslint-config-custom": "workspace:*",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "sass": "^1.71.1",
     "storybook": "^7.6.17",
     "storybook-solidjs": "1.0.0-beta.2",
     "storybook-solidjs-vite": "1.0.0-beta.2",

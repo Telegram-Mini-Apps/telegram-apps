@@ -15,15 +15,9 @@ export type LoaderSize = 'sm' | 'md' | 'lg';
 export type LoaderElementKey = 'root' | 'inner';
 
 /**
- * Properties, which are passed to classes resolvers.
+ * List of components properties, which have defaults.
  */
-export interface LoaderClassesProps
-  extends RequiredBy<LoaderViewProps, 'size' | keyof WithComponentProps> {
-}
-
-export interface LoaderViewProps extends JSX.HTMLAttributes<HTMLDivElement>,
-  WithOptionalClasses<LoaderElementKey, LoaderClassesProps>,
-  WithComponentProps {
+export interface LoaderPropsDefaults extends WithComponentProps {
   /**
    * Loader size.
    * @default 'md'
@@ -31,4 +25,13 @@ export interface LoaderViewProps extends JSX.HTMLAttributes<HTMLDivElement>,
   size?: LoaderSize;
 }
 
-export type LoaderProps = LoaderViewProps;
+/**
+ * Properties, which are passed to classes resolvers.
+ */
+export interface LoaderClassesProps extends RequiredBy<LoaderProps, keyof LoaderPropsDefaults> {
+}
+
+export interface LoaderProps extends JSX.HTMLAttributes<HTMLDivElement>,
+  WithOptionalClasses<LoaderElementKey, LoaderClassesProps>,
+  LoaderPropsDefaults {
+}

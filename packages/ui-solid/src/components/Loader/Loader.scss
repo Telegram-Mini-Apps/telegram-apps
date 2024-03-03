@@ -1,0 +1,111 @@
+// Each platforms settings.
+$platforms: (
+  "base": [],
+  "ios": [],
+);
+
+// Element sizes for base:
+// [
+//  root width,
+//  stroke width,
+//  initial stroke dasharray spacing,
+//  stroke dasharray length,
+//  stroke dasharray 50%,
+//  stroke dasharray 100%,
+// ]
+$baseSizes: (
+  "sm": [18, 2.5, 56, 43, -15, -56],
+  "md": [36, 3.5, 112, 89, -25, -112],
+  "lg": [44, 4, 138, 100, -40, -138],
+);
+
+// Element sizes for iOS:
+// [root width, inner width, inner height]
+$iosSizes: (
+  "sm": [24, 2, 5],
+  "md": [28, 2.5, 6.3],
+  "lg": [32, 3.3, 7.5],
+);
+
+.tgui-loader {
+  aspect-ratio: 1;
+
+  &--base {
+    fill: transparent;
+    stroke: #007AFF;
+    stroke-linecap: round;
+    overflow: visible;
+
+    @each $sizeType, $settings in $baseSizes {
+      &-#{$sizeType} {
+        width: #{nth($settings, 1)}px;
+        stroke-width: #{nth($settings, 2)}px;
+        animation: tgui-loader-base-dash-#{$sizeType} 2s ease infinite, tgui-loader-base-rotate 2s linear infinite;
+
+        @keyframes tgui-loader-base-dash-#{$sizeType} {
+          0% {
+            stroke-dasharray: 1, nth($settings, 3);
+            stroke-dashoffset: 0;
+          }
+          50% {
+            stroke-dasharray: nth($settings, 4), nth($settings, 3);
+            stroke-dashoffset: nth($settings, 5);
+          }
+          100% {
+            stroke-dasharray: nth($settings, 4), nth($settings, 3);
+            stroke-dashoffset: nth($settings, 6);
+          }
+        }
+      }
+    }
+  }
+
+  &--ios {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @each $sizeType, $settings in $iosSizes {
+      &-#{$sizeType} {
+        width: #{nth($settings, 1)}px;
+      }
+    }
+  }
+
+  &__inner {
+    &--ios {
+      position: absolute;
+      background-color: #707579;
+      border-radius: 1000px;
+      transform-origin: bottom;
+      animation: tgui-loader-ios-fade 800ms linear infinite;
+      opacity: .1;
+
+      @each $sizeType, $settings in $iosSizes {
+        &-#{$sizeType} {
+          width: #{nth($settings, 2)}px;
+          height: #{nth($settings, 3)}px;
+        }
+      }
+    }
+  }
+}
+
+@keyframes tgui-loader-ios-fade {
+  0% {
+    opacity: 1
+  }
+
+  100% {
+    opacity: .1
+  }
+}
+
+@keyframes tgui-loader-base-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
