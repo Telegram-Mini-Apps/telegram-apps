@@ -1,7 +1,10 @@
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+
 import { ConfigProvider } from '../src/providers';
 
 // Allowed icons:
-// https://storybook.js.org/docs/7.0/faq#what-icons-are-available-for-my-toolbar-or-my-addon
+// https://www.npmjs.com/package/@storybook/icons
+// https://main--64b56e737c0aeefed9d5e675.chromatic.com/
 
 /** @type { import('storybook-solidjs').Preview } */
 const preview = {
@@ -11,10 +14,9 @@ const preview = {
       defaultValue: 'light',
       toolbar: {
         title: 'Color scheme',
-        icon: 'mirror',
         items: [
-          { value: 'light', title: 'Light' },
-          { value: 'dark', title: 'Dark' },
+          { value: 'light', title: 'Light', icon: 'sun' },
+          { value: 'dark', title: 'Dark', icon: 'moon' },
         ],
         dynamicTitle: true,
       },
@@ -27,8 +29,8 @@ const preview = {
         title: 'Platform',
         icon: 'mobile',
         items: [
-          { value: 'base', title: 'Base' },
-          { value: 'ios', title: 'IOS' },
+          { value: 'base', title: 'Base', icon: 'windows' },
+          { value: 'ios', title: 'iOS', icon: 'apple' },
         ],
         dynamicTitle: true,
       },
@@ -36,18 +38,33 @@ const preview = {
   },
 
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
+    actions: {
+      argTypesRegex: '^on[A-Z].*',
+    },
+    backgrounds: {
+      disable: true,
+    },
     controls: {
+      // https://storybook.js.org/docs/essentials/controls#specify-initial-preset-color-swatches
+      // presetColors: [{ color: '#ff4785', title: 'Coral' }, 'rgba(0, 159, 183, 1)', '#fe4a49'],
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+      // https://storybook.js.org/docs/essentials/controls#sorting-controls
+      controls: {
+        sort: 'requiredFirst',
+      },
+    },
+    viewport: {
+      viewports: INITIAL_VIEWPORTS,
     },
   },
 
   decorators: [
     (Story, context) => {
       const { colorScheme, platform } = context.globals;
+      // colorScheme dark 333333
 
       return (
         <ConfigProvider platform={platform} colorScheme={colorScheme}>
