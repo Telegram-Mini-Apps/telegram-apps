@@ -6,6 +6,10 @@ it('should ignore all non-empty strings and objects', () => {
   expect(classNames('', 2, 'b', null, undefined, false, true, [], 'a', 'c')).toBe('b a c');
 });
 
+it('should apply classNames function to the item, if it is an array', () => {
+  expect(classNames(['a', 'b', 'c'])).toBe('a b c');
+})
+
 it('should pick only keys which values are truthy', () => {
   expect(classNames({
     a: true,
