@@ -1,0 +1,142 @@
+/* Shared */
+
+.tgui-loader {
+  aspect-ratio: 1;
+}
+
+/* Base */
+
+.tgui-loader--base {
+  fill: transparent;
+  stroke: #007AFF;
+  stroke-linecap: round;
+  overflow: visible;
+}
+
+.tgui-loader--base-sm {
+  width: 18px;
+  stroke-width: 2.5;
+  animation: tgui-loader-base-dash-sm 2s ease infinite, tgui-loader-base-rotate 2s linear infinite;
+}
+
+.tgui-loader--base-md {
+  width: 36px;
+  stroke-width: 3.5;
+  animation: tgui-loader-base-dash-md 2s ease infinite, tgui-loader-base-rotate 2s linear infinite;
+}
+
+.tgui-loader--base-lg {
+  width: 44px;
+  stroke-width: 4;
+  animation: tgui-loader-base-dash-lg 2s ease infinite, tgui-loader-base-rotate 2s linear infinite;
+  stroke-dasharray: 115, 138;
+  stroke-dashoffset: 0;
+}
+
+@keyframes tgui-loader-base-dash-sm {
+  0% {
+    stroke-dasharray: 1, 95;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 85, 95;
+    stroke-dashoffset: -25;
+  }
+  100% {
+    stroke-dasharray: 85, 95;
+    stroke-dashoffset: -56;
+  }
+}
+
+@keyframes tgui-loader-base-dash-md {
+  0% {
+    stroke-dasharray: 1, 112;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 85, 112;
+    stroke-dashoffset: -25;
+  }
+  100% {
+    stroke-dasharray: 89, 112;
+    stroke-dashoffset: -112;
+  }
+}
+
+@keyframes tgui-loader-base-dash-lg {
+  0% {
+    stroke-dasharray: 1, 138;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 115, 138;
+    stroke-dashoffset: -25;
+  }
+  100% {
+    stroke-dasharray: 115, 138;
+    stroke-dashoffset: -138;
+  }
+}
+
+@keyframes tgui-loader-base-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* IOS */
+
+.tgui-loader--ios {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tgui-loader--ios-sm {
+  width: 24px;
+}
+
+.tgui-loader--ios-md {
+  width: 28px;
+}
+
+.tgui-loader--ios-lg {
+  width: 32px;
+}
+
+.tgui-loader__inner--ios {
+  position: absolute;
+  background-color: #707579;
+  border-radius: 1000px;
+  transform-origin: bottom;
+  animation: tgui-loader-ios-fade 800ms linear infinite;
+  opacity: .1;
+}
+
+.tgui-loader__inner--ios-sm {
+  width: 2px;
+  height: 5px;
+}
+
+.tgui-loader__inner--ios-md {
+  width: 2.5px;
+  height: 6.3px;
+}
+
+.tgui-loader__inner--ios-lg {
+  width: 3.3px;
+  height: 7.5px;
+}
+
+@keyframes tgui-loader-ios-fade {
+  0% {
+    opacity: 1
+  }
+
+  100% {
+    opacity: .1
+  }
+}

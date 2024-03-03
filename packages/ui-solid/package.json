@@ -1,0 +1,73 @@
+{
+  "name": "@tma.js/ui-solid",
+  "version": "0.0.1",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
+    "directory": "packages/ui-solid"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
+  },
+  "keywords": [
+    "telegram-mini-apps",
+    "typescript",
+    "solid"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "browser": "./dist/index.iife.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/dts/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "test": "vitest --run",
+    "lint": "eslint src",
+    "lint:fix": "pnpm run lint --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "build": "pnpm run build:default && pnpm run build:iife",
+    "build:default": "vite build --config vite.config.ts",
+    "build:iife": "vite build --config vite.iife.config.ts",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "peerDependencies": {
+    "@tma.js/sdk": "workspace:^",
+    "@tma.js/sdk-solid": "workspace:^",
+    "solid-js": "^1.0.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^7.6.17",
+    "@storybook/addon-interactions": "^7.6.17",
+    "@storybook/addon-links": "^7.6.17",
+    "@storybook/blocks": "^7.6.17",
+    "@storybook/testing-library": "0.2.2",
+    "@tma.js/sdk-solid": "workspace:^",
+    "build-utils": "workspace:*",
+    "eslint-config-custom": "workspace:*",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "storybook": "^7.6.17",
+    "storybook-solidjs": "1.0.0-beta.2",
+    "storybook-solidjs-vite": "1.0.0-beta.2",
+    "test-utils": "workspace:*",
+    "tsconfig": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
