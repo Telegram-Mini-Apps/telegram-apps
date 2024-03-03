@@ -1,17 +1,12 @@
 module.exports = {
   extends: [
-    'airbnb-base',
-    'airbnb-typescript/base',
-    'plugin:solid/typescript'
+    './base.js',
+    'plugin:solid/typescript',
   ],
   plugins: [
-    'simple-import-sort',
-    'import',
-    'solid'
+    'solid',
   ],
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: './tsconfig.json',
+  rules: {
+    'prefer-destructuring': 0,
   },
-  rules: require('./rules'),
 };
