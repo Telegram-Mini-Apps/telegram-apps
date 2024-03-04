@@ -1,76 +1,45 @@
-// Sizes map. Each value is:
-// [font-size, [base-line-height, base-letter-spacing], [ios-line-height, ios-letter-spacing]]
-$sizes: (
-  "large-title": [34, [42, 0.25], [41, 0.4]],
-  "title1": [28, [36, 0.1], [34, 0.38]],
-  "title2": [24, [32], [28, 0.07]],
-  "title3": [20, [24, 0.15], [25, -0.45]],
-  "headline": [19, [28, 0.15], [24, -0.45]],
-  "text": [17, [26, 0.1], [22, -0.4]],
-  "subheadline1": [16, [24, 0.15], [21, -0.23]],
-  "subheadline2": [15, [22, 0.15], [20, -0.23]],
-  "caption1": [13, [20, 0.1], [16, -0.08]],
-  "caption2": [10, [16, 0.1], [13, 0.06]],
-);
-
-$weights: (
-  "regular": 400,
-  "semibold": 590,
-  "bold": 700
-);
-
-// Platforms fonts:
-// [default, monospace]
-// fixme: Better fonts?
-$platforms: (
-  "base": [
-    #{"Roboto", sans-serif},
-    #{"Roboto Mono", monospace}
-  ],
-  "ios": [
-    #{"SF Pro", -apple-system, sans-serif},
-    #{"SF Mono", monospace},
-  ],
-);
+@use "./variants" as variants;
 
 .tgui-typography {
   margin: 0;
   padding: 0;
 
-  @each $platform, $fonts in $platforms {
+  // fixme: Better fonts?
+  @each $platform, $fonts in (
+    "base": (
+      "default": #{"Roboto", sans-serif},
+      "mono": #{"Roboto Mono", monospace}
+    ),
+    "ios": (
+      "default": #{"SF Pro", -apple-system, sans-serif},
+      "mono": #{"SF Mono", monospace}
+    )
+  ) {
     &--#{$platform} {
-      font-family: nth($fonts, 1);
+      font-family: map-get($fonts, "default");
 
       &-monospace {
-        font-family: nth($fonts, 2);
+        font-family: map-get($fonts, "mono");
       }
 
-      $index: 2;
-      @if $platform == "ios" {
-        $index: 3;
-      }
-
-      @each $sizeType, $settings in $sizes {
-        &-#{$sizeType} {
-          line-height: #{nth(nth($settings, $index), 1)}px;
-
-          @if length(nth($settings, $index)) > 1 {
-            letter-spacing: #{nth(nth($settings, $index), 2)}px;
-          }
+      @each $variant, $_ in variants.$variants {
+        &-#{$variant} {
+          line-height: variants.line-height($platform, $variant);
+          letter-spacing: variants.letter-spacing($platform, $variant);
         }
       }
     }
   }
 
-  @each $sizeType, $settings in $sizes {
-    &--#{$sizeType} {
-      font-size: #{nth($settings, 1)}px;
+  @each $weight-type, $weight in ("regular": 400, "semibold": 600, "bold": 700) {
+    &--#{$weight-type} {
+      font-weight: $weight;
     }
   }
 
-  @each $weightType, $weight in $weights {
-    &--#{$weightType} {
-      font-weight: $weight;
+  @each $variant, $_ in variants.$variants {
+    &--#{$variant} {
+      font-size: variants.font-size($variant);
     }
   }
 }

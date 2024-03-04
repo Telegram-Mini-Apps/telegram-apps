@@ -1,33 +1,7 @@
-// Each platforms settings.
-$platforms: (
-  "base": [],
-  "ios": [],
-);
-
-// Element sizes for base:
-// [
-//  root width,
-//  stroke width,
-//  initial stroke dasharray spacing,
-//  stroke dasharray length,
-//  stroke dasharray 50%,
-//  stroke dasharray 100%,
-// ]
-$baseSizes: (
-  "sm": [18, 2.5, 56, 43, -15, -56],
-  "md": [36, 3.5, 112, 89, -25, -112],
-  "lg": [44, 4, 138, 100, -40, -138],
-);
-
-// Element sizes for iOS:
-// [root width, inner width, inner height]
-$iosSizes: (
-  "sm": [24, 2, 5],
-  "md": [28, 2.5, 6.3],
-  "lg": [32, 3.3, 7.5],
-);
+@use "./sizes" as sizes;
 
 .tgui-loader {
+  display: block;
   aspect-ratio: 1;
 
   &--base {
@@ -36,24 +10,47 @@ $iosSizes: (
     stroke-linecap: round;
     overflow: visible;
 
-    @each $sizeType, $settings in $baseSizes {
-      &-#{$sizeType} {
-        width: #{nth($settings, 1)}px;
-        stroke-width: #{nth($settings, 2)}px;
-        animation: tgui-loader-base-dash-#{$sizeType} 2s ease infinite, tgui-loader-base-rotate 2s linear infinite;
+    @each $size-type, $settings in (
+      "sm": (
+        "stroke-width": 2.5px,
+        "strokes": (
+          "0%": [#{1, 56}, 0],
+          "50%": [#{43, 56}, -15],
+          "100%": [#{43, 56}, -56],
+        )
+      ),
+      "md": (
+        "stroke-width": 3.5px,
+        "strokes": (
+          "0%": [#{1, 112}, 0],
+          "50%": [#{89, 112}, -25],
+          "100%": [#{89, 112}, -112],
+        )
+      ),
+      "lg": (
+        "stroke-width": 4px,
+        "strokes": (
+          "0%": [#{1, 138}, 0],
+          "50%": [#{100, 138}, -40],
+          "100%": [#{100, 138}, -138],
+        )
+      ),
+    ) {
+      &-#{$size-type} {
+        width: sizes.size("base", $size-type);
+        stroke-width: map-get($settings, "stroke-width");
+        animation: tgui-loader-base-dash-#{$size-type} 2s ease infinite, tgui-loader-base-rotate 2s linear infinite;
+      }
 
-        @keyframes tgui-loader-base-dash-#{$sizeType} {
-          0% {
-            stroke-dasharray: 1, nth($settings, 3);
-            stroke-dashoffset: 0;
-          }
-          50% {
-            stroke-dasharray: nth($settings, 4), nth($settings, 3);
-            stroke-dashoffset: nth($settings, 5);
-          }
-          100% {
-            stroke-dasharray: nth($settings, 4), nth($settings, 3);
-            stroke-dashoffset: nth($settings, 6);
+      @keyframes tgui-loader-base-dash-#{$size-type} {
+        @each $percentage in ["0%", "50%", "100%"] {
+          $stroke-settings: map-get(map-get($settings, "strokes"), $percentage);
+
+          #{$percentage} {
+            stroke: {
+              dasharray: nth($stroke-settings, 1);
+              dashoffset: nth($stroke-settings, 2);
+            }
           }
         }
       }
@@ -65,27 +62,29 @@ $iosSizes: (
     justify-content: center;
     align-items: center;
 
-    @each $sizeType, $settings in $iosSizes {
-      &-#{$sizeType} {
-        width: #{nth($settings, 1)}px;
+    @each $size-type, $_ in sizes.$sizes {
+      &-#{$size-type} {
+        width: sizes.size("ios", $size-type);
       }
     }
   }
 
-  &__inner {
-    &--ios {
-      position: absolute;
-      background-color: #707579;
-      border-radius: 1000px;
-      transform-origin: bottom;
-      animation: tgui-loader-ios-fade 800ms linear infinite;
-      opacity: .1;
+  &__inner--ios {
+    position: absolute;
+    background-color: #707579;
+    border-radius: 1000px;
+    transform-origin: bottom;
+    animation: tgui-loader-ios-fade 800ms linear infinite;
+    opacity: .1;
 
-      @each $sizeType, $settings in $iosSizes {
-        &-#{$sizeType} {
-          width: #{nth($settings, 2)}px;
-          height: #{nth($settings, 3)}px;
-        }
+    @each $size-type, $dimensions in (
+      "sm": [2px, 5px],
+      "md": [2.5px, 6.3px],
+      "lg": [3.3px, 7.5px]
+    ) {
+      &-#{$size-type} {
+        width: nth($dimensions, 1);
+        height: nth($dimensions, 2);
       }
     }
   }

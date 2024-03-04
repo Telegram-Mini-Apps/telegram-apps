@@ -1,0 +1,46 @@
+@function _create($font-size, $settings) {
+  $result: ("font-size": $font-size);
+
+  @each $platform in ["base", "ios"] {
+    $platform-settings: map-get($settings, $platform);
+    $result: map-merge($result, (
+      $platform: (
+        "line-height": nth($platform-settings, 1),
+        "letter-spacing": if(length($platform-settings) > 1, nth($platform-settings, 2), null),
+      )
+    ));
+  }
+
+  @return $result
+}
+
+$variants: (
+  "large-title": _create(34px, ("base": [42px, 0.25px], "ios": [41px, 0.4px])),
+  "title1": _create(28px, ("base": [36px, 0.1px], "ios": [34px, 0.38px])),
+  "title2": _create(24px, ("base": [32px], "ios": [28px, 0.07px])),
+  "title3": _create(20px, ("base": [24px, 0.15px], "ios": [25px, -0.45px])),
+  "headline": _create(19px, ("base": [28px, 0.15px], "ios": [24px, -0.45px])),
+  "text": _create(17px, ("base": [26px, 0.1px], "ios": [22px, -0.4px])),
+  "subheadline1": _create(16px, ("base": [24px, 0.15px], "ios": [21px, -0.23px])),
+  "subheadline2": _create(15px, ("base": [22px, 0.15px], "ios": [20px, -0.23px])),
+  "caption1": _create(13px, ("base": [20px, 0.1px], "ios": [16px, -0.08px])),
+  "caption2": _create(10px, ("base": [16px, 0.1px], "ios": [13px, 0.06px])),
+);
+
+@function line-height($platform, $variant) {
+  @return map-get(
+      map-get(map-get($variants, $variant), $platform),
+      "line-height"
+  );
+}
+
+@function letter-spacing($platform, $variant) {
+  @return map-get(
+      map-get(map-get($variants, $variant), $platform),
+      "letter-spacing"
+  );
+}
+
+@function font-size($variant) {
+  @return map-get(map-get($variants, $variant), "font-size")
+}

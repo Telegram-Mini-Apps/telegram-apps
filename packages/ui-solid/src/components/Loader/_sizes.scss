@@ -1,0 +1,9 @@
+$sizes: (
+  "sm": ("base": 18px, "ios": 24px),
+  "md": ("base": 36px, "ios": 28px),
+  "lg": ("base": 44px, "ios": 32px),
+);
+
+@function size($platform, $size) {
+  @return map-get(map-get($sizes, $size), $platform)
+}

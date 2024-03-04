@@ -27,7 +27,7 @@ export const TypographyView = styled<TypographyProps, TypographyClassesProps>((p
     'classes',
     'monospace',
   ]);
-  const classes = createClasses(merged);
+  const classes = createClasses<TypographyClassesProps>(merged);
 
   return (
     <Dynamic
@@ -40,11 +40,11 @@ export const TypographyView = styled<TypographyProps, TypographyClassesProps>((p
   root(props) {
     return [
       'tgui-typography',
-      props.monospace && `tgui-typography--${props.platform}-monospace`,
       `tgui-typography--${props.weight}`,
       `tgui-typography--${props.platform}`,
       `tgui-typography--${props.type}`,
       `tgui-typography--${props.platform}-${props.type}`,
+      props.monospace && `tgui-typography--${props.platform}-monospace`,
     ];
   },
 });

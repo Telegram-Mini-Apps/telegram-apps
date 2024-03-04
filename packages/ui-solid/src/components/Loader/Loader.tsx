@@ -13,7 +13,7 @@ import './Loader.scss';
 export const LoaderView = styled<LoaderProps, LoaderClassesProps>((props) => {
   const merged = mergeWithConfigDefaults({ size: 'md' } as const, props);
   const [, rest] = splitProps(merged, ['size', 'colorScheme', 'platform', 'classes']);
-  const classes = createClasses(merged);
+  const classes = createClasses<LoaderClassesProps>(merged);
 
   return (
     <Switch>
@@ -51,8 +51,8 @@ export const LoaderView = styled<LoaderProps, LoaderClassesProps>((props) => {
   },
   inner(props) {
     return [
-      'tgui-loader__inner',
-      `tgui-loader__inner--${props.platform}`,
+      // 'tgui-loader__inner',
+      props.platform && `tgui-loader__inner--${props.platform}`,
       `tgui-loader__inner--${props.platform}-${props.size}`,
     ];
   },
