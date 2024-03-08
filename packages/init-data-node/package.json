@@ -44,7 +44,7 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "@types/node": "^16.0.0",
+    "@types/node": "^20.0.0",
     "build-utils": "workspace:*",
     "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*"
