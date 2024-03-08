@@ -82,18 +82,12 @@ importers:
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
-      cli-spinners:
-        specifier: ^2.9.2
-        version: 2.9.2
       commander:
         specifier: ^12.0.0
         version: 12.0.0
       inquirer:
         specifier: ^9.2.15
         version: 9.2.15
-      node-spinner:
-        specifier: ^0.0.4
-        version: 0.0.4
       ora:
         specifier: ^8.0.1
         version: 8.0.1
@@ -4959,12 +4953,6 @@ packages:
     resolution: {integrity: sha512-uYr7J37ae/ORWdZeQ1xxMJe3NtdmqMC/JZK+geofDrkLUApKRHPd18/TxtBOJ4A0/+uUIliorNrfYV6s1b02eQ==}
     dev: true
 
-  /node-spinner@0.0.4:
-    resolution: {integrity: sha512-W4ivgsaxoJr1wSppeEQGYrq23GuMniTwJNZWLpFadCIuxwu1srmdH2uH+VlaMnxvjBqZ4NlcCBQEOmB3mXF+cA==}
-    dependencies:
-      util-extend: 1.0.3
-    dev: false
-
   /normalize-package-data@2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
     dependencies:
@@ -6326,10 +6314,6 @@ packages:
 
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
-
-  /util-extend@1.0.3:
-    resolution: {integrity: sha512-mLs5zAK+ctllYBj+iAQvlDCwoxU/WDOUaJkcFudeiAX6OajC6BKXJUa9a+tbtkC11dz2Ufb7h0lyvIOVn4LADA==}
-    dev: false
 
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
