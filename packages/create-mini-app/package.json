@@ -1,0 +1,50 @@
+{
+  "name": "@tma.js/create-mini-app",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
+    "directory": "packages/create-mini-app"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
+  },
+  "keywords": [
+    "telegram-mini-apps",
+    "templates",
+    "boilerplates"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "bin": "dist/index.cjs",
+  "scripts": {
+    "lint": "eslint src",
+    "lint:fix": "pnpm run lint --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build": "vite build --config vite.config.ts"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.0.0",
+    "build-utils": "workspace:*",
+    "eslint-config-custom": "workspace:*",
+    "test-utils": "workspace:*",
+    "tsconfig": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "inquirer": "^9.2.15",
+    "ora": "^8.0.1"
+  }
+}
