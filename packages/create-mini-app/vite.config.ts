@@ -6,7 +6,7 @@ export default defineConfig({
     ssr: true,
     lib: {
       entry: 'src/index.ts',
-      formats: ['cjs'],
+      formats: ['es'],
       fileName: 'index',
     },
   },

@@ -23,7 +23,7 @@
   "files": [
     "dist"
   ],
-  "bin": "dist/index.cjs",
+  "bin": "dist/index.js",
   "scripts": {
     "lint": "eslint src",
     "lint:fix": "pnpm run lint --fix",
