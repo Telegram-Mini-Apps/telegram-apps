@@ -43,15 +43,13 @@
   },
   "peerDependencies": {
     "@types/react": "^17.0.0 || ^18.0.0",
-    "react": "^17.0.0 || ^18.0.0"
+    "react": "^17.0.0 || ^18.0.0",
+    "@tma.js/sdk": "workspace:*"
   },
   "peerDependenciesMeta": {
     "@types/react": {
       "optional": true
     }
-  },
-  "dependencies": {
-    "@tma.js/sdk": "workspace:*"
   },
   "devDependencies": {
     "build-utils": "workspace:*",

@@ -19,21 +19,21 @@ for comfortable usage of React JS on the Telegram Mini Apps platform.
 
 ## Installation
 
-Before anything else, it is assumed that you have already installed the `react` package, as it is a
-peer dependency of this package.
+Before anything else, it is assumed that you have already installed the `react` and `@tma.js/sdk` 
+packages, as they are peer dependencies of this package.
 
 ::: code-group
 
 ```bash [pnpm]
-pnpm i @tma.js/sdk-react
+pnpm i @tma.js/sdk @tma.js/sdk-react
 ```
 
 ```bash [npm]
-npm i @tma.js/sdk-react
+npm i @tma.js/sdk @tma.js/sdk-react
 ```
 
 ```bash [yarn]
-yarn add @tma.js/sdk-react
+yarn add @tma.js/sdk @tma.js/sdk-react
 ```
 
 :::
