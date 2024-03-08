@@ -1,5 +1,11 @@
 # @tma.js/sdk-react
 
+## 1.2.0
+
+### Minor Changes
+
+- 2917d0e: Make @tma.js/sdk dependency as peer
+
 ## 1.1.10
 
 ### Patch Changes
