@@ -19,21 +19,21 @@ for comfortable usage of Solid JS on the Telegram Mini Apps platform.
 
 ## Installation
 
-Before anything else, it is assumed that you have already installed the `solid-js` package, as it is
-a peer dependency of this package.
+Before anything else, it is assumed that you have already installed the `solid-js` and `@tma.js/sdk`
+packages, as they are peer dependencies of this package.
 
 ::: code-group
 
 ```bash [pnpm]
-pnpm i @tma.js/sdk-solid
+pnpm i @tma.js/sdk @tma.js/sdk-solid
 ```
 
 ```bash [npm]
-npm i @tma.js/sdk-solid
+npm i @tma.js/sdk @tma.js/sdk-solid
 ```
 
 ```bash [yarn]
-yarn add @tma.js/sdk-solid
+yarn add @tma.js/sdk @tma.js/sdk-solid
 ```
 
 :::
