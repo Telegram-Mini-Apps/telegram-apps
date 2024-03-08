@@ -10,6 +10,13 @@ export const packagesNavItem = {
 export const packagesSidebar = {
   [prefixed('/')]: [
     {
+      text: 'CLI',
+      items: [
+        { text: '@tma.js/create-mini-app', link: prefixed('/tma-js-create-mini-app') },
+      ]
+    },
+
+    {
       text: 'TypeScript',
       items: [
         {
