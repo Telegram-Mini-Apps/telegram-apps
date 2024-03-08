@@ -1,0 +1,10 @@
+{
+  "extends": "tsconfig/esnext.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "types": ["node"]
+  },
+  "include": [
+    "src"
+  ]
+}

@@ -1,58 +1,50 @@
 {
-  "name": "@tma.js/init-data-node",
-  "version": "1.1.8",
-  "description": "TypeScript Node library to operate with Telegram init data.",
+  "name": "@tma.js/create-mini-app",
+  "version": "0.0.1",
+  "description": "",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
   "repository": {
     "type": "git",
     "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
-    "directory": "packages/init-data-node"
+    "directory": "packages/create-mini-app"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
   },
   "keywords": [
     "telegram-mini-apps",
-    "init-data",
-    "node",
-    "typescript"
+    "templates",
+    "boilerplates"
   ],
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/dts/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/dts/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
-      "default": "./dist/index.cjs"
-    }
-  },
+  "bin": "dist/index.cjs",
   "scripts": {
-    "test": "vitest --run",
     "lint": "eslint src",
     "lint:fix": "pnpm run lint --fix",
-    "typecheck": "tsc --noEmit",
-    "build": "vite build"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build": "vite build --config vite.config.ts"
   },
   "devDependencies": {
+    "@types/inquirer": "^9.0.7",
     "@types/node": "^20.0.0",
     "build-utils": "workspace:*",
     "eslint-config-custom": "workspace:*",
+    "test-utils": "workspace:*",
     "tsconfig": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@tma.js/sdk": "workspace:^"
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "inquirer": "^9.2.15",
+    "ora": "^8.0.1"
   }
 }
