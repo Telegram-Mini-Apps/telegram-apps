@@ -62,7 +62,10 @@ export function init(options: InitOptions = {}): InitResult | Promise<InitResult
       // application which is used in catchCustomStyles function. We should call this method also
       // to start receiving "reload_iframe" events from the Telegram application.
       postEvent('iframe_ready', { reload_supported: true });
-      on('reload_iframe', () => window.location.reload());
+      on('reload_iframe', () => {
+        postEvent('iframe_will_reload');
+        window.location.reload();
+      });
     }
 
     const result: Omit<InitResult, 'viewport'> = {
