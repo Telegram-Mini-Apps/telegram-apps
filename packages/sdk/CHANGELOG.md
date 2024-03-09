@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.4.8
+
+### Patch Changes
+
+- 25ee92d: Call iframe_will_reload method on reload_iframe event
+
 ## 1.4.7
 
 ### Patch Changes
