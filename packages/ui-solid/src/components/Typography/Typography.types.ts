@@ -4,9 +4,6 @@ import type { WithOptionalClasses } from '../../styles/index.js';
 import type { RequiredBy } from '../../types/index.js';
 import type { WithComponentProps } from '../types.js';
 
-// Figma reference:
-// https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-Library?type=design&node-id=216-1907&mode=design&t=nUrQwsUgG6ktNuOf-0
-
 export type TypographyType =
   | 'large-title'
   | 'title1'
@@ -31,12 +28,12 @@ export type TypographyAs = Extract<keyof JSX.IntrinsicElements,
   | 'p'
 >;
 
+export type TypographyWeight = 'regular' | 'semibold' | 'bold';
+
 /**
- * List of component element keys.
+ * List of component element keys allowed to be modified.
  */
 export type TypographyElementKey = 'root';
-
-export type TypographyWeight = 'regular' | 'semibold' | 'bold';
 
 /**
  * List of components properties, which have defaults.
@@ -59,10 +56,16 @@ export interface TypographyPropsDefaults extends WithComponentProps {
   monospace?: boolean;
 }
 
+/**
+ * Properties passed to the Typography component class names computers.
+ */
 export interface TypographyClassesProps
   extends RequiredBy<TypographyProps, keyof TypographyPropsDefaults> {
 }
 
+/**
+ * Typography component properties.
+ */
 export type TypographyProps<As extends TypographyAs = 'p'> =
   TypographyPropsDefaults
   & WithOptionalClasses<TypographyElementKey, TypographyClassesProps>
