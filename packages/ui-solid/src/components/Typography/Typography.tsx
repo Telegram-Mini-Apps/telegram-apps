@@ -1,4 +1,3 @@
-import { classNames } from '@tma.js/sdk';
 import { splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
@@ -12,7 +11,7 @@ import './Typography.scss';
 
 /**
  * Component used for any typography-related functionality.
- * @see https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-Library?type=design&node-id=216-1907&mode=design&t=nUrQwsUgG6ktNuOf-0
+ * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-Library?type=design&node-id=216-1907&mode=design&t=nUrQwsUgG6ktNuOf-0
  */
 export const Typography = withConfig(
   styled<TypographyProps>((props) => {
@@ -31,18 +30,12 @@ export const Typography = withConfig(
       'classes',
       'monospace',
     ]);
-    const classes = createClasses(merged);
 
-    return (
-      <Dynamic
-        {...rest}
-        component={merged.as}
-        class={classNames(classes.root, merged.class)}
-      />
-    );
+    return <Dynamic {...rest} component={merged.as} class={createClasses(merged).root}/>;
   }, {
     root(props) {
       return [
+        props.class,
         'tgui-typography',
         `tgui-typography--${props.weight}`,
         `tgui-typography--${props.type}`,
