@@ -12,7 +12,11 @@ export type LoaderSize = 'sm' | 'md' | 'lg';
 /**
  * List of component element keys.
  */
-export type LoaderElementKey = 'root' | 'inner';
+export type LoaderElementKey =
+  | 'root'
+  | 'iosLine'
+  | 'androidContainer'
+  | 'androidCircle';
 
 /**
  * List of components properties, which have defaults.

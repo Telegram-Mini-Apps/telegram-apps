@@ -1,17 +1,15 @@
-@use "./sizes" as sizes;
-
 .tgui-loader {
   display: block;
   aspect-ratio: 1;
 
   &--base {
-    fill: transparent;
-    stroke: #007AFF;
+    color: #007AFF;
+    stroke: currentColor;
     stroke-linecap: round;
-    overflow: visible;
 
     @each $size-type, $settings in (
       "sm": (
+        "width": 18px,
         "stroke-width": 2.5px,
         "strokes": (
           "0%": [#{1, 56}, 0],
@@ -20,6 +18,7 @@
         )
       ),
       "md": (
+        "width": 36px,
         "stroke-width": 3.5px,
         "strokes": (
           "0%": [#{1, 112}, 0],
@@ -28,6 +27,7 @@
         )
       ),
       "lg": (
+        "width": 44px,
         "stroke-width": 4px,
         "strokes": (
           "0%": [#{1, 138}, 0],
@@ -37,7 +37,7 @@
       ),
     ) {
       &-#{$size-type} {
-        width: sizes.size("base", $size-type);
+        width: map-get($settings, "width");
         stroke-width: map-get($settings, "stroke-width");
         animation: tgui-loader-base-dash-#{$size-type} 2s ease infinite, tgui-loader-base-rotate 2s linear infinite;
       }
@@ -61,17 +61,26 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #707579;
 
-    @each $size-type, $_ in sizes.$sizes {
+    @each $size-type, $size in ("sm": 24px, "md": 28px, "lg": 32px) {
       &-#{$size-type} {
-        width: sizes.size("ios", $size-type);
+        width: $size;
       }
     }
   }
 
-  &__inner--ios {
+  &__android-container {
+    fill: transparent;
+    overflow: visible;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__ios-line {
     position: absolute;
-    background-color: #707579;
+    background-color: currentColor;
     border-radius: 1000px;
     transform-origin: bottom;
     animation: tgui-loader-ios-fade 800ms linear infinite;
@@ -82,7 +91,7 @@
       "md": [2.5px, 6.3px],
       "lg": [3.3px, 7.5px]
     ) {
-      &-#{$size-type} {
+      &--#{$size-type} {
         width: nth($dimensions, 1);
         height: nth($dimensions, 2);
       }
