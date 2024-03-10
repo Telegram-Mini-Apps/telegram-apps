@@ -1,76 +1,90 @@
-import { classNames } from '@tma.js/sdk';
 import type { Component } from 'solid-js';
-import { createMemo, Match, Switch, splitProps } from 'solid-js';
-
-import { withConfig } from '../../providers/index.js';
-import { createClasses, styled } from '../../styles/index.js';
-import { Loader } from '../Loader/index.js';
-import { Typography, type TypographyType } from '../Typography/index.js';
-import { mergeWithConfigDefaults } from '../utils.js';
+import { on, Show, createMemo, splitProps } from 'solid-js';
+import { Dynamic } from 'solid-js/web';
 
 import type { ButtonClassesProps, ButtonProps } from './Button.types.js';
+
+import { Loader, Typography, mergeWithConfigDefaults } from '~components';
+import { withConfig } from '~providers';
+import { createClasses, styled } from '~styles';
+
 import './Button.scss';
 
-export const ButtonView = styled<ButtonProps, ButtonClassesProps>((props) => {
-  const merged = mergeWithConfigDefaults({
-    disabled: false,
-    fullWidth: false,
-    loading: false,
-    rounded: false,
-    type: 'fill',
-    size: 'md',
-  } as const, props);
-  const [, rest] = splitProps(merged, [
-    'fullWidth',
-    'loading',
-    'rounded',
-    'type',
-    'colorScheme',
-    'classes',
-    'platform',
-    'size',
-  ]);
-  const classes = createClasses<ButtonClassesProps>(merged);
-  const typographyType = createMemo<TypographyType>(() => {
-    return merged.size === 'lg' ? 'text' : 'subheadline2';
-  });
+/**
+ * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-Library?type=design&node-id=45-609&mode=design&t=5uMXzbr5N7vuFjxS-0
+ */
+export const Button: Component<ButtonProps> = withConfig(
+  styled<ButtonProps>((props) => {
+    const merged = mergeWithConfigDefaults({
+      disabled: false,
+      fullWidth: false,
+      loading: false,
+      rounded: false,
+      type: 'fill',
+      size: 'md',
+      Loader,
+    } as const, props);
+    const [, rest] = splitProps(merged, [
+      'fullWidth',
+      'loading',
+      'rounded',
+      'type',
+      'colorScheme',
+      'classes',
+      'platform',
+      'size',
+      'icon',
+      'Loader',
+    ]);
+    const classes = createClasses<ButtonClassesProps>(merged);
 
-  return (
-    <button {...rest} class={classNames(props.class, classes.root)}>
-      <Switch>
-        <Match when={!merged.loading}>
-          <Typography type={typographyType()} class={classes.content}>
-            {props.children}
-          </Typography>
-        </Match>
-        <Match when={true}>
-          <Loader class={classes.loader} size="sm"/>
-        </Match>
-      </Switch>
-    </button>
-  );
-}, {
-  root(props) {
-    return [
-      'tgui-button',
-      `tgui-button--${props.platform}`,
-      `tgui-button--${props.platform}-${props.size}`,
-      props.fullWidth && 'tgui-button--full-width',
-      props.rounded && 'tgui-button--rounded',
-    ];
-  },
-  content(props) {
-    return [
-      'tgui-button__content',
-      `tgui-button__content--${props.platform}-${props.size}`,
-    ];
-  },
-  loader(props) {
-    return [
-      'tgui-button__loader',
-      `tgui-button__loader--${props.platform}-${props.size}`,
-    ];
-  },
-});
+    const icon = createMemo(on(
+      [() => merged.loading, () => merged.icon, () => merged.Loader],
+      ([loading, buttonIcon, LoaderComponent]) => {
+        if (loading) {
+          return LoaderComponent;
+        }
+        if (buttonIcon) {
+          return typeof buttonIcon === 'function' ? buttonIcon : () => buttonIcon;
+        }
+      },
+    ));
 
-export const Button: Component<ButtonProps> = withConfig(ButtonView);
+    return (
+      <button {...rest} class={classes.root}>
+        <Show when={icon()}>
+          {(getIcon) => (
+            <div class={classes.iconContainer}>
+              <Dynamic component={getIcon()} class={classes.icon}/>
+            </div>
+          )}
+        </Show>
+        <Show when={props.children}>
+          {(children) => (
+            <Typography
+              type={merged.size === 'lg' ? 'text' : 'subheadline2'}
+              class={classes.content}
+              weight="semibold"
+            >
+              {children()}
+            </Typography>
+          )}
+        </Show>
+      </button>
+    );
+  }, {
+    root(props) {
+      return [
+        props.class,
+        'tgui-button',
+        `tgui-button--${props.type}`,
+        `tgui-button--${props.platform}`,
+        `tgui-button--${props.platform}-${props.size}`,
+        props.fullWidth && 'tgui-button--full-width',
+        props.rounded && 'tgui-button--rounded',
+      ];
+    },
+    iconContainer: 'tgui-button__icon-container',
+    icon: 'tgui-button__icon',
+  }),
+);

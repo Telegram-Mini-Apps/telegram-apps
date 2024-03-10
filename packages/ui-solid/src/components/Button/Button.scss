@@ -1,91 +1,81 @@
 @use "sass:math";
 @use "sass:map";
-//@use "../Typography/_utils.scss" as typography;
-//@use "../Loader/_utils.scss" as loader;
 
-$sizeSettings: (
-  "sm": (
-    "height": 36,
-    "text-type": "subheadline2",
-    "padding-x": 12,
-    "border-radius": (
-      "base": 8,
-      "ios": 12,
-    )
-  ),
-  "md": (
-    "height": 42,
-    "text-type": "subheadline2",
-    "padding-x": 14,
-    "border-radius": (
-      "base": 8,
-      "ios": 12,
-    ),
-  ),
-  "lg": (
-    "height": 50,
-    "text-type": "text",
-    "padding-x": 18,
-    "border-radius": (
-      "base": 8,
-      "ios": 10,
-    )
-  ),
-);
+$icon-size: 24px;
 
-$platforms: ["base", "ios"];
+@mixin sizes($map) {
+  @each $size, $size-settings in $map {
+    &-#{$size} {
+      min-height: nth($size-settings, 1);
+      padding: #{math.div(nth($size-settings, 1) - $icon-size - 2, 2)} nth($size-settings, 2);
+      border-radius: nth($size-settings, 3);
+    }
+  }
+}
 
 .tgui-button {
-  border: none;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 
-  &--full-width {
-    width: 100%;
+  &--base {
+    gap: 12px;
+
+    @include sizes((
+      "sm": [38px, 12px, 8px],
+      "md": [42px, 14px, 8px],
+      "lg": [50px, 18px, 8px]
+    ));
+  }
+
+  &--ios {
+    gap: 10px;
+
+    @include sizes((
+      "sm": [36px, 12px, 12px],
+      "md": [42px, 14px, 12px],
+      "lg": [50px, 18px, 10px]
+    ));
+  }
+
+  // Color modifiers.
+  @each $type, $type-settings in (
+    "fill": [#007AFF, white],
+    "bezeled": [#4378FF1A, #007AFF],
+    "plain": [transparent, #007AFF],
+    "gray": [#0000000A, #000000CC],
+    "outline": [transparent, #000000CC, #0000000D],
+    "white": [white, #000000CC],
+  ) {
+    &--#{$type} {
+      background-color: nth($type-settings, 1);
+      color: nth($type-settings, 2);
+
+      @if length($type-settings) > 2 {
+        border-color: nth($type-settings, 3);
+      }
+    }
   }
 
   &--rounded {
     border-radius: 1000px;
   }
 
-  @each $platform in $platforms {
-    @each $sizeType, $settings in $sizeSettings {
-      &--#{$platform} {
-        padding: 0 #{map.get($settings, "padding-x")}px;
-      }
-
-      &--#{$platform}-#{$sizeType} {
-        border-radius: #{map.get(map.get($settings, "border-radius"), $platform)}px;
-      }
-    }
+  &--full-width {
+    width: 100%;
   }
 
-  &__content {
-    margin: auto;
-
-    @each $platform in $platforms {
-      @each $sizeType, $settings in $sizeSettings {
-        //&--#{$platform}-#{$sizeType} {
-        //  padding: #{math.div(
-        //    map.get($settings, "height") - typography.line-height(
-        //      $platform,
-        //      map.get($settings, "text-type")
-        //    ),
-        //    2
-        //  )}px 0;
-        //}
-      }
-    }
+  &__icon-container {
+    width: $icon-size;
+    height: $icon-size;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  &__loader {
-    @each $platform in $platforms {
-      @each $sizeType, $settings in $sizeSettings {
-        &--#{$platform}-#{$sizeType} {
-          //margin: #{math.div(
-          //  map.get($settings, "height") - loader.size($platform, "sm"),
-          //  2
-          //)}px auto;
-        }
-      }
-    }
+  &__icon {
+    color: currentColor;
   }
 }

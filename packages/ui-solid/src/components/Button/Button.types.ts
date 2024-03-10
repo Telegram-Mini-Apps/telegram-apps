@@ -1,8 +1,8 @@
-import type { JSX } from 'solid-js';
+import type { Component, JSX, JSXElement } from 'solid-js';
 
-import type { WithOptionalClasses } from '../../styles/index.js';
-import type { RequiredBy } from '../../types/index.js';
-import type { WithComponentProps } from '../types.js';
+import type { LoaderProps, WithComponentProps } from '~components';
+import type { WithOptionalClasses } from '~styles';
+import type { RequiredBy } from '~types';
 
 export type ButtonType =
   | 'fill'
@@ -12,9 +12,11 @@ export type ButtonType =
   | 'outline'
   | 'white';
 
-export type ButtonElementKey = 'root' | 'content' | 'loader';
+export type ButtonElementKey = 'root' | 'content' | 'loader' | 'iconContainer' | 'icon';
 
 export type ButtonSize = 'sm' | 'md' | 'lg';
+
+export type ButtonIcon = Component<{ class?: string }> | JSXElement;
 
 export interface ButtonPropsDefaults extends WithComponentProps {
   /**
@@ -28,7 +30,8 @@ export interface ButtonPropsDefaults extends WithComponentProps {
    */
   fullWidth?: boolean;
   /**
-   * Is Button currently loading.
+   * Should component replace the icon inside with the Loader component. Enabling this
+   * property will ignore the value of the property passed in the `icon`.
    * @default false
    */
   loading?: boolean;
@@ -47,6 +50,7 @@ export interface ButtonPropsDefaults extends WithComponentProps {
    * @default 'fill'
    */
   type?: ButtonType;
+  Loader?: Component<LoaderProps>;
 }
 
 export interface ButtonClassesProps extends RequiredBy<ButtonProps, keyof ButtonPropsDefaults> {
@@ -56,4 +60,8 @@ export interface ButtonProps
   extends JSX.HTMLAttributes<HTMLButtonElement>,
     WithOptionalClasses<ButtonElementKey, any>,
     ButtonPropsDefaults {
+  /**
+   * Icon to be displayed before the content.
+   */
+  icon?: ButtonIcon;
 }
