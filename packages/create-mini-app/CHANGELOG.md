@@ -1,5 +1,11 @@
 # @tma.js/create-mini-app
 
+## 0.0.4
+
+### Patch Changes
+
+- ef16fa7: Fix typo
+
 ## 0.0.3
 
 ### Patch Changes
