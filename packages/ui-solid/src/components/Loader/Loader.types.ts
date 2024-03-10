@@ -1,8 +1,8 @@
 import type { JSX } from 'solid-js';
 
-import type { WithOptionalClasses } from '../../styles/index.js';
-import type { RequiredBy } from '../../types/index.js';
-import type { WithComponentProps } from '../types.js';
+import type { WithComponentProps } from '~components';
+import type { WithOptionalClasses } from '~styles';
+import type { RequiredBy } from '~types';
 
 /**
  * Allowed loader size.

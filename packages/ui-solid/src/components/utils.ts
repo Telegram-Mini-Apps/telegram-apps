@@ -1,7 +1,7 @@
 import type { MergeProps } from 'solid-js';
 import { mergeProps } from 'solid-js';
 
-import type { ColorScheme, Platform } from '../types/index.js';
+import type { ColorScheme, Platform } from '~types';
 
 export function mergeWithConfigDefaults<T extends unknown[]>(
   ...sources: T

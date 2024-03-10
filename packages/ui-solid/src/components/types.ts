@@ -1,4 +1,4 @@
-import type { ColorScheme, Platform } from '../types/index.js';
+import type { ColorScheme, Platform } from '~types';
 
 export interface WithColorScheme {
   /**

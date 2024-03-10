@@ -1,10 +1,10 @@
 import { For, splitProps, Show } from 'solid-js';
 
-import { withConfig } from '../../providers/index.js';
-import { createClasses, styled } from '../../styles/index.js';
-import { mergeWithConfigDefaults } from '../utils.js';
-
 import type { LoaderProps } from './Loader.types.js';
+
+import { mergeWithConfigDefaults } from '~components';
+import { withConfig } from '~providers';
+import { createClasses, styled } from '~styles';
 
 import './Loader.scss';
 
