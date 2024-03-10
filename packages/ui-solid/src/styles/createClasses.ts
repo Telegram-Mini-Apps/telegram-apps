@@ -67,7 +67,7 @@ function getArrayBasedGetter<Props>(
  * @param props - properties, passed to a component.
  * @returns Reactive object with keys as element keys and values as computed class property values.
  */
-export function createClasses<Props extends WithOptionalClasses<any, Props>>(
+export function createClasses<Props extends WithOptionalClasses<any, any>>(
   props: Props,
 ): ClassNamesMap<InferElementKey<Props>> {
   if (!props.classes) {

@@ -1,16 +1,15 @@
 import type { Component } from 'solid-js';
 import { mergeProps } from 'solid-js';
 
-import type { Classes, InferPropsElementKey, WithOptionalClasses } from './types.js';
+import type { ExtractPropsClasses, WithOptionalClasses } from './types.js';
 
 export interface StyledOptions {
   /**
-   * Returned wrapper component name.
+   * Returned component name.
+   * @default `Styled{Component.name}`
    */
   name?: string;
 }
-
-type StyledClasses<Props> = Classes<InferPropsElementKey<Props>, Props>;
 
 /**
  * Returns Higher Order Component which transfers passed properties adding specified classes.
@@ -25,33 +24,35 @@ type StyledClasses<Props> = Classes<InferPropsElementKey<Props>, Props>;
  *   ...
  * });
  */
-export function styled<
-  Props extends WithOptionalClasses<any, ClassesProps>,
-  ClassesProps = Props,
->(
+export function styled<Props extends WithOptionalClasses<any, any>>(
   Component: Component<Props>,
-  classes: StyledClasses<ClassesProps>,
+  classes: ExtractPropsClasses<Props>,
   options: StyledOptions = {},
 ): Component<Props> {
   const Wrapped: Component<Props> = (props) => {
     const mergedProps = mergeProps({ classes: {} }, props);
 
     // Merge element keys from the passed properties and classes from HOC.
-    const keys: Set<InferPropsElementKey<Props>> = new Set([
-      ...Object.keys(mergedProps.classes),
-      ...Object.keys(classes),
-    ] as InferPropsElementKey<Props>[]);
+    // Concat classes keys passed from the parent component with the classes keys passed
+    // from styled.
+    const keys = [
+      ...new Set([
+        ...Object.keys(mergedProps.classes),
+        ...Object.keys(classes),
+      ]),
+    ];
 
-    const mergedClasses = [...keys]
-      .reduce<StyledClasses<ClassesProps>>((acc, key) => {
-        (acc as any)[key] = [
-          (mergedProps.classes as any)[key],
-          (classes as any)[key as any],
-        ];
-        return acc;
-      }, {});
+    // Iterate over each found key, extract its value from both class maps and merge into a single
+    // array.
+    const mergedClasses = keys.reduce<ExtractPropsClasses<Props>>((acc, key) => {
+      (acc as any)[key] = [
+        (mergedProps.classes as any)[key],
+        (classes as any)[key as any],
+      ];
+      return acc;
+    }, {} as ExtractPropsClasses<Props>);
 
-    return <Component {...props as any} classes={mergedClasses}/>;
+    return <Component {...props} classes={mergedClasses}/>;
   };
 
   Object.defineProperty(Wrapped, 'name', {

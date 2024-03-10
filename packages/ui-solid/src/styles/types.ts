@@ -56,14 +56,8 @@ export interface WithOptionalClasses<ElementKey extends string, Props> {
 }
 
 /**
- * Extracts element key type from the component properties, containing classes description.
+ * Extracts classes map from the properties.
  */
-export type InferPropsElementKey<P> = P extends WithOptionalClasses<infer ElementKey, any>
-  ? ElementKey
+export type ExtractPropsClasses<Props> = Props extends WithOptionalClasses<any, any>
+  ? Exclude<Props['classes'], undefined>
   : never;
-
-/**
- * @see WithOptionalClasses
- */
-export type WithRequiredClasses<Key extends string, Props> =
-  Required<WithOptionalClasses<Key, Props>>;
