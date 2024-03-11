@@ -55,7 +55,9 @@ defined function.
 Here is an example:
 
 ```typescript
-window.Telegram.WebView.receiveEvent('popup_closed', { button_id: 'cancel' });
+window.Telegram.WebView.receiveEvent('popup_closed', { 
+  button_id: 'cancel'
+});
 ```
 
 Path to this function depends on platform:
@@ -72,6 +74,30 @@ type ReceiveEvent = (eventType: string, eventData: unknown) => void;
 
 So, the solution is rather simple. To handle incoming events we should create a function of this
 type and assign it to all 3 paths.
+
+## Listening to Events
+
+Handling all possible environments for a developer's application can be challenging. To simplify
+this process, the community developed the [@tma.js/sdk](../packages/tma-js-sdk) package, which
+greatly eases integration.
+
+Here's how to use it:
+
+```ts
+import { on } from '@tma.js/sdk';
+
+// Start listening to "viewport_changed" event. Returned value
+// is a function, which removes this event listener.
+const removeListener = on('viewport_changed', payload => {
+  console.log('Viewport changed:', payload);
+});
+
+// Remove this event listener.
+removeListener();
+```
+
+You can learn more about calling methods in the
+package's [documentation](../packages/tma-js-sdk/methods-and-events#listening-to-events).
 
 ## Available Events
 
