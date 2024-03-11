@@ -76,6 +76,23 @@ const data = JSON.stringify({
 window.external.notify(data);
 ```
 
+## Calling Methods
+
+Handling all possible environments for a developer's application can be challenging. To simplify
+this process, the community developed the [@tma.js/sdk](../packages/tma-js-sdk) package, which
+greatly eases integration.
+
+Here's how to use it:
+
+```ts
+import { postEvent } from '@tma.js/sdk';
+
+postEvent('web_app_set_header_color', { color_key: 'bg_color' });
+```
+
+You can learn more about calling methods in the
+package's [documentation](../packages/tma-js-sdk/methods-and-events#calling-methods).
+
 ## Available Methods
 
 This section contains a list of available methods to call with their names, description, and
