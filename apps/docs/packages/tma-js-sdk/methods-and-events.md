@@ -28,7 +28,10 @@ event, to receive actual viewport data.
 ```typescript
 import { request } from '@tma.js/sdk';
 
-const viewport = await request('web_app_request_viewport', 'viewport_changed');
+const viewport = await request(
+  'web_app_request_viewport',
+  'viewport_changed'
+);
 
 console.log(viewport);
 // Output:
@@ -39,20 +42,55 @@ console.log(viewport);
 // };
 ```
 
-In case, Telegram Mini Apps method accepts parameters, you should pass them as the second argument:
+In case, Telegram Mini Apps method accepts parameters, you should pass them in the `params`
+property of the third argument:
 
 ```typescript
 import { request } from '@tma.js/sdk';
 
-const viewport = await request(
-  'web_app_invoke_custom_method',
-  {
-    req_id: 'abc',
-    method: 'getStorageValues',
-    params: { keys: ['a'] }
+const buttonId = await request('web_app_open_popup', 'popup_closed', {
+  params: {
+    title: 'Caution',
+    message: 'Should we delete you account?',
+    buttons: [
+      { id: 'yes', type: 'ok' },
+      { id: 'no', type: 'cancel' },
+    ],
   },
-  'custom_method_invoked',
-);
+});
+```
+
+Alternatively, you could pass the object describing all options:
+
+```typescript
+import { request } from '@tma.js/sdk';
+
+const buttonId = await request({
+  method: 'web_app_open_popup',
+  event: 'popup_closed',
+  params: {
+    title: 'Caution',
+    message: 'Should we delete you account?',
+    buttons: [
+      { id: 'yes', type: 'ok' },
+      { id: 'no', type: 'cancel' },
+    ],
+  },
+});
+```
+
+Moreover, you can track several events in the same time:
+
+```typescript
+import { request } from '@tma.js/sdk';
+
+const result = await request({
+  method: 'web_app_open_scan_qr_popup',
+  event: ['qr_text_received', 'scan_qr_popup_closed'],
+});
+
+// result will either be qr_text_received or 
+// scan_qr_popup_closed events payload.
 ```
 
 This function allows passing additional options, such as `postEvent`, `timeout` and `capture`.
@@ -81,13 +119,15 @@ import { request, isTimeoutError } from '@tma.js/sdk';
 try {
   await request(
     'web_app_invoke_custom_method',
-    {
-      req_id: '1',
-      method: 'deleteStorageValues',
-      params: { keys: ['a'] },
-    },
     'custom_method_invoked',
-    { timeout: 5000 },
+    {
+      timeout: 5000,
+      params: {
+        req_id: '1',
+        method: 'deleteStorageValues',
+        params: { keys: ['a'] },
+      },
+    },
   );
 } catch (e) {
   if (isTimeoutError(e)) {
@@ -104,40 +144,42 @@ try {
 event should be captured and returned from the `request` function:
 
 ```typescript
-request(
-  'web_app_open_invoice',
-  { slug: 'jjKSJnm1k23lodd' },
-  'invoice_closed',
-  {
-    capture(data) {
-      return slug === data.slug;
-    },
+const slug = 'jjKSJnm1k23lodd';
+
+request('web_app_open_invoice', 'invoice_closed', {
+  params: { slug },
+  capture(data) {
+    return slug === data.slug;
   },
-)
+});
 ```
 
-In this case, `request` function will capture the event only in case, it has the expected slug.
+By default, the `request` function captures the first event with required name. In this
+case, `request` function will capture the event only in case, it has the expected slug.
 
 ## Invoking Custom Methods
 
-Custom methods are methods, which could be used by Telegram Mini Apps 
-`web_app_invoke_custom_method` method. `invokeCustomMethod` function simplifies usage of such methods and 
-reuses the `request` function. 
+Custom methods are methods, which could be used by Telegram Mini Apps
+`web_app_invoke_custom_method` method. `invokeCustomMethod` function simplifies usage of such
+methods and reuses the `request` function.
 
 Here is the code example without using this function:
 
 ```typescript
 import { request } from '@tma.js/sdk';
 
-request(
-  'web_app_invoke_custom_method',
-  {
-    req_id: '1',
+const reqId = 'ABC';
+
+request('web_app_invoke_custom_method', 'custom_method_invoked', {
+  params: {
+    req_id: reqId,
     method: 'deleteStorageValues',
     params: { keys: ['a'] },
   },
-  'custom_method_invoked',
-)
+  capture(data) {
+    return data.req_id === reqId;
+  }
+});
 ```
 
 And that is how we could rewrite it using the `invokeCustomMethod` function:
@@ -145,11 +187,11 @@ And that is how we could rewrite it using the `invokeCustomMethod` function:
 ```typescript
 import { invokeCustomMethod } from '@tma.js/sdk';
 
-invokeCustomMethod('deleteStorageValues', { keys: ['a'] }, '1');
+invokeCustomMethod('deleteStorageValues', { keys: ['a'] }, 'ABC');
 ```
 
-In contrary to the `request` function, the `invokeCustomMethod` function parses the result and 
-checks if contains the `error` property. In case it does, the function will throw the according 
+In contrary to the `request` function, the `invokeCustomMethod` function parses the result and
+checks if contains the `error` property. In case it does, the function will throw the according
 error. Otherwise, the `result` property will be returned.
 
 ## Listening to Events
