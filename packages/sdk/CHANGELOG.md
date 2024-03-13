@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.5.0
+
+### Minor Changes
+
+- 0bec0b5: Improve request function
+
 ## 1.4.9
 
 ### Patch Changes
