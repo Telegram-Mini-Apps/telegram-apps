@@ -60,6 +60,14 @@ export type { RGB, RGBShort } from './colors/types.js';
  * Components.
  */
 
+// Back button.
+export { BackButton } from './components/back-button/BackButton.js';
+export type {
+  BackButtonEventListener,
+  BackButtonEventName,
+  BackButtonEvents,
+} from './components/back-button/types.js';
+
 // Closing behavior
 export { ClosingBehavior } from './components/closing-behavior/ClosingBehavior.js';
 export type {
