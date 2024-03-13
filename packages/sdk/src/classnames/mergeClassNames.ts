@@ -1,8 +1,8 @@
 import { classNames } from './classNames.js';
-import { isRecord } from '../misc/index.js';
-import type { UnionOptionalKeys, UnionRequiredKeys } from '../types/index.js';
+import { isRecord } from '../misc/isRecord.js';
+import type { UnionOptionalKeys, UnionRequiredKeys } from '../types/unions.js';
 
-type MergeClassNames<Tuple extends any[]> =
+export type MergeClassNames<Tuple extends any[]> =
   // Removes all types from union which will be ignored by the mergeClassNames function.
   Exclude<Tuple[number], number | string | null | undefined | any[] | boolean> extends infer Union
     ? {

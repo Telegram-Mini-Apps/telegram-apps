@@ -1,7 +1,7 @@
 import { expect, vi, it, SpyInstance, afterEach, beforeAll } from 'vitest';
 import { bindViewportCSSVars } from '../bindViewportCSSVars';
-import { Viewport } from '../../viewport';
 import { dispatchWindowMessageEvent } from '../../../test-utils/dispatchWindowMessageEvent';
+import { Viewport } from '../../components/viewport/Viewport';
 
 let setCSSPropertySpy: SpyInstance<[string, string, string?], void>;
 

@@ -1,6 +1,6 @@
 import type { StateEvents } from './types.js';
-import type { EventEmitter } from '../event-emitter/index.js';
-import type { StringKeys } from '../types/index.js';
+import type { EventEmitter } from '../event-emitter/EventEmitter.js';
+import type { StringKeys } from '../types/utils.js';
 
 /**
  * Represents state which is observable via passed EventEmitter.

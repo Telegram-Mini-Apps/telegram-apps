@@ -1,6 +1,6 @@
 import { ParseError } from './ParseError.js';
 import type { Parser } from './types.js';
-import type { If } from '../types/index.js';
+import type { If } from '../types/logical.js';
 
 /**
  * Result of "parse" function.

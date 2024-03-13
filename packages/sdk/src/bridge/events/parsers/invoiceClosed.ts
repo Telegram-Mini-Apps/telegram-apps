@@ -1,4 +1,5 @@
-import { json, string } from '../../../parsing/index.js';
+import { json } from '../../../parsing/parsers/json.js';
+import { string } from '../../../parsing/parsers/string.js';
 
 export type InvoiceStatus =
   | 'paid'

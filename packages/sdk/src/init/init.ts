@@ -1,26 +1,26 @@
+import { catchCustomStyles } from './catchCustomStyles.js';
+import { createBackButton } from './creators/createBackButton.js';
+import { createClosingBehavior } from './creators/createClosingBehavior.js';
+import { createMainButton } from './creators/createMainButton.js';
+import { createMiniApp } from './creators/createMiniApp.js';
+import { createRequestIdGenerator } from './creators/createRequestIdGenerator.js';
+import { createSettingsButton } from './creators/createSettingsButton.js';
+import { createThemeParams } from './creators/createThemeParams.js';
+import { createViewport } from './creators/createViewport.js';
+import { processCSSVars } from './css/processCSSVarsOption.js';
 import type { InitOptions, InitResult } from './types.js';
-import { createPostEvent, on } from '../bridge/index.js';
-import { CloudStorage } from '../cloud-storage/index.js';
-import { HapticFeedback } from '../haptic-feedback/index.js';
-import { catchCustomStyles } from '../init/catchCustomStyles.js';
-import {
-  createBackButton,
-  createClosingBehavior,
-  createMainButton,
-  createMiniApp,
-  createRequestIdGenerator,
-  createSettingsButton,
-  createThemeParams,
-  createViewport,
-} from '../init/creators/index.js';
-import { processCSSVars } from '../init/css/index.js';
-import { InitData } from '../init-data/index.js';
-import { Invoice } from '../invoice/index.js';
-import { retrieveLaunchParams } from '../launch-params/index.js';
-import { isIframe, isPageReload } from '../misc/index.js';
-import { Popup } from '../popup/index.js';
-import { QRScanner } from '../qr-scanner/index.js';
-import { Utils } from '../utils/index.js';
+import { on } from '../bridge/events/on.js';
+import { createPostEvent } from '../bridge/methods/createPostEvent.js';
+import { CloudStorage } from '../components/cloud-storage/CloudStorage.js';
+import { HapticFeedback } from '../components/haptic-feedback/HapticFeedback.js';
+import { InitData } from '../components/init-data/InitData.js';
+import { Invoice } from '../components/invoice/Invoice.js';
+import { Popup } from '../components/popup/Popup.js';
+import { QRScanner } from '../components/qr-scanner/QRScanner.js';
+import { Utils } from '../components/utils/Utils.js';
+import { retrieveLaunchParams } from '../launch-params/retrieveLaunchParams.js';
+import { isIframe } from '../misc/isIframe.js';
+import { isPageReload } from '../misc/isPageReload.js';
 
 type ComputedInitResult<O> = O extends { async: true } | { complete: true }
   ? Promise<InitResult>

@@ -1,6 +1,6 @@
-import type { InitDataParsed } from '../init-data/index.js';
-import type { ThemeParamsParsed } from '../theme-params/index.js';
-import type { Platform } from '../types/index.js';
+import type { InitDataParsed } from '../components/init-data/types.js';
+import type { ThemeParamsParsed } from '../components/theme-params/types.js';
+import type { Platform } from '../types/platform.js';
 
 /**
  * Telegram Mini Apps launch parameters.

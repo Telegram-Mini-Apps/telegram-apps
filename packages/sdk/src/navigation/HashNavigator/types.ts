@@ -1,6 +1,5 @@
 import type { HashNavigator } from './HashNavigator.js';
-import type { NavigatorOptions } from '../Navigator/index.js';
-import type { NavigationEntry } from '../Navigator/types.js';
+import type { NavigationEntry, NavigatorOptions } from '../Navigator/types.js';
 
 export type HashNavigatorOptions = Omit<NavigatorOptions, 'loggerPrefix'>;
 

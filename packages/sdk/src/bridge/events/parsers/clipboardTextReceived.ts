@@ -1,5 +1,6 @@
-import { json, string } from '../../../parsing/index.js';
-import type { RequestId } from '../../../types/index.js';
+import { json } from '../../../parsing/parsers/json.js';
+import { string } from '../../../parsing/parsers/string.js';
+import type { RequestId } from '../../../types/request-id.js';
 
 export interface ClipboardTextReceivedPayload {
   /**

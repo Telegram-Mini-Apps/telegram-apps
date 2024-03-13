@@ -4,9 +4,11 @@ import type {
   HashNavigatorEventsMap,
   HashNavigatorOptions,
 } from './types.js';
-import { off, on, postEvent } from '../../bridge/index.js';
-import { EventEmitter } from '../../event-emitter/index.js';
-import { Navigator } from '../Navigator/index.js';
+import { off } from '../../bridge/events/off.js';
+import { on } from '../../bridge/events/on.js';
+import { postEvent } from '../../bridge/methods/postEvent.js';
+import { EventEmitter } from '../../event-emitter/EventEmitter.js';
+import { Navigator } from '../Navigator/Navigator.js';
 import type {
   NavigationEntry,
   NavigatorConEntry,

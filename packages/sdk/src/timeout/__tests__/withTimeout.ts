@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
-
-import { TimeoutError, withTimeout } from '../index';
+import { withTimeout } from '../withTimeout';
+import { TimeoutError } from '../TimeoutError';
 
 beforeAll(() => {
   vi.useFakeTimers();

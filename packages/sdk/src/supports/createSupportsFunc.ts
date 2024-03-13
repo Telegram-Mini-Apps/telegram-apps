@@ -1,7 +1,7 @@
 import { supports } from './supports.js';
 import type { SupportsFunc } from './types.js';
-import type { MiniAppsMethodName } from '../bridge/index.js';
-import type { Version } from '../version/index.js';
+import type { MiniAppsMethodName } from '../bridge/methods/methods.js';
+import type { Version } from '../version/types.js';
 
 /**
  * Returns function, which accepts predefined method name and checks if it is supported

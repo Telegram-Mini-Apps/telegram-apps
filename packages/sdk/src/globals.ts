@@ -1,4 +1,4 @@
-import { Logger } from './logger/index.js';
+import { Logger } from './logger/Logger.js';
 
 let currentTargetOrigin = 'https://web.telegram.org';
 

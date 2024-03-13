@@ -1,5 +1,5 @@
-import type { PostEvent } from '../../bridge/index.js';
-import { SettingsButton } from '../../settings-button/index.js';
+import type { PostEvent } from '../../bridge/methods/postEvent.js';
+import { SettingsButton } from '../../components/settings-button/SettingsButton.js';
 import { getStorageValue, saveStorageValue } from '../../storage.js';
 
 /**

@@ -1,19 +1,17 @@
 import type { MiniAppsEventEmitter, MiniAppsEventName } from './events.js';
 import { onTelegramEvent } from './onTelegramEvent.js';
-import {
-  clipboardTextReceived,
-  customMethodInvoked,
-  invoiceClosed,
-  phoneRequested,
-  popupClosed,
-  qrTextReceived,
-  themeChanged,
-  viewportChanged,
-  writeAccessRequested,
-} from './parsers/index.js';
-import { EventEmitter } from '../../event-emitter/index.js';
+import { clipboardTextReceived } from './parsers/clipboardTextReceived.js';
+import { customMethodInvoked } from './parsers/customMethodInvoked.js';
+import { invoiceClosed } from './parsers/invoiceClosed.js';
+import { phoneRequested } from './parsers/phoneRequested.js';
+import { popupClosed } from './parsers/popupClosed.js';
+import { qrTextReceived } from './parsers/qrTextReceived.js';
+import { themeChanged } from './parsers/theme-changed.js';
+import { viewportChanged } from './parsers/viewportChanged.js';
+import { writeAccessRequested } from './parsers/writeAccessRequested.js';
+import { EventEmitter } from '../../event-emitter/EventEmitter.js';
 import { logger } from '../../globals.js';
-import { string } from '../../parsing/index.js';
+import { string } from '../../parsing/parsers/string.js';
 
 /**
  * Returns event emitter which could be safely used, to process events from

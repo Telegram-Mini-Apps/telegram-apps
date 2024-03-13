@@ -1,4 +1,4 @@
-import type { CreateRequestIdFunc } from '../../types/index.js';
+import type { CreateRequestIdFunc } from '../../types/request-id.js';
 
 /**
  * Creates function which generated request identifiers.
