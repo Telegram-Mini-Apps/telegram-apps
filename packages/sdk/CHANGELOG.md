@@ -1,5 +1,12 @@
 # @tma.js/sdk
 
+## 1.4.9
+
+### Patch Changes
+
+- 896411c: Remove slow types
+- 26a1c84: Get rid of barrel files
+
 ## 1.4.8
 
 ### Patch Changes
