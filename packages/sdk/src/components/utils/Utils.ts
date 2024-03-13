@@ -1,3 +1,4 @@
+import { captureSameReq } from '../../bridge/captureSameReq.js';
 import type { PostEvent } from '../../bridge/methods/postEvent.js';
 import { postEvent as defaultPostEvent } from '../../bridge/methods/postEvent.js';
 import { request } from '../../bridge/request.js';
@@ -82,13 +83,17 @@ export class Utils {
    * - Value in clipboard is not text
    * - Access to clipboard is not allowed
    */
-  readTextFromClipboard(): Promise<string | null> {
-    return request(
-      'web_app_read_text_from_clipboard',
-      { req_id: this.createRequestId() },
-      'clipboard_text_received',
-      { postEvent: this.postEvent },
-    ).then(({ data = null }) => data);
+  async readTextFromClipboard(): Promise<string | null> {
+    const reqId = this.createRequestId();
+    const {
+      data = null,
+    } = await request('web_app_read_text_from_clipboard', 'clipboard_text_received', {
+      postEvent: this.postEvent,
+      params: { req_id: reqId },
+      capture: captureSameReq(reqId),
+    });
+
+    return data;
   }
 
   /**

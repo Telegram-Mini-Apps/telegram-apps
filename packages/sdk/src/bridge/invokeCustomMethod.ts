@@ -1,3 +1,4 @@
+import { captureSameReq } from './captureSameReq.js';
 import type { CustomMethodName, CustomMethodParams } from './methods/custom-methods.js';
 import { request } from './request.js';
 import type { ExecuteWithOptions } from '../types/methods.js';
@@ -36,16 +37,18 @@ export async function invokeCustomMethod(
   requestId: string,
   options: ExecuteWithOptions = {},
 ): Promise<unknown> {
-  const { result, error } = await request(
-    'web_app_invoke_custom_method',
-    {
+  const {
+    result,
+    error,
+  } = await request('web_app_invoke_custom_method', 'custom_method_invoked', {
+    ...options,
+    params: {
       method,
       params,
       req_id: requestId,
     },
-    'custom_method_invoked',
-    options,
-  );
+    capture: captureSameReq(requestId),
+  });
 
   if (error) {
     throw new Error(error);

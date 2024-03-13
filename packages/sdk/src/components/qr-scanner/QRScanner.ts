@@ -64,9 +64,11 @@ export class QRScanner {
     try {
       const result = await request(
         'web_app_open_scan_qr_popup',
-        { text },
         ['qr_text_received', 'scan_qr_popup_closed'],
-        { postEvent: this.postEvent },
+        {
+          postEvent: this.postEvent,
+          params: { text },
+        },
       );
 
       return typeof result === 'object' && typeof result.data === 'string' ? result.data : null;

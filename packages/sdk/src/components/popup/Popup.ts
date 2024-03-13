@@ -69,12 +69,10 @@ export class Popup {
 
     this.isOpened = true;
 
-    return request(
-      'web_app_open_popup',
-      preparePopupParams(options),
-      'popup_closed',
-      { postEvent: this.postEvent },
-    )
+    return request('web_app_open_popup', 'popup_closed', {
+      postEvent: this.postEvent,
+      params: preparePopupParams(options),
+    })
       .then(({ button_id = null }) => button_id)
       .finally(() => {
         this.isOpened = false;

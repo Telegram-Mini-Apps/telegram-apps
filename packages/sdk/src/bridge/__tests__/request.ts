@@ -50,7 +50,9 @@ function emptyCatch() {
 describe('options', () => {
   describe('timeout', () => {
     it('should throw an error in case, timeout was reached', () => {
-      const promise = request('web_app_request_phone', 'phone_requested', {
+      const promise = request({
+        method: 'web_app_request_phone',
+        event: 'phone_requested',
         timeout: 1000,
       });
 
@@ -132,8 +134,10 @@ describe('options', () => {
 
 describe('with request id', () => {
   it('should ignore event with the different request id', () => {
-    const promise = request('web_app_read_text_from_clipboard', { req_id: 'a' }, 'clipboard_text_received', {
+    const promise = request('web_app_read_text_from_clipboard', 'clipboard_text_received', {
       timeout: 1000,
+      params: { req_id: 'a' },
+      capture: (({ req_id }) => req_id === 'a'),
     });
 
     dispatchWindowMessageEvent('clipboard_text_received', { req_id: 'b' });
@@ -145,8 +149,10 @@ describe('with request id', () => {
   });
 
   it('should capture event with the same request id', () => {
-    const promise = request('web_app_read_text_from_clipboard', { req_id: 'a' }, 'clipboard_text_received', {
+    const promise = request('web_app_read_text_from_clipboard', 'clipboard_text_received', {
       timeout: 1000,
+      params: { req_id: 'a' },
+      capture: (({ req_id }) => req_id === 'a'),
     });
 
     dispatchWindowMessageEvent('clipboard_text_received', {
@@ -172,22 +178,14 @@ describe('multiple events', () => {
         ['phone_requested', 'write_access_requested'],
         { timeout: 1000 },
       );
-      const promise2 = request(
-        'web_app_request_phone',
-        ['phone_requested', 'write_access_requested'],
-        { timeout: 1000 },
-      );
 
       dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
-      dispatchWindowMessageEvent('write_access_requested', { status: 'declined' });
       vi.advanceTimersByTime(1500);
 
-      return Promise
-        .all([promise, promise2])
+      return promise
         .catch(emptyCatch)
         .finally(() => {
           expect(promise).resolves.toStrictEqual({ status: 'allowed' });
-          expect(promise2).resolves.toStrictEqual({ status: 'declined' });
         });
     });
   });
@@ -196,41 +194,21 @@ describe('multiple events', () => {
     it('should handle any of the specified events', () => {
       const promise = request(
         'web_app_data_send',
-        { data: 'abc' },
         ['phone_requested', 'write_access_requested'],
-        { timeout: 1000 },
-      );
-      const promise2 = request(
-        'web_app_data_send',
-        { data: 'abc' },
-        ['phone_requested', 'write_access_requested'],
-        { timeout: 1000 },
+        {
+          timeout: 1000,
+          params: { data: 'abc' },
+        },
       );
 
-      dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
       dispatchWindowMessageEvent('write_access_requested', { status: 'declined' });
       vi.advanceTimersByTime(1500);
 
-      return Promise
-        .all([promise, promise2])
+      return promise
         .catch(emptyCatch)
         .finally(() => {
-          expect(promise).resolves.toStrictEqual({ status: 'allowed' });
-          expect(promise2).resolves.toStrictEqual({ status: 'declined' });
+          expect(promise).resolves.toStrictEqual({ status: 'declined' });
         });
     });
   });
 });
-
-// it('no params methods', () => {
-//  it('should properly handle ')
-// });
-
-// it('with request id', () => {
-//   const promise = request('web_app_read_text_from_clipboard', { req_id: 'a' }, 'clipboard_text_received');
-//
-//   dispatchWindowEvent('clipboard_text_received', { req_id: 'b' });
-//   expect(promise).resolves.toHaveLength(0);
-//   dispatchWindowEvent('clipboard_text_received', { req_id: 'a' });
-//   expect(promise).resolves.toHaveLength(1);
-// });

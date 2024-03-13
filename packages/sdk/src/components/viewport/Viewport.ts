@@ -9,7 +9,7 @@ import type { RemoveListenerFn } from '../../bridge/events/on.js';
 import { on } from '../../bridge/events/on.js';
 import type { PostEvent } from '../../bridge/methods/postEvent.js';
 import { postEvent as defaultPostEvent } from '../../bridge/methods/postEvent.js';
-import type { RequestOptions } from '../../bridge/request.js';
+import type { RequestSimpleOptions } from '../../bridge/request.js';
 import { EventEmitter } from '../../event-emitter/EventEmitter.js';
 import { State } from '../../state/State.js';
 
@@ -48,7 +48,7 @@ export class Viewport {
    * instance.
    * @param options - options to request fresh data.
    */
-  sync(options?: RequestOptions): Promise<void> {
+  sync(options?: RequestSimpleOptions<'web_app_request_viewport'>): Promise<void> {
     return requestViewport(options).then(({ height, isExpanded, width, isStateStable }) => {
       this.state.set({
         height,

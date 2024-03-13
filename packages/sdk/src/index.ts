@@ -8,7 +8,11 @@ export { off } from './bridge/events/off.js';
 export { once } from './bridge/events/once.js';
 export { parseMessage } from './bridge/parseMessage.js';
 export { postEvent, type PostEvent } from './bridge/methods/postEvent.js';
-export { request, type RequestOptions, type RequestOptionsAdvanced } from './bridge/request.js';
+export {
+  request,
+  type RequestSimpleOptions,
+  type RequestCompleteOptions,
+} from './bridge/request.js';
 export { subscribe } from './bridge/events/subscribe.js';
 export { unsubscribe } from './bridge/events/unsubscribe.js';
 export { MethodUnsupportedError } from './bridge/errors/MethodUnsupportedError.js';

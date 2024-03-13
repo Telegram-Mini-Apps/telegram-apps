@@ -2,7 +2,7 @@ import type { AnyInvokeCustomMethodParams } from './custom-methods.js';
 import type { AnyHapticFeedbackParams } from './haptic.js';
 import type { PopupParams } from './popup.js';
 import type { RGB } from '../../colors/types.js';
-import type { Not } from '../../types/logical.js';
+import type { If, Not } from '../../types/logical.js';
 import type { RequestId } from '../../types/request-id.js';
 import type { UnionKeys } from '../../types/unions.js';
 import type { IsNever } from '../../types/utils.js';
@@ -17,7 +17,7 @@ export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
  */
 export type SwitchInlineQueryChatType = 'users' | 'bots' | 'groups' | 'channels';
 
-interface CreateParams<Params = undefined, VersionedParam extends UnionKeys<Params> = never> {
+interface CreateParams<Params = never, VersionedParam extends UnionKeys<Params> = never> {
   params: Params;
   versionedParams: VersionedParam;
 }
@@ -342,21 +342,19 @@ export type MiniAppsMethodParams<M extends MiniAppsMethodName> = MiniAppsMethods
  * True if specified method accepts parameters.
  */
 export type MiniAppsMethodAcceptParams<M extends MiniAppsMethodName> =
-  Not<IsNever<Exclude<MiniAppsMethodParams<M>, undefined>>>;
+  Not<IsNever<MiniAppsMethodParams<M>>>;
 
 /**
  * Any post-available event name which does not require arguments.
  */
 export type MiniAppsEmptyMethodName = {
-  [M in MiniAppsMethodName]: undefined extends MiniAppsMethodParams<M> ? M : never;
+  [Method in MiniAppsMethodName]: If<MiniAppsMethodAcceptParams<Method>, never, Method>;
 }[MiniAppsMethodName];
 
 /**
  * Any post-available event name which require arguments.
  */
-export type MiniAppsNonEmptyMethodName = {
-  [M in MiniAppsMethodName]: MiniAppsMethodAcceptParams<M> extends true ? M : never;
-}[MiniAppsMethodName];
+export type MiniAppsNonEmptyMethodName = Exclude<MiniAppsMethodName, MiniAppsEmptyMethodName>;
 
 /**
  * Method names which have versioned params.

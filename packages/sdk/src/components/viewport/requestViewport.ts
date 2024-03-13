@@ -1,4 +1,4 @@
-import type { RequestOptions } from '../../bridge/request.js';
+import type { RequestSimpleOptions } from '../../bridge/request.js';
 import { request } from '../../bridge/request.js';
 
 export interface RequestViewportResult {
@@ -12,7 +12,9 @@ export interface RequestViewportResult {
  * Requests viewport actual information from the Telegram application.
  * @param options - request options.
  */
-export async function requestViewport(options?: RequestOptions): Promise<RequestViewportResult> {
+export async function requestViewport(
+  options?: RequestSimpleOptions<'web_app_request_viewport'>,
+): Promise<RequestViewportResult> {
   const data = await request('web_app_request_viewport', 'viewport_changed', options);
 
   return {

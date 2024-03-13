@@ -1,176 +1,130 @@
 import type {
-  MiniAppsEventHasParams,
   MiniAppsEventName,
   MiniAppsEventParams,
 } from './events/events.js';
 import { on } from './events/on.js';
 import type {
   MiniAppsEmptyMethodName,
-  MiniAppsMethodAcceptParams,
   MiniAppsMethodName,
   MiniAppsMethodParams, MiniAppsNonEmptyMethodName,
 } from './methods/methods.js';
 import { postEvent as defaultPostEvent } from './methods/postEvent.js';
-import { isRecord } from '../misc/isRecord.js';
 import { withTimeout } from '../timeout/withTimeout.js';
-import type { And, If } from '../types/logical.js';
+import type { If } from '../types/logical.js';
 import type { ExecuteWithOptions } from '../types/methods.js';
 import type { IsNever } from '../types/utils.js';
 
 /**
- * Names of methods, which require passing "req_id" parameter.
+ * Simple `request` method options.
  */
-type MethodWithRequestId = {
-  [M in MiniAppsMethodName]: If<
-    And<
-      MiniAppsMethodAcceptParams<M>,
-      MiniAppsMethodParams<M> extends { req_id: string } ? true : false
-    >,
-    M,
-    never
-  >;
-}[MiniAppsMethodName];
+export type RequestSimpleOptions<Method extends MiniAppsMethodName> =
+  Omit<RequestCompleteOptions<Method, any>, 'method' | 'event'>;
 
 /**
- * Names of events, which contain "req_id" parameter.
+ * Complete `request` method options.
  */
-type EventWithRequestId = {
-  [E in MiniAppsEventName]: If<
-    And<MiniAppsEventHasParams<E>, MiniAppsEventParams<E> extends {
-      req_id: string
-    } ? true : false>,
-    E,
-    never
-  >;
-}[MiniAppsEventName];
-
-export interface RequestOptions extends ExecuteWithOptions {
-}
-
-export interface RequestOptionsAdvanced<EventPayload> extends RequestOptions {
+export type RequestCompleteOptions<
+  Method extends MiniAppsMethodName,
+  Event extends MiniAppsEventName,
+> =
+  & {
+    /**
+     * Mini Apps method name.
+     */
+    method: Method;
+    /**
+     * One or many tracked Mini Apps events.
+     */
+    event: Event | Event[];
+    /**
+     * Should return true in case, this event should be captured. If not specified,
+     * request is not skipping captured events.
+     */
+    capture?: If<
+      IsNever<MiniAppsEventParams<Event>>,
+      () => boolean,
+      (payload: MiniAppsEventParams<Event>) => boolean
+    >
+  }
+  & ExecuteWithOptions
+  & If<IsNever<MiniAppsMethodParams<Method>>, {}, {
   /**
-   * Should return true in case, this event should be captured. If not specified,
-   * request is not skipping captured events.
+   * List of method parameters.
    */
-  capture?: If<IsNever<EventPayload>, () => boolean, (payload: EventPayload) => boolean>;
-}
+  params: MiniAppsMethodParams<Method>
+}>;
 
 /**
- * Calls specified TWA method and captures one of the specified events. Returns promise
- * which will be resolved in case, event with specified in method request identifier
- * was captured.
- * @param method - method to execute.
- * @param params - method parameters.
- * @param event - event or events to listen.
- * @param options - additional execution options.
- */
-export function request<M extends MethodWithRequestId, E extends EventWithRequestId>(
-  method: M,
-  params: MiniAppsMethodParams<M>,
-  event: E | E[],
-  options?: RequestOptions,
-): Promise<MiniAppsEventParams<E>>;
-
-/**
- * Calls specified TWA method and captures one of the specified events. Returns promise
+ * Calls specified Mini Apps method and captures one of the specified events. Returns promise
  * which will be resolved in case, specified event was captured.
- * @param method - method to execute.
- * @param event - event or events to listen.
- * @param options - additional execution options.
+ * @param options - method options.
  */
-export function request<M extends MiniAppsEmptyMethodName, E extends MiniAppsEventName>(
-  method: M,
-  event: E | E[],
-  options?: RequestOptionsAdvanced<MiniAppsEventParams<E>>,
-): Promise<MiniAppsEventParams<E>>;
+export function request<Method extends MiniAppsEmptyMethodName, Event extends MiniAppsEventName>(
+  options: RequestCompleteOptions<Method, Event>,
+): Promise<MiniAppsEventParams<Event>>;
 
 /**
- * Calls specified TWA method and captures one of the specified events. Returns promise
+ * Calls specified Mini Apps method and captures one of the specified events. Returns promise
  * which will be resolved in case, specified event was captured.
- * @param method - method to execute
- * @param params - method parameters.
- * @param event - event or events to listen
- * @param options - additional execution options.
+ * @param method - method name.
+ * @param eventOrEvents - tracked event or events.
+ * @param options - method options.
  */
-export function request<M extends MiniAppsNonEmptyMethodName, E extends MiniAppsEventName>(
-  method: M,
-  params: MiniAppsMethodParams<M>,
-  event: E | E[],
-  options?: RequestOptionsAdvanced<MiniAppsEventParams<E>>,
-): Promise<MiniAppsEventParams<E>>;
+export function request<Method extends MiniAppsNonEmptyMethodName, Event extends MiniAppsEventName>(
+  method: Method,
+  eventOrEvents: Event | Event[],
+  options: RequestSimpleOptions<Method>,
+): Promise<MiniAppsEventParams<Event>>;
 
-export function request(
-  method: MiniAppsMethodName,
-  eventOrParams: MiniAppsEventName | MiniAppsEventName[] | MiniAppsEventParams<any>,
-  eventOrOptions?:
-    | MiniAppsEventName
-    | MiniAppsEventName[]
-    | RequestOptions
-    | RequestOptionsAdvanced<any>,
-  options?: RequestOptions | RequestOptionsAdvanced<any>,
-): Promise<any> {
-  let executionOptions: RequestOptions | RequestOptionsAdvanced<any> | undefined;
-  let methodParams: MiniAppsEventParams<any> | undefined;
-  let events: MiniAppsEventName[];
-  let requestId: string | undefined;
+/**
+ * Calls specified Mini Apps method and captures one of the specified events. Returns promise
+ * which will be resolved in case, specified event was captured.
+ * @param method - method name.
+ * @param eventOrEvents - tracked event or events.
+ * @param options - method options.
+ */
+export function request<Method extends MiniAppsEmptyMethodName, Event extends MiniAppsEventName>(
+  method: Method,
+  eventOrEvents: Event | Event[],
+  options?: RequestSimpleOptions<Method>,
+): Promise<MiniAppsEventParams<Event>>;
 
-  if (typeof eventOrParams === 'string' || Array.isArray(eventOrParams)) {
-    // Override: [method, event, options?]
-    events = Array.isArray(eventOrParams) ? eventOrParams : [eventOrParams] as MiniAppsEventName[];
-    executionOptions = eventOrOptions as (RequestOptionsAdvanced<any> | undefined);
-  } else {
-    // Override: [method, params, event, options?]
-    methodParams = eventOrParams as MiniAppsEventParams<any>;
-    events = Array.isArray(eventOrOptions)
-      ? eventOrOptions
-      : [eventOrOptions] as MiniAppsEventName[];
-    executionOptions = options;
-  }
-
-  // In case, method parameters were passed, and they contained request identifier, we should store
-  // it and wait for the event with this identifier to occur.
-  if (isRecord(methodParams) && typeof methodParams.req_id === 'string') {
-    requestId = methodParams.req_id;
-  }
-
-  const { postEvent = defaultPostEvent, timeout } = executionOptions || {};
-  const capture = executionOptions && 'capture' in executionOptions
-    ? executionOptions.capture
-    : null;
-
-  const execute = () => {
-    return new Promise((res, rej) => {
-      // Iterate over each event and create event listener.
-      const stoppers = events.map((ev) => on(ev, (data?) => {
-        // If request identifier was specified, we are waiting for event with the same value
-        // to occur.
-        if (requestId && (!isRecord(data) || data.req_id !== requestId)) {
-          return;
-        }
-
-        if (typeof capture === 'function' && !capture(data)) {
-          return;
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        stopListening();
-        res(data);
-      }));
-
-      // Function which removes all event listeners.
-      const stopListening = () => stoppers.forEach((stop) => stop());
-
-      try {
-        // We are wrapping this call in try catch, because it can throw errors in case,
-        // compatibility check was enabled. We want an error to be captured by promise, not by
-        // another one external try catch.
-        postEvent(method as any, methodParams);
-      } catch (e) {
-        stopListening();
-        rej(e);
+export async function request<Method extends MiniAppsMethodName, Event extends MiniAppsEventName>(
+  methodOrOptions: Method | RequestCompleteOptions<Method, Event>,
+  eventOrEvents?: Event | Event[],
+  simpleOptions?: RequestSimpleOptions<Method>,
+): Promise<MiniAppsEventParams<Event>> {
+  let resolve: (payload: MiniAppsEventParams<Event>) => void;
+  const promise = new Promise<MiniAppsEventParams<Event>>((res) => {
+    resolve = res;
+  });
+  const options: RequestCompleteOptions<Method, Event> = (
+    eventOrEvents
+      ? {
+        ...simpleOptions,
+        event: eventOrEvents,
+        method: methodOrOptions,
       }
-    });
-  };
+      : methodOrOptions
+  ) as RequestCompleteOptions<Method, Event>;
 
-  return typeof timeout === 'number' ? withTimeout(execute, timeout) : execute();
+  const {
+    method,
+    event,
+    capture,
+    postEvent = defaultPostEvent,
+    timeout,
+  } = options;
+
+  const stoppers = (Array.isArray(event) ? event : [event]).map(
+    (ev) => on(ev, (payload?) => (!capture || capture(payload)) && resolve(payload)),
+  );
+
+  try {
+    postEvent(method as any, (options as any).params);
+    return await (timeout ? withTimeout(promise, timeout) : promise);
+  } finally {
+    // After promise execution was completed, don't forget to remove all the listeners.
+    stoppers.forEach((stop) => stop());
+  }
 }

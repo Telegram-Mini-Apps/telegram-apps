@@ -95,17 +95,13 @@ export class Invoice {
     this.isOpened = true;
 
     try {
-      const result = await request(
-        'web_app_open_invoice',
-        { slug },
-        'invoice_closed',
-        {
-          postEvent: this.postEvent,
-          capture(data) {
-            return slug === data.slug;
-          },
+      const result = await request('web_app_open_invoice', 'invoice_closed', {
+        params: { slug },
+        postEvent: this.postEvent,
+        capture(data) {
+          return slug === data.slug;
         },
-      );
+      });
 
       return result.status;
     } finally {
