@@ -13,12 +13,15 @@ function createTimeoutPromise(timeout: number): Promise<never> {
 /**
  * Accepts specified function and instantly executes. It waits for timeout milliseconds for
  * it to complete and throws an error in case, deadline was reached.
- * @param func - function to execute.
+ * @param funcOrPromise - function to execute or pending promise.
  * @param timeout - completion timeout.
  */
-export function withTimeout<T>(func: () => Promise<T>, timeout: number): Promise<T> {
+export function withTimeout<T>(
+  funcOrPromise: Promise<T> | (() => Promise<T>),
+  timeout: number,
+): Promise<T> {
   return Promise.race([
-    func(),
+    typeof funcOrPromise === 'function' ? funcOrPromise() : funcOrPromise,
     createTimeoutPromise(timeout),
   ]);
 }
