@@ -1,10 +1,10 @@
 import type { User } from './types.js';
-import { boolean, json, number, string } from '../parsing/index.js';
+import { boolean, json, number, string, type ValueParser } from '../parsing/index.js';
 
 /**
  * Returns parser used to parse user data.
  */
-export function userParser() {
+export function userParser(): ValueParser<User, false> {
   return json<User>({
     addedToAttachmentMenu: {
       type: boolean().optional(),

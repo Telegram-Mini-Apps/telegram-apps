@@ -1,12 +1,12 @@
 import { chatParser } from './chatParser.js';
 import type { InitDataParsed } from './types.js';
 import { userParser } from './userParser.js';
-import { date, number, searchParams, string } from '../parsing/index.js';
+import { date, number, searchParams, string, type ValueParser } from '../parsing/index.js';
 
 /**
  * Returns parser used to parse init data, presented as search params.
  */
-export function initDataParser() {
+export function initDataParser(): ValueParser<InitDataParsed, false> {
   return searchParams<InitDataParsed>({
     authDate: {
       type: date(),

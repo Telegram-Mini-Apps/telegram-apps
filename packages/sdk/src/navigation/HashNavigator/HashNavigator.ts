@@ -19,6 +19,8 @@ const CURSOR_VOID = 0;
 const CURSOR_BACK = 1;
 const CURSOR_FORWARD = 2;
 
+type HashNavigatorEventEmitter = EventEmitter<HashNavigatorEventsMap>;
+
 export class HashNavigator extends Navigator<Promise<void>> {
   /**
    * Creates navigator from current window location hash.
@@ -192,7 +194,7 @@ export class HashNavigator extends Navigator<Promise<void>> {
     return this.syncHistory();
   }
 
-  back = () => super.back();
+  back = (): Promise<void> => super.back();
 
   /**
    * Detaches current navigator from the browser history.
@@ -210,10 +212,10 @@ export class HashNavigator extends Navigator<Promise<void>> {
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on: HashNavigatorEventEmitter['on'] = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off: HashNavigatorEventEmitter['off'] = this.ee.off.bind(this.ee);
 }

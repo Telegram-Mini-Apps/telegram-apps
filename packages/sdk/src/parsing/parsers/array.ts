@@ -2,8 +2,8 @@ import { ArrayValueParser } from '../ArrayValueParser.js';
 
 /**
  * Parses incoming value as an array.
- * @param type - parser type name.
+ * @param parserTypeName - parser type name.
  */
-export function array(type?: string): ArrayValueParser<unknown, false> {
-  return new ArrayValueParser((value) => value, false, type);
+export function array(parserTypeName?: string): ArrayValueParser<unknown, false> {
+  return new ArrayValueParser((value) => value, false, parserTypeName);
 }

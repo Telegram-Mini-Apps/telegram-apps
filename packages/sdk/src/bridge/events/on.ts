@@ -2,7 +2,10 @@ import type { MiniAppsEventListener, MiniAppsEventName } from './events.js';
 import { off } from './off.js';
 import { singletonEmitter } from './singletonEmitter.js';
 
-type StopListening = () => void;
+/**
+ * Removes event listener.
+ */
+export type RemoveListenerFn = () => void;
 
 /**
  * Adds new listener to the specified event. Returns handler
@@ -13,7 +16,7 @@ type StopListening = () => void;
 export function on<E extends MiniAppsEventName>(
   event: E,
   listener: MiniAppsEventListener<E>,
-): StopListening {
+): RemoveListenerFn {
   singletonEmitter().on(event, listener);
   return () => off(event, listener);
 }

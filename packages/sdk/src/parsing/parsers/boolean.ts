@@ -1,10 +1,11 @@
+import type { ValueParserGenerator } from '../createValueParserGenerator.js';
 import { createValueParserGenerator } from '../createValueParserGenerator.js';
 import { unexpectedTypeError } from '../unexpectedTypeError.js';
 
 /**
  * Returns parser to parse value as boolean.
  */
-export const boolean = createValueParserGenerator<boolean>((value) => {
+export const boolean: ValueParserGenerator<boolean> = createValueParserGenerator((value) => {
   if (typeof value === 'boolean') {
     return value;
   }

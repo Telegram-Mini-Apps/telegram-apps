@@ -13,6 +13,8 @@ import {
 } from '../supports/index.js';
 import type { Version } from '../version/index.js';
 
+type PopupEventEmitter = EventEmitter<PopupEvents>;
+
 /**
  * Controls currently displayed application popup. It allows developers to
  * open new custom popups and detect popup-connected events.
@@ -44,12 +46,12 @@ export class Popup {
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on: PopupEventEmitter['on'] = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off: PopupEventEmitter['off'] = this.ee.off.bind(this.ee);
 
   /**
    * A method that shows a native popup described by the `params` argument.

@@ -5,14 +5,19 @@ import type {
   ViewportState,
 } from './types.js';
 import { truncate } from './utils.js';
+import type {
+  PostEvent,
+  RemoveListenerFn,
+  RequestOptions,
+} from '../bridge/index.js';
 import {
   on,
-  type PostEvent,
   postEvent as defaultPostEvent,
-  type RequestOptions,
 } from '../bridge/index.js';
 import { EventEmitter } from '../event-emitter/index.js';
 import { State } from '../state/index.js';
+
+type Emitter = EventEmitter<ViewportEvents>;
 
 /**
  * Contains information about current WebApp device viewport, its dimensions
@@ -100,7 +105,7 @@ export class Viewport {
    * Starts listening to viewport changes and applies them.
    * @returns Function to stop listening.
    */
-  listen() {
+  listen(): RemoveListenerFn {
     return on('viewport_changed', (event) => {
       const {
         height,
@@ -161,10 +166,10 @@ export class Viewport {
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on: Emitter['on'] = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off: Emitter['off'] = this.ee.off.bind(this.ee);
 }

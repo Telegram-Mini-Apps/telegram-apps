@@ -6,6 +6,8 @@ import { type PostEvent, postEvent as defaultPostEvent } from '../bridge/index.j
 import { EventEmitter } from '../event-emitter/index.js';
 import { State } from '../state/index.js';
 
+type ClosingBehaviorEventEmitter = EventEmitter<ClosingBehaviorEvents>;
+
 /**
  * Component responsible for controlling current closing confirmation
  * status.
@@ -54,10 +56,10 @@ export class ClosingBehavior {
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on: ClosingBehaviorEventEmitter['on'] = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off: ClosingBehaviorEventEmitter['off'] = this.ee.off.bind(this.ee);
 }

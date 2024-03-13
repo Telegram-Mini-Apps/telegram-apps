@@ -12,6 +12,7 @@ import {
 } from '../supports/index.js';
 import type { Version } from '../version/index.js';
 
+type QRScannerEventEmitter = EventEmitter<QRScannerEvents>;
 /**
  * Provides QR scanner functionality.
  */
@@ -80,12 +81,12 @@ export class QRScanner {
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on: QRScannerEventEmitter['on'] = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off: QRScannerEventEmitter['off'] = this.ee.off.bind(this.ee);
 
   /**
    * Checks if specified method is supported by current component.

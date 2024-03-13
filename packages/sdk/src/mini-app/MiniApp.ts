@@ -28,6 +28,8 @@ import {
 import { sleep, withTimeout } from '../timeout/index.js';
 import type { CreateRequestIdFunc, ExecuteWithTimeout } from '../types/index.js';
 
+type MiniAppEventEmitter = EventEmitter<MiniAppEvents>;
+
 /**
  * Provides common Mini Apps functionality not covered by other system components.
  */
@@ -154,12 +156,12 @@ export class MiniApp {
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on: MiniAppEventEmitter['on'] = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off: MiniAppEventEmitter['off'] = this.ee.off.bind(this.ee);
 
   /**
    * Informs the Telegram app that the Mini App is ready to be displayed.

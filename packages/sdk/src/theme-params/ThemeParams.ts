@@ -4,10 +4,13 @@ import type {
   ThemeParamsParsed,
   ThemeParamsState,
 } from './types.js';
+import type { RemoveListenerFn } from '../bridge/index.js';
 import { on } from '../bridge/index.js';
 import { isColorDark, type RGB } from '../colors/index.js';
 import { EventEmitter } from '../event-emitter/index.js';
 import { State } from '../state/index.js';
+
+type Emitter = EventEmitter<ThemeParamsEvents>;
 
 export class ThemeParams {
   private readonly ee = new EventEmitter<ThemeParamsEvents>();
@@ -82,12 +85,12 @@ export class ThemeParams {
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on: Emitter['on'] = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off: Emitter['off'] = this.ee.off.bind(this.ee);
 
   get secondaryBackgroundColor(): RGB | undefined {
     return this.get('secondaryBackgroundColor');
@@ -111,7 +114,7 @@ export class ThemeParams {
    * Starts listening to theme changes and applies them.
    * @returns Function to stop listening.
    */
-  listen() {
+  listen(): RemoveListenerFn {
     return on('theme_changed', (event) => {
       this.state.set(parseThemeParams(event.theme_params));
     });

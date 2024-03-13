@@ -13,6 +13,8 @@ import {
 } from '../supports/index.js';
 import type { Version } from '../version/index.js';
 
+type InvoiceEventEmitter = EventEmitter<InvoiceEvents>;
+
 /**
  * Extracts invoice slug from URL.
  * @param url - url to extract slug from.
@@ -65,12 +67,12 @@ export class Invoice {
   /**
    * Adds new event listener.
    */
-  on = this.ee.on.bind(this.ee);
+  on: InvoiceEventEmitter['on'] = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off = this.ee.off.bind(this.ee);
+  off: InvoiceEventEmitter['off'] = this.ee.off.bind(this.ee);
 
   /**
    * Opens an invoice using its slug.
