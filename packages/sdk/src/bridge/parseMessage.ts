@@ -15,15 +15,13 @@ export interface MiniAppsMessage {
   eventData?: unknown;
 }
 
-const parser = json<MiniAppsMessage>({
-  eventType: string(),
-  eventData: (value) => value,
-});
-
 /**
  * Parses value as a message between client and Telegram applications.
  * @param value - value to parse.
  */
 export function parseMessage(value: unknown): MiniAppsMessage {
-  return parser.parse(value);
+  return json<MiniAppsMessage>({
+    eventType: string(),
+    eventData: (v) => v,
+  }).parse(value);
 }

@@ -5,7 +5,7 @@
  * @param b
  */
 function space(a: string, b: string): string {
-  return a + (a.length > 0 && b.length > 0 ? ` ${b}` : b);
+  return a + (a.length + b.length > 0 ? ` ${b}` : b);
 }
 
 /**
