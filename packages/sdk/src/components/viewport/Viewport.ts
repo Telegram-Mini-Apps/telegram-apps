@@ -5,8 +5,8 @@ import type {
   ViewportState,
 } from './types.js';
 import { truncate } from './utils.js';
-import type { RemoveListenerFn } from '../../bridge/events/on.js';
 import { on } from '../../bridge/events/on.js';
+import type { RemoveListenerFn } from '../../bridge/events/types.js';
 import type { PostEvent } from '../../bridge/methods/postEvent.js';
 import { postEvent as defaultPostEvent } from '../../bridge/methods/postEvent.js';
 import type { RequestSimpleOptions } from '../../bridge/request.js';

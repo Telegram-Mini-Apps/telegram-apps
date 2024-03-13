@@ -4,8 +4,8 @@ import type {
   ThemeParamsParsed,
   ThemeParamsState,
 } from './types.js';
-import type { RemoveListenerFn } from '../../bridge/events/on.js';
 import { on } from '../../bridge/events/on.js';
+import type { RemoveListenerFn } from '../../bridge/events/types.js';
 import { isColorDark } from '../../colors/isColorDark.js';
 import type { RGB } from '../../colors/types.js';
 import { EventEmitter } from '../../event-emitter/EventEmitter.js';
