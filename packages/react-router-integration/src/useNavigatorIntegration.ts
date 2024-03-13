@@ -14,34 +14,25 @@ function formatTo(to: To): string {
  * @param nav - Mini Apps navigator.
  */
 export function useNavigatorIntegration(nav: HashNavigator): [Location, Navigator] {
-  const {
-    pathname,
-    hash,
-    search,
-    go,
-    push,
-    replace,
-  } = nav;
-
   // Creates location based on the Mini Apps navigator.
   const createLocation = useCallback(() => ({
     state: null,
     key: '',
-    pathname,
-    hash,
-    search,
-  }), [pathname, hash, search]);
+    pathname: nav.pathname,
+    hash: nav.hash,
+    search: nav.search,
+  }), [nav]);
 
   const [location, setLocation] = useState(createLocation);
 
   // Create Navigator appropriate to the react-router-dom package.
   const navigator = useMemo<Navigator>(() => ({
-    go: go.bind(nav),
-    push: push.bind(nav),
-    replace: replace.bind(nav),
+    go: nav.go.bind(nav),
+    push: nav.push.bind(nav),
+    replace: nav.replace.bind(nav),
     createHref: (to) => `#${formatTo(to)}`,
     encodeLocation: (to) => new URL(formatTo(to), 'http://localhost'),
-  }), [go, push, replace, nav]);
+  }), [nav]);
 
   // When Mini Apps navigator changes its location, we should actualize the reactive values.
   useEffect(() => {
