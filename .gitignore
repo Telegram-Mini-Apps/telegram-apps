@@ -44,3 +44,5 @@ apps-local
 
 apps/docs/.vitepress/cache
 apps/docs/.vitepress/dist
+
+jsr.json
