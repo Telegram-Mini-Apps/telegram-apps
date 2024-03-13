@@ -3,12 +3,12 @@ import {
   type NotificationHapticFeedbackType,
   type PostEvent,
   postEvent as defaultPostEvent,
-} from '~/bridge/index.js';
+} from '../bridge/index.js';
 import {
   createSupportsFunc,
   type SupportsFunc,
-} from '~/supports/index.js';
-import type { Version } from '~/version/index.js';
+} from '../supports/index.js';
+import type { Version } from '../version/index.js';
 
 /**
  * Class which controls haptic feedback. It allows calling different types of

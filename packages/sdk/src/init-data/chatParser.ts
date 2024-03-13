@@ -1,6 +1,5 @@
-import { json, number, string } from '~/parsing/index.js';
-
 import type { Chat } from './types.js';
+import { json, number, string } from '../parsing/index.js';
 
 /**
  * Returns parser used to parse chat data.

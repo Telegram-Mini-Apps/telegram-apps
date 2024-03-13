@@ -1,7 +1,3 @@
-import { EventEmitter } from '~/event-emitter/index.js';
-import { logger } from '~/globals.js';
-import { string } from '~/parsing/index.js';
-
 import type { MiniAppsEventEmitter, MiniAppsEventName } from './events.js';
 import { onTelegramEvent } from './onTelegramEvent.js';
 import {
@@ -15,6 +11,9 @@ import {
   viewportChanged,
   writeAccessRequested,
 } from './parsers/index.js';
+import { EventEmitter } from '../../event-emitter/index.js';
+import { logger } from '../../globals.js';
+import { string } from '../../parsing/index.js';
 
 /**
  * Returns event emitter which could be safely used, to process events from

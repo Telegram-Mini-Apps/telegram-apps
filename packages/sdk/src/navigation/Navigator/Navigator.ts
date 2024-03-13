@@ -1,5 +1,3 @@
-import { Logger } from '~/logger/index.js';
-
 import type {
   AnyEntry,
   NavigationEntry,
@@ -9,6 +7,7 @@ import type {
   PerformPushOptions,
   PerformReplaceOptions,
 } from './types.js';
+import { Logger } from '../../logger/index.js';
 import { ensurePrefix } from '../ensurePrefix.js';
 
 /**

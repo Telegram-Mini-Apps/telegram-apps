@@ -1,4 +1,4 @@
-import type { Platform } from '~/types/index.js';
+import type { Platform } from '../types/index.js';
 
 /**
  * Returns true if specified platform has stable viewport. Stable means not changing from time to

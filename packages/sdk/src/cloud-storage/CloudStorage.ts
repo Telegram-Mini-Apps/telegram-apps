@@ -1,18 +1,18 @@
 import {
   invokeCustomMethod,
   postEvent as defaultPostEvent,
-} from '~/bridge/index.js';
+} from '../bridge/index.js';
 import {
   array,
   json,
   string,
-} from '~/parsing/index.js';
+} from '../parsing/index.js';
 import {
   createSupportsFunc,
   type SupportsFunc,
-} from '~/supports/index.js';
-import type { CreateRequestIdFunc, ExecuteWithTimeout } from '~/types/index.js';
-import type { Version } from '~/version/index.js';
+} from '../supports/index.js';
+import type { CreateRequestIdFunc, ExecuteWithTimeout } from '../types/index.js';
+import type { Version } from '../version/index.js';
 
 function objectFromKeys<K extends string, V>(keys: K[], value: V): Record<K, V> {
   return keys.reduce<Record<K, V>>((acc, key) => {

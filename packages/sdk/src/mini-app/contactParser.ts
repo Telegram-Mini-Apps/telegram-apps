@@ -1,6 +1,5 @@
-import { date, json, number, searchParams, string } from '~/parsing/index.js';
-
 import type { RequestedContact } from './types.js';
+import { date, json, number, searchParams, string } from '../parsing/index.js';
 
 export const contactParser = searchParams<RequestedContact>({
   contact: json({

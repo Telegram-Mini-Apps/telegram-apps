@@ -1,4 +1,4 @@
-import { json, string } from '~/parsing/index.js';
+import { json, string } from '../parsing/index.js';
 
 /**
  * Message format used in communication between client and Telegram applications.

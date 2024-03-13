@@ -1,4 +1,4 @@
-import { boolean, json, number } from '~/parsing/index.js';
+import { boolean, json, number } from '../../../parsing/index.js';
 
 export interface ViewportChangedPayload {
   /**

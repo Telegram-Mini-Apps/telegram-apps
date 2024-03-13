@@ -1,5 +1,4 @@
-import type { Version } from '~/version/index.js';
-
+import type { Version } from '../../version/index.js';
 import type { MiniAppsMethodName } from '../methods/index.js';
 
 /**

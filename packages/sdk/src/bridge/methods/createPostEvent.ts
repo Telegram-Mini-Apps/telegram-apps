@@ -1,8 +1,7 @@
-import { isRecord } from '~/misc/index.js';
-import { supports } from '~/supports/index.js';
-import type { Version } from '~/version/index.js';
-
 import { type PostEvent, postEvent } from './postEvent.js';
+import { isRecord } from '../../misc/index.js';
+import { supports } from '../../supports/index.js';
+import type { Version } from '../../version/index.js';
 import { MethodUnsupportedError, ParameterUnsupportedError } from '../errors/index.js';
 
 /**

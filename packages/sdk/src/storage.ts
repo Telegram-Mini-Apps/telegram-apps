@@ -1,5 +1,5 @@
-import type { HeaderColorKey } from '~/bridge/index.js';
-import type { RGB } from '~/colors/index.js';
+import type { HeaderColorKey } from './bridge/index.js';
+import type { RGB } from './colors/index.js';
 
 // fixme: components-related. Should probably rename
 

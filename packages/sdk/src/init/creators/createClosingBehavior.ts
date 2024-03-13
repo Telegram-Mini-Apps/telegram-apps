@@ -1,6 +1,6 @@
-import { ClosingBehavior } from '~/closing-behavior/index.js';
-import { getStorageValue, saveStorageValue } from '~/storage.js';
-import type { PostEvent } from '~/bridge/index.js';
+import type { PostEvent } from '../../bridge/index.js';
+import { ClosingBehavior } from '../../closing-behavior/index.js';
+import { getStorageValue, saveStorageValue } from '../../storage.js';
 
 /**
  * Creates ClosingBehaviour instance using last locally saved data also saving each state in

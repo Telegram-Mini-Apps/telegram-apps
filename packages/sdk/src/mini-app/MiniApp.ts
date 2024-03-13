@@ -1,3 +1,9 @@
+import { contactParser } from './contactParser.js';
+import type {
+  MiniAppEvents,
+  MiniAppHeaderColor, MiniAppProps,
+  MiniAppState, RequestedContact,
+} from './types.js';
 import {
   invokeCustomMethod,
   type PhoneRequestedStatus,
@@ -6,28 +12,21 @@ import {
   request,
   type SwitchInlineQueryChatType,
   type WriteAccessRequestedStatus,
-} from '~/bridge/index.js';
+} from '../bridge/index.js';
 import {
   isColorDark,
   isRGB,
   type RGB,
-} from '~/colors/index.js';
-import { EventEmitter } from '~/event-emitter/index.js';
-import { State } from '~/state/index.js';
+} from '../colors/index.js';
+import { EventEmitter } from '../event-emitter/index.js';
+import { State } from '../state/index.js';
 import {
   createSupportsFunc,
   createSupportsParamFunc,
   type SupportsFunc,
-} from '~/supports/index.js';
-import { sleep, withTimeout } from '~/timeout/index.js';
-import type { CreateRequestIdFunc, ExecuteWithTimeout } from '~/types/index.js';
-
-import { contactParser } from './contactParser.js';
-import type {
-  MiniAppEvents,
-  MiniAppHeaderColor, MiniAppProps,
-  MiniAppState, RequestedContact,
-} from './types.js';
+} from '../supports/index.js';
+import { sleep, withTimeout } from '../timeout/index.js';
+import type { CreateRequestIdFunc, ExecuteWithTimeout } from '../types/index.js';
 
 /**
  * Provides common Mini Apps functionality not covered by other system components.

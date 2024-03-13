@@ -1,6 +1,6 @@
-import { SettingsButton } from '~/settings-button/index.js';
-import { getStorageValue, saveStorageValue } from '~/storage.js';
-import type { PostEvent } from '~/bridge/index.js';
+import type { PostEvent } from '../../bridge/index.js';
+import { SettingsButton } from '../../settings-button/index.js';
+import { getStorageValue, saveStorageValue } from '../../storage.js';
 
 /**
  * Creates SettingsButton instance using last locally saved data also saving each state in

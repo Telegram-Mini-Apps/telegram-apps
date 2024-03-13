@@ -1,8 +1,7 @@
-import { bindMiniAppCSSVars, bindThemeCSSVars, bindViewportCSSVars } from '~/css/index.js';
-import type { MiniApp } from '~/mini-app/index.js';
-import type { ThemeParams } from '~/theme-params/index.js';
-import type { Viewport } from '~/viewport/index.js';
-
+import { bindMiniAppCSSVars, bindThemeCSSVars, bindViewportCSSVars } from '../../css/index.js';
+import type { MiniApp } from '../../mini-app/index.js';
+import type { ThemeParams } from '../../theme-params/index.js';
+import type { Viewport } from '../../viewport/index.js';
 import type { InitCSSVarsOption, InitCSSVarsSpecificOption } from '../types.js';
 
 /**

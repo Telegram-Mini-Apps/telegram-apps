@@ -1,7 +1,6 @@
-import { toRGB } from '~/colors/index.js';
-import type { RGB } from '~/colors/index.js';
-
 import { string } from './string.js';
+import type { RGB } from '../../colors/index.js';
+import { toRGB } from '../../colors/index.js';
 import { createValueParserGenerator } from '../createValueParserGenerator.js';
 
 /**

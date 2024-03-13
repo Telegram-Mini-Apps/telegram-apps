@@ -1,4 +1,4 @@
-import { parseMessage } from '~/bridge/parseMessage.js';
+import { parseMessage } from '../../bridge/parseMessage.js';
 
 /**
  * Emits event sent from Telegram native application like it was sent in

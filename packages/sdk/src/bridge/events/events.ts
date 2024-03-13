@@ -1,12 +1,4 @@
 import type {
-  AnySubscribeListener,
-  EventEmitter,
-  EventListener,
-  EventParams,
-} from '~/event-emitter/index.js';
-import type { IsNever, Not } from '~/types/index.js';
-
-import type {
   ClipboardTextReceivedPayload,
   CustomMethodInvokedPayload,
   InvoiceClosedPayload,
@@ -17,6 +9,13 @@ import type {
   ViewportChangedPayload,
   WriteAccessRequestedPayload,
 } from './parsers/index.js';
+import type {
+  AnySubscribeListener,
+  EventEmitter,
+  EventListener,
+  EventParams,
+} from '../../event-emitter/index.js';
+import type { IsNever, Not } from '../../types/index.js';
 
 /**
  * Map where key is known event name, and value is its listener.

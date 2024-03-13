@@ -1,5 +1,5 @@
-import type { MiniAppsEventListener } from '~/bridge/index.js';
-import type { StateEvents } from '~/state/index.js';
+import type { MiniAppsEventListener } from '../bridge/index.js';
+import type { StateEvents } from '../state/index.js';
 
 export interface SettingsButtonState {
   isVisible: boolean;

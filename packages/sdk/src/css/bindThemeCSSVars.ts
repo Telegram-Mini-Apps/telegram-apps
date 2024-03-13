@@ -1,6 +1,5 @@
-import type { ThemeParams } from '~/theme-params/index.js';
-
 import { setCSSVar } from './setCSSVar.js';
+import type { ThemeParams } from '../theme-params/index.js';
 
 /**
  * Creates CSS variables connected with theme parameters. Created CSS variables names are

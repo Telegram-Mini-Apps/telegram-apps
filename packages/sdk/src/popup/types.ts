@@ -1,4 +1,4 @@
-import type { StateEvents } from '~/state/index.js';
+import type { StateEvents } from '../state/index.js';
 
 export interface PopupState {
   isOpened: boolean;

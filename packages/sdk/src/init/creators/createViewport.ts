@@ -1,12 +1,12 @@
-import { getStorageValue, saveStorageValue } from '~/storage.js';
+import type { PostEvent } from '../../bridge/index.js';
+import { getStorageValue, saveStorageValue } from '../../storage.js';
+import type { Platform } from '../../types/index.js';
 import {
   isStableViewportPlatform,
   requestViewport,
   Viewport,
   type ViewportProps,
-} from '~/viewport/index.js';
-import type { PostEvent } from '~/bridge/index.js';
-import type { Platform } from '~/types/index.js';
+} from '../../viewport/index.js';
 
 /**
  * Creates new bound instance of the Viewport component.

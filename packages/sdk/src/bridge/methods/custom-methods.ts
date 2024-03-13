@@ -1,4 +1,4 @@
-import type { RequestId } from '~/types/index.js';
+import type { RequestId } from '../../types/index.js';
 
 interface CreateInvokeCustomMethodParams<M extends string, Params extends object> {
   /**

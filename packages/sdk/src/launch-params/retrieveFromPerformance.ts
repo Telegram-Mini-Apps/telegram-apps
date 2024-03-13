@@ -1,7 +1,6 @@
-import { getFirstNavigationEntry } from '~/misc/getFirstNavigationEntry.js';
-
 import { retrieveFromUrl } from './retrieveFromUrl.js';
 import type { LaunchParams } from './types.js';
+import { getFirstNavigationEntry } from '../misc/getFirstNavigationEntry.js';
 
 /**
  * @returns Launch parameters based on the first navigation entry.

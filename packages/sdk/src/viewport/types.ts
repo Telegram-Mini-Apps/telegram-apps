@@ -1,5 +1,5 @@
-import type { PostEvent } from '~/bridge/index.js';
-import type { StateEvents } from '~/state/index.js';
+import type { PostEvent } from '../bridge/index.js';
+import type { StateEvents } from '../state/index.js';
 
 export interface ViewportProps {
   height: number;

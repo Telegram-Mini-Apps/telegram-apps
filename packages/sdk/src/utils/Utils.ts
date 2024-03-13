@@ -2,15 +2,15 @@ import {
   type PostEvent,
   postEvent as defaultPostEvent,
   request,
-} from '~/bridge/index.js';
+} from '../bridge/index.js';
 import {
   createSupportsFunc,
   createSupportsParamFunc,
   supports,
   type SupportsFunc,
-} from '~/supports/index.js';
-import type { CreateRequestIdFunc } from '~/types/index.js';
-import type { Version } from '~/version/index.js';
+} from '../supports/index.js';
+import type { CreateRequestIdFunc } from '../types/index.js';
+import type { Version } from '../version/index.js';
 
 /**
  * Provides common Mini Apps functionality not covered by other system components.

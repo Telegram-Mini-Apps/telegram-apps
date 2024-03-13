@@ -1,12 +1,12 @@
-import {
-  compareVersions,
-  type Version,
-} from '~/version/index.js';
 import type {
   MiniAppsMethodName,
   MiniAppsMethodVersionedParams,
   MiniAppsMethodWithVersionedParams,
-} from '~/bridge/methods/index.js';
+} from '../bridge/methods/index.js';
+import {
+  compareVersions,
+  type Version,
+} from '../version/index.js';
 
 /**
  * Returns true if "a" version is less than or equal to "b" version.

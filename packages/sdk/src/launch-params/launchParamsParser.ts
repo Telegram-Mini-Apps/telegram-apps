@@ -1,8 +1,7 @@
-import { initDataParser } from '~/init-data/index.js';
-import { boolean, searchParams, string } from '~/parsing/index.js';
-import { themeParamsParser } from '~/theme-params/index.js';
-
 import type { LaunchParams } from './types.js';
+import { initDataParser } from '../init-data/index.js';
+import { boolean, searchParams, string } from '../parsing/index.js';
+import { themeParamsParser } from '../theme-params/index.js';
 
 /**
  * Returns parser used to parse launch params.

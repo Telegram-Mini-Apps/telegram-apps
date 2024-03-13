@@ -1,12 +1,11 @@
-import { off, on, postEvent } from '~/bridge/index.js';
-import { EventEmitter } from '~/event-emitter/index.js';
-
 import { drop } from './drop.js';
 import { go } from './go.js';
 import type {
   HashNavigatorEventsMap,
   HashNavigatorOptions,
 } from './types.js';
+import { off, on, postEvent } from '../../bridge/index.js';
+import { EventEmitter } from '../../event-emitter/index.js';
 import { Navigator } from '../Navigator/index.js';
 import type {
   NavigationEntry,

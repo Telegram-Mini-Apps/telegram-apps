@@ -1,7 +1,7 @@
-import { MainButton } from '~/main-button/index.js';
-import { getStorageValue, saveStorageValue } from '~/storage.js';
-import type { PostEvent } from '~/bridge/index.js';
-import type { RGB } from '~/colors/index.js';
+import type { PostEvent } from '../../bridge/index.js';
+import type { RGB } from '../../colors/index.js';
+import { MainButton } from '../../main-button/index.js';
+import { getStorageValue, saveStorageValue } from '../../storage.js';
 
 /**
  * Creates MainButton instance using last locally saved data also saving each state in

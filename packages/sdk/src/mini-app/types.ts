@@ -1,8 +1,8 @@
-import type { HeaderColorKey, PostEvent } from '~/bridge/index.js';
-import type { RGB } from '~/colors/index.js';
-import type { StateEvents } from '~/state/index.js';
-import type { CreateRequestIdFunc } from '~/types/index.js';
-import type { Version } from '~/version/index.js';
+import type { HeaderColorKey, PostEvent } from '../bridge/index.js';
+import type { RGB } from '../colors/index.js';
+import type { StateEvents } from '../state/index.js';
+import type { CreateRequestIdFunc } from '../types/index.js';
+import type { Version } from '../version/index.js';
 
 export interface MiniAppProps {
   headerColor: MiniAppHeaderColor;

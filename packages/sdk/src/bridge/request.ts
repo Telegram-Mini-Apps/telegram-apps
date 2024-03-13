@@ -1,7 +1,3 @@
-import { isRecord } from '~/misc/index.js';
-import { withTimeout } from '~/timeout/index.js';
-import type { And, ExecuteWithOptions, If, IsNever } from '~/types/index.js';
-
 import {
   type MiniAppsEventHasParams,
   type MiniAppsEventName,
@@ -16,6 +12,9 @@ import {
   type MiniAppsNonEmptyMethodName,
   postEvent as defaultPostEvent,
 } from './methods/index.js';
+import { isRecord } from '../misc/index.js';
+import { withTimeout } from '../timeout/index.js';
+import type { And, ExecuteWithOptions, If, IsNever } from '../types/index.js';
 
 /**
  * Names of methods, which require passing "req_id" parameter.

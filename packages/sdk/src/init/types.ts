@@ -1,19 +1,19 @@
-import type { BackButton } from '~/back-button/index.js';
-import type { PostEvent } from '~/bridge/index.js';
-import type { ClosingBehavior } from '~/closing-behavior/index.js';
-import type { CloudStorage } from '~/cloud-storage/index.js';
-import type { HapticFeedback } from '~/haptic-feedback/index.js';
-import type { InitData } from '~/init-data/index.js';
-import type { Invoice } from '~/invoice/index.js';
-import type { MainButton } from '~/main-button/index.js';
-import type { MiniApp } from '~/mini-app/index.js';
-import type { Popup } from '~/popup/index.js';
-import type { QRScanner } from '~/qr-scanner/index.js';
-import type { SettingsButton } from '~/settings-button/index.js';
-import type { ThemeParams } from '~/theme-params/index.js';
-import type { CreateRequestIdFunc } from '~/types/index.js';
-import type { Utils } from '~/utils/index.js';
-import type { Viewport } from '~/viewport/index.js';
+import type { BackButton } from '../back-button/index.js';
+import type { PostEvent } from '../bridge/index.js';
+import type { ClosingBehavior } from '../closing-behavior/index.js';
+import type { CloudStorage } from '../cloud-storage/index.js';
+import type { HapticFeedback } from '../haptic-feedback/index.js';
+import type { InitData } from '../init-data/index.js';
+import type { Invoice } from '../invoice/index.js';
+import type { MainButton } from '../main-button/index.js';
+import type { MiniApp } from '../mini-app/index.js';
+import type { Popup } from '../popup/index.js';
+import type { QRScanner } from '../qr-scanner/index.js';
+import type { SettingsButton } from '../settings-button/index.js';
+import type { ThemeParams } from '../theme-params/index.js';
+import type { CreateRequestIdFunc } from '../types/index.js';
+import type { Utils } from '../utils/index.js';
+import type { Viewport } from '../viewport/index.js';
 
 export interface InitResult {
   backButton: BackButton;

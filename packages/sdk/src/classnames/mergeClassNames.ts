@@ -1,29 +1,6 @@
-import { isRecord } from '~/misc/index.js';
-
 import { classNames } from './classNames.js';
-
-/**
- * Returns union keys removing those, which values are not strings.
- */
-type UnionStringKeys<U> = U extends U
-  ? {
-    [K in keyof U]-?: U[K] extends string | undefined ? K : never;
-  }[keyof U]
-  : never;
-
-/**
- * Returns union required keys.
- */
-type UnionRequiredKeys<U> = U extends U
-  ? {
-    [K in UnionStringKeys<U>]: ({} extends Pick<U, K> ? never : K)
-  }[UnionStringKeys<U>]
-  : never;
-
-/**
- * Returns union optional keys.
- */
-type UnionOptionalKeys<U> = Exclude<UnionStringKeys<U>, UnionRequiredKeys<U>>;
+import { isRecord } from '../misc/index.js';
+import type { UnionOptionalKeys, UnionRequiredKeys } from '../types/index.js';
 
 type MergeClassNames<Tuple extends any[]> =
   // Removes all types from union which will be ignored by the mergeClassNames function.

@@ -1,4 +1,4 @@
-import { json, string } from '~/parsing/index.js';
+import { json, string } from '../../../parsing/index.js';
 
 export interface PopupClosedPayload {
   /**

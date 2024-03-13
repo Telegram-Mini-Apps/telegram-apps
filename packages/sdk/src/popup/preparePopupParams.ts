@@ -1,6 +1,5 @@
-import type { PopupButton, PopupParams as BridgePopupParams } from '~/bridge/index.js';
-
 import type { OpenPopupOptions } from './types.js';
+import type { PopupButton, PopupParams as BridgePopupParams } from '../bridge/index.js';
 
 /**
  * Prepares popup parameters before sending them to native app.

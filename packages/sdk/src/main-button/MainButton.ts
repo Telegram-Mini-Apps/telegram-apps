@@ -1,19 +1,18 @@
-import {
-  off,
-  on,
-  type PostEvent,
-  postEvent as defaultPostEvent,
-} from '~/bridge/index.js';
-import { EventEmitter } from '~/event-emitter/index.js';
-import { State } from '~/state/index.js';
-import type { RGB } from '~/colors/index.js';
-
 import type {
   MainButtonEvents,
   MainButtonParams,
   MainButtonProps,
   MainButtonState,
 } from './types.js';
+import {
+  off,
+  on,
+  type PostEvent,
+  postEvent as defaultPostEvent,
+} from '../bridge/index.js';
+import type { RGB } from '../colors/index.js';
+import { EventEmitter } from '../event-emitter/index.js';
+import { State } from '../state/index.js';
 
 type Emitter = EventEmitter<MainButtonEvents>;
 

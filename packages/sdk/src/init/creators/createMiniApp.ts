@@ -1,9 +1,9 @@
-import { MiniApp } from '~/mini-app/index.js';
-import { getStorageValue, saveStorageValue } from '~/storage.js';
-import type { PostEvent } from '~/bridge/index.js';
-import type { RGB } from '~/colors/index.js';
-import type { CreateRequestIdFunc } from '~/types/index.js';
-import type { Version } from '~/version/index.js';
+import type { PostEvent } from '../../bridge/index.js';
+import type { RGB } from '../../colors/index.js';
+import { MiniApp } from '../../mini-app/index.js';
+import { getStorageValue, saveStorageValue } from '../../storage.js';
+import type { CreateRequestIdFunc } from '../../types/index.js';
+import type { Version } from '../../version/index.js';
 
 /**
  * Creates MiniApp instance using last locally saved data also saving each state in

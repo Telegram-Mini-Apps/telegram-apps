@@ -1,4 +1,4 @@
-import { on } from '~/bridge/index.js';
+import { on } from '../bridge/index.js';
 
 /**
  * Creates style html element which contains styles sent from the Telegram application.

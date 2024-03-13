@@ -1,7 +1,6 @@
-import type { RGB } from '~/colors/index.js';
-
 import { keyToExternal } from './keys.js';
 import type { ThemeParamsParsed } from './types.js';
+import type { RGB } from '../colors/index.js';
 
 /**
  * Serializes theme parameters to representation sent from the Telegram application.

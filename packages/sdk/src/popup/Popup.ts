@@ -1,18 +1,17 @@
+import { preparePopupParams } from './preparePopupParams.js';
+import type { OpenPopupOptions, PopupEvents, PopupState } from './types.js';
 import {
   type PostEvent,
   postEvent as defaultPostEvent,
   request,
-} from '~/bridge/index.js';
-import { EventEmitter } from '~/event-emitter/index.js';
-import { State } from '~/state/index.js';
+} from '../bridge/index.js';
+import { EventEmitter } from '../event-emitter/index.js';
+import { State } from '../state/index.js';
 import {
   createSupportsFunc,
   type SupportsFunc,
-} from '~/supports/index.js';
-import type { Version } from '~/version/index.js';
-
-import { preparePopupParams } from './preparePopupParams.js';
-import type { OpenPopupOptions, PopupEvents, PopupState } from './types.js';
+} from '../supports/index.js';
+import type { Version } from '../version/index.js';
 
 /**
  * Controls currently displayed application popup. It allows developers to

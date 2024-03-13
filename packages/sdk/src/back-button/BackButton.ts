@@ -1,15 +1,14 @@
+import type { BackButtonEvents, BackButtonState } from './types.js';
 import {
   off,
   on,
   type PostEvent,
   postEvent as defaultPostEvent,
-} from '~/bridge/index.js';
-import { EventEmitter } from '~/event-emitter/index.js';
-import { State } from '~/state/index.js';
-import { createSupportsFunc, type SupportsFunc } from '~/supports/index.js';
-import type { Version } from '~/version/index.js';
-
-import type { BackButtonEvents, BackButtonState } from './types.js';
+} from '../bridge/index.js';
+import { EventEmitter } from '../event-emitter/index.js';
+import { State } from '../state/index.js';
+import { createSupportsFunc, type SupportsFunc } from '../supports/index.js';
+import type { Version } from '../version/index.js';
 
 type Emitter = EventEmitter<BackButtonEvents>;
 

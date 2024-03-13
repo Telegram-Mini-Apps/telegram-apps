@@ -1,7 +1,8 @@
-import { createPostEvent, on } from '~/bridge/index.js';
-import { CloudStorage } from '~/cloud-storage/index.js';
-import { HapticFeedback } from '~/haptic-feedback/index.js';
-import { catchCustomStyles } from '~/init/catchCustomStyles.js';
+import type { InitOptions, InitResult } from './types.js';
+import { createPostEvent, on } from '../bridge/index.js';
+import { CloudStorage } from '../cloud-storage/index.js';
+import { HapticFeedback } from '../haptic-feedback/index.js';
+import { catchCustomStyles } from '../init/catchCustomStyles.js';
 import {
   createBackButton,
   createClosingBehavior,
@@ -11,17 +12,15 @@ import {
   createSettingsButton,
   createThemeParams,
   createViewport,
-} from '~/init/creators/index.js';
-import { processCSSVars } from '~/init/css/index.js';
-import { InitData } from '~/init-data/index.js';
-import { Invoice } from '~/invoice/index.js';
-import { retrieveLaunchParams } from '~/launch-params/index.js';
-import { isIframe, isPageReload } from '~/misc/index.js';
-import { Popup } from '~/popup/index.js';
-import { QRScanner } from '~/qr-scanner/index.js';
-import { Utils } from '~/utils/index.js';
-
-import type { InitOptions, InitResult } from './types.js';
+} from '../init/creators/index.js';
+import { processCSSVars } from '../init/css/index.js';
+import { InitData } from '../init-data/index.js';
+import { Invoice } from '../invoice/index.js';
+import { retrieveLaunchParams } from '../launch-params/index.js';
+import { isIframe, isPageReload } from '../misc/index.js';
+import { Popup } from '../popup/index.js';
+import { QRScanner } from '../qr-scanner/index.js';
+import { Utils } from '../utils/index.js';
 
 type ComputedInitResult<O> = O extends { async: true } | { complete: true }
   ? Promise<InitResult>

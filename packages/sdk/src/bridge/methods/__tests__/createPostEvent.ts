@@ -3,7 +3,7 @@ import { expect, it, vi } from 'vitest';
 import { createPostEvent } from '../../index';
 import * as postEventModule from '../postEvent';
 
-vi.mock('~/bridge/methods/postEvent.js', () => ({
+vi.mock('../../bridge/methods/postEvent.js', () => ({
   postEvent: vi.fn(),
 }));
 

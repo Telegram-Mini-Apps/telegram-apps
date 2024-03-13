@@ -1,14 +1,13 @@
-import { on } from '~/bridge/index.js';
-import { isColorDark, type RGB } from '~/colors/index.js';
-import { EventEmitter } from '~/event-emitter/index.js';
-import { State } from '~/state/index.js';
-
 import { parseThemeParams } from './parseThemeParams.js';
 import type {
   ThemeParamsEvents,
   ThemeParamsParsed,
   ThemeParamsState,
 } from './types.js';
+import { on } from '../bridge/index.js';
+import { isColorDark, type RGB } from '../colors/index.js';
+import { EventEmitter } from '../event-emitter/index.js';
+import { State } from '../state/index.js';
 
 export class ThemeParams {
   private readonly ee = new EventEmitter<ThemeParamsEvents>();

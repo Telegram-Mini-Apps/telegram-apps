@@ -1,4 +1,4 @@
-import type { StringKeys } from '~/types/index.js';
+import type { StringKeys } from '../types/index.js';
 
 /**
  * Computes state property changed event.

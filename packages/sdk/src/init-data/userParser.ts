@@ -1,6 +1,5 @@
-import { boolean, json, number, string } from '~/parsing/index.js';
-
 import type { User } from './types.js';
+import { boolean, json, number, string } from '../parsing/index.js';
 
 /**
  * Returns parser used to parse user data.

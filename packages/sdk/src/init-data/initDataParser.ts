@@ -1,8 +1,7 @@
-import { date, number, searchParams, string } from '~/parsing/index.js';
-
 import { chatParser } from './chatParser.js';
 import type { InitDataParsed } from './types.js';
 import { userParser } from './userParser.js';
+import { date, number, searchParams, string } from '../parsing/index.js';
 
 /**
  * Returns parser used to parse init data, presented as search params.

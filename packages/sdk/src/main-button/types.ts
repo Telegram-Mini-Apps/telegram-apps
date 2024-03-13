@@ -1,6 +1,6 @@
-import type { PostEvent } from '~/bridge/index.js';
-import type { RGB } from '~/colors/index.js';
-import type { StateEvents } from '~/state/index.js';
+import type { PostEvent } from '../bridge/index.js';
+import type { RGB } from '../colors/index.js';
+import type { StateEvents } from '../state/index.js';
 
 export interface MainButtonParams {
   backgroundColor?: RGB;

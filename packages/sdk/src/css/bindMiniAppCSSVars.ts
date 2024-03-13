@@ -1,7 +1,7 @@
-import { isRGB } from '~/colors/index.js';
-import { setCSSVar } from '~/css/setCSSVar.js';
-import type { MiniApp } from '~/mini-app/index.js';
-import type { ThemeParams } from '~/theme-params/index.js';
+import { isRGB } from '../colors/index.js';
+import { setCSSVar } from '../css/setCSSVar.js';
+import type { MiniApp } from '../mini-app/index.js';
+import type { ThemeParams } from '../theme-params/index.js';
 
 /**
  * Creates CSS variables connected with WebApp background and header colors based on

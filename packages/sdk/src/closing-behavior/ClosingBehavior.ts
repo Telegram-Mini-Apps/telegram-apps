@@ -1,11 +1,10 @@
-import { type PostEvent, postEvent as defaultPostEvent } from '~/bridge/index.js';
-import { EventEmitter } from '~/event-emitter/index.js';
-import { State } from '~/state/index.js';
-
 import type {
   ClosingBehaviorEvents,
   ClosingBehaviorState,
 } from './types.js';
+import { type PostEvent, postEvent as defaultPostEvent } from '../bridge/index.js';
+import { EventEmitter } from '../event-emitter/index.js';
+import { State } from '../state/index.js';
 
 /**
  * Component responsible for controlling current closing confirmation

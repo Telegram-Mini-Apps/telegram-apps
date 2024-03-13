@@ -1,5 +1,3 @@
-import { isIframe } from '~/misc/isIframe.js';
-
 import type {
   MiniAppsEmptyMethodName,
   MiniAppsMethodName,
@@ -7,6 +5,7 @@ import type {
   MiniAppsNonEmptyMethodName,
 } from './methods.js';
 import { logger, targetOrigin as globalTargetOrigin } from '../../globals.js';
+import { isIframe } from '../../misc/isIframe.js';
 import {
   hasExternalNotify,
   hasWebviewProxy,

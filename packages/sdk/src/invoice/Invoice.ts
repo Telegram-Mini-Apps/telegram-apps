@@ -1,18 +1,17 @@
+import type { InvoiceEvents, InvoiceState } from './types.js';
 import {
   type InvoiceStatus,
   type PostEvent,
   postEvent as defaultPostEvent,
   request,
-} from '~/bridge/index.js';
-import { EventEmitter } from '~/event-emitter/index.js';
-import { State } from '~/state/index.js';
+} from '../bridge/index.js';
+import { EventEmitter } from '../event-emitter/index.js';
+import { State } from '../state/index.js';
 import {
   createSupportsFunc,
   type SupportsFunc,
-} from '~/supports/index.js';
-import type { Version } from '~/version/index.js';
-
-import type { InvoiceEvents, InvoiceState } from './types.js';
+} from '../supports/index.js';
+import type { Version } from '../version/index.js';
 
 /**
  * Extracts invoice slug from URL.

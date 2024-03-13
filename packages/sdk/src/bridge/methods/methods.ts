@@ -1,9 +1,8 @@
-import type { RGB } from '~/colors/index.js';
-import type { IsNever, Not, RequestId, UnionKeys } from '~/types/index.js';
-
 import type { AnyInvokeCustomMethodParams } from './custom-methods.js';
 import type { AnyHapticFeedbackParams } from './haptic.js';
 import type { PopupParams } from './popup.js';
+import type { RGB } from '../../colors/index.js';
+import type { IsNever, Not, RequestId, UnionKeys } from '../../types/index.js';
 
 /**
  * Color key which could be used to update header color.

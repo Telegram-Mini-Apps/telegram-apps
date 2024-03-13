@@ -1,7 +1,6 @@
-import { isPageReload } from '~/misc/index.js';
-
 import { retrieveLaunchParams } from './retrieveLaunchParams.js';
 import type { LaunchData } from './types.js';
+import { isPageReload } from '../misc/index.js';
 
 /**
  * Returns launch data information. Function ignores passed options in case, it was already

@@ -1,11 +1,10 @@
+import { keyToLocal } from './keys.js';
+import type { ThemeParamsParsed } from './types.js';
 import {
   createValueParserGenerator,
   rgb,
   toRecord,
-} from '~/parsing/index.js';
-
-import { keyToLocal } from './keys.js';
-import type { ThemeParamsParsed } from './types.js';
+} from '../parsing/index.js';
 
 export const themeParamsParser = createValueParserGenerator<ThemeParamsParsed>(
   (value) => {

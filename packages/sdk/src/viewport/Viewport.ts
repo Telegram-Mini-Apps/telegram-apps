@@ -1,19 +1,18 @@
-import {
-  on,
-  type PostEvent,
-  postEvent as defaultPostEvent,
-  type RequestOptions,
-} from '~/bridge/index.js';
-import { EventEmitter } from '~/event-emitter/index.js';
-import { State } from '~/state/index.js';
-import { requestViewport } from '~/viewport/requestViewport.js';
-
+import { requestViewport } from './requestViewport.js';
 import type {
   ViewportEvents,
   ViewportProps,
   ViewportState,
 } from './types.js';
 import { truncate } from './utils.js';
+import {
+  on,
+  type PostEvent,
+  postEvent as defaultPostEvent,
+  type RequestOptions,
+} from '../bridge/index.js';
+import { EventEmitter } from '../event-emitter/index.js';
+import { State } from '../state/index.js';
 
 /**
  * Contains information about current WebApp device viewport, its dimensions
