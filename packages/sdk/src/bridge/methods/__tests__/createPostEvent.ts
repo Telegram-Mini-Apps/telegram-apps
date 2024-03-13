@@ -1,9 +1,9 @@
 import { expect, it, vi } from 'vitest';
 
-import { createPostEvent } from '../../index';
+import { createPostEvent } from '../createPostEvent';
 import * as postEventModule from '../postEvent';
 
-vi.mock('../../bridge/methods/postEvent.js', () => ({
+vi.mock('../postEvent', () => ({
   postEvent: vi.fn(),
 }));
 

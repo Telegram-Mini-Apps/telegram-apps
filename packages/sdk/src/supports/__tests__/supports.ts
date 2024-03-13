@@ -1,12 +1,12 @@
 import { expect, it } from 'vitest';
 
-import type {
+import { supports } from '../supports';
+import {
   MiniAppsMethodName,
   MiniAppsMethodVersionedParams,
   MiniAppsMethodWithVersionedParams,
-} from '../../bridge';
-import type { Version } from '../../version';
-import { supports } from '../supports';
+} from '../../bridge/methods/methods';
+import { Version } from '../../version/types';
 
 type HaveCheckSupportMethodTuple = {
   [M in MiniAppsMethodWithVersionedParams]: [M, MiniAppsMethodVersionedParams<M>]

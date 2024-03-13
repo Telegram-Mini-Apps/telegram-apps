@@ -7,7 +7,7 @@ import type {
   PerformPushOptions,
   PerformReplaceOptions,
 } from './types.js';
-import { Logger } from '../../logger/index.js';
+import { Logger } from '../../logger/Logger.js';
 import { ensurePrefix } from '../ensurePrefix.js';
 
 /**

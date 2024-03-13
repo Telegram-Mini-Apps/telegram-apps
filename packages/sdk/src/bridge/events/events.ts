@@ -1,21 +1,16 @@
-import type {
-  ClipboardTextReceivedPayload,
-  CustomMethodInvokedPayload,
-  InvoiceClosedPayload,
-  PhoneRequestedPayload,
-  PopupClosedPayload,
-  QrTextReceivedPayload,
-  ThemeChangedPayload,
-  ViewportChangedPayload,
-  WriteAccessRequestedPayload,
-} from './parsers/index.js';
-import type {
-  AnySubscribeListener,
-  EventEmitter,
-  EventListener,
-  EventParams,
-} from '../../event-emitter/index.js';
-import type { IsNever, Not } from '../../types/index.js';
+import type { ClipboardTextReceivedPayload } from './parsers/clipboardTextReceived.js';
+import type { CustomMethodInvokedPayload } from './parsers/customMethodInvoked.js';
+import type { InvoiceClosedPayload } from './parsers/invoiceClosed.js';
+import type { PhoneRequestedPayload } from './parsers/phoneRequested.js';
+import type { PopupClosedPayload } from './parsers/popupClosed.js';
+import type { QrTextReceivedPayload } from './parsers/qrTextReceived.js';
+import type { ThemeChangedPayload } from './parsers/theme-changed.js';
+import type { ViewportChangedPayload } from './parsers/viewportChanged.js';
+import type { WriteAccessRequestedPayload } from './parsers/writeAccessRequested.js';
+import type { EventEmitter } from '../../event-emitter/EventEmitter.js';
+import type { AnySubscribeListener, EventListener, EventParams } from '../../event-emitter/types.js';
+import type { Not } from '../../types/logical.js';
+import type { IsNever } from '../../types/utils.js';
 
 /**
  * Map where key is known event name, and value is its listener.

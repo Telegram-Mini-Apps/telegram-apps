@@ -1,6 +1,6 @@
-import type { CustomMethodName, CustomMethodParams } from './methods/index.js';
+import type { CustomMethodName, CustomMethodParams } from './methods/custom-methods.js';
 import { request } from './request.js';
-import type { ExecuteWithOptions } from '../types/index.js';
+import type { ExecuteWithOptions } from '../types/methods.js';
 
 /**
  * Invokes known custom method. Returns method execution result.

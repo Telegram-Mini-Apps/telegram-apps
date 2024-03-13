@@ -1,7 +1,10 @@
 import type { LaunchParams } from './types.js';
-import { initDataParser } from '../init-data/index.js';
-import { boolean, searchParams, string, type ValueParser } from '../parsing/index.js';
-import { themeParamsParser } from '../theme-params/index.js';
+import { initDataParser } from '../components/init-data/initDataParser.js';
+import { themeParamsParser } from '../components/theme-params/themeParamsParser.js';
+import { boolean } from '../parsing/parsers/boolean.js';
+import { searchParams } from '../parsing/parsers/searchParams.js';
+import { string } from '../parsing/parsers/string.js';
+import type { ValueParser } from '../parsing/ValueParser.js';
 
 /**
  * Returns parser used to parse launch params.

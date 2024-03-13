@@ -1,4 +1,4 @@
-import { retrieveLaunchParams } from '../launch-params/index.js';
+import { retrieveLaunchParams } from '../launch-params/retrieveLaunchParams.js';
 
 /**
  * Returns true in case, current environment is Telegram Mini Apps.

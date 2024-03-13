@@ -1,8 +1,8 @@
 import { expect, vi, it, SpyInstance, afterEach, beforeAll, describe } from 'vitest';
-import { ThemeParams } from '../../theme-params';
 import { dispatchWindowMessageEvent } from '../../../test-utils/dispatchWindowMessageEvent';
 import { bindMiniAppCSSVars } from '../bindMiniAppCSSVars';
-import { MiniApp } from '../../mini-app';
+import { MiniApp } from '../../components/mini-app/MiniApp';
+import { ThemeParams } from '../../components/theme-params/ThemeParams';
 
 let setCSSPropertySpy: SpyInstance<[string, string, string?], void>;
 

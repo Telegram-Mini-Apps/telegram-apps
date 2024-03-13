@@ -1,5 +1,5 @@
-import { createEmitter } from '../../bridge/events/createEmitter.js';
-import type { MiniAppsEventEmitter } from '../../bridge/index.js';
+import { createEmitter } from './createEmitter.js';
+import type { MiniAppsEventEmitter } from './events.js';
 
 const CACHED_EMITTER = 'telegram-mini-apps-cached-emitter';
 

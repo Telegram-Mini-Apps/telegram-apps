@@ -3,8 +3,8 @@ import type { SupportsFunc } from './types.js';
 import type {
   MiniAppsMethodVersionedParams,
   MiniAppsMethodWithVersionedParams,
-} from '../bridge/index.js';
-import type { Version } from '../version/index.js';
+} from '../bridge/methods/methods.js';
+import type { Version } from '../version/types.js';
 
 type HasCheckSupportMethodTuple = {
   [M in MiniAppsMethodWithVersionedParams]: [M, MiniAppsMethodVersionedParams<M>]

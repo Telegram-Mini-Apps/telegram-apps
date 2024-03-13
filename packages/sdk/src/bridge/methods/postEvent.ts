@@ -6,10 +6,8 @@ import type {
 } from './methods.js';
 import { logger, targetOrigin as globalTargetOrigin } from '../../globals.js';
 import { isIframe } from '../../misc/isIframe.js';
-import {
-  hasExternalNotify,
-  hasWebviewProxy,
-} from '../env/index.js';
+import { hasExternalNotify } from '../env/hasExternalNotify.js';
+import { hasWebviewProxy } from '../env/hasWebviewProxy.js';
 
 interface PostEventOptions {
   /**

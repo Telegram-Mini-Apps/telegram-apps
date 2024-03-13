@@ -1,5 +1,5 @@
-import { BackButton } from '../../back-button/index.js';
-import type { PostEvent } from '../../bridge/index.js';
+import type { PostEvent } from '../../bridge/methods/postEvent.js';
+import { BackButton } from '../../components/back-button/BackButton.js';
 import { getStorageValue, saveStorageValue } from '../../storage.js';
 
 /**

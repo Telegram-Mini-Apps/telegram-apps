@@ -1,19 +1,19 @@
-import type { BackButton } from '../back-button/index.js';
-import type { PostEvent } from '../bridge/index.js';
-import type { ClosingBehavior } from '../closing-behavior/index.js';
-import type { CloudStorage } from '../cloud-storage/index.js';
-import type { HapticFeedback } from '../haptic-feedback/index.js';
-import type { InitData } from '../init-data/index.js';
-import type { Invoice } from '../invoice/index.js';
-import type { MainButton } from '../main-button/index.js';
-import type { MiniApp } from '../mini-app/index.js';
-import type { Popup } from '../popup/index.js';
-import type { QRScanner } from '../qr-scanner/index.js';
-import type { SettingsButton } from '../settings-button/index.js';
-import type { ThemeParams } from '../theme-params/index.js';
-import type { CreateRequestIdFunc } from '../types/index.js';
-import type { Utils } from '../utils/index.js';
-import type { Viewport } from '../viewport/index.js';
+import type { PostEvent } from '../bridge/methods/postEvent.js';
+import type { BackButton } from '../components/back-button/BackButton.js';
+import type { ClosingBehavior } from '../components/closing-behavior/ClosingBehavior.js';
+import type { CloudStorage } from '../components/cloud-storage/CloudStorage.js';
+import type { HapticFeedback } from '../components/haptic-feedback/HapticFeedback.js';
+import type { InitData } from '../components/init-data/InitData.js';
+import type { Invoice } from '../components/invoice/Invoice.js';
+import type { MainButton } from '../components/main-button/MainButton.js';
+import type { MiniApp } from '../components/mini-app/MiniApp.js';
+import type { Popup } from '../components/popup/Popup.js';
+import type { QRScanner } from '../components/qr-scanner/QRScanner.js';
+import type { SettingsButton } from '../components/settings-button/SettingsButton.js';
+import type { ThemeParams } from '../components/theme-params/ThemeParams.js';
+import type { Utils } from '../components/utils/Utils.js';
+import type { Viewport } from '../components/viewport/Viewport.js';
+import type { CreateRequestIdFunc } from '../types/request-id.js';
 
 export interface InitResult {
   backButton: BackButton;

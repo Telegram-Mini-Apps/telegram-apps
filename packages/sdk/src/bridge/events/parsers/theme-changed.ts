@@ -1,5 +1,7 @@
-import type { RGB } from '../../../colors/index.js';
-import { json, rgb, toRecord } from '../../../parsing/index.js';
+import type { RGB } from '../../../colors/types.js';
+import { json } from '../../../parsing/parsers/json.js';
+import { rgb } from '../../../parsing/parsers/rgb.js';
+import { toRecord } from '../../../parsing/toRecord.js';
 
 export interface ThemeChangedPayload {
   /**

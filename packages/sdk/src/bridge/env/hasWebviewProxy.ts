@@ -1,4 +1,4 @@
-import { isRecord } from '../../misc/index.js';
+import { isRecord } from '../../misc/isRecord.js';
 
 type WithWebviewProxy<T> = T & {
   TelegramWebviewProxy: {

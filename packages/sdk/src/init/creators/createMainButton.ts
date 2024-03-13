@@ -1,6 +1,6 @@
-import type { PostEvent } from '../../bridge/index.js';
-import type { RGB } from '../../colors/index.js';
-import { MainButton } from '../../main-button/index.js';
+import type { PostEvent } from '../../bridge/methods/postEvent.js';
+import type { RGB } from '../../colors/types.js';
+import { MainButton } from '../../components/main-button/MainButton.js';
 import { getStorageValue, saveStorageValue } from '../../storage.js';
 
 /**

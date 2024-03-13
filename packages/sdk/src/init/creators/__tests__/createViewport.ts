@@ -3,10 +3,10 @@ import type { SpyInstance } from 'vitest';
 import { afterEach, expect, it, vi } from 'vitest';
 
 import { createWindow } from '../../../../test-utils/createWindow';
-import { requestViewport } from '../../../viewport/requestViewport';
 import { createViewport } from '../createViewport';
+import { requestViewport } from '../../../components/viewport/requestViewport';
 
-vi.mock('../../../viewport/requestViewport', () => {
+vi.mock('../../../components/viewport/requestViewport', () => {
   return {
     requestViewport: vi.fn(),
   };

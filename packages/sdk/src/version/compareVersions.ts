@@ -1,3 +1,5 @@
+import type { Version } from './types.js';
+
 /**
  * Returns 1 in case, version "a" is greater than "b".
  * Returns 0 in case, version "a" equal to "b".
@@ -5,7 +7,7 @@
  * @param a - first version.
  * @param b - second version.
  */
-export function compareVersions(a: string, b: string): number {
+export function compareVersions(a: Version, b: Version): number {
   // Split both of the version by dot.
   const aParts = a.split('.');
   const bParts = b.split('.');

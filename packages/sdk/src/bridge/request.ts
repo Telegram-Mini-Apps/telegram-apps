@@ -1,20 +1,21 @@
-import {
-  type MiniAppsEventHasParams,
-  type MiniAppsEventName,
-  type MiniAppsEventParams,
-  on,
-} from './events/index.js';
-import {
-  type MiniAppsEmptyMethodName,
-  type MiniAppsMethodAcceptParams,
-  type MiniAppsMethodName,
-  type MiniAppsMethodParams,
-  type MiniAppsNonEmptyMethodName,
-  postEvent as defaultPostEvent,
-} from './methods/index.js';
-import { isRecord } from '../misc/index.js';
-import { withTimeout } from '../timeout/index.js';
-import type { And, ExecuteWithOptions, If, IsNever } from '../types/index.js';
+import type {
+  MiniAppsEventHasParams,
+  MiniAppsEventName,
+  MiniAppsEventParams,
+} from './events/events.js';
+import { on } from './events/on.js';
+import type {
+  MiniAppsEmptyMethodName,
+  MiniAppsMethodAcceptParams,
+  MiniAppsMethodName,
+  MiniAppsMethodParams, MiniAppsNonEmptyMethodName,
+} from './methods/methods.js';
+import { postEvent as defaultPostEvent } from './methods/postEvent.js';
+import { isRecord } from '../misc/isRecord.js';
+import { withTimeout } from '../timeout/withTimeout.js';
+import type { And, If } from '../types/logical.js';
+import type { ExecuteWithOptions } from '../types/methods.js';
+import type { IsNever } from '../types/utils.js';
 
 /**
  * Names of methods, which require passing "req_id" parameter.

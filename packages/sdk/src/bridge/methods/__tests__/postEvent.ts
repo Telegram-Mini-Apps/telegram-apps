@@ -8,7 +8,7 @@ import {
 } from 'vitest';
 
 import { setTargetOrigin } from '../../../globals';
-import { postEvent } from '../../index';
+import { postEvent } from '../postEvent';
 
 let windowSpy: SpyInstance<[], Window & typeof globalThis>;
 

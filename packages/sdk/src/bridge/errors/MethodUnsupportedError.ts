@@ -1,5 +1,5 @@
-import type { Version } from '../../version/index.js';
-import type { MiniAppsMethodName } from '../methods/index.js';
+import type { Version } from '../../version/types.js';
+import type { MiniAppsMethodName } from '../methods/methods.js';
 
 /**
  * Error thrown in case, unsupported method was called.
