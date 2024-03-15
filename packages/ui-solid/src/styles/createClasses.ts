@@ -46,6 +46,8 @@ function getArrayBasedGetter<Props>(
     }, ['', []]);
 
   return () => {
+    console.log(dynamic.map((m) => m()));
+    console.warn(classNames(dynamic.map((m) => m())));
     return classNames(nonDynamic, dynamic.map((m) => m()));
   };
 }

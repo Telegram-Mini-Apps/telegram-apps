@@ -1,6 +1,6 @@
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 
-import { ConfigProvider } from '../src/providers';
+import { ConfigProvider } from '../src/providers/ConfigProvider/ConfigProvider';
 
 // Allowed icons:
 // https://www.npmjs.com/package/@storybook/icons

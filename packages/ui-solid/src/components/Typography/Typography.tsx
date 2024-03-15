@@ -1,11 +1,13 @@
 import { splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
+import { mergeWithConfigDefaults } from '~components/utils.js';
+import { createClasses } from '~styles/createClasses.js';
+
 import type { TypographyProps } from './Typography.types.js';
 
-import { mergeWithConfigDefaults } from '~components';
-import { withConfig } from '~providers';
-import { createClasses, styled } from '~styles';
+import { withConfig } from '~providers/ConfigProvider/ConfigProvider.context.js';
+import { styled } from '~styles/styled.js';
 
 import './Typography.scss';
 

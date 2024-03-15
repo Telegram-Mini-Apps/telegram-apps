@@ -2,9 +2,9 @@ import { isColorDark, retrieveLaunchParams } from '@tma.js/sdk';
 import { createMemo } from 'solid-js';
 import type { ParentProps, Component } from 'solid-js';
 
-import { ConfigContext } from './ConfigProvider.context.js';
-
 import type { ColorScheme, Platform } from '~types';
+
+import { ConfigContext } from './ConfigProvider.context.js';
 
 export type ConfigProviderProps = ParentProps<{
   /**

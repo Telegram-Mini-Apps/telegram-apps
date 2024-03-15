@@ -1,4 +1,4 @@
-import type { ColorScheme, Platform } from '~types';
+import type { ColorScheme, Platform } from '~types/known.js';
 
 export interface WithColorScheme {
   /**

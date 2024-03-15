@@ -19,6 +19,30 @@ $icon-size: 24px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: background-color;
+  transition-duration: 75ms;
+
+  // Color modifiers.
+  @each $type, $type-settings in (
+    "fill": [#007AFF, white, null],
+    "bezeled": [#4378FF1A, #007AFF, null],
+    "plain": [transparent, #007AFF, null],
+    "gray": [#0000000A, #000000CC, null],
+    "outline": [transparent, #000000CC, #0000000D],
+    "white": [white, #000000CC, null],
+  ) {
+    $background-color: nth($type-settings, 1);
+    $border-color: nth($type-settings, 3);
+
+    &--#{$type} {
+      background-color: $background-color;
+      color: nth($type-settings, 2);
+
+      @if $border-color {
+        border-color: $border-color;
+      }
+    }
+  }
 
   &--base {
     gap: 12px;
@@ -28,6 +52,22 @@ $icon-size: 24px;
       "md": [42px, 14px, 8px],
       "lg": [50px, 18px, 8px]
     ));
+
+    // Color hover modifiers.
+    @each $type, $type-settings in (
+      "fill": [transparentize(#007AFF, .15)],
+      "bezeled": [transparentize(#007AFF, .93)],
+      //"plain": [transparentize(#007AFF, .97)],
+      //"gray": [],
+      //"outline": [],
+      //"white": [],
+    ) {
+      $background-color: nth($type-settings, 1);
+
+      &-#{$type}:hover {
+        background-color: $background-color;
+      }
+    }
   }
 
   &--ios {
@@ -40,31 +80,17 @@ $icon-size: 24px;
     ));
   }
 
-  // Color modifiers.
-  @each $type, $type-settings in (
-    "fill": [#007AFF, white],
-    "bezeled": [#4378FF1A, #007AFF],
-    "plain": [transparent, #007AFF],
-    "gray": [#0000000A, #000000CC],
-    "outline": [transparent, #000000CC, #0000000D],
-    "white": [white, #000000CC],
-  ) {
-    &--#{$type} {
-      background-color: nth($type-settings, 1);
-      color: nth($type-settings, 2);
-
-      @if length($type-settings) > 2 {
-        border-color: nth($type-settings, 3);
-      }
-    }
-  }
-
   &--rounded {
     border-radius: 1000px;
   }
 
   &--full-width {
     width: 100%;
+  }
+
+  &--disabled {
+    opacity: .35;
+    cursor: not-allowed;
   }
 
   &__icon-container {

@@ -2,11 +2,15 @@ import type { Component } from 'solid-js';
 import { on, Show, createMemo, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
+import { mergeWithConfigDefaults } from '~components/utils.js';
+import { createClasses } from '~styles/createClasses.js';
+
 import type { ButtonClassesProps, ButtonProps } from './Button.types.js';
 
-import { Loader, Typography, mergeWithConfigDefaults } from '~components';
-import { withConfig } from '~providers';
-import { createClasses, styled } from '~styles';
+import { Loader } from '~components/Loader/Loader.js';
+import { Typography } from '~components/Typography/Typography.js';
+import { withConfig } from '~providers/ConfigProvider/ConfigProvider.context.js';
+import { styled } from '~styles/styled.js';
 
 import './Button.scss';
 
@@ -79,9 +83,11 @@ export const Button: Component<ButtonProps> = withConfig(
         'tgui-button',
         `tgui-button--${props.type}`,
         `tgui-button--${props.platform}`,
+        `tgui-button--${props.platform}-${props.type}`,
         `tgui-button--${props.platform}-${props.size}`,
         props.fullWidth && 'tgui-button--full-width',
         props.rounded && 'tgui-button--rounded',
+        props.disabled && 'tgui-button--disabled',
       ];
     },
     iconContainer: 'tgui-button__icon-container',

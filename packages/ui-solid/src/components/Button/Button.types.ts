@@ -1,8 +1,9 @@
 import type { Component, JSX, JSXElement } from 'solid-js';
 
-import type { LoaderProps, WithComponentProps } from '~components';
-import type { WithOptionalClasses } from '~styles';
-import type { RequiredBy } from '~types';
+import type { LoaderProps } from '~components/Loader/Loader.types.js';
+import type { WithComponentProps } from '~components/types.js';
+import type { WithOptionalClasses } from '~styles/types.js';
+import type { RequiredBy } from '~types/utils.js';
 
 export type ButtonType =
   | 'fill'

@@ -40,37 +40,37 @@ const meta: Meta<StoryComponent> = {
   },
   argTypes: {
     children: {
-      description: 'Content to display inside the button',
+      description: 'Content to display inside the button. Any JSX element allowed.',
       control: { type: 'text' },
     },
     size: {
-      description: 'Button size',
+      description: 'Button size.',
       options: buttonSizes,
       control: { type: 'select' },
       defaultValue: { summary: 'fill' },
     },
     type: {
-      description: 'Button type',
+      description: 'Button variant.',
       options: buttonTypes,
       control: { type: 'select' },
       defaultValue: { summary: 'fill' },
     },
     disabled: {
-      description: 'Button active state',
+      description: 'Button active state.',
       control: { type: 'boolean' },
       defaultValue: { summary: false },
     },
     icon: {
-      description: 'Icon to display before the content. Could be either a Component having the `class?: string` property, or JSX Element',
+      description: 'Icon to display before the content. Could be either a Component having the `class?: string` property, or JSX Element.',
       control: { type: 'boolean' },
     },
     fullWidth: {
-      description: 'Should button use full available width',
+      description: 'Should button use full available width.',
       control: { type: 'boolean' },
       defaultValue: { summary: false },
     },
     rounded: {
-      description: 'Should button have highly rounded corners',
+      description: 'Should button have highly rounded corners.',
       control: { type: 'boolean' },
       defaultValue: { summary: false },
     },
@@ -80,7 +80,7 @@ const meta: Meta<StoryComponent> = {
       defaultValue: { summary: false },
     },
     classes: getClassesArgType({
-      elementKeys: ['root'],
+      elementKeys: ['root', 'content', 'loader', 'iconContainer', 'icon'],
       component: 'button',
     }),
   },

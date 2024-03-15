@@ -6,7 +6,8 @@ import {
 } from 'solid-js';
 import type { Accessor, Component, JSX } from 'solid-js';
 
-import type { ColorScheme, FlattenAccessors, PartialBy, Platform } from '~types';
+import type { ColorScheme, Platform } from '~types/known.js';
+import type { FlattenAccessors, PartialBy } from '~types/utils.js';
 
 type WithOptionalConfig = Partial<FlattenAccessors<Config>>;
 type WithConfigComponent<P extends WithOptionalConfig> = Component<PartialBy<P, keyof Config>>;
