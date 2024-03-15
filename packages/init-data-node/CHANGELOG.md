@@ -1,5 +1,11 @@
 # @tma.js/init-data-node
 
+## 1.1.12
+
+### Patch Changes
+
+- 7575ff0: Re-export InitDataParsed from the @tma.js/sdk package.
+
 ## 1.1.11
 
 ### Patch Changes
