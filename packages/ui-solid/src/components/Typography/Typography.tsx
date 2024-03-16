@@ -1,13 +1,12 @@
-import { splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
-import { mergeWithConfigDefaults } from '~components/utils.js';
-import { createClasses } from '~styles/createClasses.js';
+import { mergeWithConfigDefaults } from '~/components/utils.js';
+import { sanitizeProps } from '~/helpers/sanitizeProps.js';
+import { withConfig } from '~/hocs/withConfig.js';
+import { createClasses } from '~/styles/createClasses.js';
+import { styled } from '~/styles/styled.js';
 
 import type { TypographyProps } from './Typography.types.js';
-
-import { withConfig } from '~providers/ConfigProvider/ConfigProvider.context.js';
-import { styled } from '~styles/styled.js';
 
 import './Typography.scss';
 
@@ -20,20 +19,27 @@ export const Typography = withConfig(
     const merged = mergeWithConfigDefaults({
       type: 'text',
       weight: 'regular',
-      as: 'p',
+      component: 'p',
       monospace: false,
     } as const, props);
-    const [, rest] = splitProps(merged, [
-      'as',
+    const sanitized = sanitizeProps(
+      merged,
+      'component',
       'type',
       'weight',
       'platform',
       'colorScheme',
       'classes',
       'monospace',
-    ]);
+    );
 
-    return <Dynamic {...rest} component={merged.as} class={createClasses(merged).root}/>;
+    return (
+      <Dynamic
+        {...sanitized}
+        component={merged.component}
+        class={createClasses(merged).root}
+      />
+    );
   }, {
     root(props) {
       return [

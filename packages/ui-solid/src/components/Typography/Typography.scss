@@ -1,45 +1,116 @@
-@use "./variants" as variants;
+@function _create-variant($font-size, $platforms-settings) {
+  $result: (
+    "font-size": $font-size
+  );
+
+  @each $platform in ["base", "ios"] {
+    $platform-settings: map-get($platforms-settings, $platform);
+    $result: map-merge($result, (
+      $platform: (
+        "line-height": nth($platform-settings, 1),
+        "letter-spacing": if(length($platform-settings) > 1, nth($platform-settings, 2), null),
+      )
+    ));
+  }
+
+  @return $result
+}
+
+$variants: (
+  "large-title": _create-variant(34px, (
+    "base": [42px, 0.25px],
+    "ios": [41px, 0.4px])
+  ),
+  "title1": _create-variant(28px, (
+    "base": [36px, 0.1px],
+    "ios": [34px, 0.38px])
+  ),
+  "title2": _create-variant(24px, (
+    "base": [32px],
+    "ios": [28px, 0.07px])
+  ),
+  "title3": _create-variant(20px, (
+    "base": [24px, 0.15px],
+    "ios": [25px, -0.45px])
+  ),
+  "headline": _create-variant(19px, (
+    "base": [28px, 0.15px],
+    "ios": [24px, -0.45px])
+  ),
+  "text": _create-variant(17px, (
+    "base": [26px, 0.1px],
+    "ios": [22px, -0.4px])
+  ),
+  "subheadline1": _create-variant(16px, (
+    "base": [24px, 0.15px],
+    "ios": [21px, -0.23px])
+  ),
+  "subheadline2": _create-variant(15px, (
+    "base": [22px, 0.15px],
+    "ios": [20px, -0.23px]
+  )),
+  "caption1": _create-variant(13px, (
+    "base": [20px, 0.1px],
+    "ios": [16px, -0.08px]
+  )),
+  "caption2": _create-variant(10px, (
+    "base": [16px, 0.1px],
+    "ios": [13px, 0.06px]
+  )),
+);
+
+// todo: Better fonts?
+$fonts: (
+  "base": (
+    "default": #{"Roboto", sans-serif},
+    "mono": #{"Roboto Mono", monospace}
+  ),
+  "ios": (
+    "default": #{"SF Pro", -apple-system, sans-serif},
+    "mono": #{"SF Mono", monospace}
+  )
+);
+
+$weights: (
+  "regular": 400,
+  "semibold": 600,
+  "bold": 700
+);
 
 .tgui-typography {
-  margin: 0;
-  padding: 0;
-
-  // fixme: Better fonts?
-  @each $platform, $fonts in (
-    "base": (
-      "default": #{"Roboto", sans-serif},
-      "mono": #{"Roboto Mono", monospace}
-    ),
-    "ios": (
-      "default": #{"SF Pro", -apple-system, sans-serif},
-      "mono": #{"SF Mono", monospace}
-    )
-  ) {
+  // Font families.
+  @each $platform, $fonts in $fonts {
     &--#{$platform} {
       font-family: map-get($fonts, "default");
 
       &-monospace {
         font-family: map-get($fonts, "mono");
       }
-
-      @each $variant, $_ in variants.$variants {
-        &-#{$variant} {
-          line-height: variants.line-height($platform, $variant);
-          letter-spacing: variants.letter-spacing($platform, $variant);
-        }
-      }
     }
   }
 
-  @each $weight-type, $weight in ("regular": 400, "semibold": 600, "bold": 700) {
+  // Weights.
+  @each $weight-type, $weight in $weights {
     &--#{$weight-type} {
       font-weight: $weight;
     }
   }
 
-  @each $variant, $_ in variants.$variants {
+  // Variants settings.
+  @each $variant, $variant-settings in $variants {
+    // Variant font size.
     &--#{$variant} {
-      font-size: variants.font-size($variant);
+      font-size: map-get($variant-settings, "font-size");
+    }
+
+    // Each platform variant settings.
+    @each $platform in ["base", "ios"] {
+      $platform-settings: map-get($variant-settings, $platform);
+
+      &-#{$platform}--#{$variant} {
+        line-height: map-get($platform-settings, "line-height");
+        letter-spacing: map-get($platform-settings, "letter-spacing");
+      }
     }
   }
 }

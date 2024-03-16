@@ -2,7 +2,7 @@ import type { JSX } from 'solid-js';
 
 import type { WithComponentProps } from '~/components/types.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
-import type { WithAs } from '~/types/jsx.js';
+import type { WithComponentProp } from '~/types/components.js';
 import type { RequiredBy } from '~/types/utils.js';
 
 export type TypographyType =
@@ -17,17 +17,7 @@ export type TypographyType =
   | 'caption1'
   | 'caption2';
 
-export type TypographyAs = Extract<keyof JSX.IntrinsicElements,
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'h6'
-  | 'span'
-  | 'label'
-  | 'p'
->;
+export type TypographyComponent = keyof JSX.IntrinsicElements;
 
 export type TypographyWeight = 'regular' | 'semibold' | 'bold';
 
@@ -67,11 +57,7 @@ export interface TypographyClassesProps
 /**
  * Typography component properties.
  */
-export type TypographyProps<As extends TypographyAs = 'p'> =
+export type TypographyProps<Component extends TypographyComponent = 'p'> =
   TypographyPropsDefaults
   & WithOptionalClasses<TypographyElementKey, TypographyClassesProps>
-  & (
-  'p' extends As
-    ? (JSX.IntrinsicElements['p'] & { as?: 'p' })
-    : (JSX.IntrinsicElements[As] & { as: As })
-  );
+  & WithComponentProp<Component, 'p'>;
