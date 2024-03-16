@@ -32,6 +32,12 @@ const meta: Meta<StoryComponent> = {
   title: 'Typography',
   component: Component,
   tags: ['autodocs'],
+};
+
+export default meta;
+
+export const Playground: Story = {
+  render: Component,
   args: {
     children: 'Telegram Mini Apps is awesome',
     component: 'p',
@@ -73,13 +79,7 @@ const meta: Meta<StoryComponent> = {
   },
 };
 
-export default meta;
-
-export const Playground: Story = {
-  render: Component,
-};
-
-export const Showcase: Story = {
+export const Preview: Story = {
   render: () => {
     const formatValue = (value: string) => {
       return value
@@ -97,7 +97,7 @@ export const Showcase: Story = {
                 <Component
                   type={typographyType}
                   weight={typographyWeight}
-                  style={{ 'margin-top': '12px' }}
+                  style={{ margin: '0 0 12px' }}
                 >
                   {formatValue(typographyType)}&nbsp;·&nbsp;{formatValue(typographyWeight)}
                 </Component>
