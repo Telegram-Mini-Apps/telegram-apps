@@ -72,10 +72,7 @@ export const Playground: Story = {
       control: { type: 'select' },
       defaultValue: { summary: 'regular' },
     },
-    classes: getClassesArgType({
-      elementKeys: ['root'],
-      component: 'typography',
-    }),
+    classes: getClassesArgType('root'),
   },
 };
 

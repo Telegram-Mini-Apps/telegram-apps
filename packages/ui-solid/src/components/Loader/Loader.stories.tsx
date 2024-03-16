@@ -40,10 +40,7 @@ export const Playground: Story = {
         },
       },
     },
-    classes: getClassesArgType({
-      elementKeys: ['root', 'inner'],
-      component: 'loader',
-    }),
+    classes: getClassesArgType('root', 'inner'),
   },
 };
 
