@@ -21,6 +21,12 @@ module.exports = {
   'import/order': [
     'error',
     {
+      pathGroups: [
+        {
+          pattern: '~/**',
+          group: 'internal',
+        },
+      ],
       'newlines-between': 'always',
       alphabetize: {
         'order': 'asc',
