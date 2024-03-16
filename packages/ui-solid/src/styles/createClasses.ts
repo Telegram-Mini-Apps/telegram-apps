@@ -46,8 +46,6 @@ function getArrayBasedGetter<Props>(
     }, ['', []]);
 
   return () => {
-    console.log(dynamic.map((m) => m()));
-    console.warn(classNames(dynamic.map((m) => m())));
     return classNames(nonDynamic, dynamic.map((m) => m()));
   };
 }
@@ -69,18 +67,19 @@ function getArrayBasedGetter<Props>(
  * @param props - properties, passed to a component.
  * @returns Reactive object with keys as element keys and values as computed class property values.
  */
-export function createClasses<Props extends WithOptionalClasses<any, any>>(
+export function createClasses<Props extends WithOptionalClasses<any, Props>>(
   props: Props,
 ): ClassNamesMap<InferElementKey<Props>> {
-  if (!props.classes) {
+  const { classes } = props;
+  if (!classes) {
     return {};
   }
 
   const result: ClassNamesMap<InferElementKey<Props>> = {};
 
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
-  for (const elementKey in props.classes) {
-    const value = props.classes[elementKey];
+  for (const elementKey in classes) {
+    const value = classes[elementKey];
     if (value) {
       Object.defineProperty(result, elementKey, {
         get: createMemo(
