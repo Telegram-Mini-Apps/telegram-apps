@@ -86,10 +86,10 @@ export const Ripples = withConfig(
         class={classes.root}
         onPointerDown={onPointerDown()}
       >
-        <Show when={ripples()}>
-          <div class={classes.content}>
-            {props.children}
-          </div>
+        <div class={classes.content}>
+          {props.children}
+        </div>
+        <Show when={ripples().length}>
           <div class={classes.ripples}>
             <For each={ripples()}>
               {({ size, left, top, color }) => (
