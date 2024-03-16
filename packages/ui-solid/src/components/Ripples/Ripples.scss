@@ -1,0 +1,32 @@
+.tgui-ripples {
+  position: relative;
+
+  &__ripples {
+    overflow: hidden;
+    position: absolute;
+    inset: 0;
+  }
+
+  &__ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: tgui-ripples-ripple 600ms linear;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+
+    &--overlay {
+      z-index: 0;
+    }
+  }
+}
+
+@keyframes tgui-ripples-ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
