@@ -4,7 +4,7 @@ import type { ParentProps, Component } from 'solid-js';
 
 import type { ColorScheme, Platform } from '~/types/known.js';
 
-import { ConfigContext } from './ConfigProvider.context.js';
+import { configContext } from './ConfigProvider.context.js';
 
 export type ConfigProviderProps = ParentProps<{
   /**
@@ -38,8 +38,8 @@ export const ConfigProvider: Component<ConfigProviderProps> = (props) => {
   });
 
   return (
-    <ConfigContext.Provider value={{ colorScheme, platform }}>
+    <configContext.Provider value={{ colorScheme, platform }}>
       {props.children}
-    </ConfigContext.Provider>
+    </configContext.Provider>
   );
 };
