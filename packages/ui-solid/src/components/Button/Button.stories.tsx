@@ -1,6 +1,8 @@
 import { createMemo } from 'solid-js';
 import type { Meta, StoryObj } from 'storybook-solidjs';
 
+import { ButtonText } from '~/components/Button/ButtonText.js';
+
 import { getClassesArgType } from '../../../.storybook/utils.js';
 
 import { Button as Component } from './Button.js';

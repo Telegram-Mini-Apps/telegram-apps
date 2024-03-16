@@ -5,30 +5,6 @@
   ],
   "compilerOptions": {
     "paths": {
-      "~components": [
-        "./src/components/index.js"
-      ],
-      "~components/*": [
-        "./src/components/*"
-      ],
-      "~providers": [
-        "./src/providers/index.js"
-      ],
-      "~providers/*": [
-        "./src/providers/*"
-      ],
-      "~styles": [
-        "./src/styles/index.js"
-      ],
-      "~styles/*": [
-        "./src/styles/*"
-      ],
-      "~types": [
-        "./src/types/index.js"
-      ],
-      "~types/*": [
-        "./src/types/*"
-      ],
       "~/*": [
         "./src/*"
       ]

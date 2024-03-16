@@ -2,15 +2,15 @@ import type { Component } from 'solid-js';
 import { on, Show, createMemo, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
-import { mergeWithConfigDefaults } from '~components/utils.js';
-import { createClasses } from '~styles/createClasses.js';
+import { ButtonText } from '~/components/Button/ButtonText.js';
+import { Loader } from '~/components/Loader/Loader.js';
+import { mergeWithConfigDefaults } from '~/components/utils.js';
+import { slotToComponent } from '~/helpers/slotToComponent.js';
+import { withConfig } from '~/providers/ConfigProvider/ConfigProvider.context.js';
+import { createClasses } from '~/styles/createClasses.js';
+import { styled } from '~/styles/styled.js';
 
 import type { ButtonClassesProps, ButtonProps } from './Button.types.js';
-
-import { Loader } from '~components/Loader/Loader.js';
-import { Typography } from '~components/Typography/Typography.js';
-import { withConfig } from '~providers/ConfigProvider/ConfigProvider.context.js';
-import { styled } from '~styles/styled.js';
 
 import './Button.scss';
 
