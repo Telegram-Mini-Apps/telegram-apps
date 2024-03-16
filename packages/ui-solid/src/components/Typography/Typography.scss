@@ -78,6 +78,8 @@ $weights: (
 );
 
 .tgui-typography {
+  margin: 0;
+
   // Font families.
   @each $platform, $fonts in $fonts {
     &--#{$platform} {

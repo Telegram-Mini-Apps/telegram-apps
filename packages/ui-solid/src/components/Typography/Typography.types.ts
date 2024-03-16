@@ -1,11 +1,12 @@
-import type { JSX } from 'solid-js';
-
 import type { WithComponentProps } from '~/components/types.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
 import type { WithComponentProp } from '~/types/components.js';
 import type { RequiredBy } from '~/types/utils.js';
 
-export type TypographyType =
+/**
+ * Typography variant.
+ */
+export type TypographyVariant =
   | 'large-title'
   | 'title1'
   | 'title2'
@@ -17,12 +18,27 @@ export type TypographyType =
   | 'caption1'
   | 'caption2';
 
-export type TypographyComponent = keyof JSX.IntrinsicElements;
+/**
+ * HTML tags allowed to be used in the component.
+ */
+export type TypographyComponent =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'div'
+  | 'span'
+  | 'p';
 
+/**
+ * Font weight.
+ */
 export type TypographyWeight = 'regular' | 'semibold' | 'bold';
 
 /**
- * List of component element keys allowed to be modified.
+ * List of component element keys allowed to be customized.
  */
 export type TypographyElementKey = 'root';
 
@@ -31,33 +47,33 @@ export type TypographyElementKey = 'root';
  */
 export interface TypographyPropsDefaults extends WithComponentProps {
   /**
-   * Typography type.
+   * Should component use monospace font.
+   * @default false
+   */
+  monospace?: boolean;
+  /**
+   * Typography variant.
    * @default 'text'
    */
-  type?: TypographyType;
+  variant?: TypographyVariant;
   /**
    * Font weight.
    * @default 'regular'
    */
   weight?: TypographyWeight;
-  /**
-   * Should component use monospace font.
-   * @default false
-   */
-  monospace?: boolean;
 }
 
 /**
  * Properties passed to the Typography component class names computers.
  */
 export interface TypographyClassesProps
-  extends RequiredBy<TypographyProps, keyof TypographyPropsDefaults> {
+  extends RequiredBy<TypographyProps, keyof TypographyPropsDefaults | 'component'> {
 }
 
 /**
  * Typography component properties.
  */
-export type TypographyProps<Component extends TypographyComponent = 'p'> =
-  TypographyPropsDefaults
+export type TypographyProps<Cmp extends TypographyComponent = 'p'> =
+  & TypographyPropsDefaults
   & WithOptionalClasses<TypographyElementKey, TypographyClassesProps>
-  & WithComponentProp<Component, 'p'>;
+  & WithComponentProp<Cmp, 'p'>;

@@ -4,12 +4,16 @@ import type { Meta, StoryObj } from 'storybook-solidjs';
 import { getClassesArgType } from '../../../.storybook/utils.js';
 
 import { Typography as Component } from './Typography.js';
-import type { TypographyType, TypographyWeight } from './Typography.types.js';
+import type {
+  TypographyComponent,
+  TypographyVariant,
+  TypographyWeight,
+} from './Typography.types.js';
 
 type StoryComponent = typeof Component;
 type Story = StoryObj<StoryComponent>;
 
-const typographyTypes: TypographyType[] = [
+const variants: TypographyVariant[] = [
   'large-title',
   'title1',
   'title2',
@@ -22,10 +26,22 @@ const typographyTypes: TypographyType[] = [
   'caption2',
 ];
 
-const typographyWeights: TypographyWeight[] = [
+const weights: TypographyWeight[] = [
   'regular',
   'semibold',
   'bold',
+];
+
+const components: TypographyComponent[] = [
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'div',
+  'span',
+  'p',
 ];
 
 const meta: Meta<StoryComponent> = {
@@ -42,34 +58,35 @@ export const Playground: Story = {
     children: 'Telegram Mini Apps is awesome',
     component: 'p',
     monospace: false,
-    type: 'text',
+    variant: 'text',
     weight: 'regular',
   },
   argTypes: {
     children: {
       description: 'Content to place inside the component',
-      control: { type: 'text' },
+      control: 'text',
     },
     component: {
-      description: 'HTML tag name. Can also be a component.',
-      control: { type: 'text' },
+      description: 'HTML tag name.',
+      control: 'select',
+      options: components,
       defaultValue: { summary: 'p' },
     },
     monospace: {
-      description: 'Should component use monospace font',
+      description: 'Use monospace font.',
       control: { type: 'boolean' },
       defaultValue: { summary: false },
     },
-    type: {
-      description: 'Typography type',
-      options: typographyTypes,
-      control: { type: 'select' },
+    variant: {
+      description: 'Typography variant.',
+      options: variants,
+      control: 'select',
       defaultValue: { summary: 'text' },
     },
     weight: {
-      description: 'Font weight',
-      options: typographyWeights,
-      control: { type: 'select' },
+      description: 'Font weight.',
+      options: weights,
+      control: 'select',
       defaultValue: { summary: 'regular' },
     },
     classes: getClassesArgType('root'),
@@ -86,13 +103,13 @@ export const Preview: Story = {
     };
 
     return (
-      <For each={typographyTypes}>
+      <For each={variants}>
         {(typographyType) => (
           <div style={{ 'margin-bottom': '48px' }}>
-            <For each={typographyWeights}>
+            <For each={weights}>
               {(typographyWeight) => (
                 <Component
-                  type={typographyType}
+                  variant={typographyType}
                   weight={typographyWeight}
                   style={{ margin: '0 0 12px' }}
                 >
