@@ -1,3 +1,35 @@
+@function _create-base-settings($width, $stroke-width, $strokes0, $strokes50, $strokes100) {
+  @return (
+    "width": $width,
+    "stroke-width": $stroke-width,
+    "strokes": (
+      "0%": $strokes0,
+      "50%": $strokes50,
+      "100%": $strokes100,
+    )
+  )
+}
+
+$base-settings: (
+  "sm": _create-base-settings(18px, 2.5px, [#{1, 56}, 0], [#{43, 56}, -15], [#{43, 56}, -56]),
+  "md": _create-base-settings(36px, 3.5px, [#{1, 112}, 0], [#{89, 112}, -25], [#{89, 112}, -112]),
+  "lg": _create-base-settings(44px, 4px, [#{1, 138}, 0], [#{100, 138}, -40], [#{100, 138}, -138]),
+);
+
+@function _create-ios-size($root-size, $line-width, $line-height) {
+  @return (
+    "root": $root-size,
+    "line-width": $line-width,
+    "line-height": $line-height
+  )
+}
+
+$ios-sizes: (
+  "sm": _create-ios-size(24px, 2px, 5px),
+  "md": _create-ios-size(28px, 2.5px, 6.3px),
+  "lg": _create-ios-size(32px, 3.3px, 7.5px),
+);
+
 .tgui-loader {
   display: block;
   aspect-ratio: 1;
@@ -7,44 +39,17 @@
     stroke: currentColor;
     stroke-linecap: round;
 
-    @each $size-type, $settings in (
-      "sm": (
-        "width": 18px,
-        "stroke-width": 2.5px,
-        "strokes": (
-          "0%": [#{1, 56}, 0],
-          "50%": [#{43, 56}, -15],
-          "100%": [#{43, 56}, -56],
-        )
-      ),
-      "md": (
-        "width": 36px,
-        "stroke-width": 3.5px,
-        "strokes": (
-          "0%": [#{1, 112}, 0],
-          "50%": [#{89, 112}, -25],
-          "100%": [#{89, 112}, -112],
-        )
-      ),
-      "lg": (
-        "width": 44px,
-        "stroke-width": 4px,
-        "strokes": (
-          "0%": [#{1, 138}, 0],
-          "50%": [#{100, 138}, -40],
-          "100%": [#{100, 138}, -138],
-        )
-      ),
-    ) {
+    @each $size-type, $size-settings in $base-settings {
       &-#{$size-type} {
-        width: map-get($settings, "width");
-        stroke-width: map-get($settings, "stroke-width");
-        animation: tgui-loader-base-dash-#{$size-type} 2s ease infinite, tgui-loader-base-rotate 2s linear infinite;
+        width: map-get($size-settings, "width");
+        stroke-width: map-get($size-settings, "stroke-width");
+        animation: tgui-loader-base-dash-#{$size-type} 2s ease infinite,
+        tgui-loader-base-rotate 2s linear infinite;
       }
 
       @keyframes tgui-loader-base-dash-#{$size-type} {
         @each $percentage in ["0%", "50%", "100%"] {
-          $stroke-settings: map-get(map-get($settings, "strokes"), $percentage);
+          $stroke-settings: map-get(map-get($size-settings, "strokes"), $percentage);
 
           #{$percentage} {
             stroke: {
@@ -63,9 +68,9 @@
     align-items: center;
     color: #707579;
 
-    @each $size-type, $size in ("sm": 24px, "md": 28px, "lg": 32px) {
+    @each $size-type, $size-settings in $ios-sizes {
       &-#{$size-type} {
-        width: $size;
+        width: map-get($size-settings, "root");
       }
     }
   }
@@ -82,18 +87,14 @@
     position: absolute;
     background-color: currentColor;
     border-radius: 1000px;
-    transform-origin: bottom;
+    transform-origin: center;
     animation: tgui-loader-ios-fade 800ms linear infinite;
     opacity: .1;
 
-    @each $size-type, $dimensions in (
-      "sm": [2px, 5px],
-      "md": [2.5px, 6.3px],
-      "lg": [3.3px, 7.5px]
-    ) {
+    @each $size-type, $size-settings in $ios-sizes {
       &--#{$size-type} {
-        width: nth($dimensions, 1);
-        height: nth($dimensions, 2);
+        width: map-get($size-settings, "line-width");
+        height: map-get($size-settings, "line-height");
       }
     }
   }
@@ -103,7 +104,6 @@
   0% {
     opacity: 1
   }
-
   100% {
     opacity: .1
   }

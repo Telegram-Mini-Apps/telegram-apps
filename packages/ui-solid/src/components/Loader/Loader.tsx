@@ -1,12 +1,12 @@
-import { For, splitProps, Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 
-import { mergeWithConfigDefaults } from '~components/utils.js';
-import { createClasses } from '~styles/createClasses.js';
+import { mergeWithConfigDefaults } from '~/components/utils.js';
+import { sanitizeProps } from '~/helpers/sanitizeProps.js';
+import { withConfig } from '~/hocs/withConfig.js';
+import { createClasses } from '~/styles/createClasses.js';
+import { styled } from '~/styles/styled.js';
 
 import type { LoaderProps } from './Loader.types.js';
-
-import { withConfig } from '~providers/ConfigProvider/ConfigProvider.context.js';
-import { styled } from '~styles/styled.js';
 
 import './Loader.scss';
 
@@ -17,16 +17,17 @@ import './Loader.scss';
 export const Loader = withConfig(
   styled<LoaderProps>((props) => {
     const merged = mergeWithConfigDefaults({ size: 'md' } as const, props);
-    const [, rest] = splitProps(merged, [
+    const sanitized = sanitizeProps(
+      merged,
       'size',
       'colorScheme',
       'platform',
       'classes',
-    ]);
+    );
     const classes = createClasses(merged);
 
     return (
-      <div {...rest} class={classes.root}>
+      <div {...sanitized} class={classes.root}>
         <Show
           when={merged.platform === 'ios'}
           fallback={
@@ -41,7 +42,6 @@ export const Loader = withConfig(
                 class={classes.iosLine}
                 style={{
                   'animation-delay': `${100 * index()}ms`,
-                  'transform-origin': 'center',
                   transform: `rotate(${45 * index()}deg) translate3d(0, -115%, 0)`,
                 }}
               />
