@@ -1,9 +1,9 @@
-import type { RGB } from '@tma.js/sdk';
-import type { Component, JSX } from 'solid-js';
+import type { JSX, ParentProps } from 'solid-js';
 
 import type { WithComponentProps } from '~/components/types.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
 import type { WithComponentProp } from '~/types/components.js';
+import type { JSXHTMLIntrinsicElement } from '~/types/jsx.js';
 import type { RequiredBy } from '~/types/utils.js';
 
 export type OnPointerDown = JSX.EventHandlerUnion<{
@@ -11,20 +11,9 @@ export type OnPointerDown = JSX.EventHandlerUnion<{
 }, PointerEvent>;
 
 /**
- * Type describing allowed "component" Ripples component property.
+ * HTML tags allowed to be used as a root component.
  */
-export type RipplesComponent =
-// Intrinsic elements supporting onPointerDown handler.
-  {
-    [Element in keyof JSX.IntrinsicElements]:
-    OnPointerDown extends JSX.IntrinsicElements[Element]['onPointerDown']
-      ? Element
-      : never;
-  }[keyof JSX.IntrinsicElements]
-  | Component<{
-  class?: string;
-  onPointerDown?: OnPointerDown;
-}>;
+export type RipplesComponent = JSXHTMLIntrinsicElement;
 
 /**
  * List of component element keys allowed to be modified.
@@ -41,11 +30,6 @@ export interface RipplesPropsDefaults extends WithComponentProps {
    */
   centered?: boolean;
   /**
-   * Ripple color.
-   * @default '#ffffffb3'
-   */
-  color?: RGB | string;
-  /**
    * Disables ripples.
    * @default false
    */
@@ -57,24 +41,26 @@ export interface RipplesPropsDefaults extends WithComponentProps {
   overlay?: boolean;
 }
 
+export interface RipplesStableProps extends ParentProps, RipplesPropsDefaults {
+  /**
+   * Ripple radius in pixels.
+   * @default Half of the biggest container dimension.
+   */
+  radius?: number;
+}
+
 /**
  * Properties passed to the Ripples component class names computers.
  */
-export interface RipplesClassesProps
-  extends RequiredBy<RipplesProps, keyof RipplesPropsDefaults | 'component'> {
-}
+export type RipplesClassesProps<Cmp extends RipplesComponent> =
+  & RequiredBy<RipplesStableProps, keyof RipplesPropsDefaults>
+  & WithOptionalClasses<RipplesElementKey, RipplesClassesProps<Cmp>>
+  & WithComponentProp<Cmp, 'div'>;
 
 /**
  * Ripples component properties.
  */
-export type RipplesProps<Component extends RipplesComponent = 'div'> =
-  & {
-    /**
-     * Ripple radius in pixels.
-     * @default Half of the biggest container dimension.
-     */
-    radius?: number;
-  }
-  & RipplesPropsDefaults
-  & WithOptionalClasses<RipplesElementKey, RipplesClassesProps>
-  & WithComponentProp<Component, 'div'>;
+export type RipplesProps<Cmp extends RipplesComponent> =
+  & RipplesStableProps
+  & WithOptionalClasses<RipplesElementKey, RipplesClassesProps<Cmp>>
+  & WithComponentProp<Cmp, 'div'>;

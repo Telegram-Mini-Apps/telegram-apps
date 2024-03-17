@@ -51,7 +51,6 @@ export const Playground: Story = {
   },
   args: {
     centered: false,
-    color: '#ffffffb3',
     disabled: false,
     overlay: false,
   },
@@ -60,11 +59,6 @@ export const Playground: Story = {
       description: 'Ignores click coordinates and places ripples in the middle of the container.',
       control: 'boolean',
       defaultValue: { summary: false },
-    },
-    color: {
-      description: 'Ripple color.',
-      control: 'color',
-      defaultValue: { summary: '#ffffffb3' },
     },
     disabled: {
       description: 'Disables ripples.',
