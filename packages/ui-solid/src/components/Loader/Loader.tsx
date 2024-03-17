@@ -27,19 +27,19 @@ export const Loader = withConfig(
     const classes = createClasses(merged);
 
     return (
-      <div {...sanitized} class={classes.root}>
+      <div {...sanitized} class={classes().root}>
         <Show
           when={merged.platform === 'ios'}
           fallback={
-            <svg class={classes.androidContainer}>
-              <circle class={classes.androidCircle} cx="50%" cy="50%" r="50%"/>
+            <svg class={classes().androidContainer}>
+              <circle class={classes().androidCircle} cx="50%" cy="50%" r="50%"/>
             </svg>
           }
         >
           <For each={new Array(8).fill(null)}>
             {(_item, index) => (
               <div
-                class={classes.iosLine}
+                class={classes().iosLine}
                 style={{
                   'animation-delay': `${100 * index()}ms`,
                   transform: `rotate(${45 * index()}deg) translate3d(0, -115%, 0)`,
