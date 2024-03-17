@@ -1,7 +1,6 @@
 import type { WithComponentProps } from '~/components/types.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
 import type { WithComponentProp } from '~/types/components.js';
-import type { RequiredBy } from '~/types/utils.js';
 
 /**
  * Typography variant.
@@ -30,7 +29,8 @@ export type TypographyComponent =
   | 'h6'
   | 'div'
   | 'span'
-  | 'p';
+  | 'p'
+  | 'label';
 
 /**
  * Font weight.
@@ -66,14 +66,14 @@ export interface TypographyPropsDefaults extends WithComponentProps {
 /**
  * Properties passed to the Typography component class names computers.
  */
-export interface TypographyClassesProps
-  extends RequiredBy<TypographyProps, keyof TypographyPropsDefaults | 'component'> {
-}
+export type TypographyClassesProps<Cmp extends TypographyComponent> =
+  & Required<TypographyPropsDefaults>
+  & WithComponentProp<Cmp, 'p'>;
 
 /**
  * Typography component properties.
  */
-export type TypographyProps<Cmp extends TypographyComponent = 'p'> =
+export type TypographyProps<Cmp extends TypographyComponent> =
   & TypographyPropsDefaults
-  & WithOptionalClasses<TypographyElementKey, TypographyClassesProps>
+  & WithOptionalClasses<TypographyElementKey, TypographyClassesProps<Cmp>>
   & WithComponentProp<Cmp, 'p'>;

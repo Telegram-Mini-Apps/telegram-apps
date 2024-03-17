@@ -26,7 +26,7 @@ export const Typography = withConfig(
     const sanitized = sanitizeProps(
       merged,
       'component',
-      'type',
+      'variant',
       'weight',
       'platform',
       'colorScheme',
@@ -44,7 +44,7 @@ export const Typography = withConfig(
   }, {
     root(props) {
       return [
-        (props as any).class,
+        props.class,
         'tgui-typography',
         `tgui-typography--${props.weight}`,
         `tgui-typography--${props.variant}`,
