@@ -18,7 +18,7 @@ import './Typography.scss';
 export const Typography = withConfig(
   styled((props: TypographyProps<TypographyComponent>) => {
     const merged = mergeWithConfigDefaults({
-      type: 'text',
+      variant: 'text',
       weight: 'regular',
       component: 'p',
       monospace: false,
@@ -33,12 +33,13 @@ export const Typography = withConfig(
       'classes',
       'monospace',
     );
+    const classes = createClasses(merged);
 
     return (
       <Dynamic
         {...sanitized}
         component={merged.component}
-        class={createClasses(merged as any).root}
+        class={classes().root}
       />
     );
   }, {
