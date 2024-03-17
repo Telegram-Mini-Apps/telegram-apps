@@ -1,7 +1,6 @@
-import type { JSX } from 'solid-js';
-
 import type { WithComponentProps } from '~/components/types.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
+import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
 import type { RequiredBy } from '~/types/utils.js';
 
 /**
@@ -35,7 +34,7 @@ export interface LoaderPropsDefaults extends WithComponentProps {
 export interface LoaderClassesProps extends RequiredBy<LoaderProps, keyof LoaderPropsDefaults> {
 }
 
-export interface LoaderProps extends JSX.HTMLAttributes<HTMLDivElement>,
+export interface LoaderProps extends JSXIntrinsicElementAttrs<'div'>,
   WithOptionalClasses<LoaderElementKey, LoaderClassesProps>,
   LoaderPropsDefaults {
 }

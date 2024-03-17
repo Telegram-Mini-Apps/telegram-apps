@@ -15,7 +15,7 @@ import './Loader.scss';
  * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-Library?type=design&node-id=216-2847&mode=design&t=5uMXzbr5N7vuFjxS-0
  */
 export const Loader = withConfig(
-  styled<LoaderProps>((props) => {
+  styled((props: LoaderProps) => {
     const merged = mergeWithConfigDefaults({ size: 'md' } as const, props);
     const sanitized = sanitizeProps(
       merged,
