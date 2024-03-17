@@ -1,4 +1,4 @@
-import type { Component } from 'solid-js';
+import type { Component, ComponentProps } from 'solid-js';
 import { mergeProps } from 'solid-js';
 
 import type { ExtractPropsClasses, WithOptionalClasses } from './types.js';
@@ -10,6 +10,9 @@ export interface StyledOptions {
    */
   name?: string;
 }
+
+type StyledClasses<Cmp extends Component<WithOptionalClasses<any, any>>> =
+  Partial<ExtractPropsClasses<ComponentProps<Cmp>>>;
 
 /**
  * Returns Higher Order Component which transfers passed properties adding specified classes.
@@ -24,12 +27,12 @@ export interface StyledOptions {
  *   ...
  * });
  */
-export function styled<Props extends WithOptionalClasses<any, any>>(
-  Component: Component<Props>,
-  classes: ExtractPropsClasses<Props>,
+export function styled<Cmp extends Component<WithOptionalClasses<any, any>>>(
+  Component: Cmp,
+  classes: StyledClasses<Cmp>,
   options: StyledOptions = {},
-): Component<Props> {
-  const Wrapped: Component<Props> = (props) => {
+): Cmp {
+  const Wrapped = ((props) => {
     const mergedProps = mergeProps({ classes: {} }, props);
 
     // Merge element keys from the passed properties and classes from HOC.
@@ -44,16 +47,16 @@ export function styled<Props extends WithOptionalClasses<any, any>>(
 
     // Iterate over each found key, extract its value from both class maps and merge into a single
     // array.
-    const mergedClasses = keys.reduce<ExtractPropsClasses<Props>>((acc, key) => {
+    const mergedClasses = keys.reduce<StyledClasses<Cmp>>((acc, key) => {
       (acc as any)[key] = [
         (mergedProps.classes as any)[key],
         (classes as any)[key as any],
       ];
       return acc;
-    }, {} as ExtractPropsClasses<Props>);
+    }, {});
 
     return <Component {...props} classes={mergedClasses}/>;
-  };
+  }) as Cmp;
 
   Object.defineProperty(Wrapped, 'name', {
     value: options.name || `Styled${Component.name}`,
