@@ -1,11 +1,11 @@
-export type ClassesClassName = string | boolean | undefined | null;
+export type ClassName = string | boolean | undefined | null;
 
-export type ComputeClassNamesFn<Props> = (props: Props) => ClassesClassName | ClassesClassName[];
+export type ClassNameFn<Props> = (props: Props) => ClassName | ClassName[];
 
 export type ClassesValue<Props> =
-  | ClassesClassName
-  | ComputeClassNamesFn<Props>
-  | (ClassesClassName | ComputeClassNamesFn<Props>)[];
+  | ClassName
+  | ClassNameFn<Props>
+  | (ClassName | ClassNameFn<Props>)[];
 
 /**
  * Map, where key is an element key, and value is the generated class name or function, which

@@ -2,55 +2,14 @@ import { classNames } from '@tma.js/sdk';
 import type { Accessor } from 'solid-js';
 import { createMemo } from 'solid-js';
 
-import type {
-  ClassesClassName,
-  ClassNamesMap,
-  ComputeClassNamesFn,
-  WithOptionalClasses,
-} from './types.js';
+import type { ClassNamesMap, WithOptionalClasses } from './types.js';
 
 type InferElementKey<Props> = Props extends WithOptionalClasses<infer ElementKey, any>
   ? ElementKey
   : never;
 
-type GetterFn = () => string | undefined;
-
-function getNonArrayBasedGetter<Props>(
-  value: ClassesClassName | ComputeClassNamesFn<Props>,
-  props: Props,
-): GetterFn {
-  return () => {
-    return classNames(
-      typeof value === 'function'
-        ? value(props)
-        : value,
-    ) || undefined;
-  };
-}
-
-function getArrayBasedGetter<Props>(
-  value: (ClassesClassName | ComputeClassNamesFn<Props>)[],
-  props: Props,
-): GetterFn {
-  const [nonDynamic, dynamic] = value
-    .reduce<[string, Accessor<ClassesClassName | ClassesClassName[]>[]]>((acc, item) => {
-      if (typeof item === 'function') {
-        // Item is a function, it should be added to the dynamic part.
-        acc[1].push(createMemo(() => item(props)));
-      } else {
-        // Item is not a function, it should be added to the static part.
-        acc[0] += classNames(item);
-      }
-
-      return acc;
-    }, ['', []]);
-
-  return () => {
-    return classNames(nonDynamic, dynamic.map((m) => m()));
-  };
-}
-
 /**
+ * TODO: Re-check the description.
  * Creates a map, where key is an element key and value is a set of class names, which should
  * be applied to this element.
  *
@@ -69,28 +28,24 @@ function getArrayBasedGetter<Props>(
  */
 export function createClasses<Props extends WithOptionalClasses<any, Props>>(
   props: Props,
-): ClassNamesMap<InferElementKey<Props>> {
-  const { classes } = props;
-  if (!classes) {
-    return {};
-  }
-
-  const result: ClassNamesMap<InferElementKey<Props>> = {};
-
-  // eslint-disable-next-line guard-for-in,no-restricted-syntax
-  for (const elementKey in classes) {
-    const value = classes[elementKey];
-    if (value) {
-      Object.defineProperty(result, elementKey, {
-        get: createMemo(
-          Array.isArray(value)
-            ? getArrayBasedGetter(value, props)
-            : getNonArrayBasedGetter(value, props),
-        ),
-        enumerable: true,
-      });
-    }
-  }
-
-  return result;
+): Accessor<ClassNamesMap<InferElementKey<Props>>> {
+  return createMemo(() => {
+    return Object
+      .entries(props.classes || {})
+      .reduce<ClassNamesMap<InferElementKey<Props>>>((acc, [className, value]) => {
+        Object.defineProperty(acc, className, {
+          get: createMemo(() => {
+            return classNames(
+              Array.isArray(value)
+                ? value.map((item) => {
+                  return typeof item === 'function' ? item(props) : item;
+                })
+                : typeof value === 'function' ? value(props) : value,
+            ) || undefined;
+          }),
+          enumerable: true,
+        });
+        return acc;
+      }, {});
+  });
 }
