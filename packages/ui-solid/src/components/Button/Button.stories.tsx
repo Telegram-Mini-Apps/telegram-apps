@@ -1,17 +1,17 @@
 import { createMemo } from 'solid-js';
 import type { Meta, StoryObj } from 'storybook-solidjs';
 
-import { ButtonText } from '~/components/Button/ButtonText.js';
+import { Typography } from '~/components/Typography/Typography.js';
 
 import { getClassesArgType } from '../../../.storybook/utils.js';
 
 import { Button as Component } from './Button.js';
-import type { ButtonSize, ButtonType } from './Button.types.js';
+import type { ButtonSize, ButtonVariant } from './Button.types.js';
 
 type StoryComponent = typeof Component;
 type Story = StoryObj<StoryComponent>;
 
-const buttonTypes: ButtonType[] = [
+const variants: ButtonVariant[] = [
   'fill',
   'bezeled',
   'plain',
@@ -20,7 +20,7 @@ const buttonTypes: ButtonType[] = [
   'white',
 ];
 
-const buttonSizes: ButtonSize[] = [
+const sizes: ButtonSize[] = [
   'sm',
   'md',
   'lg',
@@ -30,62 +30,6 @@ const meta: Meta<StoryComponent> = {
   title: 'Button',
   component: Component,
   tags: ['autodocs'],
-  args: {
-    children: 'Submit',
-    disabled: false,
-    fullWidth: false,
-    loading: false,
-    rounded: false,
-    type: 'fill',
-    size: 'md',
-    icon: false,
-  },
-  argTypes: {
-    children: {
-      description: 'Content to display inside the button. Any JSX element allowed.',
-      control: { type: 'text' },
-    },
-    size: {
-      description: 'Button size.',
-      options: buttonSizes,
-      control: { type: 'select' },
-      defaultValue: { summary: 'fill' },
-    },
-    type: {
-      description: 'Button variant.',
-      options: buttonTypes,
-      control: { type: 'select' },
-      defaultValue: { summary: 'fill' },
-    },
-    disabled: {
-      description: 'Button active state.',
-      control: { type: 'boolean' },
-      defaultValue: { summary: false },
-    },
-    icon: {
-      description: 'Icon to display before the content. Could be either a Component having the `class?: string` property, or JSX Element.',
-      control: { type: 'boolean' },
-    },
-    fullWidth: {
-      description: 'Should button use full available width.',
-      control: { type: 'boolean' },
-      defaultValue: { summary: false },
-    },
-    rounded: {
-      description: 'Should button have highly rounded corners.',
-      control: { type: 'boolean' },
-      defaultValue: { summary: false },
-    },
-    loading: {
-      description: 'Should component replace the icon inside with the Loader component. Enabling this property will ignore the value of the property passed in the `icon`.',
-      control: { type: 'boolean' },
-      defaultValue: { summary: false },
-    },
-    classes: getClassesArgType({
-      elementKeys: ['root', 'content', 'loader', 'iconContainer', 'icon'],
-      component: 'button',
-    }),
-  },
 };
 
 export default meta;
@@ -114,6 +58,84 @@ export const Playground: Story = {
         : undefined;
     });
 
-    return <Component {...props} icon={icon()}/>;
+    const before = createMemo(() => {
+      return props.before && <Typography>I am before!</Typography>;
+    });
+
+    const after = createMemo(() => {
+      return props.after && <Typography>I am after!</Typography>;
+    });
+
+    return (
+      <Component
+        {...props}
+        icon={icon()}
+        before={before()}
+        after={after()}
+      />
+    );
+  },
+  args: {
+    after: false,
+    before: false,
+    children: 'Submit',
+    disabled: false,
+    icon: false,
+    loading: false,
+    rounded: false,
+    size: 'md',
+    stretched: false,
+    variant: 'fill',
+  },
+  argTypes: {
+    after: {
+      description: 'Content to display after the main content. Any JSX element or component.',
+      control: 'boolean',
+    },
+    before: {
+      description: 'Content to display between the icon and main content. Any JSX element or component.',
+      control: 'boolean',
+    },
+    children: {
+      description: 'Content to display inside the button. Any JSX element allowed.',
+      control: 'text',
+    },
+    classes: getClassesArgType('root', 'content', 'loader', 'iconContainer', 'icon'),
+    disabled: {
+      description: 'Disables the button.',
+      control: 'boolean',
+      defaultValue: { summary: false },
+    },
+    icon: {
+      description: 'Icon to display before the content. Could be either a Component having the `class?: string` property, or JSX Element.',
+      control: 'boolean',
+    },
+    loading: {
+      description: 'Replaces the icon inside with the Loader component. Enabling this property will ignore the value of the property passed in the `icon`.',
+      control: { type: 'boolean' },
+      defaultValue: { summary: false },
+    },
+    rounded: {
+      description: 'Completely rounds the button corners.',
+      control: 'boolean',
+      defaultValue: { summary: false },
+    },
+    size: {
+      description: 'Button size.',
+      options: sizes,
+      control: 'select',
+      defaultValue: { summary: 'fill' },
+    },
+    stretched: {
+      description: 'Stretches the button horizontally.',
+      control: 'boolean',
+      defaultValue: { summary: false },
+    },
+    variant: {
+      description: 'Button variant.',
+      options: variants,
+      control: 'select',
+      defaultValue: { summary: 'fill' },
+    },
   },
 };

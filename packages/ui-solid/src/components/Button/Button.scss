@@ -3,88 +3,104 @@
 
 $icon-size: 24px;
 
-@mixin sizes($map) {
-  @each $size, $size-settings in $map {
-    &-#{$size} {
-      min-height: nth($size-settings, 1);
-      padding: #{math.div(nth($size-settings, 1) - $icon-size - 2, 2)} nth($size-settings, 2);
-      border-radius: nth($size-settings, 3);
+$variant-colors: (
+  "fill": (
+    "background": #007AFF,
+    "text": white,
+    "ripple": #ffffff40
+  ),
+  "bezeled": (
+    "background": #4378FF1A,
+    "text": #007AFF,
+    "ripple": #007aff26
+  ),
+  "plain": (
+    "background": transparent,
+    "text": #007AFF,
+    "ripple": #007aff26
+  ),
+  "gray": (
+    "background": #0000000A,
+    "text": #000000CC,
+    "ripple": #0000000e
+  ),
+  "outline": (
+    "background": transparent,
+    "border": #0000000D,
+    "text": #000000CC,
+    "ripple": #0000000e
+  ),
+  "white": (
+    "background": white,
+    "text": #000000CC,
+    "ripple": #0000000e
+  ),
+);
+
+$sizes: (
+  "base": (
+    "border-radius": 8px,
+    "sizes": (
+      "sm": (
+        "min-height": 38px,
+        "padding-x": 12px,
+      ),
+      "md": (
+        "min-height": 42px,
+        "padding-x": 14px,
+      ),
+      "lg": (
+        "min-height": 50px,
+        "padding-x": 18px,
+      )
+    ),
+  ),
+  "ios": (
+    "border-radius": 12px,
+    "sizes": (
+      "sm": (
+        "min-height": 36px,
+        "padding-x": 12px,
+      ),
+      "md": (
+        "min-height": 42px,
+        "padding-x": 14px,
+      ),
+      "lg": (
+        "min-height": 50px,
+        "padding-x": 18px,
+        "border-radius": 10px
+      )
+    ),
+  )
+);
+
+$block: ".tgui-button";
+
+@mixin sizes($platform) {
+  @each $size-type, $size-settings in map-get(map-get($sizes, $platform), "sizes") {
+    $min-height: map-get($size-settings, "min-height");
+
+    &-#{$size-type} {
+      min-height: $min-height;
+      padding: #{math.div($min-height - $icon-size - 2, 2)} map-get($size-settings, "padding-x");
     }
   }
 }
 
-.tgui-button {
-  border: 1px solid transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+#{$block} {
+  border: none;
   cursor: pointer;
-  transition: background-color;
-  transition-duration: 75ms;
-
-  // Color modifiers.
-  @each $type, $type-settings in (
-    "fill": [#007AFF, white, null],
-    "bezeled": [#4378FF1A, #007AFF, null],
-    "plain": [transparent, #007AFF, null],
-    "gray": [#0000000A, #000000CC, null],
-    "outline": [transparent, #000000CC, #0000000D],
-    "white": [white, #000000CC, null],
-  ) {
-    $background-color: nth($type-settings, 1);
-    $border-color: nth($type-settings, 3);
-
-    &--#{$type} {
-      background-color: $background-color;
-      color: nth($type-settings, 2);
-
-      @if $border-color {
-        border-color: $border-color;
-      }
-    }
-  }
-
-  &--base {
-    gap: 12px;
-
-    @include sizes((
-      "sm": [38px, 12px, 8px],
-      "md": [42px, 14px, 8px],
-      "lg": [50px, 18px, 8px]
-    ));
-
-    // Color hover modifiers.
-    @each $type, $type-settings in (
-      "fill": [transparentize(#007AFF, .15)],
-      "bezeled": [transparentize(#007AFF, .93)],
-      //"plain": [transparentize(#007AFF, .97)],
-      //"gray": [],
-      //"outline": [],
-      //"white": [],
-    ) {
-      $background-color: nth($type-settings, 1);
-
-      &-#{$type}:hover {
-        background-color: $background-color;
-      }
-    }
-  }
-
-  &--ios {
-    gap: 10px;
-
-    @include sizes((
-      "sm": [36px, 12px, 12px],
-      "md": [42px, 14px, 12px],
-      "lg": [50px, 18px, 10px]
-    ));
-  }
+  overflow: hidden;
+  appearance: none;
+  padding: 0;
+  transition: opacity 75ms;
 
   &--rounded {
     border-radius: 1000px;
   }
 
-  &--full-width {
+  &--stretched {
     width: 100%;
   }
 
@@ -93,15 +109,96 @@ $icon-size: 24px;
     cursor: not-allowed;
   }
 
-  &__icon-container {
-    width: $icon-size;
-    height: $icon-size;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  // Background and text colors.
+  @each $variant, $variant-settings in $variant-colors {
+    &--#{$variant} {
+      background-color: map-get($variant-settings, "background");
+      color: map-get($variant-settings, "text");
+    }
   }
 
-  &__icon {
-    color: currentColor;
+  // Border radius.
+  @each $platform, $platform-settings in $sizes {
+    &--#{$platform} {
+      border-radius: map-get($platform-settings, "border-radius");
+
+      @each $size-type, $size-settings in map-get($platform-settings, "sizes") {
+        $border-radius: map-get($size-settings, "border-radius");
+
+        @if $border-radius {
+          &-#{$size-type} {
+            border-radius: $border-radius;
+          }
+        }
+      }
+    }
   }
+}
+
+#{$block}__ripples {
+  height: 100%;
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 75ms;
+
+  &--base {
+    @include sizes("base");
+    gap: 12px;
+
+    //// Color hover modifiers.
+    //@each $type, $type-settings in (
+    //  "fill": [transparentize(#007AFF, .15)],
+    //  "bezeled": [transparentize(#007AFF, .93)],
+    //  //"plain": [transparentize(#007AFF, .97)],
+    //  //"gray": [],
+    //  //"outline": [],
+    //  //"white": [],
+    //) {
+    //  &-#{$type}:hover {
+    //    background-color: nth($type-settings, 1);
+    //  }
+    //}
+  }
+
+  &--ios {
+    @include sizes("ios");
+    gap: 10px;
+  }
+
+  // Border colors.
+  @each $variant, $variant-settings in $variant-colors {
+    $border-color: map-get($variant-settings, "border");
+
+    @if $border-color {
+      &--#{$variant} {
+        border-color: $border-color;
+      }
+    }
+  }
+}
+
+#{$block}__ripple {
+  // Colors.
+  @each $variant, $variant-settings in $variant-colors {
+    &--#{$variant} {
+      background-color: map-get($variant-settings, "ripple");
+    }
+  }
+}
+
+#{$block}__icon-container {
+  width: $icon-size;
+  height: $icon-size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#{$block}__icon {
+  color: currentColor;
 }

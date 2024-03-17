@@ -1,11 +1,13 @@
-import type { Component, JSX, JSXElement } from 'solid-js';
-
 import type { WithComponentProps } from '~/components/types.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
-import type { ComponentSlot } from '~/types/jsx.js';
+import type { ComponentSlot } from '~/types/components.js';
+import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
 import type { RequiredBy } from '~/types/utils.js';
 
-export type ButtonType =
+/**
+ * Button variant.
+ */
+export type ButtonVariant =
   | 'fill'
   | 'bezeled'
   | 'plain'
@@ -13,31 +15,37 @@ export type ButtonType =
   | 'outline'
   | 'white';
 
-export type ButtonElementKey = 'root' | 'content' | 'loader' | 'iconContainer' | 'icon';
+/**
+ * List of component element keys allowed to be modified.
+ */
+export type ButtonElementKey =
+  | 'root'
+  | 'before'
+  | 'content'
+  | 'after'
+  | 'loader'
+  | 'iconContainer'
+  | 'icon';
 
+/**
+ * Button size.
+ */
 export type ButtonSize = 'sm' | 'md' | 'lg';
-
-export type ButtonIcon = Component<{ class?: string }> | JSXElement;
 
 export interface ButtonPropsDefaults extends WithComponentProps {
   /**
-   * Is Button disabled.
+   * Disables the button.
    * @default false
    */
   disabled?: boolean;
   /**
-   * Should button use all width available.
-   * @default false
-   */
-  fullWidth?: boolean;
-  /**
-   * Should component replace the icon inside with the Loader component. Enabling this
-   * property will ignore the value of the property passed in the `icon`.
+   * Replaces the icon inside with the Loader component. Enabling this property will ignore
+   * the value of the property passed in the `icon`.
    * @default false
    */
   loading?: boolean;
   /**
-   * Should button corners be rounded.
+   * Completely rounds the button corners.
    * @default false
    */
   rounded?: boolean;
@@ -47,22 +55,39 @@ export interface ButtonPropsDefaults extends WithComponentProps {
    */
   size?: ButtonSize;
   /**
+   * Stretches the button horizontally.
+   * @default false
+   */
+  stretched?: boolean;
+  /**
    * Button variant.
    * @default 'fill'
    */
-  type?: ButtonType;
-  Loader?: Component<LoaderProps>;
+  variant?: ButtonVariant;
 }
 
 export interface ButtonClassesProps extends RequiredBy<ButtonProps, keyof ButtonPropsDefaults> {
 }
 
 export interface ButtonProps
-  extends JSX.HTMLAttributes<HTMLButtonElement>,
-    WithOptionalClasses<ButtonElementKey, any>,
+  extends JSXIntrinsicElementAttrs<'button'>,
+    WithOptionalClasses<ButtonElementKey, ButtonClassesProps>,
     ButtonPropsDefaults {
+  /**
+   * Content to display after the main content.
+   */
+  after?: ComponentSlot;
+  /**
+   * Content to display between the icon and main content.
+   */
+  before?: ComponentSlot;
   /**
    * Icon to be displayed before the content.
    */
-  icon?: ButtonIcon;
+  icon?: ComponentSlot<{ class?: string }>;
+  /**
+   * Enables or disables ripples.
+   * @default Depends on the platform. True for the `base` platform.
+   */
+  ripples?: boolean;
 }
