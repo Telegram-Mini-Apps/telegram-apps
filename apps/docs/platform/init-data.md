@@ -34,7 +34,7 @@ resources.
 
 ::: tip
 
-You can find examples using different programming languages in [this](init-data-auth-examples.md) article.
+You can find examples using different programming languages in [this](authorizing-user.md) article.
 
 :::
 

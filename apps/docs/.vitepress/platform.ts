@@ -67,6 +67,7 @@ export const platformSidebar = {
       items: [
         { text: 'Creating New App', link: prefixed('/creating-new-app') },
         { text: 'Getting App Link', link: prefixed('/getting-app-link') },
+        { text: 'Authorizing User', link: prefixed('/authorizing-user') },
       ],
     },
   ],
