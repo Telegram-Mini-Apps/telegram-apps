@@ -10,16 +10,6 @@ their own [documentations](https://docs.telegram-mini-apps.com).
 > a single file - telegram-web-app.js. Using both @tma.js packages and telegram-web-app.js
 > will surely lead to bugs.
 
-## Templates
-
-The list of Mini Apps templates, using different frontend technologies:
-
-- [React and Vite](https://github.com/Telegram-Mini-Apps/reactjs-template)
-- [TypeScript and Vite](https://github.com/Telegram-Mini-Apps/typescript-template)
-- [Vanilla JavaScript](https://github.com/Telegram-Mini-Apps/vanillajs-template)
-- [Solid and Vite](https://github.com/Telegram-Mini-Apps/solidjs-template)
-- [Next JS](https://github.com/Telegram-Mini-Apps/nextjs-template)
-
 ## Packages
 
 ### [`@tma.js/sdk`](https://docs.telegram-mini-apps.com/packages/typescript/tma-js-sdk/about)
