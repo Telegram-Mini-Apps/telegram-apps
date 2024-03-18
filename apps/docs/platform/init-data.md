@@ -32,6 +32,12 @@ signature of the parameters and make sure that they were indeed issued to the sp
 Also, the signature verification operation is fast enough and does not require large server
 resources.
 
+::: tip
+
+You can find examples using different programming languages in [this](init-data-auth-examples.md) article.
+
+:::
+
 ## Sending to Server
 
 In order to authorize the user on the server, the developer needs to transmit the initialization
@@ -47,10 +53,10 @@ import { retrieveLaunchParams } from '@tma.js/sdk';
 const { initDataRaw } = retrieveLaunchParams();
 
 fetch('https://example.com/api', {
-    method: 'POST',
-    headers: {
-        Authorization: `tma ${initDataRaw}`
-    },
+  method: 'POST',
+  headers: {
+    Authorization: `tma ${initDataRaw}`
+  },
 });
 ```
 
@@ -123,10 +129,10 @@ After the 1-st and 2-nd steps we should receive the following data:
 ```js
 // Sorted pairs.
 [
-    'auth_date=1709144340',
-    'chat_instance=-3788475317572404878',
-    'chat_type=private',
-    'user={"id":279058397,"first_name":"Vladislav","last_name":"Kibenko","username":"vdkfrost","language_code":"en","is_premium":true,"allows_write_to_pm":true}'
+  'auth_date=1709144340',
+  'chat_instance=-3788475317572404878',
+  'chat_type=private',
+  'user={"id":279058397,"first_name":"Vladislav","last_name":"Kibenko","username":"vdkfrost","language_code":"en","is_premium":true,"allows_write_to_pm":true}'
 ]
 
 // Hash.
