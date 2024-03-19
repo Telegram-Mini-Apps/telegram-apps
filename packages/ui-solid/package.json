@@ -72,5 +72,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "solid-transition-group": "^0.2.3"
   }
 }
