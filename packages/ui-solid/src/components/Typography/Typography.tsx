@@ -4,12 +4,15 @@ import { Dynamic } from 'solid-js/web';
 import { mergeWithConfigDefaults } from '~/components/utils.js';
 import { sanitizeProps } from '~/helpers/sanitizeProps.js';
 import { withConfig } from '~/hocs/withConfig.js';
+import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
 
 import type { TypographyComponent, TypographyProps } from './Typography.types.js';
 
 import './Typography.scss';
+
+const block = new BemBlockClassNames('tgui-typography');
 
 /**
  * Component used for any typography-related functionality.
@@ -43,16 +46,15 @@ export const Typography = withConfig(
       />
     );
   }, {
-    root(props) {
-      return [
-        props.class,
-        'tgui-typography',
-        `tgui-typography--${props.weight}`,
-        `tgui-typography--${props.variant}`,
-        `tgui-typography--${props.platform}`,
-        `tgui-typography--${props.platform}-${props.variant}`,
-        props.monospace && `tgui-typography--${props.platform}-monospace`,
-      ];
-    },
+    root: (props) => block.calc({
+      mix: props.class,
+      mods: [
+        props.weight,
+        props.variant,
+        props.platform,
+        `${props.platform}-${props.variant}`,
+        props.monospace && `${props.platform}-monospace`,
+      ],
+    }),
   }),
 ) as <Cmp extends TypographyComponent>(props: TypographyProps<Cmp>) => JSXElement;

@@ -7,6 +7,7 @@ import type { RipplesComponent, RipplesProps } from '~/components/Ripples/Ripple
 import { mergeWithConfigDefaults } from '~/components/utils.js';
 import { sanitizeProps } from '~/helpers/sanitizeProps.js';
 import { withConfig } from '~/hocs/withConfig.js';
+import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
 
@@ -21,6 +22,8 @@ interface Ripple {
 
 type PointerEventHandler = JSX.EventHandler<HTMLElement, PointerEvent>;
 type TransitionEventHandler = JSX.EventHandlerUnion<HTMLSpanElement, TransitionEvent>;
+
+const block = new BemBlockClassNames('tgui-ripples');
 
 export const Ripples = withConfig(
   styled((props: RipplesProps<RipplesComponent>) => {
@@ -200,16 +203,13 @@ export const Ripples = withConfig(
       </Dynamic>
     );
   }, {
-    root(props) {
-      return [props.class, 'tgui-ripples'];
-    },
-    ripple: 'tgui-ripples__ripple',
-    ripples: 'tgui-ripples__ripples',
-    content(props) {
-      return [
-        'tgui-ripples__content',
-        props.overlay && 'tgui-ripples__content--overlay',
-      ];
+    root: (props) => block.calc({ mix: props.class }),
+    ripple: block.elem('ripple').calc(),
+    ripples: block.elem('ripples').calc(),
+    content: (props) => {
+      return block.elem('content').calc({
+        mods: props.overlay && 'overlay',
+      });
     },
   }),
 ) as <Cmp extends RipplesComponent>(props: RipplesProps<Cmp>) => JSXElement;

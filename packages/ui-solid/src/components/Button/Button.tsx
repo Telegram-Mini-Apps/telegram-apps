@@ -8,12 +8,15 @@ import { mergeWithConfigDefaults } from '~/components/utils.js';
 import { sanitizeProps } from '~/helpers/sanitizeProps.js';
 import { slotToComponent } from '~/helpers/slotToComponent.js';
 import { withConfig } from '~/hocs/withConfig.js';
+import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
 
 import type { ButtonProps } from './Button.types.js';
 
 import './Button.scss';
+
+const block = new BemBlockClassNames('tgui-button');
 
 /**
  * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-Library?type=design&node-id=45-609&mode=design&t=5uMXzbr5N7vuFjxS-0
@@ -115,20 +118,19 @@ export const Button = withConfig(
       </Ripples>
     );
   }, {
-    root(props) {
-      return [
-        props.class,
-        'tgui-button',
-        `tgui-button--${props.variant}`,
-        `tgui-button--${props.platform}`,
-        `tgui-button--${props.platform}-${props.variant}`,
-        `tgui-button--${props.platform}-${props.size}`,
-        props.stretched && 'tgui-button--stretched',
-        props.rounded && 'tgui-button--rounded',
-        props.disabled && 'tgui-button--disabled',
-      ];
-    },
-    iconContainer: 'tgui-button__icon-container',
-    icon: 'tgui-button__icon',
+    root: (props) => block.calc({
+      mix: props.class,
+      mods: [
+        props.variant,
+        props.platform,
+        `${props.platform}-${props.variant}`,
+        `${props.platform}-${props.size}`,
+        props.stretched && 'stretched',
+        props.rounded && 'rounded',
+        props.disabled && 'disabled',
+      ],
+    }),
+    iconContainer: block.elem('icon-container').calc(),
+    icon: block.elem('icon').calc(),
   }),
 );

@@ -3,12 +3,15 @@ import { For, Show } from 'solid-js';
 import { mergeWithConfigDefaults } from '~/components/utils.js';
 import { sanitizeProps } from '~/helpers/sanitizeProps.js';
 import { withConfig } from '~/hocs/withConfig.js';
+import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
 
 import type { LoaderProps } from './Loader.types.js';
 
 import './Loader.scss';
+
+const block = new BemBlockClassNames('tgui-loader');
 
 /**
  * Component used to display a pending process.
@@ -51,20 +54,13 @@ export const Loader = withConfig(
       </div>
     );
   }, {
-    root(props) {
-      return [
-        props.class,
-        'tgui-loader',
-        `tgui-loader--${props.platform}`,
-        `tgui-loader--${props.platform}-${props.size}`,
-      ];
-    },
-    androidContainer: 'tgui-loader__android-container',
-    iosLine(props) {
-      return [
-        'tgui-loader__ios-line',
-        `tgui-loader__ios-line--${props.size}`,
-      ];
+    root: (props) => block.calc({
+      mix: props.class,
+      mods: `${props.platform}-${props.size}`,
+    }),
+    androidContainer: block.elem('android-container').calc(),
+    iosLine: (props) => {
+      return block.elem('ios-line').calc({ mods: props.size });
     },
   }),
 );
