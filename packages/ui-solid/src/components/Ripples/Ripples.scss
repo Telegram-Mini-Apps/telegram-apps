@@ -10,9 +10,20 @@
   &__ripple {
     position: absolute;
     border-radius: 50%;
-    transform: scale(0);
-    animation: tgui-ripples-ripple 600ms linear;
     background-color: #ffffffb3;
+
+    &--enter-active,
+    &--exit-active {
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    &--enter {
+      transform: scale3d(0, 0, 0);
+    }
+
+    &--exit-to {
+      opacity: 0;
+    }
   }
 
   &__content {
@@ -22,12 +33,5 @@
     &--overlay {
       z-index: 0;
     }
-  }
-}
-
-@keyframes tgui-ripples-ripple {
-  to {
-    transform: scale(4);
-    opacity: 0;
   }
 }

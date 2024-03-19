@@ -51,7 +51,7 @@ export const Playground: Story = {
   },
   args: {
     centered: false,
-    disabled: false,
+    disable: false,
     overlay: false,
   },
   argTypes: {
@@ -60,7 +60,7 @@ export const Playground: Story = {
       control: 'boolean',
       defaultValue: { summary: false },
     },
-    disabled: {
+    disable: {
       description: 'Disables ripples.',
       control: 'boolean',
       defaultValue: { summary: false },

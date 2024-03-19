@@ -1,14 +1,10 @@
-import type { JSX, ParentProps } from 'solid-js';
+import type { ParentProps } from 'solid-js';
 
 import type { WithComponentProps } from '~/components/types.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
 import type { WithComponentProp } from '~/types/components.js';
 import type { JSXHTMLIntrinsicElement } from '~/types/jsx.js';
 import type { RequiredBy } from '~/types/utils.js';
-
-export type OnPointerDown = JSX.EventHandlerUnion<{
-  getBoundingClientRect: () => DOMRect
-}, PointerEvent>;
 
 /**
  * HTML tags allowed to be used as a root component.
@@ -33,7 +29,7 @@ export interface RipplesPropsDefaults extends WithComponentProps {
    * Disables ripples.
    * @default false
    */
-  disabled?: boolean;
+  disable?: boolean;
   /**
    * Places ripples over the component children.
    * @default false
