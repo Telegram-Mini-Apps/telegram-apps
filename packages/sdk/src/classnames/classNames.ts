@@ -1,4 +1,4 @@
-import { isRecord } from '~/misc/isRecord.js';
+import { isRecord } from '../misc/isRecord.js';
 
 /**
  * Inserts a space between a and b in case both of them are
