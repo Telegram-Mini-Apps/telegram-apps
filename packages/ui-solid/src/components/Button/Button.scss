@@ -7,33 +7,63 @@ $variant-colors: (
   "fill": (
     "background": #007AFF,
     "text": white,
-    "ripple": #ffffff40
+    "ripple": #ffffff40,
+    "active-opacity": (
+      "ios": 0.65
+    ),
+    "hover-opacity": (
+      "base": 0.85,
+      "ios": 0.85,
+    )
   ),
   "bezeled": (
     "background": #4378FF1A,
+    "background:hover": #DDEAFF,
     "text": #007AFF,
-    "ripple": #007aff26
+    "ripple": #007aff26,
   ),
   "plain": (
     "background": transparent,
+    "background:hover": rgba(0, 122, 255, 0.03),
     "text": #007AFF,
-    "ripple": #007aff26
+    "ripple": #007aff26,
   ),
   "gray": (
     "background": #0000000A,
     "text": #000000CC,
-    "ripple": #0000000e
+    "ripple": #0000000e,
+    "active-opacity": (
+      "ios": 0.65
+    ),
+    "hover-opacity": (
+      "base": 0.5,
+      "ios": 0.85,
+    )
   ),
   "outline": (
     "background": transparent,
     "border": #0000000D,
     "text": #000000CC,
-    "ripple": #0000000e
+    "ripple": #0000000e,
+    "active-opacity": (
+      "ios": 0.65
+    ),
+    "hover-opacity": (
+      "base": 0.5,
+      "ios": 0.85,
+    )
   ),
   "white": (
-    "background": white,
+    "background": #ffffff,
     "text": #000000CC,
-    "ripple": #0000000e
+    "ripple": #0000000e,
+    "active-opacity": (
+      "ios": 0.65
+    ),
+    "hover-opacity": (
+      "base": 0.5,
+      "ios": 0.85,
+    )
   ),
 );
 
@@ -75,8 +105,6 @@ $sizes: (
   )
 );
 
-$block: ".tgui-button";
-
 @mixin sizes($platform) {
   @each $size-type, $size-settings in map-get(map-get($sizes, $platform), "sizes") {
     $min-height: map-get($size-settings, "min-height");
@@ -87,6 +115,8 @@ $block: ".tgui-button";
     }
   }
 }
+
+$block: ".tgui-button";
 
 #{$block} {
   border: none;
@@ -104,16 +134,37 @@ $block: ".tgui-button";
     width: 100%;
   }
 
-  &--disabled {
-    opacity: .35;
-    cursor: not-allowed;
-  }
-
   // Background and text colors.
   @each $variant, $variant-settings in $variant-colors {
     &--#{$variant} {
       background-color: map-get($variant-settings, "background");
       color: map-get($variant-settings, "text");
+
+      &:hover {
+        background-color: map-get($variant-settings, "background:hover");
+      }
+    }
+  }
+
+  // Hover and active opacity.
+  @each $variant, $variant-settings in $variant-colors {
+    $active-opacity: map-get($variant-settings, "active-opacity");
+    $hover-opacity: map-get($variant-settings, "hover-opacity");
+
+    @each $platform in ["base", "ios"] {
+      &--#{$platform}-#{$variant} {
+        @if $hover-opacity {
+          &:hover {
+            opacity: map-get($hover-opacity, $platform);
+          }
+        }
+
+        @if $active-opacity {
+          &:active {
+            opacity: map-get($active-opacity, $platform);
+          }
+        }
+      }
     }
   }
 
@@ -132,6 +183,10 @@ $block: ".tgui-button";
         }
       }
     }
+  }
+
+  &[disabled] {
+    opacity: .35;
   }
 }
 

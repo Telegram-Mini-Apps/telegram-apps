@@ -100,6 +100,11 @@ export const Playground: Story = {
       description: 'Content to display inside the button. Any JSX element allowed.',
       control: 'text',
     },
+    ripples: {
+      description: 'Forces button ripples.\n\n'
+        + '_By default, this value is being computed depending on the current platform._',
+      control: 'boolean',
+    },
     classes: getClassesArgType('root', 'content', 'loader', 'iconContainer', 'icon'),
     disabled: {
       description: 'Disables the button.',

@@ -74,9 +74,9 @@ export const Button = withConfig(
           ],
         }}
         class={classes().root}
-        disabled={merged.disabled || (
+        disable={merged.disabled || (
           typeof merged.ripples === 'boolean'
-            ? merged.ripples
+            ? !merged.ripples
             : merged.platform === 'ios'
         )}
       >
