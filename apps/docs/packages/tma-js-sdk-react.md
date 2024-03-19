@@ -79,7 +79,6 @@ the component from the SDK.
 ```jsx
 import {
   SDKProvider,
-  DisplayGate,
   useMainButton,
 } from '@tma.js/sdk-react';
 
@@ -96,9 +95,7 @@ function App() {
 export function Root() {
   return (
     <SDKProvider options={{ async: true }}>
-      <DisplayGate>
-        <App/>
-      </DisplayGate>
+      <App/>
     </SDKProvider>
   );
 }
