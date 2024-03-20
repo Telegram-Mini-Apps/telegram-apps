@@ -23,13 +23,15 @@ type InferElementKey<Props> = Props extends WithOptionalClasses<infer ElementKey
  *
  * Returned object is reactive. So, its values changes are trackable and work the way, props object
  * do in Solid.
- * @param props - properties, passed to a component.
  * @returns Reactive object with keys as element keys and values as computed class property values.
+ * @param propsOrGetProps
  */
 export function createClasses<Props extends WithOptionalClasses<any, Props>>(
-  props: Props,
+  propsOrGetProps: Props | Accessor<Props>,
 ): Accessor<ClassNamesMap<InferElementKey<Props>>> {
   return createMemo(() => {
+    const props = typeof propsOrGetProps === 'function' ? propsOrGetProps() : propsOrGetProps;
+
     return Object
       .entries(props.classes || {})
       .reduce<ClassNamesMap<InferElementKey<Props>>>((acc, [className, value]) => {
