@@ -1,0 +1,20 @@
+.tgui-progress {
+  display: block;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 4px;
+
+  &--ios::-webkit-progress-bar {
+    background-color: transparent;
+  }
+
+  &--base::-webkit-progress-bar {
+    background-color: rgba(67, 120, 255, 0.1);
+    border-radius: 1000px;
+  }
+
+  &::-webkit-progress-value {
+    background-color: rgba(0, 122, 255, 1);
+    border-radius: 1000px;
+  }
+}
