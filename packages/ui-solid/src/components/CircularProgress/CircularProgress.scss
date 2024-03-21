@@ -1,0 +1,43 @@
+$sizes: (
+  "sm": (
+    "width": 18px,
+    "stroke-width": 2.5px
+  ),
+  "md": (
+    "width": 36px,
+    "stroke-width": 3.5px
+  ),
+  "lg": (
+    "width": 44px,
+    "stroke-width": 4px
+  ),
+);
+
+.tgui-circular-progress {
+  display: block;
+  aspect-ratio: 1;
+  fill: transparent;
+  overflow: visible;
+  transform: rotate3d(0, 0, 1, -90deg);
+
+  @each $size-type, $size-settings in $sizes {
+    &--#{$size-type} {
+      width: map-get($size-settings, "width");
+      stroke-width: map-get($size-settings, "stroke-width");
+    }
+  }
+
+  &__background {
+    stroke: rgba(67, 120, 255, 0.1);
+  }
+
+  &__fill {
+    color: #007AFF;
+    stroke: currentColor;
+    transition: stroke-dasharray, 100ms ease-in-out;
+    stroke: {
+      linecap: round;
+      dasharray: calc(var(--value) * 50%) calc((var(--max) - var(--value)) * 50%);
+    }
+  }
+}
