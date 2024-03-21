@@ -6,41 +6,75 @@
 
 // Native colors.
 // Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-·%C2%A0UI-Kit?type=design&node-id=247-6635&mode=design&t=wO8NRmLsNTRplvzT-0
-$bg-color: _create-color(#FFFFFF, #212121);
-$text-color: _create-color(#000, #FFFFFF);
-$hint-color: _create-color(#707579, #AAAAAA);
-$link-color: _create-color(#007AFF, #2990FF);
-$button-color: _create-color(#007AFF, #2990FF);
-$button-text-color: #FFFFFF;
-$secondary-bg-color: _create-color(#EFEFF4, #0F0F0F);
-$header-bg-color: _create-color(#FFFFFF, #212121);
-$accent-text-color: #007AFF;
-$section-bg-color: _create-color(#FFFFFF, #212121);
-$section-header-text-color: _create-color(#707579, #AAAAAA);
-$subtitle-text-color: _create-color(#707579, #AAAAAA);
-$destructive-text-color: #E53935;
+$native-colors: (
+  'bg-color': _create-color(#FFFFFF, #212121),
+  'text-color': _create-color(#000, #FFFFFF),
+  'hint-color': _create-color(#707579, #AAAAAA),
+  'link-color': _create-color(#007AFF, #2990FF),
+  'button-color': _create-color(#007AFF, #2990FF),
+  'button-text-color': #FFFFFF,
+  'secondary-bg-color': _create-color(#EFEFF4, #0F0F0F),
+  'header-bg-color': _create-color(#FFFFFF, #212121),
+  'accent-text-color': #007AFF,
+  'section-bg-color': _create-color(#FFFFFF, #212121),
+  'section-header-text-color': _create-color(#707579, #AAAAAA),
+  'subtitle-text-color': _create-color(#707579, #AAAAAA),
+  'destructive-text-color': #E53935,
+);
 
 // Additional colors.
 // Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-·%C2%A0UI-Kit?type=design&node-id=247-6635&mode=design&t=wO8NRmLsNTRplvzT-0
-$skeleton: _create-color(#00000003, #FFFFFF03);
-$divider: _create-color(#00000015, #FFFFFF05);
-$outline: _create-color(#00000005, #FFFFFF10);
-$surface-primary: _create-color(#FFFFFF95, #17171795);
-$surface-dark: _create-color(#38383885, #38383885);
-$tertiary-bg-color: _create-color(#F4F4F7, #2A2A2A);
-$quaternary-bg-color: _create-color(#F6F6FA, #2F2F2F);
-$segmented-control-active-bg: _create-color(#FFFFFF, #2F2F2F);
-$card-bg-color: _create-color(#FFFFFF, #323232);
-$secondary-hint-color: _create-color(#A2ACB0, #78797E);
-$secondary-fill: _create-color(#4378FF10, #2990FF15);
-$green: _create-color(#31D158, #32E55E);
-$destructive-background: _create-color(#F12E2E05, #F12E2E15);
-$primary-code-highlight: _create-color(#4378FF, #2990FF);
-$secondary-code-highlight: _create-color(#B00FB4, #E937ED);
-$tertiary-code-highlight: _create-color(#3A9F20, #5AE536);
-$plain-background: _create-color(#00000004, #FFFFFF08);
-$plain-foreground: _create-color(#00000080, #FFFFFF95);
-$toast-accent-color: #55A6FF;
-$tooltip-background-dark: #00000085;
-$white: #FFFFFF;
-$black: #000;
+$additional-colors: (
+  'skeleton': _create-color(#00000008, #FFFFFF08),
+  'divider': _create-color(#00000026, #FFFFFF0D),
+  'outline': _create-color(#0000000D, #FFFFFF1A),
+  'surface-primary': _create-color(#FFFFFFF2, #171717F2),
+  'surface-dark': _create-color(#383838D9, #383838D9),
+  'tertiary-bg-color': _create-color(#F4F4F7, #2A2A2A),
+  'quaternary-bg-color': _create-color(#F6F6FA, #2F2F2F),
+  'segmented-control-active-bg': _create-color(#FFFFFF, #2F2F2F),
+  'card-bg-color': _create-color(#FFFFFF, #323232),
+  'secondary-hint-color': _create-color(#707579, #AAAAAA),
+  'secondary-fill': _create-color(#4378FF1A, #2990FF26),
+  'green': _create-color(#31D158, #32E55E),
+  'destructive-background': _create-color(#F12E2E0D, #F12E2E26),
+  'primary-code-highlight': _create-color(#4378FF, #2990FF),
+  'secondary-code-highlight': _create-color(#B00FB4, #E937ED),
+  'tertiary-code-highlight': _create-color(#3A9F20, #5AE536),
+  'plain-background': _create-color(#0000000A, #FFFFFF14),
+  'plain-foreground': _create-color(#000000CC, #FFFFFFF2),
+  'toast-accent-color': #55A6FF,
+  'tooltip-background-dark': #000000D9,
+  'white': #FFFFFF,
+  'black': #000,
+);
+
+$colors: map-merge($native-colors, $additional-colors);
+
+@function _validate-name($name) {
+  @if not map-has-key($colors, $name) {
+    @error "Color \"#{$name}\" is unknown."
+  }
+  @return true;
+}
+
+@function _get-by-name($name) {
+  $_: _validate-name($name);
+  $value: map-get($colors, $name);
+
+  @if type-of($value) == "map" {
+    @return $value
+  }
+  @return _create-color($value, $value)
+}
+
+@function create-css-var($name) {
+  $_: _validate-name($name);
+  @return --tgui-palette-#{$name};
+}
+
+@function refer-css-var($css-var-name, $fallback-color-name) {
+  $light: map-get(_get-by-name($fallback-color-name), "light");
+
+  @return var($css-var-name, var(create-css-var($fallback-color-name), #{$light}));
+}
