@@ -71,10 +71,7 @@ export const Button = withConfig(
             `tgui-button__ripples--${merged.platform}`,
             `tgui-button__ripples--${merged.platform}-${merged.size}`,
           ],
-          ripple: [
-            // 'tgui-button__ripple',
-            `tgui-button__ripple--${merged.variant}`,
-          ],
+          ripple: `tgui-button__ripple--${merged.variant}`,
         }}
         class={classes().root}
         disable={merged.disabled || (
