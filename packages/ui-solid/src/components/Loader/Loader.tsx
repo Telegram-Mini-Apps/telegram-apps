@@ -56,8 +56,12 @@ export const Loader = withConfig(
   }, {
     root: (props) => block.calc({
       mix: props.class,
-      mods: `${props.platform}-${props.size}`,
+      mods: [
+        props.platform,
+        `${props.platform}-${props.size}`,
+      ],
     }),
+    androidCircle: block.elem('android-circle').calc(),
     androidContainer: block.elem('android-container').calc(),
     iosLine: (props) => {
       return block.elem('ios-line').calc({ mods: props.size });
