@@ -7,19 +7,9 @@ import type { JSXHTMLIntrinsicElement } from '~/types/jsx.js';
 import type { RequiredBy } from '~/types/utils.js';
 
 /**
- * HTML tags allowed to be used as a root component.
+ * Component properties, having defaults.
  */
-export type RipplesComponent = JSXHTMLIntrinsicElement;
-
-/**
- * List of component element keys allowed to be modified.
- */
-export type RipplesElementKey = 'root' | 'content' | 'ripples' | 'ripple';
-
-/**
- * List of components properties, which have defaults.
- */
-export interface RipplesPropsDefaults extends WithComponentProps {
+interface PropsWithDefaults extends WithComponentProps {
   /**
    * Places ripples in the center.
    * @default false
@@ -37,26 +27,40 @@ export interface RipplesPropsDefaults extends WithComponentProps {
   overlay?: boolean;
 }
 
-export interface RipplesStableProps extends ParentProps, RipplesPropsDefaults {
-  /**
-   * Ripple radius in pixels.
-   * @default Half of the biggest container dimension.
-   */
-  radius?: number;
-}
+/**
+ * HTML tags allowed to be used as a root component.
+ */
+export type RipplesComponent = JSXHTMLIntrinsicElement;
 
 /**
- * Properties passed to the Ripples component class names computers.
+ * List of component element keys allowed to be modified.
+ */
+export type RipplesElementKey = 'root' | 'content' | 'ripples' | 'ripple';
+
+/**
+ * Properties shared between classes and public component props.
+ */
+type SharedProps<Cmp extends RipplesComponent> =
+  & ParentProps<{
+    /**
+     * Ripple radius in pixels.
+     * @default Half of the biggest container dimension.
+     */
+    radius?: number;
+  }>
+  & PropsWithDefaults
+  & WithComponentProp<Cmp, 'div'>;
+
+/**
+ * Ripples component properties passed to the classes hooks.
  */
 export type RipplesClassesProps<Cmp extends RipplesComponent> =
-  & RequiredBy<RipplesStableProps, keyof RipplesPropsDefaults>
-  & WithOptionalClasses<RipplesElementKey, RipplesClassesProps<Cmp>>
-  & WithComponentProp<Cmp, 'div'>;
+  & RequiredBy<SharedProps<Cmp>, keyof PropsWithDefaults>
+  & WithOptionalClasses<RipplesElementKey, RipplesClassesProps<Cmp>>;
 
 /**
- * Ripples component properties.
+ * Ripples component public properties.
  */
 export type RipplesProps<Cmp extends RipplesComponent> =
-  & RipplesStableProps
-  & WithOptionalClasses<RipplesElementKey, RipplesClassesProps<Cmp>>
-  & WithComponentProp<Cmp, 'div'>;
+  & SharedProps<Cmp>
+  & WithOptionalClasses<RipplesElementKey, RipplesClassesProps<Cmp>>;
