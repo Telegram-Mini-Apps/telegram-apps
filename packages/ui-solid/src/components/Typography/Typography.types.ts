@@ -33,19 +33,9 @@ export type TypographyComponent =
   | 'label';
 
 /**
- * Font weight.
+ * Component properties, having defaults.
  */
-export type TypographyWeight = 'regular' | 'semibold' | 'bold';
-
-/**
- * List of component element keys allowed to be customized.
- */
-export type TypographyElementKey = 'root';
-
-/**
- * List of components properties, which have defaults.
- */
-export interface TypographyPropsDefaults extends WithComponentProps {
+interface PropsWithDefaults extends WithComponentProps {
   /**
    * Should component use monospace font.
    * @default false
@@ -64,16 +54,26 @@ export interface TypographyPropsDefaults extends WithComponentProps {
 }
 
 /**
- * Properties passed to the Typography component class names computers.
+ * Font weight.
+ */
+export type TypographyWeight = 'regular' | 'semibold' | 'bold';
+
+/**
+ * Typography component element keys allowed to be customized.
+ */
+export type TypographyElementKey = 'root';
+
+/**
+ * Typography component properties passed to the classes hooks.
  */
 export type TypographyClassesProps<Cmp extends TypographyComponent> =
-  & Required<TypographyPropsDefaults>
+  & Required<PropsWithDefaults>
   & WithComponentProp<Cmp, 'p'>;
 
 /**
- * Typography component properties.
+ * Typography component public properties.
  */
 export type TypographyProps<Cmp extends TypographyComponent> =
-  & TypographyPropsDefaults
+  & PropsWithDefaults
   & WithOptionalClasses<TypographyElementKey, TypographyClassesProps<Cmp>>
   & WithComponentProp<Cmp, 'p'>;
