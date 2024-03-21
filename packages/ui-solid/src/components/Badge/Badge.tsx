@@ -14,7 +14,7 @@ import './Badge.scss';
 const block = new BemBlockClassNames('tgui-badge');
 
 /**
- * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-·%C2%A0UI-Kit?type=design&node-id=216-2847&mode=design&t=T40lNBs6ULRFVHOS-0
+ * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-·%C2%A0UI-Kit?type=design&node-id=48-396&mode=design&t=wO8NRmLsNTRplvzT-0
  */
 export const Badge = withConfig(
   styled((props: BadgeProps) => {
