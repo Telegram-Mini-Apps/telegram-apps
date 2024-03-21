@@ -1,0 +1,55 @@
+@use "../../scss/palette" as palette;
+
+$block: "tgui-badge";
+
+$variants: (
+  "default": (
+    "background-color": palette.refer-css-var(--#{$block}-default-bg-color, "link-color"),
+  ),
+  "critical": (
+    "background-color": palette.refer-css-var(--#{$block}-destructive-bg-color, "destructive-text-color"),
+  ),
+  "secondary": (
+    "background-color": palette.refer-css-var(--#{$block}-secondary-bg-color, "secondary-fill"),
+    "color": palette.refer-css-var(--#{$block}-secondary-text-color, "link-color"),
+  ),
+  "gray": (
+    "background-color": palette.refer-css-var(--#{$block}-gray-bg-color, "plain-background"),
+    "color": palette.refer-css-var(--#{$block}-gray-text-color, "plain-foreground"),
+  ),
+  "white": (
+    "background-color": white,
+    "color": palette.refer-css-var(--#{$block}-white-text-color, "link-color"),
+  )
+);
+
+.#{$block} {
+  display: inline-flex;
+  color: palette.refer-css-var(--#{$block}-text-color, "button-text-color");
+  border-radius: 1000px;
+
+  @each $variant-type, $variant-colors in $variants {
+    &--#{$variant-type} {
+      background-color: map-get($variant-colors, "background-color");
+      color: map-get($variant-colors, "color");
+    }
+  }
+
+  &--dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  &--sm, &--lg {
+    align-items: center;
+    padding: 0 6px;
+  }
+
+  &--sm {
+    height: 20px;
+  }
+
+  &--lg {
+    height: 24px;
+  }
+}
