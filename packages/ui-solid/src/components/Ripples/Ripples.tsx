@@ -55,17 +55,17 @@ export const Ripples = withConfig(
     // List of ripples to be displayed.;
     const [ripples, setRipples] = createSignal<Ripple[]>([]);
 
-    // Drops active ripple/
+    // Drops active ripple.
     const dropActiveRipple = () => setActiveRipple();
 
-    // Removes ripple with speicifed identifier.
+    // Removes ripple with specified identifier.
     const removeRipple = (id: string) => {
       setRipples((prevRipples) => {
         return prevRipples.filter((r) => r.id !== id);
       });
     };
 
-    // Pointer leave handler which drops active ripple/
+    // Pointer leave handler which drops active ripple.
     const onPointerLeave: PointerEventHandler = (e) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       merged.onPointerLeave && (merged as any).onPointerLeave(e);
