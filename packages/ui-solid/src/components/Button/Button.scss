@@ -1,12 +1,13 @@
 @use "sass:math";
-@use "sass:map";
+@use "../../scss/palette" as palette;
 
 $icon-size: 24px;
+$block: "tgui-button";
 
 $variant-colors: (
   "fill": (
-    "background": #007AFF,
-    "text": white,
+    "background": palette.refer-css-var(--#{$block}-fill-bg-color, "button-color"),
+    "text": palette.refer-css-var(--#{$block}-fill-text-color, "button-text-color"),
     "ripple": #ffffff40,
     "active-opacity": (
       "ios": 0.65
@@ -17,20 +18,20 @@ $variant-colors: (
     )
   ),
   "bezeled": (
-    "background": #4378FF1A,
+    "background": palette.refer-css-var(--#{$block}-bezeled-bg-color, "secondary-fill"),
     "background:hover": #DDEAFF,
-    "text": #007AFF,
+    "text": palette.refer-css-var(--#{$block}-bezeled-text-color, "link-color"),
     "ripple": #007aff26,
   ),
   "plain": (
     "background": transparent,
     "background:hover": rgba(0, 122, 255, 0.03),
-    "text": #007AFF,
+    "text": palette.refer-css-var(--#{$block}-plain-text-color, "link-color"),
     "ripple": #007aff26,
   ),
   "gray": (
-    "background": #0000000A,
-    "text": #000000CC,
+    "background": palette.refer-css-var(--#{$block}-gray-bg-color, "plain-background"),
+    "text": palette.refer-css-var(--#{$block}-gray-text-color, "plain-foreground"),
     "ripple": #0000000e,
     "active-opacity": (
       "ios": 0.65
@@ -42,8 +43,8 @@ $variant-colors: (
   ),
   "outline": (
     "background": transparent,
-    "border": #0000000D,
-    "text": #000000CC,
+    "border": palette.refer-css-var(--#{$block}-outline-border-color, "outline"),
+    "text": palette.refer-css-var(--#{$block}-outline-text-color, "plain-foreground"),
     "ripple": #0000000e,
     "active-opacity": (
       "ios": 0.65
@@ -55,7 +56,7 @@ $variant-colors: (
   ),
   "white": (
     "background": #ffffff,
-    "text": #000000CC,
+    "text": palette.refer-css-var(--#{$block}-white-text-color, "plain-foreground"),
     "ripple": #0000000e,
     "active-opacity": (
       "ios": 0.65
@@ -116,9 +117,7 @@ $sizes: (
   }
 }
 
-$block: ".tgui-button";
-
-#{$block} {
+.#{$block} {
   border: none;
   cursor: pointer;
   overflow: hidden;
@@ -188,72 +187,62 @@ $block: ".tgui-button";
   &[disabled] {
     opacity: .35;
   }
-}
 
-#{$block}__ripples {
-  height: 100%;
-  width: 100%;
-  border: 1px solid transparent;
-  border-radius: inherit;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 75ms;
+  // RIPPLES.
+  &__ripples {
+    height: 100%;
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: inherit;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 75ms;
 
-  &--base {
-    @include sizes("base");
-    gap: 12px;
+    &--base {
+      @include sizes("base");
+      gap: 12px;
+    }
 
-    //// Color hover modifiers.
-    //@each $type, $type-settings in (
-    //  "fill": [transparentize(#007AFF, .15)],
-    //  "bezeled": [transparentize(#007AFF, .93)],
-    //  //"plain": [transparentize(#007AFF, .97)],
-    //  //"gray": [],
-    //  //"outline": [],
-    //  //"white": [],
-    //) {
-    //  &-#{$type}:hover {
-    //    background-color: nth($type-settings, 1);
-    //  }
-    //}
-  }
+    &--ios {
+      @include sizes("ios");
+      gap: 10px;
+    }
 
-  &--ios {
-    @include sizes("ios");
-    gap: 10px;
-  }
+    // Border colors.
+    @each $variant, $variant-settings in $variant-colors {
+      $border-color: map-get($variant-settings, "border");
 
-  // Border colors.
-  @each $variant, $variant-settings in $variant-colors {
-    $border-color: map-get($variant-settings, "border");
-
-    @if $border-color {
-      &--#{$variant} {
-        border-color: $border-color;
+      @if $border-color {
+        &--#{$variant} {
+          border-color: $border-color;
+        }
       }
     }
   }
-}
 
-#{$block}__ripple {
-  // Colors.
-  @each $variant, $variant-settings in $variant-colors {
-    &--#{$variant} {
-      background-color: map-get($variant-settings, "ripple");
+  // RIPPLE.
+  &__ripple {
+    // Colors.
+    @each $variant, $variant-settings in $variant-colors {
+      &--#{$variant} {
+        background-color: map-get($variant-settings, "ripple");
+      }
     }
   }
-}
 
-#{$block}__icon-container {
-  width: $icon-size;
-  height: $icon-size;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+   // ICON CONTAINER.
+  &__icon-container {
+    width: $icon-size;
+    height: $icon-size;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-#{$block}__icon {
-  color: currentColor;
+  // ICON
+  &__icon {
+    color: currentColor;
+  }
 }

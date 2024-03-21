@@ -1,3 +1,5 @@
+@use "../../scss/palette" as palette;
+
 @function _create-base-settings($width, $stroke-width, $strokes0, $strokes50, $strokes100) {
   @return (
     "width": $width,
@@ -30,12 +32,14 @@ $ios-sizes: (
   "lg": _create-ios-size(32px, 3.3px, 7.5px),
 );
 
-.tgui-loader {
+$block: "tgui-loader";
+
+.#{$block} {
   display: block;
   aspect-ratio: 1;
 
   &--base {
-    color: #007AFF;
+    color: palette.refer-css-var(--#{$block}-base-color, "link-color");
     stroke: currentColor;
     stroke-linecap: round;
 
@@ -43,11 +47,11 @@ $ios-sizes: (
       &-#{$size-type} {
         width: map-get($size-settings, "width");
         stroke-width: map-get($size-settings, "stroke-width");
-        animation: tgui-loader-base-dash-#{$size-type} 2s ease infinite,
-        tgui-loader-base-rotate 2s linear infinite;
+        animation: #{$block}-base-dash-#{$size-type} 2s ease infinite,
+        #{$block}-base-rotate 2s linear infinite;
       }
 
-      @keyframes tgui-loader-base-dash-#{$size-type} {
+      @keyframes #{$block}-base-dash-#{$size-type} {
         @each $percentage in ["0%", "50%", "100%"] {
           $stroke-settings: map-get(map-get($size-settings, "strokes"), $percentage);
 
@@ -66,7 +70,7 @@ $ios-sizes: (
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #707579;
+    color: palette.refer-css-var(--#{$block}-ios-color, "hint-color");
 
     @each $size-type, $size-settings in $ios-sizes {
       &-#{$size-type} {
@@ -88,7 +92,7 @@ $ios-sizes: (
     background-color: currentColor;
     border-radius: 1000px;
     transform-origin: center;
-    animation: tgui-loader-ios-fade 800ms linear infinite;
+    animation: #{$block}-ios-fade 800ms linear infinite;
     opacity: .1;
 
     @each $size-type, $size-settings in $ios-sizes {
@@ -100,7 +104,7 @@ $ios-sizes: (
   }
 }
 
-@keyframes tgui-loader-ios-fade {
+@keyframes #{$block}-ios-fade {
   0% {
     opacity: 1
   }
@@ -109,7 +113,7 @@ $ios-sizes: (
   }
 }
 
-@keyframes tgui-loader-base-rotate {
+@keyframes #{$block}-base-rotate {
   0% {
     transform: rotate(0deg);
   }

@@ -1,20 +1,22 @@
+@use "../../scss/palette" as palette;
+
 .tgui-progress {
   display: block;
   appearance: none;
   -webkit-appearance: none;
   height: 4px;
 
+  &::-webkit-progress-value {
+    background-color: palette.refer-css-var(--tgui-progress-value-color, "link-color");
+    border-radius: 1000px;
+  }
+
   &--ios::-webkit-progress-bar {
     background-color: transparent;
   }
 
   &--base::-webkit-progress-bar {
-    background-color: rgba(67, 120, 255, 0.1);
-    border-radius: 1000px;
-  }
-
-  &::-webkit-progress-value {
-    background-color: rgba(0, 122, 255, 1);
+    background-color: palette.refer-css-var(--tgui-progress-bg-color, "secondary-fill");
     border-radius: 1000px;
   }
 }

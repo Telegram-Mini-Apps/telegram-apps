@@ -1,3 +1,5 @@
+@use "../../scss/palette" as palette;
+
 $sizes: (
   "sm": (
     "width": 18px,
@@ -13,7 +15,9 @@ $sizes: (
   ),
 );
 
-.tgui-circular-progress {
+$block: "tgui-circular-progress";
+
+.#{$block} {
   display: block;
   aspect-ratio: 1;
   fill: transparent;
@@ -28,11 +32,11 @@ $sizes: (
   }
 
   &__background {
-    stroke: rgba(67, 120, 255, 0.1);
+    color: palette.refer-css-var(--#{$block}-value-color, "secondary-fill");
   }
 
   &__fill {
-    color: #007AFF;
+    color: palette.refer-css-var(--#{$block}-value-color, "link-color");
     stroke: currentColor;
     transition: stroke-dasharray, 100ms ease-in-out;
     stroke: {
