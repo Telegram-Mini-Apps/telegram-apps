@@ -1,16 +1,22 @@
 // This script optimizes icons, placed in the "icons" folder.
 
 import { optimize } from 'svgo';
-import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, rmdirSync, mkdirSync } from 'node:fs';
 import { resolve, dirname, parse } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const dir = resolve(dirname(fileURLToPath(import.meta.url)), '../icons');
+const svgIconsDir = resolve(dirname(fileURLToPath(import.meta.url)), '../icons');
+const solidIconsDir = resolve(svgIconsDir, '../src/icons');
 
-readdirSync(dir).forEach(file => {
-  const filePath = resolve(dir, file);
-  const { name } = parse(filePath);
-  let { data: svg } = optimize(readFileSync(filePath), {
+// Clean target Solid components directory.
+rmdirSync(solidIconsDir, { recursive: true });
+mkdirSync(solidIconsDir);
+
+readdirSync(svgIconsDir).forEach(file => {
+  const filePath = resolve(svgIconsDir, file);
+
+  // Optimize SVG.
+  const { data: svg } = optimize(readFileSync(filePath), {
     multipass: true,
     plugins: [
       'preset-default',
@@ -26,21 +32,39 @@ readdirSync(dir).forEach(file => {
     ],
   });
 
-  const component = 'Icon' + parse(filePath)
+  // Compute size based on the icon name.
+  const [, size] = file.match(/(\d+)\.svg$/).map(Number);
+
+  // Compute component name
+  const component = parse(file)
     .name
     .split('_')
     .map(part => part[0].toUpperCase() + part.slice(1))
     .join('');
-  const result =
-    `import type { Component } from 'solid-js';
-import type { JSXIntrinsicElementAttrs } from '../types/jsx.js';
 
-export const ${component}: Component<JSXIntrinsicElementAttrs<'svg'>> = (props) => {
+  // Compute Solid component TypeScript file content.
+  const result =
+    `/* eslint-disable */
+import { mergeProps, type Component } from 'solid-js';
+
+import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
+
+export interface ${component}Props extends JSXIntrinsicElementAttrs<'svg'> {
+  /**
+   * Icon size. This is value will be passed to the SVG's width and height attributes.
+   * @default ${size}
+   */
+  size?: JSXIntrinsicElementAttrs<'svg'>['width'];
+}
+
+export const ${component}: Component<${component}Props> = (props) => {
+  const merged = mergeProps({ size: ${size} }, props);
+
   return (
     ${svg
       .replace(/([{}])/g, '{\'$1\'}')
       .replace(/<!--\s*([\s\S]*?)\s*-->/g, '{/* $1 */}')
-      .replace(/(<svg[^>]*)>/i, '$1 {...props}>')}
+      .replace(/(<svg[^>]*)>/i, '$1 width={merged.size} height={merged.size} {...props}>')}
   );
 }
 `;
@@ -49,5 +73,5 @@ export const ${component}: Component<JSXIntrinsicElementAttrs<'svg'>> = (props) 
   writeFileSync(filePath, svg);
 
   // Write Solid component.
-  writeFileSync(resolve(dir, '../src/icons', `${component}.tsx`), result);
+  writeFileSync(resolve(solidIconsDir, `${component}.tsx`), result);
 });

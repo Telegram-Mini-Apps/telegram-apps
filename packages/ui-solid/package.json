@@ -42,7 +42,7 @@
     "build": "pnpm run build:default && pnpm run build:iife",
     "build:default": "vite build --config vite.config.ts",
     "build:iife": "vite build --config vite.iife.config.ts",
-    "build:icons": "node scripts/build-icons.js && eslint --fix src/icons",
+    "build:icons": "node scripts/build-icons.js",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
