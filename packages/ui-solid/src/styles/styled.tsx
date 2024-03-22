@@ -1,4 +1,4 @@
-import type { Component, ComponentProps } from 'solid-js';
+import type { Component } from 'solid-js';
 import { createMemo, mergeProps } from 'solid-js';
 
 import type {
@@ -16,8 +16,8 @@ export interface StyledOptions {
   name?: string;
 }
 
-type StyledClasses<Cmp extends Component<WithOptionalClasses<any, any>>> =
-  Partial<ExtractPropsClasses<ComponentProps<Cmp>>>;
+type StyledClasses<Props extends WithOptionalClasses<any, any>> =
+  Partial<ExtractPropsClasses<Props>>;
 
 function formatClasses<P>(value: ClassesValue<P>): (ClassName | ClassNameFn<P>)[] {
   return Array.isArray(value) ? value : [value];
@@ -36,11 +36,11 @@ function formatClasses<P>(value: ClassesValue<P>): (ClassName | ClassNameFn<P>)[
  *   ...
  * });
  */
-export function styled<Cmp extends Component<WithOptionalClasses<any, any>>>(
-  Component: Cmp,
-  classes: StyledClasses<Cmp>,
+export function styled<Props extends WithOptionalClasses<any, any>>(
+  Component: Component<Props>,
+  classes: StyledClasses<Props>,
   options: StyledOptions = {},
-): Cmp {
+): Component<Props> {
   const Wrapped = ((props) => {
     const merged = mergeProps({ classes: {} }, props);
 
@@ -57,7 +57,7 @@ export function styled<Cmp extends Component<WithOptionalClasses<any, any>>>(
     // Iterate over each found key, extract its value from both class maps and merge into a single
     // array.
     const mergedClasses = createMemo(() => {
-      return keys().reduce<StyledClasses<Cmp>>((acc, key) => {
+      return keys().reduce<StyledClasses<Props>>((acc, key) => {
         (acc as any)[key] = [
           ...formatClasses((merged.classes as any)[key]),
           ...formatClasses(classes[key]),
@@ -67,7 +67,7 @@ export function styled<Cmp extends Component<WithOptionalClasses<any, any>>>(
     });
 
     return <Component {...props} classes={mergedClasses()}/>;
-  }) as Cmp;
+  }) as Component<Props>;
 
   Object.defineProperty(Wrapped, 'name', {
     value: options.name || `Styled${Component.name}`,
