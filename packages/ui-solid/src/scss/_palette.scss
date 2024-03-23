@@ -78,3 +78,7 @@ $colors: map-merge($native-colors, $additional-colors);
 
   @return var($css-var-name, var(create-css-var($fallback-color-name), #{$light}));
 }
+
+@function refer-bem-css-var($block, $element, $fallback-color-name) {
+  @return refer-css-var(--#{$block}-#{$element}, $fallback-color-name)
+}
