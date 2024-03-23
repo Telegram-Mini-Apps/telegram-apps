@@ -1,41 +1,14 @@
-import type { WithComponentProps } from '~/components/types.js';
+import type { Component } from 'solid-js';
+
+import type { WithConfig } from '~/components/types.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
-import type { WithComponentProp } from '~/types/components.js';
-
-/**
- * Typography variant.
- */
-export type TypographyVariant =
-  | 'large-title'
-  | 'title1'
-  | 'title2'
-  | 'title3'
-  | 'headline'
-  | 'text'
-  | 'subheadline1'
-  | 'subheadline2'
-  | 'caption1'
-  | 'caption2';
-
-/**
- * HTML tags allowed to be used in the component.
- */
-export type TypographyComponent =
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'h6'
-  | 'div'
-  | 'span'
-  | 'p'
-  | 'label';
+import type { JSXElement, JSXIntrinsicElementAttrs } from '~/types/jsx.js';
+import type { RequiredBy } from '~/types/utils.js';
 
 /**
  * Component properties, having defaults.
  */
-interface PropsWithDefaults extends WithComponentProps {
+interface WithDefaults {
   /**
    * Should component use monospace font.
    * @default false
@@ -54,7 +27,22 @@ interface PropsWithDefaults extends WithComponentProps {
 }
 
 /**
- * Font weight.
+ * Typography variant.
+ */
+export type TypographyVariant =
+  | 'large-title'
+  | 'title1'
+  | 'title2'
+  | 'title3'
+  | 'headline'
+  | 'text'
+  | 'subheadline1'
+  | 'subheadline2'
+  | 'caption1'
+  | 'caption2';
+
+/**
+ * Typography font weight.
  */
 export type TypographyWeight = 'regular' | 'semibold' | 'bold';
 
@@ -64,16 +52,24 @@ export type TypographyWeight = 'regular' | 'semibold' | 'bold';
 export type TypographyElementKey = 'root';
 
 /**
- * Typography component properties passed to the classes hooks.
+ * Properties passed to the Typography children in case, it represents a component.
  */
-export type TypographyClassesProps<Cmp extends TypographyComponent> =
-  & Required<PropsWithDefaults>
-  & WithComponentProp<Cmp, 'p'>;
+export interface TypographyChildrenProps {
+  class?: string;
+}
 
 /**
  * Typography component public properties.
  */
-export type TypographyProps<Cmp extends TypographyComponent> =
-  & PropsWithDefaults
-  & WithOptionalClasses<TypographyElementKey, TypographyClassesProps<Cmp>>
-  & WithComponentProp<Cmp, 'p'>;
+export interface TypographyProps
+  extends Omit<JSXIntrinsicElementAttrs<'p'>, 'children'>,
+    WithConfig,
+    WithDefaults,
+    WithOptionalClasses<TypographyElementKey, TypographyProps> {
+  children?: JSXElement | Component<TypographyChildrenProps>;
+}
+
+/**
+ * Typography component properties passed to the classes hooks.
+ */
+export type TypographyClassesProps = RequiredBy<TypographyProps, keyof WithDefaults>;
