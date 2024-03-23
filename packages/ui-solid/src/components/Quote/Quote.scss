@@ -1,0 +1,29 @@
+@use "../../scss/palette" as palette;
+
+$block: "tgui-quote";
+
+.#{$block} {
+  --accent-color: #{palette.refer-bem-css-var($block, "cursor-color", "link-color")};
+  border-radius: 4px;
+  padding: 6px 28px 8px 12px;
+  overflow: hidden;
+  position: relative;
+  background-color: palette.refer-bem-css-var($block, "bg-color", "secondary-fill");;
+
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background-color: var(--accent-color);
+  }
+
+  &__icon {
+    color: var(--accent-color);
+    position: absolute;
+    top: 6px;
+    right: 6px;
+  }
+}
