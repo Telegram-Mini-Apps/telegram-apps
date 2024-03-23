@@ -3,14 +3,10 @@ import type { Meta, StoryObj } from 'storybook-solidjs';
 
 import { getClassesArgType } from '../../../.storybook/utils.js';
 
-import { Typography as Component } from './Typography.js';
-import type {
-  TypographyComponent,
-  TypographyVariant,
-  TypographyWeight,
-} from './Typography.types.js';
+import { Typography } from './Typography.js';
+import type { TypographyVariant, TypographyWeight } from './Typography.types.js';
 
-type StoryComponent = typeof Component;
+type StoryComponent = typeof Typography;
 type Story = StoryObj<StoryComponent>;
 
 const variants: TypographyVariant[] = [
@@ -32,45 +28,28 @@ const weights: TypographyWeight[] = [
   'bold',
 ];
 
-const components: TypographyComponent[] = [
-  'h1',
-  'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
-  'div',
-  'span',
-  'p',
-];
-
 const meta: Meta<StoryComponent> = {
   title: 'Typography',
-  component: Component,
+  component: Typography,
   tags: ['autodocs'],
 };
 
 export default meta;
 
 export const Playground: Story = {
-  render: Component,
+  render: Typography,
   args: {
     children: 'Telegram Mini Apps is awesome',
-    component: 'p',
     monospace: false,
     variant: 'text',
     weight: 'regular',
   },
   argTypes: {
     children: {
-      description: 'Content to place inside the component',
+      description: 'Content to place inside the component. Could either be a Solid component or JSXElement.\n\n'
+        + 'In case, Solid component is passed, all passed intrinsic attributes excluding the `class` property will be ignored. The Solid component will receive computed `class` property.\n\n'
+        + '_By default, the component renders the `p` HTML tag._',
       control: 'text',
-    },
-    component: {
-      description: 'HTML tag name.',
-      control: 'select',
-      options: components,
-      defaultValue: { summary: 'p' },
     },
     monospace: {
       description: 'Use monospace font.',
@@ -108,18 +87,38 @@ export const Preview: Story = {
           <div style={{ 'margin-bottom': '48px' }}>
             <For each={weights}>
               {(typographyWeight) => (
-                <Component
+                <Typography
                   variant={typographyType}
                   weight={typographyWeight}
                   style={{ margin: '0 0 12px' }}
                 >
                   {formatValue(typographyType)}&nbsp;·&nbsp;{formatValue(typographyWeight)}
-                </Component>
+                </Typography>
               )}
             </For>
           </div>
         )}
       </For>
+    );
+  },
+};
+
+export const CustomComponent: Story = {
+  render: () => {
+    return (
+      <Typography
+        variant={'title1'}
+        weight={'bold'}
+        // This style attribute will be ignored. Using custom components, specify attributes
+        // directly in the returned JSX element.
+        style={{ color: 'red' }}
+      >
+        {(props) => (
+          <h1 class={props.class}>
+            This content is wrapped into <code>h1</code> HTML tag.
+          </h1>
+        )}
+      </Typography>
     );
   },
 };

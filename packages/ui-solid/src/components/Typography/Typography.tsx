@@ -1,14 +1,14 @@
-import type { JSXElement } from 'solid-js';
+import { mergeProps, createMemo } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
-import { mergeWithConfigDefaults } from '~/components/utils.js';
-import { sanitizeProps } from '~/helpers/sanitizeProps.js';
+import { sanitizeConfig } from '~/helpers/sanitizeConfig.js';
 import { withConfig } from '~/hocs/withConfig.js';
 import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
+import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
 
-import type { TypographyComponent, TypographyProps } from './Typography.types.js';
+import type { TypographyChildrenProps, TypographyProps } from './Typography.types.js';
 
 import './Typography.scss';
 
@@ -19,29 +19,35 @@ const block = new BemBlockClassNames('tgui-typography');
  * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-Library?type=design&node-id=216-1907&mode=design&t=nUrQwsUgG6ktNuOf-0
  */
 export const Typography = withConfig(
-  styled((props: TypographyProps<TypographyComponent>) => {
-    const merged = mergeWithConfigDefaults({
+  styled((props: TypographyProps) => {
+    const merged = mergeProps({
       variant: 'text',
       weight: 'regular',
-      component: 'p',
       monospace: false,
     } as const, props);
-    const sanitized = sanitizeProps(
-      merged,
-      'component',
-      'variant',
-      'weight',
-      'platform',
-      'colorScheme',
-      'classes',
-      'monospace',
-    );
     const classes = createClasses(merged);
+
+    // Compute dynamic component.
+    const component = createMemo(() => {
+      return typeof merged.children === 'function' ? merged.children : 'p';
+    });
+
+    // Compute dynamic component properties.
+    const componentProps = createMemo<
+      Omit<TypographyChildrenProps | JSXIntrinsicElementAttrs<'p'>, 'class'>
+    >(() => {
+      return typeof component() === 'function'
+        // Custom component function was passed. In this case, we should pick specific properties
+        // and pass them to the custom component.
+        ? {}
+        // Otherwise, we are rendering 'p' tag and should just sanitize properties.
+        : mergeProps(sanitizeConfig(merged, ['variant', 'weight', 'monospace']));
+    });
 
     return (
       <Dynamic
-        {...sanitized}
-        component={merged.component}
+        {...componentProps()}
+        component={component()}
         class={classes().root}
       />
     );
@@ -57,4 +63,4 @@ export const Typography = withConfig(
       ],
     }),
   }),
-) as <Cmp extends TypographyComponent>(props: TypographyProps<Cmp>) => JSXElement;
+);
