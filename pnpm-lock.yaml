@@ -125,9 +125,9 @@ importers:
       eslint-import-resolver-typescript:
         specifier: ^3.6.1
         version: 3.6.1(@typescript-eslint/parser@7.2.0)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
-      eslint-plugin-import:
-        specifier: ^2.29.1
-        version: 2.29.1(@typescript-eslint/parser@7.2.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-plugin-simple-import-sort:
+        specifier: ^12.0.0
+        version: 12.0.0(eslint@8.57.0)
       eslint-plugin-solid:
         specifier: ^0.13.0
         version: 0.13.0(eslint@8.57.0)(typescript@5.4.2)
@@ -6934,6 +6934,14 @@ packages:
       resolve: 2.0.0-next.5
       semver: 6.3.1
       string.prototype.matchall: 4.0.10
+    dev: false
+
+  /eslint-plugin-simple-import-sort@12.0.0(eslint@8.57.0):
+    resolution: {integrity: sha512-8o0dVEdAkYap0Cn5kNeklaKcT1nUsa3LITWEuFk3nJifOoD+5JQGoyDUW2W/iPWwBsNBJpyJS9y4je/BgxLcyQ==}
+    peerDependencies:
+      eslint: '>=5.0.0'
+    dependencies:
+      eslint: 8.57.0
     dev: false
 
   /eslint-plugin-solid@0.13.0(eslint@8.57.0)(typescript@5.4.2):
