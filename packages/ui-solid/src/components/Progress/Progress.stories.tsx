@@ -18,6 +18,9 @@ export default meta;
 
 export const Playground: Story = {
   render: Progress,
+  args: {
+    value: 0.6,
+  },
   argTypes: {
     value: {
       description: 'Current progress value.',
