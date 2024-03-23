@@ -1,3 +1,5 @@
+@use "../../scss/palette" as palette;
+
 @function _create-variant($font-size, $platforms-settings) {
   $result: (
     "font-size": $font-size
@@ -59,7 +61,6 @@ $variants: (
   )),
 );
 
-// todo: Better fonts?
 $fonts: (
   "base": (
     "default": #{"Roboto", sans-serif},
@@ -109,7 +110,7 @@ $weights: (
     @each $platform in ["base", "ios"] {
       $platform-settings: map-get($variant-settings, $platform);
 
-      &-#{$platform}--#{$variant} {
+      &--#{$platform}-#{$variant} {
         line-height: map-get($platform-settings, "line-height");
         letter-spacing: map-get($platform-settings, "letter-spacing");
       }
