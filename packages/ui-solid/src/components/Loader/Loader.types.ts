@@ -1,26 +1,14 @@
-import type { WithComponentProps } from '~/components/types.js';
-import type { WithOptionalClasses } from '~/styles/types.js';
 import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
 import type { RequiredBy } from '~/types/utils.js';
 
-/**
- * Allowed loader size.
- */
-export type LoaderSize = 'sm' | 'md' | 'lg';
+import type { WithOptionalClasses } from '~/styles/types.js';
+
+import type { WithConfig } from '~/components/types.js';
 
 /**
- * List of component element keys.
+ * Component properties, having defaults.
  */
-export type LoaderElementKey =
-  | 'root'
-  | 'iosLine'
-  | 'androidContainer'
-  | 'androidCircle';
-
-/**
- * List of components properties, which have defaults.
- */
-export interface LoaderPropsDefaults extends WithComponentProps {
+export interface LoaderDefaults {
   /**
    * Loader size.
    * @default 'md'
@@ -29,12 +17,30 @@ export interface LoaderPropsDefaults extends WithComponentProps {
 }
 
 /**
- * Properties, which are passed to classes resolvers.
+ * Loader size.
  */
-export interface LoaderClassesProps extends RequiredBy<LoaderProps, keyof LoaderPropsDefaults> {
-}
+export type LoaderSize = 'sm' | 'md' | 'lg';
 
+/**
+ * List of component element keys allowed to be modified.
+ */
+export type LoaderElementKey =
+  | 'root'
+  | 'iosLine'
+  | 'androidContainer'
+  | 'androidCircle';
+
+/**
+ * Loader component public properties.
+ */
 export interface LoaderProps extends JSXIntrinsicElementAttrs<'div'>,
   WithOptionalClasses<LoaderElementKey, LoaderClassesProps>,
-  LoaderPropsDefaults {
+  WithConfig,
+  LoaderDefaults {
+}
+
+/**
+ * Loader component properties passed to the classes hooks.
+ */
+export interface LoaderClassesProps extends RequiredBy<LoaderProps, keyof LoaderDefaults> {
 }

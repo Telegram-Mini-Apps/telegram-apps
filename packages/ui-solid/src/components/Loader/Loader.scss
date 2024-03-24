@@ -1,35 +1,51 @@
 @use "../../scss/palette" as palette;
 
-@function _create-base-settings($width, $stroke-width, $strokes0, $strokes50, $strokes100) {
-  @return (
-    "width": $width,
-    "stroke-width": $stroke-width,
+$base-settings: (
+  "sm": (
+    "width": 18px,
+    "stroke-width": 2.5px,
     "strokes": (
-      "0%": $strokes0,
-      "50%": $strokes50,
-      "100%": $strokes100,
+      "0%": [#{1, 56}, 0],
+      "50%": [#{43, 56}, -15],
+      "100%": [#{43, 56}, -56],
+    )
+  ),
+  "md": (
+    "width": 36px,
+    "stroke-width": 3.5px,
+    "strokes": (
+      "0%": [#{1, 112}, 0],
+      "50%": [#{89, 112}, -25],
+      "100%": [#{89, 112}, -112],
+    )
+  ),
+  "lg": (
+    "width": 44px,
+    "stroke-width": 4px,
+    "strokes": (
+      "0%": [#{1, 138}, 0],
+      "50%": [#{100, 138}, -40],
+      "100%": [#{100, 138}, -138],
     )
   )
-}
-
-$base-settings: (
-  "sm": _create-base-settings(18px, 2.5px, [#{1, 56}, 0], [#{43, 56}, -15], [#{43, 56}, -56]),
-  "md": _create-base-settings(36px, 3.5px, [#{1, 112}, 0], [#{89, 112}, -25], [#{89, 112}, -112]),
-  "lg": _create-base-settings(44px, 4px, [#{1, 138}, 0], [#{100, 138}, -40], [#{100, 138}, -138]),
 );
 
-@function _create-ios-size($root-size, $line-width, $line-height) {
-  @return (
-    "root": $root-size,
-    "line-width": $line-width,
-    "line-height": $line-height
-  )
-}
-
 $ios-sizes: (
-  "sm": _create-ios-size(24px, 2px, 5px),
-  "md": _create-ios-size(28px, 2.5px, 6.3px),
-  "lg": _create-ios-size(32px, 3.3px, 7.5px),
+  "sm": (
+    "root": 24px,
+    "line-width": 2px,
+    "line-height": 7px
+  ),
+  "md": (
+    "root": 28px,
+    "line-width": 2.5px,
+    "line-height": 7.8px
+  ),
+  "lg": (
+    "root": 32px,
+    "line-width": 3px,
+    "line-height": 9px
+  )
 );
 
 $block: "tgui-loader";
@@ -39,7 +55,7 @@ $block: "tgui-loader";
   aspect-ratio: 1;
 
   &--base {
-    color: palette.refer-css-var(--#{$block}-base-color, "link-color");
+    color: palette.refer-bem-css-var($block, "base-color", "link-color");
     stroke: currentColor;
     stroke-linecap: round;
 
@@ -70,7 +86,7 @@ $block: "tgui-loader";
     display: flex;
     justify-content: center;
     align-items: center;
-    color: palette.refer-css-var(--#{$block}-ios-color, "hint-color");
+    color: palette.refer-bem-css-var($block, "ios-color", "hint-color");
 
     @each $size-type, $size-settings in $ios-sizes {
       &-#{$size-type} {
@@ -107,6 +123,9 @@ $block: "tgui-loader";
 @keyframes #{$block}-ios-fade {
   0% {
     opacity: 1
+  }
+  44% {
+    opacity: 1;
   }
   100% {
     opacity: .1

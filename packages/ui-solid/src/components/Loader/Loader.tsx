@@ -1,36 +1,30 @@
-import { For, Show } from 'solid-js';
+import { For, mergeProps, Show } from 'solid-js';
 
-import { mergeWithConfigDefaults } from '~/components/utils.js';
-import { sanitizeProps } from '~/helpers/sanitizeProps.js';
+import { sanitizeCommon } from '~/helpers/sanitizeCommon.js';
 import { withConfig } from '~/hocs/withConfig.js';
+
 import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
 
-import type { LoaderProps } from './Loader.types.js';
+import type { LoaderDefaults, LoaderProps } from './Loader.types.js';
 
 import './Loader.scss';
 
 const block = new BemBlockClassNames('tgui-loader');
 
 /**
- * Component used to display a pending process.
  * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-Library?type=design&node-id=216-2847&mode=design&t=5uMXzbr5N7vuFjxS-0
  */
 export const Loader = withConfig(
   styled((props: LoaderProps) => {
-    const merged = mergeWithConfigDefaults({ size: 'md' } as const, props);
-    const sanitized = sanitizeProps(
-      merged,
-      'size',
-      'colorScheme',
-      'platform',
-      'classes',
-    );
+    const merged = mergeProps({
+      size: 'md',
+    } satisfies Required<LoaderDefaults>, props);
     const classes = createClasses(merged);
 
     return (
-      <div {...sanitized} class={classes().root}>
+      <div {...sanitizeCommon(merged, ['size'])} class={classes().root}>
         <Show
           when={merged.platform === 'ios'}
           fallback={
@@ -63,8 +57,8 @@ export const Loader = withConfig(
     }),
     androidCircle: block.elem('android-circle').calc(),
     androidContainer: block.elem('android-container').calc(),
-    iosLine: (props) => {
-      return block.elem('ios-line').calc({ mods: props.size });
-    },
+    iosLine: (props) => block.elem('ios-line').calc({
+      mods: props.size,
+    }),
   }),
 );

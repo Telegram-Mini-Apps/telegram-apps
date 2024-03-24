@@ -4,7 +4,6 @@ import type { Meta, StoryObj } from 'storybook-solidjs';
 import type { Platform } from '~/types/known.js';
 
 import { getClassesArgType } from '../../../.storybook/utils.js';
-
 import { Loader as Component } from './Loader.js';
 import type { LoaderSize } from './Loader.types.js';
 
@@ -46,7 +45,6 @@ export const Playground: Story = {
 
 export const Preview: Story = {
   render() {
-    const sizes: LoaderSize[] = ['sm', 'md', 'lg'];
     const platforms: Platform[] = ['base', 'ios'];
 
     return (
