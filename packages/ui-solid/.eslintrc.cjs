@@ -16,8 +16,12 @@ module.exports = {
         [/^@?\w/.source],
 
         // Tsconfig alias.
+        // ~/helpers
+        [/^~\/(?!components|icons|styles)/.source],
+
+        // Styles utils.
         // ~/styles
-        [/^~\/(?!components|icons)/.source],
+        [/^~\/styles/.source],
 
         // Components and icons.
         // ~/components
