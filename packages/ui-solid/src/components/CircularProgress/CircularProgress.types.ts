@@ -1,12 +1,24 @@
-import type { WithComponentProps } from '~/components/types.js';
-import type { WithOptionalClasses } from '~/styles/types.js';
 import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
 import type { RequiredBy } from '~/types/utils.js';
+
+import type { WithOptionalClasses } from '~/styles/types.js';
+
+import type { WithConfig } from '~/components/types.js';
+
+/**
+ * Allowed component size.
+ */
+export type CircularProgressSize = 'sm' | 'md' | 'lg';
+
+/**
+ * CircularProgress component element keys allowed to be customized.
+ */
+export type CircularProgressElementKey = 'root' | 'background' | 'fill';
 
 /**
  * Component properties, having defaults.
  */
-interface PropsWithDefaults extends WithComponentProps {
+export interface CircularProgressDefaults {
   /**
    * Component size.
    * @default 'md'
@@ -25,30 +37,18 @@ interface PropsWithDefaults extends WithComponentProps {
 }
 
 /**
- * Allowed component size.
+ * CircularProgress component public properties.
  */
-export type CircularProgressSize = 'sm' | 'md' | 'lg';
-
-/**
- * Properties shared between classes and public component props.
- */
-type SharedProps =
-  & JSXIntrinsicElementAttrs<'svg'>
-  & PropsWithDefaults;
-
-/**
- * CircularProgress component element keys allowed to be customized.
- */
-export type CircularProgressElementKey = 'root' | 'background' | 'fill';
+export interface CircularProgressProps
+  extends JSXIntrinsicElementAttrs<'svg'>,
+    WithConfig,
+    CircularProgressDefaults,
+    WithOptionalClasses<CircularProgressElementKey, CircularProgressClassesProps> {
+}
 
 /**
  * CircularProgress component properties passed to the classes hooks.
  */
-export type CircularProgressClassesProps = RequiredBy<SharedProps, keyof PropsWithDefaults>;
-
-/**
- * CircularProgress component public properties.
- */
-export type CircularProgressProps =
-  & SharedProps
-  & WithOptionalClasses<CircularProgressElementKey, CircularProgressClassesProps>;
+export interface CircularProgressClassesProps
+  extends RequiredBy<CircularProgressProps, keyof CircularProgressDefaults> {
+}

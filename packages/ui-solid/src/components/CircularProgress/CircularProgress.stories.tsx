@@ -4,7 +4,6 @@ import type { Meta, StoryObj } from 'storybook-solidjs';
 import type { CircularProgressSize } from '~/components/CircularProgress/CircularProgress.types.js';
 
 import { getClassesArgType } from '../../../.storybook/utils.js';
-
 import { CircularProgress } from './CircularProgress.js';
 
 type StoryComponent = typeof CircularProgress;
@@ -24,6 +23,7 @@ export const Playground: Story = {
   render: CircularProgress,
   args: {
     size: 'md',
+    value: 0.33,
   },
   argTypes: {
     value: {

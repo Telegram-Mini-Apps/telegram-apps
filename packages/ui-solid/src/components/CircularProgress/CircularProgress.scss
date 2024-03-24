@@ -23,6 +23,7 @@ $block: "tgui-circular-progress";
   fill: transparent;
   overflow: visible;
   transform: rotate3d(0, 0, 1, -90deg);
+  stroke: currentColor;
 
   @each $size-type, $size-settings in $sizes {
     &--#{$size-type} {
@@ -32,12 +33,11 @@ $block: "tgui-circular-progress";
   }
 
   &__background {
-    color: palette.refer-css-var(--#{$block}-value-color, "secondary-fill");
+    color: palette.refer-bem-css-var($block, "bg-color", "secondary-fill");
   }
 
   &__fill {
-    color: palette.refer-css-var(--#{$block}-value-color, "link-color");
-    stroke: currentColor;
+    color: palette.refer-bem-css-var($block, "value-color", "link-color");
     transition: stroke-dasharray, 100ms ease-in-out;
     stroke: {
       linecap: round;

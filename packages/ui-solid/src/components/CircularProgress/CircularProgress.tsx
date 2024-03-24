@@ -1,14 +1,14 @@
 import { isRecord } from '@tma.js/sdk';
-import { createMemo } from 'solid-js';
+import { createMemo, mergeProps } from 'solid-js';
 
-import { mergeWithConfigDefaults } from '~/components/utils.js';
-import { sanitizeProps } from '~/helpers/sanitizeProps.js';
+import { sanitizeCommon } from '~/helpers/sanitizeCommon.js';
 import { withConfig } from '~/hocs/withConfig.js';
+
 import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
 
-import type { CircularProgressProps } from './CircularProgress.types.js';
+import type { CircularProgressDefaults, CircularProgressProps } from './CircularProgress.types.js';
 
 import './CircularProgress.scss';
 
@@ -21,20 +21,18 @@ export const CircularProgress = withConfig(
   styled((props: CircularProgressProps) => {
     const merged = createMemo(() => {
       const max = !props.max || props.max <= 0 ? 1 : props.max;
-      const value = Math.min(max, Math.max(0, props.value || 0));
 
-      return mergeWithConfigDefaults({ size: 'md' } as const, props, { max, value });
+      return mergeProps(
+        {
+          size: 'md',
+        } satisfies Omit<Required<CircularProgressDefaults>, 'max' | 'value'>,
+        props,
+        {
+          max,
+          value: Math.min(max, Math.max(0, props.value || 0)),
+        },
+      );
     });
-
-    const sanitized = () => sanitizeProps(
-      merged(),
-      'size',
-      'colorScheme',
-      'platform',
-      'classes',
-      'max',
-      'value',
-    );
     const classes = createClasses(merged);
 
     const style = () => {
@@ -52,7 +50,7 @@ export const CircularProgress = withConfig(
 
     return (
       <svg
-        {...sanitized()}
+        {...sanitizeCommon(merged(), ['size', 'max', 'value'])}
         class={classes().root}
         style={style()}
       >
