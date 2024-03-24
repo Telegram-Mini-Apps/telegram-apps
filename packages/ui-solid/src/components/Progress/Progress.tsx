@@ -1,6 +1,6 @@
-import { mergeWithConfigDefaults } from '~/components/utils.js';
-import { sanitizeProps } from '~/helpers/sanitizeProps.js';
+import { sanitizeCommon } from '~/helpers/sanitizeCommon.js';
 import { withConfig } from '~/hocs/withConfig.js';
+
 import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
@@ -16,12 +16,10 @@ const block = new BemBlockClassNames('tgui-progress');
  */
 export const Progress = withConfig(
   styled((props: ProgressProps) => {
-    const merged = mergeWithConfigDefaults(props);
-
     return (
       <progress
-        {...sanitizeProps(merged, 'platform', 'colorScheme', 'classes')}
-        class={createClasses(merged)().root}
+        {...sanitizeCommon(props, ['platform'])}
+        class={createClasses(props)().root}
       />
     );
   }, {
