@@ -10,7 +10,7 @@ import type { WithConfig } from '~/components/types.js';
 /**
  * Component properties, having defaults.
  */
-interface WithDefaults {
+export interface TypographyDefaults {
   /**
    * Should component use monospace font.
    * @default false
@@ -65,7 +65,7 @@ export interface TypographyComponentProps {
  */
 export interface TypographyCustomProps
   extends WithConfig,
-    WithDefaults,
+    TypographyDefaults,
     WithOptionalClasses<TypographyElementKey, TypographyCustomClassesProps> {
   /**
    * Component which should be rendered by the Typography component.
@@ -78,7 +78,7 @@ export interface TypographyCustomProps
  * Typography.Custom component properties passed to the classes hooks.
  */
 export interface TypographyCustomClassesProps
-  extends RequiredBy<TypographyCustomProps, keyof WithDefaults> {
+  extends RequiredBy<TypographyCustomProps, keyof TypographyDefaults> {
 
 }
 
@@ -88,12 +88,12 @@ export interface TypographyCustomClassesProps
 export interface TypographyProps
   extends JSXIntrinsicElementAttrs<'p'>,
     WithConfig,
-    WithDefaults,
+    TypographyDefaults,
     WithOptionalClasses<TypographyElementKey, TypographyClassesProps> {
 }
 
 /**
  * Typography component properties passed to the classes hooks.
  */
-export interface TypographyClassesProps extends RequiredBy<TypographyProps, keyof WithDefaults> {
+export interface TypographyClassesProps extends RequiredBy<TypographyProps, keyof TypographyDefaults> {
 }

@@ -14,6 +14,7 @@ import type { WithOptionalClasses } from '~/styles/types.js';
 import type {
   TypographyComponentProps,
   TypographyCustomProps,
+  TypographyDefaults,
   TypographyElementKey,
   TypographyProps,
 } from './Typography.types.js';
@@ -35,7 +36,7 @@ export const TypographyCore = withConfig(
       variant: 'text',
       weight: 'regular',
       monospace: false,
-    } as const, props);
+    } satisfies Required<TypographyDefaults>, props);
     const classes = createClasses(merged);
     const component = createMemo(() => merged.component || 'p');
     const computedProps = createMemo<
