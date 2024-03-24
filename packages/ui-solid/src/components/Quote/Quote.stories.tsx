@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from 'storybook-solidjs';
 
 import { getClassesArgType } from '../../../.storybook/utils.js';
-
 import { Quote } from './Quote.js';
 
 type StoryComponent = typeof Quote;
@@ -28,4 +27,3 @@ export const Playground: Story = {
     classes: getClassesArgType('root'),
   },
 };
-

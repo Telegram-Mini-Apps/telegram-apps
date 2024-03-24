@@ -1,6 +1,8 @@
-import type { WithConfig } from '~/components/types.js';
-import type { WithOptionalClasses } from '~/styles/types.js';
 import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
+
+import type { WithOptionalClasses } from '~/styles/types.js';
+
+import type { WithConfig } from '~/components/types.js';
 
 /**
  * Quote component element keys allowed to be customized.
