@@ -1,9 +1,11 @@
 import type { Component } from 'solid-js';
 
-import type { WithConfig } from '~/components/types.js';
-import type { WithOptionalClasses } from '~/styles/types.js';
-import type { JSXElement, JSXIntrinsicElementAttrs } from '~/types/jsx.js';
+import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
 import type { RequiredBy } from '~/types/utils.js';
+
+import type { WithOptionalClasses } from '~/styles/types.js';
+
+import type { WithConfig } from '~/components/types.js';
 
 /**
  * Component properties, having defaults.
@@ -54,22 +56,44 @@ export type TypographyElementKey = 'root';
 /**
  * Properties passed to the Typography children in case, it represents a component.
  */
-export interface TypographyChildrenProps {
+export interface TypographyComponentProps {
   class?: string;
+}
+
+/**
+ * Typography.Custom component properties.
+ */
+export interface TypographyCustomProps
+  extends WithConfig,
+    WithDefaults,
+    WithOptionalClasses<TypographyElementKey, TypographyCustomClassesProps> {
+  /**
+   * Component which should be rendered by the Typography component.
+   */
+  component: Component<TypographyComponentProps>;
+  class?: string;
+}
+
+/**
+ * Typography.Custom component properties passed to the classes hooks.
+ */
+export interface TypographyCustomClassesProps
+  extends RequiredBy<TypographyCustomProps, keyof WithDefaults> {
+
 }
 
 /**
  * Typography component public properties.
  */
 export interface TypographyProps
-  extends Omit<JSXIntrinsicElementAttrs<'p'>, 'children'>,
+  extends JSXIntrinsicElementAttrs<'p'>,
     WithConfig,
     WithDefaults,
-    WithOptionalClasses<TypographyElementKey, TypographyProps> {
-  children?: JSXElement | Component<TypographyChildrenProps>;
+    WithOptionalClasses<TypographyElementKey, TypographyClassesProps> {
 }
 
 /**
  * Typography component properties passed to the classes hooks.
  */
-export type TypographyClassesProps = RequiredBy<TypographyProps, keyof WithDefaults>;
+export interface TypographyClassesProps extends RequiredBy<TypographyProps, keyof WithDefaults> {
+}

@@ -1,8 +1,7 @@
-import { For } from 'solid-js';
+import { For, splitProps } from 'solid-js';
 import type { Meta, StoryObj } from 'storybook-solidjs';
 
 import { getClassesArgType } from '../../../.storybook/utils.js';
-
 import { Typography } from './Typography.js';
 import type { TypographyVariant, TypographyWeight } from './Typography.types.js';
 
@@ -46,11 +45,13 @@ export const Playground: Story = {
   },
   argTypes: {
     children: {
-      description: 'Content to place inside the component. Could either be a Solid component or JSXElement.\n\n'
-        + 'In case, Solid component is passed, all passed intrinsic attributes excluding the `class` property will be ignored. The Solid component will receive computed `class` property.\n\n'
-        + '_By default, the component renders the `p` HTML tag._',
+      description: 'Content to place inside the component.',
       control: 'text',
     },
+    // component: {
+    //   description: 'Component, which could be used to override the returned content. If passed, all passed intrinsic attributes excluding the `class` property will be ignored. The Solid component will receive computed `class` and `children` properties.\n\n'
+    //     + '_By default the component renders the `p` HTML tag._',
+    // },
     monospace: {
       description: 'Use monospace font.',
       control: { type: 'boolean' },
@@ -69,6 +70,24 @@ export const Playground: Story = {
       defaultValue: { summary: 'regular' },
     },
     classes: getClassesArgType('root'),
+  },
+};
+
+export const CustomComponent: Story = {
+  ...Playground,
+  render(props) {
+    const [picked] = splitProps(props, ['weight', 'variant', 'monospace']);
+
+    return (
+      <Typography.Custom
+        {...picked}
+        component={(typographyProps) => (
+          <h1 {...typographyProps}>
+            {props.children}
+          </h1>
+        )}
+      />
+    );
   },
 };
 
@@ -99,26 +118,6 @@ export const Preview: Story = {
           </div>
         )}
       </For>
-    );
-  },
-};
-
-export const CustomComponent: Story = {
-  render: () => {
-    return (
-      <Typography
-        variant={'title1'}
-        weight={'bold'}
-        // This style attribute will be ignored. Using custom components, specify attributes
-        // directly in the returned JSX element.
-        style={{ color: 'red' }}
-      >
-        {(props) => (
-          <h1 class={props.class}>
-            This content is wrapped into <code>h1</code> HTML tag.
-          </h1>
-        )}
-      </Typography>
     );
   },
 };
