@@ -11,6 +11,7 @@ $block: "tgui-progress";
   &::-webkit-progress-value {
     background-color: palette.refer-bem-css-var($block, "value-color", "link-color");
     border-radius: 1000px;
+    transition: width 100ms ease-in-out;
   }
 
   &--ios::-webkit-progress-bar {
