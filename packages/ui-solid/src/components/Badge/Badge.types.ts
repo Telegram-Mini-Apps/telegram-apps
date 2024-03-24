@@ -1,22 +1,14 @@
-import type { WithComponentProps } from '~/components/types.js';
-import type { WithOptionalClasses } from '~/styles/types.js';
 import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
 import type { RequiredBy } from '~/types/utils.js';
 
-/**
- * Known Badge sizes.
- */
-export type BadgeSize = 'dot' | 'sm' | 'lg';
+import type { WithOptionalClasses } from '~/styles/types.js';
 
-/**
- * Known Badge variant.
- */
-export type BadgeVariant = 'default' | 'critical' | 'secondary' | 'gray' | 'white';
+import type { WithConfig } from '~/components/types.js';
 
 /**
  * Component properties, having defaults.
  */
-interface PropsWithDefaults extends WithComponentProps {
+export interface BadgeDefaults {
   /**
    * Badge size.
    * @default 'sm'
@@ -30,11 +22,14 @@ interface PropsWithDefaults extends WithComponentProps {
 }
 
 /**
- * Properties shared between classes and public component props.
+ * Known Badge sizes.
  */
-type SharedProps =
-  & JSXIntrinsicElementAttrs<'span'>
-  & PropsWithDefaults;
+export type BadgeSize = 'dot' | 'sm' | 'lg';
+
+/**
+ * Known Badge variant.
+ */
+export type BadgeVariant = 'default' | 'critical' | 'secondary' | 'gray' | 'white';
 
 /**
  * Badge component element keys allowed to be customized.
@@ -42,13 +37,17 @@ type SharedProps =
 export type BadgeElementKey = 'root';
 
 /**
- * Badge component properties passed to the classes hooks.
- */
-export type BadgeClassesProps = RequiredBy<SharedProps, keyof PropsWithDefaults>;
-
-/**
  * Badge component public properties.
  */
-export type BadgeProps =
-  & SharedProps
-  & WithOptionalClasses<BadgeElementKey, BadgeClassesProps>;
+export interface BadgeProps
+  extends JSXIntrinsicElementAttrs<'span'>,
+    WithConfig,
+    BadgeDefaults,
+    WithOptionalClasses<BadgeElementKey, BadgeClassesProps> {
+}
+
+/**
+ * Badge component properties passed to the classes hooks.
+ */
+export interface BadgeClassesProps extends RequiredBy<BadgeProps, keyof BadgeDefaults> {
+}

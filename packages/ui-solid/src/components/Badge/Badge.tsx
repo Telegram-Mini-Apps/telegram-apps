@@ -1,14 +1,16 @@
-import { Show } from 'solid-js';
+import { mergeProps, Show } from 'solid-js';
 
-import { Typography } from '~/components/Typography/Typography.js';
-import { mergeWithConfigDefaults } from '~/components/utils.js';
-import { sanitizeProps } from '~/helpers/sanitizeProps.js';
+import { sanitizeCommon } from '~/helpers/sanitizeCommon.js';
 import { withConfig } from '~/hocs/withConfig.js';
+
 import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
 
-import type { BadgeProps } from './Badge.types.js';
+import { Typography } from '~/components/Typography/Typography.js';
+
+import type { BadgeDefaults, BadgeProps } from './Badge.types.js';
+
 import './Badge.scss';
 
 const block = new BemBlockClassNames('tgui-badge');
@@ -18,36 +20,30 @@ const block = new BemBlockClassNames('tgui-badge');
  */
 export const Badge = withConfig(
   styled((props: BadgeProps) => {
-    const merged = mergeWithConfigDefaults({
+    const merged = mergeProps({
       size: 'sm',
       variant: 'default',
-    } as const, props);
+    } satisfies Required<BadgeDefaults>, props);
     const classes = createClasses(merged);
-    const sanitized = () => {
-      const keys: (keyof BadgeProps)[] = ['platform', 'colorScheme', 'classes', 'size', 'variant'];
-
-      // Dot variant cannot display any children.
-      if (merged.size === 'dot') {
-        keys.push('children');
-      }
-
-      return sanitizeProps(merged, ...keys);
-    };
 
     return (
       <Show
         when={merged.size !== 'dot'}
-        fallback={<span {...sanitized()} class={classes().root}/>}
+        fallback={(
+          <span
+            {...sanitizeCommon(merged, ['size', 'variant', 'children'])}
+            class={classes().root}
+          />
+        )}
       >
-        <Typography
-          {...sanitized()}
-          component="span"
+        <Typography.Custom
           class={classes().root}
+          component={(typoProps) => (
+            <span {...sanitizeCommon(merged, ['size', 'variant'])} {...typoProps}/>
+          )}
           variant={merged.size === 'sm' ? 'caption1' : 'subheadline2'}
-          weight={merged.size === 'sm' ? 'semibold' : undefined}
-        >
-          {merged.children}
-        </Typography>
+          weight={merged.size === 'sm' ? 'semibold' : 'regular'}
+        />
       </Show>
     );
   }, {
