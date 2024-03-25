@@ -5,6 +5,7 @@ import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
 
 import { Typography } from '~/components/Typography/Typography.js';
+
 import { Quote12 } from '~/icons/Quote12.js';
 
 import type { QuoteProps } from './Quote.types.js';

@@ -1,7 +1,7 @@
 import type { WithConfigComponent } from '~/hocs/withConfig.js';
 
-import type { TypographyCustomProps, TypographyProps } from './Typography.types.js';
 import { TypographyCore } from './TypographyCore.js';
+import type { TypographyCustomProps, TypographyProps } from './Typography.types.js';
 
 export interface TypographyComponent extends WithConfigComponent<TypographyProps> {
   Custom: WithConfigComponent<TypographyCustomProps>;

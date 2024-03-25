@@ -1,10 +1,10 @@
 import { For } from 'solid-js';
 import type { Meta, StoryObj } from 'storybook-solidjs';
 
-import type { CircularProgressSize } from '~/components/CircularProgress/CircularProgress.types.js';
-
 import { getClassesArgType } from '../../../.storybook/utils.js';
+
 import { CircularProgress } from './CircularProgress.js';
+import type { CircularProgressSize } from './CircularProgress.types.js';
 
 type StoryComponent = typeof CircularProgress;
 type Story = StoryObj<StoryComponent>;

@@ -2,6 +2,7 @@ import { For } from 'solid-js';
 import type { Meta, StoryObj } from 'storybook-solidjs';
 
 import { getClassesArgType } from '../../../.storybook/utils.js';
+
 import { Progress } from './Progress.js';
 
 type StoryComponent = typeof Progress;

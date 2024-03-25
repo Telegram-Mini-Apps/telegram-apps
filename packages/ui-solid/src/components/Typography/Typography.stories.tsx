@@ -2,6 +2,7 @@ import { For, splitProps } from 'solid-js';
 import type { Meta, StoryObj } from 'storybook-solidjs';
 
 import { getClassesArgType } from '../../../.storybook/utils.js';
+
 import { Typography } from './Typography.js';
 import type { TypographyVariant, TypographyWeight } from './Typography.types.js';
 

@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from 'storybook-solidjs';
 import type { Platform } from '~/types/known.js';
 
 import { getClassesArgType } from '../../../.storybook/utils.js';
+
 import { Loader as Component } from './Loader.js';
 import type { LoaderSize } from './Loader.types.js';
 

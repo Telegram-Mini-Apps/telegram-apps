@@ -8,27 +8,6 @@ import type { WithOptionalClasses } from '~/styles/types.js';
 import type { WithConfig } from '~/components/types.js';
 
 /**
- * Component properties, having defaults.
- */
-export interface TypographyDefaults {
-  /**
-   * Should component use monospace font.
-   * @default false
-   */
-  monospace?: boolean;
-  /**
-   * Typography variant.
-   * @default 'text'
-   */
-  variant?: TypographyVariant;
-  /**
-   * Font weight.
-   * @default 'regular'
-   */
-  weight?: TypographyWeight;
-}
-
-/**
  * Typography variant.
  */
 export type TypographyVariant =
@@ -54,7 +33,28 @@ export type TypographyWeight = 'regular' | 'semibold' | 'bold';
 export type TypographyElementKey = 'root';
 
 /**
- * Properties passed to the Typography children in case, it represents a component.
+ * Component properties, having defaults.
+ */
+export interface TypographyDefaults {
+  /**
+   * Should component use monospace font.
+   * @default false
+   */
+  monospace?: boolean;
+  /**
+   * Typography variant.
+   * @default 'text'
+   */
+  variant?: TypographyVariant;
+  /**
+   * Font weight.
+   * @default 'regular'
+   */
+  weight?: TypographyWeight;
+}
+
+/**
+ * Properties passed to the custom component.
  */
 export interface TypographyComponentProps {
   class?: string;
@@ -95,5 +95,6 @@ export interface TypographyProps
 /**
  * Typography component properties passed to the classes hooks.
  */
-export interface TypographyClassesProps extends RequiredBy<TypographyProps, keyof TypographyDefaults> {
+export interface TypographyClassesProps
+  extends RequiredBy<TypographyProps, keyof TypographyDefaults> {
 }
