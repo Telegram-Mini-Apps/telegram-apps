@@ -1,9 +1,8 @@
 import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
+import type { WithConfig } from '~/types/known.js';
 import type { RequiredBy } from '~/types/utils.js';
 
 import type { WithOptionalClasses } from '~/styles/types.js';
-
-import type { WithConfig } from '~/components/types.js';
 
 /**
  * Known Badge sizes.

@@ -1,8 +1,7 @@
 import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
+import type { WithConfig } from '~/types/known.js';
 
 import type { WithOptionalClasses } from '~/styles/types.js';
-
-import type { WithConfig } from '~/components/types.js';
 
 /**
  * Progress component element keys allowed to be customized.
