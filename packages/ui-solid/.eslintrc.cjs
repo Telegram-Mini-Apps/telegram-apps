@@ -1,3 +1,10 @@
+function regexp(regex) {
+  return [
+    new RegExp(regex.source + '.*[^\\u0000]$').source,
+    regex.source,
+  ]
+}
+
 module.exports = {
   extends: ['custom/solid'],
   rules: {
@@ -9,32 +16,35 @@ module.exports = {
       groups: [
         // Node.js builtins prefixed with `node:`.
         // node:fs
-        [/^node:/.source],
+        regexp(/^node:/),
 
         // Packages.
         // solid-js
-        [/^@?\w/.source],
+        regexp(/^@?\w/),
 
         // Tsconfig alias.
         // ~/helpers
-        [/^~\/(?!components|icons|styles)/.source],
+        regexp(/^~\/(?!components|icons|styles)/),
 
         // Styles utils.
         // ~/styles
-        [/^~\/styles/.source],
+        regexp(/^~\/styles/),
 
-        // Components and icons.
+        // Components.
         // ~/components
+        regexp(/^~\/components/),
+
+        // Icons.
         // ~/icons
-        [/^~\/components/.source, /^~\/icons/.source],
+        regexp(/^~\/icons/),
 
         // Parent imports.
         // ../Typography.js
-        [/^\.\.\//.source],
+        regexp(/^\.\.\//),
 
         // Current folder imports.
         // ./utils.js
-        [/\.\/.+\.(?!s?css)/.source],
+        regexp(/^\.\/.+\.(?!s?css)/),
 
         // Styles.
         // ./Typography.scss
