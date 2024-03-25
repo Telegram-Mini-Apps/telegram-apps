@@ -1,17 +1,17 @@
+import { splitProps } from 'solid-js';
 import type { Meta, StoryObj } from 'storybook-solidjs';
 
 import { Typography } from '~/components/Typography/Typography.js';
 
 import { getClassesArgType } from '../../../.storybook/utils.js';
+import { Ripples } from './Ripples.js';
 
-import { Ripples as Component } from './Ripples.js';
-
-type StoryComponent = typeof Component;
+type StoryComponent = typeof Ripples;
 type Story = StoryObj<StoryComponent>;
 
 const meta: Meta<StoryComponent> = {
   title: 'Ripples',
-  component: Component,
+  component: Ripples,
   tags: ['autodocs'],
 };
 
@@ -20,7 +20,7 @@ export default meta;
 export const Playground: Story = {
   render(props) {
     return (
-      <Component
+      <Ripples
         {...props}
         style={{
           'background-color': '#ccc',
@@ -31,22 +31,26 @@ export const Playground: Story = {
           'justify-content': 'center',
         }}
       >
-        <Typography
-          component='p'
-          style={{
-            margin: 0,
-            display: 'flex',
-            'align-items': 'center',
-            color: 'white',
-            'justify-content': 'center',
-            width: '200px',
-            height: '100px',
-            'background-color': 'forestgreen',
-          }}
-        >
-          Click me
-        </Typography>
-      </Component>
+        <Typography.Custom
+          component={(typoProps) => (
+            <h1
+              {...typoProps}
+              style={{
+                margin: 0,
+                display: 'flex',
+                'align-items': 'center',
+                color: 'white',
+                'justify-content': 'center',
+                width: '200px',
+                height: '100px',
+                'background-color': 'forestgreen',
+              }}
+            >
+              Click me
+            </h1>
+          )}
+        />
+      </Ripples>
     );
   },
   args: {
@@ -76,5 +80,42 @@ export const Playground: Story = {
       defaultValue: { summary: false },
     },
     classes: getClassesArgType('root', 'content', 'ripples', 'ripple'),
+  },
+};
+
+export const CustomComponent: Story = {
+  ...Playground,
+  render(props) {
+    const [picked] = splitProps(props, ['radius', 'disable', 'overlay', 'centered']);
+
+    return (
+      <Ripples.Custom
+        {...picked}
+        component={(componentProps) => (
+          <button
+            onPointerDown={componentProps.onPointerDown}
+            onPointerLeave={componentProps.onPointerLeave}
+            class={componentProps.class}
+          >
+            <componentProps.Layout>
+              <span
+                style={{
+                  margin: 0,
+                  display: 'flex',
+                  'align-items': 'center',
+                  color: 'white',
+                  'justify-content': 'center',
+                  width: '200px',
+                  height: '100px',
+                  'background-color': 'forestgreen',
+                }}
+              >
+                This is button
+              </span>
+            </componentProps.Layout>
+          </button>
+        )}
+      />
+    );
   },
 };
