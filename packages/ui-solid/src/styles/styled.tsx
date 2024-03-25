@@ -1,20 +1,13 @@
-import type { Component } from 'solid-js';
 import { createMemo, mergeProps } from 'solid-js';
+import type { Component } from 'solid-js';
 
 import type {
-  ClassName,
   ClassesValue,
+  ClassName,
+  ClassNameFn,
   ExtractPropsClasses,
-  WithOptionalClasses, ClassNameFn,
+  WithOptionalClasses,
 } from './types.js';
-
-export interface StyledOptions {
-  /**
-   * Returned component name.
-   * @default `Styled{Component.name}`
-   */
-  name?: string;
-}
 
 type StyledClasses<Props extends WithOptionalClasses<any, any>> =
   Partial<ExtractPropsClasses<Props>>;
@@ -27,7 +20,6 @@ function formatClasses<P>(value: ClassesValue<P>): (ClassName | ClassNameFn<P>)[
  * Returns Higher Order Component which transfers passed properties adding specified classes.
  * @param Component - wrapped component.
  * @param classes - classes map.
- * @param options - additional options.
  *
  * @example
  * const MyCheckbox = styled(Checkbox, {
@@ -39,9 +31,8 @@ function formatClasses<P>(value: ClassesValue<P>): (ClassName | ClassNameFn<P>)[
 export function styled<Props extends WithOptionalClasses<any, any>>(
   Component: Component<Props>,
   classes: StyledClasses<Props>,
-  options: StyledOptions = {},
 ): Component<Props> {
-  const Wrapped = ((props) => {
+  return (props) => {
     const merged = mergeProps({ classes: {} }, props);
 
     // Merge element keys from the passed properties and classes from HOC.
@@ -67,11 +58,5 @@ export function styled<Props extends WithOptionalClasses<any, any>>(
     });
 
     return <Component {...props} classes={mergedClasses()}/>;
-  }) as Component<Props>;
-
-  Object.defineProperty(Wrapped, 'name', {
-    value: options.name || `Styled${Component.name}`,
-  });
-
-  return Wrapped;
+  };
 }
