@@ -1,7 +1,7 @@
 import type { WithConfigComponent } from '~/hocs/withConfig.js';
 
-import type { RipplesCustomProps, RipplesProps } from '~/components/Ripples/Ripples.types.js';
 import { RipplesCore } from '~/components/Ripples/RipplesCore.js';
+import type { RipplesCustomProps, RipplesProps } from '~/components/Ripples/Ripples.types.js';
 
 export interface RipplesComponent extends WithConfigComponent<RipplesProps> {
   Custom: WithConfigComponent<RipplesCustomProps>;

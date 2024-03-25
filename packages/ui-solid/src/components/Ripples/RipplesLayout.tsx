@@ -1,6 +1,6 @@
-import type { Component, ParentProps } from 'solid-js';
 import { For } from 'solid-js';
 import { TransitionGroup } from 'solid-transition-group';
+import type { Component, ParentProps } from 'solid-js';
 
 import type { ClassNamesMap } from '~/styles/types.js';
 
@@ -11,6 +11,7 @@ interface Props extends ParentProps {
   ripples: RippleData[];
   onTransitionStart: TransitionEventHandler;
   onTransitionEnd: TransitionEventHandler;
+  transitionGroupName: string;
 }
 
 export const RipplesLayout: Component<Props> = (props) => {
@@ -20,7 +21,7 @@ export const RipplesLayout: Component<Props> = (props) => {
         {props.children}
       </div>
       <div class={props.classes.ripples}>
-        <TransitionGroup name="tgui-ripples__ripple-">
+        <TransitionGroup name={props.transitionGroupName}>
           <For each={props.ripples}>
             {({ size, left, top, id }) => (
               <span

@@ -1,10 +1,10 @@
 import { splitProps } from 'solid-js';
 import type { Meta, StoryObj } from 'storybook-solidjs';
 
+import { Ripples } from '~/components/Ripples/Ripples.js';
 import { Typography } from '~/components/Typography/Typography.js';
 
 import { getClassesArgType } from '../../../.storybook/utils.js';
-import { Ripples } from './Ripples.js';
 
 type StoryComponent = typeof Ripples;
 type Story = StoryObj<StoryComponent>;

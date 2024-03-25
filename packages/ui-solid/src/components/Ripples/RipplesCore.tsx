@@ -18,6 +18,7 @@ import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
 
+import { RipplesLayout } from './RipplesLayout.js';
 import type {
   LayoutProps,
   PointerEventHandler,
@@ -29,7 +30,6 @@ import type {
   RipplesProps,
   TransitionEventHandler,
 } from './Ripples.types.js';
-import { RipplesLayout } from './RipplesLayout.js';
 
 import './Ripples.scss';
 
@@ -160,6 +160,7 @@ export const RipplesCore = withConfig(
         onTransitionEnd={onTransitionEnd}
         onTransitionStart={onTransitionStart}
         classes={classes()}
+        transitionGroupName={`${block.elem('ripple').calc()}-`}
       >
         {layoutProps.children}
       </RipplesLayout>
