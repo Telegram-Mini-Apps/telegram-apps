@@ -1,22 +1,23 @@
 import { createContext } from 'solid-js';
-import type { Accessor } from 'solid-js';
 
 import type { ColorScheme, Platform } from '~/types/known.js';
 
 export interface Config {
   /**
-   * Current color scheme.
+   * Current color scheme. This value is reactive.
    */
-  colorScheme: Accessor<ColorScheme>;
-
+  colorScheme: ColorScheme;
   /**
-   * Identifier of the current platform.
+   * Identifier of the current platform. This value is reactive.
    */
-  platform: Accessor<Platform>;
+  platform: Platform;
 }
 
-export const configContext = createContext<Config>({
-  platform: () => 'base' as const,
-  colorScheme: () => 'light' as const,
+/**
+ * @internal
+ */
+export const ConfigContext = createContext<Config>({
+  platform: 'base',
+  colorScheme: 'light',
 });
 
