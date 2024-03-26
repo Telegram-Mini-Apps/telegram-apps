@@ -1,7 +1,7 @@
 // This script optimizes icons, placed in the "icons" folder.
 
 import { optimize } from 'svgo';
-import { readdirSync, readFileSync, writeFileSync, rmdirSync, mkdirSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, rmdirSync, mkdirSync, rmSync } from 'node:fs';
 import { resolve, dirname, parse } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -9,8 +9,11 @@ const svgIconsDir = resolve(dirname(fileURLToPath(import.meta.url)), '../icons')
 const solidIconsDir = resolve(svgIconsDir, '../src/icons');
 
 // Clean target Solid components directory.
-rmdirSync(solidIconsDir, { recursive: true });
+rmSync(solidIconsDir, { recursive: true });
 mkdirSync(solidIconsDir);
+
+// List of collected components names.
+const collectedComponents = [];
 
 readdirSync(svgIconsDir).forEach(file => {
   const filePath = resolve(svgIconsDir, file);
@@ -41,6 +44,7 @@ readdirSync(svgIconsDir).forEach(file => {
     .split('_')
     .map(part => part[0].toUpperCase() + part.slice(1))
     .join('');
+  collectedComponents.push(component);
 
   // Compute Solid component TypeScript file content.
   const result =
@@ -75,3 +79,11 @@ export const ${component}: Component<${component}Props> = (props) => {
   // Write Solid component.
   writeFileSync(resolve(solidIconsDir, `${component}.tsx`), result);
 });
+
+// Write Solid components index file.
+writeFileSync(
+  resolve(solidIconsDir, 'index.ts'),
+  collectedComponents.map(component => `export * from './${component}.js';\n`)
+    .sort()
+    .join('') + '\n',
+);

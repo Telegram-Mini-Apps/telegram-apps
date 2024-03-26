@@ -36,6 +36,7 @@ export type {
 export { IconButton } from '~/components/IconButton/IconButton.js';
 export type {
   IconButtonClassesProps,
+  IconButtonDefaults,
   IconButtonElementKey,
   IconButtonProps,
   IconButtonSize,
@@ -71,15 +72,12 @@ export type {
 // Ripples
 export { Ripples } from '~/components/Ripples/Ripples.js';
 export type {
-  LayoutProps,
   PointerEventHandler,
   RippleData,
   RipplesClassesProps,
-  RipplesComponentProps,
-  RipplesCustomClassesProps,
-  RipplesCustomProps,
   RipplesDefaults,
   RipplesElementKey,
+  RipplesIntrinsicProps,
   RipplesProps,
   TransitionEventHandler,
 } from '~/components/Ripples/Ripples.types.js';
@@ -88,11 +86,9 @@ export type {
 export { Typography } from '~/components/Typography/Typography.js';
 export type {
   TypographyClassesProps,
-  TypographyComponentProps,
-  TypographyCustomClassesProps,
-  TypographyCustomProps,
   TypographyDefaults,
   TypographyElementKey,
+  TypographyIntrinsicProps,
   TypographyProps,
   TypographyVariant,
   TypographyWeight,
@@ -109,6 +105,9 @@ export { withConfig } from '~/hocs/withConfig.js';
 
 /* Hooks */
 export { useConfig } from '~/hooks/useConfig.js';
+
+/* Icons */
+export * from './icons/index.js';
 
 /* Styles */
 export { styled } from '~/styles/styled.js';
@@ -130,5 +129,6 @@ export type {
   Platform,
   WithColorScheme,
   WithConfig,
+  WithPartialConfig,
   WithPlatform,
 } from '~/types/known.js';

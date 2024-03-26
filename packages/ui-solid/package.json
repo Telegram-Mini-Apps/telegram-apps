@@ -40,7 +40,7 @@
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "build": "vite build",
-    "build:icons": "node scripts/build-icons.js",
+    "build:icons": "node scripts/build-icons.js && eslint --fix src/icons/index.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
