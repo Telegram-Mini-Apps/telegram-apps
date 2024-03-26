@@ -76,19 +76,12 @@ export const CustomComponent: Story = {
     const [picked] = splitProps(props, ['weight', 'variant', 'monospace']);
 
     return (
-      <Typography.Custom
-        {...picked}
-        component={(typographyProps) => (
-          <h1 {...typographyProps}>
-            This content is wrapped into{' '}
-            <Typography.Custom
-              monospace
-              weight="bold"
-              component={(p) => <span {...p}>h1</span>}
-            />{' '}tag.
-          </h1>
-        )}
-      />
+      <Typography.h1 {...picked}>
+        This content is wrapped into{' '}
+        <Typography.span monospace weight="bold">
+          h1
+        </Typography.span>{' '}tag.
+      </Typography.h1>
     );
   },
 };

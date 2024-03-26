@@ -11,25 +11,28 @@ import { styled } from '~/styles/styled.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
 
 import type {
+  CreateTypographyProps,
   TypographyCustomProps,
   TypographyDefaults,
   TypographyElementKey,
-  TypographyProps,
 } from './Typography.types.js';
 
 import './Typography.scss';
 
 const block = new BemBlockClassNames('tgui-typography');
 
+type Props =
+  & PartialBy<
+    Omit<CreateTypographyProps<any> & TypographyCustomProps, 'classes'>,
+    'component'
+  >
+  & WithOptionalClasses<TypographyElementKey, CreateTypographyProps<any> | TypographyCustomProps>;
+
 /**
  * Component which implements both custom and common versions of Typography.
  */
 export const TypographyCore = withConfig(
-  styled((
-    props:
-      & PartialBy<Omit<TypographyProps & TypographyCustomProps, 'classes'>, 'component'>
-      & WithOptionalClasses<TypographyElementKey, TypographyProps | TypographyCustomProps>,
-  ) => {
+  styled((props: Props) => {
     const merged = mergeProps({
       variant: 'text',
       weight: 'regular',
