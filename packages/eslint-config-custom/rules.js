@@ -4,6 +4,7 @@ module.exports = {
   // Sometimes this rule decreases readability.
   'arrow-body-style': 0,
   'consistent-return': 0,
+  'function-paren-newline': 0,
 
   // We select line endings depending on current OS.
   // See: https://stackoverflow.com/q/39114446/2771889
@@ -20,6 +21,7 @@ module.exports = {
   // Sometimes we need to write "void promise".
   'no-void': 0,
   'object-curly-newline': ['error', { consistent: true }],
+  'operator-linebreak': 0,
 
   // We use special module resolution, that's why we need extensions.
   'import/extensions': 0,
