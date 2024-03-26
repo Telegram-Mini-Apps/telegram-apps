@@ -22,6 +22,7 @@ export const Playground: Story = {
     return (
       <Ripples
         {...props}
+        component={props.component || 'div'}
         style={{
           'background-color': '#ccc',
           'border-radius': '20px',
@@ -31,30 +32,27 @@ export const Playground: Story = {
           'justify-content': 'center',
         }}
       >
-        <Typography.Custom
-          component={(typoProps) => (
-            <h1
-              {...typoProps}
-              style={{
-                margin: 0,
-                display: 'flex',
-                'align-items': 'center',
-                color: 'white',
-                'justify-content': 'center',
-                width: '200px',
-                height: '100px',
-                'background-color': 'forestgreen',
-              }}
-            >
-              Click me
-            </h1>
-          )}
-        />
+        <Typography
+          component="h1"
+          style={{
+            margin: 0,
+            display: 'flex',
+            'align-items': 'center',
+            color: 'white',
+            'justify-content': 'center',
+            width: '200px',
+            height: '100px',
+            'background-color': 'forestgreen',
+          }}
+        >
+          Click me
+        </Typography>
       </Ripples>
     );
   },
   args: {
     centered: false,
+    component: 'div',
     disable: false,
     overlay: false,
   },
@@ -63,6 +61,11 @@ export const Playground: Story = {
       description: 'Ignores click coordinates and places ripples in the middle of the container.',
       control: 'boolean',
       defaultValue: { summary: false },
+    },
+    component: {
+      description: 'Custom HTML tag to be used as a root element.',
+      control: { type: 'text' },
+      defaultValue: { summary: 'div' },
     },
     disable: {
       description: 'Disables ripples.',
@@ -89,33 +92,22 @@ export const CustomComponent: Story = {
     const [picked] = splitProps(props, ['radius', 'disable', 'overlay', 'centered']);
 
     return (
-      <Ripples.Custom
-        {...picked}
-        component={(componentProps) => (
-          <button
-            onPointerDown={componentProps.onPointerDown}
-            onPointerLeave={componentProps.onPointerLeave}
-            class={componentProps.class}
-          >
-            <componentProps.Layout>
-              <span
-                style={{
-                  margin: 0,
-                  display: 'flex',
-                  'align-items': 'center',
-                  color: 'white',
-                  'justify-content': 'center',
-                  width: '200px',
-                  height: '100px',
-                  'background-color': 'forestgreen',
-                }}
-              >
-                This is button
-              </span>
-            </componentProps.Layout>
-          </button>
-        )}
-      />
+      <Ripples {...picked} component="button">
+        <span
+          style={{
+            margin: 0,
+            display: 'flex',
+            'align-items': 'center',
+            color: 'white',
+            'justify-content': 'center',
+            width: '200px',
+            height: '100px',
+            'background-color': 'forestgreen',
+          }}
+        >
+          This is button
+        </span>
+      </Ripples>
     );
   },
 };

@@ -1,13 +1,20 @@
-import type { Component, JSX, JSXElement } from 'solid-js';
+import type { JSX } from 'solid-js';
 
-import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
+import type { JSXIntrinsicElement, JSXIntrinsicElementAttrs } from '~/types/jsx.js';
 import type { WithConfig } from '~/types/known.js';
-import type { RequiredBy } from '~/types/utils.js';
+import type { PartialBy, RequiredBy } from '~/types/utils.js';
 
 import type { WithOptionalClasses } from '~/styles/types.js';
 
 export type PointerEventHandler = JSX.EventHandler<HTMLElement, PointerEvent>;
 export type TransitionEventHandler = JSX.EventHandlerUnion<HTMLSpanElement, TransitionEvent>;
+
+type IntrinsicProps<Element extends JSXIntrinsicElement> =
+  & WithConfig
+  & RipplesDefaults
+  & RipplesNoDefaults
+  & { component: Element }
+  & { [K in keyof JSXIntrinsicElementAttrs<Element>]: JSXIntrinsicElementAttrs<Element>[K] };
 
 export interface RippleData {
   id: string;
@@ -31,6 +38,11 @@ export interface RipplesDefaults {
    */
   centered?: boolean;
   /**
+   * HTML tag to be used as a root element.
+   * @default 'div'
+   */
+  component?: JSXIntrinsicElement;
+  /**
    * Disables ripples.
    * @default false
    */
@@ -51,66 +63,21 @@ interface RipplesNoDefaults {
 }
 
 /**
- * Properties passed to the Ripples layout when using custom components.
+ * Properties of the component in case custom property "component" was passed.
  */
-export interface LayoutProps {
-  children?: JSXElement;
-}
+export type RipplesIntrinsicProps<Element extends JSXIntrinsicElement> =
+  & IntrinsicProps<Element>
+  & (
+  WithOptionalClasses<
+    RipplesElementKey,
+    RequiredBy<IntrinsicProps<Element>, keyof RipplesDefaults>
+  >
+  );
 
 /**
- * Properties passed to the custom component.
+ * Ripples component default properties.
  */
-export interface RipplesComponentProps {
-  /**
-   * Computed class name.
-   */
-  class?: string;
-  /**
-   * Component which should be used by the custom component to render Ripples component core
-   * layout.
-   */
-  Layout: Component<LayoutProps>;
-  /**
-   * Pointer down handler which is being used by the Ripples component to create a new ripple.
-   */
-  onPointerDown: PointerEventHandler;
-  /**
-   * Pointer leave handler which is being used by the Ripples component to remove a ripple.
-   */
-  onPointerLeave: PointerEventHandler;
-}
-
-/**
- * Ripples.Custom component properties.
- */
-export interface RipplesCustomProps
-  extends WithConfig,
-    RipplesDefaults,
-    RipplesNoDefaults,
-    WithOptionalClasses<RipplesElementKey, RipplesCustomClassesProps> {
-  /**
-   * Component which should be rendered by the Ripples component.
-   */
-  component: Component<RipplesComponentProps>;
-  class?: string;
-}
-
-/**
- * Ripples component properties passed to the classes hooks.
- */
-export interface RipplesCustomClassesProps
-  extends RequiredBy<RipplesCustomProps, keyof RipplesDefaults> {
-}
-
-/**
- * Ripples component public properties.
- */
-export interface RipplesProps
-  extends JSXIntrinsicElementAttrs<'div'>,
-    WithConfig,
-    RipplesDefaults,
-    RipplesNoDefaults,
-    WithOptionalClasses<RipplesElementKey, RipplesClassesProps> {
+export interface RipplesProps extends PartialBy<RipplesIntrinsicProps<'div'>, 'component'> {
 }
 
 /**
