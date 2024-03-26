@@ -1,7 +1,7 @@
+import { mergeProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import type { Component, JSXElement } from 'solid-js';
 
-import { mergeWithConfig } from '~/helpers/mergeWithConfig.js';
 import { sanitizeCommon } from '~/helpers/sanitizeCommon.js';
 import { withConfig } from '~/hocs/withConfig.js';
 import type { JSXIntrinsicElement } from '~/types/jsx.js';
@@ -32,7 +32,7 @@ export interface TypographyComponent extends Component<WithPartialConfig<Typogra
  */
 export const Typography: TypographyComponent = withConfig(
   styled((props: TypographyIntrinsicProps<any>) => {
-    const merged = mergeWithConfig({
+    const merged = mergeProps({
       variant: 'text',
       weight: 'regular',
       monospace: false,

@@ -38,6 +38,7 @@ export const Playground: Story = {
   },
   args: {
     children: 'Telegram Mini Apps is awesome',
+    component: 'p',
     monospace: false,
     variant: 'text',
     weight: 'regular',
