@@ -1,11 +1,13 @@
-import type { Component } from 'solid-js';
-
-import type { WithConfigComponent } from '~/hocs/withConfig.js';
 import type { JSXIntrinsicElement, JSXIntrinsicElementAttrs } from '~/types/jsx.js';
 import type { WithConfig } from '~/types/known.js';
-import type { RequiredBy } from '~/types/utils.js';
+import type { PartialBy, RequiredBy } from '~/types/utils.js';
 
 import type { WithOptionalClasses } from '~/styles/types.js';
+
+type IntrinsicProps<Element extends JSXIntrinsicElement> =
+  & TypographyDefaults
+  & { component: Element }
+  & { [K in keyof JSXIntrinsicElementAttrs<Element>]: JSXIntrinsicElementAttrs<Element>[K] };
 
 /**
  * Typography variant.
@@ -35,7 +37,7 @@ export type TypographyElementKey = 'root';
 /**
  * Component properties, having defaults.
  */
-export interface TypographyDefaults {
+export interface TypographyDefaults extends WithConfig {
   /**
    * Should component use monospace font.
    * @default false
@@ -54,48 +56,21 @@ export interface TypographyDefaults {
 }
 
 /**
- * Properties passed to the custom component.
+ * Properties of the component in case custom property "component" was passed.
  */
-export interface TypographyComponentProps {
-  class?: string;
-}
+export type TypographyIntrinsicProps<Element extends JSXIntrinsicElement> =
+  & IntrinsicProps<Element>
+  & (
+  WithOptionalClasses<
+    TypographyElementKey,
+    RequiredBy<IntrinsicProps<Element>, keyof TypographyDefaults>
+  >
+  );
 
 /**
- * Typography.Custom component properties.
+ * Typography component default properties.
  */
-export interface TypographyCustomProps
-  extends WithConfig,
-    TypographyDefaults,
-    WithOptionalClasses<TypographyElementKey, TypographyCustomClassesProps> {
-  /**
-   * Component which should be rendered by the Typography component.
-   */
-  component: Component<TypographyComponentProps>;
-  class?: string;
-}
-
-/**
- * Typography.Custom component properties passed to the classes hooks.
- */
-export interface TypographyCustomClassesProps
-  extends RequiredBy<TypographyCustomProps, keyof TypographyDefaults> {
-}
-
-export type CreateTypographyProps<E extends JSXIntrinsicElement> =
-  & JSXIntrinsicElementAttrs<E>
-  & WithConfig
-  & TypographyDefaults
-  & WithOptionalClasses<
-  TypographyElementKey, (
-  & JSXIntrinsicElementAttrs<E>
-  & WithConfig
-  & Required<TypographyDefaults>
-  )>;
-
-/**
- * Typography component public properties.
- */
-export type TypographyProps = CreateTypographyProps<'p'>;
+export interface TypographyProps extends PartialBy<TypographyIntrinsicProps<'p'>, 'component'> {}
 
 /**
  * Typography component properties passed to the classes hooks.
@@ -103,16 +78,3 @@ export type TypographyProps = CreateTypographyProps<'p'>;
 export interface TypographyClassesProps
   extends RequiredBy<TypographyProps, keyof TypographyDefaults> {
 }
-
-/**
- * Typography component typing.
- */
-export type TypographyComponent =
-// Default Typography implementation: <Typography />
-  & WithConfigComponent<TypographyProps>
-  // Typography implementation which allows using custom rendered content: <Typography.Custom />
-  & { Custom: WithConfigComponent<TypographyCustomProps> }
-  // Typography implementation allowing usage intrinsic elements: <Typography.h1 />
-  & {
-  [Element in JSXIntrinsicElement]: WithConfigComponent<CreateTypographyProps<Element>>
-};

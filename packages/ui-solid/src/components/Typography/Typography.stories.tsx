@@ -33,7 +33,9 @@ const meta: Meta<StoryComponent> = {
 export default meta;
 
 export const Playground: Story = {
-  render: Typography,
+  render(props) {
+    return <Typography {...props} component={props.component || 'p'}/>;
+  },
   args: {
     children: 'Telegram Mini Apps is awesome',
     monospace: false,
@@ -45,10 +47,11 @@ export const Playground: Story = {
       description: 'Content to place inside the component.',
       control: 'text',
     },
-    // component: {
-    //   description: 'Component, which could be used to override the returned content. If passed, all passed intrinsic attributes excluding the `class` property will be ignored. The Solid component will receive computed `class` and `children` properties.\n\n'
-    //     + '_By default the component renders the `p` HTML tag._',
-    // },
+    component: {
+      description: 'Custom HTML tag to be used as a root element.',
+      control: { type: 'text' },
+      defaultValue: { summary: 'p' },
+    },
     monospace: {
       description: 'Use monospace font.',
       control: { type: 'boolean' },
@@ -76,18 +79,18 @@ export const CustomComponent: Story = {
     const [picked] = splitProps(props, ['weight', 'variant', 'monospace']);
 
     return (
-      <Typography.h1 {...picked}>
+      <Typography component="h1" {...picked}>
         This content is wrapped into{' '}
-        <Typography.span monospace weight="bold">
+        <Typography component="span" monospace weight="bold">
           h1
-        </Typography.span>{' '}tag.
-      </Typography.h1>
+        </Typography>{' '}tag.
+      </Typography>
     );
   },
 };
 
 export const Preview: Story = {
-  render: () => {
+  render() {
     const formatValue = (value: string) => {
       return value
         .replace(/-/g, ' ')
