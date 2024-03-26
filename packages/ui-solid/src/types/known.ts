@@ -13,7 +13,7 @@ export interface WithColorScheme {
    * Current color scheme.
    * @default 'light'
    */
-  colorScheme: ColorScheme;
+  colorScheme?: ColorScheme;
 }
 
 export interface WithPlatform {
@@ -21,7 +21,7 @@ export interface WithPlatform {
    * Identifier of the current platform.
    * @default 'base'
    */
-  platform: Platform;
+  platform?: Platform;
 }
 
 /**
