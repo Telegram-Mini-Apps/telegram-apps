@@ -1,6 +1,5 @@
 import { mergeProps, Show } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
-import type { Component, JSX } from 'solid-js';
 
 import { sanitizeCommon } from '~/helpers/sanitizeCommon.js';
 import { slotToComponent } from '~/helpers/slotToComponent.js';
@@ -14,7 +13,6 @@ import { styled } from '~/styles/styled.js';
 import { Loader } from '~/components/Loader/Loader.js';
 import { Ripples } from '~/components/Ripples/Ripples.js';
 import { Typography } from '~/components/Typography/Typography.js';
-import type { RipplesComponentProps } from '~/components/Ripples/Ripples.types.js';
 
 import type { ButtonDefaults, ButtonProps } from './Button.types.js';
 
@@ -43,8 +41,8 @@ export const Button: WithConfigComponent<ButtonProps> = withConfig(
         : slotToComponent(merged.icon)
     );
 
-    const RipplesComponent: Component<RipplesComponentProps> = (ripplesProps) => (
-      <button
+    return (
+      <Ripples
         {...sanitizeCommon(merged, [
           'after',
           'before',
@@ -55,56 +53,12 @@ export const Button: WithConfigComponent<ButtonProps> = withConfig(
           'size',
           'icon',
         ])}
-        onMouseLeave={[() => {}, {}]}
-        onPointerDown={(e) => {
-          props.onPointerDown && (props.onPointerDown as any)(e);
-          ripplesProps.onPointerDown(e);
-        }}
-        onPointerLeave={(e) => {
-          props.onPointerLeave && (props.onPointerLeave as any)(e);
-          ripplesProps.onPointerLeave(e);
-        }}
-        class={ripplesProps.class}
-      >
-        <ripplesProps.Layout>
-          <Show when={icon()}>
-            {(getIcon) => (
-              <div class={classes().iconContainer}>
-                <Dynamic component={getIcon()} class={classes().icon}/>
-              </div>
-            )}
-          </Show>
-          <Show when={slotToComponent(merged.before)}>
-            {(before) => (
-              <div class={classes().before}>
-                <Dynamic component={before()}/>
-              </div>
-            )}
-          </Show>
-          <Show when={merged.children}>
-            {(children) => (
-              <Typography
-                variant={props.size === 'lg' ? 'text' : 'subheadline2'}
-                class={classes().content}
-                weight="semibold"
-              >
-                {children()}
-              </Typography>
-            )}
-          </Show>
-          <Show when={slotToComponent(merged.after)}>
-            {(after) => (
-              <div class={classes().after}>
-                <Dynamic component={after()}/>
-              </div>
-            )}
-          </Show>
-        </ripplesProps.Layout>
-      </button>
-    );
-
-    return (
-      <Ripples.Custom
+        component="button"
+        disable={merged.disabled || (
+          typeof merged.ripples === 'boolean'
+            ? !merged.ripples
+            : merged.platform === 'ios'
+        )}
         classes={{
           content: [
             'tgui-button__ripples',
@@ -115,13 +69,40 @@ export const Button: WithConfigComponent<ButtonProps> = withConfig(
           ripple: `tgui-button__ripple--${merged.variant}`,
         }}
         class={classes().root}
-        disable={merged.disabled || (
-          typeof merged.ripples === 'boolean'
-            ? !merged.ripples
-            : merged.platform === 'ios'
-        )}
-        component={RipplesComponent}
-      />
+      >
+        <Show when={icon()}>
+          {(getIcon) => (
+            <div class={classes().iconContainer}>
+              <Dynamic component={getIcon()} class={classes().icon}/>
+            </div>
+          )}
+        </Show>
+        <Show when={slotToComponent(merged.before)}>
+          {(before) => (
+            <div class={classes().before}>
+              <Dynamic component={before()}/>
+            </div>
+          )}
+        </Show>
+        <Show when={merged.children}>
+          {(children) => (
+            <Typography
+              variant={props.size === 'lg' ? 'text' : 'subheadline2'}
+              class={classes().content}
+              weight="semibold"
+            >
+              {children()}
+            </Typography>
+          )}
+        </Show>
+        <Show when={slotToComponent(merged.after)}>
+          {(after) => (
+            <div class={classes().after}>
+              <Dynamic component={after()}/>
+            </div>
+          )}
+        </Show>
+      </Ripples>
     );
   }, {
     root: (props) => block.calc({

@@ -1,11 +1,12 @@
 import type { FlowProps } from 'solid-js';
 
-import type { ComponentSlot } from '~/types/components.js';
 import type { JSXIntrinsicElementAttrs } from '~/types/jsx.js';
 import type { WithConfig } from '~/types/known.js';
 import type { RequiredBy } from '~/types/utils.js';
 
 import type { WithOptionalClasses } from '~/styles/types.js';
+
+import type { ButtonProps } from '~/components/Button/Button.types.js';
 
 /**
  * IconButton variant.
@@ -55,7 +56,7 @@ export interface IconButtonDefaults {
  * IconButton component public properties.
  */
 export interface IconButtonProps
-  extends FlowProps<{}, ComponentSlot<{ class?: string }>>,
+  extends FlowProps<{}, ButtonProps['icon']>,
     Omit<JSXIntrinsicElementAttrs<'button'>, 'children'>,
     WithConfig,
     IconButtonDefaults,
