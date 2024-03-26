@@ -22,11 +22,7 @@ const variants: TypographyVariant[] = [
   'caption2',
 ];
 
-const weights: TypographyWeight[] = [
-  'regular',
-  'semibold',
-  'bold',
-];
+const weights: TypographyWeight[] = ['regular', 'semibold', 'bold'];
 
 const meta: Meta<StoryComponent> = {
   title: 'Typography',
@@ -84,7 +80,12 @@ export const CustomComponent: Story = {
         {...picked}
         component={(typographyProps) => (
           <h1 {...typographyProps}>
-            {props.children}
+            This content is wrapped into{' '}
+            <Typography.Custom
+              monospace
+              weight="bold"
+              component={(p) => <span {...p}>h1</span>}
+            />{' '}tag.
           </h1>
         )}
       />
