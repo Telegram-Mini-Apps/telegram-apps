@@ -13,11 +13,11 @@ export type QuoteElementKey = 'root' | 'icon';
  */
 export interface QuoteProps
   extends JSXIntrinsicElementAttrs<'blockquote'>,
-    WithOptionalClasses<QuoteElementKey, QuoteClassesProps>,
-    WithConfig {
+    WithConfig,
+    WithOptionalClasses<QuoteElementKey, QuoteClassesProps> {
 }
 
 /**
  * Quote component properties passed to the classes hooks.
  */
-export type QuoteClassesProps = QuoteProps;
+export interface QuoteClassesProps extends QuoteProps {}

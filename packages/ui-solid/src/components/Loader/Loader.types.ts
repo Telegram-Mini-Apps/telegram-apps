@@ -5,17 +5,6 @@ import type { RequiredBy } from '~/types/utils.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
 
 /**
- * Component properties, having defaults.
- */
-export interface LoaderDefaults {
-  /**
-   * Loader size.
-   * @default 'md'
-   */
-  size?: LoaderSize;
-}
-
-/**
  * Loader size.
  */
 export type LoaderSize = 'sm' | 'md' | 'lg';
@@ -30,12 +19,24 @@ export type LoaderElementKey =
   | 'androidCircle';
 
 /**
+ * Component properties, having defaults.
+ */
+export interface LoaderDefaults {
+  /**
+   * Loader size.
+   * @default 'md'
+   */
+  size?: LoaderSize;
+}
+
+/**
  * Loader component public properties.
  */
-export interface LoaderProps extends JSXIntrinsicElementAttrs<'div'>,
-  WithOptionalClasses<LoaderElementKey, LoaderClassesProps>,
-  WithConfig,
-  LoaderDefaults {
+export interface LoaderProps
+  extends JSXIntrinsicElementAttrs<'div'>,
+    WithConfig,
+    LoaderDefaults,
+    WithOptionalClasses <LoaderElementKey, LoaderClassesProps> {
 }
 
 /**

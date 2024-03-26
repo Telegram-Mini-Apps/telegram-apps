@@ -2,6 +2,7 @@ import { mergeProps, Show } from 'solid-js';
 
 import { sanitizeCommon } from '~/helpers/sanitizeCommon.js';
 import { withConfig } from '~/hocs/withConfig.js';
+import type { WithConfigComponent } from '~/hocs/withConfig.js';
 
 import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
@@ -18,7 +19,7 @@ const block = new BemBlockClassNames('tgui-badge');
 /**
  * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-·%C2%A0UI-Kit?type=design&node-id=48-396&mode=design&t=wO8NRmLsNTRplvzT-0
  */
-export const Badge = withConfig(
+export const Badge: WithConfigComponent<BadgeProps> = withConfig(
   styled((props: BadgeProps) => {
     const merged = mergeProps({
       size: 'sm',
@@ -36,11 +37,10 @@ export const Badge = withConfig(
           />
         )}
       >
-        <Typography.Custom
+        <Typography
+          {...sanitizeCommon(merged, ['size', 'variant'])}
+          component="span"
           class={classes().root}
-          component={(typoProps) => (
-            <span {...sanitizeCommon(merged, ['size', 'variant'])} {...typoProps}/>
-          )}
           variant={merged.size === 'sm' ? 'caption1' : 'subheadline2'}
           weight={merged.size === 'sm' ? 'semibold' : 'regular'}
         />

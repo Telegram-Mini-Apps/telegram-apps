@@ -1,3 +1,5 @@
+import type { PartialBy } from '~/types/utils.js';
+
 /**
  * Known platforms, where components could be used.
  */
@@ -13,7 +15,7 @@ export interface WithColorScheme {
    * Current color scheme.
    * @default 'light'
    */
-  colorScheme?: ColorScheme;
+  colorScheme: ColorScheme;
 }
 
 export interface WithPlatform {
@@ -21,7 +23,7 @@ export interface WithPlatform {
    * Identifier of the current platform.
    * @default 'base'
    */
-  platform?: Platform;
+  platform: Platform;
 }
 
 /**
@@ -29,3 +31,8 @@ export interface WithPlatform {
  */
 export interface WithConfig extends WithColorScheme, WithPlatform {
 }
+
+/**
+ * Makes config properties partial.
+ */
+export type WithPartialConfig<P extends WithConfig> = PartialBy<P, keyof WithConfig>;

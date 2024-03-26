@@ -5,6 +5,7 @@ import type { PartialBy, RequiredBy } from '~/types/utils.js';
 import type { WithOptionalClasses } from '~/styles/types.js';
 
 type IntrinsicProps<Element extends JSXIntrinsicElement> =
+  & WithConfig
   & TypographyDefaults
   & { component: Element }
   & { [K in keyof JSXIntrinsicElementAttrs<Element>]: JSXIntrinsicElementAttrs<Element>[K] };
@@ -37,7 +38,7 @@ export type TypographyElementKey = 'root';
 /**
  * Component properties, having defaults.
  */
-export interface TypographyDefaults extends WithConfig {
+export interface TypographyDefaults {
   /**
    * Should component use monospace font.
    * @default false
@@ -53,6 +54,11 @@ export interface TypographyDefaults extends WithConfig {
    * @default 'regular'
    */
   weight?: TypographyWeight;
+  /**
+   * HTML tag to use as a root element.
+   * @default 'p'
+   */
+  component?: JSXIntrinsicElement;
 }
 
 /**

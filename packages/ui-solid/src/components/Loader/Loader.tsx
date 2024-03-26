@@ -2,6 +2,7 @@ import { For, mergeProps, Show } from 'solid-js';
 
 import { sanitizeCommon } from '~/helpers/sanitizeCommon.js';
 import { withConfig } from '~/hocs/withConfig.js';
+import type { WithConfigComponent } from '~/hocs/withConfig.js';
 
 import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
@@ -16,11 +17,9 @@ const block = new BemBlockClassNames('tgui-loader');
 /**
  * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-Library?type=design&node-id=216-2847&mode=design&t=5uMXzbr5N7vuFjxS-0
  */
-export const Loader = withConfig(
+export const Loader: WithConfigComponent<LoaderProps> = withConfig(
   styled((props: LoaderProps) => {
-    const merged = mergeProps({
-      size: 'md',
-    } satisfies Required<LoaderDefaults>, props);
+    const merged = mergeProps({ size: 'md' } satisfies Required<LoaderDefaults>, props);
     const classes = createClasses(merged);
 
     return (

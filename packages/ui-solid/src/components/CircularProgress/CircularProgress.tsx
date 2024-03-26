@@ -3,12 +3,13 @@ import { createMemo, mergeProps } from 'solid-js';
 
 import { sanitizeCommon } from '~/helpers/sanitizeCommon.js';
 import { withConfig } from '~/hocs/withConfig.js';
+import type { WithConfigComponent } from '~/hocs/withConfig.js';
 
 import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
 import { styled } from '~/styles/styled.js';
 
-import type { CircularProgressDefaults, CircularProgressProps } from './CircularProgress.types.js';
+import type { CircularProgressProps } from './CircularProgress.types.js';
 
 import './CircularProgress.scss';
 
@@ -17,21 +18,15 @@ const block = new BemBlockClassNames('tgui-circular-progress');
 /**
  * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-·%C2%A0UI-Kit?type=design&node-id=216-2847&mode=design&t=T40lNBs6ULRFVHOS-0
  */
-export const CircularProgress = withConfig(
+export const CircularProgress: WithConfigComponent<CircularProgressProps> = withConfig(
   styled((props: CircularProgressProps) => {
     const merged = createMemo(() => {
       const max = !props.max || props.max <= 0 ? 1 : props.max;
 
-      return mergeProps(
-        {
-          size: 'md',
-        } satisfies Omit<Required<CircularProgressDefaults>, 'max' | 'value'>,
-        props,
-        {
-          max,
-          value: Math.min(max, Math.max(0, props.value || 0)),
-        },
-      );
+      return mergeProps({ size: 'md' } as const, props, {
+        max,
+        value: Math.min(max, Math.max(0, props.value || 0)),
+      });
     });
     const classes = createClasses(merged);
 

@@ -1,4 +1,5 @@
 import { withConfig } from '~/hocs/withConfig.js';
+import type { WithConfigComponent } from '~/hocs/withConfig.js';
 
 import { BemBlockClassNames } from '~/styles/bem/BemBlockClassNames.js';
 import { createClasses } from '~/styles/createClasses.js';
@@ -17,21 +18,15 @@ const block = new BemBlockClassNames('tgui-quote');
 /**
  * @see Figma: https://www.figma.com/file/AwAi6qE11mQllHa1sOROYp/Telegram-Mini-Apps-·%C2%A0UI-Kit?type=design&node-id=151-1301&mode=design&t=m05h6QLGMZhDICKu-0
  */
-export const Quote = withConfig(
+export const Quote: WithConfigComponent<QuoteProps> = withConfig(
   styled((props: QuoteProps) => {
     const classes = createClasses(props);
 
     return (
-      <Typography.Custom
-        class={classes().root}
-        variant="subheadline2"
-        component={(componentProps) => (
-          <blockquote {...componentProps}>
-            {props.children}
-            <Quote12 class={classes().icon}/>
-          </blockquote>
-        )}
-      />
+      <Typography component="blockquote" variant="subheadline2" class={classes().root}>
+        {props.children}
+        <Quote12 class={classes().icon}/>
+      </Typography>
     );
   }, {
     root: (props) => block.calc({ mix: props.class }),

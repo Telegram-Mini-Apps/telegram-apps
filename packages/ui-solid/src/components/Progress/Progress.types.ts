@@ -12,8 +12,8 @@ export type ProgressElementKey = 'root';
  * Progress component public properties.
  */
 export interface ProgressProps
-  extends WithConfig,
-    JSXIntrinsicElementAttrs<'progress'>,
+  extends JSXIntrinsicElementAttrs<'progress'>,
+    WithConfig,
     WithOptionalClasses<ProgressElementKey, ProgressClassesProps> {
 }
 

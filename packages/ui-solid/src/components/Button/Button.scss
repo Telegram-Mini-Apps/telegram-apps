@@ -73,15 +73,15 @@ $sizes: (
     "border-radius": 8px,
     "sizes": (
       "sm": (
-        "min-height": 38px,
+        "height": 38px,
         "padding-x": 12px,
       ),
       "md": (
-        "min-height": 42px,
+        "height": 42px,
         "padding-x": 14px,
       ),
       "lg": (
-        "min-height": 50px,
+        "height": 50px,
         "padding-x": 18px,
       )
     ),
@@ -90,15 +90,15 @@ $sizes: (
     "border-radius": 12px,
     "sizes": (
       "sm": (
-        "min-height": 36px,
+        "height": 36px,
         "padding-x": 12px,
       ),
       "md": (
-        "min-height": 42px,
+        "height": 42px,
         "padding-x": 14px,
       ),
       "lg": (
-        "min-height": 50px,
+        "height": 50px,
         "padding-x": 18px,
         "border-radius": 10px
       )
@@ -108,11 +108,11 @@ $sizes: (
 
 @mixin sizes($platform) {
   @each $size-type, $size-settings in map-get(map-get($sizes, $platform), "sizes") {
-    $min-height: map-get($size-settings, "min-height");
+    $height: map-get($size-settings, "height");
 
     &-#{$size-type} {
-      min-height: $min-height;
-      padding: #{math.div($min-height - $icon-size - 2, 2)} map-get($size-settings, "padding-x");
+      height: $height;
+      padding: #{math.div($height - $icon-size - 2, 2)} map-get($size-settings, "padding-x");
     }
   }
 }
@@ -125,12 +125,12 @@ $sizes: (
   padding: 0;
   transition: opacity 75ms;
 
-  &--rounded {
-    border-radius: 1000px;
+  &--base {
+    @include sizes("base");
   }
 
-  &--stretched {
-    width: 100%;
+  &--ios {
+    @include sizes("ios");
   }
 
   // Background and text colors.
@@ -139,7 +139,7 @@ $sizes: (
       background-color: map-get($variant-settings, "background");
       color: map-get($variant-settings, "text");
 
-      &:hover {
+      &:not([disabled]):hover {
         background-color: map-get($variant-settings, "background:hover");
       }
     }
@@ -188,6 +188,14 @@ $sizes: (
     opacity: .35;
   }
 
+  &--rounded {
+    border-radius: 1000px;
+  }
+
+  &--stretched {
+    width: 100%;
+  }
+
   // RIPPLES.
   &__ripples {
     height: 100%;
@@ -201,12 +209,10 @@ $sizes: (
     transition: background-color 75ms;
 
     &--base {
-      @include sizes("base");
       gap: 12px;
     }
 
     &--ios {
-      @include sizes("ios");
       gap: 10px;
     }
 
@@ -234,8 +240,8 @@ $sizes: (
 
    // ICON CONTAINER.
   &__icon-container {
+    aspect-ratio: 1;
     width: $icon-size;
-    height: $icon-size;
     display: flex;
     align-items: center;
     justify-content: center;
