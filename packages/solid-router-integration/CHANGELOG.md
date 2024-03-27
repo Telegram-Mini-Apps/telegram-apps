@@ -1,5 +1,12 @@
 # @tma.js/solid-router-integration
 
+## 1.0.16
+
+### Patch Changes
+
+- Updated dependencies [1e43c94]
+  - @tma.js/sdk@1.5.1
+
 ## 1.0.15
 
 ### Patch Changes
