@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.5.1
+
+### Patch Changes
+
+- 1e43c94: Better classNames util
+
 ## 1.5.0
 
 ### Minor Changes

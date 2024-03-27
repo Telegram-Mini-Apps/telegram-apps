@@ -1,5 +1,12 @@
 # @tma.js/init-data-node
 
+## 1.1.13
+
+### Patch Changes
+
+- Updated dependencies [1e43c94]
+  - @tma.js/sdk@1.5.1
+
 ## 1.1.12
 
 ### Patch Changes
