@@ -35,6 +35,7 @@
     "@types/node": "^20.0.0",
     "build-utils": "workspace:*",
     "eslint-config-custom": "workspace:*",
+    "rollup-plugin-preserve-shebang": "^1.0.1",
     "test-utils": "workspace:*",
     "tsconfig": "workspace:*"
   },
