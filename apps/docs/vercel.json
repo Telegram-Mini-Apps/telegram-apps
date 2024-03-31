@@ -42,8 +42,8 @@
       "permanent": false
     },
     {
-      "source": "/platform/(functionality|launch-parameters|apps-communication|ui|guides)/:path*",
-      "destination": "/platform/:path*",
+      "source": "/platform/(functionality|launch-parameters|apps-communication|ui|guides)/:path",
+      "destination": "/platform/:path",
       "permanent": false
     }
   ]
