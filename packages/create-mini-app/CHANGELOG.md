@@ -1,5 +1,11 @@
 # @tma.js/create-mini-app
 
+## 0.0.6
+
+### Patch Changes
+
+- 0ca60ad: Add https links of repositories.
+
 ## 0.0.5
 
 ### Patch Changes
