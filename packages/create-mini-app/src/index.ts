@@ -4,13 +4,14 @@ import process from 'node:process';
 import chalk from 'chalk';
 import { program } from 'commander';
 
+import { cloneTemplate } from './cloneTemplate.js';
 import { isGitInstalled } from './isGitInstalled.js';
 import { promptRootDir } from './promptRootDir.js';
 import { spawnWithSpinner } from './spawnWithSpinner.js';
 import { filterTemplates } from './templates.js';
 import packageJson from '../package.json';
 
-const { bold, green, blue, red } = chalk;
+const { bold, green, red } = chalk;
 
 program
   .name(packageJson.name)
@@ -30,22 +31,11 @@ program
       rootDir = await promptRootDir();
     }
 
-    const [{ repository: { clone, link } }] = filterTemplates('ts', 'tma.js', 'react');
+    const [{ repository }] = filterTemplates('ts', 'tma.js', 'react.js');
 
     // Clone the template.
     try {
-      await spawnWithSpinner({
-        title: `Cloning the template from GitHub: ${bold(blue(link))}`,
-        command: `git clone ${clone} ${rootDir}`,
-        titleFail(outputOrCode) {
-          return `Failed to load the template. ${
-            typeof outputOrCode === 'string'
-              ? `Error: ${red(outputOrCode)}`
-              : `Error code: ${red(outputOrCode)}`
-          }`;
-        },
-        titleSuccess: `Cloned the template: ${bold(blue(link))}`,
-      });
+      await cloneTemplate(rootDir, repository);
     } catch {
       process.exit(1);
     }

@@ -2,26 +2,37 @@ interface CreateTemplate<Language extends string, Framework extends string> {
   sdk: 'telegram' | 'tma.js';
   language: Language;
   framework: Framework;
-  repository: {
-    clone: string;
-    link: string;
-  };
+  repository: TemplateRepository;
 }
 
-type JsTemplate = CreateTemplate<'js', 'solid' | 'react' | 'next' | 'vanilla js'>;
-type TsTemplate = CreateTemplate<'ts', 'solid' | 'react' | 'next'>;
-type AnyTemplate = JsTemplate | TsTemplate;
+export interface TemplateRepository {
+  clone: {
+    https: string;
+    ssh: string;
+  };
+  link: string;
+}
+
+type JsTemplate = CreateTemplate<'js', 'solid.js' | 'react.js' | 'next.js' | 'vanilla js'>;
+type TsTemplate = CreateTemplate<'ts', 'solid.js' | 'react.js' | 'next.js'>;
+export type AnyTemplate = JsTemplate | TsTemplate;
 
 type AllowedLanguage = AnyTemplate['language'];
 type AllowedSDK = AnyTemplate['sdk'];
 type AllowedFramework = AnyTemplate['framework'];
 
+/**
+ * List of templates known to the CLI.
+ */
 export const templates: AnyTemplate[] = [{
   language: 'ts',
   sdk: 'tma.js',
-  framework: 'react',
+  framework: 'react.js',
   repository: {
-    clone: 'git@github.com:Telegram-Mini-Apps/reactjs-template.git',
+    clone: {
+      https: 'https://github.com/Telegram-Mini-Apps/reactjs-template.git',
+      ssh: 'git@github.com:Telegram-Mini-Apps/reactjs-template.git',
+    },
     link: 'github.com/Telegram-Mini-Apps/reactjs-template',
   },
 }];
