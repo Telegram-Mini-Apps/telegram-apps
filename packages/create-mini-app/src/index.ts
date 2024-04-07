@@ -6,9 +6,9 @@ import { program } from 'commander';
 
 import { cloneTemplate } from './cloneTemplate.js';
 import { isGitInstalled } from './isGitInstalled.js';
-import { promptRootDir } from './promptRootDir.js';
+import { promptRootDir, promptTemplate } from './prompts.js';
 import { spawnWithSpinner } from './spawnWithSpinner.js';
-import { filterTemplates } from './templates.js';
+import type { TemplateRepository } from './types.js';
 import packageJson from '../package.json';
 
 const { bold, green, red } = chalk;
@@ -20,7 +20,7 @@ program
   .action(async () => {
     // Check if git is installed.
     if (!await isGitInstalled()) {
-      console.error('To run this CLI tool, git should be installed. Installation guide: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git');
+      console.error('To run this CLI tool, git is required. Installation guide: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git');
       process.exit(1);
     }
 
@@ -28,10 +28,21 @@ program
     let rootDir: string | null = null;
     while (!rootDir) {
       console.clear();
-      rootDir = await promptRootDir();
+      try {
+        rootDir = await promptRootDir();
+      } catch {
+        process.exit(0);
+      }
     }
 
-    const [{ repository }] = filterTemplates('ts', 'tma.js', 'react.js');
+    // Prompt the target template.
+    let repository: TemplateRepository;
+    try {
+      const { repository: promptRepo } = await promptTemplate();
+      repository = promptRepo;
+    } catch {
+      process.exit(0);
+    }
 
     // Clone the template.
     try {
@@ -60,7 +71,7 @@ program
 
     console.log([
       green(bold('Your project has been successfully initialized!')),
-      `Now, open the ${bold(rootDir)} directory and follow the instructions presented in the ${bold('README.md')} file.`,
+      `Now, open the ${bold(rootDir)} directory and follow the instructions presented in the ${bold('README.md')} file. ${bold('Happy coding! 🚀')}`,
     ].join('\n'));
   });
 

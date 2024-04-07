@@ -1,25 +1,20 @@
-interface CreateTemplate<Language extends string, Framework extends string> {
-  sdk: 'telegram' | 'tma.js';
-  language: Language;
-  framework: Framework;
-  repository: TemplateRepository;
-}
+import type {
+  AnyTemplate,
+  KnownFramework,
+  KnownLanguage,
+  KnownSDK,
+  TemplateRepository,
+} from './types.js';
 
-export interface TemplateRepository {
-  clone: {
-    https: string;
-    ssh: string;
+function createRepository(name: string): TemplateRepository {
+  return {
+    clone: {
+      https: `https://github.com/Telegram-Mini-Apps/${name}.git`,
+      ssh: `git@github.com:Telegram-Mini-Apps/${name}.git`,
+    },
+    link: `github.com/Telegram-Mini-Apps/${name}`,
   };
-  link: string;
 }
-
-type JsTemplate = CreateTemplate<'js', 'solid.js' | 'react.js' | 'next.js' | 'vanilla js'>;
-type TsTemplate = CreateTemplate<'ts', 'solid.js' | 'react.js' | 'next.js'>;
-export type AnyTemplate = JsTemplate | TsTemplate;
-
-type AllowedLanguage = AnyTemplate['language'];
-type AllowedSDK = AnyTemplate['sdk'];
-type AllowedFramework = AnyTemplate['framework'];
 
 /**
  * List of templates known to the CLI.
@@ -28,21 +23,26 @@ export const templates: AnyTemplate[] = [{
   language: 'ts',
   sdk: 'tma.js',
   framework: 'react.js',
-  repository: {
-    clone: {
-      https: 'https://github.com/Telegram-Mini-Apps/reactjs-template.git',
-      ssh: 'git@github.com:Telegram-Mini-Apps/reactjs-template.git',
-    },
-    link: 'github.com/Telegram-Mini-Apps/reactjs-template',
-  },
+  repository: createRepository('reactjs-template'),
+}, {
+  language: 'js',
+  sdk: 'tma.js',
+  framework: 'react.js',
+  repository: createRepository('reactjs-js-template'),
 }];
 
-export function filterTemplates(
-  language: AllowedLanguage,
-  sdk: AllowedSDK,
-  framework: AllowedFramework,
-): AnyTemplate[] {
-  return templates.filter((t) => {
+/**
+ * Leaves only templates with specified technologies.
+ * @param language
+ * @param sdk
+ * @param framework
+ */
+export function findTemplate(
+  language: KnownLanguage,
+  sdk: KnownSDK,
+  framework: KnownFramework,
+): AnyTemplate | undefined {
+  return templates.find((t) => {
     return t.sdk === sdk && t.language === language && t.framework === framework;
   });
 }
