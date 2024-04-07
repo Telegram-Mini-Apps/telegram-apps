@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 
 import { spawnWithSpinner } from './spawnWithSpinner.js';
-import type { TemplateRepository } from './templates.js';
+import type { TemplateRepository } from './types.js';
 
 const { bold, blue, red } = chalk;
 
@@ -22,6 +22,8 @@ export async function cloneTemplate(
     link,
   }: TemplateRepository,
 ): Promise<void> {
+  const titleSuccess = bold(`Template was cloned: ${blue(link)}`);
+
   // Clone the template using https.
   try {
     await spawnWithSpinner({
@@ -34,7 +36,7 @@ export async function cloneTemplate(
             : `Error code: ${red(outputOrCode)}`
         }`;
       },
-      titleSuccess: `Cloned the template: ${bold(blue(link))}`,
+      titleSuccess,
     });
     return;
   } catch (e) { /* empty */
@@ -51,6 +53,6 @@ export async function cloneTemplate(
           : `Error code: ${red(outputOrCode)}`
       }`;
     },
-    titleSuccess: `Cloned the template: ${bold(blue(link))}`,
+    titleSuccess,
   });
 }
