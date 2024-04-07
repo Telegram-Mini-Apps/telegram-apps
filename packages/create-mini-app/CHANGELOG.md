@@ -1,5 +1,11 @@
 # @tma.js/create-mini-app
 
+## 0.1.0
+
+### Minor Changes
+
+- 18950aa: Add interactive template selection
+
 ## 0.0.6
 
 ### Patch Changes
