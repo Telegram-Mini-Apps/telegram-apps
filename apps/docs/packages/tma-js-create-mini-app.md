@@ -17,11 +17,11 @@ To run the tool, use one of the following scripts depending on your package mana
 
 ::: code-group
 ```bash [pnpm]
-pnpm dlx @tma.js/create-mini-app
+pnpm dlx @tma.js/create-mini-app@latest
 ```
 
 ```bash [npm]
-npx @tma.js/create-mini-app
+npx @tma.js/create-mini-app@latest
 ```
 
 ```bash [yarn]
