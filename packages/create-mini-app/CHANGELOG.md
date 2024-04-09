@@ -1,5 +1,11 @@
 # @tma.js/create-mini-app
 
+## 0.1.1
+
+### Patch Changes
+
+- 456d5a7: Add Solid.js tma.js, TS template
+
 ## 0.1.0
 
 ### Minor Changes
