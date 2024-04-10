@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.5.2
+
+### Patch Changes
+
+- d5ca188: Fix incorrect retrieveLaunchParams function behavior in case of complete URL
+
 ## 1.5.1
 
 ### Patch Changes
