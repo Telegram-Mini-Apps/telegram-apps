@@ -17,3 +17,22 @@ it('should return launch parameters based on query params and hash in case, URL 
     startParam: '900',
   });
 });
+
+it('should return launch parameters based in full URL', () => {
+  expect(
+    retrieveFromUrl('https://example.com/?tgWebAppStartParam=debug#my-hash?tgWebAppStartParam=900#tgWebAppPlatform=tdesktop&tgWebAppVersion=7.0&tgWebAppThemeParams=%7B%7D'),
+  ).toEqual({
+    platform: 'tdesktop',
+    version: '7.0',
+    themeParams: {},
+    startParam: 'debug',
+  });
+  expect(
+    retrieveFromUrl('https://example.com#my-hash?tgWebAppStartParam=900#tgWebAppPlatform=tdesktop&tgWebAppVersion=7.0&tgWebAppThemeParams=%7B%7D'),
+  ).toEqual({
+    platform: 'tdesktop',
+    version: '7.0',
+    themeParams: {},
+    startParam: '900',
+  });
+});
