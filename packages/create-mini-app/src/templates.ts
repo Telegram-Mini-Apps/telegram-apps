@@ -34,6 +34,11 @@ export const templates: AnyTemplate[] = [{
   sdk: 'tma.js',
   framework: 'solid.js',
   repository: createRepository('solidjs-template'),
+}, {
+  language: 'js',
+  sdk: 'tma.js',
+  framework: 'solid.js',
+  repository: createRepository('solidjs-js-template'),
 }];
 
 /**
