@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 1.5.3
+
+### Patch Changes
+
+- 26493b8: Fix invalid launch params serialization
+
 ## 1.5.2
 
 ### Patch Changes
