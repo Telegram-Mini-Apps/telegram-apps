@@ -26,7 +26,7 @@ export function serializeLaunchParams(value: LaunchParams): string {
   params.set('tgWebAppVersion', version);
 
   if (startParam) {
-    params.set('tgWebAppStartParam', version);
+    params.set('tgWebAppStartParam', startParam);
   }
 
   if (typeof showSettings === 'boolean') {
