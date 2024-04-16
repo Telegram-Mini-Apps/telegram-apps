@@ -1,3 +1,5 @@
+export * from '@tma.js/sdk';
+
 export {
   useThemeParams,
   useInitData,

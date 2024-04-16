@@ -46,7 +46,7 @@ export abstract class Navigator<T> {
         hash: hash ? ensurePrefix(hash, '#') : '',
       };
     });
-    this.logger = new Logger(`[${loggerPrefix}]`, debug);
+    this.logger = new Logger({ text: loggerPrefix }, debug);
   }
 
   protected abstract performGo(options: PerformGoOptions): T;

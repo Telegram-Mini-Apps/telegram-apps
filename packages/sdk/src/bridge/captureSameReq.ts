@@ -6,7 +6,5 @@ type CaptureSameReqFn = (payload: { req_id: string }) => boolean;
  * @param reqId - request identifier.
  */
 export function captureSameReq(reqId: string): CaptureSameReqFn {
-  return ({ req_id }: { req_id: string }): boolean => {
-    return req_id === reqId;
-  };
+  return ({ req_id }) => req_id === reqId;
 }

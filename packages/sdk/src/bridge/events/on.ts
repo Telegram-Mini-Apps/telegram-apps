@@ -1,7 +1,7 @@
-import type { MiniAppsEventListener, MiniAppsEventName } from './events.js';
 import { off } from './off.js';
 import { singletonEmitter } from './singletonEmitter.js';
-import type { RemoveListenerFn } from './types.js';
+import type { MiniAppsEventListener, MiniAppsEventName } from './types/events.js';
+import type { CleanupFn } from './types/misc.js';
 
 /**
  * Adds new listener to the specified event. Returns handler
@@ -12,7 +12,7 @@ import type { RemoveListenerFn } from './types.js';
 export function on<E extends MiniAppsEventName>(
   event: E,
   listener: MiniAppsEventListener<E>,
-): RemoveListenerFn {
+): CleanupFn {
   singletonEmitter().on(event, listener);
   return () => off(event, listener);
 }

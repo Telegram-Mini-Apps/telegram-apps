@@ -9,6 +9,6 @@ export type Platform =
   | 'tdesktop'
   | 'unigram'
   | 'unknown'
-  | 'web'
+  | 'webk'
   | 'weba'
   | string;

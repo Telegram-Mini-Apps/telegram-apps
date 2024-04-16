@@ -1,14 +1,4 @@
-import { isRecord } from '../misc/isRecord.js';
-
-/**
- * Inserts a space between a and b in case both of them are
- * non-empty strings.
- * @param a
- * @param b
- */
-function space(a: string, b: string): string {
-  return a + (a.length && b.length ? ` ${b}` : b);
-}
+import { isRecord } from '@/misc/isRecord.js';
 
 /**
  * Function which joins passed values with space following these rules:
@@ -22,21 +12,21 @@ function space(a: string, b: string): string {
  * @returns Final class name.
  */
 export function classNames(...values: any[]): string {
-  return values.reduce((acc, value) => {
-    if (typeof value === 'string') {
-      return space(acc, value);
-    }
+  return values
+    // eslint-disable-next-line array-callback-return
+    .map((value) => {
+      if (typeof value === 'string') {
+        return value;
+      }
 
-    if (isRecord(value)) {
-      return space(acc, Object.entries(value).reduce((valueAcc, entry) => {
-        return (entry[1] ? space(valueAcc, entry[0]) : valueAcc);
-      }, ''));
-    }
+      if (isRecord(value)) {
+        return classNames(Object.entries(value).map((entry) => entry[1] && entry[0]));
+      }
 
-    if (Array.isArray(value)) {
-      return space(acc, classNames(...value));
-    }
-
-    return acc;
-  }, '');
+      if (Array.isArray(value)) {
+        return classNames(...value);
+      }
+    })
+    .filter(Boolean)
+    .join(' ');
 }

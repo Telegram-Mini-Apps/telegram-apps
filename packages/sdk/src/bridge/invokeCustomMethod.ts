@@ -1,7 +1,10 @@
+import { createError } from '@/errors/createError.js';
+import { ERROR_INVOKE_CUSTOM_METHOD_RESPONSE } from '@/errors/errors.js';
+import type { ExecuteWithOptions } from '@/types/methods.js';
+
 import { captureSameReq } from './captureSameReq.js';
-import type { CustomMethodName, CustomMethodParams } from './methods/custom-methods.js';
+import type { CustomMethodName, CustomMethodParams } from './methods/types/custom-methods.js';
 import { request } from './request.js';
-import type { ExecuteWithOptions } from '../types/methods.js';
 
 /**
  * Invokes known custom method. Returns method execution result.
@@ -9,6 +12,8 @@ import type { ExecuteWithOptions } from '../types/methods.js';
  * @param params - method parameters.
  * @param requestId - request identifier.
  * @param options - additional options.
+ * @throws {SDKError} ERROR_INVOKE_CUSTOM_METHOD_RESPONSE
+ * @see ERROR_INVOKE_CUSTOM_METHOD_RESPONSE
  */
 export async function invokeCustomMethod<M extends CustomMethodName>(
   method: M,
@@ -23,6 +28,8 @@ export async function invokeCustomMethod<M extends CustomMethodName>(
  * @param params - method parameters.
  * @param requestId - request identifier.
  * @param options - additional options.
+ * @throws {SDKError} ERROR_INVOKE_CUSTOM_METHOD_RESPONSE
+ * @see ERROR_INVOKE_CUSTOM_METHOD_RESPONSE
  */
 export function invokeCustomMethod(
   method: string,
@@ -51,7 +58,7 @@ export async function invokeCustomMethod(
   });
 
   if (error) {
-    throw new Error(error);
+    throw createError(ERROR_INVOKE_CUSTOM_METHOD_RESPONSE, error);
   }
 
   return result;

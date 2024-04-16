@@ -1,27 +1,17 @@
+import { on } from '@/bridge/events/on.js';
+import type { CleanupFn } from '@/bridge/events/types/misc.js';
+import { WithState } from '@/classes/with-state/WithState.js';
+import { isColorDark } from '@/colors/isColorDark.js';
+import type { RGB } from '@/colors/types.js';
+
 import { parseThemeParams } from './parseThemeParams.js';
-import type {
-  ThemeParamsEvents,
-  ThemeParamsParsed,
-  ThemeParamsState,
-} from './types.js';
-import { on } from '../../bridge/events/on.js';
-import type { RemoveListenerFn } from '../../bridge/events/types.js';
-import { isColorDark } from '../../colors/isColorDark.js';
-import type { RGB } from '../../colors/types.js';
-import { EventEmitter } from '../../event-emitter/EventEmitter.js';
-import { State } from '../../state/State.js';
+import type { ThemeParamsParsed, ThemeParamsState } from './types.js';
 
-type Emitter = EventEmitter<ThemeParamsEvents>;
-
-export class ThemeParams {
-  private readonly ee = new EventEmitter<ThemeParamsEvents>();
-
-  private readonly state: State<ThemeParamsState>;
-
-  constructor(params: ThemeParamsParsed) {
-    this.state = new State(params, this.ee);
-  }
-
+/**
+ * @see Usage: https://docs.telegram-mini-apps.com/platform/theming
+ * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/theme-params
+ */
+export class ThemeParams extends WithState<ThemeParamsState> {
   /**
    * @since v6.10
    */
@@ -29,8 +19,8 @@ export class ThemeParams {
     return this.get('accentTextColor');
   }
 
-  get backgroundColor(): RGB | undefined {
-    return this.get('backgroundColor');
+  get bgColor(): RGB | undefined {
+    return this.get('bgColor');
   }
 
   get buttonColor(): RGB | undefined {
@@ -46,25 +36,17 @@ export class ThemeParams {
   }
 
   /**
-   * Retrieves palette color value by its name.
-   * @param key - palette key name.
-   */
-  get(key: Extract<keyof ThemeParamsParsed, string>): RGB | undefined {
-    return this.state.get(key);
-  }
-
-  /**
    * Returns the copy of the internal state of the current component instance.
    */
   getState(): ThemeParamsParsed {
-    return this.state.clone();
+    return this.clone();
   }
 
   /**
    * @since v6.10
    */
-  get headerBackgroundColor(): RGB | undefined {
-    return this.get('headerBackgroundColor');
+  get headerBgColor(): RGB | undefined {
+    return this.get('headerBgColor');
   }
 
   get hintColor(): RGB | undefined {
@@ -72,36 +54,26 @@ export class ThemeParams {
   }
 
   /**
-   * Returns true in case, current color scheme is recognized as dark. This
-   * value is calculated according to theme background color.
+   * @returns True in case, current color scheme is recognized as dark. This
+   * value is calculated according to theme bg color.
    */
   get isDark(): boolean {
-    return !this.backgroundColor || isColorDark(this.backgroundColor);
+    return !this.bgColor || isColorDark(this.bgColor);
   }
 
   get linkColor(): RGB | undefined {
     return this.get('linkColor');
   }
 
-  /**
-   * Adds new event listener.
-   */
-  on: Emitter['on'] = this.ee.on.bind(this.ee);
-
-  /**
-   * Removes event listener.
-   */
-  off: Emitter['off'] = this.ee.off.bind(this.ee);
-
-  get secondaryBackgroundColor(): RGB | undefined {
-    return this.get('secondaryBackgroundColor');
+  get secondaryBgColor(): RGB | undefined {
+    return this.get('secondaryBgColor');
   }
 
   /**
    * @since v6.10
    */
-  get sectionBackgroundColor(): RGB | undefined {
-    return this.get('sectionBackgroundColor');
+  get sectionBgColor(): RGB | undefined {
+    return this.get('sectionBgColor');
   }
 
   /**
@@ -115,9 +87,9 @@ export class ThemeParams {
    * Starts listening to theme changes and applies them.
    * @returns Function to stop listening.
    */
-  listen(): RemoveListenerFn {
+  listen(): CleanupFn {
     return on('theme_changed', (event) => {
-      this.state.set(parseThemeParams(event.theme_params));
+      this.set(parseThemeParams(event.theme_params));
     });
   }
 

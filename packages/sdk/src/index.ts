@@ -26,18 +26,18 @@ export type {
   MiniAppsMethods,
   MiniAppsNonEmptyMethodName,
   SwitchInlineQueryChatType,
-} from './bridge/methods/methods.js';
+} from './bridge/methods/types/methods.js';
 export type { InvoiceStatus } from './bridge/events/parsers/invoiceClosed.js';
 export type {
   ImpactHapticFeedbackStyle,
   NotificationHapticFeedbackType,
-} from './bridge/methods/haptic.js';
+} from './bridge/methods/types/haptic.js';
 export type {
   MiniAppsEventEmitter, MiniAppsEventHasParams,
   MiniAppsEventListener,
   MiniAppsEventName,
   MiniAppsEventParams, MiniAppsEvents, MiniAppsGlobalEventListener,
-} from './bridge/events/events.js';
+} from './bridge/events/types/events.js';
 export type { PhoneRequestedStatus } from './bridge/events/parsers/phoneRequested.js';
 export type { WriteAccessRequestedStatus } from './bridge/events/parsers/writeAccessRequested.js';
 
@@ -62,6 +62,7 @@ export type { RGB, RGBShort } from './colors/types.js';
 
 // Back button.
 export { BackButton } from './components/back-button/BackButton.js';
+export { initBackButton } from './components/back-button/initBackButton.js';
 export type {
   BackButtonEventListener,
   BackButtonEventName,
@@ -83,11 +84,11 @@ export { CloudStorage } from './components/cloud-storage/CloudStorage.js';
 export { HapticFeedback } from './components/haptic-feedback/HapticFeedback.js';
 
 // Init data.
-export { chatParser } from './components/init-data/chatParser.js';
+export { chat } from './components/init-data/parsers/chat.js';
 export { InitData } from './components/init-data/InitData.js';
-export { initDataParser } from './components/init-data/initDataParser.js';
+export { initData } from './components/init-data/parsers/initData.js';
 export { parseInitData } from './components/init-data/parseInitData.js';
-export { userParser } from './components/init-data/userParser.js';
+export { user } from './components/init-data/parsers/user.js';
 export type { Chat, User, ChatType, InitDataParsed } from './components/init-data/types.js';
 
 // Invoice.
@@ -149,7 +150,7 @@ export type {
 export { parseThemeParams } from './components/theme-params/parseThemeParams.js';
 export { requestThemeParams } from './components/theme-params/requestThemeParams.js';
 export { serializeThemeParams } from './components/theme-params/serializeThemeParams.js';
-export { themeParamsParser } from './components/theme-params/themeParamsParser.js';
+export { themeParams } from './components/theme-params/parsers/themeParams.js';
 export { ThemeParams } from './components/theme-params/ThemeParams.js';
 export type {
   ThemeParamsEventListener,
@@ -179,10 +180,10 @@ export type {
 /**
  * CSS.
  */
-export { setCSSVar } from './css/setCSSVar.js';
-export { bindMiniAppCSSVars } from './css/bindMiniAppCSSVars.js';
-export { bindThemeCSSVars } from './css/bindThemeCSSVars.js';
-export { bindViewportCSSVars } from './css/bindViewportCSSVars.js';
+export { setCSSVar } from '@/css-vars/setCSSVar.js';
+export { bindMiniAppCSSVars } from '@/css-vars/bindMiniAppCSSVars.js';
+export { bindThemeCSSVars } from '@/css-vars/bindThemeCSSVars.js';
+export { bindViewportCSSVars } from '@/css-vars/bindViewportCSSVars.js';
 
 /**
  * Init.
@@ -193,7 +194,7 @@ export type { InitOptions, InitResult } from './init/types.js';
 /**
  * Launch params.
  */
-export { launchParamsParser } from './launch-params/launchParamsParser.js';
+export { launchParams } from './launch-params/parsers/launchParams.js';
 export { parseLaunchParams } from './launch-params/parseLaunchParams.js';
 export { retrieveLaunchParams } from './launch-params/retrieveLaunchParams.js';
 export { retrieveLaunchData } from './launch-params/retrieveLaunchData.js';
@@ -204,10 +205,12 @@ export type { LaunchData } from './launch-params/types.js';
 /**
  * Misc.
  */
-export { isTMA } from './misc/isTMA.js';
+export { setTargetOrigin } from './misc/globals.js';
+export { setDebug } from './debug/debug.js';
+export { isTMA } from './env/isTMA.js';
 export { isRecord } from './misc/isRecord.js';
-export { isIframe } from './misc/isIframe.js';
-export { isPageReload } from './misc/isPageReload.js';
+export { isIframe } from './env/isIframe.js';
+export { isPageReload } from './navigation/isPageReload.js';
 
 /**
  * Navigation.
@@ -256,15 +259,10 @@ export { isTimeoutError } from './timeout/isTimeoutError.js';
 /**
  * Types.
  */
-export type { RequestId, CreateRequestIdFunc } from './types/request-id.js';
+export type { RequestId, CreateRequestIdFn } from './request-id/types.js';
 
 /**
  * Version.
  */
 export { compareVersions } from './version/compareVersions.js';
 export type { Version } from './version/types.js';
-
-/**
- * Globals.
- */
-export { setTargetOrigin, setDebug } from './globals.js';

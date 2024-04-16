@@ -1,10 +1,18 @@
 /**
  * Message log level.
  */
-export type LogLevel = 'log' | 'error' | 'warn';
+export type LogLevel = 'log' | 'error';
 
-export class Logger {
-  constructor(private readonly prefix: string, private enabled: boolean) {
+export interface LoggerOptions {
+  bgColor?: string;
+  textColor?: string;
+}
+
+export class Logger implements Pick<Console, 'log' | 'error'> {
+  constructor(
+    private readonly scope: string,
+    private readonly options: LoggerOptions = {},
+  ) {
   }
 
   /**
@@ -13,10 +21,6 @@ export class Logger {
    * @param args - arguments.
    */
   private print(level: LogLevel, ...args: any[]): void {
-    if (!this.enabled) {
-      return;
-    }
-
     const now = new Date();
     const date = Intl
       .DateTimeFormat('en-GB', {
@@ -28,15 +32,16 @@ export class Logger {
       })
       .format(now);
 
-    // eslint-disable-next-line no-console
-    console[level](`[${date}]`, this.prefix, ...args);
-  }
+    const { textColor, bgColor } = this.options;
+    const commonCss = 'font-weight: bold;padding: 0 5px;border-radius:5px';
 
-  /**
-   * Disables the logger.
-   */
-  disable() {
-    this.enabled = false;
+    console[level](
+      `%c${date}%c / %c${this.scope}`,
+      `${commonCss};background-color: lightblue;`,
+      '',
+      `${commonCss};${textColor ? `color:${textColor};` : ''}${bgColor ? `background-color:${bgColor}` : ''}`,
+      ...args,
+    );
   }
 
   /**
@@ -48,25 +53,10 @@ export class Logger {
   }
 
   /**
-   * Enables the logger.
-   */
-  enable() {
-    this.enabled = true;
-  }
-
-  /**
    * Prints log message into a console.
    * @param args
    */
   log(...args: any[]): void {
     this.print('log', ...args);
-  }
-
-  /**
-   * Prints warning message into a console.
-   * @param args
-   */
-  warn(...args: any[]): void {
-    this.print('warn', ...args);
   }
 }

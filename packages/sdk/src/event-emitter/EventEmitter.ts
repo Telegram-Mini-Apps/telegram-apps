@@ -1,19 +1,20 @@
 import type {
-  AnySubscribeListener,
   EmptyEventName,
-  EventListener, EventName,
-  EventParams, NonEmptyEventName, RemoveEventListener,
+  EventListener,
+  EventName,
+  EventParams,
+  NonEmptyEventName,
+  RemoveEventListener,
+  SubscribeListener,
 } from './types.js';
 
-type AddedEventListener = [listener: EventListener<any>, once: boolean];
-
-/**
- * Opinionated event emitter implementation.
- */
 export class EventEmitter<Schema> {
-  private readonly listeners: Map<string, AddedEventListener[]> = new Map();
+  private readonly listeners: Map<
+    string,
+    [listener: EventListener<any>, once: boolean][]
+  > = new Map();
 
-  private readonly subscribeListeners: AnySubscribeListener<Schema>[] = [];
+  private readonly subscribeListeners: SubscribeListener<Schema>[] = [];
 
   /**
    * Adds specified event listener.
@@ -48,18 +49,15 @@ export class EventEmitter<Schema> {
    * @param event - event name.
    * @param args - list of event listener arguments.
    */
-  emit<E extends NonEmptyEventName<Schema>>(
-    event: E,
-    ...args: EventParams<Schema[E]>
-  ): void;
+  emit<E extends NonEmptyEventName<Schema>>(event: E, ...args: EventParams<Schema[E]>): void;
 
   emit(event: EventName<Schema>, ...args: any[]): void {
-    this.subscribeListeners.forEach((l) => (l as any)(event, ...args));
+    this.subscribeListeners.forEach((l) => l({
+      event,
+      args: args as EventParams<Schema[EventName<Schema>]>,
+    }));
 
-    const listeners = this.listeners.get(event);
-    if (!listeners) {
-      return;
-    }
+    const listeners = this.listeners.get(event) || [];
 
     listeners.forEach(([listener, once], idx) => {
       listener(...args);
@@ -70,10 +68,10 @@ export class EventEmitter<Schema> {
   }
 
   /**
-   * Adds event listener.
+   * Adds new event listener.
    * @param event - event name.
    * @param listener - event listener.
-   * @returns Function to remove event listener.
+   * @returns Function to remove bound event listener.
    */
   on<E extends EventName<Schema>>(
     event: E,
@@ -83,7 +81,7 @@ export class EventEmitter<Schema> {
   }
 
   /**
-   * Adds event listener following the logic, described in `on` method, but calls specified
+   * Adds new event listener following the logic, described in the `on` method, but calls specified
    * listener only once, removing it after.
    * @param event - event name.
    * @param listener - event listener.
@@ -118,13 +116,11 @@ export class EventEmitter<Schema> {
   }
 
   /**
-   * Adds event listener to all events.
+   * Adds a new event listener for all events.
    * @param listener - events listener.
    * @returns Function to remove event listener.
-   * @see on
-   * @see once
    */
-  subscribe(listener: AnySubscribeListener<Schema>): RemoveEventListener {
+  subscribe(listener: SubscribeListener<Schema>): RemoveEventListener {
     this.subscribeListeners.push(listener);
     return () => this.unsubscribe(listener);
   }
@@ -133,9 +129,8 @@ export class EventEmitter<Schema> {
    * Removes global event listener. In case, specified listener was bound several times, it removes
    * only a single one.
    * @param listener - events listener.
-   * @returns Function to remove event listener.
    */
-  unsubscribe(listener: AnySubscribeListener<Schema>): void {
+  unsubscribe(listener: SubscribeListener<Schema>): void {
     for (let i = 0; i < this.subscribeListeners.length; i += 1) {
       if (this.subscribeListeners[i] === listener) {
         this.subscribeListeners.splice(i, 1);

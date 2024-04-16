@@ -1,26 +1,47 @@
-import type { PostEvent } from '../../bridge/methods/postEvent.js';
-import type { RGB } from '../../colors/types.js';
-import type { StateEvents } from '../../state/types.js';
+import type { MiniAppsEventListener } from '@/bridge/events/types/events.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
+import type { StateEvents } from '@/classes/with-state/types.js';
+import type { RGB } from '@/colors/types.js';
 
 export interface MainButtonParams {
-  backgroundColor?: RGB;
-  isEnabled?: boolean;
-  isLoaderVisible?: boolean;
-  isVisible?: boolean;
-  text?: string;
-  textColor?: RGB;
+  backgroundColor: RGB;
+  isEnabled: boolean;
+  isLoaderVisible: boolean;
+  isVisible: boolean;
+  text: string;
+  textColor: RGB;
 }
 
-export interface MainButtonProps extends Required<MainButtonParams> {
-  postEvent?: PostEvent;
+/**
+ * MainButton constructor properties.
+ */
+export interface MainButtonProps extends MainButtonParams {
+  postEvent: PostEvent;
 }
 
-export type MainButtonState = Required<MainButtonParams>;
+/**
+ * MainButton internal state.
+ */
+export interface MainButtonState extends MainButtonParams {
+}
 
+/**
+ * MainButton trackable events.
+ */
 export interface MainButtonEvents extends StateEvents<MainButtonState> {
-  click: () => void;
 }
 
+/**
+ * MainButton event name.
+ */
 export type MainButtonEventName = keyof MainButtonEvents;
 
+/**
+ * MainButton event listener.
+ */
 export type MainButtonEventListener<E extends MainButtonEventName> = MainButtonEvents[E];
+
+/**
+ * MainButton click event listener.
+ */
+export type MainButtonClickListener = MiniAppsEventListener<'main_button_pressed'>;

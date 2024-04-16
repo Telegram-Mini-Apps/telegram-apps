@@ -1,4 +1,4 @@
-import type { StateEvents } from '../../state/types.js';
+import type { StateEvents } from '@/classes/with-state/types.js';
 
 export interface PopupState {
   isOpened: boolean;

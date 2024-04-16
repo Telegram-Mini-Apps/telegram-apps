@@ -1,25 +1,26 @@
+import type { BackButton } from '@/components/back-button/BackButton.js';
+import type { ClosingBehavior } from '@/components/closing-behavior/ClosingBehavior.js';
+import type { CloudStorage } from '@/components/cloud-storage/CloudStorage.js';
+import type { HapticFeedback } from '@/components/haptic-feedback/HapticFeedback.js';
+import type { InitData } from '@/components/init-data/InitData.js';
+import type { Invoice } from '@/components/invoice/Invoice.js';
+import type { MainButton } from '@/components/main-button/MainButton.js';
+import type { MiniApp } from '@/components/mini-app/MiniApp.js';
+import type { Popup } from '@/components/popup/Popup.js';
+import type { QRScanner } from '@/components/qr-scanner/QRScanner.js';
+import type { SettingsButton } from '@/components/settings-button/SettingsButton.js';
+import type { ThemeParams } from '@/components/theme-params/ThemeParams.js';
+import type { Utils } from '@/components/utils/Utils.js';
+import type { Viewport } from '@/components/viewport/Viewport.js';
+import type { CreateRequestIdFn } from '@/request-id/types.js';
+
 import type { PostEvent } from '../bridge/methods/postEvent.js';
-import type { BackButton } from '../components/back-button/BackButton.js';
-import type { ClosingBehavior } from '../components/closing-behavior/ClosingBehavior.js';
-import type { CloudStorage } from '../components/cloud-storage/CloudStorage.js';
-import type { HapticFeedback } from '../components/haptic-feedback/HapticFeedback.js';
-import type { InitData } from '../components/init-data/InitData.js';
-import type { Invoice } from '../components/invoice/Invoice.js';
-import type { MainButton } from '../components/main-button/MainButton.js';
-import type { MiniApp } from '../components/mini-app/MiniApp.js';
-import type { Popup } from '../components/popup/Popup.js';
-import type { QRScanner } from '../components/qr-scanner/QRScanner.js';
-import type { SettingsButton } from '../components/settings-button/SettingsButton.js';
-import type { ThemeParams } from '../components/theme-params/ThemeParams.js';
-import type { Utils } from '../components/utils/Utils.js';
-import type { Viewport } from '../components/viewport/Viewport.js';
-import type { CreateRequestIdFunc } from '../types/request-id.js';
 
 export interface InitResult {
   backButton: BackButton;
   closingBehavior: ClosingBehavior;
   cloudStorage: CloudStorage;
-  createRequestId: CreateRequestIdFunc;
+  createRequestId: CreateRequestIdFn;
   hapticFeedback: HapticFeedback;
   initData?: InitData;
   initDataRaw?: string;

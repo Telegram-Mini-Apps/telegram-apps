@@ -1,134 +1,71 @@
-import { catchCustomStyles } from './catchCustomStyles.js';
-import { createBackButton } from './creators/createBackButton.js';
-import { createClosingBehavior } from './creators/createClosingBehavior.js';
-import { createMainButton } from './creators/createMainButton.js';
-import { createMiniApp } from './creators/createMiniApp.js';
-import { createRequestIdGenerator } from './creators/createRequestIdGenerator.js';
-import { createSettingsButton } from './creators/createSettingsButton.js';
-import { createThemeParams } from './creators/createThemeParams.js';
-import { createViewport } from './creators/createViewport.js';
-import { processCSSVars } from './css/processCSSVarsOption.js';
-import type { InitOptions, InitResult } from './types.js';
-import { on } from '../bridge/events/on.js';
-import { createPostEvent } from '../bridge/methods/createPostEvent.js';
-import { CloudStorage } from '../components/cloud-storage/CloudStorage.js';
-import { HapticFeedback } from '../components/haptic-feedback/HapticFeedback.js';
-import { InitData } from '../components/init-data/InitData.js';
-import { Invoice } from '../components/invoice/Invoice.js';
-import { Popup } from '../components/popup/Popup.js';
-import { QRScanner } from '../components/qr-scanner/QRScanner.js';
-import { Utils } from '../components/utils/Utils.js';
-import { retrieveLaunchParams } from '../launch-params/retrieveLaunchParams.js';
-import { isIframe } from '../misc/isIframe.js';
-import { isPageReload } from '../misc/isPageReload.js';
+import { on } from '@/bridge/events/on.js';
+import type { CleanupFn } from '@/bridge/events/types/misc.js';
+import { createPostEvent } from '@/bridge/methods/createPostEvent.js';
+import { isIframe } from '@/env/isIframe.js';
+import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
+import type { Version } from '@/version/types.js';
 
-type ComputedInitResult<O> = O extends { async: true } | { complete: true }
-  ? Promise<InitResult>
-  : InitResult;
+export interface InitOptions {
+  /**
+   * True if SDK should accept styles sent from the Telegram web application. This option is only
+   * used in web versions of Telegram.
+   * @default false
+   */
+  acceptCustomStyles?: boolean;
+  /**
+   * Mini Apps version.
+   * @default Will be extracted from the current environment.
+   */
+  version?: Version;
+}
 
-export function init(): InitResult;
-export function init<O extends InitOptions>(options: O): ComputedInitResult<O>;
-export function init(options: InitOptions = {}): InitResult | Promise<InitResult> {
+/**
+ * Runs initialization flow, common for all Mini Apps.
+ * @param options - init options.
+ * @returns Function, which performs cleanup removing all created elements and listeners.
+ */
+export function init(options: InitOptions = {}): CleanupFn {
   const {
-    async = false,
-    complete = async,
-    cssVars = false,
     acceptCustomStyles = false,
+    version = retrieveLaunchParams().version,
   } = options;
+  const postEvent = createPostEvent(version);
+  const listeners: CleanupFn[] = [];
+  const cleanup = () => listeners.forEach((l) => l());
 
-  try {
-    const {
-      initData,
-      initDataRaw,
-      version,
-      platform,
-      themeParams,
-      botInline = false,
-    } = retrieveLaunchParams();
-    const isPageReloaded = isPageReload();
+  // In Telegram web version we should listen to special event sent from the Telegram application
+  // to know, when we should reload the Mini App.
+  if (!isIframe()) {
+    return cleanup;
+  }
 
-    const createRequestId = createRequestIdGenerator();
-    const postEvent = createPostEvent(version);
+  if (acceptCustomStyles) {
+    const element = document.createElement('style');
+    element.id = 'telegram-custom-styles';
+    document.head.appendChild(element);
 
-    // In Telegram web version we should listen to special event sent from the Telegram application
-    // to know, when we should reload the Mini App.
-    if (isIframe()) {
-      if (acceptCustomStyles) {
-        catchCustomStyles();
-      }
-
-      // Notify Telegram, iframe is ready. This will result in sending style tag html from native
-      // application which is used in catchCustomStyles function. We should call this method also
-      // to start receiving "reload_iframe" events from the Telegram application.
-      postEvent('iframe_ready', { reload_supported: true });
-      on('reload_iframe', () => {
-        postEvent('iframe_will_reload');
-        window.location.reload();
-      });
-    }
-
-    const result: Omit<InitResult, 'viewport'> = {
-      backButton: createBackButton(isPageReloaded, version, postEvent),
-      closingBehavior: createClosingBehavior(isPageReloaded, postEvent),
-      cloudStorage: new CloudStorage(version, createRequestId, postEvent),
-      createRequestId,
-      hapticFeedback: new HapticFeedback(version, postEvent),
-      invoice: new Invoice(version, postEvent),
-      mainButton: createMainButton(
-        isPageReloaded,
-        themeParams.buttonColor || '#000000',
-        themeParams.buttonTextColor || '#ffffff',
-        postEvent,
-      ),
-      miniApp: createMiniApp(
-        isPageReloaded,
-        themeParams.backgroundColor || '#ffffff',
-        version,
-        botInline,
-        createRequestId,
-        postEvent,
-      ),
-      popup: new Popup(version, postEvent),
-      postEvent,
-      qrScanner: new QRScanner(version, postEvent),
-      settingsButton: createSettingsButton(isPageReloaded, version, postEvent),
-      themeParams: createThemeParams(themeParams),
-      utils: new Utils(version, createRequestId, postEvent),
-      ...(initData
-        // Init data could be missing in case, application was launched via InlineKeyboardButton.
-        ? {
-          initData: new InitData(initData),
-          initDataRaw,
-        }
-        : {}),
-    };
-
-    const viewport = createViewport(isPageReloaded, platform, postEvent, complete);
-    if (viewport instanceof Promise || complete) {
-      return Promise.resolve(viewport).then((vp) => {
-        processCSSVars(
-          cssVars,
-          result.miniApp,
-          result.themeParams,
-          vp,
-        );
-
-        return { ...result, viewport: vp };
-      });
-    }
-
-    processCSSVars(
-      cssVars,
-      result.miniApp,
-      result.themeParams,
-      viewport,
+    listeners.push(
+      on('set_custom_style', (html) => {
+        // It is safe to use innerHTML here as long as style tag has a special behavior related
+        // to the specified content. In case, any script will be passed here, it will not be
+        // executed.
+        element.innerHTML = html;
+      }),
     );
 
-    return { ...result, viewport };
-  } catch (e) {
-    if (complete) {
-      return Promise.reject(e);
-    }
-    throw e;
+    listeners.push(() => document.head.removeChild(element));
   }
+
+  // Notify Telegram, iframe is ready. This will result in sending style tag html from native
+  // application which is used in catchCustomStyles function. We should call this method also
+  // to start receiving "reload_iframe" events from the Telegram application.
+  postEvent('iframe_ready', { reload_supported: true });
+  listeners.push(
+    on('reload_iframe', () => {
+      postEvent('iframe_will_reload');
+      window.location.reload();
+    }),
+  );
+
+  return cleanup;
 }

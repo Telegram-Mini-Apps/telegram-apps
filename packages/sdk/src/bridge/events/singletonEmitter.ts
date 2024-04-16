@@ -1,7 +1,7 @@
 import { createEmitter } from './createEmitter.js';
-import type { MiniAppsEventEmitter } from './events.js';
+import type { MiniAppsEventEmitter } from './types/events.js';
 
-const CACHED_EMITTER = 'telegram-mini-apps-cached-emitter';
+const CACHED_EMITTER = '@tma.js/cached-emitter';
 
 /**
  * Returns singleton instance of bridge EventEmitter. Also, defines

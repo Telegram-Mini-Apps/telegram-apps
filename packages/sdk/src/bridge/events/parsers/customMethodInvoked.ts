@@ -1,26 +1,13 @@
-import { json } from '../../../parsing/parsers/json.js';
-import { string } from '../../../parsing/parsers/string.js';
-import type { RequestId } from '../../../types/request-id.js';
+import { json } from '@/parsing/parsers/json.js';
+import { string } from '@/parsing/parsers/string.js';
+import type { ValueParser } from '@/parsing/ValueParser/ValueParser.js';
 
-export interface CustomMethodInvokedPayload<R = unknown> {
-  /**
-   * Unique identifier of this invocation.
-   */
-  req_id: RequestId;
-  /**
-   * Method invocation successful result.
-   */
-  result?: R;
-  /**
-   * Method invocation error code.
-   */
-  error?: string;
-}
+import type { CustomMethodInvokedPayload } from '../types/payloads.js';
 
-export function customMethodInvoked() {
-  return json<CustomMethodInvokedPayload>({
+export function customMethodInvoked(): ValueParser<CustomMethodInvokedPayload, false> {
+  return json({
     req_id: string(),
     result: (value) => value,
     error: string().optional(),
-  });
+  }, 'CustomMethodInvokedPayload');
 }

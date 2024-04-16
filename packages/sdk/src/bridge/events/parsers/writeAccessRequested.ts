@@ -1,15 +1,9 @@
-import { json } from '../../../parsing/parsers/json.js';
-import { string } from '../../../parsing/parsers/string.js';
+import { json } from '@/parsing/parsers/json.js';
+import { string } from '@/parsing/parsers/string.js';
+import type { ValueParser } from '@/parsing/ValueParser/ValueParser.js';
 
-export type WriteAccessRequestedStatus = 'allowed' | string;
+import type { WriteAccessRequestedPayload } from '../types/payloads.js';
 
-export interface WriteAccessRequestedPayload {
-  /**
-   * Request status.
-   */
-  status: WriteAccessRequestedStatus;
-}
-
-export function writeAccessRequested() {
-  return json<WriteAccessRequestedPayload>({ status: string() });
+export function writeAccessRequested(): ValueParser<WriteAccessRequestedPayload, false> {
+  return json({ status: string() }, 'WriteAccessRequestedPayload');
 }

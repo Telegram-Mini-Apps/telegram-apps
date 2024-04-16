@@ -1,27 +1,14 @@
-import { json } from '../../../parsing/parsers/json.js';
-import { string } from '../../../parsing/parsers/string.js';
-import type { RequestId } from '../../../types/request-id.js';
+import { json } from '@/parsing/parsers/json.js';
+import { string } from '@/parsing/parsers/string.js';
+import type { ValueParser } from '@/parsing/ValueParser/ValueParser.js';
 
-export interface ClipboardTextReceivedPayload {
-  /**
-   * Passed during the `web_app_read_text_from_clipboard` method invocation `req_id` value.
-   */
-  req_id: RequestId;
+import type { ClipboardTextReceivedPayload } from '../types/payloads.js';
 
-  /**
-   * Data extracted from the clipboard. The returned value will have the type `string` only in
-   * the case, application has access to the clipboard.
-   */
-  data?: string | null;
-}
-
-export function clipboardTextReceived() {
-  return json<ClipboardTextReceivedPayload>({
+export function clipboardTextReceived(): ValueParser<ClipboardTextReceivedPayload, false> {
+  return json({
     req_id: string(),
     data: (value) => (
-      value === null
-        ? value
-        : string().optional().parse(value)
+      value === null ? value : string().optional().parse(value)
     ),
-  });
+  }, 'ClipboardTextReceivedPayload');
 }

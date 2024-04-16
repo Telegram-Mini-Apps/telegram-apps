@@ -22,12 +22,11 @@ export function toRGB(value: string): RGB {
 
   // Convert from #RGB.
   if (isRGBShort(clean)) {
-    let color = '#';
-
+    let color: RGB = '#';
     for (let i = 0; i < 3; i += 1) {
       color += clean[1 + i].repeat(2);
     }
-    return color as RGB;
+    return color;
   }
 
   // Example valid values: rgb(0,3,10) rgba(32,114,8,0)
@@ -36,7 +35,7 @@ export function toRGB(value: string): RGB {
 
   // In case, this didn't work as well, we can't extract RGB color from passed
   // text.
-  if (match === null) {
+  if (!match) {
     throw new Error(`Value "${value}" does not satisfy any of known RGB formats.`);
   }
 

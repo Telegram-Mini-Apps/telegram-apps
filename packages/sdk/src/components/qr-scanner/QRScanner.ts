@@ -1,29 +1,18 @@
-import type { QRScannerEvents, QRScannerState } from './types.js';
-import type { PostEvent } from '../../bridge/methods/postEvent.js';
-import { postEvent as defaultPostEvent } from '../../bridge/methods/postEvent.js';
-import { request } from '../../bridge/request.js';
-import { EventEmitter } from '../../event-emitter/EventEmitter.js';
-import { State } from '../../state/State.js';
-import { createSupportsFunc } from '../../supports/createSupportsFunc.js';
-import type { SupportsFunc } from '../../supports/types.js';
-import type { Version } from '../../version/types.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
+import { request } from '@/bridge/request.js';
+import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
+import type { Version } from '@/version/types.js';
 
-type Emitter = EventEmitter<QRScannerEvents>;
+import type { QRScannerState } from './types.js';
+
+// TODO: Usage
 
 /**
- * Provides QR scanner functionality.
+ * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/qr-scanner
  */
-export class QRScanner {
-  private readonly ee = new EventEmitter<QRScannerEvents>();
-
-  private readonly state: State<QRScannerState>;
-
-  constructor(
-    version: Version,
-    private readonly postEvent: PostEvent = defaultPostEvent,
-  ) {
-    this.state = new State({ isOpened: false }, this.ee);
-    this.supports = createSupportsFunc(version, {
+export class QRScanner extends WithStateAndSupports<QRScannerState, 'close' | 'open'> {
+  constructor(isOpened: boolean, version: Version, private readonly postEvent: PostEvent) {
+    super({ isOpened }, version, {
       close: 'web_app_close_scan_qr_popup',
       open: 'web_app_open_scan_qr_popup',
     });
@@ -38,14 +27,14 @@ export class QRScanner {
   }
 
   private set isOpened(value) {
-    this.state.set('isOpened', value);
+    this.set('isOpened', value);
   }
 
   /**
    * Returns true in case, QR scanner is currently opened.
    */
   get isOpened(): boolean {
-    return this.state.get('isOpened');
+    return this.get('isOpened');
   }
 
   /**
@@ -69,26 +58,11 @@ export class QRScanner {
           postEvent: this.postEvent,
           params: { text },
         },
-      );
+      ) || {};
 
-      return typeof result === 'object' && typeof result.data === 'string' ? result.data : null;
+      return result.data || null;
     } finally {
       this.isOpened = false;
     }
   }
-
-  /**
-   * Adds new event listener.
-   */
-  on: Emitter['on'] = this.ee.on.bind(this.ee);
-
-  /**
-   * Removes event listener.
-   */
-  off: Emitter['off'] = this.ee.off.bind(this.ee);
-
-  /**
-   * Checks if specified method is supported by current component.
-   */
-  supports: SupportsFunc<'open' | 'close'>;
 }

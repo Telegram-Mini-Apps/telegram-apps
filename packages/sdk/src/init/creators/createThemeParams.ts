@@ -1,5 +1,5 @@
-import { ThemeParams } from '../../components/theme-params/ThemeParams.js';
-import type { ThemeParamsParsed } from '../../components/theme-params/types.js';
+import { ThemeParams } from '@/components/theme-params/ThemeParams.js';
+import type { ThemeParamsParsed } from '@/components/theme-params/types.js';
 
 /**
  * Creates synced instance of ThemeParams.

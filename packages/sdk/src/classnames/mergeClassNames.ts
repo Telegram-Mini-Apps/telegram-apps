@@ -1,6 +1,7 @@
+import { isRecord } from '@/misc/isRecord.js';
+import type { UnionOptionalKeys, UnionRequiredKeys } from '@/types/unions.js';
+
 import { classNames } from './classNames.js';
-import { isRecord } from '../misc/isRecord.js';
-import type { UnionOptionalKeys, UnionRequiredKeys } from '../types/unions.js';
 
 export type MergeClassNames<Tuple extends any[]> =
   // Removes all types from union which will be ignored by the mergeClassNames function.
@@ -27,7 +28,7 @@ export function mergeClassNames<T extends any[]>(...partials: T): MergeClassName
     Object.entries(partial).forEach(([key, value]) => {
       const className = classNames((acc as any)[key], value);
 
-      if (className.length > 0) {
+      if (className.length) {
         (acc as any)[key] = className;
       }
     });

@@ -11,6 +11,7 @@ module.exports = {
   'import/no-duplicates': 'error',
   // We have extraneous deps, because we have workspace.
   'import/no-extraneous-dependencies': 0,
+  'import/order': 0,
   // We don't use default exports anywhere.
   'import/prefer-default-export': 0,
   // We select line endings depending on current OS.
@@ -23,6 +24,7 @@ module.exports = {
   // Sometimes we need to write "void promise".
   'no-void': 0,
   'object-curly-newline': ['error', { consistent: true }],
+  'simple-import-sort/exports': 'error',
   'simple-import-sort/imports': [
     2,
     {

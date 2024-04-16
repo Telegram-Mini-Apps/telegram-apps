@@ -1,5 +1,5 @@
-import type { MiniAppsEventListener, MiniAppsEventName } from './events.js';
 import { singletonEmitter } from './singletonEmitter.js';
+import type { MiniAppsEventListener, MiniAppsEventName } from './types/events.js';
 
 /**
  * Removes listener from specified event.

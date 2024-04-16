@@ -1,6 +1,6 @@
+import { createTypeError } from '../createTypeError.js';
 import type { ValueParserGenerator } from '../createValueParserGenerator.js';
 import { createValueParserGenerator } from '../createValueParserGenerator.js';
-import { unexpectedTypeError } from '../unexpectedTypeError.js';
 
 /**
  * Returns parser to parse value as boolean.
@@ -19,5 +19,5 @@ export const boolean: ValueParserGenerator<boolean> = createValueParserGenerator
     return false;
   }
 
-  throw unexpectedTypeError();
+  throw createTypeError();
 }, 'boolean');

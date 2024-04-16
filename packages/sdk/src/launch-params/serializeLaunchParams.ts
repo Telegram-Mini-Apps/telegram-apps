@@ -1,5 +1,6 @@
+import { serializeThemeParams } from '@/components/theme-params/serializeThemeParams.js';
+
 import type { LaunchParams } from './types.js';
-import { serializeThemeParams } from '../components/theme-params/serializeThemeParams.js';
 
 /**
  * Converts launch parameters to its initial representation.

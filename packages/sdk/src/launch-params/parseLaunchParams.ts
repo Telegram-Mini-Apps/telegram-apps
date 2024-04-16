@@ -1,4 +1,4 @@
-import { launchParamsParser } from './launchParamsParser.js';
+import { launchParams } from './parsers/launchParams.js';
 import type { LaunchParams } from './types.js';
 
 /**
@@ -6,5 +6,5 @@ import type { LaunchParams } from './types.js';
  * @param value - value to parse.
  */
 export function parseLaunchParams(value: unknown): LaunchParams {
-  return launchParamsParser().parse(value);
+  return launchParams().parse(value);
 }

@@ -1,60 +1,50 @@
-import { contactParser } from './contactParser.js';
+/* eslint-disable no-await-in-loop */
 import type {
-  MiniAppEvents,
-  MiniAppHeaderColor, MiniAppProps,
-  MiniAppState, RequestedContact,
-} from './types.js';
-import type { PhoneRequestedStatus } from '../../bridge/events/parsers/phoneRequested.js';
-import type { WriteAccessRequestedStatus } from '../../bridge/events/parsers/writeAccessRequested.js';
-import { invokeCustomMethod } from '../../bridge/invokeCustomMethod.js';
-import type { SwitchInlineQueryChatType } from '../../bridge/methods/methods.js';
-import type { PostEvent } from '../../bridge/methods/postEvent.js';
-import { postEvent as defaultPostEvent } from '../../bridge/methods/postEvent.js';
-import { request } from '../../bridge/request.js';
-import { isColorDark } from '../../colors/isColorDark.js';
-import { isRGB } from '../../colors/isRGB.js';
-import type { RGB } from '../../colors/types.js';
-import { EventEmitter } from '../../event-emitter/EventEmitter.js';
-import { State } from '../../state/State.js';
-import { createSupportsFunc } from '../../supports/createSupportsFunc.js';
-import { createSupportsParamFunc } from '../../supports/createSupportsParamFunc.js';
-import type { SupportsFunc } from '../../supports/types.js';
-import { sleep } from '../../timeout/sleep.js';
-import { withTimeout } from '../../timeout/withTimeout.js';
-import type { ExecuteWithTimeout } from '../../types/methods.js';
-import type { CreateRequestIdFunc } from '../../types/request-id.js';
+  PhoneRequestedStatus,
+  WriteAccessRequestedStatus,
+} from '@/bridge/events/types/payloads.js';
+import { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
+import type { SwitchInlineQueryChatType } from '@/bridge/methods/types/methods.js';
+import { request } from '@/bridge/request.js';
+import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
+import { isColorDark } from '@/colors/isColorDark.js';
+import { isRGB } from '@/colors/isRGB.js';
+import type { RGB } from '@/colors/types.js';
+import type { CreateRequestIdFn } from '@/request-id/types.js';
+import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
+import type { SupportsFn } from '@/supports/types.js';
+import { createTimeoutError } from '@/timeout/createTimeoutError.js';
+import { sleep } from '@/timeout/sleep.js';
+import { withTimeout } from '@/timeout/withTimeout.js';
+import type { ExecuteWithTimeout } from '@/types/methods.js';
 
-type Emitter = EventEmitter<MiniAppEvents>;
+import { contact } from './parsers/contact.js';
+import type { MiniAppHeaderColor, MiniAppProps, MiniAppState, RequestedContact } from './types.js';
 
 /**
  * Provides common Mini Apps functionality not covered by other system components.
  */
-export class MiniApp {
-  private readonly ee = new EventEmitter<MiniAppEvents>();
-
-  private readonly state: State<MiniAppState>;
-
+export class MiniApp extends WithStateAndSupports<
+  MiniAppState,
+  | 'requestPhoneAccess'
+  | 'requestWriteAccess'
+  | 'switchInlineQuery'
+  | 'setHeaderColor'
+  | 'setBackgroundColor'
+> {
   private readonly botInline: boolean;
 
   private readonly postEvent: PostEvent;
 
-  private readonly createRequestId: CreateRequestIdFunc;
+  private readonly createRequestId: CreateRequestIdFn;
 
   private requestingPhoneAccess = false;
 
   private requestingWriteAccess = false;
 
-  constructor(props: MiniAppProps) {
-    const {
-      postEvent = defaultPostEvent,
-      headerColor,
-      backgroundColor,
-      version,
-      botInline,
-      createRequestId,
-    } = props;
-
-    const isSupported = createSupportsFunc(version, {
+  constructor({ postEvent, createRequestId, version, botInline, ...rest }: MiniAppProps) {
+    super(rest, version, {
       requestPhoneAccess: 'web_app_request_phone',
       requestWriteAccess: 'web_app_request_write_access',
       switchInlineQuery: 'web_app_switch_inline_query',
@@ -62,49 +52,48 @@ export class MiniApp {
       setBackgroundColor: 'web_app_set_background_color',
     });
 
+    this.createRequestId = createRequestId;
     this.postEvent = postEvent;
     this.botInline = botInline;
-    this.createRequestId = createRequestId;
+
+    const supportsOriginal = this.supports.bind(this);
     this.supports = (method) => {
-      if (!isSupported(method)) {
+      if (!supportsOriginal(method)) {
         return false;
       }
 
       // web_app_switch_inline_query requires a Mini App to be in inline mode, that's why we
       // add 1 more check here.
-      if (method === 'switchInlineQuery' && !botInline) {
-        return false;
-      }
-      return true;
+      return method !== 'switchInlineQuery' || botInline;
     };
 
-    this.state = new State({ backgroundColor, headerColor }, this.ee);
-    this.supportsParam = createSupportsParamFunc(version, {
+    this.supportsParam = createSupportsParamFn(version, {
       'setHeaderColor.color': ['web_app_set_header_color', 'color'],
     });
   }
 
   /**
    * Attempts to get requested contact.
+   * @param timeout - request timeout.
    */
-  private async getRequestedContact(): Promise<RequestedContact> {
-    return invokeCustomMethod(
-      'getRequestedContact',
-      {},
-      this.createRequestId(),
-      {
-        postEvent: this.postEvent,
-        timeout: 10000,
-      },
-    )
-      .then((data) => contactParser.parse(data));
+  private async getRequestedContact(
+    { timeout = 10000 }: ExecuteWithTimeout = {},
+  ): Promise<RequestedContact> {
+    return contact().parse(
+      await invokeCustomMethod(
+        'getRequestedContact',
+        {},
+        this.createRequestId(),
+        { postEvent: this.postEvent, timeout },
+      ),
+    );
   }
 
   /**
    * The Mini App background color.
    */
-  get backgroundColor(): RGB {
-    return this.state.get('backgroundColor');
+  get bgColor(): RGB {
+    return this.get('bgColor');
   }
 
   /**
@@ -118,7 +107,7 @@ export class MiniApp {
    * The Mini App header color. Could either be a header color key or RGB color.
    */
   get headerColor(): MiniAppHeaderColor {
-    return this.state.get('headerColor');
+    return this.get('headerColor');
   }
 
   /**
@@ -132,7 +121,7 @@ export class MiniApp {
    * True if current Mini App background color recognized as dark.
    */
   get isDark(): boolean {
-    return isColorDark(this.backgroundColor);
+    return isColorDark(this.bgColor);
   }
 
   /**
@@ -148,16 +137,6 @@ export class MiniApp {
   get isRequestingWriteAccess(): boolean {
     return this.requestingWriteAccess;
   }
-
-  /**
-   * Adds new event listener.
-   */
-  on: Emitter['on'] = this.ee.on.bind(this.ee);
-
-  /**
-   * Removes event listener.
-   */
-  off: Emitter['off'] = this.ee.off.bind(this.ee);
 
   /**
    * Informs the Telegram app that the Mini App is ready to be displayed.
@@ -198,24 +177,22 @@ export class MiniApp {
     // Time to wait before executing the next request.
     let sleepTime = 50;
 
+    // We are trying to retrieve the requested contact until deadline was reached.
     return withTimeout(async () => {
-      // We are trying to retrieve the requested contact until deadline was reached.
       while (Date.now() < deadlineAt) {
         try {
-          // eslint-disable-next-line no-await-in-loop
           return await this.getRequestedContact();
         } catch (e) { /* empty */
         }
 
         // Sleep for some time.
-        // eslint-disable-next-line no-await-in-loop
         await sleep(sleepTime);
 
         // Increase the sleep time not to kill the backend service.
         sleepTime += 50;
       }
 
-      throw new Error('Unable to retrieve requested contact.');
+      throw createTimeoutError(timeout);
     }, timeout);
   }
 
@@ -228,40 +205,42 @@ export class MiniApp {
    * @param options - additional options.
    * @see requestContact
    */
-  requestPhoneAccess(options: ExecuteWithTimeout = {}): Promise<PhoneRequestedStatus> {
+  async requestPhoneAccess(options: ExecuteWithTimeout = {}): Promise<PhoneRequestedStatus> {
     if (this.requestingPhoneAccess) {
       throw new Error('Phone access is already being requested.');
     }
     this.requestingPhoneAccess = true;
 
-    return request('web_app_request_phone', 'phone_requested', {
-      ...options,
-      postEvent: this.postEvent,
-    })
-      .then((data) => data.status)
-      .finally(() => {
-        this.requestingPhoneAccess = false;
+    try {
+      const { status } = await request('web_app_request_phone', 'phone_requested', {
+        ...options,
+        postEvent: this.postEvent,
       });
+      return status;
+    } finally {
+      this.requestingPhoneAccess = false;
+    }
   }
 
   /**
    * Requests write message access to current user.
    * @param options - additional options.
    */
-  requestWriteAccess(options: ExecuteWithTimeout = {}): Promise<WriteAccessRequestedStatus> {
+  async requestWriteAccess(options: ExecuteWithTimeout = {}): Promise<WriteAccessRequestedStatus> {
     if (this.requestingWriteAccess) {
       throw new Error('Write access is already being requested.');
     }
     this.requestingWriteAccess = true;
 
-    return request('web_app_request_write_access', 'write_access_requested', {
-      ...options,
-      postEvent: this.postEvent,
-    })
-      .then((data) => data.status)
-      .finally(() => {
-        this.requestingWriteAccess = false;
+    try {
+      const { status } = await request('web_app_request_write_access', 'write_access_requested', {
+        ...options,
+        postEvent: this.postEvent,
       });
+      return status;
+    } finally {
+      this.requestingWriteAccess = false;
+    }
   }
 
   /**
@@ -275,7 +254,7 @@ export class MiniApp {
    */
   sendData(data: string): void {
     const { size } = new Blob([data]);
-    if (size === 0 || size > 4096) {
+    if (!size || size > 4096) {
       throw new Error(`Passed data has incorrect size: ${size}`);
     }
     this.postEvent('web_app_data_send', { data });
@@ -283,45 +262,32 @@ export class MiniApp {
 
   /**
    * Updates current Mini App header color.
+   *
+   * @see No effect on desktop: https://github.com/Telegram-Mini-Apps/tma.js/issues/9
+   * @see Works incorrectly in Android: https://github.com/Telegram-Mini-Apps/tma.js/issues/8
    * @param color - color key or RGB color.
    */
   setHeaderColor(color: MiniAppHeaderColor): void {
-    // FIXME: Has no effect on desktop, works incorrectly on Android.
-    //  Issues:
-    //  https://github.com/Telegram-Mini-Apps/tma.js/issues/9
-    //  https://github.com/Telegram-Mini-Apps/tma.js/issues/8
     this.postEvent('web_app_set_header_color', isRGB(color) ? { color } : { color_key: color });
-    this.state.set('headerColor', color);
+    this.set('headerColor', color);
   }
 
   /**
    * Updates current Mini App background color.
+   *
+   * @see No effect on desktop: https://github.com/Telegram-Mini-Apps/tma.js/issues/9
+   * @see Works incorrectly in Android: https://github.com/Telegram-Mini-Apps/tma.js/issues/8
    * @param color - RGB color.
    */
-  setBackgroundColor(color: RGB): void {
-    // FIXME: Has no effect on desktop, works incorrectly in Android.
-    //  Issues:
-    //  https://github.com/Telegram-Mini-Apps/tma.js/issues/9
-    //  https://github.com/Telegram-Mini-Apps/tma.js/issues/8
+  setBgColor(color: RGB): void {
     this.postEvent('web_app_set_background_color', { color });
-    this.state.set('backgroundColor', color);
+    this.set('bgColor', color);
   }
-
-  /**
-   * Checks if specified method is supported by current component.
-   */
-  supports: SupportsFunc<
-    | 'requestWriteAccess'
-    | 'requestPhoneAccess'
-    | 'switchInlineQuery'
-    | 'setHeaderColor'
-    | 'setBackgroundColor'
-  >;
 
   /**
    * Checks if specified method parameter is supported by current component.
    */
-  supportsParam: SupportsFunc<'setHeaderColor.color'>;
+  supportsParam: SupportsFn<'setHeaderColor.color'>;
 
   /**
    * Inserts the bot's username and the specified inline query in the current chat's input field.
@@ -337,9 +303,6 @@ export class MiniApp {
     if (!this.supports('switchInlineQuery') && !this.isBotInline) {
       throw new Error('Method is unsupported because Mini App should be launched in inline mode.');
     }
-    this.postEvent('web_app_switch_inline_query', {
-      query: text,
-      chat_types: chatTypes,
-    });
+    this.postEvent('web_app_switch_inline_query', { query: text, chat_types: chatTypes });
   }
 }

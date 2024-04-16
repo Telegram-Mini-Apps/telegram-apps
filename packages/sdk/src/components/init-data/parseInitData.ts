@@ -1,4 +1,4 @@
-import { initDataParser } from './initDataParser.js';
+import { initData } from './parsers/initData.js';
 import type { InitDataParsed } from './types.js';
 
 /**
@@ -6,5 +6,5 @@ import type { InitDataParsed } from './types.js';
  * @param value - value to parse.
  */
 export function parseInitData(value: unknown): InitDataParsed {
-  return initDataParser().parse(value);
+  return initData().parse(value);
 }

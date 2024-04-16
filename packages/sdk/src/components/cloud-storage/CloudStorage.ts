@@ -1,28 +1,29 @@
-import { invokeCustomMethod } from '../../bridge/invokeCustomMethod.js';
-import { postEvent as defaultPostEvent } from '../../bridge/methods/postEvent.js';
-import { array } from '../../parsing/parsers/array.js';
-import { json } from '../../parsing/parsers/json.js';
-import { string } from '../../parsing/parsers/string.js';
-import { createSupportsFunc } from '../../supports/createSupportsFunc.js';
-import type { SupportsFunc } from '../../supports/types.js';
-import type { ExecuteWithTimeout } from '../../types/methods.js';
-import type { CreateRequestIdFunc } from '../../types/request-id.js';
-import type { Version } from '../../version/types.js';
+import { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
+import { WithSupports } from '@/classes/with-supports/WithSupports.js';
+import { array } from '@/parsing/parsers/array.js';
+import { json } from '@/parsing/parsers/json.js';
+import { string } from '@/parsing/parsers/string.js';
+import type { CreateRequestIdFn } from '@/request-id/types.js';
+import type { ExecuteWithTimeout } from '@/types/methods.js';
+import type { Version } from '@/version/types.js';
 
 function objectFromKeys<K extends string, V>(keys: K[], value: V): Record<K, V> {
-  return keys.reduce<Record<K, V>>((acc, key) => {
-    acc[key] = value;
-    return acc;
-  }, {} as Record<K, V>);
+  return Object.fromEntries(keys.map((k) => [k, value])) as Record<K, V>;
 }
 
-export class CloudStorage {
+// TODO: Usage.
+
+/**
+ * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/cloud-storage
+ */
+export class CloudStorage extends WithSupports<'delete' | 'get' | 'getKeys' | 'set'> {
   constructor(
     version: Version,
-    private readonly createRequestId: CreateRequestIdFunc,
-    private readonly postEvent = defaultPostEvent,
+    private readonly createRequestId: CreateRequestIdFn,
+    private readonly postEvent: PostEvent,
   ) {
-    this.supports = createSupportsFunc(version, {
+    super(version, {
       delete: 'web_app_invoke_custom_method',
       get: 'web_app_invoke_custom_method',
       getKeys: 'web_app_invoke_custom_method',
@@ -37,16 +38,14 @@ export class CloudStorage {
    */
   async delete(keyOrKeys: string | string[], options: ExecuteWithTimeout = {}): Promise<void> {
     const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
-    if (keys.length === 0) {
-      return;
+    if (keys.length) {
+      await invokeCustomMethod(
+        'deleteStorageValues',
+        { keys },
+        this.createRequestId(),
+        { ...options, postEvent: this.postEvent },
+      );
     }
-
-    await invokeCustomMethod(
-      'deleteStorageValues',
-      { keys },
-      this.createRequestId(),
-      { ...options, postEvent: this.postEvent },
-    );
   }
 
   /**
@@ -54,14 +53,14 @@ export class CloudStorage {
    * @param options - request execution options.
    */
   async getKeys(options: ExecuteWithTimeout = {}): Promise<string[]> {
-    const result = await invokeCustomMethod(
-      'getStorageKeys',
-      {},
-      this.createRequestId(),
-      { ...options, postEvent: this.postEvent },
+    return array().of(string()).parse(
+      await invokeCustomMethod(
+        'getStorageKeys',
+        {},
+        this.createRequestId(),
+        { ...options, postEvent: this.postEvent },
+      ),
     );
-
-    return array().of(string()).parse(result);
   }
 
   /**
@@ -70,10 +69,7 @@ export class CloudStorage {
    * @param keys - keys list.
    * @param options - request execution options.
    */
-  get<K extends string>(
-    keys: K[],
-    options?: ExecuteWithTimeout,
-  ): Promise<Record<K, string>>;
+  get<K extends string>(keys: K[], options?: ExecuteWithTimeout): Promise<Record<K, string>>;
 
   /**
    * Returns value of the specified key.
@@ -89,19 +85,17 @@ export class CloudStorage {
     options: ExecuteWithTimeout = {},
   ): Promise<string | Record<string, string>> {
     const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
-    if (keys.length === 0) {
-      return objectFromKeys<string, string>(keys, '');
+    if (!keys.length) {
+      return objectFromKeys(keys, '');
     }
 
-    const schema = json(
-      objectFromKeys(keys, string()),
-    );
-    const result = await invokeCustomMethod(
+    const data = await invokeCustomMethod(
       'getStorageValues',
       { keys },
       this.createRequestId(),
       { ...options, postEvent: this.postEvent },
-    ).then((data) => schema.parse(data));
+    );
+    const result = json(objectFromKeys(keys, string()), 'CloudStorageData').parse(data);
 
     return Array.isArray(keyOrKeys) ? result : result[keyOrKeys];
   }
@@ -120,14 +114,4 @@ export class CloudStorage {
       { ...options, postEvent: this.postEvent },
     );
   }
-
-  /**
-   * Checks if specified method is supported by current component.
-   */
-  supports: SupportsFunc<
-    | 'delete'
-    | 'get'
-    | 'getKeys'
-    | 'set'
-  >;
 }

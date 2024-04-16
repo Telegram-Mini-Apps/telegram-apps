@@ -1,5 +1,5 @@
-import { json } from '../parsing/parsers/json.js';
-import { string } from '../parsing/parsers/string.js';
+import { json } from '@/parsing/parsers/json.js';
+import { string } from '@/parsing/parsers/string.js';
 
 /**
  * Message format used in communication between client and Telegram applications.
@@ -20,8 +20,8 @@ export interface MiniAppsMessage {
  * @param value - value to parse.
  */
 export function parseMessage(value: unknown): MiniAppsMessage {
-  return json<MiniAppsMessage>({
+  return json({
     eventType: string(),
     eventData: (v) => v,
-  }).parse(value);
+  }, 'MiniAppsMessage').parse(value);
 }

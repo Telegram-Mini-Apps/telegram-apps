@@ -1,17 +1,17 @@
-import type { RGB } from '../../colors/types.js';
-import type { StateEvents } from '../../state/types.js';
+import type { StateEvents } from '@/classes/with-state/types.js';
+import type { RGB } from '@/colors/types.js';
 
 export type ThemeParamsKey =
   | 'accentTextColor'
-  | 'backgroundColor'
+  | 'bgColor'
   | 'buttonColor'
   | 'buttonTextColor'
   | 'destructiveTextColor'
-  | 'headerBackgroundColor'
+  | 'headerBgColor'
   | 'hintColor'
   | 'linkColor'
-  | 'secondaryBackgroundColor'
-  | 'sectionBackgroundColor'
+  | 'secondaryBgColor'
+  | 'sectionBgColor'
   | 'sectionHeaderTextColor'
   | 'subtitleTextColor'
   | 'textColor';
@@ -24,10 +24,24 @@ export interface ThemeParamsParsed {
   [key: ThemeParamsKey | string]: RGB | undefined;
 }
 
-export type ThemeParamsState = ThemeParamsParsed;
+/**
+ * ThemeParams internal state.
+ */
+export interface ThemeParamsState extends ThemeParamsParsed {
+}
 
-export type ThemeParamsEvents = StateEvents<ThemeParamsState>;
+/**
+ * ThemeParams trackable events.
+ */
+export interface ThemeParamsEvents extends StateEvents<ThemeParamsState> {
+}
 
+/**
+ * ThemeParams event name.
+ */
 export type ThemeParamsEventName = keyof ThemeParamsEvents;
 
+/**
+ * ThemeParams event listener.
+ */
 export type ThemeParamsEventListener<E extends ThemeParamsEventName> = ThemeParamsEvents[E];

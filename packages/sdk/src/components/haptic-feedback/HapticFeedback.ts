@@ -1,24 +1,19 @@
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type {
   ImpactHapticFeedbackStyle,
   NotificationHapticFeedbackType,
-} from '../../bridge/methods/haptic.js';
-import type { PostEvent } from '../../bridge/methods/postEvent.js';
-import { postEvent as defaultPostEvent } from '../../bridge/methods/postEvent.js';
-import { createSupportsFunc } from '../../supports/createSupportsFunc.js';
-import type { SupportsFunc } from '../../supports/types.js';
-import type { Version } from '../../version/types.js';
+} from '@/bridge/methods/types/haptic.js';
+import { WithSupports } from '@/classes/with-supports/WithSupports.js';
+import type { Version } from '@/version/types.js';
 
 /**
- * Class which controls haptic feedback. It allows calling different types of
- * haptic notifications which usually occur after user interaction with
- * application.
+ * @see Usage: https://docs.telegram-mini-apps.com/platform/haptic-feedback
+ * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/haptic-feedback
  */
-export class HapticFeedback {
-  constructor(
-    version: Version,
-    private readonly postEvent: PostEvent = defaultPostEvent,
-  ) {
-    this.supports = createSupportsFunc(version, {
+export class HapticFeedback
+  extends WithSupports<'impactOccurred' | 'notificationOccurred' | 'selectionChanged'> {
+  constructor(version: Version, private readonly postEvent: PostEvent) {
+    super(version, {
       impactOccurred: 'web_app_trigger_haptic_feedback',
       notificationOccurred: 'web_app_trigger_haptic_feedback',
       selectionChanged: 'web_app_trigger_haptic_feedback',
@@ -60,9 +55,4 @@ export class HapticFeedback {
   selectionChanged(): void {
     this.postEvent('web_app_trigger_haptic_feedback', { type: 'selection_change' });
   }
-
-  /**
-   * Checks if specified method is supported by current component.
-   */
-  supports: SupportsFunc<'impactOccurred' | 'notificationOccurred' | 'selectionChanged'>;
 }

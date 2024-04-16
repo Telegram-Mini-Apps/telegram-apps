@@ -1,6 +1,6 @@
+import { createTypeError } from '../createTypeError.js';
 import type { ValueParserGenerator } from '../createValueParserGenerator.js';
 import { createValueParserGenerator } from '../createValueParserGenerator.js';
-import { unexpectedTypeError } from '../unexpectedTypeError.js';
 
 /**
  * Returns parser to parse value as number.
@@ -18,5 +18,5 @@ export const number: ValueParserGenerator<number> = createValueParserGenerator((
     }
   }
 
-  throw unexpectedTypeError();
+  throw createTypeError();
 }, 'number');

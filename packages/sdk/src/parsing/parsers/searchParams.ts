@@ -1,7 +1,7 @@
+import { createTypeError } from '../createTypeError.js';
 import { parseBySchema } from '../parseBySchema.js';
 import type { Schema } from '../types.js';
-import { unexpectedTypeError } from '../unexpectedTypeError.js';
-import { ValueParser } from '../ValueParser.js';
+import { ValueParser } from '../ValueParser/ValueParser.js';
 
 /**
  * Creates new search params parser according to passed schema.
@@ -11,7 +11,7 @@ import { ValueParser } from '../ValueParser.js';
 export function searchParams<T>(schema: Schema<T>, type?: string): ValueParser<T, false> {
   return new ValueParser((value) => {
     if (typeof value !== 'string' && !(value instanceof URLSearchParams)) {
-      throw unexpectedTypeError();
+      throw createTypeError();
     }
 
     const params = typeof value === 'string' ? new URLSearchParams(value) : value;

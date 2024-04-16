@@ -1,9 +1,13 @@
 {
   "extends": "tsconfig/esnext-dom.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
   "include": [
     "src"
-  ],
-  "exclude": [
-    "**/__tests__"
   ]
 }

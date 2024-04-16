@@ -1,4 +1,4 @@
-import type { PostEvent } from '../bridge/methods/postEvent.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
 
 export interface ExecuteWithTimeout {
   /**

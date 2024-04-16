@@ -1,4 +1,4 @@
-import type { IsNever } from '../types/utils.js';
+import type { IsNever } from '@/types/utils.js';
 
 /**
  * Function accepting the list of passed arguments and returning nothing.
@@ -50,9 +50,11 @@ export type NonEmptyEventName<Schema> =
 /**
  * Represents any listener, which could be used in EventEmitter.subscribe.
  */
-export type AnySubscribeListener<Schema> = {
-  [E in keyof Schema]: (event: E, ...args: EventParams<Schema[E]>) => void;
-}[keyof Schema];
+export type SubscribeListener<Schema> = (
+  payload: {
+    [E in EventName<Schema>]: { event: E; args: EventParams<Schema[E]> };
+  }[EventName<Schema>],
+) => void;
 
 /**
  * Function which removes event listener.

@@ -1,20 +1,13 @@
-import { json } from '../../../parsing/parsers/json.js';
-import { string } from '../../../parsing/parsers/string.js';
+import { json } from '@/parsing/parsers/json.js';
+import { string } from '@/parsing/parsers/string.js';
+import type { ValueParser } from '@/parsing/ValueParser/ValueParser.js';
 
-export interface PopupClosedPayload {
-  /**
-   * Identifier of the clicked button. In case, the popup was closed without clicking any button,
-   * this property will be omitted.
-   */
-  button_id?: string;
-}
+import type { PopupClosedPayload } from '../types/payloads.js';
 
-export function popupClosed() {
-  return json<PopupClosedPayload>({
+export function popupClosed(): ValueParser<PopupClosedPayload, false> {
+  return json({
     button_id: (value) => (
-      value === null || value === undefined
-        ? undefined
-        : string().parse(value)
+      value === null || value === undefined ? undefined : string().parse(value)
     ),
-  });
+  }, 'PopupClosedPayload');
 }

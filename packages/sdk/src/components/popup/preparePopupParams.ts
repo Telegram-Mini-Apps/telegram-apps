@@ -1,5 +1,6 @@
+import type { PopupButton, PopupParams as BridgePopupParams } from '@/bridge/methods/types/popup.js';
+
 import type { OpenPopupOptions } from './types.js';
-import type { PopupButton, PopupParams as BridgePopupParams } from '../../bridge/methods/popup.js';
 
 /**
  * Prepares popup parameters before sending them to native app.
@@ -17,7 +18,7 @@ export function preparePopupParams(params: OpenPopupOptions): BridgePopupParams 
   }
 
   // Check message.
-  if (message.length === 0 || message.length > 256) {
+  if (!message.length || message.length > 256) {
     throw new Error(`Message has incorrect size: ${message.length}`);
   }
 
@@ -27,7 +28,7 @@ export function preparePopupParams(params: OpenPopupOptions): BridgePopupParams 
   }
 
   // Append button in case, there are no buttons passed.
-  if (buttons.length === 0) {
+  if (!buttons.length) {
     preparedButtons = [{ type: 'close', id: '' }];
   } else {
     // Otherwise, check all the buttons.
@@ -39,10 +40,10 @@ export function preparePopupParams(params: OpenPopupOptions): BridgePopupParams 
         throw new Error(`Button ID has incorrect size: ${id}`);
       }
 
-      if (b.type === undefined || b.type === 'default' || b.type === 'destructive') {
+      if (!b.type || b.type === 'default' || b.type === 'destructive') {
         const text = b.text.trim();
 
-        if (text.length === 0 || text.length > 64) {
+        if (!text.length || text.length > 64) {
           const type = b.type || 'default';
 
           throw new Error(`Button text with type "${type}" has incorrect size: ${b.text.length}`);

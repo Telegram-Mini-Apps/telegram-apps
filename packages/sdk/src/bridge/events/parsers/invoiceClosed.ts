@@ -1,27 +1,9 @@
-import { json } from '../../../parsing/parsers/json.js';
-import { string } from '../../../parsing/parsers/string.js';
+import { json } from '@/parsing/parsers/json.js';
+import { string } from '@/parsing/parsers/string.js';
+import type { ValueParser } from '@/parsing/ValueParser/ValueParser.js';
 
-export type InvoiceStatus =
-  | 'paid'
-  | 'failed'
-  | 'pending'
-  | 'cancelled'
-  | string;
+import type { InvoiceClosedPayload } from '../types/payloads.js';
 
-export interface InvoiceClosedPayload {
-  /**
-   * Passed during the `web_app_open_invoice` method invocation `slug` value.
-   */
-  slug: string;
-  /**
-   * Invoice status
-   */
-  status: InvoiceStatus;
-}
-
-export function invoiceClosed() {
-  return json<InvoiceClosedPayload>({
-    slug: string(),
-    status: string(),
-  });
+export function invoiceClosed(): ValueParser<InvoiceClosedPayload, false> {
+  return json({ slug: string(), status: string() }, 'InvoiceClosedPayload');
 }

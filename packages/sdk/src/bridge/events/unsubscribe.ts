@@ -1,5 +1,5 @@
-import type { MiniAppsGlobalEventListener } from './events.js';
 import { singletonEmitter } from './singletonEmitter.js';
+import type { MiniAppsGlobalEventListener } from './types/events.js';
 
 /**
  * Removes global event listener.

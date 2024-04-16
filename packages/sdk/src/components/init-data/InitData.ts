@@ -6,7 +6,8 @@ import type {
 } from './types.js';
 
 /**
- * Class which is responsible for displaying Mini Apps init data.
+ * @see Usage: https://docs.telegram-mini-apps.com/platform/init-data
+ * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/init-data
  */
 export class InitData {
   constructor(private readonly initData: InitDataParsed) {
@@ -33,9 +34,9 @@ export class InitData {
   get canSendAfterDate(): Date | undefined {
     const { canSendAfter } = this;
 
-    return canSendAfter === undefined
-      ? undefined
-      : new Date(this.authDate.getTime() + canSendAfter * 1000);
+    return canSendAfter
+      ? new Date(this.authDate.getTime() + canSendAfter * 1000)
+      : undefined;
   }
 
   /**

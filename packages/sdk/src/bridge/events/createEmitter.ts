@@ -1,4 +1,7 @@
-import type { MiniAppsEventEmitter, MiniAppsEventName } from './events.js';
+import { error, log } from '@/debug/debug.js';
+import { EventEmitter } from '@/event-emitter/EventEmitter.js';
+import { string } from '@/parsing/parsers/string.js';
+
 import { onTelegramEvent } from './onTelegramEvent.js';
 import { clipboardTextReceived } from './parsers/clipboardTextReceived.js';
 import { customMethodInvoked } from './parsers/customMethodInvoked.js';
@@ -9,9 +12,7 @@ import { qrTextReceived } from './parsers/qrTextReceived.js';
 import { themeChanged } from './parsers/theme-changed.js';
 import { viewportChanged } from './parsers/viewportChanged.js';
 import { writeAccessRequested } from './parsers/writeAccessRequested.js';
-import { EventEmitter } from '../../event-emitter/EventEmitter.js';
-import { logger } from '../../globals.js';
-import { string } from '../../parsing/parsers/string.js';
+import type { MiniAppsEventEmitter, MiniAppsEventName } from './types/events.js';
 
 /**
  * Returns event emitter which could be safely used, to process events from
@@ -20,7 +21,13 @@ import { string } from '../../parsing/parsers/string.js';
 export function createEmitter(): MiniAppsEventEmitter {
   const emitter: MiniAppsEventEmitter = new EventEmitter();
   const emit: MiniAppsEventEmitter['emit'] = (event: any, ...data: any[]) => {
-    logger.log('Emitting processed event:', event, ...data);
+    log(
+      'emittedEvent',
+      'Emitting processed event:',
+      data.length
+        ? { event, args: data }
+        : { event },
+    );
     emitter.emit(event, ...data);
   };
 
@@ -40,7 +47,7 @@ export function createEmitter(): MiniAppsEventEmitter {
   // In case, any Telegram event was received, we should prepare data before
   // passing it to emitter.
   onTelegramEvent((eventType: MiniAppsEventName | string, eventData): void => {
-    logger.log('Received raw event:', eventType, eventData);
+    log('rawEvent', 'Received raw event:', { eventType, eventData });
 
     try {
       switch (eventType) {
@@ -51,17 +58,7 @@ export function createEmitter(): MiniAppsEventEmitter {
           return emit(eventType, themeChanged().parse(eventData));
 
         case 'popup_closed':
-          // FIXME: Payloads are different on different platforms.
-          //  Issue: https://github.com/Telegram-Mini-Apps/tma.js/issues/2
-          if (
-            // Sent on desktop.
-            eventData === undefined
-            // Sent on iOS.
-            || eventData === null
-          ) {
-            return emit(eventType, {});
-          }
-          return emit(eventType, popupClosed().parse(eventData));
+          return emit(eventType, popupClosed().parse(eventData || {}));
 
         case 'set_custom_style':
           return emit(eventType, string().parse(eventData));
@@ -97,7 +94,12 @@ export function createEmitter(): MiniAppsEventEmitter {
           return emit(eventType as any, eventData);
       }
     } catch (cause) {
-      logger.error('Error processing event:', cause);
+      error(
+        null,
+        'There was an error processing an event from the Telegram application. Please, file an issue here: https://github.com/Telegram-Mini-Apps/tma.js/issues/new/choose',
+        { eventType, eventData },
+        cause,
+      );
     }
   });
 

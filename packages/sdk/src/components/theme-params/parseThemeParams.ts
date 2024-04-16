@@ -1,4 +1,4 @@
-import { themeParamsParser } from './themeParamsParser.js';
+import { themeParams } from './parsers/themeParams.js';
 import type { ThemeParamsParsed } from './types.js';
 
 /**
@@ -6,5 +6,5 @@ import type { ThemeParamsParsed } from './types.js';
  * @param value - value to parse.
  */
 export function parseThemeParams(value: unknown): ThemeParamsParsed {
-  return themeParamsParser().parse(value);
+  return themeParams().parse(value);
 }

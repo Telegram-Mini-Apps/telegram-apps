@@ -11,7 +11,10 @@ export function createVitestConfig(options: Options = {}): InlineConfig {
     coverage,
   } = options;
   const config: InlineConfig = {
-    include: ['src/**/__tests__/**/*.ts'],
+    include: [
+      'src/**/__tests__/**/*.ts',
+      'src/**/*.test.ts'
+    ],
   };
 
   if (environment) {

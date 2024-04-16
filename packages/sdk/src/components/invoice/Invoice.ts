@@ -1,74 +1,35 @@
-import type { InvoiceEvents, InvoiceState } from './types.js';
-import type { InvoiceStatus } from '../../bridge/events/parsers/invoiceClosed.js';
-import type { PostEvent } from '../../bridge/methods/postEvent.js';
-import { postEvent as defaultPostEvent } from '../../bridge/methods/postEvent.js';
-import { request } from '../../bridge/request.js';
-import { EventEmitter } from '../../event-emitter/EventEmitter.js';
-import { State } from '../../state/State.js';
-import { createSupportsFunc } from '../../supports/createSupportsFunc.js';
-import type { SupportsFunc } from '../../supports/types.js';
-import type { Version } from '../../version/types.js';
+import type { InvoiceStatus } from '@/bridge/events/parsers/invoiceClosed.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
+import { request } from '@/bridge/request.js';
+import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
+import type { Version } from '@/version/types.js';
 
-type Emitter = EventEmitter<InvoiceEvents>;
+import type { InvoiceState } from './types.js';
+
+// TODO: Usage.
 
 /**
- * Extracts invoice slug from URL.
- * @param url - url to extract slug from.
+ * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/invoice
  */
-function slugFromUrl(url: string): string {
-  const { hostname, pathname } = new URL(url, window.location.href);
-  if (hostname !== 't.me') {
-    throw new Error(`Incorrect hostname: ${hostname}`);
-  }
-
-  // Valid examples:
-  // "/invoice/my-slug"
-  // "/$my-slug"
-  const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
-
-  if (match === null) {
-    // eslint-disable-next-line no-template-curly-in-string
-    throw new Error('Link pathname has incorrect format. Expected to receive "/invoice/{slug}" or "/${slug}"');
-  }
-  return match[2];
-}
-
-/**
- * Controls currently displayed invoice.
- */
-export class Invoice {
-  private readonly ee = new EventEmitter<InvoiceEvents>();
-
-  private readonly state: State<InvoiceState>;
-
+export class Invoice extends WithStateAndSupports<InvoiceState, 'open'> {
   constructor(
+    isOpened: boolean,
     version: Version,
-    private readonly postEvent: PostEvent = defaultPostEvent,
+    private readonly postEvent: PostEvent,
   ) {
-    this.state = new State({ isOpened: false }, this.ee);
-    this.supports = createSupportsFunc(version, { open: 'web_app_open_invoice' });
+    super({ isOpened }, version, { open: 'web_app_open_invoice' });
   }
 
   private set isOpened(value) {
-    this.state.set('isOpened', value);
+    this.set('isOpened', value);
   }
 
   /**
    * True if invoice is currently opened.
    */
   get isOpened(): boolean {
-    return this.state.get('isOpened');
+    return this.get('isOpened');
   }
-
-  /**
-   * Adds new event listener.
-   */
-  on: Emitter['on'] = this.ee.on.bind(this.ee);
-
-  /**
-   * Removes event listener.
-   */
-  off: Emitter['off'] = this.ee.off.bind(this.ee);
 
   /**
    * Opens an invoice using its slug.
@@ -90,7 +51,25 @@ export class Invoice {
       throw new Error('Invoice is already opened');
     }
 
-    const slug = type ? slugFromUrl(urlOrSlug) : urlOrSlug;
+    let slug: string;
+    if (!type) {
+      slug = urlOrSlug;
+    } else {
+      const { hostname, pathname } = new URL(urlOrSlug, window.location.href);
+      if (hostname !== 't.me') {
+        throw new Error(`Incorrect hostname: ${hostname}`);
+      }
+
+      // Valid examples:
+      // "/invoice/my-slug"
+      // "/$my-slug"
+      const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
+      if (!match) {
+        // eslint-disable-next-line no-template-curly-in-string
+        throw new Error('Link pathname has incorrect format. Expected to receive "/invoice/{slug}" or "/${slug}"');
+      }
+      [,,slug] = match;
+    }
 
     this.isOpened = true;
 
@@ -108,9 +87,4 @@ export class Invoice {
       this.isOpened = false;
     }
   }
-
-  /**
-   * Checks if specified method is supported by current component.
-   */
-  supports: SupportsFunc<'open'>;
 }

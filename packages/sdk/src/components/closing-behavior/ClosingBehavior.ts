@@ -1,66 +1,41 @@
-import type {
-  ClosingBehaviorEvents,
-  ClosingBehaviorState,
-} from './types.js';
-import type { PostEvent } from '../../bridge/methods/postEvent.js';
-import { postEvent as defaultPostEvent } from '../../bridge/methods/postEvent.js';
-import { EventEmitter } from '../../event-emitter/EventEmitter.js';
-import { State } from '../../state/State.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
+import { WithState } from '@/classes/with-state/WithState.js';
 
-type Emitter = EventEmitter<ClosingBehaviorEvents>;
+import type { ClosingBehaviorState } from './types.js';
 
 /**
- * Component responsible for controlling current closing confirmation
- * status.
+ * @see Usage: https://docs.telegram-mini-apps.com/platform/closing-behavior
+ * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/closing-behavior
  */
-export class ClosingBehavior {
-  private readonly ee = new EventEmitter<ClosingBehaviorEvents>();
-
-  private readonly state: State<ClosingBehaviorState>;
-
-  constructor(
-    isConfirmationNeeded: boolean,
-    private readonly postEvent: PostEvent = defaultPostEvent,
-  ) {
-    this.state = new State({ isConfirmationNeeded }, this.ee);
+export class ClosingBehavior extends WithState<ClosingBehaviorState> {
+  constructor(isConfirmationNeeded: boolean, private readonly postEvent: PostEvent) {
+    super({ isConfirmationNeeded });
   }
 
   private set isConfirmationNeeded(value: boolean) {
-    this.state.set('isConfirmationNeeded', value);
+    this.set('isConfirmationNeeded', value);
     this.postEvent('web_app_setup_closing_behavior', { need_confirmation: value });
   }
 
   /**
-   * Returns true, if the confirmation dialog enabled while the user is trying
-   * to close the Mini App.
+   * True, if the confirmation dialog should be shown while the user is trying to close
+   * the Mini App.
    */
   get isConfirmationNeeded(): boolean {
-    return this.state.get('isConfirmationNeeded');
+    return this.get('isConfirmationNeeded');
   }
 
   /**
-   * Disables the confirmation dialog while the user is trying to close the
-   * Mini App.
+   * Disables the confirmation dialog when closing the Mini App.
    */
   disableConfirmation(): void {
     this.isConfirmationNeeded = false;
   }
 
   /**
-   * Enables the confirmation dialog while the user is trying to close the
-   * Mini App.
+   * Enables the confirmation dialog when closing the Mini App.
    */
   enableConfirmation(): void {
     this.isConfirmationNeeded = true;
   }
-
-  /**
-   * Adds new event listener.
-   */
-  on: Emitter['on'] = this.ee.on.bind(this.ee);
-
-  /**
-   * Removes event listener.
-   */
-  off: Emitter['off'] = this.ee.off.bind(this.ee);
 }

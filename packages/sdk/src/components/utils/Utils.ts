@@ -1,28 +1,25 @@
-import { captureSameReq } from '../../bridge/captureSameReq.js';
-import type { PostEvent } from '../../bridge/methods/postEvent.js';
-import { postEvent as defaultPostEvent } from '../../bridge/methods/postEvent.js';
-import { request } from '../../bridge/request.js';
-import { createSupportsFunc } from '../../supports/createSupportsFunc.js';
-import { createSupportsParamFunc } from '../../supports/createSupportsParamFunc.js';
-import { supports } from '../../supports/supports.js';
-import type { SupportsFunc } from '../../supports/types.js';
-import type { CreateRequestIdFunc } from '../../types/request-id.js';
-import type { Version } from '../../version/types.js';
+import { captureSameReq } from '@/bridge/captureSameReq.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
+import { request } from '@/bridge/request.js';
+import { WithSupports } from '@/classes/with-supports/WithSupports.js';
+import type { CreateRequestIdFn } from '@/request-id/types.js';
+import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
+import { supports } from '@/supports/supports.js';
+import type { SupportsFn } from '@/supports/types.js';
+import type { Version } from '@/version/types.js';
 
 /**
- * Provides common Mini Apps functionality not covered by other system components.
+ * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/utils
  */
-export class Utils {
+export class Utils extends WithSupports<'readTextFromClipboard'> {
   constructor(
     private readonly version: Version,
-    private readonly createRequestId: CreateRequestIdFunc,
-    private readonly postEvent: PostEvent = defaultPostEvent,
+    private readonly createRequestId: CreateRequestIdFn,
+    private readonly postEvent: PostEvent,
   ) {
-    this.supports = createSupportsFunc(version, {
-      readTextFromClipboard: 'web_app_read_text_from_clipboard',
-    });
+    super(version, { readTextFromClipboard: 'web_app_read_text_from_clipboard' });
 
-    this.supportsParam = createSupportsParamFunc(version, {
+    this.supportsParam = createSupportsParamFn(version, {
       'openLink.tryInstantView': ['web_app_open_link', 'try_instant_view'],
     });
   }
@@ -59,12 +56,7 @@ export class Utils {
    * @throws {Error} URL has not allowed hostname.
    */
   openTelegramLink(url: string): void {
-    const {
-      hostname,
-      pathname,
-      search,
-    } = new URL(url, window.location.href);
-
+    const { hostname, pathname, search } = new URL(url, window.location.href);
     if (hostname !== 't.me') {
       throw new Error(`URL has not allowed hostname: ${hostname}. Only "t.me" is allowed`);
     }
@@ -97,12 +89,7 @@ export class Utils {
   }
 
   /**
-   * Checks if specified method is supported by current component.
-   */
-  supports: SupportsFunc<'readTextFromClipboard'>;
-
-  /**
    * Checks if specified method parameter is supported by current component.
    */
-  supportsParam: SupportsFunc<'openLink.tryInstantView'>;
+  supportsParam: SupportsFn<'openLink.tryInstantView'>;
 }

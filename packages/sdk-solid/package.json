@@ -41,8 +41,10 @@
     "typecheck": "tsc --noEmit",
     "build": "vite build"
   },
+  "dependencies": {
+    "@tma.js/sdk": "workspace:*"
+  },
   "peerDependencies": {
-    "@tma.js/sdk": "workspace:*",
     "solid-js": "^1.0.0"
   },
   "devDependencies": {

@@ -8,7 +8,6 @@ module.exports = {
   },
   plugins: [
     'simple-import-sort',
-    'import',
   ],
   rules: require('./rules'),
   ignorePatterns: ['**/__tests__/*'],

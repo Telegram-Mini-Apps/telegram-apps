@@ -41,10 +41,12 @@
     "typecheck": "tsc --noEmit",
     "build": "vite build"
   },
+  "dependencies": {
+    "@tma.js/sdk": "workspace:*"
+  },
   "peerDependencies": {
     "@types/react": "^17.0.0 || ^18.0.0",
-    "react": "^17.0.0 || ^18.0.0",
-    "@tma.js/sdk": "workspace:*"
+    "react": "^17.0.0 || ^18.0.0"
   },
   "peerDependenciesMeta": {
     "@types/react": {

@@ -1,28 +1,12 @@
-import { boolean } from '../../../parsing/parsers/boolean.js';
-import { json } from '../../../parsing/parsers/json.js';
-import { number } from '../../../parsing/parsers/number.js';
+import { boolean } from '@/parsing/parsers/boolean.js';
+import { json } from '@/parsing/parsers/json.js';
+import { number } from '@/parsing/parsers/number.js';
+import type { ValueParser } from '@/parsing/ValueParser/ValueParser.js';
 
-export interface ViewportChangedPayload {
-  /**
-   * The viewport height.
-   */
-  height: number;
-  /**
-   * The viewport width.
-   */
-  width: number;
-  /**
-   * Is the viewport currently expanded.
-   */
-  is_expanded: boolean;
-  /**
-   * Is the viewport current state stable and not going to change in the next moment.
-   */
-  is_state_stable: boolean;
-}
+import type { ViewportChangedPayload } from '../types/payloads.js';
 
-export function viewportChanged() {
-  return json<ViewportChangedPayload>({
+export function viewportChanged(): ValueParser<ViewportChangedPayload, false> {
+  return json({
     height: number(),
     width: (value) => (
       value === null || value === undefined
@@ -31,5 +15,5 @@ export function viewportChanged() {
     ),
     is_state_stable: boolean(),
     is_expanded: boolean(),
-  });
+  }, 'ViewportChangedPayload');
 }

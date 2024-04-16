@@ -1,7 +1,8 @@
+import type { RequestSimpleOptions } from '@/bridge/request.js';
+import { request } from '@/bridge/request.js';
+
 import { parseThemeParams } from './parseThemeParams.js';
 import type { ThemeParamsParsed } from './types.js';
-import type { RequestSimpleOptions } from '../../bridge/request.js';
-import { request } from '../../bridge/request.js';
 
 /**
  * Requests current theme parameters from the Telegram application.

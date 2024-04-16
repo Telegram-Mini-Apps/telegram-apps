@@ -1,18 +1,19 @@
+import type { If } from '@/types/logical.js';
+import type { ExecuteWithOptions } from '@/types/methods.js';
+import type { IsNever } from '@/types/utils.js';
+
+import { on } from './events/on.js';
 import type {
   MiniAppsEventName,
   MiniAppsEventParams,
-} from './events/events.js';
-import { on } from './events/on.js';
+} from './events/types/events.js';
+import { postEvent as defaultPostEvent } from './methods/postEvent.js';
 import type {
   MiniAppsEmptyMethodName,
   MiniAppsMethodName,
   MiniAppsMethodParams, MiniAppsNonEmptyMethodName,
-} from './methods/methods.js';
-import { postEvent as defaultPostEvent } from './methods/postEvent.js';
+} from './methods/types/methods.js';
 import { withTimeout } from '../timeout/withTimeout.js';
-import type { If } from '../types/logical.js';
-import type { ExecuteWithOptions } from '../types/methods.js';
-import type { IsNever } from '../types/utils.js';
 
 /**
  * Simple `request` method options.
@@ -38,7 +39,7 @@ export type RequestCompleteOptions<
     event: Event | Event[];
     /**
      * Should return true in case, this event should be captured. If not specified,
-     * request is not skipping captured events.
+     * request will be captured automatically.
      */
     capture?: If<
       IsNever<MiniAppsEventParams<Event>>,
