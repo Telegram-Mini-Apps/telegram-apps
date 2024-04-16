@@ -34,14 +34,11 @@ interface CreateFnBasic<Component> {
 }
 
 interface CreateFnStorage<Component, SK extends StorageKey> {
-  (
-    options: CreateOptions,
-    state: Partial<StorageValue<SK>>,
-  ): Component,
+  (options: CreateOptions, state: Partial<StorageValue<SK>>): Component,
 }
 
 interface CreateInitFnResult<Options, Component> {
-  (options?: Options): Component
+  (options?: Options): Component;
 }
 
 /**
@@ -57,10 +54,7 @@ export function createInitFn<Component>(
  * @param create - function creating new component instance.
  * @param storageKey - storage key to restore component from.
  */
-export function createInitFn<
-  Component extends Trackable<StorageValue<SK>>,
-  SK extends StorageKey,
->(
+export function createInitFn<Component extends Trackable<StorageValue<SK>>, SK extends StorageKey>(
   storageKey: SK,
   create: CreateFnStorage<Component, SK>,
 ): CreateInitFnResult<InitFnStorageOptions, Component>;
