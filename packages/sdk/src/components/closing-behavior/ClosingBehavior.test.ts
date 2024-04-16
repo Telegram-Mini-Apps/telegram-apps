@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { ClosingBehavior } from '../ClosingBehavior';
+import { ClosingBehavior } from './ClosingBehavior.js';
 
 describe('disable', () => {
   it('should call "web_app_setup_closing_behavior" method with "need_confirmation" equal to false', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { user } from '../user.js';
+import { user } from './user.js';
 
 describe('first_name', () => {
   it('should throw an error in case, this property is missing', () => {

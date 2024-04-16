@@ -1,5 +1,6 @@
-import { it, expect, afterEach, vi } from 'vitest';
-import { getFirstNavigationEntry } from '../getFirstNavigationEntry.js';
+import { afterEach, expect, it, vi } from 'vitest';
+
+import { getFirstNavigationEntry } from './getFirstNavigationEntry.js';
 
 afterEach(() => {
   vi.restoreAllMocks();

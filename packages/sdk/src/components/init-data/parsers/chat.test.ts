@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { chat } from '../chat.js';
+import { chat } from './chat.js';
 
 describe('id', () => {
   it('should throw an error in case, this property is missing', () => {

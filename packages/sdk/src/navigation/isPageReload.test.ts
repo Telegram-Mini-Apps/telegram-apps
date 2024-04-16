@@ -1,5 +1,6 @@
-import { it, expect, afterEach, vi } from 'vitest';
-import { isPageReload } from '../isPageReload.js';
+import { afterEach, expect, it, vi } from 'vitest';
+
+import { isPageReload } from './isPageReload.js';
 
 afterEach(() => {
   vi.restoreAllMocks();

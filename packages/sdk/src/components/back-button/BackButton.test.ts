@@ -113,15 +113,15 @@ describe('off', () => {
 describe('supports', () => {
   describe('show / hide', () => {
     it('should return true in case, BackButton version is 6.1 or higher. False, otherwise', () => {
-      const backButton1 = new BackButton(false, '6.0');
+      const backButton1 = new BackButton(false, '6.0', () => null);
       expect(backButton1.supports('show')).toBe(false);
       expect(backButton1.supports('hide')).toBe(false);
 
-      const backButton2 = new BackButton(false, '6.1');
+      const backButton2 = new BackButton(false, '6.1', () => null);
       expect(backButton2.supports('show')).toBe(true);
       expect(backButton2.supports('hide')).toBe(true);
 
-      const backButton3 = new BackButton(false, '6.2');
+      const backButton3 = new BackButton(false, '6.2', () => null);
       expect(backButton3.supports('show')).toBe(true);
       expect(backButton3.supports('hide')).toBe(true);
     });

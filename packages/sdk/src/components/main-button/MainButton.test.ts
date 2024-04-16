@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { MainButton } from '../MainButton';
+import { MainButton } from './MainButton.js';
 
 describe('disable', () => {
   it('should call "web_app_setup_main_button" method with parameter where "is_active" property equal to false', () => {

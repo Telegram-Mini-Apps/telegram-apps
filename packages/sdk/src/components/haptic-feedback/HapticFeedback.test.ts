@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { HapticFeedback } from '../HapticFeedback';
+import { HapticFeedback } from './HapticFeedback.js';
 
 describe('impactOccurred', () => {
   it('should call "web_app_trigger_haptic_feedback" method with { type: "impact", style: {{style}} }', () => {
@@ -49,17 +49,17 @@ describe('selectionChanged', () => {
 describe('supports', () => {
   describe('impactOccurred / notificationOccurred / selectionChanged', () => {
     it('should return true in case, HapticFeedback version is 6.1 or higher. False, otherwise', () => {
-      const haptic1 = new HapticFeedback('6.0');
+      const haptic1 = new HapticFeedback('6.0', () => null);
       expect(haptic1.supports('impactOccurred')).toBe(false);
       expect(haptic1.supports('notificationOccurred')).toBe(false);
       expect(haptic1.supports('selectionChanged')).toBe(false);
 
-      const haptic2 = new HapticFeedback('6.1');
+      const haptic2 = new HapticFeedback('6.1', () => null);
       expect(haptic2.supports('impactOccurred')).toBe(true);
       expect(haptic2.supports('notificationOccurred')).toBe(true);
       expect(haptic2.supports('selectionChanged')).toBe(true);
 
-      const haptic3 = new HapticFeedback('6.2');
+      const haptic3 = new HapticFeedback('6.2', () => null);
       expect(haptic3.supports('impactOccurred')).toBe(true);
       expect(haptic3.supports('notificationOccurred')).toBe(true);
       expect(haptic3.supports('selectionChanged')).toBe(true);

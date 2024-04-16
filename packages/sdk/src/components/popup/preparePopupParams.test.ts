@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { preparePopupParams } from '../preparePopupParams';
+import { preparePopupParams } from './preparePopupParams.js';
 
 /**
  * Creates test text.

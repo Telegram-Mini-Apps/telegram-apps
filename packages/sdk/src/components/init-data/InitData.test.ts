@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { InitData } from '../InitData';
+import { InitData } from './InitData.js';
 
 it('should return fields specified in constructor', () => {
   const authDate = new Date(123);
