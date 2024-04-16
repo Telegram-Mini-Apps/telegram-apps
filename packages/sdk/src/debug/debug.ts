@@ -1,5 +1,5 @@
 import { singletonEmitter } from '@/bridge/events/singletonEmitter.js';
-import { Logger, type LogLevel as LoggerLogLevel } from '@/logger/Logger.js';
+import { Logger } from '@/logger/Logger.js';
 
 export interface LogLevel {
   postEvent?: boolean;
@@ -16,14 +16,6 @@ export const logger = new Logger('SDK', {
 });
 
 const logLevel: LogLevel = {};
-
-function createLogFn(loggerLevel: LoggerLogLevel) {
-  return (debugLevel: keyof LogLevel | null, ...args: any[]): void => {
-    if (!debugLevel || logLevel[debugLevel]) {
-      logger[loggerLevel](...args);
-    }
-  };
-}
 
 /**
  * Sets new debug mode. Enabling debug mode leads to printing additional messages in the console,
@@ -46,5 +38,21 @@ export function setDebug(value: boolean | Partial<LogLevel>): void {
   singletonEmitter();
 }
 
-export const log = createLogFn('log');
-export const error = createLogFn('error');
+/**
+ * Logs info message into the console.
+ * @param debugLevel - required debug level.
+ * @param args - additional arguments.
+ */
+export function log(debugLevel: keyof LogLevel, ...args: any[]): void {
+  if (logLevel[debugLevel]) {
+    logger.log(...args);
+  }
+}
+
+/**
+ * Logs error message into the console.
+ * @param args - additional arguments.
+ */
+export function error(...args: any[]): void {
+  logger.error(...args);
+}
