@@ -6,6 +6,7 @@ import type { MiniAppState } from '@/components/mini-app/types.js';
 import type { PopupState } from '@/components/popup/types.js';
 import type { QRScannerState } from '@/components/qr-scanner/types.js';
 import type { SettingsButtonState } from '@/components/settings-button/types.js';
+import type { ThemeParamsParsed } from '@/components/theme-params/types.js';
 import type { ViewportState } from '@/components/viewport/types.js';
 
 /**
@@ -15,13 +16,14 @@ export interface StorageParams {
   backButton: BackButtonState;
   closingBehavior: ClosingBehaviorState;
   invoice: InvoiceState;
+  launchParams: string;
   mainButton: MainButtonState;
   miniApp: MiniAppState;
   popup: PopupState;
   qrScanner: QRScannerState;
   settingsButton: SettingsButtonState;
+  themeParams: ThemeParamsParsed;
   viewport: ViewportState;
-  launchParams: string;
 }
 
 /**

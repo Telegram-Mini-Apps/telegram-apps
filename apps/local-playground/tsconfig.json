@@ -11,8 +11,9 @@
       "esnext",
       "DOM"
     ],
-    "module": "ESNext",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "preserveWatchOutput": true,
@@ -26,5 +27,11 @@
       "@packages/*": ["../../packages/*"]
     }
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "include": [
+    "src"
+  ]
+//  "references": [
+//    "./tsconfig.node.json"
+//  ]
 }

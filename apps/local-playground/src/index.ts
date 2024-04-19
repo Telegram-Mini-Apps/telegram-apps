@@ -8,6 +8,12 @@
  * import { postEvent } from '@/sdk';
  */
 
-import { postEvent } from '@/sdk';
+import { initBackButton } from '@/sdk';
 
-postEvent('web_app_expand');
+const bb = initBackButton();
+
+// setDebug(true);
+
+bb.show();
+
+// on('main_button_pressed', console.warn);

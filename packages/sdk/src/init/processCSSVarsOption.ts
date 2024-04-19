@@ -5,7 +5,7 @@ import { bindMiniAppCSSVars } from '@/css-vars/bindMiniAppCSSVars.js';
 import { bindThemeCSSVars } from '@/css-vars/bindThemeCSSVars.js';
 import { bindViewportCSSVars } from '@/css-vars/bindViewportCSSVars.js';
 
-import type { InitCSSVarsOption, InitCSSVarsSpecificOption } from '../types.js';
+import type { InitCSSVarsOption, InitCSSVarsSpecificOption } from './types.js';
 
 /**
  * Converts init cssVars option to more narrow type.
