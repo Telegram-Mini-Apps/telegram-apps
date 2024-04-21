@@ -1,7 +1,7 @@
 import type { RequestSimpleOptions } from '@/bridge/request.js';
 import { request } from '@/bridge/request.js';
 
-import { parseThemeParams } from './parseThemeParams.js';
+import { parseThemeParams } from './parsing/parseThemeParams.js';
 import type { ThemeParamsParsed } from './types.js';
 
 /**

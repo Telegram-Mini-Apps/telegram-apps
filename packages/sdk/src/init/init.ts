@@ -1,8 +1,8 @@
 import { on } from '@/bridge/events/on.js';
-import type { CleanupFn } from '@/bridge/events/types/misc.js';
 import { createPostEvent } from '@/bridge/methods/createPostEvent.js';
 import { isIframe } from '@/env/isIframe.js';
 import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
+import type { CleanupFn } from '@/types/misc.js';
 import type { Version } from '@/version/types.js';
 
 export interface InitOptions {

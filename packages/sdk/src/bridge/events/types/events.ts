@@ -1,5 +1,5 @@
-import type { EventEmitter } from '@/event-emitter/EventEmitter.js';
-import type { AnySubscribeListener, EventListener, EventParams } from '@/event-emitter/types.js';
+import type { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
+import type { EventListener, EventParams, SubscribeListener } from '@/events/event-emitter/types.js';
 import type { Not } from '@/types/logical.js';
 import type { IsNever } from '@/types/utils.js';
 
@@ -149,5 +149,6 @@ export type MiniAppsEventHasParams<E extends MiniAppsEventName> =
  * Event listener used in `subscribe` and `unsubscribe` functions.
  */
 export type MiniAppsGlobalEventListener =
-  | AnySubscribeListener<MiniAppsEvents>
+  | SubscribeListener<MiniAppsEvents>
+  // FIXME
   | ((event: string, data: unknown) => void);

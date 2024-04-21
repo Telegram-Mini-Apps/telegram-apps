@@ -1,4 +1,4 @@
-import { EventEmitter } from '@/event-emitter/EventEmitter.js';
+import { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
 
 import { drop } from './drop.js';
 import { go } from './go.js';

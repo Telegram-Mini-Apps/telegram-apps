@@ -1,19 +1,13 @@
-import { createEmitter } from './createEmitter.js';
-import type { MiniAppsEventEmitter } from './types/events.js';
+import type { MiniAppsEventEmitter } from '@/bridge/events/types/index.js';
+import { createSingleton } from '@/misc/createSingleton.js';
 
-const CACHED_EMITTER = '@tma.js/cached-emitter';
+import { createEmitter } from './createEmitter.js';
+
+export const [getSingletonEmitter] = createSingleton(createEmitter, (result) => result[1]());
 
 /**
- * Returns singleton instance of bridge EventEmitter. Also, defines
- * Telegram event handlers.
+ * Returns Mini Apps event emitter singleton.
  */
 export function singletonEmitter(): MiniAppsEventEmitter {
-  const wnd: any = window;
-  const cachedEmitter = wnd[CACHED_EMITTER];
-
-  if (cachedEmitter === undefined) {
-    wnd[CACHED_EMITTER] = createEmitter();
-  }
-
-  return wnd[CACHED_EMITTER];
+  return getSingletonEmitter()[0];
 }

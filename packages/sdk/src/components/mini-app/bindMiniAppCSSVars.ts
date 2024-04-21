@@ -2,7 +2,7 @@ import { isRGB } from '@/colors/isRGB.js';
 import type { MiniApp } from '@/components/mini-app/MiniApp.js';
 import type { ThemeParams } from '@/components/theme-params/ThemeParams.js';
 
-import { setCSSVar } from './setCSSVar.js';
+import { setCSSVar } from '../../css-vars/setCSSVar.js';
 
 /**
  * Creates CSS variables connected with WebApp background and header colors based on

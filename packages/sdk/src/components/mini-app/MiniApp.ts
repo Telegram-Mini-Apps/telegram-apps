@@ -11,6 +11,7 @@ import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStat
 import { isColorDark } from '@/colors/isColorDark.js';
 import { isRGB } from '@/colors/isRGB.js';
 import type { RGB } from '@/colors/types.js';
+import { contact } from '@/components/mini-app/parsing/contact.js';
 import type { CreateRequestIdFn } from '@/request-id/types.js';
 import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
 import type { SupportsFn } from '@/supports/types.js';
@@ -19,7 +20,6 @@ import { sleep } from '@/timeout/sleep.js';
 import { withTimeout } from '@/timeout/withTimeout.js';
 import type { ExecuteWithTimeout } from '@/types/methods.js';
 
-import { contact } from './parsers/contact.js';
 import type { MiniAppHeaderColor, MiniAppProps, MiniAppState, RequestedContact } from './types.js';
 
 /**

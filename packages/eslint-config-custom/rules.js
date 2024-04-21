@@ -1,6 +1,7 @@
 module.exports = {
   '@typescript-eslint/consistent-type-imports': 'error',
   '@typescript-eslint/indent': 0,
+  '@typescript-eslint/no-unused-expressions': 0,
   // Sometimes this rule decreases readability.
   'arrow-body-style': 0,
   'consistent-return': 0,
@@ -21,6 +22,7 @@ module.exports = {
   'no-console': 0,
   'no-continue': 0,
   'no-nested-ternary': 0,
+  'no-return-assign': 0,
   // Sometimes we need to write "void promise".
   'no-void': 0,
   'object-curly-newline': ['error', { consistent: true }],

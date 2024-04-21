@@ -1,5 +1,5 @@
 /**
- * Sets CSS variable.
+ * Sets CSS variable globally.
  * @param name - variable name.
  * @param value - variable value.
  */

@@ -1,5 +1,5 @@
 /**
- * Converts palette key from the Telegram application to representation used by the package.
+ * Converts a palette key from the Telegram application to the representation used by the package.
  * @param key - palette key.
  */
 export function keyToLocal(key: string): string {
@@ -7,8 +7,8 @@ export function keyToLocal(key: string): string {
 }
 
 /**
- * Converts palette key from local representation to representation sent from the Telegram
- * application.
+ * Converts palette key from the local representation to the representation sent from the
+ * Telegram application.
  * @param key - palette key.
  */
 export function keyToExternal(key: string): string {

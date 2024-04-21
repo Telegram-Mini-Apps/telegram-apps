@@ -4,9 +4,9 @@ import type {
   EventName,
   EventParams,
   NonEmptyEventName,
-  RemoveEventListener,
   SubscribeListener,
 } from './types.js';
+import type { RemoveEventListenerFn } from '../types.js';
 
 export class EventEmitter<Schema> {
   private readonly listeners: Map<
@@ -14,7 +14,7 @@ export class EventEmitter<Schema> {
     [listener: EventListener<any>, once: boolean][]
   > = new Map();
 
-  private readonly subscribeListeners: SubscribeListener<Schema>[] = [];
+  private subscribeListeners: SubscribeListener<Schema>[] = [];
 
   /**
    * Adds specified event listener.
@@ -26,7 +26,7 @@ export class EventEmitter<Schema> {
     event: E,
     listener: EventListener<Schema[E]>,
     once: boolean,
-  ): RemoveEventListener {
+  ): RemoveEventListenerFn {
     let listeners = this.listeners.get(event);
     if (!listeners) {
       listeners = [];
@@ -36,6 +36,14 @@ export class EventEmitter<Schema> {
     listeners.push([listener, once]);
 
     return () => this.off(event, listener);
+  }
+
+  /**
+   * Removes all event listeners.
+   */
+  clear() {
+    this.listeners.clear();
+    this.subscribeListeners.splice(0, this.subscribeListeners.length);
   }
 
   /**
@@ -76,7 +84,7 @@ export class EventEmitter<Schema> {
   on<E extends EventName<Schema>>(
     event: E,
     listener: EventListener<Schema[E]>,
-  ): RemoveEventListener {
+  ): RemoveEventListenerFn {
     return this.addListener(event, listener, false);
   }
 
@@ -91,7 +99,7 @@ export class EventEmitter<Schema> {
   once<E extends EventName<Schema>>(
     event: E,
     listener: EventListener<Schema[E]>,
-  ): RemoveEventListener {
+  ): RemoveEventListenerFn {
     return this.addListener(event, listener, true);
   }
 
@@ -120,7 +128,7 @@ export class EventEmitter<Schema> {
    * @param listener - events listener.
    * @returns Function to remove event listener.
    */
-  subscribe(listener: SubscribeListener<Schema>): RemoveEventListener {
+  subscribe(listener: SubscribeListener<Schema>): RemoveEventListenerFn {
     this.subscribeListeners.push(listener);
     return () => this.unsubscribe(listener);
   }

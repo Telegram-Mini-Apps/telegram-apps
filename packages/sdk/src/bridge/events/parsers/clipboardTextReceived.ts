@@ -7,8 +7,6 @@ import type { ClipboardTextReceivedPayload } from '../types/payloads.js';
 export function clipboardTextReceived(): ValueParser<ClipboardTextReceivedPayload, false> {
   return json({
     req_id: string(),
-    data: (value) => (
-      value === null ? value : string().optional().parse(value)
-    ),
+    data: (value) => (value === null ? value : string().optional().parse(value)),
   }, 'ClipboardTextReceivedPayload');
 }

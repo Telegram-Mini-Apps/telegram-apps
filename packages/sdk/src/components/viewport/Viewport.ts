@@ -1,8 +1,8 @@
 import { on } from '@/bridge/events/on.js';
-import type { CleanupFn } from '@/bridge/events/types/misc.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { RequestSimpleOptions } from '@/bridge/request.js';
 import { WithState } from '@/classes/with-state/WithState.js';
+import type { CleanupFn } from '@/types/misc.js';
 
 import { requestViewport } from './requestViewport.js';
 import type { ViewportProps, ViewportState } from './types.js';

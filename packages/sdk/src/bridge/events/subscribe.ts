@@ -1,7 +1,7 @@
 import { singletonEmitter } from './singletonEmitter.js';
 import type { MiniAppsGlobalEventListener } from './types/events.js';
-import type { CleanupFn } from './types/misc.js';
 import { unsubscribe } from './unsubscribe.js';
+import type { CleanupFn } from '../../types/misc.js';
 
 /**
  * Subscribes to all events sent from the native Telegram application.

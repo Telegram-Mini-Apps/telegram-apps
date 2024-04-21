@@ -1,4 +1,4 @@
-import { EventEmitter } from '@/event-emitter/EventEmitter.js';
+import { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
 import type { StringKeys } from '@/types/utils.js';
 
 import type { StateEvents } from './types.js';

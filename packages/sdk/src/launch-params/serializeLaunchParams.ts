@@ -1,4 +1,4 @@
-import { serializeThemeParams } from '@/components/theme-params/serializeThemeParams.js';
+import { serializeThemeParams } from '@/components/theme-params/parsing/serializeThemeParams.js';
 
 import type { LaunchParams } from './types.js';
 

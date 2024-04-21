@@ -3,7 +3,7 @@ import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEve
 import type { FnToSpy } from '@test-utils/types.js';
 import { afterEach, beforeAll, expect, it, vi } from 'vitest';
 
-import { bindThemeCSSVars } from './bindThemeCSSVars.js';
+import { bindThemeParamsCSSVars } from './bindThemeParamsCSSVars.js';
 
 let setCSSPropertySpy: FnToSpy<typeof document.documentElement.style.setProperty>;
 
@@ -19,7 +19,7 @@ afterEach(() => {
 });
 
 it('should set --tg-theme-{key} CSS vars, where key is a kebab-cased theme keys', () => {
-  bindThemeCSSVars(new ThemeParams({
+  bindThemeParamsCSSVars(new ThemeParams({
     bgColor: '#abcdef',
     accentTextColor: '#000011',
   }));
@@ -34,7 +34,7 @@ it('should update --tg-theme-{key} variables to the values, received in the Them
     bgColor: '#abcdef',
     accentTextColor: '#000011',
   });
-  bindThemeCSSVars(tp);
+  bindThemeParamsCSSVars(tp);
   setCSSPropertySpy.mockClear();
 
   tp.listen();

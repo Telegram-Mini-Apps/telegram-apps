@@ -12,14 +12,14 @@ export default defineConfig({
   // you will need correct certificate, private key and DNS configuration for your custom domain.
   // For this purpose you could use mkcert:
   // https://github.com/FiloSottile/mkcert
-  server: {
-    port: 443,
-    https: {
-      cert: readFileSync(resolve(dir, '../../https-cert.pem')),
-      key: readFileSync(resolve(dir, '../../https-key.pem')),
-    },
-    host: 'tma.internal',
-  },
+  // server: {
+  //   port: 443,
+  //   https: {
+  //     cert: readFileSync(resolve(dir, '../../https-cert.pem')),
+  //     key: readFileSync(resolve(dir, '../../https-key.pem')),
+  //   },
+  //   host: 'tma.internal',
+  // },
   build: {
     outDir: 'dist',
     emptyOutDir: true,

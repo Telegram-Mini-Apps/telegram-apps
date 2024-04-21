@@ -1,10 +1,10 @@
 import { on } from '@/bridge/events/on.js';
-import type { CleanupFn } from '@/bridge/events/types/misc.js';
 import { WithState } from '@/classes/with-state/WithState.js';
 import { isColorDark } from '@/colors/isColorDark.js';
 import type { RGB } from '@/colors/types.js';
+import type { CleanupFn } from '@/types/misc.js';
 
-import { parseThemeParams } from './parseThemeParams.js';
+import { parseThemeParams } from './parsing/parseThemeParams.js';
 import type { ThemeParamsParsed, ThemeParamsState } from './types.js';
 
 /**
@@ -84,7 +84,7 @@ export class ThemeParams extends WithState<ThemeParamsState> {
   }
 
   /**
-   * Starts listening to theme changes and applies them.
+   * Starts listening to the external theme changes and applies them.
    * @returns Function to stop listening.
    */
   listen(): CleanupFn {

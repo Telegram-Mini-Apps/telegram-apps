@@ -55,8 +55,3 @@ export type SubscribeListener<Schema> = (
     [E in EventName<Schema>]: { event: E; args: EventParams<Schema[E]> };
   }[EventName<Schema>],
 ) => void;
-
-/**
- * Function which removes event listener.
- */
-export type RemoveEventListener = () => void;

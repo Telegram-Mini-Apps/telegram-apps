@@ -1,5 +1,6 @@
-import { themeParams } from './parsers/themeParams.js';
-import type { ThemeParamsParsed } from './types.js';
+import { themeParams } from '@/components/theme-params/parsing/themeParams.js';
+
+import type { ThemeParamsParsed } from '../types.js';
 
 /**
  * Parses incoming value as theme parameters.
