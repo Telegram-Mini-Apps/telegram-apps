@@ -1,23 +1,23 @@
 /* eslint-disable no-await-in-loop */
-import type {
-  PhoneRequestedStatus,
-  WriteAccessRequestedStatus,
-} from '@/bridge/events/types/payloads.js';
 import { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
-import type { PostEvent } from '@/bridge/methods/postEvent.js';
-import type { SwitchInlineQueryChatType } from '@/bridge/methods/types/methods.js';
 import { request } from '@/bridge/request.js';
 import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
 import { isColorDark } from '@/colors/isColorDark.js';
 import { isRGB } from '@/colors/isRGB.js';
-import type { RGB } from '@/colors/types.js';
 import { contact } from '@/components/mini-app/parsing/contact.js';
-import type { CreateRequestIdFn } from '@/request-id/types.js';
 import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
-import type { SupportsFn } from '@/supports/types.js';
 import { createTimeoutError } from '@/timeout/createTimeoutError.js';
 import { sleep } from '@/timeout/sleep.js';
 import { withTimeout } from '@/timeout/withTimeout.js';
+import type {
+  PhoneRequestedStatus,
+  WriteAccessRequestedStatus,
+} from '@/bridge/events/types/payloads.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
+import type { SwitchInlineQueryChatType } from '@/bridge/methods/types/methods.js';
+import type { RGB } from '@/colors/types.js';
+import type { CreateRequestIdFn } from '@/request-id/types.js';
+import type { SupportsFn } from '@/supports/types.js';
 import type { ExecuteWithTimeout } from '@/types/methods.js';
 
 import type { MiniAppHeaderColor, MiniAppProps, MiniAppState, RequestedContact } from './types.js';

@@ -1,4 +1,3 @@
-import type { RGB } from '@/colors/types.js';
 import { logger } from '@/debug/debug.js';
 import { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
 import { onWindow } from '@/events/onWindow.js';
@@ -8,6 +7,7 @@ import { number } from '@/parsing/parsers/number.js';
 import { rgb } from '@/parsing/parsers/rgb.js';
 import { string } from '@/parsing/parsers/string.js';
 import { toRecord } from '@/parsing/toRecord.js';
+import type { RGB } from '@/colors/types.js';
 
 import { type MiniAppsMessage, parseMessage } from '../../parseMessage.js';
 import { cleanupEventHandlers } from '../event-handlers/cleanupEventHandlers.js';

@@ -1,7 +1,7 @@
-import type { InvoiceStatus } from '@/bridge/events/parsers/invoiceClosed.js';
-import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import { request } from '@/bridge/request.js';
 import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
+import type { InvoiceStatus } from '@/bridge/events/parsers/invoiceClosed.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { Version } from '@/version/types.js';
 
 import type { InvoiceState } from './types.js';

@@ -4,12 +4,12 @@ import { user } from './user.js';
 
 describe('first_name', () => {
   it('should throw an error in case, this property is missing', () => {
-    expect(() => user().parse({ id: 123 })).toThrow();
+    expect(() => user.parse({ id: 123 })).toThrow();
   });
 
   it('should parse source property as string and pass it to the "firstName" property', () => {
     expect(
-      user().parse({ id: 123, first_name: 'Pavel' }),
+      user.parse({ id: 123, first_name: 'Pavel' }),
     ).toMatchObject({
       firstName: 'Pavel',
     });
@@ -18,12 +18,12 @@ describe('first_name', () => {
 
 describe('id', () => {
   it('should throw an error in case, this property is missing', () => {
-    expect(() => user().parse({ first_name: 'Pavel' })).toThrow();
+    expect(() => user.parse({ first_name: 'Pavel' })).toThrow();
   });
 
   it('should parse source property as number and pass it to the "id" property', () => {
     expect(
-      user().parse({
+      user.parse({
         id: 123,
         first_name: 'Pavel',
       }),
@@ -43,7 +43,7 @@ describe('id', () => {
   describe(from, () => {
     it(`should parse source property as boolean and pass it to the "${to}" property`, () => {
       expect(
-        user().parse({
+        user.parse({
           id: 123,
           first_name: 'Pavel',
           [from]: false,
@@ -53,7 +53,7 @@ describe('id', () => {
       });
 
       expect(
-        () => user().parse({
+        () => user.parse({
           id: 123,
           first_name: 'Pavel',
           [from]: 'non-boolean',
@@ -73,7 +73,7 @@ describe('id', () => {
   describe(from, () => {
     it(`should parse source property as string and pass it to the "${to}" property`, () => {
       expect(
-        user().parse({
+        user.parse({
           id: 123,
           first_name: 'Pavel',
           [from]: 'my custom property',
@@ -83,7 +83,7 @@ describe('id', () => {
       });
 
       expect(
-        () => user().parse({
+        () => user.parse({
           id: 123,
           first_name: 'Pavel',
           [from]: {

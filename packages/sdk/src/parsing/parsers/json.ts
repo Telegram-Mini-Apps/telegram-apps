@@ -1,7 +1,7 @@
 import { parseBySchema } from '../parseBySchema.js';
 import { toRecord } from '../toRecord.js';
-import type { Schema } from '../types.js';
 import { ValueParser } from '../ValueParser/ValueParser.js';
+import type { Schema } from '../types.js';
 
 /**
  * Creates new Json parser according to passed schema.

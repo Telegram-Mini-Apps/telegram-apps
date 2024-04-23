@@ -1,5 +1,5 @@
-import type { MiniAppsMethodName } from '@/bridge/methods/types/methods.js';
 import { supports } from '@/supports/supports.js';
+import type { MiniAppsMethodName } from '@/bridge/methods/types/methods.js';
 import type { SupportsFn } from '@/supports/types.js';
 import type { Version } from '@/version/types.js';
 

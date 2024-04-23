@@ -5,7 +5,7 @@ import { chat } from './chat.js';
 describe('id', () => {
   it('should throw an error in case, this property is missing', () => {
     expect(
-      () => chat().parse({
+      () => chat.parse({
         type: 'group chat',
         title: 'My chat',
       }),
@@ -14,7 +14,7 @@ describe('id', () => {
 
   it('should parse source property as number and pass it to the "id" property', () => {
     expect(
-      chat().parse({
+      chat.parse({
         id: 882,
         type: 'group chat',
         title: 'My chat',
@@ -28,7 +28,7 @@ describe('id', () => {
 describe('type', () => {
   it('should throw an error in case, this property is missing', () => {
     expect(
-      () => chat().parse({
+      () => chat.parse({
         id: 223,
         title: 'My chat',
       }),
@@ -37,7 +37,7 @@ describe('type', () => {
 
   it('should parse source property as number and pass it to the "type" property', () => {
     expect(
-      chat().parse({
+      chat.parse({
         id: 882,
         type: 'group chat',
         title: 'My chat',
@@ -51,7 +51,7 @@ describe('type', () => {
 describe('title', () => {
   it('should throw an error in case, this property is missing', () => {
     expect(
-      () => chat().parse({
+      () => chat.parse({
         id: 223,
         type: 'group chat',
       }),
@@ -60,7 +60,7 @@ describe('title', () => {
 
   it('should parse source property as number and pass it to the "title" property', () => {
     expect(
-      chat().parse({
+      chat.parse({
         id: 882,
         type: 'group chat',
         title: 'My chat',
@@ -74,7 +74,7 @@ describe('title', () => {
 describe('photo_url', () => {
   it('should parse source property as number and pass it to the "photoUrl" property', () => {
     expect(
-      chat().parse({
+      chat.parse({
         id: 882,
         type: 'group chat',
         title: 'My chat',
@@ -89,7 +89,7 @@ describe('photo_url', () => {
 describe('username', () => {
   it('should parse source property as number and pass it to the "username" property', () => {
     expect(
-      chat().parse({
+      chat.parse({
         id: 882,
         type: 'group chat',
         title: 'My chat',

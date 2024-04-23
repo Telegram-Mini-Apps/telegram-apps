@@ -1,8 +1,8 @@
-import type { ArrayParserOfResult } from '../ArrayParser/types.js';
 import { createTypeError } from '../createTypeError.js';
+import { ValueParser } from '../ValueParser/ValueParser.js';
+import type { ArrayParserOfResult } from '../ArrayParser/types.js';
 import type { AnyParser, Parser } from '../types.js';
 import type { ValueParserParseResult } from '../ValueParser/types.js';
-import { ValueParser } from '../ValueParser/ValueParser.js';
 
 /**
  * Parses incoming value as array.

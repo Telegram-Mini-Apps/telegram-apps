@@ -1,9 +1,9 @@
 import { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
-import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import { WithSupports } from '@/classes/with-supports/WithSupports.js';
 import { array } from '@/parsing/parsers/array.js';
 import { json } from '@/parsing/parsers/json.js';
 import { string } from '@/parsing/parsers/string.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { CreateRequestIdFn } from '@/request-id/types.js';
 import type { ExecuteWithTimeout } from '@/types/methods.js';
 import type { Version } from '@/version/types.js';

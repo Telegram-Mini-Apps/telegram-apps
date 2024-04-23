@@ -1,10 +1,10 @@
 import { captureSameReq } from '@/bridge/captureSameReq.js';
-import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import { request } from '@/bridge/request.js';
 import { WithSupports } from '@/classes/with-supports/WithSupports.js';
-import type { CreateRequestIdFn } from '@/request-id/types.js';
 import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
 import { supports } from '@/supports/supports.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
+import type { CreateRequestIdFn } from '@/request-id/types.js';
 import type { SupportsFn } from '@/supports/types.js';
 import type { Version } from '@/version/types.js';
 

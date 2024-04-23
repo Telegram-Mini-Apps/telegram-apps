@@ -1,7 +1,7 @@
 import { subscribe } from '@/bridge/events/listening/subscribe.js';
 import { unsubscribe } from '@/bridge/events/listening/unsubscribe.js';
-import type { MiniAppsSubscribeListener } from '@/bridge/events/types.js';
 import { Logger } from '@/logger/Logger.js';
+import type { MiniAppsSubscribeListener } from '@/bridge/events/types.js';
 
 export const logger = new Logger('SDK', {
   bgColor: 'forestgreen',

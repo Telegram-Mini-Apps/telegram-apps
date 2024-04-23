@@ -1,9 +1,9 @@
+import { compareVersions } from '@/version/compareVersions.js';
 import type {
   MiniAppsMethodName,
   MiniAppsMethodVersionedParams,
   MiniAppsMethodWithVersionedParams,
 } from '@/bridge/methods/types/methods.js';
-import { compareVersions } from '@/version/compareVersions.js';
 import type { Version } from '@/version/types.js';
 
 /**

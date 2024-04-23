@@ -1,5 +1,5 @@
-import type { Parser } from './types.js';
 import { ValueParser } from './ValueParser/ValueParser.js';
+import type { Parser } from './types.js';
 
 export type ValueParserGenerator<T> = () => ValueParser<T, false>;
 

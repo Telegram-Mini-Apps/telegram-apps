@@ -1,6 +1,6 @@
-import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import { request } from '@/bridge/request.js';
 import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { Version } from '@/version/types.js';
 
 import type { QRScannerState } from './types.js';

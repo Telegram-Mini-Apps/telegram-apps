@@ -1,16 +1,11 @@
 /**
  * Creates regular expression for the "simple-import-sort" plugin using specified options.
- * @param {RegExp | string} regexp - base for regular expression.
+ * @param {RegExp} regexp - base for regular expression.
  * @param {boolean} [types] - should types be enabled.
  * @returns {String} Generated regular expression.
  */
 function constructRegExp(regexp, types = false) {
-  const source = typeof regexp === 'string' ? regexp : regexp.source;
-  return [
-    source.endsWith('$') ? source.slice(0, source.length - 1) : source,
-    types ? '\\u0000' : '(?!\\u0000)',
-    ''
-  ].join('');
+  return `${regexp.source}.+${types ? '\\u0000' : '[^\\u0000]'}$`;
 }
 
 /**
@@ -20,12 +15,12 @@ function constructRegExp(regexp, types = false) {
  */
 function defaultImportsGroup(regexps) {
   return regexps
-    .reduce((acc, regexp) => {
-      acc[0].push(constructRegExp(regexp));
-      acc[1].push(constructRegExp(regexp, true));
-      return acc;
-    }, [[], []])
-    .flat(1);
+      .reduce((acc, regexp) => {
+        acc[0].push(constructRegExp(regexp));
+        acc[1].push(constructRegExp(regexp, true));
+        return acc;
+      }, [[], []])
+      .flat(1);
 }
 
 /**
@@ -53,11 +48,11 @@ function defaultImportsGroup(regexps) {
  */
 function simpleSortGroups() {
   // node:*
-  const node = /^node:[-\w]+/;
+  const node = /^node:/;
   // react
-  const external = /^[-\w:]+/;
+  const external = /^\w/;
   // @/components
-  const alias = /^@\/[-\w]+/;
+  const alias = /^@\//;
   // ../Suggest
   const parent = /^\.\./;
   // ./Suggest

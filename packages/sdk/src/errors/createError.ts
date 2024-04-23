@@ -1,5 +1,5 @@
-import type { ErrorType } from './errors.js';
 import { SDKError } from './SDKError.js';
+import type { ErrorType } from './errors.js';
 
 /**
  * Creates new error using specified type and message.

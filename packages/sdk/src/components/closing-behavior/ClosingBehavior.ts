@@ -1,5 +1,5 @@
-import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import { WithState } from '@/classes/with-state/WithState.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
 
 import type { ClosingBehaviorState } from './types.js';
 

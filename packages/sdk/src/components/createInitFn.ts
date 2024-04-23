@@ -1,15 +1,15 @@
-import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
 import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
 import { isPageReload as isPageReloadFn } from '@/navigation/isPageReload.js';
 import { createRequestIdGenerator } from '@/request-id/createRequestIdGenerator.js';
-import type { CreateRequestIdFn } from '@/request-id/types.js';
 import {
   getStorageValue,
   setStorageValue,
   type StorageKey,
   type StorageValue,
 } from '@/storage/storage.js';
+import type { PostEvent } from '@/bridge/methods/postEvent.js';
+import type { CreateRequestIdFn } from '@/request-id/types.js';
 import type { Version } from '@/version/types.js';
 
 interface Trackable<State> {

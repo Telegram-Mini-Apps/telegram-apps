@@ -4,6 +4,8 @@ import { off } from '../../bridge/events/off.js';
 import { on } from '../../bridge/events/on.js';
 import { postEvent } from '../../bridge/methods/postEvent.js';
 import { Navigator } from '../Navigator/Navigator.js';
+import { drop } from './drop.js';
+import { go } from './go.js';
 import type {
   NavigationEntry,
   NavigatorConEntry,
@@ -11,8 +13,6 @@ import type {
   PerformPushOptions,
   PerformReplaceOptions,
 } from '../Navigator/types.js';
-import { drop } from './drop.js';
-import { go } from './go.js';
 import type {
   HashNavigatorEventsMap,
   HashNavigatorOptions,

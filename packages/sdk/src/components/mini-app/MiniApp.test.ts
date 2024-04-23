@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { createRequestIdGenerator } from '@/request-id/createRequestIdGenerator.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { RGB } from '@/colors/types.js';
-import { createRequestIdGenerator } from '@/request-id/createRequestIdGenerator.js';
 
 import { MiniApp } from './MiniApp.js';
 import type { MiniAppHeaderColor } from './types.js';

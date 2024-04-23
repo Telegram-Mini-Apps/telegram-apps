@@ -1,7 +1,7 @@
 import { createTypeError } from '../createTypeError.js';
 import { parseBySchema } from '../parseBySchema.js';
-import type { Schema } from '../types.js';
 import { ValueParser } from '../ValueParser/ValueParser.js';
+import type { Schema } from '../types.js';
 
 /**
  * Creates new search params parser according to passed schema.

@@ -1,5 +1,5 @@
-import type { RequestSimpleOptions } from '@/bridge/request.js';
 import { request } from '@/bridge/request.js';
+import type { RequestSimpleOptions } from '@/bridge/request.js';
 
 export interface RequestViewportResult {
   height: number;

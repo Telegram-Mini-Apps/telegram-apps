@@ -1,9 +1,9 @@
+import { WithSupports } from '@/classes/with-supports/WithSupports.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type {
   ImpactHapticFeedbackStyle,
   NotificationHapticFeedbackType,
 } from '@/bridge/methods/types/haptic.js';
-import { WithSupports } from '@/classes/with-supports/WithSupports.js';
 import type { Version } from '@/version/types.js';
 
 /**

@@ -1,6 +1,6 @@
-import type { MiniAppsMethodName } from '@/bridge/methods/types/methods.js';
 import { WithState } from '@/classes/with-state/WithState.js';
 import { createSupportsFn } from '@/supports/createSupportsFn.js';
+import type { MiniAppsMethodName } from '@/bridge/methods/types/methods.js';
 import type { SupportsFn } from '@/supports/types.js';
 import type { Version } from '@/version/types.js';
 

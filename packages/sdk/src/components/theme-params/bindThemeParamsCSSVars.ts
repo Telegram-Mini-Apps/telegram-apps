@@ -3,9 +3,9 @@ import { setCSSVar } from '@/css-vars/setCSSVar.js';
 import type { ThemeParams } from './ThemeParams.js';
 
 /**
- * Creates CSS variables connected with the passed instance of ThemeParams. Created CSS variables names are
- * following the pattern "--tg-theme-{name}". {name} is a theme parameters key name converted
- * from camel to kebab case.
+ * Creates CSS variables connected with the passed instance of ThemeParams. Created CSS variables
+ * names are following the pattern "--tg-theme-{name}". {name} is a theme parameters key name
+ * converted from camel to kebab case.
  *
  * Example:
  * --tg-theme-bg-color

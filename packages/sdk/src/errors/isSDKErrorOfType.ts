@@ -1,5 +1,5 @@
-import type { ErrorType } from './errors.js';
 import { isSDKError } from './isSDKError.js';
+import type { ErrorType } from './errors.js';
 
 /**
  * Returns true if passed value is an SDK error of specified type.
