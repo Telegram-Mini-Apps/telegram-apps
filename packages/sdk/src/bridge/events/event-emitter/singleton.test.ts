@@ -1,9 +1,8 @@
+import { createWindow } from '@test-utils/createWindow.js';
 import { afterEach, beforeEach, expect, it } from 'vitest';
+import type { WindowSpy } from '@test-utils/createWindow.js';
 
 import { miniAppsEventEmitter } from './singleton.js';
-
-import type { WindowSpy } from '@test-utils/createWindow.js';
-import { createWindow } from '@test-utils/createWindow.js';
 
 let windowSpy: WindowSpy;
 

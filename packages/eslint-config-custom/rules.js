@@ -50,7 +50,7 @@ function simpleSortGroups() {
   // node:*
   const node = /^node:/;
   // react
-  const external = /^\w/;
+  const external = /^@?\w/;
   // @/components
   const alias = /^@\//;
   // ../Suggest

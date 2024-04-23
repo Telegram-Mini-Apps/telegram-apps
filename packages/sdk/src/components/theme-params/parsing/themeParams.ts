@@ -1,12 +1,9 @@
-import {
-  createValueParserGenerator,
-} from '@/parsing/createValueParserGenerator.js';
+import { createValueParserGenerator, type ValueParserGenerator } from '@/parsing/createValueParserGenerator.js';
 import { rgb } from '@/parsing/parsers/rgb.js';
 import { toRecord } from '@/parsing/toRecord.js';
-import type { ValueParserGenerator } from '@/parsing/createValueParserGenerator.js';
-import type { ThemeParamsParsed } from '@/types.js';
 
 import { keyToLocal } from '../keys.js';
+import type { ThemeParamsParsed } from '../types.js';
 
 export const themeParams: ValueParserGenerator<ThemeParamsParsed> = createValueParserGenerator(
   (value) => {

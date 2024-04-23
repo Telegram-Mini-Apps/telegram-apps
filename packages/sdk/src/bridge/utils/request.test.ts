@@ -1,3 +1,5 @@
+import { createWindow } from '@test-utils/createWindow.js';
+import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 import {
   afterAll,
   afterEach,
@@ -14,9 +16,6 @@ import { createTimeoutError } from '@/timeout/createTimeoutError.js';
 
 import { type PostEvent, postEvent as globalPostEvent } from '../methods/postEvent.js';
 import { request } from './request.js';
-
-import { createWindow } from '@test-utils/createWindow.js';
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
 vi.mock('./methods/postEvent', async () => {
   const { postEvent: actualPostEvent } = await vi

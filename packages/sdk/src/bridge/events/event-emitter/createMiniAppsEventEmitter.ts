@@ -8,6 +8,7 @@ import { rgb } from '@/parsing/parsers/rgb.js';
 import { string } from '@/parsing/parsers/string.js';
 import { toRecord } from '@/parsing/toRecord.js';
 import type { RGB } from '@/colors/types.js';
+import type { SubscribeListener } from '@/events/event-emitter/types.js';
 
 import { type MiniAppsMessage, parseMessage } from '../../parseMessage.js';
 import { cleanupEventHandlers } from '../event-handlers/cleanupEventHandlers.js';
@@ -23,12 +24,25 @@ import type {
  */
 export type MiniAppsEventEmitterEvents = {
   [E in MiniAppsEventName]: MiniAppsEventListener<E>;
-} & Record<string, unknown>;
+} & Record<string, (data?: unknown) => void>;
 
 /**
  * MiniApps event emitter.
  */
 export type MiniAppsEventEmitter = EventEmitter<MiniAppsEventEmitterEvents>;
+
+/**
+ * MiniApps event emitter subscribe listener.
+ */
+export type MiniAppsEventEmitterSubscribeListener = SubscribeListener<MiniAppsEventEmitterEvents>;
+
+const popupClosedParser = json({
+  button_id: (value) => (
+    value === null || value === undefined
+      ? undefined
+      : string().parse(value)
+  ),
+});
 
 /**
  * Parsers for each Mini Apps event.
@@ -37,7 +51,7 @@ export type MiniAppsEventEmitter = EventEmitter<MiniAppsEventEmitterEvents>;
  */
 const parsers: {
   [E in MiniAppsEventName]?: {
-    parse(value: unknown): MiniAppsEventPayload<E>
+    parse(value: unknown): MiniAppsEventPayload<E>;
   }
 } = {
   clipboard_text_received: json({
@@ -56,13 +70,9 @@ const parsers: {
   phone_requested: json({
     status: string(),
   }),
-  popup_closed: json({
-    button_id: (value) => (
-      value === null || value === undefined
-        ? undefined
-        : string().parse(value)
-    ),
-  }),
+  popup_closed: {
+    parse: (value) => popupClosedParser.parse(value ?? {}),
+  },
   qr_text_received: json({
     data: string().optional(),
   }),
@@ -150,7 +160,8 @@ export function createMiniAppsEventEmitter(): [
 
       try {
         const data = parser ? parser.parse(eventData) : eventData;
-        emitter.emit(eventType as any, data);
+        // eslint-disable-next-line prefer-spread
+        emitter.emit.apply(emitter, data ? [eventType, data] : [eventType]);
       } catch (cause) {
         logger.error(
           `An error occurred processing the "${eventType}" event from the Telegram application. Please, file an issue here: https://github.com/Telegram-Mini-Apps/tma.js/issues/new/choose`,
@@ -161,10 +172,19 @@ export function createMiniAppsEventEmitter(): [
     }),
     // Clear emitter bound events.
     () => emitter.clear(),
+    // Add listener which automatically disposes
+    emitter.subscribe(() => {
+      if (!emitter.count) {
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        dispose();
+      }
+    }),
   ];
 
-  return [emitter, () => {
+  const dispose = () => {
     disposeListeners.forEach((l) => l());
     disposeListeners = [];
-  }];
+  };
+
+  return [emitter, dispose];
 }

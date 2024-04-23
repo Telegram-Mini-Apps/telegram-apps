@@ -1,9 +1,10 @@
-import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-
-import { subscribe } from './subscribe.js';
-
 import { createWindow, type WindowSpy } from '@test-utils/createWindow.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+
+import { disposeMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
+
+import { subscribe } from './subscribe.js';
 
 let windowSpy: WindowSpy;
 
@@ -13,6 +14,9 @@ beforeEach(() => {
 
 afterEach(() => {
   windowSpy.mockRestore();
+
+  // We have to dispose event emitter as long as it is saved between tests and works improperly.
+  disposeMiniAppsEventEmitter();
 });
 
 it('should call listener in case, Telegram event was created', () => {

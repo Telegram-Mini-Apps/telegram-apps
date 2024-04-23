@@ -1,11 +1,10 @@
+import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 import { afterEach, beforeAll, expect, it, vi } from 'vitest';
+import type { FnToSpy } from '@test-utils/types.js';
 
 import { Viewport } from '@/components/viewport/Viewport.js';
 
 import { bindViewportCSSVars } from './bindViewportCSSVars.js';
-
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
-import type { FnToSpy } from '@test-utils/types.js';
 
 let setCSSPropertySpy: FnToSpy<typeof document.documentElement.style.setProperty>;
 

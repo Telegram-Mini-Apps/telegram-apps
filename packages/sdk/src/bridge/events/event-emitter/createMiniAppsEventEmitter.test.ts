@@ -1,10 +1,11 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { createEmitter } from '../createEmitter.js';
-import type { MiniAppsEventName, MiniAppsEventPayload } from '../types.js';
-
 import { createWindow, type WindowSpy } from '@test-utils/createWindow.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { defineEventHandlers as defineEventHandlersFn } from '../event-handlers/defineEventHandlers.js';
+import { createMiniAppsEventEmitter } from './createMiniAppsEventEmitter.js';
+import type { FnToSpy } from '../../../../test-utils/types.js';
+import type { MiniAppsEventName, MiniAppsEventPayload } from '../types.js';
 
 type TestCase<E extends MiniAppsEventName> =
   | [input: any, expected: MiniAppsEventPayload<E>]
@@ -17,6 +18,16 @@ type TestCases = {
 }[MiniAppsEventName][];
 
 let windowSpy: WindowSpy;
+// eslint-disable-next-line max-len
+const defineEventHandlers = defineEventHandlersFn as unknown as FnToSpy<typeof defineEventHandlersFn>;
+
+vi.mock('../event-handlers/defineEventHandlers.js', async () => {
+  const actual = await vi.importActual('../event-handlers/defineEventHandlers.js');
+
+  return {
+    defineEventHandlers: vi.fn((actual as any).defineEventHandlers),
+  };
+});
 
 beforeEach(() => {
   windowSpy = createWindow({
@@ -30,8 +41,8 @@ afterEach(() => {
 });
 
 it('should emit "viewport_changed" event in case, window changed its size', () => {
-  const emitter = createEmitter();
   const spy = vi.fn();
+  const [emitter] = createMiniAppsEventEmitter();
 
   emitter.on('viewport_changed', spy);
 
@@ -44,6 +55,12 @@ it('should emit "viewport_changed" event in case, window changed its size', () =
     is_state_stable: true,
     is_expanded: true,
   });
+});
+
+it('should call defineEventHandlers function to initialize global handlers', () => {
+  defineEventHandlers.mockClear();
+  createMiniAppsEventEmitter();
+  expect(defineEventHandlers).toHaveBeenCalledOnce();
 });
 
 describe('events handling', () => {
@@ -97,8 +114,7 @@ describe('events handling', () => {
   testCases.forEach(([event, inputOrCaseOrCases]) => {
     it(`should correctly handle "${event}" event data`, () => {
       const spy = vi.fn();
-      const emitter = createEmitter();
-
+      const [emitter] = createMiniAppsEventEmitter();
       emitter.on(event, spy);
 
       // No expected data to be passed to listener.
@@ -133,8 +149,7 @@ describe('events handling', () => {
 
   it('should not emit event in case, it contains incorrect payload', () => {
     const spy = vi.fn();
-    const emitter = createEmitter();
-
+    const [emitter] = createMiniAppsEventEmitter();
     emitter.on('viewport_changed', spy);
 
     dispatchWindowMessageEvent('viewport_changed', 'broken data');
