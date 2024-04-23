@@ -34,27 +34,29 @@ export interface MiniAppsEvents {
    * @since 7.2
    */
   biometry_auth_requested: {
-    status?: 'authorized' | string;
+    status: 'authorized' | string;
     token?: string;
   };
   /**
    * fixme
    * @since 7.2
    */
-  biometry_info_received: {
-    available?: boolean;
-    access_requested?: boolean;
-    access_granted?: boolean;
-    device_id?: string;
-    token_saved?: boolean;
-    type?: 'finger' | 'face' | 'unknown' | string;
+  biometry_info_received:
+    | { available: false }
+    | {
+    available: true;
+    access_requested: boolean;
+    access_granted: boolean;
+    device_id: string;
+    token_saved: boolean;
+    type: 'finger' | 'face' | 'unknown' | string;
   };
   /**
    * fixme
    * @since 7.2
    */
   biometry_token_updated: {
-    status?: 'updated' | 'removed' | string;
+    status: 'updated' | 'removed' | string;
   };
   /**
    * Telegram application attempted to extract text from clipboard.
