@@ -1,3 +1,75 @@
+/**
+ * Creates regular expression for the "simple-import-sort" plugin using specified options.
+ * @param {RegExp | string} regexp - base for regular expression.
+ * @param {boolean} [types] - should types be enabled.
+ * @returns {String} Generated regular expression.
+ */
+function constructRegExp(regexp, types = false) {
+  const source = typeof regexp === 'string' ? regexp : regexp.source;
+  return [
+    source.endsWith('$') ? source.slice(0, source.length - 1) : source,
+    types ? '\\u0000' : '(?!\\u0000)',
+    ''
+  ].join('');
+}
+
+/**
+ * Returns group of imports containing usual imports first, and then type imports.
+ * @param {RegExp[]} regexps - list of regular expressions bases.
+ * @returns {String[]} List of regular expressions.
+ */
+function defaultImportsGroup(regexps) {
+  return regexps
+    .reduce((acc, regexp) => {
+      acc[0].push(constructRegExp(regexp));
+      acc[1].push(constructRegExp(regexp, true));
+      return acc;
+    }, [[], []])
+    .flat(1);
+}
+
+/**
+ * Creates imports group for the rule "simple-import-sort/imports".
+ *
+ * @example
+ * // External imports + node:*
+ * import { readFileSync } from 'node:fs';
+ * import { useEffect } from 'react';
+ * import type { Component } from 'react';
+ *
+ * // Alias imports.
+ * import { SettingsButton } from '@components/SettingsButton';
+ * import { BackButton } from '@/components/BackButton';
+ * import type { MainButton } from '@/components/MainButton';
+ * import type { Headline } from '@/components/Headline';
+ *
+ * // Relative imports.
+ * import { Parent } from '../Parent';
+ * import { SomeSearch } from './-Search';
+ * import type { ParentType } from '../Parent.types';
+ * import type { SearchType } from './-Search.types';
+ *
+ * @returns {String[][]}
+ */
+function simpleSortGroups() {
+  // node:*
+  const node = /^node:[-\w]+/;
+  // react
+  const external = /^[-\w:]+/;
+  // @/components
+  const alias = /^@\/[-\w]+/;
+  // ../Suggest
+  const parent = /^\.\./;
+  // ./Suggest
+  const sibling = /^\./;
+
+  return [
+    defaultImportsGroup([node, external]),
+    defaultImportsGroup([alias]),
+    defaultImportsGroup([parent, sibling]),
+  ];
+}
+
 module.exports = {
   '@typescript-eslint/consistent-type-imports': 'error',
   '@typescript-eslint/indent': 0,
@@ -27,26 +99,9 @@ module.exports = {
   'no-void': 0,
   'object-curly-newline': ['error', { consistent: true }],
   'simple-import-sort/exports': 'error',
-  'simple-import-sort/imports': [
-    2,
-    {
-      groups: [
-        // Side effect imports.
-        [/^\u0000/.source],
-
-        // Node.js builtins.
-        [/^node:/.source],
-
-        // Externals.
-        [/^/.source],
-
-        // Special current package imports.
-        // Paths starting with "~/". Then go their types.
-        [/^~\//.source, /^~\/.+\u0000$/.source],
-
-        // Relative imports.
-        [/^\.[^.]/.source, /^\.\./.source],
-      ],
-    },
-  ],
+  'simple-import-sort/imports': ['error', { groups: simpleSortGroups() }]
 };
+
+
+
+
