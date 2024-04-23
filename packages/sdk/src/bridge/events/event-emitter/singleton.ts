@@ -1,10 +1,13 @@
 import { createSingleton } from '@/misc/createSingleton.js';
 
-import { createMiniAppsEventEmitter, type MiniAppsEventEmitter } from './createMiniAppsEventEmitter.js';
-
-const [get, disposeMiniAppsEventEmitter] = createSingleton(
+import {
   createMiniAppsEventEmitter,
-  (result) => result[1](),
+  type MiniAppsEventEmitter,
+} from './createMiniAppsEventEmitter.js';
+
+const [get, resetMiniAppsEventEmitter] = createSingleton(
+  createMiniAppsEventEmitter,
+  ([, cleanup]) => cleanup(),
 );
 
 /**
@@ -14,4 +17,4 @@ export function miniAppsEventEmitter(): MiniAppsEventEmitter {
   return get()[0];
 }
 
-export { disposeMiniAppsEventEmitter };
+export { resetMiniAppsEventEmitter };

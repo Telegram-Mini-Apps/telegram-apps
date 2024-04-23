@@ -14,21 +14,23 @@ export class EventEmitter<Schema> {
     [listener: EventListener<any>, once?: boolean][]
   > = new Map();
 
-  private readonly subscribeListeners: SubscribeListener<Schema>[] = [];
+  private listenersCount = 0;
+
+  private subscribeListeners: SubscribeListener<Schema>[] = [];
 
   /**
    * Removes all event listeners.
    */
   clear() {
     this.listeners.clear();
-    this.subscribeListeners.splice(0, this.subscribeListeners.length);
+    this.subscribeListeners = [];
   }
 
   /**
    * Returns count of bound listeners.
    */
   get count(): number {
-    return this.listeners.size + this.subscribeListeners.length;
+    return this.listenersCount + this.subscribeListeners.length;
   }
 
   /**
@@ -78,6 +80,7 @@ export class EventEmitter<Schema> {
     }
 
     listeners.push([listener, once]);
+    this.listenersCount += 1;
 
     return () => this.off(event, listener);
   }
@@ -93,6 +96,7 @@ export class EventEmitter<Schema> {
     for (let i = 0; i < listeners.length; i += 1) {
       if (listener === listeners[i][0]) {
         listeners.splice(i, 1);
+        this.listenersCount -= 1;
         return;
       }
     }

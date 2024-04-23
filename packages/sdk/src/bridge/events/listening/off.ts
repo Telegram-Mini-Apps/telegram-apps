@@ -1,4 +1,4 @@
-import { disposeMiniAppsEventEmitter, miniAppsEventEmitter } from '../event-emitter/singleton.js';
+import { miniAppsEventEmitter, resetMiniAppsEventEmitter } from '../event-emitter/singleton.js';
 import type { MiniAppsEventListener, MiniAppsEventName } from '../types.js';
 
 /**
@@ -16,6 +16,6 @@ export function off<E extends MiniAppsEventName>(
 
   // If event emitter now has no listeners, we can make a cleanup.
   if (count && !ee.count) {
-    disposeMiniAppsEventEmitter();
+    resetMiniAppsEventEmitter();
   }
 }
