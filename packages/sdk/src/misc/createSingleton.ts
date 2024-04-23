@@ -1,7 +1,7 @@
 /**
  * Creates resettable singleton. We mostly need it for test purposes.
  * @param create - function which creates singleton entity.
- * @param onDispose - function which will be called in case, singleton reset was called.
+ * @param onDispose - function which will be called in case, singleton was reset.
  */
 export function createSingleton<T>(
   create: () => T,
