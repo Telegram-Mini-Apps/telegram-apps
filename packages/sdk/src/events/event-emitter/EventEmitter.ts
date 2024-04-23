@@ -1,3 +1,4 @@
+import type { RemoveEventListenerFn } from '../types.js';
 import type {
   EmptyEventName,
   EventListener,
@@ -6,7 +7,6 @@ import type {
   NonEmptyEventName,
   SubscribeListener,
 } from './types.js';
-import type { RemoveEventListenerFn } from '../types.js';
 
 export class EventEmitter<Schema> {
   private readonly listeners: Map<

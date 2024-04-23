@@ -5,13 +5,13 @@ import { isIframe } from '@/env/isIframe.js';
 import { createError } from '@/errors/createError.js';
 import { ERROR_UNKNOWN_ENV } from '@/errors/errors.js';
 
+import { targetOrigin as targetOriginFn } from '../target-origin.js';
 import type {
   MiniAppsMethodName,
   MiniAppsMethodParams, MiniAppsMethodWithOptionalParams,
   MiniAppsMethodWithoutParams,
   MiniAppsMethodWithParams,
 } from './types/methods.js';
-import { targetOrigin as targetOriginFn } from '../target-origin.js';
 
 interface PostEventOptions {
   /**

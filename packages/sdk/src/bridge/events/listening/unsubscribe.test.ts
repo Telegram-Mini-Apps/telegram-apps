@@ -1,9 +1,10 @@
-import { createWindow, type WindowSpy } from '@test-utils/createWindow.js';
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 
 import { subscribe } from './subscribe.js';
 import { unsubscribe } from './unsubscribe.js';
+
+import { createWindow, type WindowSpy } from '@test-utils/createWindow.js';
+import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
 let windowSpy: WindowSpy;
 

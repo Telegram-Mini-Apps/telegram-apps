@@ -1,5 +1,6 @@
-import { setTargetOrigin, targetOrigin } from '@/bridge/target-origin.js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
+import { setTargetOrigin, targetOrigin } from '@/bridge/target-origin.js';
 
 afterEach(() => {
   vi.restoreAllMocks();

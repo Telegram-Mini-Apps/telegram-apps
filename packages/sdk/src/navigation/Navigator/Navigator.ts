@@ -1,3 +1,5 @@
+import { Logger } from '../../logger/Logger.js';
+import { ensurePrefix } from '../ensurePrefix.js';
 import type {
   AnyEntry,
   NavigationEntry,
@@ -7,8 +9,6 @@ import type {
   PerformPushOptions,
   PerformReplaceOptions,
 } from './types.js';
-import { Logger } from '../../logger/Logger.js';
-import { ensurePrefix } from '../ensurePrefix.js';
 
 /**
  * Represents basic navigator implementation which uses only memory to store and control

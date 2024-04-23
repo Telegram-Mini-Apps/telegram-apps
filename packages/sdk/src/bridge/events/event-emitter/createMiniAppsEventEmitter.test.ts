@@ -1,9 +1,10 @@
-import { createWindow, type WindowSpy } from '@test-utils/createWindow.js';
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createEmitter } from '../createEmitter.js';
 import type { MiniAppsEventName, MiniAppsEventPayload } from '../types.js';
+
+import { createWindow, type WindowSpy } from '@test-utils/createWindow.js';
+import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
 type TestCase<E extends MiniAppsEventName> =
   | [input: any, expected: MiniAppsEventPayload<E>]

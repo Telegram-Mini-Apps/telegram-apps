@@ -1,7 +1,3 @@
-import { createTimeoutError } from '@/timeout/createTimeoutError.js';
-import { createWindow } from '@test-utils/createWindow.js';
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
-import type { SpyInstance } from 'vitest';
 import {
   afterAll,
   afterEach,
@@ -12,9 +8,15 @@ import {
   it,
   vi,
 } from 'vitest';
+import type { SpyInstance } from 'vitest';
 
-import { request } from './request.js';
+import { createTimeoutError } from '@/timeout/createTimeoutError.js';
+
 import { type PostEvent, postEvent as globalPostEvent } from '../methods/postEvent.js';
+import { request } from './request.js';
+
+import { createWindow } from '@test-utils/createWindow.js';
+import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
 vi.mock('./methods/postEvent', async () => {
   const { postEvent: actualPostEvent } = await vi

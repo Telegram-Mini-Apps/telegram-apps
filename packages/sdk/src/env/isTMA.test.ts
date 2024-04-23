@@ -1,7 +1,9 @@
+import { expect, it, vi } from 'vitest';
+
 import { request as requestFn } from '@/bridge/request.js';
 import { isTMA } from '@/env/isTMA.js';
+
 import type { FnToSpy } from '@test-utils/types.js';
-import { expect, it, vi } from 'vitest';
 
 const request = requestFn as unknown as FnToSpy<typeof requestFn>;
 

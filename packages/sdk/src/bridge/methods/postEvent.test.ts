@@ -6,6 +6,7 @@ import {
   type SpyInstance,
   vi,
 } from 'vitest';
+
 import { setTargetOrigin } from '@/bridge/target-origin.js';
 
 import { postEvent } from './postEvent.js';

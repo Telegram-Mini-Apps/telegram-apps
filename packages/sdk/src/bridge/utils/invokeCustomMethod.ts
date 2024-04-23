@@ -2,9 +2,9 @@ import { createError } from '@/errors/createError.js';
 import { ERROR_INVOKE_CUSTOM_METHOD_RESPONSE } from '@/errors/errors.js';
 import type { ExecuteWithOptions } from '@/types/index.js';
 
+import type { CustomMethodName, CustomMethodParams } from '../methods/types/custom-methods.js';
 import { captureSameReq } from './captureSameReq.js';
 import { request } from './request.js';
-import type { CustomMethodName, CustomMethodParams } from '../methods/types/custom-methods.js';
 
 /**
  * Invokes known custom method. Returns method execution result.

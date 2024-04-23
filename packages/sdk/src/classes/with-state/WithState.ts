@@ -69,8 +69,4 @@ export class WithState<State extends object> {
    * Removes event listener.
    */
   off: EventEmitter<StateEvents<State>>['off'] = this.ee.off.bind(this.ee);
-
-  public a() {
-
-  }
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { ArrayParser } from './ArrayParser.js';
 import { string } from '../parsers/string.js';
+import { ArrayParser } from './ArrayParser.js';
 
 describe('constructor', () => {
   it('should apply parser value directly if it is function', () => {

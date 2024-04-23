@@ -1,6 +1,7 @@
-import { onWindow } from '@/events/onWindow.js';
 import { mockWindow } from 'test-utils';
 import { expect, it, vi } from 'vitest';
+
+import { onWindow } from '@/events/onWindow.js';
 
 it('should add event listener using window.addEventListener', () => {
   const addEventListener = vi.fn();

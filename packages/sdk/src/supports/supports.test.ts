@@ -1,10 +1,11 @@
+import { expect, it } from 'vitest';
+
 import type {
   MiniAppsMethodName,
   MiniAppsMethodVersionedParams,
   MiniAppsMethodWithVersionedParams,
 } from '@/bridge/methods/types/methods.js';
 import type { Version } from '@/version/types.js';
-import { expect, it } from 'vitest';
 
 import { supports } from './supports.js';
 

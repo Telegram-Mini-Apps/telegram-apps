@@ -1,8 +1,9 @@
-import { createWindow } from '@test-utils/createWindow.js';
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 import { afterEach, expect, it, vi } from 'vitest';
 
 import { onTelegramEvent } from './onTelegramEvent.js';
+
+import { createWindow } from '@test-utils/createWindow.js';
+import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
 afterEach(() => {
   vi.restoreAllMocks();

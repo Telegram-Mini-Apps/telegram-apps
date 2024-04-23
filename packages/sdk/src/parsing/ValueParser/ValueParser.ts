@@ -1,8 +1,8 @@
 import { createError } from '@/errors/createError.js';
 import { ERROR_PARSE } from '@/errors/errors.js';
 
-import type { ValueParserOptionalResult, ValueParserParseResult } from './types.js';
 import type { Parser } from '../types.js';
+import type { ValueParserOptionalResult, ValueParserParseResult } from './types.js';
 
 export class ValueParser<ResultType, IsOptional extends boolean> {
   constructor(

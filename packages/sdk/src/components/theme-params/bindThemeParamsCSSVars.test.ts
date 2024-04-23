@@ -1,9 +1,11 @@
-import { ThemeParams } from '@/components/theme-params/ThemeParams.js';
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
-import type { FnToSpy } from '@test-utils/types.js';
 import { afterEach, beforeAll, expect, it, vi } from 'vitest';
 
+import { ThemeParams } from '@/components/theme-params/ThemeParams.js';
+
 import { bindThemeParamsCSSVars } from './bindThemeParamsCSSVars.js';
+
+import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
+import type { FnToSpy } from '@test-utils/types.js';
 
 let setCSSPropertySpy: FnToSpy<typeof document.documentElement.style.setProperty>;
 

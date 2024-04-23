@@ -1,9 +1,10 @@
 import { expect, it } from 'vitest';
 
+import { ERROR_PARSE, ERROR_UNEXPECTED_TYPE } from '@/errors/errors.js';
+
 import { date } from './date.js';
 import { searchParams } from './searchParams.js';
 import { string } from './string.js';
-import { ERROR_PARSE, ERROR_UNEXPECTED_TYPE } from '@/errors/errors.js';
 
 it('should throw an error in case, passed value is not of type string or URLSearchParams', () => {
   const parser = searchParams({});
