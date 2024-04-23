@@ -1,11 +1,11 @@
 /**
  * Creates resettable singleton. We mostly need it for test purposes.
  * @param create - function which creates singleton entity.
- * @param onDispose - function which will be called in case, singleton was reset.
+ * @param onReset - function which will be called in case, singleton was reset.
  */
 export function createSingleton<T>(
   create: () => T,
-  onDispose?: (entity: T) => void,
+  onReset?: (entity: T) => void,
 ): [
   /**
    * Returns singleton entity.
@@ -14,13 +14,14 @@ export function createSingleton<T>(
   /**
    * Resets last stored entity.
    */
-  dispose: () => void,
+  reset: () => void,
 ] {
   let cached: T | undefined;
+
   return [
     () => (cached === undefined ? cached = create() : cached),
     () => {
-      cached !== undefined && onDispose && onDispose(cached);
+      cached !== undefined && onReset && onReset(cached);
       cached = undefined;
     },
   ];

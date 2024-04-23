@@ -5,9 +5,5 @@ import type { CreateRequestIdFn } from './types.js';
  */
 export function createRequestIdGenerator(): CreateRequestIdFn {
   let requestId = 0;
-
-  return () => {
-    requestId += 1;
-    return requestId.toString();
-  };
+  return () => (requestId += 1).toString();
 }
