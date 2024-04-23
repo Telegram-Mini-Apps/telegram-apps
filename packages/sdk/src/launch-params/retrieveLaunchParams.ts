@@ -10,7 +10,7 @@ import type { LaunchParams } from './types.js';
  * @throws Error if extraction was unsuccessful.
  */
 export function retrieveLaunchParams(): LaunchParams {
-  const errors = [];
+  const errors: unknown[] = [];
 
   // eslint-disable-next-line no-restricted-syntax
   for (const retrieve of [
@@ -31,6 +31,6 @@ export function retrieveLaunchParams(): LaunchParams {
     }
   }
 
-  logger.error('Unable to extract launch parameters. Received errors:', errors);
+  logger.error('Unable to retrieve launch parameters from any known source. Received errors:', errors);
   throw new Error('Unable to retrieve launch parameters from any known source.');
 }

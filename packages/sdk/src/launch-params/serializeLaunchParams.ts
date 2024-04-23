@@ -19,12 +19,13 @@ export function serializeLaunchParams(value: LaunchParams): string {
 
   const params = new URLSearchParams();
 
-  if (initDataRaw) {
-    params.set('tgWebAppData', initDataRaw);
-  }
   params.set('tgWebAppPlatform', platform);
   params.set('tgWebAppThemeParams', serializeThemeParams(themeParams));
   params.set('tgWebAppVersion', version);
+
+  if (initDataRaw) {
+    params.set('tgWebAppData', initDataRaw);
+  }
 
   if (startParam) {
     params.set('tgWebAppStartParam', startParam);

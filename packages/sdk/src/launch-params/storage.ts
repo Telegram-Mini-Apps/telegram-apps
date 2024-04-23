@@ -17,9 +17,5 @@ export function retrieveFromStorage(): LaunchParams {
  * @param value - launch params to save.
  */
 export function saveToStorage(value: LaunchParams): void {
-  // TODO: We probably don't need serialization here. We used it only to correctly
-  //  serialize Date values which are being converted to strings. To solve the problem we
-  //  could improve the Date parser to allow parsing such invalid (Dates, converted to
-  //  strings) values.
   setStorageValue('launchParams', serializeLaunchParams(value));
 }
