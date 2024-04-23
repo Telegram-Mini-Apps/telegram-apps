@@ -1,6 +1,7 @@
+import { afterAll, beforeAll, expect, it, vi } from 'vitest';
+
 import { createError } from '@/errors/createError.js';
 import { ERROR_TIMED_OUT } from '@/errors/errors.js';
-import { afterAll, beforeAll, expect, it, vi } from 'vitest';
 
 import { withTimeout } from './withTimeout.js';
 

@@ -47,44 +47,14 @@ describe('on', () => {
     ee.emit('test', 1, true);
     expect(listener).not.toBeCalled();
   });
-});
 
-describe('once', () => {
-  it('should emit bound listener with specified arguments only once', () => {
+  it('should remove listener if "once" argument was passed and listener was called', () => {
     const listener = vi.fn();
-    ee.once('test', listener);
+    ee.on('test', listener, true);
+
     ee.emit('test', 1, true);
-    ee.emit('test', 1, true);
-    ee.emit('test', 1, true);
+    ee.emit('test', 2, false);
     expect(listener).toHaveBeenCalledOnce();
-    expect(listener).toBeCalledWith(1, true);
-  });
-
-  it('should emit bound listener with specified arguments as many times as it was bound', () => {
-    const listener = vi.fn();
-    ee.once('test', listener);
-    ee.once('test', listener);
-    ee.emit('test', 1, true);
-    ee.emit('test', 1, true);
-    expect(listener).toHaveBeenCalledTimes(2);
-    expect(listener).toHaveBeenNthCalledWith(1, 1, true);
-    expect(listener).toHaveBeenNthCalledWith(2, 1, true);
-  });
-
-  it('should not emit bound listener in case, event name does not match', () => {
-    const listener = vi.fn();
-    ee.once('test', listener);
-    ee.emit('hey');
-    expect(listener).not.toBeCalled();
-  });
-
-  it('should remove listener if returned function was called', () => {
-    const listener = vi.fn();
-    const off = ee.once('test', listener);
-
-    off();
-    ee.emit('test', 1, true);
-    expect(listener).not.toBeCalled();
   });
 });
 
@@ -102,14 +72,6 @@ describe('off', () => {
       const listener = vi.fn();
       ee.off('test', listener);
     }).not.toThrow();
-  });
-
-  it('should remove event listener bound via "once" method', () => {
-    const listener = vi.fn();
-    ee.once('test', listener);
-    ee.off('test', listener);
-    ee.emit('test', 1, true);
-    expect(listener).not.toBeCalled();
   });
 
   it('should not do anything if received not bound listener', () => {
