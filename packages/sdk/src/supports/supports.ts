@@ -76,7 +76,25 @@ export function supports(
       return versionLessOrEqual('6.9', paramOrVersion);
     case 'web_app_setup_settings_button':
       return versionLessOrEqual('6.10', paramOrVersion);
+    case 'web_app_biometry_get_info':
+    case 'web_app_biometry_open_settings':
+    case 'web_app_biometry_request_access':
+    case 'web_app_biometry_request_auth':
+    case 'web_app_biometry_update_token':
+      return versionLessOrEqual('7.2', paramOrVersion);
     default:
-      return true;
+      return [
+        'iframe_ready',
+        'iframe_will_reload',
+        'web_app_close',
+        'web_app_data_send',
+        'web_app_expand',
+        'web_app_open_link',
+        'web_app_ready',
+        'web_app_request_theme',
+        'web_app_request_viewport',
+        'web_app_setup_main_button',
+        'web_app_setup_closing_behavior',
+      ].includes(method);
   }
 }

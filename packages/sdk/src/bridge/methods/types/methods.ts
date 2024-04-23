@@ -43,6 +43,48 @@ export interface MiniAppsMethods {
    */
   iframe_will_reload: CreateParams;
   /**
+   * @since 7.2
+   * fixme
+   */
+  web_app_biometry_get_info: CreateParams;
+  /**
+   * @since 7.2
+   * fixme
+   */
+  web_app_biometry_open_settings: CreateParams;
+  /**
+   * @since 7.2
+   * fixme
+   */
+  web_app_biometry_request_access: CreateParams<{
+    /**
+     * Reason to request biometry data. Should be at least 1 symbol length, but not more than
+     * 128 symbols.
+     */
+    reason?: string;
+  }>;
+  /**
+   * @since 7.2
+   * fixme
+   */
+  web_app_biometry_request_auth: CreateParams<{
+    /**
+     * Reason to request biometry data. Should be at least 1 symbol length, but not more than
+     * 128 symbols.
+     */
+    reason?: string;
+  }>;
+  /**
+   * @since 7.2
+   * fixme
+   */
+  web_app_biometry_update_token: CreateParams<{
+    /**
+     * Not more than 1024 symbols.
+     */
+    token: string;
+  }>;
+  /**
    * Closes Mini App.
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-close
    */

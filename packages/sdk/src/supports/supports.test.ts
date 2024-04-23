@@ -19,11 +19,10 @@ type HaveCheckSupportMethodTuple = {
  * @param amount - count of bumps.
  */
 function increaseVersion(version: Version, amount: number): string {
-  const match = version.match(/(.+\.)(\d+)$/);
-  if (!match) {
-    throw new Error(`Invalid version: ${version}`);
-  }
-  return `${match[1]}${parseInt(match[2], 10) + amount}`;
+  const [, major, minor] = version.match(/(\d+)\.(\d+)$/)!.map(Number);
+  return minor + amount >= 0
+    ? `${major}.${minor + amount}`
+    : `${major - 1}.99`;
 }
 
 const tests: [
@@ -72,20 +71,30 @@ const tests: [
   ['6.10', [
     'web_app_setup_settings_button',
   ]],
+  ['7.2', [
+    'web_app_biometry_get_info',
+    'web_app_biometry_open_settings',
+    'web_app_biometry_request_access',
+    'web_app_biometry_request_auth',
+    'web_app_biometry_update_token',
+  ]],
 ];
 
 tests.forEach(([version, methods]) => {
+  const higher = increaseVersion(version, 1);
+  const lower = increaseVersion(version, -1);
+
   methods.forEach((methodOrTuple) => {
     if (Array.isArray(methodOrTuple)) {
       const [method, param] = methodOrTuple;
 
-      it(`should return true in case, passed method is "${method}", parameter is "${param}" and version is ${version} or higher`, () => {
+      it(`should return true for method "${method}", parameter "${param}" and version >= ${version} (${higher})`, () => {
         expect(supports(method, param, version)).toBe(true);
-        expect(supports(method, param, increaseVersion(version, 1))).toBe(true);
+        expect(supports(method, param, higher)).toBe(true);
       });
 
-      it(`should return false in case, passed method is "${method}", parameter is "${param}" and version is lower than ${version}`, () => {
-        expect(supports(method, param, increaseVersion(version, -1))).toBe(false);
+      it(`should return false for method "${method}", parameter "${param}" and version < ${version} (${lower})`, () => {
+        expect(supports(method, param, lower)).toBe(false);
       });
 
       return;
@@ -93,13 +102,15 @@ tests.forEach(([version, methods]) => {
 
     const method = methodOrTuple;
 
-    it(`should return true in case, passed method is "${method}" and version is ${version} or higher`, () => {
+    it(`should return true for "${method}" and version >= ${version} (${higher})`, () => {
       expect(supports(method, version)).toBe(true);
-      expect(supports(method, increaseVersion(version, 1))).toBe(true);
+      expect(supports(method, higher)).toBe(true);
     });
 
-    it(`should return false in case, passed method is "${method}" and version is lower than ${version}`, () => {
-      expect(supports(method, increaseVersion(version, -1))).toBe(false);
-    });
+    if (version !== '6.0') {
+      it(`should return false for "${method}" and version < ${version} (${lower})`, () => {
+        expect(supports(method, lower)).toBe(false);
+      });
+    }
   });
 });

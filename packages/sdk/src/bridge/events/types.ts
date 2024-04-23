@@ -30,6 +30,33 @@ export interface MiniAppsEvents {
    */
   back_button_pressed: () => void;
   /**
+   * fixme
+   * @since 7.2
+   */
+  biometry_auth_requested: {
+    status?: 'authorized' | string;
+    token?: string;
+  };
+  /**
+   * fixme
+   * @since 7.2
+   */
+  biometry_info_received: {
+    available?: boolean;
+    access_requested?: boolean;
+    access_granted?: boolean;
+    device_id?: string;
+    token_saved?: boolean;
+    type?: 'finger' | 'face' | 'unknown' | string;
+  };
+  /**
+   * fixme
+   * @since 7.2
+   */
+  biometry_token_updated: {
+    status?: 'updated' | 'removed' | string;
+  };
+  /**
    * Telegram application attempted to extract text from clipboard.
    * @param payload - event payload.
    * @since v6.4
@@ -111,11 +138,6 @@ export interface MiniAppsEvents {
     button_id?: string;
   }) => void;
   /**
-   * Parent iframe requested current iframe reload.
-   * @see https://docs.telegram-mini-apps.com/platform/events#reload-iframe
-   */
-  reload_iframe: () => void;
-  /**
    * The QR scanner scanned some QR and extracted its content.
    * @param payload - event payload.
    * @since v6.4
@@ -127,6 +149,11 @@ export interface MiniAppsEvents {
      */
     data?: string;
   }) => void;
+  /**
+   * Parent iframe requested current iframe reload.
+   * @see https://docs.telegram-mini-apps.com/platform/events#reload-iframe
+   */
+  reload_iframe: () => void;
   /**
    * QR scanner was closed.
    * @since v6.4
