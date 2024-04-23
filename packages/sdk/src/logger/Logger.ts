@@ -37,7 +37,7 @@ export class Logger implements Pick<Console, 'log' | 'error'> {
 
     console[level](
       `%c${date}%c / %c${this.scope}`,
-      `${commonCss};background-color: lightblue;`,
+      `${commonCss};background-color: lightblue;color:black`,
       '',
       `${commonCss};${textColor ? `color:${textColor};` : ''}${bgColor ? `background-color:${bgColor}` : ''}`,
       ...args,
