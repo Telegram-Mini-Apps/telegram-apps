@@ -5,12 +5,10 @@ interface CreateInvokeCustomMethodParams<M extends string, Params extends object
    * Unique request identifier.
    */
   req_id: RequestId;
-
   /**
    * Method name.
    */
   method: M;
-
   /**
    * Method specific parameters.
    */

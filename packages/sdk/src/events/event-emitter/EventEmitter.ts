@@ -11,32 +11,10 @@ import type { RemoveEventListenerFn } from '../types.js';
 export class EventEmitter<Schema> {
   private readonly listeners: Map<
     string,
-    [listener: EventListener<any>, once: boolean][]
+    [listener: EventListener<any>, once?: boolean][]
   > = new Map();
 
-  private subscribeListeners: SubscribeListener<Schema>[] = [];
-
-  /**
-   * Adds specified event listener.
-   * @param event - event name.
-   * @param listener - event listener.
-   * @param once - should listener called only once.
-   */
-  private addListener<E extends EventName<Schema>>(
-    event: E,
-    listener: EventListener<Schema[E]>,
-    once: boolean,
-  ): RemoveEventListenerFn {
-    let listeners = this.listeners.get(event);
-    if (!listeners) {
-      listeners = [];
-      this.listeners.set(event, listeners);
-    }
-
-    listeners.push([listener, once]);
-
-    return () => this.off(event, listener);
-  }
+  private readonly subscribeListeners: SubscribeListener<Schema>[] = [];
 
   /**
    * Removes all event listeners.
@@ -44,6 +22,13 @@ export class EventEmitter<Schema> {
   clear() {
     this.listeners.clear();
     this.subscribeListeners.splice(0, this.subscribeListeners.length);
+  }
+
+  /**
+   * Returns count of bound listeners.
+   */
+  get count(): number {
+    return this.listeners.size + this.subscribeListeners.length;
   }
 
   /**
@@ -79,28 +64,22 @@ export class EventEmitter<Schema> {
    * Adds new event listener.
    * @param event - event name.
    * @param listener - event listener.
+   * @param once - should listener be called only once.
    * @returns Function to remove bound event listener.
    */
   on<E extends EventName<Schema>>(
     event: E,
     listener: EventListener<Schema[E]>,
+    once?: boolean,
   ): RemoveEventListenerFn {
-    return this.addListener(event, listener, false);
-  }
+    let listeners = this.listeners.get(event);
+    if (!listeners) {
+      this.listeners.set(event, listeners = []);
+    }
 
-  /**
-   * Adds new event listener following the logic, described in the `on` method, but calls specified
-   * listener only once, removing it after.
-   * @param event - event name.
-   * @param listener - event listener.
-   * @returns Function to remove event listener.
-   * @see on
-   */
-  once<E extends EventName<Schema>>(
-    event: E,
-    listener: EventListener<Schema[E]>,
-  ): RemoveEventListenerFn {
-    return this.addListener(event, listener, true);
+    listeners.push([listener, once]);
+
+    return () => this.off(event, listener);
   }
 
   /**
@@ -110,11 +89,7 @@ export class EventEmitter<Schema> {
    * @param listener - event listener.
    */
   off<E extends EventName<Schema>>(event: E, listener: EventListener<Schema[E]>): void {
-    const listeners = this.listeners.get(event);
-    if (!listeners) {
-      return;
-    }
-
+    const listeners = this.listeners.get(event) || [];
     for (let i = 0; i < listeners.length; i += 1) {
       if (listener === listeners[i][0]) {
         listeners.splice(i, 1);
@@ -125,7 +100,7 @@ export class EventEmitter<Schema> {
 
   /**
    * Adds a new event listener for all events.
-   * @param listener - events listener.
+   * @param listener - event listener.
    * @returns Function to remove event listener.
    */
   subscribe(listener: SubscribeListener<Schema>): RemoveEventListenerFn {
@@ -136,7 +111,7 @@ export class EventEmitter<Schema> {
   /**
    * Removes global event listener. In case, specified listener was bound several times, it removes
    * only a single one.
-   * @param listener - events listener.
+   * @param listener - event listener.
    */
   unsubscribe(listener: SubscribeListener<Schema>): void {
     for (let i = 0; i < this.subscribeListeners.length; i += 1) {

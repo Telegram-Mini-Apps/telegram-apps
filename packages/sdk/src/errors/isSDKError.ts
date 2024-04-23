@@ -1,4 +1,4 @@
-import { SDKError } from '@/errors/SDKError.js';
+import { SDKError } from './SDKError.js';
 
 /**
  * @returns True, if passed value is an instance of SDKError.

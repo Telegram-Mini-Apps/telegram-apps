@@ -1,8 +1,6 @@
 import type { RGB } from '@/colors/types.js';
 import type { RequestId } from '@/request-id/types.js';
-import type { If, Not } from '@/types/logical.js';
-import type { UnionKeys } from '@/types/unions.js';
-import type { IsNever } from '@/types/utils.js';
+import type { If, IsNever, IsUndefined, UnionKeys } from '@/types/index.js';
 
 import type { AnyInvokeCustomMethodParams } from './custom-methods.js';
 import type { AnyHapticFeedbackParams } from './haptic.js';
@@ -18,7 +16,7 @@ export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
  */
 export type SwitchInlineQueryChatType = 'users' | 'bots' | 'groups' | 'channels';
 
-interface CreateParams<Params = never, VersionedParam extends UnionKeys<Params> = never> {
+interface CreateParams<Params = undefined, VersionedParam extends UnionKeys<Params> = never> {
   params: Params;
   versionedParams: VersionedParam;
 }
@@ -315,22 +313,29 @@ export type MiniAppsMethodName = keyof MiniAppsMethods;
 export type MiniAppsMethodParams<M extends MiniAppsMethodName> = MiniAppsMethods[M]['params'];
 
 /**
- * True if specified method accepts parameters.
+ * Methods with parameters.
  */
-export type MiniAppsMethodAcceptParams<M extends MiniAppsMethodName> =
-  Not<IsNever<MiniAppsMethodParams<M>>>;
-
-/**
- * Any post-available event name which does not require arguments.
- */
-export type MiniAppsEmptyMethodName = {
-  [Method in MiniAppsMethodName]: If<MiniAppsMethodAcceptParams<Method>, never, Method>;
+export type MiniAppsMethodWithParams = {
+  [Method in MiniAppsMethodName]: undefined extends MiniAppsMethodParams<Method>
+    ? never
+    : Method;
 }[MiniAppsMethodName];
 
 /**
- * Any post-available event name which require arguments.
+ * Methods with optional parameters.
  */
-export type MiniAppsNonEmptyMethodName = Exclude<MiniAppsMethodName, MiniAppsEmptyMethodName>;
+export type MiniAppsMethodWithOptionalParams = {
+  [Method in MiniAppsMethodName]: undefined extends MiniAppsMethodParams<Method>
+    ? If<IsUndefined<MiniAppsMethodParams<Method>>, never, Method>
+    : never;
+}[MiniAppsMethodName];
+
+/**
+ * Methods without parameters.
+ */
+export type MiniAppsMethodWithoutParams = {
+  [Method in MiniAppsMethodName]: If<IsUndefined<MiniAppsMethodParams<Method>>, Method, never>;
+}[MiniAppsMethodName];
 
 /**
  * Method names which have versioned params.

@@ -23,5 +23,5 @@ export function parseMessage(value: unknown): MiniAppsMessage {
   return json({
     eventType: string(),
     eventData: (v) => v,
-  }, 'MiniAppsMessage').parse(value);
+  }).parse(value);
 }

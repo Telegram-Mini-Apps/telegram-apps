@@ -1,5 +1,5 @@
 import { createInitFn } from '@/components/createInitFn.js';
-import { error } from '@/debug/debug.js';
+import { logger } from '@/debug/debug.js';
 import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
 
 import { Viewport } from './Viewport.js';
@@ -38,7 +38,7 @@ export const initViewport = createInitFn(
       // the platform is not stable, and we had no previously saved state. This means, we
       // should actualize the state using the Mini Apps method.
       viewport.sync({ postEvent, timeout: 1000 }).catch((e) => {
-        error('Unable to sync viewport state', e);
+        logger.error('Unable to sync viewport state', e);
       });
     }
 

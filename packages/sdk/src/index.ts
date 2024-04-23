@@ -3,12 +3,12 @@
  */
 export { hasExternalNotify } from '@/bridge/env/hasExternalNotify.js';
 export { hasWebviewProxy } from '@/bridge/env/hasWebviewProxy.js';
-export { createEmitter } from '@/bridge/events/createEmitter.js';
-export { off } from '@/bridge/events/off.js';
-export { on } from '@/bridge/events/on.js';
-export { once } from '@/bridge/events/once.js';
-export { once } from '@/bridge/events/onTelegramEvent.js';
-export { once } from '@/bridge/events/singletonEmitter.js';
+export { createMiniAppsEmitter } from '@/bridge/events/event-emitter/createMiniAppsEmitter.js';
+// export { once } from '@/bridge/events/miniAppsEmitterSingleton.js';
+// export { off } from '@/bridge/events/off.js';
+// export { on } from '@/bridge/events/on.js';
+// export { once } from '@/bridge/events/once.js';
+// export { once } from '@/bridge/events/onTelegramEvent.js';
 export { subscribe } from '@/bridge/events/subscribe.js';
 export * from '@/bridge/events/types/index.js';
 export { unsubscribe } from '@/bridge/events/unsubscribe.js';

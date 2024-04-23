@@ -1,4 +1,4 @@
-import type { IsNever } from '@/types/utils.js';
+import type { If, IsNever } from '@/types/index.js';
 
 /**
  * Function accepting the list of passed arguments and returning nothing.
@@ -15,13 +15,15 @@ type VoidFunc<Args extends any[] = []> = (...args: Args) => void;
  */
 export type EventParams<Params> = Params extends any[]
   ? Params
-  : Params extends (...args: any[]) => any
+  : Params extends (...args: any) => any
     ? Parameters<Params>
-    : IsNever<Params> extends true
+    : Params extends undefined
       ? []
-      : Params extends void
-        ? []
-        : [Params];
+      : If<
+        IsNever<Params>,
+        [],
+        Params extends void ? [] : [Params]
+      >;
 
 /**
  * Returns function that represents event listener with specified
@@ -44,8 +46,7 @@ export type EmptyEventName<Schema> = {
 /**
  * Returns event names which require arguments.
  */
-export type NonEmptyEventName<Schema> =
-  Exclude<EventName<Schema>, EmptyEventName<Schema>>;
+export type NonEmptyEventName<Schema> = Exclude<EventName<Schema>, EmptyEventName<Schema>>;
 
 /**
  * Represents any listener, which could be used in EventEmitter.subscribe.

@@ -2,10 +2,9 @@ import type {
   MiniAppsMethodVersionedParams,
   MiniAppsMethodWithVersionedParams,
 } from '@/bridge/methods/types/methods.js';
+import { supports } from '@/supports/supports.js';
+import type { SupportsFn } from '@/supports/types.js';
 import type { Version } from '@/version/types.js';
-
-import { supports } from './supports.js';
-import type { SupportsFn } from './types.js';
 
 type HasCheckSupportMethodTuple = {
   [M in MiniAppsMethodWithVersionedParams]: [M, MiniAppsMethodVersionedParams<M>]
