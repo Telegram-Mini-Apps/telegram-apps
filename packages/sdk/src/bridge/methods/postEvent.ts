@@ -8,7 +8,8 @@ import { ERROR_UNKNOWN_ENV } from '@/errors/errors.js';
 import { targetOrigin as targetOriginFn } from '../target-origin.js';
 import type {
   MiniAppsMethodName,
-  MiniAppsMethodParams, MiniAppsMethodWithOptionalParams,
+  MiniAppsMethodParams,
+  MiniAppsMethodWithOptionalParams,
   MiniAppsMethodWithoutParams,
   MiniAppsMethodWithParams,
 } from './types/methods.js';
@@ -86,7 +87,9 @@ export function postEvent(
   }
   const { targetOrigin = targetOriginFn() } = postOptions;
 
-  log('Posting event:', { name: eventType, data: eventData });
+  log('Posting event:', eventData
+    ? { event: eventType, data: eventData }
+    : { event: eventType });
 
   // Telegram Web.
   if (isIframe()) {
