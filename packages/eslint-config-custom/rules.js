@@ -90,6 +90,7 @@ module.exports = {
   'no-continue': 0,
   'no-nested-ternary': 0,
   'no-return-assign': 0,
+  'no-underscore-dangle': 0,
   // Sometimes we need to write "void promise".
   'no-void': 0,
   'object-curly-newline': ['error', { consistent: true }],
