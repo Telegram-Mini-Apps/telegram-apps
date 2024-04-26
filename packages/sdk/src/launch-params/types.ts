@@ -41,14 +41,3 @@ export interface LaunchParams {
    */
   version: string;
 }
-
-export interface LaunchData {
-  /**
-   * Was current application reloaded.
-   */
-  isPageReload: boolean;
-  /**
-   * Current application launch parameters.
-   */
-  launchParams: LaunchParams;
-}
