@@ -12,14 +12,15 @@ import {
 } from 'vitest';
 import type { SpyInstance } from 'vitest';
 
+import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
 import { createTimeoutError } from '@/timeout/createTimeoutError.js';
 
 import { type PostEvent, postEvent as globalPostEvent } from '../methods/postEvent.js';
 import { request } from './request.js';
 
-vi.mock('./methods/postEvent', async () => {
+vi.mock('../methods/postEvent', async () => {
   const { postEvent: actualPostEvent } = await vi
-    .importActual('./methods/postEvent') as { postEvent: PostEvent };
+    .importActual('../methods/postEvent') as { postEvent: PostEvent };
 
   return {
     postEvent: vi.fn(actualPostEvent),
@@ -42,11 +43,9 @@ beforeEach(() => {
 
 afterEach(() => {
   windowSpy.mockRestore();
+  // Reset mini apps event emitter singleton.
+  resetMiniAppsEventEmitter();
 });
-
-function emptyCatch() {
-
-}
 
 describe('options', () => {
   describe('timeout', () => {
@@ -59,13 +58,15 @@ describe('options', () => {
 
       vi.advanceTimersByTime(1500);
 
-      return promise.catch(emptyCatch).finally(() => {
+      return promise.catch(() => null).finally(() => {
         expect(promise).rejects.toEqual(createTimeoutError(1000));
       });
     });
 
     it('should not throw an error in case, data was received before timeout', () => {
-      const promise = request('web_app_request_phone', 'phone_requested', {
+      const promise = request({
+        method: 'web_app_request_phone',
+        event: 'phone_requested',
         timeout: 1000,
       });
 
@@ -73,7 +74,7 @@ describe('options', () => {
       dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
       vi.advanceTimersByTime(1000);
 
-      return promise.catch(emptyCatch).finally(() => {
+      return promise.catch(() => null).finally(() => {
         expect(promise).resolves.toStrictEqual({ status: 'allowed' });
       });
     });
@@ -82,18 +83,27 @@ describe('options', () => {
   describe('postEvent', () => {
     it('should use specified postEvent property', () => {
       const postEvent = vi.fn();
-      request('web_app_request_phone', 'phone_requested', { postEvent });
+      request({
+        method: 'web_app_request_phone',
+        event: 'phone_requested',
+        postEvent,
+      });
       expect(postEvent).toHaveBeenCalledWith('web_app_request_phone', undefined);
     });
 
     it('should use global postEvent function if according property was not specified', () => {
-      request('web_app_request_phone', 'phone_requested');
+      request({
+        method: 'web_app_request_phone',
+        event: 'phone_requested',
+      });
       expect(globalPostEvent).toHaveBeenCalledWith('web_app_request_phone', undefined);
     });
 
     it('should reject promise in case, postEvent threw an error', () => {
-      const promise = request('web_app_request_phone', 'phone_requested', {
-        postEvent: () => {
+      const promise = request({
+        method: 'web_app_request_phone',
+        event: 'phone_requested',
+        postEvent() {
           throw new Error('Nope!');
         },
       });
@@ -103,7 +113,9 @@ describe('options', () => {
 
   describe('capture', () => {
     it('should capture an event in case, capture method returned true', () => {
-      const promise = request('web_app_request_phone', 'phone_requested', {
+      const promise = request({
+        method: 'web_app_request_phone',
+        event: 'phone_requested',
         timeout: 1000,
         capture: ({ status }) => status === 'allowed',
       });
@@ -112,13 +124,15 @@ describe('options', () => {
       dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
       vi.advanceTimersByTime(1000);
 
-      return promise.catch(emptyCatch).finally(() => {
+      return promise.catch(() => null).finally(() => {
         expect(promise).resolves.toStrictEqual({ status: 'allowed' });
       });
     });
 
     it('should not capture an event in case, capture method returned false', () => {
-      const promise = request('web_app_request_phone', 'phone_requested', {
+      const promise = request({
+        method: 'web_app_request_phone',
+        event: 'phone_requested',
         timeout: 500,
         capture: ({ status }) => status === 'allowed',
       });
@@ -126,7 +140,7 @@ describe('options', () => {
       dispatchWindowMessageEvent('phone_requested', { status: 'declined' });
       vi.advanceTimersByTime(1000);
 
-      return promise.catch(emptyCatch).finally(() => {
+      return promise.catch(() => null).finally(() => {
         expect(promise).rejects.toMatchObject(createTimeoutError(500));
       });
     });
@@ -135,7 +149,9 @@ describe('options', () => {
 
 describe('with request id', () => {
   it('should ignore event with the different request id', () => {
-    const promise = request('web_app_read_text_from_clipboard', 'clipboard_text_received', {
+    const promise = request({
+      method: 'web_app_read_text_from_clipboard',
+      event: 'clipboard_text_received',
       timeout: 1000,
       params: { req_id: 'a' },
       capture: (({ req_id }) => req_id === 'a'),
@@ -144,13 +160,15 @@ describe('with request id', () => {
     dispatchWindowMessageEvent('clipboard_text_received', { req_id: 'b' });
     vi.advanceTimersByTime(1500);
 
-    return promise.catch(emptyCatch).finally(() => {
+    return promise.catch(() => null).finally(() => {
       expect(promise).rejects.toMatchObject(createTimeoutError(1000));
     });
   });
 
   it('should capture event with the same request id', () => {
-    const promise = request('web_app_read_text_from_clipboard', 'clipboard_text_received', {
+    const promise = request({
+      method: 'web_app_read_text_from_clipboard',
+      event: 'clipboard_text_received',
       timeout: 1000,
       params: { req_id: 'a' },
       capture: (({ req_id }) => req_id === 'a'),
@@ -162,7 +180,7 @@ describe('with request id', () => {
     });
     vi.advanceTimersByTime(1500);
 
-    return promise.catch(emptyCatch).finally(() => {
+    return promise.catch(() => null).finally(() => {
       expect(promise).resolves.toStrictEqual({
         req_id: 'a',
         data: 'from clipboard',
@@ -174,17 +192,17 @@ describe('with request id', () => {
 describe('multiple events', () => {
   describe('no params', () => {
     it('should handle any of the specified events', () => {
-      const promise = request(
-        'web_app_request_phone',
-        ['phone_requested', 'write_access_requested'],
-        { timeout: 1000 },
-      );
+      const promise = request({
+        method: 'web_app_request_phone',
+        event: ['phone_requested', 'write_access_requested'],
+        timeout: 1000,
+      });
 
       dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
       vi.advanceTimersByTime(1500);
 
       return promise
-        .catch(emptyCatch)
+        .catch(() => null)
         .finally(() => {
           expect(promise).resolves.toStrictEqual({ status: 'allowed' });
         });
@@ -193,20 +211,18 @@ describe('multiple events', () => {
 
   describe('with params', () => {
     it('should handle any of the specified events', () => {
-      const promise = request(
-        'web_app_data_send',
-        ['phone_requested', 'write_access_requested'],
-        {
-          timeout: 1000,
-          params: { data: 'abc' },
-        },
-      );
+      const promise = request({
+        method: 'web_app_data_send',
+        event: ['phone_requested', 'write_access_requested'],
+        timeout: 1000,
+        params: { data: 'abc' },
+      });
 
       dispatchWindowMessageEvent('write_access_requested', { status: 'declined' });
       vi.advanceTimersByTime(1500);
 
       return promise
-        .catch(emptyCatch)
+        .catch(() => null)
         .finally(() => {
           expect(promise).resolves.toStrictEqual({ status: 'declined' });
         });

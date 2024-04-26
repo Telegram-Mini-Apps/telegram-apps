@@ -1,27 +1,52 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { logger, setDebug } from '@/debug/debug.js';
+import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
+import { log, logger, setDebug } from '@/debug/debug.js';
+
+import { dispatchWindowMessageEvent } from '../../test-utils/dispatchWindowMessageEvent.js';
 
 afterEach(() => {
   vi.restoreAllMocks();
+
+  // Reset debug mode after each test.
+  setDebug(false);
+  resetMiniAppsEventEmitter();
 });
 
-describe('logger', () => {
-  it('should log message in case, debug mode is enabled. Otherwise no output should be shown', () => {
-    const spy = vi
-      .spyOn(console, 'log')
-      .mockImplementation(() => {
-      });
-
-    logger.log(123);
-    expect(spy).not.toHaveBeenCalled();
-
+describe('setDebug', () => {
+  it('should output log in the console, if debug mode is enabled', () => {
+    const spy = vi.spyOn(console, 'log').mockImplementation(() => null);
     setDebug(true);
-    logger.log('Some log');
-    expect(spy).toHaveBeenCalledTimes(1);
+    dispatchWindowMessageEvent('back_button_pressed');
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      'Event received:',
+      { name: 'back_button_pressed' },
+    );
+    spy.mockClear();
 
     setDebug(false);
-    logger.log('Another log');
-    expect(spy).toHaveBeenCalledTimes(1);
+    dispatchWindowMessageEvent('back_button_pressed');
+    expect(spy).not.toHaveBeenCalled();
+  });
+});
+
+describe('log', () => {
+  it('should call logger.log if debug mode is enabled', () => {
+    const spy = vi.spyOn(logger, 'log').mockImplementationOnce(() => null);
+    setDebug(true);
+    log('abc');
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith('abc');
+    spy.mockClear();
+
+    setDebug(false);
+    log('abc');
+    expect(spy).not.toHaveBeenCalled();
   });
 });

@@ -1,12 +1,12 @@
 import { expect, it, vi } from 'vitest';
 import type { FnToSpy } from '@test-utils/types.js';
 
-import { request as requestFn } from '@/bridge/request.js';
+import { request as requestFn } from '@/bridge/utils/request.js';
 import { isTMA } from '@/env/isTMA.js';
 
 const request = requestFn as unknown as FnToSpy<typeof requestFn>;
 
-vi.mock('@/bridge/request.js', async () => {
+vi.mock('@/bridge/utils/request.js', async () => {
   return {
     request: vi.fn(),
   };
