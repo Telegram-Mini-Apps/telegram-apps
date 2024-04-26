@@ -209,8 +209,10 @@ export class MiniApp extends WithStateAndSupports<
     this.requestingPhoneAccess = true;
 
     try {
-      const { status } = await request('web_app_request_phone', 'phone_requested', {
+      const { status } = await request({
         ...options,
+        method: 'web_app_request_phone',
+        event: 'phone_requested',
         postEvent: this.postEvent,
       });
       return status;
@@ -230,8 +232,10 @@ export class MiniApp extends WithStateAndSupports<
     this.requestingWriteAccess = true;
 
     try {
-      const { status } = await request('web_app_request_write_access', 'write_access_requested', {
+      const { status } = await request({
         ...options,
+        method: 'web_app_request_write_access',
+        event: 'write_access_requested',
         postEvent: this.postEvent,
       });
       return status;
