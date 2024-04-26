@@ -1,10 +1,6 @@
 import type { RGB } from '@/colors/types.js';
 import type { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
-import type {
-  EventListener,
-  EventParams,
-  SubscribeListener,
-} from '@/events/event-emitter/types.js';
+import type { EventListener, SubscribeListener } from '@/events/event-emitter/types.js';
 import type { RequestId } from '@/request-id/types.js';
 
 export type InvoiceStatus =
@@ -18,6 +14,10 @@ export type PhoneRequestedStatus = 'sent' | 'cancelled' | string;
 
 export type WriteAccessRequestedStatus = 'allowed' | string;
 
+export type BiometryType = 'finger' | 'face';
+
+export type BiometryTokenUpdateStatus = 'updated' | 'removed';
+
 /**
  * Map where key is known event name, and value is its listener.
  * @see https://docs.telegram-mini-apps.com/platform/events
@@ -28,7 +28,7 @@ export interface MiniAppsEvents {
    * @since v6.1
    * @see https://docs.telegram-mini-apps.com/platform/events#back-button-pressed
    */
-  back_button_pressed: () => void;
+  back_button_pressed: never;
   /**
    * Biometry authorization completed. If authorization was successful, event contains
    * previously saved token.
@@ -51,7 +51,7 @@ export interface MiniAppsEvents {
     access_granted: boolean;
     device_id: string;
     token_saved: boolean;
-    type: 'finger' | 'face';
+    type: BiometryType;
   };
   /**
    * Biometry token was updated.
@@ -59,15 +59,14 @@ export interface MiniAppsEvents {
    * @see https://docs.telegram-mini-apps.com/platform/events#biometry-token-updated
    */
   biometry_token_updated: {
-    status: 'updated' | 'removed';
+    status: BiometryTokenUpdateStatus;
   };
   /**
    * Telegram application attempted to extract text from clipboard.
-   * @param payload - event payload.
    * @since v6.4
    * @see https://docs.telegram-mini-apps.com/platform/events#clipboard-text-received
    */
-  clipboard_text_received: (payload: {
+  clipboard_text_received: {
     /**
      * Passed during the `web_app_read_text_from_clipboard` method invocation `req_id` value.
      */
@@ -77,14 +76,13 @@ export interface MiniAppsEvents {
      * the case, application has access to the clipboard.
      */
     data?: string | null;
-  }) => void;
+  };
   /**
    * Custom method invocation completed.
-   * @param payload - event payload.
    * @since v6.9
    * @see https://docs.telegram-mini-apps.com/platform/events#custom-method-invoked
    */
-  custom_method_invoked: (payload: {
+  custom_method_invoked: {
     /**
      * Unique identifier of this invocation.
      */
@@ -97,13 +95,12 @@ export interface MiniAppsEvents {
      * Method invocation error code.
      */
     error?: string;
-  }) => void;
+  };
   /**
    * An invoice was closed.
-   * @param payload - invoice close information.
    * @see https://docs.telegram-mini-apps.com/platform/events#invoice-closed
    */
-  invoice_closed: (payload: {
+  invoice_closed: {
     /**
      * Passed during the `web_app_open_invoice` method invocation `slug` value.
      */
@@ -112,80 +109,76 @@ export interface MiniAppsEvents {
      * Invoice status.
      */
     status: InvoiceStatus;
-  }) => void;
+  };
   /**
    * User clicked the Main Button.
    * @see https://docs.telegram-mini-apps.com/platform/events#main-button-pressed
    */
-  main_button_pressed: () => void;
+  main_button_pressed: never;
   /**
    * Application received phone access request status.
-   * @param payload - event payload.
    * @since v6.9
    * @see https://docs.telegram-mini-apps.com/platform/events#phone-requested
    */
-  phone_requested: (payload: {
+  phone_requested: {
     /**
      * Request status.
      */
     status: PhoneRequestedStatus;
-  }) => void;
+  };
   /**
    * Popup was closed.
-   * @param payload - event payload.
    * @see https://docs.telegram-mini-apps.com/platform/events#popup-closed
    */
-  popup_closed: (payload: {
+  popup_closed: {
     /**
      * Identifier of the clicked button. In case, the popup was closed without clicking any button,
      * this property will be omitted.
      */
     button_id?: string;
-  }) => void;
+  };
   /**
    * The QR scanner scanned some QR and extracted its content.
    * @param payload - event payload.
    * @since v6.4
    * @see https://docs.telegram-mini-apps.com/platform/events#qr-text-received
    */
-  qr_text_received: (payload: {
+  qr_text_received: {
     /**
      * Data extracted from the QR.
      */
     data?: string;
-  }) => void;
+  };
   /**
    * Parent iframe requested current iframe reload.
    * @see https://docs.telegram-mini-apps.com/platform/events#reload-iframe
    */
-  reload_iframe: () => void;
+  reload_iframe: never;
   /**
    * QR scanner was closed.
    * @since v6.4
    * @see https://docs.telegram-mini-apps.com/platform/events#scan-qr-popup-closed
    */
-  scan_qr_popup_closed: () => void;
+  scan_qr_popup_closed: never;
   /**
    * The event which is usually sent by the Telegram web application. Its payload represents
    * `<style/>` tag html content, a developer could use. The stylesheet described in the payload
    * will help the developer to stylize the app scrollbar (but he is still able to do it himself).
-   * @param html - `style` tag inner HTML.
    * @see https://docs.telegram-mini-apps.com/platform/events#set-custom-style
    */
-  set_custom_style: (html: string) => void;
+  set_custom_style: string;
   /**
    * Occurs when the Settings Button was pressed.
    * @since v6.1
    * @see https://docs.telegram-mini-apps.com/platform/events#settings-button-pressed
    */
-  settings_button_pressed: () => void;
+  settings_button_pressed: never;
   /**
    * Occurs whenever theme settings are changed in the user's Telegram app
    * (including switching to night mode).
-   * @param payload - event payload.
    * @see https://docs.telegram-mini-apps.com/platform/events#theme-changed
    */
-  theme_changed: (payload: {
+  theme_changed: {
     /**
      * Map where the key is a theme stylesheet key and value is  the corresponding color in
      * `#RRGGBB` format.
@@ -224,14 +217,13 @@ export interface MiniAppsEvents {
       text_color?: RGB;
       [key: string]: RGB | undefined; // Future unknown palette keys.
     };
-  }) => void;
+  };
   /**
    * Occurs whenever the viewport has been changed. For example, when the user started
    * dragging the application or called the expansion method.
-   * @param payload - event payload.
    * @see https://docs.telegram-mini-apps.com/platform/events#viewport-changed
    */
-  viewport_changed: (payload: {
+  viewport_changed: {
     /**
      * The viewport height.
      */
@@ -248,42 +240,41 @@ export interface MiniAppsEvents {
      * Is the viewport current state stable and not going to change in the next moment.
      */
     is_state_stable: boolean;
-  }) => void;
+  };
   /**
    * Application received write access request status.
-   * @param payload - event payload.
    * @since v6.9
    * @see https://docs.telegram-mini-apps.com/platform/events#write-access-requested
    */
-  write_access_requested: (payload: {
+  write_access_requested: {
     /**
      * Request status.
      */
     status: WriteAccessRequestedStatus;
-  }) => void;
+  };
 }
 
 /**
- * Any known event name.
+ * Mini Apps event name.
  */
 export type MiniAppsEventName = keyof MiniAppsEvents;
 
 /**
- * Parameters of the specified event.
+ * Payload of the specified Mini Apps event.
  */
-export type MiniAppsEventPayload<E extends MiniAppsEventName> = EventParams<MiniAppsEvents[E]>[0];
+export type MiniAppsEventPayload<E extends MiniAppsEventName> = MiniAppsEvents[E];
 
 /**
- * Returns event listener for specified event name.
+ * Returns event listener for the specified Mini Apps event.
  */
 export type MiniAppsEventListener<E extends MiniAppsEventName> = EventListener<MiniAppsEvents[E]>;
 
 /**
- * Event listener used in `subscribe` and `unsubscribe` functions.
+ * Mini Apps event listener used in `subscribe` and `unsubscribe` functions.
  */
 export type MiniAppsSubscribeListener = SubscribeListener<MiniAppsEvents>;
 
 /**
- * MiniApps event emitter.
+ * Mini Apps event emitter.
  */
 export type MiniAppsEventEmitter = EventEmitter<MiniAppsEvents>;

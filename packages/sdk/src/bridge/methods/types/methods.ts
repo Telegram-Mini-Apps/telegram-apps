@@ -1,6 +1,6 @@
 import type { RGB } from '@/colors/types.js';
 import type { RequestId } from '@/request-id/types.js';
-import type { If, IsNever, IsUndefined, UnionKeys } from '@/types/index.js';
+import type { If, IsNever, UnionKeys } from '@/types/index.js';
 
 import type { AnyInvokeCustomMethodParams } from './custom-methods.js';
 import type { AnyHapticFeedbackParams } from './haptic.js';
@@ -16,7 +16,7 @@ export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
  */
 export type SwitchInlineQueryChatType = 'users' | 'bots' | 'groups' | 'channels';
 
-interface CreateParams<Params = undefined, VersionedParam extends UnionKeys<Params> = never> {
+interface CreateParams<Params = never, VersionedParam extends UnionKeys<Params> = never> {
   params: Params;
   versionedParams: VersionedParam;
 }
@@ -355,30 +355,21 @@ export interface MiniAppsMethods {
 }
 
 /**
- * Any Telegram Mini Apps known method name.
+ * Mini Apps method name.
  */
 export type MiniAppsMethodName = keyof MiniAppsMethods;
 
 /**
- * Returns parameters for specified post-available event.
+ * Parameters of the specified Mini Apps method.
  */
 export type MiniAppsMethodParams<M extends MiniAppsMethodName> = MiniAppsMethods[M]['params'];
-
-/**
- * Methods with parameters.
- */
-export type MiniAppsMethodWithParams = {
-  [Method in MiniAppsMethodName]: undefined extends MiniAppsMethodParams<Method>
-    ? never
-    : Method;
-}[MiniAppsMethodName];
 
 /**
  * Methods with optional parameters.
  */
 export type MiniAppsMethodWithOptionalParams = {
   [Method in MiniAppsMethodName]: undefined extends MiniAppsMethodParams<Method>
-    ? If<IsUndefined<MiniAppsMethodParams<Method>>, never, Method>
+    ? Method
     : never;
 }[MiniAppsMethodName];
 
@@ -386,8 +377,16 @@ export type MiniAppsMethodWithOptionalParams = {
  * Methods without parameters.
  */
 export type MiniAppsMethodWithoutParams = {
-  [Method in MiniAppsMethodName]: If<IsUndefined<MiniAppsMethodParams<Method>>, Method, never>;
+  [Method in MiniAppsMethodName]: If<IsNever<MiniAppsMethodParams<Method>>, Method, never>;
 }[MiniAppsMethodName];
+
+/**
+ * Methods with parameters.
+ */
+export type MiniAppsMethodWithRequiredParams = Exclude<
+  MiniAppsMethodName,
+  MiniAppsMethodWithoutParams | MiniAppsMethodWithOptionalParams
+>;
 
 /**
  * Method names which have versioned params.

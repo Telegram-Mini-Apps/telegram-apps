@@ -11,7 +11,7 @@ import type {
   MiniAppsMethodParams,
   MiniAppsMethodWithOptionalParams,
   MiniAppsMethodWithoutParams,
-  MiniAppsMethodWithParams,
+  MiniAppsMethodWithRequiredParams,
 } from './types/methods.js';
 
 interface PostEventOptions {
@@ -56,7 +56,7 @@ export function postEvent(method: MiniAppsMethodWithoutParams, options?: PostEve
  * @throws {SDKError} ERROR_UNKNOWN_ENV
  * @see ERROR_UNKNOWN_ENV
  */
-export function postEvent<Method extends MiniAppsMethodWithParams>(
+export function postEvent<Method extends MiniAppsMethodWithRequiredParams>(
   method: Method,
   params: MiniAppsMethodParams<Method>,
   options?: PostEventOptions,
