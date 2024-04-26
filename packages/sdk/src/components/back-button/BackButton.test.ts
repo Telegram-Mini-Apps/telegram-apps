@@ -14,7 +14,7 @@ describe('hide', () => {
   });
 
   it('should emit "isVisibleChanged" event with false value', () => {
-    const backButton = new BackButton(true, '', vi.fn());
+    const backButton = new BackButton(true, '', vi.fn(() => null));
     const listener = vi.fn();
 
     backButton.on('change:isVisible', listener);
@@ -37,7 +37,7 @@ describe('show', () => {
   });
 
   it('should emit "isVisibleChanged" event with true value', () => {
-    const backButton = new BackButton(false, '', vi.fn());
+    const backButton = new BackButton(false, '', vi.fn(() => null));
     const listener = vi.fn();
 
     backButton.on('change:isVisible', listener);
@@ -93,7 +93,7 @@ describe('off', () => {
   describe('"isVisibleChanged" event', () => {
     it('should remove event listener from event', () => {
       const listener = vi.fn();
-      const backButton = new BackButton(false, '', vi.fn());
+      const backButton = new BackButton(false, '', vi.fn(() => null));
 
       backButton.on('change:isVisible', listener);
 
