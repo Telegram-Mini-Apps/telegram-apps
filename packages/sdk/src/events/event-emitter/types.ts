@@ -1,4 +1,4 @@
-import type { If, IsNever } from '@/types/index.js';
+import type { If, IsNever, IsUndefined, Or } from '@/types/index.js';
 
 /**
  * Function accepting the list of passed arguments and returning nothing.
@@ -20,7 +20,7 @@ export type EventParams<Params> = Params extends any[]
     : Params extends undefined
       ? []
       : If<
-        IsNever<Params>,
+        Or<IsNever<Params>, IsUndefined<Params>>,
         [],
         Params extends void ? [] : [Params]
       >;
