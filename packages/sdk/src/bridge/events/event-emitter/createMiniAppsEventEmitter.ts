@@ -139,7 +139,7 @@ export function createMiniAppsEventEmitter(): [
       try {
         const data = parser ? parser.parse(eventData) : eventData;
         // eslint-disable-next-line prefer-spread
-        emitter.emit.apply(emitter, data ? [eventType, data] : [eventType]);
+        emitter.emit(...((data ? [eventType, data] : [eventType]) as [any, any]));
       } catch (cause) {
         logger.error(
           `An error occurred processing the "${eventType}" event from the Telegram application. Please, file an issue here: https://github.com/Telegram-Mini-Apps/tma.js/issues/new/choose`,
