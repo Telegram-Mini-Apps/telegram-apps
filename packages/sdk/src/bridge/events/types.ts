@@ -1,11 +1,11 @@
 import type { RGB } from '@/colors/types.js';
+import type { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
 import type {
   EventListener,
   EventParams,
   SubscribeListener,
 } from '@/events/event-emitter/types.js';
 import type { RequestId } from '@/request-id/types.js';
-import type { IsUndefined, Not } from '@/types/index.js';
 
 export type InvoiceStatus =
   | 'paid'
@@ -274,12 +274,6 @@ export type MiniAppsEventPayload<E extends MiniAppsEventName> = EventParams<Mini
  * Returns event listener for specified event name.
  */
 export type MiniAppsEventListener<E extends MiniAppsEventName> = EventListener<MiniAppsEvents[E]>;
-
-/**
- * Returns true in case, event has payload.
- */
-export type MiniAppsEventHasPayload<E extends MiniAppsEventName> =
-  Not<IsUndefined<MiniAppsEventPayload<E>>>;
 
 /**
  * Event listener used in `subscribe` and `unsubscribe` functions.
