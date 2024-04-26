@@ -1,5 +1,5 @@
-import { on } from '@/bridge/events/on.js';
-import type { RemoveEventListenerFn } from '@/events/event-emitter/types.js';
+import { on } from '@/bridge/events/listening/on.js';
+import type { RemoveEventListenerFn } from '@/events/types.js';
 
 import type { BackButtonClickListener } from './types.js';
 

@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
-import { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
-import { request } from '@/bridge/request.js';
+import { invokeCustomMethod } from '@/bridge/utils/invokeCustomMethod.js';
+import { request } from '@/bridge/utils/request.js';
 import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
 import { isColorDark } from '@/colors/isColorDark.js';
 import { isRGB } from '@/colors/isRGB.js';
@@ -9,10 +9,7 @@ import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
 import { createTimeoutError } from '@/timeout/createTimeoutError.js';
 import { sleep } from '@/timeout/sleep.js';
 import { withTimeout } from '@/timeout/withTimeout.js';
-import type {
-  PhoneRequestedStatus,
-  WriteAccessRequestedStatus,
-} from '@/bridge/events/types/payloads.js';
+import type { PhoneRequestedStatus, WriteAccessRequestedStatus } from '@/bridge/events/types.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { SwitchInlineQueryChatType } from '@/bridge/methods/types/methods.js';
 import type { RGB } from '@/colors/types.js';

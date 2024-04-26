@@ -1,6 +1,6 @@
-import { request } from '@/bridge/request.js';
+import { request } from '@/bridge/utils/request.js';
 import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
-import type { InvoiceStatus } from '@/bridge/events/parsers/invoiceClosed.js';
+import type { InvoiceStatus } from '@/bridge/events/types.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { Version } from '@/version/types.js';
 
@@ -68,13 +68,15 @@ export class Invoice extends WithStateAndSupports<InvoiceState, 'open'> {
         // eslint-disable-next-line no-template-curly-in-string
         throw new Error('Link pathname has incorrect format. Expected to receive "/invoice/{slug}" or "/${slug}"');
       }
-      [,,slug] = match;
+      [, , slug] = match;
     }
 
     this.isOpened = true;
 
     try {
-      const result = await request('web_app_open_invoice', 'invoice_closed', {
+      const result = await request({
+        method: 'web_app_open_invoice',
+        event: 'invoice_closed',
         params: { slug },
         postEvent: this.postEvent,
         capture(data) {

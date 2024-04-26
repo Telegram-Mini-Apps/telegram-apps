@@ -1,4 +1,4 @@
-import { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
+import { invokeCustomMethod } from '@/bridge/utils/invokeCustomMethod.js';
 import { WithSupports } from '@/classes/with-supports/WithSupports.js';
 import { array } from '@/parsing/parsers/array.js';
 import { json } from '@/parsing/parsers/json.js';

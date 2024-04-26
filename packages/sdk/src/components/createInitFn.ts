@@ -1,6 +1,6 @@
 import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
 import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
-import { isPageReload as isPageReloadFn } from '@/navigation/isPageReload.js';
+import { isPageReload as isPageReloadFn } from '@/navigation/utils/isPageReload.js';
 import { createRequestIdGenerator } from '@/request-id/createRequestIdGenerator.js';
 import {
   getStorageValue,

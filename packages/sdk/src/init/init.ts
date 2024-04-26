@@ -1,8 +1,8 @@
-import { on } from '@/bridge/events/on.js';
+import { on } from '@/bridge/events/listening/on.js';
 import { createPostEvent } from '@/bridge/methods/createPostEvent.js';
 import { isIframe } from '@/env/isIframe.js';
 import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
-import type { CleanupFn } from '@/types/misc.js';
+import type { RemoveEventListenerFn } from '@/events/types.js';
 import type { Version } from '@/version/types.js';
 
 export interface InitOptions {
@@ -24,13 +24,13 @@ export interface InitOptions {
  * @param options - init options.
  * @returns Function, which performs cleanup removing all created elements and listeners.
  */
-export function init(options: InitOptions = {}): CleanupFn {
+export function init(options: InitOptions = {}): () => void {
   const {
     acceptCustomStyles = false,
     version = retrieveLaunchParams().version,
   } = options;
   const postEvent = createPostEvent(version);
-  const listeners: CleanupFn[] = [];
+  const listeners: RemoveEventListenerFn[] = [];
   const cleanup = () => listeners.forEach((l) => l());
 
   // In Telegram web version we should listen to special event sent from the Telegram application

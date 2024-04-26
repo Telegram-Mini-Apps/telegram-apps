@@ -1,4 +1,4 @@
-import { off } from '@/bridge/events/off.js';
+import { off } from '@/bridge/events/listening/off.js';
 
 import type { SettingsButtonClickListener } from './types.js';
 

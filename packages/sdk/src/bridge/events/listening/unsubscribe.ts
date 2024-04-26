@@ -1,11 +1,11 @@
 import { miniAppsEventEmitter, resetMiniAppsEventEmitter } from '../event-emitter/singleton.js';
-import type { MiniAppsEventEmitterSubscribeListener } from '../event-emitter/createMiniAppsEventEmitter.js';
+import type { MiniAppsSubscribeListener } from '../types.js';
 
 /**
  * Removes global event listener.
  * @param listener - event listener.
  */
-export function unsubscribe(listener: MiniAppsEventEmitterSubscribeListener): void {
+export function unsubscribe(listener: MiniAppsSubscribeListener): void {
   const ee = miniAppsEventEmitter();
   const { count } = ee;
   ee.unsubscribe(listener);

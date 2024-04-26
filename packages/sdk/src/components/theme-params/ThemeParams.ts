@@ -1,8 +1,8 @@
-import { on } from '@/bridge/events/on.js';
+import { on } from '@/bridge/events/listening/on.js';
 import { WithState } from '@/classes/with-state/WithState.js';
 import { isColorDark } from '@/colors/isColorDark.js';
 import type { RGB } from '@/colors/types.js';
-import type { CleanupFn } from '@/types/misc.js';
+import type { RemoveEventListenerFn } from '@/events/types.js';
 
 import { parseThemeParams } from './parsing/parseThemeParams.js';
 import type { ThemeParamsParsed, ThemeParamsState } from './types.js';
@@ -87,7 +87,7 @@ export class ThemeParams extends WithState<ThemeParamsState> {
    * Starts listening to the external theme changes and applies them.
    * @returns Function to stop listening.
    */
-  listen(): CleanupFn {
+  listen(): RemoveEventListenerFn {
     return on('theme_changed', (event) => {
       this.set(parseThemeParams(event.theme_params));
     });
