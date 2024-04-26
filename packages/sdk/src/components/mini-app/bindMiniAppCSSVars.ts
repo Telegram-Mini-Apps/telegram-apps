@@ -1,8 +1,8 @@
 import { isRGB } from '@/colors/isRGB.js';
-import type { MiniApp } from '@/components/mini-app/MiniApp.js';
+import { setCSSVar } from '@/css-vars/setCSSVar.js';
 import type { ThemeParams } from '@/components/theme-params/ThemeParams.js';
 
-import { setCSSVar } from '../../css-vars/setCSSVar.js';
+import type { MiniApp } from './MiniApp.js';
 
 /**
  * Creates CSS variables connected with WebApp background and header colors based on
@@ -12,7 +12,8 @@ import { setCSSVar } from '../../css-vars/setCSSVar.js';
  * - `--tg-bg-color`
  * - `--tg-header-color`
  *
- * Variables are being automatically updated in case, corresponding properties are updating.
+ * Variables are being automatically updated in case, corresponding MiniApp and ThemeParams
+ * properties were updated.
  *
  * @param miniApp - MiniApp instance.
  * @param themeParams - ThemeParams instance.

@@ -22,10 +22,10 @@ interface CreateOptions {
   createRequestId: CreateRequestIdFn;
 }
 
-interface InitFnSimpleOptions extends Partial<CreateOptions> {
+export interface InitFnSimpleOptions extends Partial<CreateOptions> {
 }
 
-interface InitFnStorageOptions extends InitFnSimpleOptions {
+export interface InitFnStorageOptions extends InitFnSimpleOptions {
   isPageReload?: boolean;
 }
 
@@ -37,7 +37,7 @@ interface CreateFnStorage<Component, SK extends StorageKey> {
   (options: CreateOptions, state: Partial<StorageValue<SK>>): Component,
 }
 
-interface CreateInitFnResult<Options, Component> {
+export interface InitFn<Options, Component> {
   (options?: Options): Component;
 }
 
@@ -47,7 +47,7 @@ interface CreateInitFnResult<Options, Component> {
  */
 export function createInitFn<Component>(
   create: CreateFnBasic<Component>,
-): CreateInitFnResult<InitFnSimpleOptions, Component>;
+): InitFn<InitFnSimpleOptions, Component>;
 
 /**
  * Creates new init function based on common options and storage data.
@@ -57,14 +57,14 @@ export function createInitFn<Component>(
 export function createInitFn<Component extends Trackable<StorageValue<SK>>, SK extends StorageKey>(
   storageKey: SK,
   create: CreateFnStorage<Component, SK>,
-): CreateInitFnResult<InitFnStorageOptions, Component>;
+): InitFn<InitFnStorageOptions, Component>;
 
 export function createInitFn<Component>(
   createOrStorageKey: CreateFnBasic<Component> | StorageKey,
   create?: CreateFnStorage<Component, StorageKey>,
 ):
-  | CreateInitFnResult<InitFnSimpleOptions, Component>
-  | CreateInitFnResult<InitFnStorageOptions, Component> {
+  | InitFn<InitFnSimpleOptions, Component>
+  | InitFn<InitFnStorageOptions, Component> {
   return ((options: InitFnSimpleOptions | InitFnStorageOptions): Component => {
     const {
       postEvent = defaultPostEvent,
@@ -92,6 +92,6 @@ export function createInitFn<Component>(
 
     return component;
   }) as
-    | CreateInitFnResult<InitFnSimpleOptions, Component>
-    | CreateInitFnResult<InitFnStorageOptions, Component>;
+    | InitFn<InitFnSimpleOptions, Component>
+    | InitFn<InitFnStorageOptions, Component>;
 }
