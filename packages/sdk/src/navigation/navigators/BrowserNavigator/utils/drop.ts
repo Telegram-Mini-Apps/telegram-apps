@@ -8,7 +8,7 @@ export async function drop(): Promise<void> {
     return;
   }
 
-  // Push empty state to cut states we have no access to.
+  // Push empty state to cut states we have no access to, placed after the current one.
   window.history.pushState(null, '');
 
   // By this line of code we cover the most recent case, when application is opened in WebView,
