@@ -43,29 +43,37 @@ export interface MiniAppsMethods {
    */
   iframe_will_reload: CreateParams;
   /**
+   * Request current biometry settings.
    * @since 7.2
-   * fixme
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-get-info
    */
   web_app_biometry_get_info: CreateParams;
   /**
+   * Opens the biometric access settings for bots. Useful when you need to request biometrics
+   * access to users who haven't granted it yet.
+   *
+   * _Note that this method can be called only in response to user interaction with the Mini
+   * App interface (e.g. a click inside the Mini App or on the main button)_.
    * @since 7.2
-   * fixme
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-open-settings
    */
   web_app_biometry_open_settings: CreateParams;
   /**
+   * Requests access to use biometrics.
    * @since 7.2
-   * fixme
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-request-access
    */
   web_app_biometry_request_access: CreateParams<{
     /**
-     * Reason to request biometry data. Should be at least 1 symbol length, but not more than
-     * 128 symbols.
+     * Reason to request biometry access. Should be at least 1 symbol length, but not
+     * more than 128 symbols.
      */
     reason?: string;
   }>;
   /**
+   * Authenticates the user using biometrics.
    * @since 7.2
-   * fixme
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-request-auth
    */
   web_app_biometry_request_auth: CreateParams<{
     /**
@@ -75,12 +83,14 @@ export interface MiniAppsMethods {
     reason?: string;
   }>;
   /**
+   * Updates the biometric token in secure storage on the device. To remove the token, pass
+   * an empty string.
    * @since 7.2
-   * fixme
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-update-token
    */
   web_app_biometry_update_token: CreateParams<{
     /**
-     * Not more than 1024 symbols.
+     * Token to store. Has max length of 1024 symbols.
      */
     token: string;
   }>;

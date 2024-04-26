@@ -30,16 +30,18 @@ export interface MiniAppsEvents {
    */
   back_button_pressed: () => void;
   /**
-   * fixme
+   * Biometry authorization completed. If authorization was successful, event contains
+   * previously saved token.
    * @since 7.2
+   * @see https://docs.telegram-mini-apps.com/platform/events#biometry-auth-requested
    */
-  biometry_auth_requested: {
-    status: 'authorized' | string;
-    token?: string;
-  };
+  biometry_auth_requested:
+    | { status: 'failed' }
+    | { status: 'authorized', token: string };
   /**
-   * fixme
+   * Biometry settings were received.
    * @since 7.2
+   * @see https://docs.telegram-mini-apps.com/platform/events#biometry-info-received
    */
   biometry_info_received:
     | { available: false }
@@ -49,14 +51,15 @@ export interface MiniAppsEvents {
     access_granted: boolean;
     device_id: string;
     token_saved: boolean;
-    type: 'finger' | 'face' | 'unknown' | string;
+    type: 'finger' | 'face';
   };
   /**
-   * fixme
+   * Biometry token was updated.
    * @since 7.2
+   * @see https://docs.telegram-mini-apps.com/platform/events#biometry-token-updated
    */
   biometry_token_updated: {
-    status: 'updated' | 'removed' | string;
+    status: 'updated' | 'removed';
   };
   /**
    * Telegram application attempted to extract text from clipboard.
