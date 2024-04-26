@@ -284,5 +284,9 @@ export type MiniAppsEventHasPayload<E extends MiniAppsEventName> =
 /**
  * Event listener used in `subscribe` and `unsubscribe` functions.
  */
-export type MiniAppsSubscribeListener =
-  SubscribeListener<MiniAppsEvents & Record<string, unknown>>;
+export type MiniAppsSubscribeListener = SubscribeListener<MiniAppsEvents>;
+
+/**
+ * MiniApps event emitter.
+ */
+export type MiniAppsEventEmitter = EventEmitter<MiniAppsEvents>;
