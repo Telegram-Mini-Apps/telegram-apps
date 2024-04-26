@@ -1,5 +1,5 @@
-import { request } from '@/bridge/request.js';
-import type { RequestSimpleOptions } from '@/bridge/request.js';
+import { request } from '@/bridge/utils/request.js';
+import type { ExecuteWithOptions } from '@/types/index.js';
 
 export interface RequestViewportResult {
   height: number;
@@ -13,13 +13,17 @@ export interface RequestViewportResult {
  * @param options - request options.
  */
 export async function requestViewport(
-  options?: RequestSimpleOptions<'web_app_request_viewport'>,
+  options: ExecuteWithOptions = {},
 ): Promise<RequestViewportResult> {
   const {
     is_expanded: isExpanded,
     is_state_stable: isStateStable,
     ...rest
-  } = await request('web_app_request_viewport', 'viewport_changed', options);
+  } = await request({
+    ...options,
+    method: 'web_app_request_viewport',
+    event: 'viewport_changed',
+  });
 
   return { ...rest, isExpanded, isStateStable };
 }

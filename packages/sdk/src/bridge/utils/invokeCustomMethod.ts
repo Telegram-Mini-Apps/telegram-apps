@@ -47,8 +47,10 @@ export async function invokeCustomMethod(
   const {
     result,
     error,
-  } = await request('web_app_invoke_custom_method', 'custom_method_invoked', {
+  } = await request({
     ...options,
+    method: 'web_app_invoke_custom_method',
+    event: 'custom_method_invoked',
     params: {
       method,
       params,

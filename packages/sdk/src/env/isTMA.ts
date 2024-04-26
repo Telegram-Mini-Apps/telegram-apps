@@ -5,7 +5,7 @@ import { request } from '@/bridge/utils/request.js';
  */
 export async function isTMA(): Promise<boolean> {
   try {
-    await request('web_app_request_theme', 'theme_changed', { timeout: 100 });
+    await request({ method: 'web_app_request_theme', event: 'theme_changed', timeout: 100 });
     return true;
   } catch (e) {
     return false;

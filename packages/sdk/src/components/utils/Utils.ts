@@ -1,5 +1,5 @@
-import { captureSameReq } from '@/bridge/captureSameReq.js';
-import { request } from '@/bridge/request.js';
+import { captureSameReq } from '@/bridge/utils/captureSameReq.js';
+import { request } from '@/bridge/utils/request.js';
 import { WithSupports } from '@/classes/with-supports/WithSupports.js';
 import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
 import { supports } from '@/supports/supports.js';
@@ -79,7 +79,9 @@ export class Utils extends WithSupports<'readTextFromClipboard'> {
     const reqId = this.createRequestId();
     const {
       data = null,
-    } = await request('web_app_read_text_from_clipboard', 'clipboard_text_received', {
+    } = await request({
+      method: 'web_app_read_text_from_clipboard',
+      event: 'clipboard_text_received',
       postEvent: this.postEvent,
       params: { req_id: reqId },
       capture: captureSameReq(reqId),

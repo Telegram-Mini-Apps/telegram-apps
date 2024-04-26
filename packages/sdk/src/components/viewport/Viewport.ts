@@ -1,8 +1,8 @@
-import { on } from '@/bridge/events/on.js';
+import { on } from '@/bridge/events/listening/on.js';
 import { WithState } from '@/classes/with-state/WithState.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
-import type { RequestSimpleOptions } from '@/bridge/request.js';
-import type { CleanupFn } from '@/types/misc.js';
+import type { RemoveEventListenerFn } from '@/events/types.js';
+import type { ExecuteWithOptions } from '@/types/index.js';
 
 import { requestViewport } from './requestViewport.js';
 import type { ViewportProps, ViewportState } from './types.js';
@@ -37,7 +37,7 @@ export class Viewport extends WithState<ViewportState> {
    * instance.
    * @param options - options to request fresh data.
    */
-  async sync(options?: RequestSimpleOptions<'web_app_request_viewport'>): Promise<void> {
+  async sync(options?: ExecuteWithOptions): Promise<void> {
     const { isStateStable, ...rest } = await requestViewport(options);
     this.set({
       ...rest,
@@ -87,7 +87,7 @@ export class Viewport extends WithState<ViewportState> {
    * Starts listening to viewport changes and applies them.
    * @returns Function to stop listening.
    */
-  listen(): CleanupFn {
+  listen(): RemoveEventListenerFn {
     return on('viewport_changed', (event) => {
       const {
         height,

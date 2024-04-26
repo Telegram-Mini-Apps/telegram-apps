@@ -1,4 +1,4 @@
-import { request } from '@/bridge/request.js';
+import { request } from '@/bridge/utils/request.js';
 import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { Version } from '@/version/types.js';
@@ -51,14 +51,12 @@ export class QRScanner extends WithStateAndSupports<QRScannerState, 'close' | 'o
     this.isOpened = true;
 
     try {
-      const result = await request(
-        'web_app_open_scan_qr_popup',
-        ['qr_text_received', 'scan_qr_popup_closed'],
-        {
-          postEvent: this.postEvent,
-          params: { text },
-        },
-      ) || {};
+      const result = await request({
+        method: 'web_app_open_scan_qr_popup',
+        event: ['qr_text_received', 'scan_qr_popup_closed'],
+        postEvent: this.postEvent,
+        params: { text },
+      }) || {};
 
       return result.data || null;
     } finally {

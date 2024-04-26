@@ -1,4 +1,4 @@
-import { request } from '@/bridge/request.js';
+import { request } from '@/bridge/utils/request.js';
 import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { Version } from '@/version/types.js';
@@ -45,7 +45,9 @@ export class Popup extends WithStateAndSupports<PopupState, 'open'> {
     this.isOpened = true;
 
     try {
-      const { button_id: buttonId = null } = await request('web_app_open_popup', 'popup_closed', {
+      const { button_id: buttonId = null } = await request({
+        event: 'popup_closed',
+        method: 'web_app_open_popup',
         postEvent: this.postEvent,
         params: preparePopupParams(options),
       });
