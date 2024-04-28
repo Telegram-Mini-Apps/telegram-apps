@@ -36,21 +36,58 @@ export interface MiniAppsEvents {
    * @see https://docs.telegram-mini-apps.com/platform/events#biometry-auth-requested
    */
   biometry_auth_requested:
-    | { status: 'failed' }
-    | { status: 'authorized', token: string };
+    | {
+    /**
+     * Authorization status.
+     */
+    status: 'failed';
+  }
+    | {
+    /**
+     * Authorization status.
+     */
+    status: 'authorized';
+    /**
+     * Token, saved previously.
+     */
+    token: string;
+  };
   /**
    * Biometry settings were received.
    * @since 7.2
    * @see https://docs.telegram-mini-apps.com/platform/events#biometry-info-received
    */
   biometry_info_received:
-    | { available: false }
     | {
+    /**
+     * True, if biometry is available.
+     */
+    available: false;
+  }
+    | {
+    /**
+     * `true`, if biometry is available.
+     */
     available: true;
+    /**
+     * `true`, if access was requested previously.
+     */
     access_requested: boolean;
+    /**
+     * `true`, if access was granted previously.
+     */
     access_granted: boolean;
+    /**
+     * Current device identifier.
+     */
     device_id: string;
+    /**
+     * `true`, if local storage contains previously saved token.
+     */
     token_saved: boolean;
+    /**
+     * Supported biometry type.
+     */
     type: BiometryType;
   };
   /**
@@ -59,6 +96,9 @@ export interface MiniAppsEvents {
    * @see https://docs.telegram-mini-apps.com/platform/events#biometry-token-updated
    */
   biometry_token_updated: {
+    /**
+     * Update status.
+     */
     status: BiometryTokenUpdateStatus;
   };
   /**
