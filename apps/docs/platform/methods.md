@@ -114,6 +114,57 @@ event.
 
 Notifies parent iframe about the current iframe is going to reload.
 
+### `web_app_biometry_get_info`
+
+Available since: **v7.2**
+
+Request current biometry settings.
+
+### `web_app_biometry_open_settings`
+
+Available since: **v7.2**
+
+Opens the biometric access settings for bots. Useful when you need to request biometrics
+access to users who haven't granted it yet.
+
+::: info
+
+This method can be called only in response to user interaction with the Mini
+App interface (e.g. a click inside the Mini App or on the main button)
+
+:::
+
+### `web_app_biometry_request_access`
+
+Available since: **v7.2**
+
+Requests access to use biometrics.
+
+| Field  | Type     | Description                                                                                                       |
+|--------|----------|-------------------------------------------------------------------------------------------------------------------|
+| reason | `string` | _Optional_. Reason to request biometry access. Should be at least 1 symbol length, but not more than 128 symbols. |
+
+### `web_app_biometry_request_auth`
+
+Available since: **v7.2**
+
+Authenticates the user using biometrics.
+
+| Field  | Type     | Description                                                                                                       |
+|--------|----------|-------------------------------------------------------------------------------------------------------------------|
+| reason | `string` | _Optional_. Reason to request biometry access. Should be at least 1 symbol length, but not more than 128 symbols. |
+
+### `web_app_biometry_update_token`
+
+Available since: **v7.2**
+
+Updates the biometric token in secure storage on the device. To remove the token, pass an empty
+string.
+
+| Field | Type     | Description                                     |
+|-------|----------|-------------------------------------------------|
+| token | `string` | Token to store. Has max length of 1024 symbols. |
+
 ### `web_app_close`
 
 Closes Mini App.

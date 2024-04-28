@@ -55,7 +55,7 @@ defined function.
 Here is an example:
 
 ```typescript
-window.Telegram.WebView.receiveEvent('popup_closed', { 
+window.Telegram.WebView.receiveEvent('popup_closed', {
   button_id: 'cancel'
 });
 ```
@@ -109,6 +109,51 @@ parameters. Section title means minimal version, from which events inside the se
 Available since: **v6.1**
 
 User clicked the [Back Button](back-button.md).
+
+### `biometry_auth_requested`
+
+Available since: **v7.2**
+
+Biometry authorization completed. If authorization was successful, event contains previously
+saved token.
+
+| Field  | Type                     | Description                                                                  |
+|--------|--------------------------|------------------------------------------------------------------------------|
+| status | `failed` or `authorized` | Authorization status.                                                        |
+| token  | `string`                 | _Optional_. Token saved previously. Passed only if `status` is `authorized`. |
+
+### `biometry_info_received`
+
+Available since: **v7.2**
+
+Biometry settings were received.
+
+Payload if `available` property is `false`:
+
+| Field     | Type      | Description                       |
+|-----------|-----------|-----------------------------------|
+| available | `boolean` | `true`, if biometry is available. |
+
+Payload if `available` property is `true`:
+
+| Field            | Type               | Description                                               |
+|------------------|--------------------|-----------------------------------------------------------|
+| available        | `boolean`          | `true`, if biometry is available.                         |
+| access_requested | `boolean`          | `true`, if access was requested previously.               |
+| access_granted   | `boolean`          | `true`, if access was granted previously.                 |
+| device_id        | `string`           | Current device identifier.                                |
+| token_saved      | `boolean`          | `true`, if local storage contains previously saved token. |
+| type             | `face` or `finger` | Supported biometry type.                                  |
+
+### `biometry_token_updated`
+
+Available since: **v7.2**
+
+Biometry token was updated.
+
+| Field  | Type                   | Description    |
+|--------|------------------------|----------------|
+| status | `updated` or `removed` | Update status. |
 
 ### `clipboard_text_received`
 
