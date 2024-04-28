@@ -118,7 +118,7 @@ Notifies parent iframe about the current iframe is going to reload.
 
 Available since: **v7.2**
 
-Request current biometry settings.
+Requests current biometry settings.
 
 ### `web_app_biometry_open_settings`
 
@@ -138,11 +138,11 @@ App interface (e.g. a click inside the Mini App or on the main button)
 
 Available since: **v7.2**
 
-Requests access to use biometrics.
+Requests permission to use biometrics.
 
-| Field  | Type     | Description                                                                                                       |
-|--------|----------|-------------------------------------------------------------------------------------------------------------------|
-| reason | `string` | _Optional_. Reason to request biometry access. Should be at least 1 symbol length, but not more than 128 symbols. |
+| Field  | Type     | Description                                                                                                                      |
+|--------|----------|----------------------------------------------------------------------------------------------------------------------------------|
+| reason | `string` | _Optional_. The text to be displayed to a user in the popup describing why the bot needs access to biometrics, 0-128 characters. |
 
 ### `web_app_biometry_request_auth`
 
@@ -150,9 +150,9 @@ Available since: **v7.2**
 
 Authenticates the user using biometrics.
 
-| Field  | Type     | Description                                                                                                       |
-|--------|----------|-------------------------------------------------------------------------------------------------------------------|
-| reason | `string` | _Optional_. Reason to request biometry access. Should be at least 1 symbol length, but not more than 128 symbols. |
+| Field  | Type     | Description                                                                                                                                                                                       |
+|--------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| reason | `string` | _Optional_. The text to be displayed to a user in the popup describing why you are asking them to authenticate and what action you will be taking based on that authentication, 0-128 characters. |
 
 ### `web_app_biometry_update_token`
 

@@ -114,13 +114,15 @@ User clicked the [Back Button](back-button.md).
 
 Available since: **v7.2**
 
-Biometry authorization completed. If authorization was successful, event contains previously
-saved token.
+Biometry authentication request completed. This event usually occurs in a response to the
+[web_app_request_auth](methods.md#web-app-biometry-request-auth) method.
 
-| Field  | Type                     | Description                                                                  |
-|--------|--------------------------|------------------------------------------------------------------------------|
-| status | `failed` or `authorized` | Authorization status.                                                        |
-| token  | `string`                 | _Optional_. Token saved previously. Passed only if `status` is `authorized`. |
+If authentication was successful, the event contains a token from the local secure storage.
+
+| Field  | Type                         | Description                                                                                                |
+|--------|------------------------------|------------------------------------------------------------------------------------------------------------|
+| status | `'failed'` or `'authorized'` | Authentication status.                                                                                     |
+| token  | `string`                     | _Optional_. Token from the local secure storage saved previously. Passed only if `status` is `authorized`. |
 
 ### `biometry_info_received`
 
@@ -128,22 +130,14 @@ Available since: **v7.2**
 
 Biometry settings were received.
 
-Payload if `available` property is `false`:
-
-| Field     | Type      | Description                       |
-|-----------|-----------|-----------------------------------|
-| available | `boolean` | `true`, if biometry is available. |
-
-Payload if `available` property is `true`:
-
-| Field            | Type               | Description                                               |
-|------------------|--------------------|-----------------------------------------------------------|
-| available        | `boolean`          | `true`, if biometry is available.                         |
-| access_requested | `boolean`          | `true`, if access was requested previously.               |
-| access_granted   | `boolean`          | `true`, if access was granted previously.                 |
-| device_id        | `string`           | Current device identifier.                                |
-| token_saved      | `boolean`          | `true`, if local storage contains previously saved token. |
-| type             | `face` or `finger` | Supported biometry type.                                  |
+| Field            | Type                   | Description                                                                   |
+|------------------|------------------------|-------------------------------------------------------------------------------|
+| available        | `boolean`              | Shows whether biometry is available.                                          |
+| access_requested | `boolean`              | Shows whether permission to use biometrics has been requested.                |
+| access_granted   | `boolean`              | Shows whether permission to use biometrics has been granted.                  |
+| device_id        | `string`               | A unique device identifier that can be used to match the token to the device. |
+| token_saved      | `boolean`              | Show whether local secure storage contains previously saved token.            |
+| type             | `'face'` or `'finger'` | The type of biometrics currently available on the device.                     |
 
 ### `biometry_token_updated`
 
