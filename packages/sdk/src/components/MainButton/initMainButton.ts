@@ -6,7 +6,7 @@ import { MainButton } from './MainButton.js';
  * @returns A new initialized instance of the `MainButton` class.
  * @see MainButton
  */
-export const initMainButton = createInitFn<'mainButton', MainButton, 'themeParams'>('mainButton', ({
+export const initMainButton = createComponentInitFn<'mainButton', MainButton, 'themeParams'>('mainButton', ({
   postEvent,
   themeParams,
   state = {

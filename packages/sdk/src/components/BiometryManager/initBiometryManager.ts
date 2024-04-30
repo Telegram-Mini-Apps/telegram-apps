@@ -10,7 +10,7 @@ import { requestBiometryInfo } from './requestBiometryInfo.js';
  * @returns A promise with a new initialized instance of the `BiometryManager` class.
  * @see BiometryManager
  */
-export const initBiometryManager = createInitFn<
+export const initBiometryManager = createComponentInitFn<
   'biometryManager',
   Promise<BiometryManager>,
   'version'

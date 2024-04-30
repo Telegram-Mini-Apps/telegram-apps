@@ -6,7 +6,7 @@ import { MiniApp } from './MiniApp.js';
  * @returns A new initialized instance of the `MiniApp` class.
  * @see MiniApp
  */
-export const initMiniApp = createInitFn<'miniApp', MiniApp, 'themeParams' | 'version' | 'botInline'>('miniApp', ({
+export const initMiniApp = createComponentInitFn<'miniApp', MiniApp, 'themeParams' | 'version' | 'botInline'>('miniApp', ({
   themeParams,
   botInline = false,
   state = {

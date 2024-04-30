@@ -6,7 +6,7 @@ import { createComponentInitFn } from '@/init/createComponentInitFn/createCompon
  * @returns A new initialized instance of the `ThemeParams` class.
  * @see ThemeParams
  */
-export const initThemeParams = createInitFn<
+export const initThemeParams = createComponentInitFn<
   'themeParams',
   ThemeParams,
   'themeParams'

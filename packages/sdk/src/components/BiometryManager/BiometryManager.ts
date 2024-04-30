@@ -61,7 +61,10 @@ export class BiometryManager extends WithStateAndSupports<BiometryManagerState,
    * @since 7.2
    * @returns Token from the local secure storage, if authentication was successful.
    */
-  async authenticate({ reason, ...rest }: BiometryManagerAuthenticateOptions): Promise<string | undefined> {
+  async authenticate({
+    reason,
+    ...rest
+  }: BiometryManagerAuthenticateOptions): Promise<string | undefined> {
     if (!this.authPromise) {
       this.authPromise = request({
         ...rest,

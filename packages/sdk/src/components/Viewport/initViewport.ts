@@ -49,7 +49,7 @@ function instantiate({
  * @returns A promise with a new initialized instance of the `Viewport` class.
  * @see Viewport
  */
-export const initViewport = createInitFn<'viewport', Promise<Viewport>, 'platform'>(
+export const initViewport = createComponentInitFn<'viewport', Promise<Viewport>, 'platform'>(
   'viewport',
   async (options) => {
     if (isSSR() && !options.state) {
