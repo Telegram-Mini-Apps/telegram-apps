@@ -1,4 +1,4 @@
-import type { MiniAppsEventListener } from '@/bridge/events/types/events.js';
+import type { MiniAppsEventListener } from '@/bridge/events/types.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { StateEvents } from '@/classes/with-state/types.js';
 import type { RGB } from '@/colors/types.js';
