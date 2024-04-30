@@ -1,27 +1,20 @@
-import { createInitFn } from '@/components/createInitFn.js';
-import { MainButton } from '@/components/main-button/MainButton.js';
-import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
+import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
+
+import { MainButton } from './MainButton.js';
 
 /**
- * @returns A new initialized instance of MainButton class.
+ * @returns A new initialized instance of the `MainButton` class.
+ * @see MainButton
  */
-export const initMainButton = createInitFn(
-  'mainButton',
-  ({ postEvent }, state) => {
-    const {
-      buttonTextColor,
-      buttonColor,
-    } = retrieveLaunchParams().themeParams;
-
-    return new MainButton({
-      isVisible: false,
-      isEnabled: false,
-      text: '',
-      isLoaderVisible: false,
-      textColor: buttonTextColor || '#ffffff',
-      backgroundColor: buttonColor || '#000000',
-      postEvent,
-      ...state,
-    });
+export const initMainButton = createInitFn<'mainButton', MainButton, 'themeParams'>('mainButton', ({
+  postEvent,
+  themeParams,
+  state = {
+    isVisible: false,
+    isEnabled: false,
+    text: '',
+    isLoaderVisible: false,
+    textColor: themeParams.buttonTextColor || '#ffffff',
+    backgroundColor: themeParams.buttonColor || '#000000',
   },
-);
+}) => new MainButton({ ...state, postEvent }));

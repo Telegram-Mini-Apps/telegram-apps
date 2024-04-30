@@ -1,10 +1,11 @@
-import { createInitFn } from '@/components/createInitFn.js';
+import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
 import { Utils } from '@/components/utils/Utils.js';
 
 /**
- * @returns A new initialized instance of Utils class.
+ * @returns A new initialized instance of the `Utils` class.
+ * @see Utils
  */
-export const initUtils = createInitFn(
+export const initUtils = createInitFn<Utils, 'version'>(
   ({ version, postEvent, createRequestId }) => {
     return new Utils(version, createRequestId, postEvent);
   },

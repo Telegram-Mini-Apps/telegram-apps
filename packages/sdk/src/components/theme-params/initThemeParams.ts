@@ -1,22 +1,21 @@
-import { createInitFn } from '@/components/createInitFn.js';
 import { ThemeParams } from '@/components/theme-params/ThemeParams.js';
-import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
+import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
+import { isSSR } from '@/env/isSSR.js';
 
 /**
- * @returns A new initialized instance of ThemeParams class.
+ * @returns A new initialized instance of the `ThemeParams` class.
+ * @see ThemeParams
  */
-export const initThemeParams = createInitFn(
+export const initThemeParams = createInitFn<
   'themeParams',
-  (_, state) => {
-    // Create component instance.
-    const tp = new ThemeParams({
-      ...retrieveLaunchParams().themeParams,
-      ...state,
-    });
+  ThemeParams,
+  'themeParams'
+>('themeParams', ({ themeParams, state = themeParams }) => {
+  const tp = new ThemeParams(state);
 
-    // Start listening to the theme changes.
+  if (!isSSR()) {
     tp.listen();
+  }
 
-    return tp;
-  },
-);
+  return tp;
+});

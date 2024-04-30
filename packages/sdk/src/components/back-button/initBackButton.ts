@@ -1,11 +1,13 @@
-import { createInitFn } from '@/components/createInitFn.js';
+import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
 
 import { BackButton } from './BackButton.js';
 
 /**
- * @returns A new initialized instance of BackButton class.
+ * @returns A new initialized instance of the `BackButton` class.
+ * @see BackButton
  */
-export const initBackButton = createInitFn('backButton', (
-  { postEvent, version },
-  { isVisible = false },
-) => new BackButton(isVisible, version, postEvent));
+export const initBackButton = createInitFn<'backButton', BackButton, 'version'>('backButton', ({
+  postEvent,
+  version,
+  state = { isVisible: false },
+}) => new BackButton(state.isVisible, version, postEvent));

@@ -1,21 +1,17 @@
-import { createInitFn } from '@/components/createInitFn.js';
-import { MiniApp } from '@/components/mini-app/MiniApp.js';
-import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
+import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
 
-export const initMiniApp = createInitFn<MiniApp, 'miniApp'>(
-  'miniApp',
-  (options, state) => {
-    const {
-      bgColor = '#ffffff',
-      headerBgColor: headerColor = '#000000',
-    } = retrieveLaunchParams().themeParams;
+import { MiniApp } from './MiniApp.js';
 
-    return new MiniApp({
-      ...options,
-      bgColor,
-      headerColor,
-      ...state,
-      botInline: retrieveLaunchParams().botInline || false,
-    });
+/**
+ * @returns A new initialized instance of the `MiniApp` class.
+ * @see MiniApp
+ */
+export const initMiniApp = createInitFn<'miniApp', MiniApp, 'themeParams' | 'version' | 'botInline'>('miniApp', ({
+  themeParams,
+  botInline = false,
+  state = {
+    bgColor: themeParams.bgColor || '#ffffff',
+    headerColor: themeParams.headerBgColor || '#000000',
   },
-);
+  ...rest
+}) => new MiniApp({ ...rest, ...state, botInline }));

@@ -1,9 +1,11 @@
-import { createInitFn } from '@/components/createInitFn.js';
-import { HapticFeedback } from '@/components/haptic-feedback/HapticFeedback.js';
+import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
+
+import { HapticFeedback } from './HapticFeedback.js';
 
 /**
- * @returns A new initialized instance of HapticFeedback class.
+ * @returns A new initialized instance of the `HapticFeedback` class.
+ * @see HapticFeedback
  */
-export const initHapticFeedback = createInitFn(
+export const initHapticFeedback = createInitFn<HapticFeedback, 'version'>(
   ({ version, postEvent }) => new HapticFeedback(version, postEvent),
 );

@@ -1,11 +1,12 @@
-import { createInitFn } from '@/components/createInitFn.js';
+import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
 
 import { ClosingBehavior } from './ClosingBehavior.js';
 
 /**
- * @returns A new initialized instance of ClosingBehavior class.
+ * @returns A new initialized instance of the `ClosingBehavior` class.
+ * @see ClosingBehavior
  */
-export const initClosingBehavior = createInitFn('closingBehavior', (
-  { postEvent },
-  { isConfirmationNeeded = false },
-) => new ClosingBehavior(isConfirmationNeeded, postEvent));
+export const initClosingBehavior = createInitFn('closingBehavior', ({
+  postEvent,
+  state = { isConfirmationNeeded: false },
+}) => new ClosingBehavior(state.isConfirmationNeeded, postEvent));

@@ -1,10 +1,11 @@
-import { createInitFn } from '@/components/createInitFn.js';
-import { Popup } from '@/components/popup/Popup.js';
+import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
+
+import { Popup } from './Popup.js';
 
 /**
- * @returns A new initialized instance of Popup class.
+ * @returns A new initialized instance of the `Popup` class.
+ * @see Popup
  */
-export const initPopup = createInitFn('popup', (
-  { postEvent, version },
-  { isOpened = false },
-) => new Popup(isOpened, version, postEvent));
+export const initPopup = createInitFn<Popup, 'version'>(
+  ({ postEvent, version }) => new Popup(false, version, postEvent),
+);

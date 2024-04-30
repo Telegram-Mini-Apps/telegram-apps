@@ -1,14 +1,13 @@
-import { createInitFn } from '@/components/createInitFn.js';
-import { SettingsButton } from '@/components/settings-button/SettingsButton.js';
-import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
+import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
+
+import { SettingsButton } from './SettingsButton.js';
 
 /**
- * @returns A new initialized instance of SettingsButton class.
+ * @returns A new initialized instance of the `SettingsButton` class.
+ * @see SettingsButton
  */
-export const initSettingsButton = createInitFn(
-  'settingsButton',
-  (
-    { version, postEvent },
-    { isVisible = retrieveLaunchParams().showSettings || false },
-  ) => new SettingsButton(isVisible, version, postEvent),
-);
+export const initSettingsButton = createInitFn<'settingsButton', SettingsButton, 'version'>('settingsButton', ({
+  version,
+  postEvent,
+  state = { isVisible: false },
+}) => new SettingsButton(state.isVisible, version, postEvent));

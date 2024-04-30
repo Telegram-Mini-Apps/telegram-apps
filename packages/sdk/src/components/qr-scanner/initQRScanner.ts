@@ -1,10 +1,11 @@
-import { createInitFn } from '@/components/createInitFn.js';
-import { QRScanner } from '@/components/qr-scanner/QRScanner.js';
+import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
+
+import { QRScanner } from './QRScanner.js';
 
 /**
- * @returns A new initialized instance of QRScanner class.
+ * @returns A new initialized instance of the `QRScanner` class.
+ * @see QRScanner
  */
-export const initQRScanner = createInitFn('qrScanner', (
-  { version, postEvent },
-  { isOpened = false },
-) => new QRScanner(isOpened, version, postEvent));
+export const initQRScanner = createInitFn<QRScanner, 'version'>(
+  ({ version, postEvent }) => new QRScanner(false, version, postEvent),
+);
