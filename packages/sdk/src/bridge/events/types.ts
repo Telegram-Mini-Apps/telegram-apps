@@ -14,9 +14,11 @@ export type PhoneRequestedStatus = 'sent' | 'cancelled' | string;
 
 export type WriteAccessRequestedStatus = 'allowed' | string;
 
-export type BiometryType = 'finger' | 'face';
+export type BiometryType = 'finger' | 'face' | string;
 
-export type BiometryTokenUpdateStatus = 'updated' | 'removed';
+export type BiometryTokenUpdateStatus = 'updated' | 'removed' | string;
+
+export type BiometryAuthRequestStatus = 'failed' | 'authorized' | string;
 
 /**
  * Map where key is known event name, and value is its listener.
@@ -24,69 +26,54 @@ export type BiometryTokenUpdateStatus = 'updated' | 'removed';
  */
 export interface MiniAppsEvents {
   /**
-   * User clicked back button.
+   * User clicked the BackButton.
    * @since v6.1
    * @see https://docs.telegram-mini-apps.com/platform/events#back-button-pressed
    */
   back_button_pressed: never;
   /**
-   * Biometry authorization completed. If authorization was successful, event contains
-   * previously saved token.
+   * Biometry authentication request completed.
    * @since 7.2
    * @see https://docs.telegram-mini-apps.com/platform/events#biometry-auth-requested
    */
-  biometry_auth_requested:
-    | {
+  biometry_auth_requested: {
     /**
-     * Authorization status.
+     * Authentication status.
      */
-    status: 'failed';
-  }
-    | {
+    status: BiometryAuthRequestStatus;
     /**
-     * Authorization status.
+     * Token from the local secure storage saved previously.
      */
-    status: 'authorized';
-    /**
-     * Token, saved previously.
-     */
-    token: string;
+    token?: string;
   };
   /**
    * Biometry settings were received.
    * @since 7.2
    * @see https://docs.telegram-mini-apps.com/platform/events#biometry-info-received
    */
-  biometry_info_received:
-    | {
+  biometry_info_received: {
     /**
-     * True, if biometry is available.
-     */
-    available: false;
-  }
-    | {
-    /**
-     * `true`, if biometry is available.
+     * Shows whether biometry is available.
      */
     available: true;
     /**
-     * `true`, if access was requested previously.
+     * Shows whether permission to use biometrics has been requested.
      */
     access_requested: boolean;
     /**
-     * `true`, if access was granted previously.
+     * Shows whether permission to use biometrics has been granted.
      */
     access_granted: boolean;
     /**
-     * Current device identifier.
+     * A unique device identifier that can be used to match the token to the device.
      */
     device_id: string;
     /**
-     * `true`, if local storage contains previously saved token.
+     * Show whether local storage contains previously saved token.
      */
     token_saved: boolean;
     /**
-     * Supported biometry type.
+     * The type of biometrics currently available on the device.
      */
     type: BiometryType;
   };
