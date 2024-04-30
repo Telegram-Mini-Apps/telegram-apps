@@ -41,3 +41,13 @@ export interface LaunchParams {
    */
   version: string;
 }
+
+/**
+ * Known launch parameter name.
+ */
+export type LaunchParamName = keyof LaunchParams;
+
+/**
+ * Picks specified launch params.
+ */
+export type PickLaunchParams<LP extends LaunchParamName> = Pick<LaunchParams, LP>;
