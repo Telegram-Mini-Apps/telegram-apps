@@ -10,5 +10,5 @@ module.exports = {
     'simple-import-sort',
   ],
   rules: require('./rules'),
-  ignorePatterns: ['**/__tests__/*'],
+  ignorePatterns: ['**/*.test.*'],
 };
