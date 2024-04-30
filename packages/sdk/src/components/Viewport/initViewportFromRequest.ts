@@ -1,5 +1,5 @@
-import { requestViewport } from '@/components/viewport/requestViewport.js';
-import { Viewport } from '@/components/viewport/Viewport.js';
+import { requestViewport } from '@/components/Viewport/requestViewport.js';
+import { Viewport } from '@/components/Viewport/Viewport.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { ExecuteWithTimeout } from '@/types/index.js';
 

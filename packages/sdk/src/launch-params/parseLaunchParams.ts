@@ -1,5 +1,5 @@
-import { initData } from '@/components/init-data/parsers/initData.js';
-import { themeParams } from '@/components/theme-params/parsing/themeParams.js';
+import { initData } from '@/components/InitData/parsers/initData.js';
+import { themeParams } from '@/components/ThemeParams/parsing/themeParams.js';
 import { boolean } from '@/parsing/parsers/boolean.js';
 import { searchParams } from '@/parsing/parsers/searchParams.js';
 import { string } from '@/parsing/parsers/string.js';

@@ -2,7 +2,7 @@ import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEve
 import { afterEach, beforeAll, expect, it, vi } from 'vitest';
 import type { FnToSpy } from '@test-utils/types.js';
 
-import { ThemeParams } from '@/components/theme-params/ThemeParams.js';
+import { ThemeParams } from '@/components/ThemeParams/ThemeParams.js';
 
 import { bindThemeParamsCSSVars } from './bindThemeParamsCSSVars.js';
 

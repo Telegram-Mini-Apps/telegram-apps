@@ -1,5 +1,5 @@
-import type { InitDataParsed } from '@/components/init-data/types.js';
-import type { ThemeParamsParsed } from '@/components/theme-params/types.js';
+import type { InitDataParsed } from '@/components/InitData/types.js';
+import type { ThemeParamsParsed } from '@/components/ThemeParams/types.js';
 import type { Platform } from '@/types/platform.js';
 
 /**

@@ -1,5 +1,5 @@
 import { setCSSVar } from '@/css-vars/setCSSVar.js';
-import type { Viewport } from '@/components/viewport/Viewport.js';
+import type { Viewport } from '@/components/Viewport/Viewport.js';
 
 /**
  * Accepts Viewport instance and sets CSS variables connected with viewport

@@ -1,4 +1,4 @@
-import { themeParams } from '@/components/theme-params/parsing/themeParams.js';
+import { themeParams } from '@/components/ThemeParams/parsing/themeParams.js';
 
 import type { ThemeParamsParsed } from '../types.js';
 

@@ -2,8 +2,8 @@ import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEve
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import type { FnToSpy } from '@test-utils/types.js';
 
-import { MiniApp } from '@/components/mini-app/MiniApp.js';
-import { ThemeParams } from '@/components/theme-params/ThemeParams.js';
+import { MiniApp } from '@/components/MiniApp/MiniApp.js';
+import { ThemeParams } from '@/components/ThemeParams/ThemeParams.js';
 
 import { bindMiniAppCSSVars } from './bindMiniAppCSSVars.js';
 

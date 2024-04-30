@@ -1,11 +1,11 @@
-import type { BackButtonState } from '@/components/back-button/types.js';
-import type { BiometryManagerState } from '@/components/biometry-manager/types.js';
-import type { ClosingBehaviorState } from '@/components/closing-behavior/types.js';
-import type { MainButtonState } from '@/components/main-button/types.js';
-import type { MiniAppState } from '@/components/mini-app/types.js';
-import type { SettingsButtonState } from '@/components/settings-button/types.js';
-import type { ThemeParamsParsed } from '@/components/theme-params/types.js';
-import type { ViewportState } from '@/components/viewport/types.js';
+import type { BackButtonState } from '@/components/BackButton/types.js';
+import type { BiometryManagerState } from '@/components/BiometryManager/types.js';
+import type { ClosingBehaviorState } from '@/components/ClosingBehavior/types.js';
+import type { MainButtonState } from '@/components/MainButton/types.js';
+import type { MiniAppState } from '@/components/MiniApp/types.js';
+import type { SettingsButtonState } from '@/components/SettingsButton/types.js';
+import type { ThemeParamsParsed } from '@/components/ThemeParams/types.js';
+import type { ViewportState } from '@/components/Viewport/types.js';
 
 /**
  * Describes storage keys and according values.

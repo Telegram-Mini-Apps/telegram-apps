@@ -34,65 +34,65 @@ export * from '@/colors/types.js';
  */
 
 // BackButton.
-export { BackButton } from '@/components/back-button/BackButton.js';
-export { initBackButton } from '@/components/back-button/initBackButton.js';
-export { offBackButtonClick } from '@/components/back-button/offBackButtonClick.js';
-export { onBackButtonClick } from '@/components/back-button/onBackButtonClick.js';
+export { BackButton } from '@/components/BackButton/BackButton.js';
+export { initBackButton } from '@/components/BackButton/initBackButton.js';
+export { offBackButtonClick } from '@/components/BackButton/offBackButtonClick.js';
+export { onBackButtonClick } from '@/components/BackButton/onBackButtonClick.js';
 export type {
   BackButtonClickListener,
   BackButtonEventListener,
   BackButtonEventName,
   BackButtonEvents,
-} from '@/components/back-button/types.js';
+} from '@/components/BackButton/types.js';
 
 // BiometryManager.
-export { BiometryManager } from '@/components/biometry-manager/BiometryManager.js';
-export { initBiometryManager } from '@/components/biometry-manager/initBiometryManager.js';
-export { requestBiometryInfo } from '@/components/biometry-manager/requestBiometryInfo.js';
+export { BiometryManager } from '@/components/BiometryManager/BiometryManager.js';
+export { initBiometryManager } from '@/components/BiometryManager/initBiometryManager.js';
+export { requestBiometryInfo } from '@/components/BiometryManager/requestBiometryInfo.js';
 export type {
   BiometryManagerAuthenticateOptions,
   BiometryManagerProps,
   BiometryManagerRequestAccessOptions,
   BiometryManagerUpdateTokenOptions,
-} from '@/components/biometry-manager/types.js';
+} from '@/components/BiometryManager/types.js';
 
 // ClosingBehavior.
-export { ClosingBehavior } from '@/components/closing-behavior/ClosingBehavior.js';
-export { initClosingBehavior } from '@/components/closing-behavior/initClosingBehavior.js';
+export { ClosingBehavior } from '@/components/ClosingBehavior/ClosingBehavior.js';
+export { initClosingBehavior } from '@/components/ClosingBehavior/initClosingBehavior.js';
 export type {
   ClosingBehaviorEventListener,
   ClosingBehaviorEventName,
   ClosingBehaviorEvents,
-} from '@/components/closing-behavior/types.js';
+} from '@/components/ClosingBehavior/types.js';
 
 // CloudStorage.
-export { CloudStorage } from '@/components/cloud-storage/CloudStorage.js';
-export { initCloudStorage } from '@/components/cloud-storage/initCloudStorage.js';
+export { CloudStorage } from '@/components/CloudStorage/CloudStorage.js';
+export { initCloudStorage } from '@/components/CloudStorage/initCloudStorage.js';
 
 // HapticFeedback.
-export { HapticFeedback } from '@/components/haptic-feedback/HapticFeedback.js';
-export { initHapticFeedback } from '@/components/haptic-feedback/initHapticFeedback.js';
+export { HapticFeedback } from '@/components/HapticFeedback/HapticFeedback.js';
+export { initHapticFeedback } from '@/components/HapticFeedback/initHapticFeedback.js';
 
 // InitData.
-export { InitData } from '@/components/init-data/InitData.js';
-export { initInitData } from '@/components/init-data/initInitData.js';
-export { parseInitData } from '@/components/init-data/parseInitData.js';
-export * from '@/components/init-data/types.js';
+export { InitData } from '@/components/InitData/InitData.js';
+export { initInitData } from '@/components/InitData/initInitData.js';
+export { parseInitData } from '@/components/InitData/parseInitData.js';
+export * from '@/components/InitData/types.js';
 
 // Invoice.
-export { initInvoice } from '@/components/invoice/initInvoice.js';
-export { Invoice } from '@/components/invoice/Invoice.js';
+export { initInvoice } from '@/components/Invoice/initInvoice.js';
+export { Invoice } from '@/components/Invoice/Invoice.js';
 export type {
   InvoiceEventListener,
   InvoiceEventName,
   InvoiceEvents,
-} from '@/components/invoice/types.js';
+} from '@/components/Invoice/types.js';
 
 // MainButton.
-export { initMainButton } from '@/components/main-button/initMainButton.js';
-export { MainButton } from '@/components/main-button/MainButton.js';
-export { offMainButtonClick } from '@/components/main-button/offMainButtonClick.js';
-export { onMainButtonClick } from '@/components/main-button/onMainButtonClick.js';
+export { initMainButton } from '@/components/MainButton/initMainButton.js';
+export { MainButton } from '@/components/MainButton/MainButton.js';
+export { offMainButtonClick } from '@/components/MainButton/offMainButtonClick.js';
+export { onMainButtonClick } from '@/components/MainButton/onMainButtonClick.js';
 export type {
   MainButtonClickListener,
   MainButtonEventListener,
@@ -100,12 +100,12 @@ export type {
   MainButtonEvents,
   MainButtonParams,
   MainButtonProps,
-} from '@/components/main-button/types.js';
+} from '@/components/MainButton/types.js';
 
 // MiniApp.
-export { bindMiniAppCSSVars } from '@/components/mini-app/bindMiniAppCSSVars.js';
-export { initMiniApp } from '@/components/mini-app/initMiniApp.js';
-export { MiniApp } from '@/components/mini-app/MiniApp.js';
+export { bindMiniAppCSSVars } from '@/components/MiniApp/bindMiniAppCSSVars.js';
+export { initMiniApp } from '@/components/MiniApp/initMiniApp.js';
+export { MiniApp } from '@/components/MiniApp/MiniApp.js';
 export type {
   MiniAppEventListener,
   MiniAppEventName,
@@ -113,73 +113,73 @@ export type {
   MiniAppHeaderColor,
   MiniAppProps,
   RequestedContact,
-} from '@/components/mini-app/types.js';
+} from '@/components/MiniApp/types.js';
 
 // Popup.
-export { initPopup } from '@/components/popup/initPopup.js';
-export { Popup } from '@/components/popup/Popup.js';
+export { initPopup } from '@/components/Popup/initPopup.js';
+export { Popup } from '@/components/Popup/Popup.js';
 export type {
   OpenPopupOptions,
   OpenPopupOptionsButton,
   PopupEventListener,
   PopupEventName,
   PopupEvents,
-} from '@/components/popup/types.js';
+} from '@/components/Popup/types.js';
 
 // QRScanner.
-export { initQRScanner } from '@/components/qr-scanner/initQRScanner.js';
-export { QRScanner } from '@/components/qr-scanner/QRScanner.js';
+export { initQRScanner } from '@/components/QRScanner/initQRScanner.js';
+export { QRScanner } from '@/components/QRScanner/QRScanner.js';
 export type {
   QRScannerEventListener,
   QRScannerEventName,
   QRScannerEvents,
-} from '@/components/qr-scanner/types.js';
+} from '@/components/QRScanner/types.js';
 
 // SettingsButton.
-export { initSettingsButton } from '@/components/settings-button/initSettingsButton.js';
-export { offSettingsButtonClick } from '@/components/settings-button/offSettingsButtonClick.js';
-export { onSettingsButtonClick } from '@/components/settings-button/onSettingsButtonClick.js';
-export { SettingsButton } from '@/components/settings-button/SettingsButton.js';
+export { initSettingsButton } from '@/components/SettingsButton/initSettingsButton.js';
+export { offSettingsButtonClick } from '@/components/SettingsButton/offSettingsButtonClick.js';
+export { onSettingsButtonClick } from '@/components/SettingsButton/onSettingsButtonClick.js';
+export { SettingsButton } from '@/components/SettingsButton/SettingsButton.js';
 export type {
   SettingsButtonClickListener,
   SettingsButtonEventListener,
   SettingsButtonEventName,
   SettingsButtonEvents,
-} from '@/components/settings-button/types.js';
+} from '@/components/SettingsButton/types.js';
 
 // ThemeParams.
-export { bindThemeParamsCSSVars } from '@/components/theme-params/bindThemeParamsCSSVars.js';
-export { initThemeParams } from '@/components/theme-params/initThemeParams.js';
-export { parseThemeParams } from '@/components/theme-params/parsing/parseThemeParams.js';
-export { serializeThemeParams } from '@/components/theme-params/parsing/serializeThemeParams.js';
-export { requestThemeParams } from '@/components/theme-params/requestThemeParams.js';
-export { ThemeParams } from '@/components/theme-params/ThemeParams.js';
+export { bindThemeParamsCSSVars } from '@/components/ThemeParams/bindThemeParamsCSSVars.js';
+export { initThemeParams } from '@/components/ThemeParams/initThemeParams.js';
+export { parseThemeParams } from '@/components/ThemeParams/parsing/parseThemeParams.js';
+export { serializeThemeParams } from '@/components/ThemeParams/parsing/serializeThemeParams.js';
+export { requestThemeParams } from '@/components/ThemeParams/requestThemeParams.js';
+export { ThemeParams } from '@/components/ThemeParams/ThemeParams.js';
 export type {
   ThemeParamsEventListener,
   ThemeParamsEventName,
   ThemeParamsEvents,
   ThemeParamsKey,
   ThemeParamsParsed,
-} from '@/components/theme-params/types.js';
+} from '@/components/ThemeParams/types.js';
 
 // Utils.
-export { initUtils } from '@/components/utils/initUtils.js';
-export { Utils } from '@/components/utils/Utils.js';
+export { initUtils } from '@/components/Utils/initUtils.js';
+export { Utils } from '@/components/Utils/Utils.js';
 
 // Viewport.
-export { bindViewportCSSVars } from '@/components/viewport/bindViewportCSSVars.js';
-export { initViewport } from '@/components/viewport/initViewport.js';
+export { bindViewportCSSVars } from '@/components/Viewport/bindViewportCSSVars.js';
+export { initViewport } from '@/components/Viewport/initViewport.js';
 export {
   requestViewport,
   type RequestViewportResult,
-} from '@/components/viewport/requestViewport.js';
+} from '@/components/Viewport/requestViewport.js';
 export type {
   ViewportEventListener,
   ViewportEventName,
   ViewportEvents,
   ViewportProps,
-} from '@/components/viewport/types.js';
-export { Viewport } from '@/components/viewport/Viewport.js';
+} from '@/components/Viewport/types.js';
+export { Viewport } from '@/components/Viewport/Viewport.js';
 
 /**
  * CSS Vars.

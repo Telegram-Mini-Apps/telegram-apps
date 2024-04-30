@@ -1,5 +1,5 @@
 import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
-import { Utils } from '@/components/utils/Utils.js';
+import { Utils } from '@/components/Utils/Utils.js';
 
 /**
  * @returns A new initialized instance of the `Utils` class.

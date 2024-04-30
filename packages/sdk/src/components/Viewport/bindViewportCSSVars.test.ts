@@ -2,7 +2,7 @@ import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEve
 import { afterEach, beforeAll, expect, it, vi } from 'vitest';
 import type { FnToSpy } from '@test-utils/types.js';
 
-import { Viewport } from '@/components/viewport/Viewport.js';
+import { Viewport } from '@/components/Viewport/Viewport.js';
 
 import { bindViewportCSSVars } from './bindViewportCSSVars.js';
 

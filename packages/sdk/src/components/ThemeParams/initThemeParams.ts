@@ -1,4 +1,4 @@
-import { ThemeParams } from '@/components/theme-params/ThemeParams.js';
+import { ThemeParams } from '@/components/ThemeParams/ThemeParams.js';
 import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
 import { isSSR } from '@/env/isSSR.js';
 

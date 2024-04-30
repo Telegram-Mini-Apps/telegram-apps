@@ -1,5 +1,5 @@
 import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
-import { initViewportFromRequest } from '@/components/viewport/initViewportFromRequest.js';
+import { initViewportFromRequest } from '@/components/Viewport/initViewportFromRequest.js';
 import { logger } from '@/debug/debug.js';
 import { isSSR } from '@/env/isSSR.js';
 import { createError } from '@/errors/createError.js';

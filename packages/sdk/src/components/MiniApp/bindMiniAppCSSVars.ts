@@ -1,6 +1,6 @@
 import { isRGB } from '@/colors/isRGB.js';
 import { setCSSVar } from '@/css-vars/setCSSVar.js';
-import type { ThemeParams } from '@/components/theme-params/ThemeParams.js';
+import type { ThemeParams } from '@/components/ThemeParams/ThemeParams.js';
 
 import type { MiniApp } from './MiniApp.js';
 

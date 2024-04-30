@@ -4,7 +4,7 @@ import { request } from '@/bridge/utils/request.js';
 import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
 import { isColorDark } from '@/colors/isColorDark.js';
 import { isRGB } from '@/colors/isRGB.js';
-import { contact } from '@/components/mini-app/parsing/contact.js';
+import { contact } from '@/components/MiniApp/parsing/contact.js';
 import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
 import { createTimeoutError } from '@/timeout/createTimeoutError.js';
 import { sleep } from '@/timeout/sleep.js';
