@@ -51,7 +51,14 @@ export interface MiniAppsEvents {
    * @since 7.2
    * @see https://docs.telegram-mini-apps.com/platform/events#biometry-info-received
    */
-  biometry_info_received: {
+  biometry_info_received:
+    | {
+    /**
+     * Shows whether biometry is available.
+     */
+    available: false;
+  }
+    | {
     /**
      * Shows whether biometry is available.
      */
