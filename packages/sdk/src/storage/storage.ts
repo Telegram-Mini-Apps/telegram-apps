@@ -1,4 +1,5 @@
 import type { BackButtonState } from '@/components/back-button/types.js';
+import type { BiometryManagerState } from '@/components/biometry-manager/types.js';
 import type { ClosingBehaviorState } from '@/components/closing-behavior/types.js';
 import type { MainButtonState } from '@/components/main-button/types.js';
 import type { MiniAppState } from '@/components/mini-app/types.js';
@@ -11,6 +12,7 @@ import type { ViewportState } from '@/components/viewport/types.js';
  */
 export interface StorageParams {
   backButton: BackButtonState;
+  biometryManager: BiometryManagerState;
   closingBehavior: ClosingBehaviorState;
   launchParams: string;
   mainButton: MainButtonState;
