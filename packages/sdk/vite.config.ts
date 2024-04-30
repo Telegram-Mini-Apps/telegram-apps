@@ -1,4 +1,4 @@
-import { getConfig } from './utils.js';
+import { getConfig } from './build/getConfig';
 
 export default getConfig({
   input: 'src/index.ts',
