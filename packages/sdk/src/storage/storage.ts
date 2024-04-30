@@ -1,10 +1,7 @@
 import type { BackButtonState } from '@/components/back-button/types.js';
 import type { ClosingBehaviorState } from '@/components/closing-behavior/types.js';
-import type { InvoiceState } from '@/components/invoice/types.js';
 import type { MainButtonState } from '@/components/main-button/types.js';
 import type { MiniAppState } from '@/components/mini-app/types.js';
-import type { PopupState } from '@/components/popup/types.js';
-import type { QRScannerState } from '@/components/qr-scanner/types.js';
 import type { SettingsButtonState } from '@/components/settings-button/types.js';
 import type { ThemeParamsParsed } from '@/components/theme-params/types.js';
 import type { ViewportState } from '@/components/viewport/types.js';
@@ -15,12 +12,9 @@ import type { ViewportState } from '@/components/viewport/types.js';
 export interface StorageParams {
   backButton: BackButtonState;
   closingBehavior: ClosingBehaviorState;
-  invoice: InvoiceState;
   launchParams: string;
   mainButton: MainButtonState;
   miniApp: MiniAppState;
-  popup: PopupState;
-  qrScanner: QRScannerState;
   settingsButton: SettingsButtonState;
   themeParams: ThemeParamsParsed;
   viewport: ViewportState;
@@ -57,7 +51,7 @@ export function setStorageValue<K extends StorageKey>(key: K, value: StorageValu
  * Extracts value from the storage.
  * @param key - storage key.
  */
-export function getStorageValue<K extends StorageKey>(key: K): StorageValue<K> | null {
+export function getStorageValue<K extends StorageKey>(key: K): StorageValue<K> | undefined {
   const value = sessionStorage.getItem(formatKey(key));
-  return value ? JSON.parse(value) : null;
+  return value ? JSON.parse(value) : undefined;
 }
