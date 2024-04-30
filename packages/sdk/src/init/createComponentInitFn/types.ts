@@ -43,17 +43,15 @@ export interface FactoryDynamic<
 > extends Factory<LP, R, StorageValue<SK>> {
 }
 
-interface InitOptions<LP extends LaunchParamName, State> {
-  /**
-   * Options, applicable only to SSR mode.
-   */
-  ssr?: SSROptions<LP, State>;
-}
-
-export interface InitFn<LP extends LaunchParamName, Result, State> {
+export interface InitComponentFn<LP extends LaunchParamName, Result, State> {
   /**
    * Initializes new component instance.
    * @param options - initialization options.
    */
-  (options: InitOptions<LP, State>): Result;
+  (options: {
+    /**
+     * Options, applicable only to SSR mode.
+     */
+    ssr?: SSROptions<LP, State>;
+  }): Result;
 }

@@ -14,7 +14,7 @@ import type {
   FactoryDynamic,
   FactoryOptions,
   FactoryStatic,
-  InitFn, SSROptions,
+  InitComponentFn, SSROptions,
   WithOnChange,
 } from './types.js';
 
@@ -24,32 +24,32 @@ const [createReqId] = createSingleton(createRequestIdGenerator);
  * Creates new init function based only on common options.
  * @param factory - function creating new component instance.
  */
-export function createInitFn<R, LP extends LaunchParamName = never>(
+export function createComponentInitFn<R, LP extends LaunchParamName = never>(
   factory: FactoryStatic<LP, R>,
-): InitFn<LP, R, never>;
+): InitComponentFn<LP, R, never>;
 
 /**
  * Creates new init function based on common options and storage data.
  * @param factory - function creating new component instance.
  * @param storageKey - storage key to restore component from.
  */
-export function createInitFn<
+export function createComponentInitFn<
   SK extends StorageKey,
   R extends WithOnChange<StorageValue<SK>> | Promise<WithOnChange<StorageValue<SK>>>,
   LP extends LaunchParamName = never,
 >(
   storageKey: SK,
   factory: FactoryDynamic<LP, R, SK>,
-): InitFn<LP, R, StorageValue<SK>>;
+): InitComponentFn<LP, R, StorageValue<SK>>;
 
-export function createInitFn<
+export function createComponentInitFn<
   LP extends LaunchParamName,
   R extends WithOnChange<StorageValue<SK>> | Promise<WithOnChange<StorageValue<SK>>>,
   SK extends StorageKey,
 >(
   factoryOrStorageKey: FactoryStatic<LP, R> | SK,
   factoryWithState?: FactoryDynamic<LP, R, SK>,
-): InitFn<LP, R, StorageValue<SK>> {
+): InitComponentFn<LP, R, StorageValue<SK>> {
   return ({ ssr } = {}) => {
     let deps: SSROptions<LP, StorageValue<SK>> | LaunchParams;
 

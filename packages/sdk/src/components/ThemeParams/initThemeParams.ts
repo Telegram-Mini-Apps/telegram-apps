@@ -1,6 +1,6 @@
 import { ThemeParams } from '@/components/ThemeParams/ThemeParams.js';
-import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
 import { isSSR } from '@/env/isSSR.js';
+import { createComponentInitFn } from '@/init/createComponentInitFn/createComponentInitFn.js';
 
 /**
  * @returns A new initialized instance of the `ThemeParams` class.

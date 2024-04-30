@@ -1,10 +1,10 @@
-import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
 import { initViewportFromRequest } from '@/components/Viewport/initViewportFromRequest.js';
 import { logger } from '@/debug/debug.js';
 import { isSSR } from '@/env/isSSR.js';
 import { createError } from '@/errors/createError.js';
 import { ERROR_SSR_INIT } from '@/errors/errors.js';
-import type { FactoryOptions } from '@/components/utilities/createInitFn/types.js';
+import { createComponentInitFn } from '@/init/createComponentInitFn/createComponentInitFn.js';
+import type { FactoryOptions } from '@/init/createComponentInitFn/types.js';
 
 import { Viewport } from './Viewport.js';
 import type { ViewportState } from './types.js';

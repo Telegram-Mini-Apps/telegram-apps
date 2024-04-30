@@ -1,4 +1,4 @@
-import { createInitFn } from '@/components/utilities/createInitFn/createInitFn.js';
+import { createComponentInitFn } from '@/init/createComponentInitFn/createComponentInitFn.js';
 
 import { BackButton } from './BackButton.js';
 
