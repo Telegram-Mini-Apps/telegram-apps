@@ -48,6 +48,16 @@ export const ERROR_NAVIGATION_CURSOR_INVALID = 'ERROR_NAVIGATION_CURSOR_INVALID'
  */
 export const ERROR_NAVIGATION_ITEM_INVALID = 'ERROR_NAVIGATION_ITEM_INVALID';
 
+/**
+ * SSR component initialization failed.
+ */
+export const ERROR_SSR_INIT = 'ERROR_SSR_INIT';
+
+/**
+ * Server side called postEvent.
+ */
+export const ERROR_SSR_POST_EVENT = 'ERROR_SSR_POST_EVENT';
+
 export type ErrorType =
   | typeof ERROR_METHOD_UNSUPPORTED
   | typeof ERROR_METHOD_PARAMETER_UNSUPPORTED
@@ -58,4 +68,6 @@ export type ErrorType =
   | typeof ERROR_UNEXPECTED_TYPE
   | typeof ERROR_NAVIGATION_LIST_EMPTY
   | typeof ERROR_NAVIGATION_CURSOR_INVALID
-  | typeof ERROR_NAVIGATION_ITEM_INVALID;
+  | typeof ERROR_NAVIGATION_ITEM_INVALID
+  | typeof ERROR_SSR_INIT
+  | typeof ERROR_SSR_POST_EVENT;
