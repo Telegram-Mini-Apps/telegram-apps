@@ -33,7 +33,7 @@ export * from '@/colors/types.js';
  * Components.
  */
 
-// Back button.
+// BackButton.
 export { BackButton } from '@/components/back-button/BackButton.js';
 export { initBackButton } from '@/components/back-button/initBackButton.js';
 export { offBackButtonClick } from '@/components/back-button/offBackButtonClick.js';
@@ -45,7 +45,18 @@ export type {
   BackButtonEvents,
 } from '@/components/back-button/types.js';
 
-// Closing behavior
+// BiometryManager.
+export { BiometryManager } from '@/components/biometry-manager/BiometryManager.js';
+export { initBiometryManager } from '@/components/biometry-manager/initBiometryManager.js';
+export { requestBiometryInfo } from '@/components/biometry-manager/requestBiometryInfo.js';
+export type {
+  BiometryManagerAuthenticateOptions,
+  BiometryManagerProps,
+  BiometryManagerRequestAccessOptions,
+  BiometryManagerUpdateTokenOptions,
+} from '@/components/biometry-manager/types.js';
+
+// ClosingBehavior.
 export { ClosingBehavior } from '@/components/closing-behavior/ClosingBehavior.js';
 export { initClosingBehavior } from '@/components/closing-behavior/initClosingBehavior.js';
 export type {
@@ -54,7 +65,7 @@ export type {
   ClosingBehaviorEvents,
 } from '@/components/closing-behavior/types.js';
 
-// Cloud storage.
+// CloudStorage.
 export { CloudStorage } from '@/components/cloud-storage/CloudStorage.js';
 export { initCloudStorage } from '@/components/cloud-storage/initCloudStorage.js';
 
@@ -62,8 +73,9 @@ export { initCloudStorage } from '@/components/cloud-storage/initCloudStorage.js
 export { HapticFeedback } from '@/components/haptic-feedback/HapticFeedback.js';
 export { initHapticFeedback } from '@/components/haptic-feedback/initHapticFeedback.js';
 
-// Init data.
+// InitData.
 export { InitData } from '@/components/init-data/InitData.js';
+export { initInitData } from '@/components/init-data/initInitData.js';
 export { parseInitData } from '@/components/init-data/parseInitData.js';
 export * from '@/components/init-data/types.js';
 
@@ -76,7 +88,7 @@ export type {
   InvoiceEvents,
 } from '@/components/invoice/types.js';
 
-// Main button.
+// MainButton.
 export { initMainButton } from '@/components/main-button/initMainButton.js';
 export { MainButton } from '@/components/main-button/MainButton.js';
 export { offMainButtonClick } from '@/components/main-button/offMainButtonClick.js';
@@ -90,7 +102,7 @@ export type {
   MainButtonProps,
 } from '@/components/main-button/types.js';
 
-// Mini app.
+// MiniApp.
 export { bindMiniAppCSSVars } from '@/components/mini-app/bindMiniAppCSSVars.js';
 export { initMiniApp } from '@/components/mini-app/initMiniApp.js';
 export { MiniApp } from '@/components/mini-app/MiniApp.js';
@@ -114,7 +126,7 @@ export type {
   PopupEvents,
 } from '@/components/popup/types.js';
 
-// QR scanner.
+// QRScanner.
 export { initQRScanner } from '@/components/qr-scanner/initQRScanner.js';
 export { QRScanner } from '@/components/qr-scanner/QRScanner.js';
 export type {
@@ -123,7 +135,7 @@ export type {
   QRScannerEvents,
 } from '@/components/qr-scanner/types.js';
 
-// Settings button.
+// SettingsButton.
 export { initSettingsButton } from '@/components/settings-button/initSettingsButton.js';
 export { offSettingsButtonClick } from '@/components/settings-button/offSettingsButtonClick.js';
 export { onSettingsButtonClick } from '@/components/settings-button/onSettingsButtonClick.js';
@@ -135,7 +147,7 @@ export type {
   SettingsButtonEvents,
 } from '@/components/settings-button/types.js';
 
-// Theme params.
+// ThemeParams.
 export { bindThemeParamsCSSVars } from '@/components/theme-params/bindThemeParamsCSSVars.js';
 export { initThemeParams } from '@/components/theme-params/initThemeParams.js';
 export { parseThemeParams } from '@/components/theme-params/parsing/parseThemeParams.js';
