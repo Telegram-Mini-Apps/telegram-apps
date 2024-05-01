@@ -2,7 +2,8 @@ import { logger } from '@/debug/debug.js';
 
 import { retrieveFromLocation } from './retrieveFromLocation.js';
 import { retrieveFromPerformance } from './retrieveFromPerformance.js';
-import { retrieveFromStorage, saveToStorage } from './storage.js';
+import { retrieveFromStorage } from './retrieveFromStorage.js';
+import { saveToStorage } from './saveToStorage.js';
 import type { LaunchParams } from './types.js';
 
 /**
