@@ -11,7 +11,7 @@ interface CleanupFn {
  * @param acceptCustomStyles - true if SDK should accept styles sent from the Telegram web
  * application. This option is only used in web versions of Telegram. Default: false.
  */
-export function initWeb(acceptCustomStyles = false): CleanupFn {
+export function initWeb(acceptCustomStyles = true): CleanupFn {
   const listeners: CleanupFn[] = [
     on('reload_iframe', () => {
       postEvent('iframe_will_reload');
