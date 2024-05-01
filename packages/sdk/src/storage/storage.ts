@@ -37,7 +37,7 @@ export type StorageValue<K extends StorageKey> = StorageParams[K];
  * @param key - storage key.
  */
 function formatKey(key: StorageKey): string {
-  return `@tma.js/${key.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`)}`;
+  return `tma.js/${key.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`)}`;
 }
 
 /**
@@ -55,5 +55,7 @@ export function setStorageValue<K extends StorageKey>(key: K, value: StorageValu
  */
 export function getStorageValue<K extends StorageKey>(key: K): StorageValue<K> | undefined {
   const value = sessionStorage.getItem(formatKey(key));
-  return value ? JSON.parse(value) : undefined;
+  try {
+    return value ? JSON.parse(value) : undefined;
+  } catch { /* empty */ }
 }
