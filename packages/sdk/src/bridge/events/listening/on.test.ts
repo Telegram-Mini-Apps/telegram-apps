@@ -35,6 +35,22 @@ it('should call listener in case, Telegram event was created', () => {
   expect(listener).toHaveBeenCalledWith(eventData);
 });
 
+it('should remove listener after being called if "once" option was passed', () => {
+  const listener = vi.fn();
+  on('viewport_changed', listener, true);
+
+  const eventData = {
+    height: 123,
+    width: 321,
+    is_expanded: false,
+    is_state_stable: false,
+  };
+  dispatchWindowMessageEvent('viewport_changed', eventData);
+  dispatchWindowMessageEvent('viewport_changed', eventData);
+
+  expect(listener).toHaveBeenCalledTimes(1);
+})
+
 it('should remove listener in case, returned callback was called', () => {
   const listener = vi.fn();
   const emit = () => dispatchWindowMessageEvent('viewport_changed', {
