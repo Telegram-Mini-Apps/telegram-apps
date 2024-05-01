@@ -31,7 +31,7 @@ export function getConfig({ filename, input, formats, declarations }: Options): 
       },
       build: {
         outDir: 'dist',
-        emptyOutDir: true,
+        emptyOutDir: false,
         lib: {
           name: 'tmajs.sdk',
           entry: input,
