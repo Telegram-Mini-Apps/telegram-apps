@@ -194,6 +194,7 @@ export { setDebug } from '@/debug/debug.js';
 /**
  * Env.
  */
+export { initWeb } from '@/env/initWeb.js';
 export { isIframe } from '@/env/isIframe.js';
 export { isTMA } from '@/env/isTMA.js';
 
@@ -211,11 +212,6 @@ export { SDKError } from '@/errors/SDKError.js';
 export { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
 export * from '@/events/event-emitter/types.js';
 export * from '@/events/types.js';
-
-/**
- * Init.
- */
-export { initWeb } from '@/env/initWeb.js';
 
 /**
  * Launch params.
