@@ -34,7 +34,7 @@ export { SDKError } from '@/errors/SDKError.js';
 /**
  * Init.
  */
-export { init } from '@/init/init.js';
+export { initWeb } from '@/env/initWeb.js';
 
 /**
  * Launch params.

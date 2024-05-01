@@ -215,7 +215,7 @@ export * from '@/events/types.js';
 /**
  * Init.
  */
-export { init, type InitOptions } from '@/init/init.js';
+export { initWeb } from '@/env/initWeb.js';
 
 /**
  * Launch params.
