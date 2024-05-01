@@ -1,9 +1,7 @@
 import { subscribe } from '@/bridge/events/listening/subscribe.js';
 import { unsubscribe } from '@/bridge/events/listening/unsubscribe.js';
 import { Logger } from '@/logger/Logger.js';
-import type {
-  MiniAppsEventEmitterSubscribeListener,
-} from '@/bridge/events/event-emitter/createMiniAppsEventEmitter.js';
+import type { MiniAppsSubscribeListener } from '@/bridge/events/types.js';
 
 export const logger = new Logger('SDK', {
   bgColor: 'forestgreen',
@@ -12,7 +10,7 @@ export const logger = new Logger('SDK', {
 
 let debugEnabled = false;
 
-const onEvent: MiniAppsEventEmitterSubscribeListener = ({ event: name, args: [data] }) => {
+const onEvent: MiniAppsSubscribeListener = ({ event: name, args: [data] }) => {
   logger.log('Event received:', data === undefined ? { name } : { name, data });
 };
 

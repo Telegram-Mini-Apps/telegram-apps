@@ -1,5 +1,5 @@
 import { withTimeout } from '@/timeout/withTimeout.js';
-import type { ExecuteWithOptions, If, IsUndefined } from '@/types/index.js';
+import type { ExecuteWithOptions, If, IsNever } from '@/types/index.js';
 
 import { on } from '../events/listening/on.js';
 import { postEvent as defaultPostEvent } from '../methods/postEvent.js';
@@ -25,7 +25,7 @@ interface BasicOptions<Method extends MiniAppsMethodName, Event extends MiniApps
    * request will be captured automatically.
    */
   capture?: If<
-    IsUndefined<MiniAppsEventListener<Event>>,
+    IsNever<MiniAppsEventListener<Event>>,
     () => boolean,
     (payload: MiniAppsEventPayload<Event>) => boolean
   >;
@@ -36,7 +36,7 @@ interface BasicOptions<Method extends MiniAppsMethodName, Event extends MiniApps
  */
 export type RequestOptions<Method extends MiniAppsMethodName, Event extends MiniAppsEventName> =
   & BasicOptions<Method, Event>
-  & If<IsUndefined<MiniAppsMethodParams<Method>>, {}, {
+  & If<IsNever<MiniAppsMethodParams<Method>>, {}, {
   /**
    * List of method parameters.
    */
@@ -65,8 +65,7 @@ export async function request<Method extends MiniAppsMethodName, Event extends M
   } = options;
 
   const stoppers = (Array.isArray(event) ? event : [event]).map(
-    (ev) => on(ev, (payload?) => {
-      console.log('Received', ev, payload);
+    (ev) => on(ev, (payload: any) => {
       return (!capture || capture(payload)) && resolve(payload);
     }),
   );

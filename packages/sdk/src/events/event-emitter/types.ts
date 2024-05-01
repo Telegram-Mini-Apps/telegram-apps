@@ -17,13 +17,11 @@ export type EventParams<Params> = Params extends any[]
   ? Params
   : Params extends (...args: any) => any
     ? Parameters<Params>
-    : Params extends undefined
-      ? []
-      : If<
-        Or<IsNever<Params>, IsUndefined<Params>>,
-        [],
-        Params extends void ? [] : [Params]
-      >;
+    : If<
+      Or<IsNever<Params>, IsUndefined<Params>>,
+      [],
+      Params extends void ? [] : [Params]
+    >;
 
 /**
  * Returns function that represents event listener with specified
