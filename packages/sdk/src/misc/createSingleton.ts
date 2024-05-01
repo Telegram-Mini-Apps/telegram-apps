@@ -4,7 +4,7 @@
  * @param onReset - function which will be called in case, singleton was reset.
  */
 export function createSingleton<T>(
-  create: () => T,
+  create: (reset: () => void) => T,
   onReset?: (entity: T) => void,
 ): [
   /**
@@ -17,12 +17,10 @@ export function createSingleton<T>(
   reset: () => void,
 ] {
   let cached: T | undefined;
+  const reset = () => {
+    cached !== undefined && onReset && onReset(cached);
+    cached = undefined;
+  };
 
-  return [
-    () => (cached === undefined ? cached = create() : cached),
-    () => {
-      cached !== undefined && onReset && onReset(cached);
-      cached = undefined;
-    },
-  ];
+  return [() => (cached === undefined ? cached = create(reset) : cached), reset];
 }
