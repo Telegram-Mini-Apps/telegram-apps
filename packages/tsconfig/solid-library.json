@@ -3,6 +3,10 @@
   "display": "Solid JS Library",
   "extends": "./base.json",
   "compilerOptions": {
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js"
