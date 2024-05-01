@@ -13,22 +13,10 @@ const [get, resetMiniAppsEventEmitter] = createSingleton(
       const { count } = emitter;
       off(event, listener);
 
-      // If event emitter now has no listeners, we can make a cleanup.
+      // If event emitter now has no listeners, we can perform a reset.
       if (count && !emitter.count) {
         reset();
       }
-    };
-
-    // Rewire "on" method to make it call "off" method if listener had to be called only once.
-    const on = emitter.on.bind(emitter);
-    emitter.on = (event, listener, once) => {
-      return on(event, function wired(...args) {
-        listener(...args);
-
-        if (once) {
-          emitter.off(event, wired);
-        }
-      });
     };
 
     return [emitter, cleanup] as const;

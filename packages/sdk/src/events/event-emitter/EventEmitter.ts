@@ -54,10 +54,10 @@ export class EventEmitter<Schema> {
 
     const listeners = this.listeners.get(event) || [];
 
-    listeners.forEach(([listener, once], idx) => {
+    listeners.forEach(([listener, once]) => {
       listener(...args);
       if (once) {
-        listeners.splice(idx, 1);
+        this.off(event, listener);
       }
     });
   }
