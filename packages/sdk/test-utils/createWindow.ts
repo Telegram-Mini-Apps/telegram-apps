@@ -1,12 +1,9 @@
 import { type SpyInstance, vi } from 'vitest';
+import { mockWindow, type Wnd } from 'test-utils';
 
 import { createDomEmitter } from './createDomEmitter.js';
 
-interface CreateWindowOptions {
-  innerWidth?: number;
-  innerHeight?: number;
-  env?: 'iframe';
-}
+type CreateWindowOptions = Partial<Wnd & { env: 'iframe' }>;
 
 export type WindowSpy = SpyInstance<[], Window & typeof globalThis>;
 
@@ -14,22 +11,14 @@ export type WindowSpy = SpyInstance<[], Window & typeof globalThis>;
  * Mocks window and returns created spy.
  * @param options - additional options.
  */
-export function createWindow(options: CreateWindowOptions = {}): WindowSpy {
-  const { innerWidth, innerHeight, env } = options;
-  const postMessageSpy = vi.fn();
-  const wnd = {
-    innerHeight,
-    innerWidth,
+export function createWindow({ env, ...rest }: CreateWindowOptions = {}): WindowSpy {
+  return mockWindow({
     // We need this property to correctly re-emit received event from Telegram.
-    parent: { postMessage: postMessageSpy },
+    parent: { postMessage: vi.fn() },
     ...createDomEmitter(),
-    ...(env === 'iframe' ? {
-      top: 1,
-      self: 2,
-    } : {}),
-  };
-
-  return vi.spyOn(window, 'window', 'get').mockImplementation(() => wnd as any);
+    ...(env === 'iframe' ? { top: 1, self: 2 } : {}),
+    ...rest,
+  } as Wnd);
 }
 
 // export function mockWindow(
