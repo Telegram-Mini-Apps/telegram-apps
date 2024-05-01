@@ -48,7 +48,7 @@ export interface InitComponentFn<LP extends LaunchParamName, Result, State> {
    * Initializes new component instance.
    * @param options - initialization options.
    */
-  (options: {
+  (options?: {
     /**
      * Options, applicable only to SSR mode.
      */
