@@ -36,9 +36,9 @@ export class MiniApp extends WithStateAndSupports<
 
   private readonly createRequestId: CreateRequestIdFn;
 
-  private requestingPhoneAccess = false;
+  private requestPhoneAccessPromise: Promise<PhoneRequestedStatus> | undefined;
 
-  private requestingWriteAccess = false;
+  private requestWriteAccessPromise: Promise<WriteAccessRequestedStatus> | undefined;
 
   constructor({ postEvent, createRequestId, version, botInline, ...rest }: MiniAppProps) {
     super(rest, version, {
@@ -73,9 +73,9 @@ export class MiniApp extends WithStateAndSupports<
    * Attempts to get requested contact.
    * @param timeout - request timeout.
    */
-  private async getRequestedContact(
-    { timeout = 10000 }: ExecuteWithTimeout = {},
-  ): Promise<RequestedContact> {
+  private async getRequestedContact({
+    timeout = 10000,
+  }: ExecuteWithTimeout = {}): Promise<RequestedContact> {
     return contact().parse(
       await invokeCustomMethod(
         'getRequestedContact',
@@ -88,6 +88,7 @@ export class MiniApp extends WithStateAndSupports<
 
   /**
    * The Mini App background color.
+   * @example "#ffaabb"
    */
   get bgColor(): RGB {
     return this.get('bgColor');
@@ -101,38 +102,26 @@ export class MiniApp extends WithStateAndSupports<
   }
 
   /**
-   * The Mini App header color. Could either be a header color key or RGB color.
+   * The Mini App header color.
+   * @example "#ffaabb"
+   * @example "bg_color"
    */
   get headerColor(): MiniAppHeaderColor {
     return this.get('headerColor');
   }
 
   /**
-   * True if Mini App is currently launched in bot inline mode.
+   * True if the Mini App is currently launched in bot inline mode.
    */
   get isBotInline(): boolean {
     return this.botInline;
   }
 
   /**
-   * True if current Mini App background color recognized as dark.
+   * True if current Mini App background color is recognized as dark.
    */
   get isDark(): boolean {
     return isColorDark(this.bgColor);
-  }
-
-  /**
-   * True if phone access is currently being requested.
-   */
-  get isRequestingPhoneAccess(): boolean {
-    return this.requestingPhoneAccess;
-  }
-
-  /**
-   * True if write access is currently being requested.
-   */
-  get isRequestingWriteAccess(): boolean {
-    return this.requestingWriteAccess;
   }
 
   /**
@@ -159,7 +148,7 @@ export class MiniApp extends WithStateAndSupports<
     // it before.
     try {
       return await this.getRequestedContact();
-    } catch (e) { /* empty */
+    } catch { /* empty */
     }
 
     // Then, request access to user's phone.
@@ -198,27 +187,22 @@ export class MiniApp extends WithStateAndSupports<
    * status of the request. In case, user accepted the request, Mini App bot will receive
    * the according notification.
    *
-   * To obtain the retrieved information instead, utilize the requestContact method.
+   * To obtain the retrieved information instead, utilize the `requestContact` method.
    * @param options - additional options.
    * @see requestContact
    */
   async requestPhoneAccess(options: ExecuteWithTimeout = {}): Promise<PhoneRequestedStatus> {
-    if (this.requestingPhoneAccess) {
-      throw new Error('Phone access is already being requested.');
-    }
-    this.requestingPhoneAccess = true;
-
-    try {
-      const { status } = await request({
+    if (!this.requestPhoneAccessPromise) {
+      this.requestPhoneAccessPromise = request({
         ...options,
         method: 'web_app_request_phone',
         event: 'phone_requested',
         postEvent: this.postEvent,
-      });
-      return status;
-    } finally {
-      this.requestingPhoneAccess = false;
+      })
+        .then(({ status }) => status)
+        .finally(() => this.requestPhoneAccessPromise = undefined);
     }
+    return this.requestPhoneAccessPromise;
   }
 
   /**
@@ -226,22 +210,17 @@ export class MiniApp extends WithStateAndSupports<
    * @param options - additional options.
    */
   async requestWriteAccess(options: ExecuteWithTimeout = {}): Promise<WriteAccessRequestedStatus> {
-    if (this.requestingWriteAccess) {
-      throw new Error('Write access is already being requested.');
-    }
-    this.requestingWriteAccess = true;
-
-    try {
-      const { status } = await request({
+    if (!this.requestWriteAccessPromise) {
+      this.requestWriteAccessPromise = request({
         ...options,
         method: 'web_app_request_write_access',
         event: 'write_access_requested',
         postEvent: this.postEvent,
-      });
-      return status;
-    } finally {
-      this.requestingWriteAccess = false;
+      })
+        .then(({ status }) => status)
+        .finally(() => this.requestWriteAccessPromise = undefined);
     }
+    return this.requestWriteAccessPromise;
   }
 
   /**
