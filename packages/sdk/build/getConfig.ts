@@ -17,9 +17,11 @@ interface Options {
 }
 
 export function getConfig({ filename, input, formats, declarations }: Options): UserConfigFn {
-  return defineConfig(() => {
+  return defineConfig((config) => {
     const dir = dirname(fileURLToPath(import.meta.url));
-    const tsconfigPath = resolve(dir, '../tsconfig.build.json');
+    const tsconfigPath = config.mode === 'test'
+      ? resolve(dir, '../tsconfig.json')
+      : resolve(dir, '../tsconfig.build.json');
 
     return {
       plugins: [
@@ -28,7 +30,7 @@ export function getConfig({ filename, input, formats, declarations }: Options): 
       ],
       resolve: {
         alias: {
-          '@': resolve(dir, '../src'),
+          '@/': resolve(dir, '../src/'),
         },
       },
       build: {
@@ -60,12 +62,11 @@ export function getConfig({ filename, input, formats, declarations }: Options): 
           exclude: [
             prefix('**/index.ts'),
             prefix('**/__tests__'),
-            prefix('bridge/invokeCustomMethod.ts'),
-            prefix('bridge/events/onTelegramEvent.ts'),
-            prefix('components/back-button/BackButton.ts'),
-            prefix('components/closing-behavior/ClosingBehavior.ts'),
-            prefix('components/init-data/InitData.ts'),
-            prefix('components/popup/preparePopupParams.ts'),
+            prefix('bridge/methods/invokeCustomMethod.ts'),
+            prefix('components/BackButton'),
+            prefix('components/ClosingBehavior/ClosingBehavior.ts'),
+            prefix('components/InitData/InitData.ts'),
+            prefix('components/Popup/preparePopupParams.ts'),
             prefix('components/main-button/MainButton.ts'),
             prefix('components/mini-app/MiniApp.ts'),
             prefix('components/theme-params/ThemeParams.ts'),
