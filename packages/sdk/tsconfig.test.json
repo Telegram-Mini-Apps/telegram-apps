@@ -1,6 +1,7 @@
 {
-  "extends": "./tsconfig.build.json",
+  "extends": "tsconfig/esnext-dom.json",
   "compilerOptions": {
+    "composite": true,
     "paths": {
       "@/*": [
         "./src/*"
@@ -11,7 +12,6 @@
     }
   },
   "include": [
-    "**/__tests__",
     "**/**.test.*"
   ],
   "exclude": []

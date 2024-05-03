@@ -4,25 +4,25 @@ import { fileURLToPath } from 'node:url';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
 
-interface Options {
+export function getConfig({
+  filename = 'index',
+  input,
+  formats,
+  declarations = false,
+}: {
   input: string;
-  filename: string;
+  filename?: string;
   formats: LibraryFormats[];
-  declarations: boolean;
-}
-
-export function getConfig({ filename, input, formats, declarations }: Options): UserConfigFn {
-  return defineConfig((config) => {
+  declarations?: boolean;
+}): UserConfigFn {
+  return defineConfig(() => {
     const dir = dirname(fileURLToPath(import.meta.url));
-    const test = config.mode === 'test';
-    const tsconfigPath = test
-      ? resolve(dir, '../tsconfig.json')
-      : resolve(dir, '../tsconfig.build.json');
+    // const tsconfigPath = resolve(dir, '../tsconfig.json')
 
     return {
       plugins: [
-        tsconfigPaths({ projects: [tsconfigPath] }),
-        declarations && dts({ outDir: 'dist/dts', tsconfigPath }),
+        tsconfigPaths(),
+        declarations && dts({ outDir: 'dist/dts' }),
       ],
       resolve: {
         alias: {
@@ -32,6 +32,7 @@ export function getConfig({ filename, input, formats, declarations }: Options): 
       build: {
         outDir: 'dist',
         emptyOutDir: false,
+        sourcemap: true,
         lib: {
           name: 'tmajs.sdk',
           entry: input,
