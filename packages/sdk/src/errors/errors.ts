@@ -36,7 +36,7 @@ export const ERROR_PARSE = 'ERROR_PARSE';
 /**
  * Navigation entries list is empty.
  */
-export const ERROR_NAVIGATION_LIST_EMPTY = 'ERROR_NAVIGATION_LIST_EMPTY';
+export const ERROR_NAVIGATION_HISTORY_EMPTY = 'ERROR_NAVIGATION_LIST_EMPTY';
 
 /**
  * Navigation entries cursor is invalid.
@@ -66,7 +66,7 @@ export type ErrorType =
   | typeof ERROR_TIMED_OUT
   | typeof ERROR_PARSE
   | typeof ERROR_UNEXPECTED_TYPE
-  | typeof ERROR_NAVIGATION_LIST_EMPTY
+  | typeof ERROR_NAVIGATION_HISTORY_EMPTY
   | typeof ERROR_NAVIGATION_CURSOR_INVALID
   | typeof ERROR_NAVIGATION_ITEM_INVALID
   | typeof ERROR_SSR_INIT
