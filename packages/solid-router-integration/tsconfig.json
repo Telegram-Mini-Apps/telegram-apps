@@ -1,9 +1,5 @@
 {
   "extends": "tsconfig/esnext-dom.json",
-  "compilerOptions": {
-    "module": "esnext",
-    "moduleResolution": "bundler"
-  },
   "include": [
     "src"
   ],
