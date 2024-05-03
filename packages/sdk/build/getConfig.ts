@@ -1,6 +1,8 @@
 import { defineConfig, UserConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { LibraryFormats } from 'vite';
 
 export function getConfig({
@@ -19,6 +21,11 @@ export function getConfig({
       tsconfigPaths(),
       declarations && dts({ outDir: 'dist/dts' }),
     ],
+    resolve: {
+      alias: {
+        '@': resolve(dirname(fileURLToPath(import.meta.url)), '../src'),
+      },
+    },
     build: {
       outDir: 'dist',
       emptyOutDir: false,
