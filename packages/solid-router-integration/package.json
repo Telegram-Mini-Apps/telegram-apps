@@ -49,8 +49,7 @@
   },
   "devDependencies": {
     "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*",
-    "build-utils": "workspace:*"
+    "tsconfig": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

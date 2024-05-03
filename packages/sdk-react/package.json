@@ -54,7 +54,6 @@
     }
   },
   "devDependencies": {
-    "build-utils": "workspace:*",
     "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*"
   },
