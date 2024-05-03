@@ -1,4 +1,4 @@
-import { go } from './go.js';
+import { go } from '@/navigation/utils/go.js';
 
 /**
  * Drops current browser history switching browser history cursor to the first one entry.

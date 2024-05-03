@@ -224,15 +224,28 @@ export * from '@/launch-params/types.js';
 /**
  * Navigation.
  */
-export { BasicNavigator } from '@/navigation/navigators/BasicNavigator/BasicNavigator.js';
-export * from '@/navigation/navigators/BasicNavigator/types.js';
-export { BrowserNavigator } from '@/navigation/navigators/BrowserNavigator/BrowserNavigator.js';
-export * from '@/navigation/navigators/BrowserNavigator/types.js';
+export { BasicNavigator } from '@/navigation/BasicNavigator/BasicNavigator.js';
+export type {
+  BasicNavigatorAnyHistoryItem,
+  BasicNavigatorEvents,
+  BasicNavigatorHistoryItem,
+} from '@/navigation/BasicNavigator/types.js';
+export { BrowserNavigator } from '@/navigation/BrowserNavigator/BrowserNavigator.js';
+export type {
+  BrowserNavigatorAnyHistoryItem,
+  BrowserNavigatorEvents,
+  BrowserNavigatorHashMode,
+  BrowserNavigatorHistoryItem,
+} from '@/navigation/BrowserNavigator/types.js';
 export {
   createBrowserNavigatorFromLocation,
-} from '@/navigation/navigators/BrowserNavigator/utils/createBrowserNavigatorFromLocation.js';
+} from '@/navigation/BrowserNavigator/utils/createBrowserNavigatorFromLocation.js';
+export { createSafeURL } from '@/navigation/utils/createSafeURL.js';
+export { ensurePrefix } from '@/navigation/utils/ensurePrefix.js';
+export { getFirstNavigationEntry } from '@/navigation/utils/getFirstNavigationEntry.js';
 export { getHash } from '@/navigation/utils/getHash.js';
 export { isPageReload } from '@/navigation/utils/isPageReload.js';
+export { urlToPath } from '@/navigation/utils/urlToPath.js';
 
 /**
  * Parsing.
@@ -264,8 +277,7 @@ export { withTimeout } from '@/timeout/withTimeout.js';
 /**
  * Types.
  */
-export * from '@/types/methods.js';
-export * from '@/types/platform.js';
+export * from '@/types/index.js';
 
 /**
  * Version.

@@ -1,5 +1,5 @@
-import { BrowserNavigator } from '../BrowserNavigator.js';
-import type { BrowserNavigatorHashMode } from '../types.js';
+import { BrowserNavigator } from '@/navigation/BrowserNavigator/BrowserNavigator.js';
+import type { BrowserNavigatorHashMode } from '@/navigation/BrowserNavigator/types.js';
 
 /**
  * Creates a new `BrowserNavigator` from the window.location.
