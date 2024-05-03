@@ -1,22 +1,13 @@
 {
-  "extends": "tsconfig/esnext-dom.json",
-  "compilerOptions": {
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    }
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": ["**/*.test.ts"],
   "references": [
     {
       "path": "./tsconfig.node.json"
     },
     {
       "path": "./tsconfig.test.json"
+    },
+    {
+      "path": "./tsconfig.build.json"
     }
   ]
 }
