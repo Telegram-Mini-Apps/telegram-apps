@@ -1,25 +1,20 @@
 import solidPlugin from 'vite-plugin-solid';
 import dts from 'vite-plugin-dts';
-
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
   return {
     plugins: [
-      // Creates typescript declarations.
-      // https://www.npmjs.com/package/vite-plugin-dts
-      dts({ outDir: 'dist/dts', tsconfigPath: './tsconfig.build.json' }),
+      dts({ outDir: 'dist/dts' }),
       solidPlugin(),
     ],
     build: {
       outDir: 'dist',
       emptyOutDir: true,
-
+      sourcemap: true,
       rollupOptions: {
-        input: 'src/index.ts',
         external: ['solid-js']
       },
-
       lib: {
         entry: 'src/index.ts',
         formats: ['es', 'cjs'],
