@@ -83,12 +83,12 @@ importers:
       '@solidjs/router':
         specifier: ^0.13.1
         version: 0.13.2(solid-js@1.8.17)
-      '@tma.js/sdk':
-        specifier: workspace:*
-        version: link:../../packages/sdk
       '@tma.js/sdk-solid':
         specifier: workspace:*
         version: link:../../packages/sdk-solid
+      '@tma.js/solid-router-integration':
+        specifier: workspace:*
+        version: link:../../packages/solid-router-integration
       '@tonconnect/ui':
         specifier: ^2.0.0
         version: 2.0.2
@@ -283,17 +283,19 @@ importers:
         version: link:../tsconfig
 
   packages/solid-router-integration:
-    dependencies:
-      '@solidjs/router':
-        specifier: ^0.x
-        version: 0.8.3(solid-js@1.8.17)
-      '@tma.js/sdk':
-        specifier: workspace:*
-        version: link:../sdk
     devDependencies:
+      '@solidjs/router':
+        specifier: ^0.13.1
+        version: 0.13.2(solid-js@1.8.17)
+      '@tma.js/sdk-solid':
+        specifier: workspace:*
+        version: link:../sdk-solid
       eslint-config-custom:
         specifier: workspace:*
         version: link:../eslint-config-custom
+      solid-js:
+        specifier: ^1.8.16
+        version: 1.8.17
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -1421,11 +1423,6 @@ packages:
     resolution: {integrity: sha512-zPlQUXaaUMFzz70SNN8scITooBaJyvIJci3ilyHUBXr9+mzEJGCUSohRJx/VXKo9+p+HEBHY48GnChiPYfLsjg==}
     peerDependencies:
       solid-js: ^1.8.6
-
-  '@solidjs/router@0.8.3':
-    resolution: {integrity: sha512-oJuqQo10rVTiQYhe1qXIG1NyZIZ2YOwHnlLc8Xx+g/iJhFCJo1saLOIrD/Dkh2fpIaIny5ZMkz1cYYqoTYGJbg==}
-    peerDependencies:
-      solid-js: ^1.5.3
 
   '@tonconnect/isomorphic-eventsource@0.0.2':
     resolution: {integrity: sha512-B4UoIjPi0QkvIzZH5fV3BQLWrqSYABdrzZQSI9sJA9aA+iC0ohOzFwVVGXanlxeDAy1bcvPbb29f6sVUk0UnnQ==}
@@ -6282,10 +6279,6 @@ snapshots:
       solid-js: 1.8.17
 
   '@solidjs/router@0.13.2(solid-js@1.8.17)':
-    dependencies:
-      solid-js: 1.8.17
-
-  '@solidjs/router@0.8.3(solid-js@1.8.17)':
     dependencies:
       solid-js: 1.8.17
 
