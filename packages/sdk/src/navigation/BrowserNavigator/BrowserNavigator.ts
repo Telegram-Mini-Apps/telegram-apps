@@ -332,17 +332,30 @@ export class BrowserNavigator<State = {}> {
    */
   push(path: string, state?: State): void;
   push(historyItem: BrowserNavigatorAnyHistoryItem<State>): void;
-  push(historyItemOrPath: string | BrowserNavigatorAnyHistoryItem<State>, state?: State): void {
-    this.navigator.push(this.formatHistoryItem(historyItemOrPath as string, state));
+  push(
+    historyItemOrPath: string | BrowserNavigatorAnyHistoryItem<State>,
+    fnState?: State,
+  ): void {
+    const hi = this.formatHistoryItem(historyItemOrPath);
+    const { state = fnState } = hi.params;
+    this.navigator.push({ ...hi, params: { ...hi.params, state } });
   }
 
   /**
-   * Replaces current entry. Has the same logic as `push` method.
-   * @param entry - entry data.
+   * Replaces current entry. Has the same logic as the `push` method.
+   * @param path - entry path.
+   * @param state - entry state.
    * @see push
    */
-  replace(entry: BrowserNavigatorAnyHistoryItem<State>): void {
-    this.navigator.replace(this.formatHistoryItem(entry));
+  replace(path: string, state?: State): void;
+  replace(historyItem: BrowserNavigatorAnyHistoryItem<State>): void;
+  replace(
+    historyItemOrPath: string | BrowserNavigatorAnyHistoryItem<State>,
+    fnState?: State,
+  ): void {
+    const hi = this.formatHistoryItem(historyItemOrPath);
+    const { state = fnState } = hi.params;
+    this.navigator.replace({ ...hi, params: { ...hi.params, state } });
   }
 
   /**
