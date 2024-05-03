@@ -1,7 +1,6 @@
 {
   "extends": "tsconfig/solid-library.json",
   "include": [
-    "vite.config.ts",
-    "package.json"
+    "src"
   ]
 }

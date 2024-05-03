@@ -1,11 +1,11 @@
 {
-  "extends": "tsconfig/solid-library.json",
-  "include": [
-    "src"
-  ],
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "composite": true
+  },
   "references": [
     {
       "path": "./tsconfig.node.json"
-    }
+    },
   ]
 }
