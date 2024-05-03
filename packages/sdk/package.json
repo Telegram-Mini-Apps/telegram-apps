@@ -24,7 +24,6 @@
     "dist"
   ],
   "main": "./dist/index.cjs",
-  "browser": "./dist/index.iife.js",
   "module": "./dist/index.mjs",
   "types": "./dist/dts/index.d.ts",
   "exports": {
