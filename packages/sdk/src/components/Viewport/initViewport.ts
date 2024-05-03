@@ -25,7 +25,7 @@ function instantiate({
     height = state.height;
     width = state.width;
     stableHeight = state.stableHeight;
-  } else if (['macos', 'tdesktop', 'unigram', 'webk', 'weba'].includes(platform)) {
+  } else if (['macos', 'tdesktop', 'unigram', 'webk', 'weba', 'web'].includes(platform)) {
     // If platform has a stable viewport, it means we could instantiate Viewport using
     // the window global object properties.
     isExpanded = true;
