@@ -1,8 +1,7 @@
-import { defineConfig, LibraryFormats, UserConfigFn } from 'vite';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { defineConfig, UserConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
+import type { LibraryFormats } from 'vite';
 
 export function getConfig({
   filename = 'index',
@@ -14,56 +13,35 @@ export function getConfig({
   filename?: string;
   formats: LibraryFormats[];
   declarations?: boolean;
-}): UserConfigFn {
-  return defineConfig(() => {
-    const dir = dirname(fileURLToPath(import.meta.url));
-    // const tsconfigPath = resolve(dir, '../tsconfig.json')
-
-    return {
-      plugins: [
-        tsconfigPaths(),
-        declarations && dts({ outDir: 'dist/dts' }),
-      ],
-      resolve: {
-        alias: {
-          '@/': resolve(dir, '../src/'),
-        },
+}): UserConfig {
+  return defineConfig({
+    plugins: [
+      tsconfigPaths(),
+      declarations && dts({ outDir: 'dist/dts' }),
+    ],
+    build: {
+      outDir: 'dist',
+      emptyOutDir: false,
+      sourcemap: true,
+      lib: {
+        name: 'tmajs.sdk',
+        entry: input,
+        formats,
+        fileName: filename,
       },
-      build: {
-        outDir: 'dist',
-        emptyOutDir: false,
-        sourcemap: true,
-        lib: {
-          name: 'tmajs.sdk',
-          entry: input,
-          formats,
-          fileName(format) {
-            switch (format) {
-              case 'cjs':
-                return `${filename}.cjs`;
-              case 'es':
-                return `${filename}.mjs`;
-              case 'iife':
-                return `${filename}.iife.js`;
-              default:
-                return filename;
-            }
-          },
-        },
+    },
+    test: {
+      environment: 'happy-dom',
+      coverage: {
+        enabled: true,
+        provider: 'v8',
+        include: ['src/**/*.ts'],
+        exclude: ['src/**/*.test.ts'],
+        branches: 80,
+        functions: 80,
+        statements: 80,
+        lines: 80,
       },
-      test: {
-        environment: 'happy-dom',
-        coverage: {
-          enabled: true,
-          provider: 'v8',
-          include: ['src/**/*.ts'],
-          exclude: ['src/**/*.test.ts'],
-          branches: 80,
-          functions: 80,
-          statements: 80,
-          lines: 80,
-        },
-      },
-    };
+    },
   });
 }
