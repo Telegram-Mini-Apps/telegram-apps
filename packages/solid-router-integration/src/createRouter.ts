@@ -1,56 +1,61 @@
-import {
-  BrowserNavigator,
-  type BrowserNavigatorHashMode,
-  createBrowserNavigatorFromLocation,
-  isPageReload,
-} from '@tma.js/sdk-solid';
+import { type BaseRouterProps, createRouter as createSolidRouter } from '@solidjs/router';
+import { type BrowserNavigator, getHash, urlToPath } from '@tma.js/sdk-solid';
+import type { Component } from 'solid-js';
 
-function instantiate<State>(
-  sessionStorageKey: string,
-  hashMode?: BrowserNavigatorHashMode,
-): BrowserNavigator<State> {
-  // If page was reloaded, we assume that navigator had to previously save
-  // its state in the session storage.
-  if (isPageReload()) {
-    const stateRaw = sessionStorage.getItem(sessionStorageKey);
-    if (stateRaw) {
-      try {
-        const { cursor, entries } = JSON.parse(stateRaw);
-        return new BrowserNavigator<State>(entries, cursor, hashMode);
-      } catch (e) {
-        console.error('Unable to restore hash navigator state.', e);
-      }
-    }
+/**
+ * Guard against selector being an invalid CSS selector.
+ * @param selector - CSS selector.
+ */
+function querySelector<T extends Element>(selector: string) {
+  try {
+    return document.querySelector<T>(selector);
+  } catch (e) {
+    return null;
   }
-
-  // In case, we could not restore its state, or it is the fresh start, we
-  // can create an empty navigator.
-  return window.location.hash.includes('?')
-    ? createBrowserNavigatorFromLocation<State>(hashMode)
-    : new BrowserNavigator(['/'], 0, hashMode);
 }
 
 /**
- * Creates Mini Apps navigator.
- * @param hashMode - navigator hash mode. Omit, if non-hash navigation is required.
- * @param sessionStorageKey - session storage key, containing this navigator state.
+ * Scrolls to specified hash.
+ * @param hash - hash to scroll to.
+ * @param fallbackTop - should scroll be performed to the beginning of the page in case
+ * hash was not found on the page.
  */
-export function createNavigator<State>(
-  sessionStorageKey: string,
-  hashMode?: BrowserNavigatorHashMode,
-): BrowserNavigator<State> {
-  const navigator = instantiate<State>(sessionStorageKey, hashMode);
+function scrollToHash(hash: string, fallbackTop: boolean) {
+  const el = querySelector(`#${hash}`);
+  if (el) {
+    el.scrollIntoView();
+    return;
+  }
 
-  const saveState = () => sessionStorage.setItem(sessionStorageKey, JSON.stringify({
-    cursor: navigator.cursor,
-    entries: navigator.history,
-  }));
+  if (fallbackTop) {
+    window.scrollTo(0, 0);
+  }
+}
 
-  // Whenever navigator changes its state, we save it in the session storage.
-  navigator.on('change', saveState);
+/**
+ * Creates new Router for the application.
+ * @param navigator - @tma.js navigator.
+ */
+export function createRouter<State>(navigator: BrowserNavigator<State>): Component<BaseRouterProps> {
+  return createSolidRouter({
+    get: () => navigator.path,
+    init: (notify) => navigator.on('change', () => notify()),
+    set: ({ value, state, ...next }) => {
+      if (next.replace) {
+        navigator.replace(value, state as State);
+      } else {
+        navigator.push(value);
+      }
 
-  // Save initial state to make sure nothing will break when page will be reloaded.
-  saveState();
-
-  return navigator;
+      const hash = getHash(value);
+      if (hash) {
+        scrollToHash(hash, next.scroll || false);
+      }
+    },
+    utils: {
+      go: (delta) => navigator.go(delta),
+      renderPath: (path) => navigator.renderPath(path),
+      parsePath: (path) => urlToPath(navigator.parsePath(path)),
+    },
+  });
 }

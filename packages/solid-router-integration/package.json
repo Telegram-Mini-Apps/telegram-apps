@@ -42,12 +42,15 @@
     "build": "vite build"
   },
   "peerDependencies": {
-    "@solidjs/router": "^1.x",
-    "@tma.js/sdk-solid": "workspace:*"
+    "@solidjs/router": "^0.13.1",
+    "@tma.js/sdk-solid": "workspace:*",
+    "solid-js": "^1.8.16"
   },
   "devDependencies": {
+    "@solidjs/router": "^0.13.1",
     "@tma.js/sdk-solid": "workspace:*",
     "eslint-config-custom": "workspace:*",
+    "solid-js": "^1.8.16",
     "tsconfig": "workspace:*"
   },
   "publishConfig": {
