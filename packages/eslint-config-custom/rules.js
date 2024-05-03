@@ -86,6 +86,7 @@ module.exports = {
   // See: https://stackoverflow.com/q/39114446/2771889
   'linebreak-style': ['error', (process.platform === 'win32' ? 'windows' : 'unix')],
   'no-await-in-loop': 0,
+  'no-bitwise': 0,
   'no-console': 0,
   'no-continue': 0,
   'no-nested-ternary': 0,
