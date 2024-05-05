@@ -1,8 +1,5 @@
-import type { ParentProps } from 'solid-js';
-
-interface AnyFn {
-  (...args: any): any;
-}
+import type { AnyFn } from '@tma.js/sdk';
+import type { Accessor, ParentProps } from 'solid-js';
 
 export interface SDKProviderProps extends ParentProps {
   /**
@@ -17,4 +14,4 @@ export interface SDKProviderProps extends ParentProps {
  * SDK context represents a map, where key is component init function, and value is an accessor,
  * retrieving its result.
  */
-export type SDKContextType = Map<AnyFn, () => any>;
+export type SDKContextType = Map<AnyFn, Accessor<any>>;
