@@ -41,14 +41,10 @@ export function createHook<Fn extends AnyFn>(fn: Fn): Hook<Fn> {
       }
 
       // Factory may return undefined if it creates the InitData component, for example.
+      // It also may not allow tracking its changes. It means, it cannot be reactive, we just
+      // this values as is.
       const value = resource();
-      if (!value) {
-        return;
-      }
-
-      // Value doesn't allow tracking its changes. It means, it cannot be reactive, we just return
-      // it as is.
-      if (!('on' in value)) {
+      if (!value || !('on' in value)) {
         return value;
       }
 
@@ -58,27 +54,29 @@ export function createHook<Fn extends AnyFn>(fn: Fn): Hook<Fn> {
         return value.on('change', () => set(value));
       });
 
-      // Construct a reactive copy of the component.
-      return Object
-        // We use this way to retrieve all properties descriptors. Event for getters-only.
-        // NOTE: Yeah, it looks horrible, but I had no other way of doing this.
-        .entries(Object.getOwnPropertyDescriptors(Object.getPrototypeOf(value)))
-        .reduce((acc, [key, descriptor]) => {
-          // Special key we are ignoring.
-          if (key === 'constructor') {
-            return acc;
-          }
+      // We use this value to retrieve properties having getters. We assume, that if property has
+      // a getter, it must be reactive.
+      // NOTE: Yeah, it looks horrible, but I had no other way of doing this.
+      const prototype = Object.getPrototypeOf(value);
 
-          if ('get' in descriptor) {
-            // Otherwise, we are dealing with a dynamic property, which must be memoized.
-            Object.defineProperty(acc, key, {
-              get: createMemo(() => (get() as any)[key]),
-              enumerable: true,
-            });
-          }
+      // Cache with already defined signals.
+      const cache: Record<string | symbol, Accessor<any>> = {};
 
-          return acc;
-        }, value);
+      return new Proxy(value, {
+        get(target: any, property: string | symbol): any {
+          if (!(property in cache)) {
+            const descriptor = Reflect.getOwnPropertyDescriptor(prototype, property);
+
+            // We receive descriptor, describing this property and check if it has getter. In
+            // case it does, we must make it reactive. Otherwise, we return real value behind
+            // this property.
+            cache[property] = descriptor && ('get' in descriptor)
+              ? createMemo(() => (get() as any)[property])
+              : () => Reflect.get(target, property);
+          }
+          return cache[property]();
+        },
+      });
     });
 
     sdk.set(fn, getResult);
