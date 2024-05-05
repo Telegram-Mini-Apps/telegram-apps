@@ -1,8 +1,6 @@
 {
   "extends": "tsconfig/esnext-dom.json",
   "compilerOptions": {
-    "composite": true,
-    "declaration": true,
     "paths": {
       "@/*": [
         "./src/*"
