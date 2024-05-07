@@ -1,5 +1,3 @@
-import { logger } from '@/debug/debug.js';
-
 import { retrieveFromLocation } from './retrieveFromLocation.js';
 import { retrieveFromPerformance } from './retrieveFromPerformance.js';
 import { retrieveFromStorage } from './retrieveFromStorage.js';
@@ -32,6 +30,5 @@ export function retrieveLaunchParams(): LaunchParams {
     }
   }
 
-  logger.error('Unable to retrieve launch parameters from any known source. Received errors:', errors);
   throw new Error('Unable to retrieve launch parameters from any known source.');
 }
