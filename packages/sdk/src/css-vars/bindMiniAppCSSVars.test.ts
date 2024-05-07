@@ -20,7 +20,7 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe('background', () => {
+describe('bgColor', () => {
   it('should set --tg-bg-color equal to miniApp.bgColor', () => {
     bindMiniAppCSSVars(
       new MiniApp({
@@ -169,3 +169,22 @@ describe('header', () => {
     setCSSPropertySpy.mockClear();
   });
 });
+
+it('should set a CSS variable following a logic, described in the getCSSVarName argument', () => {
+  bindMiniAppCSSVars(
+    new MiniApp({
+      bgColor: '#111111',
+      headerColor: '#222222',
+      botInline: false,
+      version: '7.0',
+      postEvent: () => null,
+      createRequestId: () => 'abc',
+    }),
+    new ThemeParams({}),
+    property => `--my-${property}`,
+  );
+
+  expect(setCSSPropertySpy).toHaveBeenCalledTimes(2);
+  expect(setCSSPropertySpy).toHaveBeenCalledWith('--my-bg', '#111111');
+  expect(setCSSPropertySpy).toHaveBeenCalledWith('--my-header', '#222222');
+})

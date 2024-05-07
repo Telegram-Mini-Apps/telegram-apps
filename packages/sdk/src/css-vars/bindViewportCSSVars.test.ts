@@ -1,10 +1,10 @@
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
-import { afterEach, beforeAll, expect, it, vi } from 'vitest';
-import type { FnToSpy } from '@test-utils/types.js';
+import {dispatchWindowMessageEvent} from '@test-utils/dispatchWindowMessageEvent.js';
+import {afterEach, beforeAll, expect, it, vi} from 'vitest';
+import type {FnToSpy} from '@test-utils/types.js';
 
-import { Viewport } from '@/components/Viewport/Viewport.js';
+import {Viewport} from '@/components/Viewport/Viewport.js';
 
-import { bindViewportCSSVars } from './bindViewportCSSVars.js';
+import {bindViewportCSSVars} from './bindViewportCSSVars.js';
 
 let setCSSPropertySpy: FnToSpy<typeof document.documentElement.style.setProperty>;
 
@@ -57,4 +57,22 @@ it('should update --tg-viewport-height, --tg-viewport-width, --tg-viewport-stabl
   expect(setCSSPropertySpy).toHaveBeenCalledWith('--tg-viewport-height', '900px');
   expect(setCSSPropertySpy).toHaveBeenCalledWith('--tg-viewport-width', '1800px');
   expect(setCSSPropertySpy).toHaveBeenCalledWith('--tg-viewport-stable-height', '900px');
+});
+
+it('should set a CSS variable following a logic, described in the getCSSVarName argument', () => {
+  bindViewportCSSVars(
+    new Viewport({
+      height: 192,
+      width: 1000,
+      isExpanded: false,
+      stableHeight: 200,
+      postEvent: () => null,
+    }),
+    property => `--my-${property}`
+  );
+
+  expect(setCSSPropertySpy).toHaveBeenCalledTimes(3);
+  expect(setCSSPropertySpy).toHaveBeenCalledWith('--my-height', '192px');
+  expect(setCSSPropertySpy).toHaveBeenCalledWith('--my-width', '1000px');
+  expect(setCSSPropertySpy).toHaveBeenCalledWith('--my-stable-height', '200px');
 });
