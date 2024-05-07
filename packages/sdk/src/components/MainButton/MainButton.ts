@@ -1,14 +1,23 @@
-import { WithState } from '@/classes/with-state/WithState.js';
+import { off } from '@/bridge/events/listening/off.js';
+import { on } from '@/bridge/events/listening/on.js';
+import { WithStateUtils } from '@/classes/WithStateUtils.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { RGB } from '@/colors/types.js';
+import type {
+  MainButtonEvents,
+  MainButtonParams,
+  MainButtonProps,
+  MainButtonState,
+} from '@/components/MainButton/types.js';
+import type { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
 
-import type { MainButtonParams, MainButtonProps, MainButtonState } from './types.js';
+type Emitter = EventEmitter<MainButtonEvents>;
 
 /**
  * @see Usage: https://docs.telegram-mini-apps.com/platform/main-button
  * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/main-button
  */
-export class MainButton extends WithState<MainButtonState> {
+export class MainButton extends WithStateUtils<MainButtonState> {
   private readonly postEvent: PostEvent;
 
   constructor({ postEvent, ...rest }: MainButtonProps) {
@@ -123,6 +132,28 @@ export class MainButton extends WithState<MainButtonState> {
     this.isLoaderVisible = false;
     return this;
   }
+
+  /**
+   * Adds a new event listener.
+   * @param event - event to listen.
+   * @param listener - listener to add.
+   */
+  on: Emitter['on'] = (event, listener) => (
+    event === 'click'
+      ? on('main_button_pressed', listener)
+      : this.state.on(event, listener as any)
+  );
+
+  /**
+   * Removes the event listener.
+   * @param event - event to listen.
+   * @param listener - listener to remove.
+   */
+  off: Emitter['off'] = (event, listener) => (
+    event === 'click'
+      ? off('main_button_pressed', listener)
+      : this.state.off(event, listener as any)
+  );
 
   /**
    * Shows the MainButton.

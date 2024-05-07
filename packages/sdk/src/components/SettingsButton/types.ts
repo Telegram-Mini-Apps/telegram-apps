@@ -1,5 +1,4 @@
-import type { MiniAppsEventListener } from '@/bridge/events/types.js';
-import type { StateEvents } from '@/classes/with-state/types.js';
+import type { StateEvents } from '@/classes/State/types.js';
 
 /**
  * SettingsButton internal state.
@@ -12,6 +11,10 @@ export interface SettingsButtonState {
  * SettingsButton trackable events.
  */
 export interface SettingsButtonEvents extends StateEvents<SettingsButtonState> {
+  /**
+   * The SettingsButton was clicked.
+   */
+  click: () => void;
 }
 
 /**
@@ -24,8 +27,3 @@ export type SettingsButtonEventName = keyof SettingsButtonEvents;
  */
 export type SettingsButtonEventListener<E extends SettingsButtonEventName> =
   SettingsButtonEvents[E];
-
-/**
- * SettingsButton click event listener.
- */
-export type SettingsButtonClickListener = MiniAppsEventListener<'settings_button_pressed'>;
