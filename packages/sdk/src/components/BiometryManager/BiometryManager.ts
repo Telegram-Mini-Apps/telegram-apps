@@ -1,18 +1,17 @@
 import { request } from '@/bridge/utils/request.js';
-import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
+import { WithSupportsAndTrackableState } from '@/classes/WithSupportsAndTrackableState.js';
+import { formatEvent } from '@/components/BiometryManager/formatEvent.js';
 import type { BiometryType } from '@/bridge/events/types.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
-
-import { formatBiometryInfoEvent } from './formatBiometryInfoEvent.js';
 import type {
   BiometryManagerAuthenticateOptions,
   BiometryManagerProps,
   BiometryManagerRequestAccessOptions,
   BiometryManagerState,
   BiometryManagerUpdateTokenOptions,
-} from './types.js';
+} from '@/components/BiometryManager/types.js';
 
-export class BiometryManager extends WithStateAndSupports<BiometryManagerState,
+export class BiometryManager extends WithSupportsAndTrackableState<BiometryManagerState,
   | 'auth'
   | 'openSettings'
   | 'requestAccess'
@@ -117,7 +116,7 @@ export class BiometryManager extends WithStateAndSupports<BiometryManagerState,
       })
         .then((response) => {
           // Actualize local state.
-          const formatted = formatBiometryInfoEvent(response);
+          const formatted = formatEvent(response);
           this.set(formatted);
 
           return formatted.accessGranted;

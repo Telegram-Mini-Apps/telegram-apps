@@ -1,8 +1,8 @@
 import { request } from '@/bridge/utils/request.js';
 import type { ExecuteWithOptions } from '@/types/index.js';
 
-import { formatBiometryInfoEvent } from './formatBiometryInfoEvent.js';
-import type { FormatBiometryInfoResult } from './formatBiometryInfoEvent.js';
+import { formatEvent } from './formatEvent.js';
+import type { FormatBiometryInfoResult } from './formatEvent.js';
 
 /**
  * Requests biometry information.
@@ -11,7 +11,7 @@ import type { FormatBiometryInfoResult } from './formatBiometryInfoEvent.js';
 export async function requestBiometryInfo(
   options?: ExecuteWithOptions,
 ): Promise<FormatBiometryInfoResult> {
-  return formatBiometryInfoEvent(
+  return formatEvent(
     await request({
       ...(options || {}),
       method: 'web_app_biometry_get_info',

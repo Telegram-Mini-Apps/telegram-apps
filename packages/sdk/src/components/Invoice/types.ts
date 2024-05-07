@@ -1,4 +1,4 @@
-import type { StateEvents } from '@/classes/with-state/types.js';
+import type { StateEvents } from '@/classes/State/types.js';
 
 /**
  * Invoice internal state.

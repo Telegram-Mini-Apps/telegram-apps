@@ -4,7 +4,7 @@ import type { StringKeys } from '@/types/utils.js';
  * Creates a map with all events emitted by BaseComponent.
  * @example
  * ```ts
- * type A = BaseComponentEvents<{
+ * type A = StateEvents<{
  *   name: string;
  *   age: number;
  *   isRegistered: boolean;
@@ -14,7 +14,7 @@ import type { StringKeys } from '@/types/utils.js';
  * {
  *   "change:name": (currentValue: string) => void;
  *   "change:age": (currentValue: number) => void;
- *   "isRegistered": (currentValue: boolean) => void;
+ *   "change:isRegistered": (currentValue: boolean) => void;
  *   "change": () => void;
  * }
  * ```
@@ -27,7 +27,7 @@ export type StateEvents<State extends object> = {
   ) => void;
 } & {
   /**
-   * Something change in state.
+   * Something has changed in the state.
    */
   change: (currentState: State) => void;
 };

@@ -1,6 +1,6 @@
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { HeaderColorKey } from '@/bridge/methods/types/methods.js';
-import type { StateEvents } from '@/classes/with-state/types.js';
+import type { StateEvents } from '@/classes/State/types.js';
 import type { RGB } from '@/colors/types.js';
 import type { CreateRequestIdFn } from '@/request-id/types.js';
 import type { Version } from '@/version/types.js';

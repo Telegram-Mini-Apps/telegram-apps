@@ -1,16 +1,15 @@
 import { request } from '@/bridge/utils/request.js';
-import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
+import { WithSupportsAndTrackableState } from '@/classes/WithSupportsAndTrackableState.js';
+import { preparePopupParams } from '@/components/Popup/preparePopupParams.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
+import type { OpenPopupOptions, PopupState } from '@/components/Popup/types.js';
 import type { Version } from '@/version/types.js';
-
-import { preparePopupParams } from './preparePopupParams.js';
-import type { OpenPopupOptions, PopupState } from './types.js';
 
 /**
  * @see Usage: https://docs.telegram-mini-apps.com/platform/popup
  * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/popup
  */
-export class Popup extends WithStateAndSupports<PopupState, 'open'> {
+export class Popup extends WithSupportsAndTrackableState<PopupState, 'open'> {
   constructor(isOpened: boolean, version: Version, private readonly postEvent: PostEvent) {
     super({ isOpened }, version, { open: 'web_app_open_popup' });
   }

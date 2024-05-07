@@ -1,10 +1,11 @@
 import { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
+import type { StateEvents } from '@/classes/State/types.js';
 import type { StringKeys } from '@/types/utils.js';
 
-import type { StateEvents } from './types.js';
+type Emitter<State extends object> = EventEmitter<StateEvents<State>>;
 
-export class WithState<State extends object> {
-  private readonly ee = new EventEmitter<StateEvents<State>>();
+export class State<State extends object> {
+  private readonly ee: Emitter<State> = new EventEmitter();
 
   constructor(
     /**
@@ -17,7 +18,7 @@ export class WithState<State extends object> {
   /**
    * Clones current state and returns its copy.
    */
-  protected clone(): State {
+  clone(): State {
     return { ...this.state };
   }
 
@@ -26,12 +27,13 @@ export class WithState<State extends object> {
    * @param key - state key.
    * @param value - value to set.
    */
-  protected set<K extends StringKeys<State>>(key: K, value: State[K]): void;
-  protected set(state: Partial<State>): void;
-  protected set(
-    keyOrState: StringKeys<State> | Partial<State>,
-    keyValue?: State[keyof State],
-  ): void {
+  set<K extends StringKeys<State>>(key: K, value: State[K]): void;
+  /**
+   * Sets several values simultaneously.
+   * @param state - partial state.
+   */
+  set(state: Partial<State>): void;
+  set(keyOrState: StringKeys<State> | Partial<State>, keyValue?: State[keyof State]): void {
     const didChange = Object
       .entries(typeof keyOrState === 'string' ? { [keyOrState]: keyValue } : keyOrState)
       .reduce((acc, [key, value]) => {
@@ -56,17 +58,17 @@ export class WithState<State extends object> {
    * Returns value by specified key.
    * @param key - state key.
    */
-  protected get<K extends StringKeys<State>>(key: K): State[K] {
+  get<K extends StringKeys<State>>(key: K): State[K] {
     return this.state[key];
   }
 
   /**
    * Adds new event listener.
    */
-  on: EventEmitter<StateEvents<State>>['on'] = this.ee.on.bind(this.ee);
+  on: Emitter<State>['on'] = this.ee.on.bind(this.ee);
 
   /**
    * Removes event listener.
    */
-  off: EventEmitter<StateEvents<State>>['off'] = this.ee.off.bind(this.ee);
+  off: Emitter<State>['off'] = this.ee.off.bind(this.ee);
 }

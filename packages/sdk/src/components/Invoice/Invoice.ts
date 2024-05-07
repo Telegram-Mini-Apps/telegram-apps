@@ -1,5 +1,5 @@
 import { request } from '@/bridge/utils/request.js';
-import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
+import { WithSupportsAndTrackableState } from '@/classes/WithSupportsAndTrackableState.js';
 import type { InvoiceStatus } from '@/bridge/events/types.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { Version } from '@/version/types.js';
@@ -11,7 +11,7 @@ import type { InvoiceState } from './types.js';
 /**
  * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/invoice
  */
-export class Invoice extends WithStateAndSupports<InvoiceState, 'open'> {
+export class Invoice extends WithSupportsAndTrackableState<InvoiceState, 'open'> {
   constructor(
     isOpened: boolean,
     version: Version,

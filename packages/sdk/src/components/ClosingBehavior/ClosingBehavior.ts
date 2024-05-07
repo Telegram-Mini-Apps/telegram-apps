@@ -1,13 +1,12 @@
-import { WithState } from '@/classes/with-state/WithState.js';
+import { WithTrackableState } from '@/classes/WithTrackableState.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
-
-import type { ClosingBehaviorState } from './types.js';
+import type { ClosingBehaviorState } from '@/components/ClosingBehavior/types.js';
 
 /**
  * @see Usage: https://docs.telegram-mini-apps.com/platform/closing-behavior
  * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/closing-behavior
  */
-export class ClosingBehavior extends WithState<ClosingBehaviorState> {
+export class ClosingBehavior extends WithTrackableState<ClosingBehaviorState> {
   constructor(isConfirmationNeeded: boolean, private readonly postEvent: PostEvent) {
     super({ isConfirmationNeeded });
   }

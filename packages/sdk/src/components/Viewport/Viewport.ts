@@ -1,5 +1,5 @@
 import { on } from '@/bridge/events/listening/on.js';
-import { WithState } from '@/classes/with-state/WithState.js';
+import { WithTrackableState } from '@/classes/WithTrackableState.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
 import type { ExecuteWithOptions } from '@/types/index.js';
@@ -19,7 +19,7 @@ function truncate(value: number): number {
  * @see Usage: https://docs.telegram-mini-apps.com/platform/viewport
  * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/viewport
  */
-export class Viewport extends WithState<ViewportState> {
+export class Viewport extends WithTrackableState<ViewportState> {
   private readonly postEvent: PostEvent;
 
   constructor({ postEvent, stableHeight, height, width, isExpanded }: ViewportProps) {

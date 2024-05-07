@@ -1,5 +1,5 @@
 import { request } from '@/bridge/utils/request.js';
-import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
+import { WithSupportsAndTrackableState } from '@/classes/WithSupportsAndTrackableState.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { Version } from '@/version/types.js';
 
@@ -10,7 +10,7 @@ import type { QRScannerState } from './types.js';
 /**
  * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/qr-scanner
  */
-export class QRScanner extends WithStateAndSupports<QRScannerState, 'close' | 'open'> {
+export class QRScanner extends WithSupportsAndTrackableState<QRScannerState, 'close' | 'open'> {
   constructor(isOpened: boolean, version: Version, private readonly postEvent: PostEvent) {
     super({ isOpened }, version, {
       close: 'web_app_close_scan_qr_popup',

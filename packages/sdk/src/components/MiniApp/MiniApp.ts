@@ -1,7 +1,6 @@
-/* eslint-disable no-await-in-loop */
 import { invokeCustomMethod } from '@/bridge/utils/invokeCustomMethod.js';
 import { request } from '@/bridge/utils/request.js';
-import { WithStateAndSupports } from '@/classes/with-state-and-supports/WithStateAndSupports.js';
+import { WithSupportsAndTrackableState } from '@/classes/WithSupportsAndTrackableState.js';
 import { isColorDark } from '@/colors/isColorDark.js';
 import { isRGB } from '@/colors/isRGB.js';
 import { contact } from '@/components/MiniApp/parsing/contact.js';
@@ -13,16 +12,15 @@ import type { PhoneRequestedStatus, WriteAccessRequestedStatus } from '@/bridge/
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { SwitchInlineQueryChatType } from '@/bridge/methods/types/methods.js';
 import type { RGB } from '@/colors/types.js';
+import type { MiniAppHeaderColor, MiniAppProps, MiniAppState, RequestedContact } from '@/components/MiniApp/types.js';
 import type { CreateRequestIdFn } from '@/request-id/types.js';
 import type { SupportsFn } from '@/supports/types.js';
 import type { ExecuteWithTimeout } from '@/types/methods.js';
 
-import type { MiniAppHeaderColor, MiniAppProps, MiniAppState, RequestedContact } from './types.js';
-
 /**
  * Provides common Mini Apps functionality not covered by other system components.
  */
-export class MiniApp extends WithStateAndSupports<
+export class MiniApp extends WithSupportsAndTrackableState<
   MiniAppState,
   | 'requestPhoneAccess'
   | 'requestWriteAccess'

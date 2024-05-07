@@ -1,6 +1,6 @@
 import { captureSameReq } from '@/bridge/utils/captureSameReq.js';
 import { request } from '@/bridge/utils/request.js';
-import { WithSupports } from '@/classes/with-supports/WithSupports.js';
+import { WithSupports } from '@/classes/WithSupports.js';
 import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
 import { supports } from '@/supports/supports.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';

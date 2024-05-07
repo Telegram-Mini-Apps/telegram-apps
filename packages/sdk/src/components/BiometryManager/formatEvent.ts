@@ -32,7 +32,7 @@ export interface FormatBiometryInfoResult {
  * @param event - event payload.
  * @see biometry_info_received
  */
-export function formatBiometryInfoEvent(
+export function formatEvent(
   event: MiniAppsEventPayload<'biometry_info_received'>,
 ): FormatBiometryInfoResult {
   const data = event.available ? event : {

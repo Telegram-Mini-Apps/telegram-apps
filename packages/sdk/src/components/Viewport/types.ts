@@ -1,5 +1,5 @@
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
-import type { StateEvents } from '@/classes/with-state/types.js';
+import type { StateEvents } from '@/classes/State/types.js';
 
 /**
  * Viewport constructor properties.

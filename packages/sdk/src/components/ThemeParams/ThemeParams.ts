@@ -1,5 +1,5 @@
 import { on } from '@/bridge/events/listening/on.js';
-import { WithState } from '@/classes/with-state/WithState.js';
+import { WithTrackableState } from '@/classes/WithTrackableState.js';
 import { isColorDark } from '@/colors/isColorDark.js';
 import type { RGB } from '@/colors/types.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
@@ -11,7 +11,7 @@ import type { ThemeParamsParsed, ThemeParamsState } from './types.js';
  * @see Usage: https://docs.telegram-mini-apps.com/platform/theming
  * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/theme-params
  */
-export class ThemeParams extends WithState<ThemeParamsState> {
+export class ThemeParams extends WithTrackableState<ThemeParamsState> {
   /**
    * @since v6.10
    */
