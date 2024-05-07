@@ -1,16 +1,17 @@
 import { BrowserNavigator } from '@/navigation/BrowserNavigator/BrowserNavigator.js';
-import type { BrowserNavigatorHashMode } from '@/navigation/BrowserNavigator/types.js';
+import type { BrowserNavigatorConOptions } from '@/navigation/BrowserNavigator/types.js';
 
 /**
  * Creates a new `BrowserNavigator` from the window.location.
- * @param hashMode - hash navigation mode. Omit, if non-hash mode is required.
+ * @param options - BrowserNavigator constructor options.
  */
 export function createBrowserNavigatorFromLocation<State = {}>(
-  hashMode?: BrowserNavigatorHashMode,
+  options?: BrowserNavigatorConOptions,
 ): BrowserNavigator<State> {
+  const opt = options || {};
   const { href, hash } = window.location;
 
   return new BrowserNavigator<State>([
-    new URL(hashMode ? hash.slice(1) : href, href),
-  ], 0, hashMode);
+    new URL(opt.hashMode ? hash.slice(1) : href, href),
+  ], 0, opt);
 }

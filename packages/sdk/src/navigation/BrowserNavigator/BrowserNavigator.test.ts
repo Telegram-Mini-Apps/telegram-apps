@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createError } from '@/errors/createError.js';
 import {
-  ERROR_NAVIGATION_CURSOR_INVALID,
+  ERROR_NAVIGATION_INDEX_INVALID,
   ERROR_NAVIGATION_HISTORY_EMPTY,
 } from '@/errors/errors.js';
 import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
@@ -25,10 +25,10 @@ describe('constructor', () => {
 
   it('should throw error if entries cursor is less than 0 or higher or equal to entries list length', () => {
     expect(() => new BrowserNavigator(['/a'], -1)).toThrow(
-      createError(ERROR_NAVIGATION_CURSOR_INVALID, 'Cursor should not be zero and higher or equal than history size.'),
+      createError(ERROR_NAVIGATION_INDEX_INVALID, 'Index should not be zero and higher or equal than history size.'),
     );
     expect(() => new BrowserNavigator(['/a'], 1)).toThrow(
-      createError(ERROR_NAVIGATION_CURSOR_INVALID, 'Cursor should not be zero and higher or equal than history size.'),
+      createError(ERROR_NAVIGATION_INDEX_INVALID, 'Index should not be zero and higher or equal than history size.'),
     );
   });
 });
@@ -132,8 +132,8 @@ describe('back', () => {
 
 describe('cursor', () => {
   it('should return current cursor', () => {
-    expect(new BrowserNavigator(['/'], 0).cursor).toBe(0);
-    expect(new BrowserNavigator(['/', '/'], 1).cursor).toBe(1);
+    expect(new BrowserNavigator(['/'], 0).index).toBe(0);
+    expect(new BrowserNavigator(['/', '/'], 1).index).toBe(1);
   });
 });
 
@@ -349,7 +349,9 @@ describe('parsePath', () => {
   });
 
   it('should return result based on the path\'s hash if hash mode is specified', () => {
-    const n = new BrowserNavigator(['/a'], 0, 'default');
+    const n = new BrowserNavigator(['/a'], 0, {
+      hashMode: 'default',
+    });
     expect(n.parsePath('/a?b#/c?d#e')).toStrictEqual({
       pathname: '/c',
       search: '?d',
@@ -449,14 +451,14 @@ describe('renderPath', () => {
   });
 
   it('should convert passed historyItem to the path prepending with "#/" if hash mode is "slash"', () => {
-    const n = new BrowserNavigator([''], 0, 'slash');
+    const n = new BrowserNavigator([''], 0, { hashMode: 'slash' });
     expect(n.renderPath('test')).toBe('#/test');
     expect(n.renderPath('/test')).toBe('#/test');
     expect(n.renderPath('/test?a#b')).toBe('#/test?a#b');
   });
 
   it('should convert passed historyItem to the path prepending with "#" if hash mode is "default"', () => {
-    const n = new BrowserNavigator([''], 0, 'default');
+    const n = new BrowserNavigator([''], 0, { hashMode: 'default' });
     expect(n.renderPath('test')).toBe('#test');
     expect(n.renderPath('/test')).toBe('#test');
     expect(n.renderPath('/test?a#b')).toBe('#test?a#b');

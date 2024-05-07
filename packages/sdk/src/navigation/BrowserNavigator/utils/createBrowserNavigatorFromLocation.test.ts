@@ -13,14 +13,14 @@ it('should create navigator from from window.location.hash.slice(1) if hash mode
       hash: '#p1?s1#h1',
       href: 'http://localhost/p2?s2#h2',
     }) as any);
-  expect(createBrowserNavigatorFromLocation('default')).toMatchObject({
+  expect(createBrowserNavigatorFromLocation({ hashMode: 'default' })).toMatchObject({
     pathname: '/p1',
     search: '?s1',
     hash: '#h1',
     cursor: 0,
   });
 
-  expect(createBrowserNavigatorFromLocation('slash')).toMatchObject({
+  expect(createBrowserNavigatorFromLocation({ hashMode: 'slash' })).toMatchObject({
     pathname: '/p1',
     search: '?s1',
     hash: '#h1',

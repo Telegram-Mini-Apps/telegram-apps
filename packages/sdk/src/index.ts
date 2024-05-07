@@ -233,9 +233,11 @@ export type {
 export { BrowserNavigator } from '@/navigation/BrowserNavigator/BrowserNavigator.js';
 export type {
   BrowserNavigatorAnyHistoryItem,
+  BrowserNavigatorConOptions,
   BrowserNavigatorEvents,
   BrowserNavigatorHashMode,
   BrowserNavigatorHistoryItem,
+  URLLike,
 } from '@/navigation/BrowserNavigator/types.js';
 export {
   createBrowserNavigatorFromLocation,

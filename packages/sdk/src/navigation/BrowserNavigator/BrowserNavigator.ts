@@ -1,6 +1,3 @@
-import { off } from '@/bridge/events/listening/off.js';
-import { on } from '@/bridge/events/listening/on.js';
-import { postEvent } from '@/bridge/methods/postEvent.js';
 import { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
 import { BasicNavigator } from '@/navigation/BasicNavigator/BasicNavigator.js';
 import {
@@ -9,11 +6,13 @@ import {
 import { createSafeURL } from '@/navigation/utils/createSafeURL.js';
 import { drop } from '@/navigation/utils/drop.js';
 import { ensurePrefix } from '@/navigation/utils/ensurePrefix.js';
+import { getPathname } from '@/navigation/utils/getPathname.js';
 import { go } from '@/navigation/utils/go.js';
 import { urlToPath } from '@/navigation/utils/urlToPath.js';
 import type { BasicNavigatorEvents } from '@/navigation/BasicNavigator/types.js';
 import type {
   BrowserNavigatorAnyHistoryItem,
+  BrowserNavigatorConOptions,
   BrowserNavigatorEvents,
   BrowserNavigatorFormatHistoryItemResult,
   BrowserNavigatorHashMode,
@@ -33,25 +32,29 @@ export class BrowserNavigator<State = {}> {
 
   private readonly ee: Emitter<State> = new EventEmitter();
 
+  private readonly hashMode?: BrowserNavigatorHashMode;
+
+  readonly base: string;
+
   constructor(
     /**
-     * Navigation entries.
+     * Navigation history.
      */
     history: readonly BrowserNavigatorAnyHistoryItem<State>[],
     /**
-     * Currently active navigation entry.
+     * Currently active history item index.
      */
-    cursor: number,
-    /**
-     * Hash navigation mode. Omit, if non-hash mode is required.
-     */
-    private readonly hashMode?: BrowserNavigatorHashMode,
+    index: number,
+    { postEvent, hashMode, base }: BrowserNavigatorConOptions = {},
   ) {
     this.navigator = new BasicNavigator(
       history.map((item) => this.formatHistoryItem(item)),
-      cursor,
+      index,
+      postEvent,
     );
     this.navigator.on('change', this.onNavigatorChange);
+    this.hashMode = hashMode;
+    this.base = getPathname(base || '');
   }
 
   /**
@@ -65,7 +68,8 @@ export class BrowserNavigator<State = {}> {
   async attach(): Promise<void> {
     if (!this.attached) {
       this.attached = true;
-      on('back_button_pressed', this.back);
+      this.navigator.attach();
+      window.addEventListener('popstate', this.onPopState);
       await this.syncHistory();
     }
   }
@@ -73,32 +77,17 @@ export class BrowserNavigator<State = {}> {
   /**
    * Goes back in history by 1.
    */
-  back = (): void => this.go(-1);
-
-  /**
-   * Current history cursor.
-   */
-  get cursor(): number {
-    return this.navigator.cursor;
+  back(): void {
+    this.navigator.back();
   }
 
   /**
    * Detaches current navigator from the browser history.
    */
   detach() {
-    if (this.attached) {
-      this.attached = false;
-      window.removeEventListener('popstate', this.onPopState);
-      off('back_button_pressed', this.back);
-      this.navigator.off('change', this.onNavigatorChange);
-    }
-  }
-
-  /**
-   * Goes forward in history.
-   */
-  forward(): void {
-    return this.navigator.forward();
+    this.attached = false;
+    this.navigator.detach();
+    window.removeEventListener('popstate', this.onPopState);
   }
 
   /**
@@ -144,23 +133,64 @@ export class BrowserNavigator<State = {}> {
   }
 
   /**
-   * Moves cursor by specified delta.
-   * @param delta - cursor delta.
-   * @param performCut - true, if method should be performed with allowed cut value in case, delta
-   * is out of bounds. By default, method will not be performed if delta is out of bounds.
+   * Goes forward in history.
    */
-  go(delta: number, performCut?: boolean): void {
-    return this.navigator.go(delta, performCut);
+  forward(): void {
+    return this.navigator.forward();
   }
 
   /**
-   * Current navigation entry hash.
+   * Current history cursor.
+   */
+  get index(): number {
+    return this.navigator.index;
+  }
+
+  /**
+   * Changes currently active history item index by the specified delta. This method doesn't
+   * change index in case, the updated index points to the non-existing history item. This behavior
+   * is preserved until the `fit` argument is specified.
+   * @param delta - index delta.
+   * @param fit - cuts the delta argument to fit the bounds `[0, history.length - 1]`.
+   */
+  go(delta: number, fit?: boolean): void {
+    return this.navigator.go(delta, fit);
+  }
+
+  /**
+   * Goes to the specified index. Method does nothing in case, passed index is out of bounds.
+   *
+   * If "fit" option was specified and index is out of bounds, it will be cut to the nearest
+   * bound.
+   * @param index - target index.
+   * @param fit - cuts the index argument to fit the bounds `[0, history.length - 1]`.
+   */
+  goTo(index: number, fit?: boolean): void {
+    this.navigator.goTo(index, fit);
+  }
+
+  /**
+   * Current history item hash.
    * @see URL.hash
    * @example
    * "", "#my-hash"
    */
   get hash(): string {
-    return this.historyItem.hash || '';
+    return this.historyItem.hash;
+  }
+
+  /**
+   * True if navigator has items before the current item.
+   */
+  get hasPrev(): boolean {
+    return this.navigator.hasPrev;
+  }
+
+  /**
+   * True if navigator has items after the current item.
+   */
+  get hasNext(): boolean {
+    return this.navigator.hasNext;
   }
 
   /**
@@ -178,24 +208,10 @@ export class BrowserNavigator<State = {}> {
   }
 
   /**
-   * True if navigator has items before the current cursor.
-   */
-  get hasPrev(): boolean {
-    return this.navigator.hasPrev;
-  }
-
-  /**
-   * True if navigator has items after the current cursor.
-   */
-  get hasNext(): boolean {
-    return this.navigator.hasNext;
-  }
-
-  /**
-   * Handles window "popstate" event.
+   * Handles the window "popstate" event.
    * @param state - event state.
    */
-  private onPopState = async ({ state }: PopStateEvent) => {
+  private onPopState = ({ state }: PopStateEvent) => {
     // In case state is null, we recognize current event as occurring whenever user clicks
     // any anchor.
     // TODO: Should we do it?
@@ -207,17 +223,11 @@ export class BrowserNavigator<State = {}> {
     // only one element. In this case, we should return user to the current history element.
     if (state === CURSOR_VOID) {
       window.history.forward();
-      return;
+    } else if (state === CURSOR_BACK) {
+      this.back();
     }
-
-    // User pressed Back button.
-    if (state === CURSOR_BACK) {
-      return this.back();
-    }
-
-    // User pressed Forward button.
     if (state === CURSOR_FORWARD) {
-      return this.forward();
+      this.forward();
     }
   };
 
@@ -225,17 +235,16 @@ export class BrowserNavigator<State = {}> {
    * Underlying navigator change event listener.
    */
   private onNavigatorChange = async ({
-    navigator,
     to,
     from,
-    ...rest
+    delta,
   }: BasicNavigatorEvents<BrowserNavigatorHistoryItemParams<State>>['change']) => {
     // If this navigator is attached to the browser history, we should synchronize.
     if (this.attached) {
       await this.syncHistory();
     }
     this.ee.emit('change', {
-      ...rest,
+      delta,
       from: basicNavigatorHistoryItemToBrowser(from),
       to: basicNavigatorHistoryItemToBrowser(to),
       navigator: this,
@@ -268,7 +277,7 @@ export class BrowserNavigator<State = {}> {
   }
 
   /**
-   * Current pathname. Always starts with slash.
+   * Current pathname. Always starts with the slash.
    * @see URL.pathname
    * @example
    * "/", "/abc"
@@ -279,14 +288,19 @@ export class BrowserNavigator<State = {}> {
 
   /**
    * Depending on the current navigation type, parses incoming path and returns it presented as
-   * an object.
+   * an object. In other words, this method parses the passed path and returns object, describing
+   * how the navigator "sees" it.
    *
    * @example Hash mode is omitted.
    * parsePath('/abc?a=1#hash');
    * // { pathname: '/abc', search: '?a=1', hash: '#hash' }
+   * parsePath('http://example.com/abc?a=1#hash');
+   * // { pathname: '/abc', search: '?a=1', hash: '#hash' }
    *
-   * @example Hash mode is enabled
+   * @example Hash mode is enabled.
    * parsePath('/abc?a=1#tma?is=cool#yeah');
+   * // { pathname: '/tma', search: '?is=cool', hash: '#yeah' }
+   * parsePath('http://example.com/abc?a=1#tma?is=cool#yeah');
    * // { pathname: '/tma', search: '?is=cool', hash: '#yeah' }
    */
   parsePath(path: string | URL): URLLike {
@@ -303,67 +317,65 @@ export class BrowserNavigator<State = {}> {
   }
 
   /**
-   * Pushes new navigation entry. Method replaces all entries after the current one with the
-   * inserted. Take a note, that passed pathname is always relative. In case, you want to use
-   * it as an absolute one, use "/" prefix. Example: "/absolute".
+   * Pushes new history item. Method replaces all entries after the current one with the one
+   * being pushed. Take a note, that passed item is always relative. In case, you want to use
+   * it as an absolute one, use the "/" prefix. Example: "/absolute", { pathname: "/absolute" }.
    *
    * To create a final path, navigator uses a method, used in the URL class constructor, resolving
    * a path based on the current one.
    * @param path - entry path.
    * @param state - entry state.
    *
-   * @example Pushing absolute pathname.
-   * push("/absolute-path"); // "/absolute-path"
+   * @example Pushing an absolute path.
+   * push("/absolute"); // "/absolute"
    *
-   * @example Pushing relative pathname.
+   * @example Pushing a relative path.
    * push("relative"); // "/home/root" -> "/home/relative"
    *
    * @example Pushing query parameters.
-   * push("/absolute?my-param=1"); // "/home" -> "/absolute?my-param=1"
+   * push("/absolute?my-param=1"); // "/home/root" -> "/absolute?my-param=1"
    * push("relative?my-param=1"); // "/home/root" -> "/home/relative?my-param=1"
    * push("?my-param=1"); // "/home" -> "/home?my-param=1"
    *
    * @example Pushing hash.
    * push("#my-hash"); // "/home" -> "/home#my-hash"
-   * push("johny#my-hash"); // "/home/root" -> "/home/johny#my-hash"
+   * push("relative#my-hash"); // "/home/root" -> "/home/relative#my-hash"
    *
-   * @example Pushing with state.
+   * @example Pushing state.
    * push("", { state: 'my-state' }); "/home/root" -> "/home/root"
+   * push({ state: 'my-state' }); "/home/root" -> "/home/root"
    */
   push(path: string, state?: State): void;
-  push(historyItem: BrowserNavigatorAnyHistoryItem<State>): void;
-  push(
-    historyItemOrPath: string | BrowserNavigatorAnyHistoryItem<State>,
-    fnState?: State,
-  ): void {
-    const hi = this.formatHistoryItem(historyItemOrPath);
-    const { state = fnState } = hi.params;
-    this.navigator.push({ ...hi, params: { ...hi.params, state } });
+  push(item: BrowserNavigatorAnyHistoryItem<State>): void;
+  push(itemOrPath: string | BrowserNavigatorAnyHistoryItem<State>, fnState?: State): void {
+    const item = this.formatHistoryItem(itemOrPath);
+    const { state = fnState } = item.params;
+    this.navigator.push({ ...item, params: { ...item.params, state } });
   }
 
   /**
-   * Replaces current entry. Has the same logic as the `push` method.
+   * Replaces the current history item. Has the same logic as the `push` method.
    * @param path - entry path.
    * @param state - entry state.
    * @see push
    */
   replace(path: string, state?: State): void;
-  replace(historyItem: BrowserNavigatorAnyHistoryItem<State>): void;
-  replace(
-    historyItemOrPath: string | BrowserNavigatorAnyHistoryItem<State>,
-    fnState?: State,
-  ): void {
-    const hi = this.formatHistoryItem(historyItemOrPath);
+  replace(item: BrowserNavigatorAnyHistoryItem<State>): void;
+  replace(itemOrPath: string | BrowserNavigatorAnyHistoryItem<State>, fnState?: State): void {
+    const hi = this.formatHistoryItem(itemOrPath);
     const { state = fnState } = hi.params;
     this.navigator.replace({ ...hi, params: { ...hi.params, state } });
   }
 
   /**
-   * Renders specified path as one, expected by the current navigator.
+   * Combines the navigator `base` property with the passed path data applying the navigator
+   * navigation mode.
    * @param value - path presented as string or URLLike.
    */
   renderPath(value: string | URLLike): string {
-    const path = ensurePrefix(urlToPath(value), '/');
+    const path = (this.base.length === 1 ? '' : this.base)
+      + ensurePrefix(urlToPath(value), '/');
+
     return this.hashMode
       ? ensurePrefix(path.slice(1), this.hashMode === 'default' ? '#' : '#/')
       : path;
@@ -383,9 +395,6 @@ export class BrowserNavigator<State = {}> {
 
     // Drop the browser history and work with the clean one.
     await drop();
-
-    // Actualize Telegram Mini Apps BackButton state.
-    postEvent('web_app_setup_back_button', { is_visible: this.hasPrev });
 
     if (this.hasPrev && this.hasNext) {
       // We have both previous and next elements. History should be:
@@ -424,6 +433,6 @@ export class BrowserNavigator<State = {}> {
    * "", "?", "?a=1"
    */
   get search(): string {
-    return this.historyItem.search || '';
+    return this.historyItem.search;
   }
 }

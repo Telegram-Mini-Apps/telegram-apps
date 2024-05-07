@@ -1,7 +1,10 @@
+import { off } from '@/bridge/events/listening/off.js';
+import { on } from '@/bridge/events/listening/on.js';
+import { type PostEvent, postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
 import { createError } from '@/errors/createError.js';
 import {
-  ERROR_NAVIGATION_CURSOR_INVALID,
   ERROR_NAVIGATION_HISTORY_EMPTY,
+  ERROR_NAVIGATION_INDEX_INVALID,
 } from '@/errors/errors.js';
 import { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
 import type {
@@ -13,46 +16,69 @@ import type {
 type Emitter<Params> = EventEmitter<BasicNavigatorEvents<Params>>;
 
 export class BasicNavigator<Params = {}> {
+  /**
+   * Navigation history.
+   */
   readonly history: Readonly<BasicNavigatorHistoryItem<Params>>[];
 
   private readonly ee: Emitter<Params> = new EventEmitter();
 
   constructor(
+    /**
+     * Navigation history.
+     */
     history: readonly BasicNavigatorAnyHistoryItem<Params>[],
-    protected _cursor: number,
+    /**
+     * Currently active history item.
+     */
+    private _index: number,
+    /**
+     * Function to call Mini Apps methods.
+     * @default Global `postEvent` function.
+     */
+    private readonly postEvent: PostEvent = defaultPostEvent,
   ) {
     if (history.length === 0) {
       throw createError(ERROR_NAVIGATION_HISTORY_EMPTY, 'History should not be empty.');
     }
 
-    if (_cursor < 0 || _cursor >= history.length) {
+    if (_index < 0 || _index >= history.length) {
       throw createError(
-        ERROR_NAVIGATION_CURSOR_INVALID,
-        'Cursor should not be zero and higher or equal than history size.',
+        ERROR_NAVIGATION_INDEX_INVALID,
+        'Index should not be zero and higher or equal than history size.',
       );
     }
     this.history = history.map(this.formatHistoryItem.bind(this));
   }
 
   /**
+   * True, if current navigator is currently attached.
+   */
+  private attached = false;
+
+  /**
+   * Allows this navigator to control the `BackButton` visibility state. It also tracks the
+   * `BackButton` clicks and calls the `back` method.
+   */
+  attach(): void {
+    if (!this.attached) {
+      this.attached = true;
+      this.sync();
+      on('back_button_pressed', this.back);
+    }
+  }
+
+  /**
    * Goes to the previous history item.
    */
-  back(): void {
-    this.go(-1);
-  }
+  back = (): void => this.go(-1);
 
   /**
-   * Current history cursor.
+   * Prevents current navigator from controlling the BackButton visibility state.
    */
-  get cursor(): number {
-    return this._cursor;
-  }
-
-  /**
-   * Currently active history item.
-   */
-  get historyItem(): Readonly<BasicNavigatorHistoryItem<Params>> {
-    return this.history[this.cursor];
+  detach(): void {
+    this.attached = false;
+    off('back_button_pressed', this.back);
   }
 
   /**
@@ -94,55 +120,68 @@ export class BasicNavigator<Params = {}> {
   }
 
   /**
-   * Moves history cursor by specified delta.
-   * @param delta - cursor delta.
-   * @param performCut - true, if method should be performed with allowed cut value in case, delta
-   * is out of bounds. By default, method will not be performed if delta is out of bounds.
+   * Changes currently active history item index by the specified delta. This method doesn't
+   * change index in case, the updated index points to the non-existing history item. This behavior
+   * is preserved until the `fit` argument is specified.
+   * @param delta - index delta.
+   * @param fit - cuts the delta argument to fit the bounds `[0, history.length - 1]`.
    */
-  go(delta: number, performCut?: boolean): void {
-    // Zero delta does nothing.
-    if (!delta) {
-      return;
-    }
+  go(delta: number, fit?: boolean): void {
+    // Compute the next index.
+    const index = this.index + delta;
 
-    // Compute the next cursor.
-    const nextCursor = this.cursor + delta;
-
-    // Compute the cut cursor and make it be in bounds [0, this.entries.length).
-    const cutCursor = Math.min(
-      Math.max(0, nextCursor),
+    // Cut the index to be in bounds [0, history.length - 1].
+    const fitIndex = Math.min(
+      Math.max(0, index),
       this.history.length - 1,
     );
 
-    // If computed and cut cursors are different, it means, delta is out of bounds. We stop
-    // method performing if "performCut" is not set.
-    if (nextCursor !== cutCursor && !performCut) {
-      return;
+    // We perform "go" only in case, computed and cut indexes are equal or "fit" option was
+    // specified.
+    if (index === fitIndex || fit) {
+      // We are just calling setter to update the index and emit all related events.
+      this.replaceAndMove(fitIndex, this.history[fitIndex]);
     }
-
-    const from = this.historyItem;
-    const prevCursor = this.cursor;
-    this._cursor = cutCursor;
-    this.ee.emit('change', {
-      navigator: this,
-      from,
-      to: this.historyItem,
-      delta: cutCursor - prevCursor,
-    });
   }
 
   /**
-   * True if navigator has items before the current cursor.
+   * Goes to the specified index. Method does nothing in case, passed index is out of bounds.
+   *
+   * If "fit" option was specified and index is out of bounds, it will be cut to the nearest
+   * bound.
+   * @param index - target index.
+   * @param fit - cuts the index argument to fit the bounds `[0, history.length - 1]`.
+   */
+  goTo(index: number, fit?: boolean): void {
+    this.go(index - this.index, fit);
+  }
+
+  /**
+   * Currently active history item.
+   */
+  get historyItem(): Readonly<BasicNavigatorHistoryItem<Params>> {
+    return this.history[this.index];
+  }
+
+  /**
+   * True if navigator has items before the current item.
    */
   get hasPrev(): boolean {
-    return this.cursor > 0;
+    return this.index > 0;
   }
 
   /**
-   * True if navigator has items after the current cursor.
+   * True if navigator has items after the current item.
    */
   get hasNext(): boolean {
-    return this.cursor !== this.history.length - 1;
+    return this.index !== this.history.length - 1;
+  }
+
+  /**
+   * Currently active history item index.
+   */
+  get index(): number {
+    return this._index;
   }
 
   /**
@@ -157,13 +196,13 @@ export class BasicNavigator<Params = {}> {
 
   /**
    * Adds new history item removing all after the current one.
-   * @param entry - entry to add.
+   * @param item - item to add.
    */
-  push(entry: BasicNavigatorAnyHistoryItem<Params>): void {
+  push(item: BasicNavigatorAnyHistoryItem<Params>): void {
     if (this.hasNext) {
-      this.history.splice(this.cursor + 1);
+      this.history.splice(this.index + 1);
     }
-    this.setByDelta(1, this.formatHistoryItem(entry));
+    this.replaceAndMove(this.index + 1, this.formatHistoryItem(item));
   }
 
   /**
@@ -171,24 +210,47 @@ export class BasicNavigator<Params = {}> {
    * @param entry - entry to replace with.
    */
   replace(entry: BasicNavigatorAnyHistoryItem<Params>): void {
-    this.setByDelta(0, this.formatHistoryItem(entry));
+    this.replaceAndMove(this.index, this.formatHistoryItem(entry));
   }
 
   /**
-   * Sets history item by specified cursor delta.
-   * @param delta - cursor delta.
+   * Sets history item by the specified index.
+   * @param index - history item index to replace.
    * @param historyItem - history item to set.
    */
-  private setByDelta(delta: number, historyItem: BasicNavigatorHistoryItem<Params>): void {
-    const nextCursor = this.cursor + delta;
+  private replaceAndMove(index: number, historyItem: BasicNavigatorHistoryItem<Params>): void {
+    const delta = index - this.index;
+    if (!delta && this.historyItem === historyItem) {
+      // Nothing changed.
+      return;
+    }
+
     const from = this.historyItem;
-    this._cursor = nextCursor;
-    this.history[this.cursor] = historyItem;
+
+    if (this.index !== index) {
+      const prevIndex = this._index;
+      this._index = index;
+
+      // If navigator is attached and back button local visibility state changed, we should
+      // notify Telegram app about it.
+      if (this.attached && prevIndex > 0 !== index > 0) {
+        this.sync();
+      }
+    }
+
+    this.history[index] = historyItem;
     this.ee.emit('change', {
       navigator: this,
       from,
       to: this.historyItem,
       delta,
     });
+  }
+
+  /**
+   * Actualizes the BackButton visibility state.
+   */
+  private sync(): void {
+    this.postEvent('web_app_setup_back_button', { is_visible: !!this.index });
   }
 }
