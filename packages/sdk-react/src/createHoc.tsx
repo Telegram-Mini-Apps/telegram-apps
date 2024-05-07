@@ -1,32 +1,25 @@
-import React, { type ComponentType } from 'react';
+import { type Component, mergeProps } from 'solid-js';
+import type { PartialBy } from '@tma.js/sdk';
 
 import type { Hook } from './createHook.js';
-import type { InitResultKey, InitResultValue } from './types.js';
 
-export type Hoc<K extends InitResultKey> = <P extends { [Key in K]?: InitResultValue<K> }>(
-  Component: ComponentType<P>,
-) => ComponentType<P>;
+export interface HOC<P extends string, H extends Hook<any>> {
+  <Props extends { [K in P]: ReturnType<H> }>(
+    Component: Component<Props>,
+    ...args: Parameters<H>
+  ): Component<PartialBy<Props, P>>;
+}
 
 /**
- * Creates HOC for static init result value.
- * @param initResultKey - init result key.
- * @param hook - hook which returns init result value.
+ * Based on the passed hook, creates function returning HOC. Created HOC passes hook result
+ * to the wrapped component.
+ * @param prop - target property name.
+ * @param hook - hook returning component.
  */
-export function createHoc<K extends InitResultKey>(initResultKey: K, hook: Hook<K>): Hoc<K> {
-  return (Component: ComponentType<any>) => {
-    function Wrapper(props: Record<string, unknown>) {
-      const wrappedProps = {
-        ...props,
-        [initResultKey]: hook(),
-      };
-
-      return <Component {...wrappedProps} />;
-    }
-
-    Object.defineProperty(Wrapper, 'name', {
-      value: `With${initResultKey[0].toUpperCase()}${initResultKey.slice(1)}`,
-    });
-
-    return Wrapper;
+export function createHOC<P extends string, H extends Hook<any>>(prop: P, hook: H): HOC<P, H> {
+  return (Component, ...args) => {
+    return (props) => {
+      return <Component {...mergeProps({ [prop]: hook(...args) }, props) as any}/>;
+    };
   };
 }
