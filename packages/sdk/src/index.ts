@@ -36,10 +36,7 @@ export * from '@/colors/types.js';
 // BackButton.
 export { BackButton } from '@/components/BackButton/BackButton.js';
 export { initBackButton } from '@/components/BackButton/initBackButton.js';
-export { offBackButtonClick } from '@/components/BackButton/offBackButtonClick.js';
-export { onBackButtonClick } from '@/components/BackButton/onBackButtonClick.js';
 export type {
-  BackButtonClickListener,
   BackButtonEventListener,
   BackButtonEventName,
   BackButtonEvents,
@@ -91,10 +88,7 @@ export type {
 // MainButton.
 export { initMainButton } from '@/components/MainButton/initMainButton.js';
 export { MainButton } from '@/components/MainButton/MainButton.js';
-export { offMainButtonClick } from '@/components/MainButton/offMainButtonClick.js';
-export { onMainButtonClick } from '@/components/MainButton/onMainButtonClick.js';
 export type {
-  MainButtonClickListener,
   MainButtonEventListener,
   MainButtonEventName,
   MainButtonEvents,
@@ -103,7 +97,6 @@ export type {
 } from '@/components/MainButton/types.js';
 
 // MiniApp.
-export { bindMiniAppCSSVars } from '@/components/MiniApp/bindMiniAppCSSVars.js';
 export { initMiniApp } from '@/components/MiniApp/initMiniApp.js';
 export { MiniApp } from '@/components/MiniApp/MiniApp.js';
 export type {
@@ -137,18 +130,14 @@ export type {
 
 // SettingsButton.
 export { initSettingsButton } from '@/components/SettingsButton/initSettingsButton.js';
-export { offSettingsButtonClick } from '@/components/SettingsButton/offSettingsButtonClick.js';
-export { onSettingsButtonClick } from '@/components/SettingsButton/onSettingsButtonClick.js';
 export { SettingsButton } from '@/components/SettingsButton/SettingsButton.js';
 export type {
-  SettingsButtonClickListener,
   SettingsButtonEventListener,
   SettingsButtonEventName,
   SettingsButtonEvents,
 } from '@/components/SettingsButton/types.js';
 
 // ThemeParams.
-export { bindThemeParamsCSSVars } from '@/components/ThemeParams/bindThemeParamsCSSVars.js';
 export { initThemeParams } from '@/components/ThemeParams/initThemeParams.js';
 export { parseThemeParams } from '@/components/ThemeParams/parsing/parseThemeParams.js';
 export { serializeThemeParams } from '@/components/ThemeParams/parsing/serializeThemeParams.js';
@@ -167,7 +156,6 @@ export { initUtils } from '@/components/Utils/initUtils.js';
 export { Utils } from '@/components/Utils/Utils.js';
 
 // Viewport.
-export { bindViewportCSSVars } from '@/components/Viewport/bindViewportCSSVars.js';
 export { initViewport } from '@/components/Viewport/initViewport.js';
 export {
   requestViewport,
@@ -184,6 +172,15 @@ export { Viewport } from '@/components/Viewport/Viewport.js';
 /**
  * CSS Vars.
  */
+export { bindMiniAppCSSVars, type GetMiniAppCSSVarNameFn } from '@/css-vars/bindMiniAppCSSVars.js';
+export {
+  bindThemeParamsCSSVars,
+  type GetThemeParamsCSSVarNameFn,
+} from '@/css-vars/bindThemeParamsCSSVars.js';
+export {
+  bindViewportCSSVars,
+  type GetViewportCSSVarNameFn,
+} from '@/css-vars/bindViewportCSSVars.js';
 export { setCSSVar } from '@/css-vars/setCSSVar.js';
 
 /**
