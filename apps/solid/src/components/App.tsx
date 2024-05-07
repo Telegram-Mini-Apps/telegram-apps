@@ -1,7 +1,8 @@
 import { Navigate, Route } from '@solidjs/router';
 import {
   bindMiniAppCSSVars,
-  bindThemeParamsCSSVars, bindViewportCSSVars,
+  bindThemeParamsCSSVars,
+  bindViewportCSSVars,
   useMiniApp,
   useThemeParams,
   useViewport,
@@ -18,7 +19,6 @@ export function App() {
 
   createEffect(() => bindMiniAppCSSVars(miniApp(), themeParams()));
   createEffect(() => bindThemeParamsCSSVars(themeParams()));
-
   createEffect(() => {
     const vp = viewport();
     if (vp) {
@@ -28,7 +28,7 @@ export function App() {
 
   // Create new application navigator and attach it to the browser history, so it could modify
   // it and listen to its changes.
-  const navigator = createNavigator('app-navigator-state', 'default');
+  const navigator = createNavigator('app-navigator-state', { hashMode: 'default' });
   void navigator.attach();
 
   onCleanup(() => {

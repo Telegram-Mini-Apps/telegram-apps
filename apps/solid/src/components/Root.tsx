@@ -29,7 +29,7 @@ export const Root: Component = () => {
   return (
     <ErrorBoundary
       fallback={err => {
-        console.error(err);
+        console.error('ErrorBoundary handled error:', err);
 
         return (
           <div>
