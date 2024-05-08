@@ -70,16 +70,16 @@ describe('attach', () => {
 describe('back', () => {
   it('should go back in history by 1 entry', () => {
     const n = new BasicNavigator(['a', 'b'], 1);
-    expect(n.historyItem.pathname).toBe('b');
+    expect(n.current.pathname).toBe('b');
     n.back();
-    expect(n.historyItem.pathname).toBe('a');
+    expect(n.current.pathname).toBe('a');
   });
 
   it('should do nothing, if current entry is the first entry', () => {
     const n = new BasicNavigator(['a', 'b'], 0);
-    expect(n.historyItem.pathname).toBe('a');
+    expect(n.current.pathname).toBe('a');
     n.back();
-    expect(n.historyItem.pathname).toBe('a');
+    expect(n.current.pathname).toBe('a');
   });
 
   it('should hide the BackButton if navigator is attached and index became 0', () => {
@@ -119,6 +119,21 @@ describe('back', () => {
   });
 });
 
+describe('current', () => {
+  it('should return currently active navigation entry', () => {
+    const n = new BasicNavigator(['/abc'], 0);
+    expect(n.current).toMatchObject({
+      pathname: '/abc',
+      params: undefined,
+    });
+  });
+
+  it('should return frozen object', () => {
+    const n = new BasicNavigator(['/abc'], 0);
+    expect(Object.isFrozen(n.current)).toBe(true);
+  });
+});
+
 describe('detach', () => {
   beforeEach(() => {
     createWindow({ env: 'iframe' });
@@ -142,16 +157,16 @@ describe('detach', () => {
 describe('forward', () => {
   it('should go forward in history by 1 entry', () => {
     const n = new BasicNavigator(['a', 'b'], 0);
-    expect(n.historyItem.pathname).toBe('a');
+    expect(n.current.pathname).toBe('a');
     n.forward();
-    expect(n.historyItem.pathname).toBe('b');
+    expect(n.current.pathname).toBe('b');
   });
 
   it('should do nothing, if current entry is the last entry', () => {
     const n = new BasicNavigator(['a', 'b'], 1);
-    expect(n.historyItem.pathname).toBe('b');
+    expect(n.current.pathname).toBe('b');
     n.forward();
-    expect(n.historyItem.pathname).toBe('b');
+    expect(n.current.pathname).toBe('b');
   });
 
   it('should show the BackButton if navigator is attached and index became non-zero', () => {
@@ -194,16 +209,16 @@ describe('forward', () => {
 describe('go', () => {
   it('should do nothing if delta is out of bounds', () => {
     const n = new BasicNavigator(['a', 'b'], 0);
-    expect(n.historyItem.pathname).toBe('a');
+    expect(n.current.pathname).toBe('a');
     n.go(2);
-    expect(n.historyItem.pathname).toBe('a');
+    expect(n.current.pathname).toBe('a');
   });
 
   it('should cut delta and to fit the bounds [0, history.length) if "fit" is true', () => {
     const n = new BasicNavigator(['a', 'b'], 0);
-    expect(n.historyItem.pathname).toBe('a');
+    expect(n.current.pathname).toBe('a');
     n.go(2, true);
-    expect(n.historyItem.pathname).toBe('b');
+    expect(n.current.pathname).toBe('b');
   });
 
   it('should hide the BackButton if navigator is attached and cursor became 0', () => {
@@ -260,16 +275,16 @@ describe('go', () => {
 describe('goTo', () => {
   it('should do nothing if index is out of bounds', () => {
     const n = new BasicNavigator(['a', 'b'], 0);
-    expect(n.historyItem.pathname).toBe('a');
+    expect(n.current.pathname).toBe('a');
     n.goTo(2);
-    expect(n.historyItem.pathname).toBe('a');
+    expect(n.current.pathname).toBe('a');
   });
 
   it('should cut index and to fit the bounds [0, history.length) if "fit" is true', () => {
     const n = new BasicNavigator(['a', 'b'], 0);
-    expect(n.historyItem.pathname).toBe('a');
+    expect(n.current.pathname).toBe('a');
     n.goTo(2, true);
-    expect(n.historyItem.pathname).toBe('b');
+    expect(n.current.pathname).toBe('b');
   });
 
   it('should hide the BackButton if navigator is attached and index became 0', () => {
@@ -320,21 +335,6 @@ describe('goTo', () => {
       to: { id: 'aId', pathname: 'aPathname', params: 'aParams' },
       delta: -1,
     });
-  });
-});
-
-describe('historyItem', () => {
-  it('should return currently active navigation entry', () => {
-    const n = new BasicNavigator(['/abc'], 0);
-    expect(n.historyItem).toMatchObject({
-      pathname: '/abc',
-      params: undefined,
-    });
-  });
-
-  it('should return frozen object', () => {
-    const n = new BasicNavigator(['/abc'], 0);
-    expect(Object.isFrozen(n.historyItem)).toBe(true);
   });
 });
 

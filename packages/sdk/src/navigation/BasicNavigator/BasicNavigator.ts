@@ -7,6 +7,7 @@ import {
   ERROR_NAVIGATION_INDEX_INVALID,
 } from '@/errors/errors.js';
 import { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
+import { prepareItem } from '@/navigation/BasicNavigator/prepareItem.js';
 import type {
   BasicNavigatorAnyHistoryItem,
   BasicNavigatorEvents,
@@ -48,7 +49,7 @@ export class BasicNavigator<Params = {}> {
         'Index should not be zero and higher or equal than history size.',
       );
     }
-    this.history = history.map(this.formatHistoryItem.bind(this));
+    this.history = history.map((item) => prepareItem(item, ''));
   }
 
   /**
@@ -74,42 +75,18 @@ export class BasicNavigator<Params = {}> {
   back = (): void => this.go(-1);
 
   /**
+   * Currently active history item.
+   */
+  get current(): Readonly<BasicNavigatorHistoryItem<Params>> {
+    return this.history[this.index];
+  }
+
+  /**
    * Prevents current navigator from controlling the BackButton visibility state.
    */
   detach(): void {
     this.attached = false;
     off('back_button_pressed', this.back);
-  }
-
-  /**
-   * Converts any known history item type to the local one.
-   * @param historyItem - history item presented as a string or an object.
-   */
-  private formatHistoryItem(
-    historyItem: BasicNavigatorAnyHistoryItem<Params>,
-  ): Readonly<BasicNavigatorHistoryItem<Params>> {
-    let path: string;
-    let params: Params | undefined;
-    let id: string | undefined;
-
-    if (typeof historyItem === 'string') {
-      path = historyItem;
-    } else {
-      path = historyItem.pathname === undefined
-        // History may be undefined, if current function is being called in constructor.
-        ? this.history
-          ? this.historyItem.pathname
-          : ''
-        : historyItem.pathname;
-      params = historyItem.params;
-      id = historyItem.id;
-    }
-
-    return Object.freeze({
-      id: id || ((Math.random() * 2 ** 14) | 0).toString(16),
-      pathname: path,
-      params,
-    });
   }
 
   /**
@@ -157,13 +134,6 @@ export class BasicNavigator<Params = {}> {
   }
 
   /**
-   * Currently active history item.
-   */
-  get historyItem(): Readonly<BasicNavigatorHistoryItem<Params>> {
-    return this.history[this.index];
-  }
-
-  /**
    * True if navigator has items before the current item.
    */
   get hasPrev(): boolean {
@@ -195,22 +165,22 @@ export class BasicNavigator<Params = {}> {
   off: Emitter<Params>['off'] = this.ee.off.bind(this.ee);
 
   /**
-   * Adds new history item removing all after the current one.
+   * Adds a new history item removing all after the current one.
    * @param item - item to add.
    */
   push(item: BasicNavigatorAnyHistoryItem<Params>): void {
     if (this.hasNext) {
       this.history.splice(this.index + 1);
     }
-    this.replaceAndMove(this.index + 1, this.formatHistoryItem(item));
+    this.replaceAndMove(this.index + 1, prepareItem(item, this.current.pathname));
   }
 
   /**
-   * Replaces current history item.
-   * @param entry - entry to replace with.
+   * Replaces the current history item.
+   * @param item - item to replace the current item with.
    */
-  replace(entry: BasicNavigatorAnyHistoryItem<Params>): void {
-    this.replaceAndMove(this.index, this.formatHistoryItem(entry));
+  replace(item: BasicNavigatorAnyHistoryItem<Params>): void {
+    this.replaceAndMove(this.index, prepareItem(item, this.current.pathname));
   }
 
   /**
@@ -220,12 +190,12 @@ export class BasicNavigator<Params = {}> {
    */
   private replaceAndMove(index: number, historyItem: BasicNavigatorHistoryItem<Params>): void {
     const delta = index - this.index;
-    if (!delta && this.historyItem === historyItem) {
+    if (!delta && this.current === historyItem) {
       // Nothing changed.
       return;
     }
 
-    const from = this.historyItem;
+    const from = this.current;
 
     if (this.index !== index) {
       const prevIndex = this._index;
@@ -242,13 +212,13 @@ export class BasicNavigator<Params = {}> {
     this.ee.emit('change', {
       navigator: this,
       from,
-      to: this.historyItem,
+      to: this.current,
       delta,
     });
   }
 
   /**
-   * Actualizes the BackButton visibility state.
+   * Actualizes the `BackButton` visibility state.
    */
   private sync(): void {
     this.postEvent('web_app_setup_back_button', { is_visible: !!this.index });

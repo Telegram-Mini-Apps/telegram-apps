@@ -1,4 +1,4 @@
-import { ensurePrefix } from '@/navigation/utils/ensurePrefix.js';
+import { ensurePrefix } from '@/navigation/ensurePrefix.js';
 import type { URLLike } from '@/navigation/BrowserNavigator/types.js';
 
 /**

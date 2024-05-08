@@ -1,4 +1,4 @@
-import { createSafeURL } from '@/navigation/utils/createSafeURL.js';
+import { createSafeURL } from '@/navigation/createSafeURL.js';
 import type { URLLike } from '@/navigation/BrowserNavigator/types.js';
 
 /**

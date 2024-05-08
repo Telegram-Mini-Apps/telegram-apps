@@ -7,7 +7,7 @@ import type {
 /**
  * Converts basic navigator entry to browser navigator entry.
  */
-export function basicNavigatorHistoryItemToBrowser<State>(
+export function basicItemToBrowser<State>(
   {
     params,
     ...rest

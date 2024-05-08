@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { getPathname } from '@/navigation/utils/getPathname.js';
+import { getPathname } from '@/navigation/getPathname.js';
 
 it('should convert passed value to the URL and take its pathname part', () => {
   expect(getPathname('pathname')).toBe('/pathname');

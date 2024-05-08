@@ -1,23 +1,22 @@
 import { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
 import { BasicNavigator } from '@/navigation/BasicNavigator/BasicNavigator.js';
-import {
-  basicNavigatorHistoryItemToBrowser,
-} from '@/navigation/BrowserNavigator/utils/basicNavigatorHistoryItemToBrowser.js';
-import { createSafeURL } from '@/navigation/utils/createSafeURL.js';
-import { drop } from '@/navigation/utils/drop.js';
-import { ensurePrefix } from '@/navigation/utils/ensurePrefix.js';
-import { getPathname } from '@/navigation/utils/getPathname.js';
-import { go } from '@/navigation/utils/go.js';
-import { urlToPath } from '@/navigation/utils/urlToPath.js';
+import { basicItemToBrowser } from '@/navigation/BrowserNavigator/basicItemToBrowser.js';
+import { prepareItem } from '@/navigation/BrowserNavigator/prepareItem.js';
+import { createSafeURL } from '@/navigation/createSafeURL.js';
+import { drop } from '@/navigation/drop.js';
+import { ensurePrefix } from '@/navigation/ensurePrefix.js';
+import { getPathname } from '@/navigation/getPathname.js';
+import { go } from '@/navigation/go.js';
+import { urlToPath } from '@/navigation/urlToPath.js';
 import type { BasicNavigatorEvents } from '@/navigation/BasicNavigator/types.js';
 import type {
   BrowserNavigatorAnyHistoryItem,
   BrowserNavigatorConOptions,
   BrowserNavigatorEvents,
-  BrowserNavigatorFormatHistoryItemResult,
   BrowserNavigatorHashMode,
   BrowserNavigatorHistoryItem,
-  BrowserNavigatorHistoryItemParams, URLLike,
+  BrowserNavigatorHistoryItemParams,
+  URLLike,
 } from '@/navigation/BrowserNavigator/types.js';
 
 const CURSOR_VOID = 0;
@@ -48,7 +47,7 @@ export class BrowserNavigator<State = {}> {
     { postEvent, hashMode, base }: BrowserNavigatorConOptions = {},
   ) {
     this.navigator = new BasicNavigator(
-      history.map((item) => this.formatHistoryItem(item)),
+      history.map((item) => prepareItem(item, '/')),
       index,
       postEvent,
     );
@@ -58,7 +57,7 @@ export class BrowserNavigator<State = {}> {
   }
 
   /**
-   * Shows whether navigator is currently attached to the browser history.
+   * Shows whether the navigator is currently attached to the browser history.
    */
   private attached = false;
 
@@ -88,48 +87,6 @@ export class BrowserNavigator<State = {}> {
     this.attached = false;
     this.navigator.detach();
     window.removeEventListener('popstate', this.onPopState);
-  }
-
-  /**
-   * Converts path, presented as a string to a basic navigator appropriate form.
-   * @param path - full path.
-   * @param state - history item state.
-   */
-  private formatHistoryItem(
-    path: string,
-    state?: State,
-  ): BrowserNavigatorFormatHistoryItemResult<State>;
-
-  /**
-   * Converts path, presented as an object to a basic navigator appropriate form.
-   * @param historyItem - history item data.
-   */
-  private formatHistoryItem(
-    historyItem: BrowserNavigatorAnyHistoryItem<State>,
-  ): BrowserNavigatorFormatHistoryItemResult<State>;
-
-  private formatHistoryItem(
-    historyItemOrPath: string | BrowserNavigatorAnyHistoryItem<State>,
-    state?: State,
-  ): BrowserNavigatorFormatHistoryItemResult<State> {
-    let path: string;
-    let id: string | undefined;
-
-    if (typeof historyItemOrPath === 'string') {
-      path = historyItemOrPath;
-    } else {
-      path = urlToPath(historyItemOrPath);
-      state = historyItemOrPath.state;
-      id = historyItemOrPath.id;
-    }
-
-    const { pathname, search, hash } = new URL(
-      path,
-      // If we have currently an active history item, we should build a new one based on it. We may
-      // not have a navigator in case, current function is being called in the constructor.
-      `http://a${this.navigator ? this.path : ''}`,
-    );
-    return { id, pathname, params: { hash, search, state } };
   }
 
   /**
@@ -197,14 +154,14 @@ export class BrowserNavigator<State = {}> {
    * Currently active history item.
    */
   private get historyItem(): BrowserNavigatorHistoryItem<State> {
-    return basicNavigatorHistoryItemToBrowser(this.navigator.historyItem);
+    return basicItemToBrowser(this.navigator.current);
   }
 
   /**
    * Navigation history.
    */
   get history(): BrowserNavigatorHistoryItem<State>[] {
-    return this.navigator.history.map(basicNavigatorHistoryItemToBrowser);
+    return this.navigator.history.map(basicItemToBrowser);
   }
 
   /**
@@ -245,8 +202,8 @@ export class BrowserNavigator<State = {}> {
     }
     this.ee.emit('change', {
       delta,
-      from: basicNavigatorHistoryItemToBrowser(from),
-      to: basicNavigatorHistoryItemToBrowser(to),
+      from: basicItemToBrowser(from),
+      to: basicItemToBrowser(to),
       navigator: this,
     });
   };
@@ -348,7 +305,7 @@ export class BrowserNavigator<State = {}> {
   push(path: string, state?: State): void;
   push(item: BrowserNavigatorAnyHistoryItem<State>): void;
   push(itemOrPath: string | BrowserNavigatorAnyHistoryItem<State>, fnState?: State): void {
-    const item = this.formatHistoryItem(itemOrPath);
+    const item = prepareItem(itemOrPath, this.path);
     const { state = fnState } = item.params;
     this.navigator.push({ ...item, params: { ...item.params, state } });
   }
@@ -362,9 +319,9 @@ export class BrowserNavigator<State = {}> {
   replace(path: string, state?: State): void;
   replace(item: BrowserNavigatorAnyHistoryItem<State>): void;
   replace(itemOrPath: string | BrowserNavigatorAnyHistoryItem<State>, fnState?: State): void {
-    const hi = this.formatHistoryItem(itemOrPath);
-    const { state = fnState } = hi.params;
-    this.navigator.replace({ ...hi, params: { ...hi.params, state } });
+    const item = prepareItem(itemOrPath, this.path);
+    const { state = fnState } = item.params;
+    this.navigator.replace({ ...item, params: { ...item.params, state } });
   }
 
   /**

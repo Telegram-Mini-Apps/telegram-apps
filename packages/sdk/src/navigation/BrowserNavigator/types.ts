@@ -69,13 +69,3 @@ export interface BrowserNavigatorEvents<State> {
     to: BrowserNavigatorHistoryItem<State>;
   };
 }
-
-export interface BrowserNavigatorFormatHistoryItemResult<State> {
-  id?: string;
-  pathname: string;
-  params: {
-    hash: string;
-    search: string;
-    state?: State;
-  };
-}

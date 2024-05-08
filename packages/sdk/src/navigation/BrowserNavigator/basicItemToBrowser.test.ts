@@ -1,8 +1,8 @@
 import { expect, it } from 'vitest';
-import { basicNavigatorHistoryItemToBrowser } from './basicNavigatorHistoryItemToBrowser.js';
+import { basicItemToBrowser } from './basicItemToBrowser.js';
 
 it('should convert BasicNavigator history item to the one, appropriate for BrowserNavigator', () => {
-  expect(basicNavigatorHistoryItemToBrowser({
+  expect(basicItemToBrowser({
     id: 'abc',
     pathname: '/a',
   })).toStrictEqual({
@@ -12,7 +12,7 @@ it('should convert BasicNavigator history item to the one, appropriate for Brows
     pathname: '/a',
   });
 
-  expect(basicNavigatorHistoryItemToBrowser({
+  expect(basicItemToBrowser({
     id: 'abc',
     pathname: '/a',
     params: {
