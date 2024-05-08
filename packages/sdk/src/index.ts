@@ -236,15 +236,11 @@ export type {
   BrowserNavigatorHistoryItem,
   URLLike,
 } from '@/navigation/BrowserNavigator/types.js';
-export {
-  createBrowserNavigatorFromLocation,
-} from '@/navigation/BrowserNavigator/utils/createBrowserNavigatorFromLocation.js';
-export { createSafeURL } from '@/navigation/utils/createSafeURL.js';
-export { ensurePrefix } from '@/navigation/utils/ensurePrefix.js';
-export { getFirstNavigationEntry } from '@/navigation/utils/getFirstNavigationEntry.js';
-export { getHash } from '@/navigation/utils/getHash.js';
-export { isPageReload } from '@/navigation/utils/isPageReload.js';
-export { urlToPath } from '@/navigation/utils/urlToPath.js';
+export { createSafeURL } from '@/navigation/createSafeURL.js';
+export { getHash } from '@/navigation/getHash.js';
+export { getPathname } from '@/navigation/getPathname.js';
+export { isPageReload } from '@/navigation/isPageReload.js';
+export { urlToPath } from '@/navigation/urlToPath.js';
 
 /**
  * Parsing.

@@ -1,7 +1,7 @@
 import { isSSR } from '@/env/isSSR.js';
 import { createError } from '@/errors/createError.js';
 import { ERROR_SSR_INIT } from '@/errors/errors.js';
-import { createComponentInitFn } from '@/init/createComponentInitFn/createComponentInitFn.js';
+import { createComponentInitFn } from '@/misc/createComponentInitFn/createComponentInitFn.js';
 
 import { BiometryManager } from './BiometryManager.js';
 import { requestBiometryInfo } from './requestBiometryInfo.js';

@@ -4,7 +4,7 @@ import { createError } from '@/errors/createError.js';
 import { ERROR_SSR_INIT, ERROR_SSR_POST_EVENT } from '@/errors/errors.js';
 import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
 import { createSingleton } from '@/misc/createSingleton.js';
-import { isPageReload } from '@/navigation/utils/isPageReload.js';
+import { isPageReload } from '@/navigation/isPageReload.js';
 import { createRequestIdGenerator } from '@/request-id/createRequestIdGenerator.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import type { LaunchParamName, LaunchParams } from '@/launch-params/types.js';

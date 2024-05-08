@@ -1,4 +1,4 @@
-import { createComponentInitFn } from '@/init/createComponentInitFn/createComponentInitFn.js';
+import { createComponentInitFn } from '@/misc/createComponentInitFn/createComponentInitFn.js';
 
 import { SettingsButton } from './SettingsButton.js';
 

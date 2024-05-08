@@ -1,4 +1,4 @@
-import { createComponentInitFn } from '@/init/createComponentInitFn/createComponentInitFn.js';
+import { createComponentInitFn } from '@/misc/createComponentInitFn/createComponentInitFn.js';
 
 import { ClosingBehavior } from './ClosingBehavior.js';
 
