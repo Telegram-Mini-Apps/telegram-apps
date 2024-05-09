@@ -1,7 +1,7 @@
 import globals from 'globals';
 import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import pluginSolidConfig from 'eslint-plugin-solid/configs/typescript';
+import pluginSolidConfig from 'eslint-plugin-solid/configs/typescript.js';
 
 export default [
   {
