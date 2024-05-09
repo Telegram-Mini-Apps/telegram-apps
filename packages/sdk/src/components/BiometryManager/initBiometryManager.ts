@@ -1,6 +1,6 @@
 import { isSSR } from '@/env/isSSR.js';
 import { createError } from '@/errors/createError.js';
-import { ERROR_SSR_INIT } from '@/errors/errors.js';
+import { ERR_SSR_INIT } from '@/errors/errors.js';
 import { createComponentInitFn } from '@/misc/createComponentInitFn/createComponentInitFn.js';
 
 import { BiometryManager } from './BiometryManager.js';
@@ -21,7 +21,7 @@ export const initBiometryManager = createComponentInitFn<
 
   if (isSSR()) {
     throw createError(
-      ERROR_SSR_INIT,
+      ERR_SSR_INIT,
       'BiometryManager cannot be instantiated on the server side without passing the ssr.state object.',
     );
   }

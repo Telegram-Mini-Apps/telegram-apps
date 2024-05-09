@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { ERROR_PARSE, ERROR_UNEXPECTED_TYPE } from '@/errors/errors.js';
+import { ERR_PARSE, ERR_UNEXPECTED_TYPE } from '@/errors/errors.js';
 
 import { date } from './date.js';
 import { searchParams } from './searchParams.js';
@@ -22,15 +22,15 @@ it('should throw an error in case, passed value does not contain required field 
   } catch (e) {
     expect(e).toMatchObject({
       message: 'Unable to parse value',
-      type: ERROR_PARSE,
+      type: ERR_PARSE,
       cause: {
-        type: ERROR_PARSE,
+        type: ERR_PARSE,
         message: 'Unable to parse field "prop"',
         cause: {
-          type: ERROR_PARSE,
+          type: ERR_PARSE,
           message: 'Unable to parse value as string',
           cause: {
-            type: ERROR_UNEXPECTED_TYPE,
+            type: ERR_UNEXPECTED_TYPE,
             message: 'Value has unexpected type',
           },
         },
@@ -78,19 +78,19 @@ it('should throw an error in case, passed value contains field of different type
     parser.parse('prop=abc');
   } catch (e) {
     expect(e).toMatchObject({
-      type: ERROR_PARSE,
+      type: ERR_PARSE,
       message: 'Unable to parse value',
       cause: {
-        type: ERROR_PARSE,
+        type: ERR_PARSE,
         message: 'Unable to parse field "prop"',
         cause: {
-          type: ERROR_PARSE,
+          type: ERR_PARSE,
           message: 'Unable to parse value as Date',
           cause: {
-            type: ERROR_PARSE,
+            type: ERR_PARSE,
             message: 'Unable to parse value as number',
             cause: {
-              type: ERROR_UNEXPECTED_TYPE,
+              type: ERR_UNEXPECTED_TYPE,
               message: 'Value has unexpected type',
             },
           },

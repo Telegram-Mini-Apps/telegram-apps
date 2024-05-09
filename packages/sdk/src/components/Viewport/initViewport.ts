@@ -2,7 +2,7 @@ import { initViewportFromRequest } from '@/components/Viewport/initViewportFromR
 import { logger } from '@/debug/debug.js';
 import { isSSR } from '@/env/isSSR.js';
 import { createError } from '@/errors/createError.js';
-import { ERROR_SSR_INIT } from '@/errors/errors.js';
+import { ERR_SSR_INIT } from '@/errors/errors.js';
 import { createComponentInitFn } from '@/misc/createComponentInitFn/createComponentInitFn.js';
 import type { FactoryOptions } from '@/misc/createComponentInitFn/types.js';
 
@@ -54,7 +54,7 @@ export const initViewport = createComponentInitFn<'viewport', Promise<Viewport>,
   async (options) => {
     if (isSSR() && !options.state) {
       throw createError(
-        ERROR_SSR_INIT,
+        ERR_SSR_INIT,
         'Viewport cannot be instantiated on the server side without passing the ssr.state object.',
       );
     }

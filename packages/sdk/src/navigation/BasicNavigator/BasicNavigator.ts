@@ -3,8 +3,8 @@ import { on } from '@/bridge/events/listening/on.js';
 import { type PostEvent, postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
 import { createError } from '@/errors/createError.js';
 import {
-  ERROR_NAVIGATION_HISTORY_EMPTY,
-  ERROR_NAVIGATION_INDEX_INVALID,
+  ERR_NAVIGATION_HISTORY_EMPTY,
+  ERR_NAVIGATION_INDEX_INVALID,
 } from '@/errors/errors.js';
 import { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
 import { prepareItem } from '@/navigation/BasicNavigator/prepareItem.js';
@@ -40,12 +40,12 @@ export class BasicNavigator<Params = {}> {
     private readonly postEvent: PostEvent = defaultPostEvent,
   ) {
     if (history.length === 0) {
-      throw createError(ERROR_NAVIGATION_HISTORY_EMPTY, 'History should not be empty.');
+      throw createError(ERR_NAVIGATION_HISTORY_EMPTY, 'History should not be empty.');
     }
 
     if (_index < 0 || _index >= history.length) {
       throw createError(
-        ERROR_NAVIGATION_INDEX_INVALID,
+        ERR_NAVIGATION_INDEX_INVALID,
         'Index should not be zero and higher or equal than history size.',
       );
     }

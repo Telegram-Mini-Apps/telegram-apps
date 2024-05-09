@@ -3,7 +3,7 @@ import { hasExternalNotify } from '@/env/hasExternalNotify.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { isIframe } from '@/env/isIframe.js';
 import { createError } from '@/errors/createError.js';
-import { ERROR_UNKNOWN_ENV } from '@/errors/errors.js';
+import { ERR_UNKNOWN_ENV } from '@/errors/errors.js';
 
 import { targetOrigin as targetOriginFn } from '../target-origin.js';
 import type {
@@ -30,8 +30,8 @@ export type PostEvent = typeof postEvent;
  * @param method - method name.
  * @param params - method parameters.
  * @param options - posting options.
- * @throws {SDKError} ERROR_UNKNOWN_ENV
- * @see ERROR_UNKNOWN_ENV
+ * @throws {SDKError} ERR_UNKNOWN_ENV
+ * @see ERR_UNKNOWN_ENV
  */
 export function postEvent<Method extends MiniAppsMethodWithOptionalParams>(
   method: Method,
@@ -43,8 +43,8 @@ export function postEvent<Method extends MiniAppsMethodWithOptionalParams>(
  * Calls Mini Apps method without parameters.
  * @param method - method name.
  * @param options - posting options.
- * @throws {SDKError} ERROR_UNKNOWN_ENV
- * @see ERROR_UNKNOWN_ENV
+ * @throws {SDKError} ERR_UNKNOWN_ENV
+ * @see ERR_UNKNOWN_ENV
  */
 export function postEvent(method: MiniAppsMethodWithoutParams, options?: PostEventOptions): void;
 
@@ -53,8 +53,8 @@ export function postEvent(method: MiniAppsMethodWithoutParams, options?: PostEve
  * @param method - method name.
  * @param params - method parameters.
  * @param options - posting options.
- * @throws {SDKError} ERROR_UNKNOWN_ENV
- * @see ERROR_UNKNOWN_ENV
+ * @throws {SDKError} ERR_UNKNOWN_ENV
+ * @see ERR_UNKNOWN_ENV
  */
 export function postEvent<Method extends MiniAppsMethodWithRequiredParams>(
   method: Method,
@@ -111,7 +111,7 @@ export function postEvent(
 
   // Otherwise current environment is unknown, and we are not able to send event.
   throw createError(
-    ERROR_UNKNOWN_ENV,
+    ERR_UNKNOWN_ENV,
     'Unable to determine current environment and possible way to send event. You are probably trying to use Mini Apps method outside of Telegram application environment.',
   );
 }

@@ -1,5 +1,5 @@
 import { createError } from '@/errors/createError.js';
-import { ERROR_PARSE } from '@/errors/errors.js';
+import { ERR_PARSE } from '@/errors/errors.js';
 
 import type { Parser, Schema } from './types.js';
 
@@ -45,7 +45,7 @@ export function parseBySchema<T>(
         (result as any)[field] = parsedValue;
       }
     } catch (error) {
-      throw createError(ERROR_PARSE, `Unable to parse field "${field}"`, error);
+      throw createError(ERR_PARSE, `Unable to parse field "${field}"`, error);
     }
   }
 

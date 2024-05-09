@@ -46,8 +46,8 @@ export class ArrayParser<ItemType, IsOptional extends boolean>
   /**
    * Attempts to parse passed value
    * @param value - value to parse.
-   * @throws {SDKError} ERROR_PARSE
-   * @see ERROR_PARSE
+   * @throws {SDKError} ERR_PARSE
+   * @see ERR_PARSE
    */
   override parse(value: unknown): ValueParserParseResult<ItemType[], IsOptional> {
     const arr = super.parse(value);

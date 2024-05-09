@@ -1,5 +1,5 @@
 import { createError } from '@/errors/createError.js';
-import { ERROR_PARSE } from '@/errors/errors.js';
+import { ERR_PARSE } from '@/errors/errors.js';
 
 import type { Parser } from '../types.js';
 import type { ValueParserOptionalResult, ValueParserParseResult } from './types.js';
@@ -15,8 +15,8 @@ export class ValueParser<ResultType, IsOptional extends boolean> {
   /**
    * Attempts to parse passed value
    * @param value - value to parse.
-   * @throws {SDKError} ERROR_PARSE
-   * @see ERROR_PARSE
+   * @throws {SDKError} ERR_PARSE
+   * @see ERR_PARSE
    */
   parse(value: unknown): ValueParserParseResult<ResultType, IsOptional> {
     // In case, parsing result is specified as optional, and passed value is considered as empty,
@@ -29,7 +29,7 @@ export class ValueParser<ResultType, IsOptional extends boolean> {
       return this.parser(value) as ValueParserParseResult<ResultType, IsOptional>;
     } catch (cause) {
       throw createError(
-        ERROR_PARSE,
+        ERR_PARSE,
         `Unable to parse value${this.type ? ` as ${this.type}` : ''}`,
         cause,
       );

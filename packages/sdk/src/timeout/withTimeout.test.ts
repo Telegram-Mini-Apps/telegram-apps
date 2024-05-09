@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
 
 import { createError } from '@/errors/createError.js';
-import { ERROR_TIMED_OUT } from '@/errors/errors.js';
+import { ERR_TIMED_OUT } from '@/errors/errors.js';
 
 import { withTimeout } from './withTimeout.js';
 
@@ -19,7 +19,7 @@ it('should throw an error in case timeout reached', () => {
   }), 100);
 
   Promise.resolve().then(() => vi.advanceTimersByTime(500));
-  expect(promise).rejects.toStrictEqual(createError(ERROR_TIMED_OUT, 'Timeout reached: 100ms'));
+  expect(promise).rejects.toStrictEqual(createError(ERR_TIMED_OUT, 'Timeout reached: 100ms'));
 }, 1000);
 
 it('should return resolved value by wrapped function', () => {

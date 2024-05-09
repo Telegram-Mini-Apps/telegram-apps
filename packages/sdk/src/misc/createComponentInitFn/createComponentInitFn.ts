@@ -1,7 +1,7 @@
 import { createPostEvent } from '@/bridge/methods/createPostEvent.js';
 import { isSSR } from '@/env/isSSR.js';
 import { createError } from '@/errors/createError.js';
-import { ERROR_SSR_INIT, ERROR_SSR_POST_EVENT } from '@/errors/errors.js';
+import { ERR_SSR_INIT, ERR_SSR_POST_EVENT } from '@/errors/errors.js';
 import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
 import { createSingleton } from '@/misc/createSingleton.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
@@ -56,7 +56,7 @@ export function createComponentInitFn<
     if (isSSR()) {
       if (!ssr) {
         throw createError(
-          ERROR_SSR_INIT,
+          ERR_SSR_INIT,
           'ssr.options must be specified to initialize component on the server side',
         );
       }
@@ -73,7 +73,7 @@ export function createComponentInitFn<
         // care what postEvent will be, but notify user in case, he used it.
         : () => {
           throw createError(
-            ERROR_SSR_POST_EVENT,
+            ERR_SSR_POST_EVENT,
             'postEvent function is forbidden to be called on the server side.',
           );
         },

@@ -3,8 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createError } from '@/errors/createError.js';
 
 import {
-  ERROR_NAVIGATION_INDEX_INVALID,
-  ERROR_NAVIGATION_HISTORY_EMPTY,
+  ERR_NAVIGATION_INDEX_INVALID,
+  ERR_NAVIGATION_HISTORY_EMPTY,
 } from '@/errors/errors.js';
 import { BasicNavigator } from './BasicNavigator.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
@@ -14,16 +14,16 @@ import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singlet
 describe('constructor', () => {
   it('should throw error if entries list is empty', () => {
     expect(() => new BasicNavigator([], 0)).toThrow(
-      createError(ERROR_NAVIGATION_HISTORY_EMPTY, 'History should not be empty.'),
+      createError(ERR_NAVIGATION_HISTORY_EMPTY, 'History should not be empty.'),
     );
   });
 
   it('should throw error if history index is less than 0 or higher or equal to entries list length', () => {
     expect(() => new BasicNavigator(['/a'], -1)).toThrow(
-      createError(ERROR_NAVIGATION_INDEX_INVALID, 'Index should not be zero and higher or equal than history size.'),
+      createError(ERR_NAVIGATION_INDEX_INVALID, 'Index should not be zero and higher or equal than history size.'),
     );
     expect(() => new BasicNavigator(['/a'], 1)).toThrow(
-      createError(ERROR_NAVIGATION_INDEX_INVALID, 'Index should not be zero and higher or equal than history size.'),
+      createError(ERR_NAVIGATION_INDEX_INVALID, 'Index should not be zero and higher or equal than history size.'),
     );
   });
 });
