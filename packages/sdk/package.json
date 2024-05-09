@@ -45,7 +45,6 @@
     "build:iife:low-level": "vite build -c vite.iife.low-level.config.ts"
   },
   "devDependencies": {
-    "eslint-config-custom": "workspace:*",
     "test-utils": "workspace:*",
     "tsconfig": "workspace:*"
   },

@@ -48,7 +48,6 @@
     "solid-js": "^1.0.0"
   },
   "devDependencies": {
-    "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*"
   },
   "publishConfig": {

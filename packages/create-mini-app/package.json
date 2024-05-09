@@ -33,7 +33,6 @@
   "devDependencies": {
     "@types/inquirer": "^9.0.7",
     "@types/node": "^20.0.0",
-    "eslint-config-custom": "workspace:*",
     "rollup-plugin-preserve-shebang": "^1.0.1",
     "test-utils": "workspace:*",
     "tsconfig": "workspace:*"
