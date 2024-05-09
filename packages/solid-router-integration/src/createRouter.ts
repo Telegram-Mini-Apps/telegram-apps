@@ -33,10 +33,12 @@ function scrollToHash(hash: string, fallbackTop: boolean) {
 }
 
 /**
- * Creates new Router for the application.
- * @param navigator - @tma.js navigator.
+ * Creates a new Router for the application.
+ * @param navigator - browser navigator.
  */
-export function createRouter<State>(navigator: BrowserNavigator<State>): Component<BaseRouterProps> {
+export function createRouter<State>(
+  navigator: BrowserNavigator<State>,
+): Component<BaseRouterProps> {
   return createSolidRouter({
     get: () => navigator.path,
     init: (notify) => navigator.on('change', () => notify()),
