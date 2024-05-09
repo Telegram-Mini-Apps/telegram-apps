@@ -228,6 +228,9 @@ export type {
   BasicNavigatorHistoryItem,
 } from '@/navigation/BasicNavigator/types.js';
 export { BrowserNavigator } from '@/navigation/BrowserNavigator/BrowserNavigator.js';
+export {
+  createBrowserNavigatorFromLocation,
+} from '@/navigation/BrowserNavigator/createBrowserNavigatorFromLocation.js';
 export type {
   BrowserNavigatorAnyHistoryItem,
   BrowserNavigatorConOptions,
