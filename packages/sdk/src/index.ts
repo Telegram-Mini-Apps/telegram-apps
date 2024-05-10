@@ -40,6 +40,7 @@ export type {
   BackButtonEventListener,
   BackButtonEventName,
   BackButtonEvents,
+  BackButtonState,
 } from '@/components/BackButton/types.js';
 
 // BiometryManager.
@@ -51,6 +52,7 @@ export type {
   BiometryManagerProps,
   BiometryManagerRequestAccessOptions,
   BiometryManagerUpdateTokenOptions,
+  BiometryManagerState,
 } from '@/components/BiometryManager/types.js';
 
 // ClosingBehavior.
@@ -60,6 +62,7 @@ export type {
   ClosingBehaviorEventListener,
   ClosingBehaviorEventName,
   ClosingBehaviorEvents,
+  ClosingBehaviorState,
 } from '@/components/ClosingBehavior/types.js';
 
 // CloudStorage.
@@ -74,7 +77,12 @@ export { initHapticFeedback } from '@/components/HapticFeedback/initHapticFeedba
 export { InitData } from '@/components/InitData/InitData.js';
 export { initInitData } from '@/components/InitData/initInitData.js';
 export { parseInitData } from '@/components/InitData/parseInitData.js';
-export * from '@/components/InitData/types.js';
+export type {
+  Chat,
+  ChatType,
+  User,
+  InitDataParsed
+} from '@/components/InitData/types.js';
 
 // Invoice.
 export { initInvoice } from '@/components/Invoice/initInvoice.js';
@@ -83,6 +91,7 @@ export type {
   InvoiceEventListener,
   InvoiceEventName,
   InvoiceEvents,
+  InvoiceState,
 } from '@/components/Invoice/types.js';
 
 // MainButton.
@@ -94,6 +103,7 @@ export type {
   MainButtonEvents,
   MainButtonParams,
   MainButtonProps,
+  MainButtonState,
 } from '@/components/MainButton/types.js';
 
 // MiniApp.
@@ -105,6 +115,7 @@ export type {
   MiniAppEvents,
   MiniAppHeaderColor,
   MiniAppProps,
+  MiniAppState,
   RequestedContact,
 } from '@/components/MiniApp/types.js';
 
@@ -117,6 +128,7 @@ export type {
   PopupEventListener,
   PopupEventName,
   PopupEvents,
+  PopupState,
 } from '@/components/Popup/types.js';
 
 // QRScanner.
@@ -126,6 +138,7 @@ export type {
   QRScannerEventListener,
   QRScannerEventName,
   QRScannerEvents,
+  QRScannerState,
 } from '@/components/QRScanner/types.js';
 
 // SettingsButton.
@@ -135,6 +148,7 @@ export type {
   SettingsButtonEventListener,
   SettingsButtonEventName,
   SettingsButtonEvents,
+  SettingsButtonState,
 } from '@/components/SettingsButton/types.js';
 
 // ThemeParams.
@@ -149,6 +163,7 @@ export type {
   ThemeParamsEvents,
   ThemeParamsKey,
   ThemeParamsParsed,
+  ThemeParamsState,
 } from '@/components/ThemeParams/types.js';
 
 // Utils.
@@ -166,6 +181,7 @@ export type {
   ViewportEventName,
   ViewportEvents,
   ViewportProps,
+  ViewportState,
 } from '@/components/Viewport/types.js';
 export { Viewport } from '@/components/Viewport/Viewport.js';
 
@@ -217,6 +233,19 @@ export { parseLaunchParams } from '@/launch-params/parseLaunchParams.js';
 export { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
 export { serializeLaunchParams } from '@/launch-params/serializeLaunchParams.js';
 export * from '@/launch-params/types.js';
+
+/**
+ * Misc.
+ */
+export type {
+  SSROptions,
+  FactoryOptions,
+  FactoryStatic,
+  Factory,
+  FactoryDynamic,
+  InitComponentFn,
+  WithOnChange,
+} from '@/misc/createComponentInitFn/types.js';
 
 /**
  * Navigation.
