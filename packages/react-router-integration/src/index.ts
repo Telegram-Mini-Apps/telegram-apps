@@ -1,3 +1,3 @@
-export * from './createNavigator.js';
-export * from './useBackButtonIntegration.js';
-export * from './useNavigatorIntegration.js';
+export { createNavigator } from './createNavigator.js';
+export { type BackButtonLike, useBackButtonIntegration } from './useBackButtonIntegration.js';
+export { useNavigatorIntegration } from './useNavigatorIntegration.js';

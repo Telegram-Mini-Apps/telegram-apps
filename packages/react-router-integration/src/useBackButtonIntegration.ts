@@ -1,5 +1,11 @@
-import type { BackButton, HashNavigator } from '@tma.js/sdk';
+import type { BrowserNavigator } from '@tma.js/sdk-react';
 import { useEffect } from 'react';
+
+export interface BackButtonLike {
+  show(): void;
+  hide(): void;
+  on(event: 'click', listener: () => void): () => void;
+}
 
 /**
  * Controls specified Back Button visibility state and moves navigator's cursor back if user
@@ -7,11 +13,11 @@ import { useEffect } from 'react';
  * @param nav - Mini Apps navigator.
  * @param backButton - Mini Apps Back Button.
  */
-export function useBackButtonIntegration(nav: HashNavigator, backButton: BackButton): void {
+export function useBackButtonIntegration(nav: BrowserNavigator<any>, backButton: BackButtonLike): void {
   // When Mini Apps navigator changes its location, we should actualize the reactive values.
   useEffect(() => {
     return nav.on('change', () => {
-      if (nav.canGoBack) {
+      if (nav.hasPrev) {
         backButton.show();
       } else {
         backButton.hide();
