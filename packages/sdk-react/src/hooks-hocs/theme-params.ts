@@ -1,14 +1,8 @@
 import { initThemeParams } from '@tma.js/sdk';
 
-import { createHOC, type HOC } from '../createHOC.js';
-import { createHook, type Hook } from '../createHook.js';
+import { createHOCs } from '../createHOCs.js';
+import { createHooks } from '../createHooks.js';
 
-/**
- * Hook to receive the ThemeParams component instance.
- */
-export const useThemeParams: Hook<typeof initThemeParams> = createHook(initThemeParams);
+export const [useThemeParamsRaw, useThemeParams] = createHooks(initThemeParams);
 
-/**
- * HOC to pass the ThemeParams component instance to the wrapped component.
- */
-export const withThemeParams: HOC<'themeParams', typeof useThemeParams> = createHOC('themeParams', useThemeParams);
+export const [withThemeParamsRaw, withThemeParams] = createHOCs(useThemeParamsRaw, useThemeParams);

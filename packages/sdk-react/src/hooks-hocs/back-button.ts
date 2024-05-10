@@ -1,14 +1,11 @@
 import { initBackButton } from '@tma.js/sdk';
 
-import { createHOC, type HOC } from '../createHOC.js';
-import { createHook, type Hook } from '../createHook.js';
+import { createHOCs } from '../createHOCs.js';
+import { createHooks } from '../createHooks.js';
 
-/**
- * Hook to receive the BackButton component instance.
- */
-export const useBackButton: Hook<typeof initBackButton> = createHook(initBackButton);
+export const [useBackButtonRaw, useBackButton] = createHooks(initBackButton);
 
-/**
- * HOC to pass the BackButton component instance to the wrapped component.
- */
-export const withBackButton: HOC<'backButton', typeof useBackButton> = createHOC('backButton', useBackButton);
+export const [withBackButtonRaw, withBackButton] = createHOCs(
+  useBackButtonRaw,
+  useBackButton,
+);

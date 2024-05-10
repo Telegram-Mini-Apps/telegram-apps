@@ -1,5 +1,5 @@
-import type { AnyFn } from '@tma.js/sdk';
 import type { PropsWithChildren } from 'react';
+import { AnyFn } from '@tma.js/sdk';
 
 export interface SDKProviderProps extends PropsWithChildren {
   /**
@@ -8,14 +8,41 @@ export interface SDKProviderProps extends PropsWithChildren {
    * @default true
    */
   acceptCustomStyles?: boolean;
+  /**
+   * Enables debug mode.
+   * @default false
+   */
+  debug?: boolean;
 }
+
+/**
+ * SDKContext item.
+ */
+export type SDKContextItem<T> = ({
+  /**
+   * This item execution result. The property may be missing in case, execution is async.
+   */
+  result?: T;
+} | {
+  /**
+   * An error occurred during execution.
+   */
+  error: unknown;
+});
 
 /**
  * SDK context represents a map, where key is component init function, and value is an accessor,
  * retrieving its result.
  */
 export interface SDKContextType {
-  get(fn: AnyFn): any;
-  set(fn: AnyFn, value: any): any;
-  has(fn: AnyFn): boolean;
+  /**
+   * Uses specified factory with the passed arguments. In case, this factory was called
+   * previously, a cached result will be returned.
+   * @param factory - factory function.
+   * @param args - factory arguments.
+   */
+  use<Fn extends AnyFn>(
+    factory: Fn,
+    ...args: Parameters<Fn>
+  ): SDKContextItem<Awaited<ReturnType<Fn>>>;
 }

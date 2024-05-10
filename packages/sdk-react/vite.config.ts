@@ -10,12 +10,7 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
     rollupOptions: {
-      external: ['react'],
-      output: {
-        globals: {
-          react: 'React',
-        },
-      }
+      external: ['react', 'react/jsx-runtime'],
     },
     lib: {
       entry: 'src/index.ts',

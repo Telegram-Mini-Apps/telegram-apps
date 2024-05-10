@@ -1,14 +1,8 @@
 import { initViewport } from '@tma.js/sdk';
 
-import { createHOC, type HOC } from '../createHOC.js';
-import { createHook, type Hook } from '../createHook.js';
+import { createHOCs } from '../createHOCs.js';
+import { createHooks } from '../createHooks.js';
 
-/**
- * Hook to receive the Viewport component instance.
- */
-export const useViewport: Hook<typeof initViewport> = createHook(initViewport);
+export const [useViewportRaw, useViewport] = createHooks(initViewport);
 
-/**
- * HOC to pass the Viewport component instance to the wrapped component.
- */
-export const withViewport: HOC<'viewport', typeof useViewport> = createHOC('viewport', useViewport);
+export const [withViewportRaw, withViewport] = createHOCs(useViewportRaw, useViewport);

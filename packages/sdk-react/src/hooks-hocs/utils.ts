@@ -1,14 +1,8 @@
 import { initUtils } from '@tma.js/sdk';
 
-import { createHOC, type HOC } from '../createHOC.js';
-import { createHook, type Hook } from '../createHook.js';
+import { createHOCs } from '../createHOCs.js';
+import { createHooks } from '../createHooks.js';
 
-/**
- * Hook to receive the Utils component instance.
- */
-export const useUtils: Hook<typeof initUtils> = createHook(initUtils);
+export const [useUtilsRaw, useUtils] = createHooks(initUtils);
 
-/**
- * HOC to pass the Utils component instance to the wrapped component.
- */
-export const withUtils: HOC<'utils', typeof useUtils> = createHOC('utils', useUtils);
+export const [withUtilsRaw, withUtils] = createHOCs(useUtilsRaw, useUtils);

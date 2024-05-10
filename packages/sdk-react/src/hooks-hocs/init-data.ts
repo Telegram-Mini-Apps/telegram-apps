@@ -1,14 +1,8 @@
 import { initInitData } from '@tma.js/sdk';
 
-import { createHOC, type HOC } from '../createHOC.js';
-import { createHook, type Hook } from '../createHook.js';
+import { createHooks } from '../createHooks.js';
+import { createHOCs } from '../createHOCs.js';
 
-/**
- * Hook to receive the InitData component instance.
- */
-export const useInitData: Hook<typeof initInitData> = createHook(initInitData);
+export const [useInitDataRaw, useInitData] = createHooks(initInitData);
 
-/**
- * HOC to pass the InitData component instance to the wrapped component.
- */
-export const withInitData: HOC<'initData', typeof useInitData> = createHOC('initData', useInitData);
+export const [withInitDataRaw, withInitData] = createHOCs(useInitDataRaw, useInitData);

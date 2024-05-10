@@ -1,14 +1,11 @@
 import { initSettingsButton } from '@tma.js/sdk';
 
-import { createHOC, type HOC } from '../createHOC.js';
-import { createHook, type Hook } from '../createHook.js';
+import { createHOCs } from '../createHOCs.js';
+import { createHooks } from '../createHooks.js';
 
-/**
- * Hook to receive the SettingsButton component instance.
- */
-export const useSettingsButton: Hook<typeof initSettingsButton> = createHook(initSettingsButton);
+export const [useSettingsButtonRaw, useSettingsButton] = createHooks(initSettingsButton);
 
-/**
- * HOC to pass the SettingsButton component instance to the wrapped component.
- */
-export const withSettingsButton: HOC<'settingsButton', typeof useSettingsButton> = createHOC('settingsButton', useSettingsButton);
+export const [withSettingsButtonRaw, withSettingsButton] = createHOCs(
+  useSettingsButtonRaw,
+  useSettingsButton,
+);

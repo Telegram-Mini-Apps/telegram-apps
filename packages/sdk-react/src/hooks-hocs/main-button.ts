@@ -1,14 +1,8 @@
 import { initMainButton } from '@tma.js/sdk';
 
-import { createHOC, type HOC } from '../createHOC.js';
-import { createHook, type Hook } from '../createHook.js';
+import { createHOCs } from '../createHOCs.js';
+import { createHooks } from '../createHooks.js';
 
-/**
- * Hook to receive the MainButton component instance.
- */
-export const useMainButton: Hook<typeof initMainButton> = createHook(initMainButton);
+export const [useMainButtonRaw, useMainButton] = createHooks(initMainButton);
 
-/**
- * HOC to pass the MainButton component instance to the wrapped component.
- */
-export const withMainButton: HOC<'mainButton', typeof useMainButton> = createHOC('mainButton', useMainButton);
+export const [withMainButtonRaw, withMainButton] = createHOCs(useMainButtonRaw, useMainButton);

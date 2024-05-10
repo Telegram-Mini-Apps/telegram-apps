@@ -1,14 +1,11 @@
 import { initCloudStorage } from '@tma.js/sdk';
 
-import { createHOC, type HOC } from '../createHOC.js';
-import { createHook, type Hook } from '../createHook.js';
+import { createHOCs } from '../createHOCs.js';
+import { createHooks } from '../createHooks.js';
 
-/**
- * Hook to receive the CloudStorage component instance.
- */
-export const useCloudStorage: Hook<typeof initCloudStorage> = createHook(initCloudStorage);
+export const [useCloudStorageRaw, useCloudStorage] = createHooks(initCloudStorage);
 
-/**
- * HOC to pass the CloudStorage component instance to the wrapped component.
- */
-export const withCloudStorage: HOC<'cloudStorage', typeof useCloudStorage> = createHOC('cloudStorage', useCloudStorage);
+export const [withCloudStorageRaw, withCloudStorage] = createHOCs(
+  useCloudStorageRaw,
+  useCloudStorage,
+);
