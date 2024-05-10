@@ -25,9 +25,7 @@ function instantiate<State>(
 
   // In case, we could not restore its state, or it is a fresh start, we can create an empty
   // navigator. We are creating BrowserNavigator from the window.location.
-  return window.location.hash.includes('?')
-    ? createBrowserNavigatorFromLocation(options)
-    : new BrowserNavigator(['/'], 0, options);
+  return createBrowserNavigatorFromLocation(options);
 }
 
 /**
