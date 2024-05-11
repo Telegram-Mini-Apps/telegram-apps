@@ -1,5 +1,5 @@
 {
-  "name": "my-application",
+  "name": "solidjs-template",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -28,7 +28,9 @@
   "devDependencies": {
     "@eslint/js": "^9.2.0",
     "@types/node": "^20.12.5",
-    "eslint": "^9.2.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-solid": "^0.14.0",
     "gh-pages": "^6.1.1",
     "globals": "^15.2.0",
