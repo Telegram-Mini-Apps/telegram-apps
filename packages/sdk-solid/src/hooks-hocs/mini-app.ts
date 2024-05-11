@@ -1,14 +1,14 @@
 import { initMiniApp } from '@tma.js/sdk';
 
-import { createHOC, type HOC } from '../createHOC.js';
-import { createHook, type Hook } from '../createHook.js';
+import { createHOC } from '../createHOC.js';
+import { createHook } from '../createHook.js';
 
 /**
  * Hook to receive the MiniApp component instance.
  */
-export const useMiniApp: Hook<typeof initMiniApp> = createHook(initMiniApp);
+export const useMiniApp = createHook(initMiniApp);
 
 /**
  * HOC to pass the MiniApp component instance to the wrapped component.
  */
-export const withMiniApp: HOC<'miniApp', typeof useMiniApp> = createHOC('miniApp', useMiniApp);
+export const withMiniApp = createHOC(useMiniApp);

@@ -15,5 +15,9 @@ export { useUtils, withUtils } from './hooks-hocs/utils.js';
 export { useViewport, withViewport } from './hooks-hocs/viewport.js';
 export { useSDK } from './SDKProvider/SDKContext.js';
 export { SDKProvider } from './SDKProvider/SDKProvider.js';
-export type { SDKContextType, SDKProviderProps } from './SDKProvider/SDKProvider.types.js';
+export type {
+  SDKContextType,
+  SDKProviderProps,
+  SDKContextItem,
+} from './SDKProvider/SDKProvider.types.js';
 export * from '@tma.js/sdk';

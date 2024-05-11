@@ -3,21 +3,21 @@ import type { PartialBy } from '@tma.js/sdk';
 
 import type { Hook } from './createHook.js';
 
-export interface HOC<P extends string, H extends Hook<any>> {
-  <Props extends { [K in P]: ReturnType<H> }>(
+export interface HOC<H extends Hook<any>> {
+  <PropKey extends string, Props extends { [K in PropKey]: ReturnType<H> }>(
+    prop: PropKey,
     Component: Component<Props>,
     ...args: Parameters<H>
-  ): Component<PartialBy<Props, P>>;
+  ): Component<PartialBy<Props, PropKey>>;
 }
 
 /**
  * Based on the passed hook, creates function returning HOC. Created HOC passes hook result
  * to the wrapped component.
- * @param prop - target property name.
  * @param hook - hook returning component.
  */
-export function createHOC<P extends string, H extends Hook<any>>(prop: P, hook: H): HOC<P, H> {
-  return (Component, ...args) => {
+export function createHOC<H extends Hook<any>>(hook: H): HOC<H> {
+  return (prop, Component, ...args) => {
     return (props) => {
       return <Component {...mergeProps({ [prop]: hook(...args) }, props) as any}/>;
     };
