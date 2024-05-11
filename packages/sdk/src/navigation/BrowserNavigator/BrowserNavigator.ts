@@ -31,7 +31,7 @@ export class BrowserNavigator<State = {}> {
 
   private readonly ee: Emitter<State> = new EventEmitter();
 
-  private readonly hashMode?: BrowserNavigatorHashMode;
+  readonly hashMode?: BrowserNavigatorHashMode;
 
   readonly base: string;
 
@@ -104,6 +104,13 @@ export class BrowserNavigator<State = {}> {
   }
 
   /**
+   * Current history item identifier.
+   */
+  get id(): string {
+    return this.navigator.current.id;
+  }
+
+  /**
    * Changes currently active history item index by the specified delta. This method doesn't
    * change index in case, the updated index points to the non-existing history item. This behavior
    * is preserved until the `fit` argument is specified.
@@ -133,7 +140,7 @@ export class BrowserNavigator<State = {}> {
    * "", "#my-hash"
    */
   get hash(): string {
-    return this.historyItem.hash;
+    return (this.navigator.current.params || {}).hash || '';
   }
 
   /**
@@ -148,13 +155,6 @@ export class BrowserNavigator<State = {}> {
    */
   get hasNext(): boolean {
     return this.navigator.hasNext;
-  }
-
-  /**
-   * Currently active history item.
-   */
-  private get historyItem(): BrowserNavigatorHistoryItem<State> {
-    return basicItemToBrowser(this.navigator.current);
   }
 
   /**
@@ -240,7 +240,7 @@ export class BrowserNavigator<State = {}> {
    * "/", "/abc"
    */
   get pathname(): string {
-    return this.historyItem.pathname;
+    return this.navigator.current.pathname;
   }
 
   /**
@@ -346,9 +346,8 @@ export class BrowserNavigator<State = {}> {
     // future calls of history.go.
     window.removeEventListener('popstate', this.onPopState);
 
-    const { historyItem } = this;
-    const { state } = historyItem;
-    const path = this.renderPath(historyItem);
+    const { state } = this;
+    const path = this.renderPath(this);
 
     // Drop the browser history and work with the clean one.
     await drop();
@@ -390,6 +389,13 @@ export class BrowserNavigator<State = {}> {
    * "", "?", "?a=1"
    */
   get search(): string {
-    return this.historyItem.search;
+    return (this.navigator.current.params || {}).search || '';
+  }
+
+  /**
+   * Current history item state.
+   */
+  get state(): State | undefined {
+    return (this.navigator.current.params || {}).state;
   }
 }
