@@ -3,7 +3,7 @@
   "scripts": {
     "ci:docs:build": "pnpm run docs:build",
     "ci:packages:build": "pnpm run packages:build",
-    "ci:packages:install-deps": "pnpm i --filter {packages/*}",
+    "ci:packages:install-deps": "pnpm i",
     "ci:packages:lint": "pnpm run packages:lint",
     "ci:packages:test": "vitest --run",
     "ci:packages:typecheck": "pnpm run packages:typecheck",
