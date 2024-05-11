@@ -1,5 +1,5 @@
+import type { AnyFn } from '@tma.js/sdk';
 import type { PropsWithChildren } from 'react';
-import { AnyFn } from '@tma.js/sdk';
 
 export interface SDKProviderProps extends PropsWithChildren {
   /**
@@ -30,10 +30,6 @@ export type SDKContextItem<T> = ({
   error: unknown;
 });
 
-/**
- * SDK context represents a map, where key is component init function, and value is an accessor,
- * retrieving its result.
- */
 export interface SDKContextType {
   /**
    * Uses specified factory with the passed arguments. In case, this factory was called
