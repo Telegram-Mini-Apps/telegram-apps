@@ -1,0 +1,7 @@
+.init-data-page__section + .init-data-page__section {
+  margin-top: 12px;
+}
+
+.init-data-page__section-title {
+  margin-bottom: 4px;
+}

@@ -1,27 +1,43 @@
 {
-  "name": "react-example",
+  "name": "reactjs-template",
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "homepage": "https://telegram-mini-apps.github.io/reactjs-template",
   "scripts": {
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "build": "tsc --noEmit && vite build",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
+    "preview": "vite preview",
+    "predeploy": "pnpm run build"
   },
   "dependencies": {
+    "@tma.js/react-router-integration": "workspace:*",
+    "@tma.js/sdk": "workspace:*",
     "@tma.js/sdk-react": "workspace:*",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@tonconnect/ui-react": "^2.0.2",
+    "eslint": "8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.23.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
+    "@eslint/js": "^9.2.0",
+    "@types/node": "^20.12.11",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
-    "@vitejs/plugin-react-swc": "^3.3.2",
+    "@vitejs/plugin-react-swc": "^3.6.0",
+    "eruda": "^3.0.1",
     "eslint-plugin-react": "^7.34.1",
-    "typescript": "^5.2.2",
-    "vite": "^4.4.5"
+    "gh-pages": "^6.1.1",
+    "globals": "^15.2.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.8.0",
+    "vite": "^5.2.11",
+    "vite-tsconfig-paths": "^4.3.2"
   }
 }
