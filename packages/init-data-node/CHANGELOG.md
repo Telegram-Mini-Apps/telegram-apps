@@ -1,5 +1,13 @@
 # @tma.js/init-data-node
 
+## 1.1.16
+
+### Patch Changes
+
+- 67c7e90: Change referred distributive files in the `package.json`.
+- Updated dependencies [f0f5949]
+  - @tma.js/sdk@2.0.0
+
 ## 1.1.15
 
 ### Patch Changes

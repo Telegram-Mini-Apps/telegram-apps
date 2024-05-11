@@ -1,5 +1,16 @@
 # @tma.js/sdk-react
 
+## 2.1.0
+
+### Minor Changes
+
+- c1e7ffa: Remove the `DisplayGate` component. Rework all hooks, HOCs and the SDK provider to make bindings work a bit different way.
+
+### Patch Changes
+
+- Updated dependencies [f0f5949]
+  - @tma.js/sdk@2.0.0
+
 ## 2.0.3
 
 ### Patch Changes

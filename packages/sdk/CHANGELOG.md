@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 2.0.0
+
+### Major Changes
+
+- f0f5949: Completely rework the package. In this release we have focused on improving the bundle size, writing more tests, providing new navigation features and fulfilling Mini Apps functionality
+
 ## 1.5.3
 
 ### Patch Changes

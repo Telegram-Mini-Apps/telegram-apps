@@ -1,5 +1,16 @@
 # @tma.js/react-router-integration
 
+## 1.0.0
+
+### Minor Changes
+
+- f5ae63c: Rework the integration utilities according to the changes done in the new major SDK version. Fix some known problems.
+
+### Patch Changes
+
+- Updated dependencies [c1e7ffa]
+  - @tma.js/sdk-react@2.1.0
+
 ## 0.1.4
 
 ### Patch Changes
