@@ -14,14 +14,14 @@ export default defineConfig({
   // Learn more:
   // https://docs.telegram-mini-apps.com/platform/getting-app-link#mkcert
   //
-  server: {
-    port: 443,
-    https: {
-      cert: readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), './tma.internal.pem')),
-      key: readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), './tma.internal-key.pem')),
-    },
-    host: 'tma.internal',
-  },
+  // server: {
+  //   port: 443,
+  //   https: {
+  //     cert: readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), './tma.internal.pem')),
+  //     key: readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), './tma.internal-key.pem')),
+  //   },
+  //   host: 'tma.internal',
+  // },
   publicDir: './public',
 });
 

@@ -1,16 +1,12 @@
-import {
-  retrieveLaunchParams,
-  SDKProvider,
-  setDebug,
-} from '@tma.js/sdk-solid';
+import { retrieveLaunchParams, SDKProvider } from '@tma.js/sdk-solid';
 import { ErrorBoundary, type Component, Switch, Match } from 'solid-js';
 
 import { App } from '@/components/App.js';
 import { TonConnectUIProvider } from '@/tonconnect/TonConnectUIProvider.js';
 
 const Inner: Component = () => {
-  if (retrieveLaunchParams().startParam === 'debug') {
-    setDebug(true);
+  const debug = retrieveLaunchParams().startParam === 'debug';
+  if (debug) {
     import('eruda').then((lib) => lib.default.init());
   }
 
@@ -18,7 +14,7 @@ const Inner: Component = () => {
     <TonConnectUIProvider
       manifestUrl={new URL('tonconnect-manifest.json', window.location.href).toString()}
     >
-      <SDKProvider acceptCustomStyles={true}>
+      <SDKProvider acceptCustomStyles={true} debug={debug}>
         <App/>
       </SDKProvider>
     </TonConnectUIProvider>
