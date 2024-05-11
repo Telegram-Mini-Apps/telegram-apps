@@ -43,10 +43,12 @@ export function createRouter<State>(
     get: () => navigator.path,
     init: (notify) => navigator.on('change', () => notify()),
     set: ({ value, state, ...next }) => {
+      // TODO: We should check all cases with the "state" variable. Not sure, if it always fits
+      //  the typing of State.
       if (next.replace) {
         navigator.replace(value, state as State);
       } else {
-        navigator.push(value);
+        navigator.push(value, state as State);
       }
 
       const hash = getHash(value);
