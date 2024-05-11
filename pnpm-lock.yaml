@@ -81,6 +81,7 @@ importers:
       '@tma.js/sdk': link:../../packages/sdk
       '@tma.js/sdk-react': link:../../packages/sdk-react
       '@tonconnect/ui-react': 2.0.2_react-dom@18.3.1+react@18.3.1
+      eruda: 3.0.1
       eslint: 8.57.0
       react: 18.3.1
       react-dom: 18.3.1_react@18.3.1
@@ -93,7 +94,6 @@ importers:
       '@typescript-eslint/eslint-plugin': 7.8.0_a52df3306500fbfb3ee2ee8e05175e8e
       '@typescript-eslint/parser': 7.8.0_eslint@8.57.0+typescript@5.4.5
       '@vitejs/plugin-react-swc': 3.6.0_vite@5.2.11
-      eruda: 3.0.1
       eslint-plugin-react: 7.34.1_eslint@8.57.0
       gh-pages: 6.1.1
       globals: 15.2.0
@@ -3960,6 +3960,7 @@ packages:
 
   /eruda/3.0.1:
     resolution: {integrity: sha512-6q1Xdwga4JTr1mKSW4mzuWSSbmXgqpm/8Wa1QGFGfCWRjC0bCQjbS4u06M1te1moucIS3hBLlbSTPWYH2W0qbQ==}
+    dev: false
 
   /es-abstract/1.23.3:
     resolution: {integrity: sha512-e+HfNH61Bj1X9/jLc5v1owaLYuHdeHHSQlkhCBiTK8rBvKaULl/beGMxwrMXjpYrv4pz22BlY570vVePA2ho4A==}
