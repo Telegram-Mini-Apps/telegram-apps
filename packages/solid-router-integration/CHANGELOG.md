@@ -1,5 +1,16 @@
 # @tma.js/solid-router-integration
 
+## 2.0.0
+
+### Minor Changes
+
+- f5ae63c: Rework the integration utilities according to the changes done in the new major SDK version. Fix some known problems.
+
+### Patch Changes
+
+- Updated dependencies [c1e7ffa]
+  - @tma.js/sdk-solid@2.1.0
+
 ## 1.0.18
 
 ### Patch Changes
