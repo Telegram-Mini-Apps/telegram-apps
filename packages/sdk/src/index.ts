@@ -260,6 +260,12 @@ export { BrowserNavigator } from '@/navigation/BrowserNavigator/BrowserNavigator
 export {
   createBrowserNavigatorFromLocation,
 } from '@/navigation/BrowserNavigator/createBrowserNavigatorFromLocation.js';
+export { createSafeURL } from '@/navigation/createSafeURL.js';
+export { getHash } from '@/navigation/getHash.js';
+export { getPathname } from '@/navigation/getPathname.js';
+export { initNavigator } from '@/navigation/initNavigator.js';
+export { isPageReload } from '@/navigation/isPageReload.js';
+export { urlToPath } from '@/navigation/urlToPath.js';
 export type {
   BrowserNavigatorAnyHistoryItem,
   BrowserNavigatorConOptions,
@@ -268,11 +274,6 @@ export type {
   BrowserNavigatorHistoryItem,
   URLLike,
 } from '@/navigation/BrowserNavigator/types.js';
-export { createSafeURL } from '@/navigation/createSafeURL.js';
-export { getHash } from '@/navigation/getHash.js';
-export { getPathname } from '@/navigation/getPathname.js';
-export { isPageReload } from '@/navigation/isPageReload.js';
-export { urlToPath } from '@/navigation/urlToPath.js';
 
 /**
  * Parsing.
