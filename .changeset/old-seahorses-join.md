@@ -2,4 +2,4 @@
 "@tma.js/init-data-node": patch
 ---
 
-Change referred dist files in the package.json
+Change referred distributive files in the `package.json`.

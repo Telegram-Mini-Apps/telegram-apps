@@ -1,8 +1,6 @@
 ---
 "@tma.js/react-router-integration": minor
 "@tma.js/solid-router-integration": minor
-"@tma.js/sdk-react": minor
-"@tma.js/sdk-solid": minor
 ---
 
-Actualize the packages according to the changes done in the SDK
+Rework the integration utilities according to the changes done in the new major SDK version. Fix some known problems.
