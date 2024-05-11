@@ -1,15 +1,22 @@
-import { createViteConfig } from 'build-utils';
+import dts from 'vite-plugin-dts';
+import { defineConfig } from 'vite';
 
-import packageJson from './package.json';
-
-export default createViteConfig({
-  packageName: packageJson.name,
-  formats: ['es', 'cjs'],
-  external: [
-    '@tma.js/sdk',
-    'react'
+export default defineConfig({
+  plugins: [
+    dts({ outDir: 'dist/dts' }),
   ],
-  globals: {
-    react: 'React',
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    sourcemap: true,
+    rollupOptions: {
+      external: ['@tma.js/sdk-react', 'react', 'react-router-dom'],
+    },
+    lib: {
+      entry: 'src/index.ts',
+      formats: ['es', 'cjs'],
+      fileName: 'index',
+    },
   },
 });
+

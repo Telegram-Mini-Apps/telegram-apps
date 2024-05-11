@@ -1,6 +1,6 @@
-import type { ValueParserGenerator } from '../createValueParserGenerator.js';
+import { createTypeError } from '../createTypeError.js';
 import { createValueParserGenerator } from '../createValueParserGenerator.js';
-import { unexpectedTypeError } from '../unexpectedTypeError.js';
+import type { ValueParserGenerator } from '../createValueParserGenerator.js';
 
 /**
  * Returns parser to parse value as string.
@@ -9,5 +9,5 @@ export const string: ValueParserGenerator<string> = createValueParserGenerator((
   if (typeof value === 'string' || typeof value === 'number') {
     return value.toString();
   }
-  throw unexpectedTypeError();
+  throw createTypeError();
 }, 'string');

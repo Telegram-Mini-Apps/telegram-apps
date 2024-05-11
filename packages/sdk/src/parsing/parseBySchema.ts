@@ -1,5 +1,6 @@
-import { ParseError } from './ParseError.js';
-import { ParseSchemaFieldError } from './ParseSchemaFieldError.js';
+import { createError } from '@/errors/createError.js';
+import { ERR_PARSE } from '@/errors/errors.js';
+
 import type { Parser, Schema } from './types.js';
 
 /**
@@ -30,35 +31,22 @@ export function parseBySchema<T>(
       from = field;
       parser = typeof definition === 'function' ? definition : definition.parse.bind(definition);
     } else {
-      const { type } = definition;
+      const { type: definitionType } = definition;
 
       from = definition.from || field;
-      parser = typeof type === 'function' ? type : type.parse.bind(type);
+      parser = typeof definitionType === 'function'
+        ? definitionType
+        : definitionType.parse.bind(definitionType);
     }
-
-    let parsedValue: unknown;
-    const originalValue = getField(from);
 
     try {
-      parsedValue = parser(originalValue);
-    } catch (error) {
-      // If error is not instance of ParseError, we have nothing additional to do with the error.
-      if (!(error instanceof ParseError)) {
-        throw new ParseSchemaFieldError(from, { cause: error });
+      const parsedValue = parser(getField(from));
+      if (parsedValue !== undefined) {
+        (result as any)[field] = parsedValue;
       }
-
-      // Otherwise, we are going to rethrow the error with extended data.
-      throw new ParseSchemaFieldError(from, {
-        type: error.type,
-        cause: error,
-      });
+    } catch (error) {
+      throw createError(ERR_PARSE, `Unable to parse field "${field}"`, error);
     }
-
-    if (parsedValue === undefined) {
-      continue;
-    }
-
-    (result as any)[field] = parsedValue;
   }
 
   return result;

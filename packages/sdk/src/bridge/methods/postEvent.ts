@@ -1,19 +1,23 @@
+import { log } from '@/debug/debug.js';
+import { hasExternalNotify } from '@/env/hasExternalNotify.js';
+import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
+import { isIframe } from '@/env/isIframe.js';
+import { createError } from '@/errors/createError.js';
+import { ERR_UNKNOWN_ENV } from '@/errors/errors.js';
+
+import { targetOrigin as targetOriginFn } from '../target-origin.js';
 import type {
-  MiniAppsEmptyMethodName,
   MiniAppsMethodName,
   MiniAppsMethodParams,
-  MiniAppsNonEmptyMethodName,
-} from './methods.js';
-import { logger, targetOrigin as globalTargetOrigin } from '../../globals.js';
-import { isIframe } from '../../misc/isIframe.js';
-import { hasExternalNotify } from '../env/hasExternalNotify.js';
-import { hasWebviewProxy } from '../env/hasWebviewProxy.js';
+  MiniAppsMethodWithOptionalParams,
+  MiniAppsMethodWithoutParams,
+  MiniAppsMethodWithRequiredParams,
+} from './types/methods.js';
 
 interface PostEventOptions {
   /**
-   * Origin used while posting message. This option is only used in case,
-   * current environment is browser (Web version of Telegram) and could
-   * be used for test purposes.
+   * Origin used while posting message. This option is only used in case, current environment
+   * is browser (Web version of Telegram) and could be used for test purposes.
    * @default 'https://web.telegram.org'
    */
   targetOrigin?: string;
@@ -22,27 +26,41 @@ interface PostEventOptions {
 export type PostEvent = typeof postEvent;
 
 /**
- * Sends event to native application which launched Mini App. This function
- * accepts only events, which require arguments.
- * @param eventType - event name.
- * @param params - event parameters.
+ * Calls Mini Apps method with optional parameters.
+ * @param method - method name.
+ * @param params - method parameters.
  * @param options - posting options.
- * @throws {Error} Bridge could not determine current environment and possible way to send event.
+ * @throws {SDKError} ERR_UNKNOWN_ENV
+ * @see ERR_UNKNOWN_ENV
  */
-export function postEvent<E extends MiniAppsNonEmptyMethodName>(
-  eventType: E,
-  params: MiniAppsMethodParams<E>,
+export function postEvent<Method extends MiniAppsMethodWithOptionalParams>(
+  method: Method,
+  params?: MiniAppsMethodParams<Method>,
   options?: PostEventOptions,
 ): void;
 
 /**
- * Sends event to native application which launched Mini App. This function
- * accepts only events, which require arguments.
- * @param eventType - event name.
+ * Calls Mini Apps method without parameters.
+ * @param method - method name.
  * @param options - posting options.
- * @throws {Error} Bridge could not determine current environment and possible way to send event.
+ * @throws {SDKError} ERR_UNKNOWN_ENV
+ * @see ERR_UNKNOWN_ENV
  */
-export function postEvent(eventType: MiniAppsEmptyMethodName, options?: PostEventOptions): void;
+export function postEvent(method: MiniAppsMethodWithoutParams, options?: PostEventOptions): void;
+
+/**
+ * Calls Mini Apps method with parameters.
+ * @param method - method name.
+ * @param params - method parameters.
+ * @param options - posting options.
+ * @throws {SDKError} ERR_UNKNOWN_ENV
+ * @see ERR_UNKNOWN_ENV
+ */
+export function postEvent<Method extends MiniAppsMethodWithRequiredParams>(
+  method: Method,
+  params: MiniAppsMethodParams<Method>,
+  options?: PostEventOptions,
+): void;
 
 export function postEvent(
   eventType: MiniAppsMethodName,
@@ -67,16 +85,15 @@ export function postEvent(
       eventData = paramsOrOptions;
     }
   }
-  const { targetOrigin = globalTargetOrigin() } = postOptions;
+  const { targetOrigin = targetOriginFn() } = postOptions;
 
-  logger.log(`Calling method "${eventType}"`, eventData);
+  log('Posting event:', eventData
+    ? { event: eventType, data: eventData }
+    : { event: eventType });
 
   // Telegram Web.
   if (isIframe()) {
-    window.parent.postMessage(JSON.stringify({
-      eventType,
-      eventData,
-    }), targetOrigin);
+    window.parent.postMessage(JSON.stringify({ eventType, eventData }), targetOrigin);
     return;
   }
 
@@ -93,7 +110,8 @@ export function postEvent(
   }
 
   // Otherwise current environment is unknown, and we are not able to send event.
-  throw new Error(
-    'Unable to determine current environment and possible way to send event.',
+  throw createError(
+    ERR_UNKNOWN_ENV,
+    'Unable to determine current environment and possible way to send event. You are probably trying to use Mini Apps method outside of Telegram application environment.',
   );
 }

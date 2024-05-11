@@ -1,23 +1,10 @@
+import { readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-// TODO: Add docs link for getServerOptions.
-
-/**
- * Returns Vite dev server options.
- */
-// function getServerOptions(): ServerOptions {
-//   const dir = dirname(fileURLToPath(import.meta.url));
-//
-//   return {
-//     port: 443,
-//     https: {
-//       cert: readFileSync(resolve(dir, '../../https-cert.pem')),
-//       key: readFileSync(resolve(dir, '../../https-key.pem')),
-//     },
-//     host: 'tma.internal',
-//   };
-// }
+const dir = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [tsconfigPaths()],
@@ -25,9 +12,17 @@ export default defineConfig({
   // you will need correct certificate, private key and DNS configuration for your custom domain.
   // For this purpose you could use mkcert:
   // https://github.com/FiloSottile/mkcert
-  // server: getServerOptions(),
   server: {
-    host: true,
+    port: 443,
+    https: {
+      cert: readFileSync(resolve(dir, '../../https-cert.pem')),
+      key: readFileSync(resolve(dir, '../../https-key.pem')),
+    },
+    host: 'tma.internal',
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
   },
 });
 

@@ -1,3 +1,4 @@
+export * from './document';
 export * from './performance';
 export * from './session-storage';
 export * from './toSearchParams';

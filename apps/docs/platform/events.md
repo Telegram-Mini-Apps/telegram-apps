@@ -55,7 +55,7 @@ defined function.
 Here is an example:
 
 ```typescript
-window.Telegram.WebView.receiveEvent('popup_closed', { 
+window.Telegram.WebView.receiveEvent('popup_closed', {
   button_id: 'cancel'
 });
 ```
@@ -109,6 +109,45 @@ parameters. Section title means minimal version, from which events inside the se
 Available since: **v6.1**
 
 User clicked the [Back Button](back-button.md).
+
+### `biometry_auth_requested`
+
+Available since: **v7.2**
+
+Biometry authentication request completed. This event usually occurs in a response to the
+[web_app_request_auth](methods.md#web-app-biometry-request-auth) method.
+
+If authentication was successful, the event contains a token from the local secure storage.
+
+| Field  | Type                         | Description                                                                                                |
+|--------|------------------------------|------------------------------------------------------------------------------------------------------------|
+| status | `'failed'` or `'authorized'` | Authentication status.                                                                                     |
+| token  | `string`                     | _Optional_. Token from the local secure storage saved previously. Passed only if `status` is `authorized`. |
+
+### `biometry_info_received`
+
+Available since: **v7.2**
+
+Biometry settings were received.
+
+| Field            | Type                   | Description                                                                   |
+|------------------|------------------------|-------------------------------------------------------------------------------|
+| available        | `boolean`              | Shows whether biometry is available.                                          |
+| access_requested | `boolean`              | Shows whether permission to use biometrics has been requested.                |
+| access_granted   | `boolean`              | Shows whether permission to use biometrics has been granted.                  |
+| device_id        | `string`               | A unique device identifier that can be used to match the token to the device. |
+| token_saved      | `boolean`              | Show whether local secure storage contains previously saved token.            |
+| type             | `'face'` or `'finger'` | The type of biometrics currently available on the device.                     |
+
+### `biometry_token_updated`
+
+Available since: **v7.2**
+
+Biometry token was updated.
+
+| Field  | Type                   | Description    |
+|--------|------------------------|----------------|
+| status | `updated` or `removed` | Update status. |
 
 ### `clipboard_text_received`
 

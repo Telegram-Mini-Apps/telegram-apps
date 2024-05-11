@@ -25,12 +25,12 @@
     "dist"
   ],
   "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/dts/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/dts/index.d.ts",
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "default": "./dist/index.cjs"
     }
@@ -41,10 +41,12 @@
     "typecheck": "tsc --noEmit",
     "build": "vite build"
   },
+  "dependencies": {
+    "@tma.js/sdk": "workspace:*"
+  },
   "peerDependencies": {
     "@types/react": "^17.0.0 || ^18.0.0",
-    "react": "^17.0.0 || ^18.0.0",
-    "@tma.js/sdk": "workspace:*"
+    "react": "^17.0.0 || ^18.0.0"
   },
   "peerDependenciesMeta": {
     "@types/react": {
@@ -52,9 +54,9 @@
     }
   },
   "devDependencies": {
-    "build-utils": "workspace:*",
-    "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "@types/react": "^18.0.0",
+    "react": "^18.0.0"
   },
   "publishConfig": {
     "access": "public"

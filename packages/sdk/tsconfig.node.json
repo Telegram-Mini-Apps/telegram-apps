@@ -4,8 +4,6 @@
     "composite": true
   },
   "include": [
-    "vite.config.ts",
-    "vite.iife.config.ts",
-    "package.json"
+    "build"
   ]
 }

@@ -1,3 +1,8 @@
-export type { InitDataParsed as InitData } from '@tma.js/sdk';
-export { parse } from './parse.js';
 export { validate, type ValidateOptions } from './validate.js';
+export {
+  type Chat,
+  type ChatType,
+  type InitDataParsed,
+  parseInitData as parse,
+  type User,
+} from '@tma.js/sdk';

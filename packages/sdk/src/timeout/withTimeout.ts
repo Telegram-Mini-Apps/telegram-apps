@@ -1,18 +1,7 @@
-import { TimeoutError } from './TimeoutError.js';
+import { createTimeoutError } from '@/timeout/createTimeoutError.js';
 
 /**
- * Creates promise which rejects after timeout milliseconds.
- * @param timeout - timeout in milliseconds.
- */
-function createTimeoutPromise(timeout: number): Promise<never> {
-  return new Promise((_, rej) => {
-    setTimeout(rej, timeout, new TimeoutError(timeout));
-  });
-}
-
-/**
- * Accepts specified function and instantly executes. It waits for timeout milliseconds for
- * it to complete and throws an error in case, deadline was reached.
+ * Runs passed function or promise with specified deadline presented via timeout argument.
  * @param funcOrPromise - function to execute or pending promise.
  * @param timeout - completion timeout.
  */
@@ -22,6 +11,10 @@ export function withTimeout<T>(
 ): Promise<T> {
   return Promise.race([
     typeof funcOrPromise === 'function' ? funcOrPromise() : funcOrPromise,
-    createTimeoutPromise(timeout),
+    new Promise<never>((_, rej) => {
+      setTimeout(() => {
+        rej(createTimeoutError(timeout));
+      }, timeout);
+    }),
   ]);
 }

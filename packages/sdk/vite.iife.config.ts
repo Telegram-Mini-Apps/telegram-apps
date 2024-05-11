@@ -1,7 +1,6 @@
-import { createViteIIFEConfig } from 'build-utils';
+import { getConfig } from './build/getConfig';
 
-import packageJson from './package.json';
-
-export default createViteIIFEConfig({
-  packageName: packageJson.name,
+export default getConfig({
+  input: 'src/index.ts',
+  formats: ['iife'],
 });

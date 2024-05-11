@@ -1,4 +1,4 @@
-import { unexpectedTypeError } from './unexpectedTypeError.js';
+import { createTypeError } from './createTypeError.js';
 
 /**
  * Converts value to record.
@@ -20,7 +20,7 @@ export function toRecord(value: unknown): Record<string, unknown> {
     || formattedValue === null
     || Array.isArray(formattedValue)
   ) {
-    throw unexpectedTypeError();
+    throw createTypeError();
   }
 
   return formattedValue;

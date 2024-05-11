@@ -1,6 +1,7 @@
 /**
- * Returns string after first met "#" symbol.
  * @param value - string to take hash part from.
+ * @returns String after the first met "#" symbol. In case, value doesn't contain hashtag, the
+ * function will return null.
  *
  * @example No hash.
  * getHash('/path'); // null

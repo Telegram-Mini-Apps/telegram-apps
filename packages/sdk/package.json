@@ -24,13 +24,12 @@
     "dist"
   ],
   "main": "./dist/index.cjs",
-  "browser": "./dist/index.iife.js",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/dts/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/dts/index.d.ts",
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "default": "./dist/index.cjs"
     }
@@ -40,13 +39,12 @@
     "lint": "eslint src",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
-    "build": "pnpm run build:default && pnpm run build:iife",
-    "build:default": "vite build --config vite.config.ts",
-    "build:iife": "vite build --config vite.iife.config.ts"
+    "build": "rimraf dist && pnpm run build:default && pnpm run build:iife && pnpm run build:iife:low-level",
+    "build:default": "vite build -c vite.config.ts",
+    "build:iife": "vite build -c vite.iife.config.ts",
+    "build:iife:low-level": "vite build -c vite.iife.low-level.config.ts"
   },
   "devDependencies": {
-    "build-utils": "workspace:*",
-    "eslint-config-custom": "workspace:*",
     "test-utils": "workspace:*",
     "tsconfig": "workspace:*"
   },

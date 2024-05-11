@@ -1,270 +1,314 @@
 /**
  * Bridge.
  */
-export { createPostEvent } from './bridge/methods/createPostEvent.js';
-export { invokeCustomMethod } from './bridge/invokeCustomMethod.js';
-export { on } from './bridge/events/on.js';
-export { off } from './bridge/events/off.js';
-export { once } from './bridge/events/once.js';
-export { parseMessage } from './bridge/parseMessage.js';
-export { postEvent, type PostEvent } from './bridge/methods/postEvent.js';
-export {
-  request,
-  type RequestSimpleOptions,
-  type RequestCompleteOptions,
-} from './bridge/request.js';
-export { subscribe } from './bridge/events/subscribe.js';
-export { unsubscribe } from './bridge/events/unsubscribe.js';
-export { MethodUnsupportedError } from './bridge/errors/MethodUnsupportedError.js';
-export { ParameterUnsupportedError } from './bridge/errors/ParameterUnsupportedError.js';
-export type {
-  HeaderColorKey,
-  MiniAppsEmptyMethodName,
-  MiniAppsMethodAcceptParams,
-  MiniAppsMethodName,
-  MiniAppsMethodParams,
-  MiniAppsMethods,
-  MiniAppsNonEmptyMethodName,
-  SwitchInlineQueryChatType,
-} from './bridge/methods/methods.js';
-export type { InvoiceStatus } from './bridge/events/parsers/invoiceClosed.js';
-export type {
-  ImpactHapticFeedbackStyle,
-  NotificationHapticFeedbackType,
-} from './bridge/methods/haptic.js';
-export type {
-  MiniAppsEventEmitter, MiniAppsEventHasParams,
-  MiniAppsEventListener,
-  MiniAppsEventName,
-  MiniAppsEventParams, MiniAppsEvents, MiniAppsGlobalEventListener,
-} from './bridge/events/events.js';
-export type { PhoneRequestedStatus } from './bridge/events/parsers/phoneRequested.js';
-export type { WriteAccessRequestedStatus } from './bridge/events/parsers/writeAccessRequested.js';
+export { off } from '@/bridge/events/listening/off.js';
+export { on } from '@/bridge/events/listening/on.js';
+export { subscribe } from '@/bridge/events/listening/subscribe.js';
+export { unsubscribe } from '@/bridge/events/listening/unsubscribe.js';
+export * from '@/bridge/events/types.js';
+export { createPostEvent } from '@/bridge/methods/createPostEvent.js';
+export { type PostEvent, postEvent } from '@/bridge/methods/postEvent.js';
+export * from '@/bridge/methods/types/index.js';
+export { setTargetOrigin, targetOrigin } from '@/bridge/target-origin.js';
+export { captureSameReq } from '@/bridge/utils/captureSameReq.js';
+export { invokeCustomMethod } from '@/bridge/utils/invokeCustomMethod.js';
+export { request, type RequestOptions } from '@/bridge/utils/request.js';
 
 /**
  * Classnames.
  */
-export { classNames } from './classnames/classNames.js';
-export { mergeClassNames } from './classnames/mergeClassNames.js';
+export { classNames } from '@/classnames/classNames.js';
+export { type MergeClassNames, mergeClassNames } from '@/classnames/mergeClassNames.js';
 
 /**
  * Colors.
  */
-export { isRGB } from './colors/isRGB.js';
-export { isRGBShort } from './colors/isRGBShort.js';
-export { isColorDark } from './colors/isColorDark.js';
-export { toRGB } from './colors/toRGB.js';
-export type { RGB, RGBShort } from './colors/types.js';
+export { isColorDark } from '@/colors/isColorDark.js';
+export { isRGB } from '@/colors/isRGB.js';
+export { isRGBShort } from '@/colors/isRGBShort.js';
+export { toRGB } from '@/colors/toRGB.js';
+export * from '@/colors/types.js';
 
 /**
  * Components.
  */
 
-// Back button.
-export { BackButton } from './components/back-button/BackButton.js';
+// BackButton.
+export { BackButton } from '@/components/BackButton/BackButton.js';
+export { initBackButton } from '@/components/BackButton/initBackButton.js';
 export type {
   BackButtonEventListener,
   BackButtonEventName,
   BackButtonEvents,
-} from './components/back-button/types.js';
+  BackButtonState,
+} from '@/components/BackButton/types.js';
 
-// Closing behavior
-export { ClosingBehavior } from './components/closing-behavior/ClosingBehavior.js';
+// BiometryManager.
+export { BiometryManager } from '@/components/BiometryManager/BiometryManager.js';
+export { initBiometryManager } from '@/components/BiometryManager/initBiometryManager.js';
+export { requestBiometryInfo } from '@/components/BiometryManager/requestBiometryInfo.js';
+export type {
+  BiometryManagerAuthenticateOptions,
+  BiometryManagerProps,
+  BiometryManagerRequestAccessOptions,
+  BiometryManagerUpdateTokenOptions,
+  BiometryManagerState,
+} from '@/components/BiometryManager/types.js';
+
+// ClosingBehavior.
+export { ClosingBehavior } from '@/components/ClosingBehavior/ClosingBehavior.js';
+export { initClosingBehavior } from '@/components/ClosingBehavior/initClosingBehavior.js';
 export type {
   ClosingBehaviorEventListener,
   ClosingBehaviorEventName,
   ClosingBehaviorEvents,
-} from './components/closing-behavior/types.js';
+  ClosingBehaviorState,
+} from '@/components/ClosingBehavior/types.js';
 
-// Cloud storage.
-export { CloudStorage } from './components/cloud-storage/CloudStorage.js';
+// CloudStorage.
+export { CloudStorage } from '@/components/CloudStorage/CloudStorage.js';
+export { initCloudStorage } from '@/components/CloudStorage/initCloudStorage.js';
 
 // HapticFeedback.
-export { HapticFeedback } from './components/haptic-feedback/HapticFeedback.js';
+export { HapticFeedback } from '@/components/HapticFeedback/HapticFeedback.js';
+export { initHapticFeedback } from '@/components/HapticFeedback/initHapticFeedback.js';
 
-// Init data.
-export { chatParser } from './components/init-data/chatParser.js';
-export { InitData } from './components/init-data/InitData.js';
-export { initDataParser } from './components/init-data/initDataParser.js';
-export { parseInitData } from './components/init-data/parseInitData.js';
-export { userParser } from './components/init-data/userParser.js';
-export type { Chat, User, ChatType, InitDataParsed } from './components/init-data/types.js';
+// InitData.
+export { InitData } from '@/components/InitData/InitData.js';
+export { initInitData } from '@/components/InitData/initInitData.js';
+export { parseInitData } from '@/components/InitData/parseInitData.js';
+export type {
+  Chat,
+  ChatType,
+  User,
+  InitDataParsed
+} from '@/components/InitData/types.js';
 
 // Invoice.
-export { Invoice } from './components/invoice/Invoice.js';
+export { initInvoice } from '@/components/Invoice/initInvoice.js';
+export { Invoice } from '@/components/Invoice/Invoice.js';
 export type {
-  InvoiceState,
   InvoiceEventListener,
   InvoiceEventName,
   InvoiceEvents,
-} from './components/invoice/types.js';
+  InvoiceState,
+} from '@/components/Invoice/types.js';
 
-// Main button.
-export { MainButton } from './components/main-button/MainButton.js';
+// MainButton.
+export { initMainButton } from '@/components/MainButton/initMainButton.js';
+export { MainButton } from '@/components/MainButton/MainButton.js';
 export type {
-  MainButtonParams,
-  MainButtonEvents,
   MainButtonEventListener,
   MainButtonEventName,
+  MainButtonEvents,
+  MainButtonParams,
   MainButtonProps,
-} from './components/main-button/types.js';
+  MainButtonState,
+} from '@/components/MainButton/types.js';
 
-// Mini app.
-export { MiniApp } from './components/mini-app/MiniApp.js';
+// MiniApp.
+export { initMiniApp } from '@/components/MiniApp/initMiniApp.js';
+export { MiniApp } from '@/components/MiniApp/MiniApp.js';
 export type {
-  MiniAppHeaderColor,
-  MiniAppProps,
-  MiniAppEvents,
   MiniAppEventListener,
   MiniAppEventName,
-} from './components/mini-app/types.js';
+  MiniAppEvents,
+  MiniAppHeaderColor,
+  MiniAppProps,
+  MiniAppState,
+  RequestedContact,
+} from '@/components/MiniApp/types.js';
 
 // Popup.
-export { Popup } from './components/popup/Popup.js';
+export { initPopup } from '@/components/Popup/initPopup.js';
+export { Popup } from '@/components/Popup/Popup.js';
 export type {
-  PopupEventName,
-  PopupEventListener,
   OpenPopupOptions,
   OpenPopupOptionsButton,
+  PopupEventListener,
+  PopupEventName,
   PopupEvents,
-} from './components/popup/types.js';
+  PopupState,
+} from '@/components/Popup/types.js';
 
-// QR scanner.
-export { QRScanner } from './components/qr-scanner/QRScanner.js';
+// QRScanner.
+export { initQRScanner } from '@/components/QRScanner/initQRScanner.js';
+export { QRScanner } from '@/components/QRScanner/QRScanner.js';
 export type {
-  QRScannerEvents,
   QRScannerEventListener,
   QRScannerEventName,
-} from './components/qr-scanner/types.js';
+  QRScannerEvents,
+  QRScannerState,
+} from '@/components/QRScanner/types.js';
 
-// Settings button.
-export { SettingsButton } from './components/settings-button/SettingsButton.js';
+// SettingsButton.
+export { initSettingsButton } from '@/components/SettingsButton/initSettingsButton.js';
+export { SettingsButton } from '@/components/SettingsButton/SettingsButton.js';
 export type {
   SettingsButtonEventListener,
   SettingsButtonEventName,
   SettingsButtonEvents,
-} from './components/settings-button/types.js';
+  SettingsButtonState,
+} from '@/components/SettingsButton/types.js';
 
-// Theme params.
-export { parseThemeParams } from './components/theme-params/parseThemeParams.js';
-export { requestThemeParams } from './components/theme-params/requestThemeParams.js';
-export { serializeThemeParams } from './components/theme-params/serializeThemeParams.js';
-export { themeParamsParser } from './components/theme-params/themeParamsParser.js';
-export { ThemeParams } from './components/theme-params/ThemeParams.js';
+// ThemeParams.
+export { initThemeParams } from '@/components/ThemeParams/initThemeParams.js';
+export { parseThemeParams } from '@/components/ThemeParams/parsing/parseThemeParams.js';
+export { serializeThemeParams } from '@/components/ThemeParams/parsing/serializeThemeParams.js';
+export { requestThemeParams } from '@/components/ThemeParams/requestThemeParams.js';
+export { ThemeParams } from '@/components/ThemeParams/ThemeParams.js';
 export type {
   ThemeParamsEventListener,
   ThemeParamsEventName,
-  ThemeParamsKey,
   ThemeParamsEvents,
+  ThemeParamsKey,
   ThemeParamsParsed,
-} from './components/theme-params/types.js';
+  ThemeParamsState,
+} from '@/components/ThemeParams/types.js';
 
 // Utils.
-export { Utils } from './components/utils/Utils.js';
+export { initUtils } from '@/components/Utils/initUtils.js';
+export { Utils } from '@/components/Utils/Utils.js';
 
 // Viewport.
-export { isStableViewportPlatform } from './components/viewport/isStableViewportPlatform.js';
+export { initViewport } from '@/components/Viewport/initViewport.js';
 export {
   requestViewport,
   type RequestViewportResult,
-} from './components/viewport/requestViewport.js';
-export { Viewport } from './components/viewport/Viewport.js';
+} from '@/components/Viewport/requestViewport.js';
 export type {
-  ViewportProps,
   ViewportEventListener,
   ViewportEventName,
   ViewportEvents,
-} from './components/viewport/types.js';
+  ViewportProps,
+  ViewportState,
+} from '@/components/Viewport/types.js';
+export { Viewport } from '@/components/Viewport/Viewport.js';
 
 /**
- * CSS.
+ * CSS Vars.
  */
-export { setCSSVar } from './css/setCSSVar.js';
-export { bindMiniAppCSSVars } from './css/bindMiniAppCSSVars.js';
-export { bindThemeCSSVars } from './css/bindThemeCSSVars.js';
-export { bindViewportCSSVars } from './css/bindViewportCSSVars.js';
+export { bindMiniAppCSSVars, type GetMiniAppCSSVarNameFn } from '@/css-vars/bindMiniAppCSSVars.js';
+export {
+  bindThemeParamsCSSVars,
+  type GetThemeParamsCSSVarNameFn,
+} from '@/css-vars/bindThemeParamsCSSVars.js';
+export {
+  bindViewportCSSVars,
+  type GetViewportCSSVarNameFn,
+} from '@/css-vars/bindViewportCSSVars.js';
+export { setCSSVar } from '@/css-vars/setCSSVar.js';
 
 /**
- * Init.
+ * Debug.
  */
-export { init } from './init/init.js';
-export type { InitOptions, InitResult } from './init/types.js';
+export { setDebug } from '@/debug/debug.js';
+
+/**
+ * Env.
+ */
+export { initWeb } from '@/env/initWeb.js';
+export { isIframe } from '@/env/isIframe.js';
+export { isTMA } from '@/env/isTMA.js';
+
+/**
+ * Errors.
+ */
+export * from '@/errors/errors.js';
+export { isSDKError } from '@/errors/isSDKError.js';
+export { isSDKErrorOfType } from '@/errors/isSDKErrorOfType.js';
+export { SDKError } from '@/errors/SDKError.js';
+
+/**
+ * Events.
+ */
+export { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
+export * from '@/events/event-emitter/types.js';
+export * from '@/events/types.js';
 
 /**
  * Launch params.
  */
-export { launchParamsParser } from './launch-params/launchParamsParser.js';
-export { parseLaunchParams } from './launch-params/parseLaunchParams.js';
-export { retrieveLaunchParams } from './launch-params/retrieveLaunchParams.js';
-export { retrieveLaunchData } from './launch-params/retrieveLaunchData.js';
-export { serializeLaunchParams } from './launch-params/serializeLaunchParams.js';
-export type { LaunchParams } from './launch-params/types.js';
-export type { LaunchData } from './launch-params/types.js';
+export { parseLaunchParams } from '@/launch-params/parseLaunchParams.js';
+export { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
+export { serializeLaunchParams } from '@/launch-params/serializeLaunchParams.js';
+export * from '@/launch-params/types.js';
 
 /**
  * Misc.
  */
-export { isTMA } from './misc/isTMA.js';
-export { isRecord } from './misc/isRecord.js';
-export { isIframe } from './misc/isIframe.js';
-export { isPageReload } from './misc/isPageReload.js';
+export type {
+  SSROptions,
+  FactoryOptions,
+  FactoryStatic,
+  Factory,
+  FactoryDynamic,
+  InitComponentFn,
+  WithOnChange,
+} from '@/misc/createComponentInitFn/types.js';
 
 /**
  * Navigation.
  */
-export { getHash } from './navigation/getHash.js';
-export { HashNavigator } from './navigation/HashNavigator/HashNavigator.js';
-export { Navigator } from './navigation/Navigator/Navigator.js';
+export { BasicNavigator } from '@/navigation/BasicNavigator/BasicNavigator.js';
 export type {
-  NavigationEntry,
-  NavigatorConEntry,
-  NavigatorOptions,
-} from './navigation/Navigator/types.js';
+  BasicNavigatorAnyHistoryItem,
+  BasicNavigatorEvents,
+  BasicNavigatorHistoryItem,
+} from '@/navigation/BasicNavigator/types.js';
+export { BrowserNavigator } from '@/navigation/BrowserNavigator/BrowserNavigator.js';
+export {
+  createBrowserNavigatorFromLocation,
+} from '@/navigation/BrowserNavigator/createBrowserNavigatorFromLocation.js';
+export { createSafeURL } from '@/navigation/createSafeURL.js';
+export { getHash } from '@/navigation/getHash.js';
+export { getPathname } from '@/navigation/getPathname.js';
+export { initNavigator } from '@/navigation/initNavigator.js';
+export { isPageReload } from '@/navigation/isPageReload.js';
+export { urlToPath } from '@/navigation/urlToPath.js';
 export type {
-  HashNavigatorOptions,
-  HashNavigatorEventListener,
-  HashNavigatorEventsMap,
-  HashNavigatorEventName,
-} from './navigation/HashNavigator/types.js';
+  BrowserNavigatorAnyHistoryItem,
+  BrowserNavigatorConOptions,
+  BrowserNavigatorEvents,
+  BrowserNavigatorHashMode,
+  BrowserNavigatorHistoryItem,
+  URLLike,
+} from '@/navigation/BrowserNavigator/types.js';
 
 /**
  * Parsing.
  */
-export { boolean } from './parsing/parsers/boolean.js';
-export { searchParams } from './parsing/parsers/searchParams.js';
-export { string } from './parsing/parsers/string.js';
-export { rgb } from './parsing/parsers/rgb.js';
-export { array } from './parsing/parsers/array.js';
-export { date } from './parsing/parsers/date.js';
-export { json } from './parsing/parsers/json.js';
-export { number } from './parsing/parsers/number.js';
-export { ParseError } from './parsing/ParseError.js';
-export { ParseSchemaFieldError } from './parsing/ParseSchemaFieldError.js';
+export { array } from '@/parsing/parsers/array.js';
+export { boolean } from '@/parsing/parsers/boolean.js';
+export { date } from '@/parsing/parsers/date.js';
+export { json } from '@/parsing/parsers/json.js';
+export { number } from '@/parsing/parsers/number.js';
+export { rgb } from '@/parsing/parsers/rgb.js';
+export { searchParams } from '@/parsing/parsers/searchParams.js';
+export { string } from '@/parsing/parsers/string.js';
+
+/**
+ * Request ID
+ */
+export type { RequestId } from '@/request-id/types.js';
 
 /**
  * Supports.
  */
-export { supports } from './supports/supports.js';
+export { supports } from '@/supports/supports.js';
 
 /**
  * Timeout.
  */
-export { withTimeout } from './timeout/withTimeout.js';
-export { TimeoutError } from './timeout/TimeoutError.js';
-export { isTimeoutError } from './timeout/isTimeoutError.js';
+export { withTimeout } from '@/timeout/withTimeout.js';
 
 /**
  * Types.
  */
-export type { RequestId, CreateRequestIdFunc } from './types/request-id.js';
+export * from '@/types/index.js';
 
 /**
  * Version.
  */
-export { compareVersions } from './version/compareVersions.js';
-export type { Version } from './version/types.js';
-
-/**
- * Globals.
- */
-export { setTargetOrigin, setDebug } from './globals.js';
+export { compareVersions } from '@/version/compareVersions.js';
+export type { Version } from '@/version/types.js';

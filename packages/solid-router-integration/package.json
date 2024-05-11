@@ -25,12 +25,12 @@
     "dist"
   ],
   "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/dts/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/dts/index.d.ts",
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "default": "./dist/index.cjs"
     }
@@ -41,16 +41,16 @@
     "typecheck": "tsc --noEmit",
     "build": "vite build"
   },
-  "dependencies": {
-    "@tma.js/sdk": "workspace:*"
-  },
   "peerDependencies": {
-    "@solidjs/router": "^0.x"
+    "@solidjs/router": "^0.13.1",
+    "@tma.js/sdk-solid": "workspace:*",
+    "solid-js": "^1.8.16"
   },
   "devDependencies": {
-    "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*",
-    "build-utils": "workspace:*"
+    "@solidjs/router": "^0.13.1",
+    "@tma.js/sdk-solid": "workspace:*",
+    "solid-js": "^1.8.16",
+    "tsconfig": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

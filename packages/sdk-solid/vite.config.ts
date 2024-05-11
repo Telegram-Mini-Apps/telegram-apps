@@ -1,11 +1,23 @@
-import { createViteConfig } from 'build-utils';
 import solidPlugin from 'vite-plugin-solid';
+import dts from 'vite-plugin-dts';
+import { defineConfig } from 'vite';
 
-import packageJson from './package.json';
-
-export default createViteConfig({
-  packageName: packageJson.name,
-  formats: ['es', 'cjs'],
-  external: ['@tma.js/utils', '@tma.js/sdk', 'solid-js'],
-  plugins: [solidPlugin()],
+export default defineConfig({
+  plugins: [
+    dts({ outDir: 'dist/dts' }),
+    solidPlugin(),
+  ],
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    sourcemap: true,
+    rollupOptions: {
+      external: ['solid-js'],
+    },
+    lib: {
+      entry: 'src/index.ts',
+      formats: ['es', 'cjs'],
+      fileName: 'index',
+    },
+  },
 });

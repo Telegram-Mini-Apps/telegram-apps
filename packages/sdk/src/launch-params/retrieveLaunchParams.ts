@@ -1,15 +1,15 @@
 import { retrieveFromLocation } from './retrieveFromLocation.js';
 import { retrieveFromPerformance } from './retrieveFromPerformance.js';
-import { retrieveFromStorage, saveToStorage } from './storage.js';
+import { retrieveFromStorage } from './retrieveFromStorage.js';
+import { saveToStorage } from './saveToStorage.js';
 import type { LaunchParams } from './types.js';
-import { logger } from '../globals.js';
 
 /**
  * @returns Launch parameters from any known source.
  * @throws Error if extraction was unsuccessful.
  */
 export function retrieveLaunchParams(): LaunchParams {
-  const errors = [];
+  const errors: unknown[] = [];
 
   // eslint-disable-next-line no-restricted-syntax
   for (const retrieve of [
@@ -30,6 +30,5 @@ export function retrieveLaunchParams(): LaunchParams {
     }
   }
 
-  logger.error('Unable to extract launch parameters. Received errors:', errors);
   throw new Error('Unable to retrieve launch parameters from any known source.');
 }
