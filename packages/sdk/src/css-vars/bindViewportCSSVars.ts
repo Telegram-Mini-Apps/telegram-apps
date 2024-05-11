@@ -1,5 +1,6 @@
 import { setCSSVar } from '@/css-vars/setCSSVar.js';
 import type { Viewport } from '@/components/Viewport/Viewport.js';
+import type { CleanupFn } from '@/types/index.js';
 
 export interface GetViewportCSSVarNameFn {
   /**
@@ -28,11 +29,12 @@ export interface GetViewportCSSVarNameFn {
  * @param viewport - Viewport instance.
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * Viewport property.
+ * @returns Function to stop updating variables.
  */
 export function bindViewportCSSVars(
   viewport: Viewport,
   getCSSVarName?: GetViewportCSSVarNameFn,
-): void {
+): CleanupFn {
   getCSSVarName ||= (property) => `--tg-viewport-${property}`;
   const [
     heightVar,
@@ -44,11 +46,15 @@ export function bindViewportCSSVars(
   const setStableHeight = () => setCSSVar(stableHeightVar, `${viewport.stableHeight}px`);
 
   // TODO: Should probably add debounce or throttle.
-  viewport.on('change:height', setHeight);
-  viewport.on('change:width', setWidth);
-  viewport.on('change:stableHeight', setStableHeight);
+  const listeners = [
+    viewport.on('change:height', setHeight),
+    viewport.on('change:width', setWidth),
+    viewport.on('change:stableHeight', setStableHeight),
+  ];
 
   setHeight();
   setWidth();
   setStableHeight();
+
+  return () => listeners.forEach(off => off());
 }

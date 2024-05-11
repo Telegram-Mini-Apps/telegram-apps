@@ -1,8 +1,8 @@
 import { isRGB } from '@/colors/isRGB.js';
 import { setCSSVar } from '@/css-vars/setCSSVar.js';
 import type { ThemeParams } from '@/components/ThemeParams/ThemeParams.js';
-
-import type { MiniApp } from '../components/MiniApp/MiniApp.js';
+import type { MiniApp } from '@/components/MiniApp/MiniApp.js';
+import type { CleanupFn } from '@/types/index.js';
 
 export interface GetMiniAppCSSVarNameFn {
   /**
@@ -27,19 +27,19 @@ export interface GetMiniAppCSSVarNameFn {
  * @param themeParams - ThemeParams instance.
  * @param getVarName - function, returning complete CSS variable name for the specified
  * MiniApp property.
+ * @returns Function to stop updating variables.
  */
 export function bindMiniAppCSSVars(
   miniApp: MiniApp,
   themeParams: ThemeParams,
   getVarName?: GetMiniAppCSSVarNameFn,
-): void {
+): CleanupFn {
   getVarName ||= (property) => `--tg-${property}-color`;
 
   const headerVar = getVarName('header');
   const bgVar = getVarName('bg');
-  const actualizeBackground = () => setCSSVar(bgVar, miniApp.bgColor);
 
-  const actualizeHeader = () => {
+  const actualize = () => {
     const { headerColor } = miniApp;
 
     if (isRGB(headerColor)) {
@@ -53,12 +53,16 @@ export function bindMiniAppCSSVars(
         setCSSVar(headerVar, secondaryBgColor);
       }
     }
+
+    setCSSVar(bgVar, miniApp.bgColor)
   };
 
-  themeParams.on('change', actualizeHeader);
-  miniApp.on('change:bgColor', actualizeBackground);
-  miniApp.on('change:headerColor', actualizeHeader);
+  const listeners = [
+    themeParams.on('change', actualize),
+    miniApp.on('change', actualize),
+  ];
 
-  actualizeBackground();
-  actualizeHeader();
+  actualize();
+
+  return () => listeners.forEach(off => off());
 }

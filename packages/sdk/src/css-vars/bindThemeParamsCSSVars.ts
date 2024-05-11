@@ -1,5 +1,6 @@
 import { setCSSVar } from '@/css-vars/setCSSVar.js';
 import type { ThemeParams } from '@/components/ThemeParams/ThemeParams.js';
+import type { CleanupFn } from '@/types/index.js';
 
 export interface GetThemeParamsCSSVarNameFn {
   /**
@@ -25,11 +26,12 @@ export interface GetThemeParamsCSSVarNameFn {
  * @param themeParams - ThemeParams instance.
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * ThemeParams property.
+ * @returns Function to stop updating variables.
  */
 export function bindThemeParamsCSSVars(
   themeParams: ThemeParams,
   getCSSVarName?: GetThemeParamsCSSVarNameFn,
-): void {
+): CleanupFn {
   getCSSVarName ||= (property) => {
     return `--tg-theme-${property.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`)}`;
   };
@@ -42,7 +44,7 @@ export function bindThemeParamsCSSVars(
     });
   };
 
-  themeParams.on('change', actualize);
-
   actualize();
+
+  return themeParams.on('change', actualize);
 }
