@@ -1,4 +1,4 @@
-import { isRGB, type RGB as RGBType } from '@tma.js/sdk';
+import { isRGB, type RGB as RGBType } from '@tma.js/sdk-react';
 import type { FC, ReactNode } from 'react';
 
 import { RGB } from '@/components/RGB/RGB.tsx';

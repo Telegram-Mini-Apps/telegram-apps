@@ -16,11 +16,11 @@
   "dependencies": {
     "@tma.js/react-router-integration": "workspace:*",
     "@tma.js/sdk-react": "workspace:*",
-    "@tonconnect/ui-react": "^2.0.0",
+    "@tonconnect/ui-react": "^2.0.2",
     "eruda": "^3.0.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.3"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.23.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.4",

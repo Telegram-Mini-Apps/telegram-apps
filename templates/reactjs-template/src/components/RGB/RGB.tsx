@@ -1,4 +1,4 @@
-import { classNames, type RGB as RGBType } from '@tma.js/sdk';
+import { classNames, type RGB as RGBType } from '@tma.js/sdk-react';
 import type { FC } from 'react';
 
 import './RGB.css';

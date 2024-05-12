@@ -15,11 +15,9 @@
   },
   "dependencies": {
     "@tma.js/react-router-integration": "workspace:*",
-    "@tma.js/sdk": "workspace:*",
     "@tma.js/sdk-react": "workspace:*",
     "@tonconnect/ui-react": "^2.0.2",
     "eruda": "^3.0.1",
-    "eslint": "8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.0"
@@ -32,6 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "@vitejs/plugin-react-swc": "^3.6.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "gh-pages": "^6.1.1",
     "globals": "^15.2.0",

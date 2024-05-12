@@ -250,19 +250,19 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sdk-react
       '@tonconnect/ui-react':
-        specifier: ^2.0.0
+        specifier: ^2.0.2
         version: 2.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       eruda:
         specifier: ^3.0.1
         version: 3.0.1
       react:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1
       react-dom:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       react-router-dom:
-        specifier: ^6.22.3
+        specifier: ^6.23.0
         version: 6.23.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
       '@babel/core':
@@ -304,9 +304,6 @@ importers:
       '@tma.js/react-router-integration':
         specifier: workspace:*
         version: link:../../packages/react-router-integration
-      '@tma.js/sdk':
-        specifier: workspace:*
-        version: link:../../packages/sdk
       '@tma.js/sdk-react':
         specifier: workspace:*
         version: link:../../packages/sdk-react
@@ -316,9 +313,6 @@ importers:
       eruda:
         specifier: ^3.0.1
         version: 3.0.1
-      eslint:
-        specifier: '8'
-        version: 8.57.0
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -350,6 +344,9 @@ importers:
       '@vitejs/plugin-react-swc':
         specifier: ^3.6.0
         version: 3.6.0(@swc/helpers@0.5.5)(vite@5.2.11(@types/node@20.12.11))
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.0
       eslint-plugin-react:
         specifier: ^7.34.1
         version: 7.34.1(eslint@8.57.0)
