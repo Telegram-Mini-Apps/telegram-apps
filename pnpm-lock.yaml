@@ -71,70 +71,6 @@ importers:
 
   apps/local-playground: {}
 
-  apps/solid:
-    dependencies:
-      '@solidjs/router':
-        specifier: ^0.13.1
-        version: 0.13.3(solid-js@1.8.17)
-      '@tma.js/sdk-solid':
-        specifier: workspace:*
-        version: link:../../packages/sdk-solid
-      '@tma.js/solid-router-integration':
-        specifier: workspace:*
-        version: link:../../packages/solid-router-integration
-      '@tonconnect/ui':
-        specifier: ^2.0.0
-        version: 2.0.2
-      eruda:
-        specifier: ^3.0.1
-        version: 3.0.1
-      solid-js:
-        specifier: ^1.8.16
-        version: 1.8.17
-    devDependencies:
-      '@eslint/js':
-        specifier: ^9.2.0
-        version: 9.2.0
-      '@types/node':
-        specifier: ^20.12.5
-        version: 20.12.11
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^7.8.0
-        version: 7.8.0(@typescript-eslint/parser@7.8.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
-      '@typescript-eslint/parser':
-        specifier: ^7.8.0
-        version: 7.8.0(eslint@8.57.0)(typescript@5.4.5)
-      eslint:
-        specifier: ^8.57.0
-        version: 8.57.0
-      eslint-plugin-solid:
-        specifier: ^0.14.0
-        version: 0.14.0(eslint@8.57.0)(typescript@5.4.5)
-      gh-pages:
-        specifier: ^6.1.1
-        version: 6.1.1
-      globals:
-        specifier: ^15.2.0
-        version: 15.2.0
-      solid-devtools:
-        specifier: ^0.30.1
-        version: 0.30.1(solid-js@1.8.17)(vite@5.2.11(@types/node@20.12.11))
-      typescript:
-        specifier: ^5.4.4
-        version: 5.4.5
-      typescript-eslint:
-        specifier: ^7.8.0
-        version: 7.8.0(eslint@8.57.0)(typescript@5.4.5)
-      vite:
-        specifier: ^5.2.11
-        version: 5.2.11(@types/node@20.12.11)
-      vite-plugin-solid:
-        specifier: ^2.10.2
-        version: 2.10.2(solid-js@1.8.17)(vite@5.2.11(@types/node@20.12.11))
-      vite-tsconfig-paths:
-        specifier: ^4.3.2
-        version: 4.3.2(typescript@5.4.5)(vite@5.2.11(@types/node@20.12.11))
-
   packages/create-mini-app:
     dependencies:
       '@inquirer/prompts':
@@ -334,6 +270,70 @@ importers:
       vite:
         specifier: ^5.2.11
         version: 5.2.11(@types/node@20.12.11)
+      vite-tsconfig-paths:
+        specifier: ^4.3.2
+        version: 4.3.2(typescript@5.4.5)(vite@5.2.11(@types/node@20.12.11))
+
+  templates/solidjs-template:
+    dependencies:
+      '@solidjs/router':
+        specifier: ^0.13.1
+        version: 0.13.3(solid-js@1.8.17)
+      '@tma.js/sdk-solid':
+        specifier: workspace:*
+        version: link:../../packages/sdk-solid
+      '@tma.js/solid-router-integration':
+        specifier: workspace:*
+        version: link:../../packages/solid-router-integration
+      '@tonconnect/ui':
+        specifier: ^2.0.0
+        version: 2.0.2
+      eruda:
+        specifier: ^3.0.1
+        version: 3.0.1
+      solid-js:
+        specifier: ^1.8.16
+        version: 1.8.17
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.2.0
+        version: 9.2.0
+      '@types/node':
+        specifier: ^20.12.5
+        version: 20.12.11
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.8.0(@typescript-eslint/parser@7.8.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.8.0(eslint@8.57.0)(typescript@5.4.5)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.0
+      eslint-plugin-solid:
+        specifier: ^0.14.0
+        version: 0.14.0(eslint@8.57.0)(typescript@5.4.5)
+      gh-pages:
+        specifier: ^6.1.1
+        version: 6.1.1
+      globals:
+        specifier: ^15.2.0
+        version: 15.2.0
+      solid-devtools:
+        specifier: ^0.30.1
+        version: 0.30.1(solid-js@1.8.17)(vite@5.2.11(@types/node@20.12.11))
+      typescript:
+        specifier: ^5.4.4
+        version: 5.4.5
+      typescript-eslint:
+        specifier: ^7.8.0
+        version: 7.8.0(eslint@8.57.0)(typescript@5.4.5)
+      vite:
+        specifier: ^5.2.11
+        version: 5.2.11(@types/node@20.12.11)
+      vite-plugin-solid:
+        specifier: ^2.10.2
+        version: 2.10.2(solid-js@1.8.17)(vite@5.2.11(@types/node@20.12.11))
       vite-tsconfig-paths:
         specifier: ^4.3.2
         version: 4.3.2(typescript@5.4.5)(vite@5.2.11(@types/node@20.12.11))
