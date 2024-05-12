@@ -4,12 +4,12 @@ import { Link as RouterLink, type LinkProps } from 'react-router-dom';
 
 import './Link.css';
 
-export const Link: FC<LinkProps> = (props) => {
-  const {
-    className,
-    onClick: propsOnClick,
-    to,
-  } = props;
+export const Link: FC<LinkProps> = ({
+  className,
+  onClick: propsOnClick,
+  to,
+  ...rest
+}) => {
   const utils = useUtils();
 
   const onClick = useCallback<MouseEventHandler<HTMLAnchorElement>>((e) => {
@@ -38,7 +38,8 @@ export const Link: FC<LinkProps> = (props) => {
 
   return (
     <RouterLink
-      {...props}
+      {...rest}
+      to={to}
       onClick={onClick}
       className={classNames(className, 'link')}
     />

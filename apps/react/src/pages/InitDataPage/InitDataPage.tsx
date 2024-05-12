@@ -1,4 +1,3 @@
-// import { useInitData, useInitDataRaw } from '@tma.js/sdk-react';
 import { type FC, type ReactNode, useMemo } from 'react';
 import { useInitData, useLaunchParams, type User } from '@tma.js/sdk-react';
 
