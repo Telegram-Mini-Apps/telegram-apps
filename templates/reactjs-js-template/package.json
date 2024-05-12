@@ -1,0 +1,38 @@
+{
+  "name": "reactjs-js-template",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "homepage": "https://telegram-mini-apps.github.io/reactjs-js-template",
+  "scripts": {
+    "deploy": "gh-pages -d dist",
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0 --fix",
+    "preview": "vite preview",
+    "predeploy": "pnpm run build"
+  },
+  "dependencies": {
+    "@tma.js/react-router-integration": "workspace:*",
+    "@tma.js/sdk-react": "workspace:*",
+    "@tonconnect/ui-react": "^2.0.0",
+    "eruda": "^3.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/eslint-parser": "^7.24.1",
+    "@babel/preset-env": "^7.24.4",
+    "@babel/preset-react": "^7.24.1",
+    "@types/react": "^18.3.2",
+    "@vitejs/plugin-react-swc": "^3.6.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^6.1.1",
+    "vite": "^5.1.5"
+  }
+}
