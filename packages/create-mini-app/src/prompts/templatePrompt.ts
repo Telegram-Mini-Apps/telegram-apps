@@ -202,7 +202,7 @@ export const templatePrompt = createPrompt<AnyTemplate, {}>(
         template
           ? green(
             `${bold(figures.tick)} A template utilizing these technologies was discovered. Press ${style.key(
-              'space')} to proceed.`,
+              'enter')} to proceed.`,
           )
           : style.error(`${bold(figures.warning)} Currently, no template exists that uses these technologies.`),
       )}${ansiEscapes.cursorHide}`;
