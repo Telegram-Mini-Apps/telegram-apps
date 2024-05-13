@@ -1,5 +1,11 @@
 # @tma.js/init-data-node
 
+## 1.2.0
+
+### Minor Changes
+
+- 59c1245: Add sign utilities.
+
 ## 1.1.16
 
 ### Patch Changes
