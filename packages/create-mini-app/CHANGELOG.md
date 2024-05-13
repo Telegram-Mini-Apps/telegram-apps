@@ -1,5 +1,11 @@
 # @tma.js/create-mini-app
 
+## 0.1.4
+
+### Patch Changes
+
+- d6cceba: Fix proceed control name
+
 ## 0.1.3
 
 ### Patch Changes
