@@ -1,3 +1,6 @@
+export { sign } from './sign.js';
+export { signData } from './signData.js';
+export type { SignData } from './types.js';
 export { validate, type ValidateOptions } from './validate.js';
 export {
   type Chat,
