@@ -209,6 +209,7 @@ export { setDebug } from '@/debug/debug.js';
  */
 export { initWeb } from '@/env/initWeb.js';
 export { isIframe } from '@/env/isIframe.js';
+export { isSSR } from '@/env/isSSR.js';
 export { isTMA } from '@/env/isTMA.js';
 
 /**
