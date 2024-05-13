@@ -15,7 +15,7 @@ import chalk from 'chalk';
 import figures from 'figures';
 
 import { findTemplate } from '../templates.js';
-import type { AnyTemplate, KnownFramework, KnownLanguage, KnownSDK } from '../types.js';
+import type { AnyTemplate, Framework, Language, SDK } from '../types.js';
 
 interface CreateSection<N, V> {
   title: string;
@@ -24,9 +24,9 @@ interface CreateSection<N, V> {
 }
 
 interface SelectedChoices {
-  framework: KnownFramework;
-  sdk: KnownSDK;
-  language: KnownLanguage;
+  framework: Framework;
+  sdk: SDK;
+  language: Language;
 }
 
 interface Choice<V> {
@@ -36,15 +36,11 @@ interface Choice<V> {
 }
 
 type Section =
-  | CreateSection<'framework', KnownFramework>
-  | CreateSection<'sdk', KnownSDK>
-  | CreateSection<'language', KnownLanguage>;
+  | CreateSection<'framework', Framework>
+  | CreateSection<'sdk', SDK>
+  | CreateSection<'language', Language>;
 
-const {
-  bold,
-  green,
-  blue,
-} = chalk;
+const { bold, green, blue } = chalk;
 
 function joinLines(...arr: (string | string[])[]): string {
   return arr.flat(1).join('\n');
@@ -89,7 +85,7 @@ export const templatePrompt = createPrompt<AnyTemplate, {}>(
     } = useMemo(() => {
       const result = {
         selected: {} as SelectedChoices,
-        choices: [] as Choice<KnownFramework | KnownLanguage | KnownSDK>[],
+        choices: [] as Choice<Framework | Language | SDK>[],
       };
 
       sections.forEach((section) => {
@@ -169,7 +165,8 @@ export const templatePrompt = createPrompt<AnyTemplate, {}>(
       }[template!.framework];
 
       return `${green('✔')} ${style.message(
-        `You have selected template with technologies: ${blue(framework)}, ${blue(lang)} and ${blue(sdk)}`,
+        `You have selected template with technologies: ${blue(framework)}, ${blue(lang)} and ${blue(
+          sdk)}`,
       )}`;
     }
 
@@ -204,7 +201,8 @@ export const templatePrompt = createPrompt<AnyTemplate, {}>(
 
         template
           ? green(
-            `${bold(figures.tick)} A template utilizing these technologies was discovered. Press ${style.key('space')} to proceed.`,
+            `${bold(figures.tick)} A template utilizing these technologies was discovered. Press ${style.key(
+              'space')} to proceed.`,
           )
           : style.error(`${bold(figures.warning)} Currently, no template exists that uses these technologies.`),
       )}${ansiEscapes.cursorHide}`;
