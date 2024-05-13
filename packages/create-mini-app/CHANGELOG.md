@@ -1,5 +1,11 @@
 # @tma.js/create-mini-app
 
+## 0.1.3
+
+### Patch Changes
+
+- f95744d: Add next.js TS template
+
 ## 0.1.2
 
 ### Patch Changes
