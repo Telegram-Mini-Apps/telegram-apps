@@ -15,8 +15,8 @@ export default defineConfig({
   server: {
     port: 443,
     https: {
-      cert: readFileSync(resolve(dir, '../../https-cert.pem')),
-      key: readFileSync(resolve(dir, '../../https-key.pem')),
+      cert: readFileSync(resolve(dir, '../../tma.internal.pem')),
+      key: readFileSync(resolve(dir, '../../tma.internal-key.pem')),
     },
     host: 'tma.internal',
   },
