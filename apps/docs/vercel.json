@@ -4,47 +4,5 @@
       "source": "/:path*",
       "destination": "/:path*.html"
     }
-  ],
-  "redirects": [
-    {
-      "source": "/platform/about-platform",
-      "destination": "/platform/about",
-      "permanent": false
-    },
-    {
-      "source": "/packages/typescript/tma-js-sdk/about",
-      "destination": "/packages/tma-js-sdk",
-      "permanent": false
-    },
-    {
-      "source": "/packages/typescript/tma-js-sdk/components/about",
-      "destination": "/packages/tma-js-sdk/components",
-      "permanent": false
-    },
-    {
-      "source": "/packages/typescript/tma-js-sdk/init-data/about",
-      "destination": "/packages/tma-js-sdk/init-data",
-      "permanent": false
-    },
-    {
-      "source": "/packages/(golang|node|typescript)/:path*",
-      "destination": "/packages/:path*",
-      "permanent": false
-    },
-    {
-      "source": "/platform/apps-communication/flow-definition",
-      "destination": "/platform/apps-communication",
-      "permanent": false
-    },
-    {
-      "source": "/platform/launch-parameters/common-information",
-      "destination": "/platform/launch-parameters",
-      "permanent": false
-    },
-    {
-      "source": "/platform/(functionality|launch-parameters|apps-communication|ui|guides)/:path",
-      "destination": "/platform/:path",
-      "permanent": false
-    }
   ]
 }
