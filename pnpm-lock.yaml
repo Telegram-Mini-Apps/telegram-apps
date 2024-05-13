@@ -69,7 +69,15 @@ importers:
         specifier: 1.0.0-rc.24
         version: 1.0.0-rc.24(@algolia/client-search@4.23.3)(@types/node@20.12.11)(@types/react@18.3.2)(change-case@5.4.4)(postcss@8.4.38)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.13.0)(typescript@5.4.5)
 
-  apps/local-playground: {}
+  apps/local-playground:
+    dependencies:
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+    devDependencies:
+      eruda:
+        specifier: ^3.0.1
+        version: 3.0.1
 
   packages/create-mini-app:
     dependencies:
