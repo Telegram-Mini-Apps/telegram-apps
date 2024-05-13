@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 2.0.1
+
+### Patch Changes
+
+- a77d249: Fix `isTMA` incorrect behavior in native apps.
+
 ## 2.0.0
 
 ### Major Changes
