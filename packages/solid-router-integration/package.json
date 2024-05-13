@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/solid-router-integration",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "@solidjs/router integration for navigation.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
