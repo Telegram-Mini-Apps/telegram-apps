@@ -1,0 +1,40 @@
+{
+  "name": "my-application",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "main": "index.js",
+  "homepage": "https://telegram-mini-apps.github.io/solidjs-js-template",
+  "scripts": {
+    "deploy": "gh-pages -d dist",
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0 --fix",
+    "preview": "vite preview",
+    "predeploy": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@solidjs/router": "^0.13.3",
+    "@tma.js/sdk-solid": "workspace:*",
+    "@tma.js/solid-router-integration": "workspace:*",
+    "@tonconnect/ui": "^2.0.2",
+    "eruda": "^3.0.1",
+    "solid-js": "^1.8.17"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/eslint-parser": "^7.24.1",
+    "@babel/preset-env": "^7.24.4",
+    "babel-preset-solid": "^1.8.17",
+    "eslint": "^8.57.0",
+    "eslint-plugin-solid": "^0.14.0",
+    "gh-pages": "^6.1.1",
+    "solid-devtools": "^0.30.1",
+    "vite": "^5.2.11",
+    "vite-plugin-solid": "^2.10.2"
+  }
+}

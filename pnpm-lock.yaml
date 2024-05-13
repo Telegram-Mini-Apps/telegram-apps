@@ -67,7 +67,7 @@ importers:
     devDependencies:
       vitepress:
         specifier: 1.0.0-rc.24
-        version: 1.0.0-rc.24(@algolia/client-search@4.23.3)(@types/node@20.12.11)(@types/react@18.3.2)(change-case@3.1.0)(postcss@8.4.38)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.13.0)(typescript@5.4.5)
+        version: 1.0.0-rc.24(@algolia/client-search@4.23.3)(@types/node@20.12.11)(@types/react@18.3.2)(change-case@5.4.4)(postcss@8.4.38)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.13.0)(typescript@5.4.5)
 
   apps/local-playground: {}
 
@@ -282,7 +282,7 @@ importers:
         version: 18.3.2
       '@vitejs/plugin-react-swc':
         specifier: ^3.6.0
-        version: 3.6.0(@swc/helpers@0.5.5)(vite@5.2.11(@types/node@20.12.11))
+        version: 3.6.0(@swc/helpers@0.5.11)(vite@5.2.11(@types/node@20.12.11))
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -343,7 +343,7 @@ importers:
         version: 7.8.0(eslint@8.57.0)(typescript@5.4.5)
       '@vitejs/plugin-react-swc':
         specifier: ^3.6.0
-        version: 3.6.0(@swc/helpers@0.5.5)(vite@5.2.11(@types/node@20.12.11))
+        version: 3.6.0(@swc/helpers@0.5.11)(vite@5.2.11(@types/node@20.12.11))
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -368,6 +368,58 @@ importers:
       vite-tsconfig-paths:
         specifier: ^4.3.2
         version: 4.3.2(typescript@5.4.5)(vite@5.2.11(@types/node@20.12.11))
+
+  templates/solidjs-js-template:
+    dependencies:
+      '@solidjs/router':
+        specifier: ^0.13.3
+        version: 0.13.3(solid-js@1.8.17)
+      '@tma.js/sdk-solid':
+        specifier: workspace:*
+        version: link:../../packages/sdk-solid
+      '@tma.js/solid-router-integration':
+        specifier: workspace:*
+        version: link:../../packages/solid-router-integration
+      '@tonconnect/ui':
+        specifier: ^2.0.2
+        version: 2.0.2
+      eruda:
+        specifier: ^3.0.1
+        version: 3.0.1
+      solid-js:
+        specifier: ^1.8.17
+        version: 1.8.17
+    devDependencies:
+      '@babel/core':
+        specifier: ^7.24.4
+        version: 7.24.5
+      '@babel/eslint-parser':
+        specifier: ^7.24.1
+        version: 7.24.5(@babel/core@7.24.5)(eslint@8.57.0)
+      '@babel/preset-env':
+        specifier: ^7.24.4
+        version: 7.24.5(@babel/core@7.24.5)
+      babel-preset-solid:
+        specifier: ^1.8.17
+        version: 1.8.17(@babel/core@7.24.5)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.0
+      eslint-plugin-solid:
+        specifier: ^0.14.0
+        version: 0.14.0(eslint@8.57.0)(typescript@5.4.5)
+      gh-pages:
+        specifier: ^6.1.1
+        version: 6.1.1
+      solid-devtools:
+        specifier: ^0.30.1
+        version: 0.30.1(solid-js@1.8.17)(vite@5.2.11(@types/node@20.12.11))
+      vite:
+        specifier: ^5.2.11
+        version: 5.2.11(@types/node@20.12.11)
+      vite-plugin-solid:
+        specifier: ^2.10.2
+        version: 2.10.2(solid-js@1.8.17)(vite@5.2.11(@types/node@20.12.11))
 
   templates/solidjs-template:
     dependencies:
@@ -2035,6 +2087,9 @@ packages:
   '@swc/counter@0.1.3':
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
 
+  '@swc/helpers@0.5.11':
+    resolution: {integrity: sha512-YNlnKRWF2sVojTpIyzwou9XoTNbzbzONwRhOoniEioF1AtaitTvVZblaQRrAzChWQ1bLYyYSWzM18y4WwgzJ+A==}
+
   '@swc/helpers@0.5.5':
     resolution: {integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==}
 
@@ -2686,6 +2741,9 @@ packages:
 
   change-case@3.1.0:
     resolution: {integrity: sha512-2AZp7uJZbYEzRPsFoa+ijKdvp9zsrnnt6+yFokfwEpeJm0xuJDVoxiRCAaTzyJND8GJkofo2IcKWaUZ/OECVzw==}
+
+  change-case@5.4.4:
+    resolution: {integrity: sha512-HRQyTk2/YPEkt9TnUPbOpr64Uw3KOicFWPVBb+xiHvd6eBx/qPr9xqfBFDT8P2vWsvvz4jbEkfDe71W3VyNu2w==}
 
   chardet@0.7.0:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
@@ -7366,7 +7424,7 @@ snapshots:
   '@swc/core-win32-x64-msvc@1.5.5':
     optional: true
 
-  '@swc/core@1.5.5(@swc/helpers@0.5.5)':
+  '@swc/core@1.5.5(@swc/helpers@0.5.11)':
     dependencies:
       '@swc/counter': 0.1.3
       '@swc/types': 0.1.6
@@ -7381,9 +7439,14 @@ snapshots:
       '@swc/core-win32-arm64-msvc': 1.5.5
       '@swc/core-win32-ia32-msvc': 1.5.5
       '@swc/core-win32-x64-msvc': 1.5.5
-      '@swc/helpers': 0.5.5
+      '@swc/helpers': 0.5.11
 
   '@swc/counter@0.1.3': {}
+
+  '@swc/helpers@0.5.11':
+    dependencies:
+      tslib: 2.6.2
+    optional: true
 
   '@swc/helpers@0.5.5':
     dependencies:
@@ -7706,9 +7769,9 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-react-swc@3.6.0(@swc/helpers@0.5.5)(vite@5.2.11(@types/node@20.12.11))':
+  '@vitejs/plugin-react-swc@3.6.0(@swc/helpers@0.5.11)(vite@5.2.11(@types/node@20.12.11))':
     dependencies:
-      '@swc/core': 1.5.5(@swc/helpers@0.5.5)
+      '@swc/core': 1.5.5(@swc/helpers@0.5.11)
       vite: 5.2.11(@types/node@20.12.11)
     transitivePeerDependencies:
       - '@swc/helpers'
@@ -7869,13 +7932,13 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@vueuse/integrations@10.9.0(change-case@3.1.0)(focus-trap@7.5.4)(vue@3.4.27(typescript@5.4.5))':
+  '@vueuse/integrations@10.9.0(change-case@5.4.4)(focus-trap@7.5.4)(vue@3.4.27(typescript@5.4.5))':
     dependencies:
       '@vueuse/core': 10.9.0(vue@3.4.27(typescript@5.4.5))
       '@vueuse/shared': 10.9.0(vue@3.4.27(typescript@5.4.5))
       vue-demi: 0.14.7(vue@3.4.27(typescript@5.4.5))
     optionalDependencies:
-      change-case: 3.1.0
+      change-case: 5.4.4
       focus-trap: 7.5.4
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -8250,6 +8313,9 @@ snapshots:
       title-case: 2.1.1
       upper-case: 1.1.3
       upper-case-first: 1.1.2
+
+  change-case@5.4.4:
+    optional: true
 
   chardet@0.7.0: {}
 
@@ -10982,7 +11048,7 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optionalDependencies:
-      '@swc/core': 1.5.5(@swc/helpers@0.5.5)
+      '@swc/core': 1.5.5(@swc/helpers@0.5.11)
 
   tsconfck@3.0.3(typescript@5.4.5):
     optionalDependencies:
@@ -11250,7 +11316,7 @@ snapshots:
     optionalDependencies:
       vite: 5.2.11(@types/node@20.12.11)
 
-  vitepress@1.0.0-rc.24(@algolia/client-search@4.23.3)(@types/node@20.12.11)(@types/react@18.3.2)(change-case@3.1.0)(postcss@8.4.38)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.13.0)(typescript@5.4.5):
+  vitepress@1.0.0-rc.24(@algolia/client-search@4.23.3)(@types/node@20.12.11)(@types/react@18.3.2)(change-case@5.4.4)(postcss@8.4.38)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.13.0)(typescript@5.4.5):
     dependencies:
       '@docsearch/css': 3.6.0
       '@docsearch/js': 3.6.0(@algolia/client-search@4.23.3)(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.13.0)
@@ -11258,7 +11324,7 @@ snapshots:
       '@vitejs/plugin-vue': 4.3.1(vite@4.5.3(@types/node@20.12.11))(vue@3.4.27(typescript@5.4.5))
       '@vue/devtools-api': 6.6.1
       '@vueuse/core': 10.9.0(vue@3.4.27(typescript@5.4.5))
-      '@vueuse/integrations': 10.9.0(change-case@3.1.0)(focus-trap@7.5.4)(vue@3.4.27(typescript@5.4.5))
+      '@vueuse/integrations': 10.9.0(change-case@5.4.4)(focus-trap@7.5.4)(vue@3.4.27(typescript@5.4.5))
       focus-trap: 7.5.4
       mark.js: 8.11.1
       minisearch: 6.3.0
