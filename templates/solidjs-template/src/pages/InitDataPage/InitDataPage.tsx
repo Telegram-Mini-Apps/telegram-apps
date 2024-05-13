@@ -1,6 +1,5 @@
 import { retrieveLaunchParams, useInitData, type User } from '@tma.js/sdk-solid';
-import { createMemo, Show } from 'solid-js';
-import type { Component } from 'solid-js';
+import { createMemo, Show, type Component } from 'solid-js';
 
 import { DisplayData, type DisplayDataRow } from '@/components/DisplayData/DisplayData.js';
 import { Link } from '@/components/Link/Link.js';

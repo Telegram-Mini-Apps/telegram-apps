@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+// import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react-swc';
@@ -13,14 +13,14 @@ export default defineConfig({
   // Learn more:
   // https://docs.telegram-mini-apps.com/platform/getting-app-link#mkcert
   //
-  server: {
-    port: 443,
-    https: {
-      cert: readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), './tma.internal.pem')),
-      key: readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), './tma.internal-key.pem')),
-    },
-    host: 'tma.internal',
-  },
+  // server: {
+  //   port: 443,
+  //   https: {
+  //     cert: readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), './tma.internal.pem')),
+  //     key: readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), './tma.internal-key.pem')),
+  //   },
+  //   host: 'tma.internal',
+  // },
   resolve: {
     alias: {
       '@': resolve(dirname(fileURLToPath(import.meta.url)), './src'),
