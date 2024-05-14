@@ -1,20 +1,18 @@
 import { createPostEvent } from '@/bridge/methods/createPostEvent.js';
 import { isSSR } from '@/env/isSSR.js';
-import { createError } from '@/errors/createError.js';
-import { ERR_SSR_INIT, ERR_SSR_POST_EVENT } from '@/errors/errors.js';
 import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
 import { createSingleton } from '@/misc/createSingleton.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
 import { createRequestIdGenerator } from '@/request-id/createRequestIdGenerator.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import type { LaunchParamName, LaunchParams } from '@/launch-params/types.js';
+import type { LaunchParamName } from '@/launch-params/types.js';
 import type { StorageKey, StorageValue } from '@/storage/storage.js';
 
 import type {
   FactoryDynamic,
   FactoryOptions,
   FactoryStatic,
-  InitComponentFn, SSROptions,
+  InitComponentFn,
   WithOnChange,
 } from './types.js';
 
@@ -51,32 +49,21 @@ export function createComponentInitFn<
   factoryWithState?: FactoryDynamic<LP, R, SK>,
 ): InitComponentFn<LP, R, StorageValue<SK>> {
   return ({ ssr } = {}) => {
-    let deps: SSROptions<LP, StorageValue<SK>> | LaunchParams;
-
-    if (isSSR()) {
-      if (!ssr) {
-        throw createError(
-          ERR_SSR_INIT,
-          'ssr.options must be specified to initialize component on the server side',
-        );
+    const launchParams = isSSR()
+      ? {
+        version: '6.0',
+        themeParams: {},
+        platform: 'unknown',
+        ...(ssr || {}),
       }
-      deps = ssr;
-    } else {
-      deps = retrieveLaunchParams();
-    }
+      : retrieveLaunchParams();
 
     const options = {
-      ...deps,
-      postEvent: 'version' in deps
-        ? createPostEvent(deps.version)
-        // We will not get Mini Apps version only in case, current env is SSR. So, we don't really
-        // care what postEvent will be, but notify user in case, he used it.
-        : () => {
-          throw createError(
-            ERR_SSR_POST_EVENT,
-            'postEvent function is forbidden to be called on the server side.',
-          );
-        },
+      ...launchParams,
+      postEvent: isSSR()
+        // On the server side, postEvent should do nothing.
+        ? () => null
+        : createPostEvent(launchParams.version),
       createRequestId: createReqId(),
     };
 
