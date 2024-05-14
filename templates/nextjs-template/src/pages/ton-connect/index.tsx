@@ -7,8 +7,9 @@ import { Link } from '@/components/Link/Link';
 import { Page } from '@/components/Page/Page';
 
 import styles from './styles.module.css';
+import { useDidMount } from '@/hooks/useDidMount';
 
-export default function TONConnectPage() {
+function Inner() {
   const wallet = useTonWallet();
   const utils = useUtils();
   let content: ReactNode;
@@ -70,11 +71,21 @@ export default function TONConnectPage() {
   }
 
   return (
-    <Page title="TON Connect">
+    <>
       {content}
       <div className={styles.buttonContainer}>
-        <TonConnectButton />
+        <TonConnectButton/>
       </div>
+    </>
+  );
+}
+
+export default function TONConnectPage() {
+  const didMount = useDidMount();
+
+  return (
+    <Page title="TON Connect">
+      {didMount ? <Inner/> : 'Loading'}
     </Page>
   );
 };
