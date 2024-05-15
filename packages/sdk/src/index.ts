@@ -239,7 +239,6 @@ export * from '@/launch-params/types.js';
  * Misc.
  */
 export type {
-  SSROptions,
   FactoryOptions,
   FactoryStatic,
   Factory,

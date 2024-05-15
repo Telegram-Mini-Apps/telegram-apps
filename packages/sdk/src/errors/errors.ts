@@ -54,11 +54,6 @@ export const ERR_NAVIGATION_ITEM_INVALID = 'ERR_NAVIGATION_ITEM_INVALID';
 export const ERR_SSR_INIT = 'ERR_SSR_INIT';
 
 /**
- * Server side called postEvent.
- */
-export const ERR_SSR_POST_EVENT = 'ERR_SSR_POST_EVENT';
-
-/**
  * Path starts from the invalid base.
  */
 export const ERR_INVALID_PATH_BASE = 'ERR_INVALID_PATH_BASE';
@@ -75,5 +70,4 @@ export type ErrorType =
   | typeof ERR_NAVIGATION_INDEX_INVALID
   | typeof ERR_NAVIGATION_ITEM_INVALID
   | typeof ERR_SSR_INIT
-  | typeof ERR_SSR_POST_EVENT
   | typeof ERR_INVALID_PATH_BASE;

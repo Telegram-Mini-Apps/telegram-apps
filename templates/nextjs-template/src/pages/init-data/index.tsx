@@ -1,9 +1,10 @@
 import { type ReactNode, useMemo } from 'react';
-import { useInitData, useLaunchParams, type User } from '@tma.js/sdk-react';
+import { useInitData, retrieveLaunchParams, type User } from '@tma.js/sdk-react';
 
 import { DisplayData, type DisplayDataRow } from '@/components/DisplayData/DisplayData';
 import { Link } from '@/components/Link/Link';
 import { Page } from '@/components/Page/Page';
+import { useDidMount } from '@/hooks/useDidMount';
 
 import styles from './styles.module.css';
 
@@ -19,8 +20,11 @@ function getUserRows(user: User): DisplayDataRow[] {
 }
 
 export default function InitDataPage() {
-  const initDataRaw = useLaunchParams().initDataRaw;
+  const didMount = useDidMount();
   const initData = useInitData();
+  const initDataRaw = useMemo(() => {
+    return didMount ? retrieveLaunchParams().initDataRaw : '';
+  }, [didMount]);
 
   const initDataRows = useMemo<DisplayDataRow[] | undefined>(() => {
     if (!initData || !initDataRaw) {
@@ -82,27 +86,27 @@ export default function InitDataPage() {
       <>
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Init data</h2>
-          <DisplayData rows={initDataRows} />
+          <DisplayData rows={initDataRows}/>
         </div>
 
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>User</h2>
           {userRows
-            ? <DisplayData rows={userRows} />
+            ? <DisplayData rows={userRows}/>
             : <i>User information missing</i>}
         </div>
 
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Receiver</h2>
           {receiverRows
-            ? <DisplayData rows={receiverRows} />
+            ? <DisplayData rows={receiverRows}/>
             : <i>Receiver information missing</i>}
         </div>
 
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Chat</h2>
           {chatRows
-            ? <DisplayData rows={chatRows} />
+            ? <DisplayData rows={chatRows}/>
             : <i>Chat information missing</i>}
         </div>
       </>

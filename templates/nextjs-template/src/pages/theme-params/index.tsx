@@ -3,9 +3,29 @@ import { useThemeParams } from '@tma.js/sdk-react';
 import { DisplayData } from '@/components/DisplayData/DisplayData';
 import { Link } from '@/components/Link/Link';
 import { Page } from '@/components/Page/Page';
+import { useDidMount } from '@/hooks/useDidMount';
+
+function Inner() {
+  const themeParams = useThemeParams();
+
+  return (
+    <DisplayData
+      rows={
+        Object
+          .entries(themeParams.getState())
+          .map(([title, value]) => ({
+            title: title
+              .replace(/[A-Z]/g, (m) => `_${m.toLowerCase()}`)
+              .replace(/background/, 'bg'),
+            value,
+          }))
+      }
+    />
+  );
+}
 
 export default function ThemeParamsPage() {
-  const themeParams = useThemeParams();
+  const didMount = useDidMount();
 
   return (
     <Page
@@ -21,18 +41,7 @@ export default function ThemeParamsPage() {
         </>
       )}
     >
-      <DisplayData
-        rows={
-          Object
-            .entries(themeParams.getState())
-            .map(([title, value]) => ({
-              title: title
-                .replace(/[A-Z]/g, (m) => `_${m.toLowerCase()}`)
-                .replace(/background/, 'bg'),
-              value,
-            }))
-        }
-      />
+      {didMount ? <Inner/> : 'Loading'}
     </Page>
   );
 };

@@ -11,22 +11,19 @@ export interface WithOnChange<State> {
   on(event: 'change', listener: (state: State) => void): void;
 }
 
-type LaunchParamsWithState<LP extends LaunchParamName, State> =
-  & PickLaunchParams<LP>
-  & If<IsNever<State>, {}, { state?: State }>;
-
-export type SSROptions<LP extends LaunchParamName, State> = LaunchParamsWithState<LP, State>;
+type WithState<State> = If<IsNever<State>, {}, { state?: State }>;
 
 /**
  * Options passed to a component factory.
  */
 export type FactoryOptions<LP extends LaunchParamName, State> =
-  & LaunchParamsWithState<LP, State>
+  & PickLaunchParams<LP>
+  & WithState<State>
   & { postEvent: PostEvent; createRequestId: CreateRequestIdFn };
 
 export interface Factory<LP extends LaunchParamName, R, State> {
   /**
-   * Creates new component instance.
+   * Creates a new component instance.
    * @param options - factory options.
    */
   (options: FactoryOptions<LP, State>): R;
@@ -52,6 +49,6 @@ export interface InitComponentFn<LP extends LaunchParamName, Result, State> {
     /**
      * Options, applicable only to SSR mode.
      */
-    ssr?: SSROptions<LP, State>;
+    ssr?: Partial<PickLaunchParams<LP>> & WithState<State>;
   }): Result;
 }

@@ -36,7 +36,7 @@ const ErrorBoundaryError: FC<{ error: unknown }> = ({ error }) => (
 const BackButtonManipulator: FC = () => {
   const router = useRouter();
   const { back } = useNavigationRouter();
-  const bb = useBackButton({ ssr: { version: '7.0' } });
+  const bb = useBackButton();
 
   useEffect(() => {
     if (router.pathname === '/') {
@@ -52,17 +52,9 @@ const BackButtonManipulator: FC = () => {
 };
 
 const App: FC<AppProps> = ({ pageProps, Component }) => {
-  // As long as this is not really important to specify some valid SSR values here, we are just
-  // specifying a stub.
-  const ssrStub = {
-    themeParams: {},
-    version: '7.0',
-    botInline: false,
-    platform: 'unknown',
-  };
-  const miniApp = useMiniApp({ ssr: ssrStub });
-  const themeParams = useThemeParams({ ssr: ssrStub });
-  const viewport = useViewport({ ssr: ssrStub });
+  const miniApp = useMiniApp();
+  const themeParams = useThemeParams();
+  const viewport = useViewport();
 
   useEffect(() => {
     return bindMiniAppCSSVars(miniApp, themeParams);
