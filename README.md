@@ -18,7 +18,7 @@ their own [documentations](https://docs.telegram-mini-apps.com).
 
 [sdk-npm-badge]: https://img.shields.io/npm/v/@tma.js/sdk?logo=npm
 
-[![docs-badge]](https://docs.telegram-mini-apps.com/packages/tma-js-sdk/about)
+[![docs-badge]](https://docs.telegram-mini-apps.com/packages/tma-js-sdk)
 [![sdk-npm-badge]](https://npmjs.com/package/@tma.js/sdk)
 ![Size](https://img.shields.io/bundlephobia/minzip/@tma.js/sdk)
 [![code-badge]](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk)
