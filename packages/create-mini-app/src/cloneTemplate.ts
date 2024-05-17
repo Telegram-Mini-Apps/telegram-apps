@@ -28,7 +28,7 @@ export async function cloneTemplate(
   try {
     await spawnWithSpinner({
       title: `Cloning the template from GitHub (HTTPS): ${bold(blue(link))}`,
-      command: `git clone ${https} ${rootDir}`,
+      command: `git clone "${https}" "${rootDir}"`,
       titleFail(outputOrCode) {
         return `Failed to load the template using HTTPS. ${
           typeof outputOrCode === 'string'
