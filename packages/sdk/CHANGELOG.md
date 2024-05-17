@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 2.0.2
+
+### Patch Changes
+
+- 8fa7a87: Make components intialization a bit easier on the server side.
+
 ## 2.0.1
 
 ### Patch Changes
