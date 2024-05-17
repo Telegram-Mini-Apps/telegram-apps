@@ -1,5 +1,11 @@
 # @tma.js/create-mini-app
 
+## 0.1.5
+
+### Patch Changes
+
+- 5fbb6b5: Fix invalid git clone command.
+
 ## 0.1.4
 
 ### Patch Changes
