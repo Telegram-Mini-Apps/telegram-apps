@@ -71,7 +71,7 @@ program
 
     console.log([
       green(bold('Your project has been successfully initialized!')),
-      `Now, open the ${bold(rootDir)} directory and follow the instructions presented in the ${bold('README.md')} file. ${bold('Happy coding! 🚀')}`,
+      `Now, open the "${bold(rootDir)}" directory and follow the instructions presented in the ${bold('README.md')} file. ${bold('Happy coding! 🚀')}`,
     ].join('\n'));
   });
 
