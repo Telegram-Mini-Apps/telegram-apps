@@ -1,54 +1,63 @@
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
-import type { LaunchParamName, PickLaunchParams } from '@/launch-params/types.js';
+import type { LaunchParams } from '@/launch-params/types.js';
 import type { CreateRequestIdFn } from '@/request-id/types.js';
 import type { StorageKey, StorageValue } from '@/storage/storage.js';
-import type { If, IsNever } from '@/types/index.js';
+import type { CleanupFn, If, IsNever } from '@/types/index.js';
+import type { RemoveEventListenerFn } from '@/events/types.js';
 
 /**
  * Object, which supports tracking its state changes.
  */
 export interface WithOnChange<State> {
-  on(event: 'change', listener: (state: State) => void): void;
+  on(event: 'change', listener: (state: State) => void): RemoveEventListenerFn;
 }
-
-type WithState<State> = If<IsNever<State>, {}, { state?: State }>;
 
 /**
  * Options passed to a component factory.
  */
-export type FactoryOptions<LP extends LaunchParamName, State> =
-  & PickLaunchParams<LP>
-  & WithState<State>
-  & { postEvent: PostEvent; createRequestId: CreateRequestIdFn };
+export type FactoryOptions<State, SideEffects extends boolean> =
+  & LaunchParams
+  & { postEvent: PostEvent; createRequestId: CreateRequestIdFn }
+  & If<IsNever<State>, {}, { state?: State }>
+  & If<SideEffects, { addCleanup(fn: CleanupFn): void }, {}>;
 
-export interface Factory<LP extends LaunchParamName, R, State> {
+export interface Factory<Result, SideEffects extends boolean, State> {
   /**
    * Creates a new component instance.
    * @param options - factory options.
    */
-  (options: FactoryOptions<LP, State>): R;
+  (options: FactoryOptions<State, SideEffects>): Result;
 }
 
-export interface FactoryStatic<LP extends LaunchParamName, R>
-  extends Factory<LP, R, never> {
+export interface FactoryStatic<Result> extends Factory<Result, false, never> {
 }
 
-export interface FactoryDynamic<
-  LP extends LaunchParamName,
-  R,
-  SK extends StorageKey,
-> extends Factory<LP, R, StorageValue<SK>> {
+export interface FactoryDynamic<Result, SK extends StorageKey>
+  extends Factory<Result, true, StorageValue<SK>> {
 }
 
-export interface InitComponentFn<LP extends LaunchParamName, Result, State> {
+export interface InitComponentFn<Result, SideEffects extends boolean> {
   /**
-   * Initializes new component instance.
-   * @param options - initialization options.
+   * Initializes a new static component instance.
    */
-  (options?: {
-    /**
-     * Options, applicable only to SSR mode.
-     */
-    ssr?: Partial<PickLaunchParams<LP>> & WithState<State>;
-  }): Result;
+  (): If<
+    SideEffects,
+    [
+      /**
+       * Execution result.
+       */
+      result: Result,
+      /**
+       * Cleanup function.
+       */
+      cleanup: CleanupFn
+    ],
+    Result
+  >;
+}
+
+export interface InitStaticComponentFn<Result> extends InitComponentFn<Result, false> {
+}
+
+export interface InitDynamicComponentFn<Result> extends InitComponentFn<Result, true> {
 }
