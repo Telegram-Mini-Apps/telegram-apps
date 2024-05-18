@@ -1,5 +1,13 @@
 # @tma.js/react-router-integration
 
+## 2.0.0
+
+### Patch Changes
+
+- 640f31b: Package now depends on @tma.js/sdk instead of @tma.js/sdk-react.
+- Updated dependencies [175400a]
+  - @tma.js/sdk@2.1.0
+
 ## 1.0.2
 
 ### Patch Changes

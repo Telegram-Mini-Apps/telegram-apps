@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 2.1.0
+
+### Minor Changes
+
+- 175400a: Make components initializer works only on the client side. Previously, we had a logic related to SSR, but it was moved to the external packages. In this update also make BrowserNavigator hash mode equal to "classic" by default.
+
 ## 2.0.2
 
 ### Patch Changes
