@@ -1,5 +1,5 @@
 import { type CleanupFn, isSSR, type AnyFn } from '@tma.js/sdk';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useSDK } from './SDKProvider/SDKContext.js';
 import type { SDKContextItem } from './SDKProvider/SDKProvider.types.js';
@@ -38,15 +38,26 @@ export function createHooks<Factory extends AnyFn>(factory: Factory): Hooks<Fact
   function useRaw(ssr?: boolean): SDKContextItem<HookFnResult<Factory>> | undefined {
     const sdk = useSDK();
 
-    return useMemo(() => {
-      if (isSSR()) {
-        if (!ssr) {
-          throw new Error('Using hooks on the server side, you must explicitly specify pass ssr = true');
-        }
-        return;
-      }
-      return sdk.use(factory);
-    }, [sdk, ssr]);
+    const [result, setResult] = useState<SDKContextItem<HookFnResult<Factory>> | undefined>(
+      ssr
+        // If SSR mode is enabled, we have no initial value. In this case we will set something
+        // only in useEffect.
+        ? undefined
+        // Otherwise, we are retrieving this factory result.
+        : () => {
+          if (isSSR()) {
+            throw new Error('Using hooks on the server side, you must explicitly specify ssr = true option');
+          }
+          return sdk.use(factory);
+        },
+    );
+
+    // Each time sdk context changes, we are updating the local value.
+    useEffect(() => {
+      setResult(sdk.use(factory));
+    }, [sdk]);
+
+    return result;
   }
 
   function useResult(ssr?: false): HookFnResult<Factory>;
