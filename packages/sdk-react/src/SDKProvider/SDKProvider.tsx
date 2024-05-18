@@ -16,30 +16,26 @@ import {
 export function SDKProvider({ children, acceptCustomStyles, debug }: SDKProviderProps) {
   // We need it to safely call state setters as long as React forbids these
   // operations on unmounted components.
-  const canUpdateState = useRef(true);
+  const isMountedRef = useRef(true);
 
   // Map, containing all registered factories results.
-  const cacheRef = useRef(new Map<AnyFn, SDKContextItem<any>>());
-
-  // Forcefully refreshes the cache. We need this function to notify subscribers about cache
-  // changes.
-  const [temp, setTemp] = useState([]);
-  const forceRefresh = useCallback(() => setTemp([]), []);
+  const [cache, setCache] = useState(new Map<AnyFn, SDKContextItem<any>>());
+  const cacheRef = useRef(cache);
 
   // Safely mutates cache with specified function.
   const mutateCache = useCallback(
     (mutate?: (state: Map<AnyFn, SDKContextItem<any>>) => void) => {
-      if (canUpdateState.current) {
-        mutate && mutate(cacheRef.current);
-        forceRefresh();
+      if (isMountedRef.current) {
+        setCache(c => {
+          mutate && mutate(c);
+          return new Map(c);
+        });
       }
-    }, [forceRefresh],
+    }, [],
   );
 
   const context = useMemo<SDKContextType>(() => ({
     use(factory, ...args) {
-      const { current: cache } = cacheRef;
-
       // Try to get a cached value.
       const cached = cache.get(factory);
       if (cached) {
@@ -83,10 +79,11 @@ export function SDKProvider({ children, acceptCustomStyles, debug }: SDKProvider
       // cleanup function.
       function finalize(v: any): SDKContextItem<any> {
         if ('on' in v) {
-          const off = v.on('change', forceRefresh);
-          const original = cleanup;
+          // Forcefully refresh cache in case, something in this value changed.
+          const off = v.on('change', () => mutateCache());
+          const cleanupOriginal = cleanup;
           cleanup = () => {
-            original && original();
+            cleanupOriginal && cleanupOriginal();
             off();
           };
         }
@@ -102,7 +99,16 @@ export function SDKProvider({ children, acceptCustomStyles, debug }: SDKProvider
       }
       return withCacheSet(finalize(result));
     },
-  }), [temp]);
+  }), [cache]);
+
+  // Effect, responsible for changing mount state.
+  useEffect(() => {
+    // An idiotic line for React's StrictMode.
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // Effect, responsible for initializing the app in the web version of Telegram.
   useEffect(() => {
@@ -116,12 +122,11 @@ export function SDKProvider({ children, acceptCustomStyles, debug }: SDKProvider
     setDebug(debug || false);
   }, [debug]);
 
-  // Effect, responsible for changing mount state.
+  // Every time cache changes, we should actualize the ref to it. It is used in the next
+  // effect.
   useEffect(() => {
-    return () => {
-      canUpdateState.current = false;
-    };
-  }, []);
+    cacheRef.current = cache;
+  }, [cache]);
 
   // Effect, responsible for removing all components "change" listeners.
   useEffect(() => {
@@ -130,7 +135,7 @@ export function SDKProvider({ children, acceptCustomStyles, debug }: SDKProvider
         'cleanup' in v && v.cleanup && v.cleanup();
       });
     };
-  }, [forceRefresh]);
+  }, []);
 
   return <SDKContext.Provider value={context}>{children}</SDKContext.Provider>;
 }
