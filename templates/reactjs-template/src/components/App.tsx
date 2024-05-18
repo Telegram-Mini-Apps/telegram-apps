@@ -32,9 +32,7 @@ export const App: FC = () => {
   }, [themeParams]);
 
   useEffect(() => {
-    if (viewport) {
-      return bindViewportCSSVars(viewport);
-    }
+    return viewport && bindViewportCSSVars(viewport);
   }, [viewport]);
 
   // Create new application navigator and attach it to the browser history, so it could modify
@@ -56,7 +54,7 @@ export const App: FC = () => {
     <Router location={location} navigator={reactNavigator}>
       <Routes>
         {routes.map((route) => <Route key={route.path} {...route} />)}
-        <Route path='*' element={<Navigate to='/'/>}/>
+        <Route path="*" element={<Navigate to="/"/>}/>
       </Routes>
     </Router>
   );
