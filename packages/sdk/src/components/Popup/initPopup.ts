@@ -6,6 +6,6 @@ import { Popup } from './Popup.js';
  * @returns A new initialized instance of the `Popup` class.
  * @see Popup
  */
-export const initPopup = createComponentInitFn<Popup, 'version'>(
+export const initPopup = createComponentInitFn(
   ({ postEvent, version }) => new Popup(false, version, postEvent),
 );

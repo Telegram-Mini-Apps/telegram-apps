@@ -1,4 +1,4 @@
-import type { AnyFn } from '@tma.js/sdk';
+import type { AnyFn, CleanupFn } from '@tma.js/sdk';
 import type { PropsWithChildren } from 'react';
 
 export interface SDKProviderProps extends PropsWithChildren {
@@ -23,6 +23,10 @@ export type SDKContextItem<T> = ({
    * This item execution result. The property may be missing in case, execution is async.
    */
   result?: T;
+  /**
+   * Function to cleanup item side effects.
+   */
+  cleanup?: CleanupFn;
 } | {
   /**
    * An error occurred during execution.
@@ -35,10 +39,6 @@ export interface SDKContextType {
    * Uses specified factory with the passed arguments. In case, this factory was called
    * previously, a cached result will be returned.
    * @param factory - factory function.
-   * @param args - factory arguments.
    */
-  use<Fn extends AnyFn>(
-    factory: Fn,
-    ...args: Parameters<Fn>
-  ): SDKContextItem<Awaited<ReturnType<Fn>>>;
+  use<Fn extends AnyFn>(factory: Fn): SDKContextItem<Awaited<ReturnType<Fn>>>;
 }

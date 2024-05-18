@@ -19,5 +19,6 @@ export type {
   SDKContextType,
   SDKProviderProps,
   SDKContextItem,
+  FactorySignal,
 } from './SDKProvider/SDKProvider.types.js';
 export * from '@tma.js/sdk';

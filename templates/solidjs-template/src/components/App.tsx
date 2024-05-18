@@ -26,14 +26,12 @@ export function App() {
   });
   createEffect(() => {
     const vp = viewport();
-    if (vp) {
-      onCleanup(bindViewportCSSVars(vp));
-    }
+    vp && onCleanup(bindViewportCSSVars(vp));
   });
 
   // Create new application navigator and attach it to the browser history, so it could modify
   // it and listen to its changes.
-  const navigator = initNavigator('app-navigator-state', { hashMode: 'default' });
+  const navigator = initNavigator('app-navigator-state');
   void navigator.attach();
 
   onCleanup(() => {
@@ -47,7 +45,7 @@ export function App() {
       <For each={routes}>
         {(route) => <Route path={route.path} component={route.Component}/>}
       </For>
-      <Route path='*' component={() => <Navigate href='/'/>}/>
+      <Route path="*" component={() => <Navigate href="/"/>}/>
     </Router>
   );
 }

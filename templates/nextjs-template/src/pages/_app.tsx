@@ -1,12 +1,14 @@
 import {
   SDKProvider,
-  useBackButton,
   retrieveLaunchParams,
+  useBackButton,
   useMiniApp,
   useThemeParams,
   useViewport,
   bindMiniAppCSSVars,
-  bindThemeParamsCSSVars, bindViewportCSSVars,
+  bindThemeParamsCSSVars,
+  bindViewportCSSVars,
+  isSSR,
 } from '@tma.js/sdk-react';
 import { type FC, useEffect, useMemo } from 'react';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
@@ -36,9 +38,12 @@ const ErrorBoundaryError: FC<{ error: unknown }> = ({ error }) => (
 const BackButtonManipulator: FC = () => {
   const router = useRouter();
   const { back } = useNavigationRouter();
-  const bb = useBackButton();
+  const bb = useBackButton(true);
 
   useEffect(() => {
+    if (!bb) {
+      return;
+    }
     if (router.pathname === '/') {
       bb.hide();
     } else {
@@ -46,28 +51,28 @@ const BackButtonManipulator: FC = () => {
     }
   }, [router, bb]);
 
-  useEffect(() => bb.on('click', back), [bb, back]);
+  useEffect(() => {
+    return bb && bb.on('click', back);
+  }, [bb, back]);
 
   return null;
 };
 
 const App: FC<AppProps> = ({ pageProps, Component }) => {
-  const miniApp = useMiniApp();
-  const themeParams = useThemeParams();
-  const viewport = useViewport();
+  const miniApp = useMiniApp(true);
+  const themeParams = useThemeParams(true);
+  const viewport = useViewport(true);
 
   useEffect(() => {
-    return bindMiniAppCSSVars(miniApp, themeParams);
+    return miniApp && themeParams && bindMiniAppCSSVars(miniApp, themeParams);
   }, [miniApp, themeParams]);
 
   useEffect(() => {
-    return bindThemeParamsCSSVars(themeParams);
+    return themeParams && bindThemeParamsCSSVars(themeParams);
   }, [themeParams]);
 
   useEffect(() => {
-    if (viewport) {
-      return bindViewportCSSVars(viewport);
-    }
+    return viewport && bindViewportCSSVars(viewport);
   }, [viewport]);
 
   return (
@@ -80,12 +85,10 @@ const App: FC<AppProps> = ({ pageProps, Component }) => {
 
 const Inner: FC<AppProps> = (props) => {
   const debug = useMemo(() => {
-    return typeof window === 'undefined' ? false : retrieveLaunchParams().startParam === 'debug';
+    return isSSR() ? false : retrieveLaunchParams().startParam === 'debug';
   }, []);
   const manifestUrl = useMemo(() => {
-    return typeof window === 'undefined'
-      ? ''
-      : new URL('tonconnect-manifest.json', window.location.href).toString();
+    return isSSR() ? '' : new URL('tonconnect-manifest.json', window.location.href).toString();
   }, []);
 
   useEffect(() => {

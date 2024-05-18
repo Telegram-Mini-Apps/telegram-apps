@@ -334,8 +334,8 @@ describe('path', () => {
 });
 
 describe('parsePath', () => {
-  it('should return result based on the whole path if hash mode is omitted', () => {
-    const n = new BrowserNavigator(['/a'], 0);
+  it('should return result based on the whole path if hash mode is null', () => {
+    const n = new BrowserNavigator(['/a'], 0, { hashMode: null });
     expect(n.parsePath('/a?b#c')).toStrictEqual({
       pathname: '/a',
       search: '?b',
@@ -348,9 +348,9 @@ describe('parsePath', () => {
     });
   });
 
-  it('should return result based on the path\'s hash if hash mode is specified', () => {
+  it('should return result based on the path\'s hash if hash mode is "classic", "slash" or omitted', () => {
     const n = new BrowserNavigator(['/a'], 0, {
-      hashMode: 'default',
+      hashMode: 'classic',
     });
     expect(n.parsePath('/a?b#/c?d#e')).toStrictEqual({
       pathname: '/c',
@@ -443,8 +443,10 @@ describe('pathname', () => {
 });
 
 describe('renderPath', () => {
-  it('should convert passed historyItem to the path', () => {
-    const n = new BrowserNavigator([''], 0);
+  it('should convert passed historyItem to the path if hash mode is null', () => {
+    const n = new BrowserNavigator([''], 0, {
+      hashMode: null,
+    });
     expect(n.renderPath('test')).toBe('/test');
     expect(n.renderPath('/test')).toBe('/test');
     expect(n.renderPath('/test?a#b')).toBe('/test?a#b');
@@ -457,11 +459,16 @@ describe('renderPath', () => {
     expect(n.renderPath('/test?a#b')).toBe('#/test?a#b');
   });
 
-  it('should convert passed historyItem to the path prepending with "#" if hash mode is "default"', () => {
-    const n = new BrowserNavigator([''], 0, { hashMode: 'default' });
+  it('should convert passed historyItem to the path prepending with "#" if hash mode is "classic" or omitted', () => {
+    const n = new BrowserNavigator([''], 0, { hashMode: 'classic' });
     expect(n.renderPath('test')).toBe('#test');
     expect(n.renderPath('/test')).toBe('#test');
     expect(n.renderPath('/test?a#b')).toBe('#test?a#b');
+
+    const n2 = new BrowserNavigator([''], 0);
+    expect(n2.renderPath('test')).toBe('#test');
+    expect(n2.renderPath('/test')).toBe('#test');
+    expect(n2.renderPath('/test?a#b')).toBe('#test?a#b');
   });
 });
 

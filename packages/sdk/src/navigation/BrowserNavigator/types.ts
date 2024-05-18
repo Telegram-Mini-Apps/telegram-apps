@@ -14,9 +14,10 @@ export interface BrowserNavigatorConOptions {
    */
   base?: string;
   /**
-   * Hash navigation mode. Omit, if non-hash mode is required.
+   * Hash navigation mode. Pass null to enable MPA (Multi Page Application) navigation.
+   * @default 'classic'
    */
-  hashMode?: BrowserNavigatorHashMode;
+  hashMode?: BrowserNavigatorHashMode | null;
   /**
    * Function to call Mini Apps methods.
    * @default Global postEvent function.
@@ -39,12 +40,12 @@ export type BrowserNavigatorAnyHistoryItem<State> =
 
 /**
  * Hash navigation mode.
- * @example 'default'
+ * @example 'classic'
  * '#pathname?search'
  * @example 'slash'
  * '#/pathname?search'
  */
-export type BrowserNavigatorHashMode = 'default' | 'slash';
+export type BrowserNavigatorHashMode = 'classic' | 'slash';
 
 /**
  * Events supported by `BrowserNavigator`.

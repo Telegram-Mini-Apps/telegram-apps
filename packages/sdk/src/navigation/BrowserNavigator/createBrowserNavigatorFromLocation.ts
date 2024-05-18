@@ -12,7 +12,9 @@ export function createBrowserNavigatorFromLocation<State>(
   const { href, hash } = window.location;
 
   let path = urlToPath(
-    options.hashMode
+    options.hashMode === null
+      // Hash mode is explicitly disabled. We are working with the usual location path.
+      ? href
       // If hash mode is enabled, we should create a navigator based on the location's hash.
       // In this case we have 2 possible situations:
       // 1. Hash contains only launch parameters. Example:
@@ -25,9 +27,7 @@ export function createBrowserNavigatorFromLocation<State>(
       // https://t.me/mybot/myapp#my-hash
       // In this case, the Mini App will be opened with this URL:
       // https://example.com/#my-hash?tgWebAppData=...&tgWebAppPlatform=...&...
-      ? hash.includes('?') ? hash.slice(1) : `?${hash.slice(1)}`
-      // In all other cases we are working with the usual location path.
-      : href,
+      : hash.includes('?') ? hash.slice(1) : `?${hash.slice(1)}`,
   );
 
   // If some base was specified, we should check if computed path starts with this base. In

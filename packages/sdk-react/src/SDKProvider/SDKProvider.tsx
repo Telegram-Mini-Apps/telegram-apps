@@ -1,4 +1,4 @@
-import { initWeb, isIframe, setDebug } from '@tma.js/sdk';
+import { CleanupFn, initWeb, isIframe, setDebug } from '@tma.js/sdk';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AnyFn } from '@tma.js/sdk';
 
@@ -14,76 +14,102 @@ import {
  * of Telegram.
  */
 export function SDKProvider({ children, acceptCustomStyles, debug }: SDKProviderProps) {
-  // Mount flag. We need it to safely call state setters, as long as React forbids these
+  // We need it to safely call state setters as long as React forbids these
   // operations on unmounted components.
-  const mounted = useRef(true);
+  const canUpdateState = useRef(true);
 
-  // Map, containing all registered factory results.
-  const [cache, setCache] = useState<Map<AnyFn, SDKContextItem<any>>>(
-    () => new Map(),
-  );
-
-  // Safely mutates cache with specified function.
-  const mutateCache = useCallback((mutate?: (state: typeof cache) => void) => {
-    if (mounted.current) {
-      setCache(c => {
-        if (mutate) {
-          mutate(c);
-        }
-        return new Map(c);
-      });
-    }
-  }, []);
+  // Map, containing all registered factories results.
+  const cacheRef = useRef(new Map<AnyFn, SDKContextItem<any>>());
 
   // Forcefully refreshes the cache. We need this function to notify subscribers about cache
   // changes.
-  const forceRefresh = useCallback(() => mutateCache(), [mutateCache]);
+  const [temp, setTemp] = useState([]);
+  const forceRefresh = useCallback(() => setTemp([]), []);
 
-  // List of trackable components. We don't use memo or signals as long there is no real
-  // reason to track this list changes. We use only to remove "change" listeners on the component
-  // unmount.
-  const trackable = useRef<{ on: any; off: any }[]>([]);
+  // Safely mutates cache with specified function.
+  const mutateCache = useCallback(
+    (mutate?: (state: Map<AnyFn, SDKContextItem<any>>) => void) => {
+      if (canUpdateState.current) {
+        mutate && mutate(cacheRef.current);
+        forceRefresh();
+      }
+    }, [forceRefresh],
+  );
 
   const context = useMemo<SDKContextType>(() => ({
     use(factory, ...args) {
+      const { current: cache } = cacheRef;
+
+      // Try to get a cached value.
       const cached = cache.get(factory);
       if (cached) {
         return cached;
       }
 
-      let item: SDKContextItem<any>;
+      // Call factory and retrieve result.
+      let result: any;
+      let error: any;
       try {
-        item = { result: factory(...args) };
-      } catch (error) {
-        item = { error };
+        result = factory(...args);
+      } catch (err) {
+        error = err;
       }
 
-      if ('error' in item || !item.result) {
+      function withCacheSet(item: SDKContextItem<any>): SDKContextItem<any> {
         cache.set(factory, item);
         return item;
       }
 
-      const processResult = (result: any): SDKContextItem<any> => {
-        if ('on' in result) {
-          result.on('change', forceRefresh);
-          trackable.current.push(result);
-        }
-        return { result };
-      };
-
-      if (item.result as any instanceof Promise) {
-        item.result.then(
-          (result: any) => mutateCache(c => c.set(factory, processResult(result))),
-          (error: any) => mutateCache(c => c.set(factory, { error })),
-        );
-        cache.set(factory, {});
-        return {};
+      // If an error occurred, return it.
+      if (error) {
+        return withCacheSet({ error });
       }
 
-      cache.set(factory, item = processResult(item.result));
-      return item;
+      // Result may represent a tuple, where a result is placed on the first place, and
+      // a cleanup function on the second one.
+      let cleanup: CleanupFn | undefined;
+      if (Array.isArray(result)) {
+        cleanup = result[1];
+        result = result[0];
+      }
+
+      // We may have a case, when result is empty (most likely undefined), for example, when
+      // we initialize InitData. In this case we just return the result.
+      if (!result) {
+        return withCacheSet({ result, cleanup });
+      }
+
+      // Adds change event listener to the value if required, and adds bound listener to the
+      // cleanup function.
+      function finalize(v: any): SDKContextItem<any> {
+        if ('on' in v) {
+          const off = v.on('change', forceRefresh);
+          const original = cleanup;
+          cleanup = () => {
+            original && original();
+            off();
+          };
+        }
+        return { result: v, cleanup };
+      }
+
+      if (result instanceof Promise) {
+        result.then(
+          (value: any) => mutateCache(c => c.set(factory, finalize(value))),
+          (error: any) => mutateCache(c => c.set(factory, { error })),
+        );
+        return withCacheSet({});
+      }
+      return withCacheSet(finalize(result));
     },
-  }), [cache]);
+  }), [temp]);
+
+  // Effect, responsible for initializing the app in the web version of Telegram.
+  useEffect(() => {
+    if (isIframe()) {
+      return initWeb(acceptCustomStyles);
+    }
+  }, [acceptCustomStyles]);
 
   // Effect, responsible for debug mode.
   useEffect(() => {
@@ -93,20 +119,17 @@ export function SDKProvider({ children, acceptCustomStyles, debug }: SDKProvider
   // Effect, responsible for changing mount state.
   useEffect(() => {
     return () => {
-      mounted.current = false;
+      canUpdateState.current = false;
     };
   }, []);
 
-  // Effect, responsible for initializing the app in the web version of Telegram.
-  useEffect(() => {
-    if (isIframe()) {
-      return initWeb(acceptCustomStyles);
-    }
-  }, [acceptCustomStyles]);
-
   // Effect, responsible for removing all components "change" listeners.
   useEffect(() => {
-    return () => trackable.current.forEach(item => item.off('change', forceRefresh));
+    return () => {
+      cacheRef.current.forEach(v => {
+        'cleanup' in v && v.cleanup && v.cleanup();
+      });
+    };
   }, [forceRefresh]);
 
   return <SDKContext.Provider value={context}>{children}</SDKContext.Provider>;

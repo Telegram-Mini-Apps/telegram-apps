@@ -21,10 +21,8 @@ function getUserRows(user: User): DisplayDataRow[] {
 
 export default function InitDataPage() {
   const didMount = useDidMount();
-  const initData = useInitData();
-  const initDataRaw = useMemo(() => {
-    return didMount ? retrieveLaunchParams().initDataRaw : '';
-  }, [didMount]);
+  const initData = useInitData(true);
+  const initDataRaw = useMemo(() => didMount ? retrieveLaunchParams().initDataRaw : '', [didMount]);
 
   const initDataRows = useMemo<DisplayDataRow[] | undefined>(() => {
     if (!initData || !initDataRaw) {

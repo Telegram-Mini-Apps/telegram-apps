@@ -31,7 +31,7 @@ export class BrowserNavigator<State = {}> {
 
   private readonly ee: Emitter<State> = new EventEmitter();
 
-  readonly hashMode?: BrowserNavigatorHashMode;
+  readonly hashMode: BrowserNavigatorHashMode | null;
 
   readonly base: string;
 
@@ -44,7 +44,7 @@ export class BrowserNavigator<State = {}> {
      * Currently active history item index.
      */
     index: number,
-    { postEvent, hashMode, base }: BrowserNavigatorConOptions = {},
+    { postEvent, hashMode = 'classic', base }: BrowserNavigatorConOptions = {},
   ) {
     this.navigator = new BasicNavigator(
       history.map((item) => prepareItem(item, '/')),
@@ -334,7 +334,7 @@ export class BrowserNavigator<State = {}> {
       + ensurePrefix(urlToPath(value), '/');
 
     return this.hashMode
-      ? ensurePrefix(path.slice(1), this.hashMode === 'default' ? '#' : '#/')
+      ? ensurePrefix(path.slice(1), this.hashMode === 'classic' ? '#' : '#/')
       : path;
   }
 

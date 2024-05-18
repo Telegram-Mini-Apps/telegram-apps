@@ -131,6 +131,9 @@ importers:
 
   packages/react-router-integration:
     dependencies:
+      '@tma.js/sdk':
+        specifier: workspace:*
+        version: link:../sdk
       '@types/react':
         specifier: ^17.0.0 || ^18.0.0
         version: 18.3.2
@@ -191,9 +194,9 @@ importers:
       '@solidjs/router':
         specifier: ^0.13.1
         version: 0.13.3(solid-js@1.8.17)
-      '@tma.js/sdk-solid':
+      '@tma.js/sdk':
         specifier: workspace:*
-        version: link:../sdk-solid
+        version: link:../sdk
       solid-js:
         specifier: ^1.8.16
         version: 1.8.17

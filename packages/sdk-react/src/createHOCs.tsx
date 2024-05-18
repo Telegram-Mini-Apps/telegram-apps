@@ -49,7 +49,7 @@ export function createHOCs<HRaw extends HookRaw<any>, HResult extends HookResult
       Component: ComponentType<Props>,
     ): ComponentType<PartialBy<Props, PropKey | OptionsKey>> => {
       return (props: PartialBy<Props, PropKey | OptionsKey>) => {
-        const options: any = props[optionsKey] || [];
+        const options: [] = props[optionsKey] || [];
         const merged: any = { ...props, [propKey]: hook(...options) };
 
         return <Component {...merged}/>;

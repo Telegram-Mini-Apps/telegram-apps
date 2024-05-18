@@ -244,6 +244,8 @@ export type {
   Factory,
   FactoryDynamic,
   InitComponentFn,
+  InitStaticComponentFn,
+  InitDynamicComponentFn,
   WithOnChange,
 } from '@/misc/createComponentInitFn/types.js';
 

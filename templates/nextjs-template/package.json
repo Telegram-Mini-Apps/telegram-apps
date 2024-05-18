@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:https": "next dev --experimental-https --experimental-https-key ./tma.internal-key.pem --experimental-https-cert ./tma.internal.pem -H tma.internal -p 443",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

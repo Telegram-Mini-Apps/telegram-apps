@@ -5,7 +5,7 @@ import { createComponentInitFn } from '@/misc/createComponentInitFn/createCompon
  * @returns A new initialized instance of the `Utils` class.
  * @see Utils
  */
-export const initUtils = createComponentInitFn<Utils, 'version'>(
+export const initUtils = createComponentInitFn(
   ({ version, postEvent, createRequestId }) => {
     return new Utils(version, createRequestId, postEvent);
   },

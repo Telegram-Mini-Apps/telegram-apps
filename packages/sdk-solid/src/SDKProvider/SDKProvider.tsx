@@ -1,4 +1,4 @@
-import { AnyFn, initWeb, isIframe, setDebug } from '@tma.js/sdk';
+import { AnyFn, CleanupFn, initWeb, isIframe, setDebug } from '@tma.js/sdk';
 import {
   Accessor,
   type Component,
@@ -24,63 +24,72 @@ export const SDKProvider: Component<SDKProviderProps> = (props) => {
   const cache = new Map<AnyFn, SDKContextItem<AnyFn>>();
 
   const use: SDKContextType = (factory, ...args) => {
-    // SDK context already has this value.
+    // SDK context may already have this value.
     if (cache.has(factory)) {
       return cache.get(factory)!;
     }
 
-    // We are creating a resource as long as factory can sometimes return promise. For example,
-    // this may happen in case, factory initializes BiometryManager or Viewport.
-    const [resource] = createResource(() => {
-      try {
-        return factory(...args);
-      } catch (e) {
-        // Solid can't normally handle errors in a sync way. We need an error to be handled in
-        // the first frame and this was the only 1 way of doing it I found.
-        return [e];
-      }
-    });
+    function withCacheSet(item: SDKContextItem<any>): SDKContextItem<any> {
+      cache.set(factory, item);
+      return item;
+    }
+
+    // Call factory and retrieve result.
+    let result: any;
+    try {
+      result = factory(...args);
+    } catch (error) {
+      return withCacheSet({
+        error,
+        signal: () => {
+          throw error;
+        },
+      });
+    }
+
+    // Result may represent a tuple, where the result is placed on the first place, and
+    // a cleanup function is on the second one.
+    let cleanup: CleanupFn | undefined;
+    if (Array.isArray(result)) {
+      [result, cleanup] = result;
+    }
+
+    // We are creating a resource as long as the factory can sometimes return a promise. For
+    // example, this may happen in case, the factory initializes BiometryManager or
+    // Viewport components.
+    const [resource] = createResource(() => result);
 
     // Signal, which returns computed resource value.
-    const getResource = createMemo(() => {
-      // Something went wrong, return an error.
-      if (resource.error) {
-        return [resource.error];
-      }
-
+    const value = createMemo(() => {
       // The resource is loading, return nothing. This usually happens when the factory is async.
       if (resource.state !== 'ready') {
         return;
       }
 
-      // Get a value, stored in the resource and check if it ended up with an error.
-      const value = resource();
-      if (Array.isArray(value)) {
-        return value;
-      }
+      const v = resource();
 
       // Factory may return undefined if it creates the InitData component, for example.
       // The returned component may also not allow tracking its changes. It means, it cannot
       // be reactive, we just this values as is.
-      if (!value || !('on' in value)) {
-        return value;
+      if (!v || !('on' in v)) {
+        return v;
       }
 
       // Otherwise, we are making value reactive and track its changes.
       const get = from((set) => {
-        set(value);
-        return value.on('change', () => set(value));
+        set(v);
+        return v.on('change', () => set(v));
       });
 
       // We use this value to retrieve properties having getters. We assume, that if property has
       // a getter, it must be reactive.
       // NOTE: Yeah, it looks horrible, but I had no other way of doing this.
-      const prototype = Object.getPrototypeOf(value);
+      const prototype = Object.getPrototypeOf(v);
 
       // Cache with already defined signals.
       const propCache: Record<string | symbol, Accessor<any>> = {};
 
-      return new Proxy(value, {
+      return new Proxy(v, {
         get(target: any, property: string | symbol): any {
           if (!(property in propCache)) {
             const descriptor = Reflect.getOwnPropertyDescriptor(prototype, property);
@@ -97,27 +106,19 @@ export const SDKProvider: Component<SDKProviderProps> = (props) => {
       });
     });
 
-    // Define accessor.
-    function read() {
-      const v = getResource();
-      if (Array.isArray(v)) {
-        throw v[0];
-      }
-      return v;
-    }
-
-    // Define accessor "error" property.
-    Object.defineProperty(read, 'error', {
-      get() {
-        const v = getResource();
-        return Array.isArray(v) ? v[0] : undefined;
+    return withCacheSet({
+      signal() {
+        if (resource.error) {
+          throw resource.error;
+        }
+        return value();
       },
+      get error() {
+        return resource.error;
+      },
+      cleanup,
     });
-
-    cache.set(factory, read);
-
-    return read;
-  }
+  };
 
   // Effect, responsible for debug mode.
   createEffect(() => {
@@ -129,6 +130,11 @@ export const SDKProvider: Component<SDKProviderProps> = (props) => {
     if (isIframe()) {
       onCleanup(initWeb(props.acceptCustomStyles));
     }
+  });
+
+  // On unmount, cleanup all created items.
+  onCleanup(() => {
+    cache.forEach(c => c.cleanup && c.cleanup());
   });
 
   return <SDKContext.Provider value={use}>{props.children}</SDKContext.Provider>;

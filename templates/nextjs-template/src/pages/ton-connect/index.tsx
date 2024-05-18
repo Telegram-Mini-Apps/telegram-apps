@@ -11,7 +11,7 @@ import { useDidMount } from '@/hooks/useDidMount';
 
 function Inner() {
   const wallet = useTonWallet();
-  const utils = useUtils();
+  const utils = useUtils(true);
   let content: ReactNode;
 
   if (wallet) {
@@ -45,7 +45,7 @@ function Inner() {
                 href={wallet.aboutUrl}
                 onClick={(e) => {
                   e.preventDefault();
-                  utils.openLink(wallet.aboutUrl);
+                  utils && utils.openLink(wallet.aboutUrl);
                 }}
               >
                 About connected wallet
