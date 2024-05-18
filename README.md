@@ -31,7 +31,7 @@ Mini Apps. It consists of several individual components, each responsible for a 
 the Telegram Mini Apps ecosystem.
 
 Before you begin using the SDK, we highly recommend familiarizing yourself with the Telegram Mini
-Apps [documentation](https://docs.telegram-mini-apps.com/platform/about-platform)
+Apps [documentation](https://docs.telegram-mini-apps.com/platform/about)
 to grasp the fundamental concepts of the platform.
 
 ### `@tma.js/sdk-react`
@@ -43,7 +43,7 @@ to grasp the fundamental concepts of the platform.
 ![Size](https://img.shields.io/bundlephobia/minzip/@tma.js/sdk-react)
 [![code-badge]](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk-react)
 
-React JS bindings for [client SDK](https://docs.telegram-mini-apps.com/packages/tma-js-sdk/about). Includes
+React JS bindings for [client SDK](https://docs.telegram-mini-apps.com/packages/tma-js-sdk). Includes
 hooks, components and utilities for comfortable usage of React JS on the Telegram Mini Apps platform.
 
 ### `@tma.js/sdk-solid`
@@ -56,7 +56,7 @@ hooks, components and utilities for comfortable usage of React JS on the Telegra
 [![code-badge]](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk-solid)
 
 Solid JS bindings
-for [client SDK](https://docs.telegram-mini-apps.com/packages/tma-js-sdk/about). Includes
+for [client SDK](https://docs.telegram-mini-apps.com/packages/tma-js-sdk). Includes
 hooks, components and utilities
 for comfortable usage of Solid JS on the Telegram Mini Apps platform.
 
@@ -71,7 +71,7 @@ for comfortable usage of Solid JS on the Telegram Mini Apps platform.
 
 The package provides utilities to work with the initialization data of Telegram Mini Apps on the
 server side. To learn more about the initialization data and its usage, please refer to
-the [documentation](https://docs.telegram-mini-apps.com/platform/launch-parameters/common-information).
+the [documentation](https://docs.telegram-mini-apps.com/platform/launch-parameters).
 
 ### `@tma.js/solid-router-integration`
 
