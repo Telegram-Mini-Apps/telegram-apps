@@ -1,47 +1,66 @@
-import { AnyFn } from '@tma.js/sdk';
+import { type CleanupFn, isSSR, type AnyFn } from '@tma.js/sdk';
 import { useMemo } from 'react';
 
 import { useSDK } from './SDKProvider/SDKContext.js';
-import { SDKContextItem } from './SDKProvider/SDKProvider.types.js';
+import type { SDKContextItem } from './SDKProvider/SDKProvider.types.js';
 
-type HookFnResult<Fn extends AnyFn> = ReturnType<Fn> extends Promise<infer T>
-  ? T | undefined
-  : ReturnType<Fn>;
+type ExtractResult<T> = T extends [result: infer R, cleanup: CleanupFn]
+  ? ExtractResult<R>
+  : T extends Promise<infer U>
+    ? U | undefined
+    : T;
 
-export interface HookRaw<Fn extends AnyFn> {
-  /**
-   * Hook, which retrieves SDK context item of the specified factory. This hook is safe
-   * to be used and not throwing errors.
-   */
-  (...args: Parameters<Fn>): SDKContextItem<HookFnResult<Fn>>;
+type HookFnResult<Fn extends AnyFn> = ExtractResult<ReturnType<Fn>>;
+
+interface Hook<Result> {
+  (ssr?: false): Result;
+  (ssr: true): Result | undefined;
 }
 
-export interface HookResult<Fn extends AnyFn> {
-  /**
-   * Hook, which retrieves a result of the factory.
-   * @throws An error, if factory execution was unsuccessful.
-   */
-  (...args: Parameters<Fn>): HookFnResult<Fn>;
+export interface HookRaw<Factory extends AnyFn>
+  extends Hook<SDKContextItem<HookFnResult<Factory>>> {
 }
 
-export type Hooks<Fn extends AnyFn> = [useRaw: HookRaw<Fn>, useResult: HookResult<Fn>];
+export interface HookResult<Factory extends AnyFn> extends Hook<HookFnResult<Factory>> {
+}
+
+export type Hooks<Factory extends AnyFn> = [
+  useRaw: HookRaw<Factory>,
+  useResult: HookResult<Factory>,
+];
 
 /**
  * @returns Hooks, simplifying work process with the SDK components.
  */
-export function createHooks<Fn extends AnyFn>(fn: Fn): Hooks<Fn> {
-  const useRaw = (...args: Parameters<Fn>): SDKContextItem<HookFnResult<Fn>> => {
+export function createHooks<Factory extends AnyFn>(factory: Factory): Hooks<Factory> {
+  function useRaw(ssr?: false): SDKContextItem<HookFnResult<Factory>>;
+  function useRaw(ssr: true): SDKContextItem<HookFnResult<Factory>> | undefined;
+  function useRaw(ssr?: boolean): SDKContextItem<HookFnResult<Factory>> | undefined {
     const sdk = useSDK();
-    return useMemo(() => sdk.use(fn, ...args), [sdk]);
-  };
 
-  const useResult = (...args: Parameters<Fn>): HookFnResult<Fn> => {
-    const raw = useRaw(...args);
+    return useMemo(() => {
+      if (isSSR()) {
+        if (!ssr) {
+          throw new Error('Using hooks on the server side, you must explicitly specify pass ssr = true');
+        }
+        return;
+      }
+      return sdk.use(factory);
+    }, [sdk, ssr]);
+  }
+
+  function useResult(ssr?: false): HookFnResult<Factory>;
+  function useResult(ssr: true): HookFnResult<Factory> | undefined;
+  function useResult(ssr?: boolean): HookFnResult<Factory> | undefined {
+    const raw = useRaw(ssr as any);
+    if (!raw) {
+      return;
+    }
     if ('error' in raw) {
       throw raw.error;
     }
-    return raw.result as HookFnResult<Fn>;
-  };
+    return raw.result;
+  }
 
   return [useRaw, useResult];
 }
