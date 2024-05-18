@@ -54,16 +54,17 @@ describe.each([
 
   describe('hash mode', () => {
     it('should create BrowserHistory based on the location hash', () => {
-      expect(createBrowserNavigatorFromLocation({ hashMode: 'default' }))
+      expect(createBrowserNavigatorFromLocation()).toMatchObject(expectedHash);
+      expect(createBrowserNavigatorFromLocation({ hashMode: 'classic' }))
         .toMatchObject(expectedHash);
       expect(createBrowserNavigatorFromLocation({ hashMode: 'slash' }))
         .toMatchObject(expectedHash);
     });
   });
 
-  describe('standard mode', () => {
+  describe('mpa mode', () => {
     it('should create BrowserHistory based on the location path', () => {
-      expect(createBrowserNavigatorFromLocation()).toMatchObject(expectedNormal);
+      expect(createBrowserNavigatorFromLocation({ hashMode: null })).toMatchObject(expectedNormal);
     });
   });
 });
