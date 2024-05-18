@@ -83,10 +83,9 @@ export function createComponentInitFn<
       return value;
     };
 
-    return (
-      result instanceof Promise
-      ? [result.then(bindChange), cleanup]
-      : [bindChange(result), cleanup]
-    ) as unknown as R;
+    return [
+      result instanceof Promise ? result.then(bindChange) : bindChange(result),
+      cleanup,
+    ] as unknown as R;
   };
 }
