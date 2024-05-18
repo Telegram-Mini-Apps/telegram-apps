@@ -1,5 +1,11 @@
 # @tma.js/sdk-react
 
+## 2.1.4
+
+### Patch Changes
+
+- d5a3590: Fix strict mode incorrect behavior.
+
 ## 2.1.3
 
 ### Patch Changes
