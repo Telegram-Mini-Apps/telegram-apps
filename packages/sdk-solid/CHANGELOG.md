@@ -1,5 +1,13 @@
 # @tma.js/sdk-solid
 
+## 2.1.3
+
+### Patch Changes
+
+- 56ade38: Make changes according to those, done in the SDK. Provider now automatically correctly performs cleanup on unmount and allows initializing components with their own cleanups.
+- Updated dependencies [175400a]
+  - @tma.js/sdk@2.1.0
+
 ## 2.1.2
 
 ### Patch Changes

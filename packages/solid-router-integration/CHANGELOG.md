@@ -1,5 +1,13 @@
 # @tma.js/solid-router-integration
 
+## 3.0.0
+
+### Patch Changes
+
+- 0407b6b: Package now depends on @tma.js/sdk instead of @tma.js/sdk-solid.
+- Updated dependencies [175400a]
+  - @tma.js/sdk@2.1.0
+
 ## 2.0.2
 
 ### Patch Changes

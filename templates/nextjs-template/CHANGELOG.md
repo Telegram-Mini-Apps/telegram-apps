@@ -1,5 +1,12 @@
 # nextjs-template
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [5e4f543]
+  - @tma.js/sdk-react@2.1.3
+
 ## 0.1.2
 
 ### Patch Changes
