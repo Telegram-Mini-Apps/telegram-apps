@@ -13,7 +13,7 @@ export const Link: FC<LinkProps> = ({
   href,
   ...rest
 }) => {
-  const utils = useUtils();
+  const utils = useUtils(true);
 
   const onClick = useCallback<MouseEventHandler<HTMLAnchorElement>>((e) => {
     propsOnClick?.(e);
@@ -35,7 +35,7 @@ export const Link: FC<LinkProps> = ({
 
     if (isExternal) {
       e.preventDefault();
-      return utils.openLink(targetUrl.toString());
+      utils && utils.openLink(targetUrl.toString());
     }
   }, [href, propsOnClick, utils]);
 
