@@ -1,24 +1,24 @@
 import type { ComponentType } from 'react';
-import type { PartialBy } from '@tma.js/sdk';
 
-import type { HookRaw, HookResult } from './createHooks.js';
+import type { Hook, HookRaw, HookResult } from './createHooks.js';
 
-export interface HOC<Hook extends HookRaw<any> | HookResult<any>> {
+export interface HOC<H extends HookRaw<any> | HookResult<any>> {
   /**
    * Returns a component which is a HOC, passing some hook result to the wrapped component.
    * @param propKey - key, which will be used to pass a hook result.
-   * @param optionsKey - key, containing hook arguments.
+   * @param ssr - is SSR mode enabled.
    * @param Component - component to wrap.
-   */
-  <
+   */<
     PropKey extends string,
-    OptionsKey extends string,
-    Props extends { [K in OptionsKey]?: Parameters<Hook> } & { [K in PropKey]?: ReturnType<Hook> }
+    SSR extends boolean,
+    Props,
   >(
     propKey: PropKey,
-    optionsKey: OptionsKey,
-    Component: ComponentType<Props>,
-  ): ComponentType<PartialBy<Props, PropKey | OptionsKey>>;
+    ssr: SSR,
+    Component: ComponentType<Omit<Props, PropKey> & {
+      [K in PropKey]: ReturnType<Hook<Exclude<ReturnType<H>, undefined>, SSR>>
+    }>,
+  ): ComponentType<Omit<Props, PropKey>>;
 }
 
 export type HOCs<HRaw extends HookRaw<any>, HResult extends HookResult<any>> = [
@@ -36,21 +36,13 @@ export function createHOCs<HRaw extends HookRaw<any>, HResult extends HookResult
   useRaw: HRaw,
   useResult: HResult,
 ): HOCs<HRaw, HResult> {
-  function createHOC<Hook extends HookRaw<any> | HookResult<any>>(
-    hook: Hook,
-  ): HOC<Hook> {
-    return <
-      PropKey extends string,
-      OptionsKey extends string,
-      Props extends { [K in OptionsKey]?: Parameters<Hook> } & { [K in PropKey]?: ReturnType<Hook> }
-    >(
-      propKey: PropKey,
-      optionsKey: OptionsKey,
-      Component: ComponentType<Props>,
-    ): ComponentType<PartialBy<Props, PropKey | OptionsKey>> => {
-      return (props: PartialBy<Props, PropKey | OptionsKey>) => {
-        const options: [] = props[optionsKey] || [];
-        const merged: any = { ...props, [propKey]: hook(...options) };
+  function createHOC<Hook extends HookRaw<any> | HookResult<any>>(hook: Hook): HOC<Hook> {
+    return function HOC(propKey, ssr, Component) {
+      return (props) => {
+        const merged: any = {
+          ...props,
+          [propKey]: hook(ssr as any),
+        };
 
         return <Component {...merged}/>;
       };
