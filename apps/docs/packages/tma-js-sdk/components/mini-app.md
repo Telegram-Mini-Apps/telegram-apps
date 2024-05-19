@@ -9,26 +9,12 @@ components.
 
 ## Initialization
 
-The component constructor accepts an object with specified header and background colors, Telegram
-Mini Apps version, current bot inline mode, and an optional function to call Telegram Mini Apps
-methods.
-
-headerColor: MiniAppHeaderColor;
-backgroundColor: RGB;
-version: Version;
-botInline: boolean;
-postEvent?: PostEvent;
+To initialize the component, use the `initMiniApp` function:
 
 ```typescript
-import { MiniApp, postEvent } from '@tma.js/sdk';
+import { initMiniApp } from '@tma.js/sdk';
 
-const miniApp = new MiniApp({
-  headerColor: 'bg_color',
-  backgroundColor: '#00ae13',
-  version: '6.4',
-  botInline: false,
-  postEvent,
-});
+const miniApp = initMiniApp();  
 ```
 
 ## Colors
@@ -40,8 +26,6 @@ of header color, developer could refer to the `headerColor` property and update 
 `setHeaderColor` method:
 
 ```typescript
-console.log(miniApp.headerColor); // 'bg_color'
-
 miniApp.setHeaderColor('secondary_bg_color');
 // or starting from v6.10:
 miniApp.setHeaderColor('#aa1132');
@@ -52,8 +36,7 @@ miniApp.setHeaderColor('#aa1132');
 As well as Mini App header color, developer is also able to manipulate its background color:
 
 ```typescript
-console.log(miniApp.backgroundColor); // '#00ae13'
-miniApp.setBackgroundColor('#888311');
+miniApp.setBgColor('#888311');
 ```
 
 Mini App background color is used to determine if current Mini App has dark palette. To know
@@ -151,38 +134,16 @@ the `web_app_data` field in the [Message](https://core.telegram.org/bots/api#mes
 
 ## Events
 
-List of events, which could be used in `on` and `off` component instance methods:
+List of events, which could be [tracked](../components#events):
 
-| Event                  | Listener                                 | Triggered when                     |
-|------------------------|------------------------------------------|------------------------------------|
-| change                 | `() => void`                             | Something in component changed     |
-| change:backgroundColor | `(value: RGB) => void`                   | `backgroundColor` property changed |
-| change:headerColor     | `(value: HeaderColorKey or RGB) => void` | `headerColor` property changed     |
+| Event                | Listener                                 | Triggered when                 |
+|----------------------|------------------------------------------|--------------------------------|
+| `change`             | `() => void`                             | Something in component changed |
+| `change:bgColor`     | `(value: RGB) => void`                   | `bgColor` property changed     |
+| `change:headerColor` | `(value: HeaderColorKey or RGB) => void` | `headerColor` property changed |
 
 ## Methods Support
 
-List of methods, which could be used in `supports` component instance method:
-
-- `requestWriteAccess`
-- `requestPhoneAccess`
-- `switchInlineQuery`
-- `setHeaderColor`
-- `setBackgroundColor`
-
-```typescript
-miniApp.supports('requestWriteAccess');
-miniApp.supports('requestPhoneAccess');
-miniApp.supports('switchInlineQuery');
-miniApp.supports('setHeaderColor');
-miniApp.supports('setBackgroundColor'); 
-```
-
-## Method Parameters Support
-
-List of method parameters, which could be used in `supportsParam` component instance method:
-
-- `setHeaderColor.color`
-
-```typescript
-miniApp.supportsParam('setHeaderColor.color');
-```
+List of methods and parameters, which could be used
+in [support checks](../components#methods-support): `requestWriteAccess`, `requestPhoneAccess`, 
+`switchInlineQuery`, `setHeaderColor`, `setBgColor` and `setHeaderColor.color`.

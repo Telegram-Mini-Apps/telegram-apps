@@ -4,16 +4,15 @@ The component which provides the QR scanner functionality.
 
 ## Initialization
 
-Component constructor accepts Telegram Mini Apps version and optional function to call Telegram Mini
-Apps methods.
+To initialize the component, use the `initQRScanner` function:
 
 ```typescript
-import { QRScanner, postEvent } from '@tma.js/sdk';
+import { initQRScanner } from '@tma.js/sdk';
 
-const scanner = new QRScanner('6.3', postEvent);
+const qrScanner = initQRScanner();  
 ```
 
-## Opening and closing
+## Opening and Closing
 
 To open the QR scanner, the developer should use the `open` method, which accepts optional text
 displayed to a user. As a result, the method returns a promise that will be resolved in case some QR
@@ -36,24 +35,14 @@ console.log(scanner.isOpened); // false
 
 ## Events
 
-List of events, which could be used in `on` and `off` component instance methods:
+List of events, which could be [tracked](../components#events):
 
-| Event           | Listener                   | Triggered when                 |
-|-----------------|----------------------------|--------------------------------|
-| change          | `() => void`               | Something in component changed |
-| change:isOpened | `(value: boolean) => void` | `isOpened` property changed    |
+| Event             | Listener                   | Triggered when                 |
+|-------------------|----------------------------|--------------------------------|
+| `change`          | `() => void`               | Something in component changed |
+| `change:isOpened` | `(value: boolean) => void` | `isOpened` property changed    |
 
 ## Methods Support
 
-List of methods, which could be used in `supports` component instance method:
-
-- `open`
-- `close`
-
-```typescript
-import { QRScanner } from '@tma.js/sdk';
-
-const qrScanner = new QRScanner(...);
-qrScanner.supports('open');
-qrScanner.supports('close');
-```
+List of methods, which could be used in [support checks](../components#methods-support): `open`
+and `close`

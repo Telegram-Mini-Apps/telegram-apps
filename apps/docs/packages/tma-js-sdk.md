@@ -1,6 +1,6 @@
 # @tma.js/sdk
 
-<p style="display: inline-flex; gap: 8px">
+<p style="display: flex; gap: 8px; min-height: 20px">
   <a href="https://npmjs.com/package/@tma.js/sdk">
     <img src="https://img.shields.io/npm/v/@tma.js/sdk?logo=npm"/>
   </a>
@@ -10,12 +10,12 @@
   </a>
 </p>
 
-Made from scratch TypeScript library for seamless communication with Telegram Mini Apps
+Made-from-scratch TypeScript library for seamless communication with Telegram Mini Apps
 functionality.
 
-The code of this library is designed to simplify the process of developers interacting with Telegram
-Mini Apps. It consists of several individual components, each responsible for a specific aspect of
-the Telegram Mini Apps ecosystem.
+The code of this library is designed to simplify the process for developers interacting with
+Telegram Mini Apps. It consists of several individual components, each responsible for a specific
+aspect of the Telegram Mini Apps ecosystem.
 
 Before you begin using the SDK, we highly recommend familiarizing yourself with the Telegram Mini
 Apps [documentation](../platform/about.md) to grasp the fundamental concepts of the platform.

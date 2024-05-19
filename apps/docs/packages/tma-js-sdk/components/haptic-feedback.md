@@ -5,13 +5,12 @@ Apps [haptic feedback](../../../platform/haptic-feedback.md) functionality.
 
 ## Initialization
 
-Component constructor accepts Telegram Mini Apps version and optional function to call
-Telegram Mini Apps methods.
+To initialize the component, use the `initHapticFeedback` function:
 
 ```typescript
-import { HapticFeedback, postEvent } from '@tma.js/sdk';
+import { initHapticFeedback } from '@tma.js/sdk';
 
-const haptic = new HapticFeedback('6.3', postEvent);
+const hapticFeedback = initHapticFeedback();  
 ```
 
 ## Notifications
@@ -58,17 +57,5 @@ haptic.selectionChanged();
 
 ## Methods Support
 
-List of methods, which could be used in `supports` component instance method:
-
-- `notificationOccurred`
-- `impactOccurred`
-- `selectionChanged`
-
-```typescript
-import { HapticFeedback } from '@tma.js/sdk';
-
-const hapticFeedback = new HapticFeedback(...);
-hapticFeedback.supports('notificationOccurred');
-hapticFeedback.supports('impactOccurred');
-hapticFeedback.supports('selectionChanged');
-```
+List of methods, which could be used in [support checks](../components#methods-support):
+`notificationOccurred`, `impactOccurred` and `selectionChanged`

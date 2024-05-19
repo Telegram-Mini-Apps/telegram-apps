@@ -5,20 +5,20 @@ Apps [viewport](../../../platform/viewport.md) functionality.
 
 ## Initialization
 
-The component constructor accepts an object with specified viewport height, width, stable height,
-expansion state, and an optional function to call Telegram Mini Apps methods.
+To initialize the component, use the `initViewport` function:
 
-```typescript  
-import { Viewport, postEvent } from '@tma.js/sdk';
+```typescript
+import { initViewport } from '@tma.js/sdk';
 
-const viewport = new Viewport({
-  height: 390,
-  width: 365,
-  stableHeight: 300,
-  isExpanded: false,
-  postEvent,
-});
-```  
+const viewport = initViewport();  
+```
+
+::: info
+
+Since Viewport can't be instantiated synchronously, this function returns a promise that will be
+resolved when the actual viewport state is retrieved.
+
+:::
 
 ## Dimensions
 
@@ -34,7 +34,7 @@ lower border of the window. It should not be used to pin interface elements to t
 visible area. It's more appropriate to use the value of the `stableHeight` field for this purpose.
 :::
 
-## Requesting actual data
+## Requesting Actual Data
 
 To get actual viewport information, developer could use `requestViewport` function:
 
@@ -50,12 +50,12 @@ requestViewport().then((data) => {
 
 ## Events
 
-List of events, which could be used in `on` and `off` component instance methods:
+List of events, which could be [tracked](../components#events):
 
-| Event               | Listener                          | Triggered when                  |
-|---------------------|-----------------------------------|---------------------------------|
-| change              | `() => void`                      | Something in component changed  |
-| change:height       | `(height: number) => void`        | `height` property changed       |
-| change:isExpanded   | `(isExpanded: boolean) => void`   | `isExpanded` property changed   |
-| change:stableHeight | `(stableHeight: boolean) => void` | `stableHeight` property changed |
-| change:width        | `(width: boolean) => void`        | `width` property changed        |
+| Event                 | Listener                          | Triggered when                  |
+|-----------------------|-----------------------------------|---------------------------------|
+| `change`              | `() => void`                      | Something in component changed  |
+| `change:height`       | `(height: number) => void`        | `height` property changed       |
+| `change:isExpanded`   | `(isExpanded: boolean) => void`   | `isExpanded` property changed   |
+| `change:stableHeight` | `(stableHeight: boolean) => void` | `stableHeight` property changed |
+| `change:width`        | `(width: boolean) => void`        | `width` property changed        |

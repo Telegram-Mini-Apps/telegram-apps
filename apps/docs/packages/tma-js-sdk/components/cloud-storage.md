@@ -4,20 +4,15 @@ Implements functionality related to Telegram Mini Apps cloud storage.
 
 ## Initialization
 
-Component constructor accepts Telegram Mini Apps version, function to generate request identifiers
-for called Telegram Mini Apps methods and optional function to call them.
+To initialize the component, use the `initCloudStorage` function:
 
 ```typescript
-import { CloudStorage, postEvent } from '@tma.js/sdk';
+import { initCloudStorage } from '@tma.js/sdk';
 
-const cloudStorage = new CloudStorage(
-  '6.10',
-  () => Math.random().toString(),
-  postEvent,
-);  
+const cloudStorage = initCloudStorage();  
 ```
 
-## Setting items
+## Setting Items
 
 To save a value in the cloud storage, it is required to use the `set` method:
 
@@ -27,7 +22,7 @@ cloudStorage
   .then(() => console.log('Item saved'));
 ```
 
-## Getting items
+## Getting Items
 
 To get values by keys, it is required to use `get` method, which acquires both single string
 value and array of string values:
@@ -67,7 +62,7 @@ cloudStorage
 
 This method returns empty strings for those keys, which don't exist in the cloud storage.
 
-## Getting keys
+## Getting Keys
 
 To retrieve all registered keys in the cloud storage, it is required to use the `getKeys` method:
 
@@ -80,7 +75,7 @@ cloudStorage
   })
 ```
 
-## Deleting items
+## Deleting Items
 
 To delete items in the cloud storage, it is required to use `delete` method. This method allows
 deleting both single and multiple items:
@@ -103,19 +98,5 @@ cloudStorage
 
 ## Methods Support
 
-List of methods, which could be used in `supports` component instance method:
-
-- `delete`
-- `get`
-- `getKeys`
-- `set`
-
-```typescript
-import { CloudStorage } from '@tma.js/sdk';
-
-const cloudStorage = new CloudStorage(...);
-cloudStorage.supports('delete');
-cloudStorage.supports('get');
-cloudStorage.supports('getKeys');
-cloudStorage.supports('set');
-```
+List of methods, which could be used in [support checks](../components#methods-support):
+`delete`, `get`, `getKeys` and `set`
