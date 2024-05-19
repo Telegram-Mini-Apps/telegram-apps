@@ -18,20 +18,6 @@ export const packagesSidebar = {
       '@tma.js/sdk': [
         'tma-js-sdk',
         {
-          'Initialization': 'init',
-          'Methods and events': 'methods-and-events',
-          'Launch parameters': 'launch-parameters',
-          'Theme parameters': 'theme-parameters',
-          'Init data': [
-            'init-data',
-            {
-              'InitData': 'init-data',
-              'Chat': 'chat',
-              'User': 'user',
-            },
-            true,
-          ],
-          'Navigation': 'navigation',
           'Components': [
             'components',
             {
@@ -52,6 +38,19 @@ export const packagesSidebar = {
             },
             true,
           ],
+          'Methods and events': 'methods-and-events',
+          'Launch parameters': 'launch-parameters',
+          'Theme parameters': 'theme-parameters',
+          'Init data': [
+            'init-data',
+            {
+              'InitData': 'init-data',
+              'Chat': 'chat',
+              'User': 'user',
+            },
+            true,
+          ],
+          'Navigation': 'navigation',
         },
       ],
       '@tma.js/sdk-react': '/tma-js-sdk-react',

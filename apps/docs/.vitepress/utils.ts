@@ -13,7 +13,7 @@ function itemsToArray(items: Items, prefix: string) {
     } else {
       link = linkOrItems;
     }
-    const computedLink = prefix + (link[0] === '/' ? '' : '/' + link);
+    const computedLink = prefix + (link[0] === '/' ? '' : '/') + link;
 
     result.push({
       text,
