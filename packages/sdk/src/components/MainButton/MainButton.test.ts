@@ -8,7 +8,7 @@ describe('disable', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
+      bgColor: '#ffffff',
       postEvent,
       isLoaderVisible: false,
       isVisible: false,
@@ -27,7 +27,7 @@ describe('disable', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
+      bgColor: '#ffffff',
       postEvent,
       isLoaderVisible: false,
       isVisible: false,
@@ -47,7 +47,7 @@ describe('enable', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
+      bgColor: '#ffffff',
       postEvent,
       isLoaderVisible: false,
       isVisible: false,
@@ -65,8 +65,8 @@ describe('enable', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
-      postEvent: vi.fn(),
+      bgColor: '#ffffff',
+      postEvent: () => null,
       isLoaderVisible: false,
       isVisible: false,
       isEnabled: false,
@@ -85,7 +85,7 @@ describe('hide', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
+      bgColor: '#ffffff',
       postEvent,
       isLoaderVisible: false,
       isVisible: true,
@@ -103,8 +103,8 @@ describe('hide', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
-      postEvent: vi.fn(),
+      bgColor: '#ffffff',
+      postEvent: () => null,
       isLoaderVisible: false,
       isVisible: true,
       isEnabled: false,
@@ -123,7 +123,7 @@ describe('hideLoader', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
+      bgColor: '#ffffff',
       postEvent,
       isLoaderVisible: true,
       isVisible: false,
@@ -141,8 +141,8 @@ describe('hideLoader', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
-      postEvent: vi.fn(),
+      bgColor: '#ffffff',
+      postEvent: () => null,
       isLoaderVisible: true,
       isVisible: false,
       isEnabled: false,
@@ -161,7 +161,7 @@ describe('show', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
+      bgColor: '#ffffff',
       postEvent,
       isLoaderVisible: false,
       isVisible: false,
@@ -179,8 +179,8 @@ describe('show', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
-      postEvent: vi.fn(),
+      bgColor: '#ffffff',
+      postEvent: () => null,
       isLoaderVisible: false,
       isVisible: false,
       isEnabled: false,
@@ -199,7 +199,7 @@ describe('showLoader', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
+      bgColor: '#ffffff',
       postEvent,
       isLoaderVisible: false,
       isVisible: false,
@@ -217,8 +217,8 @@ describe('showLoader', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
-      postEvent: vi.fn(),
+      bgColor: '#ffffff',
+      postEvent: () => null,
       isLoaderVisible: false,
       isVisible: false,
       isEnabled: false,
@@ -237,7 +237,7 @@ describe('setText', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
+      bgColor: '#ffffff',
       postEvent,
       isLoaderVisible: false,
       isVisible: false,
@@ -255,8 +255,8 @@ describe('setText', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
-      postEvent: vi.fn(),
+      bgColor: '#ffffff',
+      postEvent: () => null,
       isLoaderVisible: false,
       isVisible: false,
       isEnabled: false,
@@ -275,7 +275,7 @@ describe('setTextColor', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
+      bgColor: '#ffffff',
       postEvent,
       isLoaderVisible: false,
       isVisible: false,
@@ -293,8 +293,8 @@ describe('setTextColor', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
-      postEvent: vi.fn(),
+      bgColor: '#ffffff',
+      postEvent: () => null,
       isLoaderVisible: false,
       isVisible: false,
       isEnabled: false,
@@ -313,33 +313,33 @@ describe('setColor', () => {
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
+      bgColor: '#ffffff',
       postEvent,
       isLoaderVisible: false,
       isVisible: false,
       isEnabled: false,
     });
 
-    mainButton.setBackgroundColor('#ffaacc');
+    mainButton.setBgColor('#ffaacc');
     expect(postEvent).toHaveBeenCalledTimes(1);
     expect(postEvent.mock.calls[0][0]).toBe('web_app_setup_main_button');
     expect(postEvent.mock.calls[0][1]).toHaveProperty('color', '#ffaacc');
   });
 
-  it('should emit "change:backgroundColor" event with specified value', () => {
+  it('should emit "change:bgColor" event with specified value', () => {
     const listener = vi.fn();
     const mainButton = new MainButton({
       text: 'Test',
       textColor: '#000000',
-      backgroundColor: '#ffffff',
-      postEvent: vi.fn(),
+      bgColor: '#ffffff',
+      postEvent: () => null,
       isLoaderVisible: false,
       isVisible: false,
       isEnabled: false,
     });
 
-    mainButton.on('change:backgroundColor', listener);
-    mainButton.setBackgroundColor('#aaaaaa');
+    mainButton.on('change:bgColor', listener);
+    mainButton.setBgColor('#aaaaaa');
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith('#aaaaaa');
   });
