@@ -33,8 +33,8 @@ it('should call listener in case, Telegram event was created', () => {
 
   expect(listener).toHaveBeenCalledTimes(1);
   expect(listener).toHaveBeenCalledWith({
-    event: 'viewport_changed',
-    args: [eventData],
+    name: 'viewport_changed',
+    payload: eventData,
   });
 });
 
