@@ -159,7 +159,7 @@ export function createMiniAppsEventEmitter(): [
 
   return [{
     on: mainEmitter.on.bind(mainEmitter),
-    off: mainEmitter.on.bind(mainEmitter),
+    off: mainEmitter.off.bind(mainEmitter),
     subscribe(listener) {
       return subEmitter.on('event', listener);
     },
