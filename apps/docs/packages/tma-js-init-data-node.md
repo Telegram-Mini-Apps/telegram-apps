@@ -1,10 +1,14 @@
 # @tma.js/init-data-node
 
-[npm-link]: https://npmjs.com/package/@tma.js/init-data-node
-
-[npm-shield]: https://img.shields.io/npm/v/@tma.js/init-data-node?logo=npm
-
-![[npm-link]][npm-shield]
+<p style="display: flex; gap: 8px; min-height: 20px">
+  <a href="https://npmjs.com/package/@tma.js/init-data-node">
+    <img src="https://img.shields.io/npm/v/@tma.js/init-data-node?logo=npm"/>
+  </a>
+  <img src="https://img.shields.io/bundlephobia/minzip/@tma.js/init-data-node"/>
+  <a href="https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/init-data-node">
+    <img src="https://img.shields.io/badge/source-black?logo=github"/>
+  </a>
+</p>
 
 The package provides utilities to work with the initialization data of Telegram Mini Apps on the
 server side. To learn more about the initialization data and its usage, please refer to
