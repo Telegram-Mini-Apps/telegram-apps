@@ -1,5 +1,16 @@
 # @tma.js/sdk-react
 
+## 2.2.0
+
+### Minor Changes
+
+- d8ee696: Easier HOCs to use.
+
+### Patch Changes
+
+- Updated dependencies [3b081de]
+  - @tma.js/sdk@2.2.0
+
 ## 2.1.4
 
 ### Patch Changes

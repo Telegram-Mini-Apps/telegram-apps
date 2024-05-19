@@ -1,5 +1,12 @@
 # solidjs-template
 
+## 0.0.6
+
+### Patch Changes
+
+- @tma.js/sdk-solid@2.1.4
+- @tma.js/solid-router-integration@4.0.0
+
 ## 0.0.5
 
 ### Patch Changes
