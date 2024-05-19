@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 2.2.0
+
+### Minor Changes
+
+- 3b081de: Make subscribe method more comfortable to use. Fix a bug in BiometryManager initialization. Rename MainButton background-related properties and methods.
+
 ## 2.1.0
 
 ### Minor Changes
