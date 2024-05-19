@@ -56,7 +56,7 @@ import { SDKProvider } from '@tma.js/sdk-solid';
  */
 export function Root() {
   return (
-    <SDKProvider acceptCustomStyles debug={}>
+    <SDKProvider acceptCustomStyles debug>
       <div>My application!</div>
     </SDKProvider>
   );
