@@ -135,6 +135,32 @@ useEffect(() => {
 }, [bm]);
 ```
 
+### SSR
+
+This package also supports SSR mode, widely used in popular frameworks like Next.js. When using
+package hooks on the server side, you must pass `true` as the first argument. This notifies the hook
+that server-side mode is enabled. Not specifying this value and calling the hook on the server side
+will lead to an error.
+
+Server-side mode returns `undefined` for each component hook on the server side and also before the
+current component is mounted. This is required for persistence between trees rendered on the server
+and client sides.
+
+```ts
+import { useBackButton } from '@tma.js/sdk-react';
+import { useEffect } from 'react';
+
+function Component() {
+  const bb = useBackButton(true); // will be undefined or BackButton.
+
+  useEffect(() => {
+    if (bb) {
+      // Here we can safely work with the BackButton.
+    }
+  }, [bb]);
+}
+```
+
 ## Hooks List
 
 | Hook (Raw)              | Hook (Result)        | Returned value                                                              |
@@ -146,6 +172,7 @@ useEffect(() => {
 | `useHapticFeedbackRaw`  | `useHapticFeedback`  | [HapticFeedback](tma-js-sdk/components/haptic-feedback.md)                  |
 | `useInitDataRaw`        | `useInitData`        | [InitData](tma-js-sdk/components/init-data.md)                              |
 | `useInvoiceRaw`         | `useInvoice`         | [Invoice](tma-js-sdk/components/invoice.md)                                 |
+|                         | `useLaunchParams`    | [Launch params](tma-js-sdk/launch-parameters.md)                            |
 | `useMainButtonRaw`      | `useMainButton`      | [MainButton](tma-js-sdk/components/main-button.md)                          |
 | `useMiniAppRaw`         | `useMiniApp`         | [MiniApp](tma-js-sdk/components/mini-app.md)                                |
 | `usePopupRaw`           | `usePopup`           | [Popup](tma-js-sdk/components/popup.md)                                     |
