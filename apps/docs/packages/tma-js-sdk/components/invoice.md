@@ -5,16 +5,15 @@ functionality.
 
 ## Initialization
 
-Component constructor accepts Telegram Mini Apps version and optional function to call
-Telegram Mini Apps methods.
+To initialize the component, use the `initInvoice` function:
 
 ```typescript
-import { Invoice, postEvent } from '@tma.js/sdk';
+import { initInvoice } from '@tma.js/sdk';
 
-const invoice = new Invoice('6.3', postEvent);
+const invoice = initInvoice();  
 ```
 
-## Opening invoice
+## Opening Invoice
 
 To open an invoice, it is required to use the `open` method. This method allows opening invoices
 using their URLs or slugs.
@@ -48,22 +47,13 @@ invoice
 
 ## Events
 
-List of events, which could be used in `on` and `off` component instance methods:
+List of events, which could be [tracked](../components#events):
 
-| Event           | Listener                   | Triggered when                 |
-|-----------------|----------------------------|--------------------------------|
-| change          | `() => void`               | Something in component changed |
-| change:isOpened | `(value: boolean) => void` | `isOpened` property changed    |
+| Event             | Listener                   | Triggered when                 |
+|-------------------|----------------------------|--------------------------------|
+| `change`          | `() => void`               | Something in component changed |
+| `change:isOpened` | `(value: boolean) => void` | `isOpened` property changed    |
 
 ## Methods Support
 
-List of methods, which could be used in `supports` component instance method:
-
-- `open`
-
-```typescript
-import { Invoice } from '@tma.js/sdk';
-
-const invoice = new Invoice(...);
-invoice.supports('open');
-```
+List of methods, which could be used in [support checks](../components#methods-support): `open`

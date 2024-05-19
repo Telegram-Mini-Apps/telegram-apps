@@ -4,17 +4,12 @@ Implements functionality that doesn't require state and can't be categorized.
 
 ## Initialization
 
-The component constructor accepts the Telegram Mini Apps version, a function to generate a request
-identifier, and an optional function to call Telegram Mini Apps methods.
+To initialize the component, use the `initUtils` function:
 
-```typescript  
-import { Utils } from '@tma.js/sdk';
+```typescript
+import { initUtils } from '@tma.js/sdk';
 
-const utils = new Utils(
-  '6.10',
-  () => Math.random().toString(),
-  postEvent,
-);  
+const utils = initUtils();  
 ```
 
 ## Links
@@ -59,20 +54,6 @@ utils.readTextFromClipboard().then((data) => {
 
 ## Methods Support
 
-List of methods, which could be used in `supports` component instance method:
-
-- `readTextFromClipboard`
-
-```typescript
-utils.supports('readTextFromClipboard');
-```
-
-## Method Parameters Support
-
-List of method parameters, which could be used in `supportsParam` component instance method:
-
-- `openLink.tryInstantView`
-
-```typescript
-utils.supportsParam('openLink.tryInstantView');
-```
+List of methods and parameters, which could be used
+in [support checks](../components#methods-support): `readTextFromClipboard`
+and `openLink.tryInstantView`

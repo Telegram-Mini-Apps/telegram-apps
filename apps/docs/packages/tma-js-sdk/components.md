@@ -1,17 +1,55 @@
+---
+outline: [2, 3]
+---
+
 # Components
 
-All components in this package are supposed to be used as singletons. This means that you should not
-create multiple instances of the same component and use them, even if it is not explicitly
-forbidden. However, in this case, there is no guarantee that everything will work fine.
+## Init
 
-The reason for this is that each component stores its state locally, and the instances of the class
-are not synchronized with each other. For example, if a developer creates two instances of
-the `Popup` component and one of them calls the `open()` method, it will change its `isOpened`
-property to `true`. However, the second instance of `Popup` will not be aware of this change and
-will still return a `false` value, which is incorrect.
+According to the design of this package, the developer has complete control over its lifecycle,
+including the initialization process. This means that there are no pre-initialized global components
+available for use by the developer. They must create the components themselves.
 
-To avoid potential problems, developers can rely on the package's `init` function, which provides
-initialized components that are sufficient for use across the application.
+To simplify the developer's workflow, the package includes special functions prefixed with
+the `init` string. These functions return instances of the initialized components, making it easier
+for developers to work with the package.
+
+Here is an example:
+
+```typescript
+import { initBackButton, initMainButton } from '@tma.js/sdk';
+
+const mainButton = initMainButton();
+const backButton = initBackButton();
+
+// Clicking the MainButton hides it and shows the BackButton.
+mainButton.on('click', () => {
+  mainButton.hide();
+  backButton.show();
+});
+
+// Clicking the BackButton hides it and shows the MainButton.
+backButton.on('click', () => {
+  mainButton.show();
+  backButton.hide();
+});
+
+// Configure the MainButton.
+mainButton
+  .setBgColor('#ff0000')
+  .setTextColor('#ffffff')
+  .setText('Expand')
+  .enable()
+  .show();
+```
+
+:::info
+
+Take note that some components cannot be instantiated synchronously as long as there is no
+information about them locally. Use each component's documentation to learn more about how the
+component initializes.
+
+:::
 
 ## Events
 
@@ -19,12 +57,13 @@ Component instances use the common way of events listening through the `on` and 
 Here is the example with the `BackButton` component:
 
 ```typescript
-import { BackButton } from '@tma.js/sdk';
+import { initBackButton } from '@tma.js/sdk';
 
-const backButton = new BackButton(...);
+const backButton = initBackButton();
 
+// Clicking the BackButton hides it and shows the MainButton.
 backButton.on('click', () => {
-  console.log('Back button clicked.');
+  console.log('BackButton clicked.');
 });
 ```
 
@@ -32,7 +71,7 @@ You can find the list of supported events in components own documentations.
 
 ## Methods Support
 
-Almost each component is capable of checking whether its method is supported by the current Telegram
+Almost each component is capable of checking whether its method is supported by the current
 Mini Apps version or not. To check if some methods are supported, developer should use the component
 instance `supports()` function. For example:
 
@@ -47,7 +86,7 @@ backButton.supports('hide'); // true
 ```
 
 Some of the components support an additional method `supportsParam` which allows checking if
-method parameter is supported:
+method <ins>parameter</ins> is supported:
 
 ```typescript
 import { Utils } from '@tma.js/sdk';

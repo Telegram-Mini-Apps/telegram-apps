@@ -4,16 +4,15 @@ Implements Telegram Mini Apps [popup](../../../platform/popup.md).
 
 ## Initialization
 
-Component constructor accepts Telegram Mini Apps version and optional function to call Telegram Mini
-Apps methods.
+To initialize the component, use the `initPopup` function:
 
 ```typescript
-import { Popup, postEvent } from '@tma.js/sdk';
+import { initPopup } from '@tma.js/sdk';
 
-const popup = new Popup('6.3', postEvent);
+const popup = initPopup();  
 ```
 
-## Opening new popup
+## Opening New Popup
 
 To open a popup, it is required to call the `open` method specifying popup properties: title,
 message, and a list of up to 3 buttons.
@@ -32,22 +31,13 @@ case where the user didn't click any button, the method will return `null`.
 
 ## Events
 
-List of events, which could be used in `on` and `off` component instance methods:
+List of events, which could be [tracked](../components#events):
 
-| Event            | Listener                   | Triggered when                 |
-|------------------|----------------------------|--------------------------------|
-| changed          | `() => void`               | Something in component changed |
-| changed:isOpened | `(value: boolean) => void` | `isOpened` property changed    |
+| Event              | Listener                   | Triggered when                 |
+|--------------------|----------------------------|--------------------------------|
+| `changed`          | `() => void`               | Something in component changed |
+| `changed:isOpened` | `(value: boolean) => void` | `isOpened` property changed    |
 
 ## Methods Support
 
-List of methods, which could be used in `supports` component instance method:
-
-- `open`
-
-```typescript
-import { Popup } from '@tma.js/sdk';
-
-const popup = new Popup(...);
-popup.supports('open');
-```
+List of methods, which could be used in [support checks](../components#methods-support): `open`

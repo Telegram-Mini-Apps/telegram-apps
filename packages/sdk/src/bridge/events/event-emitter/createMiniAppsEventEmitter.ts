@@ -1,6 +1,7 @@
 import { logger } from '@/debug/debug.js';
 import { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
 import { onWindow } from '@/events/onWindow.js';
+import { createCleanup } from '@/misc/createCleanup.js';
 import { boolean } from '@/parsing/parsers/boolean.js';
 import { json } from '@/parsing/parsers/json.js';
 import { number } from '@/parsing/parsers/number.js';
@@ -12,15 +13,12 @@ import type { RGB } from '@/colors/types.js';
 import { type MiniAppsMessage, parseMessage } from '../../parseMessage.js';
 import { cleanupEventHandlers } from '../event-handlers/cleanupEventHandlers.js';
 import { defineEventHandlers } from '../event-handlers/defineEventHandlers.js';
-import type { MiniAppsEventEmitter, MiniAppsEventName, MiniAppsEventPayload } from '../types.js';
-
-const popupClosedParser = json({
-  button_id: (value) => (
-    value === null || value === undefined
-      ? undefined
-      : string().parse(value)
-  ),
-});
+import type {
+  MiniAppsEventName,
+  MiniAppsEventPayload,
+  MiniAppsEventEmitter,
+  MiniAppsEvents,
+} from '../types.js';
 
 /**
  * Parsers for each Mini Apps event.
@@ -41,19 +39,20 @@ const parsers: {
     result: (value) => value,
     error: string().optional(),
   }),
-  invoice_closed: json({
-    slug: string(),
-    status: string(),
-  }),
-  phone_requested: json({
-    status: string(),
-  }),
+  invoice_closed: json({ slug: string(), status: string() }),
+  phone_requested: json({ status: string() }),
   popup_closed: {
-    parse: (value) => popupClosedParser.parse(value ?? {}),
+    parse(value) {
+      return json({
+        button_id: (value) => (
+          value === null || value === undefined
+            ? undefined
+            : string().parse(value)
+        ),
+      }).parse(value ?? {});
+    },
   },
-  qr_text_received: json({
-    data: string().optional(),
-  }),
+  qr_text_received: json({ data: string().optional() }),
   theme_changed: json({
     theme_params: (value) => {
       const parser = rgb().optional();
@@ -76,9 +75,7 @@ const parsers: {
     is_state_stable: boolean(),
     is_expanded: boolean(),
   }),
-  write_access_requested: json({
-    status: string(),
-  }),
+  write_access_requested: json({ status: string() }),
 };
 
 /**
@@ -94,13 +91,21 @@ export function createMiniAppsEventEmitter(): [
    */
   dispose: () => void,
 ] {
-  const emitter: MiniAppsEventEmitter = new EventEmitter();
+  // We use this event emitter for better developer experience, using the subscribe method.
+  const subEmitter = new EventEmitter<{ event: any[] }>();
+
+  // Event emitter processing all the incoming events.
+  const mainEmitter = new EventEmitter<MiniAppsEvents>();
+
+  mainEmitter.subscribe(event => {
+    subEmitter.emit('event', { name: event.event, payload: event.args[0] });
+  });
 
   // Define event handles, which will proxy native method calls to their web version.
   defineEventHandlers();
 
   // List of cleanup functions, which should be called on dispose.
-  let cleanupFunctions = [
+  const [, cleanup] = createCleanup(
     // Don't forget to remove created handlers.
     cleanupEventHandlers,
     // Add "resize" event listener to make sure, we always have fresh viewport information.
@@ -109,7 +114,7 @@ export function createMiniAppsEventEmitter(): [
     // add our own listener to make sure, viewport information is always fresh.
     // Issue: https://github.com/Telegram-Mini-Apps/tma.js/issues/10
     onWindow('resize', () => {
-      emitter.emit('viewport_changed', {
+      mainEmitter.emit('viewport_changed', {
         width: window.innerWidth,
         height: window.innerHeight,
         is_state_stable: true,
@@ -138,8 +143,7 @@ export function createMiniAppsEventEmitter(): [
 
       try {
         const data = parser ? parser.parse(eventData) : eventData;
-        // eslint-disable-next-line prefer-spread
-        emitter.emit(...((data ? [eventType, data] : [eventType]) as [any, any]));
+        mainEmitter.emit(...(data ? [eventType, data] : [eventType]) as [any, any]);
       } catch (cause) {
         logger.error(
           `An error occurred processing the "${eventType}" event from the Telegram application. Please, file an issue here: https://github.com/Telegram-Mini-Apps/tma.js/issues/new/choose`,
@@ -148,12 +152,22 @@ export function createMiniAppsEventEmitter(): [
         );
       }
     }),
-    // Clear emitter bound events.
-    () => emitter.clear(),
-  ];
+    // Clear emitters.
+    () => subEmitter.clear(),
+    () => mainEmitter.clear(),
+  );
 
-  return [emitter, () => {
-    cleanupFunctions.forEach((l) => l());
-    cleanupFunctions = [];
-  }];
+  return [{
+    on: mainEmitter.on.bind(mainEmitter),
+    off: mainEmitter.off.bind(mainEmitter),
+    subscribe(listener) {
+      return subEmitter.on('event', listener);
+    },
+    unsubscribe(listener) {
+      subEmitter.off('event', listener);
+    },
+    get count() {
+      return mainEmitter.count + subEmitter.count;
+    },
+  }, cleanup];
 }

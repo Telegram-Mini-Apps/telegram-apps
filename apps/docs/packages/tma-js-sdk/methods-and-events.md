@@ -28,10 +28,10 @@ event, to receive actual viewport data.
 ```typescript
 import { request } from '@tma.js/sdk';
 
-const viewport = await request(
-  'web_app_request_viewport',
-  'viewport_changed'
-);
+const viewport = await request({
+  method: 'web_app_request_viewport',
+  event: 'viewport_changed'
+});
 
 console.log(viewport);
 // Output:
@@ -44,23 +44,6 @@ console.log(viewport);
 
 In case, Telegram Mini Apps method accepts parameters, you should pass them in the `params`
 property of the third argument:
-
-```typescript
-import { request } from '@tma.js/sdk';
-
-const buttonId = await request('web_app_open_popup', 'popup_closed', {
-  params: {
-    title: 'Caution',
-    message: 'Should we delete you account?',
-    buttons: [
-      { id: 'yes', type: 'ok' },
-      { id: 'no', type: 'cancel' },
-    ],
-  },
-});
-```
-
-Alternatively, you could pass the object describing all options:
 
 ```typescript
 import { request } from '@tma.js/sdk';
@@ -103,7 +86,9 @@ method.
 ```typescript
 import { request, createPostEvent } from '@tma.js/sdk';
 
-request('web_app_request_viewport', 'viewport_changed', {
+request({
+  method: 'web_app_request_viewport',
+  event: 'viewport_changed',
   postEvent: createPostEvent('6.5'),
 });
 ```
@@ -117,36 +102,32 @@ an error will be thrown.
 import { request, isTimeoutError } from '@tma.js/sdk';
 
 try {
-  await request(
-    'web_app_invoke_custom_method',
-    'custom_method_invoked',
-    {
-      timeout: 5000,
-      params: {
-        req_id: '1',
-        method: 'deleteStorageValues',
-        params: { keys: ['a'] },
-      },
+  await request({
+    method: 'web_app_invoke_custom_method',
+    event: 'custom_method_invoked',
+    timeout: 5000,
+    params: {
+      req_id: '1',
+      method: 'deleteStorageValues',
+      params: { keys: ['a'] },
     },
-  );
+  });
 } catch (e) {
-  if (isTimeoutError(e)) {
-    console.error('Timeout error:', e);
-    return;
-  }
-  console.error('Some different error', e);
+  console.error(isTimeoutError(e) ? 'Timeout error' : 'Some different error', e);
 }
 ```
 
 #### `capture`
 
-`capture` property is a function, that allows developer to determine if occurred Telegram Mini Apps
+`capture` property is a function, that allows developer to determine if occurred Mini Apps
 event should be captured and returned from the `request` function:
 
 ```typescript
 const slug = 'jjKSJnm1k23lodd';
 
-request('web_app_open_invoice', 'invoice_closed', {
+request({
+  method: 'web_app_open_invoice',
+  event: 'invoice_closed',
   params: { slug },
   capture(data) {
     return slug === data.slug;
@@ -160,8 +141,9 @@ case, `request` function will capture the event only in case, it has the expecte
 ## Invoking Custom Methods
 
 Custom methods are methods, which could be used by Telegram Mini Apps
-`web_app_invoke_custom_method` method. `invokeCustomMethod` function simplifies usage of such
-methods and reuses the `request` function.
+[web_app_invoke_custom_method](../../platform/methods.md#web-app-invoke-custom-method)
+method. `invokeCustomMethod` function simplifies usage of such methods and reuses the `request`
+function.
 
 Here is the code example without using this function:
 
@@ -170,7 +152,9 @@ import { request } from '@tma.js/sdk';
 
 const reqId = 'ABC';
 
-request('web_app_invoke_custom_method', 'custom_method_invoked', {
+request({
+  method: 'web_app_invoke_custom_method',
+  event: 'custom_method_invoked',
   params: {
     req_id: reqId,
     method: 'deleteStorageValues',
@@ -230,6 +214,17 @@ on('viewport_changed', listener);
 off('viewport_changed', listener);
 ```
 
+To call listener only once, use the third boolean argument.
+
+```typescript
+import { on } from '@tma.js/sdk';
+
+// Will be automatically removed after the first listener execution.
+on('viewport_changed', (payload) => {
+  console.log('Viewport changed:', payload);
+}, true);
+```
+
 ### `subscribe` and `unsubscribe`
 
 To listen to all events sent from the native Telegram application, developer should utilize
@@ -242,8 +237,8 @@ import {
   type MiniAppsGlobalEventListener,
 } from '@tma.js/sdk';
 
-const listener: MiniAppsGlobalEventListener = (event, data) => {
-  console.log('Received event', event, 'with data', data);
+const listener: MiniAppsSubscribeListener = (event) => {
+  console.log('Received event', event);
 };
 
 // Listen to all events.
@@ -253,10 +248,13 @@ subscribe(listener);
 unsubscribe(listener);
 ```
 
+The listener accepts an object, containing the `name` and `payload` properties, which are Mini Apps
+event name and payload.
+
 ## Checking Method Support
 
 `postEvent` function itself is not checking if specified method supported by current native Telegram
-application. To do this, developer could use `supports` function which accepts Telegram Mini Apps
+application. To do this, developer could use `supports` function which accepts Mini Apps
 method name and current platform version:
 
 ```typescript
@@ -277,13 +275,15 @@ supports('web_app_open_link', 'try_instant_view', '6.7'); // true
 ```
 
 ::: tip
-It is recommended to use this function before calling Telegram Mini Apps methods to prevent
-applications from stalling and other unexpected behavior.
+
+It is recommended to use this function before calling Mini Apps methods to prevent applications from
+stalling and other unexpected behavior.
+
 :::
 
 ### Creating safer `postEvent`
 
-This package includes a function named `createPostEvent` that takes the current Telegram Mini Apps
+This package includes a function named `createPostEvent` that takes the current Mini Apps
 version as input. It returns the `postEvent` function, which internally checks if the specified
 method and parameters are supported. If they are not, the function will throw an error.
 
@@ -328,6 +328,8 @@ setTargetOrigin('https://myendpoint.org');
 ```
 
 ::: warning
+
 It is strongly recommended not to override this value as long as it could lead to security issues.
-Specify this value only for test purposes.
+Specify this value only when you know what you are doing.
+
 :::

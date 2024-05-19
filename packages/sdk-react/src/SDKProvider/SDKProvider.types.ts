@@ -18,7 +18,7 @@ export interface SDKProviderProps extends PropsWithChildren {
 /**
  * SDKContext item.
  */
-export type SDKContextItem<T> = ({
+export interface SDKContextItem<T> {
   /**
    * This item execution result. The property may be missing in case, execution is async.
    */
@@ -27,12 +27,11 @@ export type SDKContextItem<T> = ({
    * Function to cleanup item side effects.
    */
   cleanup?: CleanupFn;
-} | {
   /**
    * An error occurred during execution.
    */
-  error: unknown;
-});
+  error?: unknown;
+}
 
 export interface SDKContextType {
   /**

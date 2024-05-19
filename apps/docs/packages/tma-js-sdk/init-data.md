@@ -1,6 +1,6 @@
 # Init Data
 
-This section of SDK provides utilities to work with Telegram Mini
+This section of SDK provides utilities to work with Mini
 Apps [init data](../../platform/init-data.md).
 
 ## Parsing
@@ -44,7 +44,7 @@ The function extracts the required parameters and automatically validates their 
 has an invalid type or value, it will throw an error. To learn more about returned type, refer
 to [InitData](init-data/init-data.md) type page.
 
-## Validation
+## Validating and Signing
 
-Validation utilities has been moved to the separate
+Validation and signing utilities has been moved to the separate
 package - [@tma.js/init-data-node](../tma-js-init-data-node.md).

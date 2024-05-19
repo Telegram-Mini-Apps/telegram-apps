@@ -1,6 +1,7 @@
 import type { RGB } from '@/colors/types.js';
+import type { EventListener } from '@/events/event-emitter/types.js';
+import {type  RemoveEventListenerFn } from '@/events/types.js';
 import type { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
-import type { EventListener, SubscribeListener } from '@/events/event-emitter/types.js';
 import type { RequestId } from '@/request-id/types.js';
 
 export type InvoiceStatus =
@@ -303,12 +304,17 @@ export type MiniAppsEventPayload<E extends MiniAppsEventName> = MiniAppsEvents[E
  */
 export type MiniAppsEventListener<E extends MiniAppsEventName> = EventListener<MiniAppsEvents[E]>;
 
+export interface MiniAppsEventEmitter
+  extends Pick<EventEmitter<MiniAppsEvents>, 'on' | 'off' | 'count'> {
+  subscribe(listener: MiniAppsSubscribeListener): RemoveEventListenerFn;
+  unsubscribe(listener: MiniAppsSubscribeListener): void;
+}
+
 /**
  * Mini Apps event listener used in `subscribe` and `unsubscribe` functions.
  */
-export type MiniAppsSubscribeListener = SubscribeListener<MiniAppsEvents>;
-
-/**
- * Mini Apps event emitter.
- */
-export type MiniAppsEventEmitter = EventEmitter<MiniAppsEvents>;
+export type MiniAppsSubscribeListener = (
+  payload: {
+    [E in MiniAppsEventName]: { name: E; payload: MiniAppsEventPayload<E> };
+  }[MiniAppsEventName],
+) => void;

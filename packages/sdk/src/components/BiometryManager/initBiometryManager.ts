@@ -1,4 +1,5 @@
 import { createComponentInitFn } from '@/misc/createComponentInitFn/createComponentInitFn.js';
+import { supports } from '@/supports/supports.js';
 
 import { BiometryManager } from './BiometryManager.js';
 import { requestBiometryInfo } from './requestBiometryInfo.js';
@@ -9,9 +10,19 @@ import { requestBiometryInfo } from './requestBiometryInfo.js';
  */
 export const initBiometryManager = createComponentInitFn(
   'biometryManager',
-  async ({ postEvent, version, state }) => new BiometryManager({
-    ...(state || await requestBiometryInfo({ timeout: 1000 })),
-    version,
-    postEvent,
-  }),
+  async ({ postEvent, version, state }) => {
+    return new BiometryManager({
+      ...(state || supports('web_app_biometry_get_info', version)
+        ? state || await requestBiometryInfo({ timeout: 1000 })
+        : {
+          available: false,
+          accessGranted: false,
+          accessRequested: false,
+          tokenSaved: false,
+          deviceId: '',
+        }),
+      version,
+      postEvent,
+    });
+  },
 );

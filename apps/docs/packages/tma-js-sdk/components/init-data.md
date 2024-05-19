@@ -5,44 +5,17 @@ outline: [2, 3]
 # `InitData`
 
 The component which is responsible for implementing the Telegram Mini
-Apps [init data](../../../platform/init-data.md). This class represents
-an object with properties getters. To create its new instance, a developer could use the class
-constructor as follows:
+Apps [init data](../../../platform/init-data.md). 
+
+## Initialization
+
+To initialize the component, use the `initInitData` function:
 
 ```typescript
-import { InitData } from '@tma.js/sdk';
+import { initInitData } from '@tma.js/sdk';
 
-const initData = new InitData({
-  authDate: new Date(),
-  canSendAfter: 1000,
-  chat: {
-    id: 7728558344,
-    photoUrl: 'https://img.static.telegram.org/image',
-    type: 'group',
-    title: 'Telegram Developers',
-    username: 'johnybravo',
-  },
-  chatType: 'sender',
-  chatInstance: '-9982961682389',
-  hash: 'myhash',
-  queryId: 'AAHdF6IQAAAAAN0Xoh',
-  startParam: 'customvalue',
-  user: {
-    addedToAttachmentMenu: false,
-    allowsWriteToPm: true,
-    firstName: 'Johny',
-    id: 22231781,
-    isBot: false,
-    isPremium: true,
-    lastName: 'Bravo',
-    languageCode: 'en',
-    photoUrl: 'https://img.static.telegram.org/johnybravo',
-    username: 'johnybravo',
-  },
-});
+const initData = initInitData();  
 ```
-
-All properties of the passed constructor object excluding `authDate` and `hash` are optional.
 
 ## Properties
 

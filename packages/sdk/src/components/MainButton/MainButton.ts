@@ -26,6 +26,13 @@ export class MainButton extends WithStateUtils<MainButtonState> {
   }
 
   /**
+   * The MainButton background color.
+   */
+  get bgColor(): RGB {
+    return this.get('bgColor');
+  }
+
+  /**
    * Sends current local state to the Telegram application.
    */
   private commit(): void {
@@ -41,63 +48,9 @@ export class MainButton extends WithStateUtils<MainButtonState> {
       is_active: this.isEnabled,
       is_progress_visible: this.isLoaderVisible,
       text: this.text,
-      color: this.backgroundColor,
+      color: this.bgColor,
       text_color: this.textColor,
     });
-  }
-
-  private set isEnabled(isEnabled: boolean) {
-    this.setParams({ isEnabled });
-  }
-
-  /**
-   * True if the MainButton is enabled.
-   */
-  get isEnabled(): boolean {
-    return this.get('isEnabled');
-  }
-
-  private set isLoaderVisible(isLoaderVisible: boolean) {
-    this.setParams({ isLoaderVisible });
-  }
-
-  /**
-   * True if the MainButton loader is visible.
-   */
-  get isLoaderVisible(): boolean {
-    return this.get('isLoaderVisible');
-  }
-
-  private set isVisible(isVisible: boolean) {
-    this.setParams({ isVisible });
-  }
-
-  /**
-   * True if the MainButton is visible.
-   */
-  get isVisible(): boolean {
-    return this.get('isVisible');
-  }
-
-  /**
-   * The MainButton background color.
-   */
-  get backgroundColor(): RGB {
-    return this.get('backgroundColor');
-  }
-
-  /**
-   * The MainButton text.
-   */
-  get text(): string {
-    return this.get('text');
-  }
-
-  /**
-   * The MainButton text color.
-   */
-  get textColor(): RGB {
-    return this.get('textColor');
   }
 
   /**
@@ -131,6 +84,39 @@ export class MainButton extends WithStateUtils<MainButtonState> {
   hideLoader(): this {
     this.isLoaderVisible = false;
     return this;
+  }
+
+  private set isEnabled(isEnabled: boolean) {
+    this.setParams({ isEnabled });
+  }
+
+  /**
+   * True if the MainButton is enabled.
+   */
+  get isEnabled(): boolean {
+    return this.get('isEnabled');
+  }
+
+  private set isLoaderVisible(isLoaderVisible: boolean) {
+    this.setParams({ isLoaderVisible });
+  }
+
+  /**
+   * True if the MainButton loader is visible.
+   */
+  get isLoaderVisible(): boolean {
+    return this.get('isLoaderVisible');
+  }
+
+  private set isVisible(isVisible: boolean) {
+    this.setParams({ isVisible });
+  }
+
+  /**
+   * True if the MainButton is visible.
+   */
+  get isVisible(): boolean {
+    return this.get('isVisible');
   }
 
   /**
@@ -192,10 +178,10 @@ export class MainButton extends WithStateUtils<MainButtonState> {
 
   /**
    * Updates current Main Button color.
-   * @param backgroundColor - color to set.
+   * @param bgColor - color to set.
    */
-  setBackgroundColor(backgroundColor: RGB): this {
-    return this.setParams({ backgroundColor });
+  setBgColor(bgColor: RGB): this {
+    return this.setParams({ bgColor });
   }
 
   /**
@@ -206,5 +192,19 @@ export class MainButton extends WithStateUtils<MainButtonState> {
     this.set(params);
     this.commit();
     return this;
+  }
+
+  /**
+   * The MainButton text.
+   */
+  get text(): string {
+    return this.get('text');
+  }
+
+  /**
+   * The MainButton text color.
+   */
+  get textColor(): RGB {
+    return this.get('textColor');
   }
 }

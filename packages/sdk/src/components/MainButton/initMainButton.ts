@@ -17,7 +17,7 @@ export const initMainButton = createComponentInitFn(
       text: '',
       isLoaderVisible: false,
       textColor: themeParams.buttonTextColor || '#ffffff',
-      backgroundColor: themeParams.buttonColor || '#000000',
+      bgColor: themeParams.buttonColor || '#000000',
     },
   }) => new MainButton({ ...state, postEvent }),
 );

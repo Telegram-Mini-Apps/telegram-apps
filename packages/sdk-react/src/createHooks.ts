@@ -1,4 +1,4 @@
-import { type CleanupFn, isSSR, type AnyFn } from '@tma.js/sdk';
+import { type CleanupFn, isSSR, type AnyFn, If } from '@tma.js/sdk';
 import { useEffect, useState } from 'react';
 
 import { useSDK } from './SDKProvider/SDKContext.js';
@@ -6,22 +6,26 @@ import type { SDKContextItem } from './SDKProvider/SDKProvider.types.js';
 
 type ExtractResult<T> = T extends [result: infer R, cleanup: CleanupFn]
   ? ExtractResult<R>
-  : T extends Promise<infer U>
-    ? U | undefined
+  : T extends PromiseLike<any>
+    ? Awaited<T> | undefined
     : T;
 
 type HookFnResult<Fn extends AnyFn> = ExtractResult<ReturnType<Fn>>;
 
-interface Hook<Result> {
-  (ssr?: false): Result;
-  (ssr: true): Result | undefined;
+interface CompleteHook<Result> extends Hook<Result, true>, Hook<Result, false> {
 }
+
+export type Hook<Result, SSR extends boolean> = If<
+  SSR,
+  (ssr: true) => Result | undefined,
+  (ssr?: false) => Result
+>;
 
 export interface HookRaw<Factory extends AnyFn>
-  extends Hook<SDKContextItem<HookFnResult<Factory>>> {
+  extends CompleteHook<SDKContextItem<HookFnResult<Factory>>> {
 }
 
-export interface HookResult<Factory extends AnyFn> extends Hook<HookFnResult<Factory>> {
+export interface HookResult<Factory extends AnyFn> extends CompleteHook<HookFnResult<Factory>> {
 }
 
 export type Hooks<Factory extends AnyFn> = [
@@ -38,7 +42,7 @@ export function createHooks<Factory extends AnyFn>(factory: Factory): Hooks<Fact
   function useRaw(ssr?: boolean): SDKContextItem<HookFnResult<Factory>> | undefined {
     const sdk = useSDK();
 
-    const [result, setResult] = useState<SDKContextItem<HookFnResult<Factory>> | undefined>(
+    const [result, setResult] = useState(
       ssr
         // If SSR mode is enabled, we have no initial value. In this case we will set something
         // only in useEffect.
@@ -57,7 +61,7 @@ export function createHooks<Factory extends AnyFn>(factory: Factory): Hooks<Fact
       setResult(sdk.use(factory));
     }, [sdk]);
 
-    return result;
+    return result as SDKContextItem<HookFnResult<Factory>> | undefined;
   }
 
   function useResult(ssr?: false): HookFnResult<Factory>;

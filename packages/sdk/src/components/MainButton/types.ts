@@ -3,7 +3,7 @@ import type { StateEvents } from '@/classes/State/types.js';
 import type { RGB } from '@/colors/types.js';
 
 export interface MainButtonParams {
-  backgroundColor: RGB;
+  bgColor: RGB;
   isEnabled: boolean;
   isLoaderVisible: boolean;
   isVisible: boolean;

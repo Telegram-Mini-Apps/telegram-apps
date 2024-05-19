@@ -10,8 +10,8 @@ export const logger = new Logger('SDK', {
 
 let debugEnabled = false;
 
-const onEvent: MiniAppsSubscribeListener = ({ event: name, args: [data] }) => {
-  logger.log('Event received:', data === undefined ? { name } : { name, data });
+const onEvent: MiniAppsSubscribeListener = ({ name, payload }) => {
+  logger.log('Event received:', payload ? { name, payload } : { name });
 };
 
 /**

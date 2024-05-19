@@ -4,16 +4,15 @@ Implements Telegram Mini Apps [Settings Button](../../../platform/settings-butto
 
 ## Initialization
 
-Component constructor accepts visibility state, Telegram Mini Apps version and optional function
-to call Telegram Mini Apps methods.
+To initialize the component, use the `initSettingsButton` function:
 
 ```typescript
-import { SettingsButton, postEvent } from '@tma.js/sdk';
+import { initSettingsButton } from '@tma.js/sdk';
 
-const settingsButton = new SettingsButton(false, '6.3', postEvent);  
-```  
+const settingsButton = initSettingsButton();  
+```
 
-## Showing and hiding
+## Showing and Hiding
 
 To show and hide the `SettingsButton`, it is required to use `show()` and `hide()` methods. These
 methods update the button's `isVisible` property:
@@ -28,25 +27,15 @@ console.log(settingsButton.isVisible); // false
 
 ## Events
 
-List of events, which could be used in `on` and `off` component instance methods:
+List of events, which could be [tracked](../components#events):
 
-| Event            | Listener                   | Triggered when                 |
-|------------------|----------------------------|--------------------------------|
-| click            | `() => void`               | Settings Button was clicked    |
-| change           | `() => void`               | Something in component changed |
-| change:isVisible | `(value: boolean) => void` | `isVisible` property changed   |
+| Event              | Listener                   | Triggered when                 |
+|--------------------|----------------------------|--------------------------------|
+| `click`            | `() => void`               | Settings Button was clicked    |
+| `change`           | `() => void`               | Something in component changed |
+| `change:isVisible` | `(value: boolean) => void` | `isVisible` property changed   |
 
 ## Methods Support
 
-List of methods, which could be used in `supports` component instance method:
-
-- `show`
-- `hide`
-
-```typescript
-import { SettingsButton } from '@tma.js/sdk';
-
-const settingsButton = new SettingsButton(...);
-settingsButton.supports('show');
-settingsButton.supports('hide');
-```
+List of methods, which could be used in [support checks](../components#methods-support): `show`
+and `hide`
