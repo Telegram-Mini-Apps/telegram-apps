@@ -161,26 +161,54 @@ function Component() {
 }
 ```
 
-## Hooks List
+### HOCs
 
-| Hook (Raw)              | Hook (Result)        | Returned value                                                              |
-|-------------------------|----------------------|-----------------------------------------------------------------------------|
-| `useBackButtonRaw`      | `useBackButton`      | [BackButton](tma-js-sdk/components/back-button.md)                          |
-| `useBiometryManagerRaw` | `useBiometryManager` | [BiometryManager](tma-js-sdk/components/biometry-manager.md) or `undefined` |
-| `useClosingBehaviorRaw` | `useClosingBehavior` | [ClosingBehavior](tma-js-sdk/components/closing-behavior.md)                |
-| `useCloudStorageRaw`    | `useCloudStorage`    | [CloudStorage](tma-js-sdk/components/cloud-storage.md)                      |
-| `useHapticFeedbackRaw`  | `useHapticFeedback`  | [HapticFeedback](tma-js-sdk/components/haptic-feedback.md)                  |
-| `useInitDataRaw`        | `useInitData`        | [InitData](tma-js-sdk/components/init-data.md)                              |
-| `useInvoiceRaw`         | `useInvoice`         | [Invoice](tma-js-sdk/components/invoice.md)                                 |
-|                         | `useLaunchParams`    | [Launch params](tma-js-sdk/launch-parameters.md)                            |
-| `useMainButtonRaw`      | `useMainButton`      | [MainButton](tma-js-sdk/components/main-button.md)                          |
-| `useMiniAppRaw`         | `useMiniApp`         | [MiniApp](tma-js-sdk/components/mini-app.md)                                |
-| `usePopupRaw`           | `usePopup`           | [Popup](tma-js-sdk/components/popup.md)                                     |
-| `useQRScannerRaw`       | `useQRScanner`       | [QRScanner](tma-js-sdk/components/qr-scanner.md)                            |
-| `useSettingsButtonRaw`  | `useSettingsButton`  | [SettingsButton](tma-js-sdk/components/settings-button.md)                  |
-| `useThemeParamsRaw`     | `useThemeParams`     | [ThemeParams](tma-js-sdk/components/theme-params.md)                        |
-| `useUtilsRaw`           | `useUtils`           | [Utils](tma-js-sdk/components/utils.md)                                     |
-| `useViewportRaw`        | `useViewport`        | [Viewport](tma-js-sdk/components/viewport.md) or `undefined`                |
+All package Higher Order Components utilize the hooks described previously. The usage is rather
+simple:
+
+```ts
+import { withBackButton } from '@tma.js/sdk-react';
+import { useEffect } from 'react';
+
+const A = withBackButton('bb', false, ({ bb }) => {
+  useEffect(() => {
+    bb.show();
+  }, [bb]);
+  return null;
+});
+
+const B = withBackButton('bb', true, ({ bb }) => {
+   useEffect(() => {
+      bb && bb.show();
+   }, [bb]);
+   return null;
+});
+```
+
+As the first argument, you must pass a value responsible for the component property name receiving a
+hook result. The second argument is SSR flag mode, which will be passed to the hook, used 
+internally.
+
+## Hooks and HOCs List
+
+| Hook and HOC (Raw)                                | Hook and HOC (Result)                       | Returned value                                                              |
+|---------------------------------------------------|---------------------------------------------|-----------------------------------------------------------------------------|
+| `useBackButtonRaw`, `withBackButtonRaw`           | `useBackButton`, `withBackButton`           | [BackButton](tma-js-sdk/components/back-button.md)                          |
+| `useBiometryManagerRaw`, `withBiometryManagerRaw` | `useBiometryManager`, `withBiometryManager` | [BiometryManager](tma-js-sdk/components/biometry-manager.md) or `undefined` |
+| `useClosingBehaviorRaw`, `withClosingBehaviorRaw` | `useClosingBehavior`, `withClosingBehavior` | [ClosingBehavior](tma-js-sdk/components/closing-behavior.md)                |
+| `useCloudStorageRaw`, `withCloudStorageRaw`       | `useCloudStorage`, `withCloudStorage`       | [CloudStorage](tma-js-sdk/components/cloud-storage.md)                      |
+| `useHapticFeedbackRaw`, `withHapticFeedbackRaw`   | `useHapticFeedback`, `withHapticFeedback`   | [HapticFeedback](tma-js-sdk/components/haptic-feedback.md)                  |
+| `useInitDataRaw`, `withInitDataRaw`               | `useInitData`, `withInitData`               | [InitData](tma-js-sdk/components/init-data.md)                              |
+| `useInvoiceRaw`, `withInvoiceRaw`                 | `useInvoice`, `withInvoice`                 | [Invoice](tma-js-sdk/components/invoice.md)                                 |
+|                                                   | `useLaunchParams`                           | [Launch params](tma-js-sdk/launch-parameters.md)                            |
+| `useMainButtonRaw`, `withMainButtonRaw`           | `useMainButton`, `withMainButton`           | [MainButton](tma-js-sdk/components/main-button.md)                          |
+| `useMiniAppRaw`, `withMiniAppRaw`                 | `useMiniApp`, `withMiniApp`                 | [MiniApp](tma-js-sdk/components/mini-app.md)                                |
+| `usePopupRaw`, `withPopupRaw`                     | `usePopup`, `withPopup`                     | [Popup](tma-js-sdk/components/popup.md)                                     |
+| `useQRScannerRaw`, `withQRScannerRaw`             | `useQRScanner`, `withQRScanner`             | [QRScanner](tma-js-sdk/components/qr-scanner.md)                            |
+| `useSettingsButtonRaw`, `withSettingsButtonRaw`   | `useSettingsButton`, `withSettingsButton`   | [SettingsButton](tma-js-sdk/components/settings-button.md)                  |
+| `useThemeParamsRaw`, `withThemeParamsRaw`         | `useThemeParams`, `withThemeParams`         | [ThemeParams](tma-js-sdk/components/theme-params.md)                        |
+| `useUtilsRaw`, `withUtilsRaw`                     | `useUtils`, `withUtils`                     | [Utils](tma-js-sdk/components/utils.md)                                     |
+| `useViewportRaw`, `withViewportRaw`               | `useViewport`, `withViewport`               | [Viewport](tma-js-sdk/components/viewport.md) or `undefined`                |
 
 ## Template
 
