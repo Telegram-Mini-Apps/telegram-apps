@@ -39,10 +39,10 @@ export const packagesSidebar = {
             },
             true,
           ],
-          'Methods and events': 'methods-and-events',
-          'Launch parameters': 'launch-parameters',
-          'Theme parameters': 'theme-parameters',
-          'Init data': [
+          'Methods and Events': 'methods-and-events',
+          'Launch Parameters': 'launch-parameters',
+          'Theme Parameters': 'theme-parameters',
+          'Init Data': [
             'init-data',
             {
               InitData: 'init-data',
