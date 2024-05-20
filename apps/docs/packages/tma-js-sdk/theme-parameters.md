@@ -1,4 +1,4 @@
-# Theme parameters
+# Theme Parameters
 
 This section of SDK covers the topic related
 to [theme parameters](../../platform/theming.md).

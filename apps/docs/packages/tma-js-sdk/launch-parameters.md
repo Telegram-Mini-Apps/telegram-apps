@@ -1,4 +1,4 @@
-# Launch parameters
+# Launch Parameters
 
 This section of SDK covers the topic related
 to [launch parameters](../../platform/launch-parameters.md).
