@@ -51,7 +51,13 @@ export const packagesSidebar = {
             },
             true,
           ],
-          'Navigation': 'navigation',
+          'Navigation': [
+            'navigation',
+            {
+              BrowserNavigator: 'browser-navigator',
+            },
+            true
+          ],
           'CSS Variables': 'css-variables',
         },
       ],
