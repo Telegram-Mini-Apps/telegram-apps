@@ -52,6 +52,7 @@ export const packagesSidebar = {
             true,
           ],
           'Navigation': 'navigation',
+          'CSS Variables': 'css-variables',
         },
       ],
       '@tma.js/sdk-react': '/tma-js-sdk-react',
