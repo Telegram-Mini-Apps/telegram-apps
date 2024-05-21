@@ -3,18 +3,21 @@ import {
   isDownKey,
   isEnterKey,
   isSpaceKey,
-  isUpKey, makeTheme,
+  isUpKey,
   Separator,
   useKeypress,
   useMemo,
-  usePrefix,
   useState,
-} from '@inquirer/prompts';
+} from '@inquirer/core';
 import ansiEscapes from 'ansi-escapes';
 import chalk from 'chalk';
 import figures from 'figures';
 
+import { lines } from '../utils/lines.js';
+import { usePrefix } from '../usePrefix.js';
 import { findTemplate } from '../templates.js';
+import { theme } from '../theme.js';
+import { spaces } from '../utils/spaces.js';
 import type { AnyTemplate, Framework, Language, SDK } from '../types.js';
 
 interface CreateSection<N, V> {
@@ -42,14 +45,8 @@ type Section =
 
 const { bold, green, blue } = chalk;
 
-function joinLines(...arr: (string | string[])[]): string {
-  return arr.flat(1).join('\n');
-}
-
-export const templatePrompt = createPrompt<AnyTemplate, {}>(
+export const promptTemplate = createPrompt<AnyTemplate, {}>(
   (_, done) => {
-    const theme = makeTheme({}, {});
-
     // List of all sections to be displayed.
     const sections = useMemo<Section[]>(() => [
       {
@@ -110,7 +107,7 @@ export const templatePrompt = createPrompt<AnyTemplate, {}>(
     // Prompt result.
     const [isDone, setIsDone] = useState(false);
 
-    const prefix = usePrefix({ theme });
+    const prefix = usePrefix('pending');
 
     // Currently selected template.
     const template = useMemo<AnyTemplate | undefined>(() => {
@@ -150,43 +147,38 @@ export const templatePrompt = createPrompt<AnyTemplate, {}>(
     const { style } = theme;
 
     if (isDone) {
-      const lang = {
-        js: 'JavaScript',
-        ts: 'TypeScript',
-      }[template!.language];
-      const sdk = {
-        telegram: 'Telegram SDK',
-        'tma.js': '@tma.js',
-      }[template!.sdk];
+      const lang = { js: 'JavaScript', ts: 'TypeScript' }[template!.language];
+      const sdk = { telegram: 'Telegram SDK', 'tma.js': '@tma.js' }[template!.sdk];
       const framework = {
         'react.js': 'React.js',
         'solid.js': 'Next.js',
         'next.js': 'Solid.js',
       }[template!.framework];
 
-      return `${green('✔')} ${style.message(
-        `You have selected template with technologies: ${blue(framework)}, ${blue(lang)} and ${blue(
-          sdk)}`,
-      )}`;
+      return spaces(
+        usePrefix('completed'),
+        style.message('Project technologies:'),
+        `${bold(blue(framework))}, ${bold(blue(lang))} and ${bold(blue(sdk))}`,
+      );
     }
 
     return `${
-      joinLines(
+      lines(
         // Message.
-        `${prefix} ${style.message(
+        spaces(prefix, style.message(
           'Please, select preferred technologies to scaffold your application.',
-        )}`,
+        )),
 
         // Selections table.
-        sections.map((section) => joinLines(
+        sections.map((section) => lines(
           bold(section.title),
           section.choices.map((choice) => {
-            const isActive = choices.indexOf(choice) === active;
-            const isSelected = selected[section.name] === choice.value;
-            const icon = isSelected ? green(figures.circleFilled) : figures.circle;
-            const cursor = isActive ? figures.pointer : ' ';
+            const icon = selected[section.name] === choice.value
+              ? green(figures.radioOn)
+              : figures.radioOff;
+            const cursor = choices.indexOf(choice) === active ? figures.pointer : ' ';
 
-            return `${cursor}${icon} ${choice.title}`;
+            return `${cursor} ${icon} ${choice.title}`;
           }),
         )),
 
@@ -196,15 +188,13 @@ export const templatePrompt = createPrompt<AnyTemplate, {}>(
         style.help(`(${[
           `${style.key('space')} to select`,
           `${style.key(figures.arrowUp)} and ${style.key(figures.arrowDown)} to change cursor`,
-          `${style.key('enter')} to proceed`,
         ].join(', ')})`),
 
         template
-          ? green(
-            `${bold(figures.tick)} A template utilizing these technologies was discovered. Press ${style.key(
-              'enter')} to proceed.`,
+          ? style.success(
+            `A template utilizing these technologies was discovered. Press ${style.key('enter')} to proceed.`,
           )
-          : style.error(`${bold(figures.warning)} Currently, no template exists that uses these technologies.`),
+          : style.error('Currently, no template exists that uses these technologies.'),
       )}${ansiEscapes.cursorHide}`;
   },
 );

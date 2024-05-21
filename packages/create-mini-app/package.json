@@ -31,7 +31,6 @@
     "build": "vite build --config vite.config.ts"
   },
   "devDependencies": {
-    "@types/inquirer": "^9.0.7",
     "@types/node": "^20.0.0",
     "rollup-plugin-preserve-shebang": "^1.0.1",
     "test-utils": "workspace:*",
@@ -41,7 +40,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@inquirer/prompts": "^4.3.2",
+    "@inquirer/core": "^8.2.1",
     "ansi-escapes": "^6.2.1",
     "chalk": "^5.3.0",
     "commander": "^12.0.0",
