@@ -10,11 +10,15 @@ import './InitDataPage.css';
 function getUserRows(user: User): DisplayDataRow[] {
   return [
     { title: 'id', value: user.id.toString() },
+    { title: 'username', value: user.username },
+    { title: 'photo_url', value: user.photoUrl },
     { title: 'last_name', value: user.lastName },
     { title: 'first_name', value: user.firstName },
     { title: 'is_bot', value: user.isBot },
     { title: 'is_premium', value: user.isPremium },
     { title: 'language_code', value: user.languageCode },
+    { title: 'allows_to_write_to_pm', value: user.allowsWriteToPm },
+    { title: 'added_to_attachment_menu', value: user.addedToAttachmentMenu },
   ];
 }
 
@@ -82,27 +86,27 @@ export const InitDataPage: FC = () => {
       <>
         <div className="init-data-page__section">
           <h2 className="init-data-page__section-title">Init data</h2>
-          <DisplayData rows={initDataRows} />
+          <DisplayData rows={initDataRows}/>
         </div>
 
         <div className="init-data-page__section">
           <h2 className="init-data-page__section-title">User</h2>
           {userRows
-            ? <DisplayData rows={userRows} />
+            ? <DisplayData rows={userRows}/>
             : <i>User information missing</i>}
         </div>
 
         <div className="init-data-page__section">
           <h2 className="init-data-page__section-title">Receiver</h2>
           {receiverRows
-            ? <DisplayData rows={receiverRows} />
+            ? <DisplayData rows={receiverRows}/>
             : <i>Receiver information missing</i>}
         </div>
 
         <div className="init-data-page__section">
           <h2 className="init-data-page__section-title">Chat</h2>
           {chatRows
-            ? <DisplayData rows={chatRows} />
+            ? <DisplayData rows={chatRows}/>
             : <i>Chat information missing</i>}
         </div>
       </>
@@ -116,7 +120,7 @@ export const InitDataPage: FC = () => {
         <>
           This page displays application
           {' '}
-          <Link to="https://docs.telegram-mini-apps.com/platform/launch-parameters">
+          <Link to="https://docs.telegram-mini-apps.com/platform/init-data">
             init data
           </Link>
           .
