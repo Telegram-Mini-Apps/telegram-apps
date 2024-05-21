@@ -80,6 +80,26 @@ const navigator = createBrowserNavigatorFromLocation({
 });
 ```
 
+## `initNavigator`
+
+The `initNavigator` function is responsible for creating a `BrowserNavigator` instance
+using previously saved navigator state. It also automatically saves it in the session storage
+for future state restoration.
+
+This function accepts session storage key name, which will contain navigator's state and an 
+optional object, representing navigator constructor options.
+
+```ts
+import { initNavigator } from '@tma.js/sdk';
+
+const n = initNavigator('app-navigator-state', {
+  hashMode: 'slash',
+});
+```
+
+In case, the function was unable to restore the navigator using the session storage, it will
+utilize the `createBrowserNavigatorFromLocation` function.
+
 ## Attaching
 
 Creating an instance of `BrowserNavigator` and using its methods doesn't automatically update the
