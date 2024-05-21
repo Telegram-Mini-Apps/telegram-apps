@@ -1,5 +1,11 @@
 # @tma.js/create-mini-app
 
+## 0.1.6
+
+### Patch Changes
+
+- ec068a0: Fix git folder removal command. Refactor whole package.
+
 ## 0.1.5
 
 ### Patch Changes
