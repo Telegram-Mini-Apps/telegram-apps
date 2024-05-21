@@ -3,11 +3,13 @@ import { spawn } from 'node:child_process';
 import chalk from 'chalk';
 import ora from 'ora';
 
+import { theme } from './theme.js';
+
 interface Options {
   /**
    * Shell command to run.
    */
-  command: string;
+  command: string | (() => Promise<any>);
   /**
    * Spinner title.
    */
@@ -22,18 +24,52 @@ interface Options {
   titleFail?: string | ((outputOrCode: string | number) => string);
 }
 
+function formatError(e: unknown): string {
+  return e instanceof Error
+    ? e.message
+    : typeof e === 'string'
+      ? e
+      : JSON.stringify(e);
+}
+
 /**
  * Spawns new process with spinner.
  * @param options - function options.
  */
-export function spawnWithSpinner(options: Options): Promise<void> {
-  const {
-    command,
-    title,
-    titleFail,
-    titleSuccess,
-  } = options;
-  const spinner = ora({ text: title, hideCursor: false }).start();
+export function spawnWithSpinner({
+  command,
+  title,
+  titleFail,
+  titleSuccess,
+}: Options): Promise<void> {
+  const { style } = theme;
+  const spinner = ora({
+    text: style.message(title),
+    hideCursor: false,
+  }).start();
+
+  const success = titleSuccess && style.message(titleSuccess);
+
+  if (typeof command === 'function') {
+    return command()
+      .then(() => {
+        spinner.succeed(success);
+      })
+      .catch((e) => {
+        const errString = formatError(e);
+        spinner.fail(
+          style.error(
+            titleFail
+              ? typeof titleFail === 'string'
+                ? titleFail
+                : titleFail(errString)
+              : errString,
+          ),
+        );
+
+        throw e;
+      });
+  }
 
   return new Promise((res, rej) => {
     const proc = spawn(command, { shell: true });
@@ -55,17 +91,19 @@ export function spawnWithSpinner(options: Options): Promise<void> {
 
       // If error code was not returned. It means, process completed successfully.
       if (!code) {
-        spinner.succeed(titleSuccess);
+        spinner.succeed(success);
         res();
         return;
       }
 
       const errString = errBuf.length ? errBuf.toString() : `Action error code: ${code}`;
-      const errorMessage = titleFail
-        ? typeof titleFail === 'string'
-          ? titleFail
-          : titleFail(errString)
-        : errString;
+      const errorMessage = style.error(
+        titleFail
+          ? typeof titleFail === 'string'
+            ? titleFail
+            : titleFail(errString)
+          : errString,
+      );
 
       spinner.fail(errorMessage);
       rej(new Error(errorMessage));

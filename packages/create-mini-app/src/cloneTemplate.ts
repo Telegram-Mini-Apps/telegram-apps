@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { spawnWithSpinner } from './spawnWithSpinner.js';
 import type { TemplateRepository } from './types.js';
 
-const { bold, blue, red } = chalk;
+const { bold, blue } = chalk;
 
 /**
  * Clones the template.
@@ -15,14 +15,17 @@ const { bold, blue, red } = chalk;
 export async function cloneTemplate(
   rootDir: string,
   {
-    clone: {
-      https,
-      ssh,
-    },
+    clone: { https, ssh },
     link,
   }: TemplateRepository,
 ): Promise<void> {
-  const titleSuccess = bold(`Template was cloned: ${blue(link)}`);
+  const titleSuccess = bold(`Cloned template: ${blue(link)}`);
+
+  function formatError(outputOrCode: string | number): string {
+    return typeof outputOrCode === 'string'
+      ? `Error: ${bold(outputOrCode)}`
+      : `Error code: ${bold(outputOrCode)}`;
+  }
 
   // Clone the template using https.
   try {
@@ -30,11 +33,7 @@ export async function cloneTemplate(
       title: `Cloning the template from GitHub (HTTPS): ${bold(blue(link))}`,
       command: `git clone "${https}" "${rootDir}"`,
       titleFail(outputOrCode) {
-        return `Failed to load the template using HTTPS. ${
-          typeof outputOrCode === 'string'
-            ? `Error: ${red(outputOrCode)}`
-            : `Error code: ${red(outputOrCode)}`
-        }`;
+        return `Failed to load the template using HTTPS. ${formatError(outputOrCode)}`;
       },
       titleSuccess,
     });
@@ -45,13 +44,9 @@ export async function cloneTemplate(
   // Clone the template using ssh.
   await spawnWithSpinner({
     title: `Cloning the template from GitHub (SSH): ${bold(blue(link))}`,
-    command: `git clone ${ssh} ${rootDir}`,
+    command: `git clone "${ssh}" "${rootDir}"`,
     titleFail(outputOrCode) {
-      return `Failed to load the template using SSH. ${
-        typeof outputOrCode === 'string'
-          ? `Error: ${red(outputOrCode)}`
-          : `Error code: ${red(outputOrCode)}`
-      }`;
+      return `Failed to load the template using SSH. ${formatError(outputOrCode)}`;
     },
     titleSuccess,
   });
