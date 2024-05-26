@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 import process from 'node:process';
 import { rm } from 'node:fs/promises';
+import { resolve } from 'node:path';
 
 import chalk from 'chalk';
 import { program } from 'commander';
 
 import { cloneTemplate } from './cloneTemplate.js';
 import { isGitInstalled } from './isGitInstalled.js';
-import { promptRootDir } from './prompts/promptRootDir.js';
 import { promptTemplate } from './prompts/promptTemplate.js';
+import { promptDirName } from './prompts/promptDirName.js';
 import { spawnWithSpinner } from './spawnWithSpinner.js';
+import { lines } from './utils/lines.js';
+import { theme } from './theme.js';
 import type { TemplateRepository } from './types.js';
 
 import packageJson from '../package.json';
-import { resolve } from 'node:path';
-import { lines } from './utils/lines.js';
-import { theme } from './theme.js';
 
 const { red } = chalk;
 
@@ -26,6 +26,13 @@ program
   .action(async () => {
     console.clear();
 
+    const { style } = theme;
+    console.log([
+      style.message(packageJson.name + '@' + packageJson.version),
+      packageJson.description,
+      '',
+    ].join('\n'));
+
     // Check if git is installed.
     if (!await isGitInstalled()) {
       console.error('To run this CLI tool, you must have git installed. Installation guide: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git');
@@ -35,7 +42,9 @@ program
     // Prompt the project root directory name.
     let rootDir: string | null = null;
     try {
-      rootDir = await promptRootDir({});
+      rootDir = await promptDirName({
+        defaultValue: 'mini-app',
+      });
     } catch {
       process.exit(0);
     }
