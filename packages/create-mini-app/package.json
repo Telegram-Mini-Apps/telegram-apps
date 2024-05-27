@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/create-mini-app",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "CLI tool to scaffold your new mini application on the Telegram Mini Apps platform.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",

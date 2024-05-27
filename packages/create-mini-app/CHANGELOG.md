@@ -1,5 +1,11 @@
 # @tma.js/create-mini-app
 
+## 0.2.0
+
+### Minor Changes
+
+- c0782ec: Rework visual part of the CLI. Add Git repo prompt.
+
 ## 0.1.6
 
 ### Patch Changes
