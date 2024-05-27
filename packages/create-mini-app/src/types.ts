@@ -6,7 +6,7 @@ export interface TemplateRepository {
   link: string;
 }
 
-export interface AnyTemplate {
+export interface Template {
   sdk: SDK;
   language: Language;
   framework: Framework;

@@ -6,15 +6,16 @@ import {
   useKeypress,
 } from '@inquirer/core';
 import { existsSync } from 'node:fs';
-import { basename, resolve } from 'node:path';
-import figures from 'figures';
 
 import { theme } from '../theme.js';
-import { usePrefix } from '../usePrefix.js';
+import { usePromptPrefix } from '../utils/usePromptPrefix.js';
 import { spaces } from '../utils/spaces.js';
+import { useInputPrefix } from '../utils/useInputPrefix.js';
+import { lines } from '../utils/lines.js';
+import { resolve } from 'node:path';
 
 /**
- * Checks if passed value is value. Returns error text.
+ * Checks if passed value is correct. Returns error text.
  * @param value - value to validate.
  */
 function validate(value: string): string | undefined {
@@ -22,13 +23,16 @@ function validate(value: string): string | undefined {
     return 'Directory name should not be empty.';
   }
 
-  const dir = resolve(value);
-  if (existsSync(dir)) {
-    return `Directory already exists: ${dir}`;
+  if (['.', '..'].includes(value)) {
+    return 'Value is not valid directory name.';
   }
 
-  if (value !== basename(value)) {
-    return `Value "${value}" contains invalid symbols.`;
+  if (!value.match(/^[a-zA-Z0-9\-.]+$/)) {
+    return 'Value contains invalid symbols.';
+  }
+
+  if (existsSync(resolve(value))) {
+    return `Directory "${value}" already exists`;
   }
 }
 
@@ -43,28 +47,33 @@ export const promptDirName = createPrompt<string, Config>(
   ({ defaultValue }, done) => {
     const [value, setValue] = useState('');
     const [error, setError] = useState<string>();
-    const [confirmed, setConfirmed] = useState(false);
-
-    useEffect(() => {
-      if (confirmed) {
-        done(value);
-      }
-    }, [confirmed, done, value]);
+    const [completed, setCompleted] = useState(false);
 
     function confirm(value: string): void {
       setValue(value);
       setError(undefined);
-      setConfirmed(true);
+      setCompleted(true);
       done(value);
     }
 
+    useEffect(() => {
+      if (completed) {
+        done(value);
+      }
+    }, [completed, done, value]);
+
     useKeypress((key, rl) => {
-      if (confirmed) {
+      if (completed) {
         return;
       }
 
       if (isEnterKey(key)) {
         if (!value) {
+          const err = defaultValue && validate(defaultValue);
+          if (err) {
+            return setError(err);
+          }
+
           return defaultValue
             ? confirm(defaultValue)
             : setError('You have to specify the directory.');
@@ -81,18 +90,19 @@ export const promptDirName = createPrompt<string, Config>(
       setValue(input);
     });
 
-    const { style } = theme;
-
     return [
       spaces(
-        usePrefix(confirmed ? 'completed' : 'pending'),
-        style.message('Directory name:'),
-        style.muted(figures.pointerSmall),
-        confirmed
-          ? style.answer(value)
-          : value || (defaultValue ? style.muted(defaultValue) : ''),
+        usePromptPrefix(completed),
+        theme.style.message('Directory name:'),
+        useInputPrefix(completed),
+        completed
+          ? theme.style.answer(value)
+          : value || (defaultValue ? theme.style.muted(defaultValue) : ''),
       ),
-      error && style.error(error),
+      completed ? undefined : lines(
+        theme.style.help('This directory will be used as a root directory for the project. It is allowed to use alphanumeric latin letters, dashes and dots.'),
+        error ? theme.style.error(error) : undefined,
+      ),
     ];
   },
 );

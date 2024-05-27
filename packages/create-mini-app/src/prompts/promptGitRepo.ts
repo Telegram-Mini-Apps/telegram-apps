@@ -4,22 +4,18 @@ import {
   isEnterKey,
   useEffect,
   useKeypress,
-  Separator,
 } from '@inquirer/core';
-import { existsSync } from 'node:fs';
-import { basename } from 'node:path';
 import { URL } from 'node:url';
-import figures from 'figures';
 import chalk from 'chalk';
 
 import { theme } from '../theme.js';
-import { usePrefix } from '../usePrefix.js';
-import { toAbsolute } from '../toAbsolute.js';
+import { usePromptPrefix } from '../utils/usePromptPrefix.js';
 import { spaces } from '../utils/spaces.js';
 import { lines } from '../utils/lines.js';
+import { useInputPrefix } from '../utils/useInputPrefix.js';
 
 /**
- * Checks if passed value is value. Returns error text.
+ * Checks if passed value is correct. Returns error text.
  * @param value - value to validate.
  */
 function validate(value: string): string | undefined {
@@ -34,34 +30,32 @@ function validate(value: string): string | undefined {
   } catch {
   }
 
-
+  // Check if it is SSH connection string.
+  if (value.match(/\w+@[\w\-.]+:[\w\-]+\/[\w.\/]+/)) {
+    return;
+  }
+  return 'Value is not considered as URL link or SSH connection string.';
 }
 
 export const promptGitRepo = createPrompt<string, {}>((_, done) => {
   const [value, setValue] = useState('');
   const [error, setError] = useState<string>();
-  const [confirmed, setConfirmed] = useState(false);
-
-  const { style } = theme;
+  const [completed, setCompleted] = useState(false);
 
   function confirm(value: string): void {
     setValue(value);
     setError(undefined);
-    setConfirmed(true);
+    setCompleted(true);
     done(value);
   }
 
   useEffect(() => {
-    if (confirmed) {
+    if (completed) {
       done(value);
     }
-  }, [confirmed, done, value]);
+  }, [completed, done, value]);
 
   useKeypress((key, rl) => {
-    if (confirmed) {
-      return;
-    }
-
     if (isEnterKey(key)) {
       if (!value) {
         return confirm('');
@@ -80,23 +74,23 @@ export const promptGitRepo = createPrompt<string, {}>((_, done) => {
 
   return [
     spaces(
-      usePrefix(confirmed ? 'completed' : 'pending'),
-      style.message('Git remote repository URL:'),
-      style.muted(figures.pointerSmall),
-      confirmed ? style.answer(value) : value,
+      usePromptPrefix(completed),
+      theme.style.message('Git remote repository URL:'),
+      useInputPrefix(completed),
+      completed
+        ? theme.style.answer(value ? value : chalk.italic('not specified'))
+        : value,
     ),
-    style.help(
-      lines(
-        new Separator().separator,
-        'This value will be used to connect with your remote Git repository. It should either be an HTTPS link or SSH connection string.',
-        '',
-        `Roughly, it will be used in the command:\n${chalk.italic('git remote add origin {value}')}`,
-        new Separator().separator,
-        chalk.bold('Examples'),
-        'SSH: git@github.com:user/repo.git',
-        'HTTPS: https://github.com/heyqbnk/abc.git',
-        new Separator().separator,
-        `Leave empty and press ${style.key('enter')} to skip.`,
+    lines(
+      error ? theme.style.error(error) : undefined,
+      !completed && theme.style.help(
+        lines(
+          'This value will be used to connect created project with your remote Git repository. It should either be an HTTPS link or SSH connection string.',
+          `Leave value empty and press ${theme.style.key('enter')} to skip this step.`,
+          chalk.bold('Examples'),
+          'SSH: git@github.com:user/repo.git',
+          'URL: https://github.com/user/repo.git',
+        ),
       ),
     ),
   ];

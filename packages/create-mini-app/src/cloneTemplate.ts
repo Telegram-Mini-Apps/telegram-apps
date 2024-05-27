@@ -3,8 +3,6 @@ import chalk from 'chalk';
 import { spawnWithSpinner } from './spawnWithSpinner.js';
 import type { TemplateRepository } from './types.js';
 
-const { bold, blue } = chalk;
-
 /**
  * Clones the template.
  * @param rootDir - root directory.
@@ -19,35 +17,25 @@ export async function cloneTemplate(
     link,
   }: TemplateRepository,
 ): Promise<void> {
-  const titleSuccess = bold(`Cloned template: ${blue(link)}`);
+  const titleSuccess = `Cloned template: ${chalk.blue(link)}`;
 
-  function formatError(outputOrCode: string | number): string {
-    return typeof outputOrCode === 'string'
-      ? `Error: ${bold(outputOrCode)}`
-      : `Error code: ${bold(outputOrCode)}`;
-  }
-
-  // Clone the template using https.
+  // Clone the template using HTTPS.
   try {
     await spawnWithSpinner({
-      title: `Cloning the template from GitHub (HTTPS): ${bold(blue(link))}`,
       command: `git clone "${https}" "${rootDir}"`,
-      titleFail(outputOrCode) {
-        return `Failed to load the template using HTTPS. ${formatError(outputOrCode)}`;
-      },
+      title: `Cloning the template from GitHub (HTTPS): ${chalk.bold.blue(https)}`,
+      titleFail: (error) => `Failed to load the template using HTTPS. ${error}`,
       titleSuccess,
     });
     return;
-  } catch (e) { /* empty */
+  } catch (e) {
   }
 
-  // Clone the template using ssh.
+  // Clone the template using SSH.
   await spawnWithSpinner({
-    title: `Cloning the template from GitHub (SSH): ${bold(blue(link))}`,
     command: `git clone "${ssh}" "${rootDir}"`,
-    titleFail(outputOrCode) {
-      return `Failed to load the template using SSH. ${formatError(outputOrCode)}`;
-    },
+    title: `Cloning the template from GitHub (SSH): ${chalk.bold.blue(ssh)}`,
+    titleFail: (error) => `Failed to load the template using SSH. ${error}`,
     titleSuccess,
   });
 }

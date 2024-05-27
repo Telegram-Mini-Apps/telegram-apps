@@ -12,11 +12,12 @@ export const theme = makeTheme({
     },
     muted(text: string): string {
       return chalk.dim(text);
-    }
+    },
   },
   prefixes: {
     pending: chalk.blue('?'),
     info: chalk.blue('i'),
     completed: chalk.green(figures.tick),
+    pointer: chalk.green(figures.pointer),
   },
 });

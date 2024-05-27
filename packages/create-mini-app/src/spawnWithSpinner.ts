@@ -5,11 +5,7 @@ import ora from 'ora';
 
 import { theme } from './theme.js';
 
-interface Options {
-  /**
-   * Shell command to run.
-   */
-  command: string | (() => Promise<any>);
+interface SharedOptions {
   /**
    * Spinner title.
    */
@@ -21,7 +17,21 @@ interface Options {
   /**
    * Text displayed when process failed.
    */
-  titleFail?: string | ((outputOrCode: string | number) => string);
+  titleFail?: string | ((error: string) => string);
+}
+
+interface TerminalOptions extends SharedOptions {
+  /**
+   * Shell command to run.
+   */
+  command: string;
+}
+
+interface OperationOptions extends SharedOptions {
+  /**
+   * Action to execute.
+   */
+  command: () => Promise<any>;
 }
 
 function formatError(e: unknown): string {
@@ -41,7 +51,7 @@ export function spawnWithSpinner({
   title,
   titleFail,
   titleSuccess,
-}: Options): Promise<void> {
+}: TerminalOptions | OperationOptions): Promise<void> {
   const { style } = theme;
   const spinner = ora({
     text: style.message(title),
@@ -82,7 +92,7 @@ export function spawnWithSpinner({
       errBuf = Buffer.concat([errBuf, buf]);
 
       // Update the spinner text to let user know, process is working.
-      spinner.suffixText = chalk.bgGray(chalk.italic(buf.toString()));
+      spinner.suffixText = chalk.bgGray.italic(buf.toString());
     });
 
     proc.on('exit', (code) => {
@@ -96,7 +106,7 @@ export function spawnWithSpinner({
         return;
       }
 
-      const errString = errBuf.length ? errBuf.toString() : `Action error code: ${code}`;
+      const errString = errBuf.length ? errBuf.toString() : `Error code: ${code}`;
       const errorMessage = style.error(
         titleFail
           ? typeof titleFail === 'string'
