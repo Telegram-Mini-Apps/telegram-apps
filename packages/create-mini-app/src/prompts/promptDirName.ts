@@ -79,6 +79,9 @@ export const promptDirName = createPrompt<string, Config>(
             : setError('You have to specify the directory.');
         }
         if (error) {
+          // We are doing it twice, as long as after pressing the enter button, we will have
+          // 2 lines.
+          rl.clearLine(0);
           rl.clearLine(0);
           rl.write(value);
         }
