@@ -9,11 +9,15 @@ export const theme = makeTheme({
     },
     success(text: string): string {
       return chalk.green(text);
-    }
+    },
+    muted(text: string): string {
+      return chalk.dim(text);
+    },
   },
   prefixes: {
-    pending: chalk.green('?'),
+    pending: chalk.blue('?'),
     info: chalk.blue('i'),
     completed: chalk.green(figures.tick),
+    pointer: chalk.green(figures.pointer),
   },
 });

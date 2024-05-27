@@ -1,4 +1,4 @@
-import type { AnyTemplate, Framework, Language, SDK, TemplateRepository } from './types.js';
+import type { Template, Framework, Language, SDK, TemplateRepository } from './types.js';
 
 function createRepository(name: string): TemplateRepository {
   return {
@@ -29,7 +29,7 @@ const settings = {
 /**
  * A list of the templates known to the CLI.
  */
-const templates: AnyTemplate[] = [];
+const templates: Template[] = [];
 
 for (const language in settings) {
   const languageSettings = settings[language as keyof typeof settings];
@@ -58,7 +58,7 @@ export function findTemplate(
   language: Language,
   sdk: SDK,
   framework: Framework,
-): AnyTemplate | undefined {
+): Template | undefined {
   return templates.find((t) => (
     t.sdk === sdk
     && t.language === language

@@ -1,7 +1,7 @@
 {
   "name": "@tma.js/create-mini-app",
   "version": "0.1.6",
-  "description": "",
+  "description": "CLI tool to scaffold your new mini application on the Telegram Mini Apps platform.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
   "repository": {
@@ -27,8 +27,9 @@
   "scripts": {
     "lint": "eslint src",
     "lint:fix": "pnpm run lint --fix",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "build": "vite build --config vite.config.ts"
+    "typecheck": "tsc --noEmit",
+    "build": "vite build",
+    "watch": "vite build --watch"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
