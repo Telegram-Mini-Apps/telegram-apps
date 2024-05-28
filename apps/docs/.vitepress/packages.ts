@@ -39,6 +39,7 @@ export const packagesSidebar = {
             },
             true,
           ],
+          'Environment': 'environment',
           'Methods and Events': 'methods-and-events',
           'Launch Parameters': 'launch-parameters',
           'Theme Parameters': 'theme-parameters',
