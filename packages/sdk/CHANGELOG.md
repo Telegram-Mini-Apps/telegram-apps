@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 2.3.0
+
+### Minor Changes
+
+- c00529a: Implement mockTelegramEnv function.
+
 ## 2.2.0
 
 ### Minor Changes
