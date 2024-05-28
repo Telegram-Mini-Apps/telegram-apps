@@ -1,5 +1,12 @@
 # my-application
 
+## 0.0.6
+
+### Patch Changes
+
+- @tma.js/sdk-solid@2.1.5
+- @tma.js/solid-router-integration@5.0.0
+
 ## 0.0.5
 
 ### Patch Changes

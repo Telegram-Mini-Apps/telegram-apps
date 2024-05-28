@@ -1,5 +1,12 @@
 # @tma.js/sdk-react
 
+## 2.2.1
+
+### Patch Changes
+
+- Updated dependencies [c00529a]
+  - @tma.js/sdk@2.3.0
+
 ## 2.2.0
 
 ### Minor Changes
