@@ -1,9 +1,8 @@
-import { type FC, type ReactNode, useMemo } from 'react';
+import { type FC, useMemo } from 'react';
 import { useInitData, useLaunchParams, type User } from '@tma.js/sdk-react';
+import { List, Placeholder } from '@telegram-apps/telegram-ui';
 
 import { DisplayData, type DisplayDataRow } from '@/components/DisplayData/DisplayData.tsx';
-import { Link } from '@/components/Link/Link.tsx';
-import { Page } from '@/components/Page/Page.tsx';
 
 import './InitDataPage.css';
 
@@ -77,57 +76,26 @@ export const InitDataPage: FC = () => {
     ];
   }, [initData]);
 
-  let contentNode: ReactNode;
-
   if (!initDataRows) {
-    contentNode = <i>Application was launched with missing init data</i>;
-  } else {
-    contentNode = (
-      <>
-        <div className="init-data-page__section">
-          <h2 className="init-data-page__section-title">Init data</h2>
-          <DisplayData rows={initDataRows}/>
-        </div>
-
-        <div className="init-data-page__section">
-          <h2 className="init-data-page__section-title">User</h2>
-          {userRows
-            ? <DisplayData rows={userRows}/>
-            : <i>User information missing</i>}
-        </div>
-
-        <div className="init-data-page__section">
-          <h2 className="init-data-page__section-title">Receiver</h2>
-          {receiverRows
-            ? <DisplayData rows={receiverRows}/>
-            : <i>Receiver information missing</i>}
-        </div>
-
-        <div className="init-data-page__section">
-          <h2 className="init-data-page__section-title">Chat</h2>
-          {chatRows
-            ? <DisplayData rows={chatRows}/>
-            : <i>Chat information missing</i>}
-        </div>
-      </>
-    );
+    return (
+      <Placeholder
+        header="Oops"
+        description="Application was launched with missing init data"
+      >
+        <img
+          alt="Telegram sticker"
+          src="https://xelene.me/telegram.gif"
+          style={{ display: 'block', width: '144px', height: '144px' }}
+        />
+      </Placeholder>
+    )
   }
-
   return (
-    <Page
-      title="Init Data"
-      disclaimer={(
-        <>
-          This page displays application
-          {' '}
-          <Link to="https://docs.telegram-mini-apps.com/platform/init-data">
-            init data
-          </Link>
-          .
-        </>
-      )}
-    >
-      {contentNode}
-    </Page>
-  );
+    <List>
+      <DisplayData header={'Init Data'} rows={initDataRows}/>
+      {userRows && <DisplayData header={'User'} rows={userRows}/>}
+      {receiverRows && <DisplayData header={'Receiver'} rows={receiverRows}/>}
+      {chatRows && <DisplayData header={'Chat'} rows={chatRows}/>}
+    </List>
+  )
 };

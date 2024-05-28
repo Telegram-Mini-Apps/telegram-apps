@@ -1,40 +1,59 @@
-import { isRGB, type RGB as RGBType } from '@tma.js/sdk-react';
+import { isRGB } from '@tma.js/sdk-react';
+import { Cell, Checkbox, Section } from '@telegram-apps/telegram-ui';
 import type { FC, ReactNode } from 'react';
 
 import { RGB } from '@/components/RGB/RGB.tsx';
+import { Link } from '@/components/Link/Link.tsx';
 
 import './DisplayData.css';
 
-export interface DisplayDataRow {
-  title: string;
-  value?: RGBType | string | boolean | ReactNode;
-}
+export type DisplayDataRow =
+  & { title: string }
+  & (
+  | { type: 'link'; value?: string }
+  | { value: ReactNode }
+  )
 
 export interface DisplayDataProps {
+  header?: ReactNode;
+  footer?: ReactNode;
   rows: DisplayDataRow[];
 }
 
-export const DisplayData: FC<DisplayDataProps> = ({ rows }) => (
-  <div>
-    {rows.map(({ title, value }, idx) => {
+export const DisplayData: FC<DisplayDataProps> = ({ header, rows }) => (
+  <Section header={header}>
+    {rows.map((item, idx) => {
       let valueNode: ReactNode;
 
-      if (value === undefined) {
+      if (item.value === undefined) {
         valueNode = <i>empty</i>;
-      } else if (typeof value === 'string' && isRGB(value)) {
-        valueNode = <RGB color={value} />;
-      } else if (typeof value === 'boolean') {
-        valueNode = value ? '✔️' : '❌';
       } else {
-        valueNode = value;
+        if ('type' in item) {
+          valueNode = <Link to={item.value}>Open</Link>;
+        } else if (typeof item.value === 'string') {
+          valueNode = isRGB(item.value)
+            ? <RGB color={item.value}/>
+            : item.value;
+        } else if (typeof item.value === 'boolean') {
+          valueNode = <Checkbox checked={item.value} disabled/>;
+        } else {
+          valueNode = item.value;
+        }
       }
 
       return (
-        <div className="display-data__line" key={idx}>
-          <span className="display-data__line-title">{title}</span>
-          <span className="display-data__line-value">{valueNode}</span>
-        </div>
+        <Cell
+          className='display-data__line'
+          subhead={item.title}
+          readOnly
+          multiline={true}
+          key={idx}
+        >
+          <span className='display-data__line-value'>
+            {valueNode}
+          </span>
+        </Cell>
       );
     })}
-  </div>
+  </Section>
 );

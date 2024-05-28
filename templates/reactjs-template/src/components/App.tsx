@@ -3,11 +3,12 @@ import {
   bindMiniAppCSSVars,
   bindThemeParamsCSSVars,
   bindViewportCSSVars,
-  initNavigator,
+  initNavigator, useLaunchParams,
   useMiniApp,
   useThemeParams,
   useViewport,
 } from '@tma.js/sdk-react';
+import { AppRoot } from '@telegram-apps/telegram-ui';
 import { type FC, useEffect, useMemo } from 'react';
 import {
   Navigate,
@@ -19,6 +20,7 @@ import {
 import { routes } from '@/navigation/routes.tsx';
 
 export const App: FC = () => {
+  const lp = useLaunchParams();
   const miniApp = useMiniApp();
   const themeParams = useThemeParams();
   const viewport = useViewport();
@@ -48,11 +50,16 @@ export const App: FC = () => {
   }, [navigator]);
 
   return (
-    <Router location={location} navigator={reactNavigator}>
-      <Routes>
-        {routes.map((route) => <Route key={route.path} {...route} />)}
-        <Route path="*" element={<Navigate to="/"/>}/>
-      </Routes>
-    </Router>
+    <AppRoot
+      appearance={miniApp.isDark ? 'dark' : 'light'}
+      platform={['macos', 'ios'].includes(lp.platform) ? 'ios' : 'base'}
+    >
+      <Router location={location} navigator={reactNavigator}>
+        <Routes>
+          {routes.map((route) => <Route key={route.path} {...route} />)}
+          <Route path='*' element={<Navigate to='/'/>}/>
+        </Routes>
+      </Router>
+    </AppRoot>
   );
 };
