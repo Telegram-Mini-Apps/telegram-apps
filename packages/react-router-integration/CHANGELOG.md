@@ -1,5 +1,12 @@
 # @tma.js/react-router-integration
 
+## 5.0.0
+
+### Patch Changes
+
+- Updated dependencies [149dc29]
+  - @tma.js/sdk@2.4.0
+
 ## 4.0.0
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 2.4.0
+
+### Minor Changes
+
+- 149dc29: Improve `QRScanner.open()` method. Improve typings for the `request` function.
+
 ## 2.3.0
 
 ### Minor Changes
