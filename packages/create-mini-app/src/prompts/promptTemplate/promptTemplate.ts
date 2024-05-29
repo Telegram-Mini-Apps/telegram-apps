@@ -75,7 +75,7 @@ export const promptTemplate = createPrompt<Template, {}>(
 
     // Each column widths along with generated rows data.
     const [lengths, rows] = useMemo(() => {
-      const lengths = new Array(sections.length).fill(0);
+      const lengths = new Array<number>(sections.length).fill(0);
       const rows: Cell[][] = [[]];
       let maxChoicesCount = 0;
 
@@ -229,12 +229,12 @@ export const promptTemplate = createPrompt<Template, {}>(
       ),
 
       // Help tip.
-      theme.style.help(`${[
+      theme.style.help([
         `${theme.style.key('space')} to select`,
         theme.style.key(figures.arrowUp),
         theme.style.key(figures.arrowDown),
         `${theme.style.key(figures.arrowLeft)} and ${theme.style.key(figures.arrowDown)} to change cursor`,
-      ].join(', ')}`),
+      ].join(', ')),
 
       ansiEscapes.cursorHide,
     );

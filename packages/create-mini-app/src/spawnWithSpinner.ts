@@ -88,7 +88,7 @@ export function spawnWithSpinner({
     let errBuf = Buffer.from([]);
 
     // When something was received from the error channel, we append it to the final buffer.
-    proc.stderr.on('data', (buf) => {
+    proc.stderr.on('data', (buf: Buffer) => {
       errBuf = Buffer.concat([errBuf, buf]);
 
       // Update the spinner text to let user know, process is working.
