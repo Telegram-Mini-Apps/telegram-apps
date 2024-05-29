@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "src/**/*.test.ts"
+  ]
+}
