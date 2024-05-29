@@ -18,7 +18,7 @@
     "packages:typecheck": "turbo run typecheck --filter=\"./packages/*\""
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.1",
+    "@changesets/cli": "^2.27.5",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@turbo/gen": "^1.13.3",
     "@vitest/coverage-v8": "^1.6.0",
