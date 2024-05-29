@@ -2,6 +2,8 @@
 
 # @tma.js
 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
 Mono-repository, containing all the packages, connected with comfortable and safe TypeScript
 development on Telegram Mini Apps platform. To learn more about specific packages, follow
 their own [documentations](https://docs.telegram-mini-apps.com).

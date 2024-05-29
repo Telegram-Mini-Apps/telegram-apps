@@ -1,0 +1,1 @@
+exec < /dev/console && cz --hook || true
