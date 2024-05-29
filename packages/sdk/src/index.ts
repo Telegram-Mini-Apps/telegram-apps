@@ -12,7 +12,12 @@ export * from '@/bridge/methods/types/index.js';
 export { setTargetOrigin, targetOrigin } from '@/bridge/target-origin.js';
 export { captureSameReq } from '@/bridge/utils/captureSameReq.js';
 export { invokeCustomMethod } from '@/bridge/utils/invokeCustomMethod.js';
-export { request, type RequestOptions } from '@/bridge/utils/request.js';
+export {
+  request,
+  type RequestOptions,
+  type RequestCapture,
+  type RequestResult,
+} from '@/bridge/utils/request.js';
 
 /**
  * Classnames.
@@ -81,7 +86,7 @@ export type {
   Chat,
   ChatType,
   User,
-  InitDataParsed
+  InitDataParsed,
 } from '@/components/InitData/types.js';
 
 // Invoice.
@@ -139,6 +144,7 @@ export type {
   QRScannerEventName,
   QRScannerEvents,
   QRScannerState,
+  QRScannerOpenOptions
 } from '@/components/QRScanner/types.js';
 
 // SettingsButton.

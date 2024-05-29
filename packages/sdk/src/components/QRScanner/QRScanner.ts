@@ -3,7 +3,7 @@ import { WithSupportsAndTrackableState } from '@/classes/WithSupportsAndTrackabl
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { Version } from '@/version/types.js';
 
-import type { QRScannerState } from './types.js';
+import { QRScannerOpenOptions, QRScannerState } from './types.js';
 
 // TODO: Usage
 
@@ -41,13 +41,26 @@ export class QRScanner extends WithSupportsAndTrackableState<QRScannerState, 'cl
    * Opens scanner with specified title shown to user. Method returns promise
    * with scanned QR content in case, it was scanned. It will contain null in
    * case, scanner was closed.
+   * @param options - method options.
+   */
+  async open(options?: QRScannerOpenOptions): Promise<string | null>;
+  /**
+   * Opens scanner with specified title shown to user. Method returns promise
+   * with scanned QR content in case, it was scanned. It will contain null in
+   * case, scanner was closed.
    * @param text - title to display.
    */
-  async open(text?: string): Promise<string | null> {
+  async open(text?: string): Promise<string | null>;
+  async open(textOrOptions?: QRScannerOpenOptions | string): Promise<string | null> {
     if (this.isOpened) {
       throw new Error('QR scanner is already opened.');
     }
 
+    const { text, capture }: QRScannerOpenOptions = (
+      typeof textOrOptions === 'string'
+        ? { text: textOrOptions }
+        : textOrOptions
+    ) || {};
     this.isOpened = true;
 
     try {
@@ -56,11 +69,19 @@ export class QRScanner extends WithSupportsAndTrackableState<QRScannerState, 'cl
         event: ['qr_text_received', 'scan_qr_popup_closed'],
         postEvent: this.postEvent,
         params: { text },
+        capture(ev) {
+          return ev.event === 'scan_qr_popup_closed' || !capture || capture(ev.payload);
+        },
       }) || {};
 
-      return result.data || null;
-    } finally {
+      const qr = result.data || null;
+      if (qr) {
+        this.close();
+      }
+      return qr;
+    } catch(e) {
       this.isOpened = false;
+      throw e;
     }
   }
 }

@@ -18,11 +18,20 @@ To open a popup, it is required to call the `open` method specifying popup prope
 message, and a list of up to 3 buttons.
 
 ```typescript
-popup.open({
-  title: 'Hello!',
-  message: 'Here is a test message.',
-  buttons: [{ id: 'my-id', type: 'default', text: 'Default text' }]
-});
+popup
+  .open({
+    title: 'Hello!',
+    message: 'Here is a test message.',
+    buttons: [{ id: 'my-id', type: 'default', text: 'Default text' }],
+  })
+  .then(buttonId => {
+    console.log(
+      buttonId === null 
+        ? 'User did not click any button'
+        : `User clicked a button with ID "${buttonId}"`
+    );
+  });
+
 console.log(popup.isOpened); // true
 ```
 

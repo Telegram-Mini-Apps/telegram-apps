@@ -21,10 +21,10 @@ export default defineConfig({
     // In case, you have a trusted SSL certificate with a key, you could use the server.https
     // option not to proceed to the untrusted SSL certificate warning.
     // https://www.npmjs.com/package/@vitejs/plugin-basic-ssl
-    basicSsl({
-      certDir: resolve('certificates'),
-      domains: ['tma.internal'],
-    }),
+    // basicSsl({
+    //   certDir: resolve('certificates'),
+    //   domains: ['tma.internal'],
+    // }),
   ],
   server: {
     // Specifying this property makes Vite dev server to start at the specified host. As long
