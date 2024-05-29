@@ -1,24 +1,25 @@
 # Telegram Mini Apps React Boilerplate
 
 This boilerplate demonstrates how developers can implement a single-page application on the Telegram
-Mini Apps platform using the following technologies:
+Mini Apps platform using the following technologies and libraries:
 
 - [React](https://react.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [TON Connect](https://docs.ton.org/develop/dapps/ton-connect/overview)
 - [@tma.js SDK](https://docs.telegram-mini-apps.com/packages/tma-js-sdk)
+- [Telegram UI](https://github.com/Telegram-Mini-Apps/TelegramUI)
 - [Vite](https://vitejs.dev/)
 
-> This boilerplate was created using [pnpm](https://pnpm.io/). Therefore, it is required to use
+> This boilerplate was created using [npm](https://www.npmjs.com/). Therefore, it is required to use
 > it for this project as well. Using other package managers, you will receive a corresponding error.
 
-## First Start
+## Install Dependencies
 
 If you have just cloned this template, you should install the project dependencies using the
 command:
 
 ```Bash
-pnpm i
+npm install
 ```
 
 ## Scripts
@@ -31,68 +32,62 @@ This project contains the following scripts:
   standards.
 - `deploy`. Deploys the application to GitHub Pages.
 
-To run a script, use the `pnpm run` command:
+To run a script, use the `npm run` command:
 
 ```Bash
-pnpm run {script}
-# Example: pnpm run build
+npm run {script}
+# Example: npm run build
 ```
 
-## Running
+## Create Bot and Mini App
 
-The first important thing to note here is that the application should always be launched in the
-context of Telegram application. You can't just run the application and open it directly in your
-browser. Opening the application this way will surely lead to errors, as long as this environment
-does not provide required Telegram Mini Apps functionality.
+Before you start, make sure you have already created a Telegram Bot. Here is
+the [comprehensive guide](https://docs.telegram-mini-apps.com/platform/creating-new-app) on how to
+do it.
 
-Telegram Mini Apps environment could be any specified
-in the [documentation](https://docs.telegram-mini-apps.com/platform/about#supported-applications).
+## Run
 
-So, before starting the application, make sure you have already created it in the Telegram
-system. Here is the [guide](https://docs.telegram-mini-apps.com/platform/creating-new-app) how to do
-it.
+Despite the fact that Mini Apps are intended to be opened
+inside [Telegram applications](https://docs.telegram-mini-apps.com/platform/about#supported-applications),
+you can still develop them outside of Telegram during the development process. Nevertheless, opening
+them inside Telegram will provide the most accurate expectation of how they will function in the
+real world.
 
-When the application is created successfully, run it using the `dev` script and open inside
-Telegram:
+Once the application is created successfully, run it using the `dev` script:
 
-```Bash
-pnpm run dev
+```bash
+npm run dev
 ```
 
-## Deploying
+After this, you will see a similar message in your terminal:
+
+```bash
+VITE ready in 275 ms
+
+➜  Local:   https://localhost:5173/reactjs-template
+➜  Network: https://192.168.0.1:5173/reactjs-template
+➜  press h + enter to show help
+```
+
+To open the application, you need to copy the `Network`
+link (`https://192.168.0.1:5173/reactjs-template` in this example) and choose one of the following:
+
+1. Open it directly in your browser and start developing. Note that in this case, you will be
+   slightly restricted in allowed functionality and may see some behavior different from the
+   Telegram application.
+2. Submit it as the Mini App link to @BotFather. Then go to https://web.telegram.org/k/, find your
+   bot, and launch the Telegram Mini App. This way, you will get the full development experience.
+
+## Deploy
 
 This boilerplate uses GitHub Pages as the way to host the application externally. GitHub Pages
 provides a CDN which will let your users receive the application rapidly. Alternatively, you could
 use such services as [Heroku](https://www.heroku.com/) or [Vercel](https://vercel.com).
 
-### GitHub Workflow
-
-To simplify the process of deployment, this boilerplate contains already
-written [GitHub workflow](.github/workflows/github-pages-deploy.yml) to deploy the project
-automatically in case, some content was pushed to the `master` branch.
-
-To let this workflow work properly, it is required create a new environment (or edit the existing
-one) in the GitHub repository Settings with the name `github-pages`. Then, add the `master` branch
-to the list of deployment branches.
-
-Environments settings could be find using this
-URL: `https://github.com/{username}/{repository}/settings/environments`
-
-![img.png](.github/deployment-branches.png)
-
-In case, you don't want to do it automatically, or you don't use GitHub as the project codebase,
-just remove the `.github` directory.
-
-### GitHub Web Interface
-
-Alternatively, developers are able to configure the automatic deployment using GitHub web interface.
-To use it, follow the link: `https://github.com/{username}/{repository}/settings/pages`.
-
 ### Manual Deployment
 
 This boilerplate uses the [gh-pages](https://www.npmjs.com/package/gh-pages) tool, which allows
-deploying your
-application right from your PC.
+deploying your application right from your PC.
 
 #### Configuring
 
@@ -130,18 +125,41 @@ Before deploying the application, make sure that you've built it and going to de
 static files:
 
 ```bash
-pnpm run build
+npm run build
 ```
 
 Then, run the deployment process, using the `deploy` script:
 
 ```Bash
-pnpm run deploy
+npm run deploy
 ```
 
 After the deployment completed successfully, visit the page with data according to your
 username and repository name. Here is the page link example using the data mentioned above:
 https://telegram-mini-apps.github.io/is-awesome
+
+### GitHub Workflow
+
+To simplify the process of deployment, this boilerplate contains already
+written [GitHub workflow](.github/workflows/github-pages-deploy.yml) to deploy the project
+automatically in case, some content was pushed to the `master` branch.
+
+To let this workflow work properly, it is required create a new environment (or edit the existing
+one) in the GitHub repository Settings with the name `github-pages`. Then, add the `master` branch
+to the list of deployment branches.
+
+Environments settings could be find using this
+URL: `https://github.com/{username}/{repository}/settings/environments`
+
+![img.png](.github/deployment-branches.png)
+
+In case, you don't want to do it automatically, or you don't use GitHub as the project codebase,
+just remove the `.github` directory.
+
+### GitHub Web Interface
+
+Alternatively, developers are able to configure the automatic deployment using GitHub web interface.
+To use it, follow the link: `https://github.com/{username}/{repository}/settings/pages`.
 
 ## TON Connect
 
