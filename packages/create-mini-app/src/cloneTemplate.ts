@@ -28,7 +28,7 @@ export async function cloneTemplate(
       titleSuccess,
     });
     return;
-  } catch (e) {
+  } catch {
   }
 
   // Clone the template using SSH.

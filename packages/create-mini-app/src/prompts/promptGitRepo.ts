@@ -31,7 +31,7 @@ function validate(value: string): string | undefined {
   }
 
   // Check if it is SSH connection string.
-  if (value.match(/\w+@[\w\-.]+:[\w\-]+\/[\w.\/]+/)) {
+  if (value.match(/\w+@[\w\-.]+:[\w-]+\/[\w./]+/)) {
     return;
   }
   return 'Value is not considered as URL link or SSH connection string.';
