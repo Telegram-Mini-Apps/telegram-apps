@@ -11,7 +11,6 @@ import type { LaunchParams } from './types.js';
 export function retrieveLaunchParams(): LaunchParams {
   const errors: unknown[] = [];
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const retrieve of [
     // Try to retrieve launch parameters from the current location. This method can return
     // nothing in case, location was changed and then page was reloaded.

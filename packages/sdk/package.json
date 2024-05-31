@@ -36,7 +36,7 @@
   },
   "scripts": {
     "test": "vitest --run",
-    "lint": "eslint src",
+    "lint": "cd ../.. && eslint packages/sdk/src --ignore-pattern **/*.test.ts",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "build": "rimraf dist && pnpm run build:default && pnpm run build:iife && pnpm run build:iife:low-level",

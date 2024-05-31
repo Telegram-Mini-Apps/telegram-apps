@@ -46,6 +46,7 @@ export class SettingsButton extends WithSupportsAndStateUtils<SettingsButtonStat
   on: Emitter['on'] = (event, listener) => (
     event === 'click'
       ? on('settings_button_pressed', listener)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       : this.state.on(event, listener as any)
   );
 
@@ -57,6 +58,7 @@ export class SettingsButton extends WithSupportsAndStateUtils<SettingsButtonStat
   off: Emitter['off'] = (event, listener) => (
     event === 'click'
       ? off('settings_button_pressed', listener)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       : this.state.off(event, listener as any)
   );
 

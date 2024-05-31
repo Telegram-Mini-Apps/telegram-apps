@@ -56,6 +56,6 @@ export function setStorageValue<K extends StorageKey>(key: K, value: StorageValu
 export function getStorageValue<K extends StorageKey>(key: K): StorageValue<K> | undefined {
   const value = sessionStorage.getItem(formatKey(key));
   try {
-    return value ? JSON.parse(value) : undefined;
+    return value ? JSON.parse(value) as StorageValue<K> : undefined;
   } catch { /* empty */ }
 }

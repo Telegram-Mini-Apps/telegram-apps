@@ -30,7 +30,6 @@ export async function drop(): Promise<void> {
   // the initial one for the current iframe.
   let shouldGoBack = await go(-1);
   while (shouldGoBack) {
-    // eslint-disable-next-line no-await-in-loop
     shouldGoBack = await go(-1);
   }
 }

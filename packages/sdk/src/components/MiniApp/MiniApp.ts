@@ -166,8 +166,7 @@ export class MiniApp extends WithSupportsAndTrackableState<
       while (Date.now() < deadlineAt) {
         try {
           return await this.getRequestedContact();
-        } catch (e) { /* empty */
-        }
+        } catch {}
 
         // Sleep for some time.
         await sleep(sleepTime);

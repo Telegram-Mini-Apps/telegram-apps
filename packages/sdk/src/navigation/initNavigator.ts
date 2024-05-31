@@ -1,4 +1,7 @@
-import { BrowserNavigatorConOptions } from '@/navigation/BrowserNavigator/types.js';
+import {
+  BrowserNavigatorConOptions,
+  BrowserNavigatorHistoryItem,
+} from '@/navigation/BrowserNavigator/types.js';
 import { BrowserNavigator } from '@/navigation/BrowserNavigator/BrowserNavigator.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
 import {
@@ -17,7 +20,11 @@ function instantiate<State>(
     if (stateRaw) {
       try {
         const { index, history } = JSON.parse(stateRaw);
-        return new BrowserNavigator(history, index, options);
+        return new BrowserNavigator(
+          history as BrowserNavigatorHistoryItem<State>[],
+          index as number,
+          options
+        );
       } catch (e) {
         console.error('Unable to restore hash navigator state.', e);
       }

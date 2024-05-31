@@ -40,6 +40,7 @@ export class Logger implements Pick<Console, 'log' | 'error'> {
       `${commonCss};background-color: lightblue;color:black`,
       '',
       `${commonCss};${textColor ? `color:${textColor};` : ''}${bgColor ? `background-color:${bgColor}` : ''}`,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       ...args,
     );
   }
@@ -49,6 +50,7 @@ export class Logger implements Pick<Console, 'log' | 'error'> {
    * @param args
    */
   error(...args: any[]): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.print('error', ...args);
   }
 
@@ -57,6 +59,7 @@ export class Logger implements Pick<Console, 'log' | 'error'> {
    * @param args
    */
   log(...args: any[]): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.print('log', ...args);
   }
 }

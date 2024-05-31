@@ -36,8 +36,6 @@
     }
   },
   "scripts": {
-    "lint": "eslint src",
-    "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit",
     "build": "vite build"
   },

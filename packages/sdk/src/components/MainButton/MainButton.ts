@@ -127,6 +127,7 @@ export class MainButton extends WithStateUtils<MainButtonState> {
   on: Emitter['on'] = (event, listener) => (
     event === 'click'
       ? on('main_button_pressed', listener)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       : this.state.on(event, listener as any)
   );
 
@@ -138,6 +139,7 @@ export class MainButton extends WithStateUtils<MainButtonState> {
   off: Emitter['off'] = (event, listener) => (
     event === 'click'
       ? off('main_button_pressed', listener)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       : this.state.off(event, listener as any)
   );
 

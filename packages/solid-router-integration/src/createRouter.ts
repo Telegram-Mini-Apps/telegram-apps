@@ -9,7 +9,7 @@ import type { Component } from 'solid-js';
 function querySelector<T extends Element>(selector: string) {
   try {
     return document.querySelector<T>(selector);
-  } catch (e) {
+  } catch {
     return null;
   }
 }
