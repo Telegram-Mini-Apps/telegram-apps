@@ -32,6 +32,7 @@ export function setDebug(enable: boolean): void {
  */
 export function log(...args: any[]): void {
   if (debugEnabled) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     logger.log(...args);
   }
 }

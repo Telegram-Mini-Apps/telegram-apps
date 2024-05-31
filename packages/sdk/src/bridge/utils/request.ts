@@ -89,6 +89,7 @@ export async function request<
   const [, cleanup] = createCleanup(
     ...(Array.isArray(event) ? event : [event]).map(
       (ev) => on(ev, (payload: any) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         return (!capture || capture(payload)) && resolve(payload);
       }),
     )

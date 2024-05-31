@@ -20,9 +20,7 @@ function parseArray(value: unknown): unknown[] {
       if (Array.isArray(json)) {
         return json;
       }
-      // eslint-disable-next-line no-empty
-    } catch (e) {
-    }
+    } catch {}
   }
   throw createTypeError();
 }

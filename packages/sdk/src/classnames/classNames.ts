@@ -13,7 +13,6 @@ import { isRecord } from '@/misc/isRecord.js';
  */
 export function classNames(...values: any[]): string {
   return values
-    // eslint-disable-next-line array-callback-return
     .map((value) => {
       if (typeof value === 'string') {
         return value;
@@ -24,6 +23,7 @@ export function classNames(...values: any[]): string {
       }
 
       if (Array.isArray(value)) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         return classNames(...value);
       }
     })

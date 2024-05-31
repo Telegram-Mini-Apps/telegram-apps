@@ -65,7 +65,6 @@ export class Invoice extends WithSupportsAndTrackableState<InvoiceState, 'open'>
       // "/$my-slug"
       const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
       if (!match) {
-        // eslint-disable-next-line no-template-curly-in-string
         throw new Error('Link pathname has incorrect format. Expected to receive "/invoice/{slug}" or "/${slug}"');
       }
       [, , slug] = match;

@@ -15,7 +15,6 @@ export function parseBySchema<T>(
 ): T {
   const result = {} as T;
 
-  // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const field in schema) {
     const definition = schema[field];
     if (!definition) {

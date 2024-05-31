@@ -44,12 +44,14 @@ export class State<State extends object> {
 
         // Otherwise set new value and emit change event.
         this.state[key as keyof State] = value;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         (this.ee as any).emit(`change:${key}`, value);
 
         return true;
       }, false);
 
     if (didChange) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       (this.ee as any).emit('change', this.state);
     }
   }

@@ -51,7 +51,9 @@ export class BrowserNavigator<State = {}> {
       index,
       postEvent,
     );
-    this.navigator.on('change', this.onNavigatorChange);
+    this.navigator.on('change', (e) => {
+      void this.onNavigatorChange(e);
+    });
     this.hashMode = hashMode;
     this.base = getPathname(base || '');
   }

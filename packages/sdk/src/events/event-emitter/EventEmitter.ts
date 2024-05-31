@@ -55,6 +55,7 @@ export class EventEmitter<Schema> {
     const listeners = this.listeners.get(event) || [];
 
     listeners.forEach(([listener, once]) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       listener(...args);
       if (once) {
         this.off(event, listener);

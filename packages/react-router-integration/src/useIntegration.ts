@@ -19,7 +19,8 @@ export function useIntegration<State>(nav: BrowserNavigator<State>): [Location, 
 
   const [location, setLocation] = useState(createLocation);
 
-  const navigate = useCallback((to: To, state?: any, options?: NavigateOptions) => {
+  // todo: We should check if state is always State.
+  const navigate = useCallback((to: To, state?: State, options?: NavigateOptions) => {
     options ||= {};
     if (state === undefined) {
       state = options.state;

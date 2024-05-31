@@ -69,6 +69,7 @@ export function mockTelegramEnv(launchParamsRaw: LaunchParams | string): void {
     ...(proxy || {}),
     postEvent(...args: any) {
       void wiredPostMessage(JSON.stringify({ eventType: args[0], eventData: args[1] }));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       proxy && proxy.postEvent(...args);
     },
   };

@@ -25,7 +25,7 @@
   ],
   "bin": "dist/index.js",
   "scripts": {
-    "lint": "eslint src",
+    "lint": "cd ../.. && eslint packages/create-mini-app/src --ignore-pattern **/*.test.ts",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit",
     "build": "vite build",

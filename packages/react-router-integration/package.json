@@ -37,7 +37,7 @@
     }
   },
   "scripts": {
-    "lint": "eslint src",
+    "lint": "cd ../.. && eslint packages/react-router-integration/src --ignore-pattern **/*.test.ts",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit",
     "build": "vite build"

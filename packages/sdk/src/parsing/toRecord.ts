@@ -23,5 +23,5 @@ export function toRecord(value: unknown): Record<string, unknown> {
     throw createTypeError();
   }
 
-  return formattedValue;
+  return formattedValue as Record<string, unknown>;
 }
