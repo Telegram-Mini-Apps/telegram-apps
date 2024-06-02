@@ -135,6 +135,28 @@ useEffect(() => {
 }, [bm]);
 ```
 
+#### Main Button
+When implementing an event handler for the Main Button, ensure to define a cleanup function that executes upon component unmount to prevent memory leaks and other side effects. Below is an example using the React `useEffect` hook:
+```ts
+useEffect(() => {
+  const handleClick = () => {
+    console.log("click");
+  };
+
+  mb.enable()
+    .show()
+    .on("click", handleClick);
+
+  return () => {
+    mb.hide().off("click", handleClick);
+  };
+}, []);
+```
+This example demonstrates how to properly manage the lifecycle of a Main Button
+
+#### Back Button
+If your application uses the react-router library, it is often unnecessary to manually set a handler function for the Back Button to navigate back. Instead, you can utilize the built-in functionality provided by react-router-integration. For detailed guidance on integrating and using this feature, please refer to: [@tma.js/react-router-integration](https://docs.telegram-mini-apps.com/packages/tma-js-react-router-integration).
+
 ### SSR
 
 This package also supports SSR mode, widely used in popular frameworks like Next.js. When using
