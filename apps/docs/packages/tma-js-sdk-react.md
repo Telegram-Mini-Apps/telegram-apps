@@ -143,14 +143,12 @@ useEffect(() => {
     console.log("click");
   };
 
-  mb.enable()
-    .show()
-    .on("click", handleClick);
+  mb.show().on("click", handleClick);
 
   return () => {
     mb.hide().off("click", handleClick);
   };
-}, []);
+}, [mb]);
 ```
 This example demonstrates how to properly manage the lifecycle of a Main Button
 
