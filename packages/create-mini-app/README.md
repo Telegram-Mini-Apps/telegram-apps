@@ -1,4 +1,4 @@
-# @tma.js/create-mini-app
+# @telegram-apps/create-mini-app
 
 [code-badge]: https://img.shields.io/badge/source-black?logo=github
 
@@ -6,11 +6,11 @@
 
 [sdk-code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/create-mini-app
 
-[sdk-docs-link]: https://docs.telegram-mini-apps.com/packages/tma-js-create-mini-app
+[sdk-docs-link]: https://docs.telegram-mini-apps.com/packages/telegram-apps-create-mini-app
 
-[sdk-npm-link]: https://npmjs.com/package/@tma.js/create-mini-app
+[sdk-npm-link]: https://npmjs.com/package/@telegram-apps/create-mini-app
 
-[sdk-npm-badge]: https://img.shields.io/npm/v/@tma.js/create-mini-app?logo=npm
+[sdk-npm-badge]: https://img.shields.io/npm/v/@telegram-apps/create-mini-app?logo=npm
 
 [![NPM][sdk-npm-badge]][sdk-npm-link]
 [![docs-badge]][sdk-docs-link]
@@ -24,13 +24,13 @@ To run the tool, use one of the following scripts depending on your package mana
 
 ```bash
 # npm
-npx @tma.js/create-mini-app
+npx @telegram-apps/create-mini-app
 
 # yarn
-yarn create @tma.js/mini-app
+yarn create @telegram-apps/mini-app
 
 # pnpm
-pnpm dlx @tma.js/create-mini-app
+pnpm dlx @telegram-apps/create-mini-app
 ```
 
 The tool will launch the project initialization process, prompting you with questions related to the

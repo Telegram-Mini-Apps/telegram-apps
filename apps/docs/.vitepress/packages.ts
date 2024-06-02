@@ -12,7 +12,7 @@ export const packagesNavItem = {
 export const packagesSidebar = {
   [PREFIX]: [
     section('CLI', {
-      '@tma.js/create-mini-app': 'tma-js-create-mini-app',
+      '@telegram-apps/create-mini-app': 'telegram-apps-create-mini-app',
     }),
     section('TypeScript', {
       '@tma.js/sdk': [

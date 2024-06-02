@@ -1,10 +1,10 @@
-# @tma.js/create-mini-app
+# @telegram-apps/create-mini-app
 
 <p style="display: inline-flex; gap: 8px">
-  <a href="https://npmjs.com/package/@tma.js/create-mini-app">
-    <img src="https://img.shields.io/npm/v/@tma.js/create-mini-app?logo=npm"/>
+  <a href="https://npmjs.com/package/@telegram-apps/create-mini-app">
+    <img src="https://img.shields.io/npm/v/@telegram-apps/create-mini-app?logo=npm"/>
   </a>
-  <a href="https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/create-mini-app">
+  <a href="https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/create-mini-app">
     <img src="https://img.shields.io/badge/source-black?logo=github"/>
   </a>
 </p>
@@ -17,15 +17,15 @@ To run the tool, use one of the following scripts depending on your package mana
 
 ::: code-group
 ```bash [pnpm]
-pnpm dlx @tma.js/create-mini-app@latest
+pnpm dlx @telegram-apps/create-mini-app@latest
 ```
 
 ```bash [npm]
-npx @tma.js/create-mini-app@latest
+npx @telegram-apps/create-mini-app@latest
 ```
 
 ```bash [yarn]
-yarn create @tma.js/mini-app
+yarn create @telegram-apps/mini-app
 ```
 :::
 
