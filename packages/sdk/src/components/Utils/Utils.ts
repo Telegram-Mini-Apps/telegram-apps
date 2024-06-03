@@ -56,7 +56,7 @@ export class Utils extends WithSupports<'readTextFromClipboard'> {
    * @throws {Error} URL has not allowed hostname.
    */
   openTelegramLink(url: string): void {
-    const { hostname, pathname, search } = new URL(url, window.location.href);
+    const { hostname, pathname, search } = new URL(url, 'https://t.me');
     if (hostname !== 't.me') {
       throw new Error(`URL has not allowed hostname: ${hostname}. Only "t.me" is allowed`);
     }
@@ -88,6 +88,20 @@ export class Utils extends WithSupports<'readTextFromClipboard'> {
     });
 
     return data;
+  }
+
+  /**
+   * Shares specified URL with the passed to the chats, selected by user.
+   *
+   * This method implements Telegram's Share Deep Link.
+   * @param url - URL to share.
+   * @param text - text to append after the URL.
+   * @see https://core.telegram.org/api/links#share-links
+   */
+  shareURL(url: string, text?: string): void {
+    this.openTelegramLink(
+      'https://t.me/share?' + new URLSearchParams({ url, text: text || '' }).toString(),
+    );
   }
 
   /**
