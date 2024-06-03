@@ -29,3 +29,16 @@ change in the next moment.
 
 Other platforms open Mini App already maximized in medium-size window and call
 of [web_app_expand](methods.md#web-app-expand) method will have no effect.
+
+## Views
+
+As long as applications can be opened via different ways, they also may have different visual
+representations of Viewport.
+
+For example, an application opened via the Menu Button will have an input in the lower part
+of the interface. In the same time, opening an application using a Direct Link, a user will
+not see any additional elements in the interface.
+
+![with input](/components/viewport/with-input.png)
+
+![without input](/components/viewport/without-input.png)
