@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/react-router-integration",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "Navigator integration for the react-router-dom package.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",

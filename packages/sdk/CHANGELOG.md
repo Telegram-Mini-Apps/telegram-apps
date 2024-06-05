@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 2.5.0
+
+### Minor Changes
+
+- 96bf02b: Implement utils.shareURL method.
+
 ## 2.4.0
 
 ### Minor Changes
