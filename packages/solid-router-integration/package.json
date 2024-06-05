@@ -43,7 +43,7 @@
   },
   "peerDependencies": {
     "@solidjs/router": "^0.13.1",
-    "@tma.js/sdk": "workspace:*",
+    "@tma.js/sdk": "workspace:^2",
     "solid-js": "^1.8.16"
   },
   "devDependencies": {
