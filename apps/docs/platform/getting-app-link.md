@@ -4,53 +4,51 @@ outline: [ 2, 4 ]
 
 # Getting App Link
 
-In a nutshell, all Mini Apps are typical web applications, all of them require having their own URL,
-which could be used to retrieve the application content and display it. Telegram does not provide
-any storage to place the developer's application, and it is the responsibility of a developer to
-create storage for their application and obtain its URL.
+In a nutshell, all Mini Apps are typical web applications, each requiring its own URL, which is used
+to retrieve and display the application's content. Telegram does not provide any storage for the
+developer's application, so it is the developer's responsibility to create storage for their
+application and obtain its URL.
 
-Recall that Telegram accepts only those links that have a valid SSL certificate and use the HTTPS
-protocol. Unlike the production environment, the [test environment](test-environment.md) allows
-using an IP directly, and this is the environment we will use in this article.
+Telegram accepts only links that have a valid SSL certificate and use the HTTPS protocol. Unlike the
+production environment, the [test environment](test-environment.md) allows using an IP directly.
 
 ::: info
 
-Despite the fact, that we can use the test environment to develop our applications, most
-of the time the environment doesn't show good performance. In case of encountering
-test environment low performance issues, consider switching to production environment.
+Despite the fact that we can use the test environment to develop our applications, the environment
+often doesn't show good performance. If you encounter low performance issues in the test
+environment, consider switching to the production environment.
 
 :::
 
 ## Introduction
 
-Before you dive into this guide, it is important to understand, why you need some link. Most of
-the time, we need application links for one of the following purposes:
+Before you dive into this guide, it is important to understand why you need some links. Most of the
+time, we need application links for one of the following purposes:
 
-1. **For development**. These links are temporary and used only to display an application via
-   development server. It can also be used to share with some other users to show current progress.
-2. **For production**. We use such types of links in production mode. These links are opening
-   a production-ready application and usually used by common users.
+1. **For development**: These links are temporary and used only to display an application via a
+   development server. They can also be used to share with other users to show current progress.
+2. **For production**: These links are used in production mode to open a production-ready
+   application, typically accessed by common users.
 
-This guide covers both of the cases. You can find real links generation and usage in the
-[template for React.js](https://github.com/telegram-mini-apps/reactjs-template).
+This guide covers both cases. You can find real link generation and usage in
+the [template for React.js](https://github.com/telegram-mini-apps/reactjs-template).
 
-The next sections of this documentation will use [Vite](https://vitejs.dev) as the basic bundler
-we use for the applications.
+The next sections of this documentation will use [Vite](https://vitejs.dev) as the basic bundler for
+the applications.
 
 ## For Development
 
 The application development process is considered to be never-ending. Long-term applications always
-need maintenance, and for this reason, it is considered appropriate to perfect the process by
-lowering the threshold of entry, as well as the resulting cognitive load.
+need maintenance, and for this reason, it is appropriate to perfect the process by lowering the
+threshold of entry and reducing the resulting cognitive load.
 
-Development links are those, we use to view the application in the current development state.
-The development link can be categorized into two types: local and remote. Let's take a look at them
-closer.
+Development links are used to view the application in its current development state. These links can
+be categorized into two types: local and remote. Let's take a closer look at them.
 
 ::: warning
 
 Development links are not supposed to be used in production. Production links should not be dynamic
-and have to reference some server providing the Mini App content.
+and must reference a server providing the Mini App content.
 
 :::
 
@@ -58,11 +56,11 @@ and have to reference some server providing the Mini App content.
 
 A local link for development refers to a link that will only be available to the current device.
 
-Popular bundler such as [Vite](https://vitejs.dev/) provides the ability to run a local server for
+Popular bundlers such as [Vite](https://vitejs.dev/) provide the ability to run a local server for
 development. As a result, you will get an IP that can be used in BotFather or directly opened in
 your browser.
 
-Here is the basic Vite config, running development server and returning a link for development.
+Here is the basic Vite config for running a development server and returning a link for development.
 
 ```ts
 import { defineConfig } from 'vite';
@@ -82,16 +80,16 @@ VITE ready in 112 ms
 Now, you are free to open the `Local` link (`http://localhost:5173`) in your browser and see the
 application.
 
-As you may have noticed, this link is not compatible with BotFather's requirements as long as
-it must have the HTTPS protocol. Now, let's get an HTTPS link.
+As you may have noticed, this link is not compatible with BotFather's requirements as it must use
+the HTTPS protocol. Now, let's get an HTTPS link.
 
 #### Vite Plugin
 
 Vite's ecosystem provides
-the [@vitejs/plugin-basic-ssl](https://www.npmjs.com/package/@vitejs/plugin-basic-ssl) plugin.
-It allows launching the application with self-signed SSL certificates on a specified domain.
+the [@vitejs/plugin-basic-ssl](https://www.npmjs.com/package/@vitejs/plugin-basic-ssl) plugin. It
+allows launching the application with self-signed SSL certificates on a specified domain.
 
-Here is the basic example:
+Here is a basic example:
 
 ```ts
 import { defineConfig } from 'vite';
@@ -104,8 +102,8 @@ export default defineConfig({
 });
 ```
 
-There are some additional options you may find useful. To learn more about them, follow plugin's
-[docs](https://www.npmjs.com/package/@vitejs/plugin-basic-ssl).
+There are some additional options you may find useful. To learn more about them, follow the
+plugin's [docs](https://www.npmjs.com/package/@vitejs/plugin-basic-ssl).
 
 After launching the development server, you will see a similar message:
 
@@ -116,74 +114,70 @@ VITE ready in 275 ms
 ➜  press h + enter to show help
 ```
 
-The `Local` link (`https://localhost:5173`) refers to a local development server.
-Opening this link in your browser, Telegram for macOS, Telegram Desktop, Telegram Web A/K, will lead
-to showing a warning message related to untrusted certificate.
+The `Local` link (`https://localhost:5173`) refers to a local development server. Opening this link
+in your browser, Telegram for macOS, Telegram Desktop, or Telegram Web A/K will lead to a warning
+message related to an untrusted certificate.
 
 <img
-src='/untrusted-cert-warning.png'
-width='100%'
-style='border: 1px solid #ebebeb; border-radius: 10px'
+   src="/untrusted-cert-warning.png"
+   class="guides-image"
+   style="border: 1px solid #ebebeb"
 />
 
 Just make an exception for this and proceed to the application.
 
 #### mkcert
 
-[mkcert](https://github.com/FiloSottile/mkcert) is a tool, which allows developers to generate
-SSL certificate along with the related private key. It also creates a Certificate Authority
-which makes a local device trust the generated certificate. Here is the
-[installation guide](https://github.com/FiloSottile/mkcert?tab=readme-ov-file#installation).
+[mkcert](https://github.com/FiloSottile/mkcert) is a tool that allows developers to generate SSL
+certificates along with the related private key. It also creates a Certificate Authority which makes
+the local device trust the generated certificate. Here is
+the [installation guide](https://github.com/FiloSottile/mkcert?tab=readme-ov-file#installation).
 
-Let's say, you would like to create some custom domain, known only to your device, which
-will be used only for development purposes. Let it be something like `tma.internal`. To
-let your current device know which IP is associated with this domain, we should modify the
-[hosts](https://en.wikipedia.org/wiki/Hosts_(file)) file and map `tma.internal` to `127.0.0.1`
+Let's say you would like to create a custom domain, known only to your device, which will be used
+only for development purposes. Let it be something like `tma.internal`. To let your current device
+know which IP is associated with this domain, we should modify
+the [hosts](https://en.wikipedia.org/wiki/Hosts_(file)) file and map `tma.internal` to `127.0.0.1`.
 
-Then, you should run the mkcert tool specifying this domain and receive 2 files: SSL certificate and
-a private key. Both of these files should be specified in Vite config.
+Then, you should run the mkcert tool specifying this domain and receive two files: an SSL
+certificate and a private key. Both of these files should be specified in the Vite config.
 
-Here is the example of Vite development server configuration using entities, generated by mkcert:
+Here is an example of Vite development server configuration using entities generated by mkcert:
 
 ```typescript
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
 import { readFileSync } from 'node:fs';
 
-export default defineConfig(() => {
-  return {
-    server: {
-      host: 'tma.internal',
-      https: {
-        cert: readFileSync(resolve('tma.internal.pem')),
-        key: readFileSync(resolve('tma.internal-key.pem')),
-      },
-    }
-  };
+export default defineConfig({
+  server: {
+    host: 'tma.internal',
+    https: {
+      cert: readFileSync(resolve('tma.internal.pem')),
+      key: readFileSync(resolve('tma.internal-key.pem')),
+    },
+  },
 });
 ```
 
 ### Network
 
-There could be some cases, when developer needs to open the application on different devices. We
+There could be cases when a developer needs to open the application on different devices. We
 implement such a feature using
 Vite's [host](https://vitejs.dev/config/server-options.html#server-host) option.
 
-Let's see how the corresponding config looks like:
+Let's see how the corresponding config looks:
 
 ```typescript
 import { defineConfig } from 'vite';
 
-export default defineConfig(() => {
-  return {
-    server: {
-      host: true,
-    }
-  };
+export default defineConfig({
+  server: {
+    host: true,
+  },
 });
 ```
 
-Alternatively, we could use such a command: `vite --host`.
+Alternatively, we could use the following command: `vite --host`.
 
 After launching the development server, you will see a similar message in your console:
 
@@ -195,8 +189,7 @@ After launching the development server, you will see a similar message in your c
   ➜  press h + enter to show help
 ```
 
-Now you can access the `Network` link (`http://172.20.10.8:5173`) on the devices in the same
-network.
+Now you can access the `Network` link (`http://172.20.10.8:5173`) on devices in the same network.
 
 To get an HTTPS link, refer to the previous sections of this guide.
 
