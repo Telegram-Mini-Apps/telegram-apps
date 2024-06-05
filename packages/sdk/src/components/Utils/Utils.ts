@@ -91,9 +91,10 @@ export class Utils extends WithSupports<'readTextFromClipboard'> {
   }
 
   /**
-   * Shares specified URL with the passed to the chats, selected by user.
+   * Shares specified URL with the passed to the chats, selected by user. After being called,
+   * it closes the mini application.
    *
-   * This method implements Telegram's Share Deep Link.
+   * This method uses Telegram's Share Links.
    * @param url - URL to share.
    * @param text - text to append after the URL.
    * @see https://core.telegram.org/api/links#share-links
