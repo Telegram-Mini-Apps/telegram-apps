@@ -35,6 +35,26 @@ utils.openTelegramLink('https://t.me/heyqbnk');
 
 In this case, Telegram application will open the group with name `heyqbnk`.
 
+### `shareURL`
+
+Sharing a URL is a common functionality in mini applications. To achieve this, a developer can use
+the shareURL method, which accepts the URL to be shared and optional text to append to the message
+after the URL.
+
+When called, it opens the chat selector to share the URL.
+
+```ts
+utils.shareURL('https://t.me/mybot/myapp', 'Look! Some cool app here!');
+```
+
+::: warning
+
+Currently, there is no native method to share anything directly. Therefore, this method utilizes
+the [openTelegramLink](#opentelegramlink) method, which closes the app after being called. This
+method uses [Share links](https://core.telegram.org/api/links#share-links) under the hood.
+
+:::
+
 ## Clipboard
 
 Developers are allowed to read the text from the clipboard using the `readTextFromClipboard`

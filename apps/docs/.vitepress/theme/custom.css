@@ -21,3 +21,8 @@
     margin-left: .3em;
   }
 }
+
+.guides-image {
+  width: 100%;
+  border-radius: 10px;
+}
