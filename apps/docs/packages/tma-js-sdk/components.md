@@ -100,7 +100,7 @@ import { Utils } from '@tma.js/sdk';
 let utils = new Utils('6.0', ...);
 utils.supportsParam('openLink.tryInstantView'); // false
 
-backButton = new Utils('6.10', ...);
+utils = new Utils('6.10', ...);
 utils.supportsParam('openLink.tryInstantView'); // true
 ```
 
