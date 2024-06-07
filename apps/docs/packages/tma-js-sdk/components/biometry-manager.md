@@ -7,7 +7,7 @@ To initialize the component, use the `initBiometryManager` function:
 ```typescript
 import { initBiometryManager } from '@tma.js/sdk';
 
-const biometryManager = initBiometryManager();  
+const [biometryManager] = initBiometryManager();  
 ```
 
 ::: info

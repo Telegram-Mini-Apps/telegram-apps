@@ -9,7 +9,7 @@ To initialize the component, use the `initSettingsButton` function:
 ```typescript
 import { initSettingsButton } from '@tma.js/sdk';
 
-const settingsButton = initSettingsButton();  
+const [settingsButton] = initSettingsButton();  
 ```
 
 ## Showing and Hiding

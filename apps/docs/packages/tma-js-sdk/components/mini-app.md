@@ -14,7 +14,7 @@ To initialize the component, use the `initMiniApp` function:
 ```typescript
 import { initMiniApp } from '@tma.js/sdk';
 
-const miniApp = initMiniApp();  
+const [miniApp] = initMiniApp();  
 ```
 
 ## Colors

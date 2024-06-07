@@ -9,7 +9,7 @@ To initialize the component, use the `initMainButton` function:
 ```typescript
 import { initMainButton } from '@tma.js/sdk';
 
-const mainButton = initMainButton();  
+const [mainButton] = initMainButton();  
 ```
 
 ## Button Visibility

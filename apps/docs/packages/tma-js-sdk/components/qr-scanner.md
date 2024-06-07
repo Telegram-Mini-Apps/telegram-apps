@@ -9,7 +9,7 @@ To initialize the component, use the `initQRScanner` function:
 ```typescript
 import { initQRScanner } from '@tma.js/sdk';
 
-const qrScanner = initQRScanner();  
+const [qrScanner] = initQRScanner();  
 ```
 
 ## Opening and Closing

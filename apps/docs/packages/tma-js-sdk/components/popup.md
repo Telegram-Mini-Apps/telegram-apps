@@ -9,7 +9,7 @@ To initialize the component, use the `initPopup` function:
 ```typescript
 import { initPopup } from '@tma.js/sdk';
 
-const popup = initPopup();  
+const [popup] = initPopup();  
 ```
 
 ## Opening New Popup

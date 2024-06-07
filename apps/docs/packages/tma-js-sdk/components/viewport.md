@@ -10,13 +10,13 @@ To initialize the component, use the `initViewport` function:
 ```typescript
 import { initViewport } from '@tma.js/sdk';
 
-const viewport = initViewport();  
+const [viewport] = initViewport();  
 ```
 
 ::: info
 
-Since Viewport can't be instantiated synchronously, this function returns a promise that will be
-resolved when the actual viewport state is retrieved.
+Since Viewport can't be instantiated synchronously, this function returns a promise as the first
+value in the tuple that will be resolved when the actual viewport state is retrieved.
 
 :::
 
@@ -39,12 +39,12 @@ visible area. It's more appropriate to use the value of the `stableHeight` field
 To get actual viewport information, developer could use `requestViewport` function:
 
 ```typescript
-import { requestViewport } from '@tma.js/sdk';
+import {requestViewport} from '@tma.js/sdk';
 
 requestViewport().then((data) => {
-  // Output:
-  // { height: 122, isExpanded: false, width: 375, isStateStable: true }
-  console.log(data);
+    // Output:
+    // { height: 122, isExpanded: false, width: 375, isStateStable: true }
+    console.log(data);
 });
 ```
 

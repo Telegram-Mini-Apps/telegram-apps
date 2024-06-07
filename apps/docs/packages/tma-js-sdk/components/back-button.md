@@ -9,7 +9,7 @@ To initialize the component, use the `initBackButton` function:
 ```typescript
 import { initBackButton } from '@tma.js/sdk';
 
-const backButton = initBackButton();  
+const [backButton] = initBackButton();  
 ```
 
 ## Showing and Hiding

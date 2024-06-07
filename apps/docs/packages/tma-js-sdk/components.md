@@ -11,36 +11,42 @@ including the initialization process. This means that there are no pre-initializ
 available for use by the developer. They must create the components themselves.
 
 To simplify the developer's workflow, the package includes special functions prefixed with
-the `init` string. These functions return instances of the initialized components, making it easier
-for developers to work with the package.
+the `init` string. These functions return a tuple, containing an instance of the initialized component
+and a cleanup function, removing all side effects created by this init function.
 
 Here is an example:
 
 ```typescript
 import { initBackButton, initMainButton } from '@tma.js/sdk';
 
-const mainButton = initMainButton();
-const backButton = initBackButton();
+const [mb, cleanupMb] = initMainButton();
+const [bb, cleanupBb] = initBackButton();
 
 // Clicking the MainButton hides it and shows the BackButton.
-mainButton.on('click', () => {
+mb.on('click', () => {
   mainButton.hide();
   backButton.show();
 });
 
 // Clicking the BackButton hides it and shows the MainButton.
-backButton.on('click', () => {
+bb.on('click', () => {
   mainButton.show();
   backButton.hide();
 });
 
 // Configure the MainButton.
-mainButton
+mb
   .setBgColor('#ff0000')
   .setTextColor('#ffffff')
   .setText('Expand')
   .enable()
   .show();
+
+// When we don't need BackButton and MainButton anymore, we can 
+// perform a cleanup. After calling a cleanup, the initialized 
+// component will not receive any events.
+cleanupMb();
+cleanupBb();
 ```
 
 :::info
@@ -59,10 +65,10 @@ Here is the example with the `BackButton` component:
 ```typescript
 import { initBackButton } from '@tma.js/sdk';
 
-const backButton = initBackButton();
+const [bb] = initBackButton();
 
 // Clicking the BackButton hides it and shows the MainButton.
-backButton.on('click', () => {
+bb.on('click', () => {
   console.log('BackButton clicked.');
 });
 ```
@@ -78,11 +84,11 @@ instance `supports()` function. For example:
 ```typescript
 import { BackButton } from '@tma.js/sdk';
 
-let backButton = new BackButton('6.0', ...);
-backButton.supports('show'); // false
+let bb = new BackButton('6.0', ...);
+bb.supports('show'); // false
 
-backButton = new BackButton('6.3', ...);
-backButton.supports('hide'); // true
+bb = new BackButton('6.3', ...);
+bb.supports('hide'); // true
 ```
 
 Some of the components support an additional method `supportsParam` which allows checking if

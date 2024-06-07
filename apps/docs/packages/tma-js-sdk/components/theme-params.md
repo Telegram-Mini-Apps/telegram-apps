@@ -10,7 +10,7 @@ To initialize the component, use the `initThemeParams` function:
 ```typescript
 import { initThemeParams } from '@tma.js/sdk';
 
-const themeParams = initThemeParams();  
+const [themeParams] = initThemeParams();  
 ```
 
 ## Requesting Actual Data

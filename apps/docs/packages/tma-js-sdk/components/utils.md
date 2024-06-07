@@ -9,7 +9,7 @@ To initialize the component, use the `initUtils` function:
 ```typescript
 import { initUtils } from '@tma.js/sdk';
 
-const utils = initUtils();  
+const [utils] = initUtils();  
 ```
 
 ## Links

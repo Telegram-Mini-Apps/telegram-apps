@@ -14,7 +14,7 @@ To initialize the component, use the `initInitData` function:
 ```typescript
 import { initInitData } from '@tma.js/sdk';
 
-const initData = initInitData();  
+const [initData] = initInitData();  
 ```
 
 ## Properties

@@ -10,7 +10,7 @@ To initialize the component, use the `initClosingBehavior` function:
 ```typescript
 import { initClosingBehavior } from '@tma.js/sdk';
 
-const closingBehavior = initClosingBehavior();  
+const [closingBehavior] = initClosingBehavior();  
 ```
 
 ## Closing Confirmation
