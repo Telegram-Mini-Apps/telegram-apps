@@ -1,4 +1,3 @@
-import { URLSearchParams } from 'node:url';
 import type { InitData, InitDataParsed } from '@tma.js/sdk';
 
 import { initDataToSearchParams } from './initDataToSearchParams.js';
@@ -27,11 +26,11 @@ export interface ValidateOptions {
  * @throws {Error} "auth_date" is empty or not found
  * @throws {Error} Init data expired
  */
-export function validate(
+export async function validate(
   value: InitData | InitDataParsed | string | URLSearchParams,
   token: string,
   options: ValidateOptions = {},
-): void {
+): Promise<void> {
   // Init data required params.
   let authDate: Date | undefined;
   let hash: string | undefined;
@@ -85,7 +84,7 @@ export function validate(
   pairs.sort();
 
   // In case, our sign is not equal to found one, we should throw an error.
-  if (signData(pairs.join('\n'), token) !== hash) {
+  if (await signData(pairs.join('\n'), token) !== hash) {
     throw new Error('Signature is invalid');
   }
 }

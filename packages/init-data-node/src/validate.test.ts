@@ -1,5 +1,3 @@
-import { URLSearchParams } from 'node:url';
-
 import { expect, it } from 'vitest';
 
 import { validate } from './validate.js';
@@ -50,41 +48,41 @@ const initData: InitDataParsed = {
   },
 };
 
-it('should throw missing hash error in case, it is not in search params', () => {
-  expect(() => validate('auth_date=1', secretToken))
-    .toThrowError('"hash" is empty or not found');
+it('should throw missing hash error in case, it is not in search params', async () => {
+  await expect(validate('auth_date=1', secretToken))
+    .rejects.toThrowError('"hash" is empty or not found');
 });
 
-it('should throw an error on case, auth_date is not passed or does not represent integer', () => {
-  expect(() => validate('hash=HHH', secretToken))
-    .toThrowError('"auth_date" is empty or not found');
-  expect(() => validate('auth_date=AAA&hash=HHH', secretToken))
-    .toThrowError('"auth_date" should present integer');
+it('should throw an error on case, auth_date is not passed or does not represent integer', async () => {
+  await expect(validate('hash=HHH', secretToken))
+    .rejects.toThrowError('"auth_date" is empty or not found');
+  await expect(validate('auth_date=AAA&hash=HHH', secretToken))
+    .rejects.toThrowError('"auth_date" should present integer');
 });
 
-it('should throw an error in case, parameters are expired', () => {
-  expect(() => validate(sp, secretToken, { expiresIn: 1 }))
-    .toThrowError('Init data expired');
-  expect(() => validate(initData, secretToken, { expiresIn: 1 }))
-    .toThrowError('Init data expired');
+it('should throw an error in case, parameters are expired', async () => {
+  await expect(validate(sp, secretToken, { expiresIn: 1 }))
+    .rejects.toThrowError('Init data expired');
+  await expect(validate(initData, secretToken, { expiresIn: 1 }))
+    .rejects.toThrowError('Init data expired');
 });
 
-it('should throw an error in case, sign is invalid', () => {
-  expect(() => validate(sp, `${secretToken}A`, { expiresIn: 0 }))
-    .toThrowError('Signature is invalid');
-  expect(() => validate(initData, `${secretToken}A`, { expiresIn: 0 }))
-    .toThrowError('Signature is invalid');
+it('should throw an error in case, sign is invalid', async () => {
+  await expect(validate(sp, `${secretToken}A`, { expiresIn: 0 }))
+    .rejects.toThrowError('Signature is invalid');
+  await expect(validate(initData, `${secretToken}A`, { expiresIn: 0 }))
+    .rejects.toThrowError('Signature is invalid');
 });
 
-it('should correctly validate parameters in case, they are valid', () => {
-  expect(() => validate(sp, secretToken, { expiresIn: 0 })).not.toThrow();
-  expect(() => validate(initData, secretToken, { expiresIn: 0 })).not.toThrow();
-  expect(() => validate(new URLSearchParams(sp), secretToken, { expiresIn: 0 })).not.toThrow();
+it('should correctly validate parameters in case, they are valid', async () => {
+  await expect(validate(sp, secretToken, { expiresIn: 0 })).resolves.toBe(undefined);
+  await expect(validate(initData, secretToken, { expiresIn: 0 })).resolves.toBe(undefined);
+  await expect(validate(new URLSearchParams(sp), secretToken, { expiresIn: 0 })).resolves.toBe(undefined);
 });
 
 it(
   'should throw an error in case, expiration time is not passed, parameters were created more than 1 day ago and already expired',
-  () => {
-    expect(() => validate(sp, secretToken)).toThrow('Init data expired');
+  async () => {
+    await expect(async () => await validate(sp, secretToken)).rejects.toThrow('Init data expired');
   },
 );
