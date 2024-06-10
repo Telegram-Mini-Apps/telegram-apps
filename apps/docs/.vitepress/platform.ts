@@ -41,9 +41,10 @@ export const platformSidebar = {
       'Viewport': 'viewport',
     }),
     section('Guides', {
+      'Authorizing User': 'authorizing-user',
       'Creating New App': 'creating-new-app',
       'Getting App Link': 'getting-app-link',
-      'Authorizing User': 'authorizing-user',
+      'Sticky App': 'sticky-app',
     }),
   ],
 };
