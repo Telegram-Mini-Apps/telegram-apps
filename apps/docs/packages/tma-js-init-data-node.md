@@ -53,7 +53,7 @@ const initData =
   '&auth_date=1662771648' +
   '&hash=c501b71e775f74ce10e377dea85a7ea24ecd640b223ea86dfe453e0eaed2e2b2';
 
-await validate(initData, secretToken);
+validate(initData, secretToken);
 ```
 
 Function will throw an error in one of these cases:
@@ -83,7 +83,7 @@ To implement such a process, it is required to use the `sign` method. Here is th
 ```ts [Signing]
 import { sign } from '@tma.js/init-data-node';
 
-await sign(
+sign(
   {
     canSendAfter: 10000,
     chat: {

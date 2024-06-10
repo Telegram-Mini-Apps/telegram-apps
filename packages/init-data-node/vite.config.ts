@@ -22,6 +22,7 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: true,
+    rollupOptions: { external: ['node:crypto', 'node:url'] },
     lib: {
       entry: 'src/index.ts',
       formats: ['es', 'cjs'],

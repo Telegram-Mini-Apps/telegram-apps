@@ -1,5 +1,7 @@
 import type { InitDataParsed, User } from '@tma.js/sdk';
 
+import { URLSearchParams } from 'node:url';
+
 /**
  * Removes undefined properties from the object.
  * @param object - object to remove properties from.
