@@ -7,10 +7,10 @@ export interface ValidateOptions {
   /**
    * Time in seconds which states, how long from creation time init data is considered valid.
    *
-   * In other words, in case, when authDate + expiresIn is before current time, init data
+   * In other words, in case when authDate + expiresIn is before current time, init data is
    * recognized as expired.
    *
-   * In case, this value is equal to 0, function does not check init data expiration.
+   * In case this value is equal to 0, the function does not check init data expiration.
    * @default 86400 (1 day)
    */
   expiresIn?: number;

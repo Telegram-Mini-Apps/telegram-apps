@@ -16,7 +16,7 @@ export async function sign(data: SignData, token: string, authDate: Date): Promi
     authDate,
   });
 
-  // Convert search params to pairs and sort final array.
+  // Convert search params to pairs and sort the final array.
   const pairs = [...sp.entries()]
     .map(([name, value]) => `${name}=${value}`)
     .sort();
