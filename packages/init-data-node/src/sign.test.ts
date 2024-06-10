@@ -2,9 +2,9 @@ import { expect, it } from 'vitest';
 
 import { sign } from './sign';
 
-it('should correctly sign data', () => {
+it('should correctly sign data', async () => {
   expect(
-    sign(
+    await sign(
       {
         canSendAfter: 10000,
         chat: {

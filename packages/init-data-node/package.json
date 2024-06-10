@@ -51,5 +51,8 @@
   },
   "dependencies": {
     "@tma.js/sdk": "workspace:^"
+  },
+  "engines": {
+    "node": ">=15"
   }
 }

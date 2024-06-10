@@ -1,4 +1,4 @@
-import { createHmac } from 'node:crypto';
+import { createHmac } from './createHmac.js';
 
 /**
  * Signs specified data with the passed token.
@@ -6,12 +6,11 @@ import { createHmac } from 'node:crypto';
  * @param token - bot token.
  * @returns Data sign.
  */
-export function signData(data: string, token: string): string {
-  return createHmac(
-    'sha256',
-    createHmac('sha256', 'WebAppData').update(token).digest(),
-  )
-    .update(data)
-    .digest()
-    .toString('hex');
+export async function signData(data: string, token: string): Promise<string> {
+  return (
+    Array.prototype.map.call(
+      new Uint8Array(await createHmac(data, await createHmac(token, 'WebAppData'))),
+      (byte: number) => byte.toString(16).padStart(2, '0'),
+    ) as number[]
+  ).join('');
 }
