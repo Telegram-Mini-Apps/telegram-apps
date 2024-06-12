@@ -119,7 +119,7 @@ export default defineConfig({
 
     addOg('title', isHome ? siteTitle : `${title} | ${siteTitle}`);
     addOg('site_name', 'Telegram Mini Apps Platform Documentation');
-    addOg('image', `${siteBase}thumbnail-1200x630.b47f7147927cc113522893dc23b7a33c.png`);
+    addOg('image', `${siteBase}thumbnail-1200x630.6b8f54aa217a6baed4703ad5af866677.png`);
     addOg('image:width', '1200');
     addOg('image:height', '630');
     addOg('image:type', 'image/png');
