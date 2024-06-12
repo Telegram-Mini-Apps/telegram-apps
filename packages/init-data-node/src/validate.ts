@@ -1,37 +1,71 @@
-import { URLSearchParams } from 'node:url';
 import type { InitData, InitDataParsed } from '@tma.js/sdk';
 
 import { initDataToSearchParams } from './initDataToSearchParams.js';
-import { signData } from './signData.js';
+import { signDataNode, signDataWeb } from './signData.js';
+import type { SignDataAsyncFn, SignDataSyncFn } from './types.js';
 
 export interface ValidateOptions {
   /**
    * Time in seconds which states, how long from creation time init data is considered valid.
    *
-   * In other words, in case, when authDate + expiresIn is before current time, init data
+   * In other words, in case when authDate + expiresIn is before current time, init data is
    * recognized as expired.
    *
-   * In case, this value is equal to 0, function does not check init data expiration.
+   * In case this value is equal to 0, the function does not check init data expiration.
    * @default 86400 (1 day)
    */
   expiresIn?: number;
+}
+
+function processSign(actual: string, expected: string): void | never {
+  if (actual !== expected) {
+    throw new Error('Signature is invalid');
+  }
+  return;
 }
 
 /**
  * Validates passed init data.
  * @param value - value to check.
  * @param token - bot secret token.
+ * @param signData - function signing data.
  * @param options - additional validation options.
  * @throws {TypeError} "auth_date" should present integer
  * @throws {Error} "hash" is empty or not found
  * @throws {Error} "auth_date" is empty or not found
  * @throws {Error} Init data expired
  */
-export function validate(
+function validate(
   value: InitData | InitDataParsed | string | URLSearchParams,
   token: string,
+  signData: SignDataSyncFn,
+  options?: ValidateOptions,
+): void | never;
+
+/**
+ * Validates passed init data.
+ * @param value - value to check.
+ * @param token - bot secret token.
+ * @param signData - function signing data.
+ * @param options - additional validation options.
+ * @throws {TypeError} "auth_date" should present integer
+ * @throws {Error} "hash" is empty or not found
+ * @throws {Error} "auth_date" is empty or not found
+ * @throws {Error} Init data expired
+ */
+function validate(
+  value: InitData | InitDataParsed | string | URLSearchParams,
+  token: string,
+  signData: SignDataAsyncFn,
+  options?: ValidateOptions,
+): Promise<void>;
+
+function validate(
+  value: InitData | InitDataParsed | string | URLSearchParams,
+  token: string,
+  signData: SignDataSyncFn | SignDataAsyncFn,
   options: ValidateOptions = {},
-): void {
+): void | never | Promise<void> {
   // Init data required params.
   let authDate: Date | undefined;
   let hash: string | undefined;
@@ -84,8 +118,46 @@ export function validate(
   // According to docs, we sort all the pairs in alphabetical order.
   pairs.sort();
 
-  // In case, our sign is not equal to found one, we should throw an error.
-  if (signData(pairs.join('\n'), token) !== hash) {
-    throw new Error('Signature is invalid');
-  }
+  const sign = signData(pairs.join('\n'), token);
+
+  return typeof sign === 'string'
+    ? processSign(sign, hash)
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    : sign.then(v => processSign(v, hash as string));
+}
+
+/**
+ * Validates passed init data.
+ * @param value - value to check.
+ * @param token - bot secret token.
+ * @param options - additional validation options.
+ * @throws {TypeError} "auth_date" should present integer
+ * @throws {Error} "hash" is empty or not found
+ * @throws {Error} "auth_date" is empty or not found
+ * @throws {Error} Init data expired
+ */
+export function validateNode(
+  value: InitData | InitDataParsed | string | URLSearchParams,
+  token: string,
+  options?: ValidateOptions,
+): void {
+  return validate(value, token, signDataNode, options);
+}
+
+/**
+ * Validates passed init data.
+ * @param value - value to check.
+ * @param token - bot secret token.
+ * @param options - additional validation options.
+ * @throws {TypeError} "auth_date" should present integer
+ * @throws {Error} "hash" is empty or not found
+ * @throws {Error} "auth_date" is empty or not found
+ * @throws {Error} Init data expired
+ */
+export function validateWeb(
+  value: InitData | InitDataParsed | string | URLSearchParams,
+  token: string,
+  options?: ValidateOptions,
+): Promise<void> {
+  return validate(value, token, signDataWeb, options);
 }

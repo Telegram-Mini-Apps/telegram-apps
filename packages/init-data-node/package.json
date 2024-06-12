@@ -29,6 +29,12 @@
   "types": "./dist/dts/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/dts/node/index.d.ts",
+      "import": "./dist/node/index.js",
+      "require": "./dist/node/index.cjs",
+      "default": "./dist/node/index.cjs"
+    },
+    "./web": {
       "types": "./dist/dts/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
