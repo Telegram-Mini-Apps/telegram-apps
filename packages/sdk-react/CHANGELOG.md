@@ -1,5 +1,11 @@
 # @tma.js/sdk-react
 
+## 2.2.4
+
+### Patch Changes
+
+- bab2fa7: Allow using the useLaunchParams hook on the server side.
+
 ## 2.2.3
 
 ### Patch Changes
