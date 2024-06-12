@@ -98,10 +98,11 @@ export class Utils extends WithSupports<'readTextFromClipboard'> {
    * @param url - URL to share.
    * @param text - text to append after the URL.
    * @see https://core.telegram.org/api/links#share-links
+   * @see https://core.telegram.org/widgets/share#custom-buttons
    */
   shareURL(url: string, text?: string): void {
     this.openTelegramLink(
-      'https://t.me/share?' + new URLSearchParams({ url, text: text || '' }).toString(),
+      'https://t.me/share/url?' + new URLSearchParams({ url, text: text || '' }).toString(),
     );
   }
 
