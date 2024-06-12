@@ -29,7 +29,7 @@ pnpm i @tma.js/sdk
 ```
 
 ```bash [npm]
-npm i @tma.js/sdk
+npm i "@tma.js/sdk"
 ```
 
 ```bash [yarn]
