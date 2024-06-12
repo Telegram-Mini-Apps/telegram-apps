@@ -10,8 +10,5 @@
   },
   "dependencies": {
     "tsconfig": "workspace:*"
-  },
-  "devDependencies": {
-    "eruda": "^3.0.1"
   }
 }

@@ -86,10 +86,6 @@ importers:
       tsconfig:
         specifier: workspace:*
         version: link:../../packages/tsconfig
-    devDependencies:
-      eruda:
-        specifier: ^3.0.1
-        version: 3.0.1
 
   packages/create-mini-app:
     dependencies:
