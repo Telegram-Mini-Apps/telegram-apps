@@ -1,5 +1,13 @@
 # reactjs-template
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [bab2fa7]
+  - @tma.js/sdk-react@2.2.4
+  - @tma.js/react-router-integration@4.0.2
+
 ## 0.0.3
 
 ### Patch Changes
