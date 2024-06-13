@@ -36,16 +36,34 @@ As well as in Telegram Desktop, `Inspect Element` option will appear in the cont
 
 ### Telegram for iOS
 
-Currently, the Telegram for iOS application doesn't have a built-in way to debug the application.
-Nevertheless, to access debugging features, refer to the [Eruda](#eruda) section.
+iOS webview debugging requires Safari desktop browser and therefore macOS.
+
+To access iOS debugging features without macOS, refer to the [Eruda](#eruda) section.
+
+On iOS device:
+- Go to `Settings`.
+- Find Safari icon and press on it.
+- Scroll down and press `Advanced`.
+- Enable `Web Inspector` option.
+
+On macOS:
+- Open Safari browser.
+- Open `Settings` (`⌘ + ,`).
+- Select `Advanced` tab.
+- Check `Show features for web developers` option at the bottom.
+
+Next steps:
+- Connect iOS device to Mac via cable.
+- Open Mini App inside iOS Telegram client.
+- Open `Develop` tab in the menu bar in Safari on macOS.
+- Select connected iPhone.
+- Optional: select `Connect via network` and disconnect the cable.
+- Select opened webview URL under `Telegram` block.
 
 ## Eruda
 
 [Eruda](https://www.npmjs.com/package/eruda) is a technology that provides a lightweight console in
 the web. We typically use such packages in environments that don't offer their own consoles.
-
-Currently, Telegram for iOS doesn't provide a common way to debug the Mini App. Eruda appears to be
-a good solution to this problem.
 
 First of all, it is necessary to install the package and initialize it.
 
