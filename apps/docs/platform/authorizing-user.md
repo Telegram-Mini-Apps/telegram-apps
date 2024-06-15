@@ -37,7 +37,7 @@ authorizes the user.
 The Node.js example uses [express](https://www.npmjs.com/package/express) to process HTTP requests.
 
 ```typescript
-import { validate, parse, type InitData } from '@tma.js/init-data-node';
+import { validate, parse, type InitDataParsed } from '@tma.js/init-data-node';
 import express, {
   type ErrorRequestHandler,
   type RequestHandler,
@@ -49,7 +49,7 @@ import express, {
  * @param res - Response object.
  * @param initData - init data.
  */
-function setInitData(res: Response, initData: InitData): void {
+function setInitData(res: Response, initData: InitDataParsed): void {
   res.locals.initData = initData;
 }
 
@@ -59,7 +59,7 @@ function setInitData(res: Response, initData: InitData): void {
  * @returns Init data stored in the Response object. Can return undefined in case,
  * the client is not authorized.
  */
-function getInitData(res: Response): InitData | undefined {
+function getInitData(res: Response): InitDataParsed | undefined {
   return res.locals.initData;
 }
 
