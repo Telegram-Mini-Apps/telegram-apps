@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 2.5.1
+
+### Patch Changes
+
+- 36d432b: Update the link, used in the `Utils.shareURL` method.
+
 ## 2.5.0
 
 ### Minor Changes
