@@ -29,8 +29,8 @@ describe('openTelegramLink', () => {
     } as any);
     const utils = new Utils('6.0', () => '', () => null);
 
-    utils.openTelegramLink('https://t.me/share?url=text');
-    expect(window.location.href).toBe('https://t.me/share?url=text');
+    utils.openTelegramLink('https://t.me/share/url?url=text');
+    expect(window.location.href).toBe('https://t.me/share/url?url=text');
   });
 
   it(
@@ -39,10 +39,10 @@ describe('openTelegramLink', () => {
       const postEvent = vi.fn();
       const utils = new Utils('7.0', () => '', postEvent);
 
-      utils.openTelegramLink('https://t.me/share?url=text');
+      utils.openTelegramLink('https://t.me/share/url?url=text');
       expect(postEvent).toHaveBeenCalledOnce();
       expect(postEvent).toHaveBeenCalledWith('web_app_open_tg_link', {
-        path_full: '/share?url=text',
+        path_full: '/share/url?url=text',
       });
     },
   );
@@ -58,15 +58,15 @@ describe('shareURL', () => {
     const utils = new Utils('6.0', () => '', () => null);
 
     utils.shareURL('https://telegram.org');
-    expect(window.location.href).toBe('https://t.me/share?url=https%3A%2F%2Ftelegram.org&text=');
+    expect(window.location.href).toBe('https://t.me/share/url?url=https%3A%2F%2Ftelegram.org&text=');
 
     utils.shareURL('https://telegram.org', 'Wow, cool messenger');
     expect(window.location.href)
-      .toBe('https://t.me/share?url=https%3A%2F%2Ftelegram.org&text=Wow%2C+cool+messenger');
+      .toBe('https://t.me/share/url?url=https%3A%2F%2Ftelegram.org&text=Wow%2C+cool+messenger');
   });
 
   it(
-    'should call web_app_open_tg_link with { path_full: string }, where path_full equals "share?url={url}&text={text}"',
+    'should call web_app_open_tg_link with { path_full: string }, where path_full equals "share/url?url={url}&text={text}"',
     () => {
       const postEvent = vi.fn();
       const utils = new Utils('7.0', () => '', postEvent);
@@ -74,14 +74,14 @@ describe('shareURL', () => {
       utils.shareURL('https://telegram.org');
       expect(postEvent).toHaveBeenCalledOnce();
       expect(postEvent).toHaveBeenCalledWith('web_app_open_tg_link', {
-        path_full: '/share?url=https%3A%2F%2Ftelegram.org&text=',
+        path_full: '/share/url?url=https%3A%2F%2Ftelegram.org&text=',
       });
 
       postEvent.mockClear();
       utils.shareURL('https://telegram.org', 'Wow, cool messenger');
       expect(postEvent).toHaveBeenCalledOnce();
       expect(postEvent).toHaveBeenCalledWith('web_app_open_tg_link', {
-        path_full: '/share?url=https%3A%2F%2Ftelegram.org&text=Wow%2C+cool+messenger',
+        path_full: '/share/url?url=https%3A%2F%2Ftelegram.org&text=Wow%2C+cool+messenger',
       });
     },
   );
