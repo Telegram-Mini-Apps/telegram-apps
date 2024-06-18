@@ -24,15 +24,21 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/dts/index.d.ts",
+  "main": "./dist/entries/node.cjs",
+  "module": "./dist/entries/node.js",
+  "types": "./dist/entries/node.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/dts/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "default": "./dist/index.cjs"
+      "types": "./dist/entries/node.d.ts",
+      "import": "./dist/entries/node.js",
+      "require": "./dist/entries/node.cjs",
+      "default": "./dist/entries/node.cjs"
+    },
+    "./web": {
+      "types": "./dist/entries/web.d.ts",
+      "import": "./dist/entries/web.js",
+      "require": "./dist/entries/web.cjs",
+      "default": "./dist/entries/web.cjs"
     }
   },
   "scripts": {
@@ -40,7 +46,9 @@
     "lint": "cd ../.. && eslint packages/init-data-node/src --ignore-pattern **/*.test.ts",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit",
-    "build": "vite build"
+    "build:node": "vite build --ssr src/entries/node.ts",
+    "build:web": "vite build --ssr src/entries/web.ts",
+    "build": "rimraf dist && pnpm run build:node && pnpm run build:web"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

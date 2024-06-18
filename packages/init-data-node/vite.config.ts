@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitest/config';
 import dts from 'vite-plugin-dts';
 
-export default defineConfig({
+export default defineConfig((_) => ({
   test: {
     include: ['src/**/*.test.ts'],
     coverage: {
@@ -16,17 +16,24 @@ export default defineConfig({
     },
   },
   plugins: [
-    dts({ outDir: 'dist/dts' }),
+    dts({ outDir: 'dist' }),
   ],
   build: {
-    outDir: 'dist',
-    emptyOutDir: true,
+    outDir: 'dist/entries',
+    emptyOutDir: false,
     sourcemap: true,
-    rollupOptions: { external: ['node:crypto', 'node:url'] },
+    rollupOptions: {
+      external: ['node:crypto'],
+    },
     lib: {
-      entry: 'src/index.ts',
+      entry: {
+        node: 'src/entries/node.ts',
+        web: 'src/entries/web.ts',
+      },
       formats: ['es', 'cjs'],
-      fileName: 'index',
+      fileName(format, entry) {
+        return `${entry}.${format === 'es' ? 'js' : 'cjs'}`;
+      },
     },
   },
-});
+}));
