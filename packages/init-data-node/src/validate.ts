@@ -1,7 +1,6 @@
 import type { InitData, InitDataParsed } from '@tma.js/sdk';
 
 import { initDataToSearchParams } from './initDataToSearchParams.js';
-import { signDataNode, signDataWeb } from './signData.js';
 import type { SignDataAsyncFn, SignDataSyncFn } from './types.js';
 
 export interface ValidateOptions {
@@ -35,7 +34,7 @@ function processSign(actual: string, expected: string): void | never {
  * @throws {Error} "auth_date" is empty or not found
  * @throws {Error} Init data expired
  */
-function validate(
+export function validate(
   value: InitData | InitDataParsed | string | URLSearchParams,
   token: string,
   signData: SignDataSyncFn,
@@ -53,14 +52,14 @@ function validate(
  * @throws {Error} "auth_date" is empty or not found
  * @throws {Error} Init data expired
  */
-function validate(
+export function validate(
   value: InitData | InitDataParsed | string | URLSearchParams,
   token: string,
   signData: SignDataAsyncFn,
   options?: ValidateOptions,
 ): Promise<void>;
 
-function validate(
+export function validate(
   value: InitData | InitDataParsed | string | URLSearchParams,
   token: string,
   signData: SignDataSyncFn | SignDataAsyncFn,
@@ -124,40 +123,4 @@ function validate(
     ? processSign(sign, hash)
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     : sign.then(v => processSign(v, hash as string));
-}
-
-/**
- * Validates passed init data.
- * @param value - value to check.
- * @param token - bot secret token.
- * @param options - additional validation options.
- * @throws {TypeError} "auth_date" should present integer
- * @throws {Error} "hash" is empty or not found
- * @throws {Error} "auth_date" is empty or not found
- * @throws {Error} Init data expired
- */
-export function validateNode(
-  value: InitData | InitDataParsed | string | URLSearchParams,
-  token: string,
-  options?: ValidateOptions,
-): void {
-  return validate(value, token, signDataNode, options);
-}
-
-/**
- * Validates passed init data.
- * @param value - value to check.
- * @param token - bot secret token.
- * @param options - additional validation options.
- * @throws {TypeError} "auth_date" should present integer
- * @throws {Error} "hash" is empty or not found
- * @throws {Error} "auth_date" is empty or not found
- * @throws {Error} Init data expired
- */
-export function validateWeb(
-  value: InitData | InitDataParsed | string | URLSearchParams,
-  token: string,
-  options?: ValidateOptions,
-): Promise<void> {
-  return validate(value, token, signDataWeb, options);
 }

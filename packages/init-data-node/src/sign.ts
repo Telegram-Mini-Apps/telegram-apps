@@ -1,6 +1,5 @@
 import { initDataToSearchParams } from './initDataToSearchParams.js';
 
-import { signDataNode, signDataWeb } from './signData.js';
 import type { SignData, SignDataAsyncFn, SignDataSyncFn } from './types.js';
 
 /**
@@ -11,7 +10,7 @@ import type { SignData, SignDataAsyncFn, SignDataSyncFn } from './types.js';
  * @param signData - function signing data.
  * @returns Signed init data presented as query parameters.
  */
-function sign(data: SignData, key: string, authDate: Date, signData: SignDataSyncFn): string;
+export function sign(data: SignData, key: string, authDate: Date, signData: SignDataSyncFn): string;
 
 /**
  * Signs specified init data.
@@ -21,14 +20,14 @@ function sign(data: SignData, key: string, authDate: Date, signData: SignDataSyn
  * @param signData - function signing data.
  * @returns Signed init data presented as query parameters.
  */
-function sign(
+export function sign(
   data: SignData,
   key: string,
   authDate: Date,
   signData: SignDataAsyncFn,
 ): Promise<string>;
 
-function sign(
+export function sign(
   data: SignData,
   key: string,
   authDate: Date,
@@ -53,26 +52,4 @@ function sign(
 
   const sign = signData(pairs.join('\n'), key);
   return typeof sign === 'string' ? processSign(sign) : sign.then(processSign);
-}
-
-/**
- * Signs specified init data.
- * @param data - init data to sign.
- * @param authDate - date, when this init data should be signed.
- * @param key - private key.
- * @returns Signed init data presented as query parameters.
- */
-export function signNode(data: SignData, key: string, authDate: Date): string {
-  return sign(data, key, authDate, signDataNode);
-}
-
-/**
- * Signs specified init data.
- * @param data - init data to sign.
- * @param authDate - date, when this init data should be signed.
- * @param key - private key.
- * @returns Signed init data presented as query parameters.
- */
-export function signWeb(data: SignData, key: string, authDate: Date): Promise<string> {
-  return sign(data, key, authDate, signDataWeb);
 }
