@@ -137,7 +137,7 @@ importers:
   packages/react-router-integration:
     dependencies:
       '@tma.js/sdk':
-        specifier: workspace:^2
+        specifier: workspace:^2.5.1
         version: link:../sdk
       '@types/react':
         specifier: ^17.0.0 || ^18.0.0
