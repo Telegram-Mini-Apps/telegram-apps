@@ -19,15 +19,10 @@ export default defineConfig((_) => ({
     dts({ outDir: 'dist' }),
   ],
   build: {
-    outDir: 'dist',
-    emptyOutDir: true,
+    outDir: 'dist/entries',
+    emptyOutDir: false,
     sourcemap: true,
     rollupOptions: {
-      input: {
-        node: 'src/entries/node.ts',
-        web: 'src/entries/web.ts',
-      },
-      output: [],
       external: ['node:crypto'],
     },
     lib: {
