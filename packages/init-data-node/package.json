@@ -46,7 +46,9 @@
     "lint": "cd ../.. && eslint packages/init-data-node/src --ignore-pattern **/*.test.ts",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit",
-    "build": "vite build"
+    "build:node": "vite build --ssr src/entries/node.ts",
+    "build:web": "vite build --ssr src/entries/web.ts",
+    "build": "rimraf dist && pnpm run build:node && pnpm run build:web"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
