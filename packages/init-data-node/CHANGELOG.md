@@ -1,5 +1,11 @@
 # @tma.js/init-data-node
 
+## 1.3.0
+
+### Minor Changes
+
+- 04e5a6f: Add Web crypto API.
+
 ## 1.2.8
 
 ### Patch Changes
