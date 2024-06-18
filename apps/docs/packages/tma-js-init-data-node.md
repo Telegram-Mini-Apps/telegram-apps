@@ -150,3 +150,16 @@ This function accepts three arguments:
 - **Signing date**: This value will be used as the value of the `authDate` property.
 
 As a result, the function returns signed init data.
+
+## Web Crypto API
+
+If this package is used in an environment other than Node.js, a developer can use the `web`
+subdirectory, which exports the same methods as described above but returns promises.
+
+```ts
+import { validate, sign, signData } from '@tma.js/init-data-node/web';
+
+await validate(...);
+await sign(...);
+await signData(...);
+```
