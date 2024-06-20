@@ -1,5 +1,11 @@
 # @tma.js/react-router-integration
 
+## 4.0.3
+
+### Patch Changes
+
+- 79aeeb5: Change @tma.js/sdk peer dep.
+
 ## 4.0.2
 
 ### Patch Changes
