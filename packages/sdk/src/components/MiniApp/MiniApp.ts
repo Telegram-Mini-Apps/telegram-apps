@@ -246,8 +246,8 @@ export class MiniApp extends WithSupportsAndTrackableState<
   /**
    * Updates current Mini App header color.
    *
-   * @see No effect on desktop: https://github.com/Telegram-Mini-Apps/tma.js/issues/9
-   * @see Works incorrectly in Android: https://github.com/Telegram-Mini-Apps/tma.js/issues/8
+   * @see No effect on desktop: https://github.com/Telegram-Mini-Apps/telegram-apps/issues/9
+   * @see Works incorrectly in Android: https://github.com/Telegram-Mini-Apps/telegram-apps/issues/8
    * @param color - color key or RGB color.
    */
   setHeaderColor(color: MiniAppHeaderColor): void {
@@ -258,8 +258,8 @@ export class MiniApp extends WithSupportsAndTrackableState<
   /**
    * Updates current Mini App background color.
    *
-   * @see No effect on desktop: https://github.com/Telegram-Mini-Apps/tma.js/issues/9
-   * @see Works incorrectly in Android: https://github.com/Telegram-Mini-Apps/tma.js/issues/8
+   * @see No effect on desktop: https://github.com/Telegram-Mini-Apps/telegram-apps/issues/9
+   * @see Works incorrectly in Android: https://github.com/Telegram-Mini-Apps/telegram-apps/issues/8
    * @param color - RGB color.
    */
   setBgColor(color: RGB): void {
