@@ -55,8 +55,8 @@ export const promptTemplate = createPrompt<Template, {}>(
 
           return acc;
         }, {
-          framework: 'react.js',
-          sdk: 'tma.js',
+          framework: 'react',
+          sdk: 'tmajs',
           language: 'ts',
         });
       }, []),

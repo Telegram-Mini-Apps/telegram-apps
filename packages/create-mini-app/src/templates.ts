@@ -12,16 +12,27 @@ function createRepository(name: string): TemplateRepository {
 
 const settings = {
   js: {
-    'tma.js': {
-      'react.js': 'reactjs-js-template',
-      'solid.js': 'solidjs-js-template',
+    tmajs: {
+      react: 'reactjs-js-template',
+      solid: 'solidjs-js-template',
+      next: 'nextjs-js-template',
+    },
+    tsdk: {
+      react: 'reactjs-js-tsdk-template',
+      solid: 'solidjs-js-tsdk-template',
+      next: 'nextjs-js-tsdk-template',
     },
   },
   ts: {
-    'tma.js': {
-      'react.js': 'reactjs-template',
-      'solid.js': 'solidjs-template',
-      'next.js': 'nextjs-template',
+    tmajs: {
+      react: 'reactjs-template',
+      solid: 'solidjs-template',
+      next: 'nextjs-template',
+    },
+    tsdk: {
+      react: 'reactjs-tsdk-template',
+      solid: 'solidjs-tsdk-template',
+      next: 'nextjs-tsdk-template',
     },
   },
 } as const;

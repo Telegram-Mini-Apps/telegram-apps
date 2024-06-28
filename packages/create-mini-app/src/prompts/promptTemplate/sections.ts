@@ -14,17 +14,17 @@ export const sections: Section[] = [
     title: 'SDK',
     name: 'sdk',
     choices: [
-      { title: 'tma.js', value: 'tma.js', defaultChecked: true },
-      { title: 'Telegram SDK', value: 'telegram' },
+      { title: 'tma.js', value: 'tmajs', defaultChecked: true },
+      { title: 'Telegram SDK', value: 'tsdk' },
     ],
   },
   {
     title: 'Framework',
     name: 'framework',
     choices: [
-      { title: 'React.js', value: 'react.js', defaultChecked: true },
-      { title: 'Solid.js', value: 'solid.js' },
-      { title: 'Next.js', value: 'next.js' },
+      { title: 'React.js', value: 'react', defaultChecked: true },
+      { title: 'Solid.js', value: 'solid' },
+      { title: 'Next.js', value: 'next' },
     ],
   },
 ];
