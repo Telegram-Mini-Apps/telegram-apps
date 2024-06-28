@@ -14,5 +14,5 @@ export interface Template {
 }
 
 export type Language = 'js' | 'ts';
-export type SDK = 'telegram' | 'tma.js';
-export type Framework = 'solid.js' | 'react.js' | 'next.js';
+export type SDK = 'tsdk' | 'tmajs';
+export type Framework = 'solid' | 'react' | 'next';
