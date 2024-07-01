@@ -1,7 +1,7 @@
 {
   "name": "solid",
   "private": true,
-  "version": "0.0.11",
+  "version": "0.0.12",
   "type": "module",
   "main": "index.js",
   "homepage": "https://telegram-mini-apps.github.io/solidjs-template",
