@@ -1,6 +1,6 @@
 {
   "name": "next",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,7 +13,7 @@
     "@tma.js/sdk-react": "workspace:*",
     "@tonconnect/ui-react": "^2.0.2",
     "eruda": "^3.0.1",
-    "next": "14.2.3",
+    "next": "0.1.11",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

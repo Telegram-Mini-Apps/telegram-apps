@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 2.6.0
+
+### Minor Changes
+
+- 3539c19: Add new 7.6 methods parameters and theme color.
+
 ## 2.5.1
 
 ### Patch Changes

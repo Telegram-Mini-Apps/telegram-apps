@@ -1,5 +1,12 @@
 # @tma.js/sdk-solid
 
+## 2.1.9
+
+### Patch Changes
+
+- Updated dependencies [3539c19]
+  - @tma.js/sdk@2.6.0
+
 ## 2.1.8
 
 ### Patch Changes
