@@ -84,6 +84,13 @@ export class ThemeParams extends WithTrackableState<ThemeParamsState> {
   }
 
   /**
+   * @since v7.6
+   */
+  get sectionSeparatorColor(): RGB | undefined {
+    return this.get('sectionHeaderTextColor');
+  }
+
+  /**
    * Starts listening to the external theme changes and applies them.
    * @returns Function to stop listening.
    */

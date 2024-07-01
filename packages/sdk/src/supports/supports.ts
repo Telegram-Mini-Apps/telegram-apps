@@ -45,12 +45,19 @@ export function supports(
       if (paramOrVersion === 'try_instant_view') {
         return versionLessOrEqual('6.4', inVersion);
       }
+      if (paramOrVersion === 'try_browser') {
+        return versionLessOrEqual('7.6', inVersion);
+      }
     }
 
     if (method === 'web_app_set_header_color') {
       if (paramOrVersion === 'color') {
         return versionLessOrEqual('6.9', inVersion);
       }
+    }
+
+    if (method === 'web_app_close' && paramOrVersion === 'return_back') {
+      return versionLessOrEqual('7.6', inVersion);
     }
   }
 

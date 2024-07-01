@@ -44,7 +44,7 @@ export interface MiniAppsMethods {
   iframe_will_reload: CreateParams;
   /**
    * Request current biometry settings.
-   * @since 7.2
+   * @since v7.2
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-get-info
    */
   web_app_biometry_get_info: CreateParams;
@@ -54,13 +54,13 @@ export interface MiniAppsMethods {
    *
    * _Note that this method can be called only in response to user interaction with the Mini
    * App interface (e.g. a click inside the Mini App or on the main button)_.
-   * @since 7.2
+   * @since v7.2
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-open-settings
    */
   web_app_biometry_open_settings: CreateParams;
   /**
    * Requests access to use biometrics.
-   * @since 7.2
+   * @since v7.2
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-request-access
    */
   web_app_biometry_request_access: CreateParams<{
@@ -72,7 +72,7 @@ export interface MiniAppsMethods {
   }>;
   /**
    * Authenticates the user using biometrics.
-   * @since 7.2
+   * @since v7.2
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-request-auth
    */
   web_app_biometry_request_auth: CreateParams<{
@@ -85,7 +85,7 @@ export interface MiniAppsMethods {
   /**
    * Updates the biometric token in secure storage on the device. To remove the token, pass
    * an empty string.
-   * @since 7.2
+   * @since v7.2
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-update-token
    */
   web_app_biometry_update_token: CreateParams<{
@@ -98,7 +98,12 @@ export interface MiniAppsMethods {
    * Closes Mini App.
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-close
    */
-  web_app_close: CreateParams;
+  web_app_close: CreateParams<{
+    /**
+     * @since v7.6
+     */
+    return_back?: boolean;
+  } | undefined, 'return_back'>;
   /**
    * Closes a QR scanner. The Telegram application creates `scan_qr_popup_closed` event.
    * @since v6.4
@@ -152,14 +157,17 @@ export interface MiniAppsMethods {
      * URL to be opened by Telegram application. Should be a full path with `https` protocol.
      */
     url: string;
-
     /**
      * Link will be opened in Instant View mode if possible.
      * @since v6.4
      * @see https://instantview.telegram.org/
      */
     try_instant_view?: boolean;
-  }, 'try_instant_view'>;
+    /**
+     * @since v7.6
+     */
+    try_browser?: boolean;
+  }, 'try_instant_view' | 'try_browser'>;
   /**
    * Opens a new popup. When user closes the popup, Telegram creates the `popup_closed` event.
    * @since v6.2

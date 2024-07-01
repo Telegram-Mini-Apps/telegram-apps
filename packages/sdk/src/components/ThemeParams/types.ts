@@ -13,6 +13,7 @@ export type ThemeParamsKey =
   | 'secondaryBgColor'
   | 'sectionBgColor'
   | 'sectionHeaderTextColor'
+  | 'sectionSeparatorColor'
   | 'subtitleTextColor'
   | 'textColor';
 

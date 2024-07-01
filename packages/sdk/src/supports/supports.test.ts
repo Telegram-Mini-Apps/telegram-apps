@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest';
+import { expect, it, describe } from 'vitest';
 
 import type {
   MiniAppsMethodName,
@@ -9,8 +9,12 @@ import type { Version } from '@/version/types.js';
 
 import { supports } from './supports.js';
 
-type HaveCheckSupportMethodTuple = {
-  [M in MiniAppsMethodWithVersionedParams]: [M, MiniAppsMethodVersionedParams<M>]
+type HaveCheckSupportMethodObj = {
+  [M in MiniAppsMethodWithVersionedParams]: {
+    title: string;
+    method: M;
+    parameter: MiniAppsMethodVersionedParams<M>
+  }
 }[MiniAppsMethodWithVersionedParams];
 
 /**
@@ -25,10 +29,10 @@ function increaseVersion(version: Version, amount: number): string {
     : `${major - 1}.99`;
 }
 
-const tests: [
+describe.each<[
   version: Version,
-  methods: (MiniAppsMethodName | HaveCheckSupportMethodTuple)[],
-][] = [
+  methods: (MiniAppsMethodName | HaveCheckSupportMethodObj)[],
+]>([
   ['6.0', [
     'iframe_ready',
     'iframe_will_reload',
@@ -57,7 +61,11 @@ const tests: [
     'web_app_read_text_from_clipboard',
     'web_app_close_scan_qr_popup',
     'web_app_close_scan_qr_popup',
-    ['web_app_open_link', 'try_instant_view'],
+    {
+      title: 'web_app_open_link.try_instant_view',
+      method: 'web_app_open_link',
+      parameter: 'try_instant_view',
+    },
   ]],
   ['6.7', [
     'web_app_switch_inline_query',
@@ -66,7 +74,11 @@ const tests: [
     'web_app_invoke_custom_method',
     'web_app_request_write_access',
     'web_app_request_phone',
-    ['web_app_set_header_color', 'color'],
+    {
+      title: 'web_app_set_header_color.color',
+      method: 'web_app_set_header_color',
+      parameter: 'color',
+    },
   ]],
   ['6.10', [
     'web_app_setup_settings_button',
@@ -78,39 +90,51 @@ const tests: [
     'web_app_biometry_request_auth',
     'web_app_biometry_update_token',
   ]],
-];
-
-tests.forEach(([version, methods]) => {
+  ['7.6', [
+    {
+      title: 'web_app_open_link.try_browser',
+      method: 'web_app_open_link',
+      parameter: 'try_browser',
+    },
+    {
+      title: 'web_app_close.return_back',
+      method: 'web_app_close',
+      parameter: 'return_back',
+    },
+  ]],
+])('%s', (version, methods) => {
   const higher = increaseVersion(version, 1);
   const lower = increaseVersion(version, -1);
 
-  methods.forEach((methodOrTuple) => {
-    if (Array.isArray(methodOrTuple)) {
-      const [method, param] = methodOrTuple;
+  const methodsOnly = methods.filter((m): m is MiniAppsMethodName => {
+    return typeof m === 'string';
+  });
 
-      it(`should return true for method "${method}", parameter "${param}" and version >= ${version} (${higher})`, () => {
-        expect(supports(method, param, version)).toBe(true);
-        expect(supports(method, param, higher)).toBe(true);
-      });
+  const paramsOnly = methods.filter((m): m is HaveCheckSupportMethodObj => {
+    return typeof m === 'object';
+  });
 
-      it(`should return false for method "${method}", parameter "${param}" and version < ${version} (${lower})`, () => {
-        expect(supports(method, param, lower)).toBe(false);
-      });
-
-      return;
-    }
-
-    const method = methodOrTuple;
-
-    it(`should return true for "${method}" and version >= ${version} (${higher})`, () => {
+  describe.each(methodsOnly)('%s', (method) => {
+    it(`should return true if version >= ${version} (${higher})`, () => {
       expect(supports(method, version)).toBe(true);
       expect(supports(method, higher)).toBe(true);
     });
 
     if (version !== '6.0') {
-      it(`should return false for "${method}" and version < ${version} (${lower})`, () => {
+      it(`should return false if version < ${version} (${lower})`, () => {
         expect(supports(method, lower)).toBe(false);
       });
     }
+  });
+
+  describe.each(paramsOnly)('$title', ({ method, parameter }) => {
+    it(`should return true if version >= ${version} (${higher})`, () => {
+      expect(supports(method, parameter, version)).toBe(true);
+      expect(supports(method, parameter, higher)).toBe(true);
+    });
+
+    it(`should return false if version < ${version} (${lower})`, () => {
+      expect(supports(method, parameter, lower)).toBe(false);
+    });
   });
 });
