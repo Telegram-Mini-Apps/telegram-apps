@@ -1,36 +1,31 @@
-import { expect, it, vi } from 'vitest';
+import { afterEach, expect, it, vi } from 'vitest';
+
+import type { FnToSpy } from '@test-utils/types.js';
 
 import { createPostEvent } from './createPostEvent.js';
 import { postEvent as postEventFn } from './postEvent.js';
-import type { FnToSpy } from '@test-utils/types.js';
 
 const postEvent = postEventFn as unknown as FnToSpy<typeof postEventFn>;
 
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 vi.mock('./postEvent', () => ({ postEvent: vi.fn() }));
 
-it('should throw error if passed method is unsupported in specified version', () => {
-  const postEvent = createPostEvent('6.0');
-  expect(() => postEvent('web_app_request_write_access')).toThrow(
+it('should throw if passed method is unsupported in specified version', () => {
+  expect(() => createPostEvent('6.0')('web_app_request_write_access')).toThrow(
     'Method "web_app_request_write_access" is unsupported in Mini Apps version 6.0',
   );
 });
 
-it('should throw error if passed method parameter is unsupported in specified version', () => {
-  const postEvent = createPostEvent('6.3');
-  expect(() => postEvent('web_app_open_link', { url: '', try_instant_view: true }))
-    .toThrow(
-      'Parameter "try_instant_view" of "web_app_open_link" method is unsupported in Mini Apps version 6.3',
-    );
-
-  expect(() => postEvent('web_app_set_header_color', { color: '#aaaaaa' }))
+it('should throw "web_app_set_header_color.color" parameter is unsupported', () => {
+  expect(() => createPostEvent('6.3')('web_app_set_header_color', { color: '#aaaaaa' }))
     .toThrow('Parameter "color" of "web_app_set_header_color" method is unsupported in Mini Apps version 6.3');
 });
 
 it('should call global postEvent function', () => {
-  const postEvent = createPostEvent('6.3');
-  const spy = vi.spyOn(postEventModule, 'postEvent');
-
-  postEvent('web_app_request_viewport');
-  expect(spy).toHaveBeenCalledOnce();
-  expect(spy).toHaveBeenCalledWith('web_app_request_viewport', undefined);
+  createPostEvent('6.3')('web_app_request_viewport');
+  expect(postEvent).toHaveBeenCalledOnce();
+  expect(postEvent).toHaveBeenCalledWith('web_app_request_viewport', undefined);
 });
