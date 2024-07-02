@@ -19,7 +19,7 @@ export class QRScanner extends WithSupportsAndTrackableState<QRScannerState, 'cl
   }
 
   /**
-   * Closes scanner.
+   * Closes the scanner.
    */
   close(): void {
     this.postEvent('web_app_close_scan_qr_popup');
@@ -31,29 +31,27 @@ export class QRScanner extends WithSupportsAndTrackableState<QRScannerState, 'cl
   }
 
   /**
-   * Returns true in case, QR scanner is currently opened.
+   * Returns true if the scanner is currently opened.
    */
   get isOpened(): boolean {
     return this.get('isOpened');
   }
 
   /**
-   * Opens scanner with specified title shown to user. Method returns promise
-   * with scanned QR content in case, it was scanned. It will contain null in
-   * case, scanner was closed.
+   * Opens the scanner with the specified title shown to user.
+   * The method returns a promise with a scanned QR content and null if the scanner was closed.
    * @param options - method options.
    */
   async open(options?: QRScannerOpenOptions): Promise<string | null>;
   /**
-   * Opens scanner with specified title shown to user. Method returns promise
-   * with scanned QR content in case, it was scanned. It will contain null in
-   * case, scanner was closed.
+   * Opens the scanner with the specified title shown to user.
+   * The method returns a promise with a scanned QR content and null if the scanner was closed.
    * @param text - title to display.
    */
   async open(text?: string): Promise<string | null>;
   async open(textOrOptions?: QRScannerOpenOptions | string): Promise<string | null> {
     if (this.isOpened) {
-      throw new Error('QR scanner is already opened.');
+      throw new Error('The scanner is already opened');
     }
 
     const { text, capture }: QRScannerOpenOptions = (
@@ -79,9 +77,10 @@ export class QRScanner extends WithSupportsAndTrackableState<QRScannerState, 'cl
         this.close();
       }
       return qr;
-    } catch(e) {
+    } finally {
       this.isOpened = false;
-      throw e;
     }
   }
+
+  // TODO: Streaming mode, allowing to scan several QRs until closed.
 }
