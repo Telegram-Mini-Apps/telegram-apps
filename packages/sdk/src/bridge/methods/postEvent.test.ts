@@ -1,138 +1,139 @@
 import {
   afterEach,
-  beforeAll,
   expect,
+  describe,
   it,
-  type SpyInstance,
   vi,
 } from 'vitest';
 
-import { setTargetOrigin } from '@/bridge/target-origin.js';
+import { resetTargetOrigin, setTargetOrigin } from '@/bridge/target-origin.js';
 
 import { postEvent } from './postEvent.js';
-
-let windowSpy: SpyInstance<[], Window & typeof globalThis>;
-
-beforeAll(() => {
-  windowSpy = vi.spyOn(window, 'window', 'get');
-});
+import { createWindow } from '@test-utils/createWindow.js';
 
 afterEach(() => {
-  windowSpy.mockReset();
+  vi.restoreAllMocks();
 });
 
-it('should call "window.parent.postMessage" with object with properties {eventType: string, eventData: any} converted to string in case, current environment is iframe', () => {
-  const postMessageSpy = vi.fn();
-  windowSpy.mockImplementation(() => ({
-    self: 1000,
-    top: 900,
-    parent: { postMessage: postMessageSpy },
-  }) as any);
+describe('env: iframe', () => {
+  it('should call "window.parent.postMessage" with object {eventType: string, eventData: any} converted to string', () => {
+    const postMessage = vi.fn();
+    createWindow({
+      env: 'iframe',
+      parent: { postMessage } as any,
+    });
 
-  expect(postMessageSpy).toHaveBeenCalledTimes(0);
-  postEvent('web_app_close');
-  expect(postMessageSpy).toHaveBeenCalledTimes(1);
-  expect(postMessageSpy).toHaveBeenCalledWith(JSON.stringify({
-    eventType: 'web_app_close',
-    eventData: undefined,
-  }), 'https://web.telegram.org');
+    postEvent('web_app_close');
+    expect(postMessage).toHaveBeenCalledOnce();
+    expect(postMessage).toHaveBeenCalledWith('{"eventType":"web_app_close"}', 'https://web.telegram.org');
 
-  postMessageSpy.mockClear();
+    postMessage.mockClear();
 
-  expect(postMessageSpy).toHaveBeenCalledTimes(0);
-  postEvent('web_app_set_header_color', { color_key: 'bg_color' });
-  expect(postMessageSpy).toHaveBeenCalledTimes(1);
-  expect(postMessageSpy).toHaveBeenCalledWith(JSON.stringify({
-    eventType: 'web_app_set_header_color',
-    eventData: { color_key: 'bg_color' },
-  }), 'https://web.telegram.org');
+    postEvent('web_app_set_header_color', { color_key: 'bg_color' });
+    expect(postMessage).toHaveBeenCalledOnce();
+    expect(postMessage).toHaveBeenCalledWith(
+      '{"eventType":"web_app_set_header_color","eventData":{"color_key":"bg_color"}}',
+      'https://web.telegram.org',
+    );
 
-  postMessageSpy.mockClear();
+    postMessage.mockClear();
 
-  expect(postMessageSpy).toHaveBeenCalledTimes(0);
-  postEvent('web_app_close', { targetOrigin: 'abc' });
-  expect(postMessageSpy).toHaveBeenCalledTimes(1);
-  expect(postMessageSpy).toHaveBeenCalledWith(JSON.stringify({
-    eventType: 'web_app_close',
-    eventData: undefined,
-  }), 'abc');
+    postEvent('web_app_close', { targetOrigin: 'abc' });
+    expect(postMessage).toHaveBeenCalledOnce();
+    expect(postMessage).toHaveBeenCalledWith('{"eventType":"web_app_close"}', 'abc');
 
-  postMessageSpy.mockClear();
+    postMessage.mockClear();
 
-  expect(postMessageSpy).toHaveBeenCalledTimes(0);
-  postEvent(
-    'web_app_set_header_color',
-    { color_key: 'bg_color' },
-    { targetOrigin: 'abc' },
-  );
-  expect(postMessageSpy).toHaveBeenCalledTimes(1);
-  expect(postMessageSpy).toHaveBeenCalledWith(JSON.stringify({
-    eventType: 'web_app_set_header_color',
-    eventData: { color_key: 'bg_color' },
-  }), 'abc');
+    expect(postMessage).toHaveBeenCalledTimes(0);
+    postEvent(
+      'web_app_set_header_color',
+      { color_key: 'bg_color' },
+      { targetOrigin: 'abc' },
+    );
+    expect(postMessage).toHaveBeenCalledOnce();
+    expect(postMessage).toHaveBeenCalledWith(
+      '{"eventType":"web_app_set_header_color","eventData":{"color_key":"bg_color"}}',
+      'abc',
+    );
+  });
 });
 
-it('should call "window.TelegramWebviewProxy.postEvent" in case this path exists. Function accepts event name (string) as the first argument and event data (object converted to string) as the second one.', () => {
-  const spy = vi.fn();
-  windowSpy.mockImplementation(() => ({
-    TelegramWebviewProxy: { postEvent: spy },
-  }) as any);
+describe('env: common mobile', () => {
+  it('should call "window.TelegramWebviewProxy.postEvent" with the event name (string) as the first argument and event data (object converted to string) as the second one', () => {
+    const spy = vi.fn();
+    createWindow({
+      TelegramWebviewProxy: {
+        postEvent: spy,
+      },
+    } as any);
 
-  // Without parameters.
-  expect(spy).toHaveBeenCalledTimes(0);
-  postEvent('web_app_close');
-  expect(spy).toHaveBeenCalledTimes(1);
-  expect(spy).toHaveBeenCalledWith('web_app_close', undefined);
+    // Without parameters.
+    expect(spy).toHaveBeenCalledTimes(0);
+    postEvent('web_app_close');
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith('web_app_close', undefined);
 
-  spy.mockClear();
+    spy.mockClear();
 
-  // With parameters.
-  expect(spy).toHaveBeenCalledTimes(0);
-  postEvent('web_app_set_header_color', { color_key: 'bg_color' });
-  expect(spy).toHaveBeenCalledTimes(1);
-  expect(spy).toHaveBeenCalledWith('web_app_set_header_color', '{"color_key":"bg_color"}');
+    // With parameters.
+    expect(spy).toHaveBeenCalledTimes(0);
+    postEvent('web_app_set_header_color', { color_key: 'bg_color' });
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith('web_app_set_header_color', '{"color_key":"bg_color"}');
+  });
 });
 
-it('should call "window.external.notify" in case it exists. Passed value is object, converted to string. This object should contain fields "eventType" and "eventData".', () => {
-  const spy = vi.fn();
-  windowSpy.mockImplementation(() => ({
-    external: { notify: spy },
-  }) as any);
+describe('env: window mobile', () => {
+  it('should call "window.external.notify" with object {eventType: string, eventData: any} converted to string', () => {
+    const spy = vi.fn();
+    createWindow({
+      external: {
+        notify: spy,
+      },
+    } as any);
 
-  // Without parameters.
-  expect(spy).toHaveBeenCalledTimes(0);
-  postEvent('web_app_close');
-  expect(spy).toHaveBeenCalledTimes(1);
-  expect(spy).toHaveBeenCalledWith('{"eventType":"web_app_close"}');
+    // Without parameters.
+    postEvent('web_app_close');
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith('{"eventType":"web_app_close"}');
 
-  spy.mockClear();
+    spy.mockClear();
 
-  // With parameters.
-  expect(spy).toHaveBeenCalledTimes(0);
-  postEvent('web_app_set_header_color', { color_key: 'bg_color' });
-  expect(spy).toHaveBeenCalledTimes(1);
-  expect(spy).toHaveBeenCalledWith('{"eventType":"web_app_set_header_color","eventData":{"color_key":"bg_color"}}');
+    // With parameters.
+    postEvent('web_app_set_header_color', { color_key: 'bg_color' });
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith('{"eventType":"web_app_set_header_color","eventData":{"color_key":"bg_color"}}');
+  });
 });
 
-it('should throw an error in case, current environment is unknown', () => {
-  windowSpy.mockImplementation(() => ({}) as any);
-  expect(() => postEvent('web_app_close'))
-    .toThrow('Unable to determine current environment and possible way to send event');
+describe('env: unknown', () => {
+  it('should throw', () => {
+    createWindow();
+    expect(() => postEvent('web_app_close')).toThrow(
+      'Unable to determine current environment and possible way to send event',
+    );
+  });
 });
 
-it('should use globally set target origin', () => {
-  const postMessageSpy = vi.fn();
-  windowSpy.mockImplementation(() => ({
-    self: 1000,
-    top: 900,
-    parent: { postMessage: postMessageSpy },
-  }) as any);
+describe('target origin', () => {
+  afterEach(() => {
+    resetTargetOrigin();
+  });
 
-  setTargetOrigin('here we go!');
-  postEvent('iframe_ready', {});
+  it('should use globally set target origin', () => {
+    const postMessage = vi.fn();
+    createWindow({
+      env: 'iframe',
+      parent: { postMessage } as any,
+    });
 
-  expect(postMessageSpy).toHaveBeenCalledWith(
-    JSON.stringify({ eventType: 'iframe_ready', eventData: {} }),
-    'here we go!',
-  );
+    setTargetOrigin('here we go!');
+    postEvent('web_app_set_header_color', { color_key: 'bg_color' });
+
+    expect(postMessage).toHaveBeenCalledOnce();
+    expect(postMessage).toHaveBeenCalledWith(
+      '{"eventType":"web_app_set_header_color","eventData":{"color_key":"bg_color"}}',
+      'here we go!',
+    );
+  });
 });
