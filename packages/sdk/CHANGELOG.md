@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 2.6.1
+
+### Patch Changes
+
+- 9173cad: Fix invalid QR scanner behavior related to the invalid isOpened property updates.
+
 ## 2.6.0
 
 ### Minor Changes
