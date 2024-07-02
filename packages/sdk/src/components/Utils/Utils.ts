@@ -1,5 +1,5 @@
-import { captureSameReq } from '@/bridge/utils/captureSameReq.js';
-import { request } from '@/bridge/utils/request.js';
+import { captureSameReq } from '@/bridge/captureSameReq.js';
+import { request } from '@/bridge/request.js';
 import { WithSupports } from '@/classes/WithSupports.js';
 import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
 import { supports } from '@/supports/supports.js';

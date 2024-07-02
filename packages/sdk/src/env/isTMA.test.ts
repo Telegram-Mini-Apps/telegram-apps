@@ -1,7 +1,7 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import type { FnToSpy } from '@test-utils/types.js';
 
-import { request as requestFn } from '@/bridge/utils/request.js';
+import { request as requestFn } from '@/bridge/request.js';
 import { isTMA } from '@/env/isTMA.js';
 import { createWindow } from '@test-utils/createWindow.js';
 

@@ -10,14 +10,14 @@ export { createPostEvent } from '@/bridge/methods/createPostEvent.js';
 export { type PostEvent, postEvent } from '@/bridge/methods/postEvent.js';
 export * from '@/bridge/methods/types/index.js';
 export { setTargetOrigin, targetOrigin } from '@/bridge/target-origin.js';
-export { captureSameReq } from '@/bridge/utils/captureSameReq.js';
-export { invokeCustomMethod } from '@/bridge/utils/invokeCustomMethod.js';
+export { captureSameReq } from '@/bridge/captureSameReq.js';
+export { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
 export {
   request,
   type RequestOptions,
   type RequestCapture,
   type RequestResult,
-} from '@/bridge/utils/request.js';
+} from '@/bridge/request.js';
 
 /**
  * Classnames.

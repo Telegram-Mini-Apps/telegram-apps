@@ -1,10 +1,10 @@
 import { withTimeout } from '@/timeout/withTimeout.js';
 import type { ExecuteWithOptions, If, IsNever } from '@/types/index.js';
 
-import { on } from '../events/listening/on.js';
-import { postEvent as defaultPostEvent } from '../methods/postEvent.js';
-import type { MiniAppsEventName, MiniAppsEventPayload } from '../events/types.js';
-import type { MiniAppsMethodName, MiniAppsMethodParams } from '../methods/types/index.js';
+import { on } from './events/listening/on.js';
+import { postEvent as defaultPostEvent } from './methods/postEvent.js';
+import type { MiniAppsEventName, MiniAppsEventPayload } from './events/types.js';
+import type { MiniAppsMethodName, MiniAppsMethodParams } from './methods/types/index.js';
 import { createCleanup } from '@/misc/createCleanup.js';
 
 /**

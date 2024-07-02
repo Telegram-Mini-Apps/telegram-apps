@@ -1,5 +1,5 @@
-import { invokeCustomMethod } from '@/bridge/utils/invokeCustomMethod.js';
-import { request } from '@/bridge/utils/request.js';
+import { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
+import { request } from '@/bridge/request.js';
 import { WithSupportsAndTrackableState } from '@/classes/WithSupportsAndTrackableState.js';
 import { isColorDark } from '@/colors/isColorDark.js';
 import { isRGB } from '@/colors/isRGB.js';

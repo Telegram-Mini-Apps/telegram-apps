@@ -1,5 +1,5 @@
 import type { StateEvents } from '@/classes/State/types.js';
-import { RequestCapture } from '@/bridge/utils/request.js';
+import { RequestCapture } from '@/bridge/request.js';
 
 /**
  * QRScanner internal state.

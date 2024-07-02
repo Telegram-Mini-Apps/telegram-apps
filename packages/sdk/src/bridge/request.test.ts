@@ -15,7 +15,7 @@ import type { SpyInstance } from 'vitest';
 import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
 import { createTimeoutError } from '@/timeout/createTimeoutError.js';
 
-import { type PostEvent, postEvent as globalPostEvent } from '../methods/postEvent.js';
+import { type PostEvent, postEvent as globalPostEvent } from './methods/postEvent.js';
 import { request } from './request.js';
 
 vi.mock('../methods/postEvent', async () => {
