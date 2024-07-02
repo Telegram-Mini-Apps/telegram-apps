@@ -1,16 +1,18 @@
 import { expect, it, vi } from 'vitest';
 
 import { createPostEvent } from './createPostEvent.js';
-import * as postEventModule from './postEvent.js';
+import { postEvent as postEventFn } from './postEvent.js';
+import type { FnToSpy } from '@test-utils/types.js';
 
-vi.mock('./postEvent', () => ({
-  postEvent: vi.fn(),
-}));
+const postEvent = postEventFn as unknown as FnToSpy<typeof postEventFn>;
+
+vi.mock('./postEvent', () => ({ postEvent: vi.fn() }));
 
 it('should throw error if passed method is unsupported in specified version', () => {
   const postEvent = createPostEvent('6.0');
-  expect(() => postEvent('web_app_request_write_access'))
-    .toThrow('Method "web_app_request_write_access" is unsupported in Mini Apps version 6.0');
+  expect(() => postEvent('web_app_request_write_access')).toThrow(
+    'Method "web_app_request_write_access" is unsupported in Mini Apps version 6.0',
+  );
 });
 
 it('should throw error if passed method parameter is unsupported in specified version', () => {
