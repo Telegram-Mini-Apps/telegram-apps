@@ -2,6 +2,8 @@
 
 This document describes the motivation that inspired us to create `@tma.js`.
 
+Here is the list of problems, we found in the official SDK and decided to create our own:
+ 
 1. [Unproductive package format](#unproductive-package-format)
 2. [No public review](#no-public-review)
 3. [Vanilla JavaScript](#vanilla-javascript)
