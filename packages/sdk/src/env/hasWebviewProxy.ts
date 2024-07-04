@@ -8,7 +8,7 @@ import { isRecord } from '@/misc/isRecord.js';
 export function hasWebviewProxy<T extends {}>(value: T): value is (
   T & {
   TelegramWebviewProxy: {
-    postEvent: (...args: any) => any;
+    postEvent: (...args: unknown[]) => unknown;
   }
 }) {
   return 'TelegramWebviewProxy' in value

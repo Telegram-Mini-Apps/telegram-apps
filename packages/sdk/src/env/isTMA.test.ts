@@ -7,21 +7,21 @@ import { createWindow } from '@test-utils/createWindow.js';
 
 const request = requestFn as unknown as FnToSpy<typeof requestFn>;
 
-vi.mock('@/bridge/utils/request.js', async () => {
-  return {
-    request: vi.fn(),
-  };
-});
+vi.mock('@/bridge/request.js', async () => ({
+  request: vi.fn(),
+}));
 
 afterEach(() => {
   vi.resetAllMocks();
 });
 
-it('should return true if current window contains TelegramWebviewProxy property', () => {
+it('should return true if current window contains TelegramWebviewProxy property', async () => {
   createWindow({
-    TelegramWebviewProxy: {},
+    TelegramWebviewProxy: {
+      postEvent: 123,
+    },
   } as any);
-  expect(isTMA()).resolves.toBe(true);
+  await expect(isTMA()).resolves.toBe(true);
 });
 
 it(

@@ -111,7 +111,8 @@ export function postEvent(
 
   // Telegram for iOS and macOS.
   if (hasWebviewProxy(window)) {
-    return window.TelegramWebviewProxy.postEvent(eventType, JSON.stringify(eventData));
+    window.TelegramWebviewProxy.postEvent(eventType, JSON.stringify(eventData));
+    return;
   }
 
   // Otherwise current environment is unknown, and we are not able to send event.
