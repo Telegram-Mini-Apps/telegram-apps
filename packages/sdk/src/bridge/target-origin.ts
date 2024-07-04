@@ -1,4 +1,6 @@
-let currentTargetOrigin = 'https://web.telegram.org';
+const INITIAL_TARGET_ORIGIN = 'https://web.telegram.org'
+
+let currentTargetOrigin = INITIAL_TARGET_ORIGIN;
 
 /**
  * Sets a new global targetOrigin, used by the `postEvent` method.
@@ -17,7 +19,7 @@ export function setTargetOrigin(value: string): void {
  * Sets the initial target origin.
  */
 export function resetTargetOrigin(): void {
-  setTargetOrigin('https://web.telegram.org');
+  setTargetOrigin(INITIAL_TARGET_ORIGIN);
 }
 
 /**
