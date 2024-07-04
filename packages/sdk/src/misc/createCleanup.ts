@@ -4,13 +4,13 @@ import { CleanupFn } from '@/types/index.js';
  * Returns a tuple, containing function to add cleanup, call cleanup, and flag showing whether
  * cleanup was called. Cleanup will not be performed in case, it was done before.
  */
-export function createCleanup(...fns: CleanupFn[]): [
+export function createCleanup(...fns: (CleanupFn | CleanupFn[])[]): [
   add: (fn: CleanupFn) => void,
   call: () => void,
   cleanedUp: boolean,
 ] {
   let called = false;
-  const cache: CleanupFn[] = [...fns];
+  const cache: CleanupFn[] = [...fns.flat(1)];
 
   return [
     (fn) => !called && cache.push(fn),
