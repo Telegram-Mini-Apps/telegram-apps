@@ -102,7 +102,12 @@ export class Utils extends WithSupports<'readTextFromClipboard'> {
    */
   shareURL(url: string, text?: string): void {
     this.openTelegramLink(
-      'https://t.me/share/url?' + new URLSearchParams({ url, text: text || '' }).toString(),
+      `https://t.me/share/url?` + new URLSearchParams({ url, text: text || '' })
+        .toString()
+        // By default, URL search params encode spaces with "+".
+        // We are replacing them with "%20", because plus symbols are working incorrectly
+        // in Telegram.
+        .replace(/\+/g, '%20'),
     );
   }
 
