@@ -10,7 +10,6 @@ import {
   it,
   vi,
 } from 'vitest';
-import type { SpyInstance } from 'vitest';
 
 import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
 import { createTimeoutError } from '@/timeout/createTimeoutError.js';
@@ -18,16 +17,14 @@ import { createTimeoutError } from '@/timeout/createTimeoutError.js';
 import { type PostEvent, postEvent as globalPostEvent } from './methods/postEvent.js';
 import { request } from './request.js';
 
-vi.mock('../methods/postEvent', async () => {
+vi.mock('./methods/postEvent', async () => {
   const { postEvent: actualPostEvent } = await vi
-    .importActual('../methods/postEvent') as { postEvent: PostEvent };
+    .importActual('./methods/postEvent') as { postEvent: PostEvent };
 
   return {
     postEvent: vi.fn(actualPostEvent),
   };
 });
-
-let windowSpy: SpyInstance<[], Window & typeof globalThis>;
 
 beforeAll(() => {
   vi.useFakeTimers();
@@ -38,18 +35,17 @@ afterAll(() => {
 });
 
 beforeEach(() => {
-  windowSpy = createWindow({ env: 'iframe' });
+  createWindow({ env: 'iframe' });
 });
 
 afterEach(() => {
-  windowSpy.mockRestore();
-  // Reset mini apps event emitter singleton.
+  vi.restoreAllMocks();
   resetMiniAppsEventEmitter();
 });
 
 describe('options', () => {
   describe('timeout', () => {
-    it('should throw an error in case, timeout was reached', () => {
+    it('should throw if timeout was reached', async () => {
       const promise = request({
         method: 'web_app_request_phone',
         event: 'phone_requested',
@@ -58,12 +54,10 @@ describe('options', () => {
 
       vi.advanceTimersByTime(1500);
 
-      return promise.catch(() => null).finally(() => {
-        expect(promise).rejects.toEqual(createTimeoutError(1000));
-      });
+      await expect(promise).rejects.toThrow('Timeout reached: 1000ms');
     });
 
-    it('should not throw an error in case, data was received before timeout', () => {
+    it('should not throw an error in case, data was received before timeout', async () => {
       const promise = request({
         method: 'web_app_request_phone',
         event: 'phone_requested',
@@ -74,9 +68,7 @@ describe('options', () => {
       dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
       vi.advanceTimersByTime(1000);
 
-      return promise.catch(() => null).finally(() => {
-        expect(promise).resolves.toStrictEqual({ status: 'allowed' });
-      });
+      await expect(promise).resolves.toStrictEqual({ status: 'allowed' });
     });
   });
 
