@@ -1,9 +1,9 @@
 import type { InitData, InitDataParsed } from '@tma.js/sdk';
 
 import { initDataToSearchParams } from './initDataToSearchParams.js';
-import type { SignDataAsyncFn, SignDataSyncFn } from './types.js';
+import type { SharedOptions, SignDataAsyncFn, SignDataSyncFn, Text } from './types.js';
 
-export interface ValidateOptions {
+export interface ValidateOptions extends SharedOptions {
   /**
    * Time in seconds which states, how long from creation time init data is considered valid.
    *
@@ -36,7 +36,7 @@ function processSign(actual: string, expected: string): void | never {
  */
 export function validate(
   value: InitData | InitDataParsed | string | URLSearchParams,
-  token: string,
+  token: Text,
   signData: SignDataSyncFn,
   options?: ValidateOptions,
 ): void | never;
@@ -54,14 +54,14 @@ export function validate(
  */
 export function validate(
   value: InitData | InitDataParsed | string | URLSearchParams,
-  token: string,
+  token: Text,
   signData: SignDataAsyncFn,
   options?: ValidateOptions,
 ): Promise<void>;
 
 export function validate(
   value: InitData | InitDataParsed | string | URLSearchParams,
-  token: string,
+  token: Text,
   signData: SignDataSyncFn | SignDataAsyncFn,
   options: ValidateOptions = {},
 ): void | never | Promise<void> {
@@ -117,10 +117,10 @@ export function validate(
   // According to docs, we sort all the pairs in alphabetical order.
   pairs.sort();
 
-  const sign = signData(pairs.join('\n'), token);
+  const sign = signData(pairs.join('\n'), token, options);
 
   return typeof sign === 'string'
     ? processSign(sign, hash)
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    : sign.then(v => processSign(v, hash as string));
+    : sign.then(v => processSign(v, hash!));
 }

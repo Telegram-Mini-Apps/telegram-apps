@@ -1,12 +1,32 @@
 import { InitDataParsed } from '@tma.js/sdk';
 
-export interface SignData extends Omit<InitDataParsed, 'authDate' | 'hash'> {
-}
+import type { SignDataOptions } from './signData.js';
+
+export type Text = string | Buffer;
+
+export type SignData = Omit<InitDataParsed, 'authDate' | 'hash'>;
 
 export interface SignDataSyncFn {
-  (data: string, key: string): string;
+  (data: Text, key: Text, options?: SignDataOptions): string;
 }
 
 export interface SignDataAsyncFn {
-  (data: string, key: string): Promise<string>;
+  (data: Text, key: Text, options?: SignDataOptions): Promise<string>;
+}
+
+/**
+ * SHA-256 hashing function.
+ */
+export interface CreateHmacFn<Async extends boolean> {
+  (data: Text, key: Text): Async extends true
+    ? Promise<Buffer>
+    : Buffer;
+}
+
+export interface SharedOptions {
+  /**
+   * True, if token is already hashed.
+   * @default false
+   */
+  tokenHashed?: boolean;
 }

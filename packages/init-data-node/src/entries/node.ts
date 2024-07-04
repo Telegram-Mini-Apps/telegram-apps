@@ -1,33 +1,46 @@
+import { createHmac as nodeCreateHmac } from 'node:crypto';
 import { InitData, InitDataParsed } from '@tma.js/sdk';
-import { createHmac } from 'node:crypto';
 
-import { sign as baseSign } from '../sign.js';
-import { signData as baseSignData } from '../signData.js';
+import { hashToken as baseHashToken } from '../hashToken.js';
+import { sign as baseSign, SignOptions } from '../sign.js';
+import { signData as baseSignData, SignDataOptions } from '../signData.js';
 import { validate as baseValidate } from '../validate.js';
-import type{ ValidateOptions } from '../validate.js';
-import type { SignData } from '../types.js';
+import type { ValidateOptions } from '../validate.js';
+import type { CreateHmacFn, SignData, Text } from '../types.js';
+
+const createHmac: CreateHmacFn<false> = (data, key) => {
+  return nodeCreateHmac('sha256', key).update(data).digest();
+};
+
+/**
+ * Hashes specified token using a string, expected during init data sign.
+ * @param token - token to hash.
+ */
+export function hashToken(token: Text): Buffer {
+  return baseHashToken(token, createHmac);
+}
 
 /**
  * Signs specified init data.
  * @param data - init data to sign.
  * @param authDate - date, when this init data should be signed.
  * @param key - private key.
+ * @param options - additional options.
  * @returns Signed init data presented as query parameters.
  */
-export function sign(data: SignData, key: string, authDate: Date): string {
-  return baseSign(data, key, authDate, signData);
+export function sign(data: SignData, key: Text, authDate: Date, options?: SignOptions): string {
+  return baseSign(data, key, authDate, signData, options);
 }
 
 /**
  * Signs specified data with the passed token.
  * @param data - data to sign.
  * @param key - private key.
+ * @param options - additional options.
  * @returns Data sign.
  */
-export function signData(data: string, key: string): string {
-  return baseSignData(data, key, (d, k) => {
-    return createHmac('sha256', k).update(d).digest();
-  });
+export function signData(data: Text, key: Text, options?: SignDataOptions): string {
+  return baseSignData(data, key, createHmac, options);
 }
 
 /**
@@ -42,7 +55,7 @@ export function signData(data: string, key: string): string {
  */
 export function validate(
   value: InitData | InitDataParsed | string | URLSearchParams,
-  token: string,
+  token: Text,
   options?: ValidateOptions,
 ): void {
   return baseValidate(value, token, signData, options);

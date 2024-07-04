@@ -7,4 +7,4 @@ export {
 } from '@tma.js/sdk';
 export { initDataToSearchParams } from '../initDataToSearchParams.js';
 export type { ValidateOptions } from '../validate.js';
-export type { SignData } from '../types.js';
+export type { SignData, Text, CreateHmacFn } from '../types.js';
