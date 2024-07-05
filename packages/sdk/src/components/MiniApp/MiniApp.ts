@@ -12,7 +12,12 @@ import type { PhoneRequestedStatus, WriteAccessRequestedStatus } from '@/bridge/
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { SwitchInlineQueryChatType } from '@/bridge/methods/types/methods.js';
 import type { RGB } from '@/colors/types.js';
-import type { MiniAppHeaderColor, MiniAppProps, MiniAppState, RequestedContact } from '@/components/MiniApp/types.js';
+import type {
+  MiniAppHeaderColor,
+  MiniAppProps,
+  MiniAppState,
+  RequestedContact,
+} from '@/components/MiniApp/types.js';
 import type { CreateRequestIdFn } from '@/request-id/types.js';
 import type { SupportsFn } from '@/supports/types.js';
 import type { ExecuteWithTimeout } from '@/types/methods.js';
@@ -94,9 +99,10 @@ export class MiniApp extends WithSupportsAndTrackableState<
 
   /**
    * Closes the Mini App.
+   * @param returnBack - should the application be wrapped into the bottom bar.
    */
-  close(): void {
-    this.postEvent('web_app_close');
+  close(returnBack?: boolean): void {
+    this.postEvent('web_app_close', { return_back: returnBack });
   }
 
   /**
@@ -116,7 +122,7 @@ export class MiniApp extends WithSupportsAndTrackableState<
   }
 
   /**
-   * True if current Mini App background color is recognized as dark.
+   * True if the current Mini App background color is recognized as dark.
    */
   get isDark(): boolean {
     return isColorDark(this.bgColor);
