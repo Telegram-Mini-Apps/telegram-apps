@@ -15,8 +15,9 @@ export { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
 export {
   request,
   type RequestOptions,
-  type RequestCapture,
-  type RequestResult,
+  type RequestCaptureEventFn,
+  type RequestCaptureEventsFn,
+  type RequestEventsPayloads,
 } from '@/bridge/request.js';
 
 /**
@@ -144,7 +145,7 @@ export type {
   QRScannerEventName,
   QRScannerEvents,
   QRScannerState,
-  QRScannerOpenOptions
+  QRScannerOpenOptions,
 } from '@/components/QRScanner/types.js';
 
 // SettingsButton.
