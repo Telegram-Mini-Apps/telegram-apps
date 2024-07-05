@@ -5,10 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:host": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "tsconfig": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^1.1.0"
   }
 }
