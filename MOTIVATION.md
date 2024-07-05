@@ -21,7 +21,7 @@ Here is the list of problems, we found in the official SDK and decided to create
 ## Unproductive Package Format
 
 The Telegram SDK is provided as an IIFE package, which may lead to a variety
-of [potential issues](#iife). Modern development typically avoids this format unless it is genuinely
+of potential issues. Modern development typically avoids this format unless it is genuinely
 necessary. Developers tend to prefer more contemporary technologies and formats. The world of
 development has advanced significantly beyond the ES5 standard and traditional JavaScript.
 
