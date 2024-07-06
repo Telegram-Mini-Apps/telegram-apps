@@ -1,4 +1,4 @@
-import { SDKProvider, useLaunchParams } from '@tma.js/sdk-react';
+import { SDKProvider, useLaunchParams } from '@telegram-apps/sdk-react';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { type FC, useEffect, useMemo } from 'react';
 

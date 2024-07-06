@@ -1,12 +1,10 @@
-import { type ReactNode, useMemo } from 'react';
-import { useInitData, retrieveLaunchParams, type User } from '@tma.js/sdk-react';
+'use client';
+
+import { useMemo } from 'react';
+import { useInitData, useLaunchParams, type User } from '@telegram-apps/sdk-react';
+import { List, Placeholder } from '@telegram-apps/telegram-ui';
 
 import { DisplayData, type DisplayDataRow } from '@/components/DisplayData/DisplayData';
-import { Link } from '@/components/Link/Link';
-import { Page } from '@/components/Page/Page';
-import { useDidMount } from '@/hooks/useDidMount';
-
-import styles from './styles.module.css';
 
 function getUserRows(user: User): DisplayDataRow[] {
   return [
@@ -24,9 +22,8 @@ function getUserRows(user: User): DisplayDataRow[] {
 }
 
 export default function InitDataPage() {
-  const didMount = useDidMount();
-  const initData = useInitData(true);
-  const initDataRaw = useMemo(() => didMount ? retrieveLaunchParams().initDataRaw : '', [didMount]);
+  const initDataRaw = useLaunchParams().initDataRaw;
+  const initData = useInitData();
 
   const initDataRows = useMemo<DisplayDataRow[] | undefined>(() => {
     if (!initData || !initDataRaw) {
@@ -79,57 +76,26 @@ export default function InitDataPage() {
     ];
   }, [initData]);
 
-  let contentNode: ReactNode;
-
   if (!initDataRows) {
-    contentNode = <i>Application was launched with missing init data</i>;
-  } else {
-    contentNode = (
-      <>
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Init data</h2>
-          <DisplayData rows={initDataRows}/>
-        </div>
-
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>User</h2>
-          {userRows
-            ? <DisplayData rows={userRows}/>
-            : <i>User information missing</i>}
-        </div>
-
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Receiver</h2>
-          {receiverRows
-            ? <DisplayData rows={receiverRows}/>
-            : <i>Receiver information missing</i>}
-        </div>
-
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Chat</h2>
-          {chatRows
-            ? <DisplayData rows={chatRows}/>
-            : <i>Chat information missing</i>}
-        </div>
-      </>
+    return (
+      <Placeholder
+        header="Oops"
+        description="Application was launched with missing init data"
+      >
+        <img
+          alt="Telegram sticker"
+          src="https://xelene.me/telegram.gif"
+          style={{ display: 'block', width: '144px', height: '144px' }}
+        />
+      </Placeholder>
     );
   }
-
   return (
-    <Page
-      title="Init Data"
-      disclaimer={(
-        <>
-          This page displays application
-          {' '}
-          <Link href="https://docs.telegram-mini-apps.com/platform/init-data">
-            init data
-          </Link>
-          .
-        </>
-      )}
-    >
-      {contentNode}
-    </Page>
+    <List>
+      <DisplayData header={'Init Data'} rows={initDataRows}/>
+      {userRows && <DisplayData header={'User'} rows={userRows}/>}
+      {receiverRows && <DisplayData header={'Receiver'} rows={receiverRows}/>}
+      {chatRows && <DisplayData header={'Chat'} rows={chatRows}/>}
+    </List>
   );
 };

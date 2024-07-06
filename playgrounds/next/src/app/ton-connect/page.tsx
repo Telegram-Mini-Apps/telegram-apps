@@ -1,3 +1,5 @@
+'use client';
+
 import { useUtils } from '@telegram-apps/sdk-react';
 import { TonConnectButton, useTonWallet } from '@tonconnect/ui-react';
 import {
@@ -5,17 +7,17 @@ import {
   Cell,
   List,
   Navigation,
-  Placeholder, Section,
+  Placeholder,
+  Section,
   Text,
   Title,
 } from '@telegram-apps/telegram-ui';
-import type { FC } from 'react';
 
-import { DisplayData } from '@/components/DisplayData/DisplayData.tsx';
+import { DisplayData } from '@/components/DisplayData/DisplayData';
 
-import './TONConnectPage.css';
+import './styles.css';
 
-export const TONConnectPage: FC = () => {
+export default function TONConnectPage() {
   const wallet = useTonWallet();
   const utils = useUtils();
 

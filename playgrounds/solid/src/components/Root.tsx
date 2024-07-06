@@ -1,4 +1,4 @@
-import { retrieveLaunchParams, SDKProvider } from '@tma.js/sdk-solid';
+import { retrieveLaunchParams, SDKProvider } from '@telegram-apps/sdk-solid';
 import { ErrorBoundary, type Component, Switch, Match } from 'solid-js';
 
 import { App } from '@/components/App.js';

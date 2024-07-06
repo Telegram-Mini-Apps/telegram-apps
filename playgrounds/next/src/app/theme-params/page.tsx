@@ -1,10 +1,11 @@
+'use client';
+
 import { useThemeParams } from '@telegram-apps/sdk-react';
-import type { FC } from 'react';
 import { List } from '@telegram-apps/telegram-ui';
 
-import { DisplayData } from '@/components/DisplayData/DisplayData.tsx';
+import { DisplayData } from '@/components/DisplayData/DisplayData';
 
-export const ThemeParamsPage: FC = () => {
+export default function ThemeParamsPage() {
   const themeParams = useThemeParams();
 
   return (

@@ -1,5 +1,5 @@
 import { type FC, useMemo } from 'react';
-import { useInitData, useLaunchParams, type User } from '@tma.js/sdk-react';
+import { useInitData, useLaunchParams, type User } from '@telegram-apps/sdk-react';
 import { List, Placeholder } from '@telegram-apps/telegram-ui';
 
 import { DisplayData, type DisplayDataRow } from '@/components/DisplayData/DisplayData.tsx';
