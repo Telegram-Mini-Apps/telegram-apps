@@ -12,14 +12,14 @@ can clone the repository using the Git command:
 
 ```bash
 # Via SSH.
-git clone git@github.com:Telegram-Mini-Apps/tma.js.git
+git clone git@github.com:Telegram-Mini-Apps/telegram-apps.git
 ```
 
 or
 
 ```bash
 # Via HTTPS.
-git clone https://github.com/Telegram-Mini-Apps/tma.js.git
+git clone https://github.com/Telegram-Mini-Apps/telegram-apps.git
 ```
 
 Once the repository is fetched, install project dependencies via [pnpm](https://pnpm.io/) (pnpm
@@ -31,7 +31,7 @@ pnpm i
 
 ## Trying Your Code
 
-This project contains an already configured application that can use any `@tma.js` package located
+This project contains an already configured application that can use any `@telegram-apps` package located
 in the [packages](packages) folder. The application uses local versions of packages, not remote ones
 presented in some registry. The local playground represents almost the default Vite TypeScript
 application template with some additional tsconfig configuration, allowing the resolution of
@@ -53,7 +53,7 @@ automatically transpiled by Vite and executed by the browser.
 
 As the local playground refers to the actual code, you can make any changes in the packages
 directory to see the changes instantly. This will help you understand how the code you are going to
-change in `@tma.js` packages will work after your proposed changes.
+change in `@telegram-apps` packages will work after your proposed changes.
 
 ## After Changes Done
 

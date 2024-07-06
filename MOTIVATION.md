@@ -1,6 +1,6 @@
 # Motivation
 
-This document describes the motivation that inspired us to create `@tma.js`.
+This document describes the motivation that inspired us to create `@telegram-apps`.
 
 Here is the list of problems, we found in the official SDK and decided to create our own:
  
@@ -27,11 +27,11 @@ development has advanced significantly beyond the ES5 standard and traditional J
 
 ### Solution
 
-Despite the issues associated with IIFE, `@tma.js` is available in three formats: CommonJS (CJS),
+Despite the issues associated with IIFE, `@telegram-apps` is available in three formats: CommonJS (CJS),
 ECMAScript Modules (ESM), and IIFE. Developers have the flexibility to choose any of these formats,
 and they can reap the benefits of selecting ESM.
 
-All project packages are available on [npm.js](https://www.npmjs.com/org/tma.js) and can be
+All project packages are available on [npm.js](https://www.npmjs.com/org/telegram-apps) and can be
 installed in the standard manner via `npm i`, `pnpm i`, `yarn add`, etc.
 
 ## No Public Review
@@ -42,7 +42,7 @@ Additionally, developers are unable to report some problems in code or suggest a
 
 ### Solution
 
-`@tma.js` uses GitHub as its codebase repository. Every developer can track changes made to any
+`@telegram-apps` uses GitHub as its codebase repository. Every developer can track changes made to any
 files and review them.
 
 ## Vanilla JavaScript
@@ -54,7 +54,7 @@ TypeScript, offering type support out of the box.
 
 ### Solution
 
-`@tma.js` is written in TypeScript and doesn't require help of other packages to provide typings.
+`@telegram-apps` is written in TypeScript and doesn't require help of other packages to provide typings.
 
 ## Possible Security Issues
 
@@ -78,7 +78,7 @@ this security mechanism, Telegram does it for them for "testing purposes".
 
 ### Solution
 
-`@tma.js` does not disable any security mechanisms. If a developer needs to configure the list of
+`@telegram-apps` does not disable any security mechanisms. If a developer needs to configure the list of
 allowed parent iframe origins, the package provides corresponding methods.
 
 ## Mixed Code Quality
@@ -94,7 +94,7 @@ is happening in the code, which, in turn, makes it more challenging to contribut
 
 ### Solution
 
-`@tma.js` code is extensively documented with various types of comments and documentation. The
+`@telegram-apps` code is extensively documented with various types of comments and documentation. The
 project follows well-established and widely
 recognized [ESLint rules as described by Airbnb](https://github.com/airbnb/javascript). External
 developers are welcome to explore the code and propose improvements.
@@ -108,7 +108,7 @@ here.
 
 ### Solution
 
-`@tma.js` packages are built using Vite (Rollup), which minifies the code and provides ready-to-use
+`@telegram-apps` packages are built using Vite (Rollup), which minifies the code and provides ready-to-use
 libraries.
 
 ## Inconsistent Components State
@@ -130,7 +130,7 @@ So, the SDK lacks awareness of the actual state of components.
 
 ### Solution
 
-`@tma.js` packages consistently provide the current component state.
+`@telegram-apps` packages consistently provide the current component state.
 
 ## 1700 Lines of Code, Single File
 
@@ -139,7 +139,7 @@ way too hard, decreasing code understanding and external developers code contrib
 
 ### Solution
 
-`@tma.js` packages are finely detailed, with each package being responsible for its specific part of
+`@telegram-apps` packages are finely detailed, with each package being responsible for its specific part of
 the platform and having an intuitive file structure.
 
 ## Unused Code
@@ -174,7 +174,7 @@ already a concern.
 
 ### Solution
 
-`@tma.js` does not contain any code specifically oriented towards a distinct group of developers.
+`@telegram-apps` does not contain any code specifically oriented towards a distinct group of developers.
 The functionality it provides covers scenarios that all developers are likely to encounter.
 
 ## Implicit Methods Inactivity
@@ -195,12 +195,12 @@ platform versions and implement the corresponding functionality themselves.
 
 ### Solution
 
-The `@tma.js/bridge` package offers utilities to verify whether a specific Telegram Mini Apps method
+The `@telegram-apps/bridge` package offers utilities to verify whether a specific Telegram Mini Apps method
 is supported in a specified platform version. This ensures that the developer can be confident the
 method call will work as intended. It also allows checking if specified method **parameter** is
 supported by specified version.
 
-The `@tma.js/sdk` package provides higher-level components that make use of Telegram Mini Apps. Each
+The `@telegram-apps/sdk` package provides higher-level components that make use of Telegram Mini Apps. Each
 component has a special method, `supports`, which returns `true` if the component's method is
 supported in the current platform version. By default, calling methods that are not supported in the
 current platform version will result in an error. Nevertheless, this type of behavior is configurable.
@@ -219,7 +219,7 @@ initialization has been completed.
 
 ### Solution
 
-`@tma.js` provides asynchronous initialization to ensure that developers are working with
+`@telegram-apps` provides asynchronous initialization to ensure that developers are working with
 components in their actual state. However, it does not restrict developers from implementing
 their own initialization process.
 
@@ -237,7 +237,7 @@ configurable.
 
 ### Solution
 
-CSS variables feature is configurable in `@tma.js` packages.
+CSS variables feature is configurable in `@telegram-apps` packages.
 
 ## Forced Logs
 
@@ -247,4 +247,4 @@ to sending unnecessary logs to external services.
 
 ### Solution
 
-`@tma.js/sdk` supports enabling and disabling lifecycle logs.
+`@telegram-apps/sdk` supports enabling and disabling lifecycle logs.
