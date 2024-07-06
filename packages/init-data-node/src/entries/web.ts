@@ -1,46 +1,65 @@
 import { InitData, InitDataParsed } from '@tma.js/sdk';
 
-import { sign as baseSign } from '../sign.js';
-import { signData as baseSignData } from '../signData.js';
+import { hashToken as baseHashToken } from '../hashToken.js';
+import { sign as baseSign, SignOptions } from '../sign.js';
+import { signData as baseSignData, SignDataOptions } from '../signData.js';
 import { validate as baseValidate } from '../validate.js';
 import type{ ValidateOptions } from '../validate.js';
-import type { SignData } from '../types.js';
+import type { CreateHmacFn, SignData, Text } from '../types.js';
+
+const createHmac: CreateHmacFn<true> = async (data, key) => {
+  const encoder = new TextEncoder();
+
+  return Buffer.from(
+    await crypto.subtle.sign(
+      'HMAC',
+      await crypto.subtle.importKey(
+        'raw',
+        typeof key === 'string' ? encoder.encode(key) : key,
+        { name: 'HMAC', hash: 'SHA-256' },
+        false,
+        ['sign', 'verify'],
+      ),
+      encoder.encode(data.toString()),
+    ),
+  );
+};
+
+
+/**
+ * Hashes specified token using a string, expected during init data sign.
+ * @param token - token to hash.
+ */
+export function hashToken(token: Text): Promise<Buffer> {
+  return baseHashToken(token, createHmac);
+}
 
 /**
  * Signs specified init data.
  * @param data - init data to sign.
  * @param authDate - date, when this init data should be signed.
  * @param key - private key.
+ * @param options - additional options.
  * @returns Signed init data presented as query parameters.
  */
-export function sign(data: SignData, key: string, authDate: Date): Promise<string> {
-  return baseSign(data, key, authDate, signData);
+export function sign(
+  data: SignData,
+  key: Text,
+  authDate: Date,
+  options?: SignOptions
+): Promise<string> {
+  return baseSign(data, key, authDate, signData, options);
 }
 
 /**
  * Signs specified data with the passed token.
  * @param data - data to sign.
  * @param key - private key.
+ * @param options - additional options.
  * @returns Data sign.
  */
-export async function signData(data: string, key: string): Promise<string> {
-  return baseSignData(data, key, async (d, k) => {
-    const encoder = new TextEncoder();
-
-    return Buffer.from(
-      await crypto.subtle.sign(
-        'HMAC',
-        await crypto.subtle.importKey(
-          'raw',
-          typeof k === 'string' ? encoder.encode(k) : k,
-          { name: 'HMAC', hash: 'SHA-256' },
-          false,
-          ['sign', 'verify'],
-        ),
-        encoder.encode(d),
-      ),
-    );
-  });
+export async function signData(data: Text, key: Text, options?: SignDataOptions): Promise<string> {
+  return baseSignData(data, key, createHmac, options);
 }
 
 /**
@@ -55,7 +74,7 @@ export async function signData(data: string, key: string): Promise<string> {
  */
 export async function validate(
   value: InitData | InitDataParsed | string | URLSearchParams,
-  token: string,
+  token: Text,
   options?: ValidateOptions,
 ): Promise<void> {
   return baseValidate(value, token, signData, options);

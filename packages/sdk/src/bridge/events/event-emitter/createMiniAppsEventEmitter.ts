@@ -5,10 +5,7 @@ import { createCleanup } from '@/misc/createCleanup.js';
 import { boolean } from '@/parsing/parsers/boolean.js';
 import { json } from '@/parsing/parsers/json.js';
 import { number } from '@/parsing/parsers/number.js';
-import { rgb } from '@/parsing/parsers/rgb.js';
 import { string } from '@/parsing/parsers/string.js';
-import { toRecord } from '@/parsing/toRecord.js';
-import type { RGB } from '@/colors/types.js';
 
 import { type MiniAppsMessage, parseMessage } from '../../parseMessage.js';
 import { cleanupEventHandlers } from '../event-handlers/cleanupEventHandlers.js';
@@ -21,9 +18,7 @@ import type {
 } from '../types.js';
 
 /**
- * Parsers for each Mini Apps event.
- *
- * This map should be cleaned
+ * Parsers for problematic Mini Apps events.
  */
 const parsers: {
   [E in MiniAppsEventName]?: {
@@ -39,8 +34,6 @@ const parsers: {
     result: (value) => value,
     error: string().optional(),
   }),
-  invoice_closed: json({ slug: string(), status: string() }),
-  phone_requested: json({ status: string() }),
   popup_closed: {
     parse(value) {
       return json({
@@ -52,19 +45,6 @@ const parsers: {
       }).parse(value ?? {});
     },
   },
-  qr_text_received: json({ data: string().optional() }),
-  theme_changed: json({
-    theme_params: (value) => {
-      const parser = rgb().optional();
-
-      return Object
-        .entries(toRecord(value))
-        .reduce<Partial<Record<string, RGB>>>((acc, [k, v]) => {
-          acc[k] = parser.parse(v);
-          return acc;
-        }, {});
-    },
-  }),
   viewport_changed: json({
     height: number(),
     width: (value) => (
@@ -75,7 +55,6 @@ const parsers: {
     is_state_stable: boolean(),
     is_expanded: boolean(),
   }),
-  write_access_requested: json({ status: string() }),
 };
 
 /**
@@ -146,7 +125,7 @@ export function createMiniAppsEventEmitter(): [
         mainEmitter.emit(...(data ? [eventType, data] : [eventType]) as [any, any]);
       } catch (cause) {
         logger.error(
-          `An error occurred processing the "${eventType}" event from the Telegram application. Please, file an issue here: https://github.com/Telegram-Mini-Apps/tma.js/issues/new/choose`,
+          `An error occurred processing the "${eventType}" event from the Telegram application.\nPlease, file an issue here:\nhttps://github.com/Telegram-Mini-Apps/tma.js/issues/new/choose`,
           message,
           cause,
         );

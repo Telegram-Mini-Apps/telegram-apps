@@ -8,9 +8,9 @@ export { unsubscribe } from '@/bridge/events/listening/unsubscribe.js';
 export { createPostEvent } from '@/bridge/methods/createPostEvent.js';
 export { postEvent } from '@/bridge/methods/postEvent.js';
 export { setTargetOrigin, targetOrigin } from '@/bridge/target-origin.js';
-export { captureSameReq } from '@/bridge/utils/captureSameReq.js';
-export { invokeCustomMethod } from '@/bridge/utils/invokeCustomMethod.js';
-export { request } from '@/bridge/utils/request.js';
+export { captureSameReq } from '@/bridge/captureSameReq.js';
+export { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
+export { request } from '@/bridge/request.js';
 
 /**
  * Debug.

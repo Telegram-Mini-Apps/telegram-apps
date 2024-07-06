@@ -163,3 +163,74 @@ await validate(...);
 await sign(...);
 await signData(...);
 ```
+
+## Passing Hashed Token
+
+All package methods allow developers to use a hashed token instead of a raw token.
+
+By "hashed token," we mean a token hashed using the HMAC-SHA-256 algorithm with a key derived
+from `WebAppData`, as specified in
+the [validation](../platform/init-data#validating) section of the documentation.
+
+Here are some examples:
+
+```ts
+import { validate, sign } from '@tma.js/init-data-node';
+
+const secretTokenHashed = 'a5c609aa52f63cb5e6d8ceb6e4138726ea82bbc36bb786d64482d445ea38ee5f';
+const initData =
+  'query_id=AAHdF6IQAAAAAN0XohDhrOrc' +
+  '&user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%22%2C%22last_name%22%3A%22Kibenko%22%2C%22username%22%3A%22vdkfrost%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%7D' +
+  '&auth_date=1662771648' +
+  '&hash=c501b71e775f74ce10e377dea85a7ea24ecd640b223ea86dfe453e0eaed2e2b2';
+
+// Validating.
+validate(initData, secretTokenHashed, { tokenHashed: true });
+
+// Signing.
+sign(
+  {
+    canSendAfter: 10000,
+    chat: {
+      id: 1,
+      type: 'group',
+      username: 'my-chat',
+      title: 'chat-title',
+      photoUrl: 'chat-photo',
+    },
+    chatInstance: '888',
+    chatType: 'sender',
+    queryId: 'QUERY',
+    receiver: {
+      addedToAttachmentMenu: false,
+      allowsWriteToPm: true,
+      firstName: 'receiver-first-name',
+      id: 991,
+      isBot: false,
+      isPremium: true,
+      languageCode: 'ru',
+      lastName: 'receiver-last-name',
+      photoUrl: 'receiver-photo',
+      username: 'receiver-username',
+    },
+    startParam: 'debug',
+    user: {
+      addedToAttachmentMenu: false,
+      allowsWriteToPm: false,
+      firstName: 'user-first-name',
+      id: 222,
+      isBot: true,
+      isPremium: false,
+      languageCode: 'en',
+      lastName: 'user-last-name',
+      photoUrl: 'user-photo',
+      username: 'user-username',
+    },
+  },
+  secretTokenHashed,
+  new Date(1000),
+  { tokenHashed: true }
+);
+```
+
+You can use this approach to reduce the number of instances where you directly pass a raw token.

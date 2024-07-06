@@ -31,7 +31,7 @@ describe('open', () => {
     const qr = new QRScanner(false, '10', vi.fn() as any);
     const promise = qr.open('Scan a QR');
 
-    dispatchWindowMessageEvent('scan_qr_popup_closed', {});
+    dispatchWindowMessageEvent('scan_qr_popup_closed');
 
     await expect(promise).resolves.toBeNull();
   });

@@ -1,4 +1,4 @@
-import { request } from '@/bridge/utils/request.js';
+import { request } from '@/bridge/request.js';
 import type { ExecuteWithOptions } from '@/types/index.js';
 
 import { formatEvent } from './formatEvent.js';

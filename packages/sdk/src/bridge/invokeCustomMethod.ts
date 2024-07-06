@@ -4,7 +4,7 @@ import type { ExecuteWithOptions } from '@/types/index.js';
 
 import { captureSameReq } from './captureSameReq.js';
 import { request } from './request.js';
-import type { CustomMethodName, CustomMethodParams } from '../methods/types/custom-methods.js';
+import type { CustomMethodName, CustomMethodParams } from './methods/types/custom-methods.js';
 
 /**
  * Invokes known custom method. Returns method execution result.

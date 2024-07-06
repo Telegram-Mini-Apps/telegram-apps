@@ -16,8 +16,10 @@ import type {
 
 interface PostEventOptions {
   /**
-   * Origin used while posting message. This option is only used in case, current environment
-   * is browser (Web version of Telegram) and could be used for test purposes.
+   * Origin used while posting a message.
+   *
+   * This option is only used if the current environment is browser (Web version of Telegram)
+   * and could be used for test purposes.
    * @default 'https://web.telegram.org'
    */
   targetOrigin?: string;
@@ -46,7 +48,10 @@ export function postEvent<Method extends MiniAppsMethodWithOptionalParams>(
  * @throws {SDKError} ERR_UNKNOWN_ENV
  * @see ERR_UNKNOWN_ENV
  */
-export function postEvent(method: MiniAppsMethodWithoutParams, options?: PostEventOptions): void;
+export function postEvent(
+  method: MiniAppsMethodWithoutParams | MiniAppsMethodWithOptionalParams,
+  options?: PostEventOptions,
+): void;
 
 /**
  * Calls Mini Apps method with parameters.
@@ -70,14 +75,14 @@ export function postEvent(
   let postOptions: PostEventOptions = {};
   let eventData: any;
 
-  if (paramsOrOptions === undefined && options === undefined) {
+  if (!paramsOrOptions && !options) {
     // Parameters and options were not passed.
     postOptions = {};
-  } else if (paramsOrOptions !== undefined && options !== undefined) {
+  } else if (paramsOrOptions && options) {
     // Both parameters and options passed.
     postOptions = options;
     eventData = paramsOrOptions;
-  } else if (paramsOrOptions !== undefined) {
+  } else if (paramsOrOptions) {
     // Only parameters were passed.
     if ('targetOrigin' in paramsOrOptions) {
       postOptions = paramsOrOptions;
@@ -85,7 +90,6 @@ export function postEvent(
       eventData = paramsOrOptions;
     }
   }
-  const { targetOrigin = targetOriginFn() } = postOptions;
 
   log('Posting event:', eventData
     ? { event: eventType, data: eventData }
@@ -93,8 +97,10 @@ export function postEvent(
 
   // Telegram Web.
   if (isIframe()) {
-    window.parent.postMessage(JSON.stringify({ eventType, eventData }), targetOrigin);
-    return;
+    return window.parent.postMessage(
+      JSON.stringify({ eventType, eventData }),
+      postOptions.targetOrigin || targetOriginFn(),
+    );
   }
 
   // Telegram for Windows Phone or Android.
@@ -112,6 +118,6 @@ export function postEvent(
   // Otherwise current environment is unknown, and we are not able to send event.
   throw createError(
     ERR_UNKNOWN_ENV,
-    'Unable to determine current environment and possible way to send event. You are probably trying to use Mini Apps method outside of Telegram application environment.',
+    'Unable to determine current environment and possible way to send event. You are probably trying to use Mini Apps method outside the Telegram application environment.',
   );
 }

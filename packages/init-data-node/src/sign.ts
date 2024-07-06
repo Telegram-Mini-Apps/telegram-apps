@@ -1,6 +1,8 @@
 import { initDataToSearchParams } from './initDataToSearchParams.js';
 
-import type { SignData, SignDataAsyncFn, SignDataSyncFn } from './types.js';
+import type { SharedOptions, SignData, SignDataAsyncFn, SignDataSyncFn, Text } from './types.js';
+
+export type SignOptions = SharedOptions;
 
 /**
  * Signs specified init data.
@@ -8,30 +10,40 @@ import type { SignData, SignDataAsyncFn, SignDataSyncFn } from './types.js';
  * @param authDate - date, when this init data should be signed.
  * @param key - private key.
  * @param signData - function signing data.
- * @returns Signed init data presented as query parameters.
- */
-export function sign(data: SignData, key: string, authDate: Date, signData: SignDataSyncFn): string;
-
-/**
- * Signs specified init data.
- * @param data - init data to sign.
- * @param authDate - date, when this init data should be signed.
- * @param key - private key.
- * @param signData - function signing data.
+ * @param options - additional options.
  * @returns Signed init data presented as query parameters.
  */
 export function sign(
   data: SignData,
-  key: string,
+  key: Text,
+  authDate: Date,
+  signData: SignDataSyncFn,
+  options?: SignOptions,
+): string;
+
+/**
+ * Signs specified init data.
+ * @param data - init data to sign.
+ * @param authDate - date, when this init data should be signed.
+ * @param key - private key.
+ * @param signData - function signing data.
+ * @param options - additional options.
+ * @returns Signed init data presented as query parameters.
+ */
+export function sign(
+  data: SignData,
+  key: Text,
   authDate: Date,
   signData: SignDataAsyncFn,
+  options?: SignOptions,
 ): Promise<string>;
 
 export function sign(
   data: SignData,
-  key: string,
+  key: Text,
   authDate: Date,
   signData: SignDataSyncFn | SignDataAsyncFn,
+  options?: SignOptions,
 ): string | Promise<string> {
   // Create search parameters, which will be signed further.
   const sp = initDataToSearchParams({
@@ -50,6 +62,6 @@ export function sign(
     return sp.toString();
   }
 
-  const sign = signData(pairs.join('\n'), key);
+  const sign = signData(pairs.join('\n'), key, options);
   return typeof sign === 'string' ? processSign(sign) : sign.then(processSign);
 }

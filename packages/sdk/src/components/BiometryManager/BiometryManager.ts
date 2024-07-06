@@ -1,4 +1,4 @@
-import { request } from '@/bridge/utils/request.js';
+import { request } from '@/bridge/request.js';
 import { WithSupportsAndTrackableState } from '@/classes/WithSupportsAndTrackableState.js';
 import { formatEvent } from '@/components/BiometryManager/formatEvent.js';
 import type { BiometryType } from '@/bridge/events/types.js';

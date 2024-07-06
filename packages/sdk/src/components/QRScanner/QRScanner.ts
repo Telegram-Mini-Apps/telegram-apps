@@ -1,4 +1,4 @@
-import { request } from '@/bridge/utils/request.js';
+import { request } from '@/bridge/request.js';
 import { WithSupportsAndTrackableState } from '@/classes/WithSupportsAndTrackableState.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { Version } from '@/version/types.js';

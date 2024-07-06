@@ -23,17 +23,29 @@ in an external browser not closing current Mini App, using method `openLink`:
 utils.openLink('https://google.com');
 ```
 
+This method also allows opening a link using
+Telegram's [Instant View](https://instantview.telegram.org/) when possible:
+
+```typescript
+utils.openLink('https://google.com', { tryInstantView: true });
+```
+
+To try opening a link using a user preferred browser, use the `tryBrowser` option:
+
+```typescript
+utils.openLink('https://google.com', { tryBrowser: true });
+```
+
 ### `openTelegramLink`
 
-In case, developer would like to open a link related to Telegram (starting with `https://t.me`) he
-could utilize such method as `openTelegramLink`. In this case Telegram application
-will handle such link on its own side:
+In case, a developer would like to open a link related to Telegram (starting with `https://t.me`) 
+the method `openTelegramLink` can be used. 
+
+Using this method, the Telegram application will handle such a link on its own side:
 
 ```typescript
 utils.openTelegramLink('https://t.me/heyqbnk');
 ```
-
-In this case, Telegram application will open the group with name `heyqbnk`.
 
 ### `shareURL`
 

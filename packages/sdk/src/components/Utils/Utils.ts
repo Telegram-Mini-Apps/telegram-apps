@@ -1,12 +1,24 @@
-import { captureSameReq } from '@/bridge/utils/captureSameReq.js';
-import { request } from '@/bridge/utils/request.js';
+import { captureSameReq } from '@/bridge/captureSameReq.js';
+import { request } from '@/bridge/request.js';
 import { WithSupports } from '@/classes/WithSupports.js';
 import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
 import { supports } from '@/supports/supports.js';
+import { createSafeURL } from '@/navigation/createSafeURL.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { CreateRequestIdFn } from '@/request-id/types.js';
 import type { SupportsFn } from '@/supports/types.js';
 import type { Version } from '@/version/types.js';
+
+export interface UtilsOpenLinkOptions {
+  /**
+   * Attempts to use the instant view mode.
+   */
+  tryInstantView?: boolean;
+  /**
+   * Attempts to use user preferred browser.
+   */
+  tryBrowser?: boolean;
+}
 
 /**
  * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/utils
@@ -25,27 +37,48 @@ export class Utils extends WithSupports<'readTextFromClipboard'> {
   }
 
   /**
-   * Opens a link in an external browser. The Mini App will not be closed.
+   * Opens a link.
+   *
+   * The Mini App will not be closed.
    *
    * Note that this method can be called only in response to the user
-   * interaction with the Mini App interface (e.g. click inside the Mini App
-   * or on the main button).
+   * interaction with the Mini App interface (e.g. click inside the Mini App or on the main button).
    * @param url - URL to be opened.
-   * @param tryInstantView
+   * @param options - additional options.
    */
-  openLink(url: string, tryInstantView?: boolean): void {
-    const formattedUrl = new URL(url, window.location.href).toString();
+  openLink(url: string, options?: UtilsOpenLinkOptions): void;
 
-    // If method is not supported, we are doing it in legacy way.
+  /**
+   * Opens a link.
+   *
+   * The Mini App will not be closed.
+   *
+   * Note that this method can be called only in response to the user
+   * interaction with the Mini App interface (e.g. click inside the Mini App or on the main button).
+   * @param url - URL to be opened.
+   * @param tryInstantView - try to use the instant view.
+   * @deprecated Use the second argument as an object.
+   */
+  openLink(url: string, tryInstantView?: boolean): void
+
+  openLink(url: string, instantOrOptions?: boolean | UtilsOpenLinkOptions): void {
+    const formattedUrl = createSafeURL(url).toString();
+
+    // If the method is not supported, we are doing it in legacy way.
     if (!supports('web_app_open_link', this.version)) {
       window.open(formattedUrl, '_blank');
       return;
     }
 
+    const options: UtilsOpenLinkOptions = typeof instantOrOptions === 'boolean'
+      ? { tryInstantView: instantOrOptions }
+      : instantOrOptions || {};
+
     // Otherwise, do it normally.
     this.postEvent('web_app_open_link', {
       url: formattedUrl,
-      ...(typeof tryInstantView === 'boolean' ? { try_instant_view: tryInstantView } : {}),
+      try_browser: options.tryBrowser,
+      try_instant_view: options.tryInstantView,
     });
   }
 
@@ -102,7 +135,12 @@ export class Utils extends WithSupports<'readTextFromClipboard'> {
    */
   shareURL(url: string, text?: string): void {
     this.openTelegramLink(
-      'https://t.me/share/url?' + new URLSearchParams({ url, text: text || '' }).toString(),
+      `https://t.me/share/url?` + new URLSearchParams({ url, text: text || '' })
+        .toString()
+        // By default, URL search params encode spaces with "+".
+        // We are replacing them with "%20", because plus symbols are working incorrectly
+        // in Telegram.
+        .replace(/\+/g, '%20'),
     );
   }
 

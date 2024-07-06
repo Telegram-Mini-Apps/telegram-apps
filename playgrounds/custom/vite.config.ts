@@ -1,28 +1,21 @@
-import { readFileSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-
-const dir = dirname(fileURLToPath(import.meta.url));
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
 export default defineConfig({
-  plugins: [tsconfigPaths()],
-  // Uncomment this line in case, you would like to run Vite dev server using HTTPS. In this case,
-  // you will need correct certificate, private key and DNS configuration for your custom domain.
-  // For this purpose you could use mkcert:
-  // https://github.com/FiloSottile/mkcert
-  server: {
-    port: 443,
-    https: {
-      cert: readFileSync(resolve(dir, '../../tma.internal.pem')),
-      key: readFileSync(resolve(dir, '../../tma.internal-key.pem')),
-    },
-    host: 'tma.internal',
-  },
+  plugins: [
+    // Allows using the compilerOptions.paths property in tsconfig.json.
+    // https://www.npmjs.com/package/vite-tsconfig-paths
+    tsconfigPaths(),
+    // Allows using self-signed certificates to run the dev server using HTTPS.
+    // https://www.npmjs.com/package/@vitejs/plugin-basic-ssl
+    basicSsl(),
+  ],
   build: {
     outDir: 'dist',
     emptyOutDir: true,
   },
 });
+
+
 

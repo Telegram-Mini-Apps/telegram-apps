@@ -62,7 +62,7 @@ describe('shareURL', () => {
 
     utils.shareURL('https://telegram.org', 'Wow, cool messenger');
     expect(window.location.href)
-      .toBe('https://t.me/share/url?url=https%3A%2F%2Ftelegram.org&text=Wow%2C+cool+messenger');
+      .toBe('https://t.me/share/url?url=https%3A%2F%2Ftelegram.org&text=Wow%2C%20cool%20messenger');
   });
 
   it(
@@ -81,7 +81,7 @@ describe('shareURL', () => {
       utils.shareURL('https://telegram.org', 'Wow, cool messenger');
       expect(postEvent).toHaveBeenCalledOnce();
       expect(postEvent).toHaveBeenCalledWith('web_app_open_tg_link', {
-        path_full: '/share/url?url=https%3A%2F%2Ftelegram.org&text=Wow%2C+cool+messenger',
+        path_full: '/share/url?url=https%3A%2F%2Ftelegram.org&text=Wow%2C%20cool%20messenger',
       });
     },
   );
