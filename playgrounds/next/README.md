@@ -6,7 +6,7 @@ Mini Apps platform using the following technologies and libraries:
 - [Next.js](https://nextjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [TON Connect](https://docs.ton.org/develop/dapps/ton-connect/overview)
-- [@telegram-apps SDK](https://docs.telegram-mini-apps.com/packages/tma-js-sdk)
+- [@telegram-apps SDK](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk)
 - [Telegram UI](https://github.com/Telegram-Mini-Apps/TelegramUI)
 
 > The template was created using [pnpm](https://pnpm.io/). Therefore, it is required to use
@@ -126,5 +126,5 @@ details.
 ## Useful Links
 
 - [Platform documentation](https://docs.telegram-mini-apps.com/)
-- [@telegram-apps/sdk-react documentation](https://docs.telegram-mini-apps.com/packages/tma-js-sdk-react)
+- [@telegram-apps/sdk-react documentation](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react)
 - [Telegram developers community chat](https://t.me/devs)

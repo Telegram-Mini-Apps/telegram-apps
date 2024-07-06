@@ -9,7 +9,7 @@ import type { InvoiceState } from './types.js';
 // TODO: Usage.
 
 /**
- * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/invoice
+ * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/invoice
  */
 export class Invoice extends WithSupportsAndTrackableState<InvoiceState, 'open'> {
   constructor(

@@ -6,7 +6,7 @@ Mini Apps platform using the following technologies and libraries:
 - [Solid](https://solidjs.com/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [TON Connect](https://docs.ton.org/develop/dapps/ton-connect/overview)
-- [@telegram-apps SDK](https://docs.telegram-mini-apps.com/packages/tma-js-sdk)
+- [@telegram-apps SDK](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk)
 - [Vite](https://vitejs.dev/)
 
 > This boilerplate was created using [pnpm](https://pnpm.io/). Therefore, it is required to use
@@ -240,5 +240,5 @@ project's information.
 ## Useful Links
 
 - [Platform documentation](https://docs.telegram-mini-apps.com/)
-- [@telegram-apps/sdk-solid documentation](https://docs.telegram-mini-apps.com/packages/tma-js-sdk-solid)
+- [@telegram-apps/sdk-solid documentation](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-solid)
 - [Telegram developers community chat](https://t.me/devs)

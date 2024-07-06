@@ -20,7 +20,7 @@ their own [documentations](https://docs.telegram-mini-apps.com).
 
 [sdk-npm-badge]: https://img.shields.io/npm/v/@tma.js/sdk?logo=npm
 
-[![docs-badge]](https://docs.telegram-mini-apps.com/packages/tma-js-sdk)
+[![docs-badge]](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk)
 [![sdk-npm-badge]](https://npmjs.com/package/@tma.js/sdk)
 ![Size](https://img.shields.io/bundlephobia/minzip/@tma.js/sdk)
 [![code-badge]](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk)
@@ -40,25 +40,25 @@ to grasp the fundamental concepts of the platform.
 
 [sdk-react-npm-badge]: https://img.shields.io/npm/v/@tma.js/sdk-react?logo=npm
 
-[![docs-badge]](https://docs.telegram-mini-apps.com/packages/tma-js-sdk-react)
+[![docs-badge]](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react)
 [![sdk-react-npm-badge]](https://npmjs.com/package/@tma.js/sdk-react)
 ![Size](https://img.shields.io/bundlephobia/minzip/@tma.js/sdk-react)
 [![code-badge]](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk-react)
 
-React JS bindings for [client SDK](https://docs.telegram-mini-apps.com/packages/tma-js-sdk). Includes
+React JS bindings for [client SDK](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk). Includes
 hooks, components and utilities for comfortable usage of React JS on the Telegram Mini Apps platform.
 
 ### `@tma.js/sdk-solid`
 
 [sdk-solid-npm-badge]: https://img.shields.io/npm/v/@tma.js/sdk-solid?logo=npm
 
-[![docs-badge]](https://docs.telegram-mini-apps.com/packages/tma-js-sdk-solid)
+[![docs-badge]](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-solid)
 [![sdk-solid-npm-badge]](https://npmjs.com/package/@tma.js/sdk-solid)
 ![Size](https://img.shields.io/bundlephobia/minzip/@tma.js/sdk-solid)
 [![code-badge]](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/sdk-solid)
 
 Solid JS bindings
-for [client SDK](https://docs.telegram-mini-apps.com/packages/tma-js-sdk). Includes
+for [client SDK](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk). Includes
 hooks, components and utilities
 for comfortable usage of Solid JS on the Telegram Mini Apps platform.
 
@@ -66,7 +66,7 @@ for comfortable usage of Solid JS on the Telegram Mini Apps platform.
 
 [init-data-node-npm-badge]: https://img.shields.io/npm/v/@tma.js/init-data-node?logo=npm
 
-[![docs-badge]](https://docs.telegram-mini-apps.com/packages/tma-js-init-data-node)
+[![docs-badge]](https://docs.telegram-mini-apps.com/packages/telegram-apps-init-data-node)
 [![init-data-node-npm-badge]](https://npmjs.com/package/@tma.js/init-data-node)
 ![Size](https://img.shields.io/bundlephobia/minzip/@tma.js/init-data-node)
 [![code-badge]](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/init-data-node)
@@ -79,24 +79,24 @@ the [documentation](https://docs.telegram-mini-apps.com/platform/launch-paramete
 
 [solid-router-integration-npm-badge]: https://img.shields.io/npm/v/@tma.js/solid-router-integration?logo=npm
 
-[![docs-badge]](https://docs.telegram-mini-apps.com/packages/tma-js-solid-router-integration)
+[![docs-badge]](https://docs.telegram-mini-apps.com/packages/telegram-apps-solid-router-integration)
 [![solid-router-integration-npm-badge]](https://npmjs.com/package/@tma.js/solid-router-integration)
 ![Size](https://img.shields.io/bundlephobia/minzip/@tma.js/solid-router-integration)
 [![code-badge]](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/solid-router-integration)
 
-Telegram Mini Apps [Navigator](https://docs.telegram-mini-apps.com/packages/tma-js-sdk/navigation)
+Telegram Mini Apps [Navigator](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/navigation)
 integration for [@solidjs/router](https://www.npmjs.com/package/@solidjs/router).
 
 ### `@tma.js/react-router-integration`
 
 [react-router-integration-npm-badge]: https://img.shields.io/npm/v/@tma.js/react-router-integration?logo=npm
 
-[![docs-badge]](https://docs.telegram-mini-apps.com/packages/tma-js-react-router-integration)
+[![docs-badge]](https://docs.telegram-mini-apps.com/packages/telegram-apps-react-router-integration)
 [![react-router-integration-npm-badge]](https://npmjs.com/package/@tma.js/react-router-integration)
 ![Size](https://img.shields.io/bundlephobia/minzip/@tma.js/react-router-integration)
 [![code-badge]](https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/react-router-integration)
 
-Telegram Mini Apps [Navigator](https://docs.telegram-mini-apps.com/packages/tma-js-sdk/navigation)
+Telegram Mini Apps [Navigator](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/navigation)
 integration for [react-router-dom](https://www.npmjs.com/package/react-router-dom).
 
 ## Why not Telegram SDK
