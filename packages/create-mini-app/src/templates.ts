@@ -12,7 +12,7 @@ function createRepository(name: string): TemplateRepository {
 
 const settings = {
   js: {
-    tmajs: {
+    telegramApps: {
       react: 'reactjs-js-template',
       solid: 'solidjs-js-template',
       next: 'nextjs-js-template',
@@ -24,7 +24,7 @@ const settings = {
     },
   },
   ts: {
-    tmajs: {
+    telegramApps: {
       react: 'reactjs-template',
       solid: 'solidjs-template',
       next: 'nextjs-template',

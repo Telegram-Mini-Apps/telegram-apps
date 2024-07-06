@@ -56,7 +56,7 @@ export const promptTemplate = createPrompt<Template, {}>(
           return acc;
         }, {
           framework: 'react',
-          sdk: 'tmajs',
+          sdk: 'telegramApps',
           language: 'ts',
         });
       }, []),

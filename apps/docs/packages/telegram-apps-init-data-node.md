@@ -175,7 +175,7 @@ the [validation](../platform/init-data#validating) section of the documentation.
 Here are some examples:
 
 ```ts
-import { validate, sign } from '@tma.js/init-data-node';
+import { validate, sign } from '@telegram-apps/init-data-node';
 
 const secretTokenHashed = 'a5c609aa52f63cb5e6d8ceb6e4138726ea82bbc36bb786d64482d445ea38ee5f';
 const initData =
