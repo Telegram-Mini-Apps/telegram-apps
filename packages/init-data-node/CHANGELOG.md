@@ -1,5 +1,16 @@
 # @tma.js/init-data-node
 
+## 1.4.0
+
+### Minor Changes
+
+- 24847f3: Allow using a hashed token in the package methods.
+
+### Patch Changes
+
+- Updated dependencies [150cc8e]
+  - @tma.js/sdk@2.7.0
+
 ## 1.3.2
 
 ### Patch Changes
