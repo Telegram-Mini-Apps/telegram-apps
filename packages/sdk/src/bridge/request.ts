@@ -59,6 +59,10 @@ export type RequestOptions<M extends MiniAppsMethodName, E, C> = {
   params: MiniAppsMethodParams<M>
 }>;
 
+type AnyRequestResult =
+  | MiniAppsEventPayload<MiniAppsEventName>
+  | RequestEventsPayloads<MiniAppsEventName[]>;
+
 /**
  * Calls specified Mini Apps method and captures specified event.
  * @param options - method options.
@@ -81,14 +85,9 @@ export async function request<M extends MiniAppsMethodName>(
   options:
     | RequestOptions<M, MiniAppsEventName, RequestCaptureEventFn<MiniAppsEventName>>
     | RequestOptions<M, MiniAppsEventName[], RequestCaptureEventsFn<MiniAppsEventName[]>>,
-): Promise<
-  | MiniAppsEventPayload<MiniAppsEventName>
-  | RequestEventsPayloads<MiniAppsEventName[]>
-> {
-  const { resolve, promise } = Promise.withResolvers<
-    | MiniAppsEventPayload<MiniAppsEventName>
-    | RequestEventsPayloads<MiniAppsEventName[]>
-  >();
+): Promise<AnyRequestResult> {
+  let resolve: (payload: AnyRequestResult) => void;
+  const promise = new Promise<AnyRequestResult>(res => resolve = res);
 
   const { event, capture, timeout } = options;
   const [, cleanup] = createCleanup(
