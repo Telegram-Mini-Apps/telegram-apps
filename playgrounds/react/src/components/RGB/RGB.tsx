@@ -1,4 +1,4 @@
-import { classNames, type RGB as RGBType } from '@tma.js/sdk-react';
+import { classNames, type RGB as RGBType } from '@telegram-apps/sdk-react';
 import type { FC } from 'react';
 
 import './RGB.css';

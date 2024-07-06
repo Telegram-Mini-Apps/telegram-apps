@@ -21,7 +21,7 @@ export interface UtilsOpenLinkOptions {
 }
 
 /**
- * @see API: https://docs.telegram-mini-apps.com/packages/tma-js-sdk/components/utils
+ * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/utils
  */
 export class Utils extends WithSupports<'readTextFromClipboard'> {
   constructor(

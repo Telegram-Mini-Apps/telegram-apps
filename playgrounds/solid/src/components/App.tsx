@@ -7,8 +7,8 @@ import {
   useMiniApp,
   useThemeParams,
   useViewport,
-} from '@tma.js/sdk-solid';
-import { createRouter } from '@tma.js/solid-router-integration';
+} from '@telegram-apps/sdk-solid';
+import { createRouter } from '@telegram-apps/solid-router-integration';
 import { createEffect, For, onCleanup } from 'solid-js';
 
 import { routes } from '@/navigation/routes.js';

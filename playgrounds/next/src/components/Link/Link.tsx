@@ -1,8 +1,8 @@
-import { useUtils, classNames } from '@tma.js/sdk-react';
+import { useUtils, classNames } from '@telegram-apps/sdk-react';
 import { type FC, type MouseEventHandler, type JSX, useCallback } from 'react';
 import { type LinkProps as NextLinkProps, default as NextLink } from 'next/link';
 
-import styles from './Link.module.css';
+import './styles.css';
 
 export interface LinkProps extends NextLinkProps, Omit<JSX.IntrinsicElements['a'], 'href'> {
 }
@@ -13,7 +13,7 @@ export const Link: FC<LinkProps> = ({
   href,
   ...rest
 }) => {
-  const utils = useUtils(true);
+  const utils = useUtils();
 
   const onClick = useCallback<MouseEventHandler<HTMLAnchorElement>>((e) => {
     propsOnClick?.(e);
@@ -44,7 +44,7 @@ export const Link: FC<LinkProps> = ({
       {...rest}
       href={href}
       onClick={onClick}
-      className={classNames(className, styles.root)}
+      className={classNames(className, 'link')}
     />
   );
 };

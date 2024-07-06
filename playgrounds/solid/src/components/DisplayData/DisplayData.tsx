@@ -1,4 +1,4 @@
-import { isRGB, type RGB as RGBType } from '@tma.js/sdk-solid';
+import { isRGB, type RGB as RGBType } from '@telegram-apps/sdk-solid';
 import { type Component, For, type JSXElement, Match, Switch } from 'solid-js';
 
 import { RGB } from '@/components/RGB/RGB.js';

@@ -1,4 +1,4 @@
-import { useThemeParams } from '@tma.js/sdk-react';
+import { useThemeParams } from '@telegram-apps/sdk-react';
 import type { FC } from 'react';
 import { List } from '@telegram-apps/telegram-ui';
 

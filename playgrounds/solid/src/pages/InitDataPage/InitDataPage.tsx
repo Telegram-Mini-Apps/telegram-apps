@@ -1,4 +1,4 @@
-import { retrieveLaunchParams, useInitData, type User } from '@tma.js/sdk-solid';
+import { retrieveLaunchParams, useInitData, type User } from '@telegram-apps/sdk-solid';
 import { createMemo, Show, type Component } from 'solid-js';
 
 import { DisplayData, type DisplayDataRow } from '@/components/DisplayData/DisplayData.js';

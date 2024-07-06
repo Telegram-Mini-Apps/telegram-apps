@@ -33,7 +33,7 @@
     "husky": "^9.0.11",
     "rimraf": "^5.0.5",
     "tslib": "^2.6.2",
-    "turbo": "^1.13.3",
+    "turbo": "^2.0.6",
     "typescript": "5.4.5",
     "typescript-eslint": "^8.0.0-alpha.20",
     "vite": "^5.2.11",
