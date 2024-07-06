@@ -1,5 +1,5 @@
 import type { StateEvents } from '@/classes/State/types.js';
-import { RequestCapture } from '@/bridge/request.js';
+import type { RequestCaptureEventFn } from '@/bridge/request.js';
 
 /**
  * QRScanner internal state.
@@ -31,5 +31,5 @@ export interface QRScannerOpenOptions {
   /**
    * Function, which should return true, if QR should be captured.
    */
-  capture?: RequestCapture<'qr_text_received'>;
+  capture?: RequestCaptureEventFn<'qr_text_received'>;
 }
