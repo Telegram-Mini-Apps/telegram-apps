@@ -124,6 +124,14 @@ Closes the Mini App.
 miniApp.close();
 ```
 
+If you would like to wrap the application into the bottom app bar, but not to close it, 
+consider using the first argument `returnBack: boolean`.
+
+```ts
+// Will wrap the application into the bottom app bar.
+miniApp.close(true);
+```
+
 ## Other Methods
 
 ### `sendData`
