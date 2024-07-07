@@ -1,5 +1,15 @@
 # Sticky App
 
+::: tip
+
+Starting from the Mini Apps version **7.7**, you are able to prevent the application from
+closing due to swipe down by using a special method. 
+
+- [Mini Apps method](methods.md#web-app-setup-swipe-behavior)
+- [@telegram-apps/sdk component](../packages/telegram-apps-sdk/components/swipe-behavior.md)
+
+:::
+
 Developers often seek ways to make their applications "sticky." In this context, "sticky" refers to
 preventing the application from being closed accidentally, such as by a swipe-down gesture.
 

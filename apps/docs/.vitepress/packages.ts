@@ -33,6 +33,7 @@ export const packagesSidebar = {
               Popup: 'popup',
               QRScanner: 'qr-scanner',
               SettingsButton: 'settings-button',
+              SwipeBehavior: 'swipe-behavior',
               ThemeParams: 'theme-params',
               Utils: 'utils',
               Viewport: 'viewport',

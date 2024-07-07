@@ -1,7 +1,7 @@
 import { createError } from '@/errors/createError.js';
 import { ERR_METHOD_PARAMETER_UNSUPPORTED, ERR_METHOD_UNSUPPORTED } from '@/errors/errors.js';
 import { isRecord } from '@/misc/isRecord.js';
-import { supports } from '@/supports/supports.js';
+import { supports } from '@/bridge/supports.js';
 import type { Version } from '@/version/types.js';
 
 import { type PostEvent, postEvent } from './postEvent.js';

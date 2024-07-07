@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ClosingBehavior } from './ClosingBehavior.js';
 
-describe('disable', () => {
+describe('disableConfirmation', () => {
   it('should call "web_app_setup_closing_behavior" method with "need_confirmation" equal to false', () => {
     const postEvent = vi.fn();
     const confirmation = new ClosingBehavior(true, postEvent);
@@ -14,7 +14,8 @@ describe('disable', () => {
   });
 
   it('should emit "isConfirmationNeededChanged" event with false value', () => {
-    const confirmation = new ClosingBehavior(true, vi.fn());
+    const confirmation = new ClosingBehavior(true, vi.fn(() => {
+    }));
     const listener = vi.fn();
 
     confirmation.on('change:isConfirmationNeeded', listener);
@@ -25,7 +26,7 @@ describe('disable', () => {
   });
 });
 
-describe('enable', () => {
+describe('enableConfirmation', () => {
   it('should call "web_app_setup_closing_behavior" method with "need_confirmation" equal to true', () => {
     const postEvent = vi.fn();
     const confirmation = new ClosingBehavior(false, postEvent);
@@ -37,7 +38,8 @@ describe('enable', () => {
   });
 
   it('should emit "isConfirmationNeededChanged" event with true value', () => {
-    const confirmation = new ClosingBehavior(false, vi.fn());
+    const confirmation = new ClosingBehavior(false, vi.fn(() => {
+    }));
     const listener = vi.fn();
 
     confirmation.on('change:isConfirmationNeeded', listener);
@@ -52,7 +54,8 @@ describe('on', () => {
   describe('"isConfirmationNeededChanged" event', () => {
     it('should add event listener to event', () => {
       const listener = vi.fn();
-      const confirmation = new ClosingBehavior(false, vi.fn());
+      const confirmation = new ClosingBehavior(false, vi.fn(() => {
+      }));
 
       confirmation.on('change:isConfirmationNeeded', listener);
 
@@ -67,7 +70,8 @@ describe('off', () => {
   describe('"isConfirmationNeededChanged" event', () => {
     it('should remove event listener from event', () => {
       const listener = vi.fn();
-      const confirmation = new ClosingBehavior(false, vi.fn());
+      const confirmation = new ClosingBehavior(false, vi.fn(() => {
+      }));
 
       confirmation.on('change:isConfirmationNeeded', listener);
 

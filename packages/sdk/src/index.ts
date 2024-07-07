@@ -19,6 +19,7 @@ export {
   type RequestCaptureEventsFn,
   type RequestEventsPayloads,
 } from '@/bridge/request.js';
+export { supports } from '@/bridge/supports.js';
 
 /**
  * Classnames.
@@ -157,6 +158,16 @@ export type {
   SettingsButtonEvents,
   SettingsButtonState,
 } from '@/components/SettingsButton/types.js';
+
+// SwipeBehavior.
+export { SwipeBehavior } from '@/components/SwipeBehavior/SwipeBehavior.js';
+export { initSwipeBehavior } from '@/components/SwipeBehavior/initSwipeBehavior.js';
+export type {
+  SwipeBehaviorEventListener,
+  SwipeBehaviorEventName,
+  SwipeBehaviorEvents,
+  SwipeBehaviorState,
+} from '@/components/SwipeBehavior/types.js';
 
 // ThemeParams.
 export { initThemeParams } from '@/components/ThemeParams/initThemeParams.js';
@@ -301,11 +312,6 @@ export { string } from '@/parsing/parsers/string.js';
  * Request ID
  */
 export type { RequestId } from '@/request-id/types.js';
-
-/**
- * Supports.
- */
-export { supports } from '@/supports/supports.js';
 
 /**
  * Timeout.

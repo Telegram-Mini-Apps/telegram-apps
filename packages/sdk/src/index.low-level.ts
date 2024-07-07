@@ -11,6 +11,7 @@ export { setTargetOrigin, targetOrigin } from '@/bridge/target-origin.js';
 export { captureSameReq } from '@/bridge/captureSameReq.js';
 export { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
 export { request } from '@/bridge/request.js';
+export { supports } from '@/bridge/supports.js';
 
 /**
  * Debug.
@@ -40,8 +41,3 @@ export { initWeb } from '@/env/initWeb.js';
  * Launch params.
  */
 export { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
-
-/**
- * Supports.
- */
-export { supports } from '@/supports/supports.js';

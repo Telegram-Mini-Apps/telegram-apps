@@ -89,6 +89,8 @@ export function supports(
     case 'web_app_biometry_request_auth':
     case 'web_app_biometry_update_token':
       return versionLessOrEqual('7.2', paramOrVersion);
+    case 'web_app_setup_swipe_behavior':
+      return versionLessOrEqual('7.7', paramOrVersion);
     default:
       return [
         'iframe_ready',
