@@ -1,6 +1,6 @@
 {
   "name": "@telegram-apps/react-router-integration",
-  "version": "2.0.0",
+  "version": "1.0.1",
   "description": "Navigator integration for the react-router-dom package.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
@@ -43,7 +43,7 @@
     "build": "vite build"
   },
   "peerDependencies": {
-    "@telegram-apps/sdk": "workspace:^",
+    "@telegram-apps/sdk": "workspace:^1",
     "@types/react": "^17.0.0 || ^18.0.0",
     "react": "^17.0.0 || ^18.0.0",
     "react-router-dom": "^6.22.3"

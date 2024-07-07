@@ -1,6 +1,6 @@
 # @telegram-apps/react-router-integration
 
-## 2.0.0
+## 1.0.1
 
 ### Patch Changes
 
