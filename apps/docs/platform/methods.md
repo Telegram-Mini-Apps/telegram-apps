@@ -79,7 +79,8 @@ window.external.notify(data);
 ## Calling Methods
 
 Handling all possible environments for a developer's application can be challenging. To simplify
-this process, the community developed the [@telegram-apps/sdk](../packages/telegram-apps-sdk) package, which
+this process, the community developed the [@telegram-apps/sdk](../packages/telegram-apps-sdk)
+package, which
 greatly eases integration.
 
 Here's how to use it:
@@ -462,6 +463,16 @@ Updates current state of [Settings Button](settings-button.md).
 | Field      | Type      | Description                              |
 |------------|-----------|------------------------------------------|
 | is_visible | `boolean` | Should the Settings Button be displayed. |
+
+### `web_app_setup_swipe_behavior`
+
+Available since: **v7.7**
+
+Sets new swipe behavior.
+
+| Field                | Type      | Description                                          |
+|----------------------|-----------|------------------------------------------------------|
+| allow_vertical_swipe | `boolean` | Allows closing the application using vertical swipe. |
 
 ### `web_app_switch_inline_query`
 
