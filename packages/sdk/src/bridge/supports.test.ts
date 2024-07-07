@@ -102,6 +102,9 @@ describe.each<[
       parameter: 'return_back',
     },
   ]],
+  ['7.7', [
+    'web_app_setup_swipe_behavior',
+  ]],
 ])('%s', (version, methods) => {
   const higher = increaseVersion(version, 1);
   const lower = increaseVersion(version, -1);

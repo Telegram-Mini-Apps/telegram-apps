@@ -19,6 +19,7 @@ export {
   type RequestCaptureEventsFn,
   type RequestEventsPayloads,
 } from '@/bridge/request.js';
+export { supports } from '@/bridge/supports.js';
 
 /**
  * Classnames.
@@ -301,11 +302,6 @@ export { string } from '@/parsing/parsers/string.js';
  * Request ID
  */
 export type { RequestId } from '@/request-id/types.js';
-
-/**
- * Supports.
- */
-export { supports } from '@/supports/supports.js';
 
 /**
  * Timeout.

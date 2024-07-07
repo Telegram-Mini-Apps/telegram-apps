@@ -1,4 +1,4 @@
-import { supports } from '@/supports/supports.js';
+import { supports } from '@/bridge/supports.js';
 import type {
   MiniAppsMethodVersionedParams,
   MiniAppsMethodWithVersionedParams,

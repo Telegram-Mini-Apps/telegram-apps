@@ -2,7 +2,7 @@ import { captureSameReq } from '@/bridge/captureSameReq.js';
 import { request } from '@/bridge/request.js';
 import { WithSupports } from '@/classes/WithSupports.js';
 import { createSupportsParamFn } from '@/supports/createSupportsParamFn.js';
-import { supports } from '@/supports/supports.js';
+import { supports } from '@/bridge/supports.js';
 import { createSafeURL } from '@/navigation/createSafeURL.js';
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { CreateRequestIdFn } from '@/request-id/types.js';

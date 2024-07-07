@@ -1,5 +1,5 @@
 import { createComponentInitFn } from '@/misc/createComponentInitFn/createComponentInitFn.js';
-import { supports } from '@/supports/supports.js';
+import { supports } from '@/bridge/supports.js';
 
 import { BiometryManager } from './BiometryManager.js';
 import { requestBiometryInfo } from './requestBiometryInfo.js';
