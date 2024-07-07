@@ -6,6 +6,7 @@ import type { MiniAppState } from '@/components/MiniApp/types.js';
 import type { SettingsButtonState } from '@/components/SettingsButton/types.js';
 import type { ThemeParamsParsed } from '@/components/ThemeParams/types.js';
 import type { ViewportState } from '@/components/Viewport/types.js';
+import type { SwipeBehaviorState } from '@/components/SwipeBehavior/types.js';
 
 /**
  * Describes storage keys and according values.
@@ -18,6 +19,7 @@ export interface StorageParams {
   mainButton: MainButtonState;
   miniApp: MiniAppState;
   settingsButton: SettingsButtonState;
+  swipeBehavior: SwipeBehaviorState;
   themeParams: ThemeParamsParsed;
   viewport: ViewportState;
 }
