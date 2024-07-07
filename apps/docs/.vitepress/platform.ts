@@ -16,6 +16,7 @@ export const platformSidebar = {
     }),
     section('Functional Features', {
       'Closing Behavior': 'closing-behavior',
+      'Swipe Behavior': 'swipe-behavior',
       'Haptic Feedback': 'haptic-feedback',
     }),
     section('Apps Communication', {

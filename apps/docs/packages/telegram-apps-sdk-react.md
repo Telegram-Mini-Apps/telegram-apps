@@ -191,8 +191,8 @@ internally.
 
 ## Hooks and HOCs List
 
-| Hook and HOC (Raw)                                | Hook and HOC (Result)                       | Returned value                                                              |
-|---------------------------------------------------|---------------------------------------------|-----------------------------------------------------------------------------|
+| Hook and HOC (Raw)                                | Hook and HOC (Result)                       | Returned value                                                                     |
+|---------------------------------------------------|---------------------------------------------|------------------------------------------------------------------------------------|
 | `useBackButtonRaw`, `withBackButtonRaw`           | `useBackButton`, `withBackButton`           | [BackButton](telegram-apps-sdk/components/back-button.md)                          |
 | `useBiometryManagerRaw`, `withBiometryManagerRaw` | `useBiometryManager`, `withBiometryManager` | [BiometryManager](telegram-apps-sdk/components/biometry-manager.md) or `undefined` |
 | `useClosingBehaviorRaw`, `withClosingBehaviorRaw` | `useClosingBehavior`, `withClosingBehavior` | [ClosingBehavior](telegram-apps-sdk/components/closing-behavior.md)                |
@@ -206,6 +206,7 @@ internally.
 | `usePopupRaw`, `withPopupRaw`                     | `usePopup`, `withPopup`                     | [Popup](telegram-apps-sdk/components/popup.md)                                     |
 | `useQRScannerRaw`, `withQRScannerRaw`             | `useQRScanner`, `withQRScanner`             | [QRScanner](telegram-apps-sdk/components/qr-scanner.md)                            |
 | `useSettingsButtonRaw`, `withSettingsButtonRaw`   | `useSettingsButton`, `withSettingsButton`   | [SettingsButton](telegram-apps-sdk/components/settings-button.md)                  |
+| `useSwipeBehaviorRaw`, `withSwipeBehaviorRaw`     | `useSwipeBehavior`, `withSwipeBehavior`     | [SwipeBehavior](telegram-apps-sdk/components/swipe-behavior.md)                    |
 | `useThemeParamsRaw`, `withThemeParamsRaw`         | `useThemeParams`, `withThemeParams`         | [ThemeParams](telegram-apps-sdk/components/theme-params.md)                        |
 | `useUtilsRaw`, `withUtilsRaw`                     | `useUtils`, `withUtils`                     | [Utils](telegram-apps-sdk/components/utils.md)                                     |
 | `useViewportRaw`, `withViewportRaw`               | `useViewport`, `withViewport`               | [Viewport](telegram-apps-sdk/components/viewport.md) or `undefined`                |
