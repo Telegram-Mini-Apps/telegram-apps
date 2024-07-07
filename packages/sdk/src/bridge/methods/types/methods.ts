@@ -294,6 +294,19 @@ export interface MiniAppsMethods {
     need_confirmation: boolean;
   }>;
   /**
+   * Updates current swipe behavior
+   * @since v7.7
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-setup-closing-behavior
+   */
+  web_app_setup_swipe_behavior: CreateParams<{
+    /**
+     *  True, if vertical swipes to close or minimize the Mini App are enabled.
+     *  False, if vertical swipes to close or minimize the Mini App are disabled.
+     *  In any case, the user will still be able to minimize and close the Mini App by swiping the Mini App's header.
+     */
+    allow_vertical_swipe: boolean;
+  }>;
+  /**
    * Updates the Main Button settings.
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-setup-main-button
    */

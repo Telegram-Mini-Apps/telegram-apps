@@ -191,11 +191,12 @@ internally.
 
 ## Hooks and HOCs List
 
-| Hook and HOC (Raw)                                | Hook and HOC (Result)                       | Returned value                                                              |
-|---------------------------------------------------|---------------------------------------------|-----------------------------------------------------------------------------|
+| Hook and HOC (Raw)                                | Hook and HOC (Result)                       | Returned value                                                                     |
+|---------------------------------------------------|---------------------------------------------|------------------------------------------------------------------------------------|
 | `useBackButtonRaw`, `withBackButtonRaw`           | `useBackButton`, `withBackButton`           | [BackButton](telegram-apps-sdk/components/back-button.md)                          |
 | `useBiometryManagerRaw`, `withBiometryManagerRaw` | `useBiometryManager`, `withBiometryManager` | [BiometryManager](telegram-apps-sdk/components/biometry-manager.md) or `undefined` |
 | `useClosingBehaviorRaw`, `withClosingBehaviorRaw` | `useClosingBehavior`, `withClosingBehavior` | [ClosingBehavior](telegram-apps-sdk/components/closing-behavior.md)                |
+| `useSwipeBehaviorRaw`, `withSwipeBehaviorRaw`     | `useSwipeBehavior`, `withSwipeBehavior`     | [SwipeBehavior](telegram-apps-sdk/components/swipe-behavior.md)                    |
 | `useCloudStorageRaw`, `withCloudStorageRaw`       | `useCloudStorage`, `withCloudStorage`       | [CloudStorage](telegram-apps-sdk/components/cloud-storage.md)                      |
 | `useHapticFeedbackRaw`, `withHapticFeedbackRaw`   | `useHapticFeedback`, `withHapticFeedback`   | [HapticFeedback](telegram-apps-sdk/components/haptic-feedback.md)                  |
 | `useInitDataRaw`, `withInitDataRaw`               | `useInitData`, `withInitData`               | [InitData](telegram-apps-sdk/components/init-data.md)                              |

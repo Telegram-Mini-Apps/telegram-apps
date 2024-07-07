@@ -440,6 +440,16 @@ Updates current [closing behavior](closing-behavior.md).
 |-------------------|-----------|----------------------------------------------------------------------|
 | need_confirmation | `boolean` | Will user be prompted in case, an application is going to be closed. |
 
+### `web_app_setup_swipe_behavior`
+
+Available since: **v7.7**
+
+Updates current [swipe behavior](swipe-behavior.md).
+
+| Field                | Type      | Description                                                                                                                                                                                                                                                     |
+|----------------------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| allow_vertical_swipe | `boolean` | True, if vertical swipes to close or minimize the Mini App are enabled. False, if vertical swipes to close or minimize the Mini App are disabled. In any case, the user will still be able to minimize and close the Mini App by swiping the Mini App's header. |
+
 ### `web_app_setup_main_button`
 
 Updates the [Main Button](main-button.md) settings.

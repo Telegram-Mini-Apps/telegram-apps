@@ -24,6 +24,7 @@ export const packagesSidebar = {
               BackButton: 'back-button',
               BiometryManager: 'biometry-manager',
               ClosingBehavior: 'closing-behavior',
+              SwipeBehavior: 'swipe-behavior',
               CloudStorage: 'cloud-storage',
               HapticFeedback: 'haptic-feedback',
               InitData: 'init-data',

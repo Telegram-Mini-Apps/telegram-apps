@@ -71,6 +71,16 @@ export type {
   ClosingBehaviorState,
 } from '@/components/ClosingBehavior/types.js';
 
+// SwipeBehavior.
+export { SwipeBehavior } from '@/components/SwipeBehavior/SwipeBehavior.js';
+export { initSwipeBehavior } from '@/components/SwipeBehavior/initSwipeBehavior.js';
+export type {
+  SwipeBehaviorEventListener,
+  SwipeBehaviorEventName,
+  SwipeBehaviorEvents,
+  SwipeBehaviorState,
+} from '@/components/SwipeBehavior/types.js';
+
 // CloudStorage.
 export { CloudStorage } from '@/components/CloudStorage/CloudStorage.js';
 export { initCloudStorage } from '@/components/CloudStorage/initCloudStorage.js';

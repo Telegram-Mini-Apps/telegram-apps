@@ -143,11 +143,12 @@ hook result. Note that the received value will be a signal, not the value behind
 
 ## Hooks and HOCs List
 
-| Hook                 | HOC                   | Signal value                                                                |
-|----------------------|-----------------------|-----------------------------------------------------------------------------|
+| Hook                 | HOC                   | Signal value                                                                       |
+|----------------------|-----------------------|------------------------------------------------------------------------------------|
 | `useBackButton`      | `withBackButton`      | [BackButton](telegram-apps-sdk/components/back-button.md)                          |
 | `useBiometryManager` | `withBiometryManager` | [BiometryManager](telegram-apps-sdk/components/biometry-manager.md) or `undefined` |
-| `useClosingBehavior` | `withClosingBehavior` | [ClosingBehavior](telegram-apps-sdk/components/closing-behavior.md)                |
+| `useClosingBehavior` | `withClosingBehavior` | [ClosingBehavior](telegram-apps-sdk/components/closing-behavior.md)<br/>           |
+| `useSwipeBehavior`   | `withSwipeBehavior`   | [SwipeBehavior](telegram-apps-sdk/components/swipe-behavior.md)<br/>               |
 | `useCloudStorage`    | `withCloudStorage`    | [CloudStorage](telegram-apps-sdk/components/cloud-storage.md)                      |
 | `useHapticFeedback`  | `withHapticFeedback`  | [HapticFeedback](telegram-apps-sdk/components/haptic-feedback.md)                  |
 | `useInitData`        | `withInitData`        | [InitData](telegram-apps-sdk/components/init-data.md)                              |

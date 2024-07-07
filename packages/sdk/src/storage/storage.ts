@@ -1,6 +1,7 @@
 import type { BackButtonState } from '@/components/BackButton/types.js';
 import type { BiometryManagerState } from '@/components/BiometryManager/types.js';
 import type { ClosingBehaviorState } from '@/components/ClosingBehavior/types.js';
+import type { SwipeBehaviorState } from '@/components/SwipeBehavior/types.js';
 import type { MainButtonState } from '@/components/MainButton/types.js';
 import type { MiniAppState } from '@/components/MiniApp/types.js';
 import type { SettingsButtonState } from '@/components/SettingsButton/types.js';
@@ -14,6 +15,7 @@ export interface StorageParams {
   backButton: BackButtonState;
   biometryManager: BiometryManagerState;
   closingBehavior: ClosingBehaviorState;
+  swipeBehavior: SwipeBehaviorState;
   launchParams: string;
   mainButton: MainButtonState;
   miniApp: MiniAppState;
