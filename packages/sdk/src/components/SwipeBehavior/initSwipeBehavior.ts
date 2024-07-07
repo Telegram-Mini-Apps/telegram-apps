@@ -10,6 +10,6 @@ export const initSwipeBehavior = createComponentInitFn(
   'swipeBehavior',
   ({
     postEvent,
-    state = { isVerticalSwipesEnabled: false },
+    state = { isVerticalSwipesEnabled: true },
   }) => new SwipeBehavior(state.isVerticalSwipesEnabled, postEvent),
 );
