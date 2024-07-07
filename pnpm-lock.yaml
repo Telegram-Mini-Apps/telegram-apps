@@ -131,7 +131,7 @@ importers:
   packages/react-router-integration:
     dependencies:
       '@telegram-apps/sdk':
-        specifier: workspace:^
+        specifier: workspace:^1
         version: link:../sdk
       '@types/react':
         specifier: ^17.0.0 || ^18.0.0
