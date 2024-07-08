@@ -61,7 +61,7 @@ export default defineConfig({
 
   // https://vitepress.dev/reference/default-theme-config
   themeConfig: {
-    logo: '/logo.png',
+    logo: '/logo.db0268ac.png',
 
     // https://vitepress.dev/reference/default-theme-footer#footer
     footer: {
