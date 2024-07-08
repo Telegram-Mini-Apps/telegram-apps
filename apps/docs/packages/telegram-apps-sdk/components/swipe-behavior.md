@@ -1,6 +1,6 @@
 # `SwipeBehavior`
 
-Implements Telegram Mini Apps swipe behavior functionality.
+Implements Telegram Mini Apps [swipe behavior](../../../platform/swipe-behavior.md) functionality.
 
 ## Initialization
 
@@ -15,7 +15,8 @@ const [swipeBehavior] = initSwipeBehavior();
 ## Vertical Swipe
 
 By default, users are allowed to hide the application just by swiping the application down.
-To prevent a possible closure, you can disable this behavior by calling the `disableVerticalSwipe()` method, or enable via the `enableVerticalSwipe()` method. In turn,
+To prevent a possible closure, you can disable this behavior by calling the `disableVerticalSwipe()`
+method, or enable via the `enableVerticalSwipe()` method. In turn,
 both of these methods update the `isVerticalSwipeEnabled` property:
 
 ```typescript  
