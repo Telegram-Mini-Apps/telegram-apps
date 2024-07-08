@@ -143,8 +143,8 @@ hook result. Note that the received value will be a signal, not the value behind
 
 ## Hooks and HOCs List
 
-| Hook                 | HOC                   | Signal value                                                                |
-|----------------------|-----------------------|-----------------------------------------------------------------------------|
+| Hook                 | HOC                   | Signal value                                                                       |
+|----------------------|-----------------------|------------------------------------------------------------------------------------|
 | `useBackButton`      | `withBackButton`      | [BackButton](telegram-apps-sdk/components/back-button.md)                          |
 | `useBiometryManager` | `withBiometryManager` | [BiometryManager](telegram-apps-sdk/components/biometry-manager.md) or `undefined` |
 | `useClosingBehavior` | `withClosingBehavior` | [ClosingBehavior](telegram-apps-sdk/components/closing-behavior.md)                |
@@ -157,6 +157,7 @@ hook result. Note that the received value will be a signal, not the value behind
 | `usePopup`           | `withPopup`           | [Popup](telegram-apps-sdk/components/popup.md)                                     |
 | `useQRScanner`       | `withQRScanner`       | [QRScanner](telegram-apps-sdk/components/qr-scanner.md)                            |
 | `useSettingsButton`  | `withSettingsButton`  | [SettingsButton](telegram-apps-sdk/components/settings-button.md)                  |
+| `useSwipeBehavior`   | `withSwipeBehavior`   | [SwipeBehavior](telegram-apps-sdk/components/swipe-behavior.md)                    |
 | `useThemeParams`     | `withThemeParams`     | [ThemeParams](telegram-apps-sdk/components/theme-params.md)                        |
 | `useUtils`           | `withUtils`           | [Utils](telegram-apps-sdk/components/utils.md)                                     |
 | `useViewport`        | `withViewport`        | [Viewport](telegram-apps-sdk/components/viewport.md) or `undefined`                |

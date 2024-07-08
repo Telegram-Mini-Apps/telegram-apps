@@ -2,9 +2,8 @@ import { WithSupportsAndTrackableState } from '@/classes/WithSupportsAndTrackabl
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { SwipeBehaviorState } from '@/components/SwipeBehavior/types.js';
 
-// TODO: Usage.
-
 /**
+ * @see Usage: https://docs.telegram-mini-apps.com/platform/swipe-behavior
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/swipe-behavior
  */
 export class SwipeBehavior extends WithSupportsAndTrackableState<SwipeBehaviorState,
