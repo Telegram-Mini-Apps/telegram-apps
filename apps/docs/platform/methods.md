@@ -9,7 +9,7 @@ by a Mini App.
 
 ## Web
 
-As long as the web version of Telegram displays the front-end application in `<iframe/>` tag, it
+Since the web version of Telegram displays the front-end application in an `<iframe/>` tag, it
 uses the default way of communication between 2 iframes - sending messages
 through `window.parent.postMessage` function.
 
