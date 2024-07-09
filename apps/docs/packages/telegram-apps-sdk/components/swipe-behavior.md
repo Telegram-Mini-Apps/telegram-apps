@@ -20,11 +20,11 @@ method, or enable via the `enableVerticalSwipe()` method. In turn,
 both of these methods update the `isVerticalSwipeEnabled` property:
 
 ```typescript  
-swipeBehaviour.enableVerticalSwipe();
-console.log(swipeBehaviour.isVerticalSwipeEnabled); // true  
+swipeBehavior.enableVerticalSwipe();
+console.log(swipeBehavior.isVerticalSwipeEnabled); // true  
 
-swipeBehaviour.disableVerticalSwipe();
-console.log(swipeBehaviour.isVerticalSwipeEnabled); // false
+swipeBehavior.disableVerticalSwipe();
+console.log(swipeBehavior.isVerticalSwipeEnabled); // false
 ```
 
 ## Events
