@@ -28,9 +28,10 @@ is enough to learn standard front-end development technologies, such as:
 Really simple, isn't it? But to make much more serious and bigger applications, we recommend using
 more solid technologies, such as `TypeScript`, `React`, `SCSS`, etc.
 
-So, if we want to create a Mini App, we should create a standard web application with any technology
-stack. The only thing Telegram needs from the developer is the application URL to download it
-from. It will be used as a source for WebView, which will lead to application being downloaded and displayed.
+So, if we want to create a Mini App, we should create a standard web application with any technology 
+stack. The only thing Telegram needs from the developer is the application URL. This URL will be used as 
+a source for the WebView component of the Telegram client, which will load and display the application 
+within Telegram.
 
 ## Usage
 
