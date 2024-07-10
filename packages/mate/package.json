@@ -1,0 +1,44 @@
+{
+  "name": "@telegram-apps/mate",
+  "version": "0.0.1",
+  "description": "Your personal mate in Telegram Mini Apps development.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
+    "directory": "packages/mate"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
+  },
+  "keywords": [
+    "telegram-mini-apps",
+    "cli"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "bin": "dist/index.js",
+  "scripts": {
+    "lint": "cd ../.. && eslint packages/mate/src --ignore-pattern **/*.test.ts",
+    "lint:fix": "pnpm run lint --fix",
+    "typecheck": "tsc --noEmit",
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "dev": "tsx --watch src/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsconfig": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "commander": "^12.0.0"
+  }
+}
