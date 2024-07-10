@@ -131,8 +131,8 @@ importers:
   packages/react-router-integration:
     dependencies:
       '@telegram-apps/sdk':
-        specifier: workspace:^1
-        version: link:../sdk
+        specifier: ^1.0.0
+        version: 1.1.0
       '@types/react':
         specifier: ^17.0.0 || ^18.0.0
         version: 18.3.2
@@ -1624,6 +1624,9 @@ packages:
 
   '@swc/types@0.1.7':
     resolution: {integrity: sha512-scHWahbHF0eyj3JsxG9CFJgFdFNaVQCNAimBlT6PzS3n/HptxqREjsm4OH6AN3lYcffZYSPxXW8ua2BEHp0lJQ==}
+
+  '@telegram-apps/sdk@1.1.0':
+    resolution: {integrity: sha512-31Lfl8qlCzD2JXG1DKuFygHQEi7//lV8G3kQAZk0ZAjxoar3snstPjP3NDN2pa8/CyFyocLcKjndQyMLdo/u8A==}
 
   '@telegram-apps/telegram-ui@2.1.4':
     resolution: {integrity: sha512-N4eDwX+TfAaa/3enAY06FPuRxTji9/x+mdYBEZJn+2TseEUdaVtLMvGGsiPSBXlsXMkQG/4xUVktMXWeo/8qlw==}
@@ -6687,6 +6690,8 @@ snapshots:
   '@swc/types@0.1.7':
     dependencies:
       '@swc/counter': 0.1.3
+
+  '@telegram-apps/sdk@1.1.0': {}
 
   '@telegram-apps/telegram-ui@2.1.4(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
