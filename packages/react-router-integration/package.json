@@ -43,7 +43,7 @@
     "build": "vite build"
   },
   "peerDependencies": {
-    "@telegram-apps/sdk": "workspace:^1",
+    "@telegram-apps/sdk": "workspace:^1.1.1",
     "@types/react": "^17.0.0 || ^18.0.0",
     "react": "^17.0.0 || ^18.0.0",
     "react-router-dom": "^6.22.3"
