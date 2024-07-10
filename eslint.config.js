@@ -23,6 +23,7 @@ export default tseslint.config(
       '@typescript-eslint/no-redundant-type-constituents': 0,
       '@typescript-eslint/no-duplicate-type-constituents': 0,
       '@typescript-eslint/no-unused-expressions': 0,
+      '@typescript-eslint/no-unsafe-call': 0,
       'no-empty': 0,
     },
   },
