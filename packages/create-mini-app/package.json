@@ -33,8 +33,6 @@
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "rollup-plugin-preserve-shebang": "^1.0.1",
-    "test-utils": "workspace:*",
     "tsconfig": "workspace:*"
   },
   "publishConfig": {
