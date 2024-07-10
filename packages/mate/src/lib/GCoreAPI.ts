@@ -12,11 +12,29 @@ export class GCoreAPI {
     }).then(r => r.json() as R);
   }
 
+  /**
+   * @see https://api.gcore.com/docs/cdn#tag/CDN-resources/operation/get_resources
+   */
   getCDNResources(): Promise<{
-    id: number;
     cname: string;
     deleted: boolean;
+    id: number;
   }[]> {
     return this.fetch('/cdn/resources');
+  }
+
+  /**
+   * @see https://api.gcore.com/docs/storage#tag/Storage/operation/storageListHttpV2
+   */
+  listStorages(): Promise<{
+    data: {
+      address: string;
+      client_id: number;
+      location: string;
+      name: string;
+      type: 'sftp' | 's3' | string;
+    }[];
+  }> {
+    return this.fetch('/storage/provisioning/v2/storage');
   }
 }
