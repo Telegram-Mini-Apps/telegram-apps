@@ -29,5 +29,5 @@ export function retrieveLaunchParams(): LaunchParams {
     }
   }
 
-  throw new Error('Unable to retrieve launch parameters from any known source.');
+  throw new Error('Unable to retrieve launch parameters from any known source. Perhaps, you have opened your app outside of Telegram?\n\n📖 Refer to docs for more information:\nhttps://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/environment');
 }
