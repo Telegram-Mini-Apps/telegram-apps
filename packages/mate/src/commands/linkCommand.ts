@@ -17,7 +17,7 @@ export const linkCommand = new Command()
       .requiredOption('--s3-region <region>', 'S3 region identifier')
       .requiredOption('--s3-bucket <bucket name>', 'S3 bucket name')
       .requiredOption('--api-key <key>', 'gcore API Key')
-      .requiredOption('--project <project name>', 'project identifier. Example: "my-mini-app"')
+      .requiredOption('-p, --project <project name>', 'project identifier. Example: "my-mini-app"')
       .action(async (options: {
         apiKey: string;
         project: string;
