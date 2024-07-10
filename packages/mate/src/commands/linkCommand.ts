@@ -1,13 +1,16 @@
+import { S3 } from '@aws-sdk/client-s3';
 import { Command } from 'commander';
 import chalk from 'chalk';
-import figureSet from 'figures';
+import { spawnWithSpinner } from 'cli-utils';
 
-import { createGCoreDeployProvider } from '../providers/createGCoreDeployProvider.js';
-import { Logger } from '../logger/Logger.js';
+import { Logger } from '../logging/Logger.js';
+import { logSuccess } from '../logging/logSuccess.js';
+import { logWarning } from '../logging/logWarning.js';
+import { GCoreAPI } from '../lib/GCoreAPI.js';
 
 export const linkCommand = new Command()
   .name('link')
-  .description('Prints the link, which can be used to retrieve the application assets')
+  .description('Prints the link, which can be used to retrieve the project assets')
   .addCommand(
     new Command('gcore')
       .option('--verbose', 'enable debug mode')
@@ -28,36 +31,51 @@ export const linkCommand = new Command()
         s3SecretKey: string;
         verbose: boolean;
       }) => {
-        const { project } = options;
         const logger = options.verbose ? new Logger() : undefined;
-
         logger?.log('Using options:', options);
 
-        const provider = createGCoreDeployProvider({
-          apiKey: options.apiKey,
-          s3: {
+        const { project } = options;
+        const api = new GCoreAPI(options.apiKey);
+        const s3 = new S3({
+          region: options.s3Region,
+          endpoint: options.s3Endpoint,
+          credentials: {
             accessKeyId: options.s3AccessKey,
-            bucket: options.s3Bucket,
             secretAccessKey: options.s3SecretKey,
-            endpoint: options.s3Endpoint,
-            region: options.s3Region,
           },
         });
 
         // TODO: handle error.
+        // TODO: format project.
 
-        const link = await provider.getLink(project);
+        const link = await spawnWithSpinner({
+          async command() {
+            // Retrieve any objects, having the project name as a prefix.
+            // We use the project name as a bucket directory.
+            const response = await s3.listObjects({
+              Bucket: options.s3Bucket,
+              Prefix: `${project}/`,
+              MaxKeys: 1,
+            });
+            if (!response.Contents?.length) {
+              return;
+            }
+
+            // Publicly, objects are only available via CDN.
+            const resources = await api.getCDNResources();
+            if (resources.length > 0) {
+              return `https://${resources[0].cname}/${options.s3Bucket}/${project}`;
+            }
+          },
+          title: 'Fetching project information',
+          titleFail: 'Unable to retrieve project information. Something went wrong',
+          titleSuccess: 'Project information fetched',
+        });
 
         if (link) {
-          console.log(
-            chalk.bold.green(figureSet.tick),
-            `Project ${chalk.bold.yellow(project)} link: ${chalk.bold.blue(link)}`,
-          );
+          logSuccess(`Project ${chalk.bold.yellow(project)} link: ${chalk.bold.blue(link)}`);
         } else {
-          console.log(
-            chalk.bold.yellow(figureSet.warning),
-            `Project ${chalk.bold.yellow(project)} is not yet deployed`,
-          );
+          logWarning(`Project ${chalk.bold.yellow(project)} is not yet deployed`);
         }
       }),
   );
