@@ -22,19 +22,14 @@ export class Logger {
       })
       .format(now);
 
-    console[level](
-      chalk.bold.whiteBright.bgGreen(` ${date} `),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      ...args
-    );
+    console[level](chalk.bold.whiteBright.bgGreen(` ${date} `), ...args);
   }
 
   /**
-   * Prints log message into a console.
+   * Prints a log message into a console.
    * @param args
    */
   log(...args: any[]): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    this.print('log', chalk.bold.whiteBright.bgBlue('[info]'), ...args);
+    this.print('log', chalk.whiteBright.bgBlue(' i '), ...args);
   }
 }
