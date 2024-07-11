@@ -22,7 +22,9 @@
   "files": [
     "dist"
   ],
-  "bin": "dist/index.js",
+  "bin": {
+    "mate": "dist/index.js"
+  },
   "scripts": {
     "lint": "cd ../.. && eslint packages/mate/src --ignore-pattern **/*.test.ts",
     "lint:fix": "pnpm run lint --fix",
