@@ -9,10 +9,5 @@
   },
   "include": [
     "src"
-  ],
-  "references": [
-    {
-      "path": "../cli-utils"
-    }
   ]
 }

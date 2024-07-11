@@ -26,23 +26,11 @@ jobs:
         uses: pnpm/action-setup@v2
         id: pnpm-install
         with:
-          version: 7
+          version: 9
           run_install: false
 
-      - name: Install packages dependencies only
-        run: pnpm run ci:packages:install-deps
-
-      - name: Build packages
-        run: pnpm run ci:packages:build
-
-#      - name: Lint packages
-#        run: pnpm run ci:packages:lint
-
-      - name: Check packages types
-        run: pnpm run ci:packages:typecheck
-
-      - name: Test packages
-        run: pnpm run ci:packages:test
+      - name: Rollup
+        run: pnpm run ci:packages:rollup
 
       - name: Run changeset
         uses: changesets/action@v1
