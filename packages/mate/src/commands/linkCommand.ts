@@ -1,7 +1,8 @@
 import { S3 } from '@aws-sdk/client-s3';
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { spawnWithSpinner } from 'cli-utils';
+
+import { spawnWithSpinner } from '@/cli-utils/spawnWithSpinner.js';
 
 import { Logger } from '../logging/Logger.js';
 import { logSuccess } from '../logging/logSuccess.js';
