@@ -7,7 +7,7 @@
     "ci:packages:lint": "pnpm run packages:lint",
     "ci:packages:test": "vitest --run",
     "ci:packages:typecheck": "pnpm run packages:typecheck",
-    "ci:packages:rollup": "pnpm run ci:packages:deps && pnpm run ci:packages:build && pnpm run ci:packages:typecheck && pnpm run ci:packages:test",
+    "ci:packages:rollup": "pnpm run ci:packages:deps && pnpm run ci:packages:build && pnpm run ci:packages:lint && pnpm run ci:packages:typecheck && pnpm run ci:packages:test",
     "commit": "git cz",
     "dev": "turbo run dev",
     "docs:build": "turbo run build --filter=\"./apps/docs\"",
