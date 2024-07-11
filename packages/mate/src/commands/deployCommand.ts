@@ -3,9 +3,10 @@ import { existsSync, lstatSync, readdirSync, createReadStream } from 'node:fs';
 
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { spawnWithSpinner } from 'cli-utils';
 import { S3 } from '@aws-sdk/client-s3';
 import mimeDb from 'mime-db';
+
+import { spawnWithSpinner } from '@/cli-utils/spawnWithSpinner.js';
 
 import { GCoreAPI } from '../lib/GCoreAPI.js';
 import { Logger } from '../logging/Logger.js';
