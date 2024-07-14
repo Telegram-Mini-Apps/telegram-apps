@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 1.1.2
+
+### Patch Changes
+
+- fd30596: Make the `postEvent` function intellisense a bit better.
+
 ## 1.1.1
 
 ### Patch Changes
