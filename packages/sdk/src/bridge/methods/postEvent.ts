@@ -28,7 +28,21 @@ interface PostEventOptions {
 export type PostEvent = typeof postEvent;
 
 /**
- * Calls Mini Apps method with optional parameters.
+ * Calls Mini Apps methods requiring parameters.
+ * @param method - method name.
+ * @param params - method parameters.
+ * @param options - posting options.
+ * @throws {SDKError} ERR_UNKNOWN_ENV
+ * @see ERR_UNKNOWN_ENV
+ */
+export function postEvent<Method extends MiniAppsMethodWithRequiredParams>(
+  method: Method,
+  params: MiniAppsMethodParams<Method>,
+  options?: PostEventOptions,
+): void;
+
+/**
+ * Calls Mini Apps methods accepting optional parameters.
  * @param method - method name.
  * @param params - method parameters.
  * @param options - posting options.
@@ -42,7 +56,7 @@ export function postEvent<Method extends MiniAppsMethodWithOptionalParams>(
 ): void;
 
 /**
- * Calls Mini Apps method without parameters.
+ * Calls Mini Apps methods accepting optional or no parameters at all.
  * @param method - method name.
  * @param options - posting options.
  * @throws {SDKError} ERR_UNKNOWN_ENV
@@ -50,20 +64,6 @@ export function postEvent<Method extends MiniAppsMethodWithOptionalParams>(
  */
 export function postEvent(
   method: MiniAppsMethodWithoutParams | MiniAppsMethodWithOptionalParams,
-  options?: PostEventOptions,
-): void;
-
-/**
- * Calls Mini Apps method with parameters.
- * @param method - method name.
- * @param params - method parameters.
- * @param options - posting options.
- * @throws {SDKError} ERR_UNKNOWN_ENV
- * @see ERR_UNKNOWN_ENV
- */
-export function postEvent<Method extends MiniAppsMethodWithRequiredParams>(
-  method: Method,
-  params: MiniAppsMethodParams<Method>,
   options?: PostEventOptions,
 ): void;
 

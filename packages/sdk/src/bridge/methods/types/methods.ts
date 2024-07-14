@@ -408,7 +408,7 @@ export type MiniAppsMethodWithRequiredParams = Exclude<
  * Method names which have versioned params.
  */
 export type MiniAppsMethodWithVersionedParams = {
-  [M in MiniAppsMethodName]: IsNever<MiniAppsMethods[M]['versionedParams']> extends true ? never : M;
+  [M in MiniAppsMethodName]: If<IsNever<MiniAppsMethods[M]['versionedParams']>, never, M>;
 }[MiniAppsMethodName];
 
 /**
