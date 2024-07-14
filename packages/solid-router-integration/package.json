@@ -43,7 +43,7 @@
   },
   "peerDependencies": {
     "@solidjs/router": "^0.13.1",
-    "@telegram-apps/sdk": "^1.0.0",
+    "@telegram-apps/sdk": "workspace:^1",
     "solid-js": "^1.8.16"
   },
   "devDependencies": {

@@ -1,5 +1,12 @@
 # @telegram-apps/init-data-node
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [fd30596]
+  - @telegram-apps/sdk@1.1.2
+
 ## 1.0.2
 
 ### Patch Changes
