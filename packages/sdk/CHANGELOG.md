@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 1.1.3
+
+### Patch Changes
+
+- 0ac4c50: Re-use captured errors in `retrieveLaunchParams`. Make error more clear.
+
 ## 1.1.2
 
 ### Patch Changes
