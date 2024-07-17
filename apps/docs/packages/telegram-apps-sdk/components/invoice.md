@@ -10,7 +10,7 @@ To initialize the component, use the `initInvoice` function:
 ```typescript
 import { initInvoice } from '@telegram-apps/sdk';
 
-const [invoice] = initInvoice();  
+const invoice = initInvoice();  
 ```
 
 ## Opening Invoice
