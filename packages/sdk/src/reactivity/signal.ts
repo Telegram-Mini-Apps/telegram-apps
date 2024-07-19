@@ -38,18 +38,20 @@ export function signal<T>(): Signal<T | undefined>;
  */
 export function signal<T>(initialValue: T): Signal<T>;
 export function signal<T>(initialValue?: T): Signal<T> {
-  const listeners: ListenerFn<T>[] = [];
+  const listeners = new Map<symbol, ListenerFn<T>>();
   let value: T = initialValue as T;
 
   function track(fn: ListenerFn<T>): () => void {
-    listeners.push(fn);
+    listeners.set(Symbol(), fn);
     return () => untrack(fn);
   }
 
   function untrack(fn: ListenerFn<T>): void {
-    const index = listeners.indexOf(fn);
-    if (index >= 0) {
-      listeners.splice(index, 1);
+    for (const [key, listener] of listeners.entries()) {
+      if (listener === fn) {
+        listeners.delete(key);
+        return;
+      }
     }
   }
 
@@ -67,7 +69,7 @@ export function signal<T>(initialValue?: T): Signal<T> {
     track,
     untrack,
     function untrackAll() {
-      listeners.splice(0, listeners.length);
+      listeners.clear();
     },
   ];
 }
