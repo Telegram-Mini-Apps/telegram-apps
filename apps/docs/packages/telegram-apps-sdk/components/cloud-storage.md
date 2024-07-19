@@ -9,7 +9,7 @@ To initialize the component, use the `initCloudStorage` function:
 ```typescript
 import { initCloudStorage } from '@telegram-apps/sdk';
 
-const [cloudStorage] = initCloudStorage();  
+const cloudStorage = initCloudStorage();  
 ```
 
 ## Setting Items
