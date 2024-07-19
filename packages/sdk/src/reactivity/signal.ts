@@ -1,4 +1,4 @@
-import { registerReactiveUnitUsage } from '@/reactivity/context.js';
+import { registerGet } from '@/reactivity/context.js';
 import type { ListenerFn, TrackReactiveUnitFn, UntrackReactiveUnitFn } from '@/reactivity/types.js';
 
 /**
@@ -55,7 +55,7 @@ export function signal<T>(initialValue?: T): Signal<T> {
 
   return [
     function get() {
-      registerReactiveUnitUsage(track);
+      registerGet(track);
       return value;
     },
     function set(v) {
