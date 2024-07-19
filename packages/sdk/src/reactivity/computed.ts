@@ -1,7 +1,7 @@
-import { registerReactiveUnitUsage, runInReactiveContext } from '@/reactivity/context.js';
+import { runInReactiveContext } from '@/reactivity/context.js';
 import { signal } from '@/reactivity/signal.js';
 import type {
-  RemoveListenerFn,
+  CleanupFn,
   TrackReactiveUnitFn,
   UntrackReactiveUnitFn,
 } from '@/reactivity/types.js';
@@ -9,19 +9,23 @@ import type {
 /**
  * Represents a computed value.
  */
-export type Memo<T> = [
+export type Computed<T> = [
   /**
-   * Returns the underlying memo value.
+   * Returns the underlying value.
    */
   get: () => T,
   /**
-   * Adds a new listener, tracking the memo changes.
+   * Adds a new listener, tracking changes.
    */
   track: TrackReactiveUnitFn<T>,
   /**
-   * Removes a listener, tracking the memo changes.
+   * Removes a listener, tracking changes.
    */
   untrack: UntrackReactiveUnitFn<T>,
+  /**
+   * Removes all listeners.
+   */
+  untrackAll: () => void,
 ];
 
 /**
@@ -29,9 +33,9 @@ export type Memo<T> = [
  * changed.
  * @param fn - function to memoize.
  */
-export function memo<T>(fn: () => T): Memo<T> {
-  const untrackers: RemoveListenerFn[] = [];
-  const [get, set, track, untrack] = signal<T>(compute());
+export function computed<T>(fn: () => T): Computed<T> {
+  const untrackers: CleanupFn[] = [];
+  const [get, set, track, untrack, untrackAll] = signal<T>(compute());
 
   function update() {
     set(compute());
@@ -51,12 +55,5 @@ export function memo<T>(fn: () => T): Memo<T> {
     return result;
   }
 
-  return [
-    function getMemo() {
-      registerReactiveUnitUsage(track);
-      return get();
-    },
-    track,
-    untrack,
-  ];
+  return [get, track, untrack, untrackAll];
 }
