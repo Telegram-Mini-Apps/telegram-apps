@@ -1,15 +1,15 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { FnToSpy } from '@test-utils/types.js';
 
-import { registerReactiveUnitUsage as registerReactiveUnitUsageFn } from '@/reactivity/context.js';
+import { registerGet as registerGetFn } from '@/reactivity/context.js';
 import { signal } from '@/reactivity/signal.js';
 
 vi.mock('@/reactivity/context.js', () => ({
-  registerReactiveUnitUsage: vi.fn(),
+  registerGet: vi.fn(),
 }));
 
-const registerReactiveUnitUsage =
-  registerReactiveUnitUsageFn as unknown as FnToSpy<typeof registerReactiveUnitUsageFn>;
+const registerGet =
+  registerGetFn as unknown as FnToSpy<typeof registerGetFn>;
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -21,11 +21,11 @@ describe('get', () => {
     expect(get()).toBe(123321);
   });
 
-  it('should call registerReactiveUnitUsage function with track function when called', () => {
+  it('should call registerGet function with track function when called', () => {
     const [get, , track] = signal(1);
     get();
-    expect(registerReactiveUnitUsage).toHaveBeenCalledTimes(1);
-    expect(registerReactiveUnitUsage).toHaveBeenCalledWith(track);
+    expect(registerGet).toHaveBeenCalledTimes(1);
+    expect(registerGet).toHaveBeenCalledWith(track);
   });
 });
 
