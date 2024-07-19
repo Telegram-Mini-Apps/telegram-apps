@@ -11,6 +11,7 @@ export type Signal<T> = [
   get: () => T,
   /**
    * Updates the signal notifying all subscribers about changes.
+   * @param value - value to set.
    */
   set: (value: T) => void,
   /**
@@ -21,6 +22,10 @@ export type Signal<T> = [
    * Removes a listener, tracking the signal changes.
    */
   untrack: UntrackReactiveUnitFn<T>,
+  /**
+   * Removes all listeners.
+   */
+  untrackAll: () => void,
 ];
 
 /**
@@ -61,5 +66,8 @@ export function signal<T>(initialValue?: T): Signal<T> {
     },
     track,
     untrack,
+    function untrackAll() {
+      listeners.splice(0, listeners.length);
+    },
   ];
 }
