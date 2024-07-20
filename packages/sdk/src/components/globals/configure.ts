@@ -4,7 +4,7 @@ import { set as setVersion } from '@/components/globals/version.js';
 import { set as setPostEvent } from '@/components/globals/postEvent.js';
 import type { Version } from '@/version/types.js';
 
-export interface InitOptions {
+export interface ConfigureOptions {
   /**
    * Mini Apps version.
    */
@@ -16,10 +16,10 @@ export interface InitOptions {
 }
 
 /**
- * Initializes global dependencies.
+ * Configures global dependencies.
  * @param options - additional options.
  */
-export function init(options: InitOptions = {}): void {
+export function configure(options: ConfigureOptions = {}): void {
   const lp = retrieveLaunchParams();
   setVersion(options.version || lp.version);
   setPostEvent(options.postEvent || defaultPostEvent);
