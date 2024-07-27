@@ -7,7 +7,7 @@ export { subscribe } from '@/bridge/events/listening/subscribe.js';
 export { unsubscribe } from '@/bridge/events/listening/unsubscribe.js';
 export * from '@/bridge/events/types.js';
 export { createPostEvent } from '@/bridge/methods/createPostEvent.js';
-export { type PostEvent, postEvent } from '@/bridge/methods/postEvent.js';
+export { type PostEvent, postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
 export * from '@/bridge/methods/types/index.js';
 export { setTargetOrigin, targetOrigin } from '@/bridge/target-origin.js';
 export { captureSameReq } from '@/bridge/captureSameReq.js';
@@ -39,16 +39,6 @@ export * from '@/colors/types.js';
 /**
  * Components.
  */
-
-// BackButton.
-export { BackButton } from '@/components/BackButton/BackButton.js';
-export { initBackButton } from '@/components/BackButton/initBackButton.js';
-export type {
-  BackButtonEventListener,
-  BackButtonEventName,
-  BackButtonEvents,
-  BackButtonState,
-} from '@/components/BackButton/types.js';
 
 // BiometryManager.
 export { BiometryManager } from '@/components/BiometryManager/BiometryManager.js';
@@ -328,3 +318,11 @@ export * from '@/types/index.js';
  */
 export { compareVersions } from '@/version/compareVersions.js';
 export type { Version } from '@/version/types.js';
+
+
+/**
+ * EXPERIMENTS
+ */
+export { postEvent, version } from '@/components/globals.js';
+export { configure, type ConfigureOptions } from '@/components/configure.js';
+export * as BackButton from '@/components/BackButton.js';
