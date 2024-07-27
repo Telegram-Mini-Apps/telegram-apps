@@ -1,7 +1,16 @@
 import type { UnsubscribeFn, ListenerFn } from '@/signals/Signal/types.js';
 
 export class Signal<T> {
-  private listeners: ListenerFn<T>[] = [];
+  private listeners: [
+    /**
+     * Actual change listener.
+     */
+    listener: ListenerFn<T>,
+    /**
+     * True, if the listener was added by some other signal.
+     */
+    signalListener?: boolean
+  ][] = [];
 
   /**
    * Signals collected during the last call of the `collect` method.
@@ -63,17 +72,18 @@ export class Signal<T> {
       //
       // We want the setter to make sure that all listeners will be called in predefined
       // order withing a single update frame.
-      [...this.listeners].forEach(l => l(value));
+      [...this.listeners].forEach(item => item[0](value));
     }
   }
 
   /**
    * Adds a new listener, tracking the signal changes.
    * @param fn - event listener.
+   * @param signalListener - true, if the listener was added by some other signal.
    * @returns Function to remove bound listener.
    */
-  subscribe(fn: ListenerFn<T>): UnsubscribeFn {
-    this.listeners.push(fn);
+  subscribe(fn: ListenerFn<T>, signalListener?: boolean): UnsubscribeFn {
+    this.listeners.push([fn, signalListener]);
     return () => this.unsubscribe(fn);
   }
 
@@ -82,16 +92,16 @@ export class Signal<T> {
    * @param fn - event listener.
    */
   unsubscribe(fn: ListenerFn<T>): void {
-    const idx = this.listeners.indexOf(fn);
+    const idx = this.listeners.findIndex(item => item[0] === fn);
     if (idx >= 0) {
       this.listeners.splice(idx, 1);
     }
   }
 
   /**
-   * Removes all signal change listeners.
+   * Removes all signal change listeners, not added by other signals.
    */
   unsubscribeAll(): void {
-    this.listeners = [];
+    this.listeners = this.listeners.filter(item => item[1]);
   }
 }

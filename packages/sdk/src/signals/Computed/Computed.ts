@@ -1,4 +1,4 @@
-import { Signal } from '@/signals/signal/signal.js';
+import { Signal } from '@/signals/Signal/Signal.js';
 
 export class Computed<T> extends Signal<T> {
   private signals = new Set<Signal<unknown>>();
@@ -22,7 +22,7 @@ export class Computed<T> extends Signal<T> {
     const [result, signals] = Signal.collect(this.fn);
 
     // Start tracking for all dependencies' changes and re-compute the computed value.
-    signals.forEach(s => s.subscribe(this.update));
+    signals.forEach(s => s.subscribe(this.update, true));
     this.signals = signals;
 
     // Update the internal value.
