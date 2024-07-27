@@ -9,10 +9,10 @@ afterEach(() => {
 
 describe('subscribe', () => {
   it('should call passed function if signal was changed directly', () => {
-    const c = new Computed(() => 1);
+    const computed = new Computed(() => 1);
     const fn = vi.fn();
-    c.subscribe(fn);
-    c.set(2);
+    computed.subscribe(fn);
+    computed.set(2);
     expect(fn).toBeCalledTimes(1);
     expect(fn).toBeCalledWith(2);
   });
