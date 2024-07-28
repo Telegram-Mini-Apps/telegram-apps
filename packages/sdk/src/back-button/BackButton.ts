@@ -8,13 +8,19 @@ import { postEvent } from '@/components/globals.js';
 import type { MiniAppsEventListener } from '@/bridge/events/types.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
 
-const SETUP_METHOD = 'web_app_setup_back_button';
+const MINI_APPS_METHOD = 'web_app_setup_back_button';
 const CLICK_EVENT = 'back_button_pressed';
+
+/**
+ * fixme
+ * @see Usage: https://docs.telegram-mini-apps.com/platform/back-button
+ * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/back-button
+ */
 
 export const isVisible = createSignal(false, {
   set(value) {
     if (this.get() !== value) {
-      postEvent()(SETUP_METHOD, { is_visible: value });
+      postEvent()(MINI_APPS_METHOD, { is_visible: value });
       setStorageValue('bb', { isVisible: value });
     }
     this.set(value);
@@ -26,7 +32,7 @@ export const state = createComputed(() => ({ isVisible: isVisible() }));
 /**
  * Hides the back button.
  */
-export const hide = decorateWithSupports((): void => isVisible.set(false), SETUP_METHOD);
+export const hide = decorateWithSupports((): void => isVisible.set(false), MINI_APPS_METHOD);
 
 /**
  * Add a new back button click listener.
@@ -55,4 +61,4 @@ export function restore(): void {
 /**
  * Shows the back button.
  */
-export const show = decorateWithSupports((): void => isVisible.set(true), SETUP_METHOD);
+export const show = decorateWithSupports((): void => isVisible.set(true), MINI_APPS_METHOD);
