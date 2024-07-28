@@ -1,4 +1,5 @@
-import type { UnsubscribeFn, ListenerFn } from '@/signals/Signal/types.js';
+import { collectSignal } from '../reactive-context.js';
+import type { UnsubscribeFn, ListenerFn } from '../types.js';
 
 export class Signal<T> {
   private listeners: [
@@ -12,42 +13,6 @@ export class Signal<T> {
     signalListener?: boolean
   ][] = [];
 
-  /**
-   * Signals collected during the last call of the `collect` method.
-   * @private
-   */
-  private static collectedSignals?: Set<Signal<unknown>>;
-
-  /**
-   * Runs specified function in a reactive context, collecting called signals.
-   * @param fn - function to call.
-   * @returns A tuple, containing a result of the function and collected signals.
-   */
-  static collect<T>(fn: () => T): [
-    /**
-     * Function execution result.
-     */
-    result: T,
-    /**
-     * Collected signals.
-     */
-    signals: Set<Signal<unknown>>,
-  ] {
-    this.collectedSignals = new Set();
-
-    try {
-      // Call the function and start tracking for all captured reactive units.
-      return [fn(), this.collectedSignals];
-    } finally {
-      // Remember to untrack the reactive context.
-      this.collectedSignals = undefined;
-    }
-  }
-
-  private static registerGet(signal: Signal<any>): void {
-    this.collectedSignals && this.collectedSignals.add(signal);
-  }
-
   constructor(private value: T) {
   }
 
@@ -55,7 +20,7 @@ export class Signal<T> {
    * @returns An underlying signal value.
    */
   get(): T {
-    Signal.registerGet(this);
+    collectSignal(this);
     return this.value;
   }
 
@@ -82,16 +47,16 @@ export class Signal<T> {
    * @param signalListener - true, if the listener was added by some other signal.
    * @returns Function to remove bound listener.
    */
-  subscribe(fn: ListenerFn<T>, signalListener?: boolean): UnsubscribeFn {
+  sub(fn: ListenerFn<T>, signalListener?: boolean): UnsubscribeFn {
     this.listeners.push([fn, signalListener]);
-    return () => this.unsubscribe(fn);
+    return () => this.unsub(fn);
   }
 
   /**
    * Removes a listener, tracking the signal changes.
    * @param fn - event listener.
    */
-  unsubscribe(fn: ListenerFn<T>): void {
+  unsub(fn: ListenerFn<T>): void {
     const idx = this.listeners.findIndex(item => item[0] === fn);
     if (idx >= 0) {
       this.listeners.splice(idx, 1);
@@ -101,7 +66,7 @@ export class Signal<T> {
   /**
    * Removes all signal change listeners, not added by other signals.
    */
-  unsubscribeAll(): void {
+  unsubAll(): void {
     this.listeners = this.listeners.filter(item => item[1]);
   }
 }
