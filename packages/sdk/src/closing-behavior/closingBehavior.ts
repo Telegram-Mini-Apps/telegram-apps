@@ -1,5 +1,7 @@
 import { createComputed, createSignal } from '@/signals/utils.js';
 import { postEvent } from '@/components/globals.js';
+import { getStorageValue, setStorageValue } from '@/storage/storage.js';
+import { isPageReload } from '@/navigation/isPageReload.js';
 
 /**
  * fixme
@@ -15,6 +17,7 @@ export const isConfirmationNeeded = createSignal(false, {
   set(value) {
     if (this.get() !== value) {
       postEvent()('web_app_setup_closing_behavior', { need_confirmation: value });
+      setStorageValue('cb', { isConfirmationNeeded: value });
     }
     this.set(value);
   },
@@ -36,4 +39,13 @@ export function disableConfirmation(): void {
  */
 export function enableConfirmation() {
   isConfirmationNeeded.set(true);
+}
+
+/**
+ * Restores the component state.
+ */
+export function restore(): void {
+  isConfirmationNeeded.set(
+    (isPageReload() && getStorageValue('cb') || { isConfirmationNeeded: false }).isConfirmationNeeded,
+  );
 }
