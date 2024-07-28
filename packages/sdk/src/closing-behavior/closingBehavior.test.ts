@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { postEvent } from '@/components/globals.js';
+import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
+
 import {
-  state,
   isConfirmationNeeded,
   disableConfirmation,
   enableConfirmation,
-} from './ClosingBehavior.js';
-import { postEvent } from '@/components/globals.js';
-import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
+} from './closingBehavior.js';
 
 beforeEach(() => {
   // Mock postEvent.
@@ -15,8 +15,7 @@ beforeEach(() => {
 
   // Reset all signals.
   isConfirmationNeeded.set(false);
-  isConfirmationNeeded.unsubscribeAll();
-  state.unsubscribeAll();
+  isConfirmationNeeded.unsubAll();
 
   // Reset all mocks.
   vi.restoreAllMocks();
@@ -64,13 +63,5 @@ describe('enableConfirmation', () => {
     enableConfirmation();
     expect(spy).toBeCalledTimes(1);
     expect(spy).toBeCalledWith('web_app_setup_closing_behavior', { need_confirmation: true });
-  });
-});
-
-describe('state', () => {
-  it('should return object with isConfirmationNeeded: boolean', () => {
-    expect(state()).toStrictEqual({ isConfirmationNeeded: false });
-    isConfirmationNeeded.set(true);
-    expect(state()).toStrictEqual({ isConfirmationNeeded: true });
   });
 });
