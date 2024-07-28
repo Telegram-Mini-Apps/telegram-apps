@@ -1,4 +1,4 @@
-import { createComputed, createSignal } from '@/signals/utils.js';
+import { createSignal } from '@/signals/utils.js';
 import { postEvent } from '@/components/globals.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
@@ -22,10 +22,6 @@ export const isConfirmationNeeded = createSignal(false, {
     this.set(value);
   },
 });
-
-export const state = createComputed(() => ({
-  isConfirmationNeeded: isConfirmationNeeded(),
-}));
 
 /**
  * Disables the confirmation dialog when closing the Mini App.
