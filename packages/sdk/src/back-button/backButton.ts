@@ -3,7 +3,7 @@ import { off } from '@/bridge/events/listening/off.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import { decorateWithSupports } from '@/components/utilities/decorateWithSupports.js';
-import { createComputed, createSignal } from '@/signals/utils.js';
+import { createSignal } from '@/signals/utils.js';
 import { postEvent } from '@/components/globals.js';
 import type { MiniAppsEventListener } from '@/bridge/events/types.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
@@ -26,8 +26,6 @@ export const isVisible = createSignal(false, {
     this.set(value);
   },
 });
-
-export const state = createComputed(() => ({ isVisible: isVisible() }));
 
 /**
  * Hides the back button.

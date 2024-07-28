@@ -1,14 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
-  state,
   show,
   isVisible,
   hide,
   restore,
   onClick,
   offClick,
-} from './BackButton.js';
+} from './backButton.js';
 import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
 import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
 import { mockSessionStorageGetItem } from 'test-utils';
@@ -22,8 +21,7 @@ beforeEach(() => {
 
   // Reset all signals.
   isVisible.set(false);
-  isVisible.unsubscribeAll();
-  state.unsubscribeAll();
+  isVisible.unsubAll();
 
   // Reset mini apps event emitter and all mocks.
   resetMiniAppsEventEmitter();
@@ -157,13 +155,5 @@ describe('show', () => {
       version.set('6.2');
       expect(show.isSupported()).toBe(true);
     });
-  });
-});
-
-describe('state', () => {
-  it('should return object with isVisible: boolean', () => {
-    expect(state()).toStrictEqual({ isVisible: false });
-    isVisible.set(true);
-    expect(state()).toStrictEqual({ isVisible: true });
   });
 });
