@@ -1,39 +1,24 @@
 import { describe, vi, it, expect, afterEach } from 'vitest';
 
-import { Computed } from '@/signals/Computed/Computed.js';
-import { Signal } from '@/signals/Signal/Signal.js';
+import { Computed } from './Computed.js';
+import { Signal } from '../Signal/Signal.js';
 
 afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe('subscribe', () => {
-  it('should call passed function if signal was changed directly', () => {
-    const computed = new Computed(() => 1);
-    const fn = vi.fn();
-    computed.subscribe(fn);
-    computed.set(2);
-    expect(fn).toBeCalledTimes(1);
-    expect(fn).toBeCalledWith(2);
-  });
-
+describe('sub', () => {
   it('should call passed function if signal deps changed', () => {
     const signal = new Signal(1);
     const computed = new Computed(() => {
       return signal.get();
     });
+    expect(computed.get()).toBe(1);
     const fn = vi.fn();
-    computed.subscribe(fn);
+    computed.sub(fn);
     signal.set(2);
+    expect(computed.get()).toBe(2);
     expect(fn).toBeCalledTimes(1);
     expect(fn).toBeCalledWith(2);
-  });
-
-  it('should not call function if set value is the same', () => {
-    const computed = new Computed(() => 1);
-    const fn = vi.fn();
-    computed.subscribe(fn);
-    computed.set(1);
-    expect(fn).toBeCalledTimes(0);
   });
 });
