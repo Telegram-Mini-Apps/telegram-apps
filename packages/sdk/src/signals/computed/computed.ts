@@ -46,7 +46,12 @@ import { collectSignals } from '../reactive-context.js';
 //   };
 // }
 
-export type Computed<T> = Omit<Signal<T>, 'set' | 'reset'>;
+export interface Computed<T> extends Omit<Signal<T>, 'set' | 'reset'> {
+  /**
+   * @returns An underlying signal value.
+   */
+  (): T;
+}
 
 export function computed<T>(fn: () => T): Computed<T> {
   let deps = new Set<Signal<unknown>>();
