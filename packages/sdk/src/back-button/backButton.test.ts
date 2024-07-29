@@ -72,21 +72,21 @@ describe('restore', () => {
       mockPageReload();
     });
 
-    it('should use isVisible prop from session storage key "telegram-apps/bb"', () => {
+    it('should use isVisible prop from session storage key "telegram-apps/back-button"', () => {
       const spy = vi.fn(() => '{"isVisible":true}');
       mockSessionStorageGetItem(spy);
       restore();
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('telegram-apps/bb');
+      expect(spy).toHaveBeenCalledWith('telegram-apps/back-button');
       expect(isVisible()).toBe(true);
     });
 
-    it('should set isVisible false if session storage key "telegram-apps/bb" not presented', () => {
+    it('should set isVisible false if session storage key "telegram-apps/back-button" not presented', () => {
       const spy = vi.fn(() => null);
       mockSessionStorageGetItem(spy);
       restore();
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('telegram-apps/bb');
+      expect(spy).toHaveBeenCalledWith('telegram-apps/back-button');
       expect(isVisible()).toBe(false);
     });
   });
