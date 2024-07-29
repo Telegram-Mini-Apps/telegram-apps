@@ -1,9 +1,9 @@
 import { describe, vi, expect, it, afterEach, beforeEach } from 'vitest';
 import { createWindow } from '@test-utils/createWindow.js';
 
-import { postEvent, version } from '@/components/globals.js';
-import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
+import { createRequestId, postEvent, version } from '@/components/globals.js';
 import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
+import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
 import {
   shareURL,
@@ -14,29 +14,46 @@ import {
 
 beforeEach(() => {
   postEvent.set(() => null);
-  resetMiniAppsEventEmitter();
-  vi.restoreAllMocks();
-})
+});
 
 afterEach(() => {
-  // Reset postEvent.
-  postEvent.set(defaultPostEvent);
-  version.set(() => null);
+  postEvent.reset();
+  version.reset();
+  createRequestId.reset();
+  resetMiniAppsEventEmitter();
+  vi.restoreAllMocks();
+});
+
+describe('openLink', () => {
+  it('should call "web_app_open_link" with formatted URL and passed options', () => {
+    const spy = vi.fn();
+    postEvent.set(spy);
+    openLink('https://ya.ru', {
+      tryBrowser: true,
+      tryInstantView: true,
+    });
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith('web_app_open_link', {
+      url: 'https://ya.ru/',
+      try_browser: true,
+      try_instant_view: true,
+    });
+  });
 });
 
 describe('openTelegramLink', () => {
-  it('should throw an error, if hostname is not t.me', () => {
+  it('should throw error, if hostname is not t.me', () => {
     expect(() => openTelegramLink('https://ya.ru')).toThrow(`ERR_INVALID_HOSTNAME`);
     expect(() => openTelegramLink('https://ya.ru/abc')).toThrow(`ERR_INVALID_HOSTNAME`);
   });
 
-  it('should change window.location.href, if web_app_open_tg_link is not supported', () => {
+  it('should change window.location.href, if "web_app_open_tg_link" is not supported', () => {
     createWindow({ location: { href: '' } } as any);
     openTelegramLink('https://t.me/share/url?url=text');
     expect(window.location.href).toBe('https://t.me/share/url?url=text');
   });
 
-  it('should call web_app_open_tg_link with { path_full: string }, where path_full is a combination of pathname and search', () => {
+  it('should call "web_app_open_tg_link" with { path_full: string }, where path_full is a combination of pathname and search', () => {
     const spy = vi.fn();
     postEvent.set(spy);
     version.set('10');
@@ -45,6 +62,18 @@ describe('openTelegramLink', () => {
     expect(spy).toHaveBeenCalledWith('web_app_open_tg_link', {
       path_full: '/share/url?url=text',
     });
+  });
+});
+
+describe('readTextFromClipboard', () => {
+  it('should call "web_app_read_text_from_clipboard" method and receive "clipboard_text_received" event', async () => {
+    const promise = readTextFromClipboard();
+    dispatchWindowMessageEvent('clipboard_text_received', {
+      req_id: 1,
+      data: 'Some text',
+    });
+
+    await expect(promise).resolves.toBe('Some text');
   });
 });
 
@@ -64,6 +93,7 @@ describe('shareURL', () => {
   it('should call web_app_open_tg_link with { path_full: string }, where path_full equals "share/url?url={url}&text={text}"', () => {
     const spy = vi.fn();
     postEvent.set(spy);
+    version.set('10');
 
     shareURL('https://telegram.org');
     expect(spy).toHaveBeenCalledOnce();
