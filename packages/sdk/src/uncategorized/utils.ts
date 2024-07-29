@@ -38,19 +38,9 @@ const READ_TEXT_FROM_CLIPBOARD_METHOD = 'web_app_read_text_from_clipboard';
  * @param options - additional options.
  */
 export function openLink(url: string, options?: OpenLinkOptions): void {
-  const formattedUrl = createSafeURL(url).toString();
-
-  // If the method is not supported, we are doing it in legacy way.
-  if (!supports('web_app_open_link', version())) {
-    window.open(formattedUrl, '_blank');
-    return;
-  }
-
   options ||= {};
-
-  // Otherwise, do it normally.
   postEvent()('web_app_open_link', {
-    url: formattedUrl,
+    url: createSafeURL(url).toString(),
     try_browser: options.tryBrowser,
     try_instant_view: options.tryInstantView,
   });
