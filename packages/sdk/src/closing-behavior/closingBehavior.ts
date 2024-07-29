@@ -1,9 +1,9 @@
-import { createSignal } from '@/signals/utils.js';
 import { postEvent } from '@/components/globals.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
+import { signal } from '@/signals/signal/signal.js';
 
-/**
+/*
  * fixme
  * @see Usage: https://docs.telegram-mini-apps.com/platform/closing-behavior
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/closing-behavior
@@ -13,13 +13,13 @@ import { isPageReload } from '@/navigation/isPageReload.js';
  * Signal containing true, if the confirmation dialog should be shown while the user is trying to
  * close the Mini App.
  */
-export const isConfirmationNeeded = createSignal(false, {
-  set(value) {
-    if (this.get() !== value) {
+export const isConfirmationNeeded = signal(false, {
+  set(s, value) {
+    if (s() !== value) {
       postEvent()('web_app_setup_closing_behavior', { need_confirmation: value });
-      setStorageValue('cb', { isConfirmationNeeded: value });
+      setStorageValue('closingBehavior', { isConfirmationNeeded: value });
     }
-    this.set(value);
+    s.set(value);
   },
 });
 
@@ -42,6 +42,6 @@ export function enableConfirmation() {
  */
 export function restore(): void {
   isConfirmationNeeded.set(
-    (isPageReload() && getStorageValue('cb') || { isConfirmationNeeded: false }).isConfirmationNeeded,
+    (isPageReload() && getStorageValue('closingBehavior') || { isConfirmationNeeded: false }).isConfirmationNeeded,
   );
 }
