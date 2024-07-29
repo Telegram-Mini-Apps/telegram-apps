@@ -9,15 +9,15 @@ afterEach(() => {
 
 describe('sub', () => {
   it('should call passed function if signal deps changed', () => {
-    const [getSignal, setSignal] = signal(1);
-    const [get, sub] = computed(() => {
-      return getSignal();
+    const s = signal(1);
+    const c = computed(() => {
+      return s();
     });
-    expect(get()).toBe(1);
+    expect(c()).toBe(1);
     const fn = vi.fn();
-    sub(fn);
-    setSignal(2);
-    expect(get()).toBe(2);
+    c.sub(fn);
+    s.set(2);
+    expect(c()).toBe(2);
     expect(fn).toBeCalledTimes(1);
     expect(fn).toBeCalledWith(2);
   });
