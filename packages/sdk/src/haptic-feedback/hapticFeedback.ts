@@ -1,17 +1,18 @@
 import { postEvent } from '@/components/globals.js';
-import { decorateWithSupports } from '@/components/utilities/decorateWithSupports.js';
+import { decorateWithSupports } from '@/components/decorateWithSupports.js';
 import type {
   ImpactHapticFeedbackStyle,
   NotificationHapticFeedbackType,
 } from '@/bridge/methods/types/index.js';
 
-const MINI_APPS_METHOD = 'web_app_trigger_haptic_feedback';
-
-/**
+/*
  * fixme
  * @see Usage: https://docs.telegram-mini-apps.com/platform/haptic-feedback
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/haptic-feedback
  */
+
+
+const MINI_APPS_METHOD = 'web_app_trigger_haptic_feedback';
 
 /**
  * A method tells that an impact occurred. The Telegram app may play the appropriate haptics based
@@ -19,7 +20,7 @@ const MINI_APPS_METHOD = 'web_app_trigger_haptic_feedback';
  * @param style - impact style.
  */
 export const impactOccurred = decorateWithSupports(
-  (style: ImpactHapticFeedbackStyle): void => postEvent()('web_app_trigger_haptic_feedback', {
+  (style: ImpactHapticFeedbackStyle): void => postEvent()(MINI_APPS_METHOD, {
     type: 'impact',
     impact_style: style,
   }),
@@ -32,7 +33,7 @@ export const impactOccurred = decorateWithSupports(
  * @param type - notification type.
  */
 export const notificationOccurred = decorateWithSupports(
-  (type: NotificationHapticFeedbackType): void => postEvent()('web_app_trigger_haptic_feedback', {
+  (type: NotificationHapticFeedbackType): void => postEvent()(MINI_APPS_METHOD, {
     type: 'notification',
     notification_type: type,
   }),
@@ -47,6 +48,6 @@ export const notificationOccurred = decorateWithSupports(
  * selection changes.
  */
 export const selectionChanged = decorateWithSupports(
-  (): void => postEvent()('web_app_trigger_haptic_feedback', { type: 'selection_change' }),
+  (): void => postEvent()(MINI_APPS_METHOD, { type: 'selection_change' }),
   MINI_APPS_METHOD,
 );
