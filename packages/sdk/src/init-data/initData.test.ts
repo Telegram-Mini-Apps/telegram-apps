@@ -32,7 +32,7 @@ vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({
       user: {
         id: 2000,
         photoUrl: 'user photo',
-        firstName: 'a',f
+        firstName: 'a',
         lastName: 'b',
         username: 'c',
         languageCode: 'en',
