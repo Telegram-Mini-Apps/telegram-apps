@@ -5,16 +5,16 @@ import { string } from '@/parsing/parsers/string.js';
 import {
   decorateWithSupports,
   type WithSupports,
-} from '@/components/utilities/decorateWithSupports.js';
+} from '@/components/decorateWithSupports.js';
 import { createRequestId, postEvent } from '@/components/globals.js';
 import type { ExecuteWithTimeout } from '@/types/methods.js';
 
 const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
 
-// TODO: Usage.
-
-/**
+/*
+ * fixme
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/cloud-storage
+ * todo: usage
  */
 
 /**
