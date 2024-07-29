@@ -1,7 +1,7 @@
 import { describe, vi, it, expect, afterEach } from 'vitest';
 
-import { Computed } from './Computed.js';
-import { Signal } from '../Signal/Signal.js';
+import { computed } from './computed.js';
+import { signal } from '../signal/signal.js';
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -9,15 +9,15 @@ afterEach(() => {
 
 describe('sub', () => {
   it('should call passed function if signal deps changed', () => {
-    const signal = new Signal(1);
-    const computed = new Computed(() => {
-      return signal.get();
+    const [getSignal, setSignal] = signal(1);
+    const [get, sub] = computed(() => {
+      return getSignal();
     });
-    expect(computed.get()).toBe(1);
+    expect(get()).toBe(1);
     const fn = vi.fn();
-    computed.sub(fn);
-    signal.set(2);
-    expect(computed.get()).toBe(2);
+    sub(fn);
+    setSignal(2);
+    expect(get()).toBe(2);
     expect(fn).toBeCalledTimes(1);
     expect(fn).toBeCalledWith(2);
   });

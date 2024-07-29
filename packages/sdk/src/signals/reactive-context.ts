@@ -1,4 +1,4 @@
-import type { Signal } from './Signal/Signal.js';
+import type { Signal } from './signal/signal.js';
 
 /**
  * Signals collected during the last call of the `collect` method.
