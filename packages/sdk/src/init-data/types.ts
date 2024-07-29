@@ -31,7 +31,7 @@ export interface User {
   id: number;
   /**
    * True, if this user is a bot. Returned in the `receiver` field only.
-   * @see InitDataParsed.receiver
+   * @see InitData.receiver
    */
   isBot?: boolean;
   /**
@@ -89,7 +89,7 @@ export interface Chat {
  * Describes Telegram Mini Apps [InitData](https://docs.telegram-mini-apps.com/platform/init-data#parameters-list)
  * type.
  */
-export interface InitDataParsed {
+export interface InitData {
   /**
    * Init data generation date.
    */
