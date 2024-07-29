@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { state, init } from '@/init-data/InitData.js';
-import type { InitDataParsed } from '@/init-data/types.js';
+import { state, restore } from './initData.js';
+import type { InitData } from './types.js';
 
 vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({
   retrieveLaunchParams: () => ({
@@ -32,12 +32,12 @@ vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({
       user: {
         id: 2000,
         photoUrl: 'user photo',
-        firstName: 'a',
+        firstName: 'a',f
         lastName: 'b',
         username: 'c',
         languageCode: 'en',
       },
-    } satisfies InitDataParsed,
+    } satisfies InitData,
   }),
 }));
 
@@ -47,11 +47,10 @@ beforeEach(() => {
 
 describe('init', () => {
   it('should set state based on init data from launch params', () => {
-    init();
+    restore();
     expect(state()).toStrictEqual({
       authDate: new Date(1000),
       canSendAfter: 60,
-      canSendAfterDate: new Date(61000),
       chat: {
         id: 999,
         photoUrl: 'photo',
