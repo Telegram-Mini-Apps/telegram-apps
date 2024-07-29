@@ -1,15 +1,3 @@
-import type { StateEvents } from '@/classes/State/types.js';
-
-export interface PopupState {
-  isOpened: boolean;
-}
-
-export type PopupEvents = StateEvents<PopupState>;
-
-export type PopupEventName = keyof PopupEvents;
-
-export type PopupEventListener<E extends PopupEventName> = PopupEvents[E];
-
 /**
  * This object describes the native popup.
  * @see https://core.telegram.org/bots/webapps#popupparams
@@ -20,12 +8,10 @@ export interface OpenPopupOptions {
    * @default ""
    */
   title?: string;
-
   /**
    * The message to be displayed in the body of the popup, 1-256 characters.
    */
   message: string;
-
   /**
    * List of buttons to be displayed in the popup, 1-3 buttons.
    * @default [{type: 'close'}]
@@ -65,5 +51,5 @@ export type OpenPopupOptionsButton = {
    * - `close`, a button with the localized text "Close";
    * - `cancel`, a button with the localized text "Cancel".
    */
-    type: 'ok' | 'close' | 'cancel';
-  });
+  type: 'ok' | 'close' | 'cancel';
+});
