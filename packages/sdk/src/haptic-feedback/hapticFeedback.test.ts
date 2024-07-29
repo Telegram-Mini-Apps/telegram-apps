@@ -1,12 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { postEvent, version } from '@/components/globals.js';
+import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
+
 import {
   impactOccurred,
   notificationOccurred,
   selectionChanged,
-} from '@/haptic-feedback/HapticFeedback.js';
-import { postEvent, version } from '@/components/globals.js';
-import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
+} from './hapticFeedback.js';
 
 beforeEach(() => {
   // Mock postEvent.
