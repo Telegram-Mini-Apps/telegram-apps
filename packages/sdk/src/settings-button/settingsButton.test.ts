@@ -1,14 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  state,
-  show,
-  isVisible,
-  hide,
-  restore,
-  onClick,
-  offClick,
-} from './SettingsButton.js';
 import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
 import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
 import { mockSessionStorageGetItem } from 'test-utils';
@@ -16,14 +7,22 @@ import { postEvent, version } from '@/components/globals.js';
 import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
 import { mockPageReload } from '@test-utils/mockPageReload.js';
 
+import {
+  show,
+  isVisible,
+  hide,
+  restore,
+  onClick,
+  offClick,
+} from './settingsButton.js';
+
 beforeEach(() => {
   // Mock postEvent.
   postEvent.set(() => null);
 
   // Reset all signals.
   isVisible.set(false);
-  isVisible.unsubscribeAll();
-  state.unsubscribeAll();
+  isVisible.unsubAll();
 
   // Reset mini apps event emitter and all mocks.
   resetMiniAppsEventEmitter();
@@ -74,21 +73,21 @@ describe('restore', () => {
       mockPageReload();
     });
 
-    it('should use isVisible prop from session storage key "telegram-apps/sb"', () => {
+    it('should use isVisible prop from session storage key "telegram-apps/settings-button"', () => {
       const spy = vi.fn(() => '{"isVisible":true}');
       mockSessionStorageGetItem(spy);
       restore();
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('telegram-apps/sb');
+      expect(spy).toHaveBeenCalledWith('telegram-apps/settings-button');
       expect(isVisible()).toBe(true);
     });
 
-    it('should set isVisible false if session storage key "telegram-apps/sb" not presented', () => {
+    it('should set isVisible false if session storage key "telegram-apps/settings-button" not presented', () => {
       const spy = vi.fn(() => null);
       mockSessionStorageGetItem(spy);
       restore();
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('telegram-apps/sb');
+      expect(spy).toHaveBeenCalledWith('telegram-apps/settings-button');
       expect(isVisible()).toBe(false);
     });
   });
@@ -157,13 +156,5 @@ describe('show', () => {
       version.set('6.11');
       expect(show.isSupported()).toBe(true);
     });
-  });
-});
-
-describe('state', () => {
-  it('should return object with isVisible: boolean', () => {
-    expect(state()).toStrictEqual({ isVisible: false });
-    isVisible.set(true);
-    expect(state()).toStrictEqual({ isVisible: true });
   });
 });

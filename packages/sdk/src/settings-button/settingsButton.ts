@@ -2,32 +2,30 @@ import { on } from '@/bridge/events/listening/on.js';
 import { off } from '@/bridge/events/listening/off.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import { decorateWithSupports } from '@/components/utilities/decorateWithSupports.js';
-import { createComputed, createSignal } from '@/signals/utils.js';
+import { decorateWithSupports } from '@/components/decorateWithSupports.js';
 import { postEvent } from '@/components/globals.js';
+import { signal } from '@/signals/signal/signal.js';
 import type { MiniAppsEventListener } from '@/bridge/events/types.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
 
-const MINI_APPS_METHOD = 'web_app_setup_settings_button';
-const CLICK_EVENT = 'settings_button_pressed';
-
-/**
+/*
  * fixme
  * @see Usage: https://docs.telegram-mini-apps.com/platform/settings-button
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/settings-button
  */
 
-export const isVisible = createSignal(false, {
-  set(value) {
-    if (this.get() !== value) {
+const MINI_APPS_METHOD = 'web_app_setup_settings_button';
+const CLICK_EVENT = 'settings_button_pressed';
+
+export const isVisible = signal(false, {
+  set(s, value) {
+    if (s() !== value) {
       postEvent()(MINI_APPS_METHOD, { is_visible: value });
-      setStorageValue('sb', { isVisible: value });
+      setStorageValue('settingsButton', { isVisible: value });
     }
-    this.set(value);
+    s.set(value);
   },
 });
-
-export const state = createComputed(() => ({ isVisible: isVisible() }));
 
 /**
  * Hides the settings button.
@@ -55,7 +53,7 @@ export function offClick(fn: MiniAppsEventListener<'settings_button_pressed'>): 
  * Restores the settings button state using previously saved one in the local storage.
  */
 export function restore(): void {
-  isVisible.set((isPageReload() && getStorageValue('sb') || { isVisible: false }).isVisible);
+  isVisible.set((isPageReload() && getStorageValue('settingsButton') || { isVisible: false }).isVisible);
 }
 
 /**
