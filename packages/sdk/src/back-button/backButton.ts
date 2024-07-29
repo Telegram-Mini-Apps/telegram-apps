@@ -2,28 +2,28 @@ import { on } from '@/bridge/events/listening/on.js';
 import { off } from '@/bridge/events/listening/off.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import { decorateWithSupports } from '@/components/utilities/decorateWithSupports.js';
-import { createSignal } from '@/signals/utils.js';
+import { decorateWithSupports } from '@/components/decorateWithSupports.js';
 import { postEvent } from '@/components/globals.js';
+import { signal } from '@/signals/signal/signal.js';
 import type { MiniAppsEventListener } from '@/bridge/events/types.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
 
-const MINI_APPS_METHOD = 'web_app_setup_back_button';
-const CLICK_EVENT = 'back_button_pressed';
-
-/**
+/*
  * fixme
  * @see Usage: https://docs.telegram-mini-apps.com/platform/back-button
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/back-button
  */
 
-export const isVisible = createSignal(false, {
-  set(value) {
-    if (this.get() !== value) {
+const MINI_APPS_METHOD = 'web_app_setup_back_button';
+const CLICK_EVENT = 'back_button_pressed';
+
+export const isVisible = signal(false, {
+  set(s, value) {
+    if (s() !== value) {
       postEvent()(MINI_APPS_METHOD, { is_visible: value });
-      setStorageValue('bb', { isVisible: value });
+      setStorageValue('backButton', { isVisible: value });
     }
-    this.set(value);
+    s.set(value);
   },
 });
 
@@ -53,7 +53,7 @@ export function offClick(fn: MiniAppsEventListener<'back_button_pressed'>): void
  * Restores the back button state using previously saved one in the local storage.
  */
 export function restore(): void {
-  isVisible.set((isPageReload() && getStorageValue('bb') || { isVisible: false }).isVisible);
+  isVisible.set((isPageReload() && getStorageValue('backButton') || { isVisible: false }).isVisible);
 }
 
 /**
