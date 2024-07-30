@@ -41,8 +41,7 @@ const isMounted = computed(_isMounted);
  */
 function mount(): void {
   if (!isMounted()) {
-    const s = isPageReload() && getStorageValue('backButton');
-    _isVisible.set(s ? s.isVisible : false);
+    _isVisible.set(isPageReload() && getStorageValue('backButton') || false);
     _isVisible.sub(onStateChanged);
     _isMounted.set(true);
   }
@@ -50,7 +49,7 @@ function mount(): void {
 
 function onStateChanged(isVisible: boolean) {
   postEvent()(MINI_APPS_METHOD, { is_visible: isVisible });
-  setStorageValue('backButton', { isVisible });
+  setStorageValue('backButton', isVisible);
 }
 
 /**

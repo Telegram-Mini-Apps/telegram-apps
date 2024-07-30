@@ -121,8 +121,8 @@ describe('mount', () => {
       mockPageReload();
     });
 
-    it('should use isVisible prop from session storage key "telegram-apps/back-button"', () => {
-      const spy = vi.fn(() => '{"isVisible":true}');
+    it('should use value from session storage key "telegram-apps/back-button"', () => {
+      const spy = vi.fn(() => 'true');
       mockSessionStorageGetItem(spy);
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
