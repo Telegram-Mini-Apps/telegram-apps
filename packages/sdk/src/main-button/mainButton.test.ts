@@ -1,15 +1,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { mockSessionStorageGetItem, mockSessionStorageSetItem } from 'test-utils';
+import { mockPageReload, mockSessionStorageGetItem, mockSessionStorageSetItem } from 'test-utils';
 
-import { mockPageReload } from '@test-utils/mockPageReload.js';
-import { postEvent } from '@/components/globals.js';
-import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
+import { resetGlobals } from '@test-utils/resetGlobals.js';
+
+import { postEvent } from '@/globals/globals.js';
 import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
-import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
+import * as themeParams from '@/theme-params/themeParams.js';
+import type { ThemeParams } from '@/theme-params/types.js';
 
+import { state as _state, isMounted as _isMounted } from './mainButton.private.js';
 import {
   text,
   textColor,
+  isMounted,
   isActive,
   isLoaderVisible,
   isVisible,
@@ -17,34 +20,39 @@ import {
   backgroundColor,
   onClick,
   offClick,
-  restore,
   setParams,
+  mount,
+  unmount,
 } from './mainButton.js';
 
+vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({
+  retrieveLaunchParams: () => ({
+    themeParams: {
+      buttonColor: '#aabbcc',
+      buttonTextColor: '#ffaa12',
+    } satisfies ThemeParams,
+  }),
+}));
+
 beforeEach(() => {
-  // Mock postEvent.
-  postEvent.set(() => null);
+  resetGlobals();
+  _state.reset();
+  _state.unsubAll();
+  _isMounted.reset();
+  _isMounted.unsubAll();
 
-  // Reset all signals.
-  state.set({
-    backgroundColor: '#000000',
-    isActive: false,
-    isLoaderVisible: false,
-    isVisible: false,
-    text: '',
-    textColor: '#000000',
-  });
   state.unsubAll();
+  isActive.unsubAll();
+  isLoaderVisible.unsubAll();
   isVisible.unsubAll();
+  text.unsubAll();
+  textColor.unsubAll();
+  backgroundColor.unsubAll();
 
-  // Reset mini apps event emitter and all mocks.
-  resetMiniAppsEventEmitter();
+  themeParams.unmount();
+
   vi.restoreAllMocks();
-});
-
-afterEach(() => {
-  // Reset postEvent.
-  postEvent.set(defaultPostEvent);
+  postEvent.set(() => null);
 });
 
 describe.each([
@@ -56,7 +64,7 @@ describe.each([
   { signal: textColor, name: 'textColor' },
 ] as const)('$name property', ({ signal, name }) => {
   beforeEach(() => {
-    state.set({
+    _state.set({
       backgroundColor: '#123456',
       isActive: true,
       isLoaderVisible: true,
@@ -71,7 +79,84 @@ describe.each([
   });
 });
 
-describe('restore', () => {
+describe('mounted', () => {
+  beforeEach(mount);
+  afterEach(unmount);
+
+  describe('setParams', () => {
+    it('should save the state in storage key telegram-apps/main-button', () => {
+      _state.set({
+        backgroundColor: '#123456',
+        isActive: true,
+        isLoaderVisible: true,
+        isVisible: true,
+        text: 'TEXT',
+        textColor: '#789abc',
+      });
+
+      const spy = mockSessionStorageSetItem();
+      setParams({
+        backgroundColor: '#111111',
+      });
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('telegram-apps/main-button', '{"backgroundColor":"#111111","isActive":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc"}');
+    });
+
+    it('should call "web_app_setup_main_button" only if text is not empty', () => {
+      const spy = vi.fn(() => null);
+      postEvent.set(spy);
+      _state.set({
+        backgroundColor: '#123456',
+        isActive: true,
+        isLoaderVisible: true,
+        isVisible: true,
+        text: '',
+        textColor: '#789abc',
+      });
+      setParams({ text: '' });
+
+      expect(spy).toHaveBeenCalledTimes(0);
+      setParams({ text: 'abc' });
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('web_app_setup_main_button', {
+        is_visible: true,
+        is_active: true,
+        is_progress_visible: true,
+        text: 'abc',
+        color: '#123456',
+        text_color: '#789abc',
+      });
+    });
+  });
+});
+
+describe('not mounted', () => {
+  describe('setParams', () => {
+    it('should not call postEvent', () => {
+      const spy = vi.fn(() => null);
+      postEvent.set(spy);
+      setParams({ text: 'ABC' });
+      expect(spy).toHaveBeenCalledTimes(0);
+    });
+
+    it('should not save state in storage', () => {
+      const spy = mockSessionStorageSetItem();
+      setParams({ text: 'ABC' });
+      expect(spy).toHaveBeenCalledTimes(0);
+    });
+  });
+});
+
+describe('mount', () => {
+  afterEach(unmount);
+
+  it('should set isMounted = true', () => {
+    expect(isMounted()).toBe(false);
+    mount();
+    expect(isMounted()).toBe(true);
+  });
+
   describe('page reload', () => {
     beforeEach(() => {
       mockPageReload();
@@ -87,7 +172,7 @@ describe('restore', () => {
         textColor: '#789abc',
       }));
       mockSessionStorageGetItem(spy);
-      restore();
+      mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('telegram-apps/main-button');
       expect(state()).toStrictEqual({
@@ -100,27 +185,26 @@ describe('restore', () => {
       });
     });
 
-    it('should set initial value if session storage key "telegram-apps/main-button" not presented', () => {
-      const spy = vi.fn(() => null);
-      mockSessionStorageGetItem(spy);
-      restore();
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('telegram-apps/main-button');
-      expect(state()).toStrictEqual({
-        backgroundColor: '#000000',
-        isActive: false,
-        isLoaderVisible: false,
-        isVisible: false,
-        text: '',
-        textColor: '#000000',
+    it('should set background and text colors from theme if session storage key "telegram-apps/main-button" not presented', () => {
+      const spy = mockSessionStorageGetItem(() => null);
+      mount();
+      // 2 times, because theme params calls it too.
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(spy).toHaveBeenNthCalledWith(1, 'telegram-apps/main-button');
+      expect(state()).toMatchObject({
+        backgroundColor: themeParams.buttonColor(),
+        textColor: themeParams.buttonTextColor(),
       });
     });
   });
 
   describe('first launch', () => {
-    it('should set isVisible false', () => {
-      restore();
-      expect(isVisible()).toBe(false);
+    it('should set background and text colors from theme', () => {
+      mount();
+      expect(state()).toMatchObject({
+        backgroundColor: themeParams.buttonColor(),
+        textColor: themeParams.buttonTextColor(),
+      });
     });
   });
 });
@@ -154,7 +238,7 @@ describe('offClick', () => {
 
 describe('setParams', () => {
   it('should merge passed object with the state', () => {
-    state.set({
+    _state.set({
       backgroundColor: '#123456',
       isActive: true,
       isLoaderVisible: true,
@@ -180,49 +264,26 @@ describe('setParams', () => {
       textColor: '#000000',
     });
   });
+});
 
-  it('should save the state in storage key telegram-apps/main-button', () => {
-    state.set({
-      backgroundColor: '#123456',
-      isActive: true,
-      isLoaderVisible: true,
-      isVisible: true,
-      text: 'TEXT',
-      textColor: '#789abc',
-    });
+describe('unmount', () => {
+  beforeEach(mount);
 
-    const spy = mockSessionStorageSetItem();
-    setParams({
-      backgroundColor: '#111111',
-    });
+  it('should stop calling postEvent function and session storage updates when something changes', () => {
+    const postEventSpy = vi.fn();
+    const storageSpy = mockSessionStorageSetItem();
+    postEvent.set(postEventSpy);
+    _state.set({ ..._state(), text: 'Hello!' });
+    expect(postEventSpy).toHaveBeenCalledTimes(1);
+    expect(storageSpy).toHaveBeenCalledTimes(1);
 
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('telegram-apps/main-button', '{"backgroundColor":"#111111","isActive":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc"}');
-  });
+    postEventSpy.mockClear();
+    storageSpy.mockClear();
 
-  it('should call web_app_setup_main_button only if text is not empty', () => {
-    const spy = vi.fn(() => null);
-    postEvent.set(spy);
-    state.set({
-      backgroundColor: '#123456',
-      isActive: true,
-      isLoaderVisible: true,
-      isVisible: true,
-      text: '',
-      textColor: '#789abc',
-    });
-    setParams({ text: '' });
+    unmount();
+    _state.set({ ..._state() });
 
-    expect(spy).toHaveBeenCalledTimes(0);
-    setParams({ text: 'abc' });
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('web_app_setup_main_button', {
-      is_visible: true,
-      is_active: true,
-      is_progress_visible: true,
-      text: 'abc',
-      color: '#123456',
-      text_color: '#789abc',
-    });
+    expect(postEventSpy).toHaveBeenCalledTimes(0);
+    expect(storageSpy).toHaveBeenCalledTimes(0);
   });
 });
