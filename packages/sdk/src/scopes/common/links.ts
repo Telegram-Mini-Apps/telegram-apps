@@ -1,6 +1,6 @@
-import { postEvent, version } from '@/globals/globals.js';
+import { postEvent, version } from '@/scopes/globals/globals.js';
 import { createSafeURL } from '@/navigation/createSafeURL.js';
-import { decorateWithSupports } from '@/components/decorateWithSupports.js';
+import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import { createError } from '@/errors/createError.js';
 import { ERR_INVALID_HOSTNAME } from '@/errors/errors.js';
 import { supports } from '@/bridge/supports.js';
@@ -45,7 +45,7 @@ export function openLink(url: string, options?: OpenLinkOptions): void {
  * @throws {SDKError} ERR_INVALID_HOSTNAME
  * @see ERR_INVALID_HOSTNAME
  */
-export const openTelegramLink = decorateWithSupports((url: string): void => {
+export const openTelegramLink: WithIsSupported<(url: string) => void> = decorateWithIsSupported(url => {
   const { hostname, pathname, search } = new URL(url, 'https://t.me');
   if (hostname !== 't.me') {
     throw createError(ERR_INVALID_HOSTNAME);
@@ -69,13 +69,14 @@ export const openTelegramLink = decorateWithSupports((url: string): void => {
  * @see https://core.telegram.org/api/links#share-links
  * @see https://core.telegram.org/widgets/share#custom-buttons
  */
-export const shareURL = decorateWithSupports((url: string, text?: string): void => {
-  openTelegramLink(
-    `https://t.me/share/url?` + new URLSearchParams({ url, text: text || '' })
-      .toString()
-      // By default, URL search params encode spaces with "+".
-      // We are replacing them with "%20", because plus symbols are working incorrectly
-      // in Telegram.
-      .replace(/\+/g, '%20'),
-  );
-}, OPEN_TG_LINK_METHOD);
+export const shareURL: WithIsSupported<(url: string, text?: string) => void> =
+  decorateWithIsSupported((url, text?) => {
+    openTelegramLink(
+      `https://t.me/share/url?` + new URLSearchParams({ url, text: text || '' })
+        .toString()
+        // By default, URL search params encode spaces with "+".
+        // We are replacing them with "%20", because plus symbols are working incorrectly
+        // in Telegram.
+        .replace(/\+/g, '%20'),
+    );
+  }, OPEN_TG_LINK_METHOD);

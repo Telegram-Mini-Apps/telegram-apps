@@ -1,10 +1,11 @@
 import { describe, vi, expect, it, afterEach, beforeEach } from 'vitest';
 
-import { postEvent } from '@/globals/globals.js';
+import { resetGlobals } from '@test-utils/resetGlobals.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
+import { postEvent } from '@/scopes/globals/globals.js';
+
 import { readTextFromClipboard } from './utils.js';
-import { resetGlobals } from '@test-utils/resetGlobals.js';
 
 beforeEach(() => {
   postEvent.set(() => null);
