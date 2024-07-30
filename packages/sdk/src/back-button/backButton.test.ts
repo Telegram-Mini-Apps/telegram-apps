@@ -6,7 +6,7 @@ import { resetGlobals } from '@test-utils/resetGlobals.js';
 import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
 import { postEvent, version } from '@/globals/globals.js';
 
-import { isVisible as _isVisible, isMounted as _isMounted } from './backButton.private.js';
+import * as _ from './backButton.private.js';
 import {
   show,
   isVisible,
@@ -20,10 +20,10 @@ import {
 
 beforeEach(() => {
   resetGlobals();
-  _isVisible.reset();
-  _isMounted.reset();
-  _isVisible.unsubAll();
-  _isMounted.unsubAll();
+  _.isVisible.reset();
+  _.isMounted.reset();
+  _.isVisible.unsubAll();
+  _.isMounted.unsubAll();
   vi.restoreAllMocks();
   postEvent.set(() => null);
 });
@@ -34,7 +34,7 @@ describe('mounted', () => {
 
   describe('hide', () => {
     it('should call postEvent with "web_app_setup_back_button" and { is_visible: false }', () => {
-      _isVisible.set(true);
+      _.isVisible.set(true);
       const spy = vi.fn();
       postEvent.set(spy);
       hide();
@@ -47,7 +47,7 @@ describe('mounted', () => {
 
   describe('show', () => {
     it('should call postEvent with "web_app_setup_back_button" and { is_visible: true }', () => {
-      _isVisible.set(false);
+      _.isVisible.set(false);
       const spy = vi.fn();
       postEvent.set(spy);
       show();
@@ -62,11 +62,16 @@ describe('mounted', () => {
 describe('not mounted', () => {
   describe('hide', () => {
     it('should not call postEvent', () => {
-      _isVisible.set(true);
+      _.isVisible.set(true);
       const spy = vi.fn();
       postEvent.set(spy);
       hide();
-      hide();
+      expect(spy).toBeCalledTimes(0);
+    });
+
+    it('should not save state in storage', () => {
+      _.isVisible.set(true);
+      const spy = mockSessionStorageSetItem();
       hide();
       expect(spy).toBeCalledTimes(0);
     });
@@ -74,9 +79,18 @@ describe('not mounted', () => {
 
   describe('show', () => {
     it('should not call postEvent', () => {
-      _isVisible.set(false);
+      _.isVisible.set(false);
       const spy = vi.fn();
       postEvent.set(spy);
+      show();
+      show();
+      show();
+      expect(spy).toBeCalledTimes(0);
+    });
+
+    it('should not save state in storage', () => {
+      _.isVisible.set(false);
+      const spy = mockSessionStorageSetItem();
       show();
       show();
       show();
@@ -87,7 +101,7 @@ describe('not mounted', () => {
 
 describe('hide', () => {
   it('should set isVisible = false', () => {
-    _isVisible.set(true);
+    _.isVisible.set(true);
     expect(isVisible()).toBe(true);
     hide();
     expect(isVisible()).toBe(false);
@@ -155,7 +169,7 @@ describe('unmount', () => {
     const postEventSpy = vi.fn();
     const storageSpy = mockSessionStorageSetItem();
     postEvent.set(postEventSpy);
-    _isVisible.set(true);
+    _.isVisible.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);
 
@@ -163,7 +177,7 @@ describe('unmount', () => {
     storageSpy.mockClear();
 
     unmount();
-    _isVisible.set(false);
+    _.isVisible.set(false);
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);
@@ -199,7 +213,7 @@ describe('offClick', () => {
 
 describe('show', () => {
   it('should set isVisible = true', () => {
-    _isVisible.set(false);
+    _.isVisible.set(false);
     expect(isVisible()).toBe(false);
     show();
     expect(isVisible()).toBe(true);

@@ -8,7 +8,7 @@ import { computed } from '@/signals/computed/computed.js';
 import type { MiniAppsEventListener } from '@/bridge/events/types.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
 
-import { isVisible as _isVisible, isMounted as _isMounted } from './backButton.private.js';
+import * as _ from './backButton.private.js';
 
 /*
  * fixme
@@ -18,38 +18,39 @@ import { isVisible as _isVisible, isMounted as _isMounted } from './backButton.p
 
 const MINI_APPS_METHOD = 'web_app_setup_back_button';
 const CLICK_EVENT = 'back_button_pressed';
+const STORAGE_KEY = 'backButton';
 
 /**
  * Hides the back button.
  */
 const hide: WithSupports<() => void> = decorateWithSupports(() => {
-  _isVisible.set(false);
+  _.isVisible.set(false);
 }, MINI_APPS_METHOD);
 
 /**
  * True if the component is currently visible.
  */
-const isVisible = computed(_isVisible);
+const isVisible = computed(_.isVisible);
 
 /**
  * True if the component is currently mounted.
  */
-const isMounted = computed(_isMounted);
+const isMounted = computed(_.isMounted);
 
 /**
  * Mounts the component.
  */
 function mount(): void {
-  if (!isMounted()) {
-    _isVisible.set(isPageReload() && getStorageValue('backButton') || false);
-    _isVisible.sub(onStateChanged);
-    _isMounted.set(true);
+  if (!_.isMounted()) {
+    _.isVisible.set(isPageReload() && getStorageValue(STORAGE_KEY) || false);
+    _.isVisible.sub(onStateChanged);
+    _.isMounted.set(true);
   }
 }
 
 function onStateChanged(isVisible: boolean) {
   postEvent()(MINI_APPS_METHOD, { is_visible: isVisible });
-  setStorageValue('backButton', isVisible);
+  setStorageValue(STORAGE_KEY, isVisible);
 }
 
 /**
@@ -73,15 +74,15 @@ function offClick(fn: MiniAppsEventListener<'back_button_pressed'>): void {
  * Shows the back button.
  */
 const show: WithSupports<() => void> = decorateWithSupports(() => {
-  _isVisible.set(true);
+  _.isVisible.set(true);
 }, MINI_APPS_METHOD);
 
 /**
  * Unmounts the component.
  */
 function unmount() {
-  _isVisible.unsub(onStateChanged);
-  _isMounted.set(false);
+  _.isVisible.unsub(onStateChanged);
+  _.isMounted.set(false);
 }
 
 export {
