@@ -1,7 +1,12 @@
-import { postEvent } from '@/components/globals.js';
+import { postEvent } from '@/globals/globals.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
-import { signal } from '@/signals/signal/signal.js';
+import { computed } from '@/signals/computed/computed.js';
+
+import {
+  isMounted as _isMounted,
+  isConfirmationNeeded as _isConfirmationNeeded,
+} from './closingBehavior.private.js';
 
 /*
  * fixme
@@ -10,38 +15,58 @@ import { signal } from '@/signals/signal/signal.js';
  */
 
 /**
- * Signal containing true, if the confirmation dialog should be shown while the user is trying to
- * close the Mini App.
+ * True if the confirmation dialog should be shown while the user is trying to close the Mini App.
  */
-export const isConfirmationNeeded = signal(false, {
-  set(s, value) {
-    if (s() !== value) {
-      postEvent()('web_app_setup_closing_behavior', { need_confirmation: value });
-      setStorageValue('closingBehavior', { isConfirmationNeeded: value });
-    }
-    s.set(value);
-  },
-});
+const isConfirmationNeeded = computed(_isConfirmationNeeded);
+
+/**
+ * True if the component is currently mounted.
+ */
+const isMounted = computed(_isMounted);
 
 /**
  * Disables the confirmation dialog when closing the Mini App.
  */
-export function disableConfirmation(): void {
-  isConfirmationNeeded.set(false);
+function disableConfirmation(): void {
+  _isConfirmationNeeded.set(false);
 }
 
 /**
  * Enables the confirmation dialog when closing the Mini App.
  */
-export function enableConfirmation() {
-  isConfirmationNeeded.set(true);
+function enableConfirmation() {
+  _isConfirmationNeeded.set(true);
 }
 
 /**
- * Restores the component state.
+ * Mounts the component.
  */
-export function restore(): void {
-  isConfirmationNeeded.set(
-    (isPageReload() && getStorageValue('closingBehavior') || { isConfirmationNeeded: false }).isConfirmationNeeded,
-  );
+function mount(): void {
+  if (!_isMounted()) {
+    _isConfirmationNeeded.set(isPageReload() && getStorageValue('closingBehavior') || false);
+    _isConfirmationNeeded.sub(onStateChanged);
+    _isMounted.set(true);
+    // todo listener
+  }
 }
+
+function onStateChanged(isConfirmationNeeded: boolean): void {
+  postEvent()('web_app_setup_closing_behavior', { need_confirmation: isConfirmationNeeded });
+  setStorageValue('closingBehavior', isConfirmationNeeded);
+}
+
+/**
+ * Unmounts the component.
+ */
+function unmount(): void {
+  _isConfirmationNeeded.unsub(onStateChanged);
+}
+
+export {
+  disableConfirmation,
+  enableConfirmation,
+  isMounted,
+  isConfirmationNeeded,
+  mount,
+  unmount,
+};
