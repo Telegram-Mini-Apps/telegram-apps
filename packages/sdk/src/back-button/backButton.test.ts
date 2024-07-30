@@ -6,7 +6,7 @@ import { resetGlobals } from '@test-utils/resetGlobals.js';
 import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
 import { postEvent, version } from '@/globals/globals.js';
 
-import { isVisible as _isVisible, isMounted as _isMounted } from './private.js';
+import { isVisible as _isVisible, isMounted as _isMounted } from './backButton.private.js';
 import {
   show,
   isVisible,
@@ -16,7 +16,7 @@ import {
   onClick,
   unmount,
   offClick,
-} from './public.js';
+} from './backButton.js';
 
 beforeEach(() => {
   resetGlobals();

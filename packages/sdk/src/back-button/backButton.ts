@@ -8,7 +8,7 @@ import { computed } from '@/signals/computed/computed.js';
 import type { MiniAppsEventListener } from '@/bridge/events/types.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
 
-import { isVisible as _isVisible, isMounted as _isMounted } from './private.js';
+import { isVisible as _isVisible, isMounted as _isMounted } from './backButton.private.js';
 
 /*
  * fixme
