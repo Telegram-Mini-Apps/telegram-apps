@@ -1,8 +1,10 @@
-import { postEvent } from '@/components/globals.js';
+import { postEvent } from '@/globals/globals.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
-import { decorateWithSupports } from '@/components/decorateWithSupports.js';
-import { signal } from '@/signals/signal/signal.js';
+import { computed } from '@/signals/computed/computed.js';
+
+import * as _ from './swipeBehavior.private.js';
+import { decorateWithSupports, WithSupports } from '@/components/decorateWithSupports.js';
 
 /*
  * fixme
@@ -11,39 +13,61 @@ import { signal } from '@/signals/signal/signal.js';
  */
 
 const MINI_APPS_METHOD = 'web_app_setup_swipe_behavior';
+const STORAGE_KEY = 'swipeBehavior';
 
 /**
- * Signal containing true, if the vertical swipe is enabled.
+ * True if vertical swipes are enabled.
  */
-export const isVerticalSwipeEnabled = signal(false, {
-  set(s, value) {
-    if (s() !== value) {
-      postEvent()(MINI_APPS_METHOD, { allow_vertical_swipe: value });
-      setStorageValue('swipeBehavior', { isVerticalSwipeEnabled: value });
-    }
-    s.set(value);
-  },
-});
+const isVerticalSwipesEnabled = computed(_.isVerticalSwipesEnabled);
 
 /**
- * Disables the vertical swipe.
+ * True if the component is currently mounted.
  */
-export const disableVerticalSwipe = decorateWithSupports((): void => {
-  isVerticalSwipeEnabled.set(false);
+const isMounted = computed(_.isMounted);
+
+/**
+ * Disables vertical swipes.
+ */
+const disableVerticalSwipes: WithSupports<() => void> = decorateWithSupports(() => {
+  _.isVerticalSwipesEnabled.set(false);
 }, MINI_APPS_METHOD);
 
 /**
- * Enables the vertical swipe.
+ * Enables vertical swipes.
  */
-export const enableVerticalSwipe = decorateWithSupports((): void => {
-  isVerticalSwipeEnabled.set(true);
+const enableVerticalSwipes: WithSupports<() => void> = decorateWithSupports(() => {
+  _.isVerticalSwipesEnabled.set(true);
 }, MINI_APPS_METHOD);
 
 /**
- * Restores the component state.
+ * Mounts the component.
  */
-export function restore(): void {
-  isVerticalSwipeEnabled.set(
-    (isPageReload() && getStorageValue('swipeBehavior') || { isVerticalSwipeEnabled: false }).isVerticalSwipeEnabled,
-  );
+function mount(): void {
+  if (!_.isMounted()) {
+    _.isVerticalSwipesEnabled.set(isPageReload() && getStorageValue(STORAGE_KEY) || false);
+    _.isVerticalSwipesEnabled.sub(onStateChanged);
+    _.isMounted.set(true);
+  }
 }
+
+function onStateChanged(value: boolean): void {
+  postEvent()(MINI_APPS_METHOD, { allow_vertical_swipe: value });
+  setStorageValue(STORAGE_KEY, value);
+}
+
+/**
+ * Unmounts the component.
+ */
+function unmount(): void {
+  _.isVerticalSwipesEnabled.unsub(onStateChanged);
+  _.isMounted.set(false);
+}
+
+export {
+  disableVerticalSwipes,
+  enableVerticalSwipes,
+  isMounted,
+  isVerticalSwipesEnabled,
+  mount,
+  unmount,
+};
