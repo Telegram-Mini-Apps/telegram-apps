@@ -7,7 +7,7 @@ import { computed } from '@/signals/computed/computed.js';
 import type { PopupParams } from '@/bridge/methods/types/popup.js';
 
 import * as _ from './popup.private.js';
-import type { OpenPopupOptions } from './types.js';
+import type { OpenOptions } from './types.js';
 
 /*
  * fixme
@@ -23,7 +23,7 @@ const MINI_APPS_METHOD = 'web_app_open_popup';
  * @throws {SDKError} ERR_POPUP_INVALID_PARAMS
  * @see ERR_POPUP_INVALID_PARAMS
  */
-function preparePopupParams(params: OpenPopupOptions): PopupParams {
+function preparePopupParams(params: OpenOptions): PopupParams {
   const message = params.message.trim();
   const title = (params.title || '').trim();
   const buttons = params.buttons || [];
@@ -83,7 +83,7 @@ export const isOpened = computed(_.isOpened);
  * @throws {SDKError} ERR_POPUP_OPENED
  * @see ERR_POPUP_OPENED
  */
-export const open: WithSupports<(options: OpenPopupOptions) => Promise<string | null>> =
+export const open: WithSupports<(options: OpenOptions) => Promise<string | null>> =
   decorateWithSupports(async options => {
     if (_.isOpened()) {
       throw createError(ERR_POPUP_OPENED);
