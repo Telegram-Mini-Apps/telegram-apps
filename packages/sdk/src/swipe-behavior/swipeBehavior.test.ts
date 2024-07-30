@@ -1,129 +1,165 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { mockSessionStorageGetItem } from 'test-utils';
+import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
 
-import { postEvent, version } from '@/components/globals.js';
-import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
-import { mockPageReload } from '@test-utils/mockPageReload.js';
+import { resetGlobals } from '@test-utils/resetGlobals.js';
 
+import { postEvent } from '@/globals/globals.js';
+
+import * as _ from './swipeBehavior.private.js';
 import {
-  enableVerticalSwipe,
-  disableVerticalSwipe,
-  isVerticalSwipeEnabled,
-  restore,
+  isVerticalSwipesEnabled,
+  disableVerticalSwipes,
+  enableVerticalSwipes,
+  isMounted,
+  mount,
+  unmount,
 } from './swipeBehavior.js';
 
 beforeEach(() => {
-  // Mock postEvent.
-  postEvent.set(() => null);
-
-  // Reset all signals.
-  isVerticalSwipeEnabled.set(false);
-  isVerticalSwipeEnabled.unsubAll();
-
-  // Reset all mocks.
+  resetGlobals();
+  _.isVerticalSwipesEnabled.reset();
+  _.isMounted.reset();
+  _.isVerticalSwipesEnabled.unsubAll();
+  _.isMounted.unsubAll();
   vi.restoreAllMocks();
+  postEvent.set(() => null);
 });
 
-afterEach(() => {
-  // Reset postEvent.
-  postEvent.set(defaultPostEvent);
-});
+describe('mounted', () => {
+  beforeEach(mount);
+  afterEach(unmount);
 
-describe('disableVerticalSwipe', () => {
-  it('should set isVerticalSwipeEnabled = false', () => {
-    isVerticalSwipeEnabled.set(true);
-    expect(isVerticalSwipeEnabled()).toBe(true);
-    disableVerticalSwipe();
-    expect(isVerticalSwipeEnabled()).toBe(false);
+  describe('disableVerticalSwipes', () => {
+    it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: false }', () => {
+      _.isVerticalSwipesEnabled.set(true);
+      const spy = vi.fn();
+      postEvent.set(spy);
+      disableVerticalSwipes();
+      disableVerticalSwipes();
+      disableVerticalSwipes();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: false });
+    });
   });
 
-  it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: false } if value changed', () => {
-    isVerticalSwipeEnabled.set(true);
-    const spy = vi.fn();
-    postEvent.set(spy);
-    disableVerticalSwipe();
-    disableVerticalSwipe();
-    disableVerticalSwipe();
-    expect(spy).toBeCalledTimes(1);
-    expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: false });
-  });
-
-  describe('isSupported', () => {
-    it('should return false if version is less than 7.7. True otherwise', () => {
-      version.set('7.6');
-      expect(disableVerticalSwipe.isSupported()).toBe(false);
-
-      version.set('7.7');
-      expect(disableVerticalSwipe.isSupported()).toBe(true);
-
-      version.set('7.8');
-      expect(disableVerticalSwipe.isSupported()).toBe(true);
+  describe('enableVerticalSwipes', () => {
+    it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: true }', () => {
+      _.isVerticalSwipesEnabled.set(false);
+      const spy = vi.fn();
+      postEvent.set(spy);
+      enableVerticalSwipes();
+      enableVerticalSwipes();
+      enableVerticalSwipes();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: true });
     });
   });
 });
 
-describe('enableVerticalSwipe', () => {
-  it('should set isVerticalSwipeEnabled = true', () => {
-    isVerticalSwipeEnabled.set(false);
-    expect(isVerticalSwipeEnabled()).toBe(false);
-    enableVerticalSwipe();
-    expect(isVerticalSwipeEnabled()).toBe(true);
+
+describe('not mounted', () => {
+  describe('disableVerticalSwipes', () => {
+    it('should not call postEvent', () => {
+      _.isVerticalSwipesEnabled.set(true);
+      const spy = vi.fn();
+      postEvent.set(spy);
+      disableVerticalSwipes();
+      disableVerticalSwipes();
+      disableVerticalSwipes();
+      expect(spy).toBeCalledTimes(0);
+    });
   });
 
-  it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: true } if value changed', () => {
-    isVerticalSwipeEnabled.set(false);
-    const spy = vi.fn();
-    postEvent.set(spy);
-    enableVerticalSwipe();
-    enableVerticalSwipe();
-    enableVerticalSwipe();
-    expect(spy).toBeCalledTimes(1);
-    expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: true });
-  });
-
-  describe('isSupported', () => {
-    it('should return false if version is less than 7.7. True otherwise', () => {
-      version.set('7.6');
-      expect(enableVerticalSwipe.isSupported()).toBe(false);
-
-      version.set('7.7');
-      expect(enableVerticalSwipe.isSupported()).toBe(true);
-
-      version.set('7.8');
-      expect(enableVerticalSwipe.isSupported()).toBe(true);
+  describe('enableVerticalSwipes', () => {
+    it('should not call postEvent', () => {
+      _.isVerticalSwipesEnabled.set(false);
+      const spy = vi.fn();
+      postEvent.set(spy);
+      enableVerticalSwipes();
+      enableVerticalSwipes();
+      enableVerticalSwipes();
+      expect(spy).toBeCalledTimes(0);
     });
   });
 });
 
-describe('restore', () => {
+describe('disableVerticalSwipes', () => {
+  it('should set isVerticalSwipesEnabled = false', () => {
+    _.isVerticalSwipesEnabled.set(true);
+    expect(isVerticalSwipesEnabled()).toBe(true);
+    disableVerticalSwipes();
+    expect(isVerticalSwipesEnabled()).toBe(false);
+  });
+});
+
+describe('mount', () => {
+  afterEach(unmount);
+
+  it('should set isMounted = true', () => {
+    expect(isMounted()).toBe(false);
+    mount();
+    expect(isMounted()).toBe(true);
+  });
+
   describe('page reload', () => {
     beforeEach(() => {
       mockPageReload();
     });
 
-    it('should use isVerticalSwipeEnabled prop from session storage key "telegram-apps/swipe-behavior"', () => {
-      const spy = vi.fn(() => '{"isVerticalSwipeEnabled":true}');
+    it('should use value from session storage key "telegram-apps/swipe-behavior"', () => {
+      const spy = vi.fn(() => 'true');
       mockSessionStorageGetItem(spy);
-      restore();
+      mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('telegram-apps/swipe-behavior');
-      expect(isVerticalSwipeEnabled()).toBe(true);
+      expect(isVerticalSwipesEnabled()).toBe(true);
     });
 
-    it('should set isVerticalSwipeEnabled false if session storage key "telegram-apps/swipe-behavior" not presented', () => {
+    it('should set isVerticalSwipesEnabled false if session storage key "telegram-apps/swipe-behavior" not presented', () => {
       const spy = vi.fn(() => null);
       mockSessionStorageGetItem(spy);
-      restore();
+      mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('telegram-apps/swipe-behavior');
-      expect(isVerticalSwipeEnabled()).toBe(false);
+      expect(isVerticalSwipesEnabled()).toBe(false);
     });
   });
 
   describe('first launch', () => {
-    it('should set isVerticalSwipeEnabled false', () => {
-      restore();
-      expect(isVerticalSwipeEnabled()).toBe(false);
+    it('should set isVerticalSwipesEnabled false', () => {
+      mount();
+      expect(isVerticalSwipesEnabled()).toBe(false);
     });
+  });
+});
+
+describe('unmount', () => {
+  beforeEach(mount);
+
+  it('should stop calling postEvent function and session storage updates when isVerticalSwipesEnabled changes', () => {
+    const postEventSpy = vi.fn();
+    const storageSpy = mockSessionStorageSetItem();
+    postEvent.set(postEventSpy);
+    _.isVerticalSwipesEnabled.set(true);
+    expect(postEventSpy).toHaveBeenCalledTimes(1);
+    expect(storageSpy).toHaveBeenCalledTimes(1);
+
+    postEventSpy.mockClear();
+    storageSpy.mockClear();
+
+    unmount();
+    _.isVerticalSwipesEnabled.set(false);
+
+    expect(postEventSpy).toHaveBeenCalledTimes(0);
+    expect(storageSpy).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('enableVerticalSwipes', () => {
+  it('should set isVerticalSwipesEnabled = true', () => {
+    _.isVerticalSwipesEnabled.set(false);
+    expect(isVerticalSwipesEnabled()).toBe(false);
+    enableVerticalSwipes();
+    expect(isVerticalSwipesEnabled()).toBe(true);
   });
 });
