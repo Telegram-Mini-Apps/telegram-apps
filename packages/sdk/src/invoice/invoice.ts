@@ -1,10 +1,12 @@
 import { decorateWithSupports, WithSupports } from '@/components/decorateWithSupports.js';
 import { request } from '@/bridge/request.js';
-import { postEvent } from '@/components/globals.js';
+import { postEvent } from '@/globals/globals.js';
 import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_INVOICE_OPENED } from '@/errors/errors.js';
 import { createError } from '@/errors/createError.js';
-import { signal } from '@/signals/signal/signal.js';
+import { computed } from '@/signals/computed/computed.js';
 import type { InvoiceStatus } from '@/bridge/events/types.js';
+
+import { isOpened as _isOpened } from './invoice.private.js';
 
 /*
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/invoice
@@ -40,13 +42,13 @@ export type OpenFn = WithSupports<{
 const MINI_APPS_METHOD = 'web_app_open_invoice';
 
 /**
- * Signal containing true if invoice is currently opened.
+ * True if the invoice is currently opened.
  */
-export const isOpened = signal(false);
+export const isOpened = computed(_isOpened);
 
 export const open: OpenFn = decorateWithSupports(
-  async (urlOrSlug: string, type?: 'url'): Promise<InvoiceStatus> => {
-    if (isOpened()) {
+  async (urlOrSlug, type?) => {
+    if (_isOpened()) {
       throw createError(ERR_INVOICE_OPENED);
     }
 
@@ -69,7 +71,7 @@ export const open: OpenFn = decorateWithSupports(
       [, , slug] = match;
     }
 
-    isOpened.set(true);
+    _isOpened.set(true);
 
     try {
       const result = await request({
@@ -84,7 +86,7 @@ export const open: OpenFn = decorateWithSupports(
 
       return result.status;
     } finally {
-      isOpened.set(false);
+      _isOpened.set(false);
     }
   },
   MINI_APPS_METHOD,

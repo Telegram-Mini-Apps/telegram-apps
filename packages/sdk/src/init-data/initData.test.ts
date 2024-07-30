@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { state as _state } from './initData.private.js';
 import { state, restore } from './initData.js';
 import type { InitData } from './types.js';
 
@@ -41,11 +42,9 @@ vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({
   }),
 }));
 
-beforeEach(() => {
-  state.set(undefined);
-});
+beforeEach(() => _state.set(undefined));
 
-describe('init', () => {
+describe('restore', () => {
   it('should set state based on init data from launch params', () => {
     restore();
     expect(state()).toStrictEqual({
