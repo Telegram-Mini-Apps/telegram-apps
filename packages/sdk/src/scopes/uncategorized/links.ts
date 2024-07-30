@@ -1,17 +1,10 @@
-import { supports } from '@/bridge/supports.js';
+import { postEvent, version } from '@/globals/globals.js';
+import { createSafeURL } from '@/navigation/createSafeURL.js';
+import { decorateWithSupports } from '@/components/decorateWithSupports.js';
 import { createError } from '@/errors/createError.js';
 import { ERR_INVALID_HOSTNAME } from '@/errors/errors.js';
-import { version, postEvent, createRequestId } from '@/components/globals.js';
-import { request } from '@/bridge/request.js';
-import { decorateWithSupports } from '@/components/decorateWithSupports.js';
-import { captureSameReq } from '@/bridge/captureSameReq.js';
-import { createSafeURL } from '@/navigation/createSafeURL.js';
-
-/*
- * fixme
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/utils
- * todo: usage
- */
+import { supports } from '@/bridge/supports.js';
+import type { OpenLinkBrowser } from '@/bridge/methods/types/index.js';
 
 export interface OpenLinkOptions {
   /**
@@ -19,13 +12,12 @@ export interface OpenLinkOptions {
    */
   tryInstantView?: boolean;
   /**
-   * Attempts to use user preferred browser.
+   * A preferred browser to open the link in.
    */
-  tryBrowser?: boolean;
+  tryBrowser?: OpenLinkBrowser;
 }
 
 const OPEN_TG_LINK_METHOD = 'web_app_open_tg_link';
-const READ_TEXT_FROM_CLIPBOARD_METHOD = 'web_app_read_text_from_clipboard';
 
 /**
  * Opens a link.
@@ -66,29 +58,6 @@ export const openTelegramLink = decorateWithSupports((url: string): void => {
 
   postEvent()(OPEN_TG_LINK_METHOD, { path_full: pathname + search });
 }, OPEN_TG_LINK_METHOD);
-
-/**
- * Reads a text from the clipboard and returns a string or null. null is returned
- * in cases:
- * - A value in the clipboard is not a text.
- * - Access to the clipboard is not granted.
- */
-export const readTextFromClipboard = decorateWithSupports(
-  async (): Promise<string | null> => {
-    const reqId = createRequestId()();
-    const { data = null } = await request({
-      method: READ_TEXT_FROM_CLIPBOARD_METHOD,
-      event: 'clipboard_text_received',
-      postEvent: postEvent(),
-      params: { req_id: reqId },
-      capture: captureSameReq(reqId),
-    });
-
-    return data;
-  },
-  READ_TEXT_FROM_CLIPBOARD_METHOD,
-);
-
 
 /**
  * Shares specified URL with the passed to the chats, selected by user. After being called,

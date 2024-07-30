@@ -1,26 +1,19 @@
 import { describe, vi, expect, it, afterEach, beforeEach } from 'vitest';
 import { createWindow } from '@test-utils/createWindow.js';
-
-import { createRequestId, postEvent, version } from '@/components/globals.js';
-import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
+import { resetGlobals } from '@test-utils/resetGlobals.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
-import {
-  shareURL,
-  openTelegramLink,
-  openLink,
-  readTextFromClipboard,
-} from './utils.js';
+import { postEvent, version } from '@/globals/globals.js';
+
+import { readTextFromClipboard } from './utils.js';
+import { openLink, openTelegramLink, shareURL } from './links.js';
 
 beforeEach(() => {
   postEvent.set(() => null);
 });
 
 afterEach(() => {
-  postEvent.reset();
-  version.reset();
-  createRequestId.reset();
-  resetMiniAppsEventEmitter();
+  resetGlobals();
   vi.restoreAllMocks();
 });
 
@@ -29,13 +22,13 @@ describe('openLink', () => {
     const spy = vi.fn();
     postEvent.set(spy);
     openLink('https://ya.ru', {
-      tryBrowser: true,
+      tryBrowser: 'tor',
       tryInstantView: true,
     });
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith('web_app_open_link', {
       url: 'https://ya.ru/',
-      try_browser: true,
+      try_browser: 'tor',
       try_instant_view: true,
     });
   });
