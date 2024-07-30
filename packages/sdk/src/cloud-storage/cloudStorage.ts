@@ -6,7 +6,7 @@ import {
   decorateWithSupports,
   type WithSupports,
 } from '@/components/decorateWithSupports.js';
-import { createRequestId, postEvent } from '@/components/globals.js';
+import { createRequestId, postEvent } from '@/globals/globals.js';
 import type { ExecuteWithTimeout } from '@/types/methods.js';
 
 const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
@@ -55,7 +55,7 @@ export const getKeys = decorateWithSupports(
   MINI_APPS_METHOD,
 );
 
-type GetFn = WithSupports<{
+export type GetFn = WithSupports<{
   /**
    * @param keys - keys list.
    * @param options - request execution options.
