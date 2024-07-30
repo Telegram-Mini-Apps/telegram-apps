@@ -37,6 +37,7 @@ export interface Signal<T> {
   unsubAll(): void;
 }
 
+// @__NO_SIDE_EFFECTS__
 export function signal<T>(initialValue: T, overrides?: SignalOverrides<T>): Signal<T> {
   overrides ||= {};
 
