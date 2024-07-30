@@ -1,7 +1,5 @@
-import { request as bridgeRequest } from '@/bridge/request.js';
-import { themeParamsParser } from '@/theme-params/themeParamsParser.js';
-import type { ThemeParams } from '@/theme-params/types.js';
-import type { ExecuteWithOptions } from '@/types/index.js';
+import { themeParamsParser } from './themeParamsParser.js';
+import type { ThemeParams } from './types.js';
 
 /**
  * Converts a palette key from the local representation to the representation sent from the
@@ -18,18 +16,6 @@ function keyToExternal(key: string): string {
  */
 export function parse(value: unknown): ThemeParams {
   return themeParamsParser().parse(value);
-}
-
-/**
- * Requests current theme parameters from the Telegram application.
- * @param options - request options.
- */
-export function request(options : ExecuteWithOptions): Promise<ThemeParams> {
-  return bridgeRequest({
-    ...(options || {}),
-    method: 'web_app_request_theme',
-    event: 'theme_changed',
-  }).then(parse);
 }
 
 /**
