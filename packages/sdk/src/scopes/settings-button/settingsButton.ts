@@ -2,8 +2,8 @@ import { on } from '@/bridge/events/listening/on.js';
 import { off } from '@/bridge/events/listening/off.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import { decorateWithSupports, type WithSupports } from '@/components/decorateWithSupports.js';
-import { postEvent } from '@/globals/globals.js';
+import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 import { computed } from '@/signals/computed/computed.js';
 import type { MiniAppsEventListener } from '@/bridge/events/types.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
@@ -23,7 +23,7 @@ const STORAGE_KEY = 'settingsButton';
 /**
  * Hides the settings button.
  */
-const hide: WithSupports<() => void> = decorateWithSupports(() => {
+const hide: WithIsSupported<() => void> = decorateWithIsSupported(() => {
   _.isVisible.set(false);
 }, MINI_APPS_METHOD);
 
@@ -73,7 +73,7 @@ function offClick(fn: MiniAppsEventListener<'settings_button_pressed'>): void {
 /**
  * Shows the settings button.
  */
-const show: WithSupports<() => void> = decorateWithSupports(() => {
+const show: WithIsSupported<() => void> = decorateWithIsSupported(() => {
   _.isVisible.set(true);
 }, MINI_APPS_METHOD);
 

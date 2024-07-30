@@ -1,10 +1,10 @@
-import { postEvent } from '@/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
 import { computed } from '@/signals/computed/computed.js';
+import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 
 import * as _ from './swipeBehavior.private.js';
-import { decorateWithSupports, WithSupports } from '@/components/decorateWithSupports.js';
 
 /*
  * fixme
@@ -28,14 +28,14 @@ const isMounted = computed(_.isMounted);
 /**
  * Disables vertical swipes.
  */
-const disableVerticalSwipes: WithSupports<() => void> = decorateWithSupports(() => {
+const disableVerticalSwipes: WithIsSupported<() => void> = decorateWithIsSupported(() => {
   _.isVerticalSwipesEnabled.set(false);
 }, MINI_APPS_METHOD);
 
 /**
  * Enables vertical swipes.
  */
-const enableVerticalSwipes: WithSupports<() => void> = decorateWithSupports(() => {
+const enableVerticalSwipes: WithIsSupported<() => void> = decorateWithIsSupported(() => {
   _.isVerticalSwipesEnabled.set(true);
 }, MINI_APPS_METHOD);
 

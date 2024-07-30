@@ -1,7 +1,7 @@
-import { decorateWithSupports, type WithSupports } from '@/components/decorateWithSupports.js';
+import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import { request } from '@/bridge/request.js';
 import { createError } from '@/errors/createError.js';
-import { postEvent } from '@/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 import { ERR_POPUP_INVALID_PARAMS, ERR_POPUP_OPENED } from '@/errors/errors.js';
 import { computed } from '@/signals/computed/computed.js';
 import type { PopupParams } from '@/bridge/methods/types/popup.js';
@@ -83,8 +83,8 @@ export const isOpened = computed(_.isOpened);
  * @throws {SDKError} ERR_POPUP_OPENED
  * @see ERR_POPUP_OPENED
  */
-export const open: WithSupports<(options: OpenOptions) => Promise<string | null>> =
-  decorateWithSupports(async options => {
+export const open: WithIsSupported<(options: OpenOptions) => Promise<string | null>> =
+  decorateWithIsSupported(async options => {
     if (_.isOpened()) {
       throw createError(ERR_POPUP_OPENED);
     }
