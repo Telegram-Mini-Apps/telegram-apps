@@ -5,10 +5,7 @@ import { resetGlobals } from '@test-utils/resetGlobals.js';
 
 import { postEvent } from '@/globals/globals.js';
 
-import {
-  isConfirmationNeeded as _isConfirmationNeeded,
-  isMounted as _isMounted,
-} from './closingBehavior.private.js';
+import * as _ from './closingBehavior.private.js';
 import {
   isConfirmationNeeded,
   disableConfirmation,
@@ -20,10 +17,10 @@ import {
 
 beforeEach(() => {
   resetGlobals();
-  _isConfirmationNeeded.reset();
-  _isMounted.reset();
-  _isConfirmationNeeded.unsubAll();
-  _isMounted.unsubAll();
+  _.isConfirmationNeeded.reset();
+  _.isMounted.reset();
+  _.isConfirmationNeeded.unsubAll();
+  _.isMounted.unsubAll();
   vi.restoreAllMocks();
   postEvent.set(() => null);
 });
@@ -34,7 +31,7 @@ describe('mounted', () => {
 
   describe('disableConfirmation', () => {
     it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: false }', () => {
-      _isConfirmationNeeded.set(true);
+      _.isConfirmationNeeded.set(true);
       const spy = vi.fn();
       postEvent.set(spy);
       disableConfirmation();
@@ -47,7 +44,7 @@ describe('mounted', () => {
 
   describe('enableConfirmation', () => {
     it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: true }', () => {
-      _isConfirmationNeeded.set(false);
+      _.isConfirmationNeeded.set(false);
       const spy = vi.fn();
       postEvent.set(spy);
       enableConfirmation();
@@ -63,7 +60,7 @@ describe('mounted', () => {
 describe('not mounted', () => {
   describe('disableConfirmation', () => {
     it('should not call postEvent', () => {
-      _isConfirmationNeeded.set(true);
+      _.isConfirmationNeeded.set(true);
       const spy = vi.fn();
       postEvent.set(spy);
       disableConfirmation();
@@ -75,7 +72,7 @@ describe('not mounted', () => {
 
   describe('enableConfirmation', () => {
     it('should not call postEvent', () => {
-      _isConfirmationNeeded.set(false);
+      _.isConfirmationNeeded.set(false);
       const spy = vi.fn();
       postEvent.set(spy);
       enableConfirmation();
@@ -88,7 +85,7 @@ describe('not mounted', () => {
 
 describe('disableConfirmation', () => {
   it('should set isConfirmationNeeded = false', () => {
-    _isConfirmationNeeded.set(true);
+    _.isConfirmationNeeded.set(true);
     expect(isConfirmationNeeded()).toBe(true);
     disableConfirmation();
     expect(isConfirmationNeeded()).toBe(false);
@@ -143,7 +140,7 @@ describe('unmount', () => {
     const postEventSpy = vi.fn();
     const storageSpy = mockSessionStorageSetItem();
     postEvent.set(postEventSpy);
-    _isConfirmationNeeded.set(true);
+    _.isConfirmationNeeded.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);
 
@@ -151,7 +148,7 @@ describe('unmount', () => {
     storageSpy.mockClear();
 
     unmount();
-    _isConfirmationNeeded.set(false);
+    _.isConfirmationNeeded.set(false);
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);
@@ -160,7 +157,7 @@ describe('unmount', () => {
 
 describe('enableConfirmation', () => {
   it('should set isConfirmationNeeded = true', () => {
-    _isConfirmationNeeded.set(false);
+    _.isConfirmationNeeded.set(false);
     expect(isConfirmationNeeded()).toBe(false);
     enableConfirmation();
     expect(isConfirmationNeeded()).toBe(true);

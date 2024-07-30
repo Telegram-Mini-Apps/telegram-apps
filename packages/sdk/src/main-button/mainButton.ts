@@ -18,6 +18,7 @@ import type { State } from './types.js';
  */
 
 const CLICK_EVENT = 'main_button_pressed';
+const STORAGE_KEY = 'mainButton';
 
 const isMounted = computed(_isMounted);
 
@@ -48,7 +49,7 @@ function offClick(fn: MiniAppsEventListener<'main_button_pressed'>): void {
  */
 function mount(): void {
   if (!_isMounted()) {
-    const prev = isPageReload() && getStorageValue('mainButton');
+    const prev = isPageReload() && getStorageValue(STORAGE_KEY);
     if (prev) {
       _state.set(prev);
     } else {
@@ -77,7 +78,7 @@ function onStateChanged(s: State): void {
       text_color: s.textColor,
     });
   }
-  setStorageValue('mainButton', s);
+  setStorageValue(STORAGE_KEY, s);
 }
 
 /**

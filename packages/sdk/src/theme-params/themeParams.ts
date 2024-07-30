@@ -14,14 +14,17 @@ import { state as _state, isMounted as _isMounted } from './themeParams.private.
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/theme-params
  */
 
+const STORAGE_KEY = 'themeParams';
+const THEME_CHANGED_EVENT = 'theme_changed';
+
 /**
  * Mounts the component restoring its state and adding special event listeners, actualizing
  * the component state.
  */
 function mount(): void {
   if (!_isMounted()) {
-    _state.set(isPageReload() && getStorageValue('themeParams') || retrieveLaunchParams().themeParams);
-    on('theme_changed', onThemeChanged);
+    _state.set(isPageReload() && getStorageValue(STORAGE_KEY) || retrieveLaunchParams().themeParams);
+    on(THEME_CHANGED_EVENT, onThemeChanged);
     _isMounted.set(true);
   }
 }
@@ -33,7 +36,7 @@ function mount(): void {
 const onThemeChanged: MiniAppsEventListener<'theme_changed'> = (e) => {
   const value = parse(e.theme_params);
   _state.set(value);
-  setStorageValue('themeParams', value);
+  setStorageValue(STORAGE_KEY, value);
 };
 
 /**
@@ -41,7 +44,7 @@ const onThemeChanged: MiniAppsEventListener<'theme_changed'> = (e) => {
  */
 function unmount(): void {
   if (_isMounted()) {
-    off('theme_changed', onThemeChanged);
+    off(THEME_CHANGED_EVENT, onThemeChanged);
     _isMounted.set(false);
   }
 }

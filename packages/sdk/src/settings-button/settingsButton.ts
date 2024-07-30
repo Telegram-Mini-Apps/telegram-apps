@@ -18,6 +18,7 @@ import * as _ from './settingsButton.private.js';
 
 const MINI_APPS_METHOD = 'web_app_setup_settings_button';
 const CLICK_EVENT = 'settings_button_pressed';
+const STORAGE_KEY = 'settingsButton';
 
 /**
  * Hides the settings button.
@@ -41,7 +42,7 @@ const isMounted = computed(_.isMounted);
  */
 function mount(): void {
   if (!_.isMounted()) {
-    _.isVisible.set(isPageReload() && getStorageValue('settingsButton') || false);
+    _.isVisible.set(isPageReload() && getStorageValue(STORAGE_KEY) || false);
     _.isVisible.sub(onStateChanged);
     _.isMounted.set(true);
   }
@@ -49,7 +50,7 @@ function mount(): void {
 
 function onStateChanged(isVisible: boolean) {
   postEvent()(MINI_APPS_METHOD, { is_visible: isVisible });
-  setStorageValue('settingsButton', isVisible);
+  setStorageValue(STORAGE_KEY, isVisible);
 }
 
 /**
