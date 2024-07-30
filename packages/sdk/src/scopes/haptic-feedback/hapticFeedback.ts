@@ -1,5 +1,5 @@
-import { postEvent } from '@/globals/globals.js';
-import { decorateWithSupports, type WithSupports } from '@/components/decorateWithSupports.js';
+import { postEvent } from '@/scopes/globals/globals.js';
+import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import type {
   ImpactHapticFeedbackStyle,
   NotificationHapticFeedbackType,
@@ -19,8 +19,8 @@ const MINI_APPS_METHOD = 'web_app_trigger_haptic_feedback';
  * on style value passed.
  * @param style - impact style.
  */
-export const impactOccurred: WithSupports<(style: ImpactHapticFeedbackStyle) => void> =
-  decorateWithSupports(style => {
+export const impactOccurred: WithIsSupported<(style: ImpactHapticFeedbackStyle) => void> =
+  decorateWithIsSupported(style => {
     postEvent()(MINI_APPS_METHOD, {
       type: 'impact',
       impact_style: style,
@@ -32,8 +32,8 @@ export const impactOccurred: WithSupports<(style: ImpactHapticFeedbackStyle) => 
  * app may play the appropriate haptics based on type value passed.
  * @param type - notification type.
  */
-export const notificationOccurred: WithSupports<(type: NotificationHapticFeedbackType) => void> =
-  decorateWithSupports(type => {
+export const notificationOccurred: WithIsSupported<(type: NotificationHapticFeedbackType) => void> =
+  decorateWithIsSupported(type => {
     postEvent()(MINI_APPS_METHOD, {
       type: 'notification',
       notification_type: type,
@@ -47,6 +47,6 @@ export const notificationOccurred: WithSupports<(type: NotificationHapticFeedbac
  * Do not use this feedback when the user makes or confirms a selection; use it only when the
  * selection changes.
  */
-export const selectionChanged: WithSupports<() => void> = decorateWithSupports(() => {
+export const selectionChanged: WithIsSupported<() => void> = decorateWithIsSupported(() => {
   postEvent()(MINI_APPS_METHOD, { type: 'selection_change' });
 }, MINI_APPS_METHOD);

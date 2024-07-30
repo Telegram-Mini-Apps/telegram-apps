@@ -1,6 +1,6 @@
-import { decorateWithSupports, WithSupports } from '@/components/decorateWithSupports.js';
+import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import { request } from '@/bridge/request.js';
-import { postEvent } from '@/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_INVOICE_OPENED } from '@/errors/errors.js';
 import { createError } from '@/errors/createError.js';
 import { computed } from '@/signals/computed/computed.js';
@@ -13,7 +13,7 @@ import { isOpened as _isOpened } from './invoice.private.js';
  * todo usage
  */
 
-export type OpenFn = WithSupports<{
+export type OpenFn = WithIsSupported<{
   /**
    * Opens an invoice using its slug.
    * @param slug - invoice slug.
@@ -46,7 +46,7 @@ const MINI_APPS_METHOD = 'web_app_open_invoice';
  */
 export const isOpened = computed(_isOpened);
 
-export const open: OpenFn = decorateWithSupports(
+export const open: OpenFn = decorateWithIsSupported(
   async (urlOrSlug, type?) => {
     if (_isOpened()) {
       throw createError(ERR_INVOICE_OPENED);

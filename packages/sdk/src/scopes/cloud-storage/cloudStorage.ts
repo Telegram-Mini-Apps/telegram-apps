@@ -3,9 +3,9 @@ import { array } from '@/parsing/parsers/array.js';
 import { json } from '@/parsing/parsers/json.js';
 import { string } from '@/parsing/parsers/string.js';
 import {
-  decorateWithSupports,
-  type WithSupports,
-} from '@/components/decorateWithSupports.js';
+  decorateWithIsSupported,
+  type WithIsSupported,
+} from '@/scopes/decorateWithIsSupported.js';
 import { createRequestId, postEvent } from '@/globals/globals.js';
 import type { ExecuteWithTimeout } from '@/types/methods.js';
 
@@ -22,11 +22,11 @@ const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
  * @param keyOrKeys - key or keys to delete.
  * @param options - request execution options.
  */
-export const deleteKeys: WithSupports<(
+export const deleteKeys: WithIsSupported<(
   keyOrKeys: string | string[],
   options?: ExecuteWithTimeout,
 ) => Promise<void>> =
-  decorateWithSupports(
+  decorateWithIsSupported(
     async (keyOrKeys, options) => {
       const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
       if (keys.length) {
@@ -45,8 +45,8 @@ export const deleteKeys: WithSupports<(
  * Returns list of all keys presented in the cloud storage.
  * @param options - request execution options.
  */
-export const getKeys: WithSupports<(options?: ExecuteWithTimeout) => Promise<string[]>> =
-  decorateWithSupports(
+export const getKeys: WithIsSupported<(options?: ExecuteWithTimeout) => Promise<string[]>> =
+  decorateWithIsSupported(
     async options => {
       return array().of(string()).parse(
         await invokeCustomMethod(
@@ -60,7 +60,7 @@ export const getKeys: WithSupports<(options?: ExecuteWithTimeout) => Promise<str
     MINI_APPS_METHOD,
   );
 
-export type GetFn = WithSupports<{
+export type GetFn = WithIsSupported<{
   /**
    * @param keys - keys list.
    * @param options - request execution options.
@@ -76,7 +76,7 @@ export type GetFn = WithSupports<{
   (key: string, options?: ExecuteWithTimeout): Promise<string>;
 }>;
 
-export const get: GetFn = decorateWithSupports(
+export const get: GetFn = decorateWithIsSupported(
   async (
     keyOrKeys: string | string[],
     options?: ExecuteWithTimeout,
@@ -109,11 +109,11 @@ export const get: GetFn = decorateWithSupports(
  * @param value - storage value.
  * @param options - request execution options.
  */
-export const set: WithSupports<(
+export const set: WithIsSupported<(
   key: string,
   value: string,
   options?: ExecuteWithTimeout,
-) => Promise<void>> = decorateWithSupports(
+) => Promise<void>> = decorateWithIsSupported(
   async (key, value, options) => {
     await invokeCustomMethod(
       'saveStorageValue',
