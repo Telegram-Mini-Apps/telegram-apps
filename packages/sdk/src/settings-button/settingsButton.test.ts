@@ -1,56 +1,110 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
+
+import { resetGlobals } from '@test-utils/resetGlobals.js';
 
 import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
-import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
-import { mockSessionStorageGetItem } from 'test-utils';
-import { postEvent, version } from '@/components/globals.js';
-import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
-import { mockPageReload } from '@test-utils/mockPageReload.js';
+import { postEvent, version } from '@/globals/globals.js';
 
+import * as _ from './settingsButton.private.js';
 import {
   show,
   isVisible,
   hide,
-  restore,
+  mount,
+  isMounted,
   onClick,
+  unmount,
   offClick,
 } from './settingsButton.js';
 
 beforeEach(() => {
-  // Mock postEvent.
-  postEvent.set(() => null);
-
-  // Reset all signals.
-  isVisible.set(false);
-  isVisible.unsubAll();
-
-  // Reset mini apps event emitter and all mocks.
-  resetMiniAppsEventEmitter();
+  resetGlobals();
+  _.isVisible.reset();
+  _.isMounted.reset();
+  _.isVisible.unsubAll();
+  _.isMounted.unsubAll();
   vi.restoreAllMocks();
+  postEvent.set(() => null);
 });
 
-afterEach(() => {
-  // Reset postEvent.
-  postEvent.set(defaultPostEvent);
+describe('mounted', () => {
+  beforeEach(mount);
+  afterEach(unmount);
+
+  describe('hide', () => {
+    it('should call postEvent with "web_app_setup_settings_button" and { is_visible: false }', () => {
+      _.isVisible.set(true);
+      const spy = vi.fn();
+      postEvent.set(spy);
+      hide();
+      hide();
+      hide();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_settings_button', { is_visible: false });
+    });
+  });
+
+  describe('show', () => {
+    it('should call postEvent with "web_app_setup_settings_button" and { is_visible: true }', () => {
+      _.isVisible.set(false);
+      const spy = vi.fn();
+      postEvent.set(spy);
+      show();
+      show();
+      show();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_settings_button', { is_visible: true });
+    });
+  });
+});
+
+describe('not mounted', () => {
+  describe('hide', () => {
+    it('should not call postEvent', () => {
+      _.isVisible.set(true);
+      const spy = vi.fn();
+      postEvent.set(spy);
+      hide();
+      expect(spy).toBeCalledTimes(0);
+    });
+
+    it('should not save state in storage', () => {
+      _.isVisible.set(true);
+      const spy = mockSessionStorageSetItem();
+      hide();
+      expect(spy).toBeCalledTimes(0);
+    });
+  });
+
+  describe('show', () => {
+    it('should not call postEvent', () => {
+      _.isVisible.set(false);
+      const spy = vi.fn();
+      postEvent.set(spy);
+      show();
+      show();
+      show();
+      expect(spy).toBeCalledTimes(0);
+    });
+
+    it('should not save state in storage', () => {
+      _.isVisible.set(false);
+      const spy = mockSessionStorageSetItem();
+      show();
+      show();
+      show();
+      expect(spy).toBeCalledTimes(0);
+    });
+  });
 });
 
 describe('hide', () => {
   it('should set isVisible = false', () => {
-    isVisible.set(true);
+    _.isVisible.set(true);
     expect(isVisible()).toBe(true);
     hide();
     expect(isVisible()).toBe(false);
-  });
-
-  it('should call postEvent with "web_app_setup_settings_button" and { is_visible: false } if value changed', () => {
-    isVisible.set(true);
-    const spy = vi.fn();
-    postEvent.set(spy);
-    hide();
-    hide();
-    hide();
-    expect(spy).toBeCalledTimes(1);
-    expect(spy).toBeCalledWith('web_app_setup_settings_button', { is_visible: false });
   });
 
   describe('isSupported', () => {
@@ -67,16 +121,24 @@ describe('hide', () => {
   });
 });
 
-describe('restore', () => {
+describe('mount', () => {
+  afterEach(unmount);
+
+  it('should set isMounted = true', () => {
+    expect(isMounted()).toBe(false);
+    mount();
+    expect(isMounted()).toBe(true);
+  });
+
   describe('page reload', () => {
     beforeEach(() => {
       mockPageReload();
     });
 
-    it('should use isVisible prop from session storage key "telegram-apps/settings-button"', () => {
-      const spy = vi.fn(() => '{"isVisible":true}');
+    it('should use value from session storage key "telegram-apps/settings-button"', () => {
+      const spy = vi.fn(() => 'true');
       mockSessionStorageGetItem(spy);
-      restore();
+      mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('telegram-apps/settings-button');
       expect(isVisible()).toBe(true);
@@ -85,7 +147,7 @@ describe('restore', () => {
     it('should set isVisible false if session storage key "telegram-apps/settings-button" not presented', () => {
       const spy = vi.fn(() => null);
       mockSessionStorageGetItem(spy);
-      restore();
+      mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('telegram-apps/settings-button');
       expect(isVisible()).toBe(false);
@@ -94,9 +156,31 @@ describe('restore', () => {
 
   describe('first launch', () => {
     it('should set isVisible false', () => {
-      restore();
+      mount();
       expect(isVisible()).toBe(false);
     });
+  });
+});
+
+describe('unmount', () => {
+  beforeEach(mount);
+
+  it('should stop calling postEvent function and session storage updates when isVisible changes', () => {
+    const postEventSpy = vi.fn();
+    const storageSpy = mockSessionStorageSetItem();
+    postEvent.set(postEventSpy);
+    _.isVisible.set(true);
+    expect(postEventSpy).toHaveBeenCalledTimes(1);
+    expect(storageSpy).toHaveBeenCalledTimes(1);
+
+    postEventSpy.mockClear();
+    storageSpy.mockClear();
+
+    unmount();
+    _.isVisible.set(false);
+
+    expect(postEventSpy).toHaveBeenCalledTimes(0);
+    expect(storageSpy).toHaveBeenCalledTimes(0);
   });
 });
 
@@ -129,20 +213,10 @@ describe('offClick', () => {
 
 describe('show', () => {
   it('should set isVisible = true', () => {
+    _.isVisible.set(false);
     expect(isVisible()).toBe(false);
     show();
     expect(isVisible()).toBe(true);
-  });
-
-  it('should call postEvent with "web_app_setup_settings_button" and { is_visible: true } if value changed', () => {
-    isVisible.set(false);
-    const spy = vi.fn();
-    postEvent.set(spy);
-    show();
-    show();
-    show();
-    expect(spy).toBeCalledTimes(1);
-    expect(spy).toBeCalledWith('web_app_setup_settings_button', { is_visible: true });
   });
 
   describe('isSupported', () => {
