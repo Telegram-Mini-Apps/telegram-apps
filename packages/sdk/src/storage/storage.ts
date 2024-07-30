@@ -12,9 +12,9 @@ import type { SwipeBehaviorState } from '@/components/SwipeBehavior/types.js';
  * Describes storage keys and according values.
  */
 export interface StorageParams {
-  backButton: BackButtonState;
+  backButton: boolean;
   biometryManager: BiometryManagerState;
-  closingBehavior: ClosingBehaviorState;
+  closingBehavior: boolean;
   launchParams: string;
   mainButton: MainButtonState;
   miniApp: MiniAppState;
