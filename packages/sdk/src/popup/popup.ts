@@ -1,11 +1,13 @@
-import { decorateWithSupports } from '@/components/decorateWithSupports.js';
+import { decorateWithSupports, type WithSupports } from '@/components/decorateWithSupports.js';
 import { request } from '@/bridge/request.js';
 import { createError } from '@/errors/createError.js';
-import { postEvent } from '@/components/globals.js';
+import { postEvent } from '@/globals/globals.js';
 import { ERR_POPUP_INVALID_PARAMS, ERR_POPUP_OPENED } from '@/errors/errors.js';
-import { signal } from '@/signals/signal/signal.js';
+import { computed } from '@/signals/computed/computed.js';
 import type { PopupParams } from '@/bridge/methods/types/popup.js';
-import type { OpenPopupOptions } from '@/popup/types.js';
+
+import * as _ from './popup.private.js';
+import type { OpenPopupOptions } from './types.js';
 
 /*
  * fixme
@@ -60,14 +62,14 @@ function preparePopupParams(params: OpenPopupOptions): PopupParams {
         }
         return { ...b, id };
       })
-      : [{ type: 'close', id: '' }]
+      : [{ type: 'close', id: '' }],
   };
 }
 
 /**
- * Signal containing true if popup is currently opened.
+ * True if a popup is currently opened.
  */
-export const isOpened = signal(false);
+export const isOpened = computed(_.isOpened);
 
 /**
  * A method that shows a native popup described by the `params` argument.
@@ -81,13 +83,13 @@ export const isOpened = signal(false);
  * @throws {SDKError} ERR_POPUP_OPENED
  * @see ERR_POPUP_OPENED
  */
-export const open = decorateWithSupports(
-  async (options: OpenPopupOptions): Promise<string | null> => {
-    if (isOpened()) {
+export const open: WithSupports<(options: OpenPopupOptions) => Promise<string | null>> =
+  decorateWithSupports(async options => {
+    if (_.isOpened()) {
       throw createError(ERR_POPUP_OPENED);
     }
 
-    isOpened.set(true);
+    _.isOpened.set(true);
 
     try {
       const { button_id: buttonId = null } = await request({
@@ -98,8 +100,6 @@ export const open = decorateWithSupports(
       });
       return buttonId;
     } finally {
-      isOpened.set(false);
+      _.isOpened.set(false);
     }
-  },
-  MINI_APPS_METHOD,
-);
+  }, MINI_APPS_METHOD);
