@@ -1,7 +1,8 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { postEvent, version } from '@/components/globals.js';
-import { postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
+import { resetGlobals } from '@test-utils/resetGlobals.js';
+
+import { postEvent, version } from '@/globals/globals.js';
 
 import {
   impactOccurred,
@@ -10,13 +11,8 @@ import {
 } from './hapticFeedback.js';
 
 beforeEach(() => {
-  // Mock postEvent.
+  resetGlobals();
   postEvent.set(() => null);
-});
-
-afterEach(() => {
-  // Reset postEvent.
-  postEvent.set(defaultPostEvent);
 });
 
 describe('impactOccurred', () => {
