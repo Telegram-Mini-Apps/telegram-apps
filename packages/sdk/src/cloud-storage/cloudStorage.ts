@@ -22,38 +22,43 @@ const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
  * @param keyOrKeys - key or keys to delete.
  * @param options - request execution options.
  */
-export const deleteKeys = decorateWithSupports(
-  async (keyOrKeys: string | string[], options: ExecuteWithTimeout = {}): Promise<void> => {
-    const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
-    if (keys.length) {
-      await invokeCustomMethod(
-        'deleteStorageValues',
-        { keys },
-        createRequestId()(),
-        { ...options, postEvent: postEvent() },
-      );
-    }
-  },
-  MINI_APPS_METHOD,
-);
+export const deleteKeys: WithSupports<(
+  keyOrKeys: string | string[],
+  options?: ExecuteWithTimeout,
+) => Promise<void>> =
+  decorateWithSupports(
+    async (keyOrKeys, options) => {
+      const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
+      if (keys.length) {
+        await invokeCustomMethod(
+          'deleteStorageValues',
+          { keys },
+          createRequestId()(),
+          { ...options || {}, postEvent: postEvent() },
+        );
+      }
+    },
+    MINI_APPS_METHOD,
+  );
 
 /**
  * Returns list of all keys presented in the cloud storage.
  * @param options - request execution options.
  */
-export const getKeys = decorateWithSupports(
-  async (options: ExecuteWithTimeout = {}): Promise<string[]> => {
-    return array().of(string()).parse(
-      await invokeCustomMethod(
-        'getStorageKeys',
-        {},
-        createRequestId()(),
-        { ...options, postEvent: postEvent() },
-      ),
-    );
-  },
-  MINI_APPS_METHOD,
-);
+export const getKeys: WithSupports<(options?: ExecuteWithTimeout) => Promise<string[]>> =
+  decorateWithSupports(
+    async options => {
+      return array().of(string()).parse(
+        await invokeCustomMethod(
+          'getStorageKeys',
+          {},
+          createRequestId()(),
+          { ...options || {}, postEvent: postEvent() },
+        ),
+      );
+    },
+    MINI_APPS_METHOD,
+  );
 
 export type GetFn = WithSupports<{
   /**
@@ -104,13 +109,17 @@ export const get: GetFn = decorateWithSupports(
  * @param value - storage value.
  * @param options - request execution options.
  */
-export const set = decorateWithSupports(
-  async (key: string, value: string, options: ExecuteWithTimeout = {}): Promise<void> => {
+export const set: WithSupports<(
+  key: string,
+  value: string,
+  options?: ExecuteWithTimeout,
+) => Promise<void>> = decorateWithSupports(
+  async (key, value, options) => {
     await invokeCustomMethod(
       'saveStorageValue',
       { key, value },
       createRequestId()(),
-      { ...options, postEvent: postEvent() },
+      { ...options || {}, postEvent: postEvent() },
     );
   },
   MINI_APPS_METHOD,
