@@ -1,4 +1,4 @@
-import { serializeThemeParams } from '@/components/ThemeParams/parsing/serializeThemeParams.js';
+import { serialize } from '@/scopes/theme-params/static.js';
 
 import type { LaunchParams } from './types.js';
 
@@ -20,7 +20,7 @@ export function serializeLaunchParams(value: LaunchParams): string {
   const params = new URLSearchParams();
 
   params.set('tgWebAppPlatform', platform);
-  params.set('tgWebAppThemeParams', serializeThemeParams(themeParams));
+  params.set('tgWebAppThemeParams', serialize(themeParams));
   params.set('tgWebAppVersion', version);
 
   if (initDataRaw) {

@@ -1,5 +1,5 @@
-import type { InitDataParsed } from '@/components/InitData/types.js';
-import type { ThemeParamsParsed } from '@/components/ThemeParams/types.js';
+import type { InitData } from '@/scopes/init-data/types.js';
+import type { ThemeParams } from '@/scopes/theme-params/types.js';
 import type { Platform } from '@/types/platform.js';
 
 /**
@@ -15,7 +15,7 @@ export interface LaunchParams {
    * Current launch init data. Can be missing in case, application was launched via
    * KeyboardButton.
    */
-  initData?: InitDataParsed;
+  initData?: InitData;
   /**
    * The same as initData but in initial, raw format.
    */
@@ -35,19 +35,9 @@ export interface LaunchParams {
   /**
    * Mini App palette settings.
    */
-  themeParams: ThemeParamsParsed;
+  themeParams: ThemeParams;
   /**
    * Current Mini Apps version.
    */
   version: string;
 }
-
-/**
- * Known launch parameter name.
- */
-export type LaunchParamName = keyof LaunchParams;
-
-/**
- * Picks specified launch params.
- */
-export type PickLaunchParams<LP extends LaunchParamName> = Pick<LaunchParams, LP>;

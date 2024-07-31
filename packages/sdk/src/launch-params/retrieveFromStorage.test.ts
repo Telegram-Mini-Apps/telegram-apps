@@ -6,7 +6,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-it('should return launch parameters from the session storage telegram-apps/launch-params key. If data is missing or invalid, throw an error', () => {
+it('should return launch parameters from the session storage tapps/launchParams key. If data is missing or invalid, throw an error', () => {
   const spy = vi
     .spyOn(sessionStorage, 'getItem')
     .mockImplementationOnce(() => '');
@@ -24,5 +24,5 @@ it('should return launch parameters from the session storage telegram-apps/launc
     },
   });
   expect(spy).toHaveBeenCalledOnce();
-  expect(spy).toHaveBeenCalledWith('telegram-apps/launch-params');
+  expect(spy).toHaveBeenCalledWith('tapps/launchParams');
 });
