@@ -4,15 +4,14 @@ import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
 import * as themeParams from '@/scopes/theme-params/themeParams.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { decorateWithSupports, type WithSupports } from '@/scopes/decorateWithSupports.js';
 import { ERR_DATA_INVALID_SIZE } from '@/errors/errors.js';
 import { createError } from '@/errors/createError.js';
 import type { RGB } from '@/colors/types.js';
 
-import * as _ from './miniApp.private.js';
+import * as _ from './private.js';
+import { state } from './computed.js';
 import type { HeaderColor } from './types.js';
-import { decorateWithSupports, WithSupports } from '@/scopes/decorateWithSupports.js';
-
-// fixme: rgb color key check
 
 const SET_BG_COLOR_METHOD = 'web_app_set_background_color';
 const SET_HEADER_COLOR_METHOD = 'web_app_set_header_color';
@@ -66,10 +65,7 @@ function ready(): void {
 }
 
 function saveState() {
-  setStorageValue(STORAGE_KEY, {
-    backgroundColor: _.backgroundColor(),
-    headerColor: _.headerColor(),
-  });
+  setStorageValue(STORAGE_KEY, state());
 }
 
 /**
@@ -131,5 +127,10 @@ export {
   setHeaderColor,
   setBackgroundColor,
 };
-
-export * from './miniApp.computed.js';
+export {
+  backgroundColor,
+  headerColor,
+  isDark,
+  isMounted,
+  state,
+} from './computed.js';

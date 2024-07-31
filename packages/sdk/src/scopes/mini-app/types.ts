@@ -5,3 +5,8 @@ import type { RGB } from '@/colors/types.js';
  * Mini App header color.
  */
 export type HeaderColor = HeaderColorKey | RGB;
+
+export interface State {
+  backgroundColor: RGB;
+  headerColor: HeaderColor;
+}
