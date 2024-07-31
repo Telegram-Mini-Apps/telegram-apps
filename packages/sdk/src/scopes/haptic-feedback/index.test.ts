@@ -8,7 +8,7 @@ import {
   impactOccurred,
   notificationOccurred,
   selectionChanged,
-} from './hapticFeedback.js';
+} from './index.js';
 
 beforeEach(() => {
   resetGlobals();
