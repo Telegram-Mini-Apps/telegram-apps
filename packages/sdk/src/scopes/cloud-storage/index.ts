@@ -6,16 +6,16 @@ import {
   decorateWithIsSupported,
   type WithIsSupported,
 } from '@/scopes/decorateWithIsSupported.js';
-import { createRequestId, postEvent } from '@/globals/globals.js';
+import { createRequestId, postEvent } from '@/scopes/globals/globals.js';
 import type { ExecuteWithTimeout } from '@/types/methods.js';
-
-const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
 
 /*
  * fixme
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/cloud-storage
  * todo: usage
  */
+
+const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
 
 /**
  * Deletes specified key or keys from the cloud storage.
