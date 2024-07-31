@@ -1,16 +1,16 @@
 import { computed, Computed } from '@/signals/computed/computed.js';
 import { isColorDark } from '@/colors/isColorDark.js';
 
-import { state as _state, isMounted as _isMounted } from './themeParams.private.js';
+import * as _ from './private.js';
 import type { ThemeParams } from './types.js';
 
 function createStateComputed<K extends keyof ThemeParams>(
   key: K,
 ): Computed<ThemeParams[K] | undefined> {
-  return computed(() => _state()[key]);
+  return computed(() => _.state()[key]);
 }
 
-export const state = computed(_state);
+export const state = computed(_.state);
 
 /**
  * @since v6.10
@@ -44,7 +44,7 @@ export const isDark = computed(() => {
 /**
  * True if the component is currently mounted.
  */
-export const isMounted = computed(_isMounted);
+export const isMounted = computed(_.isMounted);
 
 export const linkColor = createStateComputed('linkColor');
 
