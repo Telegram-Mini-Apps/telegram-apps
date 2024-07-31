@@ -6,7 +6,7 @@ import { resetGlobals } from '@test-utils/resetGlobals.js';
 import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
 import { postEvent, version } from '@/globals/globals.js';
 
-import * as _ from './settingsButton.private.js';
+import * as _ from './private.js';
 import {
   show,
   isVisible,
@@ -16,7 +16,7 @@ import {
   onClick,
   unmount,
   offClick,
-} from './settingsButton.js';
+} from './index.js';
 
 beforeEach(() => {
   resetGlobals();

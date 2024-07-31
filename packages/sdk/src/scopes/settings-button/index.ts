@@ -4,11 +4,10 @@ import { isPageReload } from '@/navigation/isPageReload.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import { postEvent } from '@/scopes/globals/globals.js';
-import { computed } from '@/signals/computed/computed.js';
 import type { MiniAppsEventListener } from '@/bridge/events/types.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
 
-import * as _ from './settingsButton.private.js';
+import * as _ from './private.js';
 
 /*
  * fixme
@@ -26,16 +25,6 @@ const STORAGE_KEY = 'settingsButton';
 const hide: WithIsSupported<() => void> = decorateWithIsSupported(() => {
   _.isVisible.set(false);
 }, MINI_APPS_METHOD);
-
-/**
- * True if the component is currently visible.
- */
-const isVisible = computed(_.isVisible);
-
-/**
- * True if the component is currently mounted.
- */
-const isMounted = computed(_.isMounted);
 
 /**
  * Mounts the component.
@@ -87,11 +76,13 @@ function unmount() {
 
 export {
   hide,
-  isVisible,
-  isMounted,
   mount,
   onClick,
   offClick,
   show,
   unmount,
 };
+export {
+  isMounted,
+  isVisible,
+} from './computed.js';
