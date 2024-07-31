@@ -1,9 +1,7 @@
-import { on } from '@/bridge/events/listening/on.js';
+import { on } from '@/bridge/events/listening.js';
 import { postEvent } from '@/bridge/methods/postEvent.js';
-
-interface CleanupFn {
-  (): void;
-}
+import { createCleanup } from '@/misc/createCleanup.js';
+import type { CleanupFn } from '@/types/index.js';
 
 /**
  * Performs initialization process in the web version of Telegram.
@@ -12,20 +10,19 @@ interface CleanupFn {
  * application. This option is only used in web versions of Telegram. Default: false.
  */
 export function initWeb(acceptCustomStyles = true): CleanupFn {
-  const listeners: CleanupFn[] = [
+  const [addCleanup, cleanup] = createCleanup(
     on('reload_iframe', () => {
       postEvent('iframe_will_reload');
       window.location.reload();
     }),
-  ];
-  const cleanup: CleanupFn = () => listeners.forEach((l) => l());
+  );
 
   if (acceptCustomStyles) {
     const style = document.createElement('style');
     style.id = 'telegram-custom-styles';
     document.head.appendChild(style);
 
-    listeners.push(
+    addCleanup(
       on('set_custom_style', (html) => {
         // It is safe to use innerHTML here as long as style tag has a special behavior related
         // to the specified content. In case, any script will be passed here, it will not be
