@@ -1,5 +1,5 @@
-import { initData } from '@/components/InitData/parsers/initData.js';
-import { themeParams } from '@/components/ThemeParams/parsing/themeParams.js';
+import { initDataParser } from '@/scopes/init-data/initDataParser.js';
+import { themeParamsParser } from '@/scopes/theme-params/themeParamsParser.js';
 import { boolean } from '@/parsing/parsers/boolean.js';
 import { searchParams } from '@/parsing/parsers/searchParams.js';
 import { string } from '@/parsing/parsers/string.js';
@@ -17,7 +17,7 @@ export function parseLaunchParams(value: unknown): LaunchParams {
       from: 'tgWebAppBotInline',
     },
     initData: {
-      type: initData().optional(),
+      type: initDataParser().optional(),
       from: 'tgWebAppData',
     },
     initDataRaw: {
@@ -37,7 +37,7 @@ export function parseLaunchParams(value: unknown): LaunchParams {
       from: 'tgWebAppStartParam',
     },
     themeParams: {
-      type: themeParams(),
+      type: themeParamsParser(),
       from: 'tgWebAppThemeParams',
     },
     version: {
