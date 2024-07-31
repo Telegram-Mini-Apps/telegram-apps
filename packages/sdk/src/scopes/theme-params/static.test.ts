@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parse, serialize } from './ThemeParams.static.js';
+import { parse, serialize } from './static.js';
 
 describe('serialize', () => {
   describe.each([

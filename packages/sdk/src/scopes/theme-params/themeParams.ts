@@ -5,8 +5,8 @@ import { isPageReload } from '@/navigation/isPageReload.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import type { MiniAppsEventListener } from '@/bridge/events/types.js';
 
-import { parse } from './ThemeParams.static.js';
-import { state as _state, isMounted as _isMounted } from './themeParams.private.js';
+import { parse } from './static.js';
+import * as _ from './private.js';
 
 /*
  * fixme
@@ -22,10 +22,10 @@ const THEME_CHANGED_EVENT = 'theme_changed';
  * the component state.
  */
 function mount(): void {
-  if (!_isMounted()) {
-    _state.set(isPageReload() && getStorageValue(STORAGE_KEY) || retrieveLaunchParams().themeParams);
+  if (!_.isMounted()) {
+    _.state.set(isPageReload() && getStorageValue(STORAGE_KEY) || retrieveLaunchParams().themeParams);
     on(THEME_CHANGED_EVENT, onThemeChanged);
-    _isMounted.set(true);
+    _.isMounted.set(true);
   }
 }
 
@@ -35,7 +35,7 @@ function mount(): void {
  */
 const onThemeChanged: MiniAppsEventListener<'theme_changed'> = (e) => {
   const value = parse(e.theme_params);
-  _state.set(value);
+  _.state.set(value);
   setStorageValue(STORAGE_KEY, value);
 };
 
@@ -43,11 +43,32 @@ const onThemeChanged: MiniAppsEventListener<'theme_changed'> = (e) => {
  * Unmounts the component removing all bound event listeners.
  */
 function unmount(): void {
-  if (_isMounted()) {
+  if (_.isMounted()) {
     off(THEME_CHANGED_EVENT, onThemeChanged);
-    _isMounted.set(false);
+    _.isMounted.set(false);
   }
 }
 
-export { mount, unmount };
-export * from './themeParams.computed.js';
+export {
+  mount,
+  unmount,
+};
+export {
+  accentTextColor,
+  backgroundColor,
+  buttonColor,
+  buttonTextColor,
+  destructiveTextColor,
+  headerBackgroundColor,
+  hintColor,
+  isMounted,
+  isDark,
+  linkColor,
+  state,
+  secondaryBackgroundColor,
+  sectionBackgroundColor,
+  sectionSeparatorColor,
+  sectionHeaderTextColor,
+  subtitleTextColor,
+  textColor,
+} from './computed.js';
