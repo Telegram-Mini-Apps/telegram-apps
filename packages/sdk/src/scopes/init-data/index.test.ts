@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { state as _state } from './initData.private.js';
-import { state, restore } from './initData.js';
+import { state as _state } from './private.js';
+import { state, restore } from './index.js';
 import type { InitData } from './types.js';
 
 vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({

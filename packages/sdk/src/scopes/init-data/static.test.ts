@@ -1,7 +1,7 @@
 import { toSearchParams } from 'test-utils';
 import { describe, expect, it } from 'vitest';
 
-import { parse } from './InitData.static.js';
+import { parse } from './static.js';
 
 describe('parse', () => {
   describe('auth_date', () => {

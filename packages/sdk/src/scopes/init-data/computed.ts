@@ -1,13 +1,13 @@
-import { computed, Computed } from '@/signals/computed/computed.js';
+import { computed, type Computed } from '@/signals/computed/computed.js';
 
-import { state } from './initData.private.js';
+import * as _ from './private.js';
 import type { InitData } from './types.js';
 
 function createStateComputed<K extends keyof InitData>(
   key: K,
 ): Computed<InitData[K] | undefined> {
   return computed(() => {
-    const s = state();
+    const s = _.state();
     return s ? s[key] : undefined;
   });
 }
@@ -27,7 +27,7 @@ export const canSendAfter = createStateComputed('canSendAfter');
  * the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) method.
  */
 export const canSendAfterDate = computed(() => {
-  const s = state();
+  const s = _.state();
 
   return s
     ? s.canSendAfter
@@ -70,6 +70,11 @@ export const receiver = createStateComputed('receiver');
  * @see InitData.startParam
  */
 export const startParam = createStateComputed('startParam');
+
+/**
+ * Complete component state.
+ */
+export const state = computed(_.state);
 
 /**
  * @see InitData.user
