@@ -1,15 +1,13 @@
 import { postEvent } from '@/scopes/globals/globals.js';
-
 import { isPageReload } from '@/navigation/isPageReload.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
-import { off } from '@/bridge/events/listening/off.js';
-import { on } from '@/bridge/events/listening/on.js';
-import type { MiniAppsEventListener } from '@/bridge/events/types.js';
+import { off, on } from '@/bridge/events/listening.js';
+import type { EventListener } from '@/bridge/events/types.js';
 
 import { request } from './static.js';
 import * as _ from './private.js';
-import type { State } from './types.js';
+import type { Viewport } from './types.js';
 
 /*
  * fixme
@@ -35,7 +33,7 @@ function mount(): void {
   }
   _.isMounting.set(true);
 
-  function finalizeMount(state: State) {
+  function finalizeMount(state: Viewport.State): void {
     on('viewport_changed', onViewportChanged);
     _.state.set(state);
     _.state.sub(onStateChanged);

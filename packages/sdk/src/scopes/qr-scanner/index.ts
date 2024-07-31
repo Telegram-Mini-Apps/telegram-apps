@@ -2,7 +2,7 @@ import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorate
 import { request } from '@/bridge/request.js';
 import { createError } from '@/errors/createError.js';
 import { postEvent } from '@/scopes/globals/globals.js';
-import { on } from '@/bridge/events/listening/on.js';
+import { on } from '@/bridge/events/listening.js';
 import { createCleanup } from '@/misc/createCleanup.js';
 import { ERR_SCANNER_OPENED } from '@/errors/errors.js';
 

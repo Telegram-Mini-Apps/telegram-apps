@@ -1,10 +1,10 @@
 import { isPageReload } from '@/navigation/isPageReload.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import { on } from '@/bridge/events/listening/on.js';
+import { on, off } from '@/bridge/events/listening.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import { request as bridgeRequest } from '@/bridge/request.js';
 import { postEvent } from '@/scopes/globals/globals.js';
-import type { BiometryTokenUpdateStatus, MiniAppsEventListener } from '@/bridge/events/types.js';
+import type { BiometryTokenUpdateStatus, EventListener } from '@/bridge/events/types.js';
 
 import * as _ from './private.js';
 import { request } from './static.js';
@@ -129,7 +129,7 @@ function mount(): void {
   });
 }
 
-const onBiometryInfoReceived: MiniAppsEventListener<'biometry_info_received'> = e => {
+const onBiometryInfoReceived: EventListener<'biometry_info_received'> = e => {
   _.state.set(formatEvent(e));
 };
 

@@ -23,7 +23,6 @@ export function classNames(...values: any[]): string {
       }
 
       if (Array.isArray(value)) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         return classNames(...value);
       }
     })

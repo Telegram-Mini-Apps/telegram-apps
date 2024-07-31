@@ -1,13 +1,13 @@
 import type {
-  MiniAppsMethodVersionedParams,
-  MiniAppsMethodWithVersionedParams,
+  MethodVersionedParams,
+  MethodNameWithVersionedParams,
 } from '@/bridge/methods/types/index.js';
 import { supports } from '@/bridge/supports.js';
 import { version } from '@/scopes/globals/globals.js';
 
 type HasCheckSupportMethodTuple = {
-  [M in MiniAppsMethodWithVersionedParams]: [M, MiniAppsMethodVersionedParams<M>]
-}[MiniAppsMethodWithVersionedParams];
+  [M in MethodNameWithVersionedParams]: [M, MethodVersionedParams<M>]
+}[MethodNameWithVersionedParams];
 
 export type WithSupports<
   F extends (...args: any) => any,

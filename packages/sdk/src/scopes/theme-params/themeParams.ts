@@ -1,9 +1,8 @@
-import { on } from '@/bridge/events/listening/on.js';
-import { off } from '@/bridge/events/listening/off.js';
+import { off, on } from '@/bridge/events/listening.js';
 import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import type { MiniAppsEventListener } from '@/bridge/events/types.js';
+import type { EventListener } from '@/bridge/events/types.js';
 
 import { parse } from './static.js';
 import * as _ from './private.js';
@@ -33,7 +32,7 @@ function mount(): void {
  * Actualizes the theme parameters whenever an according event was received.
  * @param e - event data.
  */
-const onThemeChanged: MiniAppsEventListener<'theme_changed'> = (e) => {
+const onThemeChanged: EventListener<'theme_changed'> = (e) => {
   const value = parse(e.theme_params);
   _.state.set(value);
   setStorageValue(STORAGE_KEY, value);

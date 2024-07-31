@@ -1,11 +1,10 @@
 import { postEvent } from '@/scopes/globals/globals.js';
-import { on } from '@/bridge/events/listening/on.js';
-import { off } from '@/bridge/events/listening/off.js';
+import { off, on } from '@/bridge/events/listening.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import * as themeParams from '@/scopes/theme-params/themeParams.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
-import type { MiniAppsEventListener } from '@/bridge/events/types.js';
+import type { EventListener } from '@/bridge/events/types.js';
 
 import * as _ from './private.js';
 import type { State } from './types.js';
@@ -24,7 +23,7 @@ const STORAGE_KEY = 'mainButton';
  * @param fn - event listener.
  * @returns A function to remove bound listener.
  */
-function onClick(fn: MiniAppsEventListener<'main_button_pressed'>): RemoveEventListenerFn {
+function onClick(fn: EventListener<'main_button_pressed'>): RemoveEventListenerFn {
   return on(CLICK_EVENT, fn);
 }
 
@@ -32,7 +31,7 @@ function onClick(fn: MiniAppsEventListener<'main_button_pressed'>): RemoveEventL
  * Removes the main button click listener.
  * @param fn - an event listener.
  */
-function offClick(fn: MiniAppsEventListener<'main_button_pressed'>): void {
+function offClick(fn: EventListener<'main_button_pressed'>): void {
   off(CLICK_EVENT, fn);
 }
 
