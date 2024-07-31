@@ -1,12 +1,13 @@
 import { saveToStorage } from '@/launch-params/saveToStorage.js';
-import { parseMessage } from '@/bridge/parseMessage.js';
 import { isIframe } from '@/env/isIframe.js';
 import { hasExternalNotify } from '@/env/hasExternalNotify.js';
-import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
-import { serializeThemeParams } from '@/components/ThemeParams/parsing/serializeThemeParams.js';
+import { emitMiniAppsEvent } from '@/bridge/events/handlers.js';
+import { serialize } from '@/scopes/theme-params/static.js';
 import { parseLaunchParams } from '@/launch-params/parseLaunchParams.js';
+import { json } from '@/parsing/parsers/json.js';
+import { string } from '@/parsing/parsers/string.js';
 import type { LaunchParams } from '@/launch-params/types.js';
-import type { MiniAppsEventPayload } from '@/bridge/events/types.js';
+import type { EventPayload } from '@/bridge/events/types.js';
 
 /**
  * Mocks a Telegram application environment.
@@ -25,12 +26,15 @@ export function mockTelegramEnv(launchParamsRaw: LaunchParams | string): void {
       return;
     }
     try {
-      const { eventType } = parseMessage(data);
+      const { eventType } = json({
+        eventType: string(),
+        eventData: (v) => v,
+      }).parse(data);
 
       if (eventType === 'web_app_request_theme') {
         emitMiniAppsEvent('theme_changed', {
-          theme_params: JSON.parse(serializeThemeParams(lp.themeParams)),
-        } satisfies MiniAppsEventPayload<'theme_changed'>);
+          theme_params: JSON.parse(serialize(lp.themeParams)),
+        } satisfies EventPayload<'theme_changed'>);
       }
 
       if (eventType === 'web_app_request_viewport') {
@@ -39,7 +43,7 @@ export function mockTelegramEnv(launchParamsRaw: LaunchParams | string): void {
           height: window.innerHeight,
           is_state_stable: true,
           is_expanded: true,
-        } satisfies MiniAppsEventPayload<'viewport_changed'>);
+        } satisfies EventPayload<'viewport_changed'>);
       }
     } catch {
     }
@@ -69,7 +73,6 @@ export function mockTelegramEnv(launchParamsRaw: LaunchParams | string): void {
     ...(proxy || {}),
     postEvent(...args: any) {
       void wiredPostMessage(JSON.stringify({ eventType: args[0], eventData: args[1] }));
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       proxy && proxy.postEvent(...args);
     },
   };
