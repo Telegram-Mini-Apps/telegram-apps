@@ -1,14 +1,13 @@
-import { postEvent } from '@/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 import { on } from '@/bridge/events/listening/on.js';
 import { off } from '@/bridge/events/listening/off.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import { computed } from '@/signals/computed/computed.js';
-import * as themeParams from '@/theme-params/themeParams.js';
+import * as themeParams from '@/scopes/theme-params/themeParams.js';
 import type { RemoveEventListenerFn } from '@/events/types.js';
 import type { MiniAppsEventListener } from '@/bridge/events/types.js';
 
-import { state as _state, isMounted as _isMounted } from './mainButton.private.js';
+import * as _ from './private.js';
 import type { State } from './types.js';
 
 /*
@@ -19,13 +18,6 @@ import type { State } from './types.js';
 
 const CLICK_EVENT = 'main_button_pressed';
 const STORAGE_KEY = 'mainButton';
-
-const isMounted = computed(_isMounted);
-
-/**
- * Current complete main button state.
- */
-const state = computed(_state);
 
 /**
  * Add a new main button click listener.
@@ -48,10 +40,10 @@ function offClick(fn: MiniAppsEventListener<'main_button_pressed'>): void {
  * Mounts the component.
  */
 function mount(): void {
-  if (!_isMounted()) {
+  if (!_.isMounted()) {
     const prev = isPageReload() && getStorageValue(STORAGE_KEY);
     if (prev) {
-      _state.set(prev);
+      _.state.set(prev);
     } else {
       themeParams.mount();
       setParams({
@@ -60,8 +52,8 @@ function mount(): void {
       });
     }
 
-    _state.sub(onStateChanged);
-    _isMounted.set(true);
+    _.state.sub(onStateChanged);
+    _.isMounted.set(true);
   }
 }
 
@@ -86,8 +78,8 @@ function onStateChanged(s: State): void {
  * @param updates - state changes to perform.
  */
 function setParams(updates: Partial<State>): void {
-  _state.set({
-    ...state(),
+  _.state.set({
+    ..._.state(),
     ...Object.fromEntries(
       Object.entries(updates).filter(([, v]) => v !== undefined),
     ),
@@ -98,18 +90,24 @@ function setParams(updates: Partial<State>): void {
  * Unmounts the component.
  */
 function unmount(): void {
-  _state.unsub(onStateChanged);
-  _isMounted.set(false);
+  _.state.unsub(onStateChanged);
+  _.isMounted.set(false);
 }
 
 export {
-  isMounted,
   mount,
   onClick,
   offClick,
   setParams,
-  state,
   unmount,
 };
-
-export * from './mainButton.computed.js';
+export {
+  backgroundColor,
+  isMounted,
+  isActive,
+  isVisible,
+  isLoaderVisible,
+  state,
+  text,
+  textColor,
+} from './computed.js';
