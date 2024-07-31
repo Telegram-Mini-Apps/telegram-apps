@@ -3,7 +3,7 @@ import { mockWindow } from 'test-utils';
 import { mockTelegramEnv } from '@/env/mockTelegramEnv.js';
 import { createWindow } from '@test-utils/createWindow.js';
 import { postEvent } from '@/bridge/methods/postEvent.js';
-import { on } from '@/bridge/events/listening/on.js';
+import { on } from '@/bridge/events/listening.js';
 import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
 import type { LaunchParams } from '@/launch-params/types.js';
 
