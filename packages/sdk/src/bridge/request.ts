@@ -1,42 +1,41 @@
 import { withTimeout } from '@/timeout/withTimeout.js';
 import type { ExecuteWithOptions, If, IsNever } from '@/types/index.js';
 
-import { on } from './events/listening/on.js';
+import { on } from './events/listening.js';
 import { postEvent as defaultPostEvent } from './methods/postEvent.js';
-import type { MiniAppsEventName, MiniAppsEventPayload } from './events/types.js';
-import type { MiniAppsMethodName, MiniAppsMethodParams } from './methods/types/index.js';
 import { createCleanup } from '@/misc/createCleanup.js';
+import type * as MiniApps from './types.js';
 
 /**
  * Returns all possible payloads for the specified events array.
  */
-export type RequestEventsPayloads<E extends MiniAppsEventName[]> =
-  E extends (infer U extends MiniAppsEventName)[]
-    ? MiniAppsEventPayload<U>
+export type RequestEventsPayloads<E extends MiniApps.EventName[]> =
+  E extends (infer U extends MiniApps.EventName)[]
+    ? MiniApps.EventPayload<U>
     : never;
 
-export type RequestCaptureEventsFn<E extends MiniAppsEventName[]> =
-  E extends (infer U extends MiniAppsEventName)[]
+export type RequestCaptureEventsFn<E extends MiniApps.EventName[]> =
+  E extends (infer U extends MiniApps.EventName)[]
     ? (payload: {
       [K in U]: If<
-        IsNever<MiniAppsEventPayload<K>>,
+        IsNever<MiniApps.EventPayload<K>>,
         { event: K },
-        { event: K; payload: MiniAppsEventPayload<K> }
+        { event: K; payload: MiniApps.EventPayload<K> }
       >
     }[U]) => boolean
     : never;
 
-export type RequestCaptureEventFn<E extends MiniAppsEventName> = If<
-  IsNever<MiniAppsEventPayload<E>>,
+export type RequestCaptureEventFn<E extends MiniApps.EventName> = If<
+  IsNever<MiniApps.EventPayload<E>>,
   () => boolean,
-  (payload: MiniAppsEventPayload<E>) => boolean
+  (payload: MiniApps.EventPayload<E>) => boolean
 >;
 
 /**
  * `request` method options.
  * @see request
  */
-export type RequestOptions<M extends MiniAppsMethodName, E, C> = {
+export type RequestOptions<M extends MiniApps.MethodName, E, C> = {
     /**
      * Mini Apps method name.
      */
@@ -52,39 +51,39 @@ export type RequestOptions<M extends MiniAppsMethodName, E, C> = {
     capture?: C;
   }
   & ExecuteWithOptions
-  & If<IsNever<MiniAppsMethodParams<M>>, {}, {
+  & If<IsNever<MiniApps.MethodParams<M>>, {}, {
   /**
    * List of method parameters.
    */
-  params: MiniAppsMethodParams<M>
+  params: MiniApps.MethodParams<M>
 }>;
 
 type AnyRequestResult =
-  | MiniAppsEventPayload<MiniAppsEventName>
-  | RequestEventsPayloads<MiniAppsEventName[]>;
+  | MiniApps.EventPayload<MiniApps.EventName>
+  | RequestEventsPayloads<MiniApps.EventName[]>;
 
 /**
  * Calls specified Mini Apps method and captures specified event.
  * @param options - method options.
  * @returns Promise which will be resolved with data of the captured event.
  */
-export async function request<M extends MiniAppsMethodName, E extends MiniAppsEventName>(
+export async function request<M extends MiniApps.MethodName, E extends MiniApps.EventName>(
   options: RequestOptions<M, E, RequestCaptureEventFn<E>>,
-): Promise<MiniAppsEventPayload<E>>;
+): Promise<MiniApps.EventPayload<E>>;
 
 /**
  * Calls specified Mini Apps method and captures one of the specified events.
  * @param options - method options.
  * @returns Promise which will be resolved with data of the first captured event.
  */
-export async function request<M extends MiniAppsMethodName, E extends MiniAppsEventName[]>(
+export async function request<M extends MiniApps.MethodName, E extends MiniApps.EventName[]>(
   options: RequestOptions<M, E, RequestCaptureEventsFn<E>>,
 ): Promise<RequestEventsPayloads<E>>;
 
-export async function request<M extends MiniAppsMethodName>(
+export async function request<M extends MiniApps.MethodName>(
   options:
-    | RequestOptions<M, MiniAppsEventName, RequestCaptureEventFn<MiniAppsEventName>>
-    | RequestOptions<M, MiniAppsEventName[], RequestCaptureEventsFn<MiniAppsEventName[]>>,
+    | RequestOptions<M, MiniApps.EventName, RequestCaptureEventFn<MiniApps.EventName>>
+    | RequestOptions<M, MiniApps.EventName[], RequestCaptureEventsFn<MiniApps.EventName[]>>,
 ): Promise<AnyRequestResult> {
   let resolve: (payload: AnyRequestResult) => void;
   const promise = new Promise<AnyRequestResult>(res => resolve = res);
@@ -99,11 +98,11 @@ export async function request<M extends MiniAppsMethodName>(
       return on(ev, (payload) => {
         if (!capture || (
           Array.isArray(event)
-            ? (capture as RequestCaptureEventsFn<MiniAppsEventName[]>)({
+            ? (capture as RequestCaptureEventsFn<MiniApps.EventName[]>)({
               event: ev,
               payload: payload as any,
             })
-            : (capture as RequestCaptureEventFn<MiniAppsEventName>)(payload)
+            : (capture as RequestCaptureEventFn<MiniApps.EventName>)(payload)
         )) {
           resolve(payload);
         }

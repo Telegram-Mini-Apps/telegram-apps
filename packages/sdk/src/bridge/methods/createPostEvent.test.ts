@@ -1,11 +1,11 @@
 import { afterEach, expect, it, vi } from 'vitest';
 
-import type { FnToSpy } from '@test-utils/types.js';
+import type { FnToMock } from '@test-utils/types.js';
 
 import { createPostEvent } from './createPostEvent.js';
 import { postEvent as postEventFn } from './postEvent.js';
 
-const postEvent = postEventFn as unknown as FnToSpy<typeof postEventFn>;
+const postEvent = postEventFn as unknown as FnToMock<typeof postEventFn>;
 
 afterEach(() => {
   vi.restoreAllMocks();

@@ -1,5 +1,4 @@
 import type { RGB } from '@/colors/types.js';
-import type { RequestId } from '@/request-id/types.js';
 import type { If, IsNever, UnionKeys } from '@/types/index.js';
 
 import type { AnyInvokeCustomMethodParams } from './custom-methods.js';
@@ -16,16 +15,43 @@ export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
  */
 export type SwitchInlineQueryChatType = 'users' | 'bots' | 'groups' | 'channels';
 
+/**
+ * Values expected by the `web_app_open_link.try_browser` option.
+ */
+export type OpenLinkBrowser =
+  | 'google-chrome'
+  | 'chrome'
+  | 'mozilla-firefox'
+  | 'firefox'
+  | 'microsoft-edge'
+  | 'edge'
+  | 'opera'
+  | 'opera-mini'
+  | 'brave'
+  | 'brave-browser'
+  | 'duckduckgo'
+  | 'duckduckgo-browser'
+  | 'samsung'
+  | 'samsung-browser'
+  | 'vivaldi'
+  | 'vivaldi-browser'
+  | 'kiwi'
+  | 'kiwi-browser'
+  | 'uc'
+  | 'uc-browser'
+  | 'tor'
+  | 'tor-browser';
+
 interface CreateParams<Params = never, VersionedParam extends UnionKeys<Params> = never> {
   params: Params;
   versionedParams: VersionedParam;
 }
 
 /**
- * Describes list of events and their parameters that could be posted by Bridge.
+ * Describes a list of events and their parameters that could be posted.
  * @see https://docs.telegram-mini-apps.com/platform/methods
  */
-export interface MiniAppsMethods {
+export interface Methods {
   /**
    * Notifies parent iframe about the current frame is ready. This method is only used in the Web
    * version of Telegram. As a result, Mini App will receive `set_custom_style` event.
@@ -43,7 +69,11 @@ export interface MiniAppsMethods {
    */
   iframe_will_reload: CreateParams;
   /**
-   * Request current biometry settings.
+   * Emitted by bot mini apps to ask the client to initialize the biometric authentication manager
+   * object for the current bot, emitting a `biometry_info_received` event on completion.
+   *
+   * This request should just initialize the client-side state, i.e. by checking if biometric
+   * authentication is even available or not, it should not ask the user anything.
    * @since v7.2
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-get-info
    */
@@ -59,7 +89,13 @@ export interface MiniAppsMethods {
    */
   web_app_biometry_open_settings: CreateParams;
   /**
-   * Requests access to use biometrics.
+   * Emitted by bot mini apps to ask the user permission to use biometric authentication,
+   * emitting a `biometry_info_received` event on completion.
+   *
+   * This request should not actually prompt biometric authentication, it should just ask the
+   * user permission to use them, and a popup should be shown only if the user hasn't already
+   * allowed or denied the usage of biometric authentication for the bot associated with the
+   * mini app.
    * @since v7.2
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-request-access
    */
@@ -71,7 +107,15 @@ export interface MiniAppsMethods {
     reason?: string;
   }>;
   /**
-   * Authenticates the user using biometrics.
+   * Attempts to authenticate a user using biometrics and fetch a previously stored
+   * secure token, emitting the `biometry_auth_requested` event on completion, containing either
+   * an error, or a decrypted biometric token (or an empty string if no token was configured yet).
+   *
+   * Should only be used if the `token_saved` field of the `biometry_info_received` event object
+   * is equal to true.
+   *
+   * If a user has previously disallowed the bot from using biometric authentication, this
+   * request will immediately fail, emitting an appropriate `biometry_auth_requested` event.
    * @since v7.2
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-request-auth
    */
@@ -83,14 +127,24 @@ export interface MiniAppsMethods {
     reason?: string;
   }>;
   /**
-   * Updates the biometric token in secure storage on the device. To remove the token, pass
-   * an empty string.
+   * Attempts to authenticate using biometrics and store the biometric token
+   * securely on a device, emitting a `biometry_token_updated` event on completion.
+   *
+   * This token will be safely stored by the Telegram client and will be associated with the bot
+   * that owns the mini app.
+   *
+   * If the user has previously disallowed the bot from using biometric authentication, this
+   * request will immediately fail, emitting an appropriate biometry_token_updated event.
    * @since v7.2
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-biometry-update-token
    */
   web_app_biometry_update_token: CreateParams<{
     /**
-     * Token to store. Has max length of 1024 symbols.
+     * Optional string field, containing the reason why the bot is asking to authenticate using biometrics (1-128 chars, used in the prompt).
+     */
+    reason?: string;
+    /**
+     * The new token (string, 0-1024 chars), or an empty string to remove it.
      */
     token: string;
   }>;
@@ -100,6 +154,7 @@ export interface MiniAppsMethods {
    */
   web_app_close: CreateParams<{
     /**
+     * Should the client return to the previous activity.
      * @since v7.6
      */
     return_back?: boolean;
@@ -149,7 +204,7 @@ export interface MiniAppsMethods {
     slug: string;
   }>;
   /**
-   * Opens link in the default browser. Mini App will not be closed.
+   * Opens a link in a default browser. The Mini App will not be closed.
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-open-link
    */
   web_app_open_link: CreateParams<{
@@ -164,9 +219,10 @@ export interface MiniAppsMethods {
      */
     try_instant_view?: boolean;
     /**
+     * A preferred browser to open the link in.
      * @since v7.6
      */
-    try_browser?: boolean;
+    try_browser?: OpenLinkBrowser;
   }, 'try_instant_view' | 'try_browser'>;
   /**
    * Opens a new popup. When user closes the popup, Telegram creates the `popup_closed` event.
@@ -211,7 +267,7 @@ export interface MiniAppsMethods {
      * Unique request identifier. Should be any unique string to handle the generated event
      * appropriately.
      */
-    req_id: RequestId;
+    req_id: string;
   }>;
   /**
    * Notifies Telegram about current application is ready to be shown. This method will make
@@ -373,46 +429,46 @@ export interface MiniAppsMethods {
 /**
  * Mini Apps method name.
  */
-export type MiniAppsMethodName = keyof MiniAppsMethods;
+export type MethodName = keyof Methods;
 
 /**
  * Parameters of the specified Mini Apps method.
  */
-export type MiniAppsMethodParams<M extends MiniAppsMethodName> = MiniAppsMethods[M]['params'];
+export type MethodParams<M extends MethodName> = Methods[M]['params'];
 
 /**
  * Methods with optional parameters.
  */
-export type MiniAppsMethodWithOptionalParams = {
-  [Method in MiniAppsMethodName]: undefined extends MiniAppsMethodParams<Method>
-    ? Method
+export type MethodNameWithOptionalParams = {
+  [M in MethodName]: undefined extends MethodParams<M>
+    ? M
     : never;
-}[MiniAppsMethodName];
+}[MethodName];
 
 /**
  * Methods without parameters.
  */
-export type MiniAppsMethodWithoutParams = {
-  [Method in MiniAppsMethodName]: If<IsNever<MiniAppsMethodParams<Method>>, Method, never>;
-}[MiniAppsMethodName];
+export type MethodNameWithoutParams = {
+  [M in MethodName]: If<IsNever<MethodParams<M>>, M, never>;
+}[MethodName];
 
 /**
  * Methods with parameters.
  */
-export type MiniAppsMethodWithRequiredParams = Exclude<
-  MiniAppsMethodName,
-  MiniAppsMethodWithoutParams | MiniAppsMethodWithOptionalParams
+export type MethodNameWithRequiredParams = Exclude<
+  MethodName,
+  MethodNameWithoutParams | MethodNameWithOptionalParams
 >;
 
 /**
  * Method names which have versioned params.
  */
-export type MiniAppsMethodWithVersionedParams = {
-  [M in MiniAppsMethodName]: If<IsNever<MiniAppsMethods[M]['versionedParams']>, never, M>;
-}[MiniAppsMethodName];
+export type MethodNameWithVersionedParams = {
+  [M in MethodName]: If<IsNever<Methods[M]['versionedParams']>, never, M>;
+}[MethodName];
 
 /**
  * Method parameters which appear only in the specific Telegram Mini Apps version.
  */
-export type MiniAppsMethodVersionedParams<M extends MiniAppsMethodWithVersionedParams> =
-  MiniAppsMethods[M]['versionedParams'];
+export type MethodVersionedParams<M extends MethodNameWithVersionedParams> =
+  Methods[M]['versionedParams'];

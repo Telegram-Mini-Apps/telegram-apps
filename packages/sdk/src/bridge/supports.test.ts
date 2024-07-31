@@ -1,21 +1,21 @@
 import { expect, it, describe } from 'vitest';
 
 import type {
-  MiniAppsMethodName,
-  MiniAppsMethodVersionedParams,
-  MiniAppsMethodWithVersionedParams,
+  MethodName,
+  MethodVersionedParams,
+  MethodNameWithVersionedParams,
 } from '@/bridge/methods/types/methods.js';
 import type { Version } from '@/version/types.js';
 
 import { supports } from './supports.js';
 
 type HaveCheckSupportMethodObj = {
-  [M in MiniAppsMethodWithVersionedParams]: {
+  [M in MethodNameWithVersionedParams]: {
     title: string;
     method: M;
-    parameter: MiniAppsMethodVersionedParams<M>
+    parameter: MethodVersionedParams<M>
   }
-}[MiniAppsMethodWithVersionedParams];
+}[MethodNameWithVersionedParams];
 
 /**
  * Increases specified version by amount of updates.
@@ -31,7 +31,7 @@ function increaseVersion(version: Version, amount: number): string {
 
 describe.each<[
   version: Version,
-  methods: (MiniAppsMethodName | HaveCheckSupportMethodObj)[],
+  methods: (MethodName | HaveCheckSupportMethodObj)[],
 ]>([
   ['6.0', [
     'iframe_ready',
@@ -109,7 +109,7 @@ describe.each<[
   const higher = increaseVersion(version, 1);
   const lower = increaseVersion(version, -1);
 
-  const methodsOnly = methods.filter((m): m is MiniAppsMethodName => {
+  const methodsOnly = methods.filter((m): m is MethodName => {
     return typeof m === 'string';
   });
 

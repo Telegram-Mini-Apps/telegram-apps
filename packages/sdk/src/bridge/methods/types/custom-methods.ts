@@ -1,10 +1,8 @@
-import type { RequestId } from '@/request-id/types.js';
-
 interface CreateInvokeCustomMethodParams<M extends string, Params extends object> {
   /**
    * Unique request identifier.
    */
-  req_id: RequestId;
+  req_id: string;
   /**
    * Method name.
    */
