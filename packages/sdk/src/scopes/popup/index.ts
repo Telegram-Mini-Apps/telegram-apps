@@ -3,10 +3,9 @@ import { request } from '@/bridge/request.js';
 import { createError } from '@/errors/createError.js';
 import { postEvent } from '@/scopes/globals/globals.js';
 import { ERR_POPUP_INVALID_PARAMS, ERR_POPUP_OPENED } from '@/errors/errors.js';
-import { computed } from '@/signals/computed/computed.js';
 import type { PopupParams } from '@/bridge/methods/types/popup.js';
 
-import * as _ from './popup.private.js';
+import * as _ from './private.js';
 import type { OpenOptions } from './types.js';
 
 /*
@@ -67,11 +66,6 @@ function preparePopupParams(params: OpenOptions): PopupParams {
 }
 
 /**
- * True if a popup is currently opened.
- */
-export const isOpened = computed(_.isOpened);
-
-/**
  * A method that shows a native popup described by the `params` argument.
  * The promise will be resolved when the popup is closed. Resolved value will have
  * an identifier of pressed button.
@@ -83,7 +77,7 @@ export const isOpened = computed(_.isOpened);
  * @throws {SDKError} ERR_POPUP_OPENED
  * @see ERR_POPUP_OPENED
  */
-export const open: WithIsSupported<(options: OpenOptions) => Promise<string | null>> =
+const open: WithIsSupported<(options: OpenOptions) => Promise<string | null>> =
   decorateWithIsSupported(async options => {
     if (_.isOpened()) {
       throw createError(ERR_POPUP_OPENED);
@@ -103,3 +97,6 @@ export const open: WithIsSupported<(options: OpenOptions) => Promise<string | nu
       _.isOpened.set(false);
     }
   }, MINI_APPS_METHOD);
+
+export { open };
+export { isOpened } from './computed.js';
