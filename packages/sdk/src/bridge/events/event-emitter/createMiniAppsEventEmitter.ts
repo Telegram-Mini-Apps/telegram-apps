@@ -1,4 +1,4 @@
-import { logger } from '@/debug/debug.js';
+import { loggerError } from '@/debug/debug.js';
 import { EventEmitter as GenericEventEmitter } from '@/events/event-emitter/EventEmitter.js';
 import { onWindow } from '@/events/onWindow.js';
 import { createCleanup } from '@/misc/createCleanup.js';
@@ -120,7 +120,7 @@ export function createMiniAppsEventEmitter(): [
         const data = parser ? parser.parse(eventData) : eventData;
         mainEmitter.emit(...(data ? [eventType, data] : [eventType]) as [any, any]);
       } catch (cause) {
-        logger.error(
+        loggerError(
           `An error occurred processing the "${eventType}" event from the Telegram application.\nPlease, file an issue here:\nhttps://github.com/Telegram-Mini-Apps/telegram-apps/issues/new/choose`,
           message,
           cause,
