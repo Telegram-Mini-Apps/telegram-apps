@@ -23,6 +23,7 @@ const REQUEST_AUTH_METHOD = 'web_app_biometry_request_auth';
 const REQUEST_ACCESS_METHOD = 'web_app_biometry_request_access';
 const OPEN_SETTINGS_METHOD = 'web_app_biometry_open_settings';
 const UPDATE_TOKEN_METHOD = 'web_app_biometry_update_token';
+const BIOMETRY_INFO_RECEIVED_EVENT = 'biometry_info_received';
 
 /**
  * Attempts to authenticate a user using biometrics and fetch a previously stored
@@ -77,7 +78,7 @@ const requestAccess: WithIsSupported<(options?: RequestAccessOptions) => Promise
         ...options,
         postEvent: postEvent(),
         method: REQUEST_ACCESS_METHOD,
-        event: 'biometry_info_received',
+        event: BIOMETRY_INFO_RECEIVED_EVENT,
         params: { reason: options.reason || '' },
       })
         .then((response) => {
@@ -106,7 +107,7 @@ function mount(): void {
   _.isMounting.set(true);
 
   function finalizeMount(state: State): void {
-    on('biometry_info_received', onBiometryInfoReceived);
+    on(BIOMETRY_INFO_RECEIVED_EVENT, onBiometryInfoReceived);
     _.state.set(state);
     _.state.sub(onStateChanged);
     _.mountError.set(undefined);
@@ -141,7 +142,8 @@ function onStateChanged(s: State): void {
  * Unmounts the component.
  */
 function unmount(): void {
-
+  off(BIOMETRY_INFO_RECEIVED_EVENT, onBiometryInfoReceived);
+  _.state.unsub(onStateChanged);
 }
 
 /**
