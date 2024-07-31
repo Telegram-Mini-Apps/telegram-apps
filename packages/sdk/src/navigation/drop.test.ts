@@ -1,5 +1,4 @@
 import { afterEach, expect, it, vi } from 'vitest';
-import type { FnToSpy } from '@test-utils/types.js';
 
 import { drop } from './drop.js';
 import { go as goFn } from './go.js';
@@ -19,7 +18,7 @@ function mockPushState(impl?: History['pushState']) {
   }
 }
 
-const go = goFn as unknown as FnToSpy<typeof goFn>;
+const go = vi.mocked(goFn);
 
 afterEach(() => {
   vi.restoreAllMocks();
