@@ -1,5 +1,4 @@
-import { off } from '@/bridge/events/listening/off.js';
-import { on } from '@/bridge/events/listening/on.js';
+import { off, on } from '@/bridge/events/listening.js';
 import { type PostEvent, postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
 import { createError } from '@/errors/createError.js';
 import {
