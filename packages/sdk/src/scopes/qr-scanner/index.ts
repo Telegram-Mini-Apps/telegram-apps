@@ -1,4 +1,3 @@
-import { computed } from '@/signals/computed/computed.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import { request } from '@/bridge/request.js';
 import { createError } from '@/errors/createError.js';
@@ -7,7 +6,7 @@ import { on } from '@/bridge/events/listening/on.js';
 import { createCleanup } from '@/misc/createCleanup.js';
 import { ERR_SCANNER_OPENED } from '@/errors/errors.js';
 
-import * as _ from './qrScanner.private.js';
+import * as _ from './private.js';
 
 // TODO: Links?
 
@@ -15,11 +14,6 @@ const CLOSE_METHOD = 'web_app_close_scan_qr_popup';
 const OPEN_METHOD = 'web_app_open_scan_qr_popup';
 const CLOSED_EVENT = 'scan_qr_popup_closed';
 const SCANNED_EVENT = 'qr_text_received';
-
-/**
- * True if the scanner is currently opened.
- */
-export const isOpened = computed(_.isOpened);
 
 /**
  * Closes the scanner.
@@ -68,7 +62,7 @@ type OpenFn = WithIsSupported<{
   }): void;
 }>;
 
-export const open: OpenFn = decorateWithIsSupported((options) => {
+const open: OpenFn = decorateWithIsSupported((options) => {
   if (_.isOpened()) {
     throw createError(ERR_SCANNER_OPENED);
   }
@@ -118,3 +112,6 @@ export const open: OpenFn = decorateWithIsSupported((options) => {
 
   postEvent()(OPEN_METHOD, { text: options.text });
 }, OPEN_METHOD) as OpenFn;
+
+export { open };
+export { isOpened } from './computed.js';
