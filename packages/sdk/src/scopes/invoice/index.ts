@@ -3,17 +3,16 @@ import { request } from '@/bridge/request.js';
 import { postEvent } from '@/scopes/globals/globals.js';
 import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_INVOICE_OPENED } from '@/errors/errors.js';
 import { createError } from '@/errors/createError.js';
-import { computed } from '@/signals/computed/computed.js';
 import type { InvoiceStatus } from '@/bridge/events/types.js';
 
-import { isOpened as _isOpened } from './invoice.private.js';
+import * as _ from './private.js';
 
 /*
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/invoice
  * todo usage
  */
 
-export type OpenFn = WithIsSupported<{
+type OpenFn = WithIsSupported<{
   /**
    * Opens an invoice using its slug.
    * @param slug - invoice slug.
@@ -41,14 +40,9 @@ export type OpenFn = WithIsSupported<{
 
 const MINI_APPS_METHOD = 'web_app_open_invoice';
 
-/**
- * True if the invoice is currently opened.
- */
-export const isOpened = computed(_isOpened);
-
-export const open: OpenFn = decorateWithIsSupported(
+const open: OpenFn = decorateWithIsSupported(
   async (urlOrSlug, type?) => {
-    if (_isOpened()) {
+    if (_.isOpened()) {
       throw createError(ERR_INVOICE_OPENED);
     }
 
@@ -71,7 +65,7 @@ export const open: OpenFn = decorateWithIsSupported(
       [, , slug] = match;
     }
 
-    _isOpened.set(true);
+    _.isOpened.set(true);
 
     try {
       const result = await request({
@@ -86,8 +80,11 @@ export const open: OpenFn = decorateWithIsSupported(
 
       return result.status;
     } finally {
-      _isOpened.set(false);
+      _.isOpened.set(false);
     }
   },
   MINI_APPS_METHOD,
 );
+
+export { open };
+export { isOpened } from './computed.js';
