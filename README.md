@@ -116,5 +116,5 @@ document](./MOTIVATION.md).
 
 ## Contribution
 
-Any contribution is appreaciated. To start contributing, please, follow
+Any contribution is appreciated. To start contributing, please, follow
 the [Contribution Guidelines](./CONTRIBUTING.md).
