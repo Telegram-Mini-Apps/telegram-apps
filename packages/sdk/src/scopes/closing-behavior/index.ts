@@ -1,9 +1,8 @@
-import { postEvent } from '@/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
-import { computed } from '@/signals/computed/computed.js';
 
-import * as _ from './closingBehavior.private.js';
+import * as _ from './private.js';
 
 /*
  * fixme
@@ -12,16 +11,6 @@ import * as _ from './closingBehavior.private.js';
  */
 
 const STORAGE_KEY = 'closingBehavior';
-
-/**
- * True if the confirmation dialog should be shown while the user is trying to close the Mini App.
- */
-const isConfirmationNeeded = computed(_.isConfirmationNeeded);
-
-/**
- * True if the component is currently mounted.
- */
-const isMounted = computed(_.isMounted);
 
 /**
  * Disables the confirmation dialog when closing the Mini App.
@@ -64,8 +53,10 @@ function unmount(): void {
 export {
   disableConfirmation,
   enableConfirmation,
-  isMounted,
-  isConfirmationNeeded,
   mount,
   unmount,
 };
+export {
+  isConfirmationNeeded,
+  isMounted,
+} from './computed.js';
