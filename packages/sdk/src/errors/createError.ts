@@ -7,6 +7,6 @@ import type { ErrorType } from './errors.js';
  * @param message - error message.
  * @param cause - original error.
  */
-export function createError(type: ErrorType, message: string, cause?: unknown): SDKError {
-  return new SDKError(type, message, cause);
+export function createError(type: ErrorType, message?: string, cause?: unknown): SDKError {
+  return new SDKError(type, message || type, cause);
 }

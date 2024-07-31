@@ -1,62 +1,23 @@
-/**
- * Specified Mini Apps method is unsupported.
- */
 export const ERR_METHOD_UNSUPPORTED = 'ERR_METHOD_UNSUPPORTED';
-
-/**
- * Specified Mini Apps method parameter is unsupported.
- */
 export const ERR_METHOD_PARAMETER_UNSUPPORTED = 'ERR_METHOD_PARAMETER_UNSUPPORTED';
-
-/**
- * Current environment is not Telegram application.
- */
 export const ERR_UNKNOWN_ENV = 'ERR_UNKNOWN_ENV';
-
-/**
- * Telegram application returned and error while invoking custom method.
- */
 export const ERR_INVOKE_CUSTOM_METHOD_RESPONSE = 'ERR_INVOKE_CUSTOM_METHOD_RESPONSE';
-
-/**
- * Timeout reached.
- */
 export const ERR_TIMED_OUT = 'ERR_TIMED_OUT';
-
-/**
- * Value has unexpected type.
- */
 export const ERR_UNEXPECTED_TYPE = 'ERR_UNEXPECTED_TYPE';
-
-/**
- * Something went wrong during value parsing.
- */
 export const ERR_PARSE = 'ERR_PARSE';
-
-/**
- * Navigation entries list is empty.
- */
 export const ERR_NAVIGATION_HISTORY_EMPTY = 'ERR_NAVIGATION_LIST_EMPTY';
-
-/**
- * Navigation entries cursor is invalid.
- */
 export const ERR_NAVIGATION_INDEX_INVALID = 'ERR_NAVIGATION_CURSOR_INVALID';
-
-/**
- * Navigation entries item is invalid.
- */
 export const ERR_NAVIGATION_ITEM_INVALID = 'ERR_NAVIGATION_ITEM_INVALID';
-
-/**
- * SSR component initialization failed.
- */
 export const ERR_SSR_INIT = 'ERR_SSR_INIT';
-
-/**
- * Path starts from the invalid base.
- */
 export const ERR_INVALID_PATH_BASE = 'ERR_INVALID_PATH_BASE';
+export const ERR_POPUP_OPENED = 'ERR_POPUP_OPENED';
+export const ERR_POPUP_INVALID_PARAMS = 'ERR_POPUP_INVALID_PARAMS';
+export const ERR_INVOICE_OPENED = 'ERR_INVOICE_OPENED';
+export const ERR_INVALID_HOSTNAME = 'ERR_INVALID_HOSTNAME';
+export const ERR_INVALID_SLUG = 'ERR_INVALID_SLUG';
+export const ERR_DATA_INVALID_SIZE = 'ERR_DATA_INVALID_SIZE';
+export const ERR_ACCESS_DENIED = 'ERR_ACCESS_DENIED';
+export const ERR_SCANNER_OPENED = 'ERR_SCANNER_OPENED';
 
 export type ErrorType =
   | typeof ERR_METHOD_UNSUPPORTED
@@ -69,5 +30,13 @@ export type ErrorType =
   | typeof ERR_NAVIGATION_HISTORY_EMPTY
   | typeof ERR_NAVIGATION_INDEX_INVALID
   | typeof ERR_NAVIGATION_ITEM_INVALID
+  | typeof ERR_POPUP_OPENED
+  | typeof ERR_POPUP_INVALID_PARAMS
   | typeof ERR_SSR_INIT
-  | typeof ERR_INVALID_PATH_BASE;
+  | typeof ERR_INVALID_PATH_BASE
+  | typeof ERR_INVOICE_OPENED
+  | typeof ERR_INVALID_HOSTNAME
+  | typeof ERR_INVALID_SLUG
+  | typeof ERR_DATA_INVALID_SIZE
+  | typeof ERR_ACCESS_DENIED
+  | typeof ERR_SCANNER_OPENED;
