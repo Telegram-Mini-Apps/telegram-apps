@@ -6,12 +6,12 @@ import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEve
 
 import { postEvent } from '@/scopes/globals/globals.js';
 
-import * as _ from './qrScanner.private.js';
+import * as _ from './private.js';
 import {
   isOpened,
   close,
   open,
-} from './qrScanner.js';
+} from './index.js';
 
 beforeEach(() => {
   resetGlobals();
