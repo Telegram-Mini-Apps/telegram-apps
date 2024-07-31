@@ -7,7 +7,7 @@ import {
   vi,
 } from 'vitest';
 
-import { Logger } from './Logger.js';
+import { createLogger } from './createLogger.js';
 
 const now = new Date('2022-11-04T09:09:43.007Z');
 
@@ -19,13 +19,13 @@ afterEach(() => {
   vi.resetAllMocks();
 });
 
-describe('error', () => {
-  it('should call console.error()', () => {
-    const logger = new Logger('SDK');
+describe('log', () => {
+  it('should call console.log()', () => {
+    const [log] = createLogger('SDK');
     const spy = vi.fn();
-    vi.spyOn(console, 'error').mockImplementation(spy);
+    vi.spyOn(console, 'log').mockImplementation(spy);
 
-    logger.error('Test');
+    log('Test');
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith(
       '%c09:09:43.007%c / %cSDK',
@@ -37,13 +37,13 @@ describe('error', () => {
   });
 });
 
-describe('log', () => {
-  it('should call console.log()', () => {
-    const logger = new Logger('SDK');
+describe('error', () => {
+  it('should call console.error()', () => {
+    const [, error] = createLogger('SDK');
     const spy = vi.fn();
-    vi.spyOn(console, 'log').mockImplementation(spy);
+    vi.spyOn(console, 'error').mockImplementation(spy);
 
-    logger.log('Test');
+    error('Test');
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith(
       '%c09:09:43.007%c / %cSDK',

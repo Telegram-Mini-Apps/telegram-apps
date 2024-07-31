@@ -1,17 +1,16 @@
-import { subscribe } from '@/bridge/events/listening/subscribe.js';
-import { unsubscribe } from '@/bridge/events/listening/unsubscribe.js';
-import { Logger } from '@/logger/Logger.js';
-import type { MiniAppsSubscribeListener } from '@/bridge/events/types.js';
+import { subscribe, unsubscribe } from '@/bridge/events/listening.js';
+import { createLogger } from '@/logger/createLogger.js';
+import type { SubscribeListener } from '@/bridge/events/types.js';
 
-export const logger = new Logger('SDK', {
+export const [loggerLog, loggerError] = createLogger('SDK', {
   bgColor: 'forestgreen',
   textColor: 'white',
 });
 
 let debugEnabled = false;
 
-const onEvent: MiniAppsSubscribeListener = ({ name, payload }) => {
-  logger.log('Event received:', payload ? { name, payload } : { name });
+const onEvent: SubscribeListener = ({ name, payload }) => {
+  loggerLog('Event received:', payload ? { name, payload } : { name });
 };
 
 /**
@@ -32,7 +31,6 @@ export function setDebug(enable: boolean): void {
  */
 export function log(...args: any[]): void {
   if (debugEnabled) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    logger.log(...args);
+    loggerError(...args);
   }
 }
