@@ -1,15 +1,11 @@
-import type { BackButtonState } from '@/components/BackButton/types.js';
-import type { BiometryManagerState } from '@/components/BiometryManager/types.js';
-import type { ClosingBehaviorState } from '@/components/ClosingBehavior/types.js';
-import type { MainButtonState } from '@/components/MainButton/types.js';
-import type { MiniAppState } from '@/components/MiniApp/types.js';
-import type { SettingsButtonState } from '@/components/SettingsButton/types.js';
-import type { ThemeParamsParsed } from '@/components/ThemeParams/types.js';
-import type { ViewportState } from '@/components/Viewport/types.js';
-import type { SwipeBehaviorState } from '@/components/SwipeBehavior/types.js';
+import type { ThemeParams } from '@/scopes/theme-params/types.js';
+import type { State as BiometryManagerState } from '@/scopes/biometry-manager/types.js';
+import type { State as MainButtonState } from '@/scopes/main-button/types.js';
+import type { State as MiniAppState } from '@/scopes/mini-app/types.js';
+import type { Viewport } from '@/scopes/viewport/types.js';
 
 /**
- * Describes storage keys and according values.
+ * Describes storage keys and corresponding values.
  */
 export interface StorageParams {
   backButton: boolean;
@@ -18,14 +14,14 @@ export interface StorageParams {
   launchParams: string;
   mainButton: MainButtonState;
   miniApp: MiniAppState;
-  settingsButton: SettingsButtonState;
-  swipeBehavior: SwipeBehaviorState;
-  themeParams: ThemeParamsParsed;
-  viewport: ViewportState;
+  settingsButton: boolean;
+  swipeBehavior: boolean;
+  themeParams: ThemeParams;
+  viewport: Viewport.State;
 }
 
 /**
- * Key which could be used to store data in the storage.
+ * A key which could be used to store data in the storage.
  */
 export type StorageKey = keyof StorageParams;
 
@@ -35,11 +31,11 @@ export type StorageKey = keyof StorageParams;
 export type StorageValue<K extends StorageKey> = StorageParams[K];
 
 /**
- * Converts passed storage key to the formatted state.
+ * Converts a passed storage key to the formatted state.
  * @param key - storage key.
  */
 function formatKey(key: StorageKey): string {
-  return `telegram-apps/${key.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`)}`;
+  return `tapps/${key}`;
 }
 
 /**
@@ -59,5 +55,6 @@ export function getStorageValue<K extends StorageKey>(key: K): StorageValue<K> |
   const value = sessionStorage.getItem(formatKey(key));
   try {
     return value ? JSON.parse(value) as StorageValue<K> : undefined;
-  } catch { /* empty */ }
+  } catch { /* empty */
+  }
 }
