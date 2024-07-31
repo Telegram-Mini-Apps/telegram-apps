@@ -25,6 +25,23 @@ function expand(): void {
 }
 
 /**
+ * Formats value to make it stay in bounds [0, +Inf).
+ * @param value - value to format.
+ */
+function truncate(value: number): number {
+  return value < 0 ? 0 : value;
+}
+
+function formatState(state: Viewport.State): Viewport.State {
+  return {
+    isExpanded: state.isExpanded,
+    height: truncate(state.height),
+    width: truncate(state.width),
+    stableHeight: truncate(state.stableHeight),
+  };
+}
+
+/**
  * Mounts the component.
  */
 function mount(): void {
@@ -35,7 +52,7 @@ function mount(): void {
 
   function finalizeMount(state: Viewport.State): void {
     on('viewport_changed', onViewportChanged);
-    _.state.set(state);
+    _.state.set(formatState(state));
     _.state.sub(onStateChanged);
     _.mountError.set(undefined);
     _.isMounting.set(false);
@@ -86,16 +103,16 @@ function mount(): void {
     });
 }
 
-const onViewportChanged: MiniAppsEventListener<'viewport_changed'> = (data) => {
-  _.state.set({
+const onViewportChanged: EventListener<'viewport_changed'> = (data) => {
+  _.state.set(formatState({
     height: data.height,
     width: data.width,
     isExpanded: data.is_expanded,
     stableHeight: data.is_state_stable ? data.height : _.state().stableHeight,
-  });
+  }));
 };
 
-function onStateChanged(s: State) {
+function onStateChanged(s: Viewport.State): void {
   setStorageValue('viewport', s);
 }
 
