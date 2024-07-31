@@ -1,10 +1,9 @@
 import { postEvent } from '@/scopes/globals/globals.js';
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 import { isPageReload } from '@/navigation/isPageReload.js';
-import { computed } from '@/signals/computed/computed.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 
-import * as _ from './swipeBehavior.private.js';
+import * as _ from './private.js';
 
 /*
  * fixme
@@ -14,16 +13,6 @@ import * as _ from './swipeBehavior.private.js';
 
 const MINI_APPS_METHOD = 'web_app_setup_swipe_behavior';
 const STORAGE_KEY = 'swipeBehavior';
-
-/**
- * True if vertical swipes are enabled.
- */
-const isVerticalSwipesEnabled = computed(_.isVerticalSwipesEnabled);
-
-/**
- * True if the component is currently mounted.
- */
-const isMounted = computed(_.isMounted);
 
 /**
  * Disables vertical swipes.
@@ -66,8 +55,10 @@ function unmount(): void {
 export {
   disableVerticalSwipes,
   enableVerticalSwipes,
-  isMounted,
-  isVerticalSwipesEnabled,
   mount,
   unmount,
 };
+export {
+  isMounted,
+  isVerticalSwipesEnabled,
+} from './computed.js';
