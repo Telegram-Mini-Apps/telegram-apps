@@ -4,7 +4,7 @@ import { createRequestIdGenerator } from '@/request-id/createRequestIdGenerator.
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
 import type { RGB } from '@/colors/types.js';
 
-import { MiniApp } from './MiniApp.js';
+import { MiniApp } from './index.js';
 import type { MiniAppHeaderColor } from './types.js';
 
 interface CreateWebAppOptions {

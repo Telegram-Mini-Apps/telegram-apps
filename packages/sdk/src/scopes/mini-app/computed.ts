@@ -1,7 +1,8 @@
 import { computed } from '@/signals/computed/computed.js';
 import { isColorDark } from '@/colors/isColorDark.js';
 
-import * as _ from './miniApp.private.js';
+import * as _ from './private.js';
+import type { State } from './types.js';
 
 /**
  * The Mini App background color.
@@ -25,3 +26,11 @@ export const isDark = computed(() => isColorDark(_.backgroundColor()));
  * True if the component is currently mounted.
  */
 export const isMounted = computed(_.isMounted);
+
+/**
+ * Complete component state.
+ */
+export const state = computed<State>(() => ({
+  backgroundColor: backgroundColor(),
+  headerColor: headerColor(),
+}));
