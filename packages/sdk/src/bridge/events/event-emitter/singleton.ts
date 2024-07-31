@@ -1,7 +1,7 @@
 import { createSingleton } from '@/misc/createSingleton.js';
+import type { EventEmitter } from '@/bridge/events/types.js';
 
 import { createMiniAppsEventEmitter } from './createMiniAppsEventEmitter.js';
-import type { MiniAppsEventEmitter } from '../types.js';
 
 const [get, resetMiniAppsEventEmitter] = createSingleton(
   (reset) => {
@@ -27,7 +27,7 @@ const [get, resetMiniAppsEventEmitter] = createSingleton(
 /**
  * Returns Mini Apps event emitter singleton.
  */
-export function miniAppsEventEmitter(): MiniAppsEventEmitter {
+export function miniAppsEventEmitter(): EventEmitter {
   return get()[0];
 }
 

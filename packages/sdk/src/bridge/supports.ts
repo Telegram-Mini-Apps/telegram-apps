@@ -1,9 +1,5 @@
 import { compareVersions } from '@/version/compareVersions.js';
-import type {
-  MiniAppsMethodName,
-  MiniAppsMethodVersionedParams,
-  MiniAppsMethodWithVersionedParams,
-} from '@/bridge/methods/types/methods.js';
+import type * as MiniApps from '@/bridge/types.js';
 import type { Version } from '@/version/types.js';
 
 /**
@@ -21,21 +17,21 @@ function versionLessOrEqual(a: Version, b: Version): boolean {
  * @param param - method parameter
  * @param inVersion - platform version.
  */
-export function supports<M extends MiniAppsMethodWithVersionedParams>(
+export function supports<M extends MiniApps.MethodNameWithVersionedParams>(
   method: M,
-  param: MiniAppsMethodVersionedParams<M>,
+  param: MiniApps.MethodVersionedParams<M>,
   inVersion: Version,
 ): boolean;
 
 /**
- * Returns true in case, specified method is supported in passed version.
+ * Returns true in case, specified method is supported in a passed version.
  * @param method - method name.
  * @param inVersion - platform version.
  */
-export function supports(method: MiniAppsMethodName, inVersion: Version): boolean;
+export function supports(method: MiniApps.MethodName, inVersion: Version): boolean;
 
 export function supports(
-  method: MiniAppsMethodName,
+  method: MiniApps.MethodName,
   paramOrVersion: Version | string,
   inVersion?: string,
 ): boolean {

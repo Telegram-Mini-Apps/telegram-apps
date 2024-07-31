@@ -1,8 +1,7 @@
 import type { RGB } from '@/colors/types.js';
-import type { EventListener } from '@/events/event-emitter/types.js';
-import {type  RemoveEventListenerFn } from '@/events/types.js';
-import type { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
-import type { RequestId } from '@/request-id/types.js';
+import type { RemoveEventListenerFn } from '@/events/types.js';
+import type { EventListener as GenericEventListener } from '@/events/event-emitter/types.js';
+import type { EventEmitter as GenericEventEmitter } from '@/events/event-emitter/EventEmitter.js';
 
 export type InvoiceStatus =
   | 'paid'
@@ -17,7 +16,7 @@ export type WriteAccessRequestedStatus = 'allowed' | string;
 
 export type BiometryType = 'finger' | 'face' | string;
 
-export type BiometryTokenUpdateStatus = 'updated' | 'removed' | string;
+export type BiometryTokenUpdateStatus = 'updated' | 'removed' | 'failed' | string;
 
 export type BiometryAuthRequestStatus = 'failed' | 'authorized' | string;
 
@@ -25,7 +24,7 @@ export type BiometryAuthRequestStatus = 'failed' | 'authorized' | string;
  * Map where key is known event name, and value is its listener.
  * @see https://docs.telegram-mini-apps.com/platform/events
  */
-export interface MiniAppsEvents {
+export interface Events {
   /**
    * User clicked the BackButton.
    * @since v6.1
@@ -55,21 +54,30 @@ export interface MiniAppsEvents {
   biometry_info_received:
     | {
     /**
-     * Shows whether biometry is available.
+     * If true, indicates that biometric authentication is available on the current device.
      */
     available: false;
   }
     | {
     /**
-     * Shows whether biometry is available.
+     * If true, indicates that biometric authentication is available on the current device.
      */
     available: true;
     /**
-     * Shows whether permission to use biometrics has been requested.
+     * Indicates whether the app has previously requested permission to use biometrics.
      */
     access_requested: boolean;
     /**
-     * Shows whether permission to use biometrics has been granted.
+     * Indicates whether the user has granted the app permission to use biometrics.
+     *
+     * If false and access_requested is true may indicate that:
+     *
+     * - The user has simply canceled the permission popup, in which case
+     * a `web_app_biometry_request_access` event can be emitted to re-open the popup.
+     *
+     * - The user has denied the app permission to use biometrics, in which case the app should
+     * open a prompt notifying the user that the biometric settings must be changed to use
+     * biometrics.
      */
     access_granted: boolean;
     /**
@@ -77,7 +85,7 @@ export interface MiniAppsEvents {
      */
     device_id: string;
     /**
-     * Show whether local storage contains previously saved token.
+     * Show whether a token was safely stored on-device.
      */
     token_saved: boolean;
     /**
@@ -93,6 +101,12 @@ export interface MiniAppsEvents {
   biometry_token_updated: {
     /**
      * Update status.
+     *
+     * One of:
+     * - `updated` - If the token was successfully updated.
+     * - `removed` - If the token was successfully removed.
+     * - `failed` - If biometric authentication failed, or the app doesn't have permission to
+     * use biometrics.
      */
     status: BiometryTokenUpdateStatus;
   };
@@ -105,7 +119,7 @@ export interface MiniAppsEvents {
     /**
      * Passed during the `web_app_read_text_from_clipboard` method invocation `req_id` value.
      */
-    req_id: RequestId;
+    req_id: string;
     /**
      * Data extracted from the clipboard. The returned value will have the type `string` only in
      * the case, application has access to the clipboard.
@@ -121,7 +135,7 @@ export interface MiniAppsEvents {
     /**
      * Unique identifier of this invocation.
      */
-    req_id: RequestId;
+    req_id: string;
     /**
      * Method invocation successful result.
      */
@@ -182,7 +196,7 @@ export interface MiniAppsEvents {
     /**
      * Data extracted from the QR.
      */
-    data?: string;
+    data: string;
   };
   /**
    * Parent iframe requested current iframe reload.
@@ -292,29 +306,29 @@ export interface MiniAppsEvents {
 /**
  * Mini Apps event name.
  */
-export type MiniAppsEventName = keyof MiniAppsEvents;
+export type EventName = keyof Events;
 
 /**
  * Payload of the specified Mini Apps event.
  */
-export type MiniAppsEventPayload<E extends MiniAppsEventName> = MiniAppsEvents[E];
+export type EventPayload<E extends EventName> = Events[E];
 
 /**
  * Returns event listener for the specified Mini Apps event.
  */
-export type MiniAppsEventListener<E extends MiniAppsEventName> = EventListener<MiniAppsEvents[E]>;
+export type EventListener<E extends EventName> = GenericEventListener<Events[E]>;
 
-export interface MiniAppsEventEmitter
-  extends Pick<EventEmitter<MiniAppsEvents>, 'on' | 'off' | 'count'> {
-  subscribe(listener: MiniAppsSubscribeListener): RemoveEventListenerFn;
-  unsubscribe(listener: MiniAppsSubscribeListener): void;
+export interface EventEmitter
+  extends Pick<GenericEventEmitter<Events>, 'on' | 'off' | 'count'> {
+  subscribe(listener: SubscribeListener): RemoveEventListenerFn;
+  unsubscribe(listener: SubscribeListener): void;
 }
 
 /**
  * Mini Apps event listener used in `subscribe` and `unsubscribe` functions.
  */
-export type MiniAppsSubscribeListener = (
+export type SubscribeListener = (
   payload: {
-    [E in MiniAppsEventName]: { name: E; payload: MiniAppsEventPayload<E> };
-  }[MiniAppsEventName],
+    [E in EventName]: { name: E; payload: EventPayload<E> };
+  }[EventName],
 ) => void;

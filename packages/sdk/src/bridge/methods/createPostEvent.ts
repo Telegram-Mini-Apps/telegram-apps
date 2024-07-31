@@ -19,7 +19,6 @@ import { type PostEvent, postEvent } from './postEvent.js';
 export function createPostEvent(version: Version): PostEvent {
   return (method: any, params: any) => {
     // Firstly, check if a method is supported.
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (!supports(method, version)) {
       throw createError(ERR_METHOD_UNSUPPORTED, `Method "${method}" is unsupported in Mini Apps version ${version}`);
     }

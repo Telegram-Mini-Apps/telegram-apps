@@ -1,18 +1,17 @@
 import { log } from '@/debug/debug.js';
-import { hasExternalNotify } from '@/env/hasExternalNotify.js';
-import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { isIframe } from '@/env/isIframe.js';
+import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
+import { hasExternalNotify } from '@/env/hasExternalNotify.js';
 import { createError } from '@/errors/createError.js';
 import { ERR_UNKNOWN_ENV } from '@/errors/errors.js';
+import type {
+  MethodName,
+  MethodNameWithOptionalParams, MethodNameWithoutParams,
+  MethodNameWithRequiredParams,
+  MethodParams,
+} from '@/bridge/methods/types/index.js';
 
 import { targetOrigin as targetOriginFn } from '../target-origin.js';
-import type {
-  MiniAppsMethodName,
-  MiniAppsMethodParams,
-  MiniAppsMethodWithOptionalParams,
-  MiniAppsMethodWithoutParams,
-  MiniAppsMethodWithRequiredParams,
-} from './types/methods.js';
 
 interface PostEventOptions {
   /**
@@ -35,9 +34,9 @@ export type PostEvent = typeof postEvent;
  * @throws {SDKError} ERR_UNKNOWN_ENV
  * @see ERR_UNKNOWN_ENV
  */
-export function postEvent<Method extends MiniAppsMethodWithRequiredParams>(
+export function postEvent<Method extends MethodNameWithRequiredParams>(
   method: Method,
-  params: MiniAppsMethodParams<Method>,
+  params: MethodParams<Method>,
   options?: PostEventOptions,
 ): void;
 
@@ -49,9 +48,9 @@ export function postEvent<Method extends MiniAppsMethodWithRequiredParams>(
  * @throws {SDKError} ERR_UNKNOWN_ENV
  * @see ERR_UNKNOWN_ENV
  */
-export function postEvent<Method extends MiniAppsMethodWithOptionalParams>(
+export function postEvent<Method extends MethodNameWithOptionalParams>(
   method: Method,
-  params?: MiniAppsMethodParams<Method>,
+  params?: MethodParams<Method>,
   options?: PostEventOptions,
 ): void;
 
@@ -63,13 +62,13 @@ export function postEvent<Method extends MiniAppsMethodWithOptionalParams>(
  * @see ERR_UNKNOWN_ENV
  */
 export function postEvent(
-  method: MiniAppsMethodWithoutParams | MiniAppsMethodWithOptionalParams,
+  method: MethodNameWithoutParams | MethodNameWithOptionalParams,
   options?: PostEventOptions,
 ): void;
 
 export function postEvent(
-  eventType: MiniAppsMethodName,
-  paramsOrOptions?: MiniAppsMethodParams<MiniAppsMethodName> | PostEventOptions,
+  eventType: MethodName,
+  paramsOrOptions?: MethodParams<MethodName> | PostEventOptions,
   options?: PostEventOptions,
 ): void {
   let postOptions: PostEventOptions = {};

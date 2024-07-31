@@ -2,30 +2,30 @@ import { createWindow, type WindowSpy } from '@test-utils/createWindow.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { defineEventHandlers as defineEventHandlersFn } from '../event-handlers/defineEventHandlers.js';
+import { defineEventHandlers as defineEventHandlersFn } from '../handlers.js';
 import { createMiniAppsEventEmitter } from './createMiniAppsEventEmitter.js';
-import type { FnToSpy } from '../../../../test-utils/types.js';
-import type { MiniAppsEventName, MiniAppsEventPayload } from '../types.js';
+import type { EventName, EventPayload } from '../types.js';
 
-type TestCase<E extends MiniAppsEventName> =
-  | [input: any, expected: MiniAppsEventPayload<E>]
-  | MiniAppsEventPayload<E>;
+type TestCase<E extends EventName> =
+  | [input: any, expected: EventPayload<E>]
+  | EventPayload<E>;
 
 type TestCases = {
-  [E in MiniAppsEventName]: MiniAppsEventPayload<E> extends undefined
+  [E in EventName]: EventPayload<E> extends undefined
     ? [E]
     : [E, TestCase<E> | TestCase<E>[]];
-}[MiniAppsEventName][];
+}[EventName][];
 
 let windowSpy: WindowSpy;
-// eslint-disable-next-line max-len
-const defineEventHandlers = defineEventHandlersFn as unknown as FnToSpy<typeof defineEventHandlersFn>;
 
-vi.mock('../event-handlers/defineEventHandlers.js', async () => {
-  const actual = await vi.importActual('../event-handlers/defineEventHandlers.js');
+const defineEventHandlers = vi.mocked(defineEventHandlersFn);
+
+vi.mock('../handlers.js', async () => {
+  const actual = await vi.importActual('../handlers.js') as any;
 
   return {
-    defineEventHandlers: vi.fn((actual as any).defineEventHandlers),
+    removeEventHandlers: vi.fn(actual.removeEventHandlers),
+    defineEventHandlers: vi.fn(actual.defineEventHandlers),
   };
 });
 
