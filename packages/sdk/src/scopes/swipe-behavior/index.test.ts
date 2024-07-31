@@ -3,9 +3,9 @@ import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } 
 
 import { resetGlobals } from '@test-utils/resetGlobals.js';
 
-import { postEvent } from '@/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 
-import * as _ from './swipeBehavior.private.js';
+import * as _ from './private.js';
 import {
   isVerticalSwipesEnabled,
   disableVerticalSwipes,
@@ -13,7 +13,7 @@ import {
   isMounted,
   mount,
   unmount,
-} from './swipeBehavior.js';
+} from './index.js';
 
 beforeEach(() => {
   resetGlobals();
