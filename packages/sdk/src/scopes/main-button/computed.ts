@@ -1,10 +1,10 @@
 import { computed, type Computed } from '@/signals/computed/computed.js';
 
-import { state } from './mainButton.private.js';
+import * as _ from './private.js';
 import type { State } from './types.js';
 
 function createStateComputed<K extends keyof State>(key: K): Computed<State[K]> {
-  return computed(() => state()[key]);
+  return computed(() => _.state()[key]);
 }
 
 /**
@@ -18,6 +18,11 @@ export const backgroundColor = createStateComputed('backgroundColor');
 export const isActive = createStateComputed('isActive');
 
 /**
+ * True if the component is currently mounted.
+ */
+export const isMounted = computed(_.isMounted);
+
+/**
  * @see State.isLoaderVisible
  */
 export const isLoaderVisible = createStateComputed('isLoaderVisible');
@@ -26,6 +31,11 @@ export const isLoaderVisible = createStateComputed('isLoaderVisible');
  * @see State.isVisible
  */
 export const isVisible = createStateComputed('isVisible');
+
+/**
+ * Complete component state.
+ */
+export const state = computed(_.state);
 
 /**
  * @see State.text

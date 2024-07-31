@@ -3,12 +3,12 @@ import { mockPageReload, mockSessionStorageGetItem, mockSessionStorageSetItem } 
 
 import { resetGlobals } from '@test-utils/resetGlobals.js';
 
-import { postEvent } from '@/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
-import * as themeParams from '@/theme-params/themeParams.js';
-import type { ThemeParams } from '@/theme-params/types.js';
+import * as themeParams from '@/scopes/theme-params/themeParams.js';
+import type { ThemeParams } from '@/scopes/theme-params/types.js';
 
-import { state as _state, isMounted as _isMounted } from './mainButton.private.js';
+import { state as _state, isMounted as _isMounted } from './private.js';
 import {
   text,
   textColor,
@@ -23,7 +23,7 @@ import {
   setParams,
   mount,
   unmount,
-} from './mainButton.js';
+} from './index.js';
 
 vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({
   retrieveLaunchParams: () => ({
