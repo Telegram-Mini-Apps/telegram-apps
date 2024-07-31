@@ -9,10 +9,10 @@ describe('setStorageValue', () => {
   it('should call sessionStorage.setItem with formatted key and JSON.stringify applied to value', () => {
     const fn = vi.fn();
     vi.spyOn(sessionStorage, 'setItem').mockImplementationOnce(fn);
-    setStorageValue('backButton', { isVisible: false });
+    setStorageValue('backButton', false);
 
     expect(fn).toHaveBeenCalledOnce();
-    expect(fn).toHaveBeenCalledWith('telegram-apps/back-button', '{"isVisible":false}');
+    expect(fn).toHaveBeenCalledWith('tapps/backButton', 'false');
   });
 });
 
@@ -21,7 +21,7 @@ describe('getStorageValue', () => {
     const getItem = vi.spyOn(sessionStorage, 'getItem').mockImplementation(() => '{"isVisible":false}');
     let value = getStorageValue('backButton');
     expect(getItem).toHaveBeenCalledOnce();
-    expect(getItem).toHaveBeenCalledWith('telegram-apps/back-button');
+    expect(getItem).toHaveBeenCalledWith('tapps/backButton');
     expect(value).toStrictEqual({ isVisible: false });
 
     getItem.mockImplementation(() => null);
