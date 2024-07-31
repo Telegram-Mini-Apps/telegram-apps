@@ -4,9 +4,9 @@ import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } 
 import { resetGlobals } from '@test-utils/resetGlobals.js';
 
 import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
-import { postEvent, version } from '@/globals/globals.js';
+import { postEvent, version } from '@/scopes/globals/globals.js';
 
-import * as _ from './backButton.private.js';
+import * as _ from './private.js';
 import {
   show,
   isVisible,
@@ -16,7 +16,7 @@ import {
   onClick,
   unmount,
   offClick,
-} from './backButton.js';
+} from './index.js';
 
 beforeEach(() => {
   resetGlobals();
