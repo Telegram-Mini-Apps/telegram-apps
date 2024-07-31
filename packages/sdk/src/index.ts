@@ -1,31 +1,27 @@
 /**
  * Bridge.
  */
-export { off } from '@/bridge/events/listening/off.js';
-export { on } from '@/bridge/events/listening/on.js';
-export { subscribe } from '@/bridge/events/listening/subscribe.js';
-export { unsubscribe } from '@/bridge/events/listening/unsubscribe.js';
-export * from '@/bridge/events/types.js';
+export { defineEventHandlers, removeEventHandlers } from '@/bridge/events/handlers.js';
+export { on, off, subscribe, unsubscribe } from '@/bridge/events/listening.js';
 export { createPostEvent } from '@/bridge/methods/createPostEvent.js';
-export { type PostEvent, postEvent as defaultPostEvent } from '@/bridge/methods/postEvent.js';
-export * from '@/bridge/methods/types/index.js';
-export { setTargetOrigin, targetOrigin } from '@/bridge/target-origin.js';
-export { captureSameReq } from '@/bridge/captureSameReq.js';
+export { postEvent, type PostEvent } from '@/bridge/methods/postEvent.js';
 export { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
 export {
   request,
-  type RequestOptions,
-  type RequestCaptureEventFn,
-  type RequestCaptureEventsFn,
   type RequestEventsPayloads,
+  type RequestCaptureEventsFn,
+  type RequestCaptureEventFn,
+  type RequestOptions,
 } from '@/bridge/request.js';
 export { supports } from '@/bridge/supports.js';
+export { resetTargetOrigin, setTargetOrigin, targetOrigin } from '@/bridge/target-origin.js';
+export * as MiniApps from '@/bridge/types.js';
 
 /**
  * Classnames.
  */
 export { classNames } from '@/classnames/classNames.js';
-export { type MergeClassNames, mergeClassNames } from '@/classnames/mergeClassNames.js';
+export { mergeClassNames, type MergeClassNames } from '@/classnames/mergeClassNames.js';
 
 /**
  * Colors.
@@ -34,178 +30,12 @@ export { isColorDark } from '@/colors/isColorDark.js';
 export { isRGB } from '@/colors/isRGB.js';
 export { isRGBShort } from '@/colors/isRGBShort.js';
 export { toRGB } from '@/colors/toRGB.js';
-export * from '@/colors/types.js';
+export type { RGB, RGBShort } from '@/colors/types.js';
 
 /**
- * Components.
+ * CSS Variables.
  */
-
-// BiometryManager.
-export { BiometryManager } from '@/components/BiometryManager/BiometryManager.js';
-export { initBiometryManager } from '@/components/BiometryManager/initBiometryManager.js';
-export { requestBiometryInfo } from '@/components/BiometryManager/requestBiometryInfo.js';
-export type {
-  BiometryManagerAuthenticateOptions,
-  BiometryManagerProps,
-  BiometryManagerRequestAccessOptions,
-  BiometryManagerUpdateTokenOptions,
-  BiometryManagerState,
-} from '@/components/BiometryManager/types.js';
-
-// ClosingBehavior.
-export { ClosingBehavior } from '@/components/ClosingBehavior/ClosingBehavior.js';
-export { initClosingBehavior } from '@/components/ClosingBehavior/initClosingBehavior.js';
-export type {
-  ClosingBehaviorEventListener,
-  ClosingBehaviorEventName,
-  ClosingBehaviorEvents,
-  ClosingBehaviorState,
-} from '@/components/ClosingBehavior/types.js';
-
-// CloudStorage.
-export { CloudStorage } from '@/components/CloudStorage/CloudStorage.js';
-export { initCloudStorage } from '@/components/CloudStorage/initCloudStorage.js';
-
-// HapticFeedback.
-export { HapticFeedback } from '@/components/HapticFeedback/HapticFeedback.js';
-export { initHapticFeedback } from '@/components/HapticFeedback/initHapticFeedback.js';
-
-// InitData.
-export { InitData } from '@/components/InitData/InitData.js';
-export { initInitData } from '@/components/InitData/initInitData.js';
-export { parseInitData } from '@/components/InitData/parseInitData.js';
-export type {
-  Chat,
-  ChatType,
-  User,
-  InitDataParsed,
-} from '@/components/InitData/types.js';
-
-// Invoice.
-export { initInvoice } from '@/components/Invoice/initInvoice.js';
-export { Invoice } from '@/components/Invoice/Invoice.js';
-export type {
-  InvoiceEventListener,
-  InvoiceEventName,
-  InvoiceEvents,
-  InvoiceState,
-} from '@/components/Invoice/types.js';
-
-// MainButton.
-export { initMainButton } from '@/components/MainButton/initMainButton.js';
-export { MainButton } from '@/components/MainButton/MainButton.js';
-export type {
-  MainButtonEventListener,
-  MainButtonEventName,
-  MainButtonEvents,
-  MainButtonParams,
-  MainButtonProps,
-  MainButtonState,
-} from '@/components/MainButton/types.js';
-
-// MiniApp.
-export { initMiniApp } from '@/components/MiniApp/initMiniApp.js';
-export { MiniApp } from '@/components/MiniApp/MiniApp.js';
-export type {
-  MiniAppEventListener,
-  MiniAppEventName,
-  MiniAppEvents,
-  MiniAppHeaderColor,
-  MiniAppProps,
-  MiniAppState,
-  RequestedContact,
-} from '@/components/MiniApp/types.js';
-
-// Popup.
-export { initPopup } from '@/components/Popup/initPopup.js';
-export { Popup } from '@/components/Popup/Popup.js';
-export type {
-  OpenPopupOptions,
-  OpenPopupOptionsButton,
-  PopupEventListener,
-  PopupEventName,
-  PopupEvents,
-  PopupState,
-} from '@/components/Popup/types.js';
-
-// QRScanner.
-export { initQRScanner } from '@/components/QRScanner/initQRScanner.js';
-export { QRScanner } from '@/components/QRScanner/QRScanner.js';
-export type {
-  QRScannerEventListener,
-  QRScannerEventName,
-  QRScannerEvents,
-  QRScannerState,
-  QRScannerOpenOptions,
-} from '@/components/QRScanner/types.js';
-
-// SettingsButton.
-export { initSettingsButton } from '@/components/SettingsButton/initSettingsButton.js';
-export { SettingsButton } from '@/components/SettingsButton/SettingsButton.js';
-export type {
-  SettingsButtonEventListener,
-  SettingsButtonEventName,
-  SettingsButtonEvents,
-  SettingsButtonState,
-} from '@/components/SettingsButton/types.js';
-
-// SwipeBehavior.
-export { SwipeBehavior } from '@/components/SwipeBehavior/SwipeBehavior.js';
-export { initSwipeBehavior } from '@/components/SwipeBehavior/initSwipeBehavior.js';
-export type {
-  SwipeBehaviorEventListener,
-  SwipeBehaviorEventName,
-  SwipeBehaviorEvents,
-  SwipeBehaviorState,
-} from '@/components/SwipeBehavior/types.js';
-
-// ThemeParams.
-export { initThemeParams } from '@/components/ThemeParams/initThemeParams.js';
-export { parseThemeParams } from '@/components/ThemeParams/parsing/parseThemeParams.js';
-export { serializeThemeParams } from '@/components/ThemeParams/parsing/serializeThemeParams.js';
-export { requestThemeParams } from '@/components/ThemeParams/requestThemeParams.js';
-export { ThemeParams } from '@/components/ThemeParams/ThemeParams.js';
-export type {
-  ThemeParamsEventListener,
-  ThemeParamsEventName,
-  ThemeParamsEvents,
-  ThemeParamsKey,
-  ThemeParamsParsed,
-  ThemeParamsState,
-} from '@/components/ThemeParams/types.js';
-
-// Utils.
-export { initUtils } from '@/components/Utils/initUtils.js';
-export { Utils } from '@/components/Utils/Utils.js';
-
-// Viewport.
-export { initViewport } from '@/components/Viewport/initViewport.js';
-export {
-  requestViewport,
-  type RequestViewportResult,
-} from '@/components/Viewport/requestViewport.js';
-export type {
-  ViewportEventListener,
-  ViewportEventName,
-  ViewportEvents,
-  ViewportProps,
-  ViewportState,
-} from '@/components/Viewport/types.js';
-export { Viewport } from '@/components/Viewport/Viewport.js';
-
-/**
- * CSS Vars.
- */
-export { bindMiniAppCSSVars, type GetMiniAppCSSVarNameFn } from '@/css-vars/bindMiniAppCSSVars.js';
-export {
-  bindThemeParamsCSSVars,
-  type GetThemeParamsCSSVarNameFn,
-} from '@/css-vars/bindThemeParamsCSSVars.js';
-export {
-  bindViewportCSSVars,
-  type GetViewportCSSVarNameFn,
-} from '@/css-vars/bindViewportCSSVars.js';
-export { setCSSVar } from '@/css-vars/setCSSVar.js';
+// FIXME
 
 /**
  * Debug.
@@ -215,7 +45,7 @@ export { setDebug } from '@/debug/debug.js';
 /**
  * Env.
  */
-export { initWeb } from '@/env/initWeb.js';
+export { init } from '@/env/init.js';
 export { isIframe } from '@/env/isIframe.js';
 export { isSSR } from '@/env/isSSR.js';
 export { isTMA } from '@/env/isTMA.js';
@@ -224,7 +54,8 @@ export { mockTelegramEnv } from '@/env/mockTelegramEnv.js';
 /**
  * Errors.
  */
-export * from '@/errors/errors.js';
+export * as ERRORS from '@/errors/errors.js';
+export type { ErrorType } from '@/errors/errors.js';
 export { isSDKError } from '@/errors/isSDKError.js';
 export { isSDKErrorOfType } from '@/errors/isSDKErrorOfType.js';
 export { SDKError } from '@/errors/SDKError.js';
@@ -232,9 +63,7 @@ export { SDKError } from '@/errors/SDKError.js';
 /**
  * Events.
  */
-export { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
-export * from '@/events/event-emitter/types.js';
-export * from '@/events/types.js';
+export type { RemoveEventListenerFn } from '@/events/types.js';
 
 /**
  * Launch params.
@@ -242,21 +71,7 @@ export * from '@/events/types.js';
 export { parseLaunchParams } from '@/launch-params/parseLaunchParams.js';
 export { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
 export { serializeLaunchParams } from '@/launch-params/serializeLaunchParams.js';
-export * from '@/launch-params/types.js';
-
-/**
- * Misc.
- */
-export type {
-  FactoryOptions,
-  FactoryStatic,
-  Factory,
-  FactoryDynamic,
-  InitComponentFn,
-  InitStaticComponentFn,
-  InitDynamicComponentFn,
-  WithOnChange,
-} from '@/misc/createComponentInitFn/types.js';
+export type * from '@/launch-params/types.js';
 
 /**
  * Navigation.
@@ -299,9 +114,67 @@ export { searchParams } from '@/parsing/parsers/searchParams.js';
 export { string } from '@/parsing/parsers/string.js';
 
 /**
- * Request ID
+ * SCOPES
  */
-export type { RequestId } from '@/request-id/types.js';
+export * as backButton from '@/scopes/back-button/index.js';
+
+export * as biometryManager from '@/scopes/biometry-manager/index.js';
+export * as BiometryManager from '@/scopes/biometry-manager/static.js';
+export type * from '@/scopes/biometry-manager/types.js';
+
+export * as closingBehavior from '@/scopes/closing-behavior/index.js';
+export * as cloudStorage from '@/scopes/cloud-storage/index.js';
+
+export {
+  shareURL,
+  openLink,
+  type OpenLinkOptions,
+  openTelegramLink,
+} from '@/scopes/common/links.js';
+export {
+  requestPhoneAccess,
+  requestWriteAccess,
+  type RequestedContact,
+  requestContact,
+} from '@/scopes/common/privacy.js';
+export { switchInlineQuery, readTextFromClipboard } from '@/scopes/common/utils.js';
+
+export * as Globals from '@/scopes/globals/globals.js';
+export * as hapticFeedback from '@/scopes/haptic-feedback/index.js';
+
+export * as InitData from '@/scopes/init-data/static.js';
+export * as initData from '@/scopes/init-data/index.js';
+export type * from '@/scopes/init-data/types.js';
+
+export * as invoice from '@/scopes/invoice/index.js';
+
+export * as mainButton from '@/scopes/main-button/index.js';
+export type * as MainButton from '@/scopes/main-button/types.js';
+
+export * as miniApp from '@/scopes/mini-app/index.js';
+export type * as MiniApp from '@/scopes/main-button/types.js';
+
+export * as popup from '@/scopes/popup/index.js';
+export type * as Popup from '@/scopes/popup/types.js';
+
+export * as qrScanner from '@/scopes/qr-scanner/index.js';
+export * as settingsButton from '@/scopes/settings-button/index.js';
+export * as swipeBehavior from '@/scopes/swipe-behavior/index.js';
+
+export * as ThemeParams from '@/scopes/theme-params/static.js';
+export * as themeParams from '@/scopes/theme-params/themeParams.js';
+export type * from '@/scopes/theme-params/types.js';
+
+export * as viewport from '@/scopes/viewport/index.js';
+export * as Viewport from '@/scopes/viewport/static.js';
+export type * from '@/scopes/viewport/types.js';
+
+/**
+ * Signals.
+ */
+export { signal, type Signal, type SignalOptions } from '@/signals/signal/signal.js';
+export { computed, type Computed } from '@/signals/computed/computed.js';
+export type { ListenerFn, UnsubscribeFn } from '@/signals/types.js';
 
 /**
  * Timeout.
@@ -318,11 +191,3 @@ export * from '@/types/index.js';
  */
 export { compareVersions } from '@/version/compareVersions.js';
 export type { Version } from '@/version/types.js';
-
-
-/**
- * EXPERIMENTS
- */
-export { postEvent, version } from '@/components/globals.js';
-export { configure, type ConfigureOptions } from '@/components/configure.js';
-export * as BackButton from '@/components/BackButton.js';
