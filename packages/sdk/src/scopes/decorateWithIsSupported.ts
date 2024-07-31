@@ -1,6 +1,6 @@
 import { supports } from '@/bridge/supports.js';
 import { version } from '@/scopes/globals/globals.js';
-import type { MiniAppsMethodName } from '@/bridge/methods/types/index.js';
+import type { MethodName } from '@/bridge/methods/types/index.js';
 
 export type WithIsSupported<F extends (...args: any) => any> = F & {
   /**
@@ -20,7 +20,7 @@ export type WithIsSupported<F extends (...args: any) => any> = F & {
 /*@__NO_SIDE_EFFECTS__*/
 export function decorateWithIsSupported<F extends (...args: any) => any>(
   fn: F,
-  method: MiniAppsMethodName,
+  method: MethodName,
   additionalCheck?: () => boolean,
 ): WithIsSupported<F> {
   return Object.assign(fn, {

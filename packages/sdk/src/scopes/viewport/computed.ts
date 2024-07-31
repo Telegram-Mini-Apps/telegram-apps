@@ -1,9 +1,9 @@
 import { computed, type Computed } from '@/signals/computed/computed.js';
 
 import * as _ from './private.js';
-import type { State } from './types.js';
+import type { Viewport } from './types.js';
 
-function createStateComputed<K extends keyof State>(key: K): Computed<State[K] | undefined> {
+function createStateComputed<K extends keyof Viewport.State>(key: K): Computed<Viewport.State[K] | undefined> {
   return computed(() => _.state()[key]);
 }
 

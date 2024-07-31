@@ -1,6 +1,6 @@
 import { signal } from '@/signals/signal/signal.js';
 
-import type { State } from './types.js';
+import type { Viewport } from './types.js';
 
 /**
  * Formats value to make it stay in bounds [0, +Inf).

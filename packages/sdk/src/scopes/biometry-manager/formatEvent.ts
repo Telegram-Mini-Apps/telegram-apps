@@ -1,4 +1,4 @@
-import type { BiometryType, MiniAppsEventPayload } from '@/bridge/events/types.js';
+import type { BiometryType, EventPayload } from '@/bridge/events/types.js';
 
 export interface FormatBiometryInfoResult {
   /**
@@ -33,7 +33,7 @@ export interface FormatBiometryInfoResult {
  * @see biometry_info_received
  */
 export function formatEvent(
-  event: MiniAppsEventPayload<'biometry_info_received'>,
+  event: EventPayload<'biometry_info_received'>,
 ): FormatBiometryInfoResult {
   const data = event.available ? event : {
     available: false,
