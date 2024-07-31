@@ -13,3 +13,7 @@ export function mockPerformanceGetEntriesByType(
     .spyOn(performance, 'getEntriesByType')
     .mockImplementation(formatImplementation(impl));
 }
+
+export function mockPageReload() {
+  return mockPerformanceGetEntriesByType([{ type: 'reload' }] as any);
+}
