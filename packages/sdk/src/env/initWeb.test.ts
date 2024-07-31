@@ -2,18 +2,15 @@ import { afterEach, vi, it, expect } from 'vitest';
 import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
 import { initWeb } from '@/env/initWeb.js';
 import { postEvent as postEventFn } from '@/bridge/methods/postEvent.js';
-import { FnToSpy } from '@test-utils/types.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 import { createWindow } from '@test-utils/createWindow.js';
 import { mockDocument } from 'test-utils';
 
-const postEvent = postEventFn as unknown as FnToSpy<typeof postEventFn>;
+const postEvent = vi.mocked(postEventFn);
 
-vi.mock('@/bridge/methods/postEvent.js', () => {
-  return {
-    postEvent: vi.fn(),
-  };
-});
+vi.mock('@/bridge/methods/postEvent.js', () => ({
+  postEvent: vi.fn(),
+}));
 
 afterEach(() => {
   resetMiniAppsEventEmitter();
