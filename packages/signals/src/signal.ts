@@ -11,6 +11,12 @@ export interface SignalOptions<T> {
    * @returns True if values are considered the same.
    */
   equals?(this: void, a: T, b: T): boolean;
+  /**
+   * Signal.set enhancer.
+   * @param signal - an underlying signal (non-enhanced).
+   * @param value - value to set.
+   */
+  set?(this: void, signal: Signal<T>, value: T): void;
 }
 
 export interface Signal<T> {
@@ -130,6 +136,22 @@ export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T
       },
     } satisfies Pick<Signal<T>, 'set' | 'reset' | 'sub' | 'unsub' | 'unsubAll'>,
   );
+
+  // TODO: tests
+  const { set: enhanceSet } = options;
+  if (enhanceSet) {
+    return Object.assign(
+      function get() {
+        return s();
+      },
+      {
+        ...s,
+        set(value: T): void {
+          enhanceSet(s, value);
+        }
+      }
+    );
+  }
 
   return s;
 }
