@@ -1,7 +1,6 @@
-import { createSingleton } from '@/createSingleton.js';
+import { createSingleton } from '@/utils/createSingleton.js';
+import { createMiniAppsEventEmitter } from '@/events/event-emitter/createMiniAppsEventEmitter.js';
 import type { EventEmitter } from '@/events/types.js';
-
-import { createMiniAppsEventEmitter } from './createMiniAppsEventEmitter.js';
 
 const [get, resetMiniAppsEventEmitter] = createSingleton(
   (reset) => {

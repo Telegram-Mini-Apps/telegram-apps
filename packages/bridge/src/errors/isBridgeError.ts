@@ -1,4 +1,4 @@
-import { BridgeError } from './BridgeError.js';
+import { BridgeError } from '@/errors/BridgeError.js';
 
 /**
  * @returns True, if passed value is an instance of BridgeError.

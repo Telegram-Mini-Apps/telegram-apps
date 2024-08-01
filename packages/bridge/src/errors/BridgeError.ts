@@ -1,4 +1,4 @@
-import type { ErrorType } from './errors.js';
+import type { ErrorType } from '@/errors/errors.js';
 
 /**
  * Error used across the SDK.

@@ -3,7 +3,7 @@ import type { If, IsNever } from '@telegram-apps/types';
 import { on } from '@/events/listening.js';
 import { withTimeout } from '@/timeout/withTimeout.js';
 import { postEvent as defaultPostEvent } from '@/methods/postEvent.js';
-import { createCleanup } from '@/createCleanup.js';
+import { createCleanup } from '@/utils/createCleanup.js';
 import type { MethodName, MethodParams } from '@/methods/types/index.js';
 import type { EventName, EventPayload } from '@/events/types.js';
 import type { ExecuteWithOptions } from '@/types.js';

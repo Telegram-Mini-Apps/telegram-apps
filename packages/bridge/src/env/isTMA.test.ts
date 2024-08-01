@@ -1,12 +1,12 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import { createWindow } from '@test-utils/createWindow.js';
 
-import { request as requestFn } from '../request.js';
+import { request as requestFn } from '@/utils/request.js';
 import { isTMA } from './isTMA.js';
 
 const request = vi.mocked(requestFn);
 
-vi.mock('../request.js', () => ({
+vi.mock('@/utils/request.js', () => ({
   request: vi.fn(),
 }));
 

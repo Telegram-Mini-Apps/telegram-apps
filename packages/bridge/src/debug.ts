@@ -1,6 +1,6 @@
-import { subscribe, unsubscribe } from './events/listening.js';
-import { createLogger } from './createLogger.js';
-import type { SubscribeListener } from './events/types.js';
+import { subscribe, unsubscribe } from '@/events/listening.js';
+import { createLogger } from '@/utils/createLogger.js';
+import type { SubscribeListener } from '@/events/types.js';
 
 export const [log, error] = createLogger('Bridge', {
   bgColor: 'blue',

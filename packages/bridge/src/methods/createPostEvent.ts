@@ -1,10 +1,10 @@
 import type { Version } from '@telegram-apps/types';
 
-import { createError } from '../errors/createError.js';
-import { ERR_METHOD_PARAMETER_UNSUPPORTED, ERR_METHOD_UNSUPPORTED } from '../errors/errors.js';
-import { isRecord } from '../isRecord.js';
-import { supports } from './supports.js';
-import { type PostEvent, postEvent } from './postEvent.js';
+import { createError } from '@/errors/createError.js';
+import { ERR_METHOD_PARAMETER_UNSUPPORTED, ERR_METHOD_UNSUPPORTED } from '@/errors/errors.js';
+import { isRecord } from '@/utils/isRecord.js';
+import { supports } from '@/methods/supports.js';
+import { type PostEvent, postEvent } from '@/methods/postEvent.js';
 
 /**
  * Creates a function which checks if specified method and parameters are supported.
