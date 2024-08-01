@@ -1,4 +1,4 @@
-import type { InitData, InitDataParsed } from '@telegram-apps/sdk';
+import type { InitData } from '@telegram-apps/types';
 
 import { initDataToSearchParams } from './initDataToSearchParams.js';
 import type { SharedOptions, SignDataAsyncFn, SignDataSyncFn, Text } from './types.js';
@@ -35,7 +35,7 @@ function processSign(actual: string, expected: string): void | never {
  * @throws {Error} Init data expired
  */
 export function validate(
-  value: InitData | InitDataParsed | string | URLSearchParams,
+  value: InitData | string | URLSearchParams,
   token: Text,
   signData: SignDataSyncFn,
   options?: ValidateOptions,
@@ -53,14 +53,14 @@ export function validate(
  * @throws {Error} Init data expired
  */
 export function validate(
-  value: InitData | InitDataParsed | string | URLSearchParams,
+  value: InitData | string | URLSearchParams,
   token: Text,
   signData: SignDataAsyncFn,
   options?: ValidateOptions,
 ): Promise<void>;
 
 export function validate(
-  value: InitData | InitDataParsed | string | URLSearchParams,
+  value: InitData | string | URLSearchParams,
   token: Text,
   signData: SignDataSyncFn | SignDataAsyncFn,
   options: ValidateOptions = {},

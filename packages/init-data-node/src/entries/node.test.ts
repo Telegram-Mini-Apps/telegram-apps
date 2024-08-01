@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { InitDataParsed } from '@telegram-apps/sdk';
+import type { InitData } from '@telegram-apps/types';
 
 import { validate, sign, signData } from './node';
 
@@ -9,7 +9,7 @@ const spObject = new URLSearchParams(sp);
 const secretToken = '5768337691:AAH5YkoiEuPk8-FZa32hStHTqXiLPtAEhx8';
 const secretTokenHashed = 'a5c609aa52f63cb5e6d8ceb6e4138726ea82bbc36bb786d64482d445ea38ee5f';
 
-const initData: InitDataParsed = {
+const initData: InitData = {
   authDate: new Date(1000),
   canSendAfter: 10000,
   chat: {
