@@ -1,5 +1,4 @@
 import { defineConfig } from 'vitest/config';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
 
 export default defineConfig(({ mode }) => {
@@ -9,7 +8,6 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
-      tsconfigPaths({ projects: [tsconfigPath] }),
       dts({ outDir: 'dist/dts', tsconfigPath }),
     ],
     build: {
