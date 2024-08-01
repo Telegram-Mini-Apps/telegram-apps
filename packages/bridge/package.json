@@ -43,6 +43,12 @@
     "build:default": "vite build -c vite.config.ts",
     "build:iife": "vite build -c vite.iife.config.ts"
   },
+  "dependencies": {
+    "@telegram-apps/event-emitter": "workspace:*",
+    "@telegram-apps/parsing": "workspace:*",
+    "@telegram-apps/signals": "workspace:*",
+    "@telegram-apps/types": "workspace:*"
+  },
   "devDependencies": {
     "test-utils": "workspace:*",
     "tsconfig": "workspace:*"
