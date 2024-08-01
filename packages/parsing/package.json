@@ -42,7 +42,7 @@
     "build": "vite build -c vite.config.ts"
   },
   "dependencies": {
-    "@telegram-apps/types": "workspace:*"
+    "@telegram-apps/types": "workspace:^"
   },
   "devDependencies": {
     "test-utils": "workspace:*",
