@@ -1,4 +1,4 @@
-import type { RGB } from './colors.js';
+import type { RGB } from '../colors.js';
 
 export type ThemeParamsKey =
   | 'accentTextColor'

@@ -1,5 +1,5 @@
 import type { InitData } from './init-data.js';
-import type { Platform } from './mini-apps.js';
+import type { Platform } from './common.js';
 import type { ThemeParams } from './theme-params.js';
 
 /**
