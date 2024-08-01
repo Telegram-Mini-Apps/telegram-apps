@@ -28,6 +28,37 @@ export type {
   BiometryTokenUpdateStatus,
   BiometryType,
 } from '@/events/types.js';
+
+export type {
+  AnyInvokeCustomMethodParams,
+  AnyHapticFeedbackParams,
+  CustomMethodName,
+  CustomMethodParams,
+  CustomMethodsParams,
+  HeaderColorKey,
+  ImpactHapticFeedbackParams,
+  ImpactHapticFeedbackStyle,
+  MethodParams,
+  MethodNameWithVersionedParams,
+  MethodName,
+  MethodNameWithRequiredParams,
+  MethodNameWithOptionalParams,
+  MethodVersionedParams,
+  Methods,
+  MethodNameWithoutParams,
+  NotificationHapticFeedbackType,
+  NotificationHapticFeedbackParams,
+  OpenLinkBrowser,
+  PopupParams,
+  PopupButton,
+  SelectionHapticFeedbackParams,
+  SwitchInlineQueryChatType,
+} from '@/methods/types/index.js';
+export { createPostEvent } from '@/methods/createPostEvent.js';
+export { postEvent, type PostEvent } from '@/methods/postEvent.js';
+export { supports } from '@/methods/supports.js';
+export { targetOrigin } from '@/methods/targetOrigin.js';
+
 export { compareVersions } from '@/utils/compareVersions.js';
 export { createCleanup } from '@/utils/createCleanup.js';
 export { createLogger } from '@/utils/createLogger.js';
