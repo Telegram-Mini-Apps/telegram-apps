@@ -1,4 +1,4 @@
-import type { RGBShort } from './types.js';
+import type { RGBShort } from '@telegram-apps/types';
 
 /**
  * Returns true in case, passed value has #RGB format.
