@@ -1,11 +1,11 @@
 import type { Version } from '@telegram-apps/types';
 
-import { compareVersions } from '../compareVersions.js';
+import { compareVersions } from '@/utils/compareVersions.js';
 import type {
   MethodName,
   MethodNameWithVersionedParams,
   MethodVersionedParams,
-} from './types/index.js';
+} from '@/methods/types/index.js';
 
 /**
  * Returns true if "a" version is less than or equal to "b" version.

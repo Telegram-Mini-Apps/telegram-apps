@@ -1,17 +1,17 @@
-import { log } from '../debug.js';
-import { isIframe } from '../env/isIframe.js';
-import { hasWebviewProxy } from '../env/hasWebviewProxy.js';
-import { hasExternalNotify } from '../env/hasExternalNotify.js';
-import { createError } from '../errors/createError.js';
-import { ERR_UNKNOWN_ENV } from '../errors/errors.js';
-import { targetOrigin } from './targetOrigin.js';
+import { log } from '@/debug.js';
+import { isIframe } from '@/env/isIframe.js';
+import { isRecord } from '@/utils/isRecord.js';
+import { createError } from '@/errors/createError.js';
+import { ERR_UNKNOWN_ENV } from '@/errors/errors.js';
+import { targetOrigin } from '@/methods/targetOrigin.js';
 import type {
   MethodName,
   MethodNameWithOptionalParams,
   MethodNameWithoutParams,
   MethodNameWithRequiredParams,
   MethodParams,
-} from './types/index.js';
+} from '@/methods/types/index.js';
+import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 
 interface PostEventOptions {
   /**

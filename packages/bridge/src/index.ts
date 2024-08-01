@@ -28,19 +28,24 @@ export type {
   BiometryTokenUpdateStatus,
   BiometryType,
 } from '@/events/types.js';
-export { compareVersions } from '@/compareVersions.js';
-export { createCleanup } from '@/createCleanup.js';
-export { createLogger } from '@/createLogger.js';
-export { createSingleton } from '@/createSingleton.js';
+export { compareVersions } from '@/utils/compareVersions.js';
+export { createCleanup } from '@/utils/createCleanup.js';
+export { createLogger } from '@/utils/createLogger.js';
+export { createSingleton } from '@/utils/createSingleton.js';
 export { setDebug } from '@/debug.js';
-export { invokeCustomMethod } from '@/invokeCustomMethod.js';
-export { isRecord } from '@/isRecord.js';
+export { invokeCustomMethod } from '@/utils/invokeCustomMethod.js';
+export { isRecord } from '@/utils/isRecord.js';
 export {
   request,
   type RequestOptions,
   type RequestCaptureEventFn,
   type RequestCaptureEventsFn,
   type RequestEventsPayloads,
-} from '@/request.js';
-export { sleep } from '@/sleep.js';
+} from '@/utils/request.js';
+export { sleep } from '@/utils/sleep.js';
+export type {
+  ExecuteWithOptions,
+  ExecuteWithPostEvent,
+  ExecuteWithTimeout,
+} from './types.js';
 export type * from '@telegram-apps/types';

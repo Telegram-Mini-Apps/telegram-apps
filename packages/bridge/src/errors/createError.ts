@@ -1,5 +1,5 @@
-import { BridgeError } from './BridgeError.js';
-import type { ErrorType } from './errors.js';
+import { BridgeError } from '@/errors/BridgeError.js';
+import type { ErrorType } from '@/errors/errors.js';
 
 /**
  * Creates a new error using the specified type and message.

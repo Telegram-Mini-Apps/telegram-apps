@@ -1,7 +1,10 @@
 import type { RemoveEventListenerFn } from '@telegram-apps/event-emitter';
 
-import { miniAppsEventEmitter, resetMiniAppsEventEmitter } from './event-emitter/singleton.js';
-import type { EventName, EventListener, SubscribeListener } from './types.js';
+import {
+  miniAppsEventEmitter,
+  resetMiniAppsEventEmitter,
+} from '@/events/event-emitter/singleton.js';
+import type { EventName, EventListener, SubscribeListener } from '@/events/types.js';
 
 /**
  * Removes the listener from the specified event.

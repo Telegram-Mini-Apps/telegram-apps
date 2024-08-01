@@ -1,5 +1,5 @@
-import { isBridgeError } from './isBridgeError.js';
-import type { ErrorType } from './errors.js';
+import { isBridgeError } from '@/errors/isBridgeError.js';
+import type { ErrorType } from '@/errors/errors.js';
 
 /**
  * Returns true if passed value is a Bridge error of the specified type.

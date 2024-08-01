@@ -1,4 +1,4 @@
-import { createTimeoutError } from './createTimeoutError.js';
+import { createTimeoutError } from '@/timeout/createTimeoutError.js';
 
 /**
  * Runs passed function or promise with specified deadline presented via timeout argument.

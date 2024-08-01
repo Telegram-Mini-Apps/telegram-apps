@@ -13,8 +13,7 @@ import {
 
 import { resetMiniAppsEventEmitter } from '@/events/event-emitter/singleton.js';
 
-import { createTimeoutError } from './timeout/createTimeoutError.js';
-
+import { createTimeoutError } from '@/timeout/createTimeoutError.js';
 import { postEvent as globalPostEvent } from '@/methods/postEvent.js';
 import { request } from './request.js';
 

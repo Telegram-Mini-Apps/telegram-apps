@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { compareVersions } from './compareVersions.js';
+import { compareVersions } from '@/utils/compareVersions.js';
 
 it('should return 1 in case "a" is greater than "b"', () => {
   expect(compareVersions('6.1', '6.0')).toBe(1);

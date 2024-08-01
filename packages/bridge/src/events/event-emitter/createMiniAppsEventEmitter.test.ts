@@ -3,9 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createWindow, type WindowSpy } from '@test-utils/createWindow.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
-import { defineEventHandlers as defineEventHandlersFn } from '../handlers.js';
-import { createMiniAppsEventEmitter } from './createMiniAppsEventEmitter.js';
-import type { EventName, EventPayload } from '../types.js';
+import { defineEventHandlers as defineEventHandlersFn } from '@/events/handlers.js';
+import { createMiniAppsEventEmitter } from '@/events/event-emitter/createMiniAppsEventEmitter.js';
+import type { EventName, EventPayload } from '@/events/types.js';
 
 type TestCase<E extends EventName> =
   | [input: any, expected: EventPayload<E>]

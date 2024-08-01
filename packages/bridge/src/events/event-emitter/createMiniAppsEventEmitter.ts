@@ -1,9 +1,9 @@
 import { EventEmitter as GenericEventEmitter } from '@telegram-apps/event-emitter';
 import { boolean, json, number, string } from '@telegram-apps/parsing';
 
-import { error } from '@/debug.js';
 import { onWindow } from '@/events/onWindow.js';
-import { createCleanup } from '@/createCleanup.js';
+import { error } from '@/debug.js';
+import { createCleanup } from '@/utils/createCleanup.js';
 import { removeEventHandlers, defineEventHandlers } from '@/events/handlers.js';
 import type { EventName, EventPayload, EventEmitter, Events } from '@/events/types.js';
 

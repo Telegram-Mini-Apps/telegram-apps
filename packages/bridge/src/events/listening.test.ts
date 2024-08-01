@@ -3,9 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createWindow, type WindowSpy } from '@test-utils/createWindow.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
-import { resetMiniAppsEventEmitter } from './event-emitter/singleton.js';
-
-import { on, off, unsubscribe, subscribe } from './listening.js';
+import { resetMiniAppsEventEmitter } from '@/events/event-emitter/singleton.js';
+import { on, off, unsubscribe, subscribe } from '@/events/listening.js';
 
 let windowSpy: WindowSpy;
 
