@@ -1,4 +1,4 @@
-import type { InitDataParsed, User } from '@telegram-apps/sdk';
+import type { InitData, User } from '@telegram-apps/types';
 
 /**
  * Removes undefined properties from the object.
@@ -41,7 +41,7 @@ export function initDataToSearchParams({
   receiver,
   user,
   ...data
-}: Partial<InitDataParsed>): URLSearchParams {
+}: Partial<InitData>): URLSearchParams {
   return new URLSearchParams(
     removeUndefined({
       auth_date: data.authDate

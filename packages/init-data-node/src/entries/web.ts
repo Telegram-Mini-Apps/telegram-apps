@@ -1,4 +1,4 @@
-import { InitData, InitDataParsed } from '@telegram-apps/sdk';
+import type { InitData } from '@telegram-apps/types';
 
 import { hashToken as baseHashToken } from '../hashToken.js';
 import { sign as baseSign, SignOptions } from '../sign.js';
@@ -73,7 +73,7 @@ export async function signData(data: Text, key: Text, options?: SignDataOptions)
  * @throws {Error} Init data expired
  */
 export async function validate(
-  value: InitData | InitDataParsed | string | URLSearchParams,
+  value: InitData | string | URLSearchParams,
   token: Text,
   options?: ValidateOptions,
 ): Promise<void> {

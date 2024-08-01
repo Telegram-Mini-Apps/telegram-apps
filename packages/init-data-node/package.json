@@ -52,12 +52,14 @@
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "test-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@telegram-apps/sdk": "workspace:^"
+    "@telegram-apps/types": "workspace:^",
+    "@telegram-apps/parsing": "workspace:^"
   }
 }
