@@ -1,4 +1,4 @@
-import { isRecord } from '../isRecord.js';
+import { isRecord } from '@/utils/isRecord.js';
 
 /**
  * Returns true in case, passed value contains path `TelegramWebviewProxy.postEvent` property and
@@ -11,8 +11,11 @@ export function hasWebviewProxy<T extends {}>(value: T): value is (
     postEvent: (...args: unknown[]) => unknown;
   }
 }) {
-  return 'TelegramWebviewProxy' in value
-    && isRecord(value.TelegramWebviewProxy)
-    && 'postEvent' in value.TelegramWebviewProxy
-    && typeof value.TelegramWebviewProxy.postEvent === 'function';
+  if (isRecord(value)) {
+    const { TelegramWebviewProxy } = value as Record<string, unknown>;
+    return isRecord(value)
+      && isRecord(TelegramWebviewProxy)
+      && typeof TelegramWebviewProxy.postEvent === 'function';
+  }
+  return false;
 }
