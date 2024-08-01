@@ -103,8 +103,9 @@ export function postEvent(
   }
 
   // Telegram for Windows Phone or Android.
-  if (hasExternalNotify(window)) {
-    window.external.notify(JSON.stringify({ eventType, eventData }));
+  const { external } = window;
+  if (isRecord(external) && typeof external.notify === 'function') {
+    external.notify(JSON.stringify({ eventType, eventData }));
     return;
   }
 
