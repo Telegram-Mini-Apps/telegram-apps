@@ -1,85 +1,132 @@
 import { toSearchParams } from 'test-utils';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { initData } from './initData.js';
 
-const baseLaunchParams = {
-  tgWebAppPlatform: 'desktop',
-  tgWebAppThemeParams: {},
-  tgWebAppVersion: '7.0',
-};
+describe('auth_date', () => {
+  it('should throw an error in case, this property is missing', () => {
+    expect(() => initData().parse(toSearchParams({ hash: 'abcd' }))).toThrow();
+  });
 
-it(`should not throw if ${['tgWebAppBotInline', 'tgWebAppData', 'tgWebAppShowSettings', 'tgWebAppStartParam'].join(', ')} parameters are missing`, () => {
-  expect(() => initData().parse(toSearchParams(baseLaunchParams))).not.toThrow();
-});
-
-it('should create "botInline" property from the "tgWebAppBotInline" as boolean', () => {
-  expect(
-    initData().parse(toSearchParams({ ...baseLaunchParams, tgWebAppBotInline: false })),
-  ).toMatchObject({ botInline: false });
-  expect(
-    () => initData().parse(toSearchParams({ ...baseLaunchParams, tgWebAppBotInline: 'str' })),
-  ).toThrow();
-});
-
-it('should create "initData" property from the "tgWebAppData" as init data', () => {
-  expect(
-    initData().parse(toSearchParams({
-      ...baseLaunchParams,
-      tgWebAppData: toSearchParams({ auth_date: 1, hash: 'abc' }),
-    })),
-  ).toMatchObject({
-    initData: {
+  it('should initData().parse source property as Date and pass it to the "authDate" property', () => {
+    expect(initData().parse(toSearchParams({ auth_date: 1, hash: 'abcd' }))).toMatchObject({
       authDate: new Date(1000),
-      hash: 'abc',
-    },
+    });
   });
-  // TODO: err
 });
 
-it('should create "initDataRaw" property from the "tgWebAppData" as string', () => {
-  expect(
-    initData().parse(toSearchParams({
-      ...baseLaunchParams,
-      tgWebAppData: toSearchParams({ auth_date: 1, hash: 'abc' }),
-    })),
-  ).toMatchObject({ initDataRaw: 'auth_date=1&hash=abc' });
-  // todo: err
-});
-
-it('should create "platform" property from the "tgWebAppPlatform" as string', () => {
-  expect(
-    initData().parse(toSearchParams({ ...baseLaunchParams, tgWebAppPlatform: 'tdesktop' })),
-  ).toMatchObject({ platform: 'tdesktop' });
-});
-
-it('should create "showSettings" property from the "tgWebAppShowSettings" as boolean', () => {
-  expect(
-    initData().parse(toSearchParams({ ...baseLaunchParams, tgWebAppShowSettings: false })),
-  ).toMatchObject({ showSettings: false });
-  expect(
-    () => initData().parse(toSearchParams({ ...baseLaunchParams, tgWebAppShowSettings: {} })),
-  ).toThrow();
-});
-
-it('should create "startParam" property from the "tgWebAppPlatform" as string', () => {
-  expect(
-    initData().parse(toSearchParams({ ...baseLaunchParams, tgWebAppStartParam: 'start-param' })),
-  ).toMatchObject({ startParam: 'start-param' });
-});
-
-it('should create "themeParams" property from the "tgWebAppThemeParams" as theme params', () => {
-  expect(
-    initData().parse(toSearchParams({
-      ...baseLaunchParams,
-      tgWebAppThemeParams: JSON.stringify({ bg_color: '#000' }),
-    })),
-  ).toMatchObject({
-    themeParams: {
-      bgColor: '#000000',
-    },
+describe('can_send_after', () => {
+  it('should parse source property as Date and pass it to the "canSendAfter" property', () => {
+    expect(
+      initData().parse(toSearchParams({
+        auth_date: 1,
+        hash: 'abcd',
+        can_send_after: 8882,
+      })),
+    ).toMatchObject({
+      canSendAfter: 8882,
+    });
   });
-  expect(
-    () => initData().parse(toSearchParams({ ...baseLaunchParams, tgWebAppThemeParams: '' })),
-  ).toThrow();
+});
+
+describe('chat', () => {
+  it('should parse source property as Chat and pass it to the "chat" property', () => {
+    expect(
+      initData().parse(toSearchParams({
+        auth_date: 1,
+        hash: 'abcd',
+        chat: {
+          id: 5,
+          type: 'group chat',
+          title: 'My Chat',
+          photo_url: 'https://johny.com',
+          username: 'Johny Chat',
+        },
+      })),
+    ).toMatchObject({
+      chat: {
+        id: 5,
+        type: 'group chat',
+        title: 'My Chat',
+        photoUrl: 'https://johny.com',
+        username: 'Johny Chat',
+      },
+    });
+  });
+});
+
+describe('hash', () => {
+  it('should throw an error in case, this property is missing', () => {
+    expect(
+      () => initData().parse(toSearchParams({
+        auth_date: 1,
+      })),
+    ).toThrow();
+  });
+
+  it('should parse source property as string and pass it to the "hash" property', () => {
+    expect(
+      initData().parse(toSearchParams({
+        auth_date: 1,
+        hash: 'abcd',
+      })),
+    ).toMatchObject({
+      hash: 'abcd',
+    });
+  });
+});
+
+describe.each([
+  { from: 'chat_instance', to: 'chatInstance' },
+  { from: 'chat_type', to: 'chatType' },
+  { from: 'query_id', to: 'queryId' },
+  { from: 'start_param', to: 'startParam' },
+])('$from', ({ from, to }) => {
+  it(`should parse source property as string and pass it to the "${to}" property`, () => {
+    expect(
+      initData().parse(toSearchParams({
+        auth_date: 1,
+        hash: 'abcd',
+        [from]: 'my custom property',
+      })),
+    ).toMatchObject({
+      [to]: 'my custom property',
+    });
+  });
+});
+
+describe.each(['user', 'receiver'])('%s', (property) => {
+  it('should parse source property as User and pass it to the property with the same name', () => {
+    expect(
+      initData().parse(toSearchParams({
+        auth_date: 1,
+        hash: 'abcd',
+        [property]: {
+          added_to_attachment_menu: true,
+          allows_write_to_pm: false,
+          first_name: 'Johny',
+          id: 333,
+          is_bot: false,
+          is_premium: true,
+          language_code: 'en',
+          last_name: 'Bravo',
+          photo_url: 'https://johny.com',
+          username: 'johnybravo',
+        },
+      })),
+    ).toMatchObject({
+      [property]: {
+        addedToAttachmentMenu: true,
+        allowsWriteToPm: false,
+        firstName: 'Johny',
+        id: 333,
+        isBot: false,
+        isPremium: true,
+        languageCode: 'en',
+        lastName: 'Bravo',
+        photoUrl: 'https://johny.com',
+        username: 'johnybravo',
+      },
+    });
+  });
 });
