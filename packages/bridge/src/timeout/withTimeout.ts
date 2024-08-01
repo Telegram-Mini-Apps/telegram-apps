@@ -13,7 +13,6 @@ export function withTimeout<T>(
     typeof funcOrPromise === 'function' ? funcOrPromise() : funcOrPromise,
     new Promise<never>((_, rej) => {
       setTimeout(() => {
-        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         rej(createTimeoutError(timeout));
       }, timeout);
     }),
