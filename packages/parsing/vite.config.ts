@@ -16,8 +16,7 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        // '@': resolve(dirname(fileURLToPath(import.meta.url)), 'src'),
-        '@types': resolve(dirname(fileURLToPath(import.meta.url)), '../types/src/index.ts'),
+        '@': resolve(dirname(fileURLToPath(import.meta.url)), 'src'),
       },
     },
     build: {
@@ -27,6 +26,7 @@ export default defineConfig(({ mode }) => {
       lib: {
         entry: 'src/index.ts',
         formats: ['es', 'cjs'],
+        fileName: 'index',
       },
     },
     test: {
