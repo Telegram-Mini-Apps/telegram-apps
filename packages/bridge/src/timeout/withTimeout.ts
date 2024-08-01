@@ -1,4 +1,4 @@
-import { createTimeoutError } from '@/timeout/createTimeoutError.js';
+import { createTimeoutError } from './createTimeoutError.js';
 
 /**
  * Runs passed function or promise with specified deadline presented via timeout argument.
@@ -13,6 +13,7 @@ export function withTimeout<T>(
     typeof funcOrPromise === 'function' ? funcOrPromise() : funcOrPromise,
     new Promise<never>((_, rej) => {
       setTimeout(() => {
+        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         rej(createTimeoutError(timeout));
       }, timeout);
     }),

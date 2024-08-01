@@ -1,4 +1,4 @@
-import { isRecord } from '@/misc/isRecord.js';
+import { isRecord } from '../isRecord.js';
 
 /**
  * Returns true in case, passed value contains path `TelegramWebviewProxy.postEvent` property and
