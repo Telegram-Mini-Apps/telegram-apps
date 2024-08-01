@@ -1,4 +1,4 @@
-import { signal, type Signal, SignalOptions } from './signal.js';
+import { signal, type Signal, type SignalOptions } from './signal.js';
 import { collectSignals } from './reactive-context.js';
 
 export interface Computed<T> extends Omit<Signal<T>, 'set' | 'reset'> {
