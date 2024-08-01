@@ -1,8 +1,8 @@
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig, type UserConfigFn } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
-import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import type { LibraryFormats } from 'vite';
 
 export function getConfig({
@@ -36,7 +36,7 @@ export function getConfig({
         emptyOutDir: false,
         sourcemap: true,
         lib: {
-          name: 'telegramApps.sdk',
+          name: 'tapps.bridge',
           entry: input,
           formats,
           fileName: filename,
