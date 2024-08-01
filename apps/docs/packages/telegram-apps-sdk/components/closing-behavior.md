@@ -19,11 +19,11 @@ To enable and disable closing confirmation, it is required to use `enableConfirm
 and `disableConfirmation()` methods. These methods update `isConfirmationNeeded` property:
 
 ```typescript  
-closingBehaviour.enableConfirmation();
-console.log(closingBehaviour.isConfirmationNeeded); // true  
+closingBehavior.enableConfirmation();
+console.log(closingBehavior.isConfirmationNeeded); // true  
 
-closingBehaviour.disableConfirmation();
-console.log(closingBehaviour.isConfirmationNeeded); // false
+closingBehavior.disableConfirmation();
+console.log(closingBehavior.isConfirmationNeeded); // false
 ```
 
 ## Events
