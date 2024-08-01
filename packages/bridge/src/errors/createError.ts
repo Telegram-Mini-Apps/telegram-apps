@@ -1,12 +1,12 @@
-import { SDKError } from './SDKError.js';
+import { BridgeError } from './BridgeError.js';
 import type { ErrorType } from './errors.js';
 
 /**
- * Creates new error using specified type and message.
+ * Creates a new error using the specified type and message.
  * @param type - error code.
  * @param message - error message.
  * @param cause - original error.
  */
-export function createError(type: ErrorType, message?: string, cause?: unknown): SDKError {
-  return new SDKError(type, message || type, cause);
+export function createError(type: ErrorType, message?: string, cause?: unknown): BridgeError {
+  return new BridgeError(type, message || type, cause);
 }

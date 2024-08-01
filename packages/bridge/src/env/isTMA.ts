@@ -1,5 +1,5 @@
-import { request } from '@/bridge/request.js';
-import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
+import { request } from '@/request.js';
+import { hasWebviewProxy } from './hasWebviewProxy.js';
 
 /**
  * Returns true in case, current environment is Telegram Mini Apps.
