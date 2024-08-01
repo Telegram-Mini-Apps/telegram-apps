@@ -100,7 +100,7 @@ export async function request<M extends MethodName>(
           Array.isArray(event)
             ? (capture as RequestCaptureEventsFn<EventName[]>)({
               event: ev,
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+               
               payload: payload as any,
             })
             : (capture as RequestCaptureEventFn<EventName>)(payload)
@@ -112,7 +112,7 @@ export async function request<M extends MethodName>(
   );
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+     
     (options.postEvent || defaultPostEvent)(options.method as any, (options as any).params);
     return await (timeout ? withTimeout(promise, timeout) : promise);
   } finally {
