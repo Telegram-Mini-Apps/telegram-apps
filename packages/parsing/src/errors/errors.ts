@@ -1,0 +1,14 @@
+export const ERR_METHOD_UNSUPPORTED = 'ERR_METHOD_UNSUPPORTED';
+export const ERR_INVALID_VALUE = 'ERR_INVALID_VALUE';
+export const ERR_UNEXPECTED_VALUE = 'ERR_UNEXPECTED_VALUE';
+export const ERR_TIMED_OUT = 'ERR_TIMED_OUT';
+export const ERR_UNEXPECTED_TYPE = 'ERR_UNEXPECTED_TYPE';
+export const ERR_PARSE = 'ERR_PARSE';
+
+export type ErrorType =
+  | typeof ERR_METHOD_UNSUPPORTED
+  | typeof ERR_TIMED_OUT
+  | typeof ERR_PARSE
+  | typeof ERR_UNEXPECTED_TYPE
+  | typeof ERR_INVALID_VALUE
+  | typeof ERR_UNEXPECTED_VALUE;
