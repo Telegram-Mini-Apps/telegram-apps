@@ -15,18 +15,18 @@ export { isBridgeErrorOfType } from '@/errors/isBridgeErrorOfType.js';
 export { removeEventHandlers, defineEventHandlers } from '@/events/handlers.js';
 export { on, off, subscribe, unsubscribe } from '@/events/listening.js';
 export type {
-  EventPayload,
-  EventName,
-  Events,
-  EventListener,
-  SubscribeListener,
-  EventEmitter,
-  WriteAccessRequestedStatus,
-  PhoneRequestedStatus,
-  InvoiceStatus,
   BiometryAuthRequestStatus,
   BiometryTokenUpdateStatus,
   BiometryType,
+  InvoiceStatus,
+  EventPayload,
+  EventName,
+  EventEmitter,
+  Events,
+  EventListener,
+  PhoneRequestedStatus,
+  SubscribeListener,
+  WriteAccessRequestedStatus,
 } from '@/events/types.js';
 
 export type {
