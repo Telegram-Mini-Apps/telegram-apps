@@ -1,9 +1,9 @@
 /**
- * Color in format #RRGGBB.
+ * Function accepting the list of passed arguments and returning nothing.
  */
-export type RGB = `#${string}`;
+export type Fn<Args extends any[], R> = (...args: Args) => R;
 
 /**
- * Color in format #RGB.
+ * Function accepting the list of passed arguments and returning nothing.
  */
-export type RGBShort = `#${string}`;
+export type VoidFn<Args extends any[] = []> = Fn<Args, void>;
