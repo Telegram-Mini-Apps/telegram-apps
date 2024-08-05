@@ -33,18 +33,18 @@ export interface Signal<T> {
    * Updates the signal notifying all subscribers about changes.
    * @param value - value to set.
    */
-  set(value: T): void;
+  set(this: void, value: T): void;
   /**
    * Resets the signal value to its initial value.
    */
-  reset(): void;
+  reset(this: void): void;
   /**
    * Adds a new listener, tracking the signal changes.
    * @param fn - event listener.
    * @param options - additional options.
    * @returns A function to remove the bound listener.
    */
-  sub(fn: SubscribeListenerFn<T>, options?: {
+  sub(this: void, fn: SubscribeListenerFn<T>, options?: {
     /**
      * True if the listener was added by some other signal.
      * In this case, the listener will not be removed by the unsubAll method.
@@ -62,11 +62,11 @@ export interface Signal<T> {
    * @param fn - event listener.
    * @param once - was this listener added for a single call. Default: false
    */
-  unsub(fn: SubscribeListenerFn<T>, once?: boolean): void;
+  unsub(this: void, fn: SubscribeListenerFn<T>, once?: boolean): void;
   /**
    * Removes all signal change listeners, not added by other signals.
    */
-  unsubAll(): void;
+  unsubAll(this: void): void;
 }
 
 /*@__NO_SIDE_EFFECTS__*/

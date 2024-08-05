@@ -7,40 +7,10 @@ export interface Computed<T> extends Omit<Signal<T>, 'set' | 'reset'> {
   (): T;
 }
 
-/**
- * Signals collected during the last call of the `collect` method.
- * @private
- */
-let collectedSignals: Set<Signal<unknown>> | undefined;
-
-/**
- * Runs specified function in a reactive context, collecting called signals.
- * @param fn - function to call.
- * @returns A tuple, containing a result of the function and collected signals.
- */
-function collectSignals<T>(fn: () => T): [
-  /**
-   * Function execution result.
-   */
-  result: T,
-  /**
-   * Collected signals.
-   */
-  signals: Set<Signal<unknown>>,
-] {
-  collectedSignals = new Set();
-
-  try {
-    // Call the function and start tracking for all captured reactive units.
-    return [fn(), collectedSignals];
-  } finally {
-    // Remember to untrack the reactive context.
-    collectedSignals = undefined;
-  }
-}
+const collectContexts: Set<Signal<unknown>>[] = [];
 
 export function collectSignal(signal: Signal<any>): void {
-  collectedSignals && collectedSignals.add(signal);
+  collectContexts.length && collectContexts[collectContexts.length - 1].add(signal);
 }
 
 /*@__NO_SIDE_EFFECTS__*/
@@ -69,12 +39,24 @@ export function computed<T>(fn: () => T, options?: SignalOptions<T>): Computed<T
     // listening to the previous signals.
     deps.forEach(s => s.unsub(update));
 
-    // Run the function and collect all called signals.
-    const [result, signals] = collectSignals(fn);
+    // Signals we collected during current computation.
+    const collectedSignals = new Set<Signal<unknown>>();
+    let result: T;
+
+    // Add this set to the global variable, so dependant signals will be catched.
+    collectContexts.push(collectedSignals);
+
+    try {
+      // Run the function and collect all called signals.
+      result = fn();
+    } finally {
+      // Remember to untrack the reactive context.
+      collectContexts.splice(collectContexts.length - 1, 1);
+    }
 
     // Start tracking for all dependencies' changes and re-compute the computed value.
-    signals.forEach(s => s.sub(update, { signal: true }));
-    deps = signals;
+    collectedSignals.forEach(s => s.sub(update, { signal: true }));
+    deps = collectedSignals;
 
     computedOnce = true;
 
@@ -106,8 +88,8 @@ export function computed<T>(fn: () => T, options?: SignalOptions<T>): Computed<T
       return s.sub(...args);
     },
     // All other properties are just proxied.
-    unsub: s.unsub.bind(s),
-    unsubAll: s.unsubAll.bind(s),
+    unsub: s.unsub,
+    unsubAll: s.unsubAll,
   } satisfies Pick<Computed<T>, 'sub' | 'unsub' | 'unsubAll'>);
 
   return computed as Computed<T>;
