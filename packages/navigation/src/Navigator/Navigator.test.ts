@@ -6,23 +6,23 @@ import {
   ERR_NAVIGATION_INDEX_INVALID,
   ERR_NAVIGATION_HISTORY_EMPTY,
 } from '@/errors/errors.js';
-import { BasicNavigator } from './BasicNavigator.js';
+import { Navigator } from './Navigator.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 import { createWindow } from '@test-utils/createWindow.js';
 import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
 
 describe('constructor', () => {
   it('should throw error if entries list is empty', () => {
-    expect(() => new BasicNavigator([], 0)).toThrow(
+    expect(() => new Navigator([], 0)).toThrow(
       createError(ERR_NAVIGATION_HISTORY_EMPTY, 'History should not be empty.'),
     );
   });
 
   it('should throw error if history index is less than 0 or higher or equal to entries list length', () => {
-    expect(() => new BasicNavigator(['/a'], -1)).toThrow(
+    expect(() => new Navigator(['/a'], -1)).toThrow(
       createError(ERR_NAVIGATION_INDEX_INVALID, 'Index should not be zero and higher or equal than history size.'),
     );
-    expect(() => new BasicNavigator(['/a'], 1)).toThrow(
+    expect(() => new Navigator(['/a'], 1)).toThrow(
       createError(ERR_NAVIGATION_INDEX_INVALID, 'Index should not be zero and higher or equal than history size.'),
     );
   });
@@ -40,7 +40,7 @@ describe('attach', () => {
 
   it('should hide the BackButton, if index === 0', () => {
     const postEvent = vi.fn();
-    const n = new BasicNavigator([''], 0, postEvent);
+    const n = new Navigator([''], 0, postEvent);
 
     expect(postEvent).not.toHaveBeenCalled();
     n.attach();
@@ -50,7 +50,7 @@ describe('attach', () => {
 
   it('should show the BackButton, if index >= 1', () => {
     const postEvent = vi.fn();
-    const n = new BasicNavigator(['', ''], 1, postEvent);
+    const n = new Navigator(['', ''], 1, postEvent);
 
     expect(postEvent).not.toHaveBeenCalled();
     n.attach();
@@ -59,7 +59,7 @@ describe('attach', () => {
   });
 
   it('should start tracking for "back_button_pressed" event and call "back" method whenever it occurs', () => {
-    const n = new BasicNavigator(['', ''], 1, vi.fn() as any);
+    const n = new Navigator(['', ''], 1, vi.fn() as any);
     expect(n.index).toBe(1);
     n.attach();
     dispatchWindowMessageEvent('back_button_pressed');
@@ -69,14 +69,14 @@ describe('attach', () => {
 
 describe('back', () => {
   it('should go back in history by 1 entry', () => {
-    const n = new BasicNavigator(['a', 'b'], 1);
+    const n = new Navigator(['a', 'b'], 1);
     expect(n.current.pathname).toBe('b');
     n.back();
     expect(n.current.pathname).toBe('a');
   });
 
   it('should do nothing, if current entry is the first entry', () => {
-    const n = new BasicNavigator(['a', 'b'], 0);
+    const n = new Navigator(['a', 'b'], 0);
     expect(n.current.pathname).toBe('a');
     n.back();
     expect(n.current.pathname).toBe('a');
@@ -84,7 +84,7 @@ describe('back', () => {
 
   it('should hide the BackButton if navigator is attached and index became 0', () => {
     const postEvent = vi.fn();
-    const n = new BasicNavigator(['', ''], 1, postEvent);
+    const n = new Navigator(['', ''], 1, postEvent);
     n.attach();
 
     postEvent.mockClear();
@@ -101,7 +101,7 @@ describe('back', () => {
   });
 
   it('should emit "change" event, if entry was changed', () => {
-    const n = new BasicNavigator<string>([
+    const n = new Navigator<string>([
       { id: 'aId', pathname: 'aPathname', params: 'aParams' },
       { id: 'bId', pathname: 'bPathname', params: 'bParams' },
     ], 1);
@@ -121,7 +121,7 @@ describe('back', () => {
 
 describe('current', () => {
   it('should return currently active navigation entry', () => {
-    const n = new BasicNavigator(['/abc'], 0);
+    const n = new Navigator(['/abc'], 0);
     expect(n.current).toMatchObject({
       pathname: '/abc',
       params: undefined,
@@ -129,7 +129,7 @@ describe('current', () => {
   });
 
   it('should return frozen object', () => {
-    const n = new BasicNavigator(['/abc'], 0);
+    const n = new Navigator(['/abc'], 0);
     expect(Object.isFrozen(n.current)).toBe(true);
   });
 });
@@ -145,7 +145,7 @@ describe('detach', () => {
   });
 
   it('should stop tracking for "back_button_pressed" event', () => {
-    const n = new BasicNavigator(['', ''], 1, vi.fn() as any);
+    const n = new Navigator(['', ''], 1, vi.fn() as any);
     expect(n.index).toBe(1);
     n.attach();
     n.detach();
@@ -156,14 +156,14 @@ describe('detach', () => {
 
 describe('forward', () => {
   it('should go forward in history by 1 entry', () => {
-    const n = new BasicNavigator(['a', 'b'], 0);
+    const n = new Navigator(['a', 'b'], 0);
     expect(n.current.pathname).toBe('a');
     n.forward();
     expect(n.current.pathname).toBe('b');
   });
 
   it('should do nothing, if current entry is the last entry', () => {
-    const n = new BasicNavigator(['a', 'b'], 1);
+    const n = new Navigator(['a', 'b'], 1);
     expect(n.current.pathname).toBe('b');
     n.forward();
     expect(n.current.pathname).toBe('b');
@@ -171,7 +171,7 @@ describe('forward', () => {
 
   it('should show the BackButton if navigator is attached and index became non-zero', () => {
     const postEvent = vi.fn();
-    const n = new BasicNavigator(['', ''], 0, postEvent);
+    const n = new Navigator(['', ''], 0, postEvent);
     n.attach();
 
     postEvent.mockClear();
@@ -188,7 +188,7 @@ describe('forward', () => {
   });
 
   it('should emit "change" event, if entry was changed', () => {
-    const n = new BasicNavigator<string>([
+    const n = new Navigator<string>([
       { id: 'aId', pathname: 'aPathname', params: 'aParams' },
       { id: 'bId', pathname: 'bPathname', params: 'bParams' },
     ], 0);
@@ -208,14 +208,14 @@ describe('forward', () => {
 
 describe('go', () => {
   it('should do nothing if delta is out of bounds', () => {
-    const n = new BasicNavigator(['a', 'b'], 0);
+    const n = new Navigator(['a', 'b'], 0);
     expect(n.current.pathname).toBe('a');
     n.go(2);
     expect(n.current.pathname).toBe('a');
   });
 
   it('should cut delta and to fit the bounds [0, history.length) if "fit" is true', () => {
-    const n = new BasicNavigator(['a', 'b'], 0);
+    const n = new Navigator(['a', 'b'], 0);
     expect(n.current.pathname).toBe('a');
     n.go(2, true);
     expect(n.current.pathname).toBe('b');
@@ -223,7 +223,7 @@ describe('go', () => {
 
   it('should hide the BackButton if navigator is attached and cursor became 0', () => {
     const postEvent = vi.fn();
-    const n = new BasicNavigator(['', ''], 1, postEvent);
+    const n = new Navigator(['', ''], 1, postEvent);
     n.attach();
 
     postEvent.mockClear();
@@ -234,7 +234,7 @@ describe('go', () => {
 
   it('should show the BackButton if navigator is attached and index became non-zero', () => {
     const postEvent = vi.fn();
-    const n = new BasicNavigator(['', ''], 0, postEvent);
+    const n = new Navigator(['', ''], 0, postEvent);
     n.attach();
 
     postEvent.mockClear();
@@ -244,7 +244,7 @@ describe('go', () => {
   });
 
   it('should emit "change" event, if entry was changed', () => {
-    const n = new BasicNavigator<string>([
+    const n = new Navigator<string>([
       { id: 'aId', pathname: 'aPathname', params: 'aParams' },
       { id: 'bId', pathname: 'bPathname', params: 'bParams' },
     ], 0);
@@ -274,14 +274,14 @@ describe('go', () => {
 
 describe('goTo', () => {
   it('should do nothing if index is out of bounds', () => {
-    const n = new BasicNavigator(['a', 'b'], 0);
+    const n = new Navigator(['a', 'b'], 0);
     expect(n.current.pathname).toBe('a');
     n.goTo(2);
     expect(n.current.pathname).toBe('a');
   });
 
   it('should cut index and to fit the bounds [0, history.length) if "fit" is true', () => {
-    const n = new BasicNavigator(['a', 'b'], 0);
+    const n = new Navigator(['a', 'b'], 0);
     expect(n.current.pathname).toBe('a');
     n.goTo(2, true);
     expect(n.current.pathname).toBe('b');
@@ -289,7 +289,7 @@ describe('goTo', () => {
 
   it('should hide the BackButton if navigator is attached and index became 0', () => {
     const postEvent = vi.fn();
-    const n = new BasicNavigator(['', ''], 1, postEvent);
+    const n = new Navigator(['', ''], 1, postEvent);
     n.attach();
 
     postEvent.mockClear();
@@ -300,7 +300,7 @@ describe('goTo', () => {
 
   it('should show the BackButton if navigator is attached and index became non-zero', () => {
     const postEvent = vi.fn();
-    const n = new BasicNavigator(['', ''], 0, postEvent);
+    const n = new Navigator(['', ''], 0, postEvent);
     n.attach();
 
     postEvent.mockClear();
@@ -310,7 +310,7 @@ describe('goTo', () => {
   });
 
   it('should emit "change" event, if entry was changed', () => {
-    const n = new BasicNavigator<string>([
+    const n = new Navigator<string>([
       { id: 'aId', pathname: 'aPathname', params: 'aParams' },
       { id: 'bId', pathname: 'bPathname', params: 'bParams' },
     ], 0);
@@ -340,30 +340,30 @@ describe('goTo', () => {
 
 describe('hasPrev', () => {
   it('should return true if cursor >= 0', () => {
-    expect(new BasicNavigator(['/a'], 0).hasPrev).toBe(false);
-    expect(new BasicNavigator(['/a', '/a2'], 0).hasPrev).toBe(false);
-    expect(new BasicNavigator(['/a', '/a2'], 1).hasPrev).toBe(true);
+    expect(new Navigator(['/a'], 0).hasPrev).toBe(false);
+    expect(new Navigator(['/a', '/a2'], 0).hasPrev).toBe(false);
+    expect(new Navigator(['/a', '/a2'], 1).hasPrev).toBe(true);
   });
 });
 
 describe('hasNext', () => {
   it('should return true if cursor < entries.length', () => {
-    expect(new BasicNavigator(['/a'], 0).hasNext).toBe(false);
-    expect(new BasicNavigator(['/a', '/a2'], 0).hasNext).toBe(true);
-    expect(new BasicNavigator(['/a', '/a2'], 1).hasNext).toBe(false);
+    expect(new Navigator(['/a'], 0).hasNext).toBe(false);
+    expect(new Navigator(['/a', '/a2'], 0).hasNext).toBe(true);
+    expect(new Navigator(['/a', '/a2'], 1).hasNext).toBe(false);
   });
 });
 
 describe('index', () => {
   it('should return current cursor', () => {
-    expect(new BasicNavigator(['/'], 0).index).toBe(0);
-    expect(new BasicNavigator(['/', '/'], 1).index).toBe(1);
+    expect(new Navigator(['/'], 0).index).toBe(0);
+    expect(new Navigator(['/', '/'], 1).index).toBe(1);
   });
 });
 
 describe('on', () => {
   it('should remove event listener if returned function was called', () => {
-    const n = new BasicNavigator(['a', 'b', 'c'], 0);
+    const n = new Navigator(['a', 'b', 'c'], 0);
     const spy = vi.fn();
     const off = n.on('change', spy);
     n.forward();
@@ -376,7 +376,7 @@ describe('on', () => {
 
 describe('off', () => {
   it('should remove specified event listener', () => {
-    const n = new BasicNavigator(['a', 'b', 'c'], 0);
+    const n = new Navigator(['a', 'b', 'c'], 0);
     const spy = vi.fn();
     n.on('change', spy);
     n.forward();
@@ -389,7 +389,7 @@ describe('off', () => {
 
 describe('push', () => {
   it('should remove all entries after the current one', () => {
-    const n = new BasicNavigator(['a', 'b', 'c'], 0);
+    const n = new Navigator(['a', 'b', 'c'], 0);
     n.push('d');
     expect(n.history).toStrictEqual([
       { id: expect.anything(), params: undefined, pathname: 'a' },
@@ -404,7 +404,7 @@ describe('push', () => {
   });
 
   it('should emit "change" event', () => {
-    const n = new BasicNavigator<string>([
+    const n = new Navigator<string>([
       { id: 'aId', pathname: 'aPathname', params: 'aParams' },
     ], 0);
     const spy = vi.fn();
@@ -423,7 +423,7 @@ describe('push', () => {
 
 describe('replace', () => {
   it('should replace current entry with the specified one', () => {
-    const n = new BasicNavigator(['a'], 0);
+    const n = new Navigator(['a'], 0);
     n.replace('b');
     expect(n.history).toStrictEqual([
       { id: expect.anything(), params: undefined, pathname: 'b' },
@@ -435,7 +435,7 @@ describe('replace', () => {
   });
 
   it('should emit "change" event', () => {
-    const n = new BasicNavigator<string>([
+    const n = new Navigator<string>([
       { id: 'aId', pathname: 'aPathname', params: 'aParams' },
     ], 0);
     const spy = vi.fn();

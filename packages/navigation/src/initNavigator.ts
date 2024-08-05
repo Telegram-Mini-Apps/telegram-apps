@@ -1,12 +1,12 @@
 import {
   BrowserNavigatorConOptions,
   BrowserNavigatorHistoryItem,
-} from '@/navigation/BrowserNavigator/types.js';
-import { BrowserNavigator } from '@/navigation/BrowserNavigator/BrowserNavigator.js';
-import { isPageReload } from '@/navigation/isPageReload.js';
+} from '@/browser/BrowserNavigator/types.js';
+import { BrowserNavigator } from '@/browser/BrowserNavigator/BrowserNavigator.js';
+import { isPageReload } from '@/browser/isPageReload.js';
 import {
   createBrowserNavigatorFromLocation
-} from '@/navigation/BrowserNavigator/createBrowserNavigatorFromLocation.js';
+} from '@/browser/BrowserNavigator/createBrowserNavigatorFromLocation.js';
 
 
 function instantiate<State>(

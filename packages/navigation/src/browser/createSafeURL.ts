@@ -1,8 +1,8 @@
-import { ensurePrefix } from '@/navigation/ensurePrefix.js';
-import type { URLLike } from '@/navigation/BrowserNavigator/types.js';
+import { ensurePrefix } from './ensurePrefix.js';
+import type { URLLike } from './types.js';
 
 /**
- * Safely creates new instance of URL with some predefined protocol and hostname.
+ * Safely creates a new instance of URL with some predefined protocol "http://" and host "a".
  * @param urlOrPath - URL instance or path.
  */
 export function createSafeURL(urlOrPath: string | Partial<URLLike>): URL {

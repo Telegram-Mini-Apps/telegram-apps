@@ -1,6 +1,6 @@
-import { ensurePrefix } from '@/navigation/ensurePrefix.js';
-import { urlToPath } from '@/navigation/urlToPath.js';
-import type { BrowserNavigatorAnyHistoryItem } from '@/navigation/BrowserNavigator/types.js';
+import { ensurePrefix } from '@/browser/ensurePrefix.js';
+import { urlToPath } from '@/browser/urlToPath.js';
+import type { BrowserNavigatorAnyHistoryItem } from '@/browser/BrowserNavigator/types.js';
 
 interface PrepareItemResult<State> {
   id?: string;

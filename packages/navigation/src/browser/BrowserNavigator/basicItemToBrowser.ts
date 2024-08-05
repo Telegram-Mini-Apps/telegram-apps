@@ -1,8 +1,8 @@
-import type { BasicNavigatorHistoryItem } from '@/navigation/BasicNavigator/types.js';
+import type { BasicNavigatorHistoryItem } from '@/Navigator/types.js';
 import type {
   BrowserNavigatorHistoryItem,
   BrowserNavigatorHistoryItemParams,
-} from '@/navigation/BrowserNavigator/types.js';
+} from '@/browser/BrowserNavigator/types.js';
 
 /**
  * Converts basic navigator entry to browser navigator entry.

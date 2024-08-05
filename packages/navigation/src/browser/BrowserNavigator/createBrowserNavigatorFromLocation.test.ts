@@ -1,7 +1,7 @@
 import { expect, describe, vi, afterEach, it, beforeEach } from 'vitest';
 import {
   createBrowserNavigatorFromLocation,
-} from '@/navigation/BrowserNavigator/createBrowserNavigatorFromLocation.js';
+} from '@/browser/BrowserNavigator/createBrowserNavigatorFromLocation.js';
 
 describe.each([
   [
