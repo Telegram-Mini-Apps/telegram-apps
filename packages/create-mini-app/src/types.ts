@@ -15,4 +15,4 @@ export interface Template {
 
 export type Language = 'js' | 'ts';
 export type SDK = 'tsdk' | 'telegramApps';
-export type Framework = 'solid' | 'react' | 'next';
+export type Framework = 'solid' | 'react' | 'next' | 'jquery' | 'none';
