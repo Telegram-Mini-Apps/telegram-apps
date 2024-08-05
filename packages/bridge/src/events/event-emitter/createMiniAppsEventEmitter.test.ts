@@ -1,7 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { createWindow, type WindowSpy } from '@test-utils/createWindow.js';
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
+import { dispatchMiniAppsEvent, createWindow, type WindowSpy } from 'test-utils';
 
 import { defineEventHandlers as defineEventHandlersFn } from '@/events/handlers.js';
 import { createMiniAppsEventEmitter } from '@/events/event-emitter/createMiniAppsEventEmitter.js';
@@ -120,14 +118,14 @@ describe('events handling', () => {
 
       // No expected data to be passed to listener.
       if (inputOrCaseOrCases === undefined) {
-        dispatchWindowMessageEvent(event);
+        dispatchMiniAppsEvent(event);
         expect(spy).toBeCalledWith();
         return;
       }
 
       // Input is equal to expected result.
       if (!Array.isArray(inputOrCaseOrCases)) {
-        dispatchWindowMessageEvent(event, inputOrCaseOrCases);
+        dispatchMiniAppsEvent(event, inputOrCaseOrCases);
         expect(spy).toBeCalledWith(inputOrCaseOrCases);
         return;
       }
@@ -135,14 +133,14 @@ describe('events handling', () => {
       // Input differs from expected result.
       if (!Array.isArray(inputOrCaseOrCases[0])) {
         const [input, expected] = inputOrCaseOrCases;
-        dispatchWindowMessageEvent(event, input);
+        dispatchMiniAppsEvent(event, input);
         expect(spy).toBeCalledWith(expected);
         return;
       }
 
       // List of cases.
       inputOrCaseOrCases.forEach(([input, expected = input]) => {
-        dispatchWindowMessageEvent(event, input);
+        dispatchMiniAppsEvent(event, input);
         expect(spy).toBeCalledWith(expected);
       });
     });
@@ -153,7 +151,7 @@ describe('events handling', () => {
     const [emitter] = createMiniAppsEventEmitter();
     emitter.on('viewport_changed', spy);
 
-    dispatchWindowMessageEvent('viewport_changed', 'broken data');
+    dispatchMiniAppsEvent('viewport_changed', 'broken data');
 
     expect(spy).not.toBeCalled();
   });

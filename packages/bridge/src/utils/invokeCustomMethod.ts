@@ -3,7 +3,7 @@ import { ERR_INVOKE_CUSTOM_METHOD_RESPONSE } from '@/errors/errors.js';
 import type { ExecuteWithOptions } from '@/types.js';
 import type { CustomMethodName, CustomMethodParams } from '@/methods/types/index.js';
 
-import { captureSameReq } from './captureSameReq.js';
+import { captureSameReq } from '../methods/captureSameReq.js';
 import { request } from './request.js';
 
 /**

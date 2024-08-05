@@ -12,7 +12,10 @@ export {
 export { isBridgeError } from '@/errors/isBridgeError.js';
 export { isBridgeErrorOfType } from '@/errors/isBridgeErrorOfType.js';
 
-export { removeEventHandlers, defineEventHandlers } from '@/events/handlers.js';
+export {
+  miniAppsEventEmitter, resetMiniAppsEventEmitter,
+} from '@/events/event-emitter/singleton.js';
+export { removeEventHandlers, defineEventHandlers, emitMiniAppsEvent } from '@/events/handlers.js';
 export { on, off, subscribe, unsubscribe } from '@/events/listening.js';
 export type {
   BiometryAuthRequestStatus,
@@ -29,6 +32,7 @@ export type {
   WriteAccessRequestedStatus,
 } from '@/events/types.js';
 
+export { captureSameReq } from '@/methods/captureSameReq.js';
 export type {
   AnyInvokeCustomMethodParams,
   AnyHapticFeedbackParams,
@@ -59,6 +63,9 @@ export { postEvent, type PostEvent } from '@/methods/postEvent.js';
 export { supports } from '@/methods/supports.js';
 export { targetOrigin } from '@/methods/targetOrigin.js';
 
+export { createTimeoutError } from '@/timeout/createTimeoutError.js';
+export { withTimeout } from '@/timeout/withTimeout.js';
+
 export { compareVersions } from '@/utils/compareVersions.js';
 export { createCleanup } from '@/utils/createCleanup.js';
 export { createLogger } from '@/utils/createLogger.js';
@@ -74,9 +81,11 @@ export {
   type RequestEventsPayloads,
 } from '@/utils/request.js';
 export { sleep } from '@/utils/sleep.js';
+
 export type {
   ExecuteWithOptions,
   ExecuteWithPostEvent,
   ExecuteWithTimeout,
 } from './types.js';
+
 export type * from '@telegram-apps/types';

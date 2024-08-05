@@ -1,5 +1,4 @@
-import { createWindow } from '@test-utils/createWindow.js';
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
+import { dispatchMiniAppsEvent, createWindow } from 'test-utils';
 import {
   afterAll,
   afterEach,
@@ -12,7 +11,6 @@ import {
 } from 'vitest';
 
 import { resetMiniAppsEventEmitter } from '@/events/event-emitter/singleton.js';
-
 import { createTimeoutError } from '@/timeout/createTimeoutError.js';
 import { postEvent as globalPostEvent } from '@/methods/postEvent.js';
 import { request } from './request.js';
@@ -63,7 +61,7 @@ describe('options', () => {
       });
 
       vi.advanceTimersByTime(500);
-      dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
+      dispatchMiniAppsEvent('phone_requested', { status: 'allowed' });
       vi.advanceTimersByTime(1000);
 
       await expect(promise).resolves.toStrictEqual({ status: 'allowed' });
@@ -111,7 +109,7 @@ describe('options', () => {
       });
 
       vi.advanceTimersByTime(500);
-      dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
+      dispatchMiniAppsEvent('phone_requested', { status: 'allowed' });
       vi.advanceTimersByTime(1000);
 
       return promise.catch(() => null).finally(() => {
@@ -127,7 +125,7 @@ describe('options', () => {
         capture: ({ status }) => status === 'allowed',
       });
 
-      dispatchWindowMessageEvent('phone_requested', { status: 'declined' });
+      dispatchMiniAppsEvent('phone_requested', { status: 'declined' });
       vi.advanceTimersByTime(1000);
 
       return promise.catch(() => null).finally(() => {
@@ -147,7 +145,7 @@ describe('with request id', () => {
       capture: (({ req_id }) => req_id === 'a'),
     });
 
-    dispatchWindowMessageEvent('clipboard_text_received', { req_id: 'b' });
+    dispatchMiniAppsEvent('clipboard_text_received', { req_id: 'b' });
     vi.advanceTimersByTime(1500);
 
     return promise.catch(() => null).finally(() => {
@@ -164,7 +162,7 @@ describe('with request id', () => {
       capture: (({ req_id }) => req_id === 'a'),
     });
 
-    dispatchWindowMessageEvent('clipboard_text_received', {
+    dispatchMiniAppsEvent('clipboard_text_received', {
       req_id: 'a',
       data: 'from clipboard',
     });
@@ -188,7 +186,7 @@ describe('multiple events', () => {
         timeout: 1000,
       });
 
-      dispatchWindowMessageEvent('phone_requested', { status: 'allowed' });
+      dispatchMiniAppsEvent('phone_requested', { status: 'allowed' });
       vi.advanceTimersByTime(1500);
 
       return promise
@@ -208,7 +206,7 @@ describe('multiple events', () => {
         params: { data: 'abc' },
       });
 
-      dispatchWindowMessageEvent('write_access_requested', { status: 'declined' });
+      dispatchMiniAppsEvent('write_access_requested', { status: 'declined' });
       vi.advanceTimersByTime(1500);
 
       return promise

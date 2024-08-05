@@ -1,7 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { createWindow, type WindowSpy } from '@test-utils/createWindow.js';
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
+import { dispatchMiniAppsEvent, createWindow, type WindowSpy } from 'test-utils';
 
 import { resetMiniAppsEventEmitter } from '@/events/event-emitter/singleton.js';
 import { on, off, unsubscribe, subscribe } from '@/events/listening.js';
@@ -22,7 +20,7 @@ afterEach(() => {
 describe('off', () => {
   it('should remove listener', () => {
     const listener = vi.fn();
-    const emit = () => dispatchWindowMessageEvent('viewport_changed', {
+    const emit = () => dispatchMiniAppsEvent('viewport_changed', {
       height: 123,
       width: 321,
       is_expanded: false,
@@ -50,7 +48,7 @@ describe('on', () => {
       is_expanded: false,
       is_state_stable: false,
     };
-    dispatchWindowMessageEvent('viewport_changed', eventData);
+    dispatchMiniAppsEvent('viewport_changed', eventData);
 
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith(eventData);
@@ -66,15 +64,15 @@ describe('on', () => {
       is_expanded: false,
       is_state_stable: false,
     };
-    dispatchWindowMessageEvent('viewport_changed', eventData);
-    dispatchWindowMessageEvent('viewport_changed', eventData);
+    dispatchMiniAppsEvent('viewport_changed', eventData);
+    dispatchMiniAppsEvent('viewport_changed', eventData);
 
     expect(listener).toHaveBeenCalledTimes(1);
   })
 
   it('should remove listener in case, returned callback was called', () => {
     const listener = vi.fn();
-    const emit = () => dispatchWindowMessageEvent('viewport_changed', {
+    const emit = () => dispatchMiniAppsEvent('viewport_changed', {
       height: 123,
       width: 321,
       is_expanded: false,
@@ -102,7 +100,7 @@ describe('subscribe', () => {
       is_expanded: false,
       is_state_stable: false,
     };
-    dispatchWindowMessageEvent('viewport_changed', eventData);
+    dispatchMiniAppsEvent('viewport_changed', eventData);
 
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith({
@@ -113,7 +111,7 @@ describe('subscribe', () => {
 
   it('should remove listener in case, returned callback was called', () => {
     const listener = vi.fn();
-    const emit = () => dispatchWindowMessageEvent('viewport_changed', {
+    const emit = () => dispatchMiniAppsEvent('viewport_changed', {
       height: 123,
       width: 321,
       is_expanded: false,
@@ -133,7 +131,7 @@ describe('subscribe', () => {
 describe('unsubscribe', () => {
   it('should remove listener', () => {
     const listener = vi.fn();
-    const emit = () => dispatchWindowMessageEvent('viewport_changed', {
+    const emit = () => dispatchMiniAppsEvent('viewport_changed', {
       height: 123,
       width: 321,
       is_expanded: false,
