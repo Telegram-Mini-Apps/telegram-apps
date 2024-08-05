@@ -16,11 +16,15 @@ const settings = {
       react: 'reactjs-js-template',
       solid: 'solidjs-js-template',
       next: 'nextjs-js-template',
+      jquery: 'js-template',
+      none: 'vanillajs-template',
     },
     tsdk: {
       react: 'reactjs-js-tsdk-template',
       solid: 'solidjs-js-tsdk-template',
       next: 'nextjs-js-tsdk-template',
+      jquery: 'js-tsdk-template',
+      none: 'vanillajs-tsdk-template',
     },
   },
   ts: {
@@ -28,11 +32,13 @@ const settings = {
       react: 'reactjs-template',
       solid: 'solidjs-template',
       next: 'nextjs-template',
+      jquery: 'typescript-template',
     },
     tsdk: {
       react: 'reactjs-tsdk-template',
       solid: 'solidjs-tsdk-template',
       next: 'nextjs-tsdk-template',
+      jquery: 'typescript-tsdk-template',
     },
   },
 } as const;

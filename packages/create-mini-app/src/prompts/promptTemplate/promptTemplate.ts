@@ -217,24 +217,26 @@ export const promptTemplate = createPrompt<Template, {}>(
       // Lower border.
       [CORNER_BOTTOM_LEFT, horizontalColumnLines.join(LINE_HOR_T_UP), CORNER_BOTTOM_RIGHT].join(''),
 
+      // Help tip.
+      // theme.style.help(
+        [
+        `${theme.style.key('space')} to select`,
+        theme.style.key(figures.arrowUp),
+        theme.style.key(figures.arrowDown),
+        `${theme.style.key(figures.arrowLeft)} and ${theme.style.key(figures.arrowDown)} to change the cursor`,
+      ].join(', '),
+    // ),
+
+      new Separator().separator,
+
       // Selection status.
       template
         ? theme.style.success(`A template using these technologies was discovered. Press ${theme.style.key('enter')} to proceed.`)
-        : theme.style.error('Unable to find a template using these technologies.'),
-
-      new Separator().separator,
+        : theme.style.error('Unable to find a template using these technologies'),
 
       theme.style.help(
         'According to selected technologies, the CLI tool will pick a corresponding template, which will be used as a base for your application.',
       ),
-
-      // Help tip.
-      theme.style.help([
-        `${theme.style.key('space')} to select`,
-        theme.style.key(figures.arrowUp),
-        theme.style.key(figures.arrowDown),
-        `${theme.style.key(figures.arrowLeft)} and ${theme.style.key(figures.arrowDown)} to change cursor`,
-      ].join(', ')),
 
       ansiEscapes.cursorHide,
     );

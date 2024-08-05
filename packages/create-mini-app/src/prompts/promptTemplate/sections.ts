@@ -25,6 +25,8 @@ export const sections: Section[] = [
       { title: 'React.js', value: 'react', defaultChecked: true },
       { title: 'Solid.js', value: 'solid' },
       { title: 'Next.js', value: 'next' },
+      { title: 'jQuery', value: 'jquery' },
+      { title: 'None', value: 'none' },
     ],
   },
 ];
