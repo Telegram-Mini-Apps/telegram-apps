@@ -28,3 +28,25 @@ it('should call subscriber only once if several signals were changed', () => {
   b.set(4);
   expect(spy).toHaveBeenCalledTimes(4);
 });
+
+it('should work as expected if batch was called inside other batch', () => {
+  const a = signal(1);
+  const b = signal(2);
+  const c = computed(() => a() + b());
+
+  const spy = vi.fn();
+  c.sub(spy);
+
+  batch(() => {
+    batch(() => {
+      a.set(10);
+      a.set(11);
+    });
+    batch(() => {
+      b.set(30);
+      b.set(88);
+    });
+  });
+  expect(spy).toHaveBeenCalledTimes(1);
+  expect(spy).toHaveBeenCalledWith(99, 3);
+});
