@@ -35,6 +35,11 @@ export function runInBatchMode(signal: Signal<unknown>, fn: () => void): void {
  * // function four times.
  */
 export function batch(fn: () => void): void {
+  // There could be a case, when batch is called inside other batch.
+  // In this case, we should just ignore the current call.
+  if (callbacks) {
+    return fn();
+  }
   callbacks = new Map();
 
   try {
