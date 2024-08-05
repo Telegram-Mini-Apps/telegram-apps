@@ -1,4 +1,5 @@
 import { collectSignal } from './reactive-context.js';
+import { runInBatchMode } from './batch.js';
 
 export type SubscribeListenerFn<T> = (actualValue: T, prevValue: T) => void;
 
@@ -99,13 +100,15 @@ export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T
       //
       // We want the setter to make sure that all listeners will be called in predefined
       // order withing a single update frame.
-      [...listeners].forEach(([fn, once]) => {
-        fn(v, prev);
+      runInBatchMode(s, () => {
+        [...listeners].forEach(([fn, once]) => {
+          fn(v, prev);
 
-        // Remove "once" listeners.
-        if (once) {
-          unsub(fn, true);
-        }
+          // Remove "once" listeners.
+          if (once) {
+            unsub(fn, true);
+          }
+        });
       });
     }
   };
