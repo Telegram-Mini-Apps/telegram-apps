@@ -1,11 +1,5 @@
 import type { PostEvent } from '@/bridge/methods/postEvent.js';
-import type { BrowserNavigator } from '@/navigation/BrowserNavigator/BrowserNavigator.js';
-
-/**
- * Minimal set of properties we are working with in this library.
- */
-export interface URLLike extends Pick<URL, 'pathname' | 'search' | 'hash'> {
-}
+import type { BrowserNavigator } from '@/browser/BrowserNavigator/BrowserNavigator.js';
 
 export interface BrowserNavigatorConOptions {
   /**

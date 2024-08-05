@@ -1,14 +1,14 @@
 import { EventEmitter } from '@/events/event-emitter/EventEmitter.js';
-import { BasicNavigator } from '@/navigation/BasicNavigator/BasicNavigator.js';
-import { basicItemToBrowser } from '@/navigation/BrowserNavigator/basicItemToBrowser.js';
-import { prepareItem } from '@/navigation/BrowserNavigator/prepareItem.js';
-import { createSafeURL } from '@/navigation/createSafeURL.js';
-import { drop } from '@/navigation/drop.js';
-import { ensurePrefix } from '@/navigation/ensurePrefix.js';
-import { getPathname } from '@/navigation/getPathname.js';
-import { go } from '@/navigation/go.js';
-import { urlToPath } from '@/navigation/urlToPath.js';
-import type { BasicNavigatorEvents } from '@/navigation/BasicNavigator/types.js';
+import { Navigator } from '@/Navigator/Navigator.js';
+import { basicItemToBrowser } from '@/browser/BrowserNavigator/basicItemToBrowser.js';
+import { prepareItem } from '@/browser/BrowserNavigator/prepareItem.js';
+import { createSafeURL } from '@/browser/createSafeURL.js';
+import { drop } from '@/browser/drop.js';
+import { ensurePrefix } from '@/browser/ensurePrefix.js';
+import { getPathname } from '@/browser/getPathname.js';
+import { go } from '@/browser/go.js';
+import { urlToPath } from '@/browser/urlToPath.js';
+import type { BasicNavigatorEvents } from '@/Navigator/types.js';
 import type {
   BrowserNavigatorAnyHistoryItem,
   BrowserNavigatorConOptions,
@@ -17,13 +17,13 @@ import type {
   BrowserNavigatorHistoryItem,
   BrowserNavigatorHistoryItemParams,
   URLLike,
-} from '@/navigation/BrowserNavigator/types.js';
+} from '@/browser/BrowserNavigator/types.js';
 
 const CURSOR_VOID = 0;
 const CURSOR_BACK = 1;
 const CURSOR_FORWARD = 2;
 
-type Navigator<State> = BasicNavigator<BrowserNavigatorHistoryItemParams<State>>;
+type Navigator<State> = Navigator<BrowserNavigatorHistoryItemParams<State>>;
 type Emitter<State> = EventEmitter<BrowserNavigatorEvents<State>>;
 
 export class BrowserNavigator<State = {}> {
@@ -46,7 +46,7 @@ export class BrowserNavigator<State = {}> {
     index: number,
     { postEvent, hashMode = 'classic', base }: BrowserNavigatorConOptions = {},
   ) {
-    this.navigator = new BasicNavigator(
+    this.navigator = new Navigator(
       history.map((item) => prepareItem(item, '/')),
       index,
       postEvent,

@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { urlToPath } from '@/navigation/urlToPath.js';
+import { urlToPath } from '@/browser/urlToPath.js';
 
 it('should preserve trailing slash in the beginning of the path', () => {
   expect(urlToPath('a?b#c')).toBe('a?b#c');

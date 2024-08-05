@@ -1,0 +1,55 @@
+{
+  "name": "@telegram-apps/navigation",
+  "version": "0.0.0",
+  "description": "Navigation functionality for Telegram Mini Apps.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
+    "directory": "packages/navigation"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
+  },
+  "keywords": [
+    "telegram-mini-apps",
+    "typescript",
+    "navigation"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/dts/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "test": "vitest --run",
+    "lint": "cd ../.. && eslint packages/navigation/src --ignore-pattern **/*.test.ts",
+    "lint:fix": "pnpm run lint --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "build": "vite build -c vite.config.ts"
+  },
+  "dependencies": {
+    "@telegram-apps/bridge": "workspace:^",
+    "@telegram-apps/signals": "workspace:^"
+  },
+  "devDependencies": {
+    "test-utils": "workspace:*",
+    "tsconfig": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

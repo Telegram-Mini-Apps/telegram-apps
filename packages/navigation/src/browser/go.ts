@@ -1,5 +1,3 @@
-import { onWindow } from '@/events/onWindow.js';
-
 /**
  * Performs window.history.go operation waiting for it to be completed.
  * @param delta - history change delta.
@@ -14,8 +12,8 @@ export async function go(delta: number): Promise<boolean> {
   // browsers.
   return Promise.race<boolean>([
     new Promise((res) => {
-      const remove = onWindow('popstate', () => {
-        remove();
+      window.addEventListener('popstate', function listener() {
+        window.removeEventListener('popstate', listener);
         res(true);
       });
 

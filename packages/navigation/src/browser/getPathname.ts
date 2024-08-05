@@ -1,5 +1,5 @@
-import { createSafeURL } from '@/navigation/createSafeURL.js';
-import type { URLLike } from '@/navigation/BrowserNavigator/types.js';
+import { createSafeURL } from './createSafeURL.js';
+import type { URLLike } from './types.js';
 
 /**
  * Extracts pathname from the value.

@@ -1,9 +1,9 @@
 import { createError } from '@/errors/createError.js';
 import { ERR_INVALID_PATH_BASE } from '@/errors/errors.js';
-import { BrowserNavigator } from '@/navigation/BrowserNavigator/BrowserNavigator.js';
-import { getPathname } from '@/navigation/getPathname.js';
-import { urlToPath } from '@/navigation/urlToPath.js';
-import type { BrowserNavigatorConOptions } from '@/navigation/BrowserNavigator/types.js';
+import { BrowserNavigator } from '@/browser/BrowserNavigator/BrowserNavigator.js';
+import { getPathname } from '@/browser/getPathname.js';
+import { urlToPath } from '@/browser/urlToPath.js';
+import type { BrowserNavigatorConOptions } from '@/browser/BrowserNavigator/types.js';
 
 export function createBrowserNavigatorFromLocation<State>(
   options?: BrowserNavigatorConOptions,

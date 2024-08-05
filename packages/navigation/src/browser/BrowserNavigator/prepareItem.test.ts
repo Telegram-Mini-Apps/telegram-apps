@@ -1,5 +1,5 @@
 import { expect, it, describe } from 'vitest';
-import { prepareItem } from '@/navigation/BrowserNavigator/prepareItem.js';
+import { prepareItem } from '@/browser/BrowserNavigator/prepareItem.js';
 
 describe('item is string', () => {
   it(
