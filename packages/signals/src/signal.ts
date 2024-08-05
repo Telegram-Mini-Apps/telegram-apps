@@ -1,18 +1,22 @@
 import { collectSignal } from './reactive-context.js';
-import type { ListenerFn, UnsubscribeFn } from './types.js';
+
+export type SubscribeListenerFn<T> = (actualValue: T, prevValue: T) => void;
 
 export interface SignalOptions<T> {
   /**
-   * Previous and next values comparator. Should return true if values are the same.
+   * Previous and next values comparator.
+   *
+   * This function is used during the actual and incoming values comparison in the `set` method.
+   * If values are considered the same, no subscribers will be called.
    *
    * By default, signals compares values directly using "===".
-   * @param a - current value.
-   * @param b - incoming value.
+   * @param a - the actual value.
+   * @param b - an incoming value.
    * @returns True if values are considered the same.
    */
   equals?(this: void, a: T, b: T): boolean;
   /**
-   * Signal.set enhancer.
+   * The `set` method override.
    * @param signal - an underlying signal (non-enhanced).
    * @param value - value to set.
    */
@@ -28,20 +32,22 @@ export interface Signal<T> {
    * Updates the signal notifying all subscribers about changes.
    * @param value - value to set.
    */
-  set(this: void, value: T): void;
+  set(value: T): void;
   /**
    * Resets the signal value to its initial value.
    */
-  reset(this: void): void;
+  reset(): void;
   /**
    * Adds a new listener, tracking the signal changes.
    * @param fn - event listener.
    * @param options - additional options.
-   * @returns A function to remove bound listener.
+   * @returns A function to remove the bound listener.
    */
-  sub(this: void, fn: ListenerFn<T>, options?: {
+  sub(fn: SubscribeListenerFn<T>, options?: {
     /**
      * True if the listener was added by some other signal.
+     * In this case, the listener will not be removed by the unsubAll method.
+     * @default false
      */
     signal?: boolean;
     /**
@@ -49,17 +55,17 @@ export interface Signal<T> {
      * @default false
      */
     once?: boolean;
-  }): UnsubscribeFn;
+  }): () => void;
   /**
    * Removes a listener, tracking the signal changes.
    * @param fn - event listener.
    * @param once - was this listener added for a single call. Default: false
    */
-  unsub(this: void, fn: ListenerFn<T>, once?: boolean): void;
+  unsub(fn: SubscribeListenerFn<T>, once?: boolean): void;
   /**
    * Removes all signal change listeners, not added by other signals.
    */
-  unsubAll(this: void): void;
+  unsubAll(): void;
 }
 
 /*@__NO_SIDE_EFFECTS__*/
@@ -71,7 +77,7 @@ export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T
     /**
      * Actual change listener.
      */
-    listener: ListenerFn<T>,
+    listener: SubscribeListenerFn<T>,
     /**
      * Should this listener be called only once.
      */
@@ -85,6 +91,7 @@ export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T
 
   const set: Signal<T>['set'] = v => {
     if (!equals(value, v)) {
+      const prev = value;
       value = v;
 
       // We are making a copy of listeners as long as they may mutate the listeners' array,
@@ -93,7 +100,7 @@ export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T
       // We want the setter to make sure that all listeners will be called in predefined
       // order withing a single update frame.
       [...listeners].forEach(([fn, once]) => {
-        fn(v);
+        fn(v, prev);
 
         // Remove "once" listeners.
         if (once) {
