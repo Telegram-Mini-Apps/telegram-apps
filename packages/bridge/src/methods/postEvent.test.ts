@@ -5,8 +5,7 @@ import {
   it,
   vi,
 } from 'vitest';
-
-import { createWindow } from '@test-utils/createWindow.js';
+import { createWindow } from 'test-utils';
 
 import { targetOrigin } from './targetOrigin.js';
 import { postEvent } from './postEvent.js';

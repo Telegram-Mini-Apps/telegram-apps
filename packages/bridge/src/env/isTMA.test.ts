@@ -1,5 +1,5 @@
 import { afterEach, expect, it, vi } from 'vitest';
-import { createWindow } from '@test-utils/createWindow.js';
+import { createWindow } from 'test-utils';
 
 import { request as requestFn } from '@/utils/request.js';
 import { isTMA } from './isTMA.js';
