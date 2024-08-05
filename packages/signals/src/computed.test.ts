@@ -22,3 +22,11 @@ describe('sub', () => {
     expect(fn).toBeCalledWith(200, 100);
   });
 });
+
+it('should properly proceed nested computed calls', () => {
+  const a = signal(2);
+  const b = signal(2);
+  const c = computed(() => a() + b());
+  const d = computed(() => c() * 2);
+  expect(d()).toBe(8);
+});
