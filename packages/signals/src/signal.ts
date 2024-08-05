@@ -1,4 +1,4 @@
-import { collectSignal } from './reactive-context.js';
+import { collectSignal } from './computed.js';
 import { runInBatchMode } from './batch.js';
 
 export type SubscribeListenerFn<T> = (actualValue: T, prevValue: T) => void;
