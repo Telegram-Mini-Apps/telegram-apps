@@ -71,8 +71,8 @@ export function computed<T>(fn: () => T, options?: SignalOptions<T>): Computed<T
       return s.sub(...args);
     },
     // All other properties are just proxied.
-    unsub: s.unsub,
-    unsubAll: s.unsubAll,
+    unsub: s.unsub.bind(s),
+    unsubAll: s.unsubAll.bind(s),
   } satisfies Pick<Computed<T>, 'sub' | 'unsub' | 'unsubAll'>);
 
   return computed as Computed<T>;
