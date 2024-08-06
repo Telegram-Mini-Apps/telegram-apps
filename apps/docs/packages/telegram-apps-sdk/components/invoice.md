@@ -43,6 +43,12 @@ invoice
   });
 ```
 
+::: info
+
+Note that slug is a part of the string which is placed after the `$` symbol. So, having the `$abcdefghi` value returned from Telegram Bot API, you must call the `open` method using the `abcdefghi` value, or a complete URL (https://t.me/invoice/abcdefghi or https://t.me/$abcdefghi).
+
+:::
+
 :::
 
 ## Events
