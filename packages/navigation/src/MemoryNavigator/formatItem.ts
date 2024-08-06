@@ -1,10 +1,10 @@
-import type { AnyNavigatorHistoryItem, NavigatorHistoryItem } from './types.js';
+import type { AnyHistoryItem, HistoryItem } from './types.js';
 
 /**
  * Converts any known history item type to the local one.
  * @param item - history item presented as a string or an object.
  */
-export function formatItem<Params>(item: AnyNavigatorHistoryItem<Params>): NavigatorHistoryItem<Params> {
+export function formatItem<Params>(item: AnyHistoryItem<Params>): HistoryItem<Params> {
   let pathname: string;
   let params: Params | undefined;
   let id: string | undefined;
