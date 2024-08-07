@@ -1,22 +1,23 @@
 # Motivation
 
-This document describes the motivation that inspired us to create `@telegram-apps`.
+This document describes the motivation that inspired us to create `@telegram-apps/sdk`.
 
 Here is the list of problems, we found in the official SDK and decided to create our own:
- 
-1. [Unproductive package format](#unproductive-package-format)
-2. [No public review](#no-public-review)
+
+1. [Unproductive Package Format](#unproductive-package-format)
+2. [No Public Review](#no-public-review)
 3. [Vanilla JavaScript](#vanilla-javascript)
-4. [Possible security issues](#possible-security-issues)
-5. [Mixed code quality](#mixed-code-quality)
-6. [Bundle size](#bundle-size)
-7. [Inconsistent components state](#inconsistent-components-state)
-8. [1700 lines of code, single file](#1700-lines-of-code-single-file)
-9. [Unused code](#unused-code)
-10. [Implicit methods inactivity](#implicit-methods-inactivity)
-11. [Uncontrolled initialization](#uncontrolled-initialization)
-12. [Forced CSS variables](#forced-css-variables)
-13. [Forced logs](#forced-logs)
+4. [Possible Security Issues](#possible-security-issues)
+5. [Mixed Code Quality](#mixed-code-quality)
+6. [Bundle Size](#bundle-size)
+7. [Inconsistent Components State](#inconsistent-components-state)
+8. [1700 Lines of Code, Single File](#1700-lines-of-code-single-file)
+9. [Unused Code](#unused-code)
+10. [Implicit Methods Inactivity](#implicit-methods-inactivity)
+11. [Uncontrolled Initialization](#uncontrolled-initialization)
+12. [Forced CSS Variables](#forced-css-variables)
+13. [Forced Logs](#forced-logs)
+14. [Ancient Bugs](#ancient-bugs)
 
 ## Unproductive Package Format
 
@@ -27,7 +28,8 @@ development has advanced significantly beyond the ES5 standard and traditional J
 
 ### Solution
 
-Despite the issues associated with IIFE, `@telegram-apps` is available in three formats: CommonJS (CJS),
+Despite the issues associated with IIFE, `@telegram-apps/sdk` is available in three formats:
+CommonJS (CJS),
 ECMAScript Modules (ESM), and IIFE. Developers have the flexibility to choose any of these formats,
 and they can reap the benefits of selecting ESM.
 
@@ -42,7 +44,8 @@ Additionally, developers are unable to report some problems in code or suggest a
 
 ### Solution
 
-`@telegram-apps` uses GitHub as its codebase repository. Every developer can track changes made to any
+`@telegram-apps/sdk` uses GitHub as its codebase repository. Every developer can track changes made
+to any
 files and review them.
 
 ## Vanilla JavaScript
@@ -54,7 +57,8 @@ TypeScript, offering type support out of the box.
 
 ### Solution
 
-`@telegram-apps` is written in TypeScript and doesn't require help of other packages to provide typings.
+`@telegram-apps/sdk` is written in TypeScript and doesn't require help of other packages to provide
+typings.
 
 ## Possible Security Issues
 
@@ -65,20 +69,22 @@ var trustedTarget = 'https://web.telegram.org';
 // For now we don't restrict target, for testing purposes
 trustedTarget = '*';
 window.parent.postMessage(JSON.stringify({
-    eventType: eventType,
-    eventData: eventData
+  eventType: eventType,
+  eventData: eventData
 }), trustedTarget);
 ```
 
 This section of code determines which parent iframes can receive `message` events from the
 developer's application. For typical developers, this means determining which iframes are capable of
-receiving [Telegram Mini Apps methods](https://docs.telegram-mini-apps.com/docs/apps-communication/methods) data along
+receiving [Telegram Mini Apps methods](https://docs.telegram-mini-apps.com/docs/apps-communication/methods)
+data along
 with their parameters. Despite the fact that the average developer does not need to disable
 this security mechanism, Telegram does it for them for "testing purposes".
 
 ### Solution
 
-`@telegram-apps` does not disable any security mechanisms. If a developer needs to configure the list of
+`@telegram-apps/sdk` does not disable any security mechanisms. If a developer needs to configure the
+list of
 allowed parent iframe origins, the package provides corresponding methods.
 
 ## Mixed Code Quality
@@ -94,7 +100,8 @@ is happening in the code, which, in turn, makes it more challenging to contribut
 
 ### Solution
 
-`@telegram-apps` code is extensively documented with various types of comments and documentation. The
+`@telegram-apps/sdk` code is extensively documented with various types of comments and
+documentation. The
 project follows well-established and widely
 recognized [ESLint rules as described by Airbnb](https://github.com/airbnb/javascript). External
 developers are welcome to explore the code and propose improvements.
@@ -108,7 +115,8 @@ here.
 
 ### Solution
 
-`@telegram-apps` packages are built using Vite (Rollup), which minifies the code and provides ready-to-use
+`@telegram-apps/sdk` packages are built using Vite (Rollup), which minifies the code and provides
+ready-to-use
 libraries.
 
 ## Inconsistent Components State
@@ -130,7 +138,7 @@ So, the SDK lacks awareness of the actual state of components.
 
 ### Solution
 
-`@telegram-apps` packages consistently provide the current component state.
+`@telegram-apps/sdk` packages consistently provide the current component state.
 
 ## 1700 Lines of Code, Single File
 
@@ -139,7 +147,8 @@ way too hard, decreasing code understanding and external developers code contrib
 
 ### Solution
 
-`@telegram-apps` packages are finely detailed, with each package being responsible for its specific part of
+`@telegram-apps/sdk` packages are finely detailed, with each package being responsible for its
+specific part of
 the platform and having an intuitive file structure.
 
 ## Unused Code
@@ -153,16 +162,16 @@ a launch parameter, such as `tgWebAppDebug`, which is not present in normal appl
 
 ```typescript
  if (initParams.tgWebAppDebug) {
-    debugBtn = document.createElement('tg-main-button');
-    debugBtnStyle = {
-        font: '600 14px/18px sans-serif',
-        display: 'none',
-        width: '100%',
-        height: '48px',
-        borderRadius: '0',
-        background: 'no-repeat right center',
-        position: 'fixed',
-        left: '0',
+  debugBtn = document.createElement('tg-main-button');
+  debugBtnStyle = {
+    font: '600 14px/18px sans-serif',
+    display: 'none',
+    width: '100%',
+    height: '48px',
+    borderRadius: '0',
+    background: 'no-repeat right center',
+    position: 'fixed',
+    left: '0',
 // ...
 ```
 
@@ -174,7 +183,8 @@ already a concern.
 
 ### Solution
 
-`@telegram-apps` does not contain any code specifically oriented towards a distinct group of developers.
+`@telegram-apps/sdk` does not contain any code specifically oriented towards a distinct group of
+developers.
 The functionality it provides covers scenarios that all developers are likely to encounter.
 
 ## Implicit Methods Inactivity
@@ -195,15 +205,18 @@ platform versions and implement the corresponding functionality themselves.
 
 ### Solution
 
-The `@telegram-apps/bridge` package offers utilities to verify whether a specific Telegram Mini Apps method
+The `@telegram-apps/bridge` package offers utilities to verify whether a specific Telegram Mini Apps
+method
 is supported in a specified platform version. This ensures that the developer can be confident the
 method call will work as intended. It also allows checking if specified method **parameter** is
 supported by specified version.
 
-The `@telegram-apps/sdk` package provides higher-level components that make use of Telegram Mini Apps. Each
+The `@telegram-apps/sdk` package provides higher-level components that make use of Telegram Mini
+Apps. Each
 component has a special method, `supports`, which returns `true` if the component's method is
 supported in the current platform version. By default, calling methods that are not supported in the
-current platform version will result in an error. Nevertheless, this type of behavior is configurable.
+current platform version will result in an error. Nevertheless, this type of behavior is
+configurable.
 
 ## Uncontrolled Initialization
 
@@ -219,7 +232,7 @@ initialization has been completed.
 
 ### Solution
 
-`@telegram-apps` provides asynchronous initialization to ensure that developers are working with
+`@telegram-apps/sdk` provides asynchronous initialization to ensure that developers are working with
 components in their actual state. However, it does not restrict developers from implementing
 their own initialization process.
 
@@ -237,7 +250,7 @@ configurable.
 
 ### Solution
 
-CSS variables feature is configurable in `@telegram-apps` packages.
+CSS variables feature is configurable in `@telegram-apps/sdk` packages.
 
 ## Forced Logs
 
@@ -245,6 +258,19 @@ Developers are unable to disable logs, related to the package lifecycle.
 This makes application debugging a bit harder, and sometimes, may lead
 to sending unnecessary logs to external services.
 
+## Ancient Bugs
+
+The Telegram SDK contains bugs that have not been fixed for a long time.
+
+These bugs have existed since the library's inception.
+
+For example, the SDK does not allow a developer to track the closing of a popup when it is closed by
+clicking outside it or by clicking the close icon. To handle this, developers must use a
+workaround not intended for this purpose.
+
+The main issue here is not the bug itself, but the inability to notify the library owners about it.
+
 ### Solution
 
-`@telegram-apps/sdk` supports enabling and disabling lifecycle logs.
+All `@telegram-apps` packages are public, and developers are allowed to create an issue for a bug.
+The community will then work to fix it.
