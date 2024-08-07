@@ -18,11 +18,8 @@ export function computed<T>(fn: () => T, options?: SignalOptions<T>): Computed<T
   // List of the signal dependencies.
   let deps = new Set<Signal<unknown>>();
 
-  // True, if we already computed the value once.
-  let computedOnce = false;
-
   // Underlying computed signal.
-  const s = signal(undefined as T, options);
+  const s = signal(compute(), options);
 
   /**
    * Updates the signal value using the `compute` function.
@@ -58,39 +55,14 @@ export function computed<T>(fn: () => T, options?: SignalOptions<T>): Computed<T
     collectedSignals.forEach(s => s.sub(update, { signal: true }));
     deps = collectedSignals;
 
-    computedOnce = true;
-
     return result;
   }
 
-  /**
-   * Updates the signal in case, it was not set initially.
-   */
-  function checkComputed() {
-    !computedOnce && update();
-  }
-
-  /**
-   * Computed signal itself.
-   */
-  function computed(): T {
-    checkComputed();
+  return Object.assign(function computed(): T {
     return s();
-  }
-
-  // We enhance the `sub` method with the initial value computation.
-  // The reason is not computing the initial value, we don't know the dependencies.
-  // So, we don't know when the re-computation must be performed and when subscribers should
-  // be notified.
-  Object.assign(computed, {
-    sub(...args) {
-      checkComputed();
-      return s.sub(...args);
-    },
-    // All other properties are just proxied.
+  }, {
+    sub: s.sub,
     unsub: s.unsub,
     unsubAll: s.unsubAll,
   } satisfies Pick<Computed<T>, 'sub' | 'unsub' | 'unsubAll'>);
-
-  return computed as Computed<T>;
 }
