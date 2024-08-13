@@ -1,4 +1,4 @@
-import { log } from '@/debug.js';
+import { debugLog } from '@/debug.js';
 import { isIframe } from '@/env/isIframe.js';
 import { isRecord } from '@/utils/isRecord.js';
 import { createError } from '@/errors/createError.js';
@@ -90,7 +90,7 @@ export function postEvent(
     }
   }
 
-  log('Posting event:', eventData
+  debugLog('Posting event:', eventData
     ? { event: eventType, data: eventData }
     : { event: eventType });
 
