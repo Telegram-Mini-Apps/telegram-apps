@@ -1,9 +1,9 @@
 import { afterEach, expect, it, vi } from 'vitest';
 
-import { drop } from './drop.js';
-import { go as goFn } from './go.js';
+import { dropHistory } from './dropHistory.js';
+import { historyGo as historyGoFn } from './historyGo.js';
 
-vi.mock('./go.js', () => ({ go: vi.fn() }));
+vi.mock('./historyGo.js', () => ({ historyGo: vi.fn() }));
 
 function mockHistoryLength(length: number) {
   vi
@@ -13,36 +13,34 @@ function mockHistoryLength(length: number) {
 
 function mockPushState(impl?: History['pushState']) {
   const spy = vi.spyOn(window.history, 'pushState');
-  if (impl) {
-    spy.mockImplementation(impl);
-  }
+  impl && spy.mockImplementation(impl);
 }
 
-const go = vi.mocked(goFn);
+const historyGo = vi.mocked(historyGoFn);
 
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
-it('should do nothing if history.length <= 1', () => {
+it('should do nothing if history.length <= 1', async () => {
   const pushStateSpy = vi.fn();
   mockPushState(pushStateSpy);
 
   mockHistoryLength(0);
-  drop();
+  await dropHistory();
   expect(pushStateSpy).not.toHaveBeenCalled();
 
   mockHistoryLength(1);
-  drop();
+  await dropHistory();
   expect(pushStateSpy).not.toHaveBeenCalled();
 });
 
-it('should push empty state', () => {
+it('should push empty state', async () => {
   const pushStateSpy = vi.fn();
   mockHistoryLength(2);
   mockPushState(pushStateSpy);
 
-  drop();
+  await dropHistory();
 
   expect(pushStateSpy).toHaveBeenCalledOnce();
   expect(pushStateSpy).toHaveBeenCalledWith(null, '');
@@ -52,11 +50,11 @@ it('should call "go" function with value 1 - window.history.length', async () =>
   mockHistoryLength(10);
   mockPushState(vi.fn());
 
-  go.mockImplementationOnce(async () => true);
-  await drop();
+  historyGo.mockImplementationOnce(() => Promise.resolve(true));
+  await dropHistory();
 
-  expect(go).toHaveBeenCalledOnce();
-  expect(go).toHaveBeenCalledWith(-9);
+  expect(historyGo).toHaveBeenCalledOnce();
+  expect(historyGo).toHaveBeenCalledWith(-9);
 });
 
 it('should call "go" function until it returns true', async () => {
@@ -64,16 +62,16 @@ it('should call "go" function until it returns true', async () => {
   mockPushState(vi.fn());
 
   let count = 0;
-  go.mockImplementation(async () => {
+  historyGo.mockImplementation(() => {
     count += 1;
-    return count > 1 && count <= 4;
+    return Promise.resolve(count > 1 && count <= 4);
   });
 
-  await drop();
+  await dropHistory();
 
-  expect(go).toHaveBeenCalledTimes(5);
-  expect(go).toHaveBeenNthCalledWith(1, -9);
+  expect(historyGo).toHaveBeenCalledTimes(5);
+  expect(historyGo).toHaveBeenNthCalledWith(1, -9);
   for (let i = 0; i < 4; i += 1) {
-    expect(go).toHaveBeenNthCalledWith(i + 2, -1);
+    expect(historyGo).toHaveBeenNthCalledWith(i + 2, -1);
   }
 });
