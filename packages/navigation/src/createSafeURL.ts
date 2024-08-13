@@ -7,9 +7,11 @@ import type { URLLike } from './types.js';
  */
 export function createSafeURL(urlOrPath: string | Partial<URLLike>): URL {
   return new URL(
-    typeof urlOrPath === 'string'
-      ? urlOrPath
-      : `${urlOrPath.pathname || ''}${ensurePrefix(urlOrPath.search || '', '?')}${ensurePrefix(urlOrPath.hash || '', '#')}`,
+    typeof urlOrPath === 'string' ? urlOrPath : [
+      urlOrPath.pathname || '',
+      ensurePrefix(urlOrPath.search || '', '?'),
+      ensurePrefix(urlOrPath.hash || '', '#'),
+    ].join(''),
     'http://a',
   );
 }

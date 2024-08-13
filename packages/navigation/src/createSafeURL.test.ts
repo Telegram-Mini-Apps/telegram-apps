@@ -1,4 +1,5 @@
 import { expect, it } from 'vitest';
+
 import { createSafeURL } from './createSafeURL.js';
 
 it('should create a url with passed path pathname, hash and search', () => {
