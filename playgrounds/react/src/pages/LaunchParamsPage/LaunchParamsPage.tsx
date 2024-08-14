@@ -15,7 +15,7 @@ export const LaunchParamsPage: FC = () => {
           { title: 'tgWebAppShowSettings', value: lp.showSettings },
           { title: 'tgWebAppVersion', value: lp.version },
           { title: 'tgWebAppBotInline', value: lp.botInline },
-          { title: 'tgWebAppStartParam', value: lp.showSettings },
+          { title: 'tgWebAppStartParam', value: lp.startParam },
           { title: 'tgWebAppData', type: 'link', value: '/init-data' },
           { title: 'tgWebAppThemeParams', type: 'link', value: '/theme-params' },
         ]}

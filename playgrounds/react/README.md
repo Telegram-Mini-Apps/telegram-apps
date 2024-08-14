@@ -60,11 +60,17 @@ npm run dev
 After this, you will see a similar message in your terminal:
 
 ```bash
-VITE ready in 275 ms
+VITE v5.2.12  ready in 237 ms
 
 ➜  Local:   http://localhost:5173/reactjs-template
+➜  Network: http://172.18.16.1:5173/reactjs-template
+➜  Network: http://172.19.32.1:5173/reactjs-template
+➜  Network: http://192.168.0.171:5173/reactjs-template
 ➜  press h + enter to show help
 ```
+
+Here, you can see the `Local` link, available locally, and `Network` links accessible to all
+devices in the same network with the current device.
 
 To view the application, you need to open the `Local`
 link (`http://localhost:5173/reactjs-template` in this example) in your browser:
@@ -98,9 +104,12 @@ which browsers will recognize as unsafe, resulting in a warning when accessing t
 After uncommenting the function, run the `dev` script again and observe the output in your terminal:
 
 ```bash
-VITE ready in 331 ms
+VITE v5.2.12  ready in 265 ms
 
 ➜  Local:   https://localhost:5173/reactjs-template
+➜  Network: https://172.18.16.1:5173/reactjs-template
+➜  Network: https://172.19.32.1:5173/reactjs-template
+➜  Network: https://192.168.0.171:5173/reactjs-template
 ➜  press h + enter to show help
 ```
 
@@ -112,33 +121,10 @@ browser, you will see the following warning:
 This browser warning is normal and can be safely ignored as long as the site is secure. Click
 the `Proceed to localhost (unsafe)` button to continue and view the application.
 
-Once the application is displayed correctly, submit this link as the Mini App link
+Once the application is displayed correctly, submit one of the `Network` links as the Mini App link
 to [@BotFather](https://t.me/botfather). Then, navigate
 to [https://web.telegram.org/k/](https://web.telegram.org/k/), find your bot, and launch the
 Telegram Mini App. This approach provides the full development experience.
-
-### Expose Dev Server
-
-Sometimes, you might want to view the application on other devices.
-
-To expose your development server to local network devices, go to the `vite.config.ts` file and
-uncomment the line defining the `host` option.
-
-Alternatively, you can achieve this by running the command `vite --host`.
-
-Here is an example of the output you will see:
-
-```bash
-VITE v5.2.12  ready in 257 ms
-
-➜  Local:   https://localhost:5173/reactjs-template
-➜  Network: https://172.27.224.1:5173/reactjs-template
-➜  Network: https://172.19.32.1:5173/reactjs-template
-➜  Network: https://192.168.0.171:5173/reactjs-template
-```
-
-All `Network` links listed here are accessible to devices on the same network. Using these links,
-those devices will be able to view the application.
 
 > **Important**
 >

@@ -32,7 +32,7 @@ export const Link: FC<LinkProps> = ({
 
     if (isExternal) {
       e.preventDefault();
-      return utils.openLink(targetUrl.toString());
+      utils.openLink(targetUrl.toString());
     }
   }, [to, propsOnClick, utils]);
 
