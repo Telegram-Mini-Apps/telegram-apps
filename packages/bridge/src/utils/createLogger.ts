@@ -8,8 +8,17 @@ export interface LoggerOptions {
   textColor?: string;
 }
 
+/*@__NO_SIDE_EFFECTS__*/
 export function createLogger(scope: string, options?: LoggerOptions): [
+  /**
+   * Prints log message into a console.
+   * @param args
+   */
   log: (...args: any[]) => void,
+  /**
+   * Prints error message into a console.
+   * @param args
+   */
   error: (...args: any[]) => void,
 ] {
   options ||= {};
@@ -43,17 +52,9 @@ export function createLogger(scope: string, options?: LoggerOptions): [
   }
 
   return [
-    /**
-     * Prints log message into a console.
-     * @param args
-     */
     function log(...args: any[]): void {
       print('log', ...args);
     },
-    /**
-     * Prints error message into a console.
-     * @param args
-     */
     function error(...args: any[]): void {
       print('error', ...args);
     },
