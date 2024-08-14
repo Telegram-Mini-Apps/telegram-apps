@@ -71,7 +71,7 @@ export { compareVersions } from '@/utils/compareVersions.js';
 export { createCleanup } from '@/utils/createCleanup.js';
 export { createLogger } from '@/utils/createLogger.js';
 export { createSingleton } from '@/utils/createSingleton.js';
-export { debug } from '@/debug.js';
+export { debug, setDebug } from '@/debug.js';
 export { invokeCustomMethod } from '@/utils/invokeCustomMethod.js';
 export { isRecord } from '@/utils/isRecord.js';
 export {
