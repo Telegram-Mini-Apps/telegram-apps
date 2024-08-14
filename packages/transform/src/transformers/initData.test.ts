@@ -5,11 +5,11 @@ import { initData } from './initData.js';
 
 describe('auth_date', () => {
   it('should throw an error in case, this property is missing', () => {
-    expect(() => initData().parse(toSearchParams({ hash: 'abcd' }))).toThrow();
+    expect(() => initData()(toSearchParams({ hash: 'abcd' }))).toThrow();
   });
 
-  it('should initData().parse source property as Date and pass it to the "authDate" property', () => {
-    expect(initData().parse(toSearchParams({ auth_date: 1, hash: 'abcd' }))).toMatchObject({
+  it('should parse source property as Date and pass it to the "authDate" property', () => {
+    expect(initData()(toSearchParams({ auth_date: 1, hash: 'abcd' }))).toMatchObject({
       authDate: new Date(1000),
     });
   });
@@ -18,7 +18,7 @@ describe('auth_date', () => {
 describe('can_send_after', () => {
   it('should parse source property as Date and pass it to the "canSendAfter" property', () => {
     expect(
-      initData().parse(toSearchParams({
+      initData()(toSearchParams({
         auth_date: 1,
         hash: 'abcd',
         can_send_after: 8882,
@@ -32,7 +32,7 @@ describe('can_send_after', () => {
 describe('chat', () => {
   it('should parse source property as Chat and pass it to the "chat" property', () => {
     expect(
-      initData().parse(toSearchParams({
+      initData()(toSearchParams({
         auth_date: 1,
         hash: 'abcd',
         chat: {
@@ -58,7 +58,7 @@ describe('chat', () => {
 describe('hash', () => {
   it('should throw an error in case, this property is missing', () => {
     expect(
-      () => initData().parse(toSearchParams({
+      () => initData()(toSearchParams({
         auth_date: 1,
       })),
     ).toThrow();
@@ -66,7 +66,7 @@ describe('hash', () => {
 
   it('should parse source property as string and pass it to the "hash" property', () => {
     expect(
-      initData().parse(toSearchParams({
+      initData()(toSearchParams({
         auth_date: 1,
         hash: 'abcd',
       })),
@@ -84,7 +84,7 @@ describe.each([
 ])('$from', ({ from, to }) => {
   it(`should parse source property as string and pass it to the "${to}" property`, () => {
     expect(
-      initData().parse(toSearchParams({
+      initData()(toSearchParams({
         auth_date: 1,
         hash: 'abcd',
         [from]: 'my custom property',
@@ -98,7 +98,7 @@ describe.each([
 describe.each(['user', 'receiver'])('%s', (property) => {
   it('should parse source property as User and pass it to the property with the same name', () => {
     expect(
-      initData().parse(toSearchParams({
+      initData()(toSearchParams({
         auth_date: 1,
         hash: 'abcd',
         [property]: {

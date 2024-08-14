@@ -1,6 +1,6 @@
 import { createError } from './errors/createError.js';
 import { ERR_PARSE } from './errors/errors.js';
-import type { Parser, Schema } from './types.js';
+import type { TransformFn, Schema } from './types.js';
 
 /**
  * Parses external value by specified schema. Functions iterates over each schema field
@@ -21,24 +21,17 @@ export function parseBySchema<T>(
     }
 
     let from: string;
-    let parser: Parser<any>;
+    let transform: TransformFn<any>;
 
-    // If the definition has the "type" property, then SchemaFieldDetailed was passed.
-    if (typeof definition === 'function' || 'parse' in definition) {
-      // Otherwise, we are working with either parser function or instance.
+    if (typeof definition === 'function') {
       from = field;
-      parser = typeof definition === 'function' ? definition : definition.parse.bind(definition);
+      transform = definition;
     } else {
-      const { type: definitionType } = definition;
-
-      from = definition.from || field;
-      parser = typeof definitionType === 'function'
-        ? definitionType
-        : definitionType.parse.bind(definitionType);
+      [from, transform] = definition;
     }
 
     try {
-      const parsedValue = parser(getField(from));
+      const parsedValue = transform(getField(from));
       if (parsedValue !== undefined) {
         (result as any)[field] = parsedValue;
       }
