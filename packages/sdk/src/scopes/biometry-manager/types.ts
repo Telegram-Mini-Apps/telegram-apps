@@ -1,5 +1,4 @@
 import type { BiometryType, ExecuteWithTimeout } from '@telegram-apps/bridge';
-import type { Maybe } from '@telegram-apps/types';
 
 export interface State {
   accessGranted: boolean;
@@ -10,6 +9,8 @@ export interface State {
   token?: string;
   biometryType?: BiometryType;
 }
+
+type Maybe<T> = T | null | undefined;
 
 export interface AuthenticateOptions extends ExecuteWithTimeout {
   /**
