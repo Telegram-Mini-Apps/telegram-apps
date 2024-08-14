@@ -1,4 +1,4 @@
-import { initData } from '@telegram-apps/parsing';
+import { initData } from '@telegram-apps/transform';
 import type { InitData } from '@telegram-apps/types';
 
 /**
@@ -7,5 +7,5 @@ import type { InitData } from '@telegram-apps/types';
  * @throws {} Parsing errors.
  */
 export function parse(value: unknown): InitData {
-  return initData().parse(value);
+  return initData()(value);
 }

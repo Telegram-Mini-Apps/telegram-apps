@@ -60,6 +60,6 @@
   },
   "dependencies": {
     "@telegram-apps/types": "workspace:^",
-    "@telegram-apps/parsing": "workspace:^"
+    "@telegram-apps/transform": "workspace:^"
   }
 }
