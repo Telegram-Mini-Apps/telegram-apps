@@ -1,10 +1,11 @@
-import { postEvent } from '@/scopes/globals/globals.js';
-import { off, on } from '@/bridge/events/listening.js';
-import { isPageReload } from '@/navigation/isPageReload.js';
-import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import * as themeParams from '@/scopes/theme-params/themeParams.js';
-import type { RemoveEventListenerFn } from '@/events/types.js';
-import type { EventListener } from '@/bridge/events/types.js';
+import { off, on, type EventListener } from '@telegram-apps/bridge';
+import { isPageReload } from '@telegram-apps/navigation';
+import { computed, type Computed } from '@telegram-apps/signals';
+import type { VoidFn } from '@telegram-apps/types';
+
+import { $postEvent } from '@/scopes/globals/globals.js';
+import { getStorageValue, setStorageValue } from '@/utils/storage.js';
+import * as themeParams from '@/scopes/theme-params/index.js';
 
 import * as _ from './private.js';
 import type { State } from './types.js';
@@ -18,12 +19,41 @@ import type { State } from './types.js';
 const CLICK_EVENT = 'main_button_pressed';
 const STORAGE_KEY = 'mainButton';
 
+function createStateComputed<K extends keyof State>(key: K): Computed<State[K]> {
+  return computed(() => _.state()[key]);
+}
+
+/**
+ * @see State.backgroundColor
+ */
+export const backgroundColor = createStateComputed('backgroundColor');
+
+/**
+ * @see State.isActive
+ */
+export const isActive = createStateComputed('isActive');
+
+/**
+ * True if the component is currently mounted.
+ */
+export const isMounted = computed(_.isMounted);
+
+/**
+ * @see State.isLoaderVisible
+ */
+export const isLoaderVisible = createStateComputed('isLoaderVisible');
+
+/**
+ * @see State.isVisible
+ */
+export const isVisible = createStateComputed('isVisible');
+
 /**
  * Add a new main button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
  */
-function onClick(fn: EventListener<'main_button_pressed'>): RemoveEventListenerFn {
+export function onClick(fn: EventListener<'main_button_pressed'>): VoidFn {
   return on(CLICK_EVENT, fn);
 }
 
@@ -31,14 +61,17 @@ function onClick(fn: EventListener<'main_button_pressed'>): RemoveEventListenerF
  * Removes the main button click listener.
  * @param fn - an event listener.
  */
-function offClick(fn: EventListener<'main_button_pressed'>): void {
+export function offClick(fn: EventListener<'main_button_pressed'>): void {
   off(CLICK_EVENT, fn);
 }
 
 /**
  * Mounts the component.
+ *
+ * This function restores the component state and is automatically saving it in the local storage
+ * if it changed.
  */
-function mount(): void {
+export function mount(): void {
   if (!_.isMounted()) {
     const prev = isPageReload() && getStorageValue(STORAGE_KEY);
     if (prev) {
@@ -60,7 +93,7 @@ function onStateChanged(s: State): void {
   // We should not commit changes until the payload is correct. Some version of Telegram will
   // crash due to the empty value of the text.
   if (s.text) {
-    postEvent()('web_app_setup_main_button', {
+    $postEvent()('web_app_setup_main_button', {
       is_visible: s.isVisible,
       is_active: s.isActive,
       is_progress_visible: s.isLoaderVisible,
@@ -73,10 +106,16 @@ function onStateChanged(s: State): void {
 }
 
 /**
+ * Complete component state.
+ */
+export const state = computed(_.state);
+
+
+/**
  * Updates the main button state.
  * @param updates - state changes to perform.
  */
-function setParams(updates: Partial<State>): void {
+export function setParams(updates: Partial<State>): void {
   _.state.set({
     ..._.state(),
     ...Object.fromEntries(
@@ -86,27 +125,22 @@ function setParams(updates: Partial<State>): void {
 }
 
 /**
- * Unmounts the component.
+ * @see State.text
  */
-function unmount(): void {
+export const text = createStateComputed('text');
+
+/**
+ * @see State.textColor
+ */
+export const textColor = createStateComputed('textColor');
+
+/**
+ * Unmounts the component, removing the listener, saving the component state in the local storage.
+ *
+ * Note that this function does not remove listeners, added via the `onClick` function.
+ * @see onClick
+ */
+export function unmount(): void {
   _.state.unsub(onStateChanged);
   _.isMounted.set(false);
 }
-
-export {
-  mount,
-  onClick,
-  offClick,
-  setParams,
-  unmount,
-};
-export {
-  backgroundColor,
-  isMounted,
-  isActive,
-  isVisible,
-  isLoaderVisible,
-  state,
-  text,
-  textColor,
-} from './computed.js';

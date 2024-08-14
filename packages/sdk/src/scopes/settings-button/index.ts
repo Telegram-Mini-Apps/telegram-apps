@@ -1,10 +1,11 @@
-import { off, on } from '@/bridge/events/listening.js';
-import { isPageReload } from '@/navigation/isPageReload.js';
-import { getStorageValue, setStorageValue } from '@/storage/storage.js';
+import { off, on, type EventListener } from '@telegram-apps/bridge';
+import { computed } from '@telegram-apps/signals';
+import { isPageReload } from '@telegram-apps/navigation';
+import type { VoidFn } from '@telegram-apps/types';
+
+import { getStorageValue, setStorageValue } from '@/utils/storage.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
-import { postEvent } from '@/scopes/globals/globals.js';
-import type { EventListener } from '@/bridge/events/types.js';
-import type { RemoveEventListenerFn } from '@/events/types.js';
+import { $postEvent } from '@/scopes/globals/globals.js';
 
 import * as _ from './private.js';
 
@@ -21,14 +22,27 @@ const STORAGE_KEY = 'settingsButton';
 /**
  * Hides the settings button.
  */
-const hide: WithIsSupported<() => void> = decorateWithIsSupported(() => {
+export const hide: WithIsSupported<() => void> = decorateWithIsSupported(() => {
   _.isVisible.set(false);
 }, MINI_APPS_METHOD);
 
 /**
- * Mounts the component.
+ * True if the component is currently visible.
  */
-function mount(): void {
+export const isVisible = computed(_.isVisible);
+
+/**
+ * True if the component is currently mounted.
+ */
+export const isMounted = computed(_.isMounted);
+
+/**
+ * Mounts the component.
+ *
+ * This function restores the component state and is automatically saving it in the local storage
+ * if it changed.
+ */
+export function mount(): void {
   if (!_.isMounted()) {
     _.isVisible.set(isPageReload() && getStorageValue(STORAGE_KEY) || false);
     _.isVisible.sub(onStateChanged);
@@ -37,7 +51,7 @@ function mount(): void {
 }
 
 function onStateChanged(isVisible: boolean) {
-  postEvent()(MINI_APPS_METHOD, { is_visible: isVisible });
+  $postEvent()(MINI_APPS_METHOD, { is_visible: isVisible });
   setStorageValue(STORAGE_KEY, isVisible);
 }
 
@@ -46,7 +60,7 @@ function onStateChanged(isVisible: boolean) {
  * @param fn - event listener.
  * @returns A function to remove bound listener.
  */
-function onClick(fn: EventListener<'settings_button_pressed'>): RemoveEventListenerFn {
+export function onClick(fn: EventListener<'settings_button_pressed'>): VoidFn {
   return on(CLICK_EVENT, fn);
 }
 
@@ -54,34 +68,24 @@ function onClick(fn: EventListener<'settings_button_pressed'>): RemoveEventListe
  * Removes the settings button click listener.
  * @param fn - an event listener.
  */
-function offClick(fn: EventListener<'settings_button_pressed'>): void {
+export function offClick(fn: EventListener<'settings_button_pressed'>): void {
   off(CLICK_EVENT, fn);
 }
 
 /**
  * Shows the settings button.
  */
-const show: WithIsSupported<() => void> = decorateWithIsSupported(() => {
+export const show: WithIsSupported<() => void> = decorateWithIsSupported(() => {
   _.isVisible.set(true);
 }, MINI_APPS_METHOD);
 
 /**
- * Unmounts the component.
+ * Unmounts the component, removing the listener, saving the component state in the local storage.
+ *
+ * Note that this function does not remove listeners, added via the `onClick` function.
+ * @see onClick
  */
-function unmount() {
+export function unmount() {
   _.isVisible.unsub(onStateChanged);
   _.isMounted.set(false);
 }
-
-export {
-  hide,
-  mount,
-  onClick,
-  offClick,
-  show,
-  unmount,
-};
-export {
-  isMounted,
-  isVisible,
-} from './computed.js';

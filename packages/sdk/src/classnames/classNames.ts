@@ -1,4 +1,4 @@
-import { isRecord } from '@/misc/isRecord.js';
+import { isRecord } from '@telegram-apps/bridge';
 
 /**
  * Function which joins passed values with space following these rules:

@@ -1,6 +1,8 @@
-import { postEvent } from '@/scopes/globals/globals.js';
-import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import { isPageReload } from '@/navigation/isPageReload.js';
+import { computed } from '@telegram-apps/signals';
+import { isPageReload } from '@telegram-apps/navigation';
+
+import { $postEvent } from '@/scopes/globals/globals.js';
+import { getStorageValue, setStorageValue } from '@/utils/storage.js';
 
 import * as _ from './private.js';
 
@@ -15,21 +17,36 @@ const STORAGE_KEY = 'closingBehavior';
 /**
  * Disables the confirmation dialog when closing the Mini App.
  */
-function disableConfirmation(): void {
+export function disableConfirmation(): void {
   _.isConfirmationNeeded.set(false);
 }
 
 /**
  * Enables the confirmation dialog when closing the Mini App.
  */
-function enableConfirmation() {
+export function enableConfirmation(): void {
   _.isConfirmationNeeded.set(true);
 }
 
 /**
- * Mounts the component.
+ * True if the confirmation dialog should be shown while the user is trying to close the Mini App.
  */
-function mount(): void {
+export const isConfirmationNeeded = computed(_.isConfirmationNeeded);
+
+/**
+ * True if the component is currently mounted.
+ * @see mount
+ * @see unmount
+ */
+export const isMounted = computed(_.isMounted);
+
+/**
+ * Mounts the component.
+ *
+ * This function restores the component state and is automatically saving it in the local storage
+ * if it changed.
+ */
+export function mount(): void {
   if (!_.isMounted()) {
     _.isConfirmationNeeded.set(isPageReload() && getStorageValue(STORAGE_KEY) || false);
     _.isConfirmationNeeded.sub(onStateChanged);
@@ -38,25 +55,14 @@ function mount(): void {
 }
 
 function onStateChanged(value: boolean): void {
-  postEvent()('web_app_setup_closing_behavior', { need_confirmation: value });
+  $postEvent()('web_app_setup_closing_behavior', { need_confirmation: value });
   setStorageValue(STORAGE_KEY, value);
 }
 
 /**
- * Unmounts the component.
+ * Unmounts the component, removing the listener, saving the component state in the local storage.
  */
-function unmount(): void {
+export function unmount(): void {
   _.isConfirmationNeeded.unsub(onStateChanged);
   _.isMounted.set(false);
 }
-
-export {
-  disableConfirmation,
-  enableConfirmation,
-  mount,
-  unmount,
-};
-export {
-  isConfirmationNeeded,
-  isMounted,
-} from './computed.js';

@@ -1,13 +1,19 @@
-import { postEvent } from '@/scopes/globals/globals.js';
-import { isPageReload } from '@/navigation/isPageReload.js';
-import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
-import { off, on } from '@/bridge/events/listening.js';
-import type { EventListener } from '@/bridge/events/types.js';
+import { off, on, type EventListener } from '@telegram-apps/bridge';
+import { isPageReload } from '@telegram-apps/navigation';
+import { computed, type Computed } from '@telegram-apps/signals';
+import type { VoidFn } from '@telegram-apps/types';
 
-import { request } from './static.js';
+import { $postEvent } from '@/scopes/globals/globals.js';
+import { getStorageValue, setStorageValue } from '@/utils/storage.js';
+import { retrieveLaunchParams } from '@/scopes/launch-params/retrieveLaunchParams.js';
+import { createError } from '@/errors/createError.js';
+import { ERR_CSS_VARS_BOUND } from '@/errors/errors.js';
+import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
+import { camelToKebab } from '@/utils/casing.js';
+
+import { type GetCSSVarNameFn, request } from './static.js';
 import * as _ from './private.js';
-import type { Viewport } from './types.js';
+import type { State } from './types.js';
 
 /*
  * fixme
@@ -15,24 +21,61 @@ import type { Viewport } from './types.js';
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/viewport
  */
 
+function createStateComputed<K extends keyof State>(key: K): Computed<State[K] | undefined> {
+  return computed(() => _.state()[key]);
+}
+
+/**
+ * Creates CSS variables connected with the current viewport.
+ *
+ * By default, created CSS variables names are following the pattern "--tg-theme-{name}", where
+ * {name} is a theme parameters key name converted from camel case to kebab case.
+ *
+ * Default variables:
+ * - `--tg-viewport-height`
+ * - `--tg-viewport-width`
+ * - `--tg-viewport-stable-height`
+ *
+ * Variables are being automatically updated if viewport was changed.
+ *
+ * @param getCSSVarName - function, returning complete CSS variable name for the specified
+ * viewport property.
+ * @returns Function to stop updating variables.
+ */
+export function bindCssVars(getCSSVarName?: GetCSSVarNameFn): VoidFn {
+  if (_.isCssVarsBound()) {
+    throw createError(ERR_CSS_VARS_BOUND);
+  }
+  getCSSVarName ||= (prop) => `--tg-viewport-${camelToKebab(prop)}`;
+  const props = ['height', 'width', 'stableHeight'] as const;
+
+  function actualize(): void {
+    props.forEach(prop => {
+      setCssVar(getCSSVarName!(prop), `${_.state()[prop]}px`);
+    });
+  }
+
+  actualize();
+  _.state.sub(actualize);
+  _.isCssVarsBound.set(true);
+
+  return () => {
+    props.forEach(deleteCssVar);
+    _.state.unsub(actualize);
+    _.isCssVarsBound.set(false);
+  };
+}
+
 /**
  * A method that expands the Mini App to the maximum available height. To find out if the Mini
  * App is expanded to the maximum height, refer to the value of the `isExpanded`.
  * @see isExpanded
  */
-function expand(): void {
-  postEvent()('web_app_expand');
+export function expand(): void {
+  $postEvent()('web_app_expand');
 }
 
-/**
- * Formats value to make it stay in bounds [0, +Inf).
- * @param value - value to format.
- */
-function truncate(value: number): number {
-  return value < 0 ? 0 : value;
-}
-
-function formatState(state: Viewport.State): Viewport.State {
+function formatState(state: State): State {
   return {
     isExpanded: state.isExpanded,
     height: truncate(state.height),
@@ -42,15 +85,65 @@ function formatState(state: Viewport.State): Viewport.State {
 }
 
 /**
- * Mounts the component.
+ * The current height of the **visible area** of the Mini App.
+ *
+ * The application can display just the top part of the Mini App, with its lower part remaining
+ * outside the screen area. From this position, the user can "pull" the Mini App to its
+ * maximum height, while the bot can do the same by calling `expand` method. As the position of
+ * the Mini App changes, the current height value of the visible area will be updated  in real
+ * time.
+ *
+ * Please note that the refresh rate of this value is not sufficient to smoothly follow the
+ * lower border of the window. It should not be used to pin interface elements to the bottom
+ * of the visible area. It's more appropriate to use the value of the `stableHeight`
+ * field for this purpose.
+ *
+ * @see stableHeight
  */
-function mount(): void {
+export const height = createStateComputed('height');
+
+/**
+ * True if the Mini App is expanded to the maximum available height. Otherwise, if
+ * the Mini App occupies part of the screen and can be expanded to the full height using
+ * `expand` method.
+ * @see expand
+ */
+export const isExpanded = createStateComputed('isExpanded');
+
+/**
+ * True if the current viewport height is stable and is not going to change in the next moment.
+ */
+export const isStable = computed(() => {
+  const s = _.state();
+  return s.height === s.stableHeight;
+});
+
+/**
+ * True if the component is currently mounted.
+ */
+export const isMounted = computed(_.isMounted);
+
+/**
+ * True if the component is currently mounting.
+ */
+export const isMounting = computed(_.isMounting);
+
+/**
+ * True if CSS variables are currently bound.
+ */
+export const isCssVarsBound = computed(_.isCssVarsBound);
+
+/**
+ * Mounts the component.
+ * todo
+ */
+export function mount(): void {
   if (_.isMounting() || _.isMounted()) {
     return;
   }
   _.isMounting.set(true);
 
-  function finalizeMount(state: Viewport.State): void {
+  function finalizeMount(state: State): void {
     on('viewport_changed', onViewportChanged);
     _.state.set(formatState(state));
     _.state.sub(onStateChanged);
@@ -103,6 +196,11 @@ function mount(): void {
     });
 }
 
+/**
+ * Error occurred while mounting the component.
+ */
+export const mountError = computed(_.mountError);
+
 const onViewportChanged: EventListener<'viewport_changed'> = (data) => {
   _.state.set(formatState({
     height: data.height,
@@ -112,31 +210,49 @@ const onViewportChanged: EventListener<'viewport_changed'> = (data) => {
   }));
 };
 
-function onStateChanged(s: Viewport.State): void {
+function onStateChanged(s: State): void {
   setStorageValue('viewport', s);
 }
 
 /**
- * Unmounts the component.
+ * Complete component state.
  */
-function unmount(): void {
+export const state = computed(_.state);
+
+/**
+ * The height of the visible area of the Mini App in its last stable state.
+ *
+ * The application can display just the top part of the Mini App, with its lower part remaining
+ * outside the screen area. From this position, the user can "pull" the Mini App to its
+ * maximum height, while the application can do the same by calling `expand` method.
+ *
+ * Unlike the value of `height`, the value of `stableHeight` does not change as the position
+ * of the Mini App changes with user gestures or during animations. The value of `stableHeight`
+ * will be updated after all gestures and animations are completed and the Mini App reaches its
+ * final size.
+ *
+ * @see height
+ */
+export const stableHeight = createStateComputed('stableHeight');
+
+/**
+ * Formats value to make it stay in bounds [0, +Inf).
+ * @param value - value to format.
+ */
+function truncate(value: number): number {
+  return value < 0 ? 0 : value;
+}
+
+/**
+ * Unmounts the component.
+ * todo
+ */
+export function unmount(): void {
   off('viewport_changed', onViewportChanged);
   _.state.unsub(onStateChanged);
 }
 
-export {
-  expand,
-  mount,
-  unmount,
-};
-export {
-  height,
-  isExpanded,
-  isMounted,
-  isMounting,
-  isStable,
-  mountError,
-  stableHeight,
-  state,
-  width,
-} from './computed.js';
+/**
+ * Currently visible area width.
+ */
+export const width = createStateComputed('width');

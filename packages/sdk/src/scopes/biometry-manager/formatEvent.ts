@@ -1,4 +1,4 @@
-import type { BiometryType, EventPayload } from '@/bridge/events/types.js';
+import type { BiometryType, EventPayload } from '@telegram-apps/bridge';
 
 export interface FormatBiometryInfoResult {
   /**

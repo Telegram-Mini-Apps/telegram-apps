@@ -1,25 +1,11 @@
-import type { RGB } from '@/colors/types.js';
+import type { ThemeParams } from '@telegram-apps/bridge';
 
-export type ThemeParamsKey =
-  | 'accentTextColor'
-  | 'bgColor'
-  | 'buttonColor'
-  | 'buttonTextColor'
-  | 'destructiveTextColor'
-  | 'headerBgColor'
-  | 'hintColor'
-  | 'linkColor'
-  | 'secondaryBgColor'
-  | 'sectionBgColor'
-  | 'sectionHeaderTextColor'
-  | 'sectionSeparatorColor'
-  | 'subtitleTextColor'
-  | 'textColor';
-
-/**
- * Application [theme parameters](https://docs.telegram-mini-apps.com/platform/theming).
- * Defines palette used by the Telegram application.
- */
-export interface ThemeParams {
-  [key: ThemeParamsKey | string]: RGB | undefined;
+export interface GetCssVarNameFn {
+  /**
+   * @param property - palette key.
+   * @returns Computed complete CSS variable name.
+   */
+  (property: Extract<keyof ThemeParams, string>): string;
 }
+
+export type { ThemeParams, ThemeParamsKey } from '@telegram-apps/bridge';

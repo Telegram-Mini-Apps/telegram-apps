@@ -1,6 +1,6 @@
-import { supports } from '@/bridge/supports.js';
-import { version } from '@/scopes/globals/globals.js';
-import type { MethodName } from '@/bridge/methods/types/index.js';
+import { type MethodName, supports } from '@telegram-apps/bridge';
+
+import { $version } from '@/scopes/globals/globals.js';
 
 export type WithIsSupported<F extends (...args: any) => any> = F & {
   /**
@@ -25,7 +25,7 @@ export function decorateWithIsSupported<F extends (...args: any) => any>(
 ): WithIsSupported<F> {
   return Object.assign(fn, {
     isSupported() {
-      return supports(method, version()) && (!additionalCheck || additionalCheck());
+      return supports(method, $version()) && (!additionalCheck || additionalCheck());
     },
   });
 }

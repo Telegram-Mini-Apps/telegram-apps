@@ -1,10 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
+import { emitMiniAppsEvent } from '@telegram-apps/bridge';
 
 import { resetGlobals } from '@test-utils/resetGlobals.js';
-
-import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
-import { postEvent, version } from '@/scopes/globals/globals.js';
+import { $postEvent, $version } from '@/scopes/globals/globals.js';
 
 import * as _ from './private.js';
 import {
@@ -25,7 +24,7 @@ beforeEach(() => {
   _.isVisible.unsubAll();
   _.isMounted.unsubAll();
   vi.restoreAllMocks();
-  postEvent.set(() => null);
+  $postEvent.set(() => null);
 });
 
 describe('mounted', () => {
@@ -36,7 +35,7 @@ describe('mounted', () => {
     it('should call postEvent with "web_app_setup_back_button" and { is_visible: false }', () => {
       _.isVisible.set(true);
       const spy = vi.fn();
-      postEvent.set(spy);
+      $postEvent.set(spy);
       hide();
       hide();
       hide();
@@ -49,7 +48,7 @@ describe('mounted', () => {
     it('should call postEvent with "web_app_setup_back_button" and { is_visible: true }', () => {
       _.isVisible.set(false);
       const spy = vi.fn();
-      postEvent.set(spy);
+      $postEvent.set(spy);
       show();
       show();
       show();
@@ -64,7 +63,7 @@ describe('not mounted', () => {
     it('should not call postEvent', () => {
       _.isVisible.set(true);
       const spy = vi.fn();
-      postEvent.set(spy);
+      $postEvent.set(spy);
       hide();
       expect(spy).toBeCalledTimes(0);
     });
@@ -81,7 +80,7 @@ describe('not mounted', () => {
     it('should not call postEvent', () => {
       _.isVisible.set(false);
       const spy = vi.fn();
-      postEvent.set(spy);
+      $postEvent.set(spy);
       show();
       show();
       show();
@@ -109,13 +108,13 @@ describe('hide', () => {
 
   describe('isSupported', () => {
     it('should return false if version is less than 6.1. True otherwise', () => {
-      version.set('6.0');
+      $version.set('6.0');
       expect(hide.isSupported()).toBe(false);
 
-      version.set('6.1');
+      $version.set('6.1');
       expect(hide.isSupported()).toBe(true);
 
-      version.set('6.2');
+      $version.set('6.2');
       expect(hide.isSupported()).toBe(true);
     });
   });
@@ -135,21 +134,21 @@ describe('mount', () => {
       mockPageReload();
     });
 
-    it('should use value from session storage key "telegram-apps/back-button"', () => {
+    it('should use value from session storage key "tapps/backButton"', () => {
       const spy = vi.fn(() => 'true');
       mockSessionStorageGetItem(spy);
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('telegram-apps/back-button');
+      expect(spy).toHaveBeenCalledWith('tapps/backButton');
       expect(isVisible()).toBe(true);
     });
 
-    it('should set isVisible false if session storage key "telegram-apps/back-button" not presented', () => {
+    it('should set isVisible false if session storage key "tapps/backButton" not presented', () => {
       const spy = vi.fn(() => null);
       mockSessionStorageGetItem(spy);
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('telegram-apps/back-button');
+      expect(spy).toHaveBeenCalledWith('tapps/backButton');
       expect(isVisible()).toBe(false);
     });
   });
@@ -168,7 +167,7 @@ describe('unmount', () => {
   it('should stop calling postEvent function and session storage updates when isVisible changes', () => {
     const postEventSpy = vi.fn();
     const storageSpy = mockSessionStorageSetItem();
-    postEvent.set(postEventSpy);
+    $postEvent.set(postEventSpy);
     _.isVisible.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);
@@ -221,13 +220,13 @@ describe('show', () => {
 
   describe('isSupported', () => {
     it('should return false if version is less than 6.1. True otherwise', () => {
-      version.set('6.0');
+      $version.set('6.0');
       expect(show.isSupported()).toBe(false);
 
-      version.set('6.1');
+      $version.set('6.1');
       expect(show.isSupported()).toBe(true);
 
-      version.set('6.2');
+      $version.set('6.2');
       expect(show.isSupported()).toBe(true);
     });
   });

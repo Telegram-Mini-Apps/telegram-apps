@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { InitData } from '@telegram-apps/bridge';
 
 import { state as _state } from './private.js';
 import { state, restore } from './index.js';
-import type { InitData } from './types.js';
 
 vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({
   retrieveLaunchParams: () => ({

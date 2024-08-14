@@ -1,9 +1,8 @@
-import { postEvent, createRequestId } from '@/scopes/globals/globals.js';
-import { request } from '@/bridge/request.js';
+import { request, captureSameReq, type SwitchInlineQueryChatType } from '@telegram-apps/bridge';
+
+import { $postEvent, $createRequestId } from '@/scopes/globals/globals.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
-import { captureSameReq } from '@/bridge/captureSameReq.js';
-import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
-import type { SwitchInlineQueryChatType } from '@/bridge/methods/types/index.js';
+import { retrieveLaunchParams } from '@/scopes/launch-params/retrieveLaunchParams.js';
 
 /*
  * fixme
@@ -22,11 +21,11 @@ const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
  */
 export const readTextFromClipboard: WithIsSupported<() => Promise<string | null>> =
   decorateWithIsSupported(async () => {
-    const reqId = createRequestId()();
+    const reqId = $createRequestId()();
     const { data = null } = await request({
       method: READ_TEXT_FROM_CLIPBOARD_METHOD,
       event: 'clipboard_text_received',
-      postEvent: postEvent(),
+      postEvent: $postEvent(),
       params: { req_id: reqId },
       capture: captureSameReq(reqId),
     });
@@ -47,7 +46,7 @@ export const readTextFromClipboard: WithIsSupported<() => Promise<string | null>
 export const switchInlineQuery: WithIsSupported<(query: string, chatTypes?: SwitchInlineQueryChatType[]) => void> =
   decorateWithIsSupported(
     (query, chatTypes?) => {
-      postEvent()(SWITCH_INLINE_QUERY_METHOD, {
+      $postEvent()(SWITCH_INLINE_QUERY_METHOD, {
         query: query,
         chat_types: chatTypes || [],
       });

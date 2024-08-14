@@ -3,12 +3,12 @@ import { describe, vi, expect, it, afterEach, beforeEach } from 'vitest';
 import { resetGlobals } from '@test-utils/resetGlobals.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
-import { postEvent } from '@/scopes/globals/globals.js';
+import { $postEvent } from '@/scopes/globals/globals.js';
 
 import { readTextFromClipboard } from './utils.js';
 
 beforeEach(() => {
-  postEvent.set(() => null);
+  $postEvent.set(() => null);
 });
 
 afterEach(() => {

@@ -1,34 +1,130 @@
-import { postEvent } from '@/scopes/globals/globals.js';
-import { isRGB } from '@/colors/isRGB.js';
-import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import { isPageReload } from '@/navigation/isPageReload.js';
-import * as themeParams from '@/scopes/theme-params/themeParams.js';
+import { isRGB } from '@telegram-apps/transform';
+import { createCleanup, type RGB } from '@telegram-apps/bridge';
+import { isPageReload } from '@telegram-apps/navigation';
+import { computed } from '@telegram-apps/signals';
+import type { VoidFn } from '@telegram-apps/types';
+
+import { $postEvent } from '@/scopes/globals/globals.js';
+import { getStorageValue, setStorageValue } from '@/utils/storage.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import { decorateWithSupports, type WithSupports } from '@/scopes/decorateWithSupports.js';
-import { ERR_DATA_INVALID_SIZE } from '@/errors/errors.js';
+import { ERR_CSS_VARS_BOUND, ERR_DATA_INVALID_SIZE } from '@/errors/errors.js';
+import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
+import { camelToKebab } from '@/utils/casing.js';
 import { createError } from '@/errors/createError.js';
-import type { RGB } from '@/colors/types.js';
+import { isColorDark } from '@/utils/isColorDark.js';
+
+import * as _themeParams from '@/scopes/theme-params/private.js';
+import * as themeParams from '@/scopes/theme-params/index.js';
 
 import * as _ from './private.js';
-import { state } from './computed.js';
-import type { HeaderColor } from './types.js';
+import type { GetCssVarNameFn, HeaderColor, State } from './types.js';
 
 const SET_BG_COLOR_METHOD = 'web_app_set_background_color';
 const SET_HEADER_COLOR_METHOD = 'web_app_set_header_color';
 const STORAGE_KEY = 'miniApp';
 
 /**
- * Closes the Mini App.
- * @param returnBack - Should the client return to the previous activity.
+ * The Mini App background color.
+ * @example "#ffaabb"
  */
-function close(returnBack?: boolean): void {
-  postEvent()('web_app_close', { return_back: returnBack });
+export const backgroundColor = computed(_.backgroundColor);
+
+/**
+ * Creates CSS variables connected with the mini app.
+ *
+ * Default variables:
+ * - `--tg-bg-color`
+ * - `--tg-header-color`
+ *
+ * Variables are being automatically updated if theme parameters were changed.
+ *
+ * @param getCSSVarName - function, returning complete CSS variable name for the specified
+ * mini app key.
+ * MiniApp property.
+ * @returns Function to stop updating variables.
+ */
+export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFn {
+  if (_.isCssVarsBound()) {
+    throw createError(ERR_CSS_VARS_BOUND);
+  }
+  getCSSVarName ||= (prop) => `--tg-${camelToKebab(prop)}`;
+  const bgVar = getCSSVarName('bgColor');
+  const headerVar = getCSSVarName('headerColor');
+
+  function actualize() {
+    setCssVar(bgVar, _.backgroundColor());
+
+    const h = _.headerColor();
+    if (isRGB(h)) {
+      return setCssVar(headerVar, _.backgroundColor());
+    }
+
+    const bgColor = themeParams.backgroundColor();
+    if (h === 'bg_color' && bgColor) {
+      return setCssVar(bgVar, bgColor);
+    }
+
+    const secondaryBgColor = themeParams.secondaryBackgroundColor();
+    if (h === 'secondary_bg_color' && secondaryBgColor) {
+      setCssVar(bgVar, secondaryBgColor);
+    }
+  }
+
+  actualize();
+  const [, cleanup] = createCleanup(
+    [
+      _.backgroundColor,
+      _.headerColor,
+      _themeParams.state,
+    ].map(s => s.sub(actualize)),
+  );
+  _.isCssVarsBound.set(true);
+
+  return () => {
+    [headerVar, bgVar].forEach(deleteCssVar);
+    cleanup();
+    _.isCssVarsBound.set(false);
+  };
 }
 
 /**
- * Mounts the component.
+ * Closes the Mini App.
+ * @param returnBack - Should the client return to the previous activity.
  */
-function mount(): void {
+export function close(returnBack?: boolean): void {
+  $postEvent()('web_app_close', { return_back: returnBack });
+}
+
+/**
+ * The Mini App header color.
+ * @example "#ffaabb"
+ * @example "bg_color"
+ */
+export const headerColor = computed(_.headerColor);
+
+/**
+ * True if the current Mini App background color is recognized as dark.
+ */
+export const isDark = computed(() => isColorDark(_.backgroundColor()));
+
+/**
+ * True if the component is currently mounted.
+ */
+export const isMounted = computed(_.isMounted);
+
+/**
+ * True if CSS variables are currently bound.
+ */
+export const isCssVarsBound = computed(_.isCssVarsBound);
+
+/**
+ * Mounts the component.
+ *
+ * This function restores the component state and is automatically saving it in the local storage
+ * if it changed.
+ */
+export function mount(): void {
   if (!_.isMounted()) {
     const s = isPageReload() && getStorageValue(STORAGE_KEY);
     themeParams.mount();
@@ -42,12 +138,12 @@ function mount(): void {
 
 function onHeaderColorChanged(color: HeaderColor): void {
   saveState();
-  postEvent()(SET_HEADER_COLOR_METHOD, isRGB(color) ? { color } : { color_key: color });
+  $postEvent()(SET_HEADER_COLOR_METHOD, isRGB(color) ? { color } : { color_key: color });
 }
 
 function onBgColorChanged(color: RGB): void {
   saveState();
-  postEvent()(SET_BG_COLOR_METHOD, { color });
+  $postEvent()(SET_BG_COLOR_METHOD, { color });
 }
 
 /**
@@ -60,13 +156,21 @@ function onBgColorChanged(color: RGB): void {
  *
  * If the method is not called, the placeholder will be hidden only when the page was fully loaded.
  */
-function ready(): void {
-  postEvent()('web_app_ready');
+export function ready(): void {
+  $postEvent()('web_app_ready');
 }
 
 function saveState() {
   setStorageValue(STORAGE_KEY, state());
 }
+
+/**
+ * Complete component state.
+ */
+export const state = computed<State>(() => ({
+  backgroundColor: _.backgroundColor(),
+  headerColor: _.headerColor(),
+}));
 
 /**
  * A method used to send data to the bot.
@@ -81,25 +185,25 @@ function saveState() {
  * @throws {SDKError} ERR_DATA_INVALID_SIZE
  * @see ERR_DATA_INVALID_SIZE
  */
-function sendData(data: string): void {
+export function sendData(data: string): void {
   const { size } = new Blob([data]);
   if (!size || size > 4096) {
     throw createError(ERR_DATA_INVALID_SIZE);
   }
-  postEvent()('web_app_data_send', { data });
+  $postEvent()('web_app_data_send', { data });
 }
 
 /**
  * Updates the background color.
  */
-const setBackgroundColor: WithIsSupported<(color: RGB) => void> = decorateWithIsSupported(color => {
+export const setBackgroundColor: WithIsSupported<(color: RGB) => void> = decorateWithIsSupported(color => {
   _.backgroundColor.set(color);
 }, SET_BG_COLOR_METHOD);
 
 /**
  * Updates the header color.
  */
-const setHeaderColor: WithSupports<
+export const setHeaderColor: WithSupports<
   WithIsSupported<(color: HeaderColor) => void>,
   { color: ['web_app_set_header_color', 'color'] }
 > = decorateWithSupports(
@@ -110,27 +214,10 @@ const setHeaderColor: WithSupports<
 );
 
 /**
- * Unmounts the component.
+ * Unmounts the component, removing the listener, saving the component state in the local storage.
  */
-function unmount(): void {
+export function unmount(): void {
   _.backgroundColor.unsub(onBgColorChanged);
   _.headerColor.unsub(onHeaderColorChanged);
   _.isMounted.set(false);
 }
-
-export {
-  close,
-  mount,
-  unmount,
-  ready,
-  sendData,
-  setHeaderColor,
-  setBackgroundColor,
-};
-export {
-  backgroundColor,
-  headerColor,
-  isDark,
-  isMounted,
-  state,
-} from './computed.js';

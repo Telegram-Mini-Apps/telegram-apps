@@ -1,9 +1,10 @@
-import type {
-  MethodVersionedParams,
-  MethodNameWithVersionedParams,
-} from '@/bridge/methods/types/index.js';
-import { supports } from '@/bridge/supports.js';
-import { version } from '@/scopes/globals/globals.js';
+import {
+  supports,
+  type MethodVersionedParams,
+  type MethodNameWithVersionedParams,
+} from '@telegram-apps/bridge';
+
+import { $version } from '@/scopes/globals/globals.js';
 
 type HasCheckSupportMethodTuple = {
   [M in MethodNameWithVersionedParams]: [M, MethodVersionedParams<M>]
@@ -35,7 +36,7 @@ export function decorateWithSupports<
   return Object.assign(fn, {
     supports(method: keyof S): boolean {
       const tuple = schema[method];
-      return supports(tuple[0], tuple[1], version());
+      return supports(tuple[0], tuple[1], $version());
     },
   });
 }

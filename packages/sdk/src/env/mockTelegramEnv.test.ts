@@ -1,11 +1,9 @@
 import { it, expect, afterEach, vi, describe } from 'vitest';
-import { mockWindow } from 'test-utils';
+import { mockSessionStorageSetItem, mockWindow } from 'test-utils';
+import { postEvent, on, resetMiniAppsEventEmitter, type LaunchParams } from '@telegram-apps/bridge';
+
 import { mockTelegramEnv } from '@/env/mockTelegramEnv.js';
 import { createWindow } from '@test-utils/createWindow.js';
-import { postEvent } from '@/bridge/methods/postEvent.js';
-import { on } from '@/bridge/events/listening.js';
-import { resetMiniAppsEventEmitter } from '@/bridge/events/event-emitter/singleton.js';
-import type { LaunchParams } from '@/launch-params/types.js';
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -52,8 +50,7 @@ const lp: LaunchParams = {
 const lpString = 'tgWebAppPlatform=tdesktop&tgWebAppThemeParams=%7B%22accent_text_color%22%3A%22%236ab2f2%22%2C%22bg_color%22%3A%22%2317212b%22%2C%22button_color%22%3A%22%235288c1%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22destructive_text_color%22%3A%22%23ec3942%22%2C%22header_bg_color%22%3A%22%2317212b%22%2C%22hint_color%22%3A%22%23708499%22%2C%22link_color%22%3A%22%236ab3f3%22%2C%22secondary_bg_color%22%3A%22%23232e3c%22%2C%22section_bg_color%22%3A%22%2317212b%22%2C%22section_header_text_color%22%3A%22%236ab3f3%22%2C%22subtitle_text_color%22%3A%22%23708499%22%2C%22text_color%22%3A%22%23f5f5f5%22%7D&tgWebAppVersion=7.2&tgWebAppData=user%3D%257B%2522id%2522%253A99281932%252C%2522first_name%2522%253A%2522Andrew%2522%252C%2522last_name%2522%253A%2522Rogue%2522%252C%2522username%2522%253A%2522rogue%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522is_premium%2522%253Atrue%252C%2522allows_write_to_pm%2522%253Atrue%257D%26chat_instance%3D8428209589180549439%26chat_type%3Dsender%26start_param%3Ddebug%26auth_date%3D1716922846%26hash%3D89d6079ad6762351f38c6dbbc41bb53048019256a9443988af7a48bcad16ba31';
 
 it('should save passed launch parameters in session storage', () => {
-  const setItem = vi.spyOn(sessionStorage, 'setItem')
-    .mockImplementation(() => null);
+  const setItem = mockSessionStorageSetItem();
   mockWindow({} as any);
 
   mockTelegramEnv(lp);

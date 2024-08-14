@@ -1,9 +1,10 @@
+import { request, type InvoiceStatus } from '@telegram-apps/bridge';
+import { computed } from '@telegram-apps/signals';
+
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
-import { request } from '@/bridge/request.js';
-import { postEvent } from '@/scopes/globals/globals.js';
+import { $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_INVOICE_OPENED } from '@/errors/errors.js';
 import { createError } from '@/errors/createError.js';
-import type { InvoiceStatus } from '@/bridge/events/types.js';
 
 import * as _ from './private.js';
 
@@ -40,7 +41,12 @@ type OpenFn = WithIsSupported<{
 
 const MINI_APPS_METHOD = 'web_app_open_invoice';
 
-const open: OpenFn = decorateWithIsSupported(
+/**
+ * True if the invoice is currently opened.
+ */
+export const isOpened = computed(_.isOpened);
+
+export const open: OpenFn = decorateWithIsSupported(
   async (urlOrSlug, type?) => {
     if (_.isOpened()) {
       throw createError(ERR_INVOICE_OPENED);
@@ -72,7 +78,7 @@ const open: OpenFn = decorateWithIsSupported(
         method: MINI_APPS_METHOD,
         event: 'invoice_closed',
         params: { slug },
-        postEvent: postEvent(),
+        postEvent: $postEvent(),
         capture(data) {
           return slug === data.slug;
         },
@@ -85,6 +91,3 @@ const open: OpenFn = decorateWithIsSupported(
   },
   MINI_APPS_METHOD,
 );
-
-export { open };
-export { isOpened } from './computed.js';
