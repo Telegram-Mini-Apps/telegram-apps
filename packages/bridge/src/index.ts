@@ -13,7 +13,8 @@ export { isBridgeError } from '@/errors/isBridgeError.js';
 export { isBridgeErrorOfType } from '@/errors/isBridgeErrorOfType.js';
 
 export {
-  miniAppsEventEmitter, resetMiniAppsEventEmitter,
+  miniAppsEventEmitter,
+  resetMiniAppsEventEmitter,
 } from '@/events/event-emitter/singleton.js';
 export { removeEventHandlers, defineEventHandlers, emitMiniAppsEvent } from '@/events/handlers.js';
 export { on, off, subscribe, unsubscribe } from '@/events/listening.js';
@@ -58,7 +59,7 @@ export type {
   SelectionHapticFeedbackParams,
   SwitchInlineQueryChatType,
 } from '@/methods/types/index.js';
-export { createPostEvent } from '@/methods/createPostEvent.js';
+export { createPostEvent, type OnUnsupportedFn } from '@/methods/createPostEvent.js';
 export { postEvent, type PostEvent } from '@/methods/postEvent.js';
 export { supports } from '@/methods/supports.js';
 export { targetOrigin } from '@/methods/targetOrigin.js';
@@ -88,4 +89,16 @@ export type {
   ExecuteWithTimeout,
 } from './types.js';
 
-export type * from '@telegram-apps/types';
+export type {
+  Chat,
+  ChatType,
+  InitData,
+  LaunchParams,
+  Platform,
+  RGB,
+  RGBShort,
+  ThemeParams,
+  ThemeParamsKey,
+  User,
+  Version,
+} from '@telegram-apps/types';
