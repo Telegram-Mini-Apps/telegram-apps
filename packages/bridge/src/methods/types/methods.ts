@@ -1,8 +1,10 @@
-import type { RGB, If, IsNever, UnionKeys } from '@telegram-apps/types';
+import type { RGB, If, IsNever } from '@telegram-apps/types';
 
 import type { AnyInvokeCustomMethodParams } from './custom-methods.js';
 import type { AnyHapticFeedbackParams } from './haptic.js';
 import type { PopupParams } from './popup.js';
+
+type UnionKeys<T> = T extends T ? keyof T : never;
 
 /**
  * Color key which could be used to update header color.
