@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@telegram-apps/event-emitter": "workspace:^",
-    "@telegram-apps/parsing": "workspace:^",
+    "@telegram-apps/transform": "workspace:^",
     "@telegram-apps/signals": "workspace:^",
     "@telegram-apps/types": "workspace:^"
   },
