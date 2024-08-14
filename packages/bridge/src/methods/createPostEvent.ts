@@ -5,22 +5,58 @@ import { ERR_METHOD_PARAMETER_UNSUPPORTED, ERR_METHOD_UNSUPPORTED } from '@/erro
 import { isRecord } from '@/utils/isRecord.js';
 import { supports } from '@/methods/supports.js';
 import { type PostEvent, postEvent } from '@/methods/postEvent.js';
+import type {
+  MethodName,
+  MethodNameWithVersionedParams,
+  MethodVersionedParams,
+} from '@/methods/types/index.js';
+
+export type OnUnsupportedFn = (
+  data: { version: Version } & (
+    | { method: MethodName }
+    | {
+    [M in MethodNameWithVersionedParams]: {
+      method: M;
+      param: MethodVersionedParams<M>;
+    };
+  }[MethodNameWithVersionedParams]),
+) => void;
 
 /**
  * Creates a function which checks if specified method and parameters are supported.
  *
- * If method or parameters are unsupported, an error will be thrown.
+ * If method or parameters are unsupported, the `onUnsupported` function will be called.
+ *
+ * By default, the `onUnsupported` function will throw a `BridgeError` error with
+ * `ERR_METHOD_UNSUPPORTED` or `ERR_METHOD_PARAMETER_UNSUPPORTED` type.
  * @param version - Telegram Mini Apps version.
- * @throws {BridgeError} ERR_METHOD_UNSUPPORTED
- * @throws {BridgeError} ERR_METHOD_PARAMETER_UNSUPPORTED
+ * @param onUnsupported - function which will be called, if a method or parameter is unsupported.
+ * @see BridgeError
  * @see ERR_METHOD_UNSUPPORTED
  * @see ERR_METHOD_PARAMETER_UNSUPPORTED
  */
-export function createPostEvent(version: Version): PostEvent {
+export function createPostEvent(
+  version: Version,
+  onUnsupported?: OnUnsupportedFn,
+): PostEvent {
+  onUnsupported ||= (data) => {
+    const { method, version } = data;
+    if ('param' in data) {
+      throw createError(
+        ERR_METHOD_PARAMETER_UNSUPPORTED,
+        `Parameter "${data.param}" of "${method}" method is unsupported in Mini Apps version ${version}`,
+      );
+    }
+    throw createError(
+      ERR_METHOD_UNSUPPORTED,
+      `Method "${method}" is unsupported in Mini Apps version ${version}`,
+    );
+  };
+
   return (method: any, params: any) => {
     // Firstly, check if a method is supported.
     if (!supports(method, version)) {
-      throw createError(ERR_METHOD_UNSUPPORTED, `Method "${method}" is unsupported in Mini Apps version ${version}`);
+      return onUnsupported({ version, method });
     }
 
     // Method could use parameters, which are supported only in specific
@@ -32,10 +68,7 @@ export function createPostEvent(version: Version): PostEvent {
       && 'color' in params
       && !supports(method, 'color', version)
     ) {
-      throw createError(
-        ERR_METHOD_PARAMETER_UNSUPPORTED,
-        `Parameter "color" of "${method}" method is unsupported in Mini Apps version ${version}`,
-      );
+      return onUnsupported({ version, method, param: 'color' });
     }
 
     return postEvent(method, params);
