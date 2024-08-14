@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { themeParams } from '@/parsers/themeParams.js';
+import { themeParams } from '@/transformers/themeParams.js';
 
 describe.each([
   { from: 'accent_text_color', to: 'accentTextColor' },
@@ -18,10 +18,10 @@ describe.each([
   { from: 'text_color', to: 'textColor' },
 ])('$to', ({ from, to }) => {
   it(`should throw if "${from}" property contains not a string in format "#RRGGBB"`, () => {
-    expect(() => themeParams().parse({ [from]: 999 })).toThrow();
+    expect(() => themeParams()({ [from]: 999 })).toThrow();
   });
 
   it(`should map to "${to}" property parsing it as string in "#RRGGBB" format`, () => {
-    expect(themeParams().parse({ [from]: '#aabbcc' })).toStrictEqual({ [to]: '#aabbcc' });
+    expect(themeParams()({ [from]: '#aabbcc' })).toStrictEqual({ [to]: '#aabbcc' });
   });
 });

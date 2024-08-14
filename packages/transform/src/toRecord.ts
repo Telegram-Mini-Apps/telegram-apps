@@ -22,7 +22,7 @@ export function toRecord(value: unknown): Record<string, unknown> {
   // We expect json to be a usual object.
   if (
     typeof formattedValue !== 'object'
-    || formattedValue === null
+    || !formattedValue
     || Array.isArray(formattedValue)
   ) {
     throw createError(ERR_UNEXPECTED_VALUE);

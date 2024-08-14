@@ -10,21 +10,21 @@ const baseLaunchParams = {
 };
 
 it(`should not throw if ${['tgWebAppBotInline', 'tgWebAppData', 'tgWebAppShowSettings', 'tgWebAppStartParam'].join(', ')} parameters are missing`, () => {
-  expect(() => launchParams().parse(toSearchParams(baseLaunchParams))).not.toThrow();
+  expect(() => launchParams()(toSearchParams(baseLaunchParams))).not.toThrow();
 });
 
 it('should create "botInline" property from the "tgWebAppBotInline" as boolean', () => {
   expect(
-    launchParams().parse(toSearchParams({ ...baseLaunchParams, tgWebAppBotInline: false })),
+    launchParams()(toSearchParams({ ...baseLaunchParams, tgWebAppBotInline: false })),
   ).toMatchObject({ botInline: false });
   expect(
-    () => launchParams().parse(toSearchParams({ ...baseLaunchParams, tgWebAppBotInline: 'str' })),
+    () => launchParams()(toSearchParams({ ...baseLaunchParams, tgWebAppBotInline: 'str' })),
   ).toThrow();
 });
 
 it('should create "initData" property from the "tgWebAppData" as init data', () => {
   expect(
-    launchParams().parse(toSearchParams({
+    launchParams()(toSearchParams({
       ...baseLaunchParams,
       tgWebAppData: toSearchParams({ auth_date: 1, hash: 'abc' }),
     })),
@@ -39,7 +39,7 @@ it('should create "initData" property from the "tgWebAppData" as init data', () 
 
 it('should create "initDataRaw" property from the "tgWebAppData" as string', () => {
   expect(
-    launchParams().parse(toSearchParams({
+    launchParams()(toSearchParams({
       ...baseLaunchParams,
       tgWebAppData: toSearchParams({ auth_date: 1, hash: 'abc' }),
     })),
@@ -49,28 +49,28 @@ it('should create "initDataRaw" property from the "tgWebAppData" as string', () 
 
 it('should create "platform" property from the "tgWebAppPlatform" as string', () => {
   expect(
-    launchParams().parse(toSearchParams({ ...baseLaunchParams, tgWebAppPlatform: 'tdesktop' })),
+    launchParams()(toSearchParams({ ...baseLaunchParams, tgWebAppPlatform: 'tdesktop' })),
   ).toMatchObject({ platform: 'tdesktop' });
 });
 
 it('should create "showSettings" property from the "tgWebAppShowSettings" as boolean', () => {
   expect(
-    launchParams().parse(toSearchParams({ ...baseLaunchParams, tgWebAppShowSettings: false })),
+    launchParams()(toSearchParams({ ...baseLaunchParams, tgWebAppShowSettings: false })),
   ).toMatchObject({ showSettings: false });
   expect(
-    () => launchParams().parse(toSearchParams({ ...baseLaunchParams, tgWebAppShowSettings: {} })),
+    () => launchParams()(toSearchParams({ ...baseLaunchParams, tgWebAppShowSettings: {} })),
   ).toThrow();
 });
 
 it('should create "startParam" property from the "tgWebAppPlatform" as string', () => {
   expect(
-    launchParams().parse(toSearchParams({ ...baseLaunchParams, tgWebAppStartParam: 'start-param' })),
+    launchParams()(toSearchParams({ ...baseLaunchParams, tgWebAppStartParam: 'start-param' })),
   ).toMatchObject({ startParam: 'start-param' });
 });
 
 it('should create "themeParams" property from the "tgWebAppThemeParams" as theme params', () => {
   expect(
-    launchParams().parse(toSearchParams({
+    launchParams()(toSearchParams({
       ...baseLaunchParams,
       tgWebAppThemeParams: JSON.stringify({ bg_color: '#000' }),
     })),
@@ -80,6 +80,6 @@ it('should create "themeParams" property from the "tgWebAppThemeParams" as theme
     },
   });
   expect(
-    () => launchParams().parse(toSearchParams({ ...baseLaunchParams, tgWebAppThemeParams: '' })),
+    () => launchParams()(toSearchParams({ ...baseLaunchParams, tgWebAppThemeParams: '' })),
   ).toThrow();
 });

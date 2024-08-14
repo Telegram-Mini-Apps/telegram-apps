@@ -1,11 +1,9 @@
 import type { ThemeParams } from '@telegram-apps/types';
 
-import {
-  createValueParserGenerator,
-  type ValueParserGenerator,
-} from '@/createValueParserGenerator.js';
-import { rgb } from '@/parsers/rgb.js';
+import { rgb } from '@/transformers/rgb.js';
 import { toRecord } from '@/toRecord.js';
+import { createTransformerGen } from '@/transformers/createTransformerGen.js';
+import type { TransformerGen } from '@/types.js';
 
 /**
  * Converts a palette key from the Telegram application to the representation used by the package.
@@ -15,18 +13,18 @@ function keyToLocal(key: string): string {
   return key.replace(/_[a-z]/g, (match) => match[1].toUpperCase());
 }
 
-export type { ThemeParams };
-
-export const themeParams: ValueParserGenerator<ThemeParams> = createValueParserGenerator(
+export const themeParams: TransformerGen<ThemeParams> = createTransformerGen(
   (value) => {
-    const rgbOptional = rgb().optional();
+    const rgbOptional = rgb(true);
 
     return Object
       .entries(toRecord(value))
       .reduce<ThemeParams>((acc, [k, v]) => {
-        acc[keyToLocal(k)] = rgbOptional.parse(v);
+        acc[keyToLocal(k)] = rgbOptional(v);
         return acc;
       }, {});
   },
   'ThemeParams',
 );
+
+export type { ThemeParams };
