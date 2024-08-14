@@ -5,7 +5,8 @@ import {
   Cell,
   List,
   Navigation,
-  Placeholder, Section,
+  Placeholder,
+  Section,
   Text,
   Title,
 } from '@telegram-apps/telegram-ui';

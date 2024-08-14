@@ -5,8 +5,6 @@ import { Link } from '@/components/Link/Link.tsx';
 
 import tonSvg from './ton.svg';
 
-import './IndexPage.css';
-
 export const IndexPage: FC = () => {
   return (
     <List>

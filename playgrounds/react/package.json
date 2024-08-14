@@ -1,7 +1,7 @@
 {
   "name": "reactjs-template",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "homepage": "https://telegram-mini-apps.github.io/reactjs-template",
   "scripts": {
@@ -11,12 +11,12 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "preview": "vite preview",
-    "predeploy": "pnpm run build"
+    "predeploy": "npm run build"
   },
   "dependencies": {
-    "@telegram-apps/telegram-ui": "^2.1.4",
-    "@telegram-apps/react-router-integration": "workspace:*",
+    "@telegram-apps/react-router-integration": "^1.0.0",
     "@telegram-apps/sdk-react": "workspace:*",
+    "@telegram-apps/telegram-ui": "^2.1.5",
     "@tonconnect/ui-react": "^2.0.5",
     "eruda": "^3.0.1",
     "react": "^18.2.0",

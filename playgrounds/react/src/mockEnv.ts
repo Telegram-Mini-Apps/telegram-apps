@@ -1,4 +1,4 @@
-import { mockTelegramEnv, parseInitData, retrieveLaunchParams } from '@telegram-apps/sdk';
+import { mockTelegramEnv, parseInitData, retrieveLaunchParams } from '@telegram-apps/sdk-react';
 
 // It is important, to mock the environment only for development purposes. When building the
 // application, import.meta.env.DEV will become false, and the code inside will be tree-shaken,

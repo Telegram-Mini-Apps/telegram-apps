@@ -4,8 +4,6 @@ import { List, Placeholder } from '@telegram-apps/telegram-ui';
 
 import { DisplayData, type DisplayDataRow } from '@/components/DisplayData/DisplayData.tsx';
 
-import './InitDataPage.css';
-
 function getUserRows(user: User): DisplayDataRow[] {
   return [
     { title: 'id', value: user.id.toString() },
@@ -88,7 +86,7 @@ export const InitDataPage: FC = () => {
           style={{ display: 'block', width: '144px', height: '144px' }}
         />
       </Placeholder>
-    )
+    );
   }
   return (
     <List>
@@ -97,5 +95,5 @@ export const InitDataPage: FC = () => {
       {receiverRows && <DisplayData header={'Receiver'} rows={receiverRows}/>}
       {chatRows && <DisplayData header={'Chat'} rows={chatRows}/>}
     </List>
-  )
+  );
 };
