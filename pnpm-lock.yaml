@@ -87,6 +87,28 @@ importers:
         specifier: 1.2.0
         version: 1.2.0(@algolia/client-search@4.23.3)(@types/node@20.14.10)(@types/react@18.3.3)(change-case@5.4.4)(postcss@8.4.38)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.14.0)(typescript@5.4.5)
 
+  packages/bridge:
+    dependencies:
+      '@telegram-apps/event-emitter':
+        specifier: workspace:^
+        version: link:../event-emitter
+      '@telegram-apps/signals':
+        specifier: workspace:^
+        version: link:../signals
+      '@telegram-apps/transform':
+        specifier: workspace:^
+        version: link:../transform
+      '@telegram-apps/types':
+        specifier: workspace:^
+        version: link:../types
+    devDependencies:
+      test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+
   packages/cli-utils:
     dependencies:
       chalk:
@@ -131,15 +153,50 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
+  packages/event-emitter:
+    dependencies:
+      '@telegram-apps/types':
+        specifier: workspace:*
+        version: link:../types
+    devDependencies:
+      test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+
   packages/init-data-node:
     dependencies:
-      '@telegram-apps/sdk':
+      '@telegram-apps/transform':
         specifier: workspace:^
-        version: link:../sdk
+        version: link:../transform
+      '@telegram-apps/types':
+        specifier: workspace:^
+        version: link:../types
     devDependencies:
       '@types/node':
         specifier: ^20.0.0
         version: 20.12.11
+      test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+
+  packages/navigation:
+    dependencies:
+      '@telegram-apps/bridge':
+        specifier: workspace:^
+        version: link:../bridge
+      '@telegram-apps/signals':
+        specifier: workspace:^
+        version: link:../signals
+    devDependencies:
+      test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -167,6 +224,22 @@ importers:
         version: link:../tsconfig
 
   packages/sdk:
+    dependencies:
+      '@telegram-apps/bridge':
+        specifier: workspace:^
+        version: link:../bridge
+      '@telegram-apps/navigation':
+        specifier: workspace:^
+        version: link:../navigation
+      '@telegram-apps/signals':
+        specifier: workspace:^
+        version: link:../signals
+      '@telegram-apps/transform':
+        specifier: workspace:^
+        version: link:../transform
+      '@telegram-apps/types':
+        specifier: workspace:^
+        version: link:../types
     devDependencies:
       test-utils:
         specifier: workspace:*
@@ -204,6 +277,15 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
+  packages/signals:
+    devDependencies:
+      test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+
   packages/solid-router-integration:
     devDependencies:
       '@solidjs/router':
@@ -225,7 +307,26 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
+  packages/transform:
+    dependencies:
+      '@telegram-apps/types':
+        specifier: workspace:^
+        version: link:../types
+    devDependencies:
+      test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+
   packages/tsconfig: {}
+
+  packages/types:
+    devDependencies:
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
 
   playgrounds/custom:
     dependencies:
