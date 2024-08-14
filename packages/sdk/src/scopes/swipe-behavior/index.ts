@@ -1,6 +1,8 @@
-import { postEvent } from '@/scopes/globals/globals.js';
-import { getStorageValue, setStorageValue } from '@/storage/storage.js';
-import { isPageReload } from '@/navigation/isPageReload.js';
+import { computed } from '@telegram-apps/signals';
+import { isPageReload } from '@telegram-apps/navigation';
+
+import { $postEvent } from '@/scopes/globals/globals.js';
+import { getStorageValue, setStorageValue } from '@/utils/storage.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 
 import * as _ from './private.js';
@@ -17,21 +19,34 @@ const STORAGE_KEY = 'swipeBehavior';
 /**
  * Disables vertical swipes.
  */
-const disableVerticalSwipes: WithIsSupported<() => void> = decorateWithIsSupported(() => {
+export const disableVerticalSwipes: WithIsSupported<() => void> = decorateWithIsSupported(() => {
   _.isVerticalSwipesEnabled.set(false);
 }, MINI_APPS_METHOD);
 
 /**
  * Enables vertical swipes.
  */
-const enableVerticalSwipes: WithIsSupported<() => void> = decorateWithIsSupported(() => {
+export const enableVerticalSwipes: WithIsSupported<() => void> = decorateWithIsSupported(() => {
   _.isVerticalSwipesEnabled.set(true);
 }, MINI_APPS_METHOD);
 
 /**
- * Mounts the component.
+ * True if vertical swipes are enabled.
  */
-function mount(): void {
+export const isVerticalSwipesEnabled = computed(_.isVerticalSwipesEnabled);
+
+/**
+ * True if the component is currently mounted.
+ */
+export const isMounted = computed(_.isMounted);
+
+/**
+ * Mounts the component.
+ *
+ * This function restores the component state and is automatically saving it in the local storage
+ * if it changed.
+ */
+export function mount(): void {
   if (!_.isMounted()) {
     _.isVerticalSwipesEnabled.set(isPageReload() && getStorageValue(STORAGE_KEY) || false);
     _.isVerticalSwipesEnabled.sub(onStateChanged);
@@ -40,25 +55,14 @@ function mount(): void {
 }
 
 function onStateChanged(value: boolean): void {
-  postEvent()(MINI_APPS_METHOD, { allow_vertical_swipe: value });
+  $postEvent()(MINI_APPS_METHOD, { allow_vertical_swipe: value });
   setStorageValue(STORAGE_KEY, value);
 }
 
 /**
- * Unmounts the component.
+ * Unmounts the component, removing the listener, saving the component state in the local storage.
  */
-function unmount(): void {
+export function unmount(): void {
   _.isVerticalSwipesEnabled.unsub(onStateChanged);
   _.isMounted.set(false);
 }
-
-export {
-  disableVerticalSwipes,
-  enableVerticalSwipes,
-  mount,
-  unmount,
-};
-export {
-  isMounted,
-  isVerticalSwipesEnabled,
-} from './computed.js';

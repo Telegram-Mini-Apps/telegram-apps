@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { resetGlobals } from '@test-utils/resetGlobals.js';
 
-import { postEvent, version } from '@/globals/globals.js';
+import { $postEvent, $version } from '@/scopes/globals/globals.js';
 
 import {
   impactOccurred,
@@ -12,13 +12,13 @@ import {
 
 beforeEach(() => {
   resetGlobals();
-  postEvent.set(() => null);
+  $postEvent.set(() => null);
 });
 
 describe('impactOccurred', () => {
   it('should call "web_app_trigger_haptic_feedback" method with { type: "impact", style: {{style}} }', () => {
     const spy = vi.fn(() => null);
-    postEvent.set(spy);
+    $postEvent.set(spy);
     impactOccurred('heavy');
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith('web_app_trigger_haptic_feedback', {
@@ -29,13 +29,13 @@ describe('impactOccurred', () => {
 
   describe('isSupported', () => {
     it('should return false if version is less than 6.1. True otherwise', () => {
-      version.set('6.0');
+      $version.set('6.0');
       expect(impactOccurred.isSupported()).toBe(false);
 
-      version.set('6.1');
+      $version.set('6.1');
       expect(impactOccurred.isSupported()).toBe(true);
 
-      version.set('6.2');
+      $version.set('6.2');
       expect(impactOccurred.isSupported()).toBe(true);
     });
   });
@@ -44,7 +44,7 @@ describe('impactOccurred', () => {
 describe('notificationOccurred', () => {
   it('should call "web_app_trigger_haptic_feedback" method with { type: "notification", notification_type: {{type}} }', () => {
     const spy = vi.fn(() => null);
-    postEvent.set(spy);
+    $postEvent.set(spy);
     notificationOccurred('success');
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith('web_app_trigger_haptic_feedback', {
@@ -55,13 +55,13 @@ describe('notificationOccurred', () => {
 
   describe('isSupported', () => {
     it('should return false if version is less than 6.1. True otherwise', () => {
-      version.set('6.0');
+      $version.set('6.0');
       expect(notificationOccurred.isSupported()).toBe(false);
 
-      version.set('6.1');
+      $version.set('6.1');
       expect(notificationOccurred.isSupported()).toBe(true);
 
-      version.set('6.2');
+      $version.set('6.2');
       expect(notificationOccurred.isSupported()).toBe(true);
     });
   });
@@ -70,7 +70,7 @@ describe('notificationOccurred', () => {
 describe('selectionChanged', () => {
   it('should call "web_app_trigger_haptic_feedback" method with { type: "selection_change" }', () => {
     const spy = vi.fn(() => null);
-    postEvent.set(spy);
+    $postEvent.set(spy);
     selectionChanged();
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith('web_app_trigger_haptic_feedback', {
@@ -80,13 +80,13 @@ describe('selectionChanged', () => {
 
   describe('isSupported', () => {
     it('should return false if version is less than 6.1. True otherwise', () => {
-      version.set('6.0');
+      $version.set('6.0');
       expect(selectionChanged.isSupported()).toBe(false);
 
-      version.set('6.1');
+      $version.set('6.1');
       expect(selectionChanged.isSupported()).toBe(true);
 
-      version.set('6.2');
+      $version.set('6.2');
       expect(selectionChanged.isSupported()).toBe(true);
     });
   });

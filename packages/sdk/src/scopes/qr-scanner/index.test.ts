@@ -4,7 +4,7 @@ import { resetGlobals } from '@test-utils/resetGlobals.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
-import { postEvent } from '@/scopes/globals/globals.js';
+import { $postEvent } from '@/scopes/globals/globals.js';
 
 import * as _ from './private.js';
 import {
@@ -18,7 +18,7 @@ beforeEach(() => {
   _.isOpened.reset();
   _.isOpened.unsubAll();
   vi.restoreAllMocks();
-  postEvent.set(() => null);
+  $postEvent.set(() => null);
 });
 
 describe('close', () => {
@@ -31,7 +31,7 @@ describe('close', () => {
 
   it('should call postEvent with "web_app_close_scan_qr_popup"', () => {
     const spy = vi.fn(() => null);
-    postEvent.set(spy);
+    $postEvent.set(spy);
     expect(spy).toHaveBeenCalledTimes(0);
     close();
     expect(spy).toHaveBeenCalledTimes(1);

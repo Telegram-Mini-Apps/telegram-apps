@@ -3,7 +3,7 @@ import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } 
 
 import { resetGlobals } from '@test-utils/resetGlobals.js';
 
-import { postEvent } from '@/scopes/globals/globals.js';
+import { $postEvent } from '@/scopes/globals/globals.js';
 
 import * as _ from './private.js';
 import {
@@ -22,7 +22,7 @@ beforeEach(() => {
   _.isConfirmationNeeded.unsubAll();
   _.isMounted.unsubAll();
   vi.restoreAllMocks();
-  postEvent.set(() => null);
+  $postEvent.set(() => null);
 });
 
 describe('mounted', () => {
@@ -33,7 +33,7 @@ describe('mounted', () => {
     it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: false }', () => {
       _.isConfirmationNeeded.set(true);
       const spy = vi.fn();
-      postEvent.set(spy);
+      $postEvent.set(spy);
       disableConfirmation();
       disableConfirmation();
       disableConfirmation();
@@ -46,7 +46,7 @@ describe('mounted', () => {
     it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: true }', () => {
       _.isConfirmationNeeded.set(false);
       const spy = vi.fn();
-      postEvent.set(spy);
+      $postEvent.set(spy);
       enableConfirmation();
       enableConfirmation();
       enableConfirmation();
@@ -62,7 +62,7 @@ describe('not mounted', () => {
     it('should not call postEvent', () => {
       _.isConfirmationNeeded.set(true);
       const spy = vi.fn();
-      postEvent.set(spy);
+      $postEvent.set(spy);
       disableConfirmation();
       disableConfirmation();
       disableConfirmation();
@@ -74,7 +74,7 @@ describe('not mounted', () => {
     it('should not call postEvent', () => {
       _.isConfirmationNeeded.set(false);
       const spy = vi.fn();
-      postEvent.set(spy);
+      $postEvent.set(spy);
       enableConfirmation();
       enableConfirmation();
       enableConfirmation();
@@ -139,7 +139,7 @@ describe('unmount', () => {
   it('should stop calling postEvent function and session storage updates when isConfirmationNeeded changes', () => {
     const postEventSpy = vi.fn();
     const storageSpy = mockSessionStorageSetItem();
-    postEvent.set(postEventSpy);
+    $postEvent.set(postEventSpy);
     _.isConfirmationNeeded.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);

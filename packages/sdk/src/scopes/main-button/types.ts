@@ -1,4 +1,4 @@
-import type { RGB } from '@/colors/types.js';
+import type { RGB } from '@telegram-apps/bridge';
 
 export interface State {
   /**

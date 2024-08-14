@@ -1,12 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockPageReload, mockSessionStorageGetItem, mockSessionStorageSetItem } from 'test-utils';
+import { emitMiniAppsEvent, type ThemeParams } from '@telegram-apps/bridge';
 
 import { resetGlobals } from '@test-utils/resetGlobals.js';
 
-import { postEvent } from '@/scopes/globals/globals.js';
-import { emitMiniAppsEvent } from '@/bridge/events/event-handlers/emitMiniAppsEvent.js';
-import * as themeParams from '@/scopes/theme-params/themeParams.js';
-import type { ThemeParams } from '@/scopes/theme-params/types.js';
+import { $postEvent } from '@/scopes/globals/globals.js';
+import * as themeParams from '@/scopes/theme-params/index.js';
 
 import { state as _state, isMounted as _isMounted } from './private.js';
 import {
@@ -52,7 +51,7 @@ beforeEach(() => {
   themeParams.unmount();
 
   vi.restoreAllMocks();
-  postEvent.set(() => null);
+  $postEvent.set(() => null);
 });
 
 describe.each([
@@ -105,7 +104,7 @@ describe('mounted', () => {
 
     it('should call "web_app_setup_main_button" only if text is not empty', () => {
       const spy = vi.fn(() => null);
-      postEvent.set(spy);
+      $postEvent.set(spy);
       _state.set({
         backgroundColor: '#123456',
         isActive: true,
@@ -135,7 +134,7 @@ describe('not mounted', () => {
   describe('setParams', () => {
     it('should not call postEvent', () => {
       const spy = vi.fn(() => null);
-      postEvent.set(spy);
+      $postEvent.set(spy);
       setParams({ text: 'ABC' });
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -272,7 +271,7 @@ describe('unmount', () => {
   it('should stop calling postEvent function and session storage updates when something changes', () => {
     const postEventSpy = vi.fn();
     const storageSpy = mockSessionStorageSetItem();
-    postEvent.set(postEventSpy);
+    $postEvent.set(postEventSpy);
     _state.set({ ..._state(), text: 'Hello!' });
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);

@@ -1,6 +1,6 @@
-import { request as bridgeRequest } from '@/bridge/request.js';
-import { postEvent } from '@/scopes/globals/globals.js';
-import type { ExecuteWithOptions } from '@/types/index.js';
+import { request as bridgeRequest, type ExecuteWithOptions } from '@telegram-apps/bridge';
+
+import { $postEvent } from '@/scopes/globals/globals.js';
 
 export interface RequestResult {
   height: number;
@@ -15,7 +15,7 @@ export interface RequestResult {
  */
 export async function request(options?: ExecuteWithOptions): Promise<RequestResult> {
   const response = await bridgeRequest({
-    postEvent: postEvent(),
+    postEvent: $postEvent(),
     ...options || {},
     method: 'web_app_request_viewport',
     event: 'viewport_changed',
@@ -28,3 +28,5 @@ export async function request(options?: ExecuteWithOptions): Promise<RequestResu
     isStable: response.is_state_stable,
   };
 }
+
+export type * from './types.js';

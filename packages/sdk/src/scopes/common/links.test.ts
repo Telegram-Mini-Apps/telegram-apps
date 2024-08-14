@@ -3,21 +3,21 @@ import { createWindow } from '@test-utils/createWindow.js';
 import { resetGlobals } from '@test-utils/resetGlobals.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
-import { postEvent, version } from '@/scopes/globals/globals.js';
+import { $postEvent, $version } from '@/scopes/globals/globals.js';
 
 import { readTextFromClipboard } from './utils.js';
 import { openLink, openTelegramLink, shareURL } from './links.js';
 
 beforeEach(() => {
   resetGlobals();
-  postEvent.set(() => null);
+  $postEvent.set(() => null);
   vi.restoreAllMocks();
 });
 
 describe('openLink', () => {
   it('should call "web_app_open_link" with formatted URL and passed options', () => {
     const spy = vi.fn();
-    postEvent.set(spy);
+    $postEvent.set(spy);
     openLink('https://ya.ru', {
       tryBrowser: 'tor',
       tryInstantView: true,
@@ -45,8 +45,8 @@ describe('openTelegramLink', () => {
 
   it('should call "web_app_open_tg_link" with { path_full: string }, where path_full is a combination of pathname and search', () => {
     const spy = vi.fn();
-    postEvent.set(spy);
-    version.set('10');
+    $postEvent.set(spy);
+    $version.set('10');
     openTelegramLink('https://t.me/share/url?url=text');
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith('web_app_open_tg_link', {
@@ -82,8 +82,8 @@ describe('shareURL', () => {
 
   it('should call web_app_open_tg_link with { path_full: string }, where path_full equals "share/url?url={url}&text={text}"', () => {
     const spy = vi.fn();
-    postEvent.set(spy);
-    version.set('10');
+    $postEvent.set(spy);
+    $version.set('10');
 
     shareURL('https://telegram.org');
     expect(spy).toHaveBeenCalledOnce();

@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { createRequestIdGenerator } from '@/request-id/createRequestIdGenerator.js';
-import type { PostEvent } from '@/bridge/methods/postEvent.js';
-import type { RGB } from '@/colors/types.js';
+import type { PostEvent, RGB } from '@telegram-apps/bridge';
+
+// fixme
+import { createRequestIdGenerator } from '@/utils/createRequestIdGenerator.js';
 
 import { MiniApp } from './index.js';
 import type { MiniAppHeaderColor } from './types.js';

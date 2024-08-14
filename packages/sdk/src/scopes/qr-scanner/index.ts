@@ -1,12 +1,13 @@
+import { request, createCleanup, on } from '@telegram-apps/bridge';
+import { computed } from '@telegram-apps/signals';
+
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
-import { request } from '@/bridge/request.js';
 import { createError } from '@/errors/createError.js';
-import { postEvent } from '@/scopes/globals/globals.js';
-import { on } from '@/bridge/events/listening.js';
-import { createCleanup } from '@/misc/createCleanup.js';
+import { $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_SCANNER_OPENED } from '@/errors/errors.js';
 
 import * as _ from './private.js';
+import { OpenFn } from './types.js';
 
 // TODO: Links?
 
@@ -20,49 +21,15 @@ const SCANNED_EVENT = 'qr_text_received';
  */
 export const close: WithIsSupported<() => void> = decorateWithIsSupported(() => {
   _.isOpened.set(false);
-  postEvent()(CLOSE_METHOD);
+  $postEvent()(CLOSE_METHOD);
 }, CLOSE_METHOD);
 
-type OpenFn = WithIsSupported<{
-  /**
-   * Opens the scanner.
-   *
-   * Whenever a user scans a QR, the passed `capture` function is being called with the QR
-   * content. It should return true if this QR must be captured and promise resolved.
-   * @param options - method options.
-   * @returns A captured QR content or null, if the scanner was closed.
-   */
-  (options: {
-    /**
-     * Title to be displayed in the scanner.
-     */
-    text?: string;
-    /**
-     * Function, which should return true if a scanned QR should be captured and promise resolved.
-     * @param qr - scanned QR content.
-     */
-    capture(this: void, qr: string): boolean;
-  }): Promise<string | null>;
-  /**
-   * Opens the scanner in stream mode.
-   *
-   * Whenever a user scans a QR, the passed `onCaptured` function will be called.
-   * @param options - method options.
-   */
-  (options: {
-    /**
-     * Title to be displayed in the scanner.
-     */
-    text?: string;
-    /**
-     * Function which will be called in case, some QR code was scanned.
-     * @param qr - scanned QR content.
-     */
-    onCaptured(this: void, qr: string): void;
-  }): void;
-}>;
+/**
+ * True if the scanner is currently opened.
+ */
+export const isOpened = computed(_.isOpened);
 
-const open: OpenFn = decorateWithIsSupported((options) => {
+export const open: OpenFn = decorateWithIsSupported((options) => {
   if (_.isOpened()) {
     throw createError(ERR_SCANNER_OPENED);
   }
@@ -77,7 +44,7 @@ const open: OpenFn = decorateWithIsSupported((options) => {
     return request({
       method: OPEN_METHOD,
       event: [SCANNED_EVENT, CLOSED_EVENT],
-      postEvent: postEvent(),
+      postEvent: $postEvent(),
       params: { text },
       capture(ev) {
         return ev.event === 'scan_qr_popup_closed' || capture(ev.payload.data);
@@ -110,8 +77,5 @@ const open: OpenFn = decorateWithIsSupported((options) => {
   // listeners.
   _.isOpened.sub(cleanup, { once: true });
 
-  postEvent()(OPEN_METHOD, { text: options.text });
+  $postEvent()(OPEN_METHOD, { text: options.text });
 }, OPEN_METHOD) as OpenFn;
-
-export { open };
-export { isOpened } from './computed.js';

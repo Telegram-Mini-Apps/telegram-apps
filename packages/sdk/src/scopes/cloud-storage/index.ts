@@ -1,13 +1,11 @@
-import { invokeCustomMethod } from '@/bridge/invokeCustomMethod.js';
-import { array } from '@/parsing/parsers/array.js';
-import { json } from '@/parsing/parsers/json.js';
-import { string } from '@/parsing/parsers/string.js';
+import { invokeCustomMethod, type ExecuteWithTimeout } from '@telegram-apps/bridge';
+import { array, object, string } from '@telegram-apps/transform';
+
 import {
   decorateWithIsSupported,
   type WithIsSupported,
 } from '@/scopes/decorateWithIsSupported.js';
-import { createRequestId, postEvent } from '@/scopes/globals/globals.js';
-import type { ExecuteWithTimeout } from '@/types/methods.js';
+import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
 
 /*
  * fixme
@@ -33,8 +31,8 @@ export const deleteKeys: WithIsSupported<(
         await invokeCustomMethod(
           'deleteStorageValues',
           { keys },
-          createRequestId()(),
-          { ...options || {}, postEvent: postEvent() },
+          $createRequestId()(),
+          { ...options || {}, postEvent: $postEvent() },
         );
       }
     },
@@ -48,12 +46,12 @@ export const deleteKeys: WithIsSupported<(
 export const getKeys: WithIsSupported<(options?: ExecuteWithTimeout) => Promise<string[]>> =
   decorateWithIsSupported(
     async options => {
-      return array().of(string()).parse(
+      return array(string())()(
         await invokeCustomMethod(
           'getStorageKeys',
           {},
-          createRequestId()(),
-          { ...options || {}, postEvent: postEvent() },
+          $createRequestId()(),
+          { ...options || {}, postEvent: $postEvent() },
         ),
       );
     },
@@ -89,14 +87,14 @@ export const get: GetFn = decorateWithIsSupported(
     const data = await invokeCustomMethod(
       'getStorageValues',
       { keys },
-      createRequestId()(),
-      { ...options || {}, postEvent: postEvent() },
+      $createRequestId()(),
+      { ...options || {}, postEvent: $postEvent() },
     );
 
-    const result = json(
+    const result = object(
       Object.fromEntries(keys.map((k) => [k, string()])),
       'CloudStorageData',
-    ).parse(data);
+    )()(data);
 
     return Array.isArray(keyOrKeys) ? result : result[keyOrKeys];
   },
@@ -118,8 +116,8 @@ export const set: WithIsSupported<(
     await invokeCustomMethod(
       'saveStorageValue',
       { key, value },
-      createRequestId()(),
-      { ...options || {}, postEvent: postEvent() },
+      $createRequestId()(),
+      { ...options || {}, postEvent: $postEvent() },
     );
   },
   MINI_APPS_METHOD,

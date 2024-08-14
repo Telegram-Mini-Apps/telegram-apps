@@ -1,13 +1,12 @@
-import { saveToStorage } from '@/launch-params/saveToStorage.js';
-import { isIframe } from '@/env/isIframe.js';
-import { hasExternalNotify } from '@/env/hasExternalNotify.js';
-import { emitMiniAppsEvent } from '@/bridge/events/handlers.js';
+import { emitMiniAppsEvent, type EventPayload, type LaunchParams } from '@telegram-apps/bridge';
+import { object, string } from '@telegram-apps/transform';
+
+import { saveToStorage } from '@/scopes/launch-params/saveToStorage.js';
 import { serialize } from '@/scopes/theme-params/static.js';
-import { parseLaunchParams } from '@/launch-params/parseLaunchParams.js';
-import { json } from '@/parsing/parsers/json.js';
-import { string } from '@/parsing/parsers/string.js';
-import type { LaunchParams } from '@/launch-params/types.js';
-import type { EventPayload } from '@/bridge/events/types.js';
+import { parseLaunchParams } from '@/scopes/launch-params/parseLaunchParams.js';
+import { debugLog } from '@/utils/debug.js';
+
+// TODO: Allow custom methods call handling.
 
 /**
  * Mocks a Telegram application environment.
@@ -26,10 +25,10 @@ export function mockTelegramEnv(launchParamsRaw: LaunchParams | string): void {
       return;
     }
     try {
-      const { eventType } = json({
+      const { eventType } = object({
         eventType: string(),
         eventData: (v) => v,
-      }).parse(data);
+      })()(data);
 
       if (eventType === 'web_app_request_theme') {
         emitMiniAppsEvent('theme_changed', {
@@ -50,30 +49,20 @@ export function mockTelegramEnv(launchParamsRaw: LaunchParams | string): void {
   }
 
   // Override all possible ways of calling a Mini Apps method.
-  if (isIframe()) {
-    const postMessage = window.parent.postMessage.bind(window.parent);
-    window.parent.postMessage = data => {
-      void wiredPostMessage(data);
-      postMessage(data);
-    };
-    return;
-  }
 
-  if (hasExternalNotify(window)) {
-    const notify = window.external.notify.bind(window.external);
-    window.external.notify = data => {
-      void wiredPostMessage(data);
-      notify(data);
-    };
-    return;
-  }
+  // Wire for iframe.
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const postMessage = window.parent.postMessage;
+  window.parent.postMessage = (...args) => {
+    void wiredPostMessage(args[0]);
+    postMessage.apply(window.parent, args as any);
+  };
+  debugLog('window.parent.postMessage was mocked via mockTelegramEnv');
 
-  const proxy = (window as any).TelegramWebviewProxy;
+  // Wire for other platforms.
   (window as any).TelegramWebviewProxy = {
-    ...(proxy || {}),
-    postEvent(...args: any) {
-      void wiredPostMessage(JSON.stringify({ eventType: args[0], eventData: args[1] }));
-      proxy && proxy.postEvent(...args);
+    postEvent(eventType: string, eventData: string) {
+      wiredPostMessage(JSON.stringify({ eventType, eventData }));
     },
   };
 }

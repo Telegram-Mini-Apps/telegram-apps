@@ -1,5 +1,5 @@
-import type { BiometryType } from '@/bridge/events/types.js';
-import type { ExecuteWithTimeout, Maybe } from '@/types/index.js';
+import type { BiometryType, ExecuteWithTimeout } from '@telegram-apps/bridge';
+import type { Maybe } from '@telegram-apps/types';
 
 export interface State {
   accessGranted: boolean;

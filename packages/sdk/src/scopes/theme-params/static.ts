@@ -1,21 +1,14 @@
-import { themeParamsParser } from './themeParamsParser.js';
-import type { ThemeParams } from './types.js';
+import { themeParams } from '@telegram-apps/transform';
+import type { ThemeParams } from '@telegram-apps/bridge';
 
-/**
- * Converts a palette key from the local representation to the representation sent from the
- * Telegram application.
- * @param key - palette key.
- */
-function keyToExternal(key: string): string {
-  return key.replace(/[A-Z]/g, (match) => `_${match.toLowerCase()}`);
-}
+import { camelToSnake } from '@/utils/casing.js';
 
 /**
  * Parses incoming value as theme parameters.
  * @param value - value to parse.
  */
 export function parse(value: unknown): ThemeParams {
-  return themeParamsParser().parse(value);
+  return themeParams()(value);
 }
 
 /**
@@ -26,7 +19,9 @@ export function serialize(themeParams: ThemeParams): string {
     Object.fromEntries(
       Object
         .entries(themeParams)
-        .map(([key, value]) => [keyToExternal(key), value]),
+        .map(([key, value]) => [camelToSnake(key), value]),
     ),
   );
 }
+
+export type * from './types.js';

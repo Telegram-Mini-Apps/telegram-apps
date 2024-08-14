@@ -1,10 +1,10 @@
-import { postEvent, version } from '@/scopes/globals/globals.js';
-import { createSafeURL } from '@/navigation/createSafeURL.js';
+import { supports, type OpenLinkBrowser } from '@telegram-apps/bridge';
+import { createSafeURL } from '@telegram-apps/navigation';
+
+import { $postEvent, $version } from '@/scopes/globals/globals.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import { createError } from '@/errors/createError.js';
 import { ERR_INVALID_HOSTNAME } from '@/errors/errors.js';
-import { supports } from '@/bridge/supports.js';
-import type { OpenLinkBrowser } from '@/bridge/methods/types/index.js';
 
 export interface OpenLinkOptions {
   /**
@@ -31,7 +31,7 @@ const OPEN_TG_LINK_METHOD = 'web_app_open_tg_link';
  */
 export function openLink(url: string, options?: OpenLinkOptions): void {
   options ||= {};
-  postEvent()('web_app_open_link', {
+  $postEvent()('web_app_open_link', {
     url: createSafeURL(url).toString(),
     try_browser: options.tryBrowser,
     try_instant_view: options.tryInstantView,
@@ -51,12 +51,12 @@ export const openTelegramLink: WithIsSupported<(url: string) => void> = decorate
     throw createError(ERR_INVALID_HOSTNAME);
   }
 
-  if (!supports(OPEN_TG_LINK_METHOD, version())) {
+  if (!supports(OPEN_TG_LINK_METHOD, $version())) {
     window.location.href = url;
     return;
   }
 
-  postEvent()(OPEN_TG_LINK_METHOD, { path_full: pathname + search });
+  $postEvent()(OPEN_TG_LINK_METHOD, { path_full: pathname + search });
 }, OPEN_TG_LINK_METHOD);
 
 /**
