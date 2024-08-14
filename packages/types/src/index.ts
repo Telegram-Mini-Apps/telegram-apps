@@ -5,5 +5,4 @@ export type * from './mini-apps/theme-params.js';
 export type * from './colors.js';
 export type * from './logical.js';
 export type * from './misc.js';
-export type * from './unions.js';
 export type * from './utils.js';

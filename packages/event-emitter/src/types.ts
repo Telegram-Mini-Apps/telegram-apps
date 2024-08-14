@@ -1,4 +1,10 @@
-import type { VoidFn, Or, IsNever, IsUndefined, If } from '@telegram-apps/types';
+import type { VoidFn, IsNever, If } from '@telegram-apps/types';
+
+type IsUndefined<T> = [T] extends [undefined] ? true : false;
+
+type Or<A extends boolean, B extends boolean> = A extends true
+  ? true
+  : (B extends true ? true : false);
 
 /**
  * Accepts type assuming, it is responsible for describing event listener
