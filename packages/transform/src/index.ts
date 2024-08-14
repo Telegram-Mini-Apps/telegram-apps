@@ -11,6 +11,7 @@ export { isCustomErrorOfType } from './errors/isCustomErrorOfType.js';
 
 export { array } from '@/transformers/array.js';
 export { boolean } from '@/transformers/boolean.js';
+export { createTransformerGen } from '@/transformers/createTransformerGen.js';
 export { date } from '@/transformers/date.js';
 export { initData, type InitData } from '@/transformers/initData.js';
 export { object } from '@/transformers/object.js';
@@ -25,3 +26,5 @@ export { isRGB } from './isRGB.js';
 export { isRGBShort } from './isRGBShort.js';
 export { toRGB } from './toRGB.js';
 export { toRecord } from './toRecord.js';
+
+export type { Schema, TransformerGen, TransformFn } from './types.js';
