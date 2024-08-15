@@ -10,7 +10,7 @@ To initialize the component, use the `initHapticFeedback` function:
 ```typescript
 import { initHapticFeedback } from '@telegram-apps/sdk';
 
-const [hapticFeedback] = initHapticFeedback();  
+const hapticFeedback = initHapticFeedback();  
 ```
 
 ## Notifications
