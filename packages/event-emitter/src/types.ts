@@ -1,4 +1,4 @@
-import type { VoidFn, IsNever, If } from '@telegram-apps/types';
+import type { VoidFn, IsNever, If } from '@telegram-apps/util-types';
 
 type IsUndefined<T> = [T] extends [undefined] ? true : false;
 

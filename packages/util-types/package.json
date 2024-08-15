@@ -1,13 +1,13 @@
 {
-  "name": "@telegram-apps/event-emitter",
+  "name": "@telegram-apps/util-types",
   "version": "0.0.0",
-  "description": "Custom event emitter implementation.",
+  "description": "Utility TypeScript types used across the @telegram-apps packages.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
   "repository": {
     "type": "git",
     "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
-    "directory": "packages/event-emitter"
+    "directory": "packages/util-types"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
@@ -15,7 +15,7 @@
   "keywords": [
     "telegram-mini-apps",
     "typescript",
-    "event-emitter"
+    "types"
   ],
   "license": "MIT",
   "type": "module",
@@ -23,29 +23,17 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
   "types": "./dist/dts/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/dts/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "default": "./dist/index.cjs"
+      "types": "./dist/dts/index.d.ts"
     }
   },
   "scripts": {
-    "test": "vitest --run",
-    "lint": "cd ../.. && eslint packages/event-emitter/src --ignore-pattern **/*.test.ts",
-    "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
-    "build": "vite build"
-  },
-  "dependencies": {
-    "@telegram-apps/util-types": "workspace:^"
+    "build": "vite build -c vite.config.ts"
   },
   "devDependencies": {
-    "test-utils": "workspace:*",
     "tsconfig": "workspace:*"
   },
   "publishConfig": {

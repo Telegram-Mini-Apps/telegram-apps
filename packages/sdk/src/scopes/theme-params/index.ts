@@ -7,7 +7,7 @@ import {
 } from '@telegram-apps/bridge';
 import { computed, type Computed } from '@telegram-apps/signals';
 import { isPageReload } from '@telegram-apps/navigation';
-import type { VoidFn } from '@telegram-apps/types';
+import type { VoidFn } from '@telegram-apps/util-types';
 
 import { isColorDark } from '@/utils/isColorDark.js';
 import { retrieveLaunchParams } from '@/scopes/launch-params/retrieveLaunchParams.js';

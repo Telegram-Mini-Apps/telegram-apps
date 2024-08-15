@@ -1,7 +1,7 @@
 import { off, on, type EventListener } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 import { computed, type Computed } from '@telegram-apps/signals';
-import type { VoidFn } from '@telegram-apps/types';
+import type { VoidFn } from '@telegram-apps/util-types';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 import { getStorageValue, setStorageValue } from '@/utils/storage.js';

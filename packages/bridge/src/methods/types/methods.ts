@@ -1,4 +1,5 @@
-import type { RGB, If, IsNever } from '@telegram-apps/types';
+import type { RGB } from '@telegram-apps/types';
+import type { If, IsNever } from '@telegram-apps/util-types';
 
 import type { AnyInvokeCustomMethodParams } from './custom-methods.js';
 import type { AnyHapticFeedbackParams } from './haptic.js';
