@@ -1,14 +1,16 @@
-import type { VoidFn } from '@telegram-apps/types';
+import type { VoidFn } from '@telegram-apps/util-types';
+
+export type CleanupFn = VoidFn;
 
 /**
  * Returns a tuple, containing function to add cleanup, call cleanup, and flag showing whether
  * cleanup was called. Cleanup will not be performed in case, it was done before.
  */
-export function createCleanup(...fns: (VoidFn | VoidFn[])[]): [
+export function createCleanup(...fns: (CleanupFn | CleanupFn[])[]): [
   /**
    * Adds new functions to be called on cleanup.
    */
-  add: (...fns: VoidFn[]) => void,
+  add: (...fns: CleanupFn[]) => void,
   /**
    * Performs cleanup.
    */

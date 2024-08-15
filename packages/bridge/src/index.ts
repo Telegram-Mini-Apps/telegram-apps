@@ -68,7 +68,7 @@ export { createTimeoutError } from '@/timeout/createTimeoutError.js';
 export { withTimeout } from '@/timeout/withTimeout.js';
 
 export { compareVersions } from '@/utils/compareVersions.js';
-export { createCleanup } from '@/utils/createCleanup.js';
+export { createCleanup, type CleanupFn } from '@/utils/createCleanup.js';
 export { createLogger } from '@/utils/createLogger.js';
 export { createSingleton } from '@/utils/createSingleton.js';
 export { debug, setDebug } from '@/debug.js';

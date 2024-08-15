@@ -2,7 +2,7 @@ import { isRGB } from '@telegram-apps/transform';
 import { createCleanup, type RGB } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 import { computed } from '@telegram-apps/signals';
-import type { VoidFn } from '@telegram-apps/types';
+import type { VoidFn } from '@telegram-apps/util-types';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 import { getStorageValue, setStorageValue } from '@/utils/storage.js';

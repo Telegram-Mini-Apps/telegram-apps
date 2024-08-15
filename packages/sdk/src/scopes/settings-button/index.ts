@@ -1,7 +1,7 @@
 import { off, on, type EventListener } from '@telegram-apps/bridge';
 import { computed } from '@telegram-apps/signals';
 import { isPageReload } from '@telegram-apps/navigation';
-import type { VoidFn } from '@telegram-apps/types';
+import type { VoidFn } from '@telegram-apps/util-types';
 
 import { getStorageValue, setStorageValue } from '@/utils/storage.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';

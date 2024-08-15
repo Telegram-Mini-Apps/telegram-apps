@@ -1,5 +1,4 @@
-import { on, createCleanup } from '@telegram-apps/bridge';
-import type { VoidFn } from '@telegram-apps/types';
+import { on, createCleanup, type CleanupFn } from '@telegram-apps/bridge';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
@@ -9,7 +8,7 @@ import { $postEvent } from '@/scopes/globals/globals.js';
  * application. This option is only used in web versions of Telegram. Default: true.
  * @returns Function, which performs cleanup removing all created elements and listeners.
  */
-export function initWeb(acceptCustomStyles = true): VoidFn {
+export function initWeb(acceptCustomStyles = true): CleanupFn {
   const [addCleanup, cleanup] = createCleanup(
     on('reload_iframe', () => {
       $postEvent()('iframe_will_reload');

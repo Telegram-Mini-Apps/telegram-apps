@@ -1,4 +1,4 @@
-import type { If, IsNever } from '@telegram-apps/types';
+import type { If, IsNever } from '@telegram-apps/util-types';
 
 import { on } from '@/events/listening.js';
 import { withTimeout } from '@/timeout/withTimeout.js';
@@ -100,7 +100,7 @@ export async function request<M extends MethodName>(
           Array.isArray(event)
             ? (capture as RequestCaptureEventsFn<EventName[]>)({
               event: ev,
-               
+
               payload: payload as any,
             })
             : (capture as RequestCaptureEventFn<EventName>)(payload)
@@ -112,7 +112,7 @@ export async function request<M extends MethodName>(
   );
 
   try {
-     
+
     (options.postEvent || defaultPostEvent)(options.method as any, (options as any).params);
     return await (timeout ? withTimeout(promise, timeout) : promise);
   } finally {

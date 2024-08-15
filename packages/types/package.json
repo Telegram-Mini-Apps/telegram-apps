@@ -1,7 +1,7 @@
 {
   "name": "@telegram-apps/types",
   "version": "0.0.0",
-  "description": "TypeScript types used across the @telegram-apps packages.",
+  "description": "Telegram Mini Apps related TypeScript types.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
   "repository": {
@@ -30,9 +30,6 @@
     }
   },
   "scripts": {
-    "test": "vitest --run",
-    "lint": "cd ../.. && eslint packages/signals/src --ignore-pattern **/*.test.ts",
-    "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "build": "vite build -c vite.config.ts"
   },
