@@ -9,7 +9,7 @@ To initialize the component, use the `initQRScanner` function:
 ```typescript
 import { initQRScanner } from '@telegram-apps/sdk';
 
-const [qrScanner] = initQRScanner();  
+const qrScanner = initQRScanner();  
 ```
 
 ## Opening and Closing
@@ -17,11 +17,11 @@ const [qrScanner] = initQRScanner();
 To open the QR scanner, the developer should use the `open` method:
 
 ```typescript
-scanner.open('Scan QR code').then((content) => {
+qrScanner.open('Scan QR code').then((content) => {
   console.log(content);
   // Output: 'some-data=22l&app=93...'
 });
-console.log(scanner.isOpened); // true
+console.log(qrScanner.isOpened); // true
 ```
 
 As a result, the method returns a promise that will be resolved in case some QR
@@ -32,7 +32,7 @@ for displaying a text in QR scanner and determining if scanned QR should be capt
 should be fulfilled.
 
 ```ts
-scanner.open({ 
+qrScanner.open({ 
   text: 'Scan QR code',
   capture({ data }) {
     // Capture QRs contanining Telegram user link.
@@ -47,8 +47,8 @@ scanner.open({
 To close the scanner, use the `close` method:
 
 ```typescript
-scanner.close();
-console.log(scanner.isOpened); // false
+qrScanner.close();
+console.log(qrScanner.isOpened); // false
 ```
 
 ## Events
