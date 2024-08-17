@@ -25,7 +25,19 @@ value in the tuple that will be resolved when the actual viewport state is retri
 The application can display just the top part of the Mini App, with its lower part remaining outside
 the screen area. From this position, the user can "pull" the Mini App to its maximum height, while
 the developer can do the same by calling `expand` method (use `isExpanded` prop to get current
-expansion state). As the position of the Mini App changes, the current height value of the visible
+expansion state):
+
+```typescript
+const [viewport] = initViewport();
+
+const vp = await viewport;
+
+if (!vp.isExpanded) {
+    vp.expand(); // will expand the Mini App, if it's not
+}
+```
+
+As the position of the Mini App changes, the current height value of the visible
 area will be updated in real time.
 
 ::: info
