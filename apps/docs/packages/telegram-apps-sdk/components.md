@@ -24,14 +24,14 @@ const [bb, cleanupBb] = initBackButton();
 
 // Clicking the MainButton hides it and shows the BackButton.
 mb.on('click', () => {
-  mainButton.hide();
-  backButton.show();
+  mb.hide();
+  bb.show();
 });
 
 // Clicking the BackButton hides it and shows the MainButton.
 bb.on('click', () => {
-  mainButton.show();
-  backButton.hide();
+  mb.show();
+  bb.hide();
 });
 
 // Configure the MainButton.
