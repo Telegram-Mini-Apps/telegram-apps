@@ -3,6 +3,15 @@
 Implements Telegram Mini
 Apps [haptic feedback](../../../platform/haptic-feedback.md) functionality.
 
+::: info
+
+If this functionality does not work on your device: check the settings. For example, 
+for the Android mobile system, you need to go to _"Settings" > "Sound & Vibration" > 
+"Vibration & Haptics"_ and find the _"Touch feedback"_ option. It should **not** be 
+zero.
+
+:::
+
 ## Initialization
 
 To initialize the component, use the `initHapticFeedback` function:
@@ -10,7 +19,7 @@ To initialize the component, use the `initHapticFeedback` function:
 ```typescript
 import { initHapticFeedback } from '@telegram-apps/sdk';
 
-const [hapticFeedback] = initHapticFeedback();  
+const hapticFeedback = initHapticFeedback();  
 ```
 
 ## Notifications
@@ -30,7 +39,7 @@ style value passed. Style of impact occurred haptic event:
 - `soft`, indicates a collision between soft or flexible UI objects
 
 ```typescript
-haptic.impactOccurred('medium');
+hapticFeedback.impactOccurred('medium');
 ```
 
 ### `notificationOccurred`
@@ -44,7 +53,7 @@ event.
 - `warning`, indicates that a task or action produced a warning.
 
 ```typescript
-haptic.notificationOccurred('success');
+hapticFeedback.notificationOccurred('success');
 ```
 
 ### `selectionChanged`
@@ -52,7 +61,7 @@ haptic.notificationOccurred('success');
 A method tells that the user has changed a selection.
 
 ```typescript
-haptic.selectionChanged();
+hapticFeedback.selectionChanged();
 ```
 
 ## Methods Support
