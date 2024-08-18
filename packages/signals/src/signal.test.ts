@@ -102,22 +102,22 @@ describe('unsub', () => {
   });
 });
 
-describe('unsubAll', () => {
-  it('should remove only non-signal listeners', () => {
+describe('destroy', () => {
+  it('should remove only all listeners', () => {
     const s = signal(1);
     const fn = vi.fn();
     const fn2 = vi.fn();
     s.sub(fn);
-    s.sub(fn2, { signal: true });
+    s.sub(fn2);
     s.set(2);
     expect(fn).toBeCalledTimes(1);
     expect(fn2).toBeCalledTimes(1);
     fn.mockClear();
     fn2.mockClear();
 
-    s.unsubAll();
+    s.destroy();
     s.set(3);
     expect(fn).toBeCalledTimes(0);
-    expect(fn2).toBeCalledTimes(1);
+    expect(fn2).toBeCalledTimes(0);
   });
 });

@@ -10,18 +10,12 @@ export interface SignalOptions<T> {
    * This function is used during the actual and incoming values comparison in the `set` method.
    * If values are considered the same, no subscribers will be called.
    *
-   * By default, signals compares values directly using "===".
+   * @default Object.is
    * @param a - the actual value.
    * @param b - an incoming value.
    * @returns True if values are considered the same.
    */
   equals?(this: void, a: T, b: T): boolean;
-  /**
-   * The `set` method override.
-   * @param signal - an underlying signal (non-enhanced).
-   * @param value - value to set.
-   */
-  set?(this: void, signal: Signal<T>, value: T): void;
 }
 
 export interface Signal<T> {
@@ -30,14 +24,24 @@ export interface Signal<T> {
    */
   (): T;
   /**
-   * Updates the signal notifying all subscribers about changes.
-   * @param value - value to set.
+   * Destroys the signal removing all bound listeners.
+   *
+   * We usually use this method when the signal is not needed anymore.
+   *
+   * Take note that as long as call of this method removes all bound listeners, computed signals
+   * based on the current one will stop listening to its changes, possibly making it work
+   * improperly.
    */
-  set(this: void, value: T): void;
+  destroy(this: void): void;
   /**
    * Resets the signal value to its initial value.
    */
   reset(this: void): void;
+  /**
+   * Updates the signal notifying all subscribers about changes.
+   * @param value - value to set.
+   */
+  set(this: void, value: T): void;
   /**
    * Adds a new listener, tracking the signal changes.
    * @param fn - event listener.
@@ -45,12 +49,6 @@ export interface Signal<T> {
    * @returns A function to remove the bound listener.
    */
   sub(this: void, fn: SubscribeListenerFn<T>, options?: {
-    /**
-     * True if the listener was added by some other signal.
-     * In this case, the listener will not be removed by the unsubAll method.
-     * @default false
-     */
-    signal?: boolean;
     /**
      * Should this listener be called only once.
      * @default false
@@ -63,30 +61,16 @@ export interface Signal<T> {
    * @param once - was this listener added for a single call. Default: false
    */
   unsub(this: void, fn: SubscribeListenerFn<T>, once?: boolean): void;
-  /**
-   * Removes all signal change listeners, not added by other signals.
-   */
-  unsubAll(this: void): void;
 }
 
 /*@__NO_SIDE_EFFECTS__*/
 export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T> {
   options ||= {};
-  const equals = options.equals || ((a, b) => a === b);
+  const equals = options.equals || Object.is;
 
   let listeners: [
-    /**
-     * Actual change listener.
-     */
     listener: SubscribeListenerFn<T>,
-    /**
-     * Should this listener be called only once.
-     */
     once?: boolean,
-    /**
-     * True, if the listener was added by some other signal.
-     */
-    signalListener?: boolean
   ][] = [];
   let value: T = initialValue;
 
@@ -99,7 +83,7 @@ export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T
       // leading to an unexpected behavior.
       //
       // We want the setter to make sure that all listeners will be called in predefined
-      // order withing a single update frame.
+      // order within a single update frame.
       runInBatchMode(s, () => {
         [...listeners].forEach(([fn, once]) => {
           fn(v, prev);
@@ -115,7 +99,7 @@ export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T
 
   const unsub: Signal<T>['unsub'] = (fn, once) => {
     const idx = listeners.findIndex(item => {
-      return item[0] === fn && item[1] === !!once;
+      return item[0] === fn && !!item[1] === !!once;
     });
     if (idx >= 0) {
       listeners.splice(idx, 1);
@@ -128,40 +112,21 @@ export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T
       return value;
     },
     {
+      destroy() {
+        listeners = [];
+      },
       set,
       reset() {
         set(initialValue);
       },
       sub(fn, options) {
-        options ||= {};
-        const { once } = options;
-        listeners.push([fn, !!once, options.signal]);
+        const once = (options || {}).once;
+        listeners.push([fn, once]);
         return () => unsub(fn, once);
       },
       unsub,
-      unsubAll() {
-        // We are removing only non-signal listeners. This is due to we don't want this method
-        // to break computed signals tracking of other signals.
-        listeners = listeners.filter(item => item[2]);
-      },
-    } satisfies Pick<Signal<T>, 'set' | 'reset' | 'sub' | 'unsub' | 'unsubAll'>,
+    } satisfies Pick<Signal<T>, 'destroy' | 'set' | 'reset' | 'sub' | 'unsub'>,
   );
-
-  // TODO: tests
-  const { set: enhanceSet } = options;
-  if (enhanceSet) {
-    return Object.assign(
-      function get() {
-        return s();
-      },
-      {
-        ...s,
-        set(value: T): void {
-          enhanceSet(s, value);
-        }
-      }
-    );
-  }
 
   return s;
 }
