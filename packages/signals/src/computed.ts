@@ -52,7 +52,7 @@ export function computed<T>(fn: () => T, options?: SignalOptions<T>): Computed<T
     }
 
     // Start tracking for all dependencies' changes and re-compute the computed value.
-    collectedSignals.forEach(s => s.sub(update, { signal: true }));
+    collectedSignals.forEach(s => s.sub(update));
     deps = collectedSignals;
 
     return result;
@@ -61,8 +61,8 @@ export function computed<T>(fn: () => T, options?: SignalOptions<T>): Computed<T
   return Object.assign(function computed(): T {
     return s();
   }, {
+    destroy: s.destroy,
     sub: s.sub,
     unsub: s.unsub,
-    unsubAll: s.unsubAll,
-  } satisfies Pick<Computed<T>, 'sub' | 'unsub' | 'unsubAll'>);
+  } satisfies Pick<Computed<T>, 'destroy' | 'sub' | 'unsub'>);
 }
