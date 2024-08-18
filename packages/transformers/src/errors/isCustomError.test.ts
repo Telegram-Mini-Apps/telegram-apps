@@ -6,5 +6,5 @@ import { CustomError } from './CustomError.js';
 it('should return true if passed value is instance of CustomError', () => {
   expect(isCustomError('')).toBe(false);
   expect(isCustomError(new Error())).toBe(false);
-  expect(isCustomError(new CustomError('ERR_METHOD_UNSUPPORTED'))).toBe(true);
+  expect(isCustomError(new CustomError('ERR_INVALID_VALUE'))).toBe(true);
 });
