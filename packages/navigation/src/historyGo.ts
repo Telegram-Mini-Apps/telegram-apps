@@ -1,33 +1,28 @@
+import { advancedPromise, addEventListener, type AdvancedPromise } from '@telegram-apps/utils';
+
 /**
  * Performs window.history.go operation waiting for it to be completed.
  * @param delta - history change delta.
+ * @param abortSignal - signal to abort the operation.
  */
-export async function historyGo(delta: number): Promise<boolean> {
+export function historyGo(delta: number, abortSignal?: AbortSignal): AdvancedPromise<boolean> {
   if (delta === 0) {
-    return true;
+    return advancedPromise(r => r(true));
   }
-  const w = window;
-  const h = w.history;
 
-  let resolve: (value: boolean) => void;
-  const promise = new Promise<boolean>(res => {
-    resolve = res;
+  // We expect the popstate event to occur during some time.
+  // Yeah, this seems tricky and not stable, but it seems like we have no other way out.
+  // Waiting for Navigation API to be implemented in browsers.
+  const promise = advancedPromise<boolean>({ abortSignal });
+  const removePopstateListener = addEventListener(window, 'popstate', () => {
+    promise.resolve(true);
   });
 
-  function listener() {
-    resolve(true);
-  }
-
-  // We expect popstate event to occur during some time. Yeah, this seems tricky and not stable,
-  // but it seems like we have no other way out. Waiting for Navigation API to be implemented in
-  // browsers.
-  w.addEventListener('popstate', listener);
-  h.go(delta);
+  window.history.go(delta);
 
   // Usually, it takes about 1ms to emit this event, but we use some buffer.
-  setTimeout(resolve!, 50, false);
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval
+  setTimeout(promise.resolve, 50, false);
 
-  return promise.finally(() => {
-    w.removeEventListener('popstate', listener);
-  });
+  return promise.finally(removePopstateListener);
 }
