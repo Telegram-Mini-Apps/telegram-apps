@@ -1,4 +1,5 @@
 export { addEventListener } from './addEventListener.js';
+export { createCbCollector, type CallbackFn } from './createCbCollector.js';
 export { createCleanup, type CleanupFn } from './createCleanup.js';
 export {
   advancedPromise,
