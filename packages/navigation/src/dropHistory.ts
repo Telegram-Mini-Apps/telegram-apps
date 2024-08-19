@@ -2,8 +2,9 @@ import { historyGo } from './historyGo.js';
 
 /**
  * Drops current browser history switching browser history cursor to the first one entry.
+ * @param abortSignal - signal to abort the operation.
  */
-export async function dropHistory(): Promise<void> {
+export async function dropHistory(abortSignal?: AbortSignal): Promise<void> {
   const h = history;
   if (h.length <= 1) {
     return;
@@ -15,7 +16,7 @@ export async function dropHistory(): Promise<void> {
   // By this line of code we cover the most recent case, when application is opened in WebView,
   // but not in iframe. Applications opened in WebView have simple browser history containing
   // only entries belonging to the current web application.
-  if (await historyGo(1 - h.length)) {
+  if (await historyGo(1 - h.length, abortSignal)) {
     return;
   }
 
@@ -28,6 +29,6 @@ export async function dropHistory(): Promise<void> {
   //
   // This is the reason why we iteratively call go(-1) to meet the entry which is recognized as
   // the initial one for the current iframe.
-  while (await historyGo(-1)) {
+  while (await historyGo(-1, abortSignal)) {
   }
 }
