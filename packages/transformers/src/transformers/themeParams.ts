@@ -1,9 +1,10 @@
 import type { ThemeParams } from '@telegram-apps/types';
 
-import { rgb } from '@/transformers/rgb.js';
 import { toRecord } from '@/toRecord.js';
-import { createTransformerGen } from '@/transformers/createTransformerGen.js';
 import type { TransformerGen } from '@/types.js';
+
+import { rgb } from './rgb.js';
+import { createTransformerGen } from './createTransformerGen.js';
 
 /**
  * Converts a palette key from the Telegram application to the representation used by the package.
