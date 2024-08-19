@@ -68,6 +68,10 @@ export interface Navigator<State> {
    */
   detach(): void;
   /**
+   * Destroys the navigator disabling all created navigator signals.
+   */
+  destroy(): void;
+  /**
    * Goes to the next history item. Alias for `go(1)`.
    * @see go
    */

@@ -43,7 +43,8 @@
   },
   "dependencies": {
     "@telegram-apps/bridge": "workspace:^",
-    "@telegram-apps/signals": "workspace:^"
+    "@telegram-apps/signals": "workspace:^",
+    "@telegram-apps/utils": "workspace:^"
   },
   "devDependencies": {
     "test-utils": "workspace:*",
