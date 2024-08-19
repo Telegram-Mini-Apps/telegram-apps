@@ -15,22 +15,13 @@ export function collectSignal(signal: Signal<any>): void {
 
 /*@__NO_SIDE_EFFECTS__*/
 export function computed<T>(fn: () => T, options?: SignalOptions<T>): Computed<T> {
-  // List of the signal dependencies.
   let deps = new Set<Signal<unknown>>();
-
-  // Underlying computed signal.
   const s = signal(compute(), options);
 
-  /**
-   * Updates the signal value using the `compute` function.
-   */
   function update() {
     s.set(compute());
   }
 
-  /**
-   * Computes the value and dependencies based on the passed function.
-   */
   function compute(): T {
     // As long as in this iteration, we may receive new signals as dependencies, we stop
     // listening to the previous signals.
@@ -64,5 +55,5 @@ export function computed<T>(fn: () => T, options?: SignalOptions<T>): Computed<T
     destroy: s.destroy,
     sub: s.sub,
     unsub: s.unsub,
-  } satisfies Pick<Computed<T>, 'destroy' | 'sub' | 'unsub'>);
+  });
 }

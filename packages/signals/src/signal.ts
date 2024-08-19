@@ -68,10 +68,7 @@ export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T
   options ||= {};
   const equals = options.equals || Object.is;
 
-  let listeners: [
-    listener: SubscribeListenerFn<T>,
-    once?: boolean,
-  ][] = [];
+  let listeners: [listener: SubscribeListenerFn<T>, once?: boolean][] = [];
   let value: T = initialValue;
 
   const set: Signal<T>['set'] = v => {
