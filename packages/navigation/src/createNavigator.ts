@@ -1,5 +1,13 @@
-import { batch, computed, signal } from '@telegram-apps/signals';
+import {
+  batch,
+  computed,
+  signal,
+  type Computed,
+  type Signal,
+  type SignalOptions,
+} from '@telegram-apps/signals';
 import { off, on, postEvent } from '@telegram-apps/bridge';
+import { createCbCollector } from '@telegram-apps/utils';
 
 import { formatItem } from './formatItem.js';
 import { ensurePrefix } from './ensurePrefix.js';
@@ -46,13 +54,29 @@ export function createNavigator<State>(
   const mode = options.hashMode || 'slash';
   const shouldNavigate = options.shouldNavigate || (() => true);
 
+  /* SIGNALS REGISTRY */
+
+  const [addSignalDestroy, destroySignals] = createCbCollector();
+
+  function registerSignal<T>(value: T, options?: SignalOptions<T>): Signal<T> {
+    const s = signal(value, options);
+    addSignalDestroy(s.destroy);
+    return s;
+  }
+
+  function registerComputed<T>(fn: () => T): Computed<T> {
+    const s = computed(fn);
+    addSignalDestroy(s.destroy);
+    return s;
+  }
+
   /* PRIVATE SIGNALS */
 
-  const $_attached = signal(false);
-  const $_attaching = signal(false);
-  const $_cursor = signal(cursor);
-  const $_hasPrev = computed(() => $_cursor() > 0);
-  const $_history = signal<Readonly<HistoryItem<State>>[]>(
+  const $_attached = registerSignal(false);
+  const $_attaching = registerSignal(false);
+  const $_cursor = registerSignal(cursor);
+  const $_hasPrev = registerComputed(() => $_cursor() > 0);
+  const $_history = registerSignal<Readonly<HistoryItem<State>>[]>(
     history.map(item => formatItem(item)),
     {
       // Disabling comparing to avoid spreading the same history array.
@@ -61,12 +85,12 @@ export function createNavigator<State>(
       },
     },
   );
-  const $_location = computed(() => $_history()[$_cursor()]);
-  const $_syncing = signal(false);
+  const $_location = registerComputed(() => $_history()[$_cursor()]);
+  const $_syncing = registerSignal(false);
 
   /* PUBLIC SIGNALS */
 
-  const $hasNext = computed(() => $_cursor() !== $_history().length - 1);
+  const $hasNext = registerComputed(() => $_cursor() !== $_history().length - 1);
 
   /* METHODS */
 
@@ -263,10 +287,10 @@ export function createNavigator<State>(
         });
       });
     },
-    attached: computed($_attached),
-    attaching: computed($_attaching),
+    attached: registerComputed($_attached),
+    attaching: registerComputed($_attaching),
     back,
-    cursor: computed($_cursor),
+    cursor: registerComputed($_cursor),
     detach() {
       if ($_attached()) {
         window.removeEventListener('popstate', onPopState);
@@ -276,15 +300,16 @@ export function createNavigator<State>(
         $_attached.set(false);
       }
     },
+    destroy: destroySignals,
     forward,
     go,
     goTo(index, fit?) {
       return go(index - $_cursor(), fit);
     },
     hasNext: $hasNext,
-    hasPrev: computed($_hasPrev),
-    history: computed($_history),
-    location: computed($_location),
+    hasPrev: registerComputed($_hasPrev),
+    history: registerComputed($_history),
+    location: registerComputed($_location),
     parsePath,
     push,
     renderPath,
@@ -294,7 +319,7 @@ export function createNavigator<State>(
         state,
       }));
     },
-    syncing: computed($_syncing),
+    syncing: registerComputed($_syncing),
   };
 
   return n;
