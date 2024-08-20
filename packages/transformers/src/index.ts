@@ -22,8 +22,9 @@ export { searchParams } from '@/transformers/searchParams.js';
 export { string } from '@/transformers/string.js';
 export { themeParams, type ThemeParams } from '@/transformers/themeParams.js';
 
-export { isRGB } from './isRGB.js';
-export { isRGBShort } from './isRGBShort.js';
+export { isRecord } from './validators/isRecord.js';
+export { isRGB } from './validators/isRGB.js';
+export { isRGBShort } from './validators/isRGBShort.js';
 export { toRGB } from './toRGB.js';
 export { toRecord } from './toRecord.js';
 

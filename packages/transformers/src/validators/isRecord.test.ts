@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { isRecord } from '@/utils/isRecord.js';
+import { isRecord } from '@/validators/isRecord.js';
 
 it('should return false for non-object value', () => {
   [true, 123, 'abc'].forEach((v) => {
