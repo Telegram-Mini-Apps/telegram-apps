@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@telegram-apps/types": "workspace:^",
-    "@telegram-apps/utils": "workspace:^"
+    "@telegram-apps/toolkit": "workspace:^"
   },
   "devDependencies": {
     "test-utils": "workspace:*",
