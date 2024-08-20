@@ -3,5 +3,5 @@
  * @param value - value to check.
  */
 export function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+  return !!value && typeof value === 'object' && !Array.isArray(value);
 }

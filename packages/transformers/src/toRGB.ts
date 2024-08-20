@@ -1,7 +1,7 @@
 import type { RGB } from '@telegram-apps/types';
 
-import { isRGB } from './isRGB.js';
-import { isRGBShort } from './isRGBShort.js';
+import { isRGB } from './validators/isRGB.js';
+import { isRGBShort } from './validators/isRGBShort.js';
 
 /**
  * Converts passed value to #RRGGBB format. Accepts following color formats:
