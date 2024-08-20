@@ -1,12 +1,13 @@
 {
-  "name": "@telegram-apps/utils",
+  "name": "@telegram-apps/toolkit",
   "version": "0.0.0",
+  "description": "Internal toolkit used in the @telegram-apps packages.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
   "repository": {
     "type": "git",
     "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
-    "directory": "packages/utils"
+    "directory": "packages/toolkit"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
@@ -34,7 +35,7 @@
   },
   "scripts": {
     "test": "vitest --run",
-    "lint": "cd ../.. && eslint packages/utils/src --ignore-pattern **/*.test.ts",
+    "lint": "cd ../.. && eslint packages/toolkit/src --ignore-pattern **/*.test.ts",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "build": "vite build -c vite.config.ts"

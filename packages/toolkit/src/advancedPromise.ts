@@ -1,13 +1,13 @@
+import { Maybe } from '@/types/misc.js';
+
 export type PromiseResolveFn<T> = (value: T | PromiseLike<T>) => void;
 export type PromiseRejectFn = (reason?: any) => void;
-export type AdvancedPromiseExecutor<T> = (res: PromiseResolveFn<T>, rej: PromiseRejectFn) => void;
+export type AdvancedPromiseExecutor<T> = (res: PromiseResolveFn<T>, rej: PromiseRejectFn) => any;
 
 export interface AdvancedPromiseOptions<T> {
   abortSignal?: AbortSignal;
   executor?: AdvancedPromiseExecutor<T>;
 }
-
-type Maybe<T> = T | undefined | null;
 
 export interface AdvancedPromise<T> {
   /**
