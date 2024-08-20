@@ -1,4 +1,4 @@
-import { camelToSnake } from '@telegram-apps/utils';
+import { camelToSnake } from '@telegram-apps/toolkit';
 import type { Chat, InitData, User } from '@telegram-apps/types';
 
 import type { Schema, TransformFn } from '@/types.js';
