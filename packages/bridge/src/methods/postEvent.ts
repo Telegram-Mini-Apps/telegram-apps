@@ -1,8 +1,10 @@
+import { isRecord } from '@telegram-apps/transformers';
+
 import { debugLog } from '@/debug.js';
 import { isIframe } from '@/env/isIframe.js';
-import { isRecord } from '@/utils/isRecord.js';
-import { createError } from '@/errors/createError.js';
+import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { ERR_UNKNOWN_ENV } from '@/errors/errors.js';
+import { BridgeError } from '@/errors/BridgeError.js';
 import { targetOrigin } from '@/methods/targetOrigin.js';
 import type {
   MethodName,
@@ -11,7 +13,6 @@ import type {
   MethodNameWithRequiredParams,
   MethodParams,
 } from '@/methods/types/index.js';
-import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 
 interface PostEventOptions {
   /**
@@ -24,90 +25,57 @@ interface PostEventOptions {
   targetOrigin?: string;
 }
 
-export type PostEvent = typeof postEvent;
+export interface PostEvent {
+  /**
+   * Calls Mini Apps methods requiring parameters.
+   * @param method - method name.
+   * @param paramsAndOptions - options along with params.
+   * @throws {BridgeError} ERR_UNKNOWN_ENV
+   * @see ERR_UNKNOWN_ENV
+   */<Method extends MethodNameWithRequiredParams>(
+    method: Method,
+    paramsAndOptions: MethodParams<Method> & PostEventOptions,
+  ): void;
 
-/**
- * Calls Mini Apps methods requiring parameters.
- * @param method - method name.
- * @param params - method parameters.
- * @param options - posting options.
- * @throws {BridgeError} ERR_UNKNOWN_ENV
- * @see ERR_UNKNOWN_ENV
- */
-export function postEvent<Method extends MethodNameWithRequiredParams>(
-  method: Method,
-  params: MethodParams<Method>,
-  options?: PostEventOptions,
-): void;
+  /**
+   * Calls Mini Apps methods accepting no parameters at all.
+   * @param method - method name.
+   * @param options - posting options.
+   * @throws {BridgeError} ERR_UNKNOWN_ENV
+   * @see ERR_UNKNOWN_ENV
+   */
+  (method: MethodNameWithoutParams, options?: PostEventOptions): void;
 
-/**
- * Calls Mini Apps methods accepting optional parameters.
- * @param method - method name.
- * @param params - method parameters.
- * @param options - posting options.
- * @throws {BridgeError} ERR_UNKNOWN_ENV
- * @see ERR_UNKNOWN_ENV
- */
-export function postEvent<Method extends MethodNameWithOptionalParams>(
-  method: Method,
-  params?: MethodParams<Method>,
-  options?: PostEventOptions,
-): void;
+  /**
+   * Calls Mini Apps methods accepting optional parameters.
+   * @param method - method name.
+   * @param paramsAndOptions - options along with params.
+   * @throws {BridgeError} ERR_UNKNOWN_ENV
+   * @see ERR_UNKNOWN_ENV
+   */<Method extends MethodNameWithOptionalParams>(
+    method: Method,
+    paramsAndOptions?: MethodParams<Method> & PostEventOptions,
+  ): void;
+}
 
-/**
- * Calls Mini Apps methods accepting optional or no parameters at all.
- * @param method - method name.
- * @param options - posting options.
- * @throws {BridgeError} ERR_UNKNOWN_ENV
- * @see ERR_UNKNOWN_ENV
- */
-export function postEvent(
-  method: MethodNameWithoutParams | MethodNameWithOptionalParams,
-  options?: PostEventOptions,
-): void;
-
-export function postEvent(
+export const postEvent: PostEvent = (
   eventType: MethodName,
-  paramsOrOptions?: MethodParams<MethodName> | PostEventOptions,
-  options?: PostEventOptions,
-): void {
-  let postOptions: PostEventOptions = {};
+  optionsOrParamsAndOptions?: PostEventOptions | (MethodParams<MethodName> & PostEventOptions),
+): void => {
+  optionsOrParamsAndOptions ||= {};
   let eventData: any;
-
-  if (!paramsOrOptions && !options) {
-    // Parameters and options were not passed.
-    postOptions = {};
-  } else if (paramsOrOptions && options) {
-    // Both parameters and options passed.
-    postOptions = options;
-    eventData = paramsOrOptions;
-  } else if (paramsOrOptions) {
-    // Only parameters were passed.
-    if ('targetOrigin' in paramsOrOptions) {
-      postOptions = paramsOrOptions;
-    } else {
-      eventData = paramsOrOptions;
-    }
+  let origin: string | undefined;
+  if ('targetOrigin' in optionsOrParamsAndOptions) {
+    const { targetOrigin, ...rest } = optionsOrParamsAndOptions;
+    eventData = rest;
+    origin = targetOrigin;
+  } else {
+    eventData = optionsOrParamsAndOptions;
   }
 
   debugLog('Posting event:', eventData
     ? { event: eventType, data: eventData }
     : { event: eventType });
-
-  // Telegram Web.
-  if (isIframe()) {
-    return window.parent.postMessage(
-      JSON.stringify({ eventType, eventData }),
-      postOptions.targetOrigin || targetOrigin(),
-    );
-  }
-
-  // Telegram for Windows Phone or Android.
-  const { external } = window;
-  if (isRecord(external) && typeof external.notify === 'function') {
-    external.notify(JSON.stringify({ eventType, eventData }));
-    return;
-  }
 
   // Telegram for iOS and macOS.
   if (hasWebviewProxy(window)) {
@@ -115,6 +83,20 @@ export function postEvent(
     return;
   }
 
+  const message = JSON.stringify({ eventType, eventData });
+
+  // Telegram Web.
+  if (isIframe()) {
+    return window.parent.postMessage(message, origin || targetOrigin());
+  }
+
+  // Telegram for Windows Phone or Android.
+  const { external } = window;
+  if (isRecord(external) && typeof external.notify === 'function') {
+    external.notify(message);
+    return;
+  }
+
   // Otherwise current environment is unknown, and we are not able to send event.
-  throw createError(ERR_UNKNOWN_ENV);
-}
+  throw new BridgeError(ERR_UNKNOWN_ENV);
+};
