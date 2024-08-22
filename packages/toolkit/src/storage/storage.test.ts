@@ -1,5 +1,5 @@
 import { vi, it, expect, afterEach, describe } from 'vitest';
-import { getStorageValue, setStorageValue } from '@/utils/storage.js';
+import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 
 afterEach(() => {
   vi.restoreAllMocks();
