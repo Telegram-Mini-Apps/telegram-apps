@@ -13,3 +13,11 @@ export function camelToKebab(value: string): string {
 export function camelToSnake(value: string): string {
   return value.replace(/[A-Z]/g, (match) => `_${match.toLowerCase()}`);
 }
+
+/**
+ * Converts value from snake case to camel case.
+ * @param value - value to convert.
+ */
+export function snakeToCamel(value: string): string {
+  return value.replace(/_[a-z]/g, (m) => m[1].toUpperCase());
+}
