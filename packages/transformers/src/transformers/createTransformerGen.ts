@@ -1,5 +1,5 @@
-import { createError } from '@/errors/createError.js';
 import { ERR_PARSE } from '@/errors/errors.js';
+import { TransformerError } from '@/errors/TransformerError.js';
 import type { TransformerGen, TransformFn } from '@/types.js';
 
 /**
@@ -7,7 +7,7 @@ import type { TransformerGen, TransformFn } from '@/types.js';
  * @param transform - transform function.
  * @param name - custom transformer name.
  */
-export function createTransformerGen<T>(transform: TransformFn<T>, name?: string): TransformerGen<T> {
+export function createTransformerGen<T>(name: string, transform: TransformFn<T>): TransformerGen<T> {
   return ((optional?) => {
     return (value: unknown) => {
       if (optional && value === undefined) {
@@ -17,11 +17,10 @@ export function createTransformerGen<T>(transform: TransformFn<T>, name?: string
       try {
         return transform(value);
       } catch (cause) {
-        throw createError(
-          ERR_PARSE,
-          `Unable to parse value${name ? ` as ${name}` : ''}`,
+        throw new TransformerError(ERR_PARSE, {
+          message: `"${name}" transformer failed to parse the value`,
           cause,
-        );
+        });
       }
     };
   }) as TransformerGen<T>;
