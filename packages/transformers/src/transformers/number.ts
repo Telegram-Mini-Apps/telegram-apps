@@ -1,18 +1,17 @@
-import { createTransformerGen } from '@/transformers/createTransformerGen.js';
-import { createTypeError } from '@/errors/createTypeError.js';
+import { throwUnexpectedValue } from '@/errors/throwUnexpectedValue.js';
 import type { TransformerGen } from '@/types.js';
 
-export const number: TransformerGen<number> = createTransformerGen((value) => {
-  if (typeof value === 'number') {
-    return value;
-  }
+import { createTransformerGen } from './createTransformerGen.js';
 
-  if (typeof value === 'string') {
-    const num = Number(value);
+export const number: TransformerGen<number> = createTransformerGen('number', v => {
+  if (typeof v === 'number') {
+    return v;
+  }
+  if (typeof v === 'string') {
+    const num = Number(v);
     if (!Number.isNaN(num)) {
       return num;
     }
   }
-
-  throw createTypeError();
-}, 'number');
+  throwUnexpectedValue(v);
+});
