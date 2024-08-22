@@ -2,6 +2,10 @@ import { TypedError } from '@/errors/TypedError.js';
 
 export const ERR_TIMED_OUT = 'ERR_TIMED_OUT';
 
+export function createTimeoutError(timeout: number): TypedError<typeof ERR_TIMED_OUT> {
+  return new TypedError(ERR_TIMED_OUT, `Timeout reached: ${timeout}ms`)
+}
+
 /**
  * Runs passed function or promise with the specified deadline presented via the timeout argument.
  * @param funcOrPromise - function to execute or pending promise.
@@ -15,7 +19,7 @@ export function withTimeout<T>(
     typeof funcOrPromise === 'function' ? funcOrPromise() : funcOrPromise,
     new Promise<never>((_, rej) => {
       setTimeout(() => {
-        rej(new TypedError('ERR_TIMED_OUT', `Timeout reached: ${timeout}ms`));
+        rej(createTimeoutError(timeout));
       }, timeout);
     }),
   ]);
