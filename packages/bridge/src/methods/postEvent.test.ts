@@ -46,8 +46,7 @@ describe('env: iframe', () => {
     expect(postMessage).toHaveBeenCalledTimes(0);
     postEvent(
       'web_app_set_header_color',
-      { color_key: 'bg_color' },
-      { targetOrigin: 'abc' },
+      { color_key: 'bg_color', targetOrigin: 'abc' },
     );
     expect(postMessage).toHaveBeenCalledOnce();
     expect(postMessage).toHaveBeenCalledWith(
