@@ -1,4 +1,5 @@
-import { createError } from './errors/createError.js';
+import { TransformerError } from '@/errors/TransformerError.js';
+
 import { ERR_PARSE } from './errors/errors.js';
 import type { TransformFn, Schema } from './types.js';
 
@@ -36,7 +37,7 @@ export function parseBySchema<T>(
         (result as any)[field] = parsedValue;
       }
     } catch (cause) {
-      throw createError(ERR_PARSE, `Unable to parse field "${field}"`, cause);
+      throw new TransformerError(ERR_PARSE, `Unable to parse field "${field}"`, cause);
     }
   }
 
