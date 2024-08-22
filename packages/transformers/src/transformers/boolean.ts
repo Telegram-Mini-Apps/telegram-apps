@@ -1,20 +1,18 @@
-import { createTransformerGen } from '@/transformers/createTransformerGen.js';
-import { createTypeError } from '@/errors/createTypeError.js';
+import { throwUnexpectedValue } from '@/errors/throwUnexpectedValue.js';
 import type { TransformerGen } from '@/types.js';
 
-export const boolean: TransformerGen<boolean> = createTransformerGen((value) => {
-  if (typeof value === 'boolean') {
-    return value;
-  }
-  const asString = String(value);
+import { createTransformerGen } from './createTransformerGen.js';
 
-  if (asString === '1' || asString === 'true') {
+export const boolean: TransformerGen<boolean> = createTransformerGen('boolean', v => {
+  if (typeof v === 'boolean') {
+    return v;
+  }
+  const str = String(v);
+  if (str === '1' || str === 'true') {
     return true;
   }
-
-  if (asString === '0' || asString === 'false') {
+  if (str === '0' || str === 'false') {
     return false;
   }
-
-  throw createTypeError();
-}, 'boolean');
+  throwUnexpectedValue(v);
+});
