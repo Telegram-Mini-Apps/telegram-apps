@@ -1,11 +1,11 @@
-import { createError } from './errors/createError.js';
-import { ERR_INVALID_VALUE, ERR_UNEXPECTED_VALUE } from './errors/errors.js';
+import { ERR_INVALID_VALUE, ERR_UNEXPECTED_VALUE } from '@/errors/errors.js';
+import { TransformerError } from '@/errors/TransformerError.js';
 
 /**
  * Converts value to a record.
  * @param value - value to convert.
- * @throws {CustomError} ERR_INVALID_VALUE
- * @throws {CustomError} ERR_UNEXPECTED_VALUE
+ * @throws {TransformerError} ERR_INVALID_VALUE
+ * @throws {TransformerError} ERR_UNEXPECTED_VALUE
  */
 export function toRecord(value: unknown): Record<string, unknown> {
   let formattedValue: any = value;
@@ -15,7 +15,7 @@ export function toRecord(value: unknown): Record<string, unknown> {
     try {
       formattedValue = JSON.parse(formattedValue);
     } catch (cause) {
-      throw createError(ERR_INVALID_VALUE, undefined, cause);
+      throw new TransformerError(ERR_INVALID_VALUE, { cause });
     }
   }
 
@@ -25,7 +25,7 @@ export function toRecord(value: unknown): Record<string, unknown> {
     || !formattedValue
     || Array.isArray(formattedValue)
   ) {
-    throw createError(ERR_UNEXPECTED_VALUE);
+    throw new TransformerError(ERR_UNEXPECTED_VALUE);
   }
 
   return formattedValue as Record<string, unknown>;
