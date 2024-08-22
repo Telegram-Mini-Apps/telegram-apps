@@ -10,15 +10,12 @@ afterAll(() => {
   vi.useRealTimers();
 });
 
-it('should resolve promise after specified timeout', () => {
+it('should resolve promise after specified timeout', async () => {
   let done = false;
-  sleep(1000).then(() => done = true);
+  const promise = sleep(1000).then(() => done = true);
   vi.advanceTimersByTime(999);
   expect(done).toBe(false);
-
-  Promise
-    .resolve()
-    .then(() => vi.advanceTimersByTime(2))
-    .then(() => expect(done).toBe(true))
-    .finally(() => vi.advanceTimersToNextTimer())
+  vi.advanceTimersByTime(2);
+  await promise;
+  expect(done).toBe(true);
 });
