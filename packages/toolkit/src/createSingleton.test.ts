@@ -1,5 +1,6 @@
 import { vi, expect, it, describe } from 'vitest';
-import { EventEmitter } from '@telegram-apps/event-emitter';
+
+import { EventEmitter } from './event-emitter/EventEmitter.js';
 
 import { createSingleton } from './createSingleton.js';
 
