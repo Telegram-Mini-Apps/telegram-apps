@@ -1,11 +1,14 @@
 import { TypedError } from '@/errors/TypedError.js';
 import { addEventListener } from '@/addEventListener.js';
-import { createTimeoutError } from './timeout.js';
 import type { Maybe } from '@/types/misc.js';
+
+import { createTimeoutError, createAbortError } from './errors.js';
 
 export type PromiseResolveFn<T> = (value: T | PromiseLike<T>) => void;
 export type PromiseRejectFn = (reason?: any) => void;
 export type PromiseExecutor<T> = (res: PromiseResolveFn<T>, rej: PromiseRejectFn) => any;
+export type PromiseOnFulfilledFn<TResult1, TResult2> = (value: TResult1) => TResult2 | PromiseLike<TResult2>;
+export type PromiseOnRejectedFn<T> = (value: any) => T | PromiseLike<T>;
 
 export interface AdvancedPromiseBasicOptions {
   /**
@@ -23,27 +26,58 @@ export interface AdvancedPromiseCompleteOptions<T> extends AdvancedPromiseBasicO
 }
 
 export class AdvancedPromise<T> extends Promise<T> {
-  constructor(executor: PromiseExecutor<T>, options?: AdvancedPromiseBasicOptions)
-  constructor(options?: AdvancedPromiseCompleteOptions<T>);
-  constructor(
+  static withOptions<T>(executor: PromiseExecutor<T>, options?: AdvancedPromiseBasicOptions): AdvancedPromise<T>;
+  static withOptions<T>(options?: AdvancedPromiseCompleteOptions<T>): AdvancedPromise<T>;
+  static withOptions<T>(
     executorOrOptions?: PromiseExecutor<T> | AdvancedPromiseCompleteOptions<T>,
     options?: AdvancedPromiseBasicOptions,
-  ) {
-    let resolve!: PromiseResolveFn<T>;
-    let reject!: PromiseRejectFn;
-
+  ): AdvancedPromise<T> {
     let executor: PromiseExecutor<T> | undefined;
     let basicOptions: AdvancedPromiseBasicOptions;
 
+    executorOrOptions ||= {};
     if (typeof executorOrOptions === 'function') {
       executor = executorOrOptions;
       basicOptions = options || {};
     } else {
-      executorOrOptions ||= {};
       executor = executorOrOptions.executor;
       basicOptions = executorOrOptions;
     }
 
+    const promise = new AdvancedPromise(executor);
+
+    let timeoutId: number | undefined;
+    let removeAbortListener: (() => void) | undefined;
+    const { timeout, abortSignal } = basicOptions;
+    if (timeout) {
+      timeoutId = (setTimeout as typeof window.setTimeout)(() => {
+        promise.reject(createTimeoutError(timeout));
+      }, timeout);
+    }
+
+    if (abortSignal) {
+      function onAborted() {
+        promise.reject(createAbortError(abortSignal!.reason));
+      }
+
+      if (abortSignal.aborted) {
+        onAborted();
+      } else {
+        removeAbortListener = addEventListener(abortSignal, 'abort', onAborted);
+      }
+    }
+
+    return removeAbortListener || timeoutId
+      ? promise.finally(() => {
+        removeAbortListener && removeAbortListener();
+        timeoutId && clearTimeout(timeoutId);
+      })
+      : promise;
+  }
+
+  constructor(executor?: PromiseExecutor<T>) {
+    let resolve!: PromiseResolveFn<T>;
+    let reject!: PromiseRejectFn;
     super((res, rej) => {
       resolve = res;
       reject = rej;
@@ -51,31 +85,7 @@ export class AdvancedPromise<T> extends Promise<T> {
     });
     this.resolve = resolve;
     this.reject = reject;
-
-    const { timeout, abortSignal } = basicOptions;
-    if (timeout) {
-      const timeoutId = setTimeout(() => {
-        reject(createTimeoutError(timeout));
-      }, timeout);
-      this.finally(() => {
-        clearTimeout(timeoutId);
-      });
-    }
-
-    if (abortSignal) {
-      this.abortSignal = abortSignal;
-
-      function abort() {
-        reject(new TypedError('ERR_ABORTED', abortSignal!.reason));
-      }
-
-      abortSignal.aborted
-        ? abort()
-        : this.finally(addEventListener(abortSignal, 'abort', abort));
-    }
   }
-
-  private readonly abortSignal?: AbortSignal;
 
   /**
    * Cancels the promise execution.
@@ -88,50 +98,35 @@ export class AdvancedPromise<T> extends Promise<T> {
    * @see Promise.catch
    */
   override catch<TResult = never>(
-    onRejected?: Maybe<(reason: any) => TResult | PromiseLike<TResult>>,
+    onRejected?: Maybe<PromiseOnRejectedFn<TResult>>,
   ): AdvancedPromise<T | TResult> {
-    return this.then(undefined, onRejected);
+    return super.catch(onRejected) as AdvancedPromise<T | TResult>;
   }
 
   /**
    * @see Promise.finally
    */
-  override finally(onFinally: (() => void) | undefined | null): AdvancedPromise<T> {
-    return new AdvancedPromise((res, rej) => {
-      super.finally(onFinally).then(res).catch(rej);
-    }, {
-      abortSignal: this.abortSignal,
-      timeout: this.timeout,
-    });
-  };
+  override finally(onFinally?: (() => void) | undefined | null): AdvancedPromise<T> {
+    return super.finally(onFinally) as AdvancedPromise<T>;
+  }
 
   /**
    * Resolves the promise.
    */
-  resolve: PromiseResolveFn<T>;
+  resolve!: PromiseResolveFn<T>;
 
   /**
    * Rejects the promise.
    */
-  reject: PromiseRejectFn;
+  reject!: PromiseRejectFn;
 
   /**
    * @see Promise.then
    */
-  override then<TResult1 = T, TResult2 = never>(
-    onFulfilled?: Maybe<(value: T) => TResult1 | PromiseLike<TResult1>>,
-    onRejected?: Maybe<(reason: any) => TResult2 | PromiseLike<TResult2>>,
+  then<TResult1 = T, TResult2 = never>(
+    onFulfilled?: Maybe<PromiseOnFulfilledFn<T, TResult1>>,
+    onRejected?: Maybe<PromiseOnRejectedFn<TResult2>>,
   ): AdvancedPromise<TResult1 | TResult2> {
-    return new AdvancedPromise((res, rej) => {
-      super.then(onFulfilled, onRejected).then(res).catch(rej);
-    }, {
-      abortSignal: this.abortSignal,
-      timeout: this.timeout,
-    });
+    return super.then(onFulfilled, onRejected) as AdvancedPromise<TResult1 | TResult2>;
   }
-
-  /**
-   * Timeout after which the promise will be rejected.
-   */
-  private readonly timeout?: number;
 }

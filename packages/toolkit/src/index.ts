@@ -5,8 +5,18 @@ export {
   type PromiseResolveFn,
   type PromiseRejectFn,
   type PromiseExecutor,
+  type PromiseOnRejectedFn,
+  type PromiseOnFulfilledFn
 } from './async/AdvancedPromise.js';
-export { ERR_TIMED_OUT, withTimeout, isTimeoutError, createTimeoutError } from './async/timeout.js';
+export {
+  createTimeoutError,
+  createAbortError,
+  isAbortError,
+  isTimeoutError,
+  ERR_TIMED_OUT,
+  ERR_ABORTED,
+} from './async/errors.js';
+export { withTimeout } from './async/withTimeout.js';
 export { TypedError, type TypedErrorOptions } from './errors/TypedError.js';
 export { createTypedError } from './errors/createTypedError.js';
 export { EventEmitter } from './event-emitter/EventEmitter.js';

@@ -1,10 +1,4 @@
-import { TypedError } from '@/errors/TypedError.js';
-
-export const ERR_TIMED_OUT = 'ERR_TIMED_OUT';
-
-export function createTimeoutError(timeout: number): TypedError<typeof ERR_TIMED_OUT> {
-  return new TypedError(ERR_TIMED_OUT, `Timeout reached: ${timeout}ms`)
-}
+import { createTimeoutError } from './errors.js';
 
 /**
  * Runs passed function or promise with the specified deadline presented via the timeout argument.
@@ -23,12 +17,4 @@ export function withTimeout<T>(
       }, timeout);
     }),
   ]);
-}
-
-/**
- * @param value - value to check.
- * @returns True if passed value is timeout error.
- */
-export function isTimeoutError(value: unknown): value is TypedError<typeof ERR_TIMED_OUT> {
-  return value instanceof TypedError && value.type === ERR_TIMED_OUT;
 }

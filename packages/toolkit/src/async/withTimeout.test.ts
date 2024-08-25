@@ -1,7 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { isTimeoutError, withTimeout } from './timeout.js';
-import { TypedError } from '@/errors/TypedError.js';
+import { withTimeout } from './withTimeout.js';
 
 describe('withTimeout', () => {
   beforeAll(() => {
@@ -33,9 +32,4 @@ describe('withTimeout', () => {
   }, 1000);
 });
 
-describe('isTimeoutError', () => {
-  it('should return true if value is instance of TypedError and type is ERR_TIMED_OUT', () => {
-    expect(isTimeoutError({ type: 'ERR_TIMED_OUT' })).toBe(false);
-    expect(isTimeoutError(new TypedError('ERR_TIMED_OUT'))).toBe(true);
-  });
-});
+
