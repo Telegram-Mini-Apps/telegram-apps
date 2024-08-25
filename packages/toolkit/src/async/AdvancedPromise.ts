@@ -3,6 +3,7 @@ import { addEventListener } from '@/addEventListener.js';
 import type { Maybe } from '@/types/misc.js';
 
 import { createTimeoutError, createAbortError } from './errors.js';
+import type { AsyncOptions } from './types.js';
 
 export type PromiseResolveFn<T> = (value: T | PromiseLike<T>) => void;
 export type PromiseRejectFn = (reason?: any) => void;
@@ -10,16 +11,7 @@ export type PromiseExecutor<T> = (res: PromiseResolveFn<T>, rej: PromiseRejectFn
 export type PromiseOnFulfilledFn<TResult1, TResult2> = (value: TResult1) => TResult2 | PromiseLike<TResult2>;
 export type PromiseOnRejectedFn<T> = (value: any) => T | PromiseLike<T>;
 
-export interface AdvancedPromiseBasicOptions {
-  /**
-   * Allows aborting the promise execution.
-   */
-  abortSignal?: AbortSignal;
-  /**
-   * Execution timeout.
-   */
-  timeout?: number;
-}
+export type AdvancedPromiseBasicOptions = AsyncOptions;
 
 export interface AdvancedPromiseCompleteOptions<T> extends AdvancedPromiseBasicOptions {
   executor?: PromiseExecutor<T>;
@@ -44,35 +36,56 @@ export class AdvancedPromise<T> extends Promise<T> {
       basicOptions = executorOrOptions;
     }
 
-    const promise = new AdvancedPromise(executor);
+    const { abortSignal } = basicOptions;
+    let promise = new AdvancedPromise<T>((res, rej) => {
+      if (abortSignal && abortSignal.aborted) {
+        rej(createAbortError(abortSignal.reason));
+      }
+      executor && executor(res, rej);
+    });
 
-    let timeoutId: number | undefined;
-    let removeAbortListener: (() => void) | undefined;
-    const { timeout, abortSignal } = basicOptions;
+    const { timeout } = basicOptions;
     if (timeout) {
-      timeoutId = (setTimeout as typeof window.setTimeout)(() => {
-        promise.reject(createTimeoutError(timeout));
-      }, timeout);
+      // NOTE: You may wonder why we just don't create timeout via setTimeout and reject
+      //  the promise via promise.reject. The reason is this approach works improperly
+      //  in some environment. For example, in Vitest.
+      let timeoutId: number | undefined;
+      promise = new AdvancedPromise<T>((res, rej) => {
+        Promise
+          .race([
+            promise,
+            new Promise<never>((_, rej) => {
+              timeoutId = (setTimeout as typeof window.setTimeout)(() => {
+                rej(createTimeoutError(timeout));
+              }, timeout);
+            }),
+          ])
+          .then(res, rej)
+          .finally(() => {
+            clearTimeout(timeoutId);
+          });
+      });
     }
 
     if (abortSignal) {
-      function onAborted() {
-        promise.reject(createAbortError(abortSignal!.reason));
-      }
-
-      if (abortSignal.aborted) {
-        onAborted();
-      } else {
-        removeAbortListener = addEventListener(abortSignal, 'abort', onAborted);
-      }
+      // NOTE: See timeout note.
+      let removeAbortListener: (() => void) | undefined;
+      promise = new AdvancedPromise((res, rej) => {
+        Promise
+          .race([
+            promise,
+            new Promise<never>((_, rej) => {
+              removeAbortListener = addEventListener(abortSignal, 'abort', () => {
+                rej(createAbortError(abortSignal.reason));
+              });
+            }),
+          ])
+          .then(res, rej)
+          .finally(removeAbortListener);
+      });
     }
 
-    return removeAbortListener || timeoutId
-      ? promise.finally(() => {
-        removeAbortListener && removeAbortListener();
-        timeoutId && clearTimeout(timeoutId);
-      })
-      : promise;
+    return promise;
   }
 
   constructor(executor?: PromiseExecutor<T>) {
