@@ -24,7 +24,7 @@ describe('env: iframe', () => {
 
     postEvent('web_app_close');
     expect(postMessage).toHaveBeenCalledOnce();
-    expect(postMessage).toHaveBeenCalledWith('{"eventType":"web_app_close"}', 'https://web.telegram.org');
+    expect(postMessage).toHaveBeenCalledWith('{"eventType":"web_app_close","eventData":{}}', 'https://web.telegram.org');
 
     postMessage.mockClear();
 
@@ -39,7 +39,7 @@ describe('env: iframe', () => {
 
     postEvent('web_app_close', { targetOrigin: 'abc' });
     expect(postMessage).toHaveBeenCalledOnce();
-    expect(postMessage).toHaveBeenCalledWith('{"eventType":"web_app_close"}', 'abc');
+    expect(postMessage).toHaveBeenCalledWith('{"eventType":"web_app_close","eventData":{}}', 'abc');
 
     postMessage.mockClear();
 
@@ -69,7 +69,7 @@ describe('env: common mobile', () => {
     expect(spy).toHaveBeenCalledTimes(0);
     postEvent('web_app_close');
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith('web_app_close', undefined);
+    expect(spy).toHaveBeenCalledWith('web_app_close', '{}');
 
     spy.mockClear();
 
@@ -93,7 +93,7 @@ describe('env: window mobile', () => {
     // Without parameters.
     postEvent('web_app_close');
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith('{"eventType":"web_app_close"}');
+    expect(spy).toHaveBeenCalledWith('{"eventType":"web_app_close","eventData":{}}');
 
     spy.mockClear();
 
