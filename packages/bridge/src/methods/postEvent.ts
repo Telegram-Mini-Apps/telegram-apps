@@ -25,7 +25,7 @@ interface PostEventOptions {
   targetOrigin?: string;
 }
 
-export interface PostEvent {
+export interface PostEventFn {
   /**
    * Calls Mini Apps methods requiring parameters.
    * @param method - method name.
@@ -58,7 +58,7 @@ export interface PostEvent {
   ): void;
 }
 
-export const postEvent: PostEvent = (
+export const postEvent: PostEventFn = (
   eventType: MethodName,
   optionsOrParamsAndOptions?: PostEventOptions | (MethodParams<MethodName> & PostEventOptions),
 ): void => {
