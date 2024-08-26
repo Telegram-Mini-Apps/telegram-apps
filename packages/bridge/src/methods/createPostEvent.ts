@@ -1,19 +1,19 @@
 import { isRecord } from '@telegram-apps/transformers';
 import type { Version } from '@telegram-apps/types';
 
+import { BridgeError } from '@/errors/BridgeError.js';
 import {
   ERR_METHOD_PARAMETER_UNSUPPORTED,
   ERR_METHOD_UNSUPPORTED,
-  ErrorType,
+  type ErrorType,
 } from '@/errors/errors.js';
 import { supports } from '@/methods/supports.js';
-import { type PostEvent, postEvent } from '@/methods/postEvent.js';
+import { type PostEventFn, postEvent } from '@/methods/postEvent.js';
 import type {
   MethodName,
   MethodNameWithVersionedParams,
   MethodVersionedParams,
 } from '@/methods/types/index.js';
-import { BridgeError } from '@/errors/BridgeError.js';
 
 export type OnUnsupportedFn = (
   data: { version: Version } & (
@@ -49,7 +49,7 @@ export type CreatePostEventMode = 'strict' | 'non-strict';
 export function createPostEvent(
   version: Version,
   onUnsupportedOrMode?: OnUnsupportedFn | CreatePostEventMode,
-): PostEvent {
+): PostEventFn {
   onUnsupportedOrMode ||= 'strict';
   const onUnsupported: OnUnsupportedFn = typeof onUnsupportedOrMode === 'function'
     ? onUnsupportedOrMode
