@@ -109,6 +109,30 @@ export class BetterPromise<T> extends Promise<T> {
     }, options);
   }
 
+  /**
+   * @see Promise.resolve
+   */
+  static override resolve(): BetterPromise<void>;
+  /**
+   * @see Promise.resolve
+   */
+  static override resolve<T>(value?: T): BetterPromise<T>;
+  /**
+   * @see Promise.resolve
+   */
+  static override resolve<T>(value?: T): BetterPromise<T> {
+    return this.withFn<T>(() => value as T);
+  }
+
+  /**
+   * @see Promise.reject
+   */
+  static override reject<T = never>(reason?: any): BetterPromise<T> {
+    return this.withFn<T>(() => {
+      throw reason;
+    });
+  }
+
   constructor(executor?: PromiseExecutor<T>) {
     let resolve!: PromiseResolveFn<T>;
     let reject!: PromiseRejectFn;
