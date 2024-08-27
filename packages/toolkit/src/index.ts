@@ -1,13 +1,11 @@
 export {
-  AdvancedPromise,
-  type AdvancedPromiseBasicOptions,
-  type AdvancedPromiseCompleteOptions,
+  BetterPromise,
   type PromiseResolveFn,
   type PromiseRejectFn,
   type PromiseExecutor,
   type PromiseOnRejectedFn,
   type PromiseOnFulfilledFn,
-} from './async/AdvancedPromise.js';
+} from './async/BetterPromise.js';
 export {
   createTimeoutError,
   createAbortError,
