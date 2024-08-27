@@ -6,13 +6,13 @@ export interface TransformerGen<T> {
    * @returns A function, which transforms the value to the type T. If optional is `true` or omitted,
    * it skips parsing the `undefined` value and returns it.
    */
-  (optional?: false): TransformFn<T>;
+  (optional: true): TransformFn<T | undefined>;
   /**
    * @param optional - is result optional.
    * @returns A function, which transforms the value to the type T. If optional is `true` or omitted,
    * it skips parsing the `undefined` value and returns it.
    */
-  (optional: true): TransformFn<T | undefined>;
+  (optional?: boolean): TransformFn<T>;
 }
 
 /**
