@@ -1,31 +1,37 @@
-import type { If, IsNever } from '@telegram-apps/util-types';
+import {
+  BetterPromise,
+  createCbCollector,
+  type If,
+  type IsNever,
+} from '@telegram-apps/toolkit';
 
 import { on } from '@/events/listening.js';
-import { withTimeout } from '@/timeout/withTimeout.js';
-import { postEvent as defaultPostEvent } from '@/methods/postEvent.js';
-import { createCleanup } from '@/utils/createCleanup.js';
-import type { MethodName, MethodParams } from '@/methods/types/index.js';
+import { postEvent } from '@/methods/postEvent.js';
+import type {
+  MethodName,
+  MethodNameWithOptionalParams,
+  MethodNameWithoutParams,
+  MethodNameWithRequiredParams,
+  MethodParams,
+} from '@/methods/types/index.js';
 import type { EventName, EventPayload } from '@/events/types.js';
 import type { ExecuteWithOptions } from '@/types.js';
 
-/**
- * Returns all possible payloads for the specified events array.
- */
-export type RequestEventsPayloads<E extends EventName[]> =
-  E extends (infer U extends EventName)[]
-    ? EventPayload<U>
-    : never;
+type AnyEventName = EventName | EventName[];
 
-export type RequestCaptureEventsFn<E extends EventName[]> =
-  E extends (infer U extends EventName)[]
-    ? (payload: {
-      [K in U]: If<
-        IsNever<EventPayload<K>>,
-        { event: K },
-        { event: K; payload: EventPayload<K> }
-      >
-    }[U]) => boolean
-    : never;
+export type RequestCaptureFnEventsPayload<E extends EventName[]> = E extends (infer U extends EventName)[]
+  ? {
+    [K in U]: If<
+      IsNever<EventPayload<K>>,
+      { event: K },
+      { event: K; payload: EventPayload<K> }
+    >
+  }[U]
+  : never;
+
+export type RequestCaptureEventsFn<E extends EventName[]> = (
+  payload: RequestCaptureFnEventsPayload<E>,
+) => boolean
 
 export type RequestCaptureEventFn<E extends EventName> = If<
   IsNever<EventPayload<E>>,
@@ -33,90 +39,105 @@ export type RequestCaptureEventFn<E extends EventName> = If<
   (payload: EventPayload<E>) => boolean
 >;
 
-/**
- * `request` method options.
- * @see request
- */
-export type RequestOptions<M extends MethodName, E, C> = {
-    /**
-     * Mini Apps method name.
-     */
-    method: M;
-    /**
-     * Tracked Mini Apps events.
-     */
-    event: E;
-    /**
-     * Should return true if this event should be captured.
-     * A request will be captured if this property is omitted.
-     */
-    capture?: C;
-  }
-  & ExecuteWithOptions
-  & If<IsNever<MethodParams<M>>, {}, {
+export type RequestCaptureFn<E extends AnyEventName> = E extends EventName[]
+  ? RequestCaptureEventsFn<E>
+  : E extends EventName
+    ? RequestCaptureEventFn<E>
+    : never;
+
+export interface RequestBasicOptions<E extends AnyEventName> extends ExecuteWithOptions {
   /**
-   * List of method parameters.
+   * Should return true if this event should be captured.
+   * The first compatible request will be captured if this property is omitted.
    */
-  params: MethodParams<M>
-}>;
+  capture?: RequestCaptureFn<E>;
+}
 
-type AnyRequestResult = EventPayload<EventName> | RequestEventsPayloads<EventName[]>;
+export type RequestResult<E extends AnyEventName> =
+  E extends (infer U extends EventName)[]
+    ? EventPayload<U>
+    : E extends EventName
+      ? EventPayload<E>
+      : never;
 
-/**
- * Calls specified Mini Apps method and captures specified event.
- * @param options - method options.
- * @returns Promise which will be resolved with data of the captured event.
- */
-export async function request<M extends MethodName, E extends EventName>(
-  options: RequestOptions<M, E, RequestCaptureEventFn<E>>,
-): Promise<EventPayload<E>>;
+export interface RequestFn {
+  /**
+   * Performs a request waiting for specified events to occur.
+   *
+   * This overriding is used for methods, requiring parameters.
+   * @param method - method name.
+   * @param eventOrEvents - tracked event or events.
+   * @param options - additional options.
+   */<M extends MethodNameWithRequiredParams, E extends AnyEventName>(
+    method: M,
+    eventOrEvents: E,
+    options: RequestBasicOptions<E> & { params: MethodParams<M> },
+  ): BetterPromise<RequestResult<E>>;
 
-/**
- * Calls specified Mini Apps method and captures one of the specified events.
- * @param options - method options.
- * @returns Promise which will be resolved with data of the first captured event.
- */
-export async function request<M extends MethodName, E extends EventName[]>(
-  options: RequestOptions<M, E, RequestCaptureEventsFn<E>>,
-): Promise<RequestEventsPayloads<E>>;
+  /**
+   * Performs a request waiting for specified events to occur.
+   *
+   * This overriding is used for methods with optional parameters.
+   * @param method - method name.
+   * @param eventOrEvents - tracked event or events.
+   * @param options - additional options.
+   */<M extends MethodNameWithOptionalParams, E extends AnyEventName>(
+    method: M,
+    eventOrEvents: E,
+    options?: RequestBasicOptions<E> & { params?: MethodParams<M> },
+  ): BetterPromise<RequestResult<E>>;
 
-export async function request<M extends MethodName>(
-  options:
-    | RequestOptions<M, EventName, RequestCaptureEventFn<EventName>>
-    | RequestOptions<M, EventName[], RequestCaptureEventsFn<EventName[]>>,
-): Promise<AnyRequestResult> {
-  let resolve: (payload: AnyRequestResult) => void;
-  const promise = new Promise<AnyRequestResult>(res => resolve = res);
+  /**
+   * Performs a request waiting for specified events to occur.
+   *
+   * This overriding is used for methods without parameters.
+   * @param method - method name.
+   * @param eventOrEvents - tracked event or events.
+   * @param options - additional options.
+   */<M extends MethodNameWithoutParams, E extends AnyEventName>(
+    method: M,
+    eventOrEvents: E,
+    options?: RequestBasicOptions<E>,
+  ): BetterPromise<RequestResult<E>>;
+}
 
-  const { event, capture, timeout } = options;
-  const [, cleanup] = createCleanup(
-    // We need to iterate over all tracked events, and create their event listeners.
-    (Array.isArray(event) ? event : [event]).map((ev) => {
+export const request: RequestFn = <M extends MethodName, E extends AnyEventName>(
+  method: M,
+  eventOrEvents: E,
+  options?: RequestBasicOptions<E> & { params?: MethodParams<M> },
+): BetterPromise<RequestResult<E>> => {
+  options ||= {};
+  const promise = BetterPromise.withOptions<RequestResult<E>>(options);
+
+  const { capture } = options || {};
+  const [, cleanup] = createCbCollector(
+    // We need to iterate over all tracked events and create their event listeners.
+    (
+      (Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents]) as EventName[]
+    ).map(event => {
       // Each event listener waits for the event to occur.
       // Then, if the capture function was passed, we should check if the event should be captured.
       // If the function is omitted, we instantly capture the event.
-      return on(ev, (payload) => {
+      return on(event, payload => {
         if (!capture || (
-          Array.isArray(event)
+          Array.isArray(eventOrEvents)
             ? (capture as RequestCaptureEventsFn<EventName[]>)({
-              event: ev,
-
-              payload: payload as any,
-            })
+              event,
+              payload,
+            } as RequestCaptureFnEventsPayload<EventName[]>)
             : (capture as RequestCaptureEventFn<EventName>)(payload)
         )) {
-          resolve(payload);
+          promise.resolve(payload as RequestResult<E>);
         }
       });
     }),
   );
 
-  try {
-
-    (options.postEvent || defaultPostEvent)(options.method as any, (options as any).params);
-    return await (timeout ? withTimeout(promise, timeout) : promise);
-  } finally {
-    // After promise execution was completed, don't forget to remove all the listeners.
-    cleanup();
-  }
-}
+  return BetterPromise
+    .resolve()
+    .then(() => {
+      (options.postEvent || postEvent)(method as any, (options as any).params);
+      return promise;
+    })
+    .finally(cleanup);
+};
