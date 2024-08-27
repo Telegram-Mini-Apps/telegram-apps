@@ -2,12 +2,12 @@ import type { CreateParams } from './utils.js';
 
 export interface Methods78 {
   /**
+   * A method that opens the native story editor.
    * @since v7.8
    */
   web_app_share_to_story: CreateParams<{
     /**
-     * A method that opens the native story editor with the media specified in the media_url
-     * parameter as an HTTPS URL.
+     * A media URL which will be used as a background for a created story.
      */
     media_url: string;
     /**
