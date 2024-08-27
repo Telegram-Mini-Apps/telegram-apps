@@ -20,7 +20,6 @@ export interface Methods64 {
      */
     text?: string;
   }>;
-
   /**
    * Reads text from the clipboard. The method accepts a request identifier which is used to
    * appropriately retrieve the method execution result from the `clipboard_text_received` event.
