@@ -1,5 +1,9 @@
 import type { Version } from '@telegram-apps/types';
 
+function parts(a: Version): number[] {
+  return a.split('.').map(v => parseInt(v, 10));
+}
+
 /**
  * @param a - first version.
  * @param b - second version.
@@ -9,15 +13,15 @@ import type { Version } from '@telegram-apps/types';
  * - `-1` the version "a" is lower than "b".
  */
 export function compareVersions(a: Version, b: Version): number {
-  const aParts = a.split('.');
-  const bParts = b.split('.');
+  const aParts = parts(a);
+  const bParts = parts(b);
   const len = Math.max(aParts.length, bParts.length);
 
   // Iterate over each part of versions and compare them. In case, part is
   // missing, assume its value is equal to 0.
   for (let i = 0; i < len; i += 1) {
-    const aVal = parseInt(aParts[i] || '0', 10);
-    const bVal = parseInt(bParts[i] || '0', 10);
+    const aVal = aParts[i]
+    const bVal = bParts[i];
 
     if (aVal === bVal) {
       continue;
