@@ -1,7 +1,5 @@
 import type { LaunchParams } from '@telegram-apps/types';
 
-import { createTransformerGen } from '@/transformers/createTransformerGen.js';
-
 import { searchParams } from '@/transformers/searchParams.js';
 import { boolean as createBoolean } from '@/transformers/boolean.js';
 import { string as createString } from '@/transformers/string.js';
@@ -9,25 +7,22 @@ import { string as createString } from '@/transformers/string.js';
 import { serializeThemeParams, themeParams } from './theme-params.js';
 import { initData } from './initData.js';
 
-export const launchParams = createTransformerGen<LaunchParams>(
-  'launchParams',
-  value => {
-    const string = createString();
-    const stringOptional = createString(true);
-    const boolOptional = createBoolean(true);
+export const launchParams = (() => {
+  const string = createString();
+  const stringOptional = createString(true);
+  const boolOptional = createBoolean(true);
 
-    return searchParams({
-      botInline: ['tgWebAppBotInline', boolOptional],
-      initData: ['tgWebAppData', initData(true)],
-      initDataRaw: ['tgWebAppData', stringOptional],
-      platform: ['tgWebAppPlatform', string],
-      showSettings: ['tgWebAppShowSettings', boolOptional],
-      startParam: ['tgWebAppStartParam', stringOptional],
-      themeParams: ['tgWebAppThemeParams', themeParams()],
-      version: ['tgWebAppVersion', string],
-    })()(value);
-  },
-);
+  return searchParams<LaunchParams>({
+    botInline: ['tgWebAppBotInline', boolOptional],
+    initData: ['tgWebAppData', initData(true)],
+    initDataRaw: ['tgWebAppData', stringOptional],
+    platform: ['tgWebAppPlatform', string],
+    showSettings: ['tgWebAppShowSettings', boolOptional],
+    startParam: ['tgWebAppStartParam', stringOptional],
+    themeParams: ['tgWebAppThemeParams', themeParams()],
+    version: ['tgWebAppVersion', string],
+  }, 'launchParams');
+})();
 
 /**
  * Serializes launch parameters to representation sent from the Telegram application.

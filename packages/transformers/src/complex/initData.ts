@@ -9,7 +9,6 @@ import { string as createString } from '@/transformers/string.js';
 import { number as createNumber } from '@/transformers/number.js';
 import { date } from '@/transformers/date.js';
 import { searchParams } from '@/transformers/searchParams.js';
-import { createTransformerGen } from '@/transformers/createTransformerGen.js';
 
 function toSnakeCaseSource<T>(schema: { [K in keyof T]: TransformFn<T[K]> }): Schema<T> {
   for (const key in schema) {
@@ -18,53 +17,50 @@ function toSnakeCaseSource<T>(schema: { [K in keyof T]: TransformFn<T[K]> }): Sc
   return schema;
 }
 
-export const initData = createTransformerGen<InitData>(
-  'initData',
-  value => {
-    const number = createNumber();
-    const numberOptional = createNumber(true);
-    const string = createString();
-    const stringOptional = createString(true);
-    const boolOptional = createBoolean(true);
+export const initData = (() => {
+  const number = createNumber();
+  const numberOptional = createNumber(true);
+  const string = createString();
+  const stringOptional = createString(true);
+  const boolOptional = createBoolean(true);
 
-    const user = object<User>(toSnakeCaseSource({
-      addedToAttachmentMenu: boolOptional,
-      allowsWriteToPm: boolOptional,
-      firstName: string,
-      id: number,
-      isBot: boolOptional,
-      isPremium: boolOptional,
-      languageCode: stringOptional,
-      lastName: stringOptional,
-      photoUrl: stringOptional,
-      username: stringOptional,
-    }), 'User')(true);
+  const user = object<User>(toSnakeCaseSource({
+    addedToAttachmentMenu: boolOptional,
+    allowsWriteToPm: boolOptional,
+    firstName: string,
+    id: number,
+    isBot: boolOptional,
+    isPremium: boolOptional,
+    languageCode: stringOptional,
+    lastName: stringOptional,
+    photoUrl: stringOptional,
+    username: stringOptional,
+  }), 'User')(true);
 
-    return searchParams<InitData>(
-      toSnakeCaseSource({
-        authDate: date(),
-        canSendAfter: numberOptional,
-        chat: object<Chat>(
-          toSnakeCaseSource({
-            id: number,
-            type: string,
-            title: string,
-            photoUrl: stringOptional,
-            username: stringOptional,
-          }),
-          'Chat',
-        )(true),
-        chatInstance: stringOptional,
-        chatType: stringOptional,
-        hash: string,
-        queryId: stringOptional,
-        receiver: user,
-        startParam: stringOptional,
-        user,
-      }),
-      'InitData',
-    )()(value);
-  },
-);
+  return searchParams<InitData>(
+    toSnakeCaseSource({
+      authDate: date(),
+      canSendAfter: numberOptional,
+      chat: object<Chat>(
+        toSnakeCaseSource({
+          id: number,
+          type: string,
+          title: string,
+          photoUrl: stringOptional,
+          username: stringOptional,
+        }),
+        'Chat',
+      )(true),
+      chatInstance: stringOptional,
+      chatType: stringOptional,
+      hash: string,
+      queryId: stringOptional,
+      receiver: user,
+      startParam: stringOptional,
+      user,
+    }),
+    'initData',
+  );
+})();
 
 export type { InitData };
