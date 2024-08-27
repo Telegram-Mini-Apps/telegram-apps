@@ -1,5 +1,7 @@
-import { createError } from '@/errors/createError.js';
+import { BetterPromise } from '@telegram-apps/toolkit';
+
 import { ERR_INVOKE_CUSTOM_METHOD_RESPONSE } from '@/errors/errors.js';
+import { BridgeError } from '@/errors/BridgeError.js';
 import type { ExecuteWithOptions } from '@/types.js';
 import type { CustomMethodName, CustomMethodParams } from '@/methods/types/index.js';
 
@@ -14,12 +16,12 @@ import { request } from './request.js';
  * @param options - additional options.
  * @throws {BridgeError} ERR_INVOKE_CUSTOM_METHOD_RESPONSE
  */
-export async function invokeCustomMethod<M extends CustomMethodName>(
+export function invokeCustomMethod<M extends CustomMethodName>(
   method: M,
   params: CustomMethodParams<M>,
   requestId: string,
   options?: ExecuteWithOptions,
-): Promise<unknown>;
+): BetterPromise<unknown>;
 
 /**
  * Invokes unknown custom method. Returns method execution result.
@@ -34,32 +36,23 @@ export function invokeCustomMethod(
   params: object,
   requestId: string,
   options?: ExecuteWithOptions,
-): Promise<unknown>;
+): BetterPromise<unknown>;
 
-export async function invokeCustomMethod(
+export function invokeCustomMethod(
   method: string,
   params: object,
   requestId: string,
-  options: ExecuteWithOptions = {},
-): Promise<unknown> {
-  const {
-    result,
-    error,
-  } = await request({
-    ...options,
-    method: 'web_app_invoke_custom_method',
-    event: 'custom_method_invoked',
-    params: {
-      method,
-      params,
-      req_id: requestId,
-    },
+  options?: ExecuteWithOptions,
+): BetterPromise<unknown> {
+  return request('web_app_invoke_custom_method', 'custom_method_invoked', {
+    ...options || {},
+    params: { method, params, req_id: requestId },
     capture: captureSameReq(requestId),
-  });
-
-  if (error) {
-    throw createError(ERR_INVOKE_CUSTOM_METHOD_RESPONSE, error);
-  }
-
-  return result;
+  })
+    .then(({ result, error }) => {
+      if (error) {
+        throw new BridgeError(ERR_INVOKE_CUSTOM_METHOD_RESPONSE, error);
+      }
+      return result;
+    });
 }
