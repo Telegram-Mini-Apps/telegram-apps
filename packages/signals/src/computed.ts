@@ -16,13 +16,20 @@ export function collectSignal(signal: Signal<any>): void {
 /*@__NO_SIDE_EFFECTS__*/
 export function computed<T>(fn: () => T, options?: SignalOptions<T>): Computed<T> {
   let deps = new Set<Signal<unknown>>();
-  const s = signal(compute(), options);
+  let isComputedOnce = false;
+  const s = signal<T>(undefined as T, options);
 
   function update() {
     s.set(compute());
   }
 
+  function updateWithComputed() {
+    !isComputedOnce && update();
+  }
+
   function compute(): T {
+    isComputedOnce = true;
+
     // As long as in this iteration, we may receive new signals as dependencies, we stop
     // listening to the previous signals.
     deps.forEach(s => s.unsub(update));
@@ -50,10 +57,14 @@ export function computed<T>(fn: () => T, options?: SignalOptions<T>): Computed<T
   }
 
   return Object.assign(function computed(): T {
+    updateWithComputed();
     return s();
   }, {
     destroy: s.destroy,
-    sub: s.sub,
+    sub(fn, options) {
+      updateWithComputed();
+      return s.sub(fn, options);
+    },
     unsub: s.unsub,
-  });
+  } satisfies Pick<Computed<T>, 'destroy' | 'sub' | 'unsub'>);
 }
