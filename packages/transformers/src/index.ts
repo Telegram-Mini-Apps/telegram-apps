@@ -1,5 +1,6 @@
 export { initData, type InitData } from './complex/initData.js';
 export { launchParams, serializeLaunchParams, type LaunchParams } from './complex/launch-params.js';
+export { miniAppsMessage, type MiniAppsMessage } from './complex/miniAppsMessage.js';
 export { themeParams, serializeThemeParams, type ThemeParams } from './complex/theme-params.js';
 
 export { TransformerError } from './errors/TransformerError.js';
