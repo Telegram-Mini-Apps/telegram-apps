@@ -99,7 +99,7 @@ export class BetterPromise<T> extends Promise<T> {
    * @param fn - function returning promise result.
    * @param options - additional options.
    */
-  static withFn<T>(fn: () => T, options?: AsyncOptions): BetterPromise<T> {
+  static withFn<T>(fn: () => (T | PromiseLike<T>), options?: AsyncOptions): BetterPromise<T> {
     return this.withOptions((res, rej) => {
       try {
         res(fn());
