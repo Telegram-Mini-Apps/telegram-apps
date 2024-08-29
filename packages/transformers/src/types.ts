@@ -1,4 +1,13 @@
-export type TransformFn<T> = (value: unknown) => T;
+export interface TransformFn<T> {
+  (value: unknown): T;
+}
+
+export interface Transformer<T> extends TransformFn<T> {
+  /**
+   * @returns True if specified value is recognized as valid.
+   */
+  isValid(value: unknown): value is T;
+}
 
 export interface TransformerGen<T> {
   /**
@@ -6,13 +15,13 @@ export interface TransformerGen<T> {
    * @returns A function, which transforms the value to the type T. If optional is `true` or omitted,
    * it skips parsing the `undefined` value and returns it.
    */
-  (optional: true): TransformFn<T | undefined>;
+  (optional: true): Transformer<T | undefined>;
   /**
    * @param optional - is result optional.
    * @returns A function, which transforms the value to the type T. If optional is `true` or omitted,
    * it skips parsing the `undefined` value and returns it.
    */
-  (optional?: boolean): TransformFn<T>;
+  (optional?: boolean): Transformer<T>;
 }
 
 /**
