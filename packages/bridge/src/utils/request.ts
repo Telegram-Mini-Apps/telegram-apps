@@ -5,7 +5,7 @@ import {
   type IsNever,
 } from '@telegram-apps/toolkit';
 
-import { on } from '@/events/listening.js';
+import { on } from '@/events/listening/on.js';
 import { postEvent } from '@/methods/postEvent.js';
 import type {
   MethodName,
@@ -14,7 +14,7 @@ import type {
   MethodNameWithRequiredParams,
   MethodParams,
 } from '@/methods/types/index.js';
-import type { EventName, EventPayload } from '@/events/types.js';
+import type { EventName, EventPayload } from '@/events/types/events.js';
 import type { ExecuteWithOptions } from '@/types.js';
 
 type AnyEventName = EventName | EventName[];
