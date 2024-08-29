@@ -11,7 +11,7 @@ export function createTransformerGen<T>(
   name: string,
   transform: TransformFn<T>
 ): TransformerGen<T> {
-  return ((optional?) => {
+  return (optional?) => {
     const parse = ((value: unknown) => {
       if (optional && value === undefined) {
         return;
@@ -27,7 +27,7 @@ export function createTransformerGen<T>(
       }
     }) as TransformFn<T>;
 
-    return Object.assign(
+    return /* #__PURE__ */ Object.assign(
       parse,
       {
         isValid(value: unknown): value is T {
@@ -40,5 +40,5 @@ export function createTransformerGen<T>(
         }
       }
     ) satisfies Transformer<T>
-  });
+  };
 }
