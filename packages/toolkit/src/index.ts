@@ -39,7 +39,6 @@ export type * from './types/predicates.js';
 
 export { addEventListener } from './addEventListener.js';
 export { createCbCollector, type CallbackFn } from './createCbCollector.js';
-export { createCleanup, type CleanupFn } from './createCleanup.js';
 export { camelToKebab, camelToSnake, snakeToCamel } from './casing.js';
 export { createLogger } from './createLogger.js';
 export { createSingleton } from './createSingleton.js';
