@@ -27,6 +27,7 @@ export const launchParams = (() => {
 /**
  * Serializes launch parameters to representation sent from the Telegram application.
  */
+// #__NO_SIDE_EFFECTS__
 export function serializeLaunchParams(lp: LaunchParams): string {
   const { initDataRaw, startParam } = lp;
 

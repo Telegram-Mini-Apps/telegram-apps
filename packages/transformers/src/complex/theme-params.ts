@@ -23,6 +23,7 @@ export const themeParams: TransformerGen<ThemeParams> = createTransformerGen(
 /**
  * Serializes theme parameters to representation sent from the Telegram application.
  */
+// #__NO_SIDE_EFFECTS__
 export function serializeThemeParams(themeParams: ThemeParams): string {
   return JSON.stringify(
     Object.fromEntries(
