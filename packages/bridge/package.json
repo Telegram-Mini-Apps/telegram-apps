@@ -44,11 +44,10 @@
     "build:iife": "vite build -c vite.iife.config.ts"
   },
   "dependencies": {
-    "@telegram-apps/event-emitter": "workspace:^",
-    "@telegram-apps/transform": "workspace:^",
     "@telegram-apps/signals": "workspace:^",
-    "@telegram-apps/types": "workspace:^",
-    "@telegram-apps/util-types": "workspace:^"
+    "@telegram-apps/toolkit": "workspace:^",
+    "@telegram-apps/transformers": "workspace:^",
+    "@telegram-apps/types": "workspace:^"
   },
   "devDependencies": {
     "test-utils": "workspace:*",
