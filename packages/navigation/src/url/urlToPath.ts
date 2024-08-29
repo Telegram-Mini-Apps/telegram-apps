@@ -1,5 +1,5 @@
 import { createSafeURL } from './createSafeURL.js';
-import type { URLLike } from './types.js';
+import type { URLLike } from '../types/types.js';
 
 /**
  * Extracts path part from a URL.
