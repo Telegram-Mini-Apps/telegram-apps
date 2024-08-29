@@ -69,14 +69,20 @@ describe('options', () => {
   });
 
   describe('postEvent', () => {
-    it('should use specified postEvent property', () => {
+    it('should use specified postEvent property', async () => {
       const postEvent = vi.fn();
-      void request('web_app_request_phone', 'phone_requested', { postEvent });
+      const promise = request('web_app_request_phone', 'phone_requested', { postEvent });
+      dispatchMiniAppsEvent('phone_requested', { status: 'allowed' });
+      await promise;
+
       expect(postEvent).toHaveBeenCalledWith('web_app_request_phone', undefined);
     });
 
-    it('should use global postEvent function if according property was not specified', () => {
-      void request('web_app_request_phone', 'phone_requested');
+    it('should use global postEvent function if according property was not specified', async () => {
+      const promise = request('web_app_request_phone', 'phone_requested');
+      dispatchMiniAppsEvent('phone_requested', { status: 'allowed' });
+      await promise;
+
       expect(globalPostEvent).toHaveBeenCalledWith('web_app_request_phone', undefined);
     });
 
