@@ -1,5 +1,6 @@
-import { ensurePrefix } from '../ensurePrefix.js';
-import type { URLLike } from '../types/types.js';
+import { ensurePrefix } from '@/ensurePrefix.js';
+
+import type { URLLike } from './types.js';
 
 /**
  * Safely creates a new instance of URL with some predefined protocol "http://" and host "a".
