@@ -11,7 +11,8 @@ import {
 } from 'vitest';
 import { TypedError } from '@telegram-apps/toolkit';
 
-import { resetMiniAppsEventEmitter } from '@/events/event-emitter/singleton.js';
+import { resetPackageState } from '@test-utils/resetPackageState.js';
+
 import { postEvent as globalPostEvent } from '@/methods/postEvent.js';
 import { request } from './request.js';
 
@@ -28,7 +29,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.restoreAllMocks();
-  resetMiniAppsEventEmitter();
+  resetPackageState();
 });
 
 beforeAll(() => {
