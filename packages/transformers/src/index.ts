@@ -16,6 +16,7 @@ export { array } from './transformers/array.js';
 export { boolean } from './transformers/boolean.js';
 export { createTransformerGen } from './transformers/createTransformerGen.js';
 export { date } from './transformers/date.js';
+export { fn } from './transformers/fn.js';
 export { object } from './transformers/object.js';
 export { number } from './transformers/number.js';
 export { rgb } from './transformers/rgb.js';
