@@ -1,19 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { dispatchMiniAppsEvent } from 'test-utils';
 
-import { resetMiniAppsEventEmitter } from './events/event-emitter/singleton.js';
-import { debugLog, debug } from './debug.js';
+import { resetPackageState } from '@test-utils/resetPackageState.js';
+
+import { debugLog, setDebug } from './debug.js';
 
 beforeEach(() => {
   vi.restoreAllMocks();
-  debug.reset();
-  resetMiniAppsEventEmitter();
+  resetPackageState();
 });
 
-describe('debug.set', () => {
+describe('setDebug', () => {
   it('should output Mini Apps event log in console if debug mode is enabled', () => {
     const spy = vi.spyOn(console, 'log').mockImplementation(() => null);
-    debug.set(true);
+    setDebug(true)
     dispatchMiniAppsEvent('back_button_pressed');
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith(
@@ -26,7 +26,7 @@ describe('debug.set', () => {
     );
     spy.mockClear();
 
-    debug.set(false);
+    setDebug(false);
     dispatchMiniAppsEvent('back_button_pressed');
     expect(spy).not.toHaveBeenCalled();
   });
@@ -35,7 +35,7 @@ describe('debug.set', () => {
 describe('debugLog', () => {
   it('should output log in console if debug mode is enabled', () => {
     const spy = vi.spyOn(console, 'log').mockImplementation(() => null);
-    debug.set(true);
+    setDebug(true);
     debugLog('abc');
 
     expect(spy).toHaveBeenCalledOnce();
@@ -48,7 +48,7 @@ describe('debugLog', () => {
     );
     spy.mockClear();
 
-    debug.set(false);
+    setDebug(false);
     debugLog('abc');
     expect(spy).not.toHaveBeenCalled();
   });
