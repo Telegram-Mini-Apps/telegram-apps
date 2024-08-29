@@ -1,5 +1,7 @@
+export { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 export { isIframe } from '@/env/isIframe.js';
 export { isTMA } from '@/env/isTMA.js';
+
 export { BridgeError } from '@/errors/BridgeError.js';
 export {
   type ErrorType,
@@ -9,85 +11,45 @@ export {
   ERR_INVOKE_CUSTOM_METHOD_RESPONSE,
   ERR_UNKNOWN_ENV,
 } from '@/errors/errors.js';
-export { isBridgeError } from '@/errors/isBridgeError.js';
-export { isBridgeErrorOfType } from '@/errors/isBridgeErrorOfType.js';
 
-export {
-  miniAppsEventEmitter,
-  resetMiniAppsEventEmitter,
-} from '@/events/event-emitter/singleton.js';
-export { removeEventHandlers, defineEventHandlers, emitMiniAppsEvent } from '@/events/handlers.js';
-export { on, off, subscribe, unsubscribe } from '@/events/listening.js';
-export type {
-  BiometryAuthRequestStatus,
-  BiometryTokenUpdateStatus,
-  BiometryType,
-  InvoiceStatus,
-  EventPayload,
-  EventName,
-  EventEmitter,
-  Events,
-  EventListener,
-  PhoneRequestedStatus,
-  SubscribeListener,
-  WriteAccessRequestedStatus,
-} from '@/events/types.js';
+export { defineEventHandlers } from '@/events/handling/defineEventHandlers.js';
+export { removeEventHandlers } from '@/events/handling/removeEventHandlers.js';
+export { on } from '@/events/listening/on.js';
+export { off } from '@/events/listening/off.js';
+export { subscribe } from '@/events/listening/subscribe.js';
+export { unsubscribe } from '@/events/listening/unsubscribe.js';
 
+export type * from '@/events/types/index.js';
+export { emitMiniAppsEvent } from '@/events/emitMiniAppsEvent.js';
+
+export { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
+
+export type * from '@/methods/types/index.js';
+export { $targetOrigin } from '@/methods/$targetOrigin.js';
 export { captureSameReq } from '@/methods/captureSameReq.js';
-export type {
-  AnyInvokeCustomMethodParams,
-  AnyHapticFeedbackParams,
-  CustomMethodName,
-  CustomMethodParams,
-  CustomMethodsParams,
-  HeaderColorKey,
-  ImpactHapticFeedbackParams,
-  ImpactHapticFeedbackStyle,
-  MethodParams,
-  MethodNameWithVersionedParams,
-  MethodName,
-  MethodNameWithRequiredParams,
-  MethodNameWithOptionalParams,
-  MethodVersionedParams,
-  Methods,
-  MethodNameWithoutParams,
-  NotificationHapticFeedbackType,
-  NotificationHapticFeedbackParams,
-  OpenLinkBrowser,
-  PopupParams,
-  PopupButton,
-  SelectionHapticFeedbackParams,
-  SwitchInlineQueryChatType,
-} from '@/methods/types/index.js';
-export { createPostEvent, type OnUnsupportedFn } from '@/methods/createPostEvent.js';
-export { postEvent, type PostEvent } from '@/methods/postEvent.js';
+export {
+  createPostEvent,
+  type OnUnsupportedFn,
+  type CreatePostEventMode,
+} from '@/methods/createPostEvent.js';
+export { postEvent, type PostEventFn } from '@/methods/postEvent.js';
 export { supports } from '@/methods/supports.js';
-export { targetOrigin } from '@/methods/targetOrigin.js';
-
-export { createTimeoutError } from '@/timeout/createTimeoutError.js';
-export { withTimeout } from '@/timeout/withTimeout.js';
 
 export { compareVersions } from '@/utils/compareVersions.js';
-export { createCleanup, type CleanupFn } from '@/utils/createCleanup.js';
-export { createLogger } from '@/utils/createLogger.js';
-export { createSingleton } from '@/utils/createSingleton.js';
-export { debug, setDebug } from '@/debug.js';
 export { invokeCustomMethod } from '@/utils/invokeCustomMethod.js';
-export { isRecord } from '@/utils/isRecord.js';
 export {
   request,
-  type RequestOptions,
-  type RequestCaptureEventFn,
   type RequestCaptureEventsFn,
-  type RequestEventsPayloads,
+  type RequestCaptureEventFn,
+  type RequestResult,
+  type RequestCaptureFnEventsPayload,
+  type RequestBasicOptions,
+  type RequestCaptureFn,
+  type RequestFn,
 } from '@/utils/request.js';
-export { sleep } from '@/utils/sleep.js';
 
-export type {
-  ExecuteWithOptions,
-  ExecuteWithPostEvent,
-  ExecuteWithTimeout,
-} from './types.js';
+export { $debug, setDebug } from '@/debug.js';
+export type { ExecuteWithOptions, ExecuteWithPostEvent } from '@/types.js';
 
 export type {
   Chat,
