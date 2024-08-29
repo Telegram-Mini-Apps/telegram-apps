@@ -1,4 +1,4 @@
-import type { LaunchParams } from '@telegram-apps/bridge';
+import type { LaunchParams } from '@telegram-apps/types';
 
 import { retrieveFromUrl } from './retrieveFromUrl.js';
 
