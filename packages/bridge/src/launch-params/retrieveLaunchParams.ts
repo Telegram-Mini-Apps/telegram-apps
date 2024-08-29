@@ -1,4 +1,4 @@
-import type { LaunchParams } from '@telegram-apps/bridge';
+import type { LaunchParams } from '@telegram-apps/types';
 
 import { retrieveFromLocation } from './retrieveFromLocation.js';
 import { retrieveFromPerformance } from './retrieveFromPerformance.js';
