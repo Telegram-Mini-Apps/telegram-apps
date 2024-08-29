@@ -6,11 +6,15 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@test-utils/*": [
+        "./test-utils/*"
       ]
     }
   },
   "include": [
-    "src"
+    "src",
+    "test-utils"
   ],
   "exclude": []
 }
