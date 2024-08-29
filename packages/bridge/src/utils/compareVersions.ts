@@ -1,7 +1,7 @@
 import type { Version } from '@telegram-apps/types';
 
 function parts(a: Version): number[] {
-  return a.split('.').map(v => parseInt(v, 10));
+  return a.split('.').map(Number);
 }
 
 /**
@@ -20,8 +20,8 @@ export function compareVersions(a: Version, b: Version): number {
   // Iterate over each part of versions and compare them. In case, part is
   // missing, assume its value is equal to 0.
   for (let i = 0; i < len; i += 1) {
-    const aVal = aParts[i]
-    const bVal = bParts[i];
+    const aVal = aParts[i] || 0
+    const bVal = bParts[i] || 0;
 
     if (aVal === bVal) {
       continue;
