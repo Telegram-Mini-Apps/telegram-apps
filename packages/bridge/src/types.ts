@@ -1,18 +1,13 @@
-import type { PostEvent } from '@/methods/postEvent.js';
+import type { AsyncOptions } from '@telegram-apps/toolkit';
 
-export interface ExecuteWithTimeout {
-  /**
-   * Timeout to execute method.
-   */
-  timeout?: number;
-}
+import type { PostEventFn } from '@/methods/postEvent.js';
 
 export interface ExecuteWithPostEvent {
   /**
-   * postEvent function to use to call Telegram Mini Apps methods.
+   * Custom function to call mini apps methods.
    */
-  postEvent?: PostEvent;
+  postEvent?: PostEventFn;
 }
 
-export interface ExecuteWithOptions extends ExecuteWithTimeout, ExecuteWithPostEvent {
+export interface ExecuteWithOptions extends AsyncOptions, ExecuteWithPostEvent {
 }
