@@ -1,15 +1,16 @@
-import { computed, signal } from '@telegram-apps/signals';
+import { computed, signal, type SubscribeListenerFn } from '@telegram-apps/signals';
 
-import { subscribe, unsubscribe } from '@/events/listening.js';
-import { createLogger } from '@/utils/createLogger.js';
-import type { SubscribeListener } from '@/events/types.js';
+import { createLogger } from '@telegram-apps/toolkit';
+import { subscribe } from '@/events/listening/subscribe.js';
+import { unsubscribe } from '@/events/listening/unsubscribe.js';
+import type { LastEvent } from '@/events/lastEvent.js';
 
 export const [log, error] = createLogger('Bridge', {
   bgColor: 'blue',
   textColor: 'white',
 });
 
-const _debug = signal(false);
+export const $_debug = signal(false);
 
 /**
  * The package debug mode.
@@ -17,10 +18,13 @@ const _debug = signal(false);
  * Enabling debug mode leads to printing additional messages in the console related to the
  * processes inside the package.
  */
-export const debug = computed(_debug);
+export const $debug = computed($_debug);
 
-const onEvent: SubscribeListener = ({ name, payload }) => {
-  log('Event received:', payload ? { name, payload } : { name });
+const onEvent: SubscribeListenerFn<LastEvent | undefined> = (e) => {
+  if (e) {
+    const [name, payload] = e;
+    log('Event received:', payload ? { name, payload } : { name });
+  }
 };
 
 /**
@@ -28,7 +32,7 @@ const onEvent: SubscribeListener = ({ name, payload }) => {
  * @param args - additional arguments.
  */
 export function debugLog(...args: any[]): void {
-  _debug() && log(...args);
+  $_debug() && log(...args);
 }
 
 /**
@@ -36,8 +40,8 @@ export function debugLog(...args: any[]): void {
  * @param v - enable debug.
  */
 export function setDebug(v: boolean): void {
-  if (_debug() !== v) {
+  if ($_debug() !== v) {
     v ? subscribe(onEvent) : unsubscribe(onEvent);
-    _debug.set(v);
+    $_debug.set(v);
   }
 }
