@@ -2,6 +2,7 @@ import { collectSignal } from './computed.js';
 import { runInBatchMode } from './batch.js';
 
 export type SubscribeListenerFn<T> = (actualValue: T, prevValue: T) => void;
+export type RemoveListenerFn = () => void;
 
 export interface SignalOptions<T> {
   /**
@@ -45,16 +46,10 @@ export interface Signal<T> {
   /**
    * Adds a new listener, tracking the signal changes.
    * @param fn - event listener.
-   * @param options - additional options.
+   * @param once - call listener only once.
    * @returns A function to remove the bound listener.
    */
-  sub(this: void, fn: SubscribeListenerFn<T>, options?: {
-    /**
-     * Should this listener be called only once.
-     * @default false
-     */
-    once?: boolean;
-  }): () => void;
+  sub(this: void, fn: SubscribeListenerFn<T>, once?: boolean): RemoveListenerFn;
   /**
    * Removes a listener, tracking the signal changes.
    * @param fn - event listener.
@@ -63,13 +58,35 @@ export interface Signal<T> {
   unsub(this: void, fn: SubscribeListenerFn<T>, once?: boolean): void;
 }
 
-/*@__NO_SIDE_EFFECTS__*/
-export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T> {
+/**
+ * Creates a new signal with initial value.
+ * @param initialValue - initial value.
+ * @param options - additional options.
+ */
+export function signal<T>(
+  initialValue: T,
+  options?: SignalOptions<T>,
+): Signal<T>
+
+/**
+ * Creates a new signal without initial value.
+ * @param initialValue
+ * @param options - additional options.
+ */
+export function signal<T>(
+  initialValue?: T,
+  options?: SignalOptions<T | undefined>,
+): Signal<T | undefined>;
+
+export function signal<T>(
+  initialValue?: T,
+  options?: SignalOptions<T | undefined>,
+): Signal<T | undefined> {
   options ||= {};
   const equals = options.equals || Object.is;
 
-  let listeners: [listener: SubscribeListenerFn<T>, once?: boolean][] = [];
-  let value: T = initialValue;
+  let listeners: [listener: SubscribeListenerFn<T | undefined>, once?: boolean][] = [];
+  let value: T | undefined = initialValue;
 
   const set: Signal<T>['set'] = v => {
     if (!equals(value, v)) {
@@ -104,7 +121,7 @@ export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T
   };
 
   const s = Object.assign(
-    function get(): T {
+    function get() {
       collectSignal(s);
       return value;
     },
@@ -114,15 +131,14 @@ export function signal<T>(initialValue: T, options?: SignalOptions<T>): Signal<T
       },
       set,
       reset() {
-        set(initialValue);
+        set(initialValue as T);
       },
-      sub(fn, options) {
-        const once = (options || {}).once;
+      sub(fn, once) {
         listeners.push([fn, once]);
         return () => unsub(fn, once);
       },
       unsub,
-    } satisfies Pick<Signal<T>, 'destroy' | 'set' | 'reset' | 'sub' | 'unsub'>,
+    } satisfies Pick<Signal<T | undefined>, 'destroy' | 'set' | 'reset' | 'sub' | 'unsub'>,
   );
 
   return s;
