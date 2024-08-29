@@ -13,6 +13,13 @@ export function collectSignal(signal: Signal<any>): void {
   collectContexts.length && collectContexts[collectContexts.length - 1].add(signal);
 }
 
+/**
+ * Creates a signal, which wil be automatically updated if some of its dependant signals were
+ * modified.
+ * @param fn - computation function.
+ * @param options - additional functions.
+ */
+// #__NO_SIDE_EFFECTS__
 export function computed<T>(
   fn: (prev?: T) => T,
   options?: SignalOptions<T>,

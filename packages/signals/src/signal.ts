@@ -78,6 +78,7 @@ export function signal<T>(
   options?: SignalOptions<T | undefined>,
 ): Signal<T | undefined>;
 
+// #__NO_SIDE_EFFECTS__
 export function signal<T>(
   initialValue?: T,
   options?: SignalOptions<T | undefined>,
