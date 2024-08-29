@@ -1,11 +1,11 @@
-import { isRecord } from '@telegram-apps/transformers';
+import { fn, object } from '@telegram-apps/transformers';
 
 import { debugLog } from '@/debug.js';
 import { isIframe } from '@/env/isIframe.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { ERR_UNKNOWN_ENV } from '@/errors/errors.js';
 import { BridgeError } from '@/errors/BridgeError.js';
-import { targetOrigin } from '@/methods/targetOrigin.js';
+import { $targetOrigin } from '@/methods/$targetOrigin.js';
 import type {
   MethodName,
   MethodNameWithOptionalParams,
@@ -77,9 +77,11 @@ export const postEvent: PostEventFn = (
     ? { event: eventType, data: eventData }
     : { event: eventType });
 
+  const w = window;
+
   // Telegram for iOS and macOS.
-  if (hasWebviewProxy(window)) {
-    window.TelegramWebviewProxy.postEvent(eventType, JSON.stringify(eventData));
+  if (hasWebviewProxy(w)) {
+    w.TelegramWebviewProxy.postEvent(eventType, JSON.stringify(eventData));
     return;
   }
 
@@ -87,12 +89,12 @@ export const postEvent: PostEventFn = (
 
   // Telegram Web.
   if (isIframe()) {
-    return window.parent.postMessage(message, origin || targetOrigin());
+    return w.parent.postMessage(message, origin || $targetOrigin());
   }
 
   // Telegram for Windows Phone or Android.
-  const { external } = window;
-  if (isRecord(external) && typeof external.notify === 'function') {
+  const { external } = w;
+  if (object({ notify: fn() })().isValid(external)) {
     external.notify(message);
     return;
   }
