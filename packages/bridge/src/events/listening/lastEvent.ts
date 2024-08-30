@@ -4,8 +4,8 @@ import { miniAppsMessage, type MiniAppsMessage } from '@telegram-apps/transforme
 
 import { error, log } from '@/debug.js';
 
-import { transformers } from './transformers.js';
-import type { EventPayload, EventName } from './types/events.js';
+import { transformers } from '../transformers.js';
+import type { EventPayload, EventName } from '../types/events.js';
 
 export type LastEvent = {
   [E in EventName]: [E, If<IsNever<EventPayload<E>>, undefined, EventPayload<E>>]
