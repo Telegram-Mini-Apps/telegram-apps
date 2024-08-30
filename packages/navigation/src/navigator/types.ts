@@ -1,5 +1,10 @@
-import type { PostEvent } from '@telegram-apps/bridge';
+import type { AsyncOptions } from '@telegram-apps/toolkit';
 import type { Computed } from '@telegram-apps/signals';
+import type { PostEventFn } from '@telegram-apps/bridge';
+
+import type { URLLike } from '@/url/types.js';
+
+export type NavigationType = 'go' | 'push' | 'replace';
 
 export interface HistoryItem<State> {
   id: string;
@@ -18,21 +23,94 @@ export type AnyHistoryItem<State> = string | {
 }
 
 /**
- * Minimal set of URL properties we are working with in this library.
+ * Hash navigation mode.
+ * @example 'classic'
+ * '#pathname?search'
+ * @example 'slash'
+ * '#/pathname?search'
  */
-export interface URLLike {
+export type HashMode = 'no-slash' | 'slash';
+
+export interface BackButtonOptions {
   /**
-   * @see URL.pathname
+   * Custom behavior on the back button press.
+   *
+   * Note that this method will only be called in case the navigator was attached via
+   * the `attach()` method.
+   * @default The navigator's `back()` method will be called.
    */
-  pathname: string;
+  onClicked?(): void;
   /**
-   * @see URL.hash
+   * Function to update the back button visibility state.
+   * @default The bridge `postEvent` function will be called.
    */
-  hash: string;
+  setVisibility?(isVisible: boolean): void;
   /**
-   * @see URL.search
+   * Function which will be called, whenever the navigator wants to start tracking
+   * the back button clicks.
+   * @param fn - the back button click callback.
+   * @default The bridge `on` function will be used.
    */
-  search: string;
+  onClick?(fn: () => void): void;
+  /**
+   * Function which will be called, whenever the navigator wants to stop tracking
+   * the back button clicks.
+   * @param fn - the back button click callback.
+   * @default The bridge `off` function will be used.
+   */
+  offClick?(fn: () => void): void;
+}
+
+export interface CtrOptions<State> {
+  /**
+   * Options related to the back button.
+   *
+   * Using these options, a developer could disable some predefined behavior related to the back
+   * button.
+   */
+  bb?: Partial<BackButtonOptions>;
+  /**
+   * Outputs additional messages into console.
+   * @default false
+   */
+  debug?: boolean;
+  /**
+   * Hash navigation mode. The hash navigation mode only affects how rendered URLs will look like.
+   *
+   * @example `no-slash`
+   * #pathname?query#hash
+   * @example `slash`
+   * #pathname?query#hash
+   * @default 'slash'
+   */
+  hashMode?: HashMode;
+  /**
+   * Custom function to call Mini Apps methods.
+   * @default The `postEvent` function from the `@telegram-apps/bridge` package.
+   */
+  postEvent?: PostEventFn;
+  /**
+   * Function which determines if navigation with passed information is allowed.
+   * @param action - action information.
+   * @default Navigator doesn't block any navigations.
+   */
+  shouldNavigate?: (
+    this: Navigator<State>,
+    action: {
+      /**
+       * Incoming cursor.
+       */
+      cursor: number;
+      /**
+       * History item information.
+       */
+      item: HistoryItem<State>;
+      /**
+       * Navigation type.
+       */
+      type: NavigationType;
+    },
+  ) => boolean;
 }
 
 export interface Navigator<State> {
@@ -41,41 +119,41 @@ export interface Navigator<State> {
    * It also tracks the back button clicks and calls the corresponding callback.
    *
    * Updates the `attached` and `attaching` signals.
+   * @param options - additional options.
    * @see attached
    * @see attaching
    */
-  attach(): void;
+  attach(this: void, options?: AsyncOptions): void;
   /**
    * True if the current navigator is currently attached.
    */
   readonly attached: Computed<boolean>;
   /**
-   * True if the current navigator is currently attaching.
-   */
-  readonly attaching: Computed<boolean>;
-  /**
    * Goes to the previous history item. Alias for `go(-1)`.
    * @see go
    */
-  back(): void;
+  back(this: void): void;
   /**
    * Currently active navigation history item index.
    */
   readonly cursor: Computed<number>;
   /**
+   * Destroys the navigator disabling all created navigator signals.
+   *
+   * You should use this function whenever the navigator is not needed anymore. After calling,
+   * you must not use the navigator.
+   */
+  destroy(this: void): void;
+  /**
    * Detaches the navigator.
    * @see attach
    */
-  detach(): void;
-  /**
-   * Destroys the navigator disabling all created navigator signals.
-   */
-  destroy(): void;
+  detach(this: void): void;
   /**
    * Goes to the next history item. Alias for `go(1)`.
    * @see go
    */
-  forward(): void;
+  forward(this: void): void;
   /**
    * Changes the currently active history item cursor by the specified delta.
    *
@@ -87,7 +165,7 @@ export interface Navigator<State> {
    * @param fit - cuts the delta argument to fit the bounds `[0, history.length - 1]`.
    * @see history
    */
-  go(delta: number, fit?: boolean): void;
+  go(this: void, delta: number, fit?: boolean): void;
   /**
    * Goes to the specified index. Method does nothing in case, passed index is out of bounds.
    *
@@ -99,7 +177,7 @@ export interface Navigator<State> {
    * @param fit - cuts the index argument to fit the bounds `[0, history.length - 1]`.
    * @see go
    */
-  goTo(index: number, fit?: boolean): void;
+  goTo(this: void, index: number, fit?: boolean): void;
   /**
    * True if the navigator has items after the currently active one.
    */
@@ -125,7 +203,7 @@ export interface Navigator<State> {
    * parsePath('http://example.com/abc?a=1#telegram-mini-apps?is=cool#yeah');
    * // { pathname: '/telegram-mini-apps', search: '?is=cool', hash: '#yeah' }
    */
-  parsePath(path: string | Partial<URLLike>): URLLike;
+  parsePath(this: void, path: string | Partial<URLLike>): URLLike;
   /**
    * Pushes a new history item. The method replaces all entries after the current one with the one
    * being pushed. Take note that passed item is always relative. In case, you want to use
@@ -154,7 +232,7 @@ export interface Navigator<State> {
    * @example Pushing state.
    * push("", { state: 'my-state' }); "/home/root" -> "/home/root"
    */
-  push(path: string, state?: State): void;
+  push(this: void, path: string, state?: State): void;
   /**
    * Pushes a new history item. The method replaces all entries after the current one with the one
    * being pushed. Take note that passed item is always relative. In case, you want to use
@@ -182,7 +260,7 @@ export interface Navigator<State> {
    * @example Pushing state.
    * push({ state: 'my-state' }); "/home/root" -> "/home/root"
    */
-  push(item: AnyHistoryItem<State>): void;
+  push(this: void, item: AnyHistoryItem<State>): void;
   /**
    * Combines the navigator `base` property with the passed path data applying the navigator
    * navigation mode.
@@ -195,114 +273,18 @@ export interface Navigator<State> {
    * renderPath('/my-path?q=1#hash') // "#my-path?q=1#hash"
    * renderPath({ pathname: '/my-path', search: '?q=1', hash: '#hash' }) // "#my-path?q=1#hash"
    */
-  renderPath(value: string | Partial<URLLike>): string;
+  renderPath(this: void, value: string | Partial<URLLike>): string;
   /**
    * Replaces the current history item with the passed one. Has the same logic as the `push` method.
    * @param path - entry path.
    * @param state - entry state.
    * @see push
    */
-  replace(path: string, state?: State): void;
+  replace(this: void, path: string, state?: State): void;
   /**
    * Replaces the current history item with the passed one. Has the same logic as the `push` method.
    * @param item - entry information.
    * @see push
    */
-  replace(item: AnyHistoryItem<State>): void;
-  /**
-   * True if the navigator is currently synchronizing its state with the browser history.
-   */
-  readonly syncing: Computed<boolean>;
-}
-
-/**
- * Hash navigation mode.
- * @example 'classic'
- * '#pathname?search'
- * @example 'slash'
- * '#/pathname?search'
- */
-export type HashMode = 'no-slash' | 'slash';
-
-export interface BackButtonOptions {
-  /**
-   * Custom behavior on the back button press.
-   *
-   * Note that this method will only be called in case the navigator was attached via
-   * the `attach()` method.
-   * @default The navigator's `back()` method will be called.
-   */
-  onPressed?(this: void): void;
-  /**
-   * Function to update the back button visibility state.
-   * @default The bridge `postEvent` function will be called.
-   */
-  setVisibility?(this: void, visible: boolean): void;
-  /**
-   * Function which will be called, whenever the navigator wants to start tracking
-   * the back button clicks.
-   * @param fn - the back button click callback.
-   * @default The bridge `on` function will be used.
-   */
-  trackPress?(this: void, fn: () => void): void;
-  /**
-   * Function which will be called, whenever the navigator wants to stop tracking
-   * the back button clicks.
-   * @param fn - the back button click callback.
-   * @default The bridge `off` function will be used.
-   */
-  untrackPress?(this: void, fn: () => void): void;
-}
-
-export type NavigationType = 'go' | 'push' | 'replace';
-
-export interface CtrOptions<State> {
-  /**
-   * Options related to the back button.
-   *
-   * Using these options, a developer could disable some predefined behavior related to the back
-   * button.
-   */
-  bb?: Partial<BackButtonOptions>;
-  /**
-   * fixme
-   */
-  dev?: boolean;
-  /**
-   * Hash navigation mode. The hash navigation mode only affects how rendered URLs will look like.
-   *
-   * @example `no-slash`
-   * #pathname?query#hash
-   * @example `slash`
-   * #pathname?query#hash
-   * @default 'slash'
-   */
-  hashMode?: HashMode;
-  /**
-   * Custom function to call Mini Apps methods.
-   * @default The `postEvent` function from the `@telegram-apps/bridge` package.
-   */
-  postEvent?: PostEvent;
-  /**
-   * Function which determines if navigation with passed information is allowed.
-   * @param action - action information.
-   * @default Navigator doesn't block any navigations.
-   */
-  shouldNavigate?: (
-    this: Navigator<State>,
-    action: {
-      /**
-       * Incoming cursor.
-       */
-      cursor: number;
-      /**
-       * History item information.
-       */
-      item: HistoryItem<State>;
-      /**
-       * Navigation type.
-       */
-      type: NavigationType;
-    },
-  ) => boolean;
+  replace(this: void, item: AnyHistoryItem<State>): void;
 }
