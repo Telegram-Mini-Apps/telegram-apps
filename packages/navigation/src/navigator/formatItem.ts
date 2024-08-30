@@ -1,5 +1,5 @@
-import { urlToPath } from './urlToPath.js';
-import { createSafeURL } from './createSafeURL.js';
+import { urlToPath } from '../url/urlToPath.js';
+import { createSafeURL } from '../url/createSafeURL.js';
 import type { AnyHistoryItem, HistoryItem } from './types.js';
 
 interface Options<State> {
