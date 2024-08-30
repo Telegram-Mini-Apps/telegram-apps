@@ -49,6 +49,7 @@ export {
 } from '@/utils/request.js';
 
 export { $debug } from '@/debug.js';
+export { resetPackageState } from '@/resetPackageState.js';
 export type { ExecuteWithOptions, ExecuteWithPostEvent } from '@/types.js';
 
 export type {

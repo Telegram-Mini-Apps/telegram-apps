@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, it } from 'vitest';
 import { createWindow } from 'test-utils';
 
-import { resetPackageState } from '@test-utils/resetPackageState.js';
+import { resetPackageState } from '@/resetPackageState.js';
 import { signalFor } from '@/events/listening/signalFor.js';
 
 beforeEach(() => {
