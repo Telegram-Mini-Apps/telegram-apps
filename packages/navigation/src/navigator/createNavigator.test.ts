@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { createNavigator } from './createNavigator.js';
-import { ERR_CURSOR_INVALID, ERR_HISTORY_EMPTY } from './errors.js';
+import { ERR_CURSOR_INVALID, ERR_HISTORY_EMPTY } from '../errors.js';
 
 describe('constructor', () => {
   it('should throw error if entries list is empty', () => {
@@ -26,6 +26,10 @@ describe('back', () => {
     expect(n.cursor()).toBe(0);
   });
 });
+
+// todo
+// describe('destroy', () => {
+// });
 
 // todo
 // describe('detach', () => {
@@ -101,6 +105,8 @@ describe('hasPrev', () => {
     expect(createNavigator(['/a', '/a2'], 1).hasPrev()).toBe(true);
   });
 });
+
+// todo: history?
 
 describe('location', () => {
   it('should return currently active navigation entry', () => {
