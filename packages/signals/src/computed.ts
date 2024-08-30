@@ -28,20 +28,13 @@ export function computed<T>(
 
   // We set the initial value as undefined, because the computed signal is lazy.
   // It will not be computed until it was either called or subscribed to.
-  const s = signal<T | undefined>(undefined, options);
-  let isComputedOnce = false;
+  const s = signal<T>(compute(), options);
 
   function update() {
     s.set(compute());
   }
 
-  function updateWithComputed() {
-    !isComputedOnce && update();
-  }
-
   function compute(): T {
-    isComputedOnce = true;
-
     // As long as in this iteration, we may receive new signals as dependencies, we stop
     // listening to the previous signals.
     deps.forEach(s => s.unsub(update));
@@ -55,7 +48,7 @@ export function computed<T>(
 
     try {
       // Run the function and collect all called signals.
-      result = fn(s());
+      result = fn();
     } finally {
       // Remember to untrack the reactive context.
       collectContexts.pop();
@@ -69,14 +62,10 @@ export function computed<T>(
   }
 
   return Object.assign(function computed(): T {
-    updateWithComputed();
-    return s() as T;
+    return s();
   }, {
     destroy: s.destroy,
-    sub(fn, options) {
-      updateWithComputed();
-      return (s as Signal<T>).sub(fn, options);
-    },
-    unsub: (s as Signal<T>).unsub,
+    sub: s.sub,
+    unsub: s.unsub,
   } satisfies Pick<Computed<T>, 'destroy' | 'sub' | 'unsub'>);
 }
