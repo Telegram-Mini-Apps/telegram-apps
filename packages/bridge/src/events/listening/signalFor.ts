@@ -1,7 +1,7 @@
 import { computed, type Computed, signal } from '@telegram-apps/signals';
 import type { If, IsNever } from '@telegram-apps/toolkit';
 
-import { lastEventSignal } from '@/events/lastEvent.js';
+import { lastEventSignal } from '@/events/listening/lastEvent.js';
 import type { EventName, EventPayload } from '@/events/types/events.js';
 
 export type SignalPayload<E extends EventName> = If<

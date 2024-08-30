@@ -1,6 +1,6 @@
 import type { SubscribeListenerFn, RemoveListenerFn } from '@telegram-apps/signals';
 
-import { type LastEvent, lastEventSignal } from '@/events/lastEvent.js';
+import { type LastEvent, lastEventSignal } from '@/events/listening/lastEvent.js';
 
 /**
  * Subscribes to all events sent from the native Telegram application.

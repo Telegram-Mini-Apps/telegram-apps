@@ -1,6 +1,6 @@
 import type { SubscribeListenerFn } from '@telegram-apps/signals';
 
-import { $lastEvent, LastEvent } from '@/events/lastEvent.js';
+import { $lastEvent, LastEvent } from '@/events/listening/lastEvent.js';
 
 /**
  * Remove a subscriber listening to all events sent from the native Telegram application.
