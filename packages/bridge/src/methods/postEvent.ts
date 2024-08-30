@@ -1,6 +1,6 @@
 import { fn, object } from '@telegram-apps/transformers';
 
-import { debugLog } from '@/debug.js';
+import { log } from '@/debug.js';
 import { isIframe } from '@/env/isIframe.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { ERR_UNKNOWN_ENV } from '@/errors/errors.js';
@@ -14,68 +14,45 @@ import type {
   MethodParams,
 } from '@/methods/types/index.js';
 
-interface PostEventOptions {
-  /**
-   * Origin used while posting a message.
-   *
-   * This option is only used if the current environment is browser (Web version of Telegram)
-   * and could be used for test purposes.
-   * @default 'https://web.telegram.org'
-   */
-  targetOrigin?: string;
-}
+export type PostEventFn = typeof postEvent;
 
-export interface PostEventFn {
-  /**
-   * Calls Mini Apps methods requiring parameters.
-   * @param method - method name.
-   * @param paramsAndOptions - options along with params.
-   * @throws {BridgeError} ERR_UNKNOWN_ENV
-   * @see ERR_UNKNOWN_ENV
-   */<Method extends MethodNameWithRequiredParams>(
-    method: Method,
-    paramsAndOptions: MethodParams<Method> & PostEventOptions,
-  ): void;
+/**
+ * Calls Mini Apps methods requiring parameters.
+ * @param method - method name.
+ * @param params - options along with params.
+ * @throws {BridgeError} ERR_UNKNOWN_ENV
+ * @see ERR_UNKNOWN_ENV
+ */
+export function postEvent<Method extends MethodNameWithRequiredParams>(
+  method: Method,
+  params: MethodParams<Method>,
+): void;
 
-  /**
-   * Calls Mini Apps methods accepting no parameters at all.
-   * @param method - method name.
-   * @param options - posting options.
-   * @throws {BridgeError} ERR_UNKNOWN_ENV
-   * @see ERR_UNKNOWN_ENV
-   */
-  (method: MethodNameWithoutParams, options?: PostEventOptions): void;
+/**
+ * Calls Mini Apps methods accepting no parameters at all.
+ * @param method - method name.
+ * @throws {BridgeError} ERR_UNKNOWN_ENV
+ * @see ERR_UNKNOWN_ENV
+ */
+export function postEvent(method: MethodNameWithoutParams): void;
 
-  /**
-   * Calls Mini Apps methods accepting optional parameters.
-   * @param method - method name.
-   * @param paramsAndOptions - options along with params.
-   * @throws {BridgeError} ERR_UNKNOWN_ENV
-   * @see ERR_UNKNOWN_ENV
-   */<Method extends MethodNameWithOptionalParams>(
-    method: Method,
-    paramsAndOptions?: MethodParams<Method> & PostEventOptions,
-  ): void;
-}
+/**
+ * Calls Mini Apps methods accepting optional parameters.
+ * @param method - method name.
+ * @param params - options along with params.
+ * @throws {BridgeError} ERR_UNKNOWN_ENV
+ * @see ERR_UNKNOWN_ENV
+ */
+export function postEvent<Method extends MethodNameWithOptionalParams>(
+  method: Method,
+  params?: MethodParams<Method>,
+): void;
 
-export const postEvent: PostEventFn = (
+export function postEvent(
   eventType: MethodName,
-  optionsOrParamsAndOptions?: PostEventOptions | (MethodParams<MethodName> & PostEventOptions),
-): void => {
-  optionsOrParamsAndOptions ||= {};
-  let eventData: any;
-  let origin: string | undefined;
-  if ('targetOrigin' in optionsOrParamsAndOptions) {
-    const { targetOrigin, ...rest } = optionsOrParamsAndOptions;
-    eventData = rest;
-    origin = targetOrigin;
-  } else {
-    eventData = optionsOrParamsAndOptions;
-  }
-
-  debugLog('Posting event:', eventData
-    ? { event: eventType, data: eventData }
-    : { event: eventType });
+  eventData?: MethodParams<MethodName>,
+): void {
+  log('Posting event:', eventData ? { eventType, eventData } : { eventType });
 
   const w = window;
 
@@ -89,7 +66,7 @@ export const postEvent: PostEventFn = (
 
   // Telegram Web.
   if (isIframe()) {
-    return w.parent.postMessage(message, origin || $targetOrigin());
+    return w.parent.postMessage(message, $targetOrigin());
   }
 
   // Telegram for Windows Phone or Android.
@@ -101,4 +78,4 @@ export const postEvent: PostEventFn = (
 
   // Otherwise current environment is unknown, and we are not able to send event.
   throw new BridgeError(ERR_UNKNOWN_ENV);
-};
+}
