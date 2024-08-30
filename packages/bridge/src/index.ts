@@ -48,7 +48,7 @@ export {
   type RequestFn,
 } from '@/utils/request.js';
 
-export { $debug, setDebug } from '@/debug.js';
+export { $debug } from '@/debug.js';
 export type { ExecuteWithOptions, ExecuteWithPostEvent } from '@/types.js';
 
 export type {
