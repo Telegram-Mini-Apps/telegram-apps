@@ -1,7 +1,8 @@
-import { isPageReload } from '@/isPageReload.js';
-import { createNavigator } from '@/createNavigator.js';
-import { createNavigatorFromLocation } from '@/createNavigatorFromLocation.js';
-import type { CtrOptions, HistoryItem, Navigator } from '@/types.js';
+import { isPageReload } from '@/history/isPageReload.js';
+import { createNavigator } from '@/navigator/createNavigator.js';
+import { createNavigatorFromLocation } from '@/navigator/createNavigatorFromLocation.js';
+
+import type { CtrOptions, HistoryItem, Navigator } from './types.js';
 
 export interface InitNavigatorOptions<State> extends CtrOptions<State> {
   /**
@@ -54,7 +55,7 @@ export function initNavigator<State>(options?: InitNavigatorOptions<State>): [
   cleanup: () => void,
 ] {
   options ||= {};
-  const sessionStorageKey = options.sessionStorageKey || '@telegram-apps/navigator/state';
+  const sessionStorageKey = options.sessionStorageKey || '@telegram-apps/navigator';
   const navigator = instantiate<State>(sessionStorageKey, options);
 
   const saveState = () => sessionStorage.setItem(sessionStorageKey, JSON.stringify({
@@ -67,7 +68,7 @@ export function initNavigator<State>(options?: InitNavigatorOptions<State>): [
 
   return [
     navigator,
-    // Whenever navigator changes its state, we save it in the session storage.
+    // Whenever the navigator changes its state, we save it in the session storage.
     navigator.location.sub(saveState)
   ];
 }
