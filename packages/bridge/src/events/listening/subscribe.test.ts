@@ -1,8 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { dispatchMiniAppsEvent, createWindow, type WindowSpy } from 'test-utils';
 
-import { resetPackageState } from '@test-utils/resetPackageState.js';
-
+import { resetPackageState } from '@/resetPackageState.js';
 import { subscribe } from '@/events/listening/subscribe.js';
 
 let windowSpy: WindowSpy;
