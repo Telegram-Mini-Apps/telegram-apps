@@ -2,7 +2,7 @@ import { createCbCollector, addEventListener, type If, type IsNever } from '@tel
 import { Signal, signal } from '@telegram-apps/signals';
 import { miniAppsMessage, type MiniAppsMessage } from '@telegram-apps/transformers';
 
-import { error } from '@/debug.js';
+import { error, log } from '@/debug.js';
 
 import { transformers } from './transformers.js';
 import type { EventPayload, EventName } from './types/events.js';
@@ -53,10 +53,13 @@ function defineListeners(onEvent: (event: LastEvent) => void): () => void {
       const createTransformer = transformers[eventType as keyof typeof transformers];
 
       try {
-        onEvent([
-          eventType,
-          createTransformer ? createTransformer()(eventData) : eventData
-        ] as LastEvent);
+        const transformed = createTransformer
+          ? createTransformer()(eventData)
+          : eventData;
+        log('Event received:', transformed
+          ? { eventType, eventData: transformed }
+          : { eventType });
+        onEvent([eventType, transformed] as LastEvent);
       } catch (cause) {
         error(
           [
