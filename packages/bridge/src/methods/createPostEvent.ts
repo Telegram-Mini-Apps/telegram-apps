@@ -72,7 +72,7 @@ export function createPostEvent(
       return console.warn(message);
     };
 
-  return (method: any, params: any) => {
+  return ((method: any, params: any) => {
     // Firstly, check if a method is supported.
     if (!supports(method, version)) {
       return onUnsupported({ version, method });
@@ -90,5 +90,5 @@ export function createPostEvent(
     }
 
     return postEvent(method, params);
-  };
+  }) as PostEventFn;
 }
