@@ -6,6 +6,11 @@ export type LogLevel = 'log' | 'error';
 export interface LoggerOptions {
   bgColor?: string;
   textColor?: string;
+  /**
+   * Should return true if log should be outputted.
+   * @default All logs will be outputted.
+   */
+  shouldLog?: boolean | (() => boolean);
 }
 
 /*@__NO_SIDE_EFFECTS__*/
@@ -22,7 +27,11 @@ export function createLogger(scope: string, options?: LoggerOptions): [
   error: (...args: any[]) => void,
 ] {
   options ||= {};
-  const { textColor, bgColor } = options;
+  const {
+    textColor,
+    bgColor,
+    shouldLog = true,
+  } = options;
 
   /**
    * Prints message into a console in case, logger is currently enabled.
@@ -30,6 +39,9 @@ export function createLogger(scope: string, options?: LoggerOptions): [
    * @param args - arguments.
    */
   function print(level: LogLevel, ...args: any[]): void {
+    if (!shouldLog || (typeof shouldLog === 'function' && !shouldLog())) {
+      return;
+    }
     const commonCss = 'font-weight:bold;padding:0 5px;border-radius:5px';
     console[level](
       `%c${
