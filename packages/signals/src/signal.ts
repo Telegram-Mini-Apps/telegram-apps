@@ -12,11 +12,11 @@ export interface SignalOptions<T> {
    * If values are considered the same, no subscribers will be called.
    *
    * @default Object.is
-   * @param a - the actual value.
-   * @param b - an incoming value.
+   * @param current - the actual value.
+   * @param incoming - an incoming value.
    * @returns True if values are considered the same.
    */
-  equals?(this: void, a: T, b: T): boolean;
+  equals?: (current: T, incoming: T) => boolean;
 }
 
 export interface Signal<T> {
@@ -33,29 +33,29 @@ export interface Signal<T> {
    * based on the current one will stop listening to its changes, possibly making it work
    * improperly.
    */
-  destroy(this: void): void;
+  destroy: () => void;
   /**
    * Resets the signal value to its initial value.
    */
-  reset(this: void): void;
+  reset: () => void;
   /**
    * Updates the signal notifying all subscribers about changes.
    * @param value - value to set.
    */
-  set(this: void, value: T): void;
+  set: (value: T) => void;
   /**
    * Adds a new listener, tracking the signal changes.
    * @param fn - event listener.
    * @param once - call listener only once.
    * @returns A function to remove the bound listener.
    */
-  sub(this: void, fn: SubscribeListenerFn<T>, once?: boolean): RemoveListenerFn;
+  sub: (fn: SubscribeListenerFn<T>, once?: boolean) => RemoveListenerFn;
   /**
    * Removes a listener, tracking the signal changes.
    * @param fn - event listener.
    * @param once - was this listener added for a single call. Default: false
    */
-  unsub(this: void, fn: SubscribeListenerFn<T>, once?: boolean): void;
+  unsub: (fn: SubscribeListenerFn<T>, once?: boolean) => void;
 }
 
 /**
@@ -89,7 +89,7 @@ export function signal<T>(
   let listeners: [listener: SubscribeListenerFn<T | undefined>, once?: boolean][] = [];
   let value: T | undefined = initialValue;
 
-  const set: Signal<T>['set'] = v => {
+  const set: Signal<T | undefined>['set'] = v => {
     if (!equals(value, v)) {
       const prev = value;
       value = v;
