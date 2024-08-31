@@ -1,14 +1,8 @@
-import { createLogger, debug } from '@telegram-apps/bridge';
+import { $debug } from '@telegram-apps/bridge';
+import { createLogger } from '@telegram-apps/toolkit';
 
-export const [loggerLog, loggerError] = createLogger('SDK', {
+export const [logInfo, logError] = createLogger('SDK', {
   bgColor: 'forestgreen',
   textColor: 'white',
+  shouldLog: $debug,
 });
-
-/**
- * Logs info message into the console.
- * @param args - additional arguments.
- */
-export function debugLog(...args: any[]): void {
-  debug() && loggerLog(...args);
-}
