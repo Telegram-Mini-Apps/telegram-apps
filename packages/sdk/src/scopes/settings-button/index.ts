@@ -1,9 +1,8 @@
 import { off, on, type EventListener } from '@telegram-apps/bridge';
 import { computed } from '@telegram-apps/signals';
 import { isPageReload } from '@telegram-apps/navigation';
-import type { VoidFn } from '@telegram-apps/util-types';
+import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
-import { getStorageValue, setStorageValue } from '@/utils/storage.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
 
@@ -15,6 +14,8 @@ import * as _ from './private.js';
  * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/settings-button
  */
 
+type StorageValue = boolean;
+
 const MINI_APPS_METHOD = 'web_app_setup_settings_button';
 const CLICK_EVENT = 'settings_button_pressed';
 const STORAGE_KEY = 'settingsButton';
@@ -23,18 +24,18 @@ const STORAGE_KEY = 'settingsButton';
  * Hides the settings button.
  */
 export const hide: WithIsSupported<() => void> = decorateWithIsSupported(() => {
-  _.isVisible.set(false);
+  _.$isVisible.set(false);
 }, MINI_APPS_METHOD);
 
 /**
  * True if the component is currently visible.
  */
-export const isVisible = computed(_.isVisible);
+export const isVisible = computed(_.$isVisible);
 
 /**
  * True if the component is currently mounted.
  */
-export const isMounted = computed(_.isMounted);
+export const isMounted = computed(_.$isMounted);
 
 /**
  * Mounts the component.
@@ -43,16 +44,16 @@ export const isMounted = computed(_.isMounted);
  * if it changed.
  */
 export function mount(): void {
-  if (!_.isMounted()) {
-    _.isVisible.set(isPageReload() && getStorageValue(STORAGE_KEY) || false);
-    _.isVisible.sub(onStateChanged);
-    _.isMounted.set(true);
+  if (!_.$isMounted()) {
+    _.$isVisible.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
+    _.$isVisible.sub(onStateChanged);
+    _.$isMounted.set(true);
   }
 }
 
 function onStateChanged(isVisible: boolean) {
   $postEvent()(MINI_APPS_METHOD, { is_visible: isVisible });
-  setStorageValue(STORAGE_KEY, isVisible);
+  setStorageValue<StorageValue>(STORAGE_KEY, isVisible);
 }
 
 /**
@@ -60,7 +61,7 @@ function onStateChanged(isVisible: boolean) {
  * @param fn - event listener.
  * @returns A function to remove bound listener.
  */
-export function onClick(fn: EventListener<'settings_button_pressed'>): VoidFn {
+export function onClick(fn: EventListener<'settings_button_pressed'>): VoidFunction {
   return on(CLICK_EVENT, fn);
 }
 
@@ -76,7 +77,7 @@ export function offClick(fn: EventListener<'settings_button_pressed'>): void {
  * Shows the settings button.
  */
 export const show: WithIsSupported<() => void> = decorateWithIsSupported(() => {
-  _.isVisible.set(true);
+  _.$isVisible.set(true);
 }, MINI_APPS_METHOD);
 
 /**
@@ -86,6 +87,6 @@ export const show: WithIsSupported<() => void> = decorateWithIsSupported(() => {
  * @see onClick
  */
 export function unmount() {
-  _.isVisible.unsub(onStateChanged);
-  _.isMounted.set(false);
+  _.$isVisible.unsub(onStateChanged);
+  _.$isMounted.set(false);
 }
