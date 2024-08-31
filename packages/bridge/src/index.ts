@@ -1,6 +1,7 @@
 export { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 export { isIframe } from '@/env/isIframe.js';
 export { isTMA } from '@/env/isTMA.js';
+export { mockTelegramEnv } from '@/env/mockTelegramEnv.js';
 
 export { BridgeError } from '@/errors/BridgeError.js';
 export {
@@ -20,7 +21,6 @@ export { subscribe } from '@/events/listening/subscribe.js';
 export { unsubscribe } from '@/events/listening/unsubscribe.js';
 
 export type * from '@/events/types/index.js';
-export { emitMiniAppsEvent } from '@/events/emitMiniAppsEvent.js';
 
 export { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
 
