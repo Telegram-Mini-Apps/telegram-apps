@@ -1,7 +1,6 @@
-import type { SubscribeListenerFn } from '@telegram-apps/signals';
-
-import { signalFor, type SignalPayload } from '@/events/listening/signalFor.js';
+import { signalFor } from '@/events/listening/signalFor.js';
 import type { EventName } from '@/events/types/events.js';
+import type { EventListener } from '@/events/listening/types.js';
 
 /**
  * Removes the listener from the specified event.
@@ -11,7 +10,7 @@ import type { EventName } from '@/events/types/events.js';
  */
 export function off<E extends EventName>(
   event: E,
-  listener: SubscribeListenerFn<SignalPayload<E>, SignalPayload<E> | undefined>,
+  listener: EventListener<E>,
   once?: boolean,
 ): void {
   signalFor(event).unsub(listener, once);
