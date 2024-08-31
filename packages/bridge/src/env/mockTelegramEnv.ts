@@ -7,7 +7,7 @@ import type { LaunchParams } from '@telegram-apps/types';
 
 import { parseLaunchParams } from '@/launch-params/parseLaunchParams.js';
 import { saveToStorage } from '@/launch-params/storage.js';
-import { log } from '@/debug.js';
+import { logInfo } from '@/debug.js';
 import { emitMiniAppsEvent } from '@/events/emitMiniAppsEvent.js';
 import type { EventPayload } from '@/events/types/index.js';
 
@@ -63,5 +63,5 @@ export function mockTelegramEnv(launchParamsRaw: LaunchParams | string): void {
     },
   };
 
-  log('Environment was mocked by the mockTelegramEnv function');
+  logInfo('Environment was mocked by the mockTelegramEnv function');
 }

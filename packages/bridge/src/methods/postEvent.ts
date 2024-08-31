@@ -1,6 +1,6 @@
 import { fn, object } from '@telegram-apps/transformers';
 
-import { log } from '@/debug.js';
+import { logInfo } from '@/debug.js';
 import { isIframe } from '@/env/isIframe.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { ERR_UNKNOWN_ENV } from '@/errors/errors.js';
@@ -52,7 +52,7 @@ export function postEvent(
   eventType: MethodName,
   eventData?: MethodParams<MethodName>,
 ): void {
-  log('Posting event:', eventData ? { eventType, eventData } : { eventType });
+  logInfo('Posting event:', eventData ? { eventType, eventData } : { eventType });
 
   const w = window;
 
