@@ -22,8 +22,6 @@ export {
   ERR_CSS_VARS_BOUND,
   ERR_DATA_INVALID_SIZE,
 } from '@/errors/errors.js';
-export { isSDKError } from '@/errors/isSDKError.js';
-export { isSDKErrorOfType } from '@/errors/isSDKErrorOfType.js';
 export { SDKError } from '@/errors/SDKError.js';
 
 export * as backButton from '@/scopes/back-button/index.js';
