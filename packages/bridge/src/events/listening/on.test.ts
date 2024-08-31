@@ -29,7 +29,7 @@ it('should call listener in case, Telegram event was created', () => {
   dispatchMiniAppsEvent('viewport_changed', eventData);
 
   expect(listener).toHaveBeenCalledTimes(1);
-  expect(listener).toHaveBeenCalledWith(eventData, expect.anything());
+  expect(listener).toHaveBeenCalledWith(eventData, undefined);
 });
 
 it('should remove listener after being called if "once" option was passed', () => {
