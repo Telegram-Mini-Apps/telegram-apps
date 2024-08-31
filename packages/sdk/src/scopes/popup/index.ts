@@ -1,10 +1,11 @@
 import { request, type PopupParams } from '@telegram-apps/bridge';
 import { computed } from '@telegram-apps/signals';
+import { BetterPromise } from '@telegram-apps/toolkit';
 
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
-import { createError } from '@/errors/createError.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_POPUP_INVALID_PARAMS, ERR_POPUP_OPENED } from '@/errors/errors.js';
+import { SDKError } from '@/errors/SDKError.js';
 
 import * as _ from './private.js';
 import type { OpenOptions } from './types.js';
@@ -30,17 +31,17 @@ function preparePopupParams(params: OpenOptions): PopupParams {
 
   // Check title.
   if (title.length > 64) {
-    throw createError(ERR_POPUP_INVALID_PARAMS, `Invalid title length: ${title.length}`);
+    throw new SDKError(ERR_POPUP_INVALID_PARAMS, `Invalid title length: ${title.length}`);
   }
 
   // Check message.
   if (!message || message.length > 256) {
-    throw createError(ERR_POPUP_INVALID_PARAMS, `Invalid message length: ${message.length}`);
+    throw new SDKError(ERR_POPUP_INVALID_PARAMS, `Invalid message length: ${message.length}`);
   }
 
   // Check buttons.
   if (buttons.length > 3) {
-    throw createError(ERR_POPUP_INVALID_PARAMS, `Invalid buttons count: ${buttons.length}`);
+    throw new SDKError(ERR_POPUP_INVALID_PARAMS, `Invalid buttons count: ${buttons.length}`);
   }
 
   return {
@@ -50,13 +51,13 @@ function preparePopupParams(params: OpenOptions): PopupParams {
       ? buttons.map((b) => {
         const id = b.id || '';
         if (id.length > 64) {
-          throw createError(ERR_POPUP_INVALID_PARAMS, `Invalid button id length: ${id.length}`);
+          throw new SDKError(ERR_POPUP_INVALID_PARAMS, `Invalid button id length: ${id.length}`);
         }
 
         if (!b.type || b.type === 'default' || b.type === 'destructive') {
           const text = b.text.trim();
           if (!text || text.length > 64) {
-            throw createError(ERR_POPUP_INVALID_PARAMS, `Invalid button text length: ${text.length}`);
+            throw new SDKError(ERR_POPUP_INVALID_PARAMS, `Invalid button text length: ${text.length}`);
           }
           return { ...b, text, id };
         }
@@ -69,7 +70,7 @@ function preparePopupParams(params: OpenOptions): PopupParams {
 /**
  * True if a popup is currently opened.
  */
-export const isOpened = computed(_.isOpened);
+export const isOpened = computed(_.$isOpened);
 
 /**
  * A method that shows a native popup described by the `params` argument.
@@ -83,23 +84,23 @@ export const isOpened = computed(_.isOpened);
  * @throws {SDKError} ERR_POPUP_OPENED
  * @see ERR_POPUP_OPENED
  */
-export const open: WithIsSupported<(options: OpenOptions) => Promise<string | null>> =
-  decorateWithIsSupported(async options => {
-    if (_.isOpened()) {
-      throw createError(ERR_POPUP_OPENED);
-    }
+export const open: WithIsSupported<(options: OpenOptions) => BetterPromise<string | null>> =
+  decorateWithIsSupported(options => {
+    return BetterPromise.withFn(() => {
+      if (_.$isOpened()) {
+        throw new SDKError(ERR_POPUP_OPENED);
+      }
 
-    _.isOpened.set(true);
+      _.$isOpened.set(true);
 
-    try {
-      const { button_id: buttonId = null } = await request({
-        event: 'popup_closed',
-        method: MINI_APPS_METHOD,
+      return request(MINI_APPS_METHOD, 'popup_closed', {
+        ...options || {},
         postEvent: $postEvent(),
         params: preparePopupParams(options),
-      });
-      return buttonId;
-    } finally {
-      _.isOpened.set(false);
-    }
+      })
+        .then(({ button_id = null }) => button_id)
+        .finally(() => {
+          _.$isOpened.set(false);
+        });
+    });
   }, MINI_APPS_METHOD);

@@ -1,8 +1,10 @@
+import type { AsyncOptions } from '@telegram-apps/toolkit';
+
 /**
  * This object describes the native popup.
  * @see https://core.telegram.org/bots/webapps#popupparams
  */
-export interface OpenOptions {
+export interface OpenOptions extends AsyncOptions {
   /**
    * The text to be displayed in the popup title, 0-64 characters.
    * @default ""
