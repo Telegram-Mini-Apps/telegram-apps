@@ -9,8 +9,8 @@ import { createLogger } from '@telegram-apps/toolkit';
  */
 export const $debug = signal(false);
 
-export const [log, error] = createLogger('Bridge', {
-  bgColor: 'blue',
+export const [logInfo, logError] = createLogger('Bridge', {
+  bgColor: 'lightskyblue',
   textColor: 'white',
   shouldLog: $debug,
 });

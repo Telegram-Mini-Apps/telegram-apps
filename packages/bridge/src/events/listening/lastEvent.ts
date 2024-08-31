@@ -2,7 +2,7 @@ import { createCbCollector, addEventListener, type If, type IsNever } from '@tel
 import { Signal, signal } from '@telegram-apps/signals';
 import { miniAppsMessage, type MiniAppsMessage } from '@telegram-apps/transformers';
 
-import { error, log } from '@/debug.js';
+import { logError, logInfo } from '@/debug.js';
 
 import { transformers } from '../transformers.js';
 import type { EventPayload, EventName } from '../types/events.js';
@@ -56,12 +56,12 @@ function defineListeners(onEvent: (event: LastEvent) => void): () => void {
         const transformed = createTransformer
           ? createTransformer()(eventData)
           : eventData;
-        log('Event received:', transformed
+        logInfo('Event received:', transformed
           ? { eventType, eventData: transformed }
           : { eventType });
         onEvent([eventType, transformed] as LastEvent);
       } catch (cause) {
-        error(
+        logError(
           [
             `An error occurred processing the "${eventType}" event from the Telegram application.`,
             'Please, file an issue here:',
