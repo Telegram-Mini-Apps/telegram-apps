@@ -1,4 +1,4 @@
-import { isRecord } from '@telegram-apps/bridge';
+import { isRecord } from '@telegram-apps/transformers';
 
 /**
  * Function which joins passed values with space following these rules:
