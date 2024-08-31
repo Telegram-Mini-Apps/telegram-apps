@@ -1,10 +1,10 @@
 import { collectSignal } from './computed.js';
 import { runInBatchMode } from './batch.js';
 
-export type SubscribeListenerFn<T> = (actualValue: T, prevValue: T) => void;
+export type SubscribeListenerFn<Current, Previous = Current> = (current: Current, previous: Previous) => void;
 export type RemoveListenerFn = () => void;
 
-export interface SignalOptions<T> {
+export interface SignalOptions<Current, Next = Current> {
   /**
    * Previous and next values comparator.
    *
@@ -13,17 +13,17 @@ export interface SignalOptions<T> {
    *
    * @default Object.is
    * @param current - the actual value.
-   * @param incoming - an incoming value.
+   * @param next - an incoming value.
    * @returns True if values are considered the same.
    */
-  equals?: (current: T, incoming: T) => boolean;
+  equals?: (current: Current | Next, next: Next) => boolean;
 }
 
-export interface Signal<T> {
+export interface Signal<TGet, TSet extends TGet = TGet> {
   /**
    * @returns An underlying signal value.
    */
-  (): T;
+  (): TGet | TSet;
   /**
    * Destroys the signal removing all bound listeners.
    *
@@ -35,27 +35,27 @@ export interface Signal<T> {
    */
   destroy: () => void;
   /**
-   * Resets the signal value to its initial value.
+   * **Silently** resets the signal to its initial value.
    */
   reset: () => void;
   /**
    * Updates the signal notifying all subscribers about changes.
    * @param value - value to set.
    */
-  set: (value: T) => void;
+  set: (value: TSet) => void;
   /**
    * Adds a new listener, tracking the signal changes.
    * @param fn - event listener.
    * @param once - call listener only once.
    * @returns A function to remove the bound listener.
    */
-  sub: (fn: SubscribeListenerFn<T>, once?: boolean) => RemoveListenerFn;
+  sub: (fn: SubscribeListenerFn<TSet, TGet>, once?: boolean) => RemoveListenerFn;
   /**
    * Removes a listener, tracking the signal changes.
    * @param fn - event listener.
    * @param once - was this listener added for a single call. Default: false
    */
-  unsub: (fn: SubscribeListenerFn<T>, once?: boolean) => void;
+  unsub: (fn: SubscribeListenerFn<TSet, TGet>, once?: boolean) => void;
 }
 
 /**
@@ -63,33 +63,35 @@ export interface Signal<T> {
  * @param initialValue - initial value.
  * @param options - additional options.
  */
-export function signal<T>(
-  initialValue: T,
-  options?: SignalOptions<T>,
-): Signal<T>
+export function signal<TGet, TSet extends TGet = TGet>(
+  initialValue: TGet | TSet,
+  options?: SignalOptions<TGet, TSet>,
+): Signal<TGet, TSet>;
 
 /**
  * Creates a new signal without initial value.
  * @param initialValue
  * @param options - additional options.
  */
-export function signal<T>(
-  initialValue?: T,
-  options?: SignalOptions<T | undefined>,
-): Signal<T | undefined>;
+export function signal<TGet, TSet extends TGet = TGet>(
+  initialValue?: TGet | TSet,
+  options?: SignalOptions<TGet | undefined, TSet>,
+): Signal<TGet | undefined, TSet>;
 
 // #__NO_SIDE_EFFECTS__
-export function signal<T>(
-  initialValue?: T,
-  options?: SignalOptions<T | undefined>,
-): Signal<T | undefined> {
+export function signal<TGet, TSet extends TGet = TGet>(
+  initialValue?: TGet | TSet,
+  options?: SignalOptions<TGet | undefined, TSet>,
+): Signal<TGet | undefined, TSet> {
+  type CurrentSignal = Signal<TGet | undefined, TSet>;
+
   options ||= {};
   const equals = options.equals || Object.is;
 
-  let listeners: [listener: SubscribeListenerFn<T | undefined>, once?: boolean][] = [];
-  let value: T | undefined = initialValue;
+  let listeners: [listener: SubscribeListenerFn<TSet, TGet | undefined>, once?: boolean][] = [];
+  let value: ReturnType<CurrentSignal> = initialValue;
 
-  const set: Signal<T | undefined>['set'] = v => {
+  const set: CurrentSignal['set'] = v => {
     if (!equals(value, v)) {
       const prev = value;
       value = v;
@@ -112,7 +114,7 @@ export function signal<T>(
     }
   };
 
-  const unsub: Signal<T>['unsub'] = (fn, once) => {
+  const unsub: CurrentSignal['unsub'] = (fn, once) => {
     const idx = listeners.findIndex(item => {
       return item[0] === fn && !!item[1] === !!once;
     });
@@ -132,14 +134,14 @@ export function signal<T>(
       },
       set,
       reset() {
-        set(initialValue as T);
+        value = initialValue;
       },
       sub(fn, once) {
         listeners.push([fn, once]);
         return () => unsub(fn, once);
       },
       unsub,
-    } satisfies Pick<Signal<T | undefined>, 'destroy' | 'set' | 'reset' | 'sub' | 'unsub'>,
+    } satisfies Pick<CurrentSignal, 'destroy' | 'set' | 'reset' | 'sub' | 'unsub'>,
   );
 
   return s;
