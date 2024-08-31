@@ -3,8 +3,8 @@ import { createSafeURL } from '@telegram-apps/navigation';
 
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
-import { createError } from '@/errors/createError.js';
 import { ERR_INVALID_HOSTNAME } from '@/errors/errors.js';
+import { SDKError } from '@/errors/SDKError.js';
 
 export interface OpenLinkOptions {
   /**
@@ -48,7 +48,7 @@ export function openLink(url: string, options?: OpenLinkOptions): void {
 export const openTelegramLink: WithIsSupported<(url: string) => void> = decorateWithIsSupported(url => {
   const { hostname, pathname, search } = new URL(url, 'https://t.me');
   if (hostname !== 't.me') {
-    throw createError(ERR_INVALID_HOSTNAME);
+    throw new SDKError(ERR_INVALID_HOSTNAME);
   }
 
   if (!supports(OPEN_TG_LINK_METHOD, $version())) {

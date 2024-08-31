@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
 
-import { resetGlobals } from '@test-utils/resetGlobals.js';
+import { resetPackageState } from '@test-utils/resetPackageState.js';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
@@ -16,11 +16,9 @@ import {
 } from './index.js';
 
 beforeEach(() => {
-  resetGlobals();
-  _.isConfirmationNeeded.reset();
-  _.isMounted.reset();
-  _.isConfirmationNeeded.unsubAll();
-  _.isMounted.unsubAll();
+  resetPackageState();
+  _.$isConfirmationNeeded.reset();
+  _.$isMounted.reset();
   vi.restoreAllMocks();
   $postEvent.set(() => null);
 });
@@ -31,7 +29,7 @@ describe('mounted', () => {
 
   describe('disableConfirmation', () => {
     it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: false }', () => {
-      _.isConfirmationNeeded.set(true);
+      _.$isConfirmationNeeded.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
       disableConfirmation();
@@ -44,7 +42,7 @@ describe('mounted', () => {
 
   describe('enableConfirmation', () => {
     it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: true }', () => {
-      _.isConfirmationNeeded.set(false);
+      _.$isConfirmationNeeded.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
       enableConfirmation();
@@ -60,7 +58,7 @@ describe('mounted', () => {
 describe('not mounted', () => {
   describe('disableConfirmation', () => {
     it('should not call postEvent', () => {
-      _.isConfirmationNeeded.set(true);
+      _.$isConfirmationNeeded.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
       disableConfirmation();
@@ -72,7 +70,7 @@ describe('not mounted', () => {
 
   describe('enableConfirmation', () => {
     it('should not call postEvent', () => {
-      _.isConfirmationNeeded.set(false);
+      _.$isConfirmationNeeded.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
       enableConfirmation();
@@ -85,7 +83,7 @@ describe('not mounted', () => {
 
 describe('disableConfirmation', () => {
   it('should set isConfirmationNeeded = false', () => {
-    _.isConfirmationNeeded.set(true);
+    _.$isConfirmationNeeded.set(true);
     expect(isConfirmationNeeded()).toBe(true);
     disableConfirmation();
     expect(isConfirmationNeeded()).toBe(false);
@@ -106,21 +104,21 @@ describe('mount', () => {
       mockPageReload();
     });
 
-    it('should use value from session storage key "telegram-apps/closing-behavior"', () => {
+    it('should use value from session storage key "tapps/closingBehavior"', () => {
       const spy = vi.fn(() => 'true');
       mockSessionStorageGetItem(spy);
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('telegram-apps/closing-behavior');
+      expect(spy).toHaveBeenCalledWith('tapps/closingBehavior');
       expect(isConfirmationNeeded()).toBe(true);
     });
 
-    it('should set isConfirmationNeeded false if session storage key "telegram-apps/closing-behavior" not presented', () => {
+    it('should set isConfirmationNeeded false if session storage key "tapps/closingBehavior" not presented', () => {
       const spy = vi.fn(() => null);
       mockSessionStorageGetItem(spy);
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('telegram-apps/closing-behavior');
+      expect(spy).toHaveBeenCalledWith('tapps/closingBehavior');
       expect(isConfirmationNeeded()).toBe(false);
     });
   });
@@ -140,7 +138,7 @@ describe('unmount', () => {
     const postEventSpy = vi.fn();
     const storageSpy = mockSessionStorageSetItem();
     $postEvent.set(postEventSpy);
-    _.isConfirmationNeeded.set(true);
+    _.$isConfirmationNeeded.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);
 
@@ -148,7 +146,7 @@ describe('unmount', () => {
     storageSpy.mockClear();
 
     unmount();
-    _.isConfirmationNeeded.set(false);
+    _.$isConfirmationNeeded.set(false);
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);
@@ -157,7 +155,7 @@ describe('unmount', () => {
 
 describe('enableConfirmation', () => {
   it('should set isConfirmationNeeded = true', () => {
-    _.isConfirmationNeeded.set(false);
+    _.$isConfirmationNeeded.set(false);
     expect(isConfirmationNeeded()).toBe(false);
     enableConfirmation();
     expect(isConfirmationNeeded()).toBe(true);

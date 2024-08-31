@@ -1,19 +1,16 @@
 import {
   invokeCustomMethod,
-  withTimeout,
   request,
-  sleep,
-  createTimeoutError,
-  type ExecuteWithTimeout,
   type PhoneRequestedStatus,
   type WriteAccessRequestedStatus,
 } from '@telegram-apps/bridge';
-import { searchParams, object, number, string, date } from '@telegram-apps/transform';
+import { searchParams, object, number, string, date } from '@telegram-apps/transformers';
 
 import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
-import { createError } from '@/errors/createError.js';
 import { ERR_ACCESS_DENIED } from '@/errors/errors.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { SDKError } from '@/errors/SDKError.js';
+import { AsyncOptions, BetterPromise, createTimeoutError, sleep } from '@telegram-apps/toolkit';
 
 /**
  * Requested contact information.
@@ -39,24 +36,26 @@ let requestWriteAccessPromise: Promise<WriteAccessRequestedStatus> | undefined;
  * Attempts to get requested contact.
  * @param options - execution options.
  */
-async function getRequestedContact(options?: ExecuteWithTimeout): Promise<RequestedContact> {
-  return searchParams({
-    contact: object({
-      userId: ['user_id', number()],
-      phoneNumber: ['phone_number', string()],
-      firstName: ['first_name', string()],
-      lastName: ['last_name', string(true)],
-    })(),
-    authDate: ['auth_date', date()],
-    hash: string(),
-  }, 'RequestedContact')()(
-    await invokeCustomMethod(
-      'getRequestedContact',
-      {},
-      $createRequestId()(),
-      { postEvent: $postEvent(), timeout: (options || {}).timeout || 10000 },
-    ),
-  );
+function getRequestedContact(options?: AsyncOptions): BetterPromise<RequestedContact> {
+  options ||= {};
+
+  return invokeCustomMethod('getRequestedContact', {}, $createRequestId()(), {
+    ...options,
+    postEvent: $postEvent(),
+    timeout: options.timeout || 10000,
+  })
+    .then(
+      searchParams({
+        contact: object({
+          userId: ['user_id', number()],
+          phoneNumber: ['phone_number', string()],
+          firstName: ['first_name', string()],
+          lastName: ['last_name', string(true)],
+        })(),
+        authDate: ['auth_date', date()],
+        hash: string(),
+      })(),
+    );
 }
 
 /**
@@ -67,18 +66,22 @@ async function getRequestedContact(options?: ExecuteWithTimeout): Promise<Reques
  * @throws {SDKError} ERR_ACCESS_DENIED
  * @see ERR_ACCESS_DENIED
  */
-export async function requestContact({ timeout = 5000 }: ExecuteWithTimeout = {}): Promise<RequestedContact> {
+export async function requestContact(options?: AsyncOptions): Promise<RequestedContact> {
+  options ||= {};
+  options.timeout ||= 5000;
+  const { timeout } = options;
+
   // First of all, let's try to get the requested contact. Probably, we already requested
   // it before.
   try {
-    return await getRequestedContact();
+    return await getRequestedContact(options);
   } catch { /* empty */
   }
 
   // Then, request access to user's phone.
-  const status = await requestPhoneAccess();
+  const status = await requestPhoneAccess(options);
   if (status !== 'sent') {
-    throw createError(ERR_ACCESS_DENIED);
+    throw new SDKError(ERR_ACCESS_DENIED);
   }
 
   // Expected deadline.
@@ -88,7 +91,7 @@ export async function requestContact({ timeout = 5000 }: ExecuteWithTimeout = {}
   let sleepTime = 50;
 
   // We are trying to retrieve the requested contact until deadline was reached.
-  return withTimeout(async () => {
+  return BetterPromise.withFn<RequestedContact>(async () => {
     while (Date.now() < deadlineAt) {
       try {
         return await getRequestedContact();
@@ -103,7 +106,7 @@ export async function requestContact({ timeout = 5000 }: ExecuteWithTimeout = {}
     }
 
     throw createTimeoutError(timeout);
-  }, timeout);
+  }, options);
 }
 
 /**
@@ -116,13 +119,11 @@ export async function requestContact({ timeout = 5000 }: ExecuteWithTimeout = {}
  * @see requestContact
  */
 export const requestPhoneAccess: WithIsSupported<
-  (options?: ExecuteWithTimeout) => Promise<PhoneRequestedStatus>
+  (options?: AsyncOptions) => Promise<PhoneRequestedStatus>
 > = decorateWithIsSupported((options) => {
   if (!requestPhoneAccessPromise) {
-    requestPhoneAccessPromise = request({
+    requestPhoneAccessPromise = request(REQUEST_PHONE_METHOD, 'phone_requested', {
       ...options || {},
-      method: REQUEST_PHONE_METHOD,
-      event: 'phone_requested',
       postEvent: $postEvent(),
     })
       .then(({ status }) => status)
@@ -136,13 +137,11 @@ export const requestPhoneAccess: WithIsSupported<
  * @param options - additional options.
  */
 export const requestWriteAccess: WithIsSupported<
-  (options?: ExecuteWithTimeout) => Promise<WriteAccessRequestedStatus>
+  (options?: AsyncOptions) => Promise<WriteAccessRequestedStatus>
 > = decorateWithIsSupported((options) => {
   if (!requestWriteAccessPromise) {
-    requestWriteAccessPromise = request({
-      ...options,
-      method: REQUEST_WRITE_ACCESS_METHOD,
-      event: 'write_access_requested',
+    requestWriteAccessPromise = request(REQUEST_WRITE_ACCESS_METHOD, 'write_access_requested', {
+      ...options || {},
       postEvent: $postEvent(),
     })
       .then(({ status }) => status)

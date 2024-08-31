@@ -1,6 +1,6 @@
 import { describe, vi, expect, it, beforeEach } from 'vitest';
 import { createWindow } from '@test-utils/createWindow.js';
-import { resetGlobals } from '@test-utils/resetGlobals.js';
+import { resetPackageState } from '@test-utils/resetPackageState.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
@@ -9,7 +9,7 @@ import { readTextFromClipboard } from './utils.js';
 import { openLink, openTelegramLink, shareURL } from './links.js';
 
 beforeEach(() => {
-  resetGlobals();
+  resetPackageState();
   $postEvent.set(() => null);
   vi.restoreAllMocks();
 });
