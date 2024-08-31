@@ -8,7 +8,6 @@ export { setCssVar, deleteCssVar } from '@/utils/css-vars.js';
 export { init } from '@/env/init.js';
 export { initWeb } from '@/env/initWeb.js';
 export { isSSR } from '@/env/isSSR.js';
-export { mockTelegramEnv } from '@/env/mockTelegramEnv.js';
 
 export {
   type ErrorType,
