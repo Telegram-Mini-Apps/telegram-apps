@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
 
-import { resetGlobals } from '@test-utils/resetGlobals.js';
+import { resetPackageState } from '@test-utils/resetPackageState.js';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
@@ -16,11 +16,9 @@ import {
 } from './index.js';
 
 beforeEach(() => {
-  resetGlobals();
-  _.isVerticalSwipesEnabled.reset();
-  _.isMounted.reset();
-  _.isVerticalSwipesEnabled.unsubAll();
-  _.isMounted.unsubAll();
+  resetPackageState();
+  _.$isVerticalSwipesEnabled.reset();
+  _.$isMounted.reset();
   vi.restoreAllMocks();
   $postEvent.set(() => null);
 });
@@ -31,7 +29,7 @@ describe('mounted', () => {
 
   describe('disableVerticalSwipes', () => {
     it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: false }', () => {
-      _.isVerticalSwipesEnabled.set(true);
+      _.$isVerticalSwipesEnabled.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
       disableVerticalSwipes();
@@ -44,7 +42,7 @@ describe('mounted', () => {
 
   describe('enableVerticalSwipes', () => {
     it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: true }', () => {
-      _.isVerticalSwipesEnabled.set(false);
+      _.$isVerticalSwipesEnabled.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
       enableVerticalSwipes();
@@ -60,7 +58,7 @@ describe('mounted', () => {
 describe('not mounted', () => {
   describe('disableVerticalSwipes', () => {
     it('should not call postEvent', () => {
-      _.isVerticalSwipesEnabled.set(true);
+      _.$isVerticalSwipesEnabled.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
       disableVerticalSwipes();
@@ -72,7 +70,7 @@ describe('not mounted', () => {
 
   describe('enableVerticalSwipes', () => {
     it('should not call postEvent', () => {
-      _.isVerticalSwipesEnabled.set(false);
+      _.$isVerticalSwipesEnabled.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
       enableVerticalSwipes();
@@ -85,7 +83,7 @@ describe('not mounted', () => {
 
 describe('disableVerticalSwipes', () => {
   it('should set isVerticalSwipesEnabled = false', () => {
-    _.isVerticalSwipesEnabled.set(true);
+    _.$isVerticalSwipesEnabled.set(true);
     expect(isVerticalSwipesEnabled()).toBe(true);
     disableVerticalSwipes();
     expect(isVerticalSwipesEnabled()).toBe(false);
@@ -140,7 +138,7 @@ describe('unmount', () => {
     const postEventSpy = vi.fn();
     const storageSpy = mockSessionStorageSetItem();
     $postEvent.set(postEventSpy);
-    _.isVerticalSwipesEnabled.set(true);
+    _.$isVerticalSwipesEnabled.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);
 
@@ -148,7 +146,7 @@ describe('unmount', () => {
     storageSpy.mockClear();
 
     unmount();
-    _.isVerticalSwipesEnabled.set(false);
+    _.$isVerticalSwipesEnabled.set(false);
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);
@@ -157,7 +155,7 @@ describe('unmount', () => {
 
 describe('enableVerticalSwipes', () => {
   it('should set isVerticalSwipesEnabled = true', () => {
-    _.isVerticalSwipesEnabled.set(false);
+    _.$isVerticalSwipesEnabled.set(false);
     expect(isVerticalSwipesEnabled()).toBe(false);
     enableVerticalSwipes();
     expect(isVerticalSwipesEnabled()).toBe(true);
