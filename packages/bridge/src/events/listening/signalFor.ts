@@ -1,14 +1,8 @@
 import { type Signal, signal } from '@telegram-apps/signals';
-import type { If, IsNever } from '@telegram-apps/toolkit';
 
 import { lastEventSignal } from '@/events/listening/lastEvent.js';
-import type { EventName, EventPayload } from '@/events/types/events.js';
-
-export type SignalPayload<E extends EventName> = If<
-  IsNever<EventPayload<E>>,
-  undefined,
-  EventPayload<E>
->;
+import type { EventName } from '@/events/types/events.js';
+import type { SignalPayload } from '@/events/listening/types.js';
 
 type CachedSignal<E extends EventName> = Signal<SignalPayload<E> | undefined, SignalPayload<E>>
 type Cache = {

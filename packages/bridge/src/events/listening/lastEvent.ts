@@ -91,7 +91,7 @@ export const $lastEventCleanup = signal<() => void>();
 /**
  * Retrieve last received Mini Apps event ensuring that external listeners were defined.
  */
-export function lastEventSignal(): Signal<LastEvent | undefined> {
+export function lastEventSignal(): Signal<LastEvent | undefined, LastEvent> {
   if (!$lastEventCleanup()) {
     $lastEventCleanup.set(defineListeners($lastEvent.set));
   }
