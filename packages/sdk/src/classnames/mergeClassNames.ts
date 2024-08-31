@@ -1,4 +1,4 @@
-import { isRecord } from '@telegram-apps/bridge';
+import { isRecord } from '@telegram-apps/transformers';
 
 import { classNames } from './classNames.js';
 
