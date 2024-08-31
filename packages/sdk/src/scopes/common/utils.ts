@@ -1,8 +1,13 @@
-import { request, captureSameReq, type SwitchInlineQueryChatType } from '@telegram-apps/bridge';
+import {
+  request,
+  captureSameReq,
+  retrieveLaunchParams,
+  type SwitchInlineQueryChatType,
+} from '@telegram-apps/bridge';
 
 import { $postEvent, $createRequestId } from '@/scopes/globals/globals.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
-import { retrieveLaunchParams } from '@/scopes/launch-params/retrieveLaunchParams.js';
+import { AsyncOptions, BetterPromise } from '@telegram-apps/toolkit';
 
 /*
  * fixme
@@ -19,18 +24,16 @@ const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
  * - A value in the clipboard is not a text.
  * - Access to the clipboard is not granted.
  */
-export const readTextFromClipboard: WithIsSupported<() => Promise<string | null>> =
-  decorateWithIsSupported(async () => {
+export const readTextFromClipboard: WithIsSupported<(options?: AsyncOptions) => BetterPromise<string | null>> =
+  decorateWithIsSupported((options?: AsyncOptions) => {
     const reqId = $createRequestId()();
-    const { data = null } = await request({
-      method: READ_TEXT_FROM_CLIPBOARD_METHOD,
-      event: 'clipboard_text_received',
+
+    return request(READ_TEXT_FROM_CLIPBOARD_METHOD, 'clipboard_text_received', {
+      ...options || {},
       postEvent: $postEvent(),
       params: { req_id: reqId },
       capture: captureSameReq(reqId),
-    });
-
-    return data;
+    }).then(({ data = null }) => data);
   }, READ_TEXT_FROM_CLIPBOARD_METHOD);
 
 /**

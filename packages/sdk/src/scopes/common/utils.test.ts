@@ -1,6 +1,6 @@
 import { describe, vi, expect, it, afterEach, beforeEach } from 'vitest';
 
-import { resetGlobals } from '@test-utils/resetGlobals.js';
+import { resetPackageState } from '@test-utils/resetPackageState.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
@@ -12,7 +12,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  resetGlobals();
+  resetPackageState();
   vi.restoreAllMocks();
 });
 
