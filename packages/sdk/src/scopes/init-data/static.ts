@@ -1,4 +1,4 @@
-import { initData } from '@telegram-apps/transform';
+import { initData } from '@telegram-apps/transformers';
 import type { InitData } from '@telegram-apps/bridge';
 
 /**
