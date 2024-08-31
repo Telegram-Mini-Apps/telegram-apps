@@ -1,4 +1,5 @@
-import { on, createCleanup, type CleanupFn } from '@telegram-apps/bridge';
+import { on } from '@telegram-apps/bridge';
+import { createCbCollector } from '@telegram-apps/toolkit';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
@@ -8,8 +9,8 @@ import { $postEvent } from '@/scopes/globals/globals.js';
  * application. This option is only used in web versions of Telegram. Default: true.
  * @returns Function, which performs cleanup removing all created elements and listeners.
  */
-export function initWeb(acceptCustomStyles = true): CleanupFn {
-  const [addCleanup, cleanup] = createCleanup(
+export function initWeb(acceptCustomStyles = true): VoidFunction {
+  const [addCleanup, cleanup] = createCbCollector(
     on('reload_iframe', () => {
       $postEvent()('iframe_will_reload');
       window.location.reload();
