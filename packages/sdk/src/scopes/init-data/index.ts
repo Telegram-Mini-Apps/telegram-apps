@@ -1,7 +1,5 @@
 import { computed, type Computed } from '@telegram-apps/signals';
-import type { InitData } from '@telegram-apps/bridge';
-
-import { retrieveLaunchParams } from '@/scopes/launch-params/retrieveLaunchParams.js';
+import { retrieveLaunchParams, type InitData } from '@telegram-apps/bridge';
 
 import * as _ from './private.js';
 
@@ -13,7 +11,7 @@ import * as _ from './private.js';
 
 function createStateComputed<K extends keyof InitData>(key: K): Computed<InitData[K] | undefined> {
   return computed(() => {
-    const s = _.state();
+    const s = _.$state();
     return s ? s[key] : undefined;
   });
 }
@@ -33,13 +31,12 @@ export const canSendAfter = createStateComputed('canSendAfter');
  * the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) method.
  */
 export const canSendAfterDate = computed(() => {
-  const s = _.state();
+  const authDateValue = authDate();
+  const canSendAfterValue = canSendAfter();
 
-  return s
-    ? s.canSendAfter
-      ? new Date(s.authDate.getTime() + s.canSendAfter * 1000)
-      : undefined
-    : undefined;
+  return canSendAfterValue && authDateValue
+    ? new Date(authDateValue.getTime() + canSendAfterValue * 1000)
+    : undefined
 });
 
 /**
@@ -76,7 +73,7 @@ export const receiver = createStateComputed('receiver');
  * Restores the component state.
  */
 export function restore(): void {
-  _.state.set(retrieveLaunchParams().initData);
+  _.$state.set(retrieveLaunchParams().initData);
 }
 
 /**
@@ -87,7 +84,7 @@ export const startParam = createStateComputed('startParam');
 /**
  * Complete component state.
  */
-export const state = computed(_.state);
+export const state = computed(_.$state);
 
 /**
  * @see InitData.user
