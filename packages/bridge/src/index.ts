@@ -22,6 +22,7 @@ export type { EventListener } from '@/events/listening/types.js';
 export { unsubscribe } from '@/events/listening/unsubscribe.js';
 
 export type * from '@/events/types/index.js';
+export { emitMiniAppsEvent } from '@/events/emitMiniAppsEvent.js';
 
 export { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
 
