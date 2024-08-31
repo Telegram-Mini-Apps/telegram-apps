@@ -12,7 +12,7 @@ import type { EventName } from '../types/events.js';
  */
 export function on<E extends EventName>(
   event: E,
-  listener: SubscribeListenerFn<SignalPayload<E>>,
+  listener: SubscribeListenerFn<SignalPayload<E>, SignalPayload<E> | undefined>,
   once?: boolean,
 ): RemoveListenerFn {
   return signalFor(event).sub(listener, once);

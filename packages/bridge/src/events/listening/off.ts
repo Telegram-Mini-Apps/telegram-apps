@@ -11,7 +11,7 @@ import type { EventName } from '@/events/types/events.js';
  */
 export function off<E extends EventName>(
   event: E,
-  listener: SubscribeListenerFn<SignalPayload<E>>,
+  listener: SubscribeListenerFn<SignalPayload<E>, SignalPayload<E> | undefined>,
   once?: boolean,
 ): void {
   signalFor(event).unsub(listener, once);
