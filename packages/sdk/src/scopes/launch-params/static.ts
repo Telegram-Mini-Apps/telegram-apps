@@ -1,5 +1,4 @@
-export { parseLaunchParams as parse } from '@/scopes/launch-params/parseLaunchParams.js';
-export { retrieveLaunchParams as retrieve } from '@/scopes/launch-params/retrieveLaunchParams.js';
+export { retrieveLaunchParams as retrieve } from '@telegram-apps/bridge';
 
 export type {
   LaunchParams,
