@@ -5,8 +5,8 @@ import { $lastEvent, $lastEventCleanup } from '@/events/listening/lastEvent.js';
 import { $targetOrigin } from '@/methods/$targetOrigin.js';
 import { $debug } from '@/debug.js';
 
-function resetAndDestroy(s: Signal<any>): void {
-  s.destroy();
+function resetSignal(s: Signal<any>): void {
+  s.unsubAll();
   s.reset();
 }
 
@@ -15,6 +15,8 @@ function resetAndDestroy(s: Signal<any>): void {
  * We are using it only for test purposes.
  */
 export function resetPackageState() {
+  $lastEventCleanup()?.();
+
   [
     ...Object.values($eventSignalsCache()),
     $eventSignalsCache,
@@ -22,5 +24,5 @@ export function resetPackageState() {
     $lastEventCleanup,
     $targetOrigin,
     $debug,
-  ].forEach(resetAndDestroy);
+  ].forEach(resetSignal);
 }
