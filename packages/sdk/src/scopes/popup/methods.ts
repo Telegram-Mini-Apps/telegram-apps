@@ -1,5 +1,4 @@
 import { request, type PopupParams } from '@telegram-apps/bridge';
-import { computed } from '@telegram-apps/signals';
 import { BetterPromise } from '@telegram-apps/toolkit';
 
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
@@ -7,14 +6,8 @@ import { $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_POPUP_INVALID_PARAMS, ERR_POPUP_OPENED } from '@/errors/errors.js';
 import { SDKError } from '@/errors/SDKError.js';
 
-import * as _ from './private.js';
+import { isOpened } from './signals.js';
 import type { OpenOptions } from './types.js';
-
-/*
- * fixme
- * @see Usage: https://docs.telegram-mini-apps.com/platform/popup
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/popup
- */
 
 const MINI_APPS_METHOD = 'web_app_open_popup';
 
@@ -68,11 +61,6 @@ function preparePopupParams(params: OpenOptions): PopupParams {
 }
 
 /**
- * True if a popup is currently opened.
- */
-export const isOpened = computed(_.$isOpened);
-
-/**
  * A method that shows a native popup described by the `params` argument.
  * The promise will be resolved when the popup is closed. Resolved value will have
  * an identifier of pressed button.
@@ -82,16 +70,18 @@ export const isOpened = computed(_.$isOpened);
  *
  * @param options - popup parameters.
  * @throws {SDKError} ERR_POPUP_OPENED
+ * @throws {SDKError} ERR_POPUP_INVALID_PARAMS
  * @see ERR_POPUP_OPENED
+ * @see ERR_POPUP_INVALID_PARAMS
  */
 export const open: WithIsSupported<(options: OpenOptions) => BetterPromise<string | null>> =
   decorateWithIsSupported(options => {
     return BetterPromise.withFn(() => {
-      if (_.$isOpened()) {
+      if (isOpened()) {
         throw new SDKError(ERR_POPUP_OPENED);
       }
 
-      _.$isOpened.set(true);
+      isOpened.set(true);
 
       return request(MINI_APPS_METHOD, 'popup_closed', {
         ...options || {},
@@ -100,7 +90,7 @@ export const open: WithIsSupported<(options: OpenOptions) => BetterPromise<strin
       })
         .then(({ button_id = null }) => button_id)
         .finally(() => {
-          _.$isOpened.set(false);
+          isOpened.set(false);
         });
     });
   }, MINI_APPS_METHOD);
