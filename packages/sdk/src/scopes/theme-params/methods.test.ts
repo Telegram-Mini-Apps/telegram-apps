@@ -1,35 +1,33 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
-import { resetPackageState } from '@test-utils/resetPackageState.js';
+import { beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
+import { createWindow } from 'test-utils';
+import { emitMiniAppsEvent } from '@telegram-apps/bridge';
+import { destroyAndReset, resetPackageState } from '@test-utils/resetPackageState.js';
 
-import { bindCssVars } from './index.js';
-import {isCssVarsBound, isMounted, state} from './signals.js';
+import { bindCssVars, mount } from './methods.js';
+import { isCssVarsBound, isMounted, state } from './signals.js';
 
-afterEach(() => {
+type SetPropertyFn = typeof document.documentElement.style.setProperty;
+let setSpy: MockInstance<Parameters<SetPropertyFn>, ReturnType<SetPropertyFn>>;
+
+beforeEach(() => {
+  vi.restoreAllMocks();
   resetPackageState();
-  isCssVarsBound.reset();
-  isMounted.reset();
-  state.reset();
-})
+  [isCssVarsBound, isMounted, state].forEach(destroyAndReset);
+
+  createWindow();
+  setSpy = vi
+    .spyOn(document.documentElement.style, 'setProperty')
+    .mockImplementation(() => {
+    });
+});
+
+vi.mock('@/scopes/launch-params/static.js', () => ({
+  retrieve: vi.fn(() => ({
+    themeParams: {},
+  })),
+}));
 
 describe('bindCssVars', () => {
-  type SetPropertyFn = typeof document.documentElement.style.setProperty;
-  let setSpy: MockInstance<Parameters<SetPropertyFn>, ReturnType<SetPropertyFn>>;
-
-  beforeAll(() => {
-    setSpy = vi
-      .spyOn(document.documentElement.style, 'setProperty')
-      .mockImplementation(() => {
-      });
-  });
-
-  beforeEach(() => {
-    state.reset();
-  });
-
-  afterEach(() => {
-    setSpy.mockClear();
-  });
-
   it('should set --tg-theme-{key} CSS vars, where key is kebab-cased theme keys', () => {
     state.set({
       bgColor: '#abcdef',
@@ -41,33 +39,28 @@ describe('bindCssVars', () => {
     expect(setSpy).toHaveBeenCalledWith('--tg-theme-accent-text-color', '#000011');
   });
 
-  // todo
-  // it(
-  //   'should update --tg-theme-{key} variables to the values, received in the Theme change events',
-  //   async () => {
-  //     _.state.set({
-  //       bgColor: '#abcdef',
-  //       accentTextColor: '#000011',
-  //     });
-  //     bindCssVars();
-  //     setSpy.mockClear();
-  //
-  //     tp.listen();
-  //
-  //     dispatchWindowMessageEvent('theme_changed', {
-  //       theme_params: {
-  //         bg_color: '#111111',
-  //         accent_text_color: '#222222',
-  //         text_color: '#333333',
-  //       },
-  //     });
-  //
-  //     expect(setSpy).toHaveBeenCalledTimes(3);
-  //     expect(setSpy).toHaveBeenCalledWith('--tg-theme-bg-color', '#111111');
-  //     expect(setSpy).toHaveBeenCalledWith('--tg-theme-accent-text-color', '#222222');
-  //     expect(setSpy).toHaveBeenCalledWith('--tg-theme-text-color', '#333333');
-  //   },
-  // );
+  it('should update --tg-theme-{key} variables to the values, received in theme_changed event', () => {
+    state.set({
+      bgColor: '#abcdef',
+      accentTextColor: '#000011',
+    });
+    bindCssVars();
+    mount();
+
+    setSpy.mockClear();
+    emitMiniAppsEvent('theme_changed', {
+      theme_params: {
+        bg_color: '#111111',
+        accent_text_color: '#222222',
+        text_color: '#333333',
+      },
+    });
+
+    expect(setSpy).toHaveBeenCalledTimes(3);
+    expect(setSpy).toHaveBeenCalledWith('--tg-theme-bg-color', '#111111');
+    expect(setSpy).toHaveBeenCalledWith('--tg-theme-accent-text-color', '#222222');
+    expect(setSpy).toHaveBeenCalledWith('--tg-theme-text-color', '#333333');
+  });
 
   it('should set CSS variable using custom function', () => {
     state.set({
@@ -81,29 +74,31 @@ describe('bindCssVars', () => {
     expect(setSpy).toHaveBeenCalledWith('--my-accentTextColor', '#000011');
   });
 
-  // todo
-  // it('should stop updating variables, if returned function was called', () => {
-  //   const tp = new ThemeParams({
-  //     bgColor: '#abcdef',
-  //     accentTextColor: '#000011',
-  //   });
-  //   const cleanup = bindThemeParamsCSSVars(tp);
-  //
-  //   expect(setSpy).toHaveBeenCalledTimes(2);
-  //   tp.listen();
-  //   dispatchWindowMessageEvent('theme_changed', {
-  //     theme_params: {
-  //       bg_color: '#111111',
-  //     },
-  //   });
-  //   expect(setSpy).toHaveBeenCalledTimes(4);
-  //
-  //   cleanup();
-  //   dispatchWindowMessageEvent('theme_changed', {
-  //     theme_params: {
-  //       bg_color: '#222222',
-  //     },
-  //   });
-  //   expect(setSpy).toHaveBeenCalledTimes(4);
-  // });
+  it('should stop updating variables, if returned function was called', () => {
+    state.set({
+      bgColor: '#abcdef',
+      accentTextColor: '#000011',
+    });
+    const cleanup = bindCssVars();
+    mount();
+
+    setSpy.mockClear();
+    emitMiniAppsEvent('theme_changed', {
+      theme_params: {
+        bg_color: '#111111',
+        accent_text_color: '#222222',
+        text_color: '#333333',
+      },
+    });
+
+    expect(setSpy).toHaveBeenCalledTimes(3);
+
+    cleanup();
+    emitMiniAppsEvent('theme_changed', {
+      theme_params: {
+        bg_color: '#222222',
+      },
+    });
+    expect(setSpy).toHaveBeenCalledTimes(3);
+  });
 });
