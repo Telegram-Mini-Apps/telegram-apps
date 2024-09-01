@@ -1,10 +1,10 @@
 import { collectSignal } from './computed.js';
 import { runInBatchMode } from './batch.js';
 
-export type SubscribeListenerFn<Current, Previous = Current> = (current: Current, previous: Previous) => void;
+export type SubscribeListenerFn<T> = (current: T, previous: T) => void;
 export type RemoveListenerFn = () => void;
 
-export interface SignalOptions<Current, Next = Current> {
+export interface SignalOptions<T> {
   /**
    * Previous and next values comparator.
    *
@@ -16,14 +16,14 @@ export interface SignalOptions<Current, Next = Current> {
    * @param next - an incoming value.
    * @returns True if values are considered the same.
    */
-  equals?: (current: Current | Next, next: Next) => boolean;
+  equals?: (current: T, next: T) => boolean;
 }
 
-export interface Signal<TGet, TSet extends TGet = TGet> {
+export interface Signal<T> {
   /**
    * @returns An underlying signal value.
    */
-  (): TGet | TSet;
+  (): T;
   /**
    * Destroys the signal removing all bound listeners.
    *
@@ -35,27 +35,27 @@ export interface Signal<TGet, TSet extends TGet = TGet> {
    */
   destroy: () => void;
   /**
-   * **Silently** resets the signal to its initial value.
+   * Resets the signal to its initial value.
    */
   reset: () => void;
   /**
    * Updates the signal notifying all subscribers about changes.
    * @param value - value to set.
    */
-  set: (value: TSet) => void;
+  set: (value: T) => void;
   /**
    * Adds a new listener, tracking the signal changes.
    * @param fn - event listener.
    * @param once - call listener only once.
    * @returns A function to remove the bound listener.
    */
-  sub: (fn: SubscribeListenerFn<TSet, TGet>, once?: boolean) => RemoveListenerFn;
+  sub: (fn: SubscribeListenerFn<T>, once?: boolean) => RemoveListenerFn;
   /**
    * Removes a listener, tracking the signal changes.
    * @param fn - event listener.
    * @param once - was this listener added for a single call. Default: false
    */
-  unsub: (fn: SubscribeListenerFn<TSet, TGet>, once?: boolean) => void;
+  unsub: (fn: SubscribeListenerFn<T>, once?: boolean) => void;
 }
 
 /**
@@ -63,32 +63,32 @@ export interface Signal<TGet, TSet extends TGet = TGet> {
  * @param initialValue - initial value.
  * @param options - additional options.
  */
-export function signal<TGet, TSet extends TGet = TGet>(
-  initialValue: TGet | TSet,
-  options?: SignalOptions<TGet, TSet>,
-): Signal<TGet, TSet>;
+export function signal<T>(
+  initialValue: T,
+  options?: SignalOptions<T>,
+): Signal<T>;
 
 /**
  * Creates a new signal without initial value.
  * @param initialValue
  * @param options - additional options.
  */
-export function signal<TGet, TSet extends TGet = TGet>(
-  initialValue?: TGet | TSet,
-  options?: SignalOptions<TGet | undefined, TSet>,
-): Signal<TGet | undefined, TSet>;
+export function signal<T>(
+  initialValue?: T,
+  options?: SignalOptions<T | undefined>,
+): Signal<T | undefined>;
 
 // #__NO_SIDE_EFFECTS__
-export function signal<TGet, TSet extends TGet = TGet>(
-  initialValue?: TGet | TSet,
-  options?: SignalOptions<TGet | undefined, TSet>,
-): Signal<TGet | undefined, TSet> {
-  type CurrentSignal = Signal<TGet | undefined, TSet>;
+export function signal<T>(
+  initialValue?: T,
+  options?: SignalOptions<T | undefined>,
+): Signal<T | undefined> {
+  type CurrentSignal = Signal<T | undefined>;
 
   options ||= {};
   const equals = options.equals || Object.is;
 
-  let listeners: [listener: SubscribeListenerFn<TSet, TGet | undefined>, once?: boolean][] = [];
+  let listeners: [listener: SubscribeListenerFn<T | undefined>, once?: boolean][] = [];
   let value: ReturnType<CurrentSignal> = initialValue;
 
   const set: CurrentSignal['set'] = v => {
@@ -134,7 +134,7 @@ export function signal<TGet, TSet extends TGet = TGet>(
       },
       set,
       reset() {
-        value = initialValue;
+        set(initialValue);
       },
       sub(fn, once) {
         listeners.push([fn, once]);
