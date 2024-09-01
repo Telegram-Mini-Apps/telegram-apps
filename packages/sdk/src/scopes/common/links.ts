@@ -43,7 +43,6 @@ export function openLink(url: string, options?: OpenLinkOptions): void {
  * links in full format, with hostname "t.me".
  * @param url - URL to be opened.
  * @throws {SDKError} ERR_INVALID_HOSTNAME
- * @see ERR_INVALID_HOSTNAME
  */
 export const openTelegramLink: WithIsSupported<(url: string) => void> = decorateWithIsSupported(url => {
   const { hostname, pathname, search } = new URL(url, 'https://t.me');

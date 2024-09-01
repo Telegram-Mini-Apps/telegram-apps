@@ -156,7 +156,6 @@ function saveState() {
  * This method is only available for Mini Apps launched via a Keyboard button.
  * @param data - data to send to bot.
  * @throws {SDKError} ERR_DATA_INVALID_SIZE
- * @see ERR_DATA_INVALID_SIZE
  */
 export function sendData(data: string): void {
   const { size } = new Blob([data]);

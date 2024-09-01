@@ -16,9 +16,6 @@ type OpenFn = WithIsSupported<{
    * @throws {SDKError} ERR_INVOICE_OPENED
    * @throws {SDKError} ERR_INVALID_HOSTNAME
    * @throws {SDKError} ERR_INVALID_SLUG
-   * @see ERR_INVOICE_OPENED
-   * @see ERR_INVALID_HOSTNAME
-   * @see ERR_INVALID_SLUG
    */
   (slug: string, options?: AsyncOptions): BetterPromise<InvoiceStatus>;
   /**
@@ -29,9 +26,6 @@ type OpenFn = WithIsSupported<{
    * @throws {SDKError} ERR_INVOICE_OPENED
    * @throws {SDKError} ERR_INVALID_HOSTNAME
    * @throws {SDKError} ERR_INVALID_SLUG
-   * @see ERR_INVOICE_OPENED
-   * @see ERR_INVALID_HOSTNAME
-   * @see ERR_INVALID_SLUG
    */
   (url: string, type: 'url', options?: AsyncOptions): BetterPromise<InvoiceStatus>;
 }>;
