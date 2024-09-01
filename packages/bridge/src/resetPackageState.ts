@@ -1,13 +1,13 @@
-import type { Computed, Signal } from '@telegram-apps/signals';
+import type { Signal } from '@telegram-apps/signals';
 
 import { $eventSignalsCache } from '@/events/listening/signalFor.js';
 import { $lastEvent, $lastEventCleanup } from '@/events/listening/lastEvent.js';
 import { $targetOrigin } from '@/methods/$targetOrigin.js';
 import { $debug } from '@/debug.js';
 
-function resetAndDestroy(s: Signal<any> | Computed<any>): void {
-  'reset' in s && s.reset();
+function resetAndDestroy(s: Signal<any>): void {
   s.destroy();
+  s.reset();
 }
 
 /**
