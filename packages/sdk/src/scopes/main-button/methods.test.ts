@@ -2,12 +2,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockPageReload, mockSessionStorageGetItem, mockSessionStorageSetItem } from 'test-utils';
 import { emitMiniAppsEvent, type ThemeParams } from '@telegram-apps/bridge';
 
-import { resetGlobals } from '@test-utils/resetGlobals.js';
+import { resetPackageState } from '@test-utils/resetPackageState.js';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
-import * as themeParams from '@/scopes/theme-params/index.js';
+import * as themeParams from '@/scopes/theme-params/instance.js';
 
-import { state as _state, isMounted as _isMounted } from './private.js';
 import {
   text,
   textColor,
@@ -17,12 +16,8 @@ import {
   isVisible,
   state,
   backgroundColor,
-  onClick,
-  offClick,
-  setParams,
-  mount,
-  unmount,
-} from './index.js';
+} from './signals.js';
+import { onClick, offClick, setParams, mount, unmount } from './methods.js';
 
 vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({
   retrieveLaunchParams: () => ({
@@ -34,19 +29,9 @@ vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({
 }));
 
 beforeEach(() => {
-  resetGlobals();
-  _state.reset();
-  _state.unsubAll();
-  _isMounted.reset();
-  _isMounted.unsubAll();
-
-  state.unsubAll();
-  isActive.unsubAll();
-  isLoaderVisible.unsubAll();
-  isVisible.unsubAll();
-  text.unsubAll();
-  textColor.unsubAll();
-  backgroundColor.unsubAll();
+  resetPackageState();
+  state.reset();
+  isMounted.reset();
 
   themeParams.unmount();
 

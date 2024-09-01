@@ -1,59 +1,24 @@
 import { off, on, type EventListener } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
-import { computed, type Computed } from '@telegram-apps/signals';
-import type { VoidFn } from '@telegram-apps/util-types';
+import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit/';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
-import { getStorageValue, setStorageValue } from '@/utils/storage.js';
-import * as themeParams from '@/scopes/theme-params/index.js';
+import * as themeParams from '@/scopes/theme-params/instance.js';
 
-import * as _ from './private.js';
+import { state, isMounted } from './signals.js';
 import type { State } from './types.js';
 
-/*
- * fixme
- * @see Usage: https://docs.telegram-mini-apps.com/platform/main-button
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/main-button
- */
+type StorageValue = State;
 
 const CLICK_EVENT = 'main_button_pressed';
 const STORAGE_KEY = 'mainButton';
-
-function createStateComputed<K extends keyof State>(key: K): Computed<State[K]> {
-  return computed(() => _.state()[key]);
-}
-
-/**
- * @see State.backgroundColor
- */
-export const backgroundColor = createStateComputed('backgroundColor');
-
-/**
- * @see State.isActive
- */
-export const isActive = createStateComputed('isActive');
-
-/**
- * True if the component is currently mounted.
- */
-export const isMounted = computed(_.isMounted);
-
-/**
- * @see State.isLoaderVisible
- */
-export const isLoaderVisible = createStateComputed('isLoaderVisible');
-
-/**
- * @see State.isVisible
- */
-export const isVisible = createStateComputed('isVisible');
 
 /**
  * Add a new main button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
  */
-export function onClick(fn: EventListener<'main_button_pressed'>): VoidFn {
+export function onClick(fn: EventListener<'main_button_pressed'>): VoidFunction {
   return on(CLICK_EVENT, fn);
 }
 
@@ -72,10 +37,10 @@ export function offClick(fn: EventListener<'main_button_pressed'>): void {
  * if it changed.
  */
 export function mount(): void {
-  if (!_.isMounted()) {
-    const prev = isPageReload() && getStorageValue(STORAGE_KEY);
+  if (!isMounted()) {
+    const prev = isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY);
     if (prev) {
-      _.state.set(prev);
+      state.set(prev);
     } else {
       themeParams.mount();
       setParams({
@@ -84,8 +49,8 @@ export function mount(): void {
       });
     }
 
-    _.state.sub(onStateChanged);
-    _.isMounted.set(true);
+    state.sub(onStateChanged);
+    isMounted.set(true);
   }
 }
 
@@ -102,37 +67,21 @@ function onStateChanged(s: State): void {
       text_color: s.textColor,
     });
   }
-  setStorageValue(STORAGE_KEY, s);
+  setStorageValue<StorageValue>(STORAGE_KEY, s);
 }
-
-/**
- * Complete component state.
- */
-export const state = computed(_.state);
-
 
 /**
  * Updates the main button state.
  * @param updates - state changes to perform.
  */
 export function setParams(updates: Partial<State>): void {
-  _.state.set({
-    ..._.state(),
+  state.set({
+    ...state(),
     ...Object.fromEntries(
       Object.entries(updates).filter(([, v]) => v !== undefined),
     ),
   });
 }
-
-/**
- * @see State.text
- */
-export const text = createStateComputed('text');
-
-/**
- * @see State.textColor
- */
-export const textColor = createStateComputed('textColor');
 
 /**
  * Unmounts the component, removing the listener, saving the component state in the local storage.
@@ -141,6 +90,6 @@ export const textColor = createStateComputed('textColor');
  * @see onClick
  */
 export function unmount(): void {
-  _.state.unsub(onStateChanged);
-  _.isMounted.set(false);
+  state.unsub(onStateChanged);
+  isMounted.set(false);
 }
