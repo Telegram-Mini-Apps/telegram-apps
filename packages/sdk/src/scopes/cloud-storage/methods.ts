@@ -8,12 +8,6 @@ import {
 } from '@/scopes/decorateWithIsSupported.js';
 import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
 
-/*
- * fixme
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/cloud-storage
- * todo: usage
- */
-
 const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
 
 /**
@@ -52,7 +46,7 @@ export const getKeys: WithIsSupported<(options?: AsyncOptions) => BetterPromise<
       .then(array(string())());
   }, MINI_APPS_METHOD);
 
-export type GetFn = WithIsSupported<{
+type GetFn = WithIsSupported<{
   /**
    * @param keys - keys list.
    * @param options - request execution options.
