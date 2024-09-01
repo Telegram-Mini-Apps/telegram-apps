@@ -5,20 +5,18 @@ import { resetPackageState } from '@test-utils/resetPackageState.js';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
-import * as _ from './private.js';
+import { isVerticalSwipesEnabled, isMounted } from './signals.js';
 import {
-  isVerticalSwipesEnabled,
   disableVerticalSwipes,
   enableVerticalSwipes,
-  isMounted,
   mount,
   unmount,
-} from './index.js';
+} from './methods.js';
 
 beforeEach(() => {
   resetPackageState();
-  _.$isVerticalSwipesEnabled.reset();
-  _.$isMounted.reset();
+  isVerticalSwipesEnabled.reset();
+  isMounted.reset();
   vi.restoreAllMocks();
   $postEvent.set(() => null);
 });
@@ -29,7 +27,7 @@ describe('mounted', () => {
 
   describe('disableVerticalSwipes', () => {
     it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: false }', () => {
-      _.$isVerticalSwipesEnabled.set(true);
+      isVerticalSwipesEnabled.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
       disableVerticalSwipes();
@@ -42,7 +40,7 @@ describe('mounted', () => {
 
   describe('enableVerticalSwipes', () => {
     it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: true }', () => {
-      _.$isVerticalSwipesEnabled.set(false);
+      isVerticalSwipesEnabled.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
       enableVerticalSwipes();
@@ -58,7 +56,7 @@ describe('mounted', () => {
 describe('not mounted', () => {
   describe('disableVerticalSwipes', () => {
     it('should not call postEvent', () => {
-      _.$isVerticalSwipesEnabled.set(true);
+      isVerticalSwipesEnabled.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
       disableVerticalSwipes();
@@ -70,7 +68,7 @@ describe('not mounted', () => {
 
   describe('enableVerticalSwipes', () => {
     it('should not call postEvent', () => {
-      _.$isVerticalSwipesEnabled.set(false);
+      isVerticalSwipesEnabled.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
       enableVerticalSwipes();
@@ -83,7 +81,7 @@ describe('not mounted', () => {
 
 describe('disableVerticalSwipes', () => {
   it('should set isVerticalSwipesEnabled = false', () => {
-    _.$isVerticalSwipesEnabled.set(true);
+    isVerticalSwipesEnabled.set(true);
     expect(isVerticalSwipesEnabled()).toBe(true);
     disableVerticalSwipes();
     expect(isVerticalSwipesEnabled()).toBe(false);
@@ -104,21 +102,21 @@ describe('mount', () => {
       mockPageReload();
     });
 
-    it('should use value from session storage key "telegram-apps/swipe-behavior"', () => {
+    it('should use value from session storage key "tapps/swipeBehavior"', () => {
       const spy = vi.fn(() => 'true');
       mockSessionStorageGetItem(spy);
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('telegram-apps/swipe-behavior');
+      expect(spy).toHaveBeenCalledWith('tapps/swipeBehavior');
       expect(isVerticalSwipesEnabled()).toBe(true);
     });
 
-    it('should set isVerticalSwipesEnabled false if session storage key "telegram-apps/swipe-behavior" not presented', () => {
+    it('should set isVerticalSwipesEnabled false if session storage key "tapps/swipeBehavior" not presented', () => {
       const spy = vi.fn(() => null);
       mockSessionStorageGetItem(spy);
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('telegram-apps/swipe-behavior');
+      expect(spy).toHaveBeenCalledWith('tapps/swipeBehavior');
       expect(isVerticalSwipesEnabled()).toBe(false);
     });
   });
@@ -138,7 +136,7 @@ describe('unmount', () => {
     const postEventSpy = vi.fn();
     const storageSpy = mockSessionStorageSetItem();
     $postEvent.set(postEventSpy);
-    _.$isVerticalSwipesEnabled.set(true);
+    isVerticalSwipesEnabled.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);
 
@@ -146,7 +144,7 @@ describe('unmount', () => {
     storageSpy.mockClear();
 
     unmount();
-    _.$isVerticalSwipesEnabled.set(false);
+    isVerticalSwipesEnabled.set(false);
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);
@@ -155,7 +153,7 @@ describe('unmount', () => {
 
 describe('enableVerticalSwipes', () => {
   it('should set isVerticalSwipesEnabled = true', () => {
-    _.$isVerticalSwipesEnabled.set(false);
+    isVerticalSwipesEnabled.set(false);
     expect(isVerticalSwipesEnabled()).toBe(false);
     enableVerticalSwipes();
     expect(isVerticalSwipesEnabled()).toBe(true);
