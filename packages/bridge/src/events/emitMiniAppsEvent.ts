@@ -8,7 +8,7 @@
  * @param eventType - event name.
  * @param eventData - event payload.
  */
-export function emitMiniAppsEvent(eventType: string, eventData: unknown): void {
+export function emitMiniAppsEvent(eventType: string, eventData?: unknown): void {
   window.dispatchEvent(new MessageEvent('message', {
     data: JSON.stringify({ eventType, eventData }),
     // We specify window.parent to imitate the case, the parent iframe sent us this event.
