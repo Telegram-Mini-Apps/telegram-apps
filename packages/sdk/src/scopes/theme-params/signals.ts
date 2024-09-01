@@ -15,6 +15,9 @@ export const isMounted = signal(false);
  */
 export const isCssVarsBound = signal(false);
 
+/**
+ * Complete component state.
+ */
 export const state = signal<ThemeParams>({});
 
 /* COMPUTED */
