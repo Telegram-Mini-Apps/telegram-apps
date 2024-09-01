@@ -44,6 +44,7 @@ const STORAGE_KEY = 'miniApp';
  * mini app key.
  * MiniApp property.
  * @returns Function to stop updating variables.
+ * @throws {SDKError} ERR_CSS_VARS_BOUND
  */
 export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
   if (isCssVarsBound()) {
@@ -53,32 +54,33 @@ export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
   const bgVar = getCSSVarName('bgColor');
   const headerVar = getCSSVarName('headerColor');
 
-  function actualize() {
-    setCssVar(bgVar, backgroundColor());
+  function updateHeaderColor() {
+    const tp = themeParams.state();
 
     const h = headerColor();
     if (isRGB(h)) {
-      return setCssVar(headerVar, backgroundColor());
+      return setCssVar(headerVar, h);
     }
 
-    const bgColor = themeParams.backgroundColor();
+    const { secondaryBgColor, bgColor } = tp;
     if (h === 'bg_color' && bgColor) {
-      return setCssVar(bgVar, bgColor);
+      return setCssVar(headerVar, bgColor);
     }
-
-    const secondaryBgColor = themeParams.secondaryBackgroundColor();
     if (h === 'secondary_bg_color' && secondaryBgColor) {
-      setCssVar(bgVar, secondaryBgColor);
+      setCssVar(headerVar, secondaryBgColor);
     }
   }
 
-  actualize();
+  function updateBgColor() {
+    setCssVar(bgVar, backgroundColor());
+  }
+
+  updateBgColor();
+  updateHeaderColor();
+
   const [, cleanup] = createCbCollector(
-    [
-      backgroundColor,
-      headerColor,
-      themeParams.state,
-    ].map(s => s.sub(actualize)),
+    backgroundColor.sub(updateBgColor),
+    [headerColor, themeParams.state].map(s => s.sub(updateHeaderColor)),
   );
   isCssVarsBound.set(true);
 
