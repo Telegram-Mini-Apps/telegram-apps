@@ -1,32 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parse, serialize } from './static.js';
-
-describe('serialize', () => {
-  describe.each([
-    { to: 'accent_text_color', from: 'accentTextColor' },
-    { to: 'bg_color', from: 'bgColor' },
-    { to: 'button_color', from: 'buttonColor' },
-    { to: 'button_text_color', from: 'buttonTextColor' },
-    { to: 'destructive_text_color', from: 'destructiveTextColor' },
-    { to: 'header_bg_color', from: 'headerBgColor' },
-    { to: 'hint_color', from: 'hintColor' },
-    { to: 'link_color', from: 'linkColor' },
-    { to: 'secondary_bg_color', from: 'secondaryBgColor' },
-    { to: 'section_header_text_color', from: 'sectionHeaderTextColor' },
-    { to: 'section_bg_color', from: 'sectionBgColor' },
-    { to: 'subtitle_text_color', from: 'subtitleTextColor' },
-    { to: 'text_color', from: 'textColor' },
-  ])('$from', ({ from, to }) => {
-    it(`should omit the "${to}" property in case this property is missing`, () => {
-      expect(serialize({})).not.toMatch(`"${to}"`);
-    });
-
-    it(`should map this property to "${to}" property`, () => {
-      expect(serialize({ [from]: '#aabbcc' })).toBe(`{"${to}":"#aabbcc"}`);
-    });
-  });
-});
+import { parse } from './static.js';
 
 describe('parse', () => {
   describe.each([

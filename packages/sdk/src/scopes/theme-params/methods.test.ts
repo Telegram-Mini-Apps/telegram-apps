@@ -1,6 +1,15 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
+import { resetPackageState } from '@test-utils/resetPackageState.js';
+
 import { bindCssVars } from './index.js';
-import * as _ from './private.js';
+import {isCssVarsBound, isMounted, state} from './signals.js';
+
+afterEach(() => {
+  resetPackageState();
+  isCssVarsBound.reset();
+  isMounted.reset();
+  state.reset();
+})
 
 describe('bindCssVars', () => {
   type SetPropertyFn = typeof document.documentElement.style.setProperty;
@@ -14,7 +23,7 @@ describe('bindCssVars', () => {
   });
 
   beforeEach(() => {
-    _.state.reset();
+    state.reset();
   });
 
   afterEach(() => {
@@ -22,7 +31,7 @@ describe('bindCssVars', () => {
   });
 
   it('should set --tg-theme-{key} CSS vars, where key is kebab-cased theme keys', () => {
-    _.state.set({
+    state.set({
       bgColor: '#abcdef',
       accentTextColor: '#000011',
     });
@@ -61,7 +70,7 @@ describe('bindCssVars', () => {
   // );
 
   it('should set CSS variable using custom function', () => {
-    _.state.set({
+    state.set({
       bgColor: '#abcdef',
       accentTextColor: '#000011',
     });
