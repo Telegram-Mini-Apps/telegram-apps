@@ -15,7 +15,6 @@ const MINI_APPS_METHOD = 'web_app_open_popup';
  * Prepares popup parameters before sending them to native app.
  * @param params - popup parameters.
  * @throws {SDKError} ERR_POPUP_INVALID_PARAMS
- * @see ERR_POPUP_INVALID_PARAMS
  */
 function preparePopupParams(params: OpenOptions): PopupParams {
   const message = params.message.trim();
@@ -71,8 +70,6 @@ function preparePopupParams(params: OpenOptions): PopupParams {
  * @param options - popup parameters.
  * @throws {SDKError} ERR_POPUP_OPENED
  * @throws {SDKError} ERR_POPUP_INVALID_PARAMS
- * @see ERR_POPUP_OPENED
- * @see ERR_POPUP_INVALID_PARAMS
  */
 export const open: WithIsSupported<(options: OpenOptions) => BetterPromise<string | null>> =
   decorateWithIsSupported(options => {

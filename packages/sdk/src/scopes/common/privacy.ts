@@ -64,7 +64,6 @@ function getRequestedContact(options?: AsyncOptions): BetterPromise<RequestedCon
  * failed.
  * @param options - additional options.
  * @throws {SDKError} ERR_ACCESS_DENIED
- * @see ERR_ACCESS_DENIED
  */
 export async function requestContact(options?: AsyncOptions): Promise<RequestedContact> {
   options ||= {};
