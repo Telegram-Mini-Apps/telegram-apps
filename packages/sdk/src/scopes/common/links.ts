@@ -2,7 +2,7 @@ import { supports, type OpenLinkBrowser } from '@telegram-apps/bridge';
 import { createSafeURL } from '@telegram-apps/navigation';
 
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
-import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { ERR_INVALID_HOSTNAME } from '@/errors/errors.js';
 import { SDKError } from '@/errors/SDKError.js';
 
@@ -44,7 +44,7 @@ export function openLink(url: string, options?: OpenLinkOptions): void {
  * @param url - URL to be opened.
  * @throws {SDKError} ERR_INVALID_HOSTNAME
  */
-export const openTelegramLink: WithIsSupported<(url: string) => void> = decorateWithIsSupported(url => {
+export const openTelegramLink: WithIsSupported<(url: string) => void> = withIsSupported(url => {
   const { hostname, pathname, search } = new URL(url, 'https://t.me');
   if (hostname !== 't.me') {
     throw new SDKError(ERR_INVALID_HOSTNAME);
@@ -69,7 +69,7 @@ export const openTelegramLink: WithIsSupported<(url: string) => void> = decorate
  * @see https://core.telegram.org/widgets/share#custom-buttons
  */
 export const shareURL: WithIsSupported<(url: string, text?: string) => void> =
-  decorateWithIsSupported((url, text?) => {
+  withIsSupported((url, text?) => {
     openTelegramLink(
       `https://t.me/share/url?` + new URLSearchParams({ url, text: text || '' })
         .toString()

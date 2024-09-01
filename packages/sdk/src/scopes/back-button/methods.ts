@@ -2,7 +2,7 @@ import { off, on, type EventListener } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
-import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
 
 import { isVisible, isMounted } from './signals.js';
@@ -16,7 +16,7 @@ const STORAGE_KEY = 'backButton';
 /**
  * Hides the back button.
  */
-export const hide: WithIsSupported<() => void> = decorateWithIsSupported(() => {
+export const hide: WithIsSupported<() => void> = withIsSupported(() => {
   isVisible.set(false);
 }, MINI_APPS_METHOD);
 
@@ -59,7 +59,7 @@ export function offClick(fn: EventListener<'back_button_pressed'>): void {
 /**
  * Shows the back button.
  */
-export const show: WithIsSupported<() => void> = decorateWithIsSupported(() => {
+export const show: WithIsSupported<() => void> = withIsSupported(() => {
   isVisible.set(true);
 }, MINI_APPS_METHOD);
 

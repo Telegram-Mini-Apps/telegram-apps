@@ -14,7 +14,7 @@ import {
   setStorageValue,
 } from '@telegram-apps/toolkit';
 
-import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 import { SDKError } from '@/errors/SDKError.js';
@@ -54,7 +54,7 @@ const BIOMETRY_INFO_RECEIVED_EVENT = 'biometry_info_received';
  */
 export const authenticate: WithIsSupported<
   (options?: AuthenticateOptions) => BetterPromise<string | undefined>
-> = decorateWithIsSupported((options) => {
+> = withIsSupported((options) => {
   if (authenticatePromise()) {
     return BetterPromise.reject(new SDKError(ERR_ALREADY_CALLED));
   }
@@ -99,7 +99,7 @@ export function isSupported(): boolean {
  * interface (e.g. a click inside the Mini App or on the main button)_.
  * @since 7.2
  */
-export const openSettings: WithIsSupported<() => void> = decorateWithIsSupported(() => {
+export const openSettings: WithIsSupported<() => void> = withIsSupported(() => {
   $postEvent()(OPEN_SETTINGS_METHOD);
 }, OPEN_SETTINGS_METHOD);
 
@@ -111,7 +111,7 @@ export const openSettings: WithIsSupported<() => void> = decorateWithIsSupported
  */
 export const requestAccess: WithIsSupported<
   (options?: RequestAccessOptions) => BetterPromise<boolean>
-> = decorateWithIsSupported((options) => {
+> = withIsSupported((options) => {
   if (requestAccessPromise()) {
     return BetterPromise.reject(new SDKError(ERR_ALREADY_CALLED));
   }
@@ -192,7 +192,7 @@ export function unmount(): void {
  */
 export const updateToken: WithIsSupported<
   (options?: UpdateTokenOptions) => BetterPromise<BiometryTokenUpdateStatus>
-> = decorateWithIsSupported((options) => {
+> = withIsSupported((options) => {
   options ||= {};
   return request(UPDATE_TOKEN_METHOD, 'biometry_token_updated', {
     postEvent: $postEvent(),

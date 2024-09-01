@@ -6,7 +6,7 @@ import {
 } from '@telegram-apps/bridge';
 
 import { $postEvent, $createRequestId } from '@/scopes/globals/globals.js';
-import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { AsyncOptions, BetterPromise } from '@telegram-apps/toolkit';
 
 /*
@@ -27,7 +27,7 @@ const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
 export const readTextFromClipboard: WithIsSupported<
   (options?: AsyncOptions) => BetterPromise<string | null>
 > =
-  decorateWithIsSupported((options?: AsyncOptions) => {
+  withIsSupported((options?: AsyncOptions) => {
     const reqId = $createRequestId()();
 
     return request(READ_TEXT_FROM_CLIPBOARD_METHOD, 'clipboard_text_received', {
@@ -50,7 +50,7 @@ export const readTextFromClipboard: WithIsSupported<
  */
 export const switchInlineQuery: WithIsSupported<
   (query: string, chatTypes?: SwitchInlineQueryChatType[]) => void
-> = decorateWithIsSupported(
+> = withIsSupported(
   (query, chatTypes?) => {
     $postEvent()(SWITCH_INLINE_QUERY_METHOD, {
       query: query,
