@@ -9,6 +9,12 @@ import { isCssVarsBound, isMounted, state } from './signals.js';
 type SetPropertyFn = typeof document.documentElement.style.setProperty;
 let setSpy: MockInstance<Parameters<SetPropertyFn>, ReturnType<SetPropertyFn>>;
 
+vi.mock('@/scopes/launch-params/static.js', () => ({
+  retrieve: vi.fn(() => ({
+    themeParams: {},
+  })),
+}));
+
 beforeEach(() => {
   vi.restoreAllMocks();
   resetPackageState();
@@ -20,12 +26,6 @@ beforeEach(() => {
     .mockImplementation(() => {
     });
 });
-
-vi.mock('@/scopes/launch-params/static.js', () => ({
-  retrieve: vi.fn(() => ({
-    themeParams: {},
-  })),
-}));
 
 describe('bindCssVars', () => {
   it('should set --tg-theme-{key} CSS vars, where key is kebab-cased theme keys', () => {
