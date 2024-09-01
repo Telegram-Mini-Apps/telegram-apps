@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import type { PostEvent, RGB } from '@telegram-apps/bridge';
+import type { PostEventFn, RGB } from '@telegram-apps/bridge';
 
 // fixme
 import { createRequestIdGenerator } from '@/utils/createRequestIdGenerator.js';
