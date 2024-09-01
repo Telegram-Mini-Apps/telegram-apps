@@ -2,7 +2,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
-import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 
 import { isMounted, isVerticalSwipesEnabled } from './signals.js';
 
@@ -20,14 +20,14 @@ const STORAGE_KEY = 'swipeBehavior';
 /**
  * Disables vertical swipes.
  */
-export const disableVerticalSwipes: WithIsSupported<() => void> = decorateWithIsSupported(() => {
+export const disableVerticalSwipes: WithIsSupported<() => void> = withIsSupported(() => {
   isVerticalSwipesEnabled.set(false);
 }, MINI_APPS_METHOD);
 
 /**
  * Enables vertical swipes.
  */
-export const enableVerticalSwipes: WithIsSupported<() => void> = decorateWithIsSupported(() => {
+export const enableVerticalSwipes: WithIsSupported<() => void> = withIsSupported(() => {
   isVerticalSwipesEnabled.set(true);
 }, MINI_APPS_METHOD);
 

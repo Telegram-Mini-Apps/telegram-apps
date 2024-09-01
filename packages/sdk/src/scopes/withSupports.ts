@@ -29,7 +29,7 @@ export type WithSupports<
  */
 
 /*@__NO_SIDE_EFFECTS__*/
-export function decorateWithSupports<
+export function withSupports<
   F extends (...args: any) => any,
   S extends Record<string, HasCheckSupportMethodTuple>,
 >(fn: F, schema: S): WithSupports<F, S> {

@@ -3,9 +3,9 @@ import { array, object, string } from '@telegram-apps/transformers';
 import { type AsyncOptions, BetterPromise } from '@telegram-apps/toolkit';
 
 import {
-  decorateWithIsSupported,
+  withIsSupported,
   type WithIsSupported,
-} from '@/scopes/decorateWithIsSupported.js';
+} from '@/scopes/withIsSupported.js';
 import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
 
 const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
@@ -19,7 +19,7 @@ export const deleteKeys: WithIsSupported<(
   keyOrKeys: string | string[],
   options?: AsyncOptions,
 ) => BetterPromise<void>> =
-  decorateWithIsSupported((keyOrKeys, options) => {
+  withIsSupported((keyOrKeys, options) => {
     const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
     return keys.length
       ? invokeCustomMethod(
@@ -36,7 +36,7 @@ export const deleteKeys: WithIsSupported<(
  * @param options - request execution options.
  */
 export const getKeys: WithIsSupported<(options?: AsyncOptions) => BetterPromise<string[]>> =
-  decorateWithIsSupported(options => {
+  withIsSupported(options => {
     return invokeCustomMethod(
       'getStorageKeys',
       {},
@@ -62,7 +62,7 @@ type GetFn = WithIsSupported<{
   (key: string, options?: AsyncOptions): BetterPromise<string>;
 }>;
 
-export const get: GetFn = decorateWithIsSupported(
+export const get: GetFn = withIsSupported(
   (
     keyOrKeys: string | string[],
     options?: AsyncOptions,
@@ -99,7 +99,7 @@ export const set: WithIsSupported<(
   key: string,
   value: string,
   options?: AsyncOptions,
-) => BetterPromise<void>> = decorateWithIsSupported(
+) => BetterPromise<void>> = withIsSupported(
   (key, value, options) => {
     return invokeCustomMethod(
       'saveStorageValue',

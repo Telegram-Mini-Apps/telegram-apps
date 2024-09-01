@@ -8,7 +8,7 @@ import { searchParams, object, number, string, date } from '@telegram-apps/trans
 
 import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_ACCESS_DENIED } from '@/errors/errors.js';
-import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { SDKError } from '@/errors/SDKError.js';
 import { AsyncOptions, BetterPromise, createTimeoutError, sleep } from '@telegram-apps/toolkit';
 
@@ -119,7 +119,7 @@ export async function requestContact(options?: AsyncOptions): Promise<RequestedC
  */
 export const requestPhoneAccess: WithIsSupported<
   (options?: AsyncOptions) => Promise<PhoneRequestedStatus>
-> = decorateWithIsSupported((options) => {
+> = withIsSupported((options) => {
   if (!requestPhoneAccessPromise) {
     requestPhoneAccessPromise = request(REQUEST_PHONE_METHOD, 'phone_requested', {
       ...options || {},
@@ -137,7 +137,7 @@ export const requestPhoneAccess: WithIsSupported<
  */
 export const requestWriteAccess: WithIsSupported<
   (options?: AsyncOptions) => Promise<WriteAccessRequestedStatus>
-> = decorateWithIsSupported((options) => {
+> = withIsSupported((options) => {
   if (!requestWriteAccessPromise) {
     requestWriteAccessPromise = request(REQUEST_WRITE_ACCESS_METHOD, 'write_access_requested', {
       ...options || {},

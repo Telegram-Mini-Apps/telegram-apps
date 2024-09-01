@@ -18,7 +18,7 @@ export type WithIsSupported<F extends (...args: any) => any> = F & {
  */
 
 /*@__NO_SIDE_EFFECTS__*/
-export function decorateWithIsSupported<F extends (...args: any) => any>(
+export function withIsSupported<F extends (...args: any) => any>(
   fn: F,
   method: MethodName,
   additionalCheck?: () => boolean,

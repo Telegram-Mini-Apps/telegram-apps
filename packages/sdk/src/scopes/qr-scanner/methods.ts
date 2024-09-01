@@ -1,7 +1,7 @@
 import { request, on } from '@telegram-apps/bridge';
 import { type AsyncOptions, BetterPromise, createCbCollector } from '@telegram-apps/toolkit';
 
-import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_SCANNER_OPENED } from '@/errors/errors.js';
 import { SDKError } from '@/errors/SDKError.js';
@@ -55,12 +55,12 @@ const SCANNED_EVENT = 'qr_text_received';
 /**
  * Closes the scanner.
  */
-export const close: WithIsSupported<() => void> = decorateWithIsSupported(() => {
+export const close: WithIsSupported<() => void> = withIsSupported(() => {
   isOpened.set(false);
   $postEvent()(CLOSE_METHOD);
 }, CLOSE_METHOD);
 
-export const open: OpenFn = decorateWithIsSupported((options) => {
+export const open: OpenFn = withIsSupported((options) => {
   if (isOpened()) {
     throw new SDKError(ERR_SCANNER_OPENED);
   }

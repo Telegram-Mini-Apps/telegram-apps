@@ -1,7 +1,7 @@
 import { request, type PopupParams } from '@telegram-apps/bridge';
 import { BetterPromise } from '@telegram-apps/toolkit';
 
-import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_POPUP_INVALID_PARAMS, ERR_POPUP_OPENED } from '@/errors/errors.js';
 import { SDKError } from '@/errors/SDKError.js';
@@ -72,7 +72,7 @@ function preparePopupParams(params: OpenOptions): PopupParams {
  * @throws {SDKError} ERR_POPUP_INVALID_PARAMS
  */
 export const open: WithIsSupported<(options: OpenOptions) => BetterPromise<string | null>> =
-  decorateWithIsSupported(options => {
+  withIsSupported(options => {
     return BetterPromise.withFn(() => {
       if (isOpened()) {
         throw new SDKError(ERR_POPUP_OPENED);

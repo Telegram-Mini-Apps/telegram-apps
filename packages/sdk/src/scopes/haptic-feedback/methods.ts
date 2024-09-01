@@ -4,7 +4,7 @@ import type {
 } from '@telegram-apps/bridge';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
-import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
+import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 
 const MINI_APPS_METHOD = 'web_app_trigger_haptic_feedback';
 
@@ -14,7 +14,7 @@ const MINI_APPS_METHOD = 'web_app_trigger_haptic_feedback';
  * @param style - impact style.
  */
 export const impactOccurred: WithIsSupported<(style: ImpactHapticFeedbackStyle) => void> =
-  decorateWithIsSupported(style => {
+  withIsSupported(style => {
     $postEvent()(MINI_APPS_METHOD, {
       type: 'impact',
       impact_style: style,
@@ -27,7 +27,7 @@ export const impactOccurred: WithIsSupported<(style: ImpactHapticFeedbackStyle) 
  * @param type - notification type.
  */
 export const notificationOccurred: WithIsSupported<(type: NotificationHapticFeedbackType) => void> =
-  decorateWithIsSupported(type => {
+  withIsSupported(type => {
     $postEvent()(MINI_APPS_METHOD, {
       type: 'notification',
       notification_type: type,
@@ -41,6 +41,6 @@ export const notificationOccurred: WithIsSupported<(type: NotificationHapticFeed
  * Do not use this feedback when the user makes or confirms a selection; use it only when the
  * selection changes.
  */
-export const selectionChanged: WithIsSupported<() => void> = decorateWithIsSupported(() => {
+export const selectionChanged: WithIsSupported<() => void> = withIsSupported(() => {
   $postEvent()(MINI_APPS_METHOD, { type: 'selection_change' });
 }, MINI_APPS_METHOD);
