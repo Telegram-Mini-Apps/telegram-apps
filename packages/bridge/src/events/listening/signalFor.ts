@@ -20,7 +20,13 @@ export function signalFor<E extends EventName>(event: E): CachedSignal<E> {
   if (!cached) {
     // This is the special symbol we use to notify signal, that nothing changed, and the current
     // value should be preserved.
-    cached = signal() as Cache[E];
+    cached = signal(undefined, {
+      equals() {
+        // We may receive several undefined in a row. For example,
+        // in the main_button_pressed event.
+        return false;
+      },
+    }) as Cache[E];
     lastEventSignal().sub(ev => {
       if (ev && ev[0] === event) {
         cached!.set(ev[1] as SignalPayload<E>);
