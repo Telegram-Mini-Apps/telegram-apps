@@ -11,7 +11,7 @@ function formatKey(key: string): string {
  * @param key - storage key.
  * @param value - storage value.
  */
-export function setStorageValue(key: string, value: unknown): void {
+export function setStorageValue<T>(key: string, value: T): void {
   sessionStorage.setItem(formatKey(key), JSON.stringify(value));
 }
 
