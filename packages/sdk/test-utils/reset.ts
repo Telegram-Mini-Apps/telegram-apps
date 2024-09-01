@@ -3,12 +3,12 @@ import type { Signal } from '@telegram-apps/signals';
 
 import { $createRequestId, $postEvent, $version } from '@/scopes/globals/globals.js';
 
-export function destroyAndReset(s: Signal<any>) {
-  s.destroy();
+export function resetSignal(s: Signal<any>) {
+  s.unsubAll();
   s.reset();
 }
 
 export function resetPackageState() {
   resetBridgeState();
-  [$postEvent, $version, $createRequestId].forEach(destroyAndReset);
+  [$postEvent, $version, $createRequestId].forEach(resetSignal);
 }
