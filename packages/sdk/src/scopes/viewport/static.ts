@@ -1,4 +1,5 @@
 import { request as bridgeRequest, type ExecuteWithOptions } from '@telegram-apps/bridge';
+import type { BetterPromise } from '@telegram-apps/toolkit';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
@@ -13,20 +14,17 @@ export interface RequestResult {
  * Requests viewport actual information from the Telegram application.
  * @param options - request options.
  */
-export async function request(options?: ExecuteWithOptions): Promise<RequestResult> {
-  const response = await bridgeRequest({
+export function request(options?: ExecuteWithOptions): BetterPromise<RequestResult> {
+  return bridgeRequest('web_app_request_viewport', 'viewport_changed', {
     postEvent: $postEvent(),
     ...options || {},
-    method: 'web_app_request_viewport',
-    event: 'viewport_changed',
-  });
-
-  return {
-    height: response.height,
-    width: response.width,
-    isExpanded: response.is_expanded,
-    isStable: response.is_state_stable,
-  };
+  })
+    .then(r => ({
+      height: r.height,
+      width: r.width,
+      isExpanded: r.is_expanded,
+      isStable: r.is_state_stable,
+    }));
 }
 
 export type * from './types.js';
