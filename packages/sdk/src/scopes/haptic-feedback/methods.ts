@@ -6,13 +6,6 @@ import type {
 import { $postEvent } from '@/scopes/globals/globals.js';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 
-/*
- * fixme
- * @see Usage: https://docs.telegram-mini-apps.com/platform/haptic-feedback
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/haptic-feedback
- */
-
-
 const MINI_APPS_METHOD = 'web_app_trigger_haptic_feedback';
 
 /**

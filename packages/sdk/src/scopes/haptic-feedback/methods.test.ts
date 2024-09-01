@@ -8,7 +8,7 @@ import {
   impactOccurred,
   notificationOccurred,
   selectionChanged,
-} from './index.js';
+} from './methods.js';
 
 beforeEach(() => {
   resetPackageState();
