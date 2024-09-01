@@ -163,8 +163,8 @@ export const mount = createMountFn<State>(
   },
   result => {
     on(BIOMETRY_INFO_RECEIVED_EVENT, onBiometryInfoReceived);
-    state.set(result);
     state.sub(onStateChanged);
+    state.set(result);
   },
   { isMounted, mountError, mountPromise },
 );
