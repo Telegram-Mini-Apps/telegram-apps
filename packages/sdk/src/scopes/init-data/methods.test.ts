@@ -3,6 +3,7 @@ import type { InitData } from '@telegram-apps/bridge';
 
 import { state } from './signals.js';
 import { restore } from './methods.js';
+import { resetSignal } from '@test-utils/reset.js';
 
 vi.mock('@/scopes/launch-params/static.js', () => ({
   retrieve: () => ({
@@ -42,7 +43,9 @@ vi.mock('@/scopes/launch-params/static.js', () => ({
   }),
 }));
 
-beforeEach(() => state.set(undefined));
+beforeEach(() => {
+  resetSignal(state);
+});
 
 describe('restore', () => {
   it('should set state based on init data from launch params', () => {
