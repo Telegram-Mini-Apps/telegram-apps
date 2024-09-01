@@ -1,6 +1,6 @@
 import { describe, vi, expect, it, afterEach, beforeEach } from 'vitest';
 
-import { resetPackageState } from '@test-utils/resetPackageState.js';
+import { resetPackageState } from '@test-utils/reset.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
