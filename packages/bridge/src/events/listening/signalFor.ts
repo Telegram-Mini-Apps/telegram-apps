@@ -4,7 +4,7 @@ import { lastEventSignal } from '@/events/listening/lastEvent.js';
 import type { EventName } from '@/events/types/events.js';
 import type { SignalPayload } from '@/events/listening/types.js';
 
-type CachedSignal<E extends EventName> = Signal<SignalPayload<E> | undefined, SignalPayload<E>>
+type CachedSignal<E extends EventName> = Signal<SignalPayload<E>>;
 type Cache = {
   [E in EventName]?: CachedSignal<E>
 };
