@@ -1,18 +1,12 @@
 import { request, type InvoiceStatus } from '@telegram-apps/bridge';
-import { computed } from '@telegram-apps/signals';
-import { AsyncOptions, BetterPromise } from '@telegram-apps/toolkit';
+import { type AsyncOptions, BetterPromise } from '@telegram-apps/toolkit';
 
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_INVOICE_OPENED } from '@/errors/errors.js';
 import { SDKError } from '@/errors/SDKError.js';
 
-import * as _ from './private.js';
-
-/*
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/invoice
- * todo usage
- */
+import { isOpened } from './signals.js';
 
 type OpenFn = WithIsSupported<{
   /**
@@ -44,15 +38,10 @@ type OpenFn = WithIsSupported<{
 
 const MINI_APPS_METHOD = 'web_app_open_invoice';
 
-/**
- * True if the invoice is currently opened.
- */
-export const isOpened = computed(_.$isOpened);
-
 export const open: OpenFn = decorateWithIsSupported(
   (urlOrSlug, optionsOrType?, options?) => {
     return BetterPromise.withFn(() => {
-      if (_.$isOpened()) {
+      if (isOpened()) {
         throw new SDKError(ERR_INVOICE_OPENED);
       }
 
@@ -77,7 +66,7 @@ export const open: OpenFn = decorateWithIsSupported(
         options = optionsOrType;
       }
 
-      _.$isOpened.set(true);
+      isOpened.set(true);
 
       return request(MINI_APPS_METHOD, 'invoice_closed', {
         ...options || {},
@@ -89,7 +78,7 @@ export const open: OpenFn = decorateWithIsSupported(
       })
         .then(r => r.status)
         .finally(() => {
-          _.$isOpened.set(false);
+          isOpened.set(false);
         });
     });
   },
