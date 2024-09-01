@@ -1,55 +1,21 @@
-import type { BiometryType, EventPayload } from '@telegram-apps/bridge';
+import type { EventPayload } from '@telegram-apps/bridge';
 
-export interface FormatBiometryInfoResult {
-  /**
-   * Shows whether biometry is available.
-   */
-  available: boolean;
-  /**
-   * Shows whether permission to use biometrics has been requested.
-   */
-  accessRequested: boolean;
-  /**
-   * Shows whether permission to use biometrics has been granted.
-   */
-  accessGranted: boolean;
-  /**
-   * A unique device identifier that can be used to match the token to the device.
-   */
-  deviceId: string;
-  /**
-   * Show whether local storage contains previously saved token.
-   */
-  tokenSaved: boolean;
-  /**
-   * The type of biometrics currently available on the device.
-   */
-  type: BiometryType;
-}
+import type { State } from './types.js';
 
 /**
  * Converts `biometry_info_received` to some common shape.
  * @param event - event payload.
  * @see biometry_info_received
  */
-export function formatEvent(
-  event: EventPayload<'biometry_info_received'>,
-): FormatBiometryInfoResult {
-  const data = event.available ? event : {
-    available: false,
-    device_id: '',
-    token_saved: false,
-    access_requested: false,
-    access_granted: false,
-    type: '',
-  };
-
-  return {
+export function formatEvent(event: EventPayload<'biometry_info_received'>): State {
+  return event.available ? {
     available: true,
-    type: data.type,
-    deviceId: data.device_id,
-    tokenSaved: data.token_saved,
-    accessRequested: data.access_requested,
-    accessGranted: data.access_granted,
+    tokenSaved: event.token_saved,
+    deviceId: event.device_id,
+    accessRequested: event.access_requested,
+    type: event.type,
+    accessGranted: event.access_granted,
+  } : {
+    available: false,
   };
 }
