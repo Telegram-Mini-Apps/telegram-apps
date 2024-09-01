@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { InitData } from '@telegram-apps/bridge';
 
-import { $state as _state } from './private.js';
-import { state, restore } from './index.js';
+import { state } from './signals.js';
+import { restore } from './methods.js';
 
-vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({
-  retrieveLaunchParams: () => ({
+vi.mock('@/scopes/launch-params/static.js', () => ({
+  retrieve: () => ({
     initData: {
       authDate: new Date(1000),
       canSendAfter: 60,
@@ -42,7 +42,7 @@ vi.mock('@/launch-params/retrieveLaunchParams.js', () => ({
   }),
 }));
 
-beforeEach(() => _state.set(undefined));
+beforeEach(() => state.set(undefined));
 
 describe('restore', () => {
   it('should set state based on init data from launch params', () => {
