@@ -6,22 +6,20 @@ import { resetPackageState } from '@test-utils/resetPackageState.js';
 
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
 
-import * as _ from './private.js';
+import { isVisible, isMounted } from './signals.js';
 import {
   show,
-  isVisible,
   hide,
   mount,
-  isMounted,
   onClick,
   unmount,
   offClick,
-} from './index.js';
+} from './methods.js';
 
 beforeEach(() => {
   resetPackageState();
-  _.$isVisible.reset();
-  _.$isMounted.reset();
+  isVisible.reset();
+  isMounted.reset();
   vi.restoreAllMocks();
   $postEvent.set(() => null);
 });
@@ -32,7 +30,7 @@ describe('mounted', () => {
 
   describe('hide', () => {
     it('should call postEvent with "web_app_setup_settings_button" and { is_visible: false }', () => {
-      _.$isVisible.set(true);
+      isVisible.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
       hide();
@@ -45,7 +43,7 @@ describe('mounted', () => {
 
   describe('show', () => {
     it('should call postEvent with "web_app_setup_settings_button" and { is_visible: true }', () => {
-      _.$isVisible.set(false);
+      isVisible.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
       show();
@@ -60,7 +58,7 @@ describe('mounted', () => {
 describe('not mounted', () => {
   describe('hide', () => {
     it('should not call postEvent', () => {
-      _.$isVisible.set(true);
+      isVisible.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
       hide();
@@ -68,7 +66,7 @@ describe('not mounted', () => {
     });
 
     it('should not save state in storage', () => {
-      _.$isVisible.set(true);
+      isVisible.set(true);
       const spy = mockSessionStorageSetItem();
       hide();
       expect(spy).toBeCalledTimes(0);
@@ -77,7 +75,7 @@ describe('not mounted', () => {
 
   describe('show', () => {
     it('should not call postEvent', () => {
-      _.$isVisible.set(false);
+      isVisible.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
       show();
@@ -87,7 +85,7 @@ describe('not mounted', () => {
     });
 
     it('should not save state in storage', () => {
-      _.$isVisible.set(false);
+      isVisible.set(false);
       const spy = mockSessionStorageSetItem();
       show();
       show();
@@ -99,7 +97,7 @@ describe('not mounted', () => {
 
 describe('hide', () => {
   it('should set isVisible = false', () => {
-    _.$isVisible.set(true);
+    isVisible.set(true);
     expect(isVisible()).toBe(true);
     hide();
     expect(isVisible()).toBe(false);
@@ -167,7 +165,7 @@ describe('unmount', () => {
     const postEventSpy = vi.fn();
     const storageSpy = mockSessionStorageSetItem();
     $postEvent.set(postEventSpy);
-    _.$isVisible.set(true);
+    isVisible.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);
 
@@ -175,7 +173,7 @@ describe('unmount', () => {
     storageSpy.mockClear();
 
     unmount();
-    _.$isVisible.set(false);
+    isVisible.set(false);
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);
@@ -211,7 +209,7 @@ describe('offClick', () => {
 
 describe('show', () => {
   it('should set isVisible = true', () => {
-    _.$isVisible.set(false);
+    isVisible.set(false);
     expect(isVisible()).toBe(false);
     show();
     expect(isVisible()).toBe(true);
