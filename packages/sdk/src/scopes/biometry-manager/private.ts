@@ -1,14 +1,8 @@
 import { signal } from '@telegram-apps/signals';
+import type { BetterPromise } from '@telegram-apps/toolkit';
 
-import type { State } from './types.js';
+export const authenticatePromise = signal<BetterPromise<string | undefined>>();
 
-export const state = signal<State>({
-  available: false,
-  accessGranted: false,
-  deviceId: '',
-  accessRequested: false,
-  tokenSaved: false,
-});
-export const isMounted = signal(false);
-export const isMounting = signal(false);
-export const mountError = signal<Error | undefined>(undefined);
+export const requestAccessPromise = signal<BetterPromise<boolean>>();
+
+export const mountPromise = signal<BetterPromise<void>>();
