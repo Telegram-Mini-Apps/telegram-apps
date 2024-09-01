@@ -6,8 +6,9 @@ import { string as createString } from '@/transformers/string.js';
 
 import { serializeThemeParams, themeParams } from './theme-params.js';
 import { initData } from './initData.js';
+import type { TransformerGen } from '@/types.js';
 
-export const launchParams = (() => {
+export const launchParams: TransformerGen<LaunchParams> = (optional) => {
   const string = createString();
   const stringOptional = createString(true);
   const boolOptional = createBoolean(true);
@@ -21,8 +22,8 @@ export const launchParams = (() => {
     startParam: ['tgWebAppStartParam', stringOptional],
     themeParams: ['tgWebAppThemeParams', themeParams()],
     version: ['tgWebAppVersion', string],
-  }, 'launchParams');
-})();
+  }, 'launchParams')(optional);
+}
 
 /**
  * Serializes launch parameters to representation sent from the Telegram application.

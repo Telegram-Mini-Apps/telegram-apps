@@ -1,7 +1,7 @@
 import { camelToSnake } from '@telegram-apps/toolkit';
 import type { Chat, InitData, User } from '@telegram-apps/types';
 
-import type { Schema, TransformFn } from '@/types.js';
+import type { Schema, TransformerGen, TransformFn } from '@/types.js';
 
 import { object } from '@/transformers/object.js';
 import { boolean as createBoolean } from '@/transformers/boolean.js';
@@ -17,7 +17,7 @@ function toSnakeCaseSource<T>(schema: { [K in keyof T]: TransformFn<T[K]> }): Sc
   return schema;
 }
 
-export const initData = (() => {
+export const initData: TransformerGen<InitData> = (optional) => {
   const number = createNumber();
   const numberOptional = createNumber(true);
   const string = createString();
@@ -60,7 +60,7 @@ export const initData = (() => {
       user,
     }),
     'initData',
-  );
-})();
+  )(optional);
+}
 
 export type { InitData };
