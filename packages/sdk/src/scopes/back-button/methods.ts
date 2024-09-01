@@ -1,18 +1,11 @@
 import { off, on, type EventListener } from '@telegram-apps/bridge';
-import { computed } from '@telegram-apps/signals';
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 import { decorateWithIsSupported, type WithIsSupported } from '@/scopes/decorateWithIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
 
-import * as _ from './private.js';
-
-/*
- * fixme
- * @see Usage: https://docs.telegram-mini-apps.com/platform/back-button
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/back-button
- */
+import { isVisible, isMounted } from './signals.js';
 
 type StorageValue = boolean;
 
@@ -24,32 +17,20 @@ const STORAGE_KEY = 'backButton';
  * Hides the back button.
  */
 export const hide: WithIsSupported<() => void> = decorateWithIsSupported(() => {
-  _.$isVisible.set(false);
+  isVisible.set(false);
 }, MINI_APPS_METHOD);
 
 /**
- * True if the component is currently visible.
- */
-export const isVisible = computed(_.$isVisible);
-
-/**
- * True if the component is currently mounted.
- * @see mount
- * @see unmount
- */
-export const isMounted = computed(_.$isMounted);
-
-/**
  * Mounts the component.
- * 
+ *
  * This function restores the component state and is automatically saving it in the local storage
  * if it changed.
  */
 export function mount(): void {
-  if (!_.$isMounted()) {
-    _.$isVisible.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
-    _.$isVisible.sub(onStateChanged);
-    _.$isMounted.set(true);
+  if (!isMounted()) {
+    isVisible.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
+    isVisible.sub(onStateChanged);
+    isMounted.set(true);
   }
 }
 
@@ -79,7 +60,7 @@ export function offClick(fn: EventListener<'back_button_pressed'>): void {
  * Shows the back button.
  */
 export const show: WithIsSupported<() => void> = decorateWithIsSupported(() => {
-  _.$isVisible.set(true);
+  isVisible.set(true);
 }, MINI_APPS_METHOD);
 
 /**
@@ -89,6 +70,6 @@ export const show: WithIsSupported<() => void> = decorateWithIsSupported(() => {
  * @see onClick
  */
 export function unmount() {
-  _.$isVisible.unsub(onStateChanged);
-  _.$isMounted.set(false);
+  isVisible.unsub(onStateChanged);
+  isMounted.set(false);
 }
