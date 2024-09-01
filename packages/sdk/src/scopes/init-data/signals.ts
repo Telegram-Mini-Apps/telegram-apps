@@ -1,17 +1,18 @@
-import { computed, type Computed } from '@telegram-apps/signals';
-import { retrieveLaunchParams, type InitData } from '@telegram-apps/bridge';
+import { computed, type Computed, signal } from '@telegram-apps/signals';
+import type { InitData } from '@telegram-apps/bridge';
 
-import * as _ from './private.js';
+/* USUAL */
 
-/*
- * fixme
- * @see Usage: https://docs.telegram-mini-apps.com/platform/init-data
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/init-data
+/**
+ * Complete component state.
  */
+export const state = signal<InitData | undefined>(undefined);
+
+/* COMPUTED */
 
 function createStateComputed<K extends keyof InitData>(key: K): Computed<InitData[K] | undefined> {
   return computed(() => {
-    const s = _.$state();
+    const s = state();
     return s ? s[key] : undefined;
   });
 }
@@ -70,21 +71,9 @@ export const queryId = createStateComputed('queryId');
 export const receiver = createStateComputed('receiver');
 
 /**
- * Restores the component state.
- */
-export function restore(): void {
-  _.$state.set(retrieveLaunchParams().initData);
-}
-
-/**
  * @see InitData.startParam
  */
 export const startParam = createStateComputed('startParam');
-
-/**
- * Complete component state.
- */
-export const state = computed(_.$state);
 
 /**
  * @see InitData.user
