@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
 import { createWindow } from 'test-utils';
 import { emitMiniAppsEvent } from '@telegram-apps/bridge';
-import { destroyAndReset, resetPackageState } from '@test-utils/resetPackageState.js';
+import { resetSignal, resetPackageState } from '@test-utils/reset.js';
 
 import { bindCssVars, mount } from './methods.js';
 import { isCssVarsBound, isMounted, state } from './signals.js';
@@ -12,7 +12,7 @@ let setSpy: MockInstance<Parameters<SetPropertyFn>, ReturnType<SetPropertyFn>>;
 beforeEach(() => {
   vi.restoreAllMocks();
   resetPackageState();
-  [isCssVarsBound, isMounted, state].forEach(destroyAndReset);
+  [isCssVarsBound, isMounted, state].forEach(resetSignal);
 
   createWindow();
   setSpy = vi

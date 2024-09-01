@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { resetPackageState } from '@test-utils/resetPackageState.js';
+import { resetPackageState, resetSignal } from '@test-utils/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
@@ -11,7 +11,7 @@ import { close, open } from './methods.js';
 
 beforeEach(() => {
   resetPackageState();
-  isOpened.reset();
+  resetSignal(isOpened);
   vi.restoreAllMocks();
   $postEvent.set(() => null);
 });

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
 
-import { resetPackageState } from '@test-utils/resetPackageState.js';
+import { resetPackageState, resetSignal } from '@test-utils/reset.js';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
@@ -15,8 +15,7 @@ import {
 
 beforeEach(() => {
   resetPackageState();
-  isVerticalSwipesEnabled.reset();
-  isMounted.reset();
+  [isVerticalSwipesEnabled, isMounted].forEach(resetSignal);
   vi.restoreAllMocks();
   $postEvent.set(() => null);
 });
