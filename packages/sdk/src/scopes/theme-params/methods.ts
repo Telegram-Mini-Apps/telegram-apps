@@ -1,7 +1,6 @@
 import {
   off,
   on,
-  retrieveLaunchParams,
   type EventListener,
   type RGB,
   type ThemeParams,
@@ -12,6 +11,7 @@ import { camelToKebab, getStorageValue, setStorageValue } from '@telegram-apps/t
 import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 import { ERR_CSS_VARS_BOUND } from '@/errors/errors.js';
 import { SDKError } from '@/errors/SDKError.js';
+import { retrieve as retrieveLaunchParams } from '@/scopes/launch-params/static.js';
 
 import { isCssVarsBound, state, isMounted } from './signals.js';
 import { type GetCssVarNameFn, parse } from './static.js';
