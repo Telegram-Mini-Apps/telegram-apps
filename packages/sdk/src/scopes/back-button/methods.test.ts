@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
 import { emitMiniAppsEvent } from '@telegram-apps/bridge';
 
-import { resetPackageState } from '@test-utils/resetPackageState.js';
+import { resetPackageState, resetSignal } from '@test-utils/reset.js';
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
 
 import { isVisible, isMounted } from './signals.js';
@@ -17,8 +17,7 @@ import {
 
 beforeEach(() => {
   resetPackageState();
-  isVisible.reset();
-  isMounted.reset();
+  [isVisible, isMounted].forEach(resetSignal);
   vi.restoreAllMocks();
   $postEvent.set(() => null);
 });
