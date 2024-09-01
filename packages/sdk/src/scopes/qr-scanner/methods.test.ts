@@ -1,29 +1,24 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { resetGlobals } from '@test-utils/resetGlobals.js';
+import { resetPackageState } from '@test-utils/resetPackageState.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
-import * as _ from './private.js';
-import {
-  isOpened,
-  close,
-  open,
-} from './index.js';
+import { isOpened } from './signals.js';
+import { close, open } from './methods.js';
 
 beforeEach(() => {
-  resetGlobals();
-  _.isOpened.reset();
-  _.isOpened.unsubAll();
+  resetPackageState();
+  isOpened.reset();
   vi.restoreAllMocks();
   $postEvent.set(() => null);
 });
 
 describe('close', () => {
   it('should set isOpened = false', () => {
-    _.isOpened.set(true);
+    isOpened.set(true);
     expect(isOpened()).toBe(true);
     close();
     expect(isOpened()).toBe(false);
