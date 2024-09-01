@@ -1,6 +1,6 @@
 import { off, on, type EventListener } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
-import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit/';
+import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 import * as themeParams from '@/scopes/theme-params/instance.js';
@@ -14,7 +14,7 @@ const CLICK_EVENT = 'main_button_pressed';
 const STORAGE_KEY = 'mainButton';
 
 /**
- * Add a new main button click listener.
+ * Adds a new main button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
  */
