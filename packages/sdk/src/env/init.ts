@@ -1,11 +1,14 @@
-// import { defineEventHandlers } from '@/bridge/events/handlers.js';
-// import { isIframe } from '@/env/isIframe.js';
-// import { initWeb } from '@/env/initWeb.js';
+import { defineEventHandlers, isIframe } from '@telegram-apps/bridge';
 
-export function init() {
-  // if (isIframe()) {
-  //   initWeb();
-  // }
-  // defineEventHandlers();
-  // // fixme
+import { initWeb } from './initWeb.js';
+
+/**
+ * Initializes special global handlers allowing the application to handle events in some Telegram
+ * native applications.
+ */
+export function init(): void {
+  if (isIframe()) {
+    initWeb();
+  }
+  defineEventHandlers();
 }
