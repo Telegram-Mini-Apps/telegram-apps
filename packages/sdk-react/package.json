@@ -40,6 +40,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@telegram-apps/react-signals": "workspace:^",
     "@telegram-apps/sdk": "workspace:^"
   },
   "peerDependencies": {
