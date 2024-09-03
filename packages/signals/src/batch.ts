@@ -34,7 +34,6 @@ export function runInBatchMode(signal: Signal<any>, fn: () => void): void {
  * // be called only once. Removing the `batch` function usage will lead to calling the `subscriber`
  * // function four times.
  */
-// #__NO_SIDE_EFFECTS__
 export function batch(fn: () => void): void {
   // There could be a case when a batch is called inside other batches.
   // In this case, we should just ignore the current call.
