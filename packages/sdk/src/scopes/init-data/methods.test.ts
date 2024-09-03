@@ -1,9 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { InitData } from '@telegram-apps/bridge';
 
-import { state } from './signals.js';
-import { restore } from './methods.js';
 import { resetSignal } from '@test-utils/reset.js';
+
+import { raw, state } from './signals.js';
+import { restore } from './methods.js';
+
 
 vi.mock('@/scopes/launch-params/static.js', () => ({
   retrieve: () => ({
@@ -40,6 +42,7 @@ vi.mock('@/scopes/launch-params/static.js', () => ({
         languageCode: 'en',
       },
     } satisfies InitData,
+    initDataRaw: 'data-set-in-the-test'
   }),
 }));
 
@@ -83,5 +86,6 @@ describe('restore', () => {
         languageCode: 'en',
       },
     });
+    expect(raw()).toBe('data-set-in-the-test');
   });
 });

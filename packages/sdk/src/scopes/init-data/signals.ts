@@ -66,6 +66,11 @@ export const hash = createStateComputed('hash');
 export const queryId = createStateComputed('queryId');
 
 /**
+ * Raw representation of init data.
+ */
+export const raw = signal<string | undefined>();
+
+/**
  * @see InitData.receiver
  */
 export const receiver = createStateComputed('receiver');
