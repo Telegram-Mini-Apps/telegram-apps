@@ -20,17 +20,6 @@ export type { AsyncOptions } from './async/types.js';
 export { TypedError, type TypedErrorOptions } from './errors/TypedError.js';
 export { createTypedError } from './errors/createTypedError.js';
 
-export { EventEmitter } from './event-emitter/EventEmitter.js';
-export type {
-  EmptyEventName,
-  EventName,
-  EventParams,
-  NonEmptyEventName,
-  RemoveEventListenerFn,
-  EventListener,
-  SubscribeListener,
-} from './event-emitter/types.js';
-
 export { getStorageValue, setStorageValue } from './storage/storage.js';
 
 export type * from './types/logical.js';
