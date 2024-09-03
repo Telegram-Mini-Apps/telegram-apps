@@ -37,7 +37,7 @@ export function computed<T>(
   function compute(): T {
     // As long as in this iteration, we may receive new signals as dependencies, we stop
     // listening to the previous signals.
-    deps.forEach(s => s.unsub(update));
+    deps.forEach(s => s.unsub(update, { signal: true }));
 
     // Signals we collected during current computation.
     const collectedSignals = new Set<Signal<unknown>>();
@@ -55,7 +55,7 @@ export function computed<T>(
     }
 
     // Start tracking for all dependencies' changes and re-compute the computed value.
-    collectedSignals.forEach(s => s.sub(update));
+    collectedSignals.forEach(s => s.sub(update, { signal: true }));
     deps = collectedSignals;
 
     return result;
@@ -67,5 +67,6 @@ export function computed<T>(
     destroy: s.destroy,
     sub: s.sub,
     unsub: s.unsub,
-  } satisfies Pick<Computed<T>, 'destroy' | 'sub' | 'unsub'>);
+    unsubAll: s.unsubAll,
+  } satisfies Pick<Computed<T>, 'destroy' | 'sub' | 'unsub' | 'unsubAll'>);
 }

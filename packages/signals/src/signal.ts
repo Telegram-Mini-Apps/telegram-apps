@@ -19,6 +19,17 @@ export interface SignalOptions<T> {
   equals?: (current: T, next: T) => boolean;
 }
 
+export interface SubOptions {
+  /**
+   * Should the listener be called only once.
+   */
+  once?: boolean;
+  /**
+   * Was this listener added by other signal.
+   */
+  signal?: boolean;
+}
+
 export interface Signal<T> {
   /**
    * @returns An underlying signal value.
@@ -46,16 +57,22 @@ export interface Signal<T> {
   /**
    * Adds a new listener, tracking the signal changes.
    * @param fn - event listener.
-   * @param once - call listener only once.
+   * @param onceOrOptions - was this listener added for a single call, or additional
+   * options.
    * @returns A function to remove the bound listener.
    */
-  sub: (fn: SubscribeListenerFn<T>, once?: boolean) => RemoveListenerFn;
+  sub: (fn: SubscribeListenerFn<T>, onceOrOptions?: boolean | SubOptions) => RemoveListenerFn;
   /**
    * Removes a listener, tracking the signal changes.
    * @param fn - event listener.
-   * @param once - was this listener added for a single call. Default: false
+   * @param onceOrOptions - was this listener added for a single call, or additional
+   * options. Default: false
    */
-  unsub: (fn: SubscribeListenerFn<T>, once?: boolean) => void;
+  unsub: (fn: SubscribeListenerFn<T>, onceOrOptions?: boolean | SubOptions) => void;
+  /**
+   * Remove all non-signal listeners.
+   */
+  unsubAll: () => void;
 }
 
 /**
@@ -88,7 +105,10 @@ export function signal<T>(
   options ||= {};
   const equals = options.equals || Object.is;
 
-  let listeners: [listener: SubscribeListenerFn<T | undefined>, once?: boolean][] = [];
+  let listeners: [
+    listener: SubscribeListenerFn<T | undefined>,
+    options: Required<SubOptions>
+  ][] = [];
   let value: ReturnType<CurrentSignal> = initialValue;
 
   const set: CurrentSignal['set'] = v => {
@@ -114,9 +134,22 @@ export function signal<T>(
     }
   };
 
-  const unsub: CurrentSignal['unsub'] = (fn, once) => {
-    const idx = listeners.findIndex(item => {
-      return item[0] === fn && !!item[1] === !!once;
+  function formatSubOptions(onceOrOptions: boolean | SubOptions | undefined): Required<SubOptions> {
+    const options = typeof onceOrOptions !== 'object'
+      ? { once: onceOrOptions }
+      : onceOrOptions;
+    return {
+      once: options.once || false,
+      signal: options.signal || false,
+    };
+  }
+
+  const unsub: CurrentSignal['unsub'] = (fn, onceOrOptions) => {
+    const options = formatSubOptions(onceOrOptions);
+    const idx = listeners.findIndex(([listener, lOptions]) => {
+      return listener === fn
+        && lOptions.once === options.once
+        && lOptions.signal === options.signal;
     });
     if (idx >= 0) {
       listeners.splice(idx, 1);
@@ -136,12 +169,15 @@ export function signal<T>(
       reset() {
         set(initialValue);
       },
-      sub(fn, once) {
-        listeners.push([fn, once]);
-        return () => unsub(fn, once);
+      sub(fn, onceOrOptions) {
+        listeners.push([fn, formatSubOptions(onceOrOptions)]);
+        return () => unsub(fn, onceOrOptions);
       },
       unsub,
-    } satisfies Pick<CurrentSignal, 'destroy' | 'set' | 'reset' | 'sub' | 'unsub'>,
+      unsubAll() {
+        listeners = listeners.filter(l => l[1].signal);
+      },
+    } satisfies Pick<CurrentSignal, 'destroy' | 'set' | 'reset' | 'sub' | 'unsub' | 'unsubAll'>,
   );
 
   return s;
