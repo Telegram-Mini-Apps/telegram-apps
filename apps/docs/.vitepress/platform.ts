@@ -46,6 +46,7 @@ export const platformSidebar = {
       'Creating New App': 'creating-new-app',
       'Getting App Link': 'getting-app-link',
       'Sticky App': 'sticky-app',
+      'Migrating from VK': 'migrating-from-vk'
     }),
   ],
 };
