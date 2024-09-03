@@ -9,7 +9,7 @@ import { $postEvent } from '@/scopes/globals/globals.js';
  * application. This option is only used in web versions of Telegram. Default: true.
  * @returns Function, which performs cleanup removing all created elements and listeners.
  */
-export function initWeb(acceptCustomStyles = true): VoidFunction {
+export function initWeb(acceptCustomStyles: boolean): VoidFunction {
   const [addCleanup, cleanup] = createCbCollector(
     on('reload_iframe', () => {
       $postEvent()('iframe_will_reload');

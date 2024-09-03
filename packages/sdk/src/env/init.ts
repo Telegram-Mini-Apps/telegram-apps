@@ -5,10 +5,12 @@ import { initWeb } from './initWeb.js';
 /**
  * Initializes special global handlers allowing the application to handle events in some Telegram
  * native applications.
+ * @param acceptCustomStyles - should the application receive custom styles sent from the
+ * native Telegram application.
  */
-export function init(): void {
+export function init(acceptCustomStyles = true): void {
   if (isIframe()) {
-    initWeb();
+    initWeb(acceptCustomStyles);
   }
   defineEventHandlers();
 }
