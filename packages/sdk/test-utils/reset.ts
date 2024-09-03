@@ -1,11 +1,11 @@
 import { resetPackageState as resetBridgeState } from '@telegram-apps/bridge';
-import type { Signal } from '@telegram-apps/signals';
+import type { Computed, Signal } from '@telegram-apps/signals';
 
 import { $createRequestId, $postEvent, $version } from '@/scopes/globals/globals.js';
 
-export function resetSignal(s: Signal<any>) {
+export function resetSignal(s: Signal<any> | Computed<any>) {
   s.unsubAll();
-  s.reset();
+  'reset' in s && s.reset();
 }
 
 export function resetPackageState() {
