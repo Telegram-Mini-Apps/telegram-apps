@@ -1,13 +1,12 @@
 {
-  "name": "@telegram-apps/event-emitter",
+  "name": "@telegram-apps/react-signals",
   "version": "0.0.0",
-  "description": "Custom event emitter implementation.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
   "repository": {
     "type": "git",
     "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
-    "directory": "packages/event-emitter"
+    "directory": "packages/react-signals"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
@@ -15,7 +14,8 @@
   "keywords": [
     "telegram-mini-apps",
     "typescript",
-    "event-emitter"
+    "react",
+    "signals"
   ],
   "license": "MIT",
   "type": "module",
@@ -35,18 +35,23 @@
     }
   },
   "scripts": {
-    "test": "vitest --run",
-    "lint": "cd ../.. && eslint packages/event-emitter/src --ignore-pattern **/*.test.ts",
-    "lint:fix": "pnpm run lint --fix",
-    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
     "build": "vite build"
   },
-  "dependencies": {
-    "@telegram-apps/util-types": "workspace:^"
+  "peerDependencies": {
+    "@telegram-apps/signals": "workspace:^",
+    "@types/react": "^17.0.0 || ^18.0.0",
+    "react": "^17.0.0 || ^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "test-utils": "workspace:*",
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "@types/react": "^18.0.0",
+    "react": "^18.0.0"
   },
   "publishConfig": {
     "access": "public"
