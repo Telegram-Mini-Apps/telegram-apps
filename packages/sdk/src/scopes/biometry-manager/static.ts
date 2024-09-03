@@ -3,7 +3,7 @@ import type { BetterPromise } from '@telegram-apps/toolkit';
 
 import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 
-import { formatEvent } from './formatEvent.js';
+import { eventToState } from './eventToState.js';
 import { State } from './types.js';
 
 const GET_INFO_METHOD = 'web_app_biometry_get_info';
@@ -14,7 +14,7 @@ const GET_INFO_METHOD = 'web_app_biometry_get_info';
  */
 export const request: WithIsSupported<(options?: ExecuteWithOptions) => BetterPromise<State>> =
   withIsSupported((options) => {
-    return bridgeRequest(GET_INFO_METHOD, 'biometry_info_received', options).then(formatEvent);
+    return bridgeRequest(GET_INFO_METHOD, 'biometry_info_received', options).then(eventToState);
   }, GET_INFO_METHOD);
 
 export type * from './types.js';

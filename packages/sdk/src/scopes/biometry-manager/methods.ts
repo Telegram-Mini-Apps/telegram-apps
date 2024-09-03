@@ -7,12 +7,7 @@ import {
   type EventListener,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
-import type { SubscribeListenerFn } from '@telegram-apps/signals';
-import {
-  BetterPromise,
-  getStorageValue,
-  setStorageValue,
-} from '@telegram-apps/toolkit';
+import { BetterPromise, getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
 import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
@@ -27,7 +22,7 @@ import {
 } from './signals.js';
 import { authenticatePromise, mountPromise, requestAccessPromise } from './private.js';
 import * as BiometryManager from './static.js';
-import { formatEvent } from './formatEvent.js';
+import { eventToState } from './eventToState.js';
 import type {
   State,
   AuthenticateOptions,
@@ -122,7 +117,7 @@ export const requestAccess: WithIsSupported<
     ...options,
     params: { reason: options.reason || '' },
   })
-    .then(formatEvent)
+    .then(eventToState)
     .then((info) => {
       if (!info.available) {
         throw new SDKError(ERR_NOT_AVAILABLE);
@@ -159,7 +154,7 @@ export const mount = createMountFn<State>(
     // the biometry information.
     options ||= {};
     options.timeout ||= 1000;
-    return BiometryManager.request(options)
+    return BiometryManager.request(options);
   },
   result => {
     on(BIOMETRY_INFO_RECEIVED_EVENT, onBiometryInfoReceived);
@@ -170,12 +165,12 @@ export const mount = createMountFn<State>(
 );
 
 const onBiometryInfoReceived: EventListener<'biometry_info_received'> = e => {
-  state.set(formatEvent(e));
+  state.set(eventToState(e));
 };
 
-const onStateChanged: SubscribeListenerFn<State | undefined> = (s) => {
+function onStateChanged(s: State | undefined) {
   s && setStorageValue<StorageValue>('biometryManager', s);
-};
+}
 
 /**
  * Unmounts the component.
