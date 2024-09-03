@@ -7,7 +7,7 @@ import type { State } from './types.js';
  * @param event - event payload.
  * @see biometry_info_received
  */
-export function formatEvent(event: EventPayload<'biometry_info_received'>): State {
+export function eventToState(event: EventPayload<'biometry_info_received'>): State {
   return event.available ? {
     available: true,
     tokenSaved: event.token_saved,
