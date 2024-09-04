@@ -55,7 +55,9 @@ export function computed<T>(
     }
 
     // Start tracking for all dependencies' changes and re-compute the computed value.
-    collectedSignals.forEach(s => s.sub(update, { signal: true }));
+    collectedSignals.forEach(s => {
+      s.sub(update, { signal: true });
+    });
     deps = collectedSignals;
 
     return result;
