@@ -102,7 +102,12 @@ export class BetterPromise<T> extends Promise<T> {
   static withFn<T>(fn: () => (T | PromiseLike<T>), options?: AsyncOptions): BetterPromise<T> {
     return this.withOptions((res, rej) => {
       try {
-        res(fn());
+        const result = fn();
+        if (result instanceof Promise) {
+          result.then(res, rej);
+        } else {
+          res(result);
+        }
       } catch (e) {
         rej(e);
       }
