@@ -17,7 +17,7 @@ export function useIntegration<State>(nav: Navigator<State>): [
   RouterLocation<State>,
   RouterNavigator
 ] {
-  const [location] = useSignal(nav.location);
+  const location = useSignal(nav.location);
 
   return [
     useMemo(() => ({
