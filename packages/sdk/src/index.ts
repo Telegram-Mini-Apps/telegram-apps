@@ -146,5 +146,7 @@ export type {
   RequestBasicOptions,
   RequestCaptureFn,
   RequestFn,
-  RequestResult
+  RequestResult,
 } from '@telegram-apps/bridge';
+
+export { isRGB, isRGBShort, toRecord, toRGB } from '@telegram-apps/transformers';
