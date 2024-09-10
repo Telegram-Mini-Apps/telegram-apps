@@ -1,11 +1,12 @@
-export {
-  BetterPromise,
-  type PromiseResolveFn,
-  type PromiseRejectFn,
-  type PromiseExecutorFn,
-  type PromiseOnRejectedFn,
-  type PromiseOnFulfilledFn,
-} from './async/BetterPromise.js';
+export { CancelablePromise } from './async/promises/CancelablePromise.js';
+export { EnhancedPromise } from './async/promises/EnhancedPromise.js';
+export type {
+  PromiseResolveFn,
+  PromiseRejectFn,
+  PromiseExecutorFn,
+  PromiseOnRejectedFn,
+  PromiseOnFulfilledFn,
+} from './async/promises/types.js';
 export {
   createTimeoutError,
   createAbortError,

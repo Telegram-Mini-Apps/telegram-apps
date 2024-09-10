@@ -1,37 +1,38 @@
 import { TypedError } from '@/errors/TypedError.js';
 import { addEventListener } from '@/addEventListener.js';
 import { createCbCollector } from '@/createCbCollector.js';
+import { createTimeoutError, createAbortError, ERR_CANCELLED } from '@/async/errors.js';
 import type { Maybe } from '@/types/misc.js';
+import type { AsyncOptions } from '@/async/types.js';
 
-import { createTimeoutError, createAbortError } from './errors.js';
-import type { AsyncOptions } from './types.js';
+import type {
+  PromiseExecutorFn,
+  PromiseOnRejectedFn,
+  PromiseRejectFn,
+  PromiseOnFulfilledFn,
+  PromiseResolveFn,
+} from './types.js';
 
-export type PromiseResolveFn<T> = (value: T | PromiseLike<T>) => void;
-
-export type PromiseRejectFn = (reason?: any) => void;
-
-export type PromiseExecutorFn<T> = (
-  res: PromiseResolveFn<T>,
-  rej: PromiseRejectFn,
-  abortSignal: AbortSignal,
-) => any;
-
-export type PromiseOnFulfilledFn<TResult1, TResult2> = (value: TResult1) => TResult2 | PromiseLike<TResult2>;
-
-export type PromiseOnRejectedFn<T> = (value: any) => T | PromiseLike<T>;
+function assignReject<P extends CancelablePromise<any>>(
+  childPromise: P,
+  parentPromise: CancelablePromise<any>
+): P {
+  childPromise.reject = parentPromise.reject;
+  return childPromise;
+}
 
 /**
  * Improved version of the JavaScript Promise.
  */
-export class BetterPromise<Result, Resolvable = Result> extends Promise<Result> {
+export class CancelablePromise<Result> extends Promise<Result> {
   /**
    * Creates a new BetterPromise instance using executor, resolving promise when a result
    * was returned.
    * @param fn - function returning promise result.
    * @param options - additional options.
    */
-  static withFn<T>(fn: () => (T | PromiseLike<T>), options?: AsyncOptions): BetterPromise<T> {
-    return new BetterPromise((res, rej) => {
+  static withFn<T>(fn: () => (T | PromiseLike<T>), options?: AsyncOptions): CancelablePromise<T> {
+    return new CancelablePromise((res, rej) => {
       try {
         const result = fn();
         return result instanceof Promise ? result.then(res, rej) : res(result);
@@ -44,16 +45,16 @@ export class BetterPromise<Result, Resolvable = Result> extends Promise<Result> 
   /**
    * @see Promise.resolve
    */
-  static override resolve(): BetterPromise<void>;
+  static override resolve(): CancelablePromise<void>;
   /**
    * @see Promise.resolve
    */
-  static override resolve<T>(value: T): BetterPromise<T>;
+  static override resolve<T>(value: T): CancelablePromise<T>;
   /**
    * @see Promise.resolve
    */
-  static override resolve<T>(value?: T): BetterPromise<T> {
-    return new BetterPromise(resolve => {
+  static override resolve<T>(value?: T): CancelablePromise<T> {
+    return new CancelablePromise(resolve => {
       resolve(value as T);
     });
   }
@@ -61,8 +62,8 @@ export class BetterPromise<Result, Resolvable = Result> extends Promise<Result> 
   /**
    * @see Promise.reject
    */
-  static override reject<T = never>(reason?: any): BetterPromise<T> {
-    return new BetterPromise((_, reject) => {
+  static override reject<T = never>(reason?: any): CancelablePromise<T> {
+    return new CancelablePromise((_, reject) => {
       reject(reason);
     });
   }
@@ -153,7 +154,6 @@ export class BetterPromise<Result, Resolvable = Result> extends Promise<Result> 
       executor && executor(resolve, reject, controllerSignal);
     });
 
-    this.resolve = resolve as unknown as PromiseResolveFn<Resolvable>;
     this.reject = reject;
   }
 
@@ -161,7 +161,7 @@ export class BetterPromise<Result, Resolvable = Result> extends Promise<Result> 
    * Cancels the promise execution.
    */
   cancel(): void {
-    this.reject(new TypedError('ERR_CANCELLED'));
+    this.reject(new TypedError(ERR_CANCELLED));
   }
 
   /**
@@ -169,21 +169,16 @@ export class BetterPromise<Result, Resolvable = Result> extends Promise<Result> 
    */
   override catch<CatchResult = never>(
     onRejected?: Maybe<PromiseOnRejectedFn<CatchResult>>,
-  ): BetterPromise<Result | CatchResult, Resolvable> {
+  ): CancelablePromise<Result | CatchResult> {
     return this.then(undefined, onRejected);
   }
 
   /**
    * @see Promise.finally
    */
-  override finally(onFinally?: Maybe<() => void>): BetterPromise<Result, Resolvable> {
-    return this.wired(super.finally(onFinally) as BetterPromise<Result>);
+  override finally(onFinally?: Maybe<() => void>): CancelablePromise<Result> {
+    return assignReject(super.finally(onFinally) as CancelablePromise<Result>, this);
   }
-
-  /**
-   * Resolves the promise.
-   */
-  resolve!: PromiseResolveFn<Resolvable>;
 
   /**
    * Rejects the promise.
@@ -193,16 +188,10 @@ export class BetterPromise<Result, Resolvable = Result> extends Promise<Result> 
   /**
    * @see Promise.then
    */
-  then<A = Result, B = never>(
+  override then<A = Result, B = never>(
     onFulfilled?: Maybe<PromiseOnFulfilledFn<Result, A>>,
     onRejected?: Maybe<PromiseOnRejectedFn<B>>,
-  ): BetterPromise<A | B, Resolvable> {
-    return this.wired(super.then(onFulfilled, onRejected) as BetterPromise<A | B>);
-  }
-
-  private wired<T>(promise: BetterPromise<T, any>): BetterPromise<T, Resolvable> {
-    promise.reject = this.reject;
-    promise.resolve = this.resolve;
-    return promise;
+  ): CancelablePromise<A | B> {
+    return assignReject(super.then(onFulfilled, onRejected) as CancelablePromise<A | B>, this);
   }
 }

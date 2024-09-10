@@ -1,6 +1,7 @@
 import { TypedError } from '@/errors/TypedError.js';
 
 export const ERR_ABORTED = 'ERR_ABORTED';
+export const ERR_CANCELLED = 'ERR_CANCELLED';
 export const ERR_TIMED_OUT = 'ERR_TIMED_OUT';
 
 export function createAbortError(cause?: unknown): TypedError<typeof ERR_ABORTED> {
