@@ -2,7 +2,7 @@ export {
   BetterPromise,
   type PromiseResolveFn,
   type PromiseRejectFn,
-  type PromiseExecutor,
+  type PromiseExecutorFn,
   type PromiseOnRejectedFn,
   type PromiseOnFulfilledFn,
 } from './async/BetterPromise.js';
@@ -30,4 +30,3 @@ export { addEventListener } from './addEventListener.js';
 export { createCbCollector, type CallbackFn } from './createCbCollector.js';
 export { camelToKebab, camelToSnake, snakeToCamel } from './casing.js';
 export { createLogger } from './createLogger.js';
-export { createSingleton } from './createSingleton.js';
