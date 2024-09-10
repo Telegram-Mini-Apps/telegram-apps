@@ -14,6 +14,7 @@ export {
   isTimeoutError,
   ERR_TIMED_OUT,
   ERR_ABORTED,
+  ERR_CANCELLED,
 } from './async/errors.js';
 export { sleep } from './async/sleep.js';
 export type { AsyncOptions } from './async/types.js';
