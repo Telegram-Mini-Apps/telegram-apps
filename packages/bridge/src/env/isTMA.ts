@@ -1,4 +1,4 @@
-import { BetterPromise, type AsyncOptions } from '@telegram-apps/toolkit';
+import { CancelablePromise, type AsyncOptions } from '@telegram-apps/toolkit';
 
 import { request } from '@/utils/request.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
@@ -23,9 +23,9 @@ export function isTMA(type: 'simple'): boolean;
  *
  * In case you need less strict checks, use sync override of this function.
  */
-export function isTMA(options?: AsyncOptions): BetterPromise<boolean>
+export function isTMA(options?: AsyncOptions): CancelablePromise<boolean>
 
-export function isTMA(optionsOrType?: AsyncOptions | 'simple'): boolean | BetterPromise<boolean> {
+export function isTMA(optionsOrType?: AsyncOptions | 'simple'): boolean | CancelablePromise<boolean> {
   if (optionsOrType === 'simple') {
     try {
       retrieveLaunchParams();
@@ -35,7 +35,7 @@ export function isTMA(optionsOrType?: AsyncOptions | 'simple'): boolean | Better
     }
   }
 
-  return BetterPromise.withFn(async () => {
+  return CancelablePromise.withFn(async () => {
     if (hasWebviewProxy(window)) {
       return true;
     }

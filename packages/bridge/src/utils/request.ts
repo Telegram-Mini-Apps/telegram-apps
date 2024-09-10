@@ -1,6 +1,6 @@
 import {
-  BetterPromise,
-  createCbCollector,
+  CancelablePromise,
+  createCbCollector, EnhancedPromise,
   type If,
   type IsNever,
 } from '@telegram-apps/toolkit';
@@ -72,7 +72,7 @@ export interface RequestFn {
     method: M,
     eventOrEvents: E,
     options: RequestBasicOptions<E> & { params: MethodParams<M> },
-  ): BetterPromise<RequestResult<E>>;
+  ): CancelablePromise<RequestResult<E>>;
 
   /**
    * Performs a request waiting for specified events to occur.
@@ -85,7 +85,7 @@ export interface RequestFn {
     method: M,
     eventOrEvents: E,
     options?: RequestBasicOptions<E> & { params?: MethodParams<M> },
-  ): BetterPromise<RequestResult<E>>;
+  ): CancelablePromise<RequestResult<E>>;
 
   /**
    * Performs a request waiting for specified events to occur.
@@ -98,16 +98,16 @@ export interface RequestFn {
     method: M,
     eventOrEvents: E,
     options?: RequestBasicOptions<E>,
-  ): BetterPromise<RequestResult<E>>;
+  ): CancelablePromise<RequestResult<E>>;
 }
 
 export const request: RequestFn = <M extends MethodName, E extends AnyEventName>(
   method: M,
   eventOrEvents: E,
   options?: RequestBasicOptions<E> & { params?: MethodParams<M> },
-): BetterPromise<RequestResult<E>> => {
+): CancelablePromise<RequestResult<E>> => {
   options ||= {};
-  const promise = BetterPromise.withOptions<RequestResult<E>>(options);
+  const promise = new EnhancedPromise<RequestResult<E>>(options);
 
   const { capture } = options || {};
   const [, cleanup] = createCbCollector(
@@ -133,7 +133,7 @@ export const request: RequestFn = <M extends MethodName, E extends AnyEventName>
     }),
   );
 
-  return BetterPromise
+  return CancelablePromise
     .resolve()
     .then(() => {
       (options.postEvent || postEvent)(method as any, (options as any).params);

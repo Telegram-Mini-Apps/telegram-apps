@@ -1,4 +1,4 @@
-import { BetterPromise } from '@telegram-apps/toolkit';
+import { CancelablePromise } from '@telegram-apps/toolkit';
 
 import { ERR_INVOKE_CUSTOM_METHOD_RESPONSE } from '@/errors/errors.js';
 import { BridgeError } from '@/errors/BridgeError.js';
@@ -21,7 +21,7 @@ export function invokeCustomMethod<M extends CustomMethodName>(
   params: CustomMethodParams<M>,
   requestId: string,
   options?: ExecuteWithOptions,
-): BetterPromise<unknown>;
+): CancelablePromise<unknown>;
 
 /**
  * Invokes unknown custom method. Returns method execution result.
@@ -36,14 +36,14 @@ export function invokeCustomMethod(
   params: object,
   requestId: string,
   options?: ExecuteWithOptions,
-): BetterPromise<unknown>;
+): CancelablePromise<unknown>;
 
 export function invokeCustomMethod(
   method: string,
   params: object,
   requestId: string,
   options?: ExecuteWithOptions,
-): BetterPromise<unknown> {
+): CancelablePromise<unknown> {
   return request('web_app_invoke_custom_method', 'custom_method_invoked', {
     ...options || {},
     params: { method, params, req_id: requestId },

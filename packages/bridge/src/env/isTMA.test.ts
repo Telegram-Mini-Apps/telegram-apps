@@ -1,4 +1,4 @@
-import { BetterPromise } from '@telegram-apps/toolkit';
+import { CancelablePromise } from '@telegram-apps/toolkit';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createWindow, mockSessionStorageGetItem, mockWindow } from 'test-utils';
 
@@ -27,13 +27,13 @@ describe('async', () => {
 
   it('should return promise with true value resolved, if requesting theme parameters was successful', async () => {
     createWindow();
-    request.mockImplementationOnce(() => BetterPromise.resolve({}));
+    request.mockImplementationOnce(() => CancelablePromise.resolve({}));
     await expect(isTMA()).resolves.toBe(true);
   });
 
   it('should return promise with false value resolved, if requesting theme parameters was unsuccessful', async () => {
     createWindow();
-    request.mockImplementationOnce(() => BetterPromise.reject(new Error('Timed out.')));
+    request.mockImplementationOnce(() => CancelablePromise.reject(new Error('Timed out.')));
     await expect(isTMA()).resolves.toBe(false);
   });
 });
