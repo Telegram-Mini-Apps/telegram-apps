@@ -6,9 +6,7 @@ import { BetterPromise } from '@/async/BetterPromise.js';
  * @param abortSignal - signal to stop function execution.
  */
 export function sleep(duration: number, abortSignal?: AbortSignal): BetterPromise<void> {
-  return BetterPromise.withOptions((res) => {
-    setTimeout(res, duration);
-  }, {
-    abortSignal,
-  });
+  return new BetterPromise(r => {
+    setTimeout(r, duration);
+  }, { abortSignal });
 }
