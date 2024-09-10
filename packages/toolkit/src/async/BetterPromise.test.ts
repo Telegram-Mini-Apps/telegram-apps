@@ -1,7 +1,69 @@
 import { expect, beforeAll, describe, vi, it, afterAll } from 'vitest';
 
-import { BetterPromise } from '@/async/BetterPromise.js';
 import { TypedError } from '@/errors/TypedError.js';
+
+import { BetterPromise } from './BetterPromise.js';
+
+describe('constructor', () => {
+  it('should instantly reject with ERR_ABORTED if passed signal was aborted', async () => {
+    const c = new AbortController();
+    c.abort(new Error('TEST'));
+    const p = new BetterPromise({ abortSignal: c.signal });
+
+    await expect(p).rejects.toStrictEqual(new TypedError('ERR_ABORTED', {
+      cause: new Error('TEST'),
+    }));
+  });
+
+  it('should notify executor if signal was aborted', () => {
+    const spy = vi.fn();
+    const p = new BetterPromise((_res, _rej, signal) => {
+      signal.addEventListener('abort', () => {
+        spy(signal.reason);
+      });
+    })
+      .catch(() => {
+      });
+
+    p.reject(new Error('TEST_ERROR'));
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(new Error('TEST_ERROR'));
+  });
+
+  describe('options', () => {
+    describe('abortSignal', () => {
+      it('should reject promise if signal was aborted', async () => {
+        const c = new AbortController();
+        const p = new BetterPromise({ abortSignal: c.signal });
+
+        await Promise.resolve().then(async () => {
+          c.abort(new Error('TEST'));
+          await expect(p).rejects.toStrictEqual(new TypedError('ERR_ABORTED', {
+            cause: new Error('TEST'),
+          }));
+        });
+      });
+    });
+
+    describe('timeout', () => {
+      beforeAll(() => {
+        vi.useFakeTimers();
+      });
+
+      afterAll(() => {
+        vi.useRealTimers();
+      });
+
+      it('should reject with ERR_TIMED_OUT if timeout was reached', async () => {
+        const p = new BetterPromise({ timeout: 100 });
+        vi.advanceTimersByTime(200);
+        await expect(p).rejects.toStrictEqual(new TypedError('ERR_TIMED_OUT', {
+          message: 'Timeout reached: 100ms',
+        }));
+      });
+    });
+  });
+});
 
 describe('cancel', () => {
   it('should reject promise with TypedError of type ERR_CANCELLED', async () => {
@@ -37,33 +99,100 @@ it('should behave like usual promise', async () => {
   ).rejects.toStrictEqual(new Error('ERR'));
 });
 
-describe('withOptions', () => {
-  describe('timeout', () => {
-    beforeAll(() => {
-      vi.useFakeTimers();
-    });
+describe('then', () => {
+  it('should create promise with resolve and reject of original one', () => {
+    const p = new BetterPromise<string>();
+    const resolve = vi.spyOn(p, 'resolve');
+    const reject = vi.spyOn(p, 'reject');
 
-    afterAll(() => {
-      vi.useRealTimers();
-    });
+    const p2 = p.then();
+    p2.resolve('Hey Mark!');
+    expect(resolve).toHaveBeenCalledOnce();
+    expect(resolve).toHaveBeenCalledWith('Hey Mark!');
 
-    it('should reject promise with ERR_TIMED_OUT if deadline was reached', async () => {
-      const p = BetterPromise.withOptions({ timeout: 100 });
-      vi.advanceTimersByTime(200);
-      await expect(p).rejects.toMatchObject(new TypedError('ERR_TIMED_OUT', 'Timeout reached: 100ms'));
-    });
+    const p3 = p.then();
+    p3.reject(new Error('Oops'));
+    expect(reject).toHaveBeenCalledOnce();
+    expect(reject).toHaveBeenCalledWith(new Error('Oops'));
   });
 
-  describe('abortSignal', () => {
-    it('should reject promise with ERR_ABORTED if signal was aborted', async () => {
-      const controller = new AbortController();
-      const p = BetterPromise.withOptions({ abortSignal: controller.signal });
+  it('should be called with previous promise result', async () => {
+    const spyA = vi.fn(r => r + 1);
+    const spyB = vi.fn(r => r + 2);
+    const p = new BetterPromise<number>().then(spyA).then(spyB);
+    p.resolve(1);
 
-      controller.abort(new Error('Just something'));
-      await expect(p).rejects.toStrictEqual(new TypedError('ERR_ABORTED', {
-        cause: new Error('Just something'),
-      }));
-    });
+    await expect(p).resolves.toBe(4);
+    expect(spyA).toHaveBeenCalledOnce();
+    expect(spyA).toHaveBeenCalledWith(1);
+    expect(spyB).toHaveBeenCalledWith(2);
+  });
+});
+
+describe('catch', () => {
+  it('should create promise with resolve and reject of original one', () => {
+    const p = new BetterPromise<string>();
+    const resolve = vi.spyOn(p, 'resolve');
+    const reject = vi.spyOn(p, 'reject');
+
+    const p2 = p.catch();
+    p2.resolve('Hey Mark!');
+    expect(resolve).toHaveBeenCalledOnce();
+    expect(resolve).toHaveBeenCalledWith('Hey Mark!');
+
+    const p3 = p.catch();
+    p3.reject(new Error('Oops'));
+    expect(reject).toHaveBeenCalledOnce();
+    expect(reject).toHaveBeenCalledWith(new Error('Oops'));
+  });
+
+  it('should handle error', async () => {
+    const spy = vi.fn();
+    const p = new BetterPromise<string>().catch(spy);
+    p.reject(new Error('Well..'));
+
+    await p;
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(new Error('Well..'));
+  });
+});
+
+describe('finally', () => {
+  it('should create promise with resolve and reject of original one', () => {
+    const p = new BetterPromise<string>();
+    const resolve = vi.spyOn(p, 'resolve');
+    const reject = vi.spyOn(p, 'reject');
+
+    const p2 = p.finally();
+    p2.resolve('Hey Mark!');
+    expect(resolve).toHaveBeenCalledOnce();
+    expect(resolve).toHaveBeenCalledWith('Hey Mark!');
+
+    const p3 = p.catch();
+    p3.reject(new Error('Oops'));
+    expect(reject).toHaveBeenCalledOnce();
+    expect(reject).toHaveBeenCalledWith(new Error('Oops'));
+  });
+
+  it('should call handler in any case', async () => {
+    const spy = vi.fn();
+    const p = new BetterPromise<string>().finally(spy);
+    p.resolve('Hey!');
+
+    await p;
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith();
+
+    const spy2 = vi.fn();
+    const p2 = new BetterPromise<string>()
+      .catch(() => {
+      })
+      .finally(spy2);
+    p2.reject(new Error('Well..'));
+
+    await p2;
+    expect(spy2).toHaveBeenCalledOnce();
+    expect(spy2).toHaveBeenCalledWith();
   });
 });
 
