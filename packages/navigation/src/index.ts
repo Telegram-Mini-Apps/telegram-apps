@@ -1,6 +1,4 @@
-export { dropHistory } from './history/dropHistory.js';
 export { getFirstNavigationEntry } from './history/getFirstNavigationEntry.js';
-export { historyGo } from './history/historyGo.js';
 export { isPageReload } from './history/isPageReload.js';
 
 export { createNavigator } from './navigator/createNavigator.js';
@@ -11,9 +9,8 @@ export type {
   NavigationType,
   AnyHistoryItem,
   BackButtonOptions,
-  HashMode,
   NavigatorCtrOptions,
-  HistoryItem,
+  HistoryItem
 } from './navigator/types.js';
 
 export { createSafeURL } from './url/createSafeURL.js';

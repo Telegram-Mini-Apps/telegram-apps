@@ -31,7 +31,7 @@ describe('item is string', () => {
 
   describe('options', () => {
     it('should apply relativePath option', () => {
-      expect(formatItem('bowl?q=1#hash', { relativePath: '/a/b' })).toStrictEqual({
+      expect(formatItem('bowl?q=1#hash', undefined,'/a/b')).toStrictEqual({
         id: expect.anything(),
         pathname: '/a/bowl',
         hash: '#hash',
@@ -41,7 +41,7 @@ describe('item is string', () => {
     });
 
     it('should apply state option', () => {
-      expect(formatItem('bowl?q=1#hash', { state: 'STATE' })).toStrictEqual({
+      expect(formatItem('bowl?q=1#hash', 'STATE', '')).toStrictEqual({
         id: expect.anything(),
         pathname: '/bowl',
         hash: '#hash',
@@ -91,7 +91,7 @@ describe('item is object', () => {
         search: '?q=1',
         hash: '#hash',
         state: 'STATE',
-      }, { relativePath: '/a/b' })).toStrictEqual({
+      }, '/a/b')).toStrictEqual({
         id: expect.anything(),
         pathname: '/a/bowl',
         hash: '#hash',
