@@ -1,4 +1,5 @@
 import { TypedError } from '@/errors/TypedError.js';
+import { createTypedErrorPredicate } from '@/errors/createTypedErrorPredicate.js';
 
 export const ERR_ABORTED = 'ERR_ABORTED';
 export const ERR_CANCELLED = 'ERR_CANCELLED';
@@ -8,22 +9,8 @@ export function createAbortError(cause?: unknown): TypedError<typeof ERR_ABORTED
   return new TypedError(ERR_ABORTED, { cause });
 }
 
-export function createTimeoutError(timeout: number): TypedError<typeof ERR_TIMED_OUT> {
-  return new TypedError(ERR_TIMED_OUT, `Timeout reached: ${timeout}ms`)
-}
+export const isTimeoutError = createTypedErrorPredicate(ERR_TIMED_OUT);
 
-/**
- * @param value - value to check.
- * @returns True if passed value is timeout error.
- */
-export function isTimeoutError(value: unknown): value is TypedError<typeof ERR_TIMED_OUT> {
-  return value instanceof TypedError && value.type === ERR_TIMED_OUT;
-}
+export const isAbortError = createTypedErrorPredicate(ERR_ABORTED);
 
-/**
- * @param value - value to check.
- * @returns True if passed value is abort error.
- */
-export function isAbortError(value: unknown): value is TypedError<typeof ERR_ABORTED> {
-  return value instanceof TypedError && value.type === ERR_ABORTED;
-}
+export const isCancelledError = createTypedErrorPredicate(ERR_CANCELLED);

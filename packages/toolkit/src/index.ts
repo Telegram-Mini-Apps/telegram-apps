@@ -8,8 +8,8 @@ export type {
   PromiseOnFulfilledFn,
 } from './async/promises/types.js';
 export {
-  createTimeoutError,
   createAbortError,
+  isCancelledError,
   isAbortError,
   isTimeoutError,
   ERR_TIMED_OUT,
@@ -19,8 +19,9 @@ export {
 export { sleep } from './async/sleep.js';
 export type { AsyncOptions } from './async/types.js';
 
-export { TypedError, type TypedErrorOptions } from './errors/TypedError.js';
 export { createTypedError } from './errors/createTypedError.js';
+export { createTypedErrorPredicate } from './errors/createTypedErrorPredicate.js';
+export { TypedError, type TypedErrorOptions } from './errors/TypedError.js';
 
 export { getStorageValue, setStorageValue } from './storage/storage.js';
 
