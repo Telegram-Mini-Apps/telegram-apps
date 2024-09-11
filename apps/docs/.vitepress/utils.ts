@@ -34,3 +34,34 @@ export function sectionGen(prefix: string) {
     return section(text, items, prefix);
   };
 }
+
+type navItem = {
+  text: string;
+  link: string;
+};
+
+export type LinkJson = Record<string, Items>;
+
+export const linkGenerator = (
+  prefix: string,
+  navItem: navItem,
+  linkJson: LinkJson
+) => {
+  const section = sectionGen(prefix);
+
+  const prefixNavItem = {
+    ...navItem,
+    link: prefix + navItem?.link,
+  };
+
+  const prefixSideBar = {
+    [prefix]: Object.entries(linkJson).map(([key, value]: [string, Items]) =>
+      section(key, value)
+    ),
+  };
+
+  return {
+    prefixNavItem,
+    prefixSideBar,
+  };
+};
