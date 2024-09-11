@@ -1,4 +1,4 @@
-import type { AsyncOptions } from '@telegram-apps/toolkit';
+import { AsyncOptions, CancelablePromise } from '@telegram-apps/toolkit';
 import type { Computed } from '@telegram-apps/signals';
 import type { PostEventFn } from '@telegram-apps/bridge';
 
@@ -21,15 +21,6 @@ export type AnyHistoryItem<State> = string | {
   search?: string;
   state?: State;
 }
-
-/**
- * Hash navigation mode.
- * @example 'classic'
- * '#pathname?search'
- * @example 'slash'
- * '#/pathname?search'
- */
-export type HashMode = 'no-slash' | 'slash';
 
 export interface BackButtonOptions {
   /**
@@ -61,7 +52,7 @@ export interface BackButtonOptions {
   offClick?(fn: () => void): void;
 }
 
-export interface CtrOptions<State> {
+export interface NavigatorCtrOptions<State> {
   /**
    * Options related to the back button.
    *
@@ -75,16 +66,6 @@ export interface CtrOptions<State> {
    */
   debug?: boolean;
   /**
-   * Hash navigation mode. The hash navigation mode only affects how rendered URLs will look like.
-   *
-   * @example `no-slash`
-   * #pathname?query#hash
-   * @example `slash`
-   * #pathname?query#hash
-   * @default 'slash'
-   */
-  hashMode?: HashMode;
-  /**
    * Custom function to call Mini Apps methods.
    * @default The `postEvent` function from the `@telegram-apps/bridge` package.
    */
@@ -94,23 +75,32 @@ export interface CtrOptions<State> {
    * @param action - action information.
    * @default Navigator doesn't block any navigations.
    */
-  shouldNavigate?: (
-    this: Navigator<State>,
-    action: {
-      /**
-       * Incoming cursor.
-       */
-      cursor: number;
-      /**
-       * History item information.
-       */
-      item: HistoryItem<State>;
-      /**
-       * Navigation type.
-       */
-      type: NavigationType;
-    },
-  ) => boolean;
+  shouldNavigate?: (action: {
+    /**
+     * Incoming cursor.
+     */
+    cursor: number;
+    /**
+     * History item information.
+     */
+    item: HistoryItem<State>;
+    /**
+     * Navigation type.
+     */
+    type: NavigationType;
+  }) => boolean;
+}
+
+export interface NavigatorGoOptions extends AsyncOptions {
+  /**
+   * Cuts the delta argument to fit the bounds `[0, history.length - 1]`.
+   * @default false
+   */
+  fit?: boolean;
+}
+
+export interface NavigatorPushReplaceOptions<State> extends AsyncOptions {
+  state?: State;
 }
 
 export interface Navigator<State> {
@@ -123,16 +113,17 @@ export interface Navigator<State> {
    * @see attached
    * @see attaching
    */
-  attach(this: void, options?: AsyncOptions): void;
+  attach(this: void, options?: AsyncOptions): CancelablePromise<void>;
   /**
    * True if the current navigator is currently attached.
    */
   readonly attached: Computed<boolean>;
   /**
    * Goes to the previous history item. Alias for `go(-1)`.
+   * @param options - additional options.
    * @see go
    */
-  back(this: void): void;
+  back(this: void, options?: AsyncOptions): CancelablePromise<void>;
   /**
    * Currently active navigation history item index.
    */
@@ -151,9 +142,10 @@ export interface Navigator<State> {
   detach(this: void): void;
   /**
    * Goes to the next history item. Alias for `go(1)`.
+   * @param options - additional options.
    * @see go
    */
-  forward(this: void): void;
+  forward(this: void, options?: AsyncOptions): CancelablePromise<void>;
   /**
    * Changes the currently active history item cursor by the specified delta.
    *
@@ -162,10 +154,10 @@ export interface Navigator<State> {
    *
    * There will also be no changes if delta argument is equal to zero.
    * @param delta - cursor delta.
-   * @param fit - cuts the delta argument to fit the bounds `[0, history.length - 1]`.
+   * @param options - additional options.
    * @see history
    */
-  go(this: void, delta: number, fit?: boolean): void;
+  go(this: void, delta: number, options?: NavigatorGoOptions): CancelablePromise<void>;
   /**
    * Goes to the specified index. Method does nothing in case, passed index is out of bounds.
    *
@@ -174,10 +166,10 @@ export interface Navigator<State> {
    *
    * It uses the `go` method with the target cursor.
    * @param index - target index.
-   * @param fit - cuts the index argument to fit the bounds `[0, history.length - 1]`.
+   * @param options - additional options.
    * @see go
    */
-  goTo(this: void, index: number, fit?: boolean): void;
+  goTo(this: void, index: number, options?: NavigatorGoOptions): CancelablePromise<void>;
   /**
    * True if the navigator has items after the currently active one.
    */
@@ -212,7 +204,7 @@ export interface Navigator<State> {
    * To create a final path, navigator uses a method, used in the URL class constructor, resolving
    * a path based on the current one.
    * @param path - entry path.
-   * @param state - entry state.
+   * @param options - additional options.
    *
    * @example Pushing an absolute path.
    * push("/absolute"); // "/absolute"
@@ -232,7 +224,7 @@ export interface Navigator<State> {
    * @example Pushing state.
    * push("", { state: 'my-state' }); "/home/root" -> "/home/root"
    */
-  push(this: void, path: string, state?: State): void;
+  push(this: void, path: string, options?: NavigatorPushReplaceOptions<State>): CancelablePromise<void>;
   /**
    * Pushes a new history item. The method replaces all entries after the current one with the one
    * being pushed. Take note that passed item is always relative. In case, you want to use
@@ -241,6 +233,7 @@ export interface Navigator<State> {
    * To create a final path, navigator uses a method, used in the URL class constructor, resolving
    * a path based on the current one.
    * @param item - entry information.
+   * @param options - additional options.
    *
    * @example Pushing an absolute path.
    * push({ pathname "/absolute" }); // "/absolute"
@@ -260,7 +253,7 @@ export interface Navigator<State> {
    * @example Pushing state.
    * push({ state: 'my-state' }); "/home/root" -> "/home/root"
    */
-  push(this: void, item: AnyHistoryItem<State>): void;
+  push(this: void, item: AnyHistoryItem<State>, options?: AsyncOptions): CancelablePromise<void>;
   /**
    * Combines the navigator `base` property with the passed path data applying the navigator
    * navigation mode.
@@ -277,14 +270,15 @@ export interface Navigator<State> {
   /**
    * Replaces the current history item with the passed one. Has the same logic as the `push` method.
    * @param path - entry path.
-   * @param state - entry state.
+   * @param options - additional options.
    * @see push
    */
-  replace(this: void, path: string, state?: State): void;
+  replace(this: void, path: string, options?: NavigatorPushReplaceOptions<State>): CancelablePromise<void>;
   /**
    * Replaces the current history item with the passed one. Has the same logic as the `push` method.
    * @param item - entry information.
+   * @param options - additional options.
    * @see push
    */
-  replace(this: void, item: AnyHistoryItem<State>): void;
+  replace(this: void, item: AnyHistoryItem<State>, options?: AsyncOptions): CancelablePromise<void>;
 }

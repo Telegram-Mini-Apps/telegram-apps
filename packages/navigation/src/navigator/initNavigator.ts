@@ -2,9 +2,9 @@ import { isPageReload } from '@/history/isPageReload.js';
 import { createNavigator } from '@/navigator/createNavigator.js';
 import { createNavigatorFromLocation } from '@/navigator/createNavigatorFromLocation.js';
 
-import type { CtrOptions, HistoryItem, Navigator } from './types.js';
+import type { NavigatorCtrOptions, HistoryItem, Navigator } from './types.js';
 
-export interface InitNavigatorOptions<State> extends CtrOptions<State> {
+export interface InitNavigatorOptions<State> extends NavigatorCtrOptions<State> {
   /**
    * Session storage key, containing the navigator state.
    * @default "@telegram-apps/navigator/state"
@@ -19,7 +19,7 @@ interface StorageData<State> {
 
 function instantiate<State>(
   sessionStorageKey: string,
-  options?: CtrOptions<State>,
+  options?: NavigatorCtrOptions<State>,
 ): Navigator<State> {
   // If the page was reloaded, we assume that navigator had to previously save its state in the
   // session storage.

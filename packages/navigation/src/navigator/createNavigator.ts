@@ -7,26 +7,31 @@ import {
   type SignalOptions,
 } from '@telegram-apps/signals';
 import { off, on, postEvent } from '@telegram-apps/bridge';
-import { createCbCollector, BetterPromise, createLogger } from '@telegram-apps/toolkit';
+import {
+  type AsyncOptions,
+  CancelablePromise,
+  createCbCollector,
+  createLogger,
+  isCancelledError, sleep,
+} from '@telegram-apps/toolkit';
 
 import { formatItem } from './formatItem.js';
 import { ensurePrefix } from '../ensurePrefix.js';
 import { urlToPath } from '../url/urlToPath.js';
 import { createSafeURL } from '../url/createSafeURL.js';
-import { dropHistory as historyDrop } from '../history/dropHistory.js';
 import { historyGo } from '../history/historyGo.js';
 import { ERR_CURSOR_INVALID, ERR_HISTORY_EMPTY } from '../errors.js';
 import type {
   AnyHistoryItem,
-  CtrOptions,
+  NavigatorCtrOptions,
   HistoryItem,
   NavigationType,
   Navigator,
 } from './types.js';
 
+const CURSOR_BACK = -1;
 const CURSOR_VOID = 0;
-const CURSOR_BACK = 1;
-const CURSOR_FORWARD = 2;
+const CURSOR_FORWARD = 1;
 
 /**
  * Creates a new navigator.
@@ -39,16 +44,18 @@ const CURSOR_FORWARD = 2;
 export function createNavigator<State>(
   history: AnyHistoryItem<State>[],
   cursor: number,
-  options?: CtrOptions<State>,
+  options?: NavigatorCtrOptions<State>,
 ): Navigator<State> {
   type Nav = Navigator<State>;
 
+  // region Arguments validation.
   if (history.length === 0) {
     throw new Error(ERR_HISTORY_EMPTY);
   }
   if (cursor < 0 || cursor >= history.length) {
     throw new Error(ERR_CURSOR_INVALID);
   }
+  // endregion
 
   options ||= {};
   const shouldNavigate = options.shouldNavigate || (() => true);
@@ -59,12 +66,17 @@ export function createNavigator<State>(
     shouldLog: options.debug,
   });
 
-  /* SHORTCUTS */
+  // region Shortcuts.
 
   const w = window;
   const h = w.history;
+  const hLength = () => h.length;
+  const replaceState = h.replaceState.bind(h);
+  const pushState = h.pushState.bind(h);
 
-  /* SIGNALS REGISTRY */
+  // endregion
+
+  // region Signals registry.
 
   const [addSignalDestroy, destroySignals] = createCbCollector();
 
@@ -80,7 +92,9 @@ export function createNavigator<State>(
     return s;
   }
 
-  /* PRIVATE SIGNALS */
+  // endregion
+
+  // region Private signals.
 
   const $_attached = registerSignal(false);
   const $_cursor = registerSignal(cursor);
@@ -96,81 +110,106 @@ export function createNavigator<State>(
   );
   const $_location = registerComputed(() => $_history()[$_cursor()]);
 
-  /* PRIVATE VARIABLES */
+  // endregion
 
-  let syncHistoryPromise: BetterPromise<void> | undefined;
+  // region Private variables.
 
-  /* PUBLIC SIGNALS */
+  let attachPromise: CancelablePromise<void> | undefined;
+  let isSyncing = false;
+  let syncHistoryPromise: CancelablePromise<void> | undefined;
+  let baseHistoryLength = 0;
+
+  // endregion
+
+  // region Public signals.
 
   const $hasNext = registerComputed(() => $_cursor() !== $_history().length - 1);
 
-  /* METHODS */
+  // endregion
 
-  const back: Nav['back'] = () => go(-1);
-  const forward: Nav['forward'] = () => go(1);
-  const go: Nav['go'] = (delta, fit) => {
-    if (delta) {
-      const cursor = $_cursor() + delta;
+  // region Methods
 
-      // Cut the cursor to be in bounds [0, history.length - 1].
-      const fitCursor = Math.min(
-        Math.max(0, cursor),
-        $_history().length - 1,
-      );
+  const go: Nav['go'] = (delta, options) => {
+    return withFnCatched(abortSignal => {
+      if (delta) {
+        const cursor = $_cursor() + delta;
 
-      if ((cursor === fitCursor || fit) && shouldNavigate.call(n, {
-        type: 'go',
-        cursor: fitCursor,
-        item: $_history()[fitCursor],
-      })) {
-        $_cursor.set(fitCursor);
+        // Cut the cursor to be in bounds [0, history.length - 1].
+        const fitCursor = Math.min(
+          Math.max(0, cursor),
+          $_history().length - 1,
+        );
+
+        options ||= {};
+        if ((cursor === fitCursor || options.fit) && shouldNavigate({
+          type: 'go',
+          cursor: fitCursor,
+          item: $_history()[fitCursor],
+        })) {
+          if ($_cursor() !== fitCursor) {
+            $_cursor.set(fitCursor);
+            return syncHistory(abortSignal);
+          }
+        }
       }
-    }
+    }, options);
+  };
+  const back: Nav['back'] = go.bind(undefined, -1);
+  const forward: Nav['forward'] = go.bind(undefined, 1);
+  const push: Nav['push'] = (item, optionsOrState?) => {
+    return withFnCatched((abortSignal) => {
+      let changed: boolean;
+
+      batch(() => {
+        changed = setByCursor('push', $_cursor() + 1, formatItem(item, {
+          relativePath: $_location().pathname,
+          state: optionsOrState && 'state' in optionsOrState ? optionsOrState.state : undefined,
+        }));
+
+        // Remove all items after the current one if something changed, and we have the next items.
+        changed && $_history.set($_history().slice(0, $_cursor() + 1));
+      });
+
+      return changed! ? syncHistory(abortSignal) : undefined;
+    }, optionsOrState);
   };
   const detach: Nav['detach'] = () => {
+    // Cancel promises.
+    syncHistoryPromise && syncHistoryPromise.cancel();
+    attachPromise && attachPromise.cancel();
+
     // Remove the back button click listener.
     bbOffClick(bbOnClicked);
     // Remove the listener updating the back button visibility state.
     $_hasPrev.unsub(bbSetVisibility);
-    // Remove the listeners synchronizing the browser history state.
-    $_location.unsub(syncHistory);
     // Remove browser history change listener.
     w.removeEventListener('popstate', onPopState);
-    // Cancel history synchronization promise.
-    syncHistoryPromise && syncHistoryPromise.cancel();
+
     $_attached.set(false);
   };
   const renderPath: Nav['renderPath'] = value => {
-    return ensurePrefix(
-      ensurePrefix(urlToPath(value), '/').slice(1),
-      (options.hashMode || 'slash') === 'slash' ? '#/' : '#',
-    );
+    return ensurePrefix(ensurePrefix(urlToPath(value), '/').slice(1), '#/');
   };
   const parsePath: Nav['parsePath'] = path => {
     return createSafeURL(createSafeURL(path).hash.slice(1));
   };
-  const push: Navigator<State>['push'] = (item, state?: State) => {
-    batch(() => {
-      const changed = setByCursor('push', $_cursor() + 1, formatItem(item, {
-        relativePath: $_location().pathname,
-        state,
-      }));
 
-      // Remove all items after the current one if something changed, and we have the next items.
-      changed && $_history.set($_history().slice(0, $_cursor() + 1));
-    });
-  };
+  // endregion
 
-  /* BACK BUTTON FUNCTIONALITY */
+  // region Back button functionality.
 
   const bb = options.bb || {};
-  const bbOnClicked = bb.onClicked || back;
+  const bbOnClicked = bb.onClicked || (() => {
+    void back();
+  });
   const bbSetVisibility = bb.setVisibility || ((visible) => {
     (options.postEvent || postEvent)('web_app_setup_back_button', { is_visible: visible });
   });
   const bbClickEvent = 'back_button_pressed';
   const bbOnClick = bb.onClick || on.bind(null, bbClickEvent);
   const bbOffClick = bb.offClick || off.bind(null, bbClickEvent);
+
+  // endregion
 
   /* ------------ */
 
@@ -188,7 +227,7 @@ export function createNavigator<State>(
   ): boolean {
     if (
       (cursor !== $_cursor() || $_location().id !== item.id)
-      && shouldNavigate.call(n, { type, cursor, item })
+      && shouldNavigate({ type, cursor, item })
     ) {
       batch(() => {
         const h = $_history();
@@ -202,119 +241,178 @@ export function createNavigator<State>(
   }
 
   /**
-   * Synchronizes the current navigator state with browser history.
-   */
-  function syncHistory(): void {
-    if (!syncHistoryPromise) {
-      syncHistoryPromise = BetterPromise
-        .withFn(() => {
-          // FIXME: Unable to cancel.
-          // Drop the browser history and work with the clean one.
-          return historyDrop();
-        })
-        .then(async () => {
-          const replaceState = h.replaceState.bind(h);
-          const pushState = h.pushState.bind(h);
-          const location = $_location();
-          const { state } = location;
-          const path = renderPath(location);
-
-          // Remove history change event listener to get rid of side effects related to the possible
-          // future calls of history.go.
-          w.removeEventListener('popstate', onPopState);
-
-          if ($hasNext()) {
-            if ($_hasPrev()) {
-              // We have both previous and next elements. History should be:
-              // [back, *current*, forward]
-              replaceState(CURSOR_BACK, '');
-              pushState(state, '', path);
-              pushState(CURSOR_FORWARD, '');
-            } else {
-              // We have only next element. History should be:
-              // [*current*, forward]
-              replaceState(state, path);
-              pushState(CURSOR_FORWARD, '');
-            }
-            // FIXME unable to cancel
-            await historyGo(-1);
-          } else {
-            if ($_hasPrev()) {
-              // We have only the previous element. History should be:
-              // [back, *current*]
-              replaceState(CURSOR_BACK, '');
-            } else {
-              // We have no back and next elements. History should be:
-              // [void, *current*]
-              replaceState(CURSOR_VOID, '');
-            }
-            pushState(state, '', path);
-          }
-        })
-        .catch(logError)
-        .finally(() => {
-          w.addEventListener('popstate', onPopState);
-          syncHistoryPromise = undefined;
-        });
-    }
-  }
-
-  /**
    * Callback which is being called every time, browser emits the "popstate" event. When it
    * happens, we should determine what navigator action should be applied.
    * @param state - popstate event "state" property.
    */
   function onPopState({ state }: PopStateEvent) {
+    //fixme: take a look at back and forward result
+    if (isSyncing) {
+      return;
+    }
+    console.warn('State', state)
+
     // There is only one case when state can be CURSOR_VOID - when history contains
     // only one element. In this case, we should return user to the current history element.
     if (state === CURSOR_VOID) {
       h.forward();
     } else if (state === CURSOR_BACK) {
-      back();
+      console.log('Popstate go back');
+      void back();
     } else if (state === CURSOR_FORWARD) {
-      forward();
-    } else if (state === null) {
-      // In case state is null, we recognize current event as occurring whenever user clicks
-      // any anchor.
-      // TODO: Should we do it?
-      push(parsePath(w.location.href));
+      console.log('Popstate go forward');
+      void forward();
     }
   }
 
-  const n: Navigator<State> = {
-    attach() {
-      if (!$_attached()) {
-        // Synchronize the state with browser history.
-        syncHistory();
-        // Add the back button click listener.
-        bbOnClick(bbOnClicked);
-        // Actualize the back button visibility state.
-        bbSetVisibility($_hasPrev());
-        // Whenever the current previous navigation element existence state changes, we
-        // should actualize the back button visibility state.
-        $_hasPrev.sub(bbSetVisibility);
-        // Whenever the current location changes, synchronize the navigator state with
-        // the browser history.
-        $_location.sub(syncHistory);
-        // Track browser history changes.
-        w.addEventListener('popstate', onPopState);
-        $_attached.set(true);
+  /**
+   * Creates a new CancelablePromise and with a catcher catching the promise and re-throwing
+   * non-cancellation errors, logging them.
+   * @param fn - promise constructor.
+   * @param options - additional options.
+   */
+  function withFnCatched<T>(
+    fn: (abortSignal: AbortSignal) => (T | PromiseLike<T>),
+    options?: AsyncOptions,
+  ): CancelablePromise<T | void> {
+    return CancelablePromise.withFn(fn, options).catch(e => {
+      if (!isCancelledError(e)) {
+        logError(e);
+        throw e;
       }
+    });
+  }
+
+  /**
+   * Setups the history making it ready to be modified by us.
+   * @param abortSignal - signal to abort the operation.
+   */
+  function setupHistory(abortSignal?: AbortSignal): CancelablePromise<void> {
+    return withFnCatched(
+      async abortSignal => {
+        const historyLength = hLength();
+
+        // Push an empty state, so we know, the browser allows us to manipulate the history.
+        pushState(null, '');
+
+        if (historyLength === hLength()) {
+          // Some browsers may prevent the pushState from being executed initially. I have found
+          // such behavior in Google Chrome when history.length === 1. It shows the following
+          // warning:
+          // > Use of history.pushState in a trivial session history context, which maintains
+          // > only one session history entry, is treated as history.replaceState.
+          //
+          // I wasn't able to find any information on this warning, so I decided to write some
+          // magic here. To be honest, we will meet this problem only in development mode in
+          // Google Chrome.
+          //
+          // In this case, all pushState and replaceState calls will be merged into a single one,
+          // but after some time the browser unlocks the history and appends a newly created
+          // navigation entry, allowing us to manipulate it.
+          while (historyLength === hLength() && !abortSignal.aborted) {
+            // Each 50ms we are checking if history changed.
+            await sleep(50, abortSignal);
+          }
+          // Add another empty entry to work with the single behavior we expected before.
+          pushState(null, '');
+        }
+        baseHistoryLength = hLength() - 1;
+        console.log('Base len', baseHistoryLength);
+        // await historyGo(-1, { abortSignal });
+      }, { abortSignal, timeout: 2000 },
+    );
+  }
+
+  /**
+   * Synchronizes the current navigator state with browser history.
+   * @param abortSignal - signal to abort the execution.
+   */
+  function syncHistory(abortSignal?: AbortSignal): CancelablePromise<void> {
+    return syncHistoryPromise || (
+      syncHistoryPromise = withFnCatched(
+        async (abortSignal) => {
+          isSyncing = true;
+
+          // Push an empty state to cut states we have no access to, placed after the current one.
+          // It will also actualize the history length removing those after the currently
+          // pointed (history.length may remain the same even if we use go(N), we don't
+          // want that).
+          pushState(null, '');
+
+          // Then, let's go to the initial browser history element.
+          const asyncOptions = { abortSignal };
+          console.log('Diff', baseHistoryLength, hLength(), baseHistoryLength - hLength());
+          await historyGo(baseHistoryLength - hLength(), asyncOptions);
+
+          // Then, actualize the browser navigation elements state.
+          // We should have the following history:
+          // [void or back, current, [forward]]
+          const location = $_location();
+
+          replaceState($_hasPrev() ? CURSOR_BACK : CURSOR_VOID, '');
+          pushState(location.state, '', renderPath(location));
+          console.log('has prev', $_hasPrev());
+          console.log('has next', $hasNext());
+          if ($hasNext()) {
+            pushState(CURSOR_FORWARD, '');
+            await historyGo(-1, asyncOptions);
+          }
+        },
+        { abortSignal },
+      ).finally(() => {
+        isSyncing = false;
+        syncHistoryPromise = undefined;
+      })
+    );
+  }
+
+  return {
+    attach(options) {
+      if ($_attached()) {
+        return CancelablePromise.resolve();
+      }
+      if (!attachPromise) {
+        attachPromise = withFnCatched(
+          async (signal) => {
+            // Setup the history, so we can work with it.
+            await setupHistory(signal);
+            // Synchronize the state with the browser history.
+            await syncHistory(signal);
+
+            // Add the back button click listener.
+            bbOnClick(bbOnClicked);
+            // Actualize the back button visibility state.
+            bbSetVisibility($_hasPrev());
+
+            // Whenever the previous element accessibility changes, we should actualize
+            // the back button visibility state.
+            $_hasPrev.sub(bbSetVisibility);
+
+            // Track all popstate events and make the navigator react.
+            w.addEventListener('popstate', onPopState);
+
+            $_attached.set(true);
+          },
+          options,
+        )
+          .finally(() => {
+            attachPromise = undefined;
+          });
+      }
+      return attachPromise;
     },
     attached: registerComputed($_attached),
     back,
     cursor: registerComputed($_cursor),
     destroy() {
-      // Detach the navigator.
       detach();
-      // Destroy all created signals.
       destroySignals();
     },
     detach,
     forward,
     go,
-    goTo(index, fit?) {
-      return go(index - $_cursor(), fit);
+    goTo(index, options) {
+      return go(index - $_cursor(), options);
     },
     hasNext: $hasNext,
     hasPrev: registerComputed($_hasPrev),
@@ -323,13 +421,15 @@ export function createNavigator<State>(
     parsePath,
     push,
     renderPath,
-    replace(item, state?: State) {
-      setByCursor('replace', $_cursor(), formatItem(item, {
-        relativePath: $_location().pathname,
-        state,
-      }));
+    replace(item, optionsOrState) {
+      return withFnCatched((abortSignal) => {
+        const changed = setByCursor('replace', $_cursor(), formatItem(item, {
+          relativePath: $_location().pathname,
+          state: optionsOrState && 'state' in optionsOrState ? optionsOrState.state : undefined,
+        }));
+
+        return changed ? syncHistory(abortSignal) : undefined;
+      }, optionsOrState);
     },
   };
-
-  return n;
 }

@@ -12,7 +12,7 @@ export type {
   AnyHistoryItem,
   BackButtonOptions,
   HashMode,
-  CtrOptions,
+  NavigatorCtrOptions,
   HistoryItem,
 } from './navigator/types.js';
 

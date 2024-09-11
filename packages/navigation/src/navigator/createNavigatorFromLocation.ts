@@ -1,9 +1,9 @@
 import { urlToPath } from '@/url/urlToPath.js';
 import { createNavigator } from '@/navigator/createNavigator.js';
 
-import type { CtrOptions, Navigator } from './types.js';
+import type { NavigatorCtrOptions, Navigator } from './types.js';
 
-export function createNavigatorFromLocation<State>(options?: CtrOptions<State>): Navigator<State> {
+export function createNavigatorFromLocation<State>(options?: NavigatorCtrOptions<State>): Navigator<State> {
   const { hash } = window.location;
   return createNavigator<State>([
     urlToPath(
