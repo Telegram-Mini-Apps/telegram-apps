@@ -1,7 +1,7 @@
 import { TypedError } from '@/errors/TypedError.js';
 import { addEventListener } from '@/addEventListener.js';
 import { createCbCollector } from '@/createCbCollector.js';
-import { createTimeoutError, createAbortError, ERR_CANCELLED } from '@/async/errors.js';
+import { createAbortError, ERR_CANCELLED, ERR_TIMED_OUT } from '@/async/errors.js';
 import type { Maybe } from '@/types/misc.js';
 import type { AsyncOptions } from '@/async/types.js';
 
@@ -15,7 +15,7 @@ import type {
 
 function assignReject<P extends CancelablePromise<any>>(
   childPromise: P,
-  parentPromise: CancelablePromise<any>
+  parentPromise: CancelablePromise<any>,
 ): P {
   childPromise.reject = parentPromise.reject;
   return childPromise;
@@ -31,10 +31,13 @@ export class CancelablePromise<Result> extends Promise<Result> {
    * @param fn - function returning promise result.
    * @param options - additional options.
    */
-  static withFn<T>(fn: () => (T | PromiseLike<T>), options?: AsyncOptions): CancelablePromise<T> {
-    return new CancelablePromise((res, rej) => {
+  static withFn<T>(
+    fn: (abortSignal: AbortSignal) => (T | PromiseLike<T>),
+    options?: AsyncOptions,
+  ): CancelablePromise<T> {
+    return new CancelablePromise((res, rej, signal) => {
       try {
-        const result = fn();
+        const result = fn(signal);
         return result instanceof Promise ? result.then(res, rej) : res(result);
       } catch (e) {
         rej(e);
@@ -49,13 +52,13 @@ export class CancelablePromise<Result> extends Promise<Result> {
   /**
    * @see Promise.resolve
    */
-  static override resolve<T>(value: T): CancelablePromise<T>;
+  static override resolve<T>(value: T | PromiseLike<T>): CancelablePromise<Awaited<T>>;
   /**
    * @see Promise.resolve
    */
-  static override resolve<T>(value?: T): CancelablePromise<T> {
+  static override resolve<T>(value?: T | PromiseLike<T>): CancelablePromise<Awaited<T>> {
     return new CancelablePromise(resolve => {
-      resolve(value as T);
+      resolve(value as Awaited<T>);
     });
   }
 
@@ -143,7 +146,7 @@ export class CancelablePromise<Result> extends Promise<Result> {
       const { timeout } = options;
       if (timeout) {
         const timeoutId = setTimeout(() => {
-          reject(createTimeoutError(timeout));
+          reject(new TypedError(ERR_TIMED_OUT, `Timeout reached: ${timeout}ms`));
         }, timeout);
 
         addCleanup(() => {

@@ -11,7 +11,7 @@ import type { Maybe } from '@/types/misc.js';
 
 function assignResolve<P extends EnhancedPromise<any>>(
   childPromise: P,
-  parentPromise: EnhancedPromise<any>
+  parentPromise: EnhancedPromise<any>,
 ): P {
   childPromise.resolve = parentPromise.resolve;
   return childPromise;
@@ -24,9 +24,14 @@ export class EnhancedPromise<Result, Resolvable = Result> extends CancelableProm
    * @param fn - function returning promise result.
    * @param options - additional options.
    */
-  static withFn<T>(fn: () => (T | PromiseLike<T>), options?: AsyncOptions): EnhancedPromise<T> {
+  static withFn<T>(
+    fn: (abortSignal: AbortSignal) => (T | PromiseLike<T>),
+    options?: AsyncOptions,
+  ): EnhancedPromise<T> {
     return new EnhancedPromise<T>(
-      (res, rej) => CancelablePromise.withFn(fn).then(res, rej),
+      (res, rej, abortSignal) => {
+        return CancelablePromise.withFn(fn, { abortSignal }).then(res, rej);
+      },
       options,
     );
   }
