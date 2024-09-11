@@ -1,5 +1,5 @@
 import { batch, type Signal } from '@telegram-apps/signals';
-import { type AsyncOptions, BetterPromise } from '@telegram-apps/toolkit';
+import { type AsyncOptions, CancelablePromise } from '@telegram-apps/toolkit';
 
 /**
  * Creates a mount function for a component.
@@ -11,7 +11,7 @@ import { type AsyncOptions, BetterPromise } from '@telegram-apps/toolkit';
  */
 // #__NO_SIDE_EFFECTS__
 export function createMountFn<T = void>(
-  mount: (options?: AsyncOptions) => (T | BetterPromise<T>),
+  mount: (options?: AsyncOptions) => (T | CancelablePromise<T>),
   onMounted: (result: T) => void,
   {
     mountPromise,
@@ -19,10 +19,10 @@ export function createMountFn<T = void>(
     mountError,
   }: {
     isMounted: Signal<boolean>,
-    mountPromise: Signal<BetterPromise<void> | undefined>,
+    mountPromise: Signal<CancelablePromise<void> | undefined>,
     mountError: Signal<Error | undefined>,
   },
-): (options?: AsyncOptions) => BetterPromise<void> {
+): (options?: AsyncOptions) => CancelablePromise<void> {
   return function mountFn(mountOptions) {
     let promise = mountPromise();
     if (promise) {
@@ -30,11 +30,11 @@ export function createMountFn<T = void>(
     }
 
     if (isMounted()) {
-      return BetterPromise.resolve();
+      return CancelablePromise.resolve();
     }
 
-    promise = BetterPromise
-      .withFn(mount, mountOptions)
+    promise = CancelablePromise
+      .resolve(mount(mountOptions))
       .then<[true, T], [false, Error]>(result => [true, result], e => [false, e])
       .then(tuple => {
         batch(() => {

@@ -7,7 +7,7 @@ import {
   type EventListener,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
-import { BetterPromise, getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
+import { CancelablePromise, getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
 import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
@@ -48,15 +48,15 @@ const BIOMETRY_INFO_RECEIVED_EVENT = 'biometry_info_received';
  * @throws {SDKError} ERR_NOT_AVAILABLE
  */
 export const authenticate: WithIsSupported<
-  (options?: AuthenticateOptions) => BetterPromise<string | undefined>
+  (options?: AuthenticateOptions) => CancelablePromise<string | undefined>
 > = withIsSupported((options) => {
   if (authenticatePromise()) {
-    return BetterPromise.reject(new SDKError(ERR_ALREADY_CALLED));
+    return CancelablePromise.reject(new SDKError(ERR_ALREADY_CALLED));
   }
 
   const s = state();
   if (!s || !s.available) {
-    return BetterPromise.reject(new SDKError(ERR_NOT_AVAILABLE));
+    return CancelablePromise.reject(new SDKError(ERR_NOT_AVAILABLE));
   }
 
   options ||= {};
@@ -105,10 +105,10 @@ export const openSettings: WithIsSupported<() => void> = withIsSupported(() => {
  * @throws {SDKError} ERR_ALREADY_CALLED
  */
 export const requestAccess: WithIsSupported<
-  (options?: RequestAccessOptions) => BetterPromise<boolean>
+  (options?: RequestAccessOptions) => CancelablePromise<boolean>
 > = withIsSupported((options) => {
   if (requestAccessPromise()) {
-    return BetterPromise.reject(new SDKError(ERR_ALREADY_CALLED));
+    return CancelablePromise.reject(new SDKError(ERR_ALREADY_CALLED));
   }
 
   options ||= {};
@@ -186,7 +186,7 @@ export function unmount(): void {
  * @returns Promise with `true`, if token was updated.
  */
 export const updateToken: WithIsSupported<
-  (options?: UpdateTokenOptions) => BetterPromise<BiometryTokenUpdateStatus>
+  (options?: UpdateTokenOptions) => CancelablePromise<BiometryTokenUpdateStatus>
 > = withIsSupported((options) => {
   options ||= {};
   return request(UPDATE_TOKEN_METHOD, 'biometry_token_updated', {

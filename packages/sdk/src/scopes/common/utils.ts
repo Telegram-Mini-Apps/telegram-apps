@@ -7,7 +7,7 @@ import {
 
 import { $postEvent, $createRequestId } from '@/scopes/globals/globals.js';
 import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
-import { AsyncOptions, BetterPromise } from '@telegram-apps/toolkit';
+import { AsyncOptions, CancelablePromise } from '@telegram-apps/toolkit';
 
 /*
  * fixme
@@ -25,7 +25,7 @@ const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
  * - Access to the clipboard is not granted.
  */
 export const readTextFromClipboard: WithIsSupported<
-  (options?: AsyncOptions) => BetterPromise<string | null>
+  (options?: AsyncOptions) => CancelablePromise<string | null>
 > =
   withIsSupported((options?: AsyncOptions) => {
     const reqId = $createRequestId()();

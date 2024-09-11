@@ -5,12 +5,12 @@ import {
   type WriteAccessRequestedStatus,
 } from '@telegram-apps/bridge';
 import { searchParams, object, number, string, date } from '@telegram-apps/transformers';
+import { type AsyncOptions, CancelablePromise, sleep } from '@telegram-apps/toolkit';
 
 import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_ACCESS_DENIED } from '@/errors/errors.js';
 import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { SDKError } from '@/errors/SDKError.js';
-import { AsyncOptions, BetterPromise, createTimeoutError, sleep } from '@telegram-apps/toolkit';
 
 /**
  * Requested contact information.
@@ -36,7 +36,7 @@ let requestWriteAccessPromise: Promise<WriteAccessRequestedStatus> | undefined;
  * Attempts to get requested contact.
  * @param options - execution options.
  */
-function getRequestedContact(options?: AsyncOptions): BetterPromise<RequestedContact> {
+function getRequestedContact(options?: AsyncOptions): CancelablePromise<RequestedContact> {
   options ||= {};
 
   return invokeCustomMethod('getRequestedContact', {}, $createRequestId()(), {
@@ -68,7 +68,6 @@ function getRequestedContact(options?: AsyncOptions): BetterPromise<RequestedCon
 export async function requestContact(options?: AsyncOptions): Promise<RequestedContact> {
   options ||= {};
   options.timeout ||= 5000;
-  const { timeout } = options;
 
   // First of all, let's try to get the requested contact. Probably, we already requested
   // it before.
@@ -83,17 +82,14 @@ export async function requestContact(options?: AsyncOptions): Promise<RequestedC
     throw new SDKError(ERR_ACCESS_DENIED);
   }
 
-  // Expected deadline.
-  const deadlineAt = Date.now() + timeout;
-
   // Time to wait before executing the next request.
   let sleepTime = 50;
 
   // We are trying to retrieve the requested contact until deadline was reached.
-  return BetterPromise.withFn<RequestedContact>(async () => {
-    while (Date.now() < deadlineAt) {
+  return new CancelablePromise(async (res, _rej, signal) => {
+    while (!signal.aborted) {
       try {
-        return await getRequestedContact();
+        res(await getRequestedContact());
       } catch {
       }
 
@@ -103,8 +99,6 @@ export async function requestContact(options?: AsyncOptions): Promise<RequestedC
       // Increase the sleep time not to kill the backend service.
       sleepTime += 50;
     }
-
-    throw createTimeoutError(timeout);
   }, options);
 }
 

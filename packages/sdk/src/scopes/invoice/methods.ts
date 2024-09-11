@@ -1,5 +1,5 @@
 import { request, type InvoiceStatus } from '@telegram-apps/bridge';
-import { type AsyncOptions, BetterPromise } from '@telegram-apps/toolkit';
+import { type AsyncOptions, CancelablePromise } from '@telegram-apps/toolkit';
 
 import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
@@ -17,7 +17,7 @@ type OpenFn = WithIsSupported<{
    * @throws {SDKError} ERR_INVALID_HOSTNAME
    * @throws {SDKError} ERR_INVALID_SLUG
    */
-  (slug: string, options?: AsyncOptions): BetterPromise<InvoiceStatus>;
+  (slug: string, options?: AsyncOptions): CancelablePromise<InvoiceStatus>;
   /**
    * Opens an invoice using its url. It expects to pass a link in full format, with hostname "t.me".
    * @param url - invoice URL.
@@ -27,14 +27,14 @@ type OpenFn = WithIsSupported<{
    * @throws {SDKError} ERR_INVALID_HOSTNAME
    * @throws {SDKError} ERR_INVALID_SLUG
    */
-  (url: string, type: 'url', options?: AsyncOptions): BetterPromise<InvoiceStatus>;
+  (url: string, type: 'url', options?: AsyncOptions): CancelablePromise<InvoiceStatus>;
 }>;
 
 const MINI_APPS_METHOD = 'web_app_open_invoice';
 
 export const open: OpenFn = withIsSupported(
   (urlOrSlug, optionsOrType?, options?) => {
-    return BetterPromise.withFn(() => {
+    return CancelablePromise.withFn(() => {
       if (isOpened()) {
         throw new SDKError(ERR_INVOICE_OPENED);
       }

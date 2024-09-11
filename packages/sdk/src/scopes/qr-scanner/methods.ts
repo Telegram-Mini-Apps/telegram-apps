@@ -1,5 +1,5 @@
 import { request, on } from '@telegram-apps/bridge';
-import { type AsyncOptions, BetterPromise, createCbCollector } from '@telegram-apps/toolkit';
+import { type AsyncOptions, CancelablePromise, createCbCollector } from '@telegram-apps/toolkit';
 
 import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
@@ -27,7 +27,7 @@ type OpenFn = WithIsSupported<{
      * @param qr - scanned QR content.
      */
     capture(this: void, qr: string): boolean;
-  }): BetterPromise<string | null>;
+  }): CancelablePromise<string | null>;
   /**
    * Opens the scanner in stream mode.
    *
@@ -96,22 +96,21 @@ export const open: OpenFn = withIsSupported((options) => {
   // Stream mode.
 
   let cleanup: VoidFunction;
-  return BetterPromise
-    .withOptions((res) => {
-      [, cleanup] = createCbCollector(
-        on('qr_text_received', ({ data }) => {
-          options.onCaptured(data);
-        }),
-        on('scan_qr_popup_closed', () => {
-          isOpened.set(false);
-        }),
-        // Whenever the scanner open state was changed, it means, it was closed by the developer.
-        // We interpret such an action as a successful QR scan.
-        isOpened.sub(res),
-      );
+  return new CancelablePromise((res) => {
+    [, cleanup] = createCbCollector(
+      on('qr_text_received', ({ data }) => {
+        options.onCaptured(data);
+      }),
+      on('scan_qr_popup_closed', () => {
+        isOpened.set(false);
+      }),
+      // Whenever the scanner open state was changed, it means, it was closed by the developer.
+      // We interpret such an action as a successful QR scan.
+      isOpened.sub(res),
+    );
 
-      $postEvent()(OPEN_METHOD, { text: options.text });
-    }, options)
+    $postEvent()(OPEN_METHOD, { text: options.text });
+  }, options)
     .then(() => {
       isOpened.set(false);
     })

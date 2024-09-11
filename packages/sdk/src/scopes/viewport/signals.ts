@@ -1,5 +1,5 @@
 import { computed, type Computed, signal } from '@telegram-apps/signals';
-import type { BetterPromise } from '@telegram-apps/toolkit';
+import type { CancelablePromise } from '@telegram-apps/toolkit';
 
 import type { State } from './types.js';
 
@@ -25,7 +25,7 @@ export const isMounted = signal(false);
  */
 export const isCssVarsBound = signal(false);
 
-export const mountPromise = signal<BetterPromise<void>>();
+export const mountPromise = signal<CancelablePromise<void>>();
 
 /**
  * Error occurred while mounting the component.

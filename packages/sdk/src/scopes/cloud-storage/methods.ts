@@ -1,6 +1,6 @@
 import { invokeCustomMethod } from '@telegram-apps/bridge';
 import { array, object, string } from '@telegram-apps/transformers';
-import { type AsyncOptions, BetterPromise } from '@telegram-apps/toolkit';
+import { type AsyncOptions, CancelablePromise } from '@telegram-apps/toolkit';
 
 import {
   withIsSupported,
@@ -18,24 +18,27 @@ const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
 export const deleteKeys: WithIsSupported<(
   keyOrKeys: string | string[],
   options?: AsyncOptions,
-) => BetterPromise<void>> =
+) => CancelablePromise<void>> =
   withIsSupported((keyOrKeys, options) => {
     const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
+
     return keys.length
       ? invokeCustomMethod(
         'deleteStorageValues',
         { keys },
         $createRequestId()(),
         { ...options || {}, postEvent: $postEvent() },
-      ) as BetterPromise<void>
-      : BetterPromise.resolve();
+      )
+        .then(() => {
+        })
+      : CancelablePromise.resolve();
   }, MINI_APPS_METHOD);
 
 /**
  * Returns list of all keys presented in the cloud storage.
  * @param options - request execution options.
  */
-export const getKeys: WithIsSupported<(options?: AsyncOptions) => BetterPromise<string[]>> =
+export const getKeys: WithIsSupported<(options?: AsyncOptions) => CancelablePromise<string[]>> =
   withIsSupported(options => {
     return invokeCustomMethod(
       'getStorageKeys',
@@ -52,24 +55,24 @@ type GetFn = WithIsSupported<{
    * @param options - request execution options.
    * @returns Map, where a key is one of the specified in the `keys` argument, and a value is
    * a corresponding storage value.
-   */<K extends string>(keys: K[], options?: AsyncOptions): BetterPromise<Record<K, string>>;
+   */<K extends string>(keys: K[], options?: AsyncOptions): CancelablePromise<Record<K, string>>;
   /**
    * @param key - cloud storage key.
    * @param options - request execution options.
    * @return Value of the specified key. If the key was not created previously, the function
    * will return an empty string.
    */
-  (key: string, options?: AsyncOptions): BetterPromise<string>;
+  (key: string, options?: AsyncOptions): CancelablePromise<string>;
 }>;
 
 export const get: GetFn = withIsSupported(
   (
     keyOrKeys: string | string[],
     options?: AsyncOptions,
-  ): BetterPromise<string | Record<string, string>> => {
+  ): CancelablePromise<string | Record<string, string>> => {
     const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
     if (!keys.length) {
-      return BetterPromise.resolve(typeof keyOrKeys === 'string' ? '' : {});
+      return CancelablePromise.resolve(typeof keyOrKeys === 'string' ? '' : {});
     }
 
     return invokeCustomMethod(
@@ -99,14 +102,14 @@ export const set: WithIsSupported<(
   key: string,
   value: string,
   options?: AsyncOptions,
-) => BetterPromise<void>> = withIsSupported(
+) => CancelablePromise<void>> = withIsSupported(
   (key, value, options) => {
     return invokeCustomMethod(
       'saveStorageValue',
       { key, value },
       $createRequestId()(),
       { ...options || {}, postEvent: $postEvent() },
-    ) as BetterPromise<void>;
+    ) as CancelablePromise<void>;
   },
   MINI_APPS_METHOD,
 );
