@@ -60,6 +60,10 @@ export function supports(
     if (method === 'web_app_close' && paramOrVersion === 'return_back') {
       return versionLessOrEqual('7.6', inVersion);
     }
+
+    if (method === 'web_app_setup_main_button' && paramOrVersion === 'has_shine_effect') {
+      return versionLessOrEqual('7.10', inVersion);
+    }
   }
 
   switch (method) {
@@ -92,6 +96,8 @@ export function supports(
       return versionLessOrEqual('7.2', paramOrVersion);
     case 'web_app_setup_swipe_behavior':
       return versionLessOrEqual('7.7', paramOrVersion);
+    case 'web_app_setup_secondary_button':
+      return versionLessOrEqual('7.10', paramOrVersion);
     default:
       return [
         'iframe_ready',

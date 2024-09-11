@@ -104,6 +104,14 @@ describe.each<[
   ['7.7', [
     'web_app_setup_swipe_behavior',
   ]],
+  ['7.10', [
+    'web_app_setup_secondary_button',
+    {
+      title: 'web_app_setup_main_button.has_shine_effect',
+      method: 'web_app_setup_main_button',
+      parameter: 'has_shine_effect',
+    },
+  ]]
 ])('%s', (version, methods) => {
   const higher = increaseVersion(version, 1);
   const lower = increaseVersion(version, -1);
