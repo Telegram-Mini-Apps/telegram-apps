@@ -1,5 +1,3 @@
-import type { CreateParams } from './utils.js';
-
 interface CreateInvokeCustomMethodParams<M extends string, Params extends object> {
   /**
    * Unique request identifier.
@@ -60,24 +58,3 @@ export type AnyInvokeCustomMethodParams =
   | {
   [M in CustomMethodName]: CreateInvokeCustomMethodParams<M, CustomMethodParams<M>>
 }[CustomMethodName];
-
-export interface Methods69 {
-  /**
-   * Invokes custom method.
-   * @since v6.9
-   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-invoke-custom-method
-   */
-  web_app_invoke_custom_method: CreateParams<AnyInvokeCustomMethodParams>;
-  /**
-   * Requests access to current user's phone.
-   * @since v6.9
-   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-phone
-   */
-  web_app_request_phone: CreateParams;
-  /**
-   * Requests write message access to the current user.
-   * @since v6.9
-   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-rqeuest-write-access
-   */
-  web_app_request_write_access: CreateParams;
-}

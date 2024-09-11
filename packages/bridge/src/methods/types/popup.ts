@@ -1,5 +1,3 @@
-import type { CreateParams } from './utils.js';
-
 /**
  * Describes the native popup.
  */
@@ -50,12 +48,3 @@ export type PopupButton = {
    */
   type: 'ok' | 'close' | 'cancel';
 });
-
-export interface Methods62 {
-  /**
-   * Opens a new popup. When a user closes the popup, Telegram creates the `popup_closed` event.
-   * @since v6.2
-   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-open-popup
-   */
-  web_app_open_popup: CreateParams<PopupParams>;
-}
