@@ -1,4 +1,4 @@
 export { useLaunchParams } from './useLaunchParams.js';
+export { useSignal } from './useSignal.js';
 
 export * from '@telegram-apps/sdk';
-export { useSignal } from '@telegram-apps/react-signals';

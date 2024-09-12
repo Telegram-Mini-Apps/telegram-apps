@@ -1,12 +1,11 @@
-import { useMemo } from 'react';
-import { type Navigator, createSafeURL, urlToPath } from '@telegram-apps/navigation';
-import { useSignal } from '@telegram-apps/react-signals';
+import { useMemo, useSyncExternalStore } from 'react';
 import type {
   Location as RouterLocation,
   Navigator as RouterNavigator,
   To,
   NavigateOptions,
 } from 'react-router-dom';
+import { type Navigator, createSafeURL, urlToPath } from '@telegram-apps/navigation';
 
 /**
  * Uses the passed Mini Apps navigator and returns a tuple containing reactive values
@@ -17,7 +16,7 @@ export function useIntegration<State>(nav: Navigator<State>): [
   RouterLocation<State>,
   RouterNavigator
 ] {
-  const location = useSignal(nav.location);
+  const location = useSyncExternalStore(nav.location.sub, nav.location);
 
   return [
     useMemo(() => ({
