@@ -18,7 +18,7 @@ export { removeEventHandlers } from '@/events/handling/removeEventHandlers.js';
 export { on } from '@/events/listening/on.js';
 export { off } from '@/events/listening/off.js';
 export { subscribe } from '@/events/listening/subscribe.js';
-export type { EventListener } from '@/events/listening/types.js';
+export type { EventListener, SubscribeListener } from '@/events/listening/types.js';
 export { unsubscribe } from '@/events/listening/unsubscribe.js';
 
 export type * from '@/events/types/index.js';

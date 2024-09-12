@@ -1,6 +1,7 @@
-import type { SubscribeListenerFn, RemoveListenerFn } from '@telegram-apps/signals';
+import type { RemoveListenerFn } from '@telegram-apps/signals';
 
-import { type LastEvent, lastEventSignal } from '@/events/listening/lastEvent.js';
+import { lastEventSignal } from '@/events/listening/lastEvent.js';
+import type { SubscribeListener } from '@/events/listening/types.js';
 
 /**
  * Subscribes to all events sent from the native Telegram application.
@@ -8,9 +9,6 @@ import { type LastEvent, lastEventSignal } from '@/events/listening/lastEvent.js
  * @param once - should this listener be called only once.
  * @returns Function to remove bound event listener.
  */
-export function subscribe(
-  listener: SubscribeListenerFn<LastEvent | undefined>,
-  once?: boolean,
-): RemoveListenerFn {
+export function subscribe(listener: SubscribeListener, once?: boolean): RemoveListenerFn {
   return lastEventSignal().sub(listener, once);
 }
