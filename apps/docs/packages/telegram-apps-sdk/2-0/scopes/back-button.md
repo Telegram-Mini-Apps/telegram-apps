@@ -5,21 +5,21 @@ The scope responsible for the Telegram Mini Apps [back button](../../../../platf
 ## Mounting
 
 Before using the scope, it is necessary to mount it to work with properly configured properties. To
-do so, use the `mount` method.
+do so, use the `mount` method. It will update the `isMounted` signal property.
 
 ```ts
 import { backButton } from '@telegram-apps/sdk';
 
-backButton.mount();
+backButton.mount(); // backButton.isMounted() -> true
 ```
 
 To unmount, use the `unmount` method:
 
 ```ts
-backButton.unmount();
+backButton.unmount(); // backButton.isMounted() -> false
 ```
 
-## Visibility
+## Showing and Hiding
 
 To change the button's visibility, use the `hide()` and `show()` methods. These methods update
 the `isVisible` signal property value.
@@ -29,18 +29,26 @@ backButton.show(); // backButton.isVisible() -> true
 backButton.hide(); // backButton.isVisible() -> false
 ```
 
-## Click Listeners
+As both of these methods were not initially implemented in Telegram Mini Apps, they are only
+supported starting from specific versions. To check if these methods are supported by the current
+Telegram Mini Apps version, use the `isSupported()` method.
+
+```ts
+backButton.show.isSupported() && backButton.show();
+backButton.hide.isSupported() && backButton.hide();
+```
+
+## Tracking Click
 
 To add a button click listener, use the `onClick` method. It returns a function to remove the bound
 listener. Alternatively, you can use the `offClick` method.
 
 ```ts
-function listener() {
-  console.log('Clicked!');
-}
+const listener = () => console.log('Clicked!');
 
 const removeListener = backButton.onClick(listener);
 removeListener();
-// Or
+// or
+backButton.onClick(listener);
 backButton.offClick(listener);
 ```
