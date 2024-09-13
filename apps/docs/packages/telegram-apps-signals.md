@@ -30,12 +30,10 @@ yarn add @telegram-apps/signals
 
 :::
 
-## Usage
+## Signal
 
-### `signal`
-
-The `signal` function is the simplest signal constructor used by other package functions. To create
-a new signal, simply pass the initial value:
+The `signal` function is the simplest signal constructor used by other package functions. To
+create a new signal, simply pass the initial value:
 
 ```ts
 import { signal } from '@telegram-apps/signals';
@@ -47,12 +45,26 @@ The returned value represents a function with useful methods. The function itsel
 current signal value.
 
 ```ts
-if (!isVisible()) {
-  console.log('The element is invisible');
-}
+console.log('The element is', isVisible() ? 'visible' : 'invisible');
 ```
 
-#### `set`
+The function also accepts options as the second argument. A developer can specify the
+`equals` function, which accepts the current and incoming values and should return true,
+if they are considered equal.
+
+```ts
+const s = signal(10, {
+  equals(current, next) {
+    // Will not update the signal if the next value is
+    // higher than the current one.
+    return next > current;
+  }
+});
+s.set(20); // will not update the signal
+s.set(5); // will update the signal
+```
+
+### `set`
 
 To set a new value, use the `set` method:
 
@@ -60,7 +72,7 @@ To set a new value, use the `set` method:
 isVisible.set(true);
 ```
 
-#### `sub`
+### `sub`
 
 To track signal changes, use the `sub` method. It returns a function that removes the bound
 listener. The listener accepts two arguments: the current and previous values, respectively.
@@ -86,7 +98,7 @@ isVisible.sub(listener, true);
 isVisible.sub(listener, { once: true });
 ```
 
-#### `unsub`
+### `unsub`
 
 Alternatively, to remove a listener, you can use the `unsub` method:
 
@@ -101,7 +113,7 @@ isVisible.sub(listener);
 isVisible.unsub(listener);
 ```
 
-#### `unsubAll`
+### `unsubAll`
 
 To remove all listeners, use the `unsubAll` method:
 
@@ -115,7 +127,7 @@ This method does not remove listeners added by computed signals.
 
 :::
 
-#### `reset`
+### `reset`
 
 To revert to the initially specified value, use the `reset` method:
 
@@ -127,7 +139,7 @@ isVisible.set(true); // isVisible becomes true
 isVisible.reset(); // isVisible becomes false again
 ```
 
-#### `destroy`
+### `destroy`
 
 When the signal is no longer needed and is not being listened to by any computed signal, you can use
 the `destroy` method, which forcibly removes all listeners:
@@ -136,7 +148,7 @@ the `destroy` method, which forcibly removes all listeners:
 isVisible.destroy();
 ```
 
-### `computed`
+## Computed
 
 The `computed` function constructs a computed signal, which is automatically recalculated when any
 of the called signals change.
@@ -156,7 +168,7 @@ b.set(5); // sum becomes 10
 
 The returned value represents a signal that lacks the `set` and `reset` methods.
 
-### `batch`
+## `batch`
 
 The `batch` function creates a scope where signal mutations are batched. It’s useful when you want
 to prevent a computed signal from recomputing every time several dependent signals change
