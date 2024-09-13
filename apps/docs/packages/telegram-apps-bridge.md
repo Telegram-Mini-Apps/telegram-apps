@@ -34,13 +34,17 @@ yarn add @telegram-apps/bridge
 
 :::
 
-## Usage Example
+## Example
 
 Here’s a basic example of how to use this package. For more details, refer to the next articles in
 the documentation.
 
 ```ts
-import { defineEventHandlers, on, postEvent } from '@telegram-apps/bridge';
+import {
+  defineEventHandlers,
+  on,
+  postEvent,
+} from '@telegram-apps/bridge';
 
 // Define Mini Apps event handlers to receive 
 // events from the Telegram native application.
