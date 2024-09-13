@@ -29,9 +29,7 @@ backButton.show(); // backButton.isVisible() -> true
 backButton.hide(); // backButton.isVisible() -> false
 ```
 
-As both of these methods were not initially implemented in Telegram Mini Apps, they are only
-supported starting from specific versions. To check if these methods are supported by the current
-Telegram Mini Apps version, use the `isSupported()` method.
+To check if these methods are supported, use the `isSupported()` method.
 
 ```ts
 backButton.show.isSupported() && backButton.show();
