@@ -1,12 +1,12 @@
 # Haptic Feedback
 
 The scope responsible for the Telegram Mini
-Apps [back button](../../../../platform/haptic-feedback.md).
+Apps [haptic feedback](../../../../platform/haptic-feedback.md).
 
-## `impactOccurred`
+## Impact Occurred
 
-A method tells that an impact occurred. The Telegram app may play the appropriate haptics based
-on style value passed.
+`impactOccurred` is the method that signals an impact event. The Telegram app may play the
+appropriate haptic feedback based on the style value passed.
 
 ```ts
 import { impactOccurred } from '@telegram-apps/sdk';
@@ -16,18 +16,19 @@ if (impactOccurred.isSupported()) {
 }
 ```
 
-Style of impact occurred haptic event:
+The available styles for the impact haptic event are:
 
-- `light`, indicates a collision between small or lightweight UI objects,
-- `medium`, indicates a collision between medium-sized or medium-weight UI objects,
-- `heavy`, indicates a collision between large or heavyweight UI objects,
-- `rigid`, indicates a collision between hard or inflexible UI objects,
-- `soft`, indicates a collision between soft or flexible UI objects.
+- `light`: indicates a collision between small or lightweight UI objects.
+- `medium`: indicates a collision between medium-sized or medium-weight UI objects.
+- `heavy`: indicates a collision between large or heavyweight UI objects.
+- `rigid`: indicates a collision between hard or inflexible UI objects.
+- `soft`: indicates a collision between soft or flexible UI objects.
 
-## `notificationOccurred`
+## Notification Occurred
 
-A method tells that a task or action has succeeded, failed, or produced a warning. The Telegram
-app may play the appropriate haptics based on type value passed.
+`notificationOccurred` is the method that signals a task or action has succeeded, failed, or
+triggered a warning. The Telegram app may play the appropriate haptic feedback based on the type
+value passed.
 
 ```ts
 import { notificationOccurred } from '@telegram-apps/sdk';
@@ -37,19 +38,18 @@ if (notificationOccurred.isSupported()) {
 }
 ```
 
-Type of notification occurred type event:
+The types of notification events are:
 
-- `error`, indicates that a task or action has failed,
-- `success`, indicates that a task or action has completed successfully,
-- `warning`, indicates that a task or action produced a warning.
+- `error`: indicates that a task or action has failed.
+- `success`: indicates that a task or action has been completed successfully.
+- `warning`: indicates that a task or action has triggered a warning.
 
-## `selectionChanged`
+## Selection Changed
 
-A method tells that the user has changed a selection. The Telegram app may play the
-appropriate haptics.
+`selectionChanged` is the method that signals a user has changed a selection. The Telegram app may
+play the appropriate haptic feedback.
 
-Do not use this feedback when the user makes or confirms a selection; use it only when the
-selection changes.
+Use this feedback only when the selection changes, not when a selection is made or confirmed.
 
 ```ts
 import { selectionChanged } from '@telegram-apps/sdk';
