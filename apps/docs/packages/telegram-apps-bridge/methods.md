@@ -26,7 +26,10 @@ the [viewport_changed](../../platform/events.md#viewport-changed) event for actu
 ```typescript
 import { request } from '@telegram-apps/bridge';
 
-const viewport = await request('web_app_request_viewport', 'viewport_changed');
+const viewport = await request(
+  'web_app_request_viewport',
+  'viewport_changed',
+);
 
 console.log(viewport);
 // Output:
@@ -61,7 +64,8 @@ const result = await request(
   ['qr_text_received', 'scan_qr_popup_closed'],
 );
 
-// The result will either be the qr_text_received or scan_qr_popup_closed event payload.
+// The result will either be the qr_text_received 
+// or scan_qr_popup_closed event payload.
 ```
 
 This function allows passing additional options such as `postEvent`, `abortSignal`, `timeout`,
@@ -103,14 +107,18 @@ The `timeout` option assigns a timeout to the request.
 import { request } from '@telegram-apps/bridge';
 
 try {
-  await request('web_app_invoke_custom_method', 'custom_method_invoked', {
-    timeout: 5000,
-    params: {
-      req_id: '1',
-      method: 'deleteStorageValues',
-      params: { keys: ['a'] },
+  await request(
+    'web_app_invoke_custom_method',
+    'custom_method_invoked',
+    {
+      timeout: 5000,
+      params: {
+        req_id: '1',
+        method: 'deleteStorageValues',
+        params: { keys: ['a'] },
+      },
     },
-  });
+  );
 } catch (e) {
   console.error(e); // TypedError with e.type === 'ERR_TIMED_OUT'
 }
