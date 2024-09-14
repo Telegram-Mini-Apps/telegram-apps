@@ -2,10 +2,7 @@ import { invokeCustomMethod } from '@telegram-apps/bridge';
 import { array, object, string } from '@telegram-apps/transformers';
 import { type AsyncOptions, CancelablePromise } from '@telegram-apps/toolkit';
 
-import {
-  withIsSupported,
-  type WithIsSupported,
-} from '@/scopes/withIsSupported.js';
+import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
 
 const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
@@ -15,7 +12,7 @@ const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
  * @param keyOrKeys - key or keys to delete.
  * @param options - request execution options.
  */
-export const deleteKeys: WithIsSupported<(
+export const deleteItem: WithIsSupported<(
   keyOrKeys: string | string[],
   options?: AsyncOptions,
 ) => CancelablePromise<void>> =
@@ -34,22 +31,29 @@ export const deleteKeys: WithIsSupported<(
       : CancelablePromise.resolve();
   }, MINI_APPS_METHOD);
 
-/**
- * Returns list of all keys presented in the cloud storage.
- * @param options - request execution options.
- */
-export const getKeys: WithIsSupported<(options?: AsyncOptions) => CancelablePromise<string[]>> =
-  withIsSupported(options => {
-    return invokeCustomMethod(
-      'getStorageKeys',
-      {},
-      $createRequestId()(),
-      { ...options || {}, postEvent: $postEvent() },
-    )
-      .then(array(string())());
-  }, MINI_APPS_METHOD);
+export const getItem = withIsSupported((
+  keyOrKeys: string | string[],
+  options?: AsyncOptions,
+): CancelablePromise<string | Record<string, string>> => {
+  const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
+  if (!keys.length) {
+    return CancelablePromise.resolve(typeof keyOrKeys === 'string' ? '' : {});
+  }
 
-type GetFn = WithIsSupported<{
+  return invokeCustomMethod(
+    'getStorageValues',
+    { keys },
+    $createRequestId()(),
+    { ...options || {}, postEvent: $postEvent() },
+  )
+    .then(data => {
+      const result = object(
+        Object.fromEntries(keys.map((k) => [k, string()])),
+      )()(data);
+
+      return Array.isArray(keyOrKeys) ? result : result[keyOrKeys];
+    });
+}, MINI_APPS_METHOD) as WithIsSupported<{
   /**
    * @param keys - keys list.
    * @param options - request execution options.
@@ -65,32 +69,20 @@ type GetFn = WithIsSupported<{
   (key: string, options?: AsyncOptions): CancelablePromise<string>;
 }>;
 
-export const get: GetFn = withIsSupported(
-  (
-    keyOrKeys: string | string[],
-    options?: AsyncOptions,
-  ): CancelablePromise<string | Record<string, string>> => {
-    const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
-    if (!keys.length) {
-      return CancelablePromise.resolve(typeof keyOrKeys === 'string' ? '' : {});
-    }
-
+/**
+ * Returns a list of all keys presented in the cloud storage.
+ * @param options - request execution options.
+ */
+export const getKeys: WithIsSupported<(options?: AsyncOptions) => CancelablePromise<string[]>> =
+  withIsSupported(options => {
     return invokeCustomMethod(
-      'getStorageValues',
-      { keys },
+      'getStorageKeys',
+      {},
       $createRequestId()(),
       { ...options || {}, postEvent: $postEvent() },
     )
-      .then(data => {
-        const result = object(
-          Object.fromEntries(keys.map((k) => [k, string()])),
-        )()(data);
-
-        return Array.isArray(keyOrKeys) ? result : result[keyOrKeys];
-      });
-  },
-  MINI_APPS_METHOD,
-) as GetFn;
+      .then(array(string())());
+  }, MINI_APPS_METHOD);
 
 /**
  * Saves specified value by key.
@@ -98,7 +90,7 @@ export const get: GetFn = withIsSupported(
  * @param value - storage value.
  * @param options - request execution options.
  */
-export const set: WithIsSupported<(
+export const setItem: WithIsSupported<(
   key: string,
   value: string,
   options?: AsyncOptions,

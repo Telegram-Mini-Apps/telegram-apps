@@ -50,6 +50,13 @@ export {
 
 export * as cloudStorage from '@/scopes/cloud-storage/instance.js';
 export {
+  getItem as getStorageItem,
+  setItem as setStorageItem,
+  deleteItem as deleteStorageItem,
+  getKeys as getStorageKeys
+} from '@/scopes/cloud-storage/instance.js';
+
+export {
   shareURL,
   openLink,
   type OpenLinkOptions,
