@@ -9,8 +9,8 @@ import {
 } from '@telegram-apps/toolkit';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
-import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
-import { withSupports, type WithSupports } from '@/scopes/withSupports.js';
+import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { withSupports } from '@/scopes/withSupports.js';
 import { ERR_CSS_VARS_BOUND, ERR_DATA_INVALID_SIZE } from '@/errors/errors.js';
 import { SDKError } from '@/errors/SDKError.js';
 import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
@@ -168,19 +168,15 @@ export function sendData(data: string): void {
 /**
  * Updates the background color.
  */
-export const setBackgroundColor: WithIsSupported<(color: RGB) => void> =
-  withIsSupported(color => {
-    backgroundColor.set(color);
-  }, SET_BG_COLOR_METHOD);
+export const setBackgroundColor = withIsSupported((color: RGB): void => {
+  backgroundColor.set(color);
+}, SET_BG_COLOR_METHOD);
 
 /**
  * Updates the header color.
  */
-export const setHeaderColor: WithSupports<
-  WithIsSupported<(color: HeaderColor) => void>,
-  { color: ['web_app_set_header_color', 'color'] }
-> = withSupports(
-  withIsSupported(color => {
+export const setHeaderColor = withSupports(
+  withIsSupported((color: HeaderColor): void => {
     headerColor.set(color);
   }, SET_HEADER_COLOR_METHOD),
   { color: [SET_HEADER_COLOR_METHOD, 'color'] },

@@ -12,24 +12,23 @@ const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
  * @param keyOrKeys - key or keys to delete.
  * @param options - request execution options.
  */
-export const deleteItem: WithIsSupported<(
+export const deleteItem = withIsSupported((
   keyOrKeys: string | string[],
   options?: AsyncOptions,
-) => CancelablePromise<void>> =
-  withIsSupported((keyOrKeys, options) => {
-    const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
+): CancelablePromise<void> => {
+  const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
 
-    return keys.length
-      ? invokeCustomMethod(
-        'deleteStorageValues',
-        { keys },
-        $createRequestId()(),
-        { ...options || {}, postEvent: $postEvent() },
-      )
-        .then(() => {
-        })
-      : CancelablePromise.resolve();
-  }, MINI_APPS_METHOD);
+  return keys.length
+    ? invokeCustomMethod(
+      'deleteStorageValues',
+      { keys },
+      $createRequestId()(),
+      { ...options || {}, postEvent: $postEvent() },
+    )
+      .then(() => {
+      })
+    : CancelablePromise.resolve();
+}, MINI_APPS_METHOD);
 
 export const getItem = withIsSupported((
   keyOrKeys: string | string[],
@@ -73,16 +72,15 @@ export const getItem = withIsSupported((
  * Returns a list of all keys presented in the cloud storage.
  * @param options - request execution options.
  */
-export const getKeys: WithIsSupported<(options?: AsyncOptions) => CancelablePromise<string[]>> =
-  withIsSupported(options => {
-    return invokeCustomMethod(
-      'getStorageKeys',
-      {},
-      $createRequestId()(),
-      { ...options || {}, postEvent: $postEvent() },
-    )
-      .then(array(string())());
-  }, MINI_APPS_METHOD);
+export const getKeys = withIsSupported((options?: AsyncOptions): CancelablePromise<string[]> => {
+  return invokeCustomMethod(
+    'getStorageKeys',
+    {},
+    $createRequestId()(),
+    { ...options || {}, postEvent: $postEvent() },
+  )
+    .then(array(string())());
+}, MINI_APPS_METHOD);
 
 /**
  * Saves specified value by key.
@@ -90,18 +88,15 @@ export const getKeys: WithIsSupported<(options?: AsyncOptions) => CancelableProm
  * @param value - storage value.
  * @param options - request execution options.
  */
-export const setItem: WithIsSupported<(
+export const setItem = withIsSupported((
   key: string,
   value: string,
   options?: AsyncOptions,
-) => CancelablePromise<void>> = withIsSupported(
-  (key, value, options) => {
-    return invokeCustomMethod(
-      'saveStorageValue',
-      { key, value },
-      $createRequestId()(),
-      { ...options || {}, postEvent: $postEvent() },
-    ) as CancelablePromise<void>;
-  },
-  MINI_APPS_METHOD,
-);
+): CancelablePromise<void> => {
+  return invokeCustomMethod(
+    'saveStorageValue',
+    { key, value },
+    $createRequestId()(),
+    { ...options || {}, postEvent: $postEvent() },
+  ) as CancelablePromise<void>;
+}, MINI_APPS_METHOD);

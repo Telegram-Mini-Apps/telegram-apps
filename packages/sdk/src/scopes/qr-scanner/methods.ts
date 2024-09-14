@@ -55,7 +55,7 @@ const SCANNED_EVENT = 'qr_text_received';
 /**
  * Closes the scanner.
  */
-export const close: WithIsSupported<() => void> = withIsSupported(() => {
+export const close = withIsSupported((): void => {
   isOpened.set(false);
   $postEvent()(CLOSE_METHOD);
 }, CLOSE_METHOD);

@@ -6,7 +6,7 @@ import {
 } from '@telegram-apps/bridge';
 
 import { $postEvent, $createRequestId } from '@/scopes/globals/globals.js';
-import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
+import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { AsyncOptions, CancelablePromise } from '@telegram-apps/toolkit';
 
 /*
@@ -24,19 +24,16 @@ const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
  * - A value in the clipboard is not a text.
  * - Access to the clipboard is not granted.
  */
-export const readTextFromClipboard: WithIsSupported<
-  (options?: AsyncOptions) => CancelablePromise<string | null>
-> =
-  withIsSupported((options?: AsyncOptions) => {
-    const reqId = $createRequestId()();
+export const readTextFromClipboard = withIsSupported((options?: AsyncOptions): CancelablePromise<string | null> => {
+  const reqId = $createRequestId()();
 
-    return request(READ_TEXT_FROM_CLIPBOARD_METHOD, 'clipboard_text_received', {
-      postEvent: $postEvent(),
-      ...options || {},
-      params: { req_id: reqId },
-      capture: captureSameReq(reqId),
-    }).then(({ data = null }) => data);
-  }, READ_TEXT_FROM_CLIPBOARD_METHOD);
+  return request(READ_TEXT_FROM_CLIPBOARD_METHOD, 'clipboard_text_received', {
+    postEvent: $postEvent(),
+    ...options || {},
+    params: { req_id: reqId },
+    capture: captureSameReq(reqId),
+  }).then(({ data = null }) => data);
+}, READ_TEXT_FROM_CLIPBOARD_METHOD);
 
 /**
  * Inserts the bot's username and the specified inline query in the current chat's input field.
@@ -48,10 +45,8 @@ export const readTextFromClipboard: WithIsSupported<
  * @param chatTypes - List of chat types which could be chosen to send the message. Could be
  * empty list.
  */
-export const switchInlineQuery: WithIsSupported<
-  (query: string, chatTypes?: SwitchInlineQueryChatType[]) => void
-> = withIsSupported(
-  (query, chatTypes?) => {
+export const switchInlineQuery = withIsSupported(
+  (query: string, chatTypes?: SwitchInlineQueryChatType[]) => {
     $postEvent()(SWITCH_INLINE_QUERY_METHOD, {
       query: query,
       chat_types: chatTypes || [],

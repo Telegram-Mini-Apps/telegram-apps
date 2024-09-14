@@ -2,7 +2,6 @@ import { supports, type OpenLinkBrowser } from '@telegram-apps/bridge';
 import { createSafeURL } from '@telegram-apps/navigation';
 
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
-import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { ERR_INVALID_HOSTNAME } from '@/errors/errors.js';
 import { SDKError } from '@/errors/SDKError.js';
 
@@ -44,7 +43,7 @@ export function openLink(url: string, options?: OpenLinkOptions): void {
  * @param url - URL to be opened.
  * @throws {SDKError} ERR_INVALID_HOSTNAME
  */
-export const openTelegramLink: WithIsSupported<(url: string) => void> = withIsSupported(url => {
+export function openTelegramLink(url: string): void {
   const { hostname, pathname, search } = new URL(url, 'https://t.me');
   if (hostname !== 't.me') {
     throw new SDKError(ERR_INVALID_HOSTNAME);
@@ -56,7 +55,7 @@ export const openTelegramLink: WithIsSupported<(url: string) => void> = withIsSu
   }
 
   $postEvent()(OPEN_TG_LINK_METHOD, { path_full: pathname + search });
-}, OPEN_TG_LINK_METHOD);
+}
 
 /**
  * Shares specified URL with the passed to the chats, selected by user. After being called,
@@ -68,14 +67,13 @@ export const openTelegramLink: WithIsSupported<(url: string) => void> = withIsSu
  * @see https://core.telegram.org/api/links#share-links
  * @see https://core.telegram.org/widgets/share#custom-buttons
  */
-export const shareURL: WithIsSupported<(url: string, text?: string) => void> =
-  withIsSupported((url, text?) => {
-    openTelegramLink(
-      `https://t.me/share/url?` + new URLSearchParams({ url, text: text || '' })
-        .toString()
-        // By default, URL search params encode spaces with "+".
-        // We are replacing them with "%20", because plus symbols are working incorrectly
-        // in Telegram.
-        .replace(/\+/g, '%20'),
-    );
-  }, OPEN_TG_LINK_METHOD);
+export function shareURL(url: string, text?: string): void {
+  openTelegramLink(
+    `https://t.me/share/url?` + new URLSearchParams({ url, text: text || '' })
+      .toString()
+      // By default, URL search params encode spaces with "+".
+      // We are replacing them with "%20", because plus symbols are working incorrectly
+      // in Telegram.
+      .replace(/\+/g, '%20'),
+  );
+}

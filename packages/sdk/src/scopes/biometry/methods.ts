@@ -9,7 +9,7 @@ import {
 import { isPageReload } from '@telegram-apps/navigation';
 import { CancelablePromise, getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
-import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
+import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 import { SDKError } from '@/errors/SDKError.js';
@@ -47,9 +47,7 @@ const BIOMETRY_INFO_RECEIVED_EVENT = 'biometry_info_received';
  * @throws {SDKError} ERR_ALREADY_CALLED
  * @throws {SDKError} ERR_NOT_AVAILABLE
  */
-export const authenticate: WithIsSupported<
-  (options?: AuthenticateOptions) => CancelablePromise<string | undefined>
-> = withIsSupported((options) => {
+export const authenticate = withIsSupported((options?: AuthenticateOptions): CancelablePromise<string | undefined> => {
   if (authenticatePromise()) {
     return CancelablePromise.reject(new SDKError(ERR_ALREADY_CALLED));
   }
@@ -94,7 +92,7 @@ export function isSupported(): boolean {
  * interface (e.g. a click inside the Mini App or on the main button)_.
  * @since 7.2
  */
-export const openSettings: WithIsSupported<() => void> = withIsSupported(() => {
+export const openSettings = withIsSupported(() => {
   $postEvent()(OPEN_SETTINGS_METHOD);
 }, OPEN_SETTINGS_METHOD);
 
@@ -104,35 +102,35 @@ export const openSettings: WithIsSupported<() => void> = withIsSupported(() => {
  * @returns Promise with true, if access was granted.
  * @throws {SDKError} ERR_ALREADY_CALLED
  */
-export const requestAccess: WithIsSupported<
-  (options?: RequestAccessOptions) => CancelablePromise<boolean>
-> = withIsSupported((options) => {
-  if (requestAccessPromise()) {
-    return CancelablePromise.reject(new SDKError(ERR_ALREADY_CALLED));
-  }
+export const requestAccess = withIsSupported(
+  (options?: RequestAccessOptions): CancelablePromise<boolean> => {
+    if (requestAccessPromise()) {
+      return CancelablePromise.reject(new SDKError(ERR_ALREADY_CALLED));
+    }
 
-  options ||= {};
-  const promise = request(REQUEST_ACCESS_METHOD, BIOMETRY_INFO_RECEIVED_EVENT, {
-    postEvent: $postEvent(),
-    ...options,
-    params: { reason: options.reason || '' },
-  })
-    .then(eventToState)
-    .then((info) => {
-      if (!info.available) {
-        throw new SDKError(ERR_NOT_AVAILABLE);
-      }
-      state.set(info);
-      return info.accessGranted;
+    options ||= {};
+    const promise = request(REQUEST_ACCESS_METHOD, BIOMETRY_INFO_RECEIVED_EVENT, {
+      postEvent: $postEvent(),
+      ...options,
+      params: { reason: options.reason || '' },
     })
-    .finally(() => {
-      requestAccessPromise.set(undefined);
-    });
+      .then(eventToState)
+      .then((info) => {
+        if (!info.available) {
+          throw new SDKError(ERR_NOT_AVAILABLE);
+        }
+        state.set(info);
+        return info.accessGranted;
+      })
+      .finally(() => {
+        requestAccessPromise.set(undefined);
+      });
 
-  requestAccessPromise.set(promise);
+    requestAccessPromise.set(promise);
 
-  return promise;
-}, REQUEST_ACCESS_METHOD);
+    return promise;
+  }, REQUEST_ACCESS_METHOD,
+);
 
 /**
  * Mounts the component.
@@ -185,16 +183,16 @@ export function unmount(): void {
  * @since 7.2
  * @returns Promise with `true`, if token was updated.
  */
-export const updateToken: WithIsSupported<
-  (options?: UpdateTokenOptions) => CancelablePromise<BiometryTokenUpdateStatus>
-> = withIsSupported((options) => {
-  options ||= {};
-  return request(UPDATE_TOKEN_METHOD, 'biometry_token_updated', {
-    postEvent: $postEvent(),
-    ...options,
-    params: {
-      token: options.token || '',
-      reason: options.reason,
-    },
-  }).then(r => r.status);
-}, UPDATE_TOKEN_METHOD);
+export const updateToken = withIsSupported(
+  (options?: UpdateTokenOptions): CancelablePromise<BiometryTokenUpdateStatus> => {
+    options ||= {};
+    return request(UPDATE_TOKEN_METHOD, 'biometry_token_updated', {
+      postEvent: $postEvent(),
+      ...options,
+      params: {
+        token: options.token || '',
+        reason: options.reason,
+      },
+    }).then(r => r.status);
+  }, UPDATE_TOKEN_METHOD,
+);

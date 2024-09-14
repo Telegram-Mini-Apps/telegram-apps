@@ -9,7 +9,7 @@ import { type AsyncOptions, CancelablePromise, sleep } from '@telegram-apps/tool
 
 import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_ACCESS_DENIED } from '@/errors/errors.js';
-import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
+import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { SDKError } from '@/errors/SDKError.js';
 
 /**
@@ -66,6 +66,7 @@ function getRequestedContact(options?: AsyncOptions): CancelablePromise<Requeste
  * @throws {SDKError} ERR_ACCESS_DENIED
  */
 export async function requestContact(options?: AsyncOptions): Promise<RequestedContact> {
+  // TODO: withIsSupported
   options ||= {};
   options.timeout ||= 5000;
 
@@ -111,9 +112,7 @@ export async function requestContact(options?: AsyncOptions): Promise<RequestedC
  * @param options - additional options.
  * @see requestContact
  */
-export const requestPhoneAccess: WithIsSupported<
-  (options?: AsyncOptions) => Promise<PhoneRequestedStatus>
-> = withIsSupported((options) => {
+export const requestPhoneAccess = withIsSupported((options?: AsyncOptions): Promise<PhoneRequestedStatus> => {
   if (!requestPhoneAccessPromise) {
     requestPhoneAccessPromise = request(REQUEST_PHONE_METHOD, 'phone_requested', {
       ...options || {},
@@ -129,9 +128,7 @@ export const requestPhoneAccess: WithIsSupported<
  * Requests write message access to the current user.
  * @param options - additional options.
  */
-export const requestWriteAccess: WithIsSupported<
-  (options?: AsyncOptions) => Promise<WriteAccessRequestedStatus>
-> = withIsSupported((options) => {
+export const requestWriteAccess = withIsSupported((options?: AsyncOptions): Promise<WriteAccessRequestedStatus> => {
   if (!requestWriteAccessPromise) {
     requestWriteAccessPromise = request(REQUEST_WRITE_ACCESS_METHOD, 'write_access_requested', {
       ...options || {},

@@ -1,7 +1,7 @@
 import { request, type PopupParams } from '@telegram-apps/bridge';
 import { CancelablePromise } from '@telegram-apps/toolkit';
 
-import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
+import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_POPUP_INVALID_PARAMS, ERR_POPUP_OPENED } from '@/errors/errors.js';
 import { SDKError } from '@/errors/SDKError.js';
@@ -71,23 +71,22 @@ function preparePopupParams(params: OpenOptions): PopupParams {
  * @throws {SDKError} ERR_POPUP_OPENED
  * @throws {SDKError} ERR_POPUP_INVALID_PARAMS
  */
-export const open: WithIsSupported<(options: OpenOptions) => CancelablePromise<string | null>> =
-  withIsSupported(options => {
-    return CancelablePromise.withFn(() => {
-      if (isOpened()) {
-        throw new SDKError(ERR_POPUP_OPENED);
-      }
+export const open = withIsSupported((options: OpenOptions): CancelablePromise<string | null> => {
+  return CancelablePromise.withFn(() => {
+    if (isOpened()) {
+      throw new SDKError(ERR_POPUP_OPENED);
+    }
 
-      isOpened.set(true);
+    isOpened.set(true);
 
-      return request(MINI_APPS_METHOD, 'popup_closed', {
-        ...options || {},
-        postEvent: $postEvent(),
-        params: preparePopupParams(options),
-      })
-        .then(({ button_id = null }) => button_id)
-        .finally(() => {
-          isOpened.set(false);
-        });
-    });
-  }, MINI_APPS_METHOD);
+    return request(MINI_APPS_METHOD, 'popup_closed', {
+      ...options || {},
+      postEvent: $postEvent(),
+      params: preparePopupParams(options),
+    })
+      .then(({ button_id = null }) => button_id)
+      .finally(() => {
+        isOpened.set(false);
+      });
+  });
+}, MINI_APPS_METHOD);
