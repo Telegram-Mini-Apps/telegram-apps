@@ -8,13 +8,25 @@ Apps [haptic feedback](../../../../platform/haptic-feedback.md).
 `impactOccurred` is the method that signals an impact event. The Telegram app may play the
 appropriate haptic feedback based on the style value passed.
 
-```ts
-import { impactOccurred } from '@telegram-apps/sdk';
+::: code-group 
 
-if (impactOccurred.isSupported()) {
-  impactOccurred('medium');
+```ts [Using object]
+import { hapticFeedback } from '@telegram-apps/sdk';
+
+if (hapticFeedback.impactOccurred.isSupported()) {
+  hapticFeedback.impactOccurred('medium');
 }
 ```
+
+```ts [Using functions]
+import { hapticImpactOccurred } from '@telegram-apps/sdk';
+
+if (hapticImpactOccurred.isSupported()) {
+  hapticImpactOccurred('medium');
+}
+```
+
+:::
 
 The available styles for the impact haptic event are:
 
@@ -30,13 +42,23 @@ The available styles for the impact haptic event are:
 triggered a warning. The Telegram app may play the appropriate haptic feedback based on the type
 value passed.
 
-```ts
-import { notificationOccurred } from '@telegram-apps/sdk';
+::: code-group
 
-if (notificationOccurred.isSupported()) {
-  notificationOccurred('success');
+```ts [Using object]
+if (hapticFeedback.notificationOccurred.isSupported()) {
+  hapticFeedback.notificationOccurred('success');
 }
 ```
+
+```ts [Using functions]
+import { hapticNotificationOccurred } from '@telegram-apps/sdk';
+
+if (hapticNotificationOccurred.isSupported()) {
+  hapticNotificationOccurred('success');
+}
+```
+
+:::
 
 The types of notification events are:
 
@@ -51,10 +73,18 @@ play the appropriate haptic feedback.
 
 Use this feedback only when the selection changes, not when a selection is made or confirmed.
 
-```ts
-import { selectionChanged } from '@telegram-apps/sdk';
+::: code-group
 
-if (selectionChanged.isSupported()) {
-  selectionChanged();
+```ts [Using object]
+if (hapticFeedback.selectionChanged.isSupported()) {
+  hapticFeedback.selectionChanged();
+}
+```
+
+```ts [Using functions]
+import { hapticSelectionChanged } from '@telegram-apps/sdk';
+
+if (hapticSelectionChanged.isSupported()) {
+  hapticSelectionChanged();
 }
 ```
