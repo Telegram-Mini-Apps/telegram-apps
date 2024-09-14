@@ -4,7 +4,7 @@ import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 import { $postEvent } from '@/scopes/globals/globals.js';
 import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 
-import { isMounted, isVerticalSwipesEnabled } from './signals.js';
+import { isMounted, isVerticalEnabled } from './signals.js';
 
 /*
  * fixme
@@ -20,15 +20,15 @@ const STORAGE_KEY = 'swipeBehavior';
 /**
  * Disables vertical swipes.
  */
-export const disableVerticalSwipes: WithIsSupported<() => void> = withIsSupported(() => {
-  isVerticalSwipesEnabled.set(false);
+export const disableVertical: WithIsSupported<() => void> = withIsSupported(() => {
+  isVerticalEnabled.set(false);
 }, MINI_APPS_METHOD);
 
 /**
  * Enables vertical swipes.
  */
-export const enableVerticalSwipes: WithIsSupported<() => void> = withIsSupported(() => {
-  isVerticalSwipesEnabled.set(true);
+export const enableVertical: WithIsSupported<() => void> = withIsSupported(() => {
+  isVerticalEnabled.set(true);
 }, MINI_APPS_METHOD);
 
 /**
@@ -39,8 +39,8 @@ export const enableVerticalSwipes: WithIsSupported<() => void> = withIsSupported
  */
 export function mount(): void {
   if (!isMounted()) {
-    isVerticalSwipesEnabled.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
-    isVerticalSwipesEnabled.sub(onStateChanged);
+    isVerticalEnabled.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
+    isVerticalEnabled.sub(onStateChanged);
     isMounted.set(true);
   }
 }
@@ -54,6 +54,6 @@ function onStateChanged(value: boolean): void {
  * Unmounts the component, removing the listener, saving the component state in the local storage.
  */
 export function unmount(): void {
-  isVerticalSwipesEnabled.unsub(onStateChanged);
+  isVerticalEnabled.unsub(onStateChanged);
   isMounted.set(false);
 }

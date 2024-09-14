@@ -8,4 +8,4 @@ export const isMounted = signal(false);
 /**
  * True if vertical swipes are enabled.
  */
-export const isVerticalSwipesEnabled = signal(false);
+export const isVerticalEnabled = signal(false);

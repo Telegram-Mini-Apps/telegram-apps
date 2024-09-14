@@ -5,17 +5,17 @@ import { resetPackageState, resetSignal } from '@test-utils/reset.js';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
-import { isVerticalSwipesEnabled, isMounted } from './signals.js';
+import { isVerticalEnabled, isMounted } from './signals.js';
 import {
-  disableVerticalSwipes,
-  enableVerticalSwipes,
+  disableVertical,
+  enableVertical,
   mount,
   unmount,
 } from './methods.js';
 
 beforeEach(() => {
   resetPackageState();
-  [isVerticalSwipesEnabled, isMounted].forEach(resetSignal);
+  [isVerticalEnabled, isMounted].forEach(resetSignal);
   vi.restoreAllMocks();
   $postEvent.set(() => null);
 });
@@ -26,12 +26,12 @@ describe('mounted', () => {
 
   describe('disableVerticalSwipes', () => {
     it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: false }', () => {
-      isVerticalSwipesEnabled.set(true);
+      isVerticalEnabled.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
-      disableVerticalSwipes();
-      disableVerticalSwipes();
-      disableVerticalSwipes();
+      disableVertical();
+      disableVertical();
+      disableVertical();
       expect(spy).toBeCalledTimes(1);
       expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: false });
     });
@@ -39,12 +39,12 @@ describe('mounted', () => {
 
   describe('enableVerticalSwipes', () => {
     it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: true }', () => {
-      isVerticalSwipesEnabled.set(false);
+      isVerticalEnabled.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
-      enableVerticalSwipes();
-      enableVerticalSwipes();
-      enableVerticalSwipes();
+      enableVertical();
+      enableVertical();
+      enableVertical();
       expect(spy).toBeCalledTimes(1);
       expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: true });
     });
@@ -55,24 +55,24 @@ describe('mounted', () => {
 describe('not mounted', () => {
   describe('disableVerticalSwipes', () => {
     it('should not call postEvent', () => {
-      isVerticalSwipesEnabled.set(true);
+      isVerticalEnabled.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
-      disableVerticalSwipes();
-      disableVerticalSwipes();
-      disableVerticalSwipes();
+      disableVertical();
+      disableVertical();
+      disableVertical();
       expect(spy).toBeCalledTimes(0);
     });
   });
 
   describe('enableVerticalSwipes', () => {
     it('should not call postEvent', () => {
-      isVerticalSwipesEnabled.set(false);
+      isVerticalEnabled.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
-      enableVerticalSwipes();
-      enableVerticalSwipes();
-      enableVerticalSwipes();
+      enableVertical();
+      enableVertical();
+      enableVertical();
       expect(spy).toBeCalledTimes(0);
     });
   });
@@ -80,10 +80,10 @@ describe('not mounted', () => {
 
 describe('disableVerticalSwipes', () => {
   it('should set isVerticalSwipesEnabled = false', () => {
-    isVerticalSwipesEnabled.set(true);
-    expect(isVerticalSwipesEnabled()).toBe(true);
-    disableVerticalSwipes();
-    expect(isVerticalSwipesEnabled()).toBe(false);
+    isVerticalEnabled.set(true);
+    expect(isVerticalEnabled()).toBe(true);
+    disableVertical();
+    expect(isVerticalEnabled()).toBe(false);
   });
 });
 
@@ -107,7 +107,7 @@ describe('mount', () => {
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/swipeBehavior');
-      expect(isVerticalSwipesEnabled()).toBe(true);
+      expect(isVerticalEnabled()).toBe(true);
     });
 
     it('should set isVerticalSwipesEnabled false if session storage key "tapps/swipeBehavior" not presented', () => {
@@ -116,14 +116,14 @@ describe('mount', () => {
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/swipeBehavior');
-      expect(isVerticalSwipesEnabled()).toBe(false);
+      expect(isVerticalEnabled()).toBe(false);
     });
   });
 
   describe('first launch', () => {
     it('should set isVerticalSwipesEnabled false', () => {
       mount();
-      expect(isVerticalSwipesEnabled()).toBe(false);
+      expect(isVerticalEnabled()).toBe(false);
     });
   });
 });
@@ -135,7 +135,7 @@ describe('unmount', () => {
     const postEventSpy = vi.fn();
     const storageSpy = mockSessionStorageSetItem();
     $postEvent.set(postEventSpy);
-    isVerticalSwipesEnabled.set(true);
+    isVerticalEnabled.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);
 
@@ -143,7 +143,7 @@ describe('unmount', () => {
     storageSpy.mockClear();
 
     unmount();
-    isVerticalSwipesEnabled.set(false);
+    isVerticalEnabled.set(false);
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);
@@ -152,9 +152,9 @@ describe('unmount', () => {
 
 describe('enableVerticalSwipes', () => {
   it('should set isVerticalSwipesEnabled = true', () => {
-    isVerticalSwipesEnabled.set(false);
-    expect(isVerticalSwipesEnabled()).toBe(false);
-    enableVerticalSwipes();
-    expect(isVerticalSwipesEnabled()).toBe(true);
+    isVerticalEnabled.set(false);
+    expect(isVerticalEnabled()).toBe(false);
+    enableVertical();
+    expect(isVerticalEnabled()).toBe(true);
   });
 });
