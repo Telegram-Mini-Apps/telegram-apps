@@ -24,12 +24,12 @@ Alternative functional approach:
 ```ts
 import {
   mountBackButton,
-  isBackButtonMounted,
+  unmountBackButton,
   isBackButtonMounted,
 } from '@telegram-apps/sdk';
 
 mountBackButton(); // isBackButtonMounted() -> true
-unmountBackButton.unmount(); // isBackButtonMounted() -> false
+unmountBackButton(); // isBackButtonMounted() -> false
 ```
 
 ## Showing and Hiding
