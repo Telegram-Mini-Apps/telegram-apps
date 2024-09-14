@@ -8,7 +8,7 @@ export interface State {
   /**
    * True if the main button is currently clickable.
    */
-  isActive: boolean;
+  isEnabled: boolean;
   /**
    * True if the main button loader is visible.
    */

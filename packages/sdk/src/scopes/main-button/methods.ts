@@ -60,7 +60,7 @@ function onStateChanged(s: State): void {
   if (s.text) {
     $postEvent()('web_app_setup_main_button', {
       is_visible: s.isVisible,
-      is_active: s.isActive,
+      is_active: s.isEnabled,
       is_progress_visible: s.isLoaderVisible,
       text: s.text,
       color: s.backgroundColor,

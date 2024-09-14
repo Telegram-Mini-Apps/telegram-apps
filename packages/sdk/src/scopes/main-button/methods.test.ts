@@ -11,7 +11,7 @@ import {
   text,
   textColor,
   isMounted,
-  isActive,
+  isEnabled,
   isLoaderVisible,
   isVisible,
   state,
@@ -44,7 +44,7 @@ beforeEach(() => {
 
 describe.each([
   { signal: backgroundColor, name: 'backgroundColor' },
-  { signal: isActive, name: 'isActive' },
+  { signal: isEnabled, name: 'isEnabled' },
   { signal: isLoaderVisible, name: 'isLoaderVisible' },
   { signal: isVisible, name: 'isVisible' },
   { signal: text, name: 'text' },
@@ -53,7 +53,7 @@ describe.each([
   beforeEach(() => {
     state.set({
       backgroundColor: '#123456',
-      isActive: true,
+      isEnabled: true,
       isLoaderVisible: true,
       isVisible: true,
       text: 'TEXT',
@@ -74,7 +74,7 @@ describe('mounted', () => {
     it('should save the state in storage key tapps/mainButton', () => {
       state.set({
         backgroundColor: '#123456',
-        isActive: true,
+        isEnabled: true,
         isLoaderVisible: true,
         isVisible: true,
         text: 'TEXT',
@@ -87,7 +87,7 @@ describe('mounted', () => {
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('tapps/mainButton', '{"backgroundColor":"#111111","isActive":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc"}');
+      expect(spy).toHaveBeenCalledWith('tapps/mainButton', '{"backgroundColor":"#111111","isEnabled":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc"}');
     });
 
     it('should call "web_app_setup_main_button" only if text is not empty', () => {
@@ -95,7 +95,7 @@ describe('mounted', () => {
       $postEvent.set(spy);
       state.set({
         backgroundColor: '#123456',
-        isActive: true,
+        isEnabled: true,
         isLoaderVisible: true,
         isVisible: true,
         text: '',
@@ -227,7 +227,7 @@ describe('setParams', () => {
   it('should merge passed object with the state', () => {
     state.set({
       backgroundColor: '#123456',
-      isActive: true,
+      isEnabled: true,
       isLoaderVisible: true,
       isVisible: true,
       text: 'TEXT',
@@ -236,7 +236,7 @@ describe('setParams', () => {
 
     setParams({
       backgroundColor: '#111111',
-      isActive: false,
+      isEnabled: false,
       isLoaderVisible: false,
       text: 'TEXT UPDATED',
       textColor: '#000000',

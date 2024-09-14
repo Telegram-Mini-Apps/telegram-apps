@@ -132,7 +132,7 @@ export {
   backgroundColor as mainButtonBackgroundColor,
   isMounted as isMainButtonMounted,
   isVisible as isMainButtonVisible,
-  isActive as isMainButtonActive,
+  isEnabled as isMainButtonEnabled,
   isLoaderVisible as isMainButtonLoaderVisible,
   mount as mountMainButton,
   onClick as onMainButtonClick,

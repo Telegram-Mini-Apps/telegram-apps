@@ -9,7 +9,7 @@ import type { State } from './types.js';
  */
 export const state = signal<State>({
   backgroundColor: '#000000',
-  isActive: true,
+  isEnabled: true,
   isLoaderVisible: false,
   isVisible: false,
   text: '',
@@ -33,9 +33,9 @@ function createStateComputed<K extends keyof State>(key: K): Computed<State[K]> 
 export const backgroundColor = createStateComputed('backgroundColor');
 
 /**
- * @see State.isActive
+ * @see State.isEnabled
  */
-export const isActive = createStateComputed('isActive');
+export const isEnabled = createStateComputed('isEnabled');
 
 /**
  * @see State.isLoaderVisible
