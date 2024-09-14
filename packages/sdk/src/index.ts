@@ -53,7 +53,7 @@ export {
   getItem as getStorageItem,
   setItem as setStorageItem,
   deleteItem as deleteStorageItem,
-  getKeys as getStorageKeys
+  getKeys as getStorageKeys,
 } from '@/scopes/cloud-storage/instance.js';
 
 export {
@@ -76,7 +76,14 @@ export {
   configure,
   type ConfigureOptions,
 } from '@/scopes/globals/globals.js';
+
 export * as hapticFeedback from '@/scopes/haptic-feedback/instance.js';
+export {
+  impactOccurred as hapticImpactOccurred,
+  notificationOccurred as hapticNotificationOccurred,
+  selectionChanged as hapticSelectionChanged,
+} from '@/scopes/haptic-feedback/instance.js';
+
 export * as initData from '@/scopes/init-data/instance.js';
 export * as InitData from '@/scopes/init-data/static.js';
 export * as invoice from '@/scopes/invoice/instance.js';
