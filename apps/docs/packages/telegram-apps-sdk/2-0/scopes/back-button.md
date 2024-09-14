@@ -32,7 +32,7 @@ backButton.unmount(); // backButton.isMounted() -> false
 ```
 
 ```ts [Using functions]
-import { unmountBackButton, isBackButtonMounted } from '@telegram-apps/sdk';
+import { unmountBackButton } from '@telegram-apps/sdk';
 
 unmountBackButton(); // isBackButtonMounted() -> false
 ```
