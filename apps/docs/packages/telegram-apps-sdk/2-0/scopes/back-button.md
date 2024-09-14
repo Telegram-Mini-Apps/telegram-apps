@@ -19,21 +19,50 @@ To unmount, use the `unmount` method:
 backButton.unmount(); // backButton.isMounted() -> false
 ```
 
+Alternative functional approach:
+
+```ts
+import {
+  mountBackButton,
+  isBackButtonMounted,
+  isBackButtonMounted,
+} from '@telegram-apps/sdk';
+
+mountBackButton(); // isBackButtonMounted() -> true
+unmountBackButton.unmount(); // isBackButtonMounted() -> false
+```
+
 ## Showing and Hiding
 
 To change the button's visibility, use the `hide()` and `show()` methods. These methods update
 the `isVisible` signal property value.
 
 ```ts
-backButton.show(); // backButton.isVisible() -> true
-backButton.hide(); // backButton.isVisible() -> false
+if (backButton.show.isSupported()) {
+  backButton.show(); // backButton.isVisible() -> true
+}
+
+if (backButton.hide.isSupported()) {
+  backButton.hide(); // backButton.isVisible() -> false
+}
 ```
 
-To check if these methods are supported, use the `isSupported()` method.
+Using functions:
 
 ```ts
-backButton.show.isSupported() && backButton.show();
-backButton.hide.isSupported() && backButton.hide();
+import {
+  showBackButton,
+  hideBackButton,
+  isBackButtonVisible,
+} from '@telegram-apps/sdk';
+
+if (showBackButton.isSupported()) {
+  showBackButton(); // isBackButtonVisible() -> true
+}
+
+if (hideBackButton.isSupported()) {
+  hideBackButton.hide(); // isBackButtonVisible() -> false
+}
 ```
 
 ## Tracking Click
@@ -49,4 +78,18 @@ removeListener();
 // or
 backButton.onClick(listener);
 backButton.offClick(listener);
+```
+
+Using functions:
+
+```ts
+import { onBackButtonClick, offBackButtonClick } from '@telegram-apps/sdk';
+
+const listener = () => console.log('Clicked!');
+
+const removeListener = onBackButtonClick(listener);
+removeListener();
+// or
+onBackButtonClick(listener);
+offBackButtonClick(listener);
 ```
