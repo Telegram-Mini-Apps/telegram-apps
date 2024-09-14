@@ -8,4 +8,4 @@ export const isMounted = signal(false);
 /**
  * True if the confirmation dialog should be shown while the user is trying to close the Mini App.
  */
-export const isConfirmationNeeded = signal(false);
+export const isEnabled = signal(false);
