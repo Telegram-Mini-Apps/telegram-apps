@@ -35,8 +35,21 @@ export {
   unmount as unmountBackButton,
 } from '@/scopes/back-button/instance.js';
 
-export * as biometryManager from '@/scopes/biometry-manager/instance.js';
-export * as BiometryManager from '@/scopes/biometry-manager/static.js';
+export * as biometry from '@/scopes/biometry/instance.js';
+export {
+  authenticate as authenticateBiometry,
+  isMounting as isBiometryMounting,
+  isMounted as isBiometryMounted,
+  isSupported as isBiometrySupported,
+  mount as mountBiometry,
+  mountError as biometryMountError,
+  openSettings as openBiometrySettings,
+  requestAccess as requestBiometryAccess,
+  state as biometryState,
+  unmount as unmountBiometry,
+  updateToken as updateBiometryToken,
+} from '@/scopes/biometry/instance.js';
+export * as Biometry from '@/scopes/biometry/static.js';
 
 export * as closingBehavior from '@/scopes/closing-behavior/instance.js';
 export {
@@ -50,10 +63,10 @@ export {
 
 export * as cloudStorage from '@/scopes/cloud-storage/instance.js';
 export {
-  getItem as getStorageItem,
-  setItem as setStorageItem,
-  deleteItem as deleteStorageItem,
-  getKeys as getStorageKeys,
+  getItem as getCloudStorageItem,
+  setItem as setCloudStorageItem,
+  deleteItem as deleteCloudStorageItem,
+  getKeys as getCloudStorageKeys,
 } from '@/scopes/cloud-storage/instance.js';
 
 export {
@@ -104,19 +117,132 @@ export {
 export * as InitData from '@/scopes/init-data/static.js';
 
 export * as invoice from '@/scopes/invoice/instance.js';
+export {
+  isOpened as isInvoiceOpened,
+  open as openInvoice,
+} from '@/scopes/invoice/instance.js';
+
 export * as LaunchParams from '@/scopes/launch-params/static.js';
+export {
+  retrieve as retrieveLaunchParams,
+} from '@/scopes/launch-params/static.js';
+
 export * as mainButton from '@/scopes/main-button/instance.js';
+export {
+  backgroundColor as mainButtonBackgroundColor,
+  isMounted as isMainButtonMounted,
+  isVisible as isMainButtonVisible,
+  isActive as isMainButtonActive,
+  isLoaderVisible as isMainButtonLoaderVisible,
+  mount as mountMainButton,
+  onClick as onMainButtonClick,
+  offClick as offMainButtonClick,
+  setParams as setMainButtonParams,
+  state as mainButtonState,
+  textColor as mainButtonTextColor,
+  text as mainButtonText,
+  unmount as unmountMainButton,
+} from '@/scopes/main-button/instance.js';
 export * as MainButton from '@/scopes/main-button/static.js';
+
 export * as miniApp from '@/scopes/mini-app/instance.js';
+export {
+  close as closeMiniApp,
+  backgroundColor as miniAppBackgroundColor,
+  bindCssVars as bindMiniAppCssVars,
+  headerColor as miniAppHeaderColor,
+  isMounted as isMiniAppMounted,
+  isCssVarsBound as isMiniAppCssVarsBound,
+  isDark as isMiniAppDark,
+  mount as mountMiniApp,
+  ready as readyMiniApp,
+  state as miniAppState,
+  setHeaderColor as setMiniAppHeaderColor,
+  setBackgroundColor as setMiniAppBackgroundColor,
+  sendData as sendMiniAppData,
+  unmount as unmountMiniApp,
+} from '@/scopes/mini-app/instance.js';
 export * as MiniApp from '@/scopes/main-button/static.js';
+
 export * as popup from '@/scopes/popup/instance.js';
+export {
+  isOpened as isPopupOpened,
+  open as openPopup,
+} from '@/scopes/popup/instance.js';
 export * as Popup from '@/scopes/popup/static.js';
+
 export * as qrScanner from '@/scopes/qr-scanner/instance.js';
+export {
+  close as closeQrScanner,
+  isOpened as isQrScannerOpened,
+  open as openQrScanner,
+} from '@/scopes/qr-scanner/instance.js';
+
 export * as settingsButton from '@/scopes/settings-button/instance.js';
+export {
+  hide as hideSettingsButton,
+  isVisible as isSettingsButtonVisible,
+  isMounted as isSettingsButtonMounted,
+  mount as mountSettingsButton,
+  onClick as onSettingsButtonClick,
+  offClick as offSettingsButtonClick,
+  show as showSettingsButton,
+  unmount as unmountSettingsButton,
+} from '@/scopes/settings-button/instance.js';
+
 export * as swipeBehavior from '@/scopes/swipe-behavior/instance.js';
-export * as themeParams from '@/scopes/theme-params/instance.js';
-export * as ThemeParams from '@/scopes/theme-params/static.js';
+export {
+  disableVertical as disableVerticalSwipes,
+  enableVertical as enableVerticalSwipes,
+  isMounted as isSwipeBehaviorMounted,
+  isVerticalEnabled as isVerticalSwipesEnabled,
+  mount as mountSwipeBehavior,
+  unmount as unmountSwipeBehavior,
+} from '@/scopes/swipe-behavior/instance.js';
+
+export * as theme from '@/scopes/theme-params/instance.js';
+export {
+  accentTextColor as themeAccentTextColor,
+  backgroundColor as themeBackgroundColor,
+  bindCssVars as bindThemeCssVars,
+  buttonTextColor as themeButtonTextColor,
+  buttonColor as themeButtonColor,
+  destructiveTextColor as themeDestructiveTextColor,
+  headerBackgroundColor as themeHeaderBackgroundColor,
+  hintColor as themeHintColor,
+  isMounted as isThemeMounted,
+  isDark as isThemeDark,
+  isCssVarsBound as isThemeCssVarsBound,
+  linkColor as themeLinkColor,
+  mount as mountTheme,
+  state as themeState,
+  subtitleTextColor as themeSubtitleTextColor,
+  sectionBackgroundColor as themeSectionBackgroundColor,
+  secondaryBackgroundColor as themeSecondaryBackgroundColor,
+  sectionSeparatorColor as themeSectionSeparatorColor,
+  sectionHeaderTextColor as themeSectionHeaderTextColor,
+  textColor as themeTextColor,
+  unmount as unmountTheme,
+} from '@/scopes/theme-params/instance.js';
+export * as Theme from '@/scopes/theme-params/static.js';
+
 export * as viewport from '@/scopes/viewport/instance.js';
+export {
+  bindCssVars as bindViewportCssVars,
+  expand as expandViewport,
+  height as viewportHeight,
+  isExpanded as isViewportExpanded,
+  isStable as isViewportStable,
+  isCssVarsBound as isViewportCssVarsBound,
+  isMounting as isViewportMounting,
+  isMounted as isViewportMounted,
+  mount as mountViewport,
+  mountError as viewportMountError,
+  state as viewportState,
+  stableHeight as viewportStableHeight,
+  unmount as unmountViewport,
+  width as viewportWidth,
+} from '@/scopes/viewport/instance.js';
 export * as Viewport from '@/scopes/viewport/static.js';
 
 export {
