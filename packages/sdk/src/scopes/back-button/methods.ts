@@ -34,7 +34,7 @@ export function mount(): void {
   }
 }
 
-export function onStateChanged(isVisible: boolean) {
+function onStateChanged(isVisible: boolean) {
   $postEvent()(MINI_APPS_METHOD, { is_visible: isVisible });
   setStorageValue<StorageValue>(STORAGE_KEY, isVisible);
 }
