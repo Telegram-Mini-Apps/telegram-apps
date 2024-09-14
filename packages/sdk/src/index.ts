@@ -24,6 +24,17 @@ export {
 export { SDKError } from '@/errors/SDKError.js';
 
 export * as backButton from '@/scopes/back-button/instance.js';
+export {
+  hide as hideBackButton,
+  isVisible as isBackButtonVisible,
+  isMounted as isBackButtonMounted,
+  mount as mountBackButton,
+  onClick as onBackButtonClick,
+  offClick as offBackButtonClick,
+  show as showBackButton,
+  unmount as unmountBackButton,
+} from '@/scopes/back-button/instance.js';
+
 export * as biometryManager from '@/scopes/biometry-manager/instance.js';
 export * as BiometryManager from '@/scopes/biometry-manager/static.js';
 export * as closingBehavior from '@/scopes/closing-behavior/instance.js';
