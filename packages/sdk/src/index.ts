@@ -85,7 +85,24 @@ export {
 } from '@/scopes/haptic-feedback/instance.js';
 
 export * as initData from '@/scopes/init-data/instance.js';
+export {
+  state as initDataState,
+  raw as initDataRaw,
+  authDate as initDataAuthDate,
+  chat as initDataChat,
+  chatInstance as initDataChatInstance,
+  chatType as initDataChatType,
+  hash as initDataHash,
+  canSendAfter as initDataCanSendAfter,
+  canSendAfterDate as initDataCanSendAfterDate,
+  queryId as initDataQueryId,
+  restore as restoreInitData,
+  user as initDataUser,
+  receiver as initDataReceiver,
+  startParam as initDataStartParam,
+} from '@/scopes/init-data/instance.js';
 export * as InitData from '@/scopes/init-data/static.js';
+
 export * as invoice from '@/scopes/invoice/instance.js';
 export * as LaunchParams from '@/scopes/launch-params/static.js';
 export * as mainButton from '@/scopes/main-button/instance.js';
