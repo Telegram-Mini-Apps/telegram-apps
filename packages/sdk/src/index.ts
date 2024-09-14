@@ -38,15 +38,15 @@ export {
 export * as biometryManager from '@/scopes/biometry-manager/instance.js';
 export * as BiometryManager from '@/scopes/biometry-manager/static.js';
 
-export * as closingConfirmation from '@/scopes/closing-confirmation/instance.js';
+export * as closingBehavior from '@/scopes/closing-behavior/instance.js';
 export {
-  disable as disableClosingConfirmation,
-  enable as enableClosingConfirmation,
-  isMounted as isClosingConfirmationMounted,
-  isEnabled as isClosingConfirmationEnabled,
-  mount as mountClosingConfirmation,
-  unmount as unmountClosingConfirmation,
-} from '@/scopes/closing-confirmation/instance.js';
+  disableClosingConfirmation,
+  enableClosingConfirmation,
+  isMounted as isClosingBehaviorMounted,
+  isClosingConfirmationEnabled,
+  mount as mountClosingBehavior,
+  unmount as unmountClosingBehavior,
+} from '@/scopes/closing-behavior/instance.js';
 
 export * as cloudStorage from '@/scopes/cloud-storage/instance.js';
 export {
