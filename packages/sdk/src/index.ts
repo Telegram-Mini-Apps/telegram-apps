@@ -40,10 +40,10 @@ export * as BiometryManager from '@/scopes/biometry-manager/static.js';
 
 export * as closingBehavior from '@/scopes/closing-behavior/instance.js';
 export {
-  disableClosingConfirmation,
-  enableClosingConfirmation,
+  disableConfirmation as disableClosingConfirmation,
+  enableConfirmation as enableClosingConfirmation,
   isMounted as isClosingBehaviorMounted,
-  isClosingConfirmationEnabled,
+  isConfirmationEnabled as isClosingConfirmationEnabled,
   mount as mountClosingBehavior,
   unmount as unmountClosingBehavior,
 } from '@/scopes/closing-behavior/instance.js';

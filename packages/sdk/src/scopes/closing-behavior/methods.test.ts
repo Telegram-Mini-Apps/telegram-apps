@@ -5,17 +5,17 @@ import { resetPackageState, resetSignal } from '@test-utils/reset.js';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
-import { isClosingConfirmationEnabled, isMounted } from './signals.js';
+import { isConfirmationEnabled, isMounted } from './signals.js';
 import {
-  disable,
-  enable,
+  disableConfirmation,
+  enableConfirmation,
   mount,
   unmount,
 } from './methods.js';
 
 beforeEach(() => {
   resetPackageState();
-  [isClosingConfirmationEnabled, isMounted].forEach(resetSignal);
+  [isConfirmationEnabled, isMounted].forEach(resetSignal);
   vi.restoreAllMocks();
   $postEvent.set(() => null);
 });
@@ -26,12 +26,12 @@ describe('mounted', () => {
 
   describe('disableConfirmation', () => {
     it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: false }', () => {
-      isClosingConfirmationEnabled.set(true);
+      isConfirmationEnabled.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
-      disable();
-      disable();
-      disable();
+      disableConfirmation();
+      disableConfirmation();
+      disableConfirmation();
       expect(spy).toBeCalledTimes(1);
       expect(spy).toBeCalledWith('web_app_setup_closing_behavior', { need_confirmation: false });
     });
@@ -39,12 +39,12 @@ describe('mounted', () => {
 
   describe('enableConfirmation', () => {
     it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: true }', () => {
-      isClosingConfirmationEnabled.set(false);
+      isConfirmationEnabled.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
-      enable();
-      enable();
-      enable();
+      enableConfirmation();
+      enableConfirmation();
+      enableConfirmation();
       expect(spy).toBeCalledTimes(1);
       expect(spy).toBeCalledWith('web_app_setup_closing_behavior', { need_confirmation: true });
     });
@@ -55,24 +55,24 @@ describe('mounted', () => {
 describe('not mounted', () => {
   describe('disableConfirmation', () => {
     it('should not call postEvent', () => {
-      isClosingConfirmationEnabled.set(true);
+      isConfirmationEnabled.set(true);
       const spy = vi.fn();
       $postEvent.set(spy);
-      disable();
-      disable();
-      disable();
+      disableConfirmation();
+      disableConfirmation();
+      disableConfirmation();
       expect(spy).toBeCalledTimes(0);
     });
   });
 
   describe('enableConfirmation', () => {
     it('should not call postEvent', () => {
-      isClosingConfirmationEnabled.set(false);
+      isConfirmationEnabled.set(false);
       const spy = vi.fn();
       $postEvent.set(spy);
-      enable();
-      enable();
-      enable();
+      enableConfirmation();
+      enableConfirmation();
+      enableConfirmation();
       expect(spy).toBeCalledTimes(0);
     });
   });
@@ -80,10 +80,10 @@ describe('not mounted', () => {
 
 describe('disableConfirmation', () => {
   it('should set isConfirmationNeeded = false', () => {
-    isClosingConfirmationEnabled.set(true);
-    expect(isClosingConfirmationEnabled()).toBe(true);
-    disable();
-    expect(isClosingConfirmationEnabled()).toBe(false);
+    isConfirmationEnabled.set(true);
+    expect(isConfirmationEnabled()).toBe(true);
+    disableConfirmation();
+    expect(isConfirmationEnabled()).toBe(false);
   });
 });
 
@@ -107,7 +107,7 @@ describe('mount', () => {
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/closingConfirmation');
-      expect(isClosingConfirmationEnabled()).toBe(true);
+      expect(isConfirmationEnabled()).toBe(true);
     });
 
     it('should set isConfirmationNeeded false if session storage key "tapps/closingConfirmation" not presented', () => {
@@ -116,14 +116,14 @@ describe('mount', () => {
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/closingConfirmation');
-      expect(isClosingConfirmationEnabled()).toBe(false);
+      expect(isConfirmationEnabled()).toBe(false);
     });
   });
 
   describe('first launch', () => {
     it('should set isConfirmationNeeded false', () => {
       mount();
-      expect(isClosingConfirmationEnabled()).toBe(false);
+      expect(isConfirmationEnabled()).toBe(false);
     });
   });
 });
@@ -135,7 +135,7 @@ describe('unmount', () => {
     const postEventSpy = vi.fn();
     const storageSpy = mockSessionStorageSetItem();
     $postEvent.set(postEventSpy);
-    isClosingConfirmationEnabled.set(true);
+    isConfirmationEnabled.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);
 
@@ -143,7 +143,7 @@ describe('unmount', () => {
     storageSpy.mockClear();
 
     unmount();
-    isClosingConfirmationEnabled.set(false);
+    isConfirmationEnabled.set(false);
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);
@@ -152,9 +152,9 @@ describe('unmount', () => {
 
 describe('enableConfirmation', () => {
   it('should set isConfirmationNeeded = true', () => {
-    isClosingConfirmationEnabled.set(false);
-    expect(isClosingConfirmationEnabled()).toBe(false);
-    enable();
-    expect(isClosingConfirmationEnabled()).toBe(true);
+    isConfirmationEnabled.set(false);
+    expect(isConfirmationEnabled()).toBe(false);
+    enableConfirmation();
+    expect(isConfirmationEnabled()).toBe(true);
   });
 });

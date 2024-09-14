@@ -3,7 +3,7 @@ import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
-import { isClosingConfirmationEnabled, isMounted } from './signals.js';
+import { isConfirmationEnabled, isMounted } from './signals.js';
 
 type StorageValue = boolean;
 
@@ -12,15 +12,15 @@ const STORAGE_KEY = 'closingConfirmation';
 /**
  * Disables the confirmation dialog when closing the Mini App.
  */
-export function disableClosingConfirmation(): void {
-  isClosingConfirmationEnabled.set(false);
+export function disableConfirmation(): void {
+  isConfirmationEnabled.set(false);
 }
 
 /**
  * Enables the confirmation dialog when closing the Mini App.
  */
-export function enableClosingConfirmation(): void {
-  isClosingConfirmationEnabled.set(true);
+export function enableConfirmation(): void {
+  isConfirmationEnabled.set(true);
 }
 
 /**
@@ -31,8 +31,8 @@ export function enableClosingConfirmation(): void {
  */
 export function mount(): void {
   if (!isMounted()) {
-    isClosingConfirmationEnabled.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
-    isClosingConfirmationEnabled.sub(onStateChanged);
+    isConfirmationEnabled.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
+    isConfirmationEnabled.sub(onStateChanged);
     isMounted.set(true);
   }
 }
@@ -46,6 +46,6 @@ function onStateChanged(value: boolean): void {
  * Unmounts the component, removing the listener, saving the component state in the local storage.
  */
 export function unmount(): void {
-  isClosingConfirmationEnabled.unsub(onStateChanged);
+  isConfirmationEnabled.unsub(onStateChanged);
   isMounted.set(false);
 }
