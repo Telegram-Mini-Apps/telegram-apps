@@ -1,4 +1,4 @@
-# Closing Confirmation
+# Closing Behavior
 
 The scope responsible for the Telegram Mini
 Apps [closing behavior](../../../../platform/closing-behavior.md).
@@ -11,18 +11,18 @@ do so, use the `mount` method. It will update the `isMounted` signal property.
 ::: code-group
 
 ```ts [Using object]
-import { closingConfirmation } from '@telegram-apps/sdk';
+import { closingBehavior } from '@telegram-apps/sdk';
 
-closingConfirmation.mount(); // closingConfirmation.isMounted() -> true
+closingBehavior.mount(); // closingBehavior.isMounted() -> true
 ```
 
 ```ts [Using functions]
 import {
-  mountClosingConfirmation,
-  isClosingConfirmationMounted,
+  mountclosingBehavior,
+  isClosingBehaviorMounted,
 } from '@telegram-apps/sdk';
 
-mountClosingConfirmation(); // isClosingConfirmationMounted() -> true
+mountclosingBehavior(); // isclosingBehaviorMounted() -> true
 ```
 
 :::
@@ -32,30 +32,31 @@ To unmount, use the `unmount` method:
 ::: code-group
 
 ```ts [Using object]
-closingConfirmation.unmount(); // closingConfirmation.isMounted() -> false
+closingBehavior.unmount(); // closingBehavior.isMounted() -> false
 ```
 
 ```ts [Using functions]
-import { unmountClosingConfirmation } from '@telegram-apps/sdk';
+import { unmountClosingBehavior } from '@telegram-apps/sdk';
 
-unmountClosingConfirmation(); // isClosingConfirmationMounted() -> false
+unmountclosingBehavior(); // isclosingBehaviorMounted() -> false
 ```
 
 :::
 
-## Enabling and Disabling
+## Enabling and Disabling Confirmation
 
-To change the closing confirmation behavior, use the `enable()` and `disable()` methods. These
-methods update the `isEnabled` signal property value.
+To change the closing confirmation behavior, use the `enableConfirmation()`
+and `disableConfirmation()` methods. These methods update the `isConfirmationEnabled` signal
+property value.
 
 ::: code-group
 
 ```ts [Using object]
-closingConfirmation.enable();
-// closingConfirmation.isEnabled() -> true
+closingBehavior.enableConfirmation();
+// closingBehavior.isConfirmationEnabled() -> true
 
-closingConfirmation.disable();
-// closingConfirmation.isEnabled() -> false
+closingBehavior.disableConfirmation();
+// closingBehavior.isConfirmationEnabled() -> false
 ```
 
 ```ts [Using functions]
