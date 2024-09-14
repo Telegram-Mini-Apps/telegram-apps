@@ -4,17 +4,90 @@ This package is designed to give developers full control over its lifecycle, inc
 initialization process. Therefore, there are no pre-initialized global scopes available for use;
 developers must configure the scopes themselves.
 
-By *scope*, we mean a union of related functionality into a single entity. For example, a scope
-could be `backButton`, `mainButton`, `hapticFeedback`, etc. This approach makes the SDK usage more
-intuitive and efficient.
+By *scope*, we refer to a collection of related functionality grouped into a single entity. Examples
+of scopes include `backButton` and `mainButton`. This design makes the SDK more intuitive and
+efficient to use.
 
-To simplify the workflow, almost every scope (where applicable) provides a `mount` method, which
-is responsible for configuring the scope state, adding special handlers, etc. After calling this
-method, developers can be confident that the scope is in an up-to-date state.
+It’s important to note that some scopes may be provided in two forms:
 
-To unmount the scope, use the `unmount` method.
+- As a variable (e.g., `backButton`)
+- As a set of functions (e.g., `showBackButton`, `mountBackButton`)
 
-If a scope is simple and doesn't require listeners or other handlers, a simpler method
-like `restore` may be provided.
+Effectively, exported variables are simply compositions of the same exported functions.
+So, `backButton.isMounted` and `isBackButtonMounted` are essentially the same entity.
 
-Be sure to read the documentation for each scope to understand how it works.
+Here's an example:
+
+```ts
+import {
+  backButton,
+  hideBackButton,
+  isBackButtonVisible,
+} from '@telegram-apps/sdk';
+
+isBackButtonVisible(); // false
+
+backButton.show();
+// backButton.isVisible and isBackButtonVisible are the same entity (signal).
+// We can say the same about backButton.show and showBackButton.
+//
+// backButton.isVisible() -> true
+// isBackButtonVisible() -> true
+
+hideBackButton();
+// backButton.isVisible() -> false
+// isBackButtonVisible() -> false
+```
+
+The key difference here lies in the final bundle size. Internally, the `backButton` export is
+handled through the following code:
+
+```ts
+export * as backButton from 'somewhere';
+```
+
+When not using the package source code while building the application, the bundler is more likely to
+make `backButton` a non-treeshakeable object. As a result, all dependencies from `somewhere` will be
+bundled, slightly increasing the final bundle size (though not by much).
+
+Let’s look at how we can use the package more efficiently:
+
+- Using functions exclusively allows the bundler to tree-shake unused scope code.
+
+```ts
+import { showBackButton, backButton } from '@telegram-apps/sdk';
+
+showBackButton();
+// Only showBackButton's source code will be bundled.
+
+backButton.show();
+// All backButton dependencies will be bundled, even if not
+// used in the code: backButton.show(), backButton.hide(),
+// backButton.isVisible(), etc.
+```
+
+- Configure the bundler to use the source code instead of the built version.
+
+```ts
+import { backButton } from '@telegram-apps/sdk';
+
+backButton.show();
+// Only backButton.show's source code will be bundled because
+// the bundler is smart enough to understand that backButton.show
+// is just the showBackButton function, so only its source code is bundled.
+```
+
+Here's an example of a Vite config using the `resolve` option:
+
+```ts
+import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      '@telegram-apps/sdk': resolve('node_modules/@telegram-apps/sdk/src'),
+    },
+  },
+});
+```
