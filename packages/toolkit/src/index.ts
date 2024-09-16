@@ -9,12 +9,12 @@ export type {
 } from './async/promises/types.js';
 export {
   createAbortError,
-  isCancelledError,
+  isCanceledError,
   isAbortError,
   isTimeoutError,
   ERR_TIMED_OUT,
   ERR_ABORTED,
-  ERR_CANCELLED,
+  ERR_CANCELED,
 } from './async/errors.js';
 export { sleep } from './async/sleep.js';
 export type { AsyncOptions } from './async/types.js';

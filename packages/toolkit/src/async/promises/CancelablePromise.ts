@@ -1,7 +1,7 @@
 import { TypedError } from '@/errors/TypedError.js';
 import { addEventListener } from '@/addEventListener.js';
 import { createCbCollector } from '@/createCbCollector.js';
-import { createAbortError, ERR_CANCELLED, ERR_TIMED_OUT } from '@/async/errors.js';
+import { createAbortError, ERR_CANCELED, ERR_TIMED_OUT } from '@/async/errors.js';
 import type { Maybe } from '@/types/misc.js';
 import type { AsyncOptions } from '@/async/types.js';
 
@@ -133,7 +133,7 @@ export class CancelablePromise<Result> extends Promise<Result> {
         controller.abort(reason);
         rej(reason);
       });
-      resolve = withCleanup(res);
+      resolve = withCleanup(res) as PromiseResolveFn<Result>;
 
       /* ABORT SIGNAL */
       abortSignal && addCleanup(
@@ -164,7 +164,7 @@ export class CancelablePromise<Result> extends Promise<Result> {
    * Cancels the promise execution.
    */
   cancel(): void {
-    this.reject(new TypedError(ERR_CANCELLED));
+    this.reject(new TypedError(ERR_CANCELED));
   }
 
   /**

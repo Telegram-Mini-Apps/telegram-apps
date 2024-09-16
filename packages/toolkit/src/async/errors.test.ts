@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { TypedError } from '@/errors/TypedError.js';
 
-import { createAbortError, isAbortError, isCancelledError, isTimeoutError } from './errors.js';
+import { createAbortError, isAbortError, isCanceledError, isTimeoutError } from './errors.js';
 
 describe('createAbortError', () => {
   it('should create TypedError with type ERR_ABORTED', () => {
@@ -27,7 +27,7 @@ describe('isAbortError', () => {
 
 describe('isCancelledError', () => {
   it('should return true if value is instance of TypedError and type is ERR_CANCELLED', () => {
-    expect(isCancelledError({ type: 'ERR_CANCELLED' })).toBe(false);
-    expect(isCancelledError(new TypedError('ERR_CANCELLED'))).toBe(true);
+    expect(isCanceledError({ type: 'ERR_CANCELLED' })).toBe(false);
+    expect(isCanceledError(new TypedError('ERR_CANCELLED'))).toBe(true);
   });
 });
