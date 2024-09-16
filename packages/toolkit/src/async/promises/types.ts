@@ -1,4 +1,6 @@
-export type PromiseResolveFn<T> = (value: T | PromiseLike<T>) => void;
+export type PromiseResolveFn<T> = undefined extends T
+  ? (value?: T | PromiseLike<T>) => void
+  : (value: T | PromiseLike<T>) => void;
 
 export type PromiseRejectFn = (reason?: any) => void;
 
