@@ -1,6 +1,6 @@
 import {
-  CancelablePromise,
-  createCbCollector, EnhancedPromise,
+  createCbCollector,
+  EnhancedPromise,
   type If,
   type IsNever,
 } from '@telegram-apps/toolkit';
@@ -55,9 +55,11 @@ export interface RequestBasicOptions<E extends AnyEventName> extends ExecuteWith
 
 export type RequestResult<E extends AnyEventName> =
   E extends (infer U extends EventName)[]
-    ? EventPayload<U>
+    ? U extends infer K extends EventName
+      ? If<IsNever<EventPayload<K>>, undefined, EventPayload<K>>
+      : never
     : E extends EventName
-      ? EventPayload<E>
+      ? If<IsNever<EventPayload<E>>, undefined, EventPayload<E>>
       : never;
 
 export interface RequestFn {
@@ -72,7 +74,7 @@ export interface RequestFn {
     method: M,
     eventOrEvents: E,
     options: RequestBasicOptions<E> & { params: MethodParams<M> },
-  ): CancelablePromise<RequestResult<E>>;
+  ): EnhancedPromise<RequestResult<E>>;
 
   /**
    * Performs a request waiting for specified events to occur.
@@ -85,7 +87,7 @@ export interface RequestFn {
     method: M,
     eventOrEvents: E,
     options?: RequestBasicOptions<E> & { params?: MethodParams<M> },
-  ): CancelablePromise<RequestResult<E>>;
+  ): EnhancedPromise<RequestResult<E>>;
 
   /**
    * Performs a request waiting for specified events to occur.
@@ -98,23 +100,21 @@ export interface RequestFn {
     method: M,
     eventOrEvents: E,
     options?: RequestBasicOptions<E>,
-  ): CancelablePromise<RequestResult<E>>;
+  ): EnhancedPromise<RequestResult<E>>;
 }
 
 export const request: RequestFn = <M extends MethodName, E extends AnyEventName>(
   method: M,
   eventOrEvents: E,
   options?: RequestBasicOptions<E> & { params?: MethodParams<M> },
-): CancelablePromise<RequestResult<E>> => {
+): EnhancedPromise<RequestResult<E>> => {
   options ||= {};
-  const promise = new EnhancedPromise<RequestResult<E>>(options);
+  let promise: EnhancedPromise<RequestResult<E>>;
 
-  const { capture } = options || {};
+  const { capture } = options;
   const [, cleanup] = createCbCollector(
     // We need to iterate over all tracked events and create their event listeners.
-    (
-      (Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents]) as EventName[]
-    ).map(event => {
+    ((Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents])).map(event => {
       // Each event listener waits for the event to occur.
       // Then, if the capture function was passed, we should check if the event should be captured.
       // If the function is omitted, we instantly capture the event.
@@ -133,11 +133,9 @@ export const request: RequestFn = <M extends MethodName, E extends AnyEventName>
     }),
   );
 
-  return CancelablePromise
-    .resolve()
-    .then(() => {
+  return (
+    promise = new EnhancedPromise<RequestResult<E>>(() => {
       (options.postEvent || postEvent)(method as any, (options as any).params);
-      return promise;
     })
-    .finally(cleanup);
+  ).finally(cleanup);
 };

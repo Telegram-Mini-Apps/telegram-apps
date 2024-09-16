@@ -1,10 +1,10 @@
 import { fn, object } from '@telegram-apps/transformers';
+import { TypedError } from '@telegram-apps/toolkit';
 
 import { logInfo } from '@/debug.js';
 import { isIframe } from '@/env/isIframe.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { ERR_UNKNOWN_ENV } from '@/errors/errors.js';
-import { BridgeError } from '@/errors/BridgeError.js';
 import { $targetOrigin } from '@/methods/$targetOrigin.js';
 import type {
   MethodName,
@@ -20,8 +20,7 @@ export type PostEventFn = typeof postEvent;
  * Calls Mini Apps methods requiring parameters.
  * @param method - method name.
  * @param params - options along with params.
- * @throws {BridgeError} ERR_UNKNOWN_ENV
- * @see ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  */
 export function postEvent<Method extends MethodNameWithRequiredParams>(
   method: Method,
@@ -31,8 +30,7 @@ export function postEvent<Method extends MethodNameWithRequiredParams>(
 /**
  * Calls Mini Apps methods accepting no parameters at all.
  * @param method - method name.
- * @throws {BridgeError} ERR_UNKNOWN_ENV
- * @see ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  */
 export function postEvent(method: MethodNameWithoutParams): void;
 
@@ -40,8 +38,7 @@ export function postEvent(method: MethodNameWithoutParams): void;
  * Calls Mini Apps methods accepting optional parameters.
  * @param method - method name.
  * @param params - options along with params.
- * @throws {BridgeError} ERR_UNKNOWN_ENV
- * @see ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  */
 export function postEvent<Method extends MethodNameWithOptionalParams>(
   method: Method,
@@ -77,5 +74,5 @@ export function postEvent(
   }
 
   // Otherwise current environment is unknown, and we are not able to send event.
-  throw new BridgeError(ERR_UNKNOWN_ENV);
+  throw new TypedError(ERR_UNKNOWN_ENV);
 }

@@ -1,11 +1,10 @@
-import { CancelablePromise } from '@telegram-apps/toolkit';
+import { CancelablePromise, TypedError } from '@telegram-apps/toolkit';
 
-import { ERR_INVOKE_CUSTOM_METHOD_RESPONSE } from '@/errors/errors.js';
-import { BridgeError } from '@/errors/BridgeError.js';
+import { ERR_CUSTOM_METHOD_ERR_RESPONSE } from '@/errors/errors.js';
+import { captureSameReq } from '@/methods/captureSameReq.js';
 import type { ExecuteWithOptions } from '@/types.js';
 import type { CustomMethodName, CustomMethodParams } from '@/methods/types/index.js';
 
-import { captureSameReq } from '../methods/captureSameReq.js';
 import { request } from './request.js';
 
 /**
@@ -14,7 +13,7 @@ import { request } from './request.js';
  * @param params - method parameters.
  * @param requestId - request identifier.
  * @param options - additional options.
- * @throws {BridgeError} ERR_INVOKE_CUSTOM_METHOD_RESPONSE
+ * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
  */
 export function invokeCustomMethod<M extends CustomMethodName>(
   method: M,
@@ -29,7 +28,7 @@ export function invokeCustomMethod<M extends CustomMethodName>(
  * @param params - method parameters.
  * @param requestId - request identifier.
  * @param options - additional options.
- * @throws {BridgeError} ERR_INVOKE_CUSTOM_METHOD_RESPONSE
+ * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
  */
 export function invokeCustomMethod(
   method: string,
@@ -51,7 +50,7 @@ export function invokeCustomMethod(
   })
     .then(({ result, error }) => {
       if (error) {
-        throw new BridgeError(ERR_INVOKE_CUSTOM_METHOD_RESPONSE, error);
+        throw new TypedError(ERR_CUSTOM_METHOD_ERR_RESPONSE, error);
       }
       return result;
     });

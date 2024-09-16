@@ -1,12 +1,8 @@
 import { isRecord } from '@telegram-apps/transformers';
+import { TypedError } from '@telegram-apps/toolkit';
 import type { Version } from '@telegram-apps/types';
 
-import { BridgeError } from '@/errors/BridgeError.js';
-import {
-  ERR_METHOD_PARAMETER_UNSUPPORTED,
-  ERR_METHOD_UNSUPPORTED,
-  type ErrorType,
-} from '@/errors/errors.js';
+import { ERR_METHOD_PARAMETER_UNSUPPORTED, ERR_METHOD_UNSUPPORTED } from '@/errors/errors.js';
 import { supports } from '@/methods/supports.js';
 import { type PostEventFn, postEvent } from '@/methods/postEvent.js';
 import type {
@@ -36,15 +32,12 @@ export type CreatePostEventMode = 'strict' | 'non-strict';
  * If `strict` or `non-strict` value was passed as the second argument, the function
  * will create its own `onUnsupported` function with behavior depending on the value passed.
  *
- * - Passing `strict` will make function to throw a `BridgeError` error
+ * - Passing `strict` will make function to throw a `TypedError` error
  * with `ERR_METHOD_UNSUPPORTED` or `ERR_METHOD_PARAMETER_UNSUPPORTED` type.
  * - Passing `non-strict` will just warn you about something being unsupported.
  *
  * @param version - Telegram Mini Apps version.
  * @param onUnsupportedOrMode - function or strict mode. Default: `strict`
- * @see BridgeError
- * @see ERR_METHOD_UNSUPPORTED
- * @see ERR_METHOD_PARAMETER_UNSUPPORTED
  */
 export function createPostEvent(
   version: Version,
@@ -56,7 +49,7 @@ export function createPostEvent(
     : data => {
       const { method, version } = data;
       let message: string;
-      let error: ErrorType;
+      let error: string;
 
       if ('param' in data) {
         message = `Parameter "${data.param}" of "${method}" method is unsupported in Mini Apps version ${version}`;
@@ -67,7 +60,7 @@ export function createPostEvent(
       }
 
       if (onUnsupportedOrMode === 'strict') {
-        throw new BridgeError(error, message);
+        throw new TypedError(error, message);
       }
       return console.warn(message);
     };
