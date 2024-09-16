@@ -51,26 +51,26 @@ const initData: InitData = {
 };
 
 describe('isValid', () => {
-  it('should throw missing hash error if "hash" param is missing', async () => {
+  it('should return false if "hash" param is missing', async () => {
     await expect(isValid('auth_date=1', secretToken)).resolves.toBe(false);
   });
 
-  it('should throw if "auth_date" param is missing or does not represent integer', async () => {
+  it('should return false if "auth_date" param is missing or does not represent integer', async () => {
     await expect(isValid('hash=HHH', secretToken)).resolves.toBe(false);
     await expect(isValid('auth_date=AAA&hash=HHH', secretToken)).resolves.toBe(false);
   });
 
-  it('should throw if parameters are expired', async () => {
+  it('should return false if parameters are expired', async () => {
     await expect(isValid(sp, secretToken, { expiresIn: 1 })).resolves.toBe(false);
     await expect(isValid(initData, secretToken, { expiresIn: 1 })).resolves.toBe(false);
   });
 
-  it('should throw if sign is invalid', async () => {
+  it('should return false if sign is invalid', async () => {
     await expect(isValid(sp, `${secretToken}A`, { expiresIn: 0 })).resolves.toBe(false);
     await expect(isValid(initData, `${secretToken}A`, { expiresIn: 0 })).resolves.toBe(false);
   });
 
-  it('should correctly validate parameters in case, they are valid', async () => {
+  it('should return true if init data is valid', async () => {
     const basicOptions = { expiresIn: 0 };
     const hashedOptions = { ...basicOptions, tokenHashed: true };
     await expect(isValid(sp, secretToken, basicOptions)).resolves.toBe(true);
@@ -83,7 +83,7 @@ describe('isValid', () => {
     await expect(isValid(spObject, secretTokenHashed, hashedOptions)).resolves.toBe(true);
   });
 
-  it('should throw if "expiresIn" is not passed and parameters were created more than 1 day ago', async () => {
+  it('should return false if "expiresIn" is not passed and parameters were created more than 1 day ago', async () => {
     await expect(isValid(sp, secretToken)).resolves.toBe(false);
   });
 });
@@ -91,35 +91,35 @@ describe('isValid', () => {
 describe('validate', () => {
   it('should throw missing hash error if "hash" param is missing', async () => {
     await expect(validate('auth_date=1', secretToken)).rejects.toThrowError(
-      '"hash" is empty or not found',
+      'ERR_HASH_INVALID',
     );
   });
 
   it('should throw if "auth_date" param is missing or does not represent integer', async () => {
     await expect(validate('hash=HHH', secretToken)).rejects.toThrowError(
-      '"auth_date" is empty or not found',
+      'ERR_AUTH_DATE_INVALID',
     );
     await expect(validate('auth_date=AAA&hash=HHH', secretToken)).rejects.toThrowError(
-      '"auth_date" should present integer',
+      'ERR_AUTH_DATE_INVALID',
     );
   });
 
   it('should throw if parameters are expired', async () => {
     await expect(validate(sp, secretToken, { expiresIn: 1 })).rejects.toThrowError(
-      'Init data expired',
+      'ERR_EXPIRED',
     );
     await expect(validate(initData, secretToken, { expiresIn: 1 })).rejects.toThrowError(
-      'Init data expired',
+      'ERR_EXPIRED',
     );
   });
 
   it('should throw if sign is invalid', async () => {
     await expect(validate(sp, `${secretToken}A`, { expiresIn: 0 }))
       .rejects
-      .toThrowError('Signature is invalid');
+      .toThrowError('ERR_SIGN_INVALID');
     await expect(validate(initData, `${secretToken}A`, { expiresIn: 0 }))
       .rejects
-      .toThrowError('Signature is invalid');
+      .toThrowError('ERR_SIGN_INVALID');
   });
 
   it('should correctly validate parameters in case, they are valid', async () => {
@@ -136,7 +136,7 @@ describe('validate', () => {
   });
 
   it('should throw if "expiresIn" is not passed and parameters were created more than 1 day ago', async () => {
-    await expect(validate(sp, secretToken)).rejects.toThrow('Init data expired');
+    await expect(validate(sp, secretToken)).rejects.toThrow('ERR_EXPIRED');
   });
 });
 

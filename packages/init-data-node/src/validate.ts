@@ -2,6 +2,12 @@ import type { InitData } from '@telegram-apps/types';
 
 import { initDataToSearchParams } from './initDataToSearchParams.js';
 import type { SharedOptions, SignDataAsyncFn, SignDataSyncFn, Text } from './types.js';
+import {
+  ERR_AUTH_DATE_INVALID,
+  ERR_EXPIRED,
+  ERR_HASH_INVALID,
+  ERR_SIGN_INVALID,
+} from './errors.js';
 
 export interface ValidateOptions extends SharedOptions {
   /**
@@ -20,7 +26,7 @@ export type ValidateValue = InitData | string | URLSearchParams;
 
 function processSign(actual: string, expected: string): void | never {
   if (actual !== expected) {
-    throw new Error('Signature is invalid');
+    throw new Error(ERR_SIGN_INVALID);
   }
   return;
 }
@@ -31,10 +37,10 @@ function processSign(actual: string, expected: string): void | never {
  * @param token - bot secret token.
  * @param signData - function signing data.
  * @param options - additional validation options.
- * @throws {TypeError} "auth_date" should present integer
- * @throws {Error} "hash" is empty or not found
- * @throws {Error} "auth_date" is empty or not found
- * @throws {Error} Init data expired
+ * @throws {Error} ERR_SIGN_INVALID
+ * @throws {Error} ERR_AUTH_DATE_INVALID
+ * @throws {Error} ERR_HASH_INVALID
+ * @throws {Error} ERR_EXPIRED
  */
 export function validate(
   value: ValidateValue,
@@ -49,10 +55,10 @@ export function validate(
  * @param token - bot secret token.
  * @param signData - function signing data.
  * @param options - additional validation options.
- * @throws {TypeError} "auth_date" should present integer
- * @throws {Error} "hash" is empty or not found
- * @throws {Error} "auth_date" is empty or not found
- * @throws {Error} Init data expired
+ * @throws {Error} ERR_SIGN_INVALID
+ * @throws {Error} ERR_AUTH_DATE_INVALID
+ * @throws {Error} ERR_HASH_INVALID
+ * @throws {Error} ERR_EXPIRED
  */
 export function validate(
   value: ValidateValue,
@@ -88,11 +94,9 @@ export function validate(
 
     if (key === 'auth_date') {
       const authDateNum = parseInt(value, 10);
-
-      if (Number.isNaN(authDateNum)) {
-        throw new TypeError('"auth_date" should present integer');
+      if (!Number.isNaN(authDateNum)) {
+        authDate = new Date(authDateNum * 1000);
       }
-      authDate = new Date(authDateNum * 1000);
     }
 
     pairs.push(`${key}=${value}`);
@@ -100,11 +104,11 @@ export function validate(
 
   // Hash and auth date always required.
   if (!hash) {
-    throw new Error('"hash" is empty or not found');
+    throw new Error(ERR_HASH_INVALID);
   }
 
   if (!authDate) {
-    throw new Error('"auth_date" is empty or not found');
+    throw new Error(ERR_AUTH_DATE_INVALID);
   }
 
   // In case, expiration time passed, we do additional parameters check.
@@ -112,7 +116,7 @@ export function validate(
   if (expiresIn > 0) {
     // Check if init data expired.
     if (+authDate + expiresIn * 1000 < Date.now()) {
-      throw new Error('Init data expired');
+      throw new Error(ERR_EXPIRED);
     }
   }
 

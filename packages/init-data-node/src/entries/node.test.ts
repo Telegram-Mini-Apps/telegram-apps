@@ -91,34 +91,32 @@ describe('isValid', () => {
 describe('validate', () => {
   it('should throw missing hash error if "hash" param is missing', () => {
     expect(() => validate('auth_date=1', secretToken)).toThrowError(
-      '"hash" is empty or not found',
+      'ERR_HASH_INVALID',
     );
   });
 
   it('should throw if "auth_date" param is missing or does not represent integer', () => {
-    expect(() => validate('hash=HHH', secretToken)).toThrowError(
-      '"auth_date" is empty or not found',
-    );
+    expect(() => validate('hash=HHH', secretToken)).toThrowError('ERR_AUTH_DATE_INVALID');
     expect(() => validate('auth_date=AAA&hash=HHH', secretToken)).toThrowError(
-      '"auth_date" should present integer',
+      'ERR_AUTH_DATE_INVALID',
     );
   });
 
   it('should throw if parameters are expired', () => {
     expect(() => validate(sp, secretToken, { expiresIn: 1 })).toThrowError(
-      'Init data expired',
+      'ERR_EXPIRED',
     );
     expect(() => validate(initData, secretToken, { expiresIn: 1 })).toThrowError(
-      'Init data expired',
+      'ERR_EXPIRED',
     );
   });
 
   it('should throw if sign is invalid', () => {
     expect(() => validate(sp, `${secretToken}A`, { expiresIn: 0 })).toThrowError(
-      'Signature is invalid',
+      'ERR_SIGN_INVALID',
     );
     expect(() => validate(initData, `${secretToken}A`, { expiresIn: 0 })).toThrowError(
-      'Signature is invalid',
+      'ERR_SIGN_INVALID',
     );
   });
 
@@ -136,7 +134,7 @@ describe('validate', () => {
   });
 
   it('should throw if "expiresIn" is not passed and parameters were created more than 1 day ago', () => {
-    expect(() => validate(sp, secretToken)).toThrow('Init data expired');
+    expect(() => validate(sp, secretToken)).toThrow('ERR_EXPIRED');
   });
 });
 
