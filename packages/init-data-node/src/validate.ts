@@ -16,6 +16,8 @@ export interface ValidateOptions extends SharedOptions {
   expiresIn?: number;
 }
 
+export type ValidateValue = InitData | string | URLSearchParams;
+
 function processSign(actual: string, expected: string): void | never {
   if (actual !== expected) {
     throw new Error('Signature is invalid');
@@ -35,7 +37,7 @@ function processSign(actual: string, expected: string): void | never {
  * @throws {Error} Init data expired
  */
 export function validate(
-  value: InitData | string | URLSearchParams,
+  value: ValidateValue,
   token: Text,
   signData: SignDataSyncFn,
   options?: ValidateOptions,
@@ -53,14 +55,14 @@ export function validate(
  * @throws {Error} Init data expired
  */
 export function validate(
-  value: InitData | string | URLSearchParams,
+  value: ValidateValue,
   token: Text,
   signData: SignDataAsyncFn,
   options?: ValidateOptions,
 ): Promise<void>;
 
 export function validate(
-  value: InitData | string | URLSearchParams,
+  value: ValidateValue,
   token: Text,
   signData: SignDataSyncFn | SignDataAsyncFn,
   options: ValidateOptions = {},
