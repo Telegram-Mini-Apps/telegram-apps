@@ -19,7 +19,6 @@ export {
 export { sleep } from './async/sleep.js';
 export type { AsyncOptions } from './async/types.js';
 
-export { createTypedError } from './errors/createTypedError.js';
 export { createTypedErrorPredicate } from './errors/createTypedErrorPredicate.js';
 export { TypedError, type TypedErrorOptions } from './errors/TypedError.js';
 
