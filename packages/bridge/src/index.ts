@@ -3,14 +3,12 @@ export { isIframe } from '@/env/isIframe.js';
 export { isTMA } from '@/env/isTMA.js';
 export { mockTelegramEnv } from '@/env/mockTelegramEnv.js';
 
-export { BridgeError } from '@/errors/BridgeError.js';
 export {
-  type ErrorType,
-  ERR_TIMED_OUT,
   ERR_METHOD_UNSUPPORTED,
   ERR_METHOD_PARAMETER_UNSUPPORTED,
-  ERR_INVOKE_CUSTOM_METHOD_RESPONSE,
+  ERR_CUSTOM_METHOD_ERR_RESPONSE,
   ERR_UNKNOWN_ENV,
+  ERR_RETRIEVE_LP_FAILED,
 } from '@/errors/errors.js';
 
 export { defineEventHandlers } from '@/events/handling/defineEventHandlers.js';
@@ -53,6 +51,43 @@ export {
 export { $debug } from '@/debug.js';
 export { resetPackageState } from '@/resetPackageState.js';
 export type { ExecuteWithOptions, ExecuteWithPostEvent } from '@/types.js';
+
+export {
+  type AsyncOptions,
+  addEventListener,
+  camelToKebab,
+  camelToSnake,
+  createCbCollector,
+  createLogger,
+  createTypedError,
+  createAbortError,
+  createTypedErrorPredicate,
+  CancelablePromise,
+  type CallbackFn,
+  ERR_TIMED_OUT,
+  ERR_ABORTED,
+  ERR_CANCELED,
+  EnhancedPromise,
+  getStorageValue,
+  isAbortError,
+  isCanceledError,
+  isTimeoutError,
+  type If,
+  type IsNever,
+  type IsUndefined,
+  type Maybe,
+  type Or,
+  type PromiseOnRejectedFn,
+  type PromiseRejectFn,
+  type PromiseOnFulfilledFn,
+  type PromiseResolveFn,
+  type PromiseExecutorFn,
+  sleep,
+  TypedError,
+  type TypedErrorOptions,
+  setStorageValue,
+  snakeToCamel,
+} from '@telegram-apps/toolkit';
 
 export type {
   Chat,
