@@ -1,11 +1,12 @@
+import { TypedError } from '@telegram-apps/toolkit';
+
 import { ERR_INVALID_VALUE, ERR_UNEXPECTED_VALUE } from '@/errors/errors.js';
-import { TransformerError } from '@/errors/TransformerError.js';
 
 /**
  * Converts value to a record.
  * @param value - value to convert.
- * @throws {TransformerError} ERR_INVALID_VALUE
- * @throws {TransformerError} ERR_UNEXPECTED_VALUE
+ * @throws {TypedError} ERR_INVALID_VALUE
+ * @throws {TypedError} ERR_UNEXPECTED_VALUE
  */
 export function toRecord(value: unknown): Record<string, unknown> {
   let formattedValue: any = value;
@@ -15,7 +16,7 @@ export function toRecord(value: unknown): Record<string, unknown> {
     try {
       formattedValue = JSON.parse(formattedValue);
     } catch (cause) {
-      throw new TransformerError(ERR_INVALID_VALUE, { cause });
+      throw new TypedError(ERR_INVALID_VALUE, { cause });
     }
   }
 
@@ -25,7 +26,7 @@ export function toRecord(value: unknown): Record<string, unknown> {
     || !formattedValue
     || Array.isArray(formattedValue)
   ) {
-    throw new TransformerError(ERR_UNEXPECTED_VALUE);
+    throw new TypedError(ERR_UNEXPECTED_VALUE);
   }
 
   return formattedValue as Record<string, unknown>;

@@ -1,5 +1,6 @@
+import {TypedError} from '@telegram-apps/toolkit';
+
 import { ERR_PARSE } from '@/errors/errors.js';
-import { TransformerError } from '@/errors/TransformerError.js';
 import type { Transformer, TransformerGen, TransformFn } from '@/types.js';
 
 /**
@@ -20,7 +21,7 @@ export function createTransformerGen<T>(
       try {
         return transform(value);
       } catch (cause) {
-        throw new TransformerError(ERR_PARSE, {
+        throw new TypedError(ERR_PARSE, {
           message: `"${name}" transformer failed to parse the value`,
           cause,
         });

@@ -3,13 +3,11 @@ export { launchParams, serializeLaunchParams, type LaunchParams } from './comple
 export { miniAppsMessage, type MiniAppsMessage } from './complex/miniAppsMessage.js';
 export { themeParams, serializeThemeParams, type ThemeParams } from './complex/theme-params.js';
 
-export { TransformerError } from './errors/TransformerError.js';
 export {
   ERR_INVALID_VALUE,
   ERR_PARSE,
   ERR_UNEXPECTED_VALUE,
   ERR_UNEXPECTED_TYPE,
-  type ErrorType,
 } from './errors/errors.js';
 
 export { array } from './transformers/array.js';

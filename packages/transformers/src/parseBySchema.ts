@@ -1,4 +1,4 @@
-import { TransformerError } from '@/errors/TransformerError.js';
+import { TypedError } from '@telegram-apps/toolkit';
 
 import { ERR_PARSE } from './errors/errors.js';
 import type { TransformFn, Schema } from './types.js';
@@ -37,7 +37,7 @@ export function parseBySchema<T>(
         (result as any)[field] = parsedValue;
       }
     } catch (cause) {
-      throw new TransformerError(ERR_PARSE, `Unable to parse field "${field}"`, cause);
+      throw new TypedError(ERR_PARSE, `Unable to parse field "${field}"`, cause);
     }
   }
 
