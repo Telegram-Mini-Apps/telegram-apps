@@ -1,10 +1,8 @@
-import type { InitData } from '@telegram-apps/types';
-
-import { hashToken as baseHashToken } from '../hashToken.js';
-import { sign as baseSign, SignOptions } from '../sign.js';
-import { signData as baseSignData, SignDataOptions } from '../signData.js';
-import { validate as baseValidate } from '../validate.js';
-import type{ ValidateOptions } from '../validate.js';
+import { hashToken as _hashToken } from '../hashToken.js';
+import { sign as _sign, SignOptions } from '../sign.js';
+import { signData as _signData, SignDataOptions } from '../signData.js';
+import { validate as _validate, type ValidateOptions, type ValidateValue } from '../validate.js';
+import { isValid as _isValid } from '../isValid.js';
 import type { CreateHmacFn, SignData, Text } from '../types.js';
 
 const createHmac: CreateHmacFn<true> = async (data, key) => {
@@ -31,7 +29,17 @@ const createHmac: CreateHmacFn<true> = async (data, key) => {
  * @param token - token to hash.
  */
 export function hashToken(token: Text): Promise<Buffer> {
-  return baseHashToken(token, createHmac);
+  return _hashToken(token, createHmac);
+}
+
+/**
+ * @param value - value to check.
+ * @param token - bot secret token.
+ * @param options - additional validation options.
+ * @returns True is specified init data is valid.
+ */
+export function isValid(value: ValidateValue, token: Text, options?: ValidateOptions): boolean {
+  return _isValid(value, token, validate, options);
 }
 
 /**
@@ -48,7 +56,7 @@ export function sign(
   authDate: Date,
   options?: SignOptions
 ): Promise<string> {
-  return baseSign(data, key, authDate, signData, options);
+  return _sign(data, key, authDate, signData, options);
 }
 
 /**
@@ -58,8 +66,8 @@ export function sign(
  * @param options - additional options.
  * @returns Data sign.
  */
-export async function signData(data: Text, key: Text, options?: SignDataOptions): Promise<string> {
-  return baseSignData(data, key, createHmac, options);
+export function signData(data: Text, key: Text, options?: SignDataOptions): Promise<string> {
+  return _signData(data, key, createHmac, options);
 }
 
 /**
@@ -72,12 +80,12 @@ export async function signData(data: Text, key: Text, options?: SignDataOptions)
  * @throws {Error} "auth_date" is empty or not found
  * @throws {Error} Init data expired
  */
-export async function validate(
-  value: InitData | string | URLSearchParams,
+export function validate(
+  value: ValidateValue,
   token: Text,
   options?: ValidateOptions,
 ): Promise<void> {
-  return baseValidate(value, token, signData, options);
+  return Promise.resolve().then(() => _validate(value, token, signData, options));
 }
 
 export * from './shared.js';
