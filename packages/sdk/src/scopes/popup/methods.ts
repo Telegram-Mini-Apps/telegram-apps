@@ -2,7 +2,7 @@ import { TypedError, CancelablePromise, type PopupParams } from '@telegram-apps/
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { request } from '@/scopes/globals/globals.js';
-import { ERR_POPUP_INVALID_PARAMS, ERR_ALREADY_OPENED } from '@/errors.js';
+import { ERR_POPUP_INVALID_PARAMS, ERR_ALREADY_CALLED } from '@/errors.js';
 
 import { isOpened } from './signals.js';
 import type { OpenOptions } from './types.js';
@@ -70,7 +70,7 @@ function preparePopupParams(params: OpenOptions): PopupParams {
  * returned.
  *
  * @param options - popup parameters.
- * @throws {TypedError} ERR_ALREADY_OPENED
+ * @throws {TypedError} ERR_ALREADY_CALLED
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid title length.
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid message length.
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid buttons length.
@@ -81,7 +81,7 @@ export const open = withIsSupported(
   (options: OpenOptions): CancelablePromise<string | null> => {
     return CancelablePromise.withFn(() => {
       if (isOpened()) {
-        throw new TypedError(ERR_ALREADY_OPENED);
+        throw new TypedError(ERR_ALREADY_CALLED);
       }
 
       isOpened.set(true);

@@ -8,7 +8,7 @@ import {
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { request } from '@/scopes/globals/globals.js';
-import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_ALREADY_OPENED } from '@/errors.js';
+import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_ALREADY_CALLED } from '@/errors.js';
 
 import { isOpened } from './signals.js';
 
@@ -19,7 +19,7 @@ const MINI_APPS_METHOD = 'web_app_open_invoice';
  * Example of the value: `jd231xxSd1`
  * @param slug - invoice slug.
  * @param options - additional options.
- * @throws {TypedError} ERR_ALREADY_OPENED
+ * @throws {TypedError} ERR_ALREADY_CALLED
  * @throws {TypedError} ERR_INVALID_HOSTNAME
  * @throws {TypedError} ERR_INVALID_SLUG
  */
@@ -35,7 +35,7 @@ function _open(slug: string, options?: ExecuteWithOptions): CancelablePromise<In
  * @param url - invoice URL.
  * @param type - value type.
  * @param options - additional options.
- * @throws {TypedError} ERR_ALREADY_OPENED
+ * @throws {TypedError} ERR_ALREADY_CALLED
  * @throws {TypedError} ERR_INVALID_HOSTNAME
  * @throws {TypedError} ERR_INVALID_SLUG
  */
@@ -48,7 +48,7 @@ function _open(
 ): CancelablePromise<InvoiceStatus> {
   return CancelablePromise.withFn(() => {
     if (isOpened()) {
-      throw new TypedError(ERR_ALREADY_OPENED);
+      throw new TypedError(ERR_ALREADY_CALLED);
     }
 
     let slug: string;

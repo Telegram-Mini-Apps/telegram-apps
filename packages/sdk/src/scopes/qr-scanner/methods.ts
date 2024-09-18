@@ -10,7 +10,7 @@ import {
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { postEvent, request } from '@/scopes/globals/globals.js';
-import { ERR_ALREADY_OPENED } from '@/errors.js';
+import { ERR_ALREADY_CALLED } from '@/errors.js';
 
 import { isOpened } from './signals.js';
 
@@ -41,6 +41,7 @@ interface OpenSharedOptions extends ExecuteWithOptions {
  * Promise may also be resolved to null if the scanner was closed.
  * @param options - method options.
  * @returns A promise with QR content presented as string or undefined if the scanner was closed.
+ * @throws {TypedError} ERR_ALREADY_CALLED
  */
 function _open(options?: OpenSharedOptions & {
   /**
@@ -56,6 +57,7 @@ function _open(options?: OpenSharedOptions & {
  * The method does not return anything and expects the scanner to be closed externally by a user
  * or via the `close` method.
  * @param options - method options.
+ * @throws {TypedError} ERR_ALREADY_CALLED
  */
 function _open(options: OpenSharedOptions & {
   /**
@@ -70,7 +72,7 @@ function _open(options?: OpenSharedOptions & {
   capture?: (qr: string) => boolean;
 }): CancelablePromise<string | undefined | void> {
   if (isOpened()) {
-    throw new TypedError(ERR_ALREADY_OPENED);
+    throw new TypedError(ERR_ALREADY_CALLED);
   }
   isOpened.set(true);
 
