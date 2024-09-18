@@ -11,7 +11,7 @@ import { type AsyncOptions, CancelablePromise } from '@telegram-apps/bridge';
  */
 // #__NO_SIDE_EFFECTS__
 export function createMountFn<T = void>(
-  mount: (options?: AsyncOptions) => (T | CancelablePromise<T>),
+  mount: (options: AsyncOptions) => (T | CancelablePromise<T>),
   onMounted: (result: T) => void,
   {
     mountPromise,
@@ -34,7 +34,7 @@ export function createMountFn<T = void>(
     }
 
     promise = CancelablePromise
-      .resolve(mount(mountOptions))
+      .resolve(mount(mountOptions || {}))
       .then<[true, T], [false, Error]>(result => [true, result], e => [false, e])
       .then(tuple => {
         batch(() => {
