@@ -1,5 +1,4 @@
-import { on } from '@telegram-apps/bridge';
-import { createCbCollector } from '@telegram-apps/toolkit';
+import { on, createCbCollector } from '@telegram-apps/bridge';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
