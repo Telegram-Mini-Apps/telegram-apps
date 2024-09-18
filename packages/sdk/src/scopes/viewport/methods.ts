@@ -10,7 +10,7 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { $postEvent } from '@/scopes/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 import { ERR_CSS_VARS_BOUND } from '@/errors.js';
 import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
@@ -74,7 +74,7 @@ export function bindCssVars(getCSSVarName?: GetCSSVarNameFn): VoidFunction {
  * @see isExpanded
  */
 export function expand(): void {
-  $postEvent()('web_app_expand');
+  postEvent('web_app_expand');
 }
 
 function formatState(state: State): State {
