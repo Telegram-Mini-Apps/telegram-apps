@@ -9,8 +9,6 @@ import { initWeb } from './initWeb.js';
  * native Telegram application.
  */
 export function init(acceptCustomStyles = true): void {
-  if (isIframe()) {
-    initWeb(acceptCustomStyles);
-  }
+  isIframe() && initWeb(acceptCustomStyles);
   defineEventHandlers();
 }
