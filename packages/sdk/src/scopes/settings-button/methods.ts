@@ -12,12 +12,6 @@ import { postEvent } from '@/scopes/globals/globals.js';
 
 import { isVisible, isMounted } from './signals.js';
 
-/*
- * fixme
- * @see Usage: https://docs.telegram-mini-apps.com/platform/settings-button
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/settings-button
- */
-
 type StorageValue = boolean;
 
 const MINI_APPS_METHOD = 'web_app_setup_settings_button';

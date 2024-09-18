@@ -121,7 +121,6 @@ export const mount = createMountFn<State>(
 
     // We were unable to retrieve data locally. In this case, we are sending a request returning
     // the viewport information.
-    options ||= {};
     options.timeout ||= 1000;
     return request(options).then(data => ({
       height: data.height,

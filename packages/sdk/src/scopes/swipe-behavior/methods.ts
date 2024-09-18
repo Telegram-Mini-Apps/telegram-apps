@@ -6,12 +6,6 @@ import { withIsSupported } from '@/scopes/withIsSupported.js';
 
 import { isMounted, isVerticalEnabled } from './signals.js';
 
-/*
- * fixme
- * @see Usage: https://docs.telegram-mini-apps.com/platform/swipe-behavior
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/swipe-behavior
- */
-
 type StorageValue = boolean;
 
 const MINI_APPS_METHOD = 'web_app_setup_swipe_behavior';
