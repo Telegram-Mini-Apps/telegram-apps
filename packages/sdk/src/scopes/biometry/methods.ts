@@ -15,8 +15,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
-import { SDKError } from '@/errors/SDKError.js';
-import { ERR_ALREADY_CALLED, ERR_NOT_AVAILABLE } from '@/errors/errors.js';
+import { ERR_ALREADY_CALLED, ERR_NOT_AVAILABLE } from '@/errors.js';
 
 import {
   state,
@@ -47,17 +46,17 @@ const BIOMETRY_INFO_RECEIVED_EVENT = 'biometry_info_received';
  * @param options - method options.
  * @since 7.2
  * @returns Token from the local secure storage saved previously or undefined.
- * @throws {SDKError} ERR_ALREADY_CALLED
- * @throws {SDKError} ERR_NOT_AVAILABLE
+ * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_NOT_AVAILABLE
  */
 export const authenticate = withIsSupported((options?: AuthenticateOptions): CancelablePromise<string | undefined> => {
   if (authenticatePromise()) {
-    return CancelablePromise.reject(new SDKError(ERR_ALREADY_CALLED));
+    return CancelablePromise.reject(new TypedError(ERR_ALREADY_CALLED));
   }
 
   const s = state();
   if (!s || !s.available) {
-    return CancelablePromise.reject(new SDKError(ERR_NOT_AVAILABLE));
+    return CancelablePromise.reject(new TypedError(ERR_NOT_AVAILABLE));
   }
 
   options ||= {};
@@ -103,12 +102,12 @@ export const openSettings = withIsSupported(() => {
  * Requests permission to use biometrics.
  * @since 7.2
  * @returns Promise with true, if access was granted.
- * @throws {SDKError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_ALREADY_CALLED
  */
 export const requestAccess = withIsSupported(
   (options?: RequestAccessOptions): CancelablePromise<boolean> => {
     if (requestAccessPromise()) {
-      return CancelablePromise.reject(new SDKError(ERR_ALREADY_CALLED));
+      return CancelablePromise.reject(new TypedError(ERR_ALREADY_CALLED));
     }
 
     options ||= {};
@@ -120,7 +119,7 @@ export const requestAccess = withIsSupported(
       .then(eventToState)
       .then((info) => {
         if (!info.available) {
-          throw new SDKError(ERR_NOT_AVAILABLE);
+          throw new TypedError(ERR_NOT_AVAILABLE);
         }
         state.set(info);
         return info.accessGranted;
