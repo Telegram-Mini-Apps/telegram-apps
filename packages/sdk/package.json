@@ -49,9 +49,7 @@
     "@telegram-apps/transformers": "workspace:^",
     "@telegram-apps/bridge": "workspace:^",
     "@telegram-apps/navigation": "workspace:^",
-    "@telegram-apps/signals": "workspace:^",
-    "@telegram-apps/types": "workspace:^",
-    "@telegram-apps/toolkit": "workspace:^"
+    "@telegram-apps/signals": "workspace:^"
   },
   "devDependencies": {
     "test-utils": "workspace:*",
