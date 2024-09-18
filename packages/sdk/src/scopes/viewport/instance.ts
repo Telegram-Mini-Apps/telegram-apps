@@ -1,9 +1,3 @@
-/*
- * fixme
- * @see Usage: https://docs.telegram-mini-apps.com/platform/viewport
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/viewport
- */
-
 export {
   state,
   width,

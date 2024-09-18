@@ -9,13 +9,6 @@ import {
 
 import { $postEvent, $createRequestId } from '@/scopes/globals/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { AsyncOptions, CancelablePromise } from '@telegram-apps/toolkit';
-
-/*
- * fixme
- * @see API: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/components/utils
- * todo: usage
- */
 
 const READ_TEXT_FROM_CLIPBOARD_METHOD = 'web_app_read_text_from_clipboard';
 const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
