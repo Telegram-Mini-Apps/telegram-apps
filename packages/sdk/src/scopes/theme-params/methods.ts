@@ -1,6 +1,7 @@
 import {
   off,
   on,
+  TypedError,
   type EventListener,
   type RGB,
   type ThemeParams,
@@ -9,8 +10,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 import { camelToKebab, getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
 import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
-import { ERR_CSS_VARS_BOUND } from '@/errors/errors.js';
-import { SDKError } from '@/errors/SDKError.js';
+import { ERR_CSS_VARS_BOUND } from '@/errors.js';
 import { retrieve as retrieveLaunchParams } from '@/scopes/launch-params/static.js';
 
 import { isCssVarsBound, state, isMounted } from './signals.js';
@@ -36,10 +36,11 @@ const THEME_CHANGED_EVENT = 'theme_changed';
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * theme parameters key.
  * @returns Function to stop updating variables.
+ * @throws TypedError ERR_CSS_VARS_BOUND
  */
 export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
   if (isCssVarsBound()) {
-    throw new SDKError(ERR_CSS_VARS_BOUND);
+    throw new TypedError(ERR_CSS_VARS_BOUND);
   }
   getCSSVarName ||= (prop) => `--tg-theme-${camelToKebab(prop)}`;
 

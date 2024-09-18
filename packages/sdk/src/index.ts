@@ -13,15 +13,14 @@ export {
   type ErrorType,
   ERR_POPUP_INVALID_PARAMS,
   ERR_INVALID_HOSTNAME,
-  ERR_POPUP_OPENED,
-  ERR_SCANNER_OPENED,
-  ERR_INVOICE_OPENED,
+  ERR_ALREADY_OPENED,
   ERR_INVALID_SLUG,
   ERR_ACCESS_DENIED,
   ERR_CSS_VARS_BOUND,
   ERR_DATA_INVALID_SIZE,
-} from '@/errors/errors.js';
-export { SDKError } from '@/errors/SDKError.js';
+  ERR_NOT_AVAILABLE,
+  ERR_ALREADY_CALLED,
+} from '@/errors.js';
 
 export * as backButton from '@/scopes/back-button/instance.js';
 export {

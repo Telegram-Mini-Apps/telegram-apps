@@ -1,6 +1,7 @@
 import {
   invokeCustomMethod,
   request,
+  TypedError,
   type PhoneRequestedStatus,
   type WriteAccessRequestedStatus,
 } from '@telegram-apps/bridge';
@@ -8,9 +9,8 @@ import { searchParams, object, number, string, date } from '@telegram-apps/trans
 import { type AsyncOptions, CancelablePromise, sleep } from '@telegram-apps/toolkit';
 
 import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
-import { ERR_ACCESS_DENIED } from '@/errors/errors.js';
+import { ERR_ACCESS_DENIED } from '@/errors.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { SDKError } from '@/errors/SDKError.js';
 
 /**
  * Requested contact information.
@@ -63,7 +63,7 @@ function getRequestedContact(options?: AsyncOptions): CancelablePromise<Requeste
  * returns promise with contact information that rejects in case, user denied access, or request
  * failed.
  * @param options - additional options.
- * @throws {SDKError} ERR_ACCESS_DENIED
+ * @throws {TypedError} ERR_ACCESS_DENIED
  */
 export async function requestContact(options?: AsyncOptions): Promise<RequestedContact> {
   // TODO: withIsSupported
@@ -80,7 +80,7 @@ export async function requestContact(options?: AsyncOptions): Promise<RequestedC
   // Then, request access to user's phone.
   const status = await requestPhoneAccess(options);
   if (status !== 'sent') {
-    throw new SDKError(ERR_ACCESS_DENIED);
+    throw new TypedError(ERR_ACCESS_DENIED);
   }
 
   // Time to wait before executing the next request.

@@ -1,18 +1,18 @@
-import { isRGB } from '@telegram-apps/transformers';
-import type { RGB } from '@telegram-apps/bridge';
-import { isPageReload } from '@telegram-apps/navigation';
 import {
   getStorageValue,
   setStorageValue,
   createCbCollector,
   camelToKebab,
-} from '@telegram-apps/toolkit';
+  TypedError,
+  type RGB,
+} from '@telegram-apps/bridge';
+import { isRGB } from '@telegram-apps/transformers';
+import { isPageReload } from '@telegram-apps/navigation';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { withSupports } from '@/scopes/withSupports.js';
-import { ERR_CSS_VARS_BOUND, ERR_DATA_INVALID_SIZE } from '@/errors/errors.js';
-import { SDKError } from '@/errors/SDKError.js';
+import { ERR_CSS_VARS_BOUND, ERR_DATA_INVALID_SIZE } from '@/errors.js';
 import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 import * as themeParams from '@/scopes/theme-params/instance.js';
 
@@ -44,11 +44,11 @@ const STORAGE_KEY = 'miniApp';
  * mini app key.
  * MiniApp property.
  * @returns Function to stop updating variables.
- * @throws {SDKError} ERR_CSS_VARS_BOUND
+ * @throws {TypedError} ERR_CSS_VARS_BOUND
  */
 export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
   if (isCssVarsBound()) {
-    throw new SDKError(ERR_CSS_VARS_BOUND);
+    throw new TypedError(ERR_CSS_VARS_BOUND);
   }
   getCSSVarName ||= (prop) => `--tg-${camelToKebab(prop)}`;
   const bgVar = getCSSVarName('bgColor');
@@ -155,12 +155,12 @@ function saveState() {
  *
  * This method is only available for Mini Apps launched via a Keyboard button.
  * @param data - data to send to bot.
- * @throws {SDKError} ERR_DATA_INVALID_SIZE
+ * @throws {TypedError} ERR_DATA_INVALID_SIZE
  */
 export function sendData(data: string): void {
   const { size } = new Blob([data]);
   if (!size || size > 4096) {
-    throw new SDKError(ERR_DATA_INVALID_SIZE);
+    throw new TypedError(ERR_DATA_INVALID_SIZE);
   }
   $postEvent()('web_app_data_send', { data });
 }

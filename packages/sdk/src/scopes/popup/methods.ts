@@ -1,10 +1,9 @@
-import { request, type PopupParams } from '@telegram-apps/bridge';
+import { request, TypedError, type PopupParams } from '@telegram-apps/bridge';
 import { CancelablePromise } from '@telegram-apps/toolkit';
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
-import { ERR_POPUP_INVALID_PARAMS, ERR_POPUP_OPENED } from '@/errors/errors.js';
-import { SDKError } from '@/errors/SDKError.js';
+import { ERR_POPUP_INVALID_PARAMS, ERR_ALREADY_OPENED } from '@/errors.js';
 
 import { isOpened } from './signals.js';
 import type { OpenOptions } from './types.js';
@@ -14,7 +13,11 @@ const MINI_APPS_METHOD = 'web_app_open_popup';
 /**
  * Prepares popup parameters before sending them to native app.
  * @param params - popup parameters.
- * @throws {SDKError} ERR_POPUP_INVALID_PARAMS
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid title length.
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid message length.
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid buttons length.
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid button id length.
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid text length.
  */
 function preparePopupParams(params: OpenOptions): PopupParams {
   const message = params.message.trim();
@@ -23,17 +26,17 @@ function preparePopupParams(params: OpenOptions): PopupParams {
 
   // Check title.
   if (title.length > 64) {
-    throw new SDKError(ERR_POPUP_INVALID_PARAMS, `Invalid title length: ${title.length}`);
+    throw new TypedError(ERR_POPUP_INVALID_PARAMS, `Invalid title length: ${title.length}`);
   }
 
   // Check message.
   if (!message || message.length > 256) {
-    throw new SDKError(ERR_POPUP_INVALID_PARAMS, `Invalid message length: ${message.length}`);
+    throw new TypedError(ERR_POPUP_INVALID_PARAMS, `Invalid message length: ${message.length}`);
   }
 
   // Check buttons.
   if (buttons.length > 3) {
-    throw new SDKError(ERR_POPUP_INVALID_PARAMS, `Invalid buttons count: ${buttons.length}`);
+    throw new TypedError(ERR_POPUP_INVALID_PARAMS, `Invalid buttons count: ${buttons.length}`);
   }
 
   return {
@@ -43,13 +46,13 @@ function preparePopupParams(params: OpenOptions): PopupParams {
       ? buttons.map((b) => {
         const id = b.id || '';
         if (id.length > 64) {
-          throw new SDKError(ERR_POPUP_INVALID_PARAMS, `Invalid button id length: ${id.length}`);
+          throw new TypedError(ERR_POPUP_INVALID_PARAMS, `Invalid button id length: ${id.length}`);
         }
 
         if (!b.type || b.type === 'default' || b.type === 'destructive') {
           const text = b.text.trim();
           if (!text || text.length > 64) {
-            throw new SDKError(ERR_POPUP_INVALID_PARAMS, `Invalid button text length: ${text.length}`);
+            throw new TypedError(ERR_POPUP_INVALID_PARAMS, `Invalid button text length: ${text.length}`);
           }
           return { ...b, text, id };
         }
@@ -68,13 +71,17 @@ function preparePopupParams(params: OpenOptions): PopupParams {
  * returned.
  *
  * @param options - popup parameters.
- * @throws {SDKError} ERR_POPUP_OPENED
- * @throws {SDKError} ERR_POPUP_INVALID_PARAMS
+ * @throws {TypedError} ERR_ALREADY_OPENED
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid title length.
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid message length.
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid buttons length.
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid button id length.
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid text length.
  */
 export const open = withIsSupported((options: OpenOptions): CancelablePromise<string | null> => {
   return CancelablePromise.withFn(() => {
     if (isOpened()) {
-      throw new SDKError(ERR_POPUP_OPENED);
+      throw new TypedError(ERR_ALREADY_OPENED);
     }
 
     isOpened.set(true);

@@ -1,9 +1,8 @@
-import { supports, type OpenLinkBrowser } from '@telegram-apps/bridge';
+import { supports, TypedError, type OpenLinkBrowser } from '@telegram-apps/bridge';
 import { createSafeURL } from '@telegram-apps/navigation';
 
 import { $postEvent, $version } from '@/scopes/globals/globals.js';
-import { ERR_INVALID_HOSTNAME } from '@/errors/errors.js';
-import { SDKError } from '@/errors/SDKError.js';
+import { ERR_INVALID_HOSTNAME } from '@/errors.js';
 
 export interface OpenLinkOptions {
   /**
@@ -41,12 +40,12 @@ export function openLink(url: string, options?: OpenLinkOptions): void {
  * Opens a Telegram link inside Telegram app. The Mini App will be closed. It expects passing
  * links in full format, with hostname "t.me".
  * @param url - URL to be opened.
- * @throws {SDKError} ERR_INVALID_HOSTNAME
+ * @throws {TypedError} ERR_INVALID_HOSTNAME
  */
 export function openTelegramLink(url: string): void {
   const { hostname, pathname, search } = new URL(url, 'https://t.me');
   if (hostname !== 't.me') {
-    throw new SDKError(ERR_INVALID_HOSTNAME);
+    throw new TypedError(ERR_INVALID_HOSTNAME);
   }
 
   if (!supports(OPEN_TG_LINK_METHOD, $version())) {

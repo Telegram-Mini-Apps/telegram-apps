@@ -1,11 +1,18 @@
-import { off, on, type EventListener, retrieveLaunchParams } from '@telegram-apps/bridge';
+import {
+  off,
+  on,
+  retrieveLaunchParams,
+  camelToKebab,
+  getStorageValue,
+  setStorageValue,
+  TypedError,
+  type EventListener,
+} from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
-import { camelToKebab, getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
-import { ERR_CSS_VARS_BOUND } from '@/errors/errors.js';
+import { ERR_CSS_VARS_BOUND } from '@/errors.js';
 import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
-import { SDKError } from '@/errors/SDKError.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 
 import { type GetCSSVarNameFn, request } from './static.js';
@@ -35,10 +42,11 @@ interface StorageValue {
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * viewport property.
  * @returns Function to stop updating variables.
+ * @throws TypedError ERR_CSS_VARS_BOUND
  */
 export function bindCssVars(getCSSVarName?: GetCSSVarNameFn): VoidFunction {
   if (isCssVarsBound()) {
-    throw new SDKError(ERR_CSS_VARS_BOUND);
+    throw new TypedError(ERR_CSS_VARS_BOUND);
   }
   getCSSVarName ||= (prop) => `--tg-viewport-${camelToKebab(prop)}`;
   const props = ['height', 'width', 'stableHeight'] as const;
