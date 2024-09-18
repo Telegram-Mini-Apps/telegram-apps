@@ -1,18 +1,16 @@
 import {
-  invokeCustomMethod,
-  request,
   TypedError,
   CancelablePromise,
   sleep,
   type PhoneRequestedStatus,
   type WriteAccessRequestedStatus,
-  type AsyncOptions,
+  type ExecuteWithOptions,
 } from '@telegram-apps/bridge';
 import { searchParams, object, number, string, date } from '@telegram-apps/transformers';
 
-import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
-import { ERR_ACCESS_DENIED } from '@/errors.js';
+import { invokeCustomMethod, request } from '@/scopes/globals/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { ERR_ACCESS_DENIED, ERR_ALREADY_CALLED } from '@/errors.js';
 
 /**
  * Requested contact information.
@@ -31,19 +29,18 @@ export interface RequestedContact {
 const REQUEST_PHONE_METHOD = 'web_app_request_phone';
 const REQUEST_WRITE_ACCESS_METHOD = 'web_app_request_write_access';
 
-let requestPhoneAccessPromise: Promise<PhoneRequestedStatus> | undefined;
-let requestWriteAccessPromise: Promise<WriteAccessRequestedStatus> | undefined;
+let isRequestingPhoneAccess: boolean | undefined;
+let isRequestingWriteAccess: boolean | undefined;
 
 /**
  * Attempts to get requested contact.
  * @param options - execution options.
+ * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
  */
-function getRequestedContact(options?: AsyncOptions): CancelablePromise<RequestedContact> {
+function getRequestedContact(options?: ExecuteWithOptions): CancelablePromise<RequestedContact> {
   options ||= {};
-
-  return invokeCustomMethod('getRequestedContact', {}, $createRequestId()(), {
+  return invokeCustomMethod('getRequestedContact', {}, {
     ...options,
-    postEvent: $postEvent(),
     timeout: options.timeout || 10000,
   })
     .then(
@@ -66,20 +63,20 @@ function getRequestedContact(options?: AsyncOptions): CancelablePromise<Requeste
  * failed.
  * @param options - additional options.
  * @throws {TypedError} ERR_ACCESS_DENIED
+ * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
  */
-export async function requestContact(options?: AsyncOptions): Promise<RequestedContact> {
+export async function requestContact(options?: ExecuteWithOptions): Promise<RequestedContact> {
   // TODO: withIsSupported
   options ||= {};
-  options.timeout ||= 5000;
 
   // First of all, let's try to get the requested contact. Probably, we already requested
   // it before.
   try {
-    return await getRequestedContact(options);
+    return await getRequestedContact({ ...options, timeout: options.timeout || 5000 });
   } catch { /* empty */
   }
 
-  // Then, request access to user's phone.
+  // Then, request access to the user's phone.
   const status = await requestPhoneAccess(options);
   if (status !== 'sent') {
     throw new TypedError(ERR_ACCESS_DENIED);
@@ -89,10 +86,10 @@ export async function requestContact(options?: AsyncOptions): Promise<RequestedC
   let sleepTime = 50;
 
   // We are trying to retrieve the requested contact until deadline was reached.
-  return new CancelablePromise(async (res, _rej, signal) => {
-    while (!signal.aborted) {
+  return new CancelablePromise(async (res, _rej, abortSignal) => {
+    while (!abortSignal.aborted) {
       try {
-        res(await getRequestedContact());
+        res(await getRequestedContact({ abortSignal }));
       } catch {
       }
 
@@ -113,31 +110,39 @@ export async function requestContact(options?: AsyncOptions): Promise<RequestedC
  * To obtain the retrieved information instead, utilize the `requestContact` method.
  * @param options - additional options.
  * @see requestContact
+ * @throws {TypedError} ERR_ALREADY_CALLED
  */
-export const requestPhoneAccess = withIsSupported((options?: AsyncOptions): Promise<PhoneRequestedStatus> => {
-  if (!requestPhoneAccessPromise) {
-    requestPhoneAccessPromise = request(REQUEST_PHONE_METHOD, 'phone_requested', {
-      ...options || {},
-      postEvent: $postEvent(),
-    })
-      .then(({ status }) => status)
-      .finally(() => requestPhoneAccessPromise = undefined);
-  }
-  return requestPhoneAccessPromise;
-}, REQUEST_PHONE_METHOD);
+export const requestPhoneAccess = withIsSupported(
+  (options?: ExecuteWithOptions): Promise<PhoneRequestedStatus> => {
+    if (isRequestingPhoneAccess) {
+      throw new TypedError(ERR_ALREADY_CALLED);
+    }
+    isRequestingPhoneAccess = true;
+
+    return request(REQUEST_PHONE_METHOD, 'phone_requested', options)
+      .then(r => r.status)
+      .finally(() => {
+        isRequestingPhoneAccess = undefined;
+      });
+  }, REQUEST_PHONE_METHOD,
+);
 
 /**
  * Requests write message access to the current user.
  * @param options - additional options.
+ * @throws {TypedError} ERR_ALREADY_CALLED
  */
-export const requestWriteAccess = withIsSupported((options?: AsyncOptions): Promise<WriteAccessRequestedStatus> => {
-  if (!requestWriteAccessPromise) {
-    requestWriteAccessPromise = request(REQUEST_WRITE_ACCESS_METHOD, 'write_access_requested', {
-      ...options || {},
-      postEvent: $postEvent(),
-    })
-      .then(({ status }) => status)
-      .finally(() => requestWriteAccessPromise = undefined);
-  }
-  return requestWriteAccessPromise;
-}, REQUEST_WRITE_ACCESS_METHOD);
+export const requestWriteAccess = withIsSupported(
+  (options?: ExecuteWithOptions): Promise<WriteAccessRequestedStatus> => {
+    if (isRequestingWriteAccess) {
+      throw new TypedError(ERR_ALREADY_CALLED);
+    }
+    isRequestingWriteAccess = true;
+
+    return request(REQUEST_WRITE_ACCESS_METHOD, 'write_access_requested', options)
+      .then(r => r.status)
+      .finally(() => {
+        isRequestingWriteAccess = undefined;
+      });
+  }, REQUEST_WRITE_ACCESS_METHOD,
+);
