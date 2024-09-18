@@ -2,11 +2,16 @@ import {
   retrieveLaunchParams,
   postEvent as _postEvent,
   request as _request,
+  invokeCustomMethod as _invokeCustomMethod,
   createPostEvent,
   type PostEventFn,
   type Version,
   type CreatePostEventMode,
   type RequestFn,
+  type CancelablePromise,
+  type ExecuteWithOptions,
+  type CustomMethodParams,
+  type CustomMethodName,
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
@@ -72,6 +77,43 @@ export function configure(options?: ConfigureOptions): void {
  */
 export function createRequestId(): string {
   return $createRequestId()();
+}
+
+/**
+ * Invokes known custom method. Returns method execution result.
+ * @param method - method name.
+ * @param params - method parameters.
+ * @param options - additional options.
+ * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
+ */
+export function invokeCustomMethod<M extends CustomMethodName>(
+  method: M,
+  params: CustomMethodParams<M>,
+  options?: ExecuteWithOptions,
+): CancelablePromise<unknown>;
+
+/**
+ * Invokes unknown custom method. Returns method execution result.
+ * @param method - method name.
+ * @param params - method parameters.
+ * @param options - additional options.
+ * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
+ */
+export function invokeCustomMethod(
+  method: string,
+  params: object,
+  options?: ExecuteWithOptions,
+): CancelablePromise<unknown>;
+
+export function invokeCustomMethod(
+  method: string,
+  params: object,
+  options?: ExecuteWithOptions,
+): CancelablePromise<unknown> {
+  return _invokeCustomMethod(method, params, createRequestId(), {
+    ...options || {},
+    postEvent: postEvent,
+  });
 }
 
 /**
