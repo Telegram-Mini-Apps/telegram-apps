@@ -7,8 +7,9 @@ import { raw, state } from './signals.js';
 import { restore } from './methods.js';
 
 
-vi.mock('@/scopes/launch-params/static.js', () => ({
-  retrieve: () => ({
+vi.mock('@telegram-apps/bridge', () => ({
+  postEvent() {},
+  retrieveLaunchParams: () => ({
     initData: {
       authDate: new Date(1000),
       canSendAfter: 60,
