@@ -1,33 +1,10 @@
-import {
-  invokeCustomMethod,
-  CancelablePromise,
-  type ExecuteWithOptions,
-  type CustomMethodName,
-  type CustomMethodParams,
-} from '@telegram-apps/bridge';
+import { CancelablePromise, type ExecuteWithOptions } from '@telegram-apps/bridge';
 import { array, object, string } from '@telegram-apps/transformers';
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { createRequestId, postEvent } from '@/scopes/globals/globals.js';
+import { invokeCustomMethod } from '@/scopes/globals/globals.js';
 
 const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
-
-/**
- * Invokes known custom method. Returns method execution result.
- * @param method - method name.
- * @param params - method parameters.
- * @param options - additional options.
- * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
- */
-function invoke<M extends CustomMethodName>(
-  method: M,
-  params: CustomMethodParams<M>,
-  options?: ExecuteWithOptions,
-): CancelablePromise<unknown> {
-  options ||= {};
-  options.postEvent ||= postEvent;
-  return invokeCustomMethod(method, params, createRequestId(), options);
-}
 
 /**
  * Deletes specified key or keys from the cloud storage.
@@ -40,7 +17,7 @@ export const deleteItem = withIsSupported((
 ): CancelablePromise<void> => {
   const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
   return keys.length
-    ? invoke('deleteStorageValues', { keys }, options).then()
+    ? invokeCustomMethod('deleteStorageValues', { keys }, options).then()
     : CancelablePromise.resolve();
 }, MINI_APPS_METHOD);
 
@@ -70,7 +47,7 @@ function _getItem(
   const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
 
   return keys.length
-    ? invoke('getStorageValues', { keys }, options).then(data => {
+    ? invokeCustomMethod('getStorageValues', { keys }, options).then(data => {
       const result = object(
         Object.fromEntries(keys.map((k) => [k, string()])),
       )()(data);
@@ -88,7 +65,7 @@ export const getItem = withIsSupported(_getItem, MINI_APPS_METHOD);
  */
 export const getKeys = withIsSupported(
   (options?: ExecuteWithOptions): CancelablePromise<string[]> => {
-    return invoke('getStorageKeys', {}, options).then(array(string())());
+    return invokeCustomMethod('getStorageKeys', {}, options).then(array(string())());
   }, MINI_APPS_METHOD,
 );
 
@@ -103,5 +80,5 @@ export const setItem = withIsSupported((
   value: string,
   options?: ExecuteWithOptions,
 ): CancelablePromise<void> => {
-  return invoke('saveStorageValue', { key, value }, options).then();
+  return invokeCustomMethod('saveStorageValue', { key, value }, options).then();
 }, MINI_APPS_METHOD);
