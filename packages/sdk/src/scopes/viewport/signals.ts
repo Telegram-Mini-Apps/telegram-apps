@@ -1,5 +1,5 @@
 import { computed, type Computed, signal } from '@telegram-apps/signals';
-import type { CancelablePromise } from '@telegram-apps/toolkit';
+import type { CancelablePromise } from '@telegram-apps/bridge';
 
 import type { State } from './types.js';
 

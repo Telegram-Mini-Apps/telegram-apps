@@ -1,6 +1,9 @@
-import { invokeCustomMethod } from '@telegram-apps/bridge';
+import {
+  invokeCustomMethod,
+  type AsyncOptions,
+  CancelablePromise
+} from '@telegram-apps/bridge';
 import { array, object, string } from '@telegram-apps/transformers';
-import { type AsyncOptions, CancelablePromise } from '@telegram-apps/toolkit';
 
 import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';

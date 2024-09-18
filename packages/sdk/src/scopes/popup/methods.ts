@@ -1,5 +1,4 @@
-import { request, TypedError, type PopupParams } from '@telegram-apps/bridge';
-import { CancelablePromise } from '@telegram-apps/toolkit';
+import { request, TypedError, CancelablePromise, type PopupParams } from '@telegram-apps/bridge';
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';

@@ -1,4 +1,4 @@
-import type { AsyncOptions } from '@telegram-apps/toolkit';
+import type { ExecuteWithOptions } from '@telegram-apps/bridge';
 
 /**
  * This object describes the native popup.

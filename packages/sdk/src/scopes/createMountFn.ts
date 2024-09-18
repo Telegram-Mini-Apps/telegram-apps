@@ -1,5 +1,5 @@
 import { batch, type Signal } from '@telegram-apps/signals';
-import { type AsyncOptions, CancelablePromise } from '@telegram-apps/toolkit';
+import { type AsyncOptions, CancelablePromise } from '@telegram-apps/bridge';
 
 /**
  * Creates a mount function for a component.

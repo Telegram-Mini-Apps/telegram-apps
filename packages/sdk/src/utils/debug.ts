@@ -1,5 +1,4 @@
-import { $debug } from '@telegram-apps/bridge';
-import { createLogger } from '@telegram-apps/toolkit';
+import { $debug, createLogger } from '@telegram-apps/bridge';
 
 export const [logInfo, logError] = createLogger('SDK', {
   bgColor: 'forestgreen',

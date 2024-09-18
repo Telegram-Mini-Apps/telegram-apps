@@ -3,11 +3,14 @@ import {
   supports,
   on,
   off,
+  TypedError,
+  CancelablePromise,
+  getStorageValue,
+  setStorageValue,
   type BiometryTokenUpdateStatus,
   type EventListener,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
-import { CancelablePromise, getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent, $version } from '@/scopes/globals/globals.js';

@@ -2,11 +2,13 @@ import {
   invokeCustomMethod,
   request,
   TypedError,
+  CancelablePromise,
+  sleep,
   type PhoneRequestedStatus,
   type WriteAccessRequestedStatus,
+  type AsyncOptions,
 } from '@telegram-apps/bridge';
 import { searchParams, object, number, string, date } from '@telegram-apps/transformers';
-import { type AsyncOptions, CancelablePromise, sleep } from '@telegram-apps/toolkit';
 
 import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
 import { ERR_ACCESS_DENIED } from '@/errors.js';

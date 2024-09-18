@@ -1,5 +1,8 @@
-import { request as bridgeRequest, type ExecuteWithOptions } from '@telegram-apps/bridge';
-import type { CancelablePromise } from '@telegram-apps/toolkit';
+import {
+  request as bridgeRequest,
+  type ExecuteWithOptions,
+  type CancelablePromise,
+} from '@telegram-apps/bridge';
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 

@@ -2,6 +2,8 @@ import {
   request,
   captureSameReq,
   retrieveLaunchParams,
+  CancelablePromise,
+  type AsyncOptions,
   type SwitchInlineQueryChatType,
 } from '@telegram-apps/bridge';
 

@@ -1,6 +1,11 @@
-import { off, on, type EventListener } from '@telegram-apps/bridge';
+import {
+  off,
+  on,
+  getStorageValue,
+  setStorageValue,
+  type EventListener,
+} from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
-import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';

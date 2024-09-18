@@ -1,5 +1,13 @@
-import { request, on } from '@telegram-apps/bridge';
-import { type AsyncOptions, CancelablePromise, createCbCollector } from '@telegram-apps/toolkit';
+import {
+  request,
+  type AsyncOptions,
+  CancelablePromise,
+  createCbCollector,
+  isCanceledError,
+  isTimeoutError,
+  isAbortError,
+  TypedError,
+} from '@telegram-apps/bridge';
 
 import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';

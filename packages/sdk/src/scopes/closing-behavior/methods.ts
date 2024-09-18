@@ -1,5 +1,5 @@
 import { isPageReload } from '@telegram-apps/navigation';
-import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
+import { getStorageValue, setStorageValue } from '@telegram-apps/bridge';
 
 import { $postEvent } from '@/scopes/globals/globals.js';
 
