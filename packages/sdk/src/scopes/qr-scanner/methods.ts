@@ -1,59 +1,19 @@
 import {
   request,
-  type AsyncOptions,
   CancelablePromise,
   createCbCollector,
   isCanceledError,
   isTimeoutError,
   isAbortError,
   TypedError,
+  type ExecuteWithOptions,
 } from '@telegram-apps/bridge';
 
-import { withIsSupported, type WithIsSupported } from '@/scopes/withIsSupported.js';
+import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { $postEvent } from '@/scopes/globals/globals.js';
-import { ERR_SCANNER_OPENED } from '@/errors/errors.js';
-import { SDKError } from '@/errors/SDKError.js';
+import { ERR_ALREADY_OPENED } from '@/errors.js';
 
 import { isOpened } from './signals.js';
-
-type OpenFn = WithIsSupported<{
-  /**
-   * Opens the scanner.
-   *
-   * Whenever a user scans a QR, the passed `capture` function is being called with the QR
-   * content. It should return true if this QR must be captured and promise resolved.
-   * @param options - method options.
-   * @returns A captured QR content or null, if the scanner was closed.
-   */
-  (options: AsyncOptions & {
-    /**
-     * Title to be displayed in the scanner.
-     */
-    text?: string;
-    /**
-     * Function, which should return true if a scanned QR should be captured and promise resolved.
-     * @param qr - scanned QR content.
-     */
-    capture(this: void, qr: string): boolean;
-  }): CancelablePromise<string | null>;
-  /**
-   * Opens the scanner in stream mode.
-   *
-   * Whenever a user scans a QR, the passed `onCaptured` function will be called.
-   * @param options - method options.
-   */
-  (options: AsyncOptions & {
-    /**
-     * Title to be displayed in the scanner.
-     */
-    text?: string;
-    /**
-     * Function which will be called in case, some QR code was scanned.
-     * @param qr - scanned QR content.
-     */
-    onCaptured(this: void, qr: string): void;
-  }): void;
-}>
 
 const CLOSE_METHOD = 'web_app_close_scan_qr_popup';
 const OPEN_METHOD = 'web_app_open_scan_qr_popup';
@@ -68,60 +28,98 @@ export const close = withIsSupported((): void => {
   $postEvent()(CLOSE_METHOD);
 }, CLOSE_METHOD);
 
-export const open: OpenFn = withIsSupported((options) => {
+interface OpenSharedOptions extends ExecuteWithOptions {
+  /**
+   * Title to be displayed in the scanner.
+   */
+  text?: string;
+}
+
+/**
+ * Opens the scanner and returns a promise which will be resolved with the QR content if the
+ * `capture` function returned true.
+ *
+ * Promise may also be resolved to null if the scanner was closed.
+ * @param options - method options.
+ * @returns A promise with QR content presented as string or undefined if the scanner was closed.
+ */
+function _open(options?: OpenSharedOptions & {
+  /**
+   * Function, which should return true if a scanned QR should be captured.
+   * @param qr - scanned QR content.
+   */
+  capture?: (qr: string) => boolean;
+}): CancelablePromise<string | undefined>;
+
+/**
+ * Opens the scanner and calls the `onCaptured` function each time, a QR was scanned.
+ *
+ * The method does not return anything and expects the scanner to be closed externally by a user
+ * or via the `close` method.
+ * @param options - method options.
+ */
+function _open(options: OpenSharedOptions & {
+  /**
+   * Function which will be called if some QR code was scanned.
+   * @param qr - scanned QR content.
+   */
+  onCaptured: (qr: string) => void;
+}): CancelablePromise<void>;
+
+function _open(options?: OpenSharedOptions & {
+  onCaptured?: (qr: string) => void;
+  capture?: (qr: string) => boolean;
+}): CancelablePromise<string | undefined | void> {
   if (isOpened()) {
-    throw new SDKError(ERR_SCANNER_OPENED);
+    throw new TypedError(ERR_ALREADY_OPENED);
   }
   isOpened.set(true);
 
-  const { text } = options;
+  const [, cleanup] = createCbCollector(
+    // The scanner could potentially be closed outside via the close method.
+    // We should track the open state change and resolve the promise to imitate
+    // the scan_qr_popup_closed event.
+    isOpened.sub(() => {
+      promise.resolve();
+    }),
+  );
 
-  // Capture single QR mode.
-  if ('capture' in options) {
-    const { capture } = options;
-
-    return request(OPEN_METHOD, [SCANNED_EVENT, CLOSED_EVENT], {
-      ...options,
-      postEvent: $postEvent(),
-      params: { text },
-      capture(ev) {
-        return ev.event === 'scan_qr_popup_closed' || capture(ev.payload.data);
-      },
+  options ||= {};
+  options.postEvent ||= $postEvent();
+  const { capture, onCaptured } = options;
+  const promise = request(OPEN_METHOD, [SCANNED_EVENT, CLOSED_EVENT], {
+    ...options,
+    params: { text: options.text },
+    capture(ev) {
+      if (ev.event === 'scan_qr_popup_closed') {
+        return true;
+      }
+      const { data } = ev.payload;
+      onCaptured && onCaptured(data);
+      return capture ? capture(data) : false;
+    },
+  })
+    .then(result => {
+      // The promise was resolved. It was either closed by a user or developer. In this case, we
+      // just check if something was scanned. In case it was, close the scanner and return
+      // the QR content.
+      if (result) {
+        close();
+        return result.data;
+      }
     })
-      .then((result) => {
-        const qr = result ? result.data : null;
-        if (qr !== null) {
-          // Some valid QR was scanned. After this, we can close the scanner.
-          close();
-        }
-        return qr;
-      })
-      .finally(() => {
-        isOpened.set(false);
-      });
-  }
+    .catch(e => {
+      close();
 
-  // Stream mode.
-
-  let cleanup: VoidFunction;
-  return new CancelablePromise((res) => {
-    [, cleanup] = createCbCollector(
-      on('qr_text_received', ({ data }) => {
-        options.onCaptured(data);
-      }),
-      on('scan_qr_popup_closed', () => {
-        isOpened.set(false);
-      }),
-      // Whenever the scanner open state was changed, it means, it was closed by the developer.
-      // We interpret such an action as a successful QR scan.
-      isOpened.sub(res),
-    );
-
-    $postEvent()(OPEN_METHOD, { text: options.text });
-  }, options)
-    .then(() => {
-      isOpened.set(false);
+      // We may have an error in case, something with the promise went wrong. It can be canceled,
+      // timed out or aborted. In this case, it is required to close the scanner.
+      if (!isAbortError(e) && !isTimeoutError(e) && !isCanceledError(e)) {
+        throw e;
+      }
     })
-    .catch(close)
-    .finally(cleanup!);
-}, OPEN_METHOD) as OpenFn;
+    .finally(cleanup);
+
+  return promise;
+}
+
+export const open = withIsSupported(_open, OPEN_METHOD);
