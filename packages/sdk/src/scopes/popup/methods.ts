@@ -77,22 +77,24 @@ function preparePopupParams(params: OpenOptions): PopupParams {
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid button id length.
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid text length.
  */
-export const open = withIsSupported((options: OpenOptions): CancelablePromise<string | null> => {
-  return CancelablePromise.withFn(() => {
-    if (isOpened()) {
-      throw new TypedError(ERR_ALREADY_OPENED);
-    }
+export const open = withIsSupported(
+  (options: OpenOptions): CancelablePromise<string | null> => {
+    return CancelablePromise.withFn(() => {
+      if (isOpened()) {
+        throw new TypedError(ERR_ALREADY_OPENED);
+      }
 
-    isOpened.set(true);
+      isOpened.set(true);
 
-    return request(MINI_APPS_METHOD, 'popup_closed', {
-      ...options || {},
-      postEvent: $postEvent(),
-      params: preparePopupParams(options),
-    })
-      .then(({ button_id = null }) => button_id)
-      .finally(() => {
-        isOpened.set(false);
-      });
-  });
-}, MINI_APPS_METHOD);
+      options.postEvent ||= $postEvent();
+      return request(MINI_APPS_METHOD, 'popup_closed', {
+        ...options || {},
+        params: preparePopupParams(options),
+      })
+        .then(({ button_id = null }) => button_id)
+        .finally(() => {
+          isOpened.set(false);
+        });
+    });
+  }, MINI_APPS_METHOD,
+);
