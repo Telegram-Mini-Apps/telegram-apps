@@ -1,4 +1,4 @@
-import { retrieve as retrieveLaunchParams } from '@/scopes/launch-params/static.js';
+import { retrieveLaunchParams } from '@telegram-apps/bridge';
 
 import { raw, state } from './signals.js';
 
