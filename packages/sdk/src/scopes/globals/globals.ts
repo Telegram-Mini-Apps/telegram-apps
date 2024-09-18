@@ -1,10 +1,11 @@
 import {
   retrieveLaunchParams,
-  postEvent as defaultPostEvent,
+  postEvent as _postEvent,
+  request as _request,
   createPostEvent,
   type PostEventFn,
   type Version,
-  type CreatePostEventMode,
+  type CreatePostEventMode, RequestFn,
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
@@ -40,6 +41,16 @@ export const $createRequestId = signal((() => {
 })());
 
 /**
+ * Signal with a currently used postEvent function across the package.
+ */
+export const $postEvent = signal<PostEventFn>(_postEvent);
+
+/**
+ * Signal with a currently supported maximum Mini Apps version. This value is usually set via
+ */
+export const $version = signal<Version>('0.0');
+
+/**
  * Configures package global dependencies.
  * @param options - configuration additional options.
  */
@@ -56,11 +67,24 @@ export function configure(options?: ConfigureOptions): void {
 }
 
 /**
- * Signal with a currently used postEvent function across the package.
+ * Creates a new request id.
  */
-export const $postEvent = signal<PostEventFn>(defaultPostEvent);
+export function createRequestId(): string {
+  return $createRequestId()();
+}
 
 /**
- * Signal with a currently supported maximum Mini Apps version. This value is usually set via
+ * `request` function from the bridge with applied global `postEvent` option.
  */
-export const $version = signal<Version>('0.0');
+export const request = ((method: any, eventOrEvents: any, options: any) => {
+  options ||= {};
+  options.postEvent ||= $postEvent();
+  return _request(method, eventOrEvents, options);
+}) as RequestFn;
+
+/**
+ * Shortcut for $postEvent call.
+ */
+export const postEvent = ((method: any, params: any) => {
+  return $postEvent()(method, params);
+}) as PostEventFn;
