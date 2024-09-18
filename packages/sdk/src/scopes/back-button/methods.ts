@@ -2,7 +2,7 @@ import { off, on, getStorageValue, setStorageValue, type EventListener } from '@
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { $postEvent } from '@/scopes/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 
 import { isVisible, isMounted } from './signals.js';
 
@@ -34,7 +34,7 @@ export function mount(): void {
 }
 
 function onStateChanged(isVisible: boolean) {
-  $postEvent()(MINI_APPS_METHOD, { is_visible: isVisible });
+  postEvent(MINI_APPS_METHOD, { is_visible: isVisible });
   setStorageValue<StorageValue>(STORAGE_KEY, isVisible);
 }
 

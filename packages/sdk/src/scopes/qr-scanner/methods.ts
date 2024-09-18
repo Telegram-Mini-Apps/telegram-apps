@@ -1,5 +1,4 @@
 import {
-  request,
   CancelablePromise,
   createCbCollector,
   isCanceledError,
@@ -10,7 +9,7 @@ import {
 } from '@telegram-apps/bridge';
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { $postEvent } from '@/scopes/globals/globals.js';
+import { postEvent, request } from '@/scopes/globals/globals.js';
 import { ERR_ALREADY_OPENED } from '@/errors.js';
 
 import { isOpened } from './signals.js';
@@ -25,7 +24,7 @@ const SCANNED_EVENT = 'qr_text_received';
  */
 export const close = withIsSupported((): void => {
   isOpened.set(false);
-  $postEvent()(CLOSE_METHOD);
+  postEvent(CLOSE_METHOD);
 }, CLOSE_METHOD);
 
 interface OpenSharedOptions extends ExecuteWithOptions {
@@ -85,7 +84,6 @@ function _open(options?: OpenSharedOptions & {
   );
 
   options ||= {};
-  options.postEvent ||= $postEvent();
   const { capture, onCaptured } = options;
   const promise = request(OPEN_METHOD, [SCANNED_EVENT, CLOSED_EVENT], {
     ...options,

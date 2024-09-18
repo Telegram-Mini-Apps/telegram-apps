@@ -1,7 +1,7 @@
 import { isPageReload } from '@telegram-apps/navigation';
 import { getStorageValue, setStorageValue } from '@telegram-apps/bridge';
 
-import { $postEvent } from '@/scopes/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 
 import { isConfirmationEnabled, isMounted } from './signals.js';
 
@@ -38,7 +38,7 @@ export function mount(): void {
 }
 
 function onStateChanged(value: boolean): void {
-  $postEvent()('web_app_setup_closing_behavior', { need_confirmation: value });
+  postEvent('web_app_setup_closing_behavior', { need_confirmation: value });
   setStorageValue<StorageValue>(STORAGE_KEY, value);
 }
 

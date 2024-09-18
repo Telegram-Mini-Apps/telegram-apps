@@ -63,7 +63,7 @@ function onStateChanged(s: State): void {
   // We should not commit changes until the payload is correct. Some version of Telegram will
   // crash due to the empty value of the text.
   if (s.text) {
-    $postEvent()('web_app_setup_main_button', {
+    postEvent('web_app_setup_main_button', {
       is_visible: s.isVisible,
       is_active: s.isEnabled,
       is_progress_visible: s.isLoaderVisible,

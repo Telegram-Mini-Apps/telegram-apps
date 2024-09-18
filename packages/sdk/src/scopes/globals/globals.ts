@@ -5,7 +5,8 @@ import {
   createPostEvent,
   type PostEventFn,
   type Version,
-  type CreatePostEventMode, RequestFn,
+  type CreatePostEventMode,
+  type RequestFn,
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
@@ -78,7 +79,7 @@ export function createRequestId(): string {
  */
 export const request = ((method: any, eventOrEvents: any, options: any) => {
   options ||= {};
-  options.postEvent ||= $postEvent();
+  options.postEvent ||= postEvent;
   return _request(method, eventOrEvents, options);
 }) as RequestFn;
 

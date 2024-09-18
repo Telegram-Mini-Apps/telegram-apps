@@ -1,7 +1,7 @@
 import { supports, TypedError, type OpenLinkBrowser } from '@telegram-apps/bridge';
 import { createSafeURL } from '@telegram-apps/navigation';
 
-import { $postEvent, $version } from '@/scopes/globals/globals.js';
+import { $version, postEvent } from '@/scopes/globals/globals.js';
 import { ERR_INVALID_HOSTNAME } from '@/errors.js';
 
 export interface OpenLinkOptions {
@@ -29,7 +29,7 @@ const OPEN_TG_LINK_METHOD = 'web_app_open_tg_link';
  */
 export function openLink(url: string, options?: OpenLinkOptions): void {
   options ||= {};
-  $postEvent()('web_app_open_link', {
+  postEvent('web_app_open_link', {
     url: createSafeURL(url).toString(),
     try_browser: options.tryBrowser,
     try_instant_view: options.tryInstantView,
@@ -53,7 +53,7 @@ export function openTelegramLink(url: string): void {
     return;
   }
 
-  $postEvent()(OPEN_TG_LINK_METHOD, { path_full: pathname + search });
+  postEvent(OPEN_TG_LINK_METHOD, { path_full: pathname + search });
 }
 
 /**

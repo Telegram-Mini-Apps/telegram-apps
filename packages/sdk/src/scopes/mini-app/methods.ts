@@ -9,7 +9,7 @@ import {
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { $postEvent } from '@/scopes/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { withSupports } from '@/scopes/withSupports.js';
 import { ERR_CSS_VARS_BOUND, ERR_DATA_INVALID_SIZE } from '@/errors.js';
@@ -96,7 +96,7 @@ export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
  * @param returnBack - Should the client return to the previous activity.
  */
 export function close(returnBack?: boolean): void {
-  $postEvent()('web_app_close', { return_back: returnBack });
+  postEvent('web_app_close', { return_back: returnBack });
 }
 
 /**
@@ -119,12 +119,12 @@ export function mount(): void {
 
 function onHeaderColorChanged(color: HeaderColor): void {
   saveState();
-  $postEvent()(SET_HEADER_COLOR_METHOD, isRGB(color) ? { color } : { color_key: color });
+  postEvent(SET_HEADER_COLOR_METHOD, isRGB(color) ? { color } : { color_key: color });
 }
 
 function onBgColorChanged(color: RGB): void {
   saveState();
-  $postEvent()(SET_BG_COLOR_METHOD, { color });
+  postEvent(SET_BG_COLOR_METHOD, { color });
 }
 
 /**
@@ -138,7 +138,7 @@ function onBgColorChanged(color: RGB): void {
  * If the method is not called, the placeholder will be hidden only when the page was fully loaded.
  */
 export function ready(): void {
-  $postEvent()('web_app_ready');
+  postEvent('web_app_ready');
 }
 
 function saveState() {
@@ -162,7 +162,7 @@ export function sendData(data: string): void {
   if (!size || size > 4096) {
     throw new TypedError(ERR_DATA_INVALID_SIZE);
   }
-  $postEvent()('web_app_data_send', { data });
+  postEvent('web_app_data_send', { data });
 }
 
 /**

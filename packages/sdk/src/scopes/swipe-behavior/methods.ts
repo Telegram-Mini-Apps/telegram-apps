@@ -1,7 +1,7 @@
 import { isPageReload } from '@telegram-apps/navigation';
 import { getStorageValue, setStorageValue } from '@telegram-apps/bridge';
 
-import { $postEvent } from '@/scopes/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 
 import { isMounted, isVerticalEnabled } from './signals.js';
@@ -46,7 +46,7 @@ export function mount(): void {
 }
 
 function onStateChanged(value: boolean): void {
-  $postEvent()(MINI_APPS_METHOD, { allow_vertical_swipe: value });
+  postEvent(MINI_APPS_METHOD, { allow_vertical_swipe: value });
   setStorageValue<StorageValue>(STORAGE_KEY, value);
 }
 

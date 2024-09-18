@@ -7,7 +7,7 @@ import {
 } from '@telegram-apps/bridge';
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { $postEvent } from '@/scopes/globals/globals.js';
+import { request } from '@/scopes/globals/globals.js';
 import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_ALREADY_OPENED } from '@/errors.js';
 
 import { isOpened } from './signals.js';
@@ -74,8 +74,6 @@ function _open(
 
     isOpened.set(true);
 
-    options ||= {};
-    options.postEvent ||= $postEvent();
     return request(MINI_APPS_METHOD, 'invoice_closed', {
       ...options,
       params: { slug },

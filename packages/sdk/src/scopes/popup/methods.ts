@@ -1,7 +1,7 @@
-import { request, TypedError, CancelablePromise, type PopupParams } from '@telegram-apps/bridge';
+import { TypedError, CancelablePromise, type PopupParams } from '@telegram-apps/bridge';
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { $postEvent } from '@/scopes/globals/globals.js';
+import { request } from '@/scopes/globals/globals.js';
 import { ERR_POPUP_INVALID_PARAMS, ERR_ALREADY_OPENED } from '@/errors.js';
 
 import { isOpened } from './signals.js';
@@ -86,9 +86,8 @@ export const open = withIsSupported(
 
       isOpened.set(true);
 
-      options.postEvent ||= $postEvent();
       return request(MINI_APPS_METHOD, 'popup_closed', {
-        ...options || {},
+        ...options,
         params: preparePopupParams(options),
       })
         .then(({ button_id = null }) => button_id)

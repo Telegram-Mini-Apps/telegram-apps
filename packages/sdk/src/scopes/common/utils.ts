@@ -1,5 +1,4 @@
 import {
-  request,
   captureSameReq,
   retrieveLaunchParams,
   CancelablePromise,
@@ -7,7 +6,7 @@ import {
   type SwitchInlineQueryChatType,
 } from '@telegram-apps/bridge';
 
-import { $postEvent, $createRequestId } from '@/scopes/globals/globals.js';
+import { postEvent, createRequestId, request } from '@/scopes/globals/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 
 const READ_TEXT_FROM_CLIPBOARD_METHOD = 'web_app_read_text_from_clipboard';
@@ -20,11 +19,10 @@ const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
  * - Access to the clipboard is not granted.
  */
 export const readTextFromClipboard = withIsSupported((options?: AsyncOptions): CancelablePromise<string | null> => {
-  const reqId = $createRequestId()();
+  const reqId = createRequestId();
 
   return request(READ_TEXT_FROM_CLIPBOARD_METHOD, 'clipboard_text_received', {
-    postEvent: $postEvent(),
-    ...options || {},
+    ...options,
     params: { req_id: reqId },
     capture: captureSameReq(reqId),
   }).then(({ data = null }) => data);
@@ -42,7 +40,7 @@ export const readTextFromClipboard = withIsSupported((options?: AsyncOptions): C
  */
 export const switchInlineQuery = withIsSupported(
   (query: string, chatTypes?: SwitchInlineQueryChatType[]) => {
-    $postEvent()(SWITCH_INLINE_QUERY_METHOD, {
+    postEvent(SWITCH_INLINE_QUERY_METHOD, {
       query: query,
       chat_types: chatTypes || [],
     });
