@@ -1,14 +1,33 @@
 import {
   invokeCustomMethod,
-  type ExecuteWithOptions,
   CancelablePromise,
+  type ExecuteWithOptions,
+  type CustomMethodName,
+  type CustomMethodParams,
 } from '@telegram-apps/bridge';
 import { array, object, string } from '@telegram-apps/transformers';
 
 import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { $createRequestId, $postEvent } from '@/scopes/globals/globals.js';
+import { createRequestId, postEvent } from '@/scopes/globals/globals.js';
 
 const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
+
+/**
+ * Invokes known custom method. Returns method execution result.
+ * @param method - method name.
+ * @param params - method parameters.
+ * @param options - additional options.
+ * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
+ */
+function invoke<M extends CustomMethodName>(
+  method: M,
+  params: CustomMethodParams<M>,
+  options?: ExecuteWithOptions,
+): CancelablePromise<unknown> {
+  options ||= {};
+  options.postEvent ||= postEvent;
+  return invokeCustomMethod(method, params, createRequestId(), options);
+}
 
 /**
  * Deletes specified key or keys from the cloud storage.
@@ -20,17 +39,8 @@ export const deleteItem = withIsSupported((
   options?: ExecuteWithOptions,
 ): CancelablePromise<void> => {
   const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
-
-  options ||= {};
-  options.postEvent ||= $postEvent();
   return keys.length
-    ? invokeCustomMethod(
-      'deleteStorageValues',
-      { keys },
-      $createRequestId()(),
-      options,
-    )
-      .then()
+    ? invoke('deleteStorageValues', { keys }, options).then()
     : CancelablePromise.resolve();
 }, MINI_APPS_METHOD);
 
@@ -58,25 +68,16 @@ function _getItem(
   options?: ExecuteWithOptions,
 ): CancelablePromise<string | Record<string, string>> {
   const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
-  if (!keys.length) {
-    return CancelablePromise.resolve(typeof keyOrKeys === 'string' ? '' : {});
-  }
 
-  options ||= {};
-  options.postEvent ||= $postEvent();
-  return invokeCustomMethod(
-    'getStorageValues',
-    { keys },
-    $createRequestId()(),
-    options,
-  )
-    .then(data => {
+  return keys.length
+    ? invoke('getStorageValues', { keys }, options).then(data => {
       const result = object(
         Object.fromEntries(keys.map((k) => [k, string()])),
       )()(data);
 
       return Array.isArray(keyOrKeys) ? result : result[keyOrKeys];
-    });
+    })
+    : CancelablePromise.resolve(typeof keyOrKeys === 'string' ? '' : {});
 }
 
 export const getItem = withIsSupported(_getItem, MINI_APPS_METHOD);
@@ -87,15 +88,7 @@ export const getItem = withIsSupported(_getItem, MINI_APPS_METHOD);
  */
 export const getKeys = withIsSupported(
   (options?: ExecuteWithOptions): CancelablePromise<string[]> => {
-    options ||= {};
-    options.postEvent ||= $postEvent();
-    return invokeCustomMethod(
-      'getStorageKeys',
-      {},
-      $createRequestId()(),
-      options,
-    )
-      .then(array(string())());
+    return invoke('getStorageKeys', {}, options).then(array(string())());
   }, MINI_APPS_METHOD,
 );
 
@@ -110,12 +103,5 @@ export const setItem = withIsSupported((
   value: string,
   options?: ExecuteWithOptions,
 ): CancelablePromise<void> => {
-  options ||= {};
-  options.postEvent ||= $postEvent();
-  return invokeCustomMethod(
-    'saveStorageValue',
-    { key, value },
-    $createRequestId()(),
-    options,
-  ).then();
+  return invoke('saveStorageValue', { key, value }, options).then();
 }, MINI_APPS_METHOD);
