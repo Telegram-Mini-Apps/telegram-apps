@@ -42,7 +42,7 @@ describe('retrieveFromStorage', () => {
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith(
       'tapps/launchParams',
-      '"tgWebAppPlatform=android&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23ffffff%22%7D&tgWebAppVersion=7.0&tgWebAppShowSettings=0&tgWebAppBotInline=0"',
+      '"tgWebAppPlatform=android&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23ffffff%22%7D&tgWebAppVersion=7.0"',
     );
   });
 });
