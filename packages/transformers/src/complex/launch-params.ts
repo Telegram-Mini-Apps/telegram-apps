@@ -23,25 +23,24 @@ export const launchParams: TransformerGen<LaunchParams> = (optional) => {
     themeParams: ['tgWebAppThemeParams', themeParams()],
     version: ['tgWebAppVersion', string],
   }, 'launchParams')(optional);
-}
+};
 
 /**
  * Serializes launch parameters to representation sent from the Telegram application.
  */
 // #__NO_SIDE_EFFECTS__
 export function serializeLaunchParams(lp: LaunchParams): string {
-  const { initDataRaw, startParam } = lp;
+  const { initDataRaw, startParam, showSettings, botInline } = lp;
 
   const params = new URLSearchParams();
 
   params.set('tgWebAppPlatform', lp.platform);
   params.set('tgWebAppThemeParams', serializeThemeParams(lp.themeParams));
   params.set('tgWebAppVersion', lp.version);
-  params.set('tgWebAppShowSettings', lp.showSettings ? '1' : '0');
-  params.set('tgWebAppBotInline', lp.botInline ? '1' : '0');
-
   initDataRaw && params.set('tgWebAppData', initDataRaw);
   startParam && params.set('tgWebAppStartParam', startParam);
+  typeof showSettings === 'boolean' && params.set('tgWebAppShowSettings', showSettings ? '1' : '0');
+  typeof botInline === 'boolean' && params.set('tgWebAppBotInline', botInline ? '1' : '0');
 
   return params.toString();
 }
