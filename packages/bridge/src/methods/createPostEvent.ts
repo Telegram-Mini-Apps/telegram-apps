@@ -2,7 +2,7 @@ import { isRecord } from '@telegram-apps/transformers';
 import { TypedError } from '@telegram-apps/toolkit';
 import type { Version } from '@telegram-apps/types';
 
-import { ERR_METHOD_PARAMETER_UNSUPPORTED, ERR_METHOD_UNSUPPORTED } from '@/errors/errors.js';
+import { ERR_METHOD_PARAMETER_UNSUPPORTED, ERR_METHOD_UNSUPPORTED } from '@/errors.js';
 import { supports } from '@/methods/supports.js';
 import { type PostEventFn, postEvent } from '@/methods/postEvent.js';
 import type {

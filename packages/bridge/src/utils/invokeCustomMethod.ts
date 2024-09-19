@@ -1,6 +1,6 @@
 import { CancelablePromise, TypedError } from '@telegram-apps/toolkit';
 
-import { ERR_CUSTOM_METHOD_ERR_RESPONSE } from '@/errors/errors.js';
+import { ERR_CUSTOM_METHOD_ERR_RESPONSE } from '@/errors.js';
 import { captureSameReq } from '@/methods/captureSameReq.js';
 import type { ExecuteWithOptions } from '@/types.js';
 import type { CustomMethodName, CustomMethodParams } from '@/methods/types/index.js';

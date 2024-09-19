@@ -4,7 +4,7 @@ import { TypedError } from '@telegram-apps/toolkit';
 import { logInfo } from '@/debug.js';
 import { isIframe } from '@/env/isIframe.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
-import { ERR_UNKNOWN_ENV } from '@/errors/errors.js';
+import { ERR_UNKNOWN_ENV } from '@/errors.js';
 import { $targetOrigin } from '@/methods/$targetOrigin.js';
 import type {
   MethodName,

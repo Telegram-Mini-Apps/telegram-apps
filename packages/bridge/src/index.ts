@@ -3,14 +3,6 @@ export { isIframe } from '@/env/isIframe.js';
 export { isTMA } from '@/env/isTMA.js';
 export { mockTelegramEnv } from '@/env/mockTelegramEnv.js';
 
-export {
-  ERR_METHOD_UNSUPPORTED,
-  ERR_METHOD_PARAMETER_UNSUPPORTED,
-  ERR_CUSTOM_METHOD_ERR_RESPONSE,
-  ERR_UNKNOWN_ENV,
-  ERR_RETRIEVE_LP_FAILED,
-} from '@/errors/errors.js';
-
 export { defineEventHandlers } from '@/events/handling/defineEventHandlers.js';
 export { removeEventHandlers } from '@/events/handling/removeEventHandlers.js';
 export { on } from '@/events/listening/on.js';
@@ -49,6 +41,13 @@ export {
 } from '@/utils/request.js';
 
 export { $debug } from '@/debug.js';
+export {
+  ERR_METHOD_UNSUPPORTED,
+  ERR_METHOD_PARAMETER_UNSUPPORTED,
+  ERR_CUSTOM_METHOD_ERR_RESPONSE,
+  ERR_UNKNOWN_ENV,
+  ERR_RETRIEVE_LP_FAILED,
+} from '@/errors.js';
 export { resetPackageState } from '@/resetPackageState.js';
 export type { ExecuteWithOptions, ExecuteWithPostEvent } from '@/types.js';
 
@@ -59,7 +58,6 @@ export {
   camelToSnake,
   createCbCollector,
   createLogger,
-  createTypedError,
   createAbortError,
   createTypedErrorPredicate,
   CancelablePromise,

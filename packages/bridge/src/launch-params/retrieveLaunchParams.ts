@@ -1,7 +1,7 @@
 import type { LaunchParams } from '@telegram-apps/types';
 import { TypedError } from '@telegram-apps/toolkit';
 
-import { ERR_RETRIEVE_LP_FAILED } from '@/errors/errors.js';
+import { ERR_RETRIEVE_LP_FAILED } from '@/errors.js';
 
 import { retrieveFromLocation } from './retrieveFromLocation.js';
 import { retrieveFromPerformance } from './retrieveFromPerformance.js';
