@@ -37,7 +37,11 @@ export function parseBySchema<T>(
         (result as any)[field] = parsedValue;
       }
     } catch (cause) {
-      throw new TypedError(ERR_PARSE, `Unable to parse field "${field}"`, cause);
+      throw new TypedError(
+        ERR_PARSE,
+        `Parser for "${field}" property failed${from === field ? '' : `. Source field: "${from}")`}`,
+        cause
+      );
     }
   }
 
