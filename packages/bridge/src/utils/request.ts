@@ -1,6 +1,6 @@
 import {
+  CancelablePromise,
   createCbCollector,
-  EnhancedPromise,
   type If,
   type IsNever,
 } from '@telegram-apps/toolkit';
@@ -62,80 +62,82 @@ export type RequestResult<E extends AnyEventName> =
       ? If<IsNever<EventPayload<E>>, undefined, EventPayload<E>>
       : never;
 
-export interface RequestFn {
-  /**
-   * Performs a request waiting for specified events to occur.
-   *
-   * This overriding is used for methods, requiring parameters.
-   * @param method - method name.
-   * @param eventOrEvents - tracked event or events.
-   * @param options - additional options.
-   */<M extends MethodNameWithRequiredParams, E extends AnyEventName>(
-    method: M,
-    eventOrEvents: E,
-    options: RequestBasicOptions<E> & { params: MethodParams<M> },
-  ): EnhancedPromise<RequestResult<E>>;
+export type RequestFn = typeof request;
 
-  /**
-   * Performs a request waiting for specified events to occur.
-   *
-   * This overriding is used for methods with optional parameters.
-   * @param method - method name.
-   * @param eventOrEvents - tracked event or events.
-   * @param options - additional options.
-   */<M extends MethodNameWithOptionalParams, E extends AnyEventName>(
-    method: M,
-    eventOrEvents: E,
-    options?: RequestBasicOptions<E> & { params?: MethodParams<M> },
-  ): EnhancedPromise<RequestResult<E>>;
+/**
+ * Performs a request waiting for specified events to occur.
+ *
+ * This overriding is used for methods, requiring parameters.
+ * @param method - method name.
+ * @param eventOrEvents - tracked event or events.
+ * @param options - additional options.
+ */
+export function request<M extends MethodNameWithRequiredParams, E extends AnyEventName>(
+  method: M,
+  eventOrEvents: E,
+  options: RequestBasicOptions<E> & { params: MethodParams<M> },
+): CancelablePromise<RequestResult<E>>;
 
-  /**
-   * Performs a request waiting for specified events to occur.
-   *
-   * This overriding is used for methods without parameters.
-   * @param method - method name.
-   * @param eventOrEvents - tracked event or events.
-   * @param options - additional options.
-   */<M extends MethodNameWithoutParams, E extends AnyEventName>(
-    method: M,
-    eventOrEvents: E,
-    options?: RequestBasicOptions<E>,
-  ): EnhancedPromise<RequestResult<E>>;
-}
-
-export const request: RequestFn = <M extends MethodName, E extends AnyEventName>(
+/**
+ * Performs a request waiting for specified events to occur.
+ *
+ * This overriding is used for methods with optional parameters.
+ * @param method - method name.
+ * @param eventOrEvents - tracked event or events.
+ * @param options - additional options.
+ */
+export function request<M extends MethodNameWithOptionalParams, E extends AnyEventName>(
   method: M,
   eventOrEvents: E,
   options?: RequestBasicOptions<E> & { params?: MethodParams<M> },
-): EnhancedPromise<RequestResult<E>> => {
-  options ||= {};
-  let promise: EnhancedPromise<RequestResult<E>>;
+): CancelablePromise<RequestResult<E>>;
 
+/**
+ * Performs a request waiting for specified events to occur.
+ *
+ * This overriding is used for methods without parameters.
+ * @param method - method name.
+ * @param eventOrEvents - tracked event or events.
+ * @param options - additional options.
+ */
+export function request<M extends MethodNameWithoutParams, E extends AnyEventName>(
+  method: M,
+  eventOrEvents: E,
+  options?: RequestBasicOptions<E>,
+): CancelablePromise<RequestResult<E>>;
+
+export function request<M extends MethodName, E extends AnyEventName>(
+  method: M,
+  eventOrEvents: E,
+  options?: RequestBasicOptions<E> & { params?: MethodParams<M> },
+): CancelablePromise<RequestResult<E>> {
+  options ||= {};
   const { capture } = options;
-  const [, cleanup] = createCbCollector(
+  const [addCleanup, cleanup] = createCbCollector();
+
+  return new CancelablePromise<RequestResult<E>>((resolve) => {
     // We need to iterate over all tracked events and create their event listeners.
-    ((Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents])).map(event => {
+    ((Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents])).forEach(event => {
       // Each event listener waits for the event to occur.
       // Then, if the capture function was passed, we should check if the event should be captured.
       // If the function is omitted, we instantly capture the event.
-      return on(event, payload => {
-        if (!capture || (
-          Array.isArray(eventOrEvents)
-            ? (capture as RequestCaptureEventsFn<EventName[]>)({
-              event,
-              payload,
-            } as RequestCaptureFnEventsPayload<EventName[]>)
-            : (capture as RequestCaptureEventFn<EventName>)(payload)
-        )) {
-          promise.resolve(payload as RequestResult<E>);
-        }
-      });
-    }),
-  );
+      addCleanup(
+        on(event, payload => {
+          if (!capture || (
+            Array.isArray(eventOrEvents)
+              ? (capture as RequestCaptureEventsFn<EventName[]>)({
+                event,
+                payload,
+              } as RequestCaptureFnEventsPayload<EventName[]>)
+              : (capture as RequestCaptureEventFn<EventName>)(payload)
+          )) {
+            resolve(payload as RequestResult<E>);
+          }
+        }),
+      );
+    });
 
-  return (
-    promise = new EnhancedPromise<RequestResult<E>>(() => {
-      (options.postEvent || postEvent)(method as any, (options as any).params);
-    })
-  ).finally(cleanup);
-};
+    (options.postEvent || postEvent)(method as any, (options as any).params);
+  }, options)
+    .finally(cleanup);
+}
