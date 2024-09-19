@@ -14,7 +14,12 @@ import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { withSupports } from '@/scopes/withSupports.js';
 import { ERR_CSS_VARS_BOUND, ERR_DATA_INVALID_SIZE } from '@/errors.js';
 import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
-import * as themeParams from '@/scopes/theme-params/instance.js';
+import {
+  mount as tpMount,
+  state as tpState,
+  backgroundColor as tpBackgroundColor,
+  headerBackgroundColor as tpHeaderBackgroundColor,
+} from '@/scopes/theme-params/instance.js';
 
 import {
   headerColor,
@@ -55,7 +60,7 @@ export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
   const headerVar = getCSSVarName('headerColor');
 
   function updateHeaderColor() {
-    const tp = themeParams.state();
+    const tp = tpState();
 
     const h = headerColor();
     if (isRGB(h)) {
@@ -80,7 +85,7 @@ export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
 
   const [, cleanup] = createCbCollector(
     backgroundColor.sub(updateBgColor),
-    [headerColor, themeParams.state].map(s => s.sub(updateHeaderColor)),
+    [headerColor, tpState].map(s => s.sub(updateHeaderColor)),
   );
   isCssVarsBound.set(true);
 
@@ -108,10 +113,10 @@ export function close(returnBack?: boolean): void {
 export function mount(): void {
   if (!isMounted()) {
     const s = isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY);
-    themeParams.mount();
-    backgroundColor.set(s ? s.backgroundColor : themeParams.backgroundColor() || '#000000');
+    tpMount();
+    backgroundColor.set(s ? s.backgroundColor : tpBackgroundColor() || '#000000');
     backgroundColor.sub(onBgColorChanged);
-    headerColor.set(s ? s.headerColor : themeParams.headerBackgroundColor() || 'bg_color');
+    headerColor.set(s ? s.headerColor : tpHeaderBackgroundColor() || 'bg_color');
     headerColor.sub(onHeaderColorChanged);
     isMounted.set(true);
   }
