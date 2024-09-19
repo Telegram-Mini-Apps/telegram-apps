@@ -2,8 +2,8 @@ import {
   captureSameReq,
   retrieveLaunchParams,
   CancelablePromise,
-  type AsyncOptions,
   type SwitchInlineQueryChatType,
+  type ExecuteWithOptions,
 } from '@telegram-apps/bridge';
 
 import { postEvent, createRequestId, request } from '@/scopes/globals/globals.js';
@@ -18,15 +18,17 @@ const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
  * - A value in the clipboard is not a text.
  * - Access to the clipboard is not granted.
  */
-export const readTextFromClipboard = withIsSupported((options?: AsyncOptions): CancelablePromise<string | null> => {
-  const reqId = createRequestId();
+export const readTextFromClipboard = withIsSupported(
+  (options?: ExecuteWithOptions): CancelablePromise<string | null> => {
+    const reqId = createRequestId();
 
-  return request(READ_TEXT_FROM_CLIPBOARD_METHOD, 'clipboard_text_received', {
-    ...options,
-    params: { req_id: reqId },
-    capture: captureSameReq(reqId),
-  }).then(({ data = null }) => data);
-}, READ_TEXT_FROM_CLIPBOARD_METHOD);
+    return request(READ_TEXT_FROM_CLIPBOARD_METHOD, 'clipboard_text_received', {
+      ...options,
+      params: { req_id: reqId },
+      capture: captureSameReq(reqId),
+    }).then(({ data = null }) => data);
+  }, READ_TEXT_FROM_CLIPBOARD_METHOD,
+);
 
 /**
  * Inserts the bot's username and the specified inline query in the current chat's input field.
