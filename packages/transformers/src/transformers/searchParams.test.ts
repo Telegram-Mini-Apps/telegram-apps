@@ -5,8 +5,9 @@ import { ERR_PARSE, ERR_UNEXPECTED_TYPE } from '../errors/errors.js';
 import { date } from './date.js';
 import { searchParams } from './searchParams.js';
 import { string } from './string.js';
+import { TypedError } from '@telegram-apps/toolkit';
 
-it('should throw an error in case, passed value is not of type string or URLSearchParams', () => {
+it('should throw if passed value is not of type string or URLSearchParams', () => {
   const parser = searchParams({})(true);
   expect(() => parser(true)).toThrow();
   expect(() => parser({})).toThrow();
@@ -14,32 +15,21 @@ it('should throw an error in case, passed value is not of type string or URLSear
   expect(() => parser(new URLSearchParams())).not.toThrow();
 });
 
-it('should throw an error in case, passed value does not contain required field presented in schema', () => {
+it('should throw if passed value does not contain required field presented in schema', () => {
   const parser = searchParams({ prop: string() })();
 
-  try {
-    parser('abc=123');
-  } catch (e) {
-    expect(e).toMatchObject({
-      message: 'Unable to parse value',
-      type: ERR_PARSE,
-      cause: {
-        type: ERR_PARSE,
-        message: 'Unable to parse field "prop"',
-        cause: {
-          type: ERR_PARSE,
-          message: 'Unable to parse value as string',
-          cause: {
-            type: ERR_UNEXPECTED_TYPE,
-          },
-        },
-      },
-    });
-  }
-  expect.assertions(1);
+  expect(() => parser('abc=123')).toThrow(
+    new TypedError(ERR_PARSE, '"searchParams" transformer failed to parse the value',
+      new TypedError(ERR_PARSE, 'Parser for "prop" failed',
+        new TypedError(ERR_PARSE, 'Unable to parse value as string',
+          new TypedError(ERR_UNEXPECTED_TYPE),
+        ),
+      ),
+    ),
+  );
 });
 
-it('should not throw an error in case, passed value does not contain optional field presented in schema', () => {
+it('should not throw if passed value does not contain optional field presented in schema', () => {
   const parser = searchParams<{ prop?: string }>({
     prop: string(true),
   })();
@@ -54,49 +44,29 @@ it('should use parser with unspecified type', () => {
     },
   })();
 
-  try {
-    parser('prop=');
-  } catch (e) {
-    expect(e).toMatchObject({
-      message: 'Unable to parse value',
-      cause: {
-        message: 'Unable to parse field "prop"',
-        cause: {
-          message: 'Just an error',
-        },
-      },
-    });
-  }
-  expect.assertions(1);
+  expect(() => parser('prop=')).toThrow(
+    new TypedError(ERR_PARSE, '"searchParams" transformer failed to parse the value',
+      new TypedError(ERR_PARSE, 'Parser for "prop" failed',
+        new Error('Just an error'),
+      ),
+    ),
+  );
 });
 
-it('should throw an error in case, passed value contains field of different type presented in schema', () => {
+it('should throw if passed value contains field of different type presented in schema', () => {
   const parser = searchParams({ prop: date() })();
 
-  try {
-    parser('prop=abc');
-  } catch (e) {
-    expect(e).toMatchObject({
-      type: ERR_PARSE,
-      message: 'Unable to parse value',
-      cause: {
-        type: ERR_PARSE,
-        message: 'Unable to parse field "prop"',
-        cause: {
-          type: ERR_PARSE,
-          message: 'Unable to parse value as Date',
-          cause: {
-            type: ERR_PARSE,
-            message: 'Unable to parse value as number',
-            cause: {
-              type: ERR_UNEXPECTED_TYPE,
-            },
-          },
-        },
-      },
-    });
-  }
-  expect.assertions(1);
+  expect(() => parser('prop=abc')).toThrow(
+    new TypedError(ERR_PARSE, '"searchParams" transformer failed to parse the value',
+      new TypedError(ERR_PARSE, 'Parser for "prop" failed',
+        new TypedError(ERR_PARSE, 'Unable to parse value as Date',
+          new TypedError(ERR_PARSE, 'Unable to parse value as number',
+            new TypedError(ERR_UNEXPECTED_TYPE),
+          ),
+        ),
+      ),
+    ),
+  );
 });
 
 it('should correctly parse built-in types', () => {
