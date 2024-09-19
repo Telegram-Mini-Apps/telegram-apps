@@ -7,8 +7,12 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { $postEvent } from '@/scopes/globals/globals.js';
-import * as themeParams from '@/scopes/theme-params/instance.js';
+import { postEvent } from '@/scopes/globals/globals.js';
+import {
+  mount as tpMount,
+  buttonColor as tpButtonColor,
+  buttonTextColor as tpButtonTextColor,
+} from '@/scopes/theme-params/instance.js';
 
 import { state, isMounted } from './signals.js';
 import type { State } from './types.js';
@@ -47,10 +51,10 @@ export function mount(): void {
     if (prev) {
       state.set(prev);
     } else {
-      themeParams.mount();
+      tpMount();
       setParams({
-        backgroundColor: themeParams.buttonColor(),
-        textColor: themeParams.buttonTextColor(),
+        backgroundColor: tpButtonColor(),
+        textColor: tpButtonTextColor(),
       });
     }
 
