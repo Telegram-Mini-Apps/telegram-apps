@@ -60,7 +60,6 @@ function section(text: string, items: Items, prefix: string) {
 
 export function sectionGen(prefix: string) {
   return (text: string, items: Items) => {
-    console.log(section(text, items, prefix));
     return section(text, items, prefix);
   };
 }
