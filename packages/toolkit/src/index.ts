@@ -32,3 +32,4 @@ export { addEventListener } from './addEventListener.js';
 export { createCbCollector, type CallbackFn } from './createCbCollector.js';
 export { camelToKebab, camelToSnake, snakeToCamel } from './casing.js';
 export { createLogger } from './createLogger.js';
+export { setCssVar, deleteCssVar } from './css-vars.js';
