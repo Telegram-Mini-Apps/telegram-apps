@@ -1,9 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
 
+import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState, resetSignal } from '@test-utils/reset.js';
-
-import { $postEvent } from '@/scopes/globals/globals.js';
 
 import { isConfirmationEnabled, isMounted } from './signals.js';
 import {
@@ -17,7 +16,7 @@ beforeEach(() => {
   resetPackageState();
   [isConfirmationEnabled, isMounted].forEach(resetSignal);
   vi.restoreAllMocks();
-  $postEvent.set(() => null);
+  mockPostEvent();
 });
 
 describe('mounted', () => {
@@ -27,8 +26,7 @@ describe('mounted', () => {
   describe('disableConfirmation', () => {
     it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: false }', () => {
       isConfirmationEnabled.set(true);
-      const spy = vi.fn();
-      $postEvent.set(spy);
+      const spy = mockPostEvent();
       disableConfirmation();
       disableConfirmation();
       disableConfirmation();
@@ -40,8 +38,7 @@ describe('mounted', () => {
   describe('enableConfirmation', () => {
     it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: true }', () => {
       isConfirmationEnabled.set(false);
-      const spy = vi.fn();
-      $postEvent.set(spy);
+      const spy = mockPostEvent();
       enableConfirmation();
       enableConfirmation();
       enableConfirmation();
@@ -56,8 +53,7 @@ describe('not mounted', () => {
   describe('disableConfirmation', () => {
     it('should not call postEvent', () => {
       isConfirmationEnabled.set(true);
-      const spy = vi.fn();
-      $postEvent.set(spy);
+      const spy = mockPostEvent();
       disableConfirmation();
       disableConfirmation();
       disableConfirmation();
@@ -68,8 +64,7 @@ describe('not mounted', () => {
   describe('enableConfirmation', () => {
     it('should not call postEvent', () => {
       isConfirmationEnabled.set(false);
-      const spy = vi.fn();
-      $postEvent.set(spy);
+      const spy = mockPostEvent();
       enableConfirmation();
       enableConfirmation();
       enableConfirmation();
@@ -132,9 +127,8 @@ describe('unmount', () => {
   beforeEach(mount);
 
   it('should stop calling postEvent function and session storage updates when isConfirmationNeeded changes', () => {
-    const postEventSpy = vi.fn();
+    const postEventSpy = mockPostEvent();
     const storageSpy = mockSessionStorageSetItem();
-    $postEvent.set(postEventSpy);
     isConfirmationEnabled.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);

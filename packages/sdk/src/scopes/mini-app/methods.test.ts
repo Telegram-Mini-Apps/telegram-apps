@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, Mock, MockInstance, vi } from 'vitest';
 import { createWindow } from 'test-utils';
 
+import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState, resetSignal } from '@test-utils/reset.js';
-import { $postEvent } from '@/scopes/globals/globals.js';
 import * as themeParams from '@/scopes/theme-params/instance.js';
 
 import {
@@ -47,7 +47,7 @@ beforeEach(() => {
     .spyOn(document.documentElement.style, 'setProperty')
     .mockImplementation(() => {
     });
-  $postEvent.set(() => null);
+  mockPostEvent();
 });
 
 describe('bindCssVars', () => {
@@ -128,8 +128,7 @@ describe('bindCssVars', () => {
 
     beforeEach(() => {
       mount();
-      spy = vi.fn();
-      $postEvent.set(spy);
+      mockPostEvent();
     });
 
     describe('setBackgroundColor', () => {

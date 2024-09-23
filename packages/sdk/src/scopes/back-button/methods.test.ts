@@ -2,8 +2,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
 import { emitMiniAppsEvent } from '@telegram-apps/bridge';
 
+import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState, resetSignal } from '@test-utils/reset.js';
-import { $postEvent, $version } from '@/scopes/globals/globals.js';
+import { $version } from '@/scopes/globals/globals.js';
 
 import { isVisible, isMounted } from './signals.js';
 import {
@@ -19,7 +20,7 @@ beforeEach(() => {
   resetPackageState();
   [isVisible, isMounted].forEach(resetSignal);
   vi.restoreAllMocks();
-  $postEvent.set(() => null);
+  mockPostEvent();
 });
 
 describe('mounted', () => {
@@ -29,8 +30,7 @@ describe('mounted', () => {
   describe('hide', () => {
     it('should call postEvent with "web_app_setup_back_button" and { is_visible: false }', () => {
       isVisible.set(true);
-      const spy = vi.fn();
-      $postEvent.set(spy);
+      const spy = mockPostEvent();
       hide();
       hide();
       hide();
@@ -42,8 +42,7 @@ describe('mounted', () => {
   describe('show', () => {
     it('should call postEvent with "web_app_setup_back_button" and { is_visible: true }', () => {
       isVisible.set(false);
-      const spy = vi.fn();
-      $postEvent.set(spy);
+      const spy = mockPostEvent();
       show();
       show();
       show();
@@ -57,8 +56,7 @@ describe('not mounted', () => {
   describe('hide', () => {
     it('should not call postEvent', () => {
       isVisible.set(true);
-      const spy = vi.fn();
-      $postEvent.set(spy);
+      const spy = mockPostEvent();
       hide();
       expect(spy).toBeCalledTimes(0);
     });
@@ -74,8 +72,7 @@ describe('not mounted', () => {
   describe('show', () => {
     it('should not call postEvent', () => {
       isVisible.set(false);
-      const spy = vi.fn();
-      $postEvent.set(spy);
+      const spy = mockPostEvent();
       show();
       show();
       show();
@@ -160,9 +157,8 @@ describe('unmount', () => {
   beforeEach(mount);
 
   it('should stop calling postEvent function and session storage updates when isVisible changes', () => {
-    const postEventSpy = vi.fn();
+    const postEventSpy = mockPostEvent();
     const storageSpy = mockSessionStorageSetItem();
-    $postEvent.set(postEventSpy);
     isVisible.set(true);
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);

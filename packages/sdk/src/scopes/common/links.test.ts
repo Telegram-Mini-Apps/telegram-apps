@@ -1,23 +1,22 @@
 import { describe, vi, expect, it, beforeEach } from 'vitest';
-import { createWindow } from '@test-utils/createWindow.js';
-import { resetPackageState } from '@test-utils/reset.js';
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
+import { createWindow, dispatchMiniAppsEvent } from 'test-utils';
 
-import { $postEvent, $version } from '@/scopes/globals/globals.js';
+import { mockPostEvent } from '@test-utils/mockPostEvent.js';
+import { resetPackageState } from '@test-utils/reset.js';
+import { $version } from '@/scopes/globals/globals.js';
 
 import { readTextFromClipboard } from './utils.js';
 import { openLink, openTelegramLink, shareURL } from './links.js';
 
 beforeEach(() => {
   resetPackageState();
-  $postEvent.set(() => null);
+  mockPostEvent();
   vi.restoreAllMocks();
 });
 
 describe('openLink', () => {
   it('should call "web_app_open_link" with formatted URL and passed options', () => {
-    const spy = vi.fn();
-    $postEvent.set(spy);
+    const spy = mockPostEvent();
     openLink('https://ya.ru', {
       tryBrowser: 'tor',
       tryInstantView: true,
@@ -44,8 +43,7 @@ describe('openTelegramLink', () => {
   });
 
   it('should call "web_app_open_tg_link" with { path_full: string }, where path_full is a combination of pathname and search', () => {
-    const spy = vi.fn();
-    $postEvent.set(spy);
+    const spy = mockPostEvent();
     $version.set('10');
     openTelegramLink('https://t.me/share/url?url=text');
     expect(spy).toHaveBeenCalledOnce();
@@ -58,7 +56,7 @@ describe('openTelegramLink', () => {
 describe('readTextFromClipboard', () => {
   it('should call "web_app_read_text_from_clipboard" method and receive "clipboard_text_received" event', async () => {
     const promise = readTextFromClipboard();
-    dispatchWindowMessageEvent('clipboard_text_received', {
+    dispatchMiniAppsEvent('clipboard_text_received', {
       req_id: 1,
       data: 'Some text',
     });
@@ -81,8 +79,7 @@ describe('shareURL', () => {
   });
 
   it('should call web_app_open_tg_link with { path_full: string }, where path_full equals "share/url?url={url}&text={text}"', () => {
-    const spy = vi.fn();
-    $postEvent.set(spy);
+    const spy = mockPostEvent();
     $version.set('10');
 
     shareURL('https://telegram.org');

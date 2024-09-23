@@ -1,8 +1,9 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
+import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset.js';
 
-import { $postEvent, $version } from '@/scopes/globals/globals.js';
+import { $version } from '@/scopes/globals/globals.js';
 
 import {
   impactOccurred,
@@ -12,13 +13,12 @@ import {
 
 beforeEach(() => {
   resetPackageState();
-  $postEvent.set(() => null);
+  mockPostEvent();
 });
 
 describe('impactOccurred', () => {
   it('should call "web_app_trigger_haptic_feedback" method with { type: "impact", style: {{style}} }', () => {
-    const spy = vi.fn(() => null);
-    $postEvent.set(spy);
+    const spy = mockPostEvent();
     impactOccurred('heavy');
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith('web_app_trigger_haptic_feedback', {
@@ -43,8 +43,7 @@ describe('impactOccurred', () => {
 
 describe('notificationOccurred', () => {
   it('should call "web_app_trigger_haptic_feedback" method with { type: "notification", notification_type: {{type}} }', () => {
-    const spy = vi.fn(() => null);
-    $postEvent.set(spy);
+    const spy = mockPostEvent();
     notificationOccurred('success');
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith('web_app_trigger_haptic_feedback', {
@@ -69,8 +68,7 @@ describe('notificationOccurred', () => {
 
 describe('selectionChanged', () => {
   it('should call "web_app_trigger_haptic_feedback" method with { type: "selection_change" }', () => {
-    const spy = vi.fn(() => null);
-    $postEvent.set(spy);
+    const spy = mockPostEvent();
     selectionChanged();
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith('web_app_trigger_haptic_feedback', {

@@ -2,9 +2,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageSetItem } from 'test-utils';
 import { emitMiniAppsEvent, type ThemeParams } from '@telegram-apps/bridge';
 
+import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetSignal, resetPackageState } from '@test-utils/reset.js';
 
-import { $postEvent } from '@/scopes/globals/globals.js';
 import * as themeParams from '@/scopes/theme-params/instance.js';
 
 import {
@@ -38,8 +38,7 @@ beforeEach(() => {
     state,
     isMounted,
   ].forEach(resetSignal);
-
-  $postEvent.set(() => null);
+  mockPostEvent();
 });
 
 describe.each([
@@ -91,8 +90,7 @@ describe('mounted', () => {
     });
 
     it('should call "web_app_setup_main_button" only if text is not empty', () => {
-      const spy = vi.fn(() => null);
-      $postEvent.set(spy);
+      const spy = mockPostEvent();
       state.set({
         backgroundColor: '#123456',
         isEnabled: true,
@@ -121,8 +119,7 @@ describe('mounted', () => {
 describe('not mounted', () => {
   describe('setParams', () => {
     it('should not call postEvent', () => {
-      const spy = vi.fn(() => null);
-      $postEvent.set(spy);
+      const spy = mockPostEvent();
       setParams({ text: 'ABC' });
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -257,9 +254,8 @@ describe('unmount', () => {
   beforeEach(mount);
 
   it('should stop calling postEvent function and session storage updates when something changes', () => {
-    const postEventSpy = vi.fn();
+    const postEventSpy = mockPostEvent();
     const storageSpy = mockSessionStorageSetItem();
-    $postEvent.set(postEventSpy);
     state.set({ ...state(), text: 'Hello!' });
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);

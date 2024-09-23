@@ -1,10 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { dispatchMiniAppsEvent } from 'test-utils';
 
 import { resetPackageState, resetSignal } from '@test-utils/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { dispatchWindowMessageEvent } from '@test-utils/dispatchWindowMessageEvent.js';
-
-import { $postEvent } from '@/scopes/globals/globals.js';
 
 import { isOpened } from './signals.js';
 import { close, open } from './methods.js';
@@ -13,7 +11,7 @@ beforeEach(() => {
   resetPackageState();
   resetSignal(isOpened);
   vi.restoreAllMocks();
-  $postEvent.set(() => null);
+  mockPostEvent();
 });
 
 describe('close', () => {
@@ -25,8 +23,7 @@ describe('close', () => {
   });
 
   it('should call postEvent with "web_app_close_scan_qr_popup"', () => {
-    const spy = vi.fn(() => null);
-    $postEvent.set(spy);
+    const spy = mockPostEvent();
     expect(spy).toHaveBeenCalledTimes(0);
     close();
     expect(spy).toHaveBeenCalledTimes(1);
@@ -54,7 +51,7 @@ describe('open', () => {
         },
       });
       expect(isOpened()).toBe(true);
-      dispatchWindowMessageEvent('qr_text_received', { data: 'QR1' });
+      dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
       await promise;
       expect(isOpened()).toBe(false);
     });
@@ -67,8 +64,8 @@ describe('open', () => {
           return qr === 'QR2';
         },
       });
-      dispatchWindowMessageEvent('qr_text_received', { data: 'QR1' });
-      dispatchWindowMessageEvent('qr_text_received', { data: 'QR2' });
+      dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
+      dispatchMiniAppsEvent('qr_text_received', { data: 'QR2' });
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('web_app_open_scan_qr_popup', { text: 'TEXT' });
       await expect(promise).resolves.toBe('QR2');
@@ -82,7 +79,7 @@ describe('open', () => {
         },
       });
       spy.mockClear();
-      dispatchWindowMessageEvent('qr_text_received', { data: 'QR1' });
+      dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
       await promise;
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('web_app_close_scan_qr_popup');
@@ -94,7 +91,7 @@ describe('open', () => {
           return true;
         },
       });
-      dispatchWindowMessageEvent('scan_qr_popup_closed');
+      dispatchMiniAppsEvent('scan_qr_popup_closed');
       await expect(promise).resolves.toBeNull();
     });
   });
@@ -112,8 +109,8 @@ describe('open', () => {
     it('should call onCaptured with QR content each time, "qr_text_received" event was received', () => {
       const spy = vi.fn();
       open({ onCaptured: spy });
-      dispatchWindowMessageEvent('qr_text_received', { data: 'QR1' });
-      dispatchWindowMessageEvent('qr_text_received', { data: 'QR2' });
+      dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
+      dispatchMiniAppsEvent('qr_text_received', { data: 'QR2' });
       expect(spy).toHaveBeenCalledTimes(2);
       expect(spy).toHaveBeenNthCalledWith(1, 'QR1');
       expect(spy).toHaveBeenNthCalledWith(2, 'QR2');
@@ -125,7 +122,7 @@ describe('open', () => {
         text: 'TEXT',
         onCaptured: vi.fn(),
       });
-      dispatchWindowMessageEvent('qr_text_received', { data: 'QR1' });
+      dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('web_app_open_scan_qr_popup', { text: 'TEXT' });
     });
@@ -133,9 +130,9 @@ describe('open', () => {
     it('should not call onCaptured if QR scanner was closed', () => {
       const spy = vi.fn();
       open({ onCaptured: spy });
-      dispatchWindowMessageEvent('qr_text_received', { data: 'QR1' });
+      dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
       close();
-      dispatchWindowMessageEvent('qr_text_received', { data: 'QR2' });
+      dispatchMiniAppsEvent('qr_text_received', { data: 'QR2' });
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('QR1');
     });
