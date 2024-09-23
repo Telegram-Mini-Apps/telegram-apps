@@ -62,6 +62,7 @@ export {
   createTypedErrorPredicate,
   CancelablePromise,
   type CallbackFn,
+  deleteCssVar,
   ERR_TIMED_OUT,
   ERR_ABORTED,
   ERR_CANCELED,
@@ -84,6 +85,7 @@ export {
   TypedError,
   type TypedErrorOptions,
   setStorageValue,
+  setCssVar,
   snakeToCamel,
 } from '@telegram-apps/toolkit';
 
