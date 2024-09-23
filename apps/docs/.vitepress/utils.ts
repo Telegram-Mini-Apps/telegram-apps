@@ -1,36 +1,66 @@
-type Items = Record<string, string | [link: string, items: Items, collapsed?: boolean]>;
+interface Items {
+  [Title: string]:
+    | string
+    | Items
+    | [itemUrlOrOptions: string | { url: string; page?: boolean }, items: Items];
+}
 
-function itemsToArray(items: Items, prefix: string) {
-  const result = [];
-  for (const text in items) {
-    const linkOrItems = items[text];
-    let link: string;
-    let linkItems: Items | undefined;
-    let collapsed: boolean | undefined;
+interface ConfigItem {
+  text: string;
+  link?: string;
+  items: ConfigItem[];
+  collapsed: boolean;
+}
 
-    if (Array.isArray(linkOrItems)) {
-      [link, linkItems, collapsed] = linkOrItems;
+function localItemsToConfigItems(items: Items, prefix: string): ConfigItem[] {
+  const result: ConfigItem[] = [];
+
+  for (const title in items) {
+    let itemUrlEntry: string | undefined;
+    let linkItems: Items;
+    let hasOwnPage: boolean | undefined;
+
+    const tupleOrLinkOrItems = items[title];
+    if (typeof tupleOrLinkOrItems === 'string') {
+      [itemUrlEntry, linkItems, hasOwnPage] = [tupleOrLinkOrItems, {}, true];
+    } else if (Array.isArray(tupleOrLinkOrItems)) {
+      const [itemUrlOrOptions] = tupleOrLinkOrItems;
+      if (typeof itemUrlOrOptions === 'string') {
+        itemUrlEntry = itemUrlOrOptions;
+        hasOwnPage = true;
+      } else {
+        itemUrlEntry = itemUrlOrOptions.url;
+        hasOwnPage = typeof itemUrlOrOptions.page === 'undefined'
+          ? true
+          : itemUrlOrOptions.page;
+      }
+      linkItems = tupleOrLinkOrItems[1];
     } else {
-      link = linkOrItems;
+      linkItems = tupleOrLinkOrItems;
     }
-    const computedLink = prefix + (link[0] === '/' ? '' : '/') + link;
 
+    const link = itemUrlEntry ? `${prefix}/${itemUrlEntry}` : undefined;
     result.push({
-      text,
-      link: computedLink,
-      items: itemsToArray(linkItems || {}, computedLink),
-      collapsed,
+      text: title,
+      link: hasOwnPage ? link : undefined,
+      items: localItemsToConfigItems(linkItems, link || prefix),
+      collapsed: true,
     });
   }
+
   return result;
 }
 
 function section(text: string, items: Items, prefix: string) {
-  return { text, items: itemsToArray(items, prefix) };
+  return {
+    text,
+    items: localItemsToConfigItems(items, prefix),
+  };
 }
 
 export function sectionGen(prefix: string) {
   return (text: string, items: Items) => {
+    console.log(section(text, items, prefix));
     return section(text, items, prefix);
   };
 }
