@@ -1,27 +1,6 @@
 export { classNames } from '@/classnames/classNames.js';
 export { mergeClassNames, type MergeClassNames } from '@/classnames/mergeClassNames.js';
 
-export { init } from '@/env/init.js';
-export { initWeb } from '@/env/initWeb.js';
-export { isSSR } from '@/env/isSSR.js';
-
-export { isColorDark } from '@/utils/isColorDark.js';
-
-export { setCssVar, deleteCssVar } from '@/utils/css-vars.js';
-
-export {
-  type ErrorType,
-  ERR_POPUP_INVALID_PARAMS,
-  ERR_INVALID_HOSTNAME,
-  ERR_ALREADY_OPENED,
-  ERR_INVALID_SLUG,
-  ERR_ACCESS_DENIED,
-  ERR_CSS_VARS_BOUND,
-  ERR_DATA_INVALID_SIZE,
-  ERR_NOT_AVAILABLE,
-  ERR_ALREADY_CALLED,
-} from '@/errors.js';
-
 export * as backButton from '@/scopes/back-button/instance.js';
 export {
   hide as hideBackButton,
@@ -79,7 +58,7 @@ export {
   requestWriteAccess,
   type RequestedContact,
   requestContact,
-} from '@/scopes/common/privacy.js';
+} from '@/scopes/privacy/methods.js';
 export { switchInlineQuery, readTextFromClipboard } from '@/scopes/common/utils.js';
 export {
   $postEvent,
@@ -121,11 +100,6 @@ export {
   open as openInvoice,
 } from '@/scopes/invoice/instance.js';
 
-export * as LaunchParams from '@/scopes/launch-params/static.js';
-export {
-  retrieve as retrieveLaunchParams,
-} from '@/scopes/launch-params/static.js';
-
 export * as mainButton from '@/scopes/main-button/instance.js';
 export {
   backgroundColor as mainButtonBackgroundColor,
@@ -146,9 +120,9 @@ export * as MainButton from '@/scopes/main-button/static.js';
 
 export * as miniApp from '@/scopes/mini-app/instance.js';
 export {
-  close as closeMiniApp,
   backgroundColor as miniAppBackgroundColor,
   bindCssVars as bindMiniAppCssVars,
+  close as closeMiniApp,
   headerColor as miniAppHeaderColor,
   isMounted as isMiniAppMounted,
   isCssVarsBound as isMiniAppCssVarsBound,
@@ -244,8 +218,22 @@ export {
 } from '@/scopes/viewport/instance.js';
 export * as Viewport from '@/scopes/viewport/static.js';
 
+export { isColorDark } from '@/utils/isColorDark.js';
+export { isSSR } from '@/utils/isSSR.js';
 export {
-  BridgeError,
+  ERR_POPUP_INVALID_PARAMS,
+  ERR_INVALID_HOSTNAME,
+  ERR_INVALID_SLUG,
+  ERR_ACCESS_DENIED,
+  ERR_CSS_VARS_BOUND,
+  ERR_DATA_INVALID_SIZE,
+  ERR_NOT_AVAILABLE,
+  ERR_ALREADY_CALLED,
+} from '@/errors.js';
+export { init } from '@/init.js';
+
+export {
+  CancelablePromise,
   defineEventHandlers,
   emitMiniAppsEvent,
   isIframe,
@@ -253,11 +241,14 @@ export {
   compareVersions,
   createPostEvent,
   $debug,
-  ERR_INVOKE_CUSTOM_METHOD_RESPONSE,
+  ERR_CANCELED,
+  ERR_ABORTED,
   ERR_METHOD_PARAMETER_UNSUPPORTED,
   ERR_METHOD_UNSUPPORTED,
   ERR_TIMED_OUT,
   ERR_UNKNOWN_ENV,
+  ERR_RETRIEVE_LP_FAILED,
+  ERR_CUSTOM_METHOD_ERR_RESPONSE,
   invokeCustomMethod,
   isTMA,
   on,
@@ -269,8 +260,16 @@ export {
   supports,
   unsubscribe,
   mockTelegramEnv,
+  deleteCssVar,
+  setCssVar,
+  isAbortError,
+  isTimeoutError,
+  isCanceledError,
+  addEventListener,
+  retrieveLaunchParams,
 } from '@telegram-apps/bridge';
 export type {
+  AsyncOptions,
   AnyHapticFeedbackParams,
   AnyInvokeCustomMethodParams,
   BiometryAuthRequestStatus,
@@ -281,7 +280,6 @@ export type {
   CustomMethodName,
   CustomMethodParams,
   CustomMethodsParams,
-  ErrorType as BridgeErrorType,
   EventListener,
   EventName,
   EventPayload,
@@ -292,6 +290,7 @@ export type {
   ImpactHapticFeedbackParams,
   ImpactHapticFeedbackStyle,
   InvoiceStatus,
+  LaunchParams,
   MethodName,
   MethodNameWithOptionalParams,
   MethodNameWithoutParams,
@@ -324,6 +323,9 @@ export type {
   RequestCaptureFn,
   RequestFn,
   RequestResult,
+  SubscribeListener,
+  ThemeParams,
+  TypedErrorOptions,
 } from '@telegram-apps/bridge';
 
 export { isRGB, isRGBShort, toRecord, toRGB } from '@telegram-apps/transformers';
