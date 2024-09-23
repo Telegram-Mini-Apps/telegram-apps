@@ -18,8 +18,10 @@ environment. It identifies the Telegram app type and selects the appropriate flo
 
 ### `request`
 
-The `request` function should be used when you need to call a Telegram Mini Apps method and receive
-a specific event. For example, to call
+The `request` function should be used when a developer needs to call a Telegram Mini Apps method and
+receive a specific event.
+
+For example, to call
 the [web_app_request_viewport](../../platform/methods.md#web-app-request-viewport) method and catch
 the [viewport_changed](../../platform/events.md#viewport-changed) event for actual viewport data:
 
@@ -40,8 +42,8 @@ console.log(viewport);
 // };
 ```
 
-If the Telegram Mini Apps method accepts parameters, pass them in the `params` property of the third
-argument:
+If the Telegram Mini Apps method accepts parameters, they should be passed in the `params` property
+of the third argument:
 
 ```typescript
 const buttonId = await request('web_app_open_popup', 'popup_closed', {
@@ -56,7 +58,7 @@ const buttonId = await request('web_app_open_popup', 'popup_closed', {
 });
 ```
 
-You can also track several events at the same time:
+It is also allowed to track several events at the same time:
 
 ```typescript
 const result = await request(
@@ -73,7 +75,8 @@ and `capture`.
 
 #### `postEvent`
 
-The `postEvent` option allows you to override the method used to call the Telegram Mini Apps method.
+The `postEvent` option allows a developer to override the method used to call the Telegram Mini Apps
+method.
 
 ```typescript
 request('web_app_request_viewport', 'viewport_changed', {
@@ -85,7 +88,7 @@ request('web_app_request_viewport', 'viewport_changed', {
 
 #### `abortSignal`
 
-To abort the returned promise externally, use the `abortSignal` option.
+To abort the returned promise externally, the `abortSignal` option is used.
 
 ```ts
 const controller = new AbortController();
@@ -141,15 +144,18 @@ request('web_app_open_invoice', 'invoice_closed', {
 ```
 
 By default, the `request` function captures the first event with the required name. In this case,
-the function will capture the event only if it has the expected slug.
+the function will capture the event only if it has the expected slug, specific for the
+[invoice_closed](../../platform/events.md#invoice-closed) event.
 
 When passing an array of events, the `capture` function will receive an object with
 the `event: EventName` and `payload?: EventPayload` properties.
 
 ## Invoking Custom Methods
 
-Custom methods can be used with
-the [web_app_invoke_custom_method](../../platform/methods.md#web-app-invoke-custom-method) method.
+Custom methods aro those methods which can be used with
+the [web_app_invoke_custom_method](../../platform/methods.md#web-app-invoke-custom-method) Mini Apps
+method.
+
 The `invokeCustomMethod` function simplifies the usage of such methods by reusing the `request`
 function.
 
@@ -178,6 +184,9 @@ import { invokeCustomMethod } from '@telegram-apps/bridge';
 invokeCustomMethod('deleteStorageValues', { keys: ['a'] }, 'ABC');
 ```
 
+Internally, it just encapsulates a specific logic related to the methods, so a developer shouldn't
+do it.
+
 Unlike the `request` function, the `invokeCustomMethod` function parses the result and checks if it
 contains the `error` property. If it does, the function throws the corresponding error; otherwise,
 the `result` property is returned.
@@ -185,8 +194,9 @@ the `result` property is returned.
 ## Checking Method Support
 
 The `postEvent` function does not check if the specified method is supported by the current Telegram
-app. To do this, use the `supports` function, which accepts a Mini Apps method name and the current
-platform version:
+app. To do this, the `supports` function is used.
+
+It accepts a Mini Apps method name and the current platform version:
 
 ```typescript
 import { supports } from '@telegram-apps/bridge';
@@ -205,15 +215,16 @@ supports('web_app_open_link', 'try_instant_view', '6.0'); // false
 supports('web_app_open_link', 'try_instant_view', '6.7'); // true
 ```
 
-::: tip
-It is recommended to use this function before calling Mini Apps methods to prevent apps from
-stalling or encountering unexpected behavior.
-:::
+> [!TIP]
+> It is recommended to use this function before calling Mini Apps methods to prevent apps from
+> stalling or encountering unexpected behavior.
 
 ## Creating Safer `postEvent`
 
 This package includes a function named `createPostEvent` that takes the current Mini Apps version as
-input. It returns the `postEvent` function, which internally checks if the specified method and
+input.
+
+It returns the `postEvent` function, which internally checks if the passed method and
 parameters are supported.
 
 ```typescript
@@ -224,12 +235,13 @@ const postEvent = createPostEvent('6.5');
 // Will work fine.
 postEvent('web_app_read_text_from_clipboard');
 
-// Will throw an error.
+// Will throw an error, this method is not supported 
+// in Mini Apps version 6.5.
 postEvent('web_app_request_phone');
 ```
 
-As a second optional argument, the function accepts a callback that is triggered if the method or
-parameter is unsupported:
+As a second optional argument, the function accepts a callback that is called if the method or
+parameter is unsupported.
 
 ```ts
 createPostEvent('6.0', (data) => {
@@ -245,7 +257,7 @@ createPostEvent('6.0', (data) => {
 });
 ```
 
-You can also specify `'non-strict'` mode to log warnings instead of throwing errors:
+To log warnings instead of throwing errors, the `'non-strict'` value can be passed:
 
 ```ts
 createPostEvent('6.0', 'non-strict');

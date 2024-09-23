@@ -23,8 +23,9 @@ for and handling the necessary events.
 
 ## `on` and `off`
 
-To start working with events, use the `on` and `off` functions. Here’s a basic example of the `on`
-function:
+To start working with events, the `on` and `off` functions are used.
+
+Here’s a basic example of the `on` function:
 
 ```typescript
 import { on } from '@telegram-apps/bridge';
@@ -39,7 +40,7 @@ const removeListener = on('viewport_changed', (payload) => {
 removeListener();
 ```
 
-Alternatively, to stop listening to events, use the `off` function:
+Alternatively, to stop listening to events, a developer can use the `off` function:
 
 ```typescript
 import { on, off, type EventListener } from '@telegram-apps/bridge';
@@ -55,7 +56,7 @@ on('viewport_changed', listener);
 off('viewport_changed', listener);
 ```
 
-To call the listener only once, use the third boolean argument:
+To call the listener only once, the third boolean argument is used:
 
 ```typescript
 import { on } from '@telegram-apps/bridge';
@@ -68,8 +69,8 @@ on('viewport_changed', (payload) => {
 
 ## `subscribe` and `unsubscribe`
 
-To listen to all events sent from the native Telegram application, use the `subscribe`
-and `unsubscribe` functions:
+To listen to all events sent from the native Telegram application, the `subscribe`
+and `unsubscribe` functions are used:
 
 ```typescript
 import {

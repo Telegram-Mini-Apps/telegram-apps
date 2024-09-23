@@ -5,11 +5,59 @@ environments lack Telegram-specific traits, calling methods such
 as [retrieveLaunchParams](launch-parameters.md) or [postEvent](methods#postevent) will lead to
 errors.
 
+Nevertheless, the package provides utilities that help developers either develop the application
+outside of Telegram or determine if the current environment is not a Telegram Mini App at all.
+
+## `isTMA`
+
+To check if the current environment is Telegram Mini Apps, a developer can use the `isTMA` function.
+It works in two modes: **simple** and **complete**.
+
+### Simple
+
+In this mode, the function attempts to retrieve launch parameters from the environment.
+
+If the extraction is successful, the environment is considered Telegram Mini Apps.
+Simple mode is synchronous and returns a boolean value.
+
+```ts
+import { isTMA } from '@telegram-apps/bridge';
+
+if (isTMA('simple')) {
+  console.log('It\'s Telegram Mini Apps');
+}
+```
+
+This mode is somewhat superficial but may still be sufficient for most applications. For a more
+reliable check, use the [complete](#complete) mode.
+
+### Complete
+
+In this mode, the function calls a Telegram Mini Apps-specific method and waits for a
+method-specific event to occur.
+
+```ts
+import { isTMA } from '@telegram-apps/bridge';
+
+if (await isTMA()) {
+  console.log('It\'s Telegram Mini Apps');
+}
+```
+
+The function waits for an event for 100 milliseconds, but a developer can change this time
+by passing an object with the `timeout: number` property.
+
+```ts
+if (await isTMA({ timeout: 50 })) {
+  console.log('It\'s Telegram Mini Apps');
+}
+```
+
 ## `mockTelegramEnv`
 
 The package provides the `mockTelegramEnv` function, which imitates the environment provided by
 Telegram. It helps developers start building applications even without creating a mini app record in
-BotFather.
+[BotFather](https://t.me/botfather).
 
 This function accepts launch parameters in raw or parsed format. Here is an example:
 
@@ -71,33 +119,3 @@ mockTelegramEnv({
 Note that this function only imitates Telegram environment behavior. It doesn't send any real
 requests or perform actions that will only be visible in the Telegram application.
 :::
-
-## `isTMA`
-
-To check if the current environment is Telegram Mini Apps, you can use the `isTMA` function. It
-works in two modes:
-
-- **Simple**. In this mode, the function attempts to retrieve launch parameters from the
-  environment. If the extraction is successful, the environment is considered Telegram Mini Apps.
-  This mode is synchronous and returns a boolean value.
-
-```ts
-import { isTMA } from '@telegram-apps/bridge';
-
-if (isTMA('simple')) {
-  console.log('It\'s Telegram Mini Apps');
-}
-```
-
-- **Complete**. In this mode, the function calls a Telegram Mini Apps-specific method and waits for
-  a method-specific event to occur. In this case, the function optionally accepts an
-  object `{ timeout?: number; abortSignal?: AbortSignal }` to manipulate the returned promise
-  execution.
-
-```ts
-import { isTMA } from '@telegram-apps/bridge';
-
-if (await isTMA()) {
-  console.log('It\'s Telegram Mini Apps');
-}
-```

@@ -13,8 +13,10 @@
 The lowest level communication layer with Telegram Mini Apps.
 
 This package provides fundamental utilities and types for developing applications on the Telegram
-Mini Apps platform. While you can use this package alone, it's recommended to use a higher-level
-package like [@telegram-apps/sdk](telegram-apps-sdk.md).
+Mini Apps platform.
+
+While a developer can use this package alone, it's recommended to use a higher-level package
+like [@telegram-apps/sdk](telegram-apps-sdk.md).
 
 ## Installation
 
@@ -34,7 +36,7 @@ yarn add @telegram-apps/bridge
 
 :::
 
-## Example
+## Usage
 
 Here’s a basic example of how to use this package. For more details, refer to the next articles in
 the documentation.
@@ -54,7 +56,8 @@ defineEventHandlers();
 // then hide it.
 postEvent('web_app_setup_back_button', { is_visible: true });
 
-on('back_button_pressed', () => {
+const off = on('back_button_pressed', () => {
   postEvent('web_app_setup_back_button', { is_visible: false });
-}, true);
+  off();
+});
 ```
