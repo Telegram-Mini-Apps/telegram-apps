@@ -5,6 +5,8 @@ import {
   camelToKebab,
   getStorageValue,
   setStorageValue,
+  deleteCssVar,
+  setCssVar,
   TypedError,
   type EventListener,
 } from '@telegram-apps/bridge';
@@ -12,7 +14,6 @@ import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals/globals.js';
 import { ERR_CSS_VARS_BOUND } from '@/errors.js';
-import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 
 import { type GetCSSVarNameFn, request } from './static.js';

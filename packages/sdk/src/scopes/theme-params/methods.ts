@@ -6,13 +6,14 @@ import {
   getStorageValue,
   setStorageValue,
   retrieveLaunchParams,
+  deleteCssVar,
+  setCssVar,
   type EventListener,
   type RGB,
   type ThemeParams,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 import { ERR_CSS_VARS_BOUND } from '@/errors.js';
 
 import { isCssVarsBound, state, isMounted } from './signals.js';

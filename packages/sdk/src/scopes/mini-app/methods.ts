@@ -3,6 +3,8 @@ import {
   setStorageValue,
   createCbCollector,
   camelToKebab,
+  deleteCssVar,
+  setCssVar,
   TypedError,
   type RGB,
 } from '@telegram-apps/bridge';
@@ -13,7 +15,6 @@ import { postEvent } from '@/scopes/globals/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { withSupports } from '@/scopes/withSupports.js';
 import { ERR_CSS_VARS_BOUND, ERR_DATA_INVALID_SIZE } from '@/errors.js';
-import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 import {
   mount as tpMount,
   state as tpState,
