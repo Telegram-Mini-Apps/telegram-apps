@@ -100,7 +100,7 @@ isVisible.sub(listener, { once: true });
 
 ### `unsub`
 
-Alternatively, to remove a listener, you can use the `unsub` method:
+Alternatively, to remove a listener, a developer can use the `unsub` method:
 
 ```ts
 function listener(current: boolean, prev: boolean) {
@@ -141,8 +141,8 @@ isVisible.reset(); // isVisible becomes false again
 
 ### `destroy`
 
-When the signal is no longer needed and is not being listened to by any computed signal, you can use
-the `destroy` method, which forcibly removes all listeners:
+When the signal is no longer needed and is not being listened to by any computed signal, a developer
+can use the `destroy` method, which forcibly removes all listeners:
 
 ```ts
 isVisible.destroy();
@@ -170,9 +170,10 @@ The returned value represents a signal that lacks the `set` and `reset` methods.
 
 ## `batch`
 
-The `batch` function creates a scope where signal mutations are batched. It’s useful when you want
-to prevent a computed signal from recomputing every time several dependent signals change
-consecutively.
+The `batch` function creates a scope where signal mutations are batched.
+
+It’s useful when a developer wants to prevent a computed signal from recomputing every time several
+dependent signals change consecutively.
 
 ```ts
 import { signal, computed, batch } from '@telegram-apps/signals';
