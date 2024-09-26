@@ -4,6 +4,22 @@ const PREFIX = '/packages';
 
 const section = sectionGen(PREFIX);
 
+function scopeSection(path: string): [string, string] {
+  return [
+    path[0].toUpperCase() + path.slice(1).replace(/-./g, m => ' ' + m[1].toUpperCase()),
+    path,
+  ];
+}
+
+function fromEntries(entries: [string, any][]): Record<string, any> {
+  const result = {};
+  entries.forEach(([k, v]) => {
+    result[k] = v;
+  });
+
+  return result;
+}
+
 export const packagesNavItem = {
   text: 'Packages',
   link: `${PREFIX}/telegram-apps-sdk`,

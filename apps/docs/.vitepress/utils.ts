@@ -2,17 +2,34 @@ interface Items {
   [Title: string]:
     | string
     | Items
-    | [itemUrlOrOptions: string | { url: string; page?: boolean }, items: Items];
+    | [
+    itemUrlOrOptions: string | {
+      /**
+       * Item own URL. If `page` is false, the value will be used as items' link prefix.
+       */
+      url: string;
+      /**
+       * True, if this item has its own documentation page.
+       */
+      page?: boolean
+    },
+    items: Items
+  ];
 }
 
 interface ConfigItem {
   text: string;
   link?: string;
   items: ConfigItem[];
-  collapsed: boolean;
+  collapsed?: boolean;
 }
 
-function localItemsToConfigItems(items: Items, prefix: string): ConfigItem[] {
+/**
+ * Converts locally determined items to items, accepted by VitePress.
+ * @param items - local items.
+ * @param prefix - links' prefix.
+ */
+function itemsToConfigItems(items: Items, prefix: string): ConfigItem[] {
   const result: ConfigItem[] = [];
 
   for (const title in items) {
@@ -43,7 +60,7 @@ function localItemsToConfigItems(items: Items, prefix: string): ConfigItem[] {
     result.push({
       text: title,
       link: hasOwnPage ? link : undefined,
-      items: localItemsToConfigItems(linkItems, link || prefix),
+      items: itemsToConfigItems(linkItems, link || prefix),
       collapsed: true,
     });
   }
@@ -51,15 +68,13 @@ function localItemsToConfigItems(items: Items, prefix: string): ConfigItem[] {
   return result;
 }
 
-function section(text: string, items: Items, prefix: string) {
-  return {
-    text,
-    items: localItemsToConfigItems(items, prefix),
-  };
-}
-
+/**
+ * Creates a new config item generator.
+ * @param prefix - items' link prefix.
+ */
 export function sectionGen(prefix: string) {
-  return (text: string, items: Items) => {
-    return section(text, items, prefix);
-  };
+  return (title: string, items: Items): ConfigItem => ({
+    text: title,
+    items: itemsToConfigItems(items, prefix),
+  });
 }
