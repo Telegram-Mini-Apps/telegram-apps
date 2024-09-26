@@ -2,7 +2,7 @@
 
 This package is designed to be used only inside the Telegram application. Since non-Telegram
 environments lack Telegram-specific traits, calling methods such
-as [retrieveLaunchParams](launch-parameters.md) or [postEvent](methods#postevent) will lead to
+as [retrieveLaunchParams](launch-parameters.md) or [postEvent](methods.md#postevent) will lead to
 errors.
 
 Nevertheless, the package provides utilities that help developers either develop the application

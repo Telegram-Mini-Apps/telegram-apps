@@ -1,6 +1,6 @@
 # Events
 
-This article covers topics related to [apps communication](../../platform/apps-communication.md)
+This article covers topics related to [apps communication](../../../platform/apps-communication.md)
 events.
 
 ## Define Event Handlers

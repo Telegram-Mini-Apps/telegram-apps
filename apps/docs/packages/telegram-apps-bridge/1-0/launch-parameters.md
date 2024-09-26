@@ -1,7 +1,7 @@
 # Launch Parameters
 
 Launch parameters are essential to the mini application lifecycle. To learn more about what launch
-parameters are and their importance, it is worth reading [this](../../platform/launch-parameters.md)
+parameters are and their importance, it is worth reading [this](../../../platform/launch-parameters.md)
 article.
 
 This package allows a developer to extract launch parameters from the current environment using
