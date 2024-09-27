@@ -7,6 +7,7 @@ import {
   getStorageValue,
   setStorageValue,
   type BiometryTokenUpdateStatus,
+  type BiometryAuthRequestStatus,
   type EventListener,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
@@ -21,9 +22,9 @@ import {
   isMounted,
   isRequestingAccess,
   isAuthenticating,
+  isMounting,
 } from './signals.js';
-import { mountPromise } from './private.js';
-import * as BiometryManager from './static.js';
+import { request as requestBiometry } from './static.js';
 import { eventToState } from './eventToState.js';
 import type {
   State,
@@ -140,6 +141,7 @@ export function requestAccess(options?: RequestAccessOptions): CancelablePromise
 
 /**
  * Mounts the component.
+ * @throws {TypedError} ERR_ALREADY_CALLED
  */
 export const mount = createMountFn<State>(
   (options) => {
@@ -156,14 +158,14 @@ export const mount = createMountFn<State>(
 
     // We were unable to retrieve data locally. In this case, we are sending a request returning
     // the biometry information.
-    return BiometryManager.request(options);
+    return requestBiometry(options);
   },
   result => {
     on(BIOMETRY_INFO_RECEIVED_EVENT, onBiometryInfoReceived);
     state.sub(onStateChanged);
     state.set(result);
   },
-  { isMounted, mountError, mountPromise },
+  { isMounted, mountError, isMounting },
 );
 
 const onBiometryInfoReceived: EventListener<'biometry_info_received'> = e => {
