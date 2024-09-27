@@ -1,8 +1,14 @@
-import { off, on, getStorageValue, setStorageValue, type EventListener } from '@telegram-apps/bridge';
+import {
+  off,
+  on,
+  getStorageValue,
+  setStorageValue,
+  supports,
+  type EventListener,
+} from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { postEvent } from '@/scopes/globals/globals.js';
+import { $version, postEvent } from '@/scopes/globals/globals.js';
 
 import { isVisible, isMounted } from './signals.js';
 
@@ -15,9 +21,16 @@ const STORAGE_KEY = 'backButton';
 /**
  * Hides the back button.
  */
-export const hide = withIsSupported(() => {
-  isVisible.set(false);
-}, MINI_APPS_METHOD);
+export function hide(): void {
+  isVisible.set(false)
+}
+
+/**
+ * @returns True if the back button is supported.
+ */
+export function isSupported(): boolean {
+  return supports(MINI_APPS_METHOD, $version());
+}
 
 /**
  * Mounts the component.
@@ -33,7 +46,7 @@ export function mount(): void {
   }
 }
 
-function onStateChanged(isVisible: boolean) {
+function onStateChanged(isVisible: boolean): void {
   postEvent(MINI_APPS_METHOD, { is_visible: isVisible });
   setStorageValue<StorageValue>(STORAGE_KEY, isVisible);
 }
@@ -58,9 +71,9 @@ export function offClick(fn: EventListener<'back_button_pressed'>): void {
 /**
  * Shows the back button.
  */
-export const show = withIsSupported(() => {
-  isVisible.set(true);
-}, MINI_APPS_METHOD);
+export function show(): void {
+  isVisible.set(true)
+}
 
 /**
  * Unmounts the component, removing the listener, saving the component state in the local storage.
@@ -68,7 +81,7 @@ export const show = withIsSupported(() => {
  * Note that this function does not remove listeners, added via the `onClick` function.
  * @see onClick
  */
-export function unmount() {
+export function unmount(): void {
   isVisible.unsub(onStateChanged);
   isMounted.set(false);
 }

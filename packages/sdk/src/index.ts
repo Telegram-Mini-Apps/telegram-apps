@@ -6,6 +6,7 @@ export {
   hide as hideBackButton,
   isVisible as isBackButtonVisible,
   isMounted as isBackButtonMounted,
+  isSupported as isBackButtonSupported,
   mount as mountBackButton,
   onClick as onBackButtonClick,
   offClick as offBackButtonClick,

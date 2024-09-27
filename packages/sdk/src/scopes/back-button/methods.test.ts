@@ -14,6 +14,7 @@ import {
   onClick,
   unmount,
   offClick,
+  isSupported,
 } from './methods.js';
 
 beforeEach(() => {
@@ -97,18 +98,18 @@ describe('hide', () => {
     hide();
     expect(isVisible()).toBe(false);
   });
+});
 
-  describe('isSupported', () => {
-    it('should return false if version is less than 6.1. True otherwise', () => {
-      $version.set('6.0');
-      expect(hide.isSupported()).toBe(false);
+describe('isSupported', () => {
+  it('should return false if version is less than 6.1. True otherwise', () => {
+    $version.set('6.0');
+    expect(isSupported()).toBe(false);
 
-      $version.set('6.1');
-      expect(hide.isSupported()).toBe(true);
+    $version.set('6.1');
+    expect(isSupported()).toBe(true);
 
-      $version.set('6.2');
-      expect(hide.isSupported()).toBe(true);
-    });
+    $version.set('6.2');
+    expect(isSupported()).toBe(true);
   });
 });
 
@@ -207,18 +208,5 @@ describe('show', () => {
     expect(isVisible()).toBe(false);
     show();
     expect(isVisible()).toBe(true);
-  });
-
-  describe('isSupported', () => {
-    it('should return false if version is less than 6.1. True otherwise', () => {
-      $version.set('6.0');
-      expect(show.isSupported()).toBe(false);
-
-      $version.set('6.1');
-      expect(show.isSupported()).toBe(true);
-
-      $version.set('6.2');
-      expect(show.isSupported()).toBe(true);
-    });
   });
 });
