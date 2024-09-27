@@ -1,5 +1,6 @@
 import { batch, type Signal } from '@telegram-apps/signals';
-import { type AsyncOptions, CancelablePromise } from '@telegram-apps/bridge';
+import { type AsyncOptions, CancelablePromise, TypedError } from '@telegram-apps/bridge';
+import { ERR_ALREADY_CALLED } from '@/errors.js';
 
 /**
  * Creates a mount function for a component.
@@ -14,49 +15,44 @@ export function createMountFn<T = void>(
   mount: (options: AsyncOptions) => (T | CancelablePromise<T>),
   onMounted: (result: T) => void,
   {
-    mountPromise,
+    isMounting,
     isMounted,
     mountError,
   }: {
     isMounted: Signal<boolean>,
-    mountPromise: Signal<CancelablePromise<void> | undefined>,
+    isMounting: Signal<boolean>,
     mountError: Signal<Error | undefined>,
   },
 ): (options?: AsyncOptions) => CancelablePromise<void> {
   return function mountFn(mountOptions) {
-    let promise = mountPromise();
-    if (promise) {
-      return promise;
-    }
-
     if (isMounted()) {
       return CancelablePromise.resolve();
     }
 
-    promise = CancelablePromise
-      .resolve(mount(mountOptions || {}))
-      .then<[true, T], [false, Error]>(result => [true, result], e => [false, e])
+    if (isMounting()) {
+      throw new TypedError(ERR_ALREADY_CALLED);
+    }
+    isMounting.set(true);
+
+    return CancelablePromise
+      .withFn((abortSignal) => mount({ abortSignal }), mountOptions)
+      .then<[true, T], [false, Error]>(
+        r => [true, r],
+        e => [false, e],
+      )
       .then(tuple => {
         batch(() => {
-          let error: Error | undefined;
+          isMounting.set(false);
+          isMounted.set(true);
 
           if (tuple[0]) {
             onMounted(tuple[1]);
-            isMounted.set(true);
           } else {
-            error = tuple[1];
-          }
-
-          mountError.set(error);
-          mountPromise.set(undefined);
-
-          if (error) {
+            const error = tuple[1];
+            mountError.set(error);
             throw error;
           }
         });
       });
-    mountPromise.set(promise);
-
-    return promise;
   };
 }
