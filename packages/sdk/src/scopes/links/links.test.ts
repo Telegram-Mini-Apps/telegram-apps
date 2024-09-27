@@ -1,11 +1,10 @@
 import { describe, vi, expect, it, beforeEach } from 'vitest';
-import { createWindow, dispatchMiniAppsEvent } from 'test-utils';
+import { createWindow } from 'test-utils';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset.js';
 import { $version } from '@/scopes/globals/globals.js';
 
-import { readTextFromClipboard } from './utils.js';
 import { openLink, openTelegramLink, shareURL } from './links.js';
 
 beforeEach(() => {
@@ -50,18 +49,6 @@ describe('openTelegramLink', () => {
     expect(spy).toHaveBeenCalledWith('web_app_open_tg_link', {
       path_full: '/share/url?url=text',
     });
-  });
-});
-
-describe('readTextFromClipboard', () => {
-  it('should call "web_app_read_text_from_clipboard" method and receive "clipboard_text_received" event', async () => {
-    const promise = readTextFromClipboard();
-    dispatchMiniAppsEvent('clipboard_text_received', {
-      req_id: 1,
-      data: 'Some text',
-    });
-
-    await expect(promise).resolves.toBe('Some text');
   });
 });
 
