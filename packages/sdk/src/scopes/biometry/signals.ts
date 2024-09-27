@@ -1,9 +1,6 @@
-import { computed, signal } from '@telegram-apps/signals';
+import { signal } from '@telegram-apps/signals';
 
-import { mountPromise } from './private.js';
 import type { State } from './types.js';
-
-/* USUAL */
 
 /**
  * Complete biometry manager state.
@@ -26,13 +23,11 @@ export const isRequestingAccess = signal<boolean>(false);
 export const isMounted = signal(false);
 
 /**
+ * True if the component is currently mounting.
+ */
+export const isMounting = signal<boolean>(false);
+
+/**
  * Error occurred while mounting the component.
  */
 export const mountError = signal<Error | undefined>(undefined);
-
-/* COMPUTED */
-
-/**
- * True if the component is currently mounting.
- */
-export const isMounting = computed<boolean>(() => !!mountPromise());
