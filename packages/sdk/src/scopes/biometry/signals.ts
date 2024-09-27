@@ -11,6 +11,16 @@ import type { State } from './types.js';
 export const state = signal<State | undefined>();
 
 /**
+ * True if the manager is currently authenticating.
+ */
+export const isAuthenticating = signal<boolean>(false);
+
+/**
+ * True if the manager is currently requesting access.
+ */
+export const isRequestingAccess = signal<boolean>(false);
+
+/**
  * True if the component is currently mounted.
  */
 export const isMounted = signal(false);

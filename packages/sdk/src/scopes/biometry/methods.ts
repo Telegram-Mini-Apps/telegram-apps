@@ -11,7 +11,6 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { $version, postEvent, request } from '@/scopes/globals/globals.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 import { ERR_ALREADY_CALLED, ERR_NOT_AVAILABLE } from '@/errors.js';
@@ -20,8 +19,10 @@ import {
   state,
   mountError,
   isMounted,
+  isRequestingAccess,
+  isAuthenticating,
 } from './signals.js';
-import { authenticatePromise, mountPromise, requestAccessPromise } from './private.js';
+import { mountPromise } from './private.js';
 import * as BiometryManager from './static.js';
 import { eventToState } from './eventToState.js';
 import type {
@@ -38,6 +39,7 @@ const REQUEST_ACCESS_METHOD = 'web_app_biometry_request_access';
 const OPEN_SETTINGS_METHOD = 'web_app_biometry_open_settings';
 const UPDATE_TOKEN_METHOD = 'web_app_biometry_update_token';
 const BIOMETRY_INFO_RECEIVED_EVENT = 'biometry_info_received';
+const STORAGE_KEY = 'biometry';
 
 /**
  * Attempts to authenticate a user using biometrics and fetch a previously stored
@@ -48,39 +50,36 @@ const BIOMETRY_INFO_RECEIVED_EVENT = 'biometry_info_received';
  * @throws {TypedError} ERR_ALREADY_CALLED
  * @throws {TypedError} ERR_NOT_AVAILABLE
  */
-export const authenticate = withIsSupported(
-  (options?: AuthenticateOptions): CancelablePromise<string | undefined> => {
-    if (authenticatePromise()) {
-      return CancelablePromise.reject(new TypedError(ERR_ALREADY_CALLED));
-    }
+export function authenticate(options?: AuthenticateOptions): CancelablePromise<string | undefined> {
+  if (isAuthenticating()) {
+    return CancelablePromise.reject(new TypedError(ERR_ALREADY_CALLED));
+  }
 
-    const s = state();
-    if (!s || !s.available) {
-      return CancelablePromise.reject(new TypedError(ERR_NOT_AVAILABLE));
-    }
+  const s = state();
+  if (!s || !s.available) {
+    return CancelablePromise.reject(new TypedError(ERR_NOT_AVAILABLE));
+  }
 
-    options ||= {};
-    const promise = request(REQUEST_AUTH_METHOD, 'biometry_auth_requested', {
-      ...options,
-      params: { reason: (options.reason || '').trim() },
+  isAuthenticating.set(true);
+
+  options ||= {};
+  return request(REQUEST_AUTH_METHOD, 'biometry_auth_requested', {
+    ...options,
+    params: { reason: (options.reason || '').trim() },
+  })
+    .then(({ token }) => {
+      if (typeof token === 'string') {
+        state.set({ ...s, token });
+      }
+      return token;
     })
-      .then(({ token }) => {
-        if (typeof token === 'string') {
-          state.set({ ...s, token });
-        }
-        return token;
-      })
-      .finally(() => {
-        authenticatePromise.set(undefined);
-      });
-    authenticatePromise.set(promise);
-
-    return promise;
-  }, REQUEST_AUTH_METHOD,
-);
+    .finally(() => {
+      isAuthenticating.set(false);
+    });
+}
 
 /**
- * @returns True if biometry manager is supported.
+ * @returns True if the biometry manager is supported.
  */
 export function isSupported(): boolean {
   return supports(REQUEST_AUTH_METHOD, $version());
@@ -94,9 +93,9 @@ export function isSupported(): boolean {
  * interface (e.g. a click inside the Mini App or on the main button)_.
  * @since 7.2
  */
-export const openSettings = withIsSupported(() => {
+export function openSettings(): void {
   postEvent(OPEN_SETTINGS_METHOD);
-}, OPEN_SETTINGS_METHOD);
+}
 
 /**
  * Requests permission to use biometrics.
@@ -105,34 +104,29 @@ export const openSettings = withIsSupported(() => {
  * @throws {TypedError} ERR_ALREADY_CALLED
  * @throws {TypedError} ERR_NOT_AVAILABLE
  */
-export const requestAccess = withIsSupported(
-  (options?: RequestAccessOptions): CancelablePromise<boolean> => {
-    if (requestAccessPromise()) {
-      return CancelablePromise.reject(new TypedError(ERR_ALREADY_CALLED));
-    }
+export function requestAccess(options?: RequestAccessOptions): CancelablePromise<boolean> {
+  if (isRequestingAccess()) {
+    return CancelablePromise.reject(new TypedError(ERR_ALREADY_CALLED));
+  }
+  isRequestingAccess.set(true);
 
-    options ||= {};
-    const promise = request(REQUEST_ACCESS_METHOD, BIOMETRY_INFO_RECEIVED_EVENT, {
-      ...options,
-      params: { reason: options.reason || '' },
+  options ||= {};
+  return request(REQUEST_ACCESS_METHOD, BIOMETRY_INFO_RECEIVED_EVENT, {
+    ...options,
+    params: { reason: options.reason || '' },
+  })
+    .then(eventToState)
+    .then((info) => {
+      if (!info.available) {
+        throw new TypedError(ERR_NOT_AVAILABLE);
+      }
+      state.set(info);
+      return info.accessGranted;
     })
-      .then(eventToState)
-      .then((info) => {
-        if (!info.available) {
-          throw new TypedError(ERR_NOT_AVAILABLE);
-        }
-        state.set(info);
-        return info.accessGranted;
-      })
-      .finally(() => {
-        requestAccessPromise.set(undefined);
-      });
-
-    requestAccessPromise.set(promise);
-
-    return promise;
-  }, REQUEST_ACCESS_METHOD,
-);
+    .finally(() => {
+      isRequestingAccess.set(false);
+    });
+}
 
 /**
  * Mounts the component.
@@ -145,14 +139,13 @@ export const mount = createMountFn<State>(
     }
 
     // Try to restore the state using the storage.
-    const s = isPageReload() && getStorageValue<StorageValue>('biometryManager');
+    const s = isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY);
     if (s) {
       return s;
     }
 
     // We were unable to retrieve data locally. In this case, we are sending a request returning
     // the biometry information.
-    options.timeout ||= 1000;
     return BiometryManager.request(options);
   },
   result => {
@@ -167,8 +160,8 @@ const onBiometryInfoReceived: EventListener<'biometry_info_received'> = e => {
   state.set(eventToState(e));
 };
 
-function onStateChanged(s: State | undefined) {
-  s && setStorageValue<StorageValue>('biometryManager', s);
+function onStateChanged(s: State | undefined): void {
+  s && setStorageValue<StorageValue>(STORAGE_KEY, s);
 }
 
 /**
@@ -184,15 +177,13 @@ export function unmount(): void {
  * @since 7.2
  * @returns Promise with `true`, if token was updated.
  */
-export const updateToken = withIsSupported(
-  (options?: UpdateTokenOptions): CancelablePromise<BiometryTokenUpdateStatus> => {
-    options ||= {};
-    return request(UPDATE_TOKEN_METHOD, 'biometry_token_updated', {
-      ...options,
-      params: {
-        token: options.token || '',
-        reason: options.reason,
-      },
-    }).then(r => r.status);
-  }, UPDATE_TOKEN_METHOD,
-);
+export function updateToken(options?: UpdateTokenOptions): CancelablePromise<BiometryTokenUpdateStatus> {
+  options ||= {};
+  return request(UPDATE_TOKEN_METHOD, 'biometry_token_updated', {
+    ...options,
+    params: {
+      token: options.token || '',
+      reason: options.reason,
+    },
+  }).then(r => r.status);
+}
