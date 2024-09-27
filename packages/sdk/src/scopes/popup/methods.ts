@@ -1,7 +1,6 @@
-import { TypedError, CancelablePromise } from '@telegram-apps/bridge';
+import { TypedError, supports } from '@telegram-apps/bridge';
 
-import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { request } from '@/scopes/globals/globals.js';
+import { $version, request } from '@/scopes/globals/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 
 import { isOpened } from './signals.js';
@@ -9,6 +8,13 @@ import { prepareParams } from './prepareParams.js';
 import type { OpenOptions } from './types.js';
 
 const MINI_APPS_METHOD = 'web_app_open_popup';
+
+/**
+ * @returns True if the back button is supported.
+ */
+export function isSupported(): boolean {
+  return supports(MINI_APPS_METHOD, $version());
+}
 
 /**
  * A method that shows a native popup described by the `params` argument.
@@ -26,23 +32,19 @@ const MINI_APPS_METHOD = 'web_app_open_popup';
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid button id length.
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid text length.
  */
-export const open = withIsSupported(
-  (options: OpenOptions): CancelablePromise<string | null> => {
-    return CancelablePromise.withFn(() => {
-      if (isOpened()) {
-        throw new TypedError(ERR_ALREADY_CALLED);
-      }
+export async function open(options: OpenOptions): Promise<string | null> {
+  if (isOpened()) {
+    throw new TypedError(ERR_ALREADY_CALLED);
+  }
+  isOpened.set(true);
 
-      isOpened.set(true);
-
-      return request(MINI_APPS_METHOD, 'popup_closed', {
-        ...options,
-        params: prepareParams(options),
-      })
-        .then(({ button_id = null }) => button_id)
-        .finally(() => {
-          isOpened.set(false);
-        });
+  try {
+    const { button_id: buttonId = null } = await request(MINI_APPS_METHOD, 'popup_closed', {
+      ...options,
+      params: prepareParams(options),
     });
-  }, MINI_APPS_METHOD,
-);
+    return buttonId;
+  } finally {
+    isOpened.set(false);
+  }
+}
