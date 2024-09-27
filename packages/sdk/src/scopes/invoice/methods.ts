@@ -1,9 +1,9 @@
 import {
-  CancelablePromise,
   TypedError,
   supports,
   type ExecuteWithOptions,
   type InvoiceStatus,
+  type ExecuteWithPostEvent,
 } from '@telegram-apps/bridge';
 
 import { $version, request } from '@/scopes/globals/globals.js';
@@ -29,7 +29,7 @@ export function isSupported(): boolean {
  * @throws {TypedError} ERR_INVALID_HOSTNAME
  * @throws {TypedError} ERR_INVALID_SLUG
  */
-function _open(slug: string, options?: ExecuteWithOptions): CancelablePromise<InvoiceStatus>;
+export function open(slug: string, options?: ExecuteWithPostEvent): Promise<InvoiceStatus>;
 
 /**
  * Opens an invoice using its url.
@@ -45,51 +45,51 @@ function _open(slug: string, options?: ExecuteWithOptions): CancelablePromise<In
  * @throws {TypedError} ERR_INVALID_HOSTNAME
  * @throws {TypedError} ERR_INVALID_SLUG
  */
-function _open(url: string, type: 'url', options?: ExecuteWithOptions): CancelablePromise<InvoiceStatus>;
+export function open(
+  url: string,
+  type: 'url',
+  options?: ExecuteWithPostEvent,
+): Promise<InvoiceStatus>;
 
-function _open(
+export async function open(
   urlOrSlug: string,
   optionsOrType?: 'url' | ExecuteWithOptions,
   options?: ExecuteWithOptions,
-): CancelablePromise<InvoiceStatus> {
-  return CancelablePromise.withFn(() => {
-    if (isOpened()) {
-      throw new TypedError(ERR_ALREADY_CALLED);
+): Promise<InvoiceStatus> {
+  if (isOpened()) {
+    throw new TypedError(ERR_ALREADY_CALLED);
+  }
+
+  let slug: string;
+
+  if (optionsOrType === 'url') {
+    const { hostname, pathname } = new URL(urlOrSlug, window.location.href);
+    if (hostname !== 't.me') {
+      throw new TypedError(ERR_INVALID_HOSTNAME);
     }
 
-    let slug: string;
-
-    if (optionsOrType === 'url') {
-      const { hostname, pathname } = new URL(urlOrSlug, window.location.href);
-      if (hostname !== 't.me') {
-        throw new TypedError(ERR_INVALID_HOSTNAME);
-      }
-
-      // Valid examples:
-      // "/invoice/my-slug"
-      // "/$my-slug"
-      const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
-      if (!match) {
-        throw new TypedError(ERR_INVALID_SLUG);
-      }
-      [, , slug] = match;
-    } else {
-      slug = urlOrSlug;
-      options = optionsOrType;
+    // Valid examples:
+    // "/invoice/my-slug"
+    // "/$my-slug"
+    const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
+    if (!match) {
+      throw new TypedError(ERR_INVALID_SLUG);
     }
+    [, , slug] = match;
+  } else {
+    slug = urlOrSlug;
+    options = optionsOrType;
+  }
 
-    isOpened.set(true);
+  isOpened.set(true);
 
-    return request(MINI_APPS_METHOD, 'invoice_closed', {
-      ...options,
-      params: { slug },
-      capture: (data) => slug === data.slug,
-    })
-      .then(r => r.status)
-      .finally(() => {
-        isOpened.set(false);
-      });
-  });
+  return request(MINI_APPS_METHOD, 'invoice_closed', {
+    ...options,
+    params: { slug },
+    capture: (data) => slug === data.slug,
+  })
+    .then(r => r.status)
+    .finally(() => {
+      isOpened.set(false);
+    });
 }
-
-export const open = withIsSupported(_open, MINI_APPS_METHOD);
