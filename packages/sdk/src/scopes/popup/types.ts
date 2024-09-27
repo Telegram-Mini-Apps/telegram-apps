@@ -1,10 +1,10 @@
-import type { ExecuteWithOptions } from '@telegram-apps/bridge';
+import type { ExecuteWithPostEvent } from '@telegram-apps/bridge';
 
 /**
  * This object describes the native popup.
  * @see https://core.telegram.org/bots/webapps#popupparams
  */
-export interface OpenOptions extends ExecuteWithOptions {
+export interface OpenOptions extends ExecuteWithPostEvent {
   /**
    * The text to be displayed in the popup title, 0-64 characters.
    * @default ""
