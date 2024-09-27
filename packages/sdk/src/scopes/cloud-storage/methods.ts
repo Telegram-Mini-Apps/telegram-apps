@@ -1,8 +1,7 @@
-import { CancelablePromise, type ExecuteWithOptions } from '@telegram-apps/bridge';
+import { CancelablePromise, type ExecuteWithOptions, supports } from '@telegram-apps/bridge';
 import { array, object, string } from '@telegram-apps/transformers';
 
-import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { invokeCustomMethod } from '@/scopes/globals/globals.js';
+import { $version, invokeCustomMethod } from '@/scopes/globals/globals.js';
 
 const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
 
@@ -11,15 +10,15 @@ const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
  * @param keyOrKeys - key or keys to delete.
  * @param options - request execution options.
  */
-export const deleteItem = withIsSupported((
+export function deleteItem(
   keyOrKeys: string | string[],
   options?: ExecuteWithOptions,
-): CancelablePromise<void> => {
+): CancelablePromise<void> {
   const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
   return keys.length
     ? invokeCustomMethod('deleteStorageValues', { keys }, options).then()
     : CancelablePromise.resolve();
-}, MINI_APPS_METHOD);
+}
 
 /**
  * @param keys - keys list.
@@ -27,7 +26,7 @@ export const deleteItem = withIsSupported((
  * @returns Map, where a key is one of the specified in the `keys` argument, and a value is
  * a corresponding storage value.
  */
-function _getItem<K extends string>(
+export function getItem<K extends string>(
   keys: K[],
   options?: ExecuteWithOptions,
 ): CancelablePromise<Record<K, string>>;
@@ -38,9 +37,9 @@ function _getItem<K extends string>(
  * @return Value of the specified key. If the key was not created previously, the function
  * will return an empty string.
  */
-function _getItem(key: string, options?: ExecuteWithOptions): CancelablePromise<string>;
+export function getItem(key: string, options?: ExecuteWithOptions): CancelablePromise<string>;
 
-function _getItem(
+export function getItem(
   keyOrKeys: string | string[],
   options?: ExecuteWithOptions,
 ): CancelablePromise<string | Record<string, string>> {
@@ -57,17 +56,20 @@ function _getItem(
     : CancelablePromise.resolve(typeof keyOrKeys === 'string' ? '' : {});
 }
 
-export const getItem = withIsSupported(_getItem, MINI_APPS_METHOD);
-
 /**
  * Returns a list of all keys presented in the cloud storage.
  * @param options - request execution options.
  */
-export const getKeys = withIsSupported(
-  (options?: ExecuteWithOptions): CancelablePromise<string[]> => {
-    return invokeCustomMethod('getStorageKeys', {}, options).then(array(string())());
-  }, MINI_APPS_METHOD,
-);
+export function getKeys(options?: ExecuteWithOptions): CancelablePromise<string[]> {
+  return invokeCustomMethod('getStorageKeys', {}, options).then(array(string())());
+}
+
+/**
+ * @returns True if the back button is supported.
+ */
+export function isSupported(): boolean {
+  return supports(MINI_APPS_METHOD, $version());
+}
 
 /**
  * Saves specified value by key.
@@ -75,10 +77,10 @@ export const getKeys = withIsSupported(
  * @param value - storage value.
  * @param options - request execution options.
  */
-export const setItem = withIsSupported((
+export function setItem(
   key: string,
   value: string,
   options?: ExecuteWithOptions,
-): CancelablePromise<void> => {
+): CancelablePromise<void> {
   return invokeCustomMethod('saveStorageValue', { key, value }, options).then();
-}, MINI_APPS_METHOD);
+}

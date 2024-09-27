@@ -42,6 +42,7 @@ export {
 
 export * as cloudStorage from '@/scopes/cloud-storage/instance.js';
 export {
+  isSupported as isCloudStorageSupported,
   getItem as getCloudStorageItem,
   setItem as setCloudStorageItem,
   deleteItem as deleteCloudStorageItem,
