@@ -50,7 +50,16 @@ const STORAGE_KEY = 'biometry';
  * @throws {TypedError} ERR_ALREADY_CALLED
  * @throws {TypedError} ERR_NOT_AVAILABLE
  */
-export function authenticate(options?: AuthenticateOptions): CancelablePromise<string | undefined> {
+export function authenticate(options?: AuthenticateOptions): CancelablePromise<{
+  /**
+   * Authentication status.
+   */
+  status: BiometryAuthRequestStatus;
+  /**
+   * Token from the local secure storage saved previously.
+   */
+  token?: string;
+}> {
   if (isAuthenticating()) {
     return CancelablePromise.reject(new TypedError(ERR_ALREADY_CALLED));
   }
@@ -67,11 +76,12 @@ export function authenticate(options?: AuthenticateOptions): CancelablePromise<s
     ...options,
     params: { reason: (options.reason || '').trim() },
   })
-    .then(({ token }) => {
+    .then(response => {
+      const { token } = response;
       if (typeof token === 'string') {
         state.set({ ...s, token });
       }
-      return token;
+      return response;
     })
     .finally(() => {
       isAuthenticating.set(false);
