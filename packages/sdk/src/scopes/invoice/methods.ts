@@ -1,17 +1,24 @@
 import {
   CancelablePromise,
   TypedError,
+  supports,
   type ExecuteWithOptions,
   type InvoiceStatus,
 } from '@telegram-apps/bridge';
 
-import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { request } from '@/scopes/globals/globals.js';
+import { $version, request } from '@/scopes/globals/globals.js';
 import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_ALREADY_CALLED } from '@/errors.js';
 
 import { isOpened } from './signals.js';
 
 const MINI_APPS_METHOD = 'web_app_open_invoice';
+
+/**
+ * @returns True if the invoice is supported.
+ */
+export function isSupported(): boolean {
+  return supports(MINI_APPS_METHOD, $version());
+}
 
 /**
  * Opens an invoice using its slug.
