@@ -72,9 +72,10 @@ export {
 
 export * as hapticFeedback from '@/scopes/haptic-feedback/instance.js';
 export {
-  impactOccurred as hapticImpactOccurred,
-  notificationOccurred as hapticNotificationOccurred,
-  selectionChanged as hapticSelectionChanged,
+  impactOccurred as hapticFeedbackImpactOccurred,
+  isSupported as isHapticFeedbackSupported,
+  notificationOccurred as hapticFeedbackNotificationOccurred,
+  selectionChanged as hapticFeedbackSelectionChanged,
 } from '@/scopes/haptic-feedback/instance.js';
 
 export * as initData from '@/scopes/init-data/instance.js';

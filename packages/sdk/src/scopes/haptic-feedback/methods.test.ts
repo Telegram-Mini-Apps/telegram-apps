@@ -5,11 +5,7 @@ import { resetPackageState } from '@test-utils/reset.js';
 
 import { $version } from '@/scopes/globals/globals.js';
 
-import {
-  impactOccurred,
-  notificationOccurred,
-  selectionChanged,
-} from './methods.js';
+import { impactOccurred, notificationOccurred, selectionChanged, isSupported } from './methods.js';
 
 beforeEach(() => {
   resetPackageState();
@@ -26,18 +22,18 @@ describe('impactOccurred', () => {
       impact_style: 'heavy',
     });
   });
+});
 
-  describe('isSupported', () => {
-    it('should return false if version is less than 6.1. True otherwise', () => {
-      $version.set('6.0');
-      expect(impactOccurred.isSupported()).toBe(false);
+describe('isSupported', () => {
+  it('should return false if version is less than 6.1. True otherwise', () => {
+    $version.set('6.0');
+    expect(isSupported()).toBe(false);
 
-      $version.set('6.1');
-      expect(impactOccurred.isSupported()).toBe(true);
+    $version.set('6.1');
+    expect(isSupported()).toBe(true);
 
-      $version.set('6.2');
-      expect(impactOccurred.isSupported()).toBe(true);
-    });
+    $version.set('6.2');
+    expect(isSupported()).toBe(true);
   });
 });
 
@@ -51,19 +47,6 @@ describe('notificationOccurred', () => {
       notification_type: 'success',
     });
   });
-
-  describe('isSupported', () => {
-    it('should return false if version is less than 6.1. True otherwise', () => {
-      $version.set('6.0');
-      expect(notificationOccurred.isSupported()).toBe(false);
-
-      $version.set('6.1');
-      expect(notificationOccurred.isSupported()).toBe(true);
-
-      $version.set('6.2');
-      expect(notificationOccurred.isSupported()).toBe(true);
-    });
-  });
 });
 
 describe('selectionChanged', () => {
@@ -73,19 +56,6 @@ describe('selectionChanged', () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith('web_app_trigger_haptic_feedback', {
       type: 'selection_change',
-    });
-  });
-
-  describe('isSupported', () => {
-    it('should return false if version is less than 6.1. True otherwise', () => {
-      $version.set('6.0');
-      expect(selectionChanged.isSupported()).toBe(false);
-
-      $version.set('6.1');
-      expect(selectionChanged.isSupported()).toBe(true);
-
-      $version.set('6.2');
-      expect(selectionChanged.isSupported()).toBe(true);
     });
   });
 });

@@ -1,10 +1,10 @@
-import type {
-  ImpactHapticFeedbackStyle,
-  NotificationHapticFeedbackType,
+import {
+  supports,
+  type ImpactHapticFeedbackStyle,
+  type NotificationHapticFeedbackType,
 } from '@telegram-apps/bridge';
 
-import { postEvent } from '@/scopes/globals/globals.js';
-import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { $version, postEvent } from '@/scopes/globals/globals.js';
 
 const MINI_APPS_METHOD = 'web_app_trigger_haptic_feedback';
 
@@ -13,18 +13,25 @@ const MINI_APPS_METHOD = 'web_app_trigger_haptic_feedback';
  * on style value passed.
  * @param style - impact style.
  */
-export const impactOccurred = withIsSupported((style: ImpactHapticFeedbackStyle): void => {
+export function impactOccurred(style: ImpactHapticFeedbackStyle): void {
   postEvent(MINI_APPS_METHOD, { type: 'impact', impact_style: style });
-}, MINI_APPS_METHOD);
+}
+
+/**
+ * @returns True if the haptic feedback is supported.
+ */
+export function isSupported(): boolean {
+  return supports(MINI_APPS_METHOD, $version());
+}
 
 /**
  * A method tells that a task or action has succeeded, failed, or produced a warning. The Telegram
  * app may play the appropriate haptics based on type value passed.
  * @param type - notification type.
  */
-export const notificationOccurred = withIsSupported((type: NotificationHapticFeedbackType): void => {
+export function notificationOccurred(type: NotificationHapticFeedbackType): void {
   postEvent(MINI_APPS_METHOD, { type: 'notification', notification_type: type });
-}, MINI_APPS_METHOD);
+}
 
 /**
  * A method tells that the user has changed a selection. The Telegram app may play the
@@ -33,6 +40,6 @@ export const notificationOccurred = withIsSupported((type: NotificationHapticFee
  * Do not use this feedback when the user makes or confirms a selection; use it only when the
  * selection changes.
  */
-export const selectionChanged = withIsSupported(() => {
+export function selectionChanged(): void {
   postEvent(MINI_APPS_METHOD, { type: 'selection_change' });
-}, MINI_APPS_METHOD);
+}
