@@ -6,7 +6,6 @@ import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState, resetSignal } from '@test-utils/reset.js';
 import { $version } from '@/scopes/globals/globals.js';
 
-import { isVisible, isMounted } from './signals.js';
 import {
   show,
   hide,
@@ -15,7 +14,9 @@ import {
   unmount,
   offClick,
   isSupported,
-} from './methods.js';
+  isVisible,
+  isMounted,
+} from './back-button.js';
 
 beforeEach(() => {
   resetPackageState();

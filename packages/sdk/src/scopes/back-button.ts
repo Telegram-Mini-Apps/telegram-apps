@@ -7,10 +7,10 @@ import {
   type EventListener,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
+import { signal } from '@telegram-apps/signals';
 
 import { $version, postEvent } from '@/scopes/globals/globals.js';
 
-import { isVisible, isMounted } from './signals.js';
 
 type StorageValue = boolean;
 
@@ -31,6 +31,16 @@ export function hide(): void {
 export function isSupported(): boolean {
   return supports(MINI_APPS_METHOD, $version());
 }
+
+/**
+ * True if the component is currently visible.
+ */
+export const isVisible = signal(false);
+
+/**
+ * True if the component is currently mounted.
+ */
+export const isMounted = signal(false);
 
 /**
  * Mounts the component.
