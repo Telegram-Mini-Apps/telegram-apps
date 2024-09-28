@@ -65,7 +65,7 @@ export function getKeys(options?: ExecuteWithOptions): CancelablePromise<string[
 }
 
 /**
- * @returns True if the back button is supported.
+ * @returns True if the cloud storage is supported.
  */
 export function isSupported(): boolean {
   return supports(MINI_APPS_METHOD, $version());
