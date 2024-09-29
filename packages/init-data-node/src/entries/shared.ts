@@ -1,5 +1,5 @@
 export type { Chat, ChatType, InitData, User } from '@telegram-apps/types';
-export { TypedError } from '@telegram-apps/toolkit';
+export { TypedError, isErrorOfType } from '@telegram-apps/toolkit';
 export { ERR_PARSE, ERR_UNEXPECTED_VALUE } from '@telegram-apps/transformers';
 
 export { initDataToSearchParams } from '../initDataToSearchParams.js';
