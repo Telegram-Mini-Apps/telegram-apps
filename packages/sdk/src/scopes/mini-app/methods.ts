@@ -6,13 +6,13 @@ import {
   deleteCssVar,
   setCssVar,
   TypedError,
-  supports,
   type RGB,
 } from '@telegram-apps/bridge';
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { $version, postEvent } from '@/scopes/globals/globals.js';
+import { postEvent } from '@/scopes/globals/globals.js';
+import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { withSupports } from '@/scopes/withSupports.js';
 import { ERR_CSS_VARS_BOUND } from '@/errors.js';
 import {
@@ -106,13 +106,6 @@ export function close(returnBack?: boolean): void {
 }
 
 /**
- * @returns True if the back button is supported.
- */
-export function isSupported(): boolean {
-  return supports(SET_BG_COLOR_METHOD, $version());
-}
-
-/**
  * Mounts the component.
  *
  * This function restores the component state and is automatically saving it in the local storage
@@ -161,17 +154,17 @@ function saveState() {
 /**
  * Updates the background color.
  */
-export function setBackgroundColor(color: RGB): void {
+export const setBackgroundColor = withIsSupported((color: RGB): void => {
   backgroundColor.set(color);
-}
+}, SET_BG_COLOR_METHOD);
 
 /**
  * Updates the header color.
  */
 export const setHeaderColor = withSupports(
-  (color: HeaderColor): void => {
+  withIsSupported((color: HeaderColor): void => {
     headerColor.set(color);
-  },
+  }, SET_HEADER_COLOR_METHOD),
   { color: [SET_HEADER_COLOR_METHOD, 'color'] },
 );
 
