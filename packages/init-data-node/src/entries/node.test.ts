@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { TypedError } from '@telegram-apps/toolkit';
 import type { InitData } from '@telegram-apps/types';
 
 import { validate, sign, signData, isValid } from './node';
@@ -91,32 +92,34 @@ describe('isValid', () => {
 describe('validate', () => {
   it('should throw missing hash error if "hash" param is missing', () => {
     expect(() => validate('auth_date=1', secretToken)).toThrowError(
-      'ERR_HASH_INVALID',
+      new TypedError('ERR_HASH_INVALID', 'Hash is invalid'),
     );
   });
 
   it('should throw if "auth_date" param is missing or does not represent integer', () => {
-    expect(() => validate('hash=HHH', secretToken)).toThrowError('ERR_AUTH_DATE_INVALID');
+    expect(() => validate('hash=HHH', secretToken)).toThrowError(
+      new TypedError('ERR_AUTH_DATE_INVALID', 'Auth date is invalid'),
+    );
     expect(() => validate('auth_date=AAA&hash=HHH', secretToken)).toThrowError(
-      'ERR_AUTH_DATE_INVALID',
+      new TypedError('ERR_AUTH_DATE_INVALID', 'Auth date is invalid'),
     );
   });
 
   it('should throw if parameters are expired', () => {
     expect(() => validate(sp, secretToken, { expiresIn: 1 })).toThrowError(
-      'ERR_EXPIRED',
+      new TypedError('ERR_EXPIRED', 'Init data is expired'),
     );
     expect(() => validate(initData, secretToken, { expiresIn: 1 })).toThrowError(
-      'ERR_EXPIRED',
+      new TypedError('ERR_EXPIRED', 'Init data is expired'),
     );
   });
 
   it('should throw if sign is invalid', () => {
     expect(() => validate(sp, `${secretToken}A`, { expiresIn: 0 })).toThrowError(
-      'ERR_SIGN_INVALID',
+      new TypedError('ERR_SIGN_INVALID', 'Sign is invalid')
     );
     expect(() => validate(initData, `${secretToken}A`, { expiresIn: 0 })).toThrowError(
-      'ERR_SIGN_INVALID',
+      new TypedError('ERR_SIGN_INVALID', 'Sign is invalid')
     );
   });
 
@@ -134,7 +137,9 @@ describe('validate', () => {
   });
 
   it('should throw if "expiresIn" is not passed and parameters were created more than 1 day ago', () => {
-    expect(() => validate(sp, secretToken)).toThrow('ERR_EXPIRED');
+    expect(() => validate(sp, secretToken)).toThrow(
+      new TypedError('ERR_EXPIRED', 'Init data is expired')
+    );
   });
 });
 

@@ -61,6 +61,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@telegram-apps/toolkit": "workspace:^",
     "@telegram-apps/types": "workspace:^",
     "@telegram-apps/transformers": "workspace:^"
   }

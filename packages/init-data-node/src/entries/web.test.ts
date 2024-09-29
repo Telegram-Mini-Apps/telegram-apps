@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { TypedError } from '@telegram-apps/toolkit';
 import type { InitData } from '@telegram-apps/types';
 
 import { validate, sign, signData, isValid } from './web';
@@ -91,35 +92,35 @@ describe('isValid', () => {
 describe('validate', () => {
   it('should throw missing hash error if "hash" param is missing', async () => {
     await expect(validate('auth_date=1', secretToken)).rejects.toThrowError(
-      'ERR_HASH_INVALID',
+      new TypedError('ERR_HASH_INVALID', 'Hash is invalid'),
     );
   });
 
   it('should throw if "auth_date" param is missing or does not represent integer', async () => {
     await expect(validate('hash=HHH', secretToken)).rejects.toThrowError(
-      'ERR_AUTH_DATE_INVALID',
+      new TypedError('ERR_AUTH_DATE_INVALID', 'Auth date is invalid'),
     );
     await expect(validate('auth_date=AAA&hash=HHH', secretToken)).rejects.toThrowError(
-      'ERR_AUTH_DATE_INVALID',
+      new TypedError('ERR_AUTH_DATE_INVALID', 'Auth date is invalid'),
     );
   });
 
   it('should throw if parameters are expired', async () => {
     await expect(validate(sp, secretToken, { expiresIn: 1 })).rejects.toThrowError(
-      'ERR_EXPIRED',
+      new TypedError('ERR_EXPIRED', 'Init data is expired'),
     );
     await expect(validate(initData, secretToken, { expiresIn: 1 })).rejects.toThrowError(
-      'ERR_EXPIRED',
+      new TypedError('ERR_EXPIRED', 'Init data is expired'),
     );
   });
 
   it('should throw if sign is invalid', async () => {
     await expect(validate(sp, `${secretToken}A`, { expiresIn: 0 }))
       .rejects
-      .toThrowError('ERR_SIGN_INVALID');
+      .toThrowError(new TypedError('ERR_SIGN_INVALID', 'Sign is invalid'));
     await expect(validate(initData, `${secretToken}A`, { expiresIn: 0 }))
       .rejects
-      .toThrowError('ERR_SIGN_INVALID');
+      .toThrowError(new TypedError('ERR_SIGN_INVALID', 'Sign is invalid'));
   });
 
   it('should correctly validate parameters in case, they are valid', async () => {
@@ -136,7 +137,9 @@ describe('validate', () => {
   });
 
   it('should throw if "expiresIn" is not passed and parameters were created more than 1 day ago', async () => {
-    await expect(validate(sp, secretToken)).rejects.toThrow('ERR_EXPIRED');
+    await expect(validate(sp, secretToken)).rejects.toThrow(
+      new TypedError('ERR_EXPIRED', 'Init data is expired'),
+    );
   });
 });
 

@@ -1,3 +1,4 @@
+import { TypedError } from '@telegram-apps/toolkit';
 import type { InitData } from '@telegram-apps/types';
 
 import { initDataToSearchParams } from './initDataToSearchParams.js';
@@ -26,7 +27,7 @@ export type ValidateValue = InitData | string | URLSearchParams;
 
 function processSign(actual: string, expected: string): void | never {
   if (actual !== expected) {
-    throw new Error(ERR_SIGN_INVALID);
+    throw new TypedError(ERR_SIGN_INVALID, 'Sign is invalid');
   }
   return;
 }
@@ -104,11 +105,11 @@ export function validate(
 
   // Hash and auth date always required.
   if (!hash) {
-    throw new Error(ERR_HASH_INVALID);
+    throw new TypedError(ERR_HASH_INVALID, 'Hash is invalid');
   }
 
   if (!authDate) {
-    throw new Error(ERR_AUTH_DATE_INVALID);
+    throw new TypedError(ERR_AUTH_DATE_INVALID, 'Auth date is invalid');
   }
 
   // In case, expiration time passed, we do additional parameters check.
@@ -116,7 +117,7 @@ export function validate(
   if (expiresIn > 0) {
     // Check if init data expired.
     if (+authDate + expiresIn * 1000 < Date.now()) {
-      throw new Error(ERR_EXPIRED);
+      throw new TypedError(ERR_EXPIRED, 'Init data is expired');
     }
   }
 
