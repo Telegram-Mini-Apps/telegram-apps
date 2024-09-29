@@ -1,14 +1,20 @@
+import type { DefaultTheme } from 'vitepress';
+
 import { sectionGen } from './utils';
 
-const PREFIX = '/packages';
+type Sidebar = DefaultTheme.Sidebar;
+type NavItemWithLink = DefaultTheme.NavItemWithLink;
 
-const section = sectionGen(PREFIX);
+const BASE = '/packages';
 
-function scopeSection(path: string): [string, string] {
-  return [
-    path[0].toUpperCase() + path.slice(1).replace(/-./g, m => ' ' + m[1].toUpperCase()),
-    path,
-  ];
+const section = sectionGen(BASE);
+
+function scope(path: string, title?: string): [string, string] {
+  title ||= path[0].toUpperCase() + path
+    .slice(1)
+    .replace(/-./g, m => ' ' + m[1].toUpperCase());
+
+  return [title, path];
 }
 
 function fromEntries(entries: [string, any][]): Record<string, any> {
@@ -20,67 +26,97 @@ function fromEntries(entries: [string, any][]): Record<string, any> {
   return result;
 }
 
-export const packagesNavItem = {
+export const packagesNavItem: NavItemWithLink = {
   text: 'Packages',
-  link: `${PREFIX}/telegram-apps-sdk`,
+  link: `${BASE}/telegram-apps-create-mini-app`,
 };
 
-export const packagesSidebar = {
-  [PREFIX]: [
+export const packagesSidebar: Sidebar = {
+  [BASE]: [
     section('CLI', {
       '@telegram-apps/create-mini-app': 'telegram-apps-create-mini-app',
     }),
     section('TypeScript', {
-      '@telegram-apps/sdk': [
-        'telegram-apps-sdk',
-        {
-          'Components': [
-            'components',
-            {
-              BackButton: 'back-button',
-              BiometryManager: 'biometry-manager',
-              ClosingBehavior: 'closing-behavior',
-              CloudStorage: 'cloud-storage',
-              HapticFeedback: 'haptic-feedback',
-              InitData: 'init-data',
-              Invoice: 'invoice',
-              MainButton: 'main-button',
-              MiniApp: 'mini-app',
-              Popup: 'popup',
-              QRScanner: 'qr-scanner',
-              SettingsButton: 'settings-button',
-              SwipeBehavior: 'swipe-behavior',
-              ThemeParams: 'theme-params',
-              Utils: 'utils',
-              Viewport: 'viewport',
-            },
-            true,
-          ],
+      '@telegram-apps/signals': 'telegram-apps-signals',
+      '@telegram-apps/bridge': ['telegram-apps-bridge', {
+        'Methods': 'methods',
+        'Events': 'events',
+        'Environment': 'environment',
+        'Launch Parameters': 'launch-parameters',
+        'Globals': 'globals',
+      }],
+      '@telegram-apps/sdk': [{ url: 'telegram-apps-sdk', page: false }, {
+        '@1.0': ['1-0', {
+          'Components': ['components', {
+            BackButton: 'back-button',
+            BiometryManager: 'biometry-manager',
+            ClosingBehavior: 'closing-behavior',
+            CloudStorage: 'cloud-storage',
+            HapticFeedback: 'haptic-feedback',
+            InitData: 'init-data',
+            Invoice: 'invoice',
+            MainButton: 'main-button',
+            MiniApp: 'mini-app',
+            Popup: 'popup',
+            QRScanner: 'qr-scanner',
+            SettingsButton: 'settings-button',
+            SwipeBehavior: 'swipe-behavior',
+            ThemeParams: 'theme-params',
+            Utils: 'utils',
+            Viewport: 'viewport',
+          }],
           'Environment': 'environment',
           'Methods and Events': 'methods-and-events',
           'Launch Parameters': 'launch-parameters',
           'Theme Parameters': 'theme-parameters',
-          'Init Data': [
-            'init-data',
-            {
-              InitData: 'init-data',
-              Chat: 'chat',
-              User: 'user',
-            },
-            true,
-          ],
-          'Navigation': [
-            'navigation',
-            {
-              BrowserNavigator: 'browser-navigator',
-            },
-            true
-          ],
+          'Init Data': ['init-data', {
+            InitData: 'init-data',
+            Chat: 'chat',
+            User: 'user',
+          }],
+          'Navigation': ['navigation', {
+            BrowserNavigator: 'browser-navigator',
+          }],
           'CSS Variables': 'css-variables',
-        },
-      ],
-      '@telegram-apps/sdk-react': '/telegram-apps-sdk-react',
-      '@telegram-apps/sdk-solid': '/telegram-apps-sdk-solid',
+        }],
+        '@2.0': ['2-0', {
+          'Initializing': 'initializing',
+          'Scopes': 'scopes',
+          'Components': [
+            { url: 'components', page: false },
+            fromEntries([
+              scope('back-button'),
+              scope('biometry'),
+              scope('closing-behavior'),
+              scope('cloud-storage'),
+              scope('haptic-feedback'),
+              scope('init-data'),
+              scope('invoice'),
+              scope('main-button'),
+              scope('mini-app'),
+              scope('popup'),
+              scope('qr-scanner', 'QR Scanner'),
+              scope('settings-button'),
+              scope('swipe-behavior'),
+              scope('theme-params'),
+              scope('viewport'),
+            ]),
+          ],
+          'Utilities': [{ url: 'utils', page: false }, fromEntries([
+            scope('links'),
+            scope('privacy'),
+            scope('uncategorized'),
+          ])],
+        }],
+      }],
+      '@telegram-apps/sdk-react': [{ url: 'telegram-apps-sdk-react', page: false }, {
+        '@1.0': '1-0',
+        '@2.0': '2-0',
+      }],
+      '@telegram-apps/sdk-solid': [{ url: 'telegram-apps-sdk-solid', page: false }, {
+        '@1.0': '1-0',
+        '@2.0': '2-0',
+      }],
       '@telegram-apps/solid-router-integration': '/telegram-apps-solid-router-integration',
       '@telegram-apps/react-router-integration': '/telegram-apps-react-router-integration',
     }),
