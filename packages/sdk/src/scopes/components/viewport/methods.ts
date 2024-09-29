@@ -13,7 +13,7 @@ import {
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals/globals.js';
-import { ERR_CSS_VARS_BOUND } from '@/errors.js';
+import { ERR_ALREADY_CALLED } from '@/errors.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 
 import { type GetCSSVarNameFn, request } from './static.js';
@@ -49,11 +49,11 @@ interface StorageValue {
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * viewport property.
  * @returns Function to stop updating variables.
- * @throws TypedError ERR_CSS_VARS_BOUND
+ * @throws TypedError ERR_ALREADY_CALLED
  */
 export function bindCssVars(getCSSVarName?: GetCSSVarNameFn): VoidFunction {
   if (isCssVarsBound()) {
-    throw new TypedError(ERR_CSS_VARS_BOUND);
+    throw new TypedError(ERR_ALREADY_CALLED);
   }
   getCSSVarName ||= (prop) => `--tg-viewport-${camelToKebab(prop)}`;
   const props = ['height', 'width', 'stableHeight'] as const;

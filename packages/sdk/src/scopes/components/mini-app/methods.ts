@@ -14,7 +14,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 import { postEvent } from '@/scopes/globals/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { withSupports } from '@/scopes/withSupports.js';
-import { ERR_CSS_VARS_BOUND } from '@/errors.js';
+import { ERR_ALREADY_CALLED } from '@/errors.js';
 import {
   mount as tpMount,
   state as tpState,
@@ -50,11 +50,11 @@ const STORAGE_KEY = 'miniApp';
  * mini app key.
  * MiniApp property.
  * @returns Function to stop updating variables.
- * @throws {TypedError} ERR_CSS_VARS_BOUND
+ * @throws {TypedError} ERR_ALREADY_CALLED
  */
 export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
   if (isCssVarsBound()) {
-    throw new TypedError(ERR_CSS_VARS_BOUND);
+    throw new TypedError(ERR_ALREADY_CALLED);
   }
   getCSSVarName ||= (prop) => `--tg-${camelToKebab(prop)}`;
   const bgVar = getCSSVarName('bgColor');

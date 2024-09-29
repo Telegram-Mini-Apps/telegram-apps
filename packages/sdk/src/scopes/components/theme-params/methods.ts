@@ -14,7 +14,7 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { ERR_CSS_VARS_BOUND } from '@/errors.js';
+import { ERR_ALREADY_CALLED } from '@/errors.js';
 
 import { isCssVarsBound, state, isMounted } from './signals.js';
 import { type GetCssVarNameFn, parse } from './static.js';
@@ -39,11 +39,11 @@ const THEME_CHANGED_EVENT = 'theme_changed';
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * theme parameters key.
  * @returns Function to stop updating variables.
- * @throws TypedError ERR_CSS_VARS_BOUND
+ * @throws TypedError ERR_ALREADY_CALLED
  */
 export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
   if (isCssVarsBound()) {
-    throw new TypedError(ERR_CSS_VARS_BOUND);
+    throw new TypedError(ERR_ALREADY_CALLED);
   }
   getCSSVarName ||= (prop) => `--tg-theme-${camelToKebab(prop)}`;
 
