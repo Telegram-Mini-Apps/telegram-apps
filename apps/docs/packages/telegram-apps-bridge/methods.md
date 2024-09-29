@@ -1,6 +1,6 @@
 # Methods
 
-This article covers topics related to [apps communication](../../../platform/apps-communication.md)
+This article covers topics related to [apps communication](../../platform/apps-communication.md)
 methods.
 
 ## Calling Methods
@@ -22,8 +22,8 @@ The `request` function should be used when a developer needs to call a Telegram 
 receive a specific event.
 
 For example, to call
-the [web_app_request_viewport](../../../platform/methods.md#web-app-request-viewport) method and catch
-the [viewport_changed](../../../platform/events.md#viewport-changed) event for actual viewport data:
+the [web_app_request_viewport](../../platform/methods.md#web-app-request-viewport) method and catch
+the [viewport_changed](../../platform/events.md#viewport-changed) event for actual viewport data:
 
 ```typescript
 import { request } from '@telegram-apps/bridge';
@@ -145,7 +145,7 @@ request('web_app_open_invoice', 'invoice_closed', {
 
 By default, the `request` function captures the first event with the required name. In this case,
 the function will capture the event only if it has the expected slug, specific for the
-[invoice_closed](../../../platform/events.md#invoice-closed) event.
+[invoice_closed](../../platform/events.md#invoice-closed) event.
 
 When passing an array of events, the `capture` function will receive an object with
 the `event: EventName` and `payload?: EventPayload` properties.
@@ -153,7 +153,7 @@ the `event: EventName` and `payload?: EventPayload` properties.
 ## Invoking Custom Methods
 
 Custom methods aro those methods which can be used with
-the [web_app_invoke_custom_method](../../../platform/methods.md#web-app-invoke-custom-method) Mini Apps
+the [web_app_invoke_custom_method](../../platform/methods.md#web-app-invoke-custom-method) Mini Apps
 method.
 
 The `invokeCustomMethod` function simplifies the usage of such methods by reusing the `request`
