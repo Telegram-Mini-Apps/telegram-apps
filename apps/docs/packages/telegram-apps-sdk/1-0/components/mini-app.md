@@ -153,5 +153,5 @@ List of events, which could be [tracked](#events):
 ## Methods Support
 
 List of methods and parameters, which could be used
-in [support checks](ort): `requestWriteAccess`, `requestPhoneAccess`, 
+in [support checks](../components.md#methods-support): `requestWriteAccess`, `requestPhoneAccess`, 
 `switchInlineQuery`, `setHeaderColor`, `setBgColor` and `setHeaderColor.color`.

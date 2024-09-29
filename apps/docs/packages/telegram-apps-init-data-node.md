@@ -12,7 +12,7 @@
 
 The package provides utilities to work with the initialization data of Telegram Mini Apps on the
 server side. To learn more about the initialization data and its usage, please refer to
-the [documentation](../../platform/init-data.md).
+the [documentation](../platform/init-data.md).
 
 ## Installation
 
@@ -221,9 +221,8 @@ sign(
 
 This function accepts three arguments:
 
-- **Data to sign**: It represents a parsed [init data](telegram-apps-sdk/init-data/init-data.md)
-  object
-  excluding the `authDate` and `hash` properties.
+- **Data to sign**: It represents a parsed init data object excluding the `authDate` and `hash`
+  properties.
 - **Bot token**: This token is received from [@BotFather](https://t.me/botfather).
 - **Signing date**: This value will be used as the value of the `authDate` property.
 

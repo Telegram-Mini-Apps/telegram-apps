@@ -10,7 +10,7 @@
   </a>
 </p>
 
-Telegram Mini Apps [Navigator](telegram-apps-sdk/navigation.md) integration
+Telegram Mini Apps [Navigator](telegram-apps-sdk/1-0/navigation.md) integration
 for [@solidjs/router](https://www.npmjs.com/package/@solidjs/router).
 
 ## Installation
