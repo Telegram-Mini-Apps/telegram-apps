@@ -10,6 +10,9 @@
   </a>
 </p>
 
+> [!TIP]
+> @telegram-apps/sdk@2 is [out](telegram-apps-sdk/2-0.md)!
+
 Made-from-scratch TypeScript library for seamless communication with Telegram Mini Apps
 functionality.
 
