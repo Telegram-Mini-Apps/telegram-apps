@@ -4,7 +4,7 @@ import { dispatchMiniAppsEvent } from 'test-utils';
 import { resetPackageState } from '@test-utils/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 
-import { readTextFromClipboard } from './utils.js';
+import { readTextFromClipboard } from './uncategorized.js';
 
 beforeEach(() => {
   mockPostEvent();
@@ -26,3 +26,4 @@ describe('readTextFromClipboard', () => {
     await expect(promise).resolves.toBe('Some text');
   });
 });
+

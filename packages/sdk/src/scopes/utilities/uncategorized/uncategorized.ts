@@ -2,12 +2,14 @@ import {
   captureSameReq,
   retrieveLaunchParams,
   CancelablePromise,
-  type SwitchInlineQueryChatType,
+  TypedError,
   type ExecuteWithOptions,
+  type SwitchInlineQueryChatType,
 } from '@telegram-apps/bridge';
 
 import { postEvent, createRequestId, request } from '@/scopes/globals/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { ERR_DATA_INVALID_SIZE } from '@/errors.js';
 
 const READ_TEXT_FROM_CLIPBOARD_METHOD = 'web_app_read_text_from_clipboard';
 const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
@@ -29,6 +31,26 @@ export const readTextFromClipboard = withIsSupported(
     }).then(({ data = null }) => data);
   }, READ_TEXT_FROM_CLIPBOARD_METHOD,
 );
+
+/**
+ * A method used to send data to the bot.
+ *
+ * When this method called, a service message sent to the bot containing the data of the length
+ * up to 4096 bytes, and the Mini App closed.
+ *
+ * See the field `web_app_data` in the class [Message](https://core.telegram.org/bots/api#message).
+ *
+ * This method is only available for Mini Apps launched via a Keyboard button.
+ * @param data - data to send to bot.
+ * @throws {TypedError} ERR_DATA_INVALID_SIZE
+ */
+export function sendData(data: string): void {
+  const { size } = new Blob([data]);
+  if (!size || size > 4096) {
+    throw new TypedError(ERR_DATA_INVALID_SIZE);
+  }
+  postEvent('web_app_data_send', { data });
+}
 
 /**
  * Inserts the bot's username and the specified inline query in the current chat's input field.
