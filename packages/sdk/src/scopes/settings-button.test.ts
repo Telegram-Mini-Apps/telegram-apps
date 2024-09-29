@@ -7,7 +7,6 @@ import { resetPackageState, resetSignal } from '@test-utils/reset.js';
 
 import { $version } from '@/scopes/globals/globals.js';
 
-import { isVisible, isMounted } from './signals.js';
 import {
   show,
   hide,
@@ -15,13 +14,16 @@ import {
   onClick,
   unmount,
   offClick,
-} from './methods.js';
+  isSupported,
+  isMounted,
+  isVisible,
+} from './settings-button.js';
 
 beforeEach(() => {
   resetPackageState();
   [isVisible, isMounted].forEach(resetSignal);
   vi.restoreAllMocks();
-  mockPostEvent()
+  mockPostEvent();
 });
 
 describe('mounted', () => {
@@ -102,18 +104,16 @@ describe('hide', () => {
     hide();
     expect(isVisible()).toBe(false);
   });
+});
 
-  describe('isSupported', () => {
-    it('should return false if version is less than 6.10. True otherwise', () => {
-      $version.set('6.9');
-      expect(hide.isSupported()).toBe(false);
-
-      $version.set('6.10');
-      expect(hide.isSupported()).toBe(true);
-
-      $version.set('6.11');
-      expect(hide.isSupported()).toBe(true);
-    });
+describe('isSupported', () => {
+  it('should return true if current version is 6.10 or higher', () => {
+    $version.set('6.9');
+    expect(isSupported()).toBe(false);
+    $version.set('6.10');
+    expect(isSupported()).toBe(true);
+    $version.set('6.11');
+    expect(isSupported()).toBe(true);
   });
 });
 
@@ -212,18 +212,5 @@ describe('show', () => {
     expect(isVisible()).toBe(false);
     show();
     expect(isVisible()).toBe(true);
-  });
-
-  describe('isSupported', () => {
-    it('should return false if version is less than 6.10. True otherwise', () => {
-      $version.set('6.9');
-      expect(show.isSupported()).toBe(false);
-
-      $version.set('6.10');
-      expect(show.isSupported()).toBe(true);
-
-      $version.set('6.11');
-      expect(show.isSupported()).toBe(true);
-    });
   });
 });

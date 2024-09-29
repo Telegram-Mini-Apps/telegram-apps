@@ -3,14 +3,13 @@ import {
   on,
   getStorageValue,
   setStorageValue,
+  supports,
   type EventListener,
 } from '@telegram-apps/bridge';
+import { signal } from '@telegram-apps/signals';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { postEvent } from '@/scopes/globals/globals.js';
-
-import { isVisible, isMounted } from './signals.js';
+import { $version, postEvent } from '@/scopes/globals/globals.js';
 
 type StorageValue = boolean;
 
@@ -21,9 +20,26 @@ const STORAGE_KEY = 'settingsButton';
 /**
  * Hides the settings button.
  */
-export const hide = withIsSupported(() => {
+export function hide(): void {
   isVisible.set(false);
-}, MINI_APPS_METHOD);
+}
+
+/**
+ * True if the component is currently visible.
+ */
+export const isVisible = signal(false);
+
+/**
+ * True if the component is currently mounted.
+ */
+export const isMounted = signal(false);
+
+/**
+ * @returns True if the settings button is supported.
+ */
+export function isSupported(): boolean {
+  return supports(MINI_APPS_METHOD, $version());
+}
 
 /**
  * Mounts the component.
@@ -64,9 +80,9 @@ export function offClick(fn: EventListener<'settings_button_pressed'>): void {
 /**
  * Shows the settings button.
  */
-export const show = withIsSupported(() => {
+export function show(): void {
   isVisible.set(true);
-}, MINI_APPS_METHOD);
+}
 
 /**
  * Unmounts the component, removing the listener, saving the component state in the local storage.
