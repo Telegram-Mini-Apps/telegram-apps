@@ -6,15 +6,15 @@ import {
   deleteCssVar,
   setCssVar,
   TypedError,
+  supports,
   type RGB,
 } from '@telegram-apps/bridge';
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { postEvent } from '@/scopes/globals/globals.js';
-import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { $version, postEvent } from '@/scopes/globals/globals.js';
 import { withSupports } from '@/scopes/withSupports.js';
-import { ERR_CSS_VARS_BOUND, ERR_DATA_INVALID_SIZE } from '@/errors.js';
+import { ERR_CSS_VARS_BOUND } from '@/errors.js';
 import {
   mount as tpMount,
   state as tpState,
@@ -106,6 +106,13 @@ export function close(returnBack?: boolean): void {
 }
 
 /**
+ * @returns True if the back button is supported.
+ */
+export function isSupported(): boolean {
+  return supports(SET_BG_COLOR_METHOD, $version());
+}
+
+/**
  * Mounts the component.
  *
  * This function restores the component state and is automatically saving it in the local storage
@@ -152,39 +159,19 @@ function saveState() {
 }
 
 /**
- * A method used to send data to the bot.
- *
- * When this method called, a service message sent to the bot containing the data of the length
- * up to 4096 bytes, and the Mini App closed.
- *
- * See the field `web_app_data` in the class [Message](https://core.telegram.org/bots/api#message).
- *
- * This method is only available for Mini Apps launched via a Keyboard button.
- * @param data - data to send to bot.
- * @throws {TypedError} ERR_DATA_INVALID_SIZE
- */
-export function sendData(data: string): void {
-  const { size } = new Blob([data]);
-  if (!size || size > 4096) {
-    throw new TypedError(ERR_DATA_INVALID_SIZE);
-  }
-  postEvent('web_app_data_send', { data });
-}
-
-/**
  * Updates the background color.
  */
-export const setBackgroundColor = withIsSupported((color: RGB): void => {
+export function setBackgroundColor(color: RGB): void {
   backgroundColor.set(color);
-}, SET_BG_COLOR_METHOD);
+}
 
 /**
  * Updates the header color.
  */
 export const setHeaderColor = withSupports(
-  withIsSupported((color: HeaderColor): void => {
+  (color: HeaderColor): void => {
     headerColor.set(color);
-  }, SET_HEADER_COLOR_METHOD),
+  },
   { color: [SET_HEADER_COLOR_METHOD, 'color'] },
 );
 
