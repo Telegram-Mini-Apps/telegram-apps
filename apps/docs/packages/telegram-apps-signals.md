@@ -168,7 +168,7 @@ b.set(5); // sum becomes 10
 
 The returned value represents a signal that lacks the `set` and `reset` methods.
 
-## `batch`
+## Batching Changes
 
 The `batch` function creates a scope where signal mutations are batched.
 
