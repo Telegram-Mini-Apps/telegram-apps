@@ -1,10 +1,8 @@
 import { isPageReload } from '@telegram-apps/navigation';
-import { getStorageValue, setStorageValue } from '@telegram-apps/bridge';
+import { getStorageValue, setStorageValue, supports } from '@telegram-apps/bridge';
+import { signal } from '@telegram-apps/signals';
 
-import { postEvent } from '@/scopes/globals/globals.js';
-import { withIsSupported } from '@/scopes/withIsSupported.js';
-
-import { isMounted, isVerticalEnabled } from './signals.js';
+import { $version, postEvent } from '@/scopes/globals/globals.js';
 
 type StorageValue = boolean;
 
@@ -14,16 +12,33 @@ const STORAGE_KEY = 'swipeBehavior';
 /**
  * Disables vertical swipes.
  */
-export const disableVertical= withIsSupported((): void => {
+export function disableVertical(): void {
   isVerticalEnabled.set(false);
-}, MINI_APPS_METHOD);
+}
 
 /**
  * Enables vertical swipes.
  */
-export const enableVertical = withIsSupported((): void => {
+export function enableVertical(): void {
   isVerticalEnabled.set(true);
-}, MINI_APPS_METHOD);
+}
+
+/**
+ * True if the component is currently mounted.
+ */
+export const isMounted = signal(false);
+
+/**
+ * True if vertical swipes are enabled.
+ */
+export const isVerticalEnabled = signal(false);
+
+/**
+ * @returns True if the back button is supported.
+ */
+export function isSupported(): boolean {
+  return supports(MINI_APPS_METHOD, $version());
+}
 
 /**
  * Mounts the component.

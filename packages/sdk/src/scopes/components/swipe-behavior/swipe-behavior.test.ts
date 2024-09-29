@@ -3,14 +3,17 @@ import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } 
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState, resetSignal } from '@test-utils/reset.js';
+import { $version } from '@/scopes/globals/globals.js';
 
-import { isVerticalEnabled, isMounted } from './signals.js';
 import {
   disableVertical,
   enableVertical,
   mount,
   unmount,
-} from './methods.js';
+  isSupported,
+  isMounted,
+  isVerticalEnabled,
+} from './swipe-behavior.js';
 
 beforeEach(() => {
   resetPackageState();
@@ -79,6 +82,19 @@ describe('disableVerticalSwipes', () => {
     expect(isVerticalEnabled()).toBe(true);
     disableVertical();
     expect(isVerticalEnabled()).toBe(false);
+  });
+});
+
+describe('isSupported', () => {
+  it('should return false if version is less than 7.7. True otherwise', () => {
+    $version.set('7.6');
+    expect(isSupported()).toBe(false);
+
+    $version.set('7.7');
+    expect(isSupported()).toBe(true);
+
+    $version.set('7.8');
+    expect(isSupported()).toBe(true);
   });
 });
 
