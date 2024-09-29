@@ -78,7 +78,7 @@ type and assign it to all 3 paths.
 ## Listening to Events
 
 Handling all possible environments for a developer's application can be challenging. To simplify
-this process, the community developed the [@telegram-apps/sdk](../packages/telegram-apps-sdk/2-0.md)
+this process, the community developed the [@telegram-apps/sdk](../packages/telegram-apps-sdk/2-x)
 package, which greatly eases integration.
 
 Here's how to use it:

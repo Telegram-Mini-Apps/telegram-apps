@@ -46,7 +46,7 @@ export const packagesSidebar: Sidebar = {
         'Globals': 'globals',
       }],
       '@telegram-apps/sdk': [{ url: 'telegram-apps-sdk', page: false }, {
-        '@1.0': ['1-0', {
+        '@1.x': ['1-x', {
           'Components': ['components', {
             BackButton: 'back-button',
             BiometryManager: 'biometry-manager',
@@ -79,7 +79,7 @@ export const packagesSidebar: Sidebar = {
           }],
           'CSS Variables': 'css-variables',
         }],
-        '@2.0': ['2-0', {
+        '@2.x': ['2-x', {
           'Initializing': 'initializing',
           'Scopes': 'scopes',
           'Components': [
@@ -110,12 +110,12 @@ export const packagesSidebar: Sidebar = {
         }],
       }],
       '@telegram-apps/sdk-react': [{ url: 'telegram-apps-sdk-react', page: false }, {
-        '@1.0': '1-0',
-        '@2.0': '2-0',
+        '@1.x': '1-x',
+        '@2.x': '2-x',
       }],
       '@telegram-apps/sdk-solid': [{ url: 'telegram-apps-sdk-solid', page: false }, {
-        '@1.0': '1-0',
-        '@2.0': '2-0',
+        '@1.x': '1-x',
+        '@2.x': '2-x',
       }],
       '@telegram-apps/solid-router-integration': '/telegram-apps-solid-router-integration',
       '@telegram-apps/react-router-integration': '/telegram-apps-react-router-integration',

@@ -10,7 +10,7 @@
   </a>
 </p>
 
-Telegram Mini Apps [Navigator](telegram-apps-sdk/1-0/navigation.md) integration
+Telegram Mini Apps [Navigator](telegram-apps-sdk/1-x/navigation.md) integration
 for [react-router-dom](https://www.npmjs.com/package/react-router-dom).
 
 ## Installation

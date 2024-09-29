@@ -11,7 +11,7 @@ and init data specifically.
 ## Retrieving
 
 To extract init data, a developer can use the `retrieveLaunchParams` function
-from [@telegram-apps/sdk](../packages/telegram-apps-sdk/2-0.md).
+from [@telegram-apps/sdk](../packages/telegram-apps-sdk/2-x).
 
 ```typescript
 import { retrieveLaunchParams } from '@telegram-apps/sdk';

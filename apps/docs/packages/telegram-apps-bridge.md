@@ -16,7 +16,7 @@ This package provides fundamental utilities and types for developing application
 Mini Apps platform.
 
 While a developer can use this package alone, it's recommended to use a higher-level package
-like [@telegram-apps/sdk](telegram-apps-sdk/2-0.md).
+like [@telegram-apps/sdk](telegram-apps-sdk/2-x).
 
 ## Installation
 
