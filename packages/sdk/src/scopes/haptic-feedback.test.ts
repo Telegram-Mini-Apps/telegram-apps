@@ -5,7 +5,12 @@ import { resetPackageState } from '@test-utils/reset.js';
 
 import { $version } from '@/scopes/globals/globals.js';
 
-import { impactOccurred, notificationOccurred, selectionChanged, isSupported } from './methods.js';
+import {
+  impactOccurred,
+  notificationOccurred,
+  selectionChanged,
+  isSupported,
+} from './haptic-feedback.js';
 
 beforeEach(() => {
   resetPackageState();

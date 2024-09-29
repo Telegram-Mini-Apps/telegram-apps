@@ -4,13 +4,14 @@ import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState, resetSignal } from '@test-utils/reset.js';
 
-import { isConfirmationEnabled, isMounted } from './signals.js';
 import {
   disableConfirmation,
   enableConfirmation,
   mount,
   unmount,
-} from './methods.js';
+  isMounted,
+  isConfirmationEnabled,
+} from './closing-behavior.js';
 
 beforeEach(() => {
   resetPackageState();
