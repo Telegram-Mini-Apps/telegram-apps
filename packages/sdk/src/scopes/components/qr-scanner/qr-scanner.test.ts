@@ -3,9 +3,9 @@ import { dispatchMiniAppsEvent } from 'test-utils';
 
 import { resetPackageState, resetSignal } from '@test-utils/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
+import { $version } from '@/scopes/globals/globals.js';
 
-import { isOpened } from './signals.js';
-import { close, open } from './methods.js';
+import { close, open, isSupported, isOpened } from './qr-scanner.js';
 
 beforeEach(() => {
   resetPackageState();
@@ -27,36 +27,26 @@ describe('close', () => {
     expect(spy).toHaveBeenCalledTimes(0);
     close();
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('web_app_close_scan_qr_popup');
+    expect(spy).toHaveBeenCalledWith('web_app_close_scan_qr_popup', undefined);
+  });
+});
+
+describe('isSupported', () => {
+  it('should return false if version is less than 6.4. True otherwise', () => {
+    $version.set('6.3');
+    expect(isSupported()).toBe(false);
+
+    $version.set('6.4');
+    expect(isSupported()).toBe(true);
+
+    $version.set('6.5');
+    expect(isSupported()).toBe(true);
   });
 });
 
 describe('open', () => {
   describe('common mode', () => {
-    it('should set isOpened = true', () => {
-      expect(isOpened()).toBe(false);
-      void open({
-        capture() {
-          return true;
-        },
-      });
-      expect(isOpened()).toBe(true);
-    });
-
-    it('should set isOpened = false if QR was scanned', async () => {
-      expect(isOpened()).toBe(false);
-      const promise = open({
-        capture() {
-          return true;
-        },
-      });
-      expect(isOpened()).toBe(true);
-      dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
-      await promise;
-      expect(isOpened()).toBe(false);
-    });
-
-    it('should call postEvent with "web_app_open_scan_qr_popup" with { text: string } and catch "qr_text_received" event returning event "data" property if "capture" returned true', async () => {
+    it('should call "web_app_open_scan_qr_popup" method with { text: string } and catch "qr_text_received" event returning event "data" property if "capture" returned true', async () => {
       const spy = mockPostEvent();
       const promise = open({
         text: 'TEXT',
@@ -66,8 +56,9 @@ describe('open', () => {
       });
       dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
       dispatchMiniAppsEvent('qr_text_received', { data: 'QR2' });
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_open_scan_qr_popup', { text: 'TEXT' });
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(spy).toHaveBeenNthCalledWith(1, 'web_app_open_scan_qr_popup', { text: 'TEXT' });
+      expect(spy).toHaveBeenNthCalledWith(2, 'web_app_close_scan_qr_popup', undefined);
       await expect(promise).resolves.toBe('QR2');
     });
 
@@ -82,33 +73,24 @@ describe('open', () => {
       dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
       await promise;
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_close_scan_qr_popup');
+      expect(spy).toHaveBeenCalledWith('web_app_close_scan_qr_popup', undefined);
     });
 
-    it('should return promise with null, if "scan_qr_popup_closed" event was received', async () => {
+    it('should return promise with undefined if "scan_qr_popup_closed" event was received', async () => {
       const promise = open({
         capture() {
           return true;
         },
       });
       dispatchMiniAppsEvent('scan_qr_popup_closed');
-      await expect(promise).resolves.toBeNull();
+      await expect(promise).resolves.toBeUndefined();
     });
   });
 
   describe('stream mode', () => {
-    it('should set isOpened = true', () => {
-      expect(isOpened()).toBe(false);
-      open({
-        onCaptured() {
-        },
-      });
-      expect(isOpened()).toBe(true);
-    });
-
     it('should call onCaptured with QR content each time, "qr_text_received" event was received', () => {
       const spy = vi.fn();
-      open({ onCaptured: spy });
+      void open({ onCaptured: spy });
       dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
       dispatchMiniAppsEvent('qr_text_received', { data: 'QR2' });
       expect(spy).toHaveBeenCalledTimes(2);
@@ -118,7 +100,7 @@ describe('open', () => {
 
     it('should call postEvent with "web_app_open_scan_qr_popup" with { text: string }', () => {
       const spy = mockPostEvent();
-      open({
+      void open({
         text: 'TEXT',
         onCaptured: vi.fn(),
       });
@@ -127,11 +109,12 @@ describe('open', () => {
       expect(spy).toHaveBeenCalledWith('web_app_open_scan_qr_popup', { text: 'TEXT' });
     });
 
-    it('should not call onCaptured if QR scanner was closed', () => {
+    it('should not call onCaptured if QR scanner was closed', async () => {
       const spy = vi.fn();
-      open({ onCaptured: spy });
+      const promise = open({ onCaptured: spy });
       dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
       close();
+      await promise;
       dispatchMiniAppsEvent('qr_text_received', { data: 'QR2' });
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('QR1');
