@@ -12,7 +12,7 @@ import {
   mount as tpMount,
   buttonColor as tpButtonColor,
   buttonTextColor as tpButtonTextColor,
-} from '@/scopes/theme-params/instance.js';
+} from '@/scopes/components/theme-params/instance.js';
 
 import { state, isMounted } from './signals.js';
 import type { State } from './types.js';

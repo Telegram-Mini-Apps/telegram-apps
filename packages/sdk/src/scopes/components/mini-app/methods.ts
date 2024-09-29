@@ -20,7 +20,7 @@ import {
   state as tpState,
   backgroundColor as tpBackgroundColor,
   headerBackgroundColor as tpHeaderBackgroundColor,
-} from '@/scopes/theme-params/instance.js';
+} from '@/scopes/components/theme-params/instance.js';
 
 import {
   headerColor,

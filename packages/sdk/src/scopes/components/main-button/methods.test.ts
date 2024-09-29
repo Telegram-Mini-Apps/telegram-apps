@@ -5,7 +5,7 @@ import { emitMiniAppsEvent, type ThemeParams } from '@telegram-apps/bridge';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetSignal, resetPackageState } from '@test-utils/reset.js';
 
-import * as themeParams from '@/scopes/theme-params/instance.js';
+import * as themeParams from '@/scopes/components/theme-params/instance.js';
 
 import {
   text,

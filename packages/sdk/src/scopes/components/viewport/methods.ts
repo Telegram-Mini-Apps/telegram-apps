@@ -17,7 +17,13 @@ import { ERR_CSS_VARS_BOUND } from '@/errors.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 
 import { type GetCSSVarNameFn, request } from './static.js';
-import { state, mountPromise, mountError, isMounted, isCssVarsBound } from './signals.js';
+import {
+  state,
+  mountError,
+  isMounted,
+  isCssVarsBound,
+  isMounting,
+} from './signals.js';
 import type { State } from './types.js';
 
 interface StorageValue {
@@ -135,7 +141,7 @@ export const mount = createMountFn<State>(
     state.sub(onStateChanged);
     state.set(formatState(result));
   },
-  { isMounted, mountError, mountPromise },
+  { isMounted, isMounting, mountError },
 );
 
 const onViewportChanged: EventListener<'viewport_changed'> = (data) => {

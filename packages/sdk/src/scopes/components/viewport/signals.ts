@@ -1,5 +1,4 @@
 import { computed, type Computed, signal } from '@telegram-apps/signals';
-import type { CancelablePromise } from '@telegram-apps/bridge';
 
 import type { State } from './types.js';
 
@@ -25,7 +24,10 @@ export const isMounted = signal(false);
  */
 export const isCssVarsBound = signal(false);
 
-export const mountPromise = signal<CancelablePromise<void>>();
+/**
+ * True if the component is currently mounting.
+ */
+export const isMounting = signal<boolean>(false);
 
 /**
  * Error occurred while mounting the component.
@@ -71,11 +73,6 @@ export const isStable = computed(() => {
   const s = state();
   return s.height === s.stableHeight;
 });
-
-/**
- * True if the component is currently mounting.
- */
-export const isMounting = computed<boolean>(() => !!mountPromise());
 
 /**
  * The height of the visible area of the Mini App in its last stable state.
