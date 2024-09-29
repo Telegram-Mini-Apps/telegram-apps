@@ -1,66 +1,68 @@
+import type { DefaultTheme } from 'vitepress';
+
+type SidebarItem = DefaultTheme.SidebarItem;
+
 interface Items {
-  [Title: string]:
-    | string
-    | Items
-    | [
+  [Title: string]: string | Items | [
     itemUrlOrOptions: string | {
       /**
        * Item own URL. If `page` is false, the value will be used as items' link prefix.
        */
-      url: string;
+      url?: string;
+      /**
+       * Custom title for this item.
+       */
+      title?: string;
       /**
        * True, if this item has its own documentation page.
        */
       page?: boolean
     },
-    items: Items
+    items: Items,
   ];
-}
-
-interface ConfigItem {
-  text: string;
-  link?: string;
-  items: ConfigItem[];
-  collapsed?: boolean;
 }
 
 /**
  * Converts locally determined items to items, accepted by VitePress.
  * @param items - local items.
- * @param prefix - links' prefix.
+ * @param base - links' base.
  */
-function itemsToConfigItems(items: Items, prefix: string): ConfigItem[] {
-  const result: ConfigItem[] = [];
+function itemsToConfigItems(items: Items, base: string): SidebarItem[] {
+  const result: SidebarItem[] = [];
 
-  for (const title in items) {
-    let itemUrlEntry: string | undefined;
+  for (let title in items) {
+    let link: string | undefined;
     let linkItems: Items;
     let hasOwnPage: boolean | undefined;
 
     const tupleOrLinkOrItems = items[title];
     if (typeof tupleOrLinkOrItems === 'string') {
-      [itemUrlEntry, linkItems, hasOwnPage] = [tupleOrLinkOrItems, {}, true];
+      // Item own link is specified.
+      [link, linkItems, hasOwnPage] = [tupleOrLinkOrItems, {}, true];
     } else if (Array.isArray(tupleOrLinkOrItems)) {
-      const [itemUrlOrOptions] = tupleOrLinkOrItems;
-      if (typeof itemUrlOrOptions === 'string') {
-        itemUrlEntry = itemUrlOrOptions;
+      // Item options and subitems specified.
+      const [linkOrOptions] = tupleOrLinkOrItems;
+      if (typeof linkOrOptions === 'string') {
+        link = linkOrOptions;
         hasOwnPage = true;
       } else {
-        itemUrlEntry = itemUrlOrOptions.url;
-        hasOwnPage = typeof itemUrlOrOptions.page === 'undefined'
+        linkOrOptions.title && (title = linkOrOptions.title);
+        link = linkOrOptions.url;
+        hasOwnPage = typeof linkOrOptions.page === 'undefined'
           ? true
-          : itemUrlOrOptions.page;
+          : linkOrOptions.page;
       }
       linkItems = tupleOrLinkOrItems[1];
     } else {
+      // Only subitems specified.
       linkItems = tupleOrLinkOrItems;
     }
 
-    const link = itemUrlEntry ? `${prefix}/${itemUrlEntry}` : undefined;
+    link = link ? `${base}/${link}` : undefined;
     result.push({
       text: title,
       link: hasOwnPage ? link : undefined,
-      items: itemsToConfigItems(linkItems, link || prefix),
+      items: itemsToConfigItems(linkItems, link || base),
       collapsed: true,
     });
   }
@@ -70,11 +72,11 @@ function itemsToConfigItems(items: Items, prefix: string): ConfigItem[] {
 
 /**
  * Creates a new config item generator.
- * @param prefix - items' link prefix.
+ * @param base - items' link base.
  */
-export function sectionGen(prefix: string) {
-  return (title: string, items: Items): ConfigItem => ({
+export function sectionGen(base: string) {
+  return (title: string, items: Items): SidebarItem => ({
     text: title,
-    items: itemsToConfigItems(items, prefix),
+    items: itemsToConfigItems(items, base),
   });
 }
