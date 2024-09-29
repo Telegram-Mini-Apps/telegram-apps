@@ -1,11 +1,11 @@
 # @telegram-apps/init-data-node
 
 <p style="display: flex; gap: 8px; min-height: 20px">
-  <a href="https://npmjs.com/package/@telegram-apps/init-data-node@2">
-    <img src="https://img.shields.io/npm/v/@telegram-apps/init-data-node@2?logo=npm"/>
+  <a href="https://npmjs.com/package/@telegram-apps/init-data-node">
+    <img src="https://img.shields.io/npm/v/@telegram-apps/init-data-node?logo=npm"/>
   </a>
-  <img src="https://img.shields.io/bundlephobia/minzip/@telegram-apps/init-data-node@2"/>
-  <a href="https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/init-data-node@2">
+  <img src="https://img.shields.io/bundlephobia/minzip/@telegram-apps/init-data-node"/>
+  <a href="https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/init-data-node">
     <img src="https://img.shields.io/badge/source-black?logo=github"/>
   </a>
 </p>
@@ -32,14 +32,59 @@ yarn add @telegram-apps/init-data-node
 
 :::
 
-[//]: # (## Parsing)
+## Parsing
 
-[//]: # ()
-[//]: # ([//]: # &#40;FIXME&#41;)
-[//]: # ()
-[//]: # (You can learn more about parsing utilities in [@telegram-apps/sdk]&#40;telegram-apps-sdk/init-data.md#parsing&#41;)
+To parse a value as init data, use the `parse` method.
 
-[//]: # (documentation. This package re-exports the `parseInitData` function as `parse`.)
+The method accepts init data presented as a `string` or `URLSearchParams`.
+
+```ts
+import { parse } from '@telegram-apps/init-data-node';
+
+try {
+  const initData = parse('...');
+  // {
+  //   canSendAfter: 10000,
+  //   chat: {
+  //     id: 1,
+  //     type: 'group',
+  //     username: 'my-chat',
+  //     title: 'chat-title',
+  //     photoUrl: 'chat-photo',
+  //   },
+  //   chatInstance: '888',
+  //   chatType: 'sender',
+  //   queryId: 'QUERY',
+  //   receiver: {
+  //     addedToAttachmentMenu: false,
+  //     allowsWriteToPm: true,
+  //     firstName: 'receiver-first-name',
+  //     id: 991,
+  //     isBot: false,
+  //     isPremium: true,
+  //     languageCode: 'ru',
+  //     lastName: 'receiver-last-name',
+  //     photoUrl: 'receiver-photo',
+  //     username: 'receiver-username',
+  //   },
+  //   startParam: 'debug',
+  //   user: {
+  //     addedToAttachmentMenu: false,
+  //     allowsWriteToPm: false,
+  //     firstName: 'user-first-name',
+  //     id: 222,
+  //     isBot: true,
+  //     isPremium: false,
+  //     languageCode: 'en',
+  //     lastName: 'user-last-name',
+  //     photoUrl: 'user-photo',
+  //     username: 'user-username',
+  //   },
+  // }
+} catch (e) {
+  console.error('Something is wrong', e);
+}
+```
 
 ## Validating
 
@@ -72,12 +117,12 @@ Function will throw an error in one of these cases:
 Here is the code you could use to check the error type:
 
 ```ts
-import { validate, ERR_SIGN_INVALID } from '@telegram-apps/init-data-node';
+import { validate, isErrorOfType } from '@telegram-apps/init-data-node';
 
 try {
-  validate('...init-data', '...token');
-} catch(e) {
-  if (e instanceof Error && e.message === ERR_SIGN_INVALID) {
+  validate('init-data', 'token');
+} catch (e) {
+  if (isErrorOfType('ERR_SIGN_INVALID')) {
     console.log('Sign is invalid');
   }
 }
@@ -96,7 +141,7 @@ It doesn't throw an error, but returns a boolean value indicating the init data 
 ```ts
 import { isValid } from '@telegram-apps/init-data-node';
 
-if (isValid('...init-data')) {
+if (isValid('init-data')) {
   console.log('Init data is fine');
 }
 ```
@@ -176,7 +221,8 @@ sign(
 
 This function accepts three arguments:
 
-- **Data to sign**: It represents a parsed [init data](telegram-apps-sdk/init-data/init-data.md) object
+- **Data to sign**: It represents a parsed [init data](telegram-apps-sdk/init-data/init-data.md)
+  object
   excluding the `authDate` and `hash` properties.
 - **Bot token**: This token is received from [@BotFather](https://t.me/botfather).
 - **Signing date**: This value will be used as the value of the `authDate` property.
@@ -189,7 +235,7 @@ If this package is used in an environment other than Node.js, a developer can us
 subdirectory, which exports the same methods as described above but returns promises.
 
 ```ts
-import { 
+import {
   validate,
   sign,
   signData,
