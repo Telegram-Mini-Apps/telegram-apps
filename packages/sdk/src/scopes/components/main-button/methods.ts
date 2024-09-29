@@ -7,7 +7,7 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { postEvent } from '@/scopes/globals/globals.js';
+import { postEvent } from '@/scopes/globals.js';
 import {
   mount as tpMount,
   buttonColor as tpButtonColor,

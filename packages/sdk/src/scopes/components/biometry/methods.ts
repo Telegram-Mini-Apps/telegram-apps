@@ -12,7 +12,7 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { $version, postEvent, request } from '@/scopes/globals/globals.js';
+import { $version, postEvent, request } from '@/scopes/globals.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 import { ERR_ALREADY_CALLED, ERR_NOT_AVAILABLE } from '@/errors.js';
 

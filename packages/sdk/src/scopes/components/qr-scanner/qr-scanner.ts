@@ -9,7 +9,7 @@ import {
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
-import { $version, postEvent } from '@/scopes/globals/globals.js';
+import { $version, postEvent } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 
 interface OpenSharedOptions extends ExecuteWithOptions {

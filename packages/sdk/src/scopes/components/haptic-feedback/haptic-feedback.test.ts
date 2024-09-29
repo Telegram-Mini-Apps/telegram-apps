@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset.js';
 
-import { $version } from '@/scopes/globals/globals.js';
+import { $version } from '@/scopes/globals.js';
 
 import {
   impactOccurred,

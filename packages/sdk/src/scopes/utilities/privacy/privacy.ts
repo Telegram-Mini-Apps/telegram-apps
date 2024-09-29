@@ -8,7 +8,7 @@ import {
 } from '@telegram-apps/bridge';
 import { searchParams, object, number, string, date } from '@telegram-apps/transformers';
 
-import { invokeCustomMethod, request } from '@/scopes/globals/globals.js';
+import { invokeCustomMethod, request } from '@/scopes/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { ERR_ACCESS_DENIED, ERR_ALREADY_CALLED } from '@/errors.js';
 

@@ -7,7 +7,7 @@ import {
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
-import { $version, request } from '@/scopes/globals/globals.js';
+import { $version, request } from '@/scopes/globals.js';
 import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_ALREADY_CALLED } from '@/errors.js';
 
 const MINI_APPS_METHOD = 'web_app_open_invoice';

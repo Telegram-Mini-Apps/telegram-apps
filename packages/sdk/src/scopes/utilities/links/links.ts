@@ -1,7 +1,7 @@
 import { supports, TypedError, type OpenLinkBrowser } from '@telegram-apps/bridge';
 import { createSafeURL } from '@telegram-apps/navigation';
 
-import { $version, postEvent } from '@/scopes/globals/globals.js';
+import { $version, postEvent } from '@/scopes/globals.js';
 import { ERR_INVALID_HOSTNAME } from '@/errors.js';
 
 export interface OpenLinkOptions {

@@ -4,7 +4,7 @@ import {
   type NotificationHapticFeedbackType,
 } from '@telegram-apps/bridge';
 
-import { $version, postEvent } from '@/scopes/globals/globals.js';
+import { $version, postEvent } from '@/scopes/globals.js';
 
 const MINI_APPS_METHOD = 'web_app_trigger_haptic_feedback';
 

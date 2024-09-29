@@ -1,6 +1,6 @@
 import { type MethodName, supports } from '@telegram-apps/bridge';
 
-import { $version } from '@/scopes/globals/globals.js';
+import { $version } from '@/scopes/globals.js';
 
 export type WithIsSupported<F extends (...args: any) => any> = F & {
   /**

@@ -9,7 +9,7 @@ import {
 import { signal } from '@telegram-apps/signals';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { $version, postEvent } from '@/scopes/globals/globals.js';
+import { $version, postEvent } from '@/scopes/globals.js';
 
 type StorageValue = boolean;
 

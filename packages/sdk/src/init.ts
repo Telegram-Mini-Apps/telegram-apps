@@ -5,7 +5,7 @@ import {
   removeEventHandlers,
 } from '@telegram-apps/bridge';
 
-import { postEvent, configure, type ConfigureOptions } from '@/scopes/globals/globals.js';
+import { postEvent, configure, type ConfigureOptions } from '@/scopes/globals.js';
 
 export interface InitOptions extends ConfigureOptions {
   /**

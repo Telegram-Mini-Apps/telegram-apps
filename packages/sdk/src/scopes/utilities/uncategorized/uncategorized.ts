@@ -7,7 +7,7 @@ import {
   type SwitchInlineQueryChatType,
 } from '@telegram-apps/bridge';
 
-import { postEvent, createRequestId, request } from '@/scopes/globals/globals.js';
+import { postEvent, createRequestId, request } from '@/scopes/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { ERR_DATA_INVALID_SIZE } from '@/errors.js';
 

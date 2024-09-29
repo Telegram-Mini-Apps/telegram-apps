@@ -1,6 +1,6 @@
 import { TypedError, supports } from '@telegram-apps/bridge';
 
-import { $version, request } from '@/scopes/globals/globals.js';
+import { $version, request } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 
 import { isOpened } from './signals.js';

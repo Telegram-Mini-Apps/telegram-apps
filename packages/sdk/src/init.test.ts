@@ -7,7 +7,7 @@ import { afterEach, vi, it, expect, beforeEach } from 'vitest';
 import { createWindow, dispatchMiniAppsEvent, mockDocument } from 'test-utils';
 
 import { resetPackageState } from '@test-utils/reset.js';
-import { $postEvent, $version } from '@/scopes/globals/globals.js';
+import { $postEvent, $version } from '@/scopes/globals.js';
 
 import { init } from './init.js';
 

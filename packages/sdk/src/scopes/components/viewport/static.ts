@@ -1,6 +1,6 @@
 import type { ExecuteWithOptions, CancelablePromise } from '@telegram-apps/bridge';
 
-import { request as _request } from '@/scopes/globals/globals.js';
+import { request as _request } from '@/scopes/globals.js';
 
 export interface RequestResult {
   height: number;

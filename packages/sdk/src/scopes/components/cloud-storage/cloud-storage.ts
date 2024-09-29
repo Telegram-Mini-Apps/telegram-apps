@@ -1,7 +1,7 @@
 import { CancelablePromise, type ExecuteWithOptions, supports } from '@telegram-apps/bridge';
 import { array, object, string } from '@telegram-apps/transformers';
 
-import { $version, invokeCustomMethod } from '@/scopes/globals/globals.js';
+import { $version, invokeCustomMethod } from '@/scopes/globals.js';
 
 const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
 

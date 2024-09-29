@@ -11,7 +11,7 @@ import {
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { postEvent } from '@/scopes/globals/globals.js';
+import { postEvent } from '@/scopes/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { withSupports } from '@/scopes/withSupports.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';

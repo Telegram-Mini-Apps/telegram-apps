@@ -5,7 +5,7 @@ import { emitMiniAppsEvent } from '@telegram-apps/bridge';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState, resetSignal } from '@test-utils/reset.js';
 
-import { $version } from '@/scopes/globals/globals.js';
+import { $version } from '@/scopes/globals.js';
 
 import {
   show,
