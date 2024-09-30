@@ -1,7 +1,5 @@
 ---
 "@telegram-apps/sdk": major
-"@telegram-apps/sdk-react": major
-"@telegram-apps/sdk-solid": major
 ---
 
-Complete package rework.
+This new major version of the SDK includes complete rework. This is probably the final its form. 
