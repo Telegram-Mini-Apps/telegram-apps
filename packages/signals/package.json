@@ -1,6 +1,6 @@
 {
   "name": "@telegram-apps/signals",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "TypeScript package implementing simple JavaScript signals.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
