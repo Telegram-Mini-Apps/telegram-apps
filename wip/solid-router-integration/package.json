@@ -44,14 +44,11 @@
     "build": "vite build"
   },
   "peerDependencies": {
-    "@solidjs/router": "^0.13.1",
-    "@telegram-apps/sdk": "workspace:^",
+    "@solidjs/router": "^0.14.3",
+    "@telegram-apps/navigation": "workspace:^",
     "solid-js": "^1.8.16"
   },
   "devDependencies": {
-    "@solidjs/router": "^0.13.1",
-    "@telegram-apps/sdk": "workspace:*",
-    "solid-js": "^1.8.16",
     "tsconfig": "workspace:*"
   },
   "publishConfig": {
