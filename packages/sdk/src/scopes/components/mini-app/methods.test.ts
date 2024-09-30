@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, Mock, MockInstance, vi } from 'vitest';
 import { createWindow } from 'test-utils';
+import type { ThemeParams } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState, resetSignal } from '@test-utils/reset.js';
@@ -16,16 +17,20 @@ import {
 import { bindCssVars, mount, setBackgroundColor, setHeaderColor } from './methods.js';
 
 type SetPropertyFn = typeof document.documentElement.style.setProperty;
-let setPropertySpy: MockInstance<Parameters<SetPropertyFn>, ReturnType<SetPropertyFn>>;
+let setPropertySpy: MockInstance<SetPropertyFn>;
 
-vi.mock('@/scopes/launch-params/static.js', () => ({
-  retrieve: () => ({
-    themeParams: {
-      bgColor: '#ffcccc',
-      secondaryBgColor: '#ccccff',
-    },
-  }),
-}));
+vi.mock('@telegram-apps/bridge', async () => {
+  const m = await vi.importActual('@telegram-apps/bridge');
+  return {
+    ...m,
+    retrieveLaunchParams: vi.fn(() => ({
+      themeParams: {
+        bgColor: '#ffcccc',
+        secondaryBgColor: '#ccccff',
+      } satisfies ThemeParams,
+    })),
+  };
+});
 
 beforeEach(() => {
   vi.restoreAllMocks();
@@ -127,8 +132,7 @@ describe('bindCssVars', () => {
     let spy: Mock;
 
     beforeEach(() => {
-      mount();
-      mockPostEvent();
+      spy = mockPostEvent();
     });
 
     describe('setBackgroundColor', () => {

@@ -1,5 +1,5 @@
 import { expect, it, describe } from 'vitest';
-import { TypedError } from '@telegram-apps/toolkit';
+import { TypedError } from '@telegram-apps/bridge';
 
 import { prepareParams } from './prepareParams.js';
 import { ERR_POPUP_INVALID_PARAMS } from '@/errors.js';

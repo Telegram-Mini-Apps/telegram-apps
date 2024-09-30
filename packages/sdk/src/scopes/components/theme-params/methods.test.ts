@@ -5,15 +5,20 @@ import { resetSignal, resetPackageState } from '@test-utils/reset.js';
 
 import { bindCssVars, mount } from './methods.js';
 import { isCssVarsBound, isMounted, state } from './signals.js';
+import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 
 type SetPropertyFn = typeof document.documentElement.style.setProperty;
-let setSpy: MockInstance<Parameters<SetPropertyFn>, ReturnType<SetPropertyFn>>;
+let setSpy: MockInstance<SetPropertyFn>;
 
-vi.mock('@/scopes/launch-params/static.js', () => ({
-  retrieve: vi.fn(() => ({
-    themeParams: {},
-  })),
-}));
+vi.mock('@telegram-apps/bridge', async () => {
+  const m = await vi.importActual('@telegram-apps/bridge');
+  return {
+    ...m,
+    retrieveLaunchParams: vi.fn(() => ({
+      themeParams: {},
+    })),
+  };
+});
 
 beforeEach(() => {
   vi.restoreAllMocks();
@@ -21,6 +26,7 @@ beforeEach(() => {
   [isCssVarsBound, isMounted, state].forEach(resetSignal);
 
   createWindow();
+  mockPostEvent();
   setSpy = vi
     .spyOn(document.documentElement.style, 'setProperty')
     .mockImplementation(() => {

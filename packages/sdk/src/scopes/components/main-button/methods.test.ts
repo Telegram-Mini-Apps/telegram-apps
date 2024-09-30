@@ -19,14 +19,18 @@ import {
 } from './signals.js';
 import { onClick, offClick, setParams, mount, unmount } from './methods.js';
 
-vi.mock('@/scopes/launch-params/static.js', () => ({
-  retrieve: () => ({
-    themeParams: {
-      buttonColor: '#aabbcc',
-      buttonTextColor: '#ffaa12',
-    } satisfies ThemeParams,
-  }),
-}));
+vi.mock('@telegram-apps/bridge', async () => {
+  const m = await vi.importActual('@telegram-apps/bridge');
+  return {
+    ...m,
+    retrieveLaunchParams: vi.fn(() => ({
+      themeParams: {
+        buttonColor: '#aabbcc',
+        buttonTextColor: '#ffaa12',
+      } satisfies ThemeParams,
+    })),
+  };
+});
 
 beforeEach(() => {
   vi.restoreAllMocks();
@@ -241,7 +245,7 @@ describe('setParams', () => {
 
     expect(state()).toStrictEqual({
       backgroundColor: '#111111',
-      isActive: false,
+      isEnabled: false,
       isLoaderVisible: false,
       isVisible: true,
       text: 'TEXT UPDATED',
