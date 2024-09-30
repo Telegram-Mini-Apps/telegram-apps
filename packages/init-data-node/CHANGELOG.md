@@ -1,5 +1,11 @@
 # @telegram-apps/init-data-node
 
+## 1.1.0
+
+### Minor Changes
+
+- d2d98ad: Add `isValid` function.
+
 ## 1.0.4
 
 ### Patch Changes
