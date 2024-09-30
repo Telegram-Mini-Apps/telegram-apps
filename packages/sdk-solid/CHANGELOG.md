@@ -1,5 +1,16 @@
 # @telegram-apps/sdk-solid
 
+## 2.0.0
+
+### Major Changes
+
+- 5c27b03: Complete package rework according to changes done in the SDK.
+
+### Patch Changes
+
+- Updated dependencies [6599d7a]
+  - @telegram-apps/sdk@2.0.0
+
 ## 1.1.3
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @telegram-apps/sdk-react
 
+## 2.0.0
+
+### Major Changes
+
+- ff2e563: Complete package rework according to changes done in the SDK.
+
+### Patch Changes
+
+- Updated dependencies [6599d7a]
+  - @telegram-apps/sdk@2.0.0
+
 ## 1.1.3
 
 ### Patch Changes
