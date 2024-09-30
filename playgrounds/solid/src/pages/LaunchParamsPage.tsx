@@ -1,4 +1,4 @@
-import { retrieveLaunchParams } from '@telegram-apps/sdk-solid';
+import { useLaunchParams } from '@telegram-apps/sdk-solid';
 import type { Component } from 'solid-js';
 
 import { DisplayData } from '@/components/DisplayData/DisplayData.js';
@@ -6,7 +6,7 @@ import { Link } from '@/components/Link/Link.js';
 import { Page } from '@/components/Page/Page.js';
 
 export const LaunchParamsPage: Component = () => {
-  const lp = retrieveLaunchParams();
+  const lp = useLaunchParams();
 
   return (
     <Page

@@ -1,4 +1,4 @@
-import { useThemeParams } from '@telegram-apps/sdk-solid';
+import { themeParams, useSignal } from '@telegram-apps/sdk-solid';
 import type { Component } from 'solid-js';
 
 import { DisplayData } from '@/components/DisplayData/DisplayData.js';
@@ -6,7 +6,7 @@ import { Link } from '@/components/Link/Link.js';
 import { Page } from '@/components/Page/Page.js';
 
 export const ThemeParamsPage: Component = () => {
-  const themeParams = useThemeParams();
+  const tp = useSignal(themeParams.state);
 
   return (
     <Page
@@ -25,7 +25,7 @@ export const ThemeParamsPage: Component = () => {
       <DisplayData
         rows={
           Object
-            .entries(themeParams().getState())
+            .entries(tp())
             .map(([title, value]) => ({
               title: title
                 .replace(/[A-Z]/g, (m) => `_${m.toLowerCase()}`)

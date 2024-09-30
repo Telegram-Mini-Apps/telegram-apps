@@ -1,12 +1,10 @@
 import { A, type AnchorProps } from '@solidjs/router';
-import { classNames, useUtils } from '@telegram-apps/sdk-solid';
+import { classNames, openLink } from '@telegram-apps/sdk-solid';
 import type { Component } from 'solid-js';
 
 import './Link.css';
 
 export const Link: Component<AnchorProps> = (props) => {
-  const utils = useUtils();
-
   const onClick = (e: MouseEvent) => {
     // Compute if target path is external. In this case we would like to open link using
     // TMA method.
@@ -17,7 +15,7 @@ export const Link: Component<AnchorProps> = (props) => {
 
     if (isExternal) {
       e.preventDefault();
-      return utils().openLink(targetUrl.toString());
+      return openLink(targetUrl.toString());
     }
   };
 

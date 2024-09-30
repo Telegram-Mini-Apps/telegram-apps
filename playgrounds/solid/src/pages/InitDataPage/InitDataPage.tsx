@@ -1,4 +1,4 @@
-import { retrieveLaunchParams, useInitData, type User } from '@telegram-apps/sdk-solid';
+import { initData as $initData, type User, useSignal } from '@telegram-apps/sdk-solid';
 import { createMemo, Show, type Component } from 'solid-js';
 
 import { DisplayData, type DisplayDataRow } from '@/components/DisplayData/DisplayData.js';
@@ -23,19 +23,19 @@ function getUserRows(user: User): DisplayDataRow[] {
 }
 
 export const InitDataPage: Component = () => {
-  const initData = useInitData();
-  const initDataRaw = retrieveLaunchParams().initDataRaw;
+  const initData = useSignal($initData.state);
+  const initDataRaw = useSignal($initData.raw);
 
   const initDataRows = createMemo<DisplayDataRow[] | undefined>(() => {
     const complete = initData();
 
-    return complete && initDataRaw
+    return complete && initDataRaw()
       ? [
-        { title: 'raw', value: initDataRaw },
+        { title: 'raw', value: initDataRaw() },
         { title: 'auth_date', value: complete.authDate.toLocaleString() },
         { title: 'auth_date (raw)', value: complete.authDate.getTime() / 1000 },
         { title: 'hash', value: complete.hash },
-        { title: 'can_send_after', value: complete.canSendAfterDate?.toISOString() },
+        { title: 'can_send_after', value: $initData.canSendAfterDate()?.toISOString() },
         { title: 'can_send_after (raw)', value: complete.canSendAfter },
         { title: 'query_id', value: complete.queryId },
         { title: 'start_param', value: complete.startParam },
