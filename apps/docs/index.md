@@ -15,7 +15,7 @@ hero:
       link: /platform/about
     - theme: alt
       text: Packages
-      link: /packages/telegram-apps-sdk
+      link: /packages/telegram-apps-create-mini-app
 
 features:
   - icon: 💻
