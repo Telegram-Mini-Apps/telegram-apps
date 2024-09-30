@@ -7,7 +7,7 @@ import { formatImplementation, type MockImplementation } from './formatImplement
  * @param impl - method implementation.
  */
 export function mockSessionStorageGetItem(
-  impl: MockImplementation<string | null> = null,
+  impl: MockImplementation<string | null, [string]> = null,
 ) {
   return vi
     .spyOn(sessionStorage, 'getItem')
