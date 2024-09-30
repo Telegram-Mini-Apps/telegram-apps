@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 2.0.0
+
+### Major Changes
+
+- 6599d7a: This new major version of the SDK includes complete rework. This is probably the final its form.
+
 ## 1.1.3
 
 ### Patch Changes
