@@ -13,6 +13,7 @@ import {
 import type { FC } from 'react';
 
 import { DisplayData } from '@/components/DisplayData/DisplayData.tsx';
+import { Page } from '@/components/Page.tsx';
 
 import './TONConnectPage.css';
 
@@ -21,18 +22,21 @@ export const TONConnectPage: FC = () => {
 
   if (!wallet) {
     return (
-      <Placeholder
-        className='ton-connect-page__placeholder'
-        header='TON Connect'
-        description={
-          <>
-            <Text>
-              To display the data related to the TON Connect, it is required to connect your wallet
-            </Text>
-            <TonConnectButton className='ton-connect-page__button'/>
-          </>
-        }
-      />
+      <Page>
+        <Placeholder
+          className="ton-connect-page__placeholder"
+          header="TON Connect"
+          description={
+            <>
+              <Text>
+                To display the data related to the TON Connect, it is required to connect your
+                wallet
+              </Text>
+              <TonConnectButton className="ton-connect-page__button"/>
+            </>
+          }
+        />
+      </Page>
     );
   }
 
@@ -48,51 +52,53 @@ export const TONConnectPage: FC = () => {
   } = wallet;
 
   return (
-    <List>
-      {'imageUrl' in wallet && (
-        <>
-          <Section>
-            <Cell
-              before={
-                <Avatar src={wallet.imageUrl} alt='Provider logo' width={60} height={60}/>
-              }
-              after={<Navigation>About wallet</Navigation>}
-              subtitle={wallet.appName}
-              onClick={(e) => {
-                e.preventDefault();
-                openLink(wallet.aboutUrl);
-              }}
-            >
-              <Title level='3'>{wallet.name}</Title>
-            </Cell>
-          </Section>
-          <TonConnectButton className='ton-connect-page__button-connected'/>
-        </>
-      )}
-      <DisplayData
-        header='Account'
-        rows={[
-          { title: 'Address', value: address },
-          { title: 'Chain', value: chain },
-          { title: 'Public Key', value: publicKey },
-        ]}
-      />
-      <DisplayData
-        header='Device'
-        rows={[
-          { title: 'App Name', value: appName },
-          { title: 'App Version', value: appVersion },
-          { title: 'Max Protocol Version', value: maxProtocolVersion },
-          { title: 'Platform', value: platform },
-          {
-            title: 'Features',
-            value: features
-              .map(f => typeof f === 'object' ? f.name : undefined)
-              .filter(v => v)
-              .join(', '),
-          },
-        ]}
-      />
-    </List>
+    <Page>
+      <List>
+        {'imageUrl' in wallet && (
+          <>
+            <Section>
+              <Cell
+                before={
+                  <Avatar src={wallet.imageUrl} alt="Provider logo" width={60} height={60}/>
+                }
+                after={<Navigation>About wallet</Navigation>}
+                subtitle={wallet.appName}
+                onClick={(e) => {
+                  e.preventDefault();
+                  openLink(wallet.aboutUrl);
+                }}
+              >
+                <Title level="3">{wallet.name}</Title>
+              </Cell>
+            </Section>
+            <TonConnectButton className="ton-connect-page__button-connected"/>
+          </>
+        )}
+        <DisplayData
+          header="Account"
+          rows={[
+            { title: 'Address', value: address },
+            { title: 'Chain', value: chain },
+            { title: 'Public Key', value: publicKey },
+          ]}
+        />
+        <DisplayData
+          header="Device"
+          rows={[
+            { title: 'App Name', value: appName },
+            { title: 'App Version', value: appVersion },
+            { title: 'Max Protocol Version', value: maxProtocolVersion },
+            { title: 'Platform', value: platform },
+            {
+              title: 'Features',
+              value: features
+                .map(f => typeof f === 'object' ? f.name : undefined)
+                .filter(v => v)
+                .join(', '),
+            },
+          ]}
+        />
+      </List>
+    </Page>
   );
 };
