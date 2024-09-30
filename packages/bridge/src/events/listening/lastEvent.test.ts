@@ -98,24 +98,25 @@ describe.each([
     ],
   },
 ])('$event', test => {
-  if ('input' in test) {
-    it('should properly process event', () => {
-      const spy = vi.fn();
-      lastEventSignal().sub(spy);
-      dispatchMiniAppsEvent(test.event, test.input);
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith([test.event, test.input], undefined);
+  if ('cases' in test) {
+    test.cases?.forEach(([input, expected = input], idx) => {
+      it(`should properly process case ${idx}`, () => {
+        const spy = vi.fn();
+        lastEventSignal().sub(spy);
+        dispatchMiniAppsEvent(test.event, input);
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith([test.event, expected], undefined);
+      });
     });
     return;
   }
 
-  test.cases?.forEach(([input, expected = input], idx) => {
-    it(`should properly process case ${idx}`, () => {
-      const spy = vi.fn();
-      lastEventSignal().sub(spy);
-      dispatchMiniAppsEvent(test.event, input);
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith([test.event, expected], undefined);
-    });
+  it('should properly process event', () => {
+    const spy = vi.fn();
+    lastEventSignal().sub(spy);
+    dispatchMiniAppsEvent(test.event, test.input);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith([test.event, test.input], undefined);
   });
+  return;
 });
