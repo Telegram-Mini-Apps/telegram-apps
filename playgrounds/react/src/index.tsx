@@ -11,11 +11,8 @@ import './index.css';
 // Mock the environment in case, we are outside Telegram.
 import './mockEnv.ts';
 
-// Check if debug mode is enabled.
-const debug = retrieveLaunchParams().startParam === 'debug';
-
 // Configure all application dependencies.
-init(debug);
+init(retrieveLaunchParams().startParam === 'debug');
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
