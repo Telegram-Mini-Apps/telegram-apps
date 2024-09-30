@@ -1,10 +1,10 @@
-import { InitDataParsed } from '@telegram-apps/sdk';
+import type { InitData } from '@telegram-apps/types';
 
 import type { SignDataOptions } from './signData.js';
 
 export type Text = string | Buffer;
 
-export type SignData = Omit<InitDataParsed, 'authDate' | 'hash'>;
+export type SignData = Omit<InitData, 'authDate' | 'hash'>;
 
 export interface SignDataSyncFn {
   (data: Text, key: Text, options?: SignDataOptions): string;

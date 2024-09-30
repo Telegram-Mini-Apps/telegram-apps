@@ -1,7 +1,14 @@
-import type { InitData, InitDataParsed } from '@telegram-apps/sdk';
+import { TypedError } from '@telegram-apps/toolkit';
+import type { InitData } from '@telegram-apps/types';
 
 import { initDataToSearchParams } from './initDataToSearchParams.js';
 import type { SharedOptions, SignDataAsyncFn, SignDataSyncFn, Text } from './types.js';
+import {
+  ERR_AUTH_DATE_INVALID,
+  ERR_EXPIRED,
+  ERR_HASH_INVALID,
+  ERR_SIGN_INVALID,
+} from './errors.js';
 
 export interface ValidateOptions extends SharedOptions {
   /**
@@ -16,9 +23,11 @@ export interface ValidateOptions extends SharedOptions {
   expiresIn?: number;
 }
 
+export type ValidateValue = InitData | string | URLSearchParams;
+
 function processSign(actual: string, expected: string): void | never {
   if (actual !== expected) {
-    throw new Error('Signature is invalid');
+    throw new TypedError(ERR_SIGN_INVALID, 'Sign is invalid');
   }
   return;
 }
@@ -29,13 +38,13 @@ function processSign(actual: string, expected: string): void | never {
  * @param token - bot secret token.
  * @param signData - function signing data.
  * @param options - additional validation options.
- * @throws {TypeError} "auth_date" should present integer
- * @throws {Error} "hash" is empty or not found
- * @throws {Error} "auth_date" is empty or not found
- * @throws {Error} Init data expired
+ * @throws {Error} ERR_SIGN_INVALID
+ * @throws {Error} ERR_AUTH_DATE_INVALID
+ * @throws {Error} ERR_HASH_INVALID
+ * @throws {Error} ERR_EXPIRED
  */
 export function validate(
-  value: InitData | InitDataParsed | string | URLSearchParams,
+  value: ValidateValue,
   token: Text,
   signData: SignDataSyncFn,
   options?: ValidateOptions,
@@ -47,20 +56,20 @@ export function validate(
  * @param token - bot secret token.
  * @param signData - function signing data.
  * @param options - additional validation options.
- * @throws {TypeError} "auth_date" should present integer
- * @throws {Error} "hash" is empty or not found
- * @throws {Error} "auth_date" is empty or not found
- * @throws {Error} Init data expired
+ * @throws {Error} ERR_SIGN_INVALID
+ * @throws {Error} ERR_AUTH_DATE_INVALID
+ * @throws {Error} ERR_HASH_INVALID
+ * @throws {Error} ERR_EXPIRED
  */
 export function validate(
-  value: InitData | InitDataParsed | string | URLSearchParams,
+  value: ValidateValue,
   token: Text,
   signData: SignDataAsyncFn,
   options?: ValidateOptions,
 ): Promise<void>;
 
 export function validate(
-  value: InitData | InitDataParsed | string | URLSearchParams,
+  value: ValidateValue,
   token: Text,
   signData: SignDataSyncFn | SignDataAsyncFn,
   options: ValidateOptions = {},
@@ -86,11 +95,9 @@ export function validate(
 
     if (key === 'auth_date') {
       const authDateNum = parseInt(value, 10);
-
-      if (Number.isNaN(authDateNum)) {
-        throw new TypeError('"auth_date" should present integer');
+      if (!Number.isNaN(authDateNum)) {
+        authDate = new Date(authDateNum * 1000);
       }
-      authDate = new Date(authDateNum * 1000);
     }
 
     pairs.push(`${key}=${value}`);
@@ -98,11 +105,11 @@ export function validate(
 
   // Hash and auth date always required.
   if (!hash) {
-    throw new Error('"hash" is empty or not found');
+    throw new TypedError(ERR_HASH_INVALID, 'Hash is invalid');
   }
 
   if (!authDate) {
-    throw new Error('"auth_date" is empty or not found');
+    throw new TypedError(ERR_AUTH_DATE_INVALID, 'Auth date is invalid');
   }
 
   // In case, expiration time passed, we do additional parameters check.
@@ -110,7 +117,7 @@ export function validate(
   if (expiresIn > 0) {
     // Check if init data expired.
     if (+authDate + expiresIn * 1000 < Date.now()) {
-      throw new Error('Init data expired');
+      throw new TypedError(ERR_EXPIRED, 'Init data is expired');
     }
   }
 

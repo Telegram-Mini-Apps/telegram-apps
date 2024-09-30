@@ -1,0 +1,57 @@
+{
+  "name": "@telegram-apps/solid-router-integration",
+  "version": "1.0.1",
+  "description": "@solidjs/router integration for navigation.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
+    "directory": "packages/solid-router-integration"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
+  },
+  "keywords": [
+    "telegram-mini-apps",
+    "typescript",
+    "navigation",
+    "solidjs"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src",
+    "tsconfig.json"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/dts/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "lint": "cd ../.. && eslint packages/solid-router-integration/src --ignore-pattern **/*.test.ts",
+    "lint:fix": "pnpm run lint --fix",
+    "typecheck": "tsc --noEmit",
+    "build": "vite build"
+  },
+  "peerDependencies": {
+    "@solidjs/router": "^0.14.3",
+    "@telegram-apps/navigation": "workspace:^",
+    "solid-js": "^1.8.16"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

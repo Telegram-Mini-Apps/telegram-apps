@@ -9,7 +9,10 @@ export default tseslint.config(
   {
     languageOptions: {
       parserOptions: {
-        project: ['./packages/*/tsconfig.eslint.json'],
+        project: [
+          './packages/*/tsconfig.eslint.json',
+          './playgrounds/*/tsconfig.json'
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -24,6 +27,7 @@ export default tseslint.config(
       '@typescript-eslint/no-duplicate-type-constituents': 0,
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/no-unsafe-call': 0,
+      '@typescript-eslint/no-namespace': 0,
       'no-empty': 0,
     },
   },

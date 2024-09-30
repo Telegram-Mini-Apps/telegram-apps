@@ -1,4 +1,4 @@
-import { isRecord } from '@/misc/isRecord.js';
+import { isRecord } from '@telegram-apps/transformers';
 
 /**
  * Function which joins passed values with space following these rules:
@@ -23,7 +23,6 @@ export function classNames(...values: any[]): string {
       }
 
       if (Array.isArray(value)) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         return classNames(...value);
       }
     })

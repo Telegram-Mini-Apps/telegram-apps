@@ -1,11 +1,10 @@
 import { createHmac as nodeCreateHmac } from 'node:crypto';
-import { InitData, InitDataParsed } from '@telegram-apps/sdk';
 
-import { hashToken as baseHashToken } from '../hashToken.js';
-import { sign as baseSign, SignOptions } from '../sign.js';
-import { signData as baseSignData, SignDataOptions } from '../signData.js';
-import { validate as baseValidate } from '../validate.js';
-import type { ValidateOptions } from '../validate.js';
+import { hashToken as _hashToken } from '../hashToken.js';
+import { sign as _sign, SignOptions } from '../sign.js';
+import { signData as _signData, SignDataOptions } from '../signData.js';
+import { validate as _validate, type ValidateOptions, type ValidateValue } from '../validate.js';
+import { isValid as _isValid } from '../isValid.js';
 import type { CreateHmacFn, SignData, Text } from '../types.js';
 
 const createHmac: CreateHmacFn<false> = (data, key) => {
@@ -17,7 +16,17 @@ const createHmac: CreateHmacFn<false> = (data, key) => {
  * @param token - token to hash.
  */
 export function hashToken(token: Text): Buffer {
-  return baseHashToken(token, createHmac);
+  return _hashToken(token, createHmac);
+}
+
+/**
+ * @param value - value to check.
+ * @param token - bot secret token.
+ * @param options - additional validation options.
+ * @returns True is specified init data is valid.
+ */
+export function isValid(value: ValidateValue, token: Text, options?: ValidateOptions): boolean {
+  return _isValid(value, token, validate, options);
 }
 
 /**
@@ -29,7 +38,7 @@ export function hashToken(token: Text): Buffer {
  * @returns Signed init data presented as query parameters.
  */
 export function sign(data: SignData, key: Text, authDate: Date, options?: SignOptions): string {
-  return baseSign(data, key, authDate, signData, options);
+  return _sign(data, key, authDate, signData, options);
 }
 
 /**
@@ -40,7 +49,7 @@ export function sign(data: SignData, key: Text, authDate: Date, options?: SignOp
  * @returns Data sign.
  */
 export function signData(data: Text, key: Text, options?: SignDataOptions): string {
-  return baseSignData(data, key, createHmac, options);
+  return _signData(data, key, createHmac, options);
 }
 
 /**
@@ -54,11 +63,11 @@ export function signData(data: Text, key: Text, options?: SignDataOptions): stri
  * @throws {Error} Init data expired
  */
 export function validate(
-  value: InitData | InitDataParsed | string | URLSearchParams,
+  value: ValidateValue,
   token: Text,
   options?: ValidateOptions,
 ): void {
-  return baseValidate(value, token, signData, options);
+  return _validate(value, token, signData, options);
 }
 
 export * from './shared.js';

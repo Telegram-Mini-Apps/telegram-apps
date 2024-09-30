@@ -1,5 +1,5 @@
 ---
-outline: [2, 3]
+outline: [ 2, 3 ]
 ---
 
 # Events
@@ -78,8 +78,8 @@ type and assign it to all 3 paths.
 ## Listening to Events
 
 Handling all possible environments for a developer's application can be challenging. To simplify
-this process, the community developed the [@telegram-apps/sdk](../packages/telegram-apps-sdk) package, which
-greatly eases integration.
+this process, the community developed the [@telegram-apps/sdk](../packages/telegram-apps-sdk/2-x)
+package, which greatly eases integration.
 
 Here's how to use it:
 
@@ -97,7 +97,7 @@ removeListener();
 ```
 
 You can learn more about calling methods in the
-package's [documentation](../packages/telegram-apps-sdk/methods-and-events#listening-to-events).
+package's [documentation](../packages/telegram-apps-bridge/events.md#listening-to-events).
 
 ## Available Events
 

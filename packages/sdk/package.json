@@ -21,7 +21,9 @@
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "src",
+    "tsconfig.json"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -39,10 +41,15 @@
     "lint": "cd ../.. && eslint packages/sdk/src --ignore-pattern **/*.test.ts",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
-    "build": "rimraf dist && pnpm run build:default && pnpm run build:iife && pnpm run build:iife:low-level",
+    "build": "rimraf dist && pnpm run build:default && pnpm run build:iife",
     "build:default": "vite build -c vite.config.ts",
-    "build:iife": "vite build -c vite.iife.config.ts",
-    "build:iife:low-level": "vite build -c vite.iife.low-level.config.ts"
+    "build:iife": "vite build -c vite.iife.config.ts"
+  },
+  "dependencies": {
+    "@telegram-apps/transformers": "workspace:^",
+    "@telegram-apps/bridge": "workspace:^",
+    "@telegram-apps/navigation": "workspace:^",
+    "@telegram-apps/signals": "workspace:^"
   },
   "devDependencies": {
     "test-utils": "workspace:*",

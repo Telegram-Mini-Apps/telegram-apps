@@ -1,5 +1,5 @@
 ---
-outline: [2, 3]
+outline: [ 2, 3 ]
 ---
 
 # Methods
@@ -79,9 +79,8 @@ window.external.notify(data);
 ## Calling Methods
 
 Handling all possible environments for a developer's application can be challenging. To simplify
-this process, the community developed the [@telegram-apps/sdk](../packages/telegram-apps-sdk)
-package, which
-greatly eases integration.
+this process, the community developed the [@telegram-apps/sdk](../packages/telegram-apps-sdk/2-x)
+package, which greatly eases integration.
 
 Here's how to use it:
 
@@ -92,7 +91,7 @@ postEvent('web_app_set_header_color', { color_key: 'bg_color' });
 ```
 
 You can learn more about calling methods in the
-package's [documentation](../packages/telegram-apps-sdk/methods-and-events#calling-methods).
+package's [documentation](../packages/telegram-apps-bridge/events.md#calling-methods).
 
 ## Available Methods
 

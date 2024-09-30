@@ -12,7 +12,7 @@
 
 The package provides utilities to work with the initialization data of Telegram Mini Apps on the
 server side. To learn more about the initialization data and its usage, please refer to
-the [documentation](../platform/launch-parameters.md).
+the [documentation](../platform/init-data.md).
 
 ## Installation
 
@@ -34,10 +34,61 @@ yarn add @telegram-apps/init-data-node
 
 ## Parsing
 
-You can learn more about parsing utilities in [@telegram-apps/sdk](telegram-apps-sdk/init-data.md#parsing)
-documentation. This package re-exports the `parseInitData` function as `parse`.
+To parse a value as init data, use the `parse` method.
+
+The method accepts init data presented as a `string` or `URLSearchParams`.
+
+```ts
+import { parse } from '@telegram-apps/init-data-node';
+
+try {
+  const initData = parse('...');
+  // {
+  //   canSendAfter: 10000,
+  //   chat: {
+  //     id: 1,
+  //     type: 'group',
+  //     username: 'my-chat',
+  //     title: 'chat-title',
+  //     photoUrl: 'chat-photo',
+  //   },
+  //   chatInstance: '888',
+  //   chatType: 'sender',
+  //   queryId: 'QUERY',
+  //   receiver: {
+  //     addedToAttachmentMenu: false,
+  //     allowsWriteToPm: true,
+  //     firstName: 'receiver-first-name',
+  //     id: 991,
+  //     isBot: false,
+  //     isPremium: true,
+  //     languageCode: 'ru',
+  //     lastName: 'receiver-last-name',
+  //     photoUrl: 'receiver-photo',
+  //     username: 'receiver-username',
+  //   },
+  //   startParam: 'debug',
+  //   user: {
+  //     addedToAttachmentMenu: false,
+  //     allowsWriteToPm: false,
+  //     firstName: 'user-first-name',
+  //     id: 222,
+  //     isBot: true,
+  //     isPremium: false,
+  //     languageCode: 'en',
+  //     lastName: 'user-last-name',
+  //     photoUrl: 'user-photo',
+  //     username: 'user-username',
+  //   },
+  // }
+} catch (e) {
+  console.error('Something is wrong', e);
+}
+```
 
 ## Validating
+
+### `validate`
 
 To validate the signature of the initialization data, the `validate` function is used. It expects
 the initialization data to be passed in a raw format (search parameters) and throws an error in
@@ -58,16 +109,42 @@ validate(initData, secretToken);
 
 Function will throw an error in one of these cases:
 
-- `auth_date` should present integer
-- `auth_date` is empty or not found
-- `hash` is empty or not found
-- Signature is invalid
-- Init data expired
+- `ERR_AUTH_DATE_INVALID`: `auth_date` is empty or not found
+- `ERR_HASH_INVALID`: `hash` is empty or not found
+- `ERR_SIGN_INVALID`: signature is invalid
+- `ERR_EXPIRED`: init data expired
+
+Here is the code you could use to check the error type:
+
+```ts
+import { validate, isErrorOfType } from '@telegram-apps/init-data-node';
+
+try {
+  validate('init-data', 'token');
+} catch (e) {
+  if (isErrorOfType('ERR_SIGN_INVALID')) {
+    console.log('Sign is invalid');
+  }
+}
+```
 
 By default, the function checks the expiration of the initialization data. The default expiration
 duration is set to 1 day (86,400 seconds). It is recommended to always check the expiration of the
 initialization data, as it could be stolen but still remain valid. To disable this feature,
 pass `{ expiresIn: 0 }` as the third argument.
+
+### `isValid`
+
+Alternatively, to check the init data validity, a developer could use the `isValid` function.
+It doesn't throw an error, but returns a boolean value indicating the init data validity.
+
+```ts
+import { isValid } from '@telegram-apps/init-data-node';
+
+if (isValid('init-data')) {
+  console.log('Init data is fine');
+}
+```
 
 ## Signing
 
@@ -144,8 +221,8 @@ sign(
 
 This function accepts three arguments:
 
-- **Data to sign**: It represents a parsed [init data](telegram-apps-sdk/init-data/init-data.md) object
-  excluding the `authDate` and `hash` properties.
+- **Data to sign**: It represents a parsed init data object excluding the `authDate` and `hash`
+  properties.
 - **Bot token**: This token is received from [@BotFather](https://t.me/botfather).
 - **Signing date**: This value will be used as the value of the `authDate` property.
 
@@ -157,11 +234,17 @@ If this package is used in an environment other than Node.js, a developer can us
 subdirectory, which exports the same methods as described above but returns promises.
 
 ```ts
-import { validate, sign, signData } from '@telegram-apps/init-data-node/web';
+import {
+  validate,
+  sign,
+  signData,
+  isValid,
+} from '@telegram-apps/init-data-node/web';
 
 await validate(...);
 await sign(...);
 await signData(...);
+await isValid(...);
 ```
 
 ## Passing Hashed Token
