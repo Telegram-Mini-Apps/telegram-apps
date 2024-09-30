@@ -21,7 +21,9 @@
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "src",
+    "tsconfig.json"
   ],
   "types": "./dist/dts/index.d.ts",
   "exports": {
