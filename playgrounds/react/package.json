@@ -14,9 +14,8 @@
     "predeploy": "npm run build"
   },
   "dependencies": {
-    "@telegram-apps/react-router-integration": "^1.0.0",
     "@telegram-apps/sdk-react": "workspace:*",
-    "@telegram-apps/telegram-ui": "^2.1.5",
+    "@telegram-apps/telegram-ui": "^2.1.7",
     "@tonconnect/ui-react": "^2.0.5",
     "eruda": "^3.0.1",
     "react": "^18.2.0",

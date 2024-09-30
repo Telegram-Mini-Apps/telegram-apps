@@ -1,12 +1,24 @@
 import ReactDOM from 'react-dom/client';
+import { StrictMode } from 'react';
+import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
 
 import { Root } from '@/components/Root';
-
-// Uncomment this import in case, you would like to develop the application even outside
-// the Telegram application, just in your browser.
-import './mockEnv.ts';
+import { init } from '@/init.ts';
 
 import '@telegram-apps/telegram-ui/dist/styles.css';
 import './index.css';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<Root/>);
+// Mock the environment in case, we are outside Telegram.
+import './mockEnv.ts';
+
+// Check if debug mode is enabled.
+const debug = retrieveLaunchParams().startParam === 'debug';
+
+// Configure all application dependencies.
+init(debug);
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <Root/>
+  </StrictMode>,
+);
