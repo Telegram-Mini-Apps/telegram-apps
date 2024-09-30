@@ -1,14 +1,15 @@
-import { vi, it, expect, afterEach, describe } from 'vitest';
+import { vi, it, expect, describe, beforeEach } from 'vitest';
+import { mockSessionStorageSetItem } from 'test-utils';
+
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 
-afterEach(() => {
+beforeEach(() => {
   vi.restoreAllMocks();
 });
 
 describe('setStorageValue', () => {
   it('should call sessionStorage.setItem with formatted key and JSON.stringify applied to value', () => {
-    const fn = vi.fn();
-    vi.spyOn(sessionStorage, 'setItem').mockImplementationOnce(fn);
+    const fn = mockSessionStorageSetItem();
     setStorageValue('backButton', false);
 
     expect(fn).toHaveBeenCalledOnce();
@@ -18,7 +19,9 @@ describe('setStorageValue', () => {
 
 describe('getStorageValue', () => {
   it('should call sessionStorage.getItem with formatted key and apply JSON.parse to the extracted value in case, it is not empty. If parsing failed, return undefined', () => {
-    const getItem = vi.spyOn(sessionStorage, 'getItem').mockImplementation(() => '{"isVisible":false}');
+    const getItem = vi
+      .spyOn(sessionStorage, 'getItem')
+      .mockImplementation(() => '{"isVisible":false}');
     let value = getStorageValue('backButton');
     expect(getItem).toHaveBeenCalledOnce();
     expect(getItem).toHaveBeenCalledWith('tapps/backButton');

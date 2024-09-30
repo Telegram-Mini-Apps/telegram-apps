@@ -66,10 +66,10 @@ describe('constructor', () => {
 });
 
 describe('cancel', () => {
-  it('should reject promise with TypedError of type ERR_CANCELLED', async () => {
+  it('should reject promise with TypedError of type ERR_CANCELED', async () => {
     const p = new CancelablePromise();
     p.cancel();
-    await expect(p).rejects.toStrictEqual(new TypedError('ERR_CANCELLED'));
+    await expect(p).rejects.toStrictEqual(new TypedError('ERR_CANCELED'));
   });
 });
 
