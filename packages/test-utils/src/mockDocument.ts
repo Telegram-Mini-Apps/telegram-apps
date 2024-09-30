@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { formatImplementation, type MockImplementation } from './utils';
+import { formatImplementation, type MockImplementation } from './formatImplementation';
 
 /**
  * Mocks document.

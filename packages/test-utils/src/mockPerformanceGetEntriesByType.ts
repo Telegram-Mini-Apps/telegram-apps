@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { formatImplementation, type MockImplementation } from './utils';
+import { formatImplementation, type MockImplementation } from './formatImplementation';
 
 /**
  * Mocks performance.getEntriesByType.
@@ -12,8 +12,4 @@ export function mockPerformanceGetEntriesByType(
   return vi
     .spyOn(performance, 'getEntriesByType')
     .mockImplementation(formatImplementation(impl));
-}
-
-export function mockPageReload() {
-  return mockPerformanceGetEntriesByType([{ type: 'reload' }] as any);
 }
