@@ -16,6 +16,7 @@ import {
   isVisible,
   state,
   backgroundColor,
+  hasShineEffect,
 } from './signals.js';
 import { onClick, offClick, setParams, mount, unmount } from './methods.js';
 
@@ -47,6 +48,7 @@ beforeEach(() => {
 
 describe.each([
   { signal: backgroundColor, name: 'backgroundColor' },
+  { signal: hasShineEffect, name: 'hasShineEffect' },
   { signal: isEnabled, name: 'isEnabled' },
   { signal: isLoaderVisible, name: 'isLoaderVisible' },
   { signal: isVisible, name: 'isVisible' },
