@@ -15,5 +15,5 @@ export interface GetCssVarNameFn {
    * @param property - mini app property.
    * @returns Computed complete CSS variable name.
    */
-  (property: 'bgColor' | 'headerColor'): string;
+  (property: 'bgColor' | 'bottomBarColor' | 'headerColor'): string;
 }
