@@ -10,6 +10,7 @@ import {
   SwitchInlineQueryChatType,
   OpenLinkBrowser,
   BottomBarColor,
+  BackgroundColor,
 } from './misc.js';
 
 interface ButtonParams {
@@ -303,9 +304,9 @@ export interface Methods {
    */
   web_app_set_background_color: CreateParams<{
     /**
-     * The Mini App background color in `#RRGGBB` format.
+     * Color to set.
      */
-    color: RGB;
+    color: BackgroundColor;
   }>;
   /**
    * Updates the mini app bottom bar background color.
