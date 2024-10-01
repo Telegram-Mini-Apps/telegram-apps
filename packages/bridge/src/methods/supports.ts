@@ -97,6 +97,7 @@ export function supports(
     case 'web_app_setup_swipe_behavior':
       return versionLessOrEqual('7.7', paramOrVersion);
     case 'web_app_setup_secondary_button':
+    case 'web_app_set_bottom_bar_color':
       return versionLessOrEqual('7.10', paramOrVersion);
     default:
       return [

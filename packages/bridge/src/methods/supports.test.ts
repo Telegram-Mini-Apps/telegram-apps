@@ -106,6 +106,7 @@ describe.each<[
   ]],
   ['7.10', [
     'web_app_setup_secondary_button',
+    'web_app_set_bottom_bar_color',
     {
       title: 'web_app_setup_main_button.has_shine_effect',
       method: 'web_app_setup_main_button',

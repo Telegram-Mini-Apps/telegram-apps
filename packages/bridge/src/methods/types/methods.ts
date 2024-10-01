@@ -10,6 +10,8 @@ import {
   SwitchInlineQueryChatType,
   OpenLinkBrowser,
   BottomBarColor,
+  BackgroundColor,
+  SecondaryButtonPosition,
 } from './misc.js';
 
 interface ButtonParams {
@@ -19,30 +21,30 @@ interface ButtonParams {
    */
   has_shine_effect?: boolean;
   /**
-   * Should the Main Button be displayed.
+   * Should the button be displayed.
    */
   is_visible?: boolean;
   /**
-   * Should the Main Button be enabled.
+   * Should the button be enabled.
    */
   is_active?: boolean;
   /**
-   * Should loader inside the Main Button be displayed. Use this property in case, some
+   * Should loader inside the button be displayed. Use this property in case, some
    * operation takes time. This loader will make user notified about it.
    */
   is_progress_visible?: boolean;
   /**
-   * Text inside the Main Button.
+   * Text inside the button.
    */
   text?: string;
   /**
-   * The Main Button background color in `#RRGGBB` format.
+   * The button background color in `#RRGGBB` format.
    */
-  color?: string;
+  color?: RGB;
   /**
    * The Main Button text color in `#RRGGBB` format.
    */
-  text_color?: string;
+  text_color?: RGB;
 }
 
 /**
@@ -303,9 +305,9 @@ export interface Methods {
    */
   web_app_set_background_color: CreateParams<{
     /**
-     * The Mini App background color in `#RRGGBB` format.
+     * Color to set.
      */
-    color: RGB;
+    color: BackgroundColor;
   }>;
   /**
    * Updates the mini app bottom bar background color.
@@ -367,7 +369,19 @@ export interface Methods {
    * Updates the secondary button settings.
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-setup-secondary-button
    */
-  web_app_setup_secondary_button: CreateParams<ButtonParams>;
+  web_app_setup_secondary_button: CreateParams<ButtonParams & {
+    /**
+     * Position of the secondary button. It applies only if both the main and secondary buttons
+     * are visible.
+     *
+     * Supported values:
+     * - `left`, displayed to the left of the main button.
+     * - `right`, displayed to the right of the main button.
+     * - `top`, displayed above the main button.
+     * - `bottom`, displayed below the main button.
+     */
+    position?: SecondaryButtonPosition;
+  }>;
   /**
    * Updates the current state of the Settings Button.
    * @since v6.10

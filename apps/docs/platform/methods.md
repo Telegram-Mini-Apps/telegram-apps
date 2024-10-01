@@ -406,9 +406,9 @@ Available since: **v6.1**
 
 Updates the Mini App [background color](theming.md#background-and-header-colors).
 
-| Field | Type     | Description                                        |
-|-------|----------|----------------------------------------------------|
-| color | `string` | The Mini App background color in `#RRGGBB` format. |
+| Field | Type     | Description                                                                                                  |
+|-------|----------|--------------------------------------------------------------------------------------------------------------|
+| color | `string` | The Mini App background color in `#RRGGBB` format,  or one of the values: `bg_color` or `secondary_bg_color` |
 
 ### `web_app_set_bottom_bar_color`
 
@@ -454,15 +454,15 @@ Updates current [closing behavior](closing-behavior.md).
 
 Updates the [Main Button](main-button.md) settings.
 
-| Field               | Type      | Description                                                                                                                                                   |
-|---------------------|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Field               | Type      | Description                                                                                                                                                   | Available since |
+|---------------------|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|
 | is_visible          | `boolean` | _Optional_. Should the button be displayed.                                                                                                                   |
 | is_active           | `boolean` | _Optional_. Should the button be enabled.                                                                                                                     |
 | is_progress_visible | `boolean` | _Optional_. Should loader inside the button be displayed. Use this property in case, some operation takes time. This loader will make user notified about it. |
 | text                | `string`  | _Optional_. Text inside the button.                                                                                                                           |
 | color               | `string`  | _Optional_. The button background color in `#RRGGBB` format.                                                                                                  |
 | text_color          | `string`  | _Optional_. The button text color in `#RRGGBB` format.                                                                                                        |
-| has_shine_effect    | `boolean` | _Optional_. _Since v7.8_. Should the button have a shining effect.                                                                                            |
+| has_shine_effect    | `boolean` | _Optional_. Should the button have a shining effect.                                                                                                          | `v7.8`          |
 
 ### `web_app_setup_settings_button`
 
@@ -502,10 +502,97 @@ A method that opens the native story editor.
 
 Available since: **v7.10**
 
-The method updates the Secondary Button settings.
+The method that updates the Secondary Button settings.
 
-Technically, this button functions the same way as the Main Button and uses the
-same [setup method parameters](#web-app-setup-main-button).
+<table>
+  <thead>
+
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+
+  </thead>
+  <tbody>
+
+  <tr>
+    <td>is_visible</td>
+    <td>
+      <code>boolean</code>
+    </td>
+    <td><i>Optional</i>. Should the button be displayed.</td>
+  </tr>
+
+  <tr>
+    <td>is_active</td>
+    <td>
+      <code>boolean</code>
+    </td>
+    <td><i>Optional</i>. Should the button be enabled.</td>
+  </tr>
+
+  <tr>
+    <td>is_progress_visible</td>
+    <td>
+      <code>boolean</code>
+    </td>
+    <td>
+      <i>Optional</i>. Should loader inside the button be displayed. Use this property in case, 
+      some operation takes time. This loader will make user notified about it.
+    </td>
+  </tr>
+
+  <tr>
+    <td>color</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td><i>Optional</i>. The button background color in <code>#RRGGBB</code> format.</td>
+  </tr>
+
+  <tr>
+    <td>text_color</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td><i>Optional</i>. The button text color in <code>#RRGGBB</code> format.</td>
+  </tr>
+
+  <tr>
+    <td>has_shine_effect</td>
+    <td>
+      <code>boolean</code>
+    </td>
+    <td><i>Optional</i>. Should the button have a shining effect.</td>
+  </tr>
+
+  <tr>
+    <td>position</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      <i>Optional</i>. Position of the secondary button. It applies only if both the main and 
+      secondary buttons are visible. <br/>Supported values:
+      <ul>
+        <li>
+          <code>left</code>, displayed to the left of the main button, 
+        </li>
+        <li>
+          <code>right</code>, displayed to the right of the main button,
+        </li>
+        <li>
+          <code>top</code>, displayed above the main button,
+        </li>
+        <li>
+          <code>bottom</code>, displayed below the main button.
+        </li>
+      </ul>
+    </td>
+  </tr>
+  </tbody>
+</table>
 
 ### `web_app_switch_inline_query`
 
