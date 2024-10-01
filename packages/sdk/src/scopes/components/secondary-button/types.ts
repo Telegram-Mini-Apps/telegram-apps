@@ -1,4 +1,4 @@
-import type { RGB } from '@telegram-apps/bridge';
+import type { RGB, SecondaryButtonPosition } from '@telegram-apps/bridge';
 
 export interface State {
   /**
@@ -21,6 +21,10 @@ export interface State {
    * True if the Secondary Button is visible.
    */
   isVisible: boolean;
+  /**
+   * The button position relative to the main one.
+   */
+  position: SecondaryButtonPosition;
   /**
    * The Secondary Button text.
    */
