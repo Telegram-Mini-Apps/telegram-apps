@@ -473,6 +473,29 @@ Sets new swipe behavior.
 |----------------------|-----------|------------------------------------------------------|
 | allow_vertical_swipe | `boolean` | Allows closing the application using vertical swipe. |
 
+### `web_app_share_to_story`
+
+Available since: **v7.8**
+
+A method that opens the native story editor.
+
+| Field            | Type     | Description                                                                                                                                                                                          |
+|------------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| media_url        | `string` | A media URL which will be used as a background for a created story.                                                                                                                                  |
+| text             | `string` | _Optional_. The caption to be added to the media. 0-200 characters for regular users and 0-2048 characters for [premium subscribers](https://telegram.org/faq_premium#telegram-premium).             |
+| widget_link      | `object` | _Optional_. An object that describes a widget link to be included in the story. Note that only [premium subscribers](https://telegram.org/faq_premium#telegram-premium) can post stories with links. |
+| widget_link.url  | `string` | The URL to be included in the story.                                                                                                                                                                 |
+| widget_link.name | `string` | _Optional_. The name to be displayed for the widget link, 0-48 characters.                                                                                                                           |
+
+### `web_app_setup_secondary_button`
+
+Available since: **v7.10**
+
+The method updates the Secondary Button settings.
+
+Technically, this button functions the same way as the Main Button and uses the
+same [setup method parameters](#web-app-setup-main-button).
+
 ### `web_app_switch_inline_query`
 
 Available since: **v6.7**
