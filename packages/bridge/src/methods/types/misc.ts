@@ -18,6 +18,11 @@ export type BackgroundColor = KnownColorKey | RGB;
 export type BottomBarColor = KnownColorKey | 'bottom_bar_bg_color' | RGB;
 
 /**
+ * Position of the secondary button related to the main one.
+ */
+export type SecondaryButtonPosition = 'left' | 'right' | 'top' | 'bottom';
+
+/**
  * Values expected by the `web_app_open_link.try_browser` option.
  */
 export type OpenLinkBrowser =
