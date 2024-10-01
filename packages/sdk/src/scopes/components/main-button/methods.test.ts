@@ -56,6 +56,7 @@ describe.each([
   beforeEach(() => {
     state.set({
       backgroundColor: '#123456',
+      hasShineEffect: true,
       isEnabled: true,
       isLoaderVisible: true,
       isVisible: true,
@@ -77,6 +78,7 @@ describe('mounted', () => {
     it('should save the state in storage key tapps/mainButton', () => {
       state.set({
         backgroundColor: '#123456',
+        hasShineEffect: true,
         isEnabled: true,
         isLoaderVisible: true,
         isVisible: true,
@@ -90,13 +92,14 @@ describe('mounted', () => {
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('tapps/mainButton', '{"backgroundColor":"#111111","isEnabled":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc"}');
+      expect(spy).toHaveBeenCalledWith('tapps/mainButton', '{"backgroundColor":"#111111","hasShineEffect":true,"isEnabled":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc"}');
     });
 
     it('should call "web_app_setup_main_button" only if text is not empty', () => {
       const spy = mockPostEvent();
       state.set({
         backgroundColor: '#123456',
+        hasShineEffect: false,
         isEnabled: true,
         isLoaderVisible: true,
         isVisible: true,
@@ -109,6 +112,7 @@ describe('mounted', () => {
       setParams({ text: 'abc' });
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('web_app_setup_main_button', {
+        has_shine_effect: false,
         is_visible: true,
         is_active: true,
         is_progress_visible: true,
@@ -228,6 +232,7 @@ describe('setParams', () => {
   it('should merge passed object with the state', () => {
     state.set({
       backgroundColor: '#123456',
+      hasShineEffect: true,
       isEnabled: true,
       isLoaderVisible: true,
       isVisible: true,
@@ -245,6 +250,7 @@ describe('setParams', () => {
 
     expect(state()).toStrictEqual({
       backgroundColor: '#111111',
+      hasShineEffect: true,
       isEnabled: false,
       isLoaderVisible: false,
       isVisible: true,

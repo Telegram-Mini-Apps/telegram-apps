@@ -6,6 +6,10 @@ export interface State {
    */
   backgroundColor: RGB;
   /**
+   * True if the Main Button has a shining effect.
+   */
+  hasShineEffect: boolean;
+  /**
    * True if the main button is currently clickable.
    */
   isEnabled: boolean;

@@ -9,6 +9,7 @@ import type { State } from './types.js';
  */
 export const state = signal<State>({
   backgroundColor: '#000000',
+  hasShineEffect: false,
   isEnabled: true,
   isLoaderVisible: false,
   isVisible: false,
@@ -31,6 +32,11 @@ function createStateComputed<K extends keyof State>(key: K): Computed<State[K]> 
  * @see State.backgroundColor
  */
 export const backgroundColor = createStateComputed('backgroundColor');
+
+/**
+ * @see State.hasShineEffect
+ */
+export const hasShineEffect = createStateComputed('hasShineEffect');
 
 /**
  * @see State.isEnabled

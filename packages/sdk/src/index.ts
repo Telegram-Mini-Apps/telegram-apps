@@ -88,6 +88,7 @@ export {
 export * as mainButton from '@/scopes/components/main-button/instance.js';
 export {
   backgroundColor as mainButtonBackgroundColor,
+  hasShineEffect as mainButtonHasShineEffect,
   isMounted as isMainButtonMounted,
   isVisible as isMainButtonVisible,
   isEnabled as isMainButtonEnabled,

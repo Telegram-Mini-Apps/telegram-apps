@@ -68,6 +68,7 @@ function onStateChanged(s: State): void {
   // crash due to the empty value of the text.
   if (s.text) {
     postEvent('web_app_setup_main_button', {
+      has_shine_effect: s.hasShineEffect,
       is_visible: s.isVisible,
       is_active: s.isEnabled,
       is_progress_visible: s.isLoaderVisible,
