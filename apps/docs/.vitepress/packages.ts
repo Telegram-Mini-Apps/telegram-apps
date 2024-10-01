@@ -96,6 +96,7 @@ export const packagesSidebar: Sidebar = {
               scope('mini-app'),
               scope('popup'),
               scope('qr-scanner', 'QR Scanner'),
+              scope('secondary-button'),
               scope('settings-button'),
               scope('swipe-behavior'),
               scope('theme-params'),
