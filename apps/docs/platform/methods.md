@@ -444,14 +444,15 @@ Updates current [closing behavior](closing-behavior.md).
 
 Updates the [Main Button](main-button.md) settings.
 
-| Field               | Type      | Description                                                                                                                                                        |
-|---------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| is_visible          | `boolean` | _Optional_. Should the Main Button be displayed.                                                                                                                   |
-| is_active           | `boolean` | _Optional_. Should the Main Button be enabled.                                                                                                                     |
-| is_progress_visible | `boolean` | _Optional_. Should loader inside the Main Button be displayed. Use this property in case, some operation takes time. This loader will make user notified about it. |
-| text                | `string`  | _Optional_. Text inside the Main Button.                                                                                                                           |
-| color               | `string`  | _Optional_. The Main Button background color in `#RRGGBB` format.                                                                                                  |
-| text_color          | `string`  | _Optional_. The Main Button text color in `#RRGGBB` format.                                                                                                        |
+| Field               | Type      | Description                                                                                                                                                   |
+|---------------------|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| is_visible          | `boolean` | _Optional_. Should the button be displayed.                                                                                                                   |
+| is_active           | `boolean` | _Optional_. Should the button be enabled.                                                                                                                     |
+| is_progress_visible | `boolean` | _Optional_. Should loader inside the button be displayed. Use this property in case, some operation takes time. This loader will make user notified about it. |
+| text                | `string`  | _Optional_. Text inside the button.                                                                                                                           |
+| color               | `string`  | _Optional_. The button background color in `#RRGGBB` format.                                                                                                  |
+| text_color          | `string`  | _Optional_. The button text color in `#RRGGBB` format.                                                                                                        |
+| has_shine_effect    | `boolean` | _Optional_. _Since v7.8_. Should the button have a shining effect.                                                                                            |
 
 ### `web_app_setup_settings_button`
 
