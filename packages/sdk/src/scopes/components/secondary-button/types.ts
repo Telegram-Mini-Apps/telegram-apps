@@ -3,8 +3,10 @@ import type { RGB, SecondaryButtonPosition } from '@telegram-apps/bridge';
 export interface State {
   /**
    * The Secondary Button background color.
+   *
+   * This value may be missing in case, some specific RGB color was not yet set.
    */
-  backgroundColor: RGB;
+  backgroundColor?: RGB;
   /**
    * True if the Secondary Button has a shining effect.
    */
@@ -31,6 +33,8 @@ export interface State {
   text: string;
   /**
    * The Secondary Button text color.
+   *
+   * This value may be missing in case, some specific RGB color was not yet set.
    */
-  textColor: RGB;
+  textColor?: RGB;
 }
