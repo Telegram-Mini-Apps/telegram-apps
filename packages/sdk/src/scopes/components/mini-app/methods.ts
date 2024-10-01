@@ -7,9 +7,11 @@ import {
   setCssVar,
   TypedError,
   type RGB,
+  type BottomBarColor, BackgroundColor,
 } from '@telegram-apps/bridge';
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
+import type { Computed } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
@@ -17,8 +19,6 @@ import { withSupports } from '@/scopes/withSupports.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 import {
   mount as tpMount,
-  state as tpState,
-  backgroundColor as tpBackgroundColor,
   headerBackgroundColor as tpHeaderBackgroundColor,
 } from '@/scopes/components/theme-params/instance.js';
 
@@ -28,12 +28,17 @@ import {
   isCssVarsBound,
   state,
   isMounted,
+  bottomBarColor,
+  headerColorRGB,
+  bottomBarColorRGB,
+  backgroundColorRGB,
 } from './signals.js';
 import type { GetCssVarNameFn, HeaderColor, State } from './types.js';
 
 type StorageValue = State;
 
 const SET_BG_COLOR_METHOD = 'web_app_set_background_color';
+const SET_BOTTOM_BAR_BG_COLOR_METHOD = 'web_app_set_bottom_bar_color';
 const SET_HEADER_COLOR_METHOD = 'web_app_set_header_color';
 const STORAGE_KEY = 'miniApp';
 
@@ -43,12 +48,12 @@ const STORAGE_KEY = 'miniApp';
  * Default variables:
  * - `--tg-bg-color`
  * - `--tg-header-color`
+ * - `--tg-bottom-bar-color`
  *
  * Variables are being automatically updated if theme parameters were changed.
  *
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * mini app key.
- * MiniApp property.
  * @returns Function to stop updating variables.
  * @throws {TypedError} ERR_ALREADY_CALLED
  */
@@ -56,45 +61,36 @@ export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
   if (isCssVarsBound()) {
     throw new TypedError(ERR_ALREADY_CALLED);
   }
+  const [addCleanup, cleanup] = createCbCollector();
+
+  /**
+   * Binds specified CSS variable to a signal.
+   * @param cssVar - CSS variable name.
+   * @param signal - signal to listen changes to.
+   */
+  function bind(cssVar: string, signal: Computed<RGB | undefined>) {
+    function update() {
+      setCssVar(cssVar, signal() || null);
+    }
+
+    // Instantly set CSS variable.
+    update();
+
+    // Remember to clean this relation up.
+    addCleanup(signal.sub(update), deleteCssVar.bind(null, cssVar));
+  }
+
   getCSSVarName ||= (prop) => `--tg-${camelToKebab(prop)}`;
-  const bgVar = getCSSVarName('bgColor');
-  const headerVar = getCSSVarName('headerColor');
+  bind(getCSSVarName('bgColor'), backgroundColorRGB);
+  bind(getCSSVarName('bottomBarColor'), bottomBarColorRGB);
+  bind(getCSSVarName('headerColor'), headerColorRGB);
+  addCleanup(() => {
+    isCssVarsBound.set(false);
+  });
 
-  function updateHeaderColor() {
-    const tp = tpState();
-
-    const h = headerColor();
-    if (isRGB(h)) {
-      return setCssVar(headerVar, h);
-    }
-
-    const { secondaryBgColor, bgColor } = tp;
-    if (h === 'bg_color' && bgColor) {
-      return setCssVar(headerVar, bgColor);
-    }
-    if (h === 'secondary_bg_color' && secondaryBgColor) {
-      setCssVar(headerVar, secondaryBgColor);
-    }
-  }
-
-  function updateBgColor() {
-    setCssVar(bgVar, backgroundColor());
-  }
-
-  updateBgColor();
-  updateHeaderColor();
-
-  const [, cleanup] = createCbCollector(
-    backgroundColor.sub(updateBgColor),
-    [headerColor, tpState].map(s => s.sub(updateHeaderColor)),
-  );
   isCssVarsBound.set(true);
 
-  return () => {
-    [headerVar, bgVar].forEach(deleteCssVar);
-    cleanup();
-    isCssVarsBound.set(false);
-  };
+  return cleanup;
 }
 
 /**
@@ -110,27 +106,37 @@ export function close(returnBack?: boolean): void {
  *
  * This function restores the component state and is automatically saving it in the local storage
  * if it changed.
+ *
+ * Internally, the function mounts the Theme Params component to work with correctly extracted
+ * theme palette values.
  */
 export function mount(): void {
   if (!isMounted()) {
     const s = isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY);
     tpMount();
-    backgroundColor.set(s ? s.backgroundColor : tpBackgroundColor() || '#000000');
+    backgroundColor.set(s ? s.backgroundColor : 'bg_color');
     backgroundColor.sub(onBgColorChanged);
+    bottomBarColor.set(s ? s.bottomBarColor : 'bottom_bar_bg_color');
+    bottomBarColor.sub(onBottomBarBgColorChanged);
     headerColor.set(s ? s.headerColor : tpHeaderBackgroundColor() || 'bg_color');
     headerColor.sub(onHeaderColorChanged);
     isMounted.set(true);
   }
 }
 
+function onBgColorChanged(color: BackgroundColor): void {
+  saveState();
+  postEvent(SET_BG_COLOR_METHOD, { color });
+}
+
+function onBottomBarBgColorChanged(color: BottomBarColor): void {
+  saveState();
+  postEvent(SET_BOTTOM_BAR_BG_COLOR_METHOD, { color });
+}
+
 function onHeaderColorChanged(color: HeaderColor): void {
   saveState();
   postEvent(SET_HEADER_COLOR_METHOD, isRGB(color) ? { color } : { color_key: color });
-}
-
-function onBgColorChanged(color: RGB): void {
-  saveState();
-  postEvent(SET_BG_COLOR_METHOD, { color });
 }
 
 /**
@@ -159,6 +165,13 @@ export const setBackgroundColor = withIsSupported((color: RGB): void => {
 }, SET_BG_COLOR_METHOD);
 
 /**
+ * Updates the bottom bar background color.
+ */
+export const setBottomBarColor = withIsSupported((color: BottomBarColor) => {
+  bottomBarColor.set(color);
+}, SET_BOTTOM_BAR_BG_COLOR_METHOD);
+
+/**
  * Updates the header color.
  */
 export const setHeaderColor = withSupports(
@@ -173,6 +186,7 @@ export const setHeaderColor = withSupports(
  */
 export function unmount(): void {
   backgroundColor.unsub(onBgColorChanged);
+  bottomBarColor.unsub(onBottomBarBgColorChanged);
   headerColor.unsub(onHeaderColorChanged);
   isMounted.set(false);
 }
