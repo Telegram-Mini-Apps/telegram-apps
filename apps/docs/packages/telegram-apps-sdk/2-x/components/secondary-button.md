@@ -49,10 +49,6 @@ isSecondaryButtonMounted(); // true
 
 :::
 
-> [!INFO]
-> To extract correctly configured values from theme parameters, this method also mounts
-> the [Theme Params](theme-params.md) scope.
-
 To unmount, use the `unmount` method:
 
 ::: code-group
