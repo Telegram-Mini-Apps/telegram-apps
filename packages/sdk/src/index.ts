@@ -122,6 +122,8 @@ export {
   open as openQrScanner,
 } from '@/scopes/components/qr-scanner/qr-scanner.js';
 
+export * from '@/scopes/components/secondary-button/exports.js';
+
 export * as settingsButton from '@/scopes/components/settings-button/settings-button.js';
 export {
   hide as hideSettingsButton,
