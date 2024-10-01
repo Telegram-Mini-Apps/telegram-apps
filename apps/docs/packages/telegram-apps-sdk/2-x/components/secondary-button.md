@@ -70,6 +70,12 @@ isSecondaryButtonMounted(); // false
 
 :::
 
+> [!WARNING]
+> This component's properties depend on values from the [Mini App](mini-app.md)
+> and [Theme Params](theme-params.md) components. Specifically, the Secondary Button uses the Mini
+> App's `bottomBarBgColor` and some of the Theme Params colors. Make sure to mount these components
+> before using the Secondary Button.
+
 ## Settings Properties
 
 To update the button properties, use the `setParams` method. It accepts an object with optional

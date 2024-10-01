@@ -43,6 +43,10 @@ unmountMainButton(); // isMainButtonMounted() -> false
 
 :::
 
+> [!WARNING]
+> This component's properties depend on values from the [Theme Params](theme-params.md) component.
+> Make sure to mount Theme Params before using the Main Button.
+
 ## Settings Properties
 
 To update the button properties, use the `setParams` method. It accepts an object with optional
