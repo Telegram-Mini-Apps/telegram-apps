@@ -406,9 +406,9 @@ Available since: **v6.1**
 
 Updates the Mini App [background color](theming.md#background-and-header-colors).
 
-| Field | Type     | Description                                        |
-|-------|----------|----------------------------------------------------|
-| color | `string` | The Mini App background color in `#RRGGBB` format. |
+| Field | Type     | Description                                                                                                  |
+|-------|----------|--------------------------------------------------------------------------------------------------------------|
+| color | `string` | The Mini App background color in `#RRGGBB` format,  or one of the values: `bg_color` or `secondary_bg_color` |
 
 ### `web_app_set_bottom_bar_color`
 
