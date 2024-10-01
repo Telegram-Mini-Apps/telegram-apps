@@ -8,13 +8,13 @@ import type { State } from './types.js';
  * Complete component state.
  */
 export const state = signal<State>({
-  backgroundColor: '#000000',
+  backgroundColor: '#2481cc',
   hasShineEffect: false,
   isEnabled: true,
   isLoaderVisible: false,
   isVisible: false,
-  text: '',
-  textColor: '#000000',
+  text: 'Continue',
+  textColor: '#ffffff',
 });
 
 /**
