@@ -410,6 +410,16 @@ Updates the Mini App [background color](theming.md#background-and-header-colors)
 |-------|----------|----------------------------------------------------|
 | color | `string` | The Mini App background color in `#RRGGBB` format. |
 
+### `web_app_set_bottom_bar_color`
+
+Available since: **v7.10**
+
+Updates the Mini App bottom bar background color.
+
+| Field | Type     | Description                                                                                                                                   |
+|-------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| color | `string` | The Mini App bottom bar background color in `#RRGGBB` format, or one of the values: `bg_color`, `secondary_bg_color` or `bottom_bar_bg_color` |
+
 ### `web_app_set_header_color`
 
 Available since: **v6.1**
