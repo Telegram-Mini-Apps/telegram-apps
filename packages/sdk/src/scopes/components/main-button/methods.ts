@@ -8,19 +8,32 @@ import {
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals.js';
-import {
-  mount as tpMount,
-  buttonColor as tpButtonColor,
-  buttonTextColor as tpButtonTextColor,
-} from '@/scopes/components/theme-params/instance.js';
 
-import { state, isMounted } from './signals.js';
+import { internalState, isMounted, state } from './signals.js';
 import type { State } from './types.js';
 
 type StorageValue = State;
 
+const MINI_APPS_METHOD = 'web_app_setup_main_button';
 const CLICK_EVENT = 'main_button_pressed';
 const STORAGE_KEY = 'mainButton';
+
+/**
+ * Mounts the component.
+ *
+ * This function restores the component state and is automatically saving it in the local storage
+ * if it changed.
+ */
+export function mount(): void {
+  if (!isMounted()) {
+    const prev = isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY);
+    prev && internalState.set(prev);
+
+    internalState.sub(onInternalStateChanged);
+    state.sub(onStateChanged);
+    isMounted.set(true);
+  }
+}
 
 /**
  * Adds a new main button click listener.
@@ -39,45 +52,22 @@ export function offClick(fn: EventListener<'main_button_pressed'>): void {
   off(CLICK_EVENT, fn);
 }
 
-/**
- * Mounts the component.
- *
- * This function restores the component state and is automatically saving it in the local storage
- * if it changed.
- */
-export function mount(): void {
-  if (!isMounted()) {
-    const prev = isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY);
-    if (prev) {
-      state.set(prev);
-    } else {
-      tpMount();
-      setParams({
-        backgroundColor: tpButtonColor(),
-        textColor: tpButtonTextColor(),
-      });
-    }
-
-    state.sub(onStateChanged);
-    isMounted.set(true);
-  }
+function onInternalStateChanged(state: State): void {
+  setStorageValue<StorageValue>(STORAGE_KEY, state);
 }
 
-function onStateChanged(s: State): void {
-  // We should not commit changes until the payload is correct. Some version of Telegram will
-  // crash due to the empty value of the text.
-  if (s.text) {
-    postEvent('web_app_setup_main_button', {
-      has_shine_effect: s.hasShineEffect,
-      is_visible: s.isVisible,
-      is_active: s.isEnabled,
-      is_progress_visible: s.isLoaderVisible,
-      text: s.text,
-      color: s.backgroundColor,
-      text_color: s.textColor,
-    });
-  }
-  setStorageValue<StorageValue>(STORAGE_KEY, s);
+function onStateChanged(s: Required<State>): void {
+  // We should not commit changes until the payload is correct.
+  // Some version of Telegram will crash due to the empty value of the text.
+  s.text && postEvent(MINI_APPS_METHOD, {
+    color: s.backgroundColor,
+    has_shine_effect: s.hasShineEffect,
+    is_active: s.isEnabled,
+    is_progress_visible: s.isLoaderVisible,
+    is_visible: s.isVisible,
+    text: s.text,
+    text_color: s.textColor,
+  });
 }
 
 /**
@@ -85,8 +75,8 @@ function onStateChanged(s: State): void {
  * @param updates - state changes to perform.
  */
 export function setParams(updates: Partial<State>): void {
-  state.set({
-    ...state(),
+  internalState.set({
+    ...internalState(),
     ...Object.fromEntries(
       Object.entries(updates).filter(([, v]) => v !== undefined),
     ),
@@ -100,6 +90,7 @@ export function setParams(updates: Partial<State>): void {
  * @see onClick
  */
 export function unmount(): void {
+  internalState.unsub(onInternalStateChanged);
   state.unsub(onStateChanged);
   isMounted.set(false);
 }

@@ -3,8 +3,10 @@ import type { RGB } from '@telegram-apps/bridge';
 export interface State {
   /**
    * The main button background color.
+   *
+   * This value may be missing in case, some specific RGB color was not yet set.
    */
-  backgroundColor: RGB;
+  backgroundColor?: RGB;
   /**
    * True if the Main Button has a shining effect.
    */
@@ -27,6 +29,8 @@ export interface State {
   text: string;
   /**
    * The main button text color.
+   *
+   * This value may be missing in case, some specific RGB color was not yet set.
    */
-  textColor: RGB;
+  textColor?: RGB;
 }

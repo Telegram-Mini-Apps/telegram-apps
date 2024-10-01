@@ -1,29 +1,39 @@
 import { computed, type Computed, signal } from '@telegram-apps/signals';
 
+import { buttonColor } from '@/scopes/components/theme-params/signals.js';
+import { bottomBarColorRGB } from '@/scopes/components/mini-app/signals.js';
+
 import type { State } from './types.js';
 
-/**
- * Complete component state.
- */
-export const state = signal<State>({
-  backgroundColor: '#000000',
+function fromState<K extends keyof Required<State>>(key: K): Computed<Required<State>[K]> {
+  return computed(() => state()[key]);
+}
+
+export const internalState = signal<State>({
   hasShineEffect: false,
   isEnabled: true,
   isLoaderVisible: false,
   isVisible: false,
   position: 'left',
   text: 'Cancel',
-  textColor: '#2481cc',
+});
+
+/**
+ * Complete component state.
+ */
+export const state = computed<Required<State>>(() => {
+  const s = internalState();
+  return {
+    ...s,
+    backgroundColor: s.backgroundColor || bottomBarColorRGB() || '#000000',
+    textColor: s.textColor || buttonColor() || '#2481cc',
+  };
 });
 
 /**
  * True if the component is currently mounted.
  */
 export const isMounted = signal(false);
-
-function fromState<K extends keyof State>(key: K): Computed<State[K]> {
-  return computed(() => state()[key]);
-}
 
 /**
  * @see State.backgroundColor

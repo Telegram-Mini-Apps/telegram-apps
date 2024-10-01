@@ -15,9 +15,11 @@ import {
   isEnabled,
   isLoaderVisible,
   isVisible,
-  state,
+  internalState,
   backgroundColor,
   hasShineEffect,
+  state,
+  position,
 } from './signals.js';
 import { onClick, offClick, setParams, mount, unmount, isSupported } from './methods.js';
 
@@ -41,8 +43,17 @@ beforeEach(() => {
     themeParams.isCssVarsBound,
     themeParams.isMounted,
     themeParams.state,
-    state,
+    text,
+    textColor,
     isMounted,
+    isEnabled,
+    isLoaderVisible,
+    isVisible,
+    internalState,
+    backgroundColor,
+    hasShineEffect,
+    state,
+    position,
   ].forEach(resetSignal);
   mockPostEvent();
 });
@@ -53,23 +64,25 @@ describe.each([
   { signal: isEnabled, name: 'isEnabled' },
   { signal: isLoaderVisible, name: 'isLoaderVisible' },
   { signal: isVisible, name: 'isVisible' },
+  { signal: position, name: 'position' },
   { signal: text, name: 'text' },
   { signal: textColor, name: 'textColor' },
 ] as const)('$name property', ({ signal, name }) => {
   beforeEach(() => {
-    state.set({
+    internalState.set({
       backgroundColor: '#123456',
       hasShineEffect: true,
       isEnabled: true,
       isLoaderVisible: true,
       isVisible: true,
+      position: 'right',
       text: 'TEXT',
       textColor: '#789abc',
     });
   });
 
   it(`should use "${name}" property from state`, () => {
-    expect(signal()).toBe(state()[name]);
+    expect(signal()).toBe(internalState()[name]);
   });
 });
 
@@ -92,12 +105,13 @@ describe('mounted', () => {
 
   describe('setParams', () => {
     it('should save the state in storage key tapps/secondaryButton', () => {
-      state.set({
+      internalState.set({
         backgroundColor: '#123456',
         hasShineEffect: true,
         isEnabled: true,
         isLoaderVisible: true,
         isVisible: true,
+        position: 'top',
         text: 'TEXT',
         textColor: '#789abc',
       });
@@ -108,17 +122,18 @@ describe('mounted', () => {
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('tapps/secondaryButton', '{"backgroundColor":"#111111","hasShineEffect":true,"isEnabled":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc"}');
+      expect(spy).toHaveBeenCalledWith('tapps/secondaryButton', '{"backgroundColor":"#111111","hasShineEffect":true,"isEnabled":true,"isLoaderVisible":true,"isVisible":true,"position":"top","text":"TEXT","textColor":"#789abc"}');
     });
 
     it('should call "web_app_setup_secondary_button" only if text is not empty', () => {
       const spy = mockPostEvent();
-      state.set({
+      internalState.set({
         backgroundColor: '#123456',
         hasShineEffect: false,
         isEnabled: true,
         isLoaderVisible: true,
         isVisible: true,
+        position: 'bottom',
         text: '',
         textColor: '#789abc',
       });
@@ -128,12 +143,13 @@ describe('mounted', () => {
       setParams({ text: 'abc' });
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('web_app_setup_secondary_button', {
+        color: '#123456',
         has_shine_effect: false,
-        is_visible: true,
         is_active: true,
         is_progress_visible: true,
+        is_visible: true,
+        position: 'bottom',
         text: 'abc',
-        color: '#123456',
         text_color: '#789abc',
       });
     });
@@ -246,12 +262,13 @@ describe('offClick', () => {
 
 describe('setParams', () => {
   it('should merge passed object with the state', () => {
-    state.set({
+    internalState.set({
       backgroundColor: '#123456',
       hasShineEffect: true,
       isEnabled: true,
       isLoaderVisible: true,
       isVisible: true,
+      position: 'right',
       text: 'TEXT',
       textColor: '#789abc',
     });
@@ -264,12 +281,13 @@ describe('setParams', () => {
       textColor: '#000000',
     });
 
-    expect(state()).toStrictEqual({
+    expect(internalState()).toStrictEqual({
       backgroundColor: '#111111',
       hasShineEffect: true,
       isEnabled: false,
       isLoaderVisible: false,
       isVisible: true,
+      position: 'right',
       text: 'TEXT UPDATED',
       textColor: '#000000',
     });
@@ -282,7 +300,7 @@ describe('unmount', () => {
   it('should stop calling postEvent function and session storage updates when something changes', () => {
     const postEventSpy = mockPostEvent();
     const storageSpy = mockSessionStorageSetItem();
-    state.set({ ...state(), text: 'Hello!' });
+    internalState.set({ ...internalState(), text: 'Hello!' });
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);
 
@@ -290,7 +308,7 @@ describe('unmount', () => {
     storageSpy.mockClear();
 
     unmount();
-    state.set({ ...state() });
+    internalState.set({ ...internalState() });
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);

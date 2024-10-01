@@ -14,9 +14,10 @@ import {
   isEnabled,
   isLoaderVisible,
   isVisible,
-  state,
+  internalState,
   backgroundColor,
   hasShineEffect,
+  state,
 } from './signals.js';
 import { onClick, offClick, setParams, mount, unmount } from './methods.js';
 
@@ -40,8 +41,16 @@ beforeEach(() => {
     themeParams.isCssVarsBound,
     themeParams.isMounted,
     themeParams.state,
-    state,
+    text,
+    textColor,
     isMounted,
+    isEnabled,
+    isLoaderVisible,
+    isVisible,
+    internalState,
+    backgroundColor,
+    hasShineEffect,
+    state,
   ].forEach(resetSignal);
   mockPostEvent();
 });
@@ -56,7 +65,7 @@ describe.each([
   { signal: textColor, name: 'textColor' },
 ] as const)('$name property', ({ signal, name }) => {
   beforeEach(() => {
-    state.set({
+    internalState.set({
       backgroundColor: '#123456',
       hasShineEffect: true,
       isEnabled: true,
@@ -68,7 +77,7 @@ describe.each([
   });
 
   it(`should use "${name}" property from state`, () => {
-    expect(signal()).toBe(state()[name]);
+    expect(signal()).toBe(internalState()[name]);
   });
 });
 
@@ -78,7 +87,7 @@ describe('mounted', () => {
 
   describe('setParams', () => {
     it('should save the state in storage key tapps/mainButton', () => {
-      state.set({
+      internalState.set({
         backgroundColor: '#123456',
         hasShineEffect: true,
         isEnabled: true,
@@ -99,7 +108,7 @@ describe('mounted', () => {
 
     it('should call "web_app_setup_main_button" only if text is not empty', () => {
       const spy = mockPostEvent();
-      state.set({
+      internalState.set({
         backgroundColor: '#123456',
         hasShineEffect: false,
         isEnabled: true,
@@ -232,7 +241,7 @@ describe('offClick', () => {
 
 describe('setParams', () => {
   it('should merge passed object with the state', () => {
-    state.set({
+    internalState.set({
       backgroundColor: '#123456',
       hasShineEffect: true,
       isEnabled: true,
@@ -250,7 +259,7 @@ describe('setParams', () => {
       textColor: '#000000',
     });
 
-    expect(state()).toStrictEqual({
+    expect(internalState()).toStrictEqual({
       backgroundColor: '#111111',
       hasShineEffect: true,
       isEnabled: false,
@@ -268,7 +277,7 @@ describe('unmount', () => {
   it('should stop calling postEvent function and session storage updates when something changes', () => {
     const postEventSpy = mockPostEvent();
     const storageSpy = mockSessionStorageSetItem();
-    state.set({ ...state(), text: 'Hello!' });
+    internalState.set({ ...internalState(), text: 'Hello!' });
     expect(postEventSpy).toHaveBeenCalledTimes(1);
     expect(storageSpy).toHaveBeenCalledTimes(1);
 
@@ -276,7 +285,7 @@ describe('unmount', () => {
     storageSpy.mockClear();
 
     unmount();
-    state.set({ ...state() });
+    internalState.set({ ...internalState() });
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);

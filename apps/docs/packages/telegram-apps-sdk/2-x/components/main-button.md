@@ -13,39 +13,40 @@ properties. To do so, use the `mount` method. It will update the `isMounted` sig
 ```ts [Variable]
 import { mainButton } from '@telegram-apps/sdk';
 
-mainButton.mount(); // mainButton.isMounted() -> true
+mainButton.mount();
+mainButton.isMounted(); // true
 ```
 
 ```ts [Functions]
-import {
-  mountMainButton,
-  isMainButtonMounted,
-} from '@telegram-apps/sdk';
+import { mountMainButton, isMainButtonMounted } from '@telegram-apps/sdk';
 
-mountMainButton(); // isMainButtonMounted() -> true
+mountMainButton();
+isMainButtonMounted(); // true
 ```
 
 :::
-
-> [!INFO]
-> To extract correctly configured values from theme parameters, this method also mounts
-> the [Theme Params](theme-params.md) scope.
 
 To unmount, use the `unmount` method:
 
 ::: code-group
 
 ```ts [Variable]
-mainButton.unmount(); // mainButton.isMounted() -> false
+mainButton.unmount(); 
+mainButton.isMounted(); // false
 ```
 
 ```ts [Functions]
-import { unmountMainButton } from '@telegram-apps/sdk';
+import { unmountMainButton, isMainButtonMounted } from '@telegram-apps/sdk';
 
-unmountMainButton(); // isMainButtonMounted() -> false
+unmountMainButton();
+isMainButtonMounted(); // false
 ```
 
 :::
+
+> [!WARNING]
+> This component's properties depend on values from the [Theme Params](theme-params.md) component.
+> Make sure to mount Theme Params before using the Main Button.
 
 ## Settings Properties
 
