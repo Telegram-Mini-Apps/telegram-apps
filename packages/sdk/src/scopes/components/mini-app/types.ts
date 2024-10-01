@@ -1,4 +1,4 @@
-import type { HeaderColorKey, RGB } from '@telegram-apps/bridge';
+import type { HeaderColorKey, BottomBarColor, RGB, BackgroundColor } from '@telegram-apps/bridge';
 
 /**
  * Mini App header color.
@@ -6,7 +6,8 @@ import type { HeaderColorKey, RGB } from '@telegram-apps/bridge';
 export type HeaderColor = HeaderColorKey | RGB;
 
 export interface State {
-  backgroundColor: RGB;
+  backgroundColor: BackgroundColor;
+  bottomBarColor: BottomBarColor;
   headerColor: HeaderColor;
 }
 
