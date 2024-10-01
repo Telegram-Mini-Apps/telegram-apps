@@ -104,23 +104,7 @@ export {
 } from '@/scopes/components/main-button/instance.js';
 export * as MainButton from '@/scopes/components/main-button/static.js';
 
-export * as miniApp from '@/scopes/components/mini-app/instance.js';
-export {
-  backgroundColor as miniAppBackgroundColor,
-  bindCssVars as bindMiniAppCssVars,
-  close as closeMiniApp,
-  headerColor as miniAppHeaderColor,
-  isMounted as isMiniAppMounted,
-  isCssVarsBound as isMiniAppCssVarsBound,
-  isDark as isMiniAppDark,
-  mount as mountMiniApp,
-  ready as miniAppReady,
-  state as miniAppState,
-  setHeaderColor as setMiniAppHeaderColor,
-  setBackgroundColor as setMiniAppBackgroundColor,
-  unmount as unmountMiniApp,
-} from '@/scopes/components/mini-app/instance.js';
-export * as MiniApp from '@/scopes/components/main-button/static.js';
+export * from '@/scopes/components/mini-app/exports.js';
 
 export * as popup from '@/scopes/components/popup/instance.js';
 export {
