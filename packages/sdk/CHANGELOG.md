@@ -1,5 +1,18 @@
 # @telegram-apps/sdk
 
+## 2.2.0
+
+### Minor Changes
+
+- 34652a2: - Enhance the Secondary Button with the `position` signal. Export the component
+  - Add bottom bar related functionality in the Mini App component
+
+### Patch Changes
+
+- Updated dependencies [7a7829a]
+  - @telegram-apps/bridge@1.2.0
+  - @telegram-apps/navigation@1.0.2
+
 ## 2.1.0
 
 ### Minor Changes
