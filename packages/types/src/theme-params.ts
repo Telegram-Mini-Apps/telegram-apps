@@ -5,6 +5,7 @@ export type ThemeParamsKey =
   | 'bgColor'
   | 'buttonColor'
   | 'buttonTextColor'
+  | 'bottomBarBgColor'
   | 'destructiveTextColor'
   | 'headerBgColor'
   | 'hintColor'
