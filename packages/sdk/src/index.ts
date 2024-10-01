@@ -222,6 +222,7 @@ export {
   readTextFromClipboard,
   sendData,
   switchInlineQuery,
+  shareStory,
 } from '@/scopes/utilities/uncategorized/uncategorized.js';
 
 export {

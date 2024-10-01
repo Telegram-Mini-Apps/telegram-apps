@@ -4,7 +4,7 @@ import { dispatchMiniAppsEvent } from 'test-utils';
 import { resetPackageState } from '@test-utils/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 
-import { readTextFromClipboard } from './uncategorized.js';
+import { readTextFromClipboard, shareStory } from './uncategorized.js';
 
 beforeEach(() => {
   mockPostEvent();
@@ -24,6 +24,29 @@ describe('readTextFromClipboard', () => {
     });
 
     await expect(promise).resolves.toBe('Some text');
+  });
+});
+
+describe('shareStory', () => {
+  it('should call "web_app_share_to_story" method with parameters', () => {
+    const postEvent = vi.fn();
+    shareStory('https://t.me/media.png', {
+      postEvent,
+      text: 'Story text',
+      widgetLink: {
+        url: 'https://t.me/widget-url.png',
+        name: 'Widget Text',
+      },
+    });
+    expect(postEvent).toHaveBeenCalledOnce();
+    expect(postEvent).toHaveBeenCalledWith('web_app_share_to_story', {
+      media_url: 'https://t.me/media.png',
+      text: 'Story text',
+      widget_link: {
+        url: 'https://t.me/widget-url.png',
+        name: 'Widget Text',
+      },
+    });
   });
 });
 
