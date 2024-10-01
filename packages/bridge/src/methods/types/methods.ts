@@ -5,7 +5,12 @@ import type { CreateParams } from './utils.js';
 import type { AnyHapticFeedbackParams } from './haptic-feedback.js';
 import type { PopupParams } from './popup.js';
 import type { AnyInvokeCustomMethodParams } from './custom-method.js';
-import type { HeaderColorKey, SwitchInlineQueryChatType, OpenLinkBrowser } from './misc.js';
+import {
+  HeaderColorKey,
+  SwitchInlineQueryChatType,
+  OpenLinkBrowser,
+  BottomBarColor,
+} from './misc.js';
 
 interface ButtonParams {
   /**
@@ -301,6 +306,17 @@ export interface Methods {
      * The Mini App background color in `#RRGGBB` format.
      */
     color: RGB;
+  }>;
+  /**
+   * Updates the mini app bottom bar background color.
+   * @since v7.10
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-set-bottom-bar-color
+   */
+  web_app_set_bottom_bar_color: CreateParams<{
+    /**
+     * Color to set.
+     */
+    color: BottomBarColor;
   }>;
   /**
    * Updates the Mini App header color.

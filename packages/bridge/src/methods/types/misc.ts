@@ -1,7 +1,14 @@
+import type { RGB } from '@telegram-apps/types';
+
 /**
  * Color key which could be used to update header color.
  */
 export type HeaderColorKey = 'bg_color' | 'secondary_bg_color';
+
+/**
+ * Color key which could be used to update bottom bar background color.
+ */
+export type BottomBarColor = 'bg_color' | 'secondary_bg_color' | 'bottom_bar_bg_color' | RGB;
 
 /**
  * Values expected by the `web_app_open_link.try_browser` option.
