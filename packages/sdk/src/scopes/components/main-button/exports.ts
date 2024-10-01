@@ -15,4 +15,4 @@ export {
   unmount as unmountMainButton,
 } from './exports.variable.js';
 export type { State as MainButtonState } from './types.js';
-export * as miniApp from './exports.variable.js';
+export * as mainButton from './exports.variable.js';
