@@ -1,20 +1,31 @@
 import { computed, type Computed, signal } from '@telegram-apps/signals';
 
+import { buttonColor, buttonTextColor } from '@/scopes/components/theme-params/signals.js';
+
 import type { State } from './types.js';
 
-/* USUAL */
+function fromState<K extends keyof Required<State>>(key: K): Computed<Required<State>[K]> {
+  return computed(() => state()[key]);
+}
 
-/**
- * Complete component state.
- */
-export const state = signal<State>({
-  backgroundColor: '#2481cc',
+export const internalState = signal<State>({
   hasShineEffect: false,
   isEnabled: true,
   isLoaderVisible: false,
   isVisible: false,
   text: 'Continue',
-  textColor: '#ffffff',
+});
+
+/**
+ * Complete component state.
+ */
+export const state = computed<Required<State>>(() => {
+  const s = internalState();
+  return {
+    ...s,
+    backgroundColor: s.backgroundColor || buttonColor() || '#2481cc',
+    textColor: s.textColor || buttonTextColor() || '#ffffff',
+  };
 });
 
 /**
@@ -22,43 +33,37 @@ export const state = signal<State>({
  */
 export const isMounted = signal(false);
 
-/* COMPUTED */
-
-function createStateComputed<K extends keyof State>(key: K): Computed<State[K]> {
-  return computed(() => state()[key]);
-}
-
 /**
  * @see State.backgroundColor
  */
-export const backgroundColor = createStateComputed('backgroundColor');
+export const backgroundColor = fromState('backgroundColor');
 
 /**
  * @see State.hasShineEffect
  */
-export const hasShineEffect = createStateComputed('hasShineEffect');
+export const hasShineEffect = fromState('hasShineEffect');
 
 /**
  * @see State.isEnabled
  */
-export const isEnabled = createStateComputed('isEnabled');
+export const isEnabled = fromState('isEnabled');
 
 /**
  * @see State.isLoaderVisible
  */
-export const isLoaderVisible = createStateComputed('isLoaderVisible');
+export const isLoaderVisible = fromState('isLoaderVisible');
 
 /**
  * @see State.isVisible
  */
-export const isVisible = createStateComputed('isVisible');
+export const isVisible = fromState('isVisible');
 
 /**
  * @see State.text
  */
-export const text = createStateComputed('text');
+export const text = fromState('text');
 
 /**
  * @see State.textColor
  */
-export const textColor = createStateComputed('textColor');
+export const textColor = fromState('textColor');
