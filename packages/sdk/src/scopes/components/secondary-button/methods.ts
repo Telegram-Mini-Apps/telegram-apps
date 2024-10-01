@@ -76,12 +76,13 @@ function onStateChanged(s: State): void {
   // crash due to the empty value of the text.
   if (s.text) {
     postEvent(MINI_APPS_METHOD, {
+      color: s.backgroundColor,
       has_shine_effect: s.hasShineEffect,
-      is_visible: s.isVisible,
       is_active: s.isEnabled,
       is_progress_visible: s.isLoaderVisible,
+      is_visible: s.isVisible,
+      position: s.position,
       text: s.text,
-      color: s.backgroundColor,
       text_color: s.textColor,
     });
   }
