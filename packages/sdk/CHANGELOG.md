@@ -1,5 +1,21 @@
 # @telegram-apps/sdk
 
+## 2.1.0
+
+### Minor Changes
+
+- baa1994: - Add the Main Button `hasShineEffect` signal.
+  - Fix the Main Button default values closer to the Telegram SDK's.
+  - Add Theme Params `bottomBarBgColor` signal.
+  - Implement `shareStory` function.
+
+### Patch Changes
+
+- Updated dependencies [74dfc59]
+  - @telegram-apps/bridge@1.1.0
+  - @telegram-apps/navigation@1.0.1
+  - @telegram-apps/transformers@1.0.1
+
 ## 2.0.0
 
 ### Major Changes
