@@ -12,6 +12,41 @@ if (readTextFromClipboard.isSupported()) {
 }
 ```
 
+## `shareStory`
+
+The `shareStory` method opens the native story editor.
+
+It has one required parameter: a media URL that will be used as the background for the story.
+
+```ts
+import { shareStory } from '@telegram-apps/sdk';
+
+if (shareStory.isSupported()) {
+  shareStory('https://my.media/background.png');
+}
+```
+
+The function optionally accepts an object with additional options:
+
+- `text?: string` - a caption to add to the media, with a limit of 0-200 characters for regular
+  users, and 0-2048 characters
+  for [premium subscribers](https://telegram.org/faq_premium#telegram-premium).
+- `widgetLink?: object` - an object for including a widget link in the story.
+  Only [premium subscribers](https://telegram.org/faq_premium#telegram-premium) can post stories
+  with links.
+  - `url: string` - the URL to be included in the story.
+  - `name?: string` - the display name for the widget link (0-48 characters).
+
+```ts
+shareStory('https://my.media/background.png', {
+  text: 'Today was a good day. Love it! Thanks to this public!',
+  widgetLink: {
+    url: 'https://t.me/heyqbnk',
+    name: 'heyqbnk public group',
+  },
+});
+```
+
 ## `sendData`
 
 To send data to the bot, use the `sendData` function. This function sends a service message to the

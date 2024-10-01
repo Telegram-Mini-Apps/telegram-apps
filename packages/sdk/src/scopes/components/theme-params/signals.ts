@@ -37,6 +37,8 @@ export const buttonColor = createStateComputed('buttonColor');
 
 export const buttonTextColor = createStateComputed('buttonTextColor');
 
+export const bottomBarBgColor = createStateComputed('bottomBarBgColor');
+
 export const destructiveTextColor = createStateComputed('destructiveTextColor');
 
 /**

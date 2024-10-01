@@ -5,6 +5,7 @@ import {
   TypedError,
   type ExecuteWithOptions,
   type SwitchInlineQueryChatType,
+  type ExecuteWithPostEvent,
 } from '@telegram-apps/bridge';
 
 import { postEvent, createRequestId, request } from '@/scopes/globals.js';
@@ -13,6 +14,31 @@ import { ERR_DATA_INVALID_SIZE } from '@/errors.js';
 
 const READ_TEXT_FROM_CLIPBOARD_METHOD = 'web_app_read_text_from_clipboard';
 const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
+const SHARE_STORY_METHOD = 'web_app_share_to_story';
+
+interface ShareStoryOptions extends ExecuteWithPostEvent {
+  /**
+   * The caption to be added to the media.
+   * 0-200 characters for regular users and 0-2048 characters for premium subscribers.
+   * @see https://telegram.org/faq_premium#telegram-premium
+   */
+  text?: string;
+  /**
+   * An object that describes a widget link to be included in the story.
+   * Note that only premium subscribers can post stories with links.
+   * @see https://telegram.org/faq_premium#telegram-premium
+   */
+  widgetLink?: {
+    /**
+     * The URL to be included in the story.
+     */
+    url: string;
+    /**
+     * The name to be displayed for the widget link, 0-48 characters.
+     */
+    name?: string;
+  };
+}
 
 /**
  * Reads a text from the clipboard and returns a string or null. null is returned
@@ -51,6 +77,21 @@ export function sendData(data: string): void {
   }
   postEvent('web_app_data_send', { data });
 }
+
+/**
+ * A method that opens the native story editor.
+ * @since v7.8
+ */
+export const shareStory = withIsSupported(
+  (mediaUrl: string, options?: ShareStoryOptions) => {
+    options ||= {};
+    (options.postEvent || postEvent)(SHARE_STORY_METHOD, {
+      text: options.text,
+      media_url: mediaUrl,
+      widget_link: options.widgetLink,
+    });
+  }, SHARE_STORY_METHOD,
+);
 
 /**
  * Inserts the bot's username and the specified inline query in the current chat's input field.

@@ -26,6 +26,7 @@ Here is a complete example of the parameter value:
   "bg_color": "#17212b",
   "button_color": "#5288c1",
   "button_text_color": "#ffffff",
+  "bottom_bar_bg_color": "#ffffff",
   "destructive_text_color": "#ec3942",
   "header_bg_color": "#17212b",
   "hint_color": "#708499",

@@ -271,6 +271,12 @@ Available since: **v6.4**
 
 QR scanner was closed.
 
+### `secondary_button_pressed`
+
+Available since: **v7.10**
+
+A user clicked the Secondary Button.
+
 ### `set_custom_style`
 
 The event which is usually sent by the Telegram web application. Its payload represents `<style/>`

@@ -52,14 +52,16 @@ unmountMainButton(); // isMainButtonMounted() -> false
 To update the button properties, use the `setParams` method. It accepts an object with optional
 properties, each responsible for its own button trait.
 
-In turn, calling this method updates such signals as `backgroundColor`,`isVisible`, `isEnabled`,
-`isLoaderVisible`, `state`, `textColor` and `text`.
+In turn, calling this method updates such signals
+as `backgroundColor`, `hasShineEffect`, `isVisible`, `isEnabled`, `isLoaderVisible`, `state`, `textColor`
+and `text`.
 
 ::: code-group
 
 ```ts [Variable]
 mainButton.setParams({
   backgroundColor: '#000000',
+  hasShineEffect: true,
   isEnabled: true,
   isLoaderVisible: true,
   isVisible: true,
@@ -67,6 +69,7 @@ mainButton.setParams({
   textColor: '#ffffff'
 });
 mainButton.backgroundColor(); // '#000000'
+mainButton.hasShineEffect(); // true
 mainButton.isEnabled(); // true
 mainButton.isLoaderVisible(); // true
 mainButton.isVisible(); // true
@@ -76,6 +79,7 @@ mainButton.textColor(); // '#ffffff'
 mainButton.state();
 // {
 //   backgroundColor: '#000000',
+//   hasShineEffect: true,
 //   isActive: true,
 //   isLoaderVisible: true,
 //   isVisible: true,
@@ -88,6 +92,7 @@ mainButton.state();
 import {
   setMainButtonParams,
   mainButtonBackgroundColor,
+  mainButtonHasShineEffect,
   isMainButtonVisible,
   isMainButtonEnabled,
   isMainButtonLoaderVisible,
@@ -98,6 +103,7 @@ import {
 
 setMainButtonParams({
   backgroundColor: '#000000',
+  hasShineEffect: true,
   isEnabled: true,
   isLoaderVisible: true,
   isVisible: true,
@@ -105,6 +111,7 @@ setMainButtonParams({
   textColor: '#ffffff'
 });
 mainButtonBackgroundColor(); // '#000000'
+mainButtonHasShineEffect(); // true
 isMainButtonEnabled(); // true
 isMainButtonLoaderVisible(); // true
 isMainButtonVisible(); // true
@@ -114,6 +121,7 @@ mainButtonTextColor(); // '#ffffff'
 mainButtonState();
 // {
 //   backgroundColor: '#000000',
+//   hasShineEffect: true,
 //   isActive: true,
 //   isLoaderVisible: true,
 //   isVisible: true,

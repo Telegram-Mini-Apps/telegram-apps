@@ -410,6 +410,16 @@ Updates the Mini App [background color](theming.md#background-and-header-colors)
 |-------|----------|----------------------------------------------------|
 | color | `string` | The Mini App background color in `#RRGGBB` format. |
 
+### `web_app_set_bottom_bar_color`
+
+Available since: **v7.10**
+
+Updates the Mini App bottom bar background color.
+
+| Field | Type     | Description                                                                                                                                   |
+|-------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| color | `string` | The Mini App bottom bar background color in `#RRGGBB` format, or one of the values: `bg_color`, `secondary_bg_color` or `bottom_bar_bg_color` |
+
 ### `web_app_set_header_color`
 
 Available since: **v6.1**
@@ -444,14 +454,15 @@ Updates current [closing behavior](closing-behavior.md).
 
 Updates the [Main Button](main-button.md) settings.
 
-| Field               | Type      | Description                                                                                                                                                        |
-|---------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| is_visible          | `boolean` | _Optional_. Should the Main Button be displayed.                                                                                                                   |
-| is_active           | `boolean` | _Optional_. Should the Main Button be enabled.                                                                                                                     |
-| is_progress_visible | `boolean` | _Optional_. Should loader inside the Main Button be displayed. Use this property in case, some operation takes time. This loader will make user notified about it. |
-| text                | `string`  | _Optional_. Text inside the Main Button.                                                                                                                           |
-| color               | `string`  | _Optional_. The Main Button background color in `#RRGGBB` format.                                                                                                  |
-| text_color          | `string`  | _Optional_. The Main Button text color in `#RRGGBB` format.                                                                                                        |
+| Field               | Type      | Description                                                                                                                                                   |
+|---------------------|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| is_visible          | `boolean` | _Optional_. Should the button be displayed.                                                                                                                   |
+| is_active           | `boolean` | _Optional_. Should the button be enabled.                                                                                                                     |
+| is_progress_visible | `boolean` | _Optional_. Should loader inside the button be displayed. Use this property in case, some operation takes time. This loader will make user notified about it. |
+| text                | `string`  | _Optional_. Text inside the button.                                                                                                                           |
+| color               | `string`  | _Optional_. The button background color in `#RRGGBB` format.                                                                                                  |
+| text_color          | `string`  | _Optional_. The button text color in `#RRGGBB` format.                                                                                                        |
+| has_shine_effect    | `boolean` | _Optional_. _Since v7.8_. Should the button have a shining effect.                                                                                            |
 
 ### `web_app_setup_settings_button`
 
@@ -472,6 +483,29 @@ Sets new swipe behavior.
 | Field                | Type      | Description                                          |
 |----------------------|-----------|------------------------------------------------------|
 | allow_vertical_swipe | `boolean` | Allows closing the application using vertical swipe. |
+
+### `web_app_share_to_story`
+
+Available since: **v7.8**
+
+A method that opens the native story editor.
+
+| Field            | Type     | Description                                                                                                                                                                                          |
+|------------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| media_url        | `string` | A media URL which will be used as a background for a created story.                                                                                                                                  |
+| text             | `string` | _Optional_. The caption to be added to the media. 0-200 characters for regular users and 0-2048 characters for [premium subscribers](https://telegram.org/faq_premium#telegram-premium).             |
+| widget_link      | `object` | _Optional_. An object that describes a widget link to be included in the story. Note that only [premium subscribers](https://telegram.org/faq_premium#telegram-premium) can post stories with links. |
+| widget_link.url  | `string` | The URL to be included in the story.                                                                                                                                                                 |
+| widget_link.name | `string` | _Optional_. The name to be displayed for the widget link, 0-48 characters.                                                                                                                           |
+
+### `web_app_setup_secondary_button`
+
+Available since: **v7.10**
+
+The method updates the Secondary Button settings.
+
+Technically, this button functions the same way as the Main Button and uses the
+same [setup method parameters](#web-app-setup-main-button).
 
 ### `web_app_switch_inline_query`
 

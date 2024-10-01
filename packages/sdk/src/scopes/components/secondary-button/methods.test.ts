@@ -6,6 +6,7 @@ import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetSignal, resetPackageState } from '@test-utils/reset.js';
 
 import * as themeParams from '@/scopes/components/theme-params/instance.js';
+import { $version } from '@/scopes/globals.js';
 
 import {
   text,
@@ -18,7 +19,7 @@ import {
   backgroundColor,
   hasShineEffect,
 } from './signals.js';
-import { onClick, offClick, setParams, mount, unmount } from './methods.js';
+import { onClick, offClick, setParams, mount, unmount, isSupported } from './methods.js';
 
 vi.mock('@telegram-apps/bridge', async () => {
   const m = await vi.importActual('@telegram-apps/bridge');
@@ -72,12 +73,25 @@ describe.each([
   });
 });
 
+describe('isSupported', () => {
+  it('should return false if version is less than 7.10. True otherwise', () => {
+    $version.set('7.9');
+    expect(isSupported()).toBe(false);
+
+    $version.set('7.10');
+    expect(isSupported()).toBe(true);
+
+    $version.set('7.11');
+    expect(isSupported()).toBe(true);
+  });
+});
+
 describe('mounted', () => {
   beforeEach(mount);
   afterEach(unmount);
 
   describe('setParams', () => {
-    it('should save the state in storage key tapps/mainButton', () => {
+    it('should save the state in storage key tapps/secondaryButton', () => {
       state.set({
         backgroundColor: '#123456',
         hasShineEffect: true,
@@ -94,10 +108,10 @@ describe('mounted', () => {
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('tapps/mainButton', '{"backgroundColor":"#111111","hasShineEffect":true,"isEnabled":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc"}');
+      expect(spy).toHaveBeenCalledWith('tapps/secondaryButton', '{"backgroundColor":"#111111","hasShineEffect":true,"isEnabled":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc"}');
     });
 
-    it('should call "web_app_setup_main_button" only if text is not empty', () => {
+    it('should call "web_app_setup_secondary_button" only if text is not empty', () => {
       const spy = mockPostEvent();
       state.set({
         backgroundColor: '#123456',
@@ -113,7 +127,7 @@ describe('mounted', () => {
       expect(spy).toHaveBeenCalledTimes(0);
       setParams({ text: 'abc' });
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_setup_main_button', {
+      expect(spy).toHaveBeenCalledWith('web_app_setup_secondary_button', {
         has_shine_effect: false,
         is_visible: true,
         is_active: true,
@@ -154,7 +168,7 @@ describe('mount', () => {
   //     mockPageReload();
   //   });
   //
-  //   it('should use value from session storage key "tapps/mainButton"', () => {
+  //   it('should use value from session storage key "tapps/secondaryButton"', () => {
   //     const spy = vi.fn(() => JSON.stringify({
   //       backgroundColor: '#123456',
   //       isActive: true,
@@ -166,7 +180,7 @@ describe('mount', () => {
   //     mockSessionStorageGetItem(spy);
   //     mount();
   //     expect(spy).toHaveBeenCalledTimes(1);
-  //     expect(spy).toHaveBeenCalledWith('tapps/mainButton');
+  //     expect(spy).toHaveBeenCalledWith('tapps/secondaryButton');
   //     expect(state()).toStrictEqual({
   //       backgroundColor: '#123456',
   //       isActive: true,
@@ -177,12 +191,12 @@ describe('mount', () => {
   //     });
   //   });
   //
-  //   it('should set background and text colors from theme if session storage key "tapps/mainButton" not presented', () => {
+  //   it('should set background and text colors from theme if session storage key "tapps/secondaryButton" not presented', () => {
   //     const spy = mockSessionStorageGetItem(() => null);
   //     mount();
   //     // 2 times, because theme params calls it too.
   //     expect(spy).toHaveBeenCalledTimes(2);
-  //     expect(spy).toHaveBeenNthCalledWith(1, 'tapps/mainButton');
+  //     expect(spy).toHaveBeenNthCalledWith(1, 'tapps/secondaryButton');
   //     expect(state()).toMatchObject({
   //       backgroundColor: themeParams.buttonColor(),
   //       textColor: themeParams.buttonTextColor(),
@@ -205,9 +219,9 @@ describe('onClick', () => {
   it('should add click listener', () => {
     const fn = vi.fn();
     onClick(fn);
-    emitMiniAppsEvent('main_button_pressed');
-    emitMiniAppsEvent('main_button_pressed');
-    emitMiniAppsEvent('main_button_pressed');
+    emitMiniAppsEvent('secondary_button_pressed');
+    emitMiniAppsEvent('secondary_button_pressed');
+    emitMiniAppsEvent('secondary_button_pressed');
     expect(fn).toHaveBeenCalledTimes(3);
   });
 
@@ -215,7 +229,7 @@ describe('onClick', () => {
     const fn = vi.fn();
     const off = onClick(fn);
     off();
-    emitMiniAppsEvent('main_button_pressed', {});
+    emitMiniAppsEvent('secondary_button_pressed', {});
     expect(fn).toHaveBeenCalledTimes(0);
   });
 });

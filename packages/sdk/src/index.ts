@@ -88,6 +88,7 @@ export {
 export * as mainButton from '@/scopes/components/main-button/instance.js';
 export {
   backgroundColor as mainButtonBackgroundColor,
+  hasShineEffect as mainButtonHasShineEffect,
   isMounted as isMainButtonMounted,
   isVisible as isMainButtonVisible,
   isEnabled as isMainButtonEnabled,
@@ -168,6 +169,7 @@ export {
   bindCssVars as bindThemeParamsCssVars,
   buttonTextColor as themeParamsButtonTextColor,
   buttonColor as themeParamsButtonColor,
+  bottomBarBgColor as themeParamsBottomBarBgColor,
   destructiveTextColor as themeParamsDestructiveTextColor,
   headerBackgroundColor as themeParamsHeaderBackgroundColor,
   hintColor as themeParamsHintColor,
@@ -222,6 +224,7 @@ export {
   readTextFromClipboard,
   sendData,
   switchInlineQuery,
+  shareStory,
 } from '@/scopes/utilities/uncategorized/uncategorized.js';
 
 export {
@@ -284,6 +287,7 @@ export type {
   AsyncOptions,
   AnyHapticFeedbackParams,
   AnyInvokeCustomMethodParams,
+  BottomBarColor,
   BiometryAuthRequestStatus,
   BiometryTokenUpdateStatus,
   BiometryType,
