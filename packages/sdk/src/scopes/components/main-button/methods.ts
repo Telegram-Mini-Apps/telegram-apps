@@ -56,16 +56,16 @@ function onInternalStateChanged(state: State): void {
   setStorageValue<StorageValue>(STORAGE_KEY, state);
 }
 
-function onStateChanged(s: Required<State>) {
+function onStateChanged(s: Required<State>): void {
   // We should not commit changes until the payload is correct.
   // Some version of Telegram will crash due to the empty value of the text.
   s.text && postEvent(MINI_APPS_METHOD, {
+    color: s.backgroundColor,
     has_shine_effect: s.hasShineEffect,
-    is_visible: s.isVisible,
     is_active: s.isEnabled,
     is_progress_visible: s.isLoaderVisible,
+    is_visible: s.isVisible,
     text: s.text,
-    color: s.backgroundColor,
     text_color: s.textColor,
   });
 }
