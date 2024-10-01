@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 2.3.0
+
+### Minor Changes
+
+- 7279f66: Fix bottom buttons color change invalid behavior.
+
 ## 2.2.0
 
 ### Minor Changes

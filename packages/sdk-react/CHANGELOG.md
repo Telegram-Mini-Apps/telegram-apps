@@ -1,5 +1,12 @@
 # @telegram-apps/sdk-react
 
+## 2.0.3
+
+### Patch Changes
+
+- Updated dependencies [7279f66]
+  - @telegram-apps/sdk@2.3.0
+
 ## 2.0.2
 
 ### Patch Changes
