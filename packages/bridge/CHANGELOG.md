@@ -1,5 +1,13 @@
 # @telegram-apps/bridge
 
+## 1.2.0
+
+### Minor Changes
+
+- 7a7829a: - Add `web_app_set_bottom_bar_color` in `supports`
+  - Widen type for `web_app_set_background_color.color`
+  - Add `web_app_setup_secondary_button.position`
+
 ## 1.1.0
 
 ### Minor Changes
