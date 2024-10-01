@@ -85,25 +85,7 @@ export {
   open as openInvoice,
 } from '@/scopes/components/invoice/invoice.js';
 
-export * as mainButton from '@/scopes/components/main-button/instance.js';
-export {
-  backgroundColor as mainButtonBackgroundColor,
-  hasShineEffect as mainButtonHasShineEffect,
-  isMounted as isMainButtonMounted,
-  isVisible as isMainButtonVisible,
-  isEnabled as isMainButtonEnabled,
-  isLoaderVisible as isMainButtonLoaderVisible,
-  mount as mountMainButton,
-  onClick as onMainButtonClick,
-  offClick as offMainButtonClick,
-  setParams as setMainButtonParams,
-  state as mainButtonState,
-  textColor as mainButtonTextColor,
-  text as mainButtonText,
-  unmount as unmountMainButton,
-} from '@/scopes/components/main-button/instance.js';
-export * as MainButton from '@/scopes/components/main-button/static.js';
-
+export * from '@/scopes/components/main-button/exports.js';
 export * from '@/scopes/components/mini-app/exports.js';
 
 export * as popup from '@/scopes/components/popup/instance.js';
