@@ -13,16 +13,15 @@ properties. To do so, use the `mount` method. It will update the `isMounted` sig
 ```ts [Variable]
 import { mainButton } from '@telegram-apps/sdk';
 
-mainButton.mount(); // mainButton.isMounted() -> true
+mainButton.mount();
+mainButton.isMounted(); // true
 ```
 
 ```ts [Functions]
-import {
-  mountMainButton,
-  isMainButtonMounted,
-} from '@telegram-apps/sdk';
+import { mountMainButton, isMainButtonMounted } from '@telegram-apps/sdk';
 
-mountMainButton(); // isMainButtonMounted() -> true
+mountMainButton();
+isMainButtonMounted(); // true
 ```
 
 :::
@@ -32,13 +31,15 @@ To unmount, use the `unmount` method:
 ::: code-group
 
 ```ts [Variable]
-mainButton.unmount(); // mainButton.isMounted() -> false
+mainButton.unmount(); 
+mainButton.isMounted(); // false
 ```
 
 ```ts [Functions]
-import { unmountMainButton } from '@telegram-apps/sdk';
+import { unmountMainButton, isMainButtonMounted } from '@telegram-apps/sdk';
 
-unmountMainButton(); // isMainButtonMounted() -> false
+unmountMainButton();
+isMainButtonMounted(); // false
 ```
 
 :::
