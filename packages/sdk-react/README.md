@@ -6,7 +6,7 @@
 
 [code-link]: https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/sdk-react
 
-[docs-link]: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react
+[docs-link]: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react/2-x
 
 [npm-link]: https://npmjs.com/package/@telegram-apps/sdk-react
 
