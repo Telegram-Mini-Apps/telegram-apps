@@ -1,5 +1,13 @@
 # @telegram-apps/sdk-react
 
+## 2.0.4
+
+### Patch Changes
+
+- 06f6720: Fix some links in README.
+- Updated dependencies [06f6720]
+  - @telegram-apps/sdk@2.3.1
+
 ## 2.0.3
 
 ### Patch Changes
