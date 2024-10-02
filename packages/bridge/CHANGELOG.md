@@ -1,5 +1,13 @@
 # @telegram-apps/bridge
 
+## 1.2.1
+
+### Patch Changes
+
+- 06f6720: Fix some links in README.
+- Updated dependencies [06f6720]
+  - @telegram-apps/signals@1.0.1
+
 ## 1.2.0
 
 ### Minor Changes
