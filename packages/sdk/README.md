@@ -6,7 +6,7 @@
 
 [link]: https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/sdk
 
-[docs-link]: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk
+[docs-link]: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x
 
 [npm-link]: https://npmjs.com/package/@telegram-apps/sdk
 

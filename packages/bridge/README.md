@@ -4,9 +4,9 @@
 
 [docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
 
-[link]: https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/sdk
+[link]: https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/bridge
 
-[docs-link]: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk
+[docs-link]: https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge
 
 [npm-link]: https://npmjs.com/package/@telegram-apps/bridge
 

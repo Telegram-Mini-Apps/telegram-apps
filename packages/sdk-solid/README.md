@@ -6,7 +6,7 @@
 
 [code-link]: https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/sdk-solid
 
-[docs-link]: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-solid
+[docs-link]: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-solid/2-x
 
 [npm-link]: https://npmjs.com/package/@telegram-apps/sdk-solid
 
@@ -20,6 +20,6 @@
 [![code-badge]][code-link]
 
 Solid JS bindings
-for [client SDK](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk). Includes
+for [client SDK](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x). Includes
 hooks, components and utilities
 for comfortable usage of Solid JS on the Telegram Mini Apps platform.

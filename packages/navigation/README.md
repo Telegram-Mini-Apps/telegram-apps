@@ -4,9 +4,9 @@
 
 [docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
 
-[link]: https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/sdk
+[link]: https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/navigation
 
-[docs-link]: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk
+[//]: # ([docs-link]: https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk)
 
 [npm-link]: https://npmjs.com/package/@telegram-apps/navigation
 
@@ -16,7 +16,8 @@
 
 [![NPM][npm-badge]][npm-link]
 ![Size][size-badge]
-[![docs-badge]][docs-link]
 [![code-badge]][link]
+
+[//]: # ([![docs-badge]][docs-link])
 
 Navigation functionality for Telegram Mini Apps.
