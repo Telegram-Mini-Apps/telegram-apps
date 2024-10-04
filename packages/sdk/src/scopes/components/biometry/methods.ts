@@ -24,7 +24,7 @@ import {
   isAuthenticating,
   isMounting,
 } from './signals.js';
-import { request as requestBiometry } from './static.js';
+import { requestBiometry } from './requestBiometry.js';
 import { eventToState } from './eventToState.js';
 import type {
   State,

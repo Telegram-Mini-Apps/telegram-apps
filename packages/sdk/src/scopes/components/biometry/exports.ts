@@ -14,6 +14,7 @@ export {
   isRequestingAccess as isRequestingBiometryAccess,
 } from './exports.variable.js';
 export * as biometry from './exports.variable.js';
+export * from './requestBiometry.js';
 export type {
   AuthenticateOptions as AuthenticateBiometryOptions,
   State as BiometryState,
