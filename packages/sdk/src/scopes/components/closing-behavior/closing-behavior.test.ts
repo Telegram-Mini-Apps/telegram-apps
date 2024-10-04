@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState, resetSignal } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 
 import {
   disableConfirmation,
@@ -15,7 +15,6 @@ import {
 
 beforeEach(() => {
   resetPackageState();
-  [isConfirmationEnabled, isMounted].forEach(resetSignal);
   vi.restoreAllMocks();
   mockPostEvent();
 });
@@ -84,7 +83,12 @@ describe('disableConfirmation', () => {
 });
 
 describe('mount', () => {
-  afterEach(unmount);
+  it('should call postEvent with "web_app_setup_closing_behavior"', () => {
+    const spy = mockPostEvent();
+    mount();
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith('web_app_setup_closing_behavior', { need_confirmation: false });
+  });
 
   it('should set isMounted = true', () => {
     expect(isMounted()).toBe(false);

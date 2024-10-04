@@ -3,22 +3,11 @@ import { createWindow } from 'test-utils';
 import type { ThemeParams } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState, resetSignal } from '@test-utils/reset.js';
-import * as themeParams from '@/scopes/components/theme-params/instance.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
+import { state as tpState } from '@/scopes/components/theme-params/signals.js';
 import { $version } from '@/scopes/globals.js';
 
-import {
-  headerColor,
-  backgroundColor,
-  state,
-  isMounted,
-  isDark,
-  isCssVarsBound,
-  bottomBarColor,
-  bottomBarColorRGB,
-  backgroundColorRGB,
-  headerColorRGB,
-} from './signals.js';
+import { headerColor, backgroundColor, bottomBarColor } from './signals.js';
 import {
   bindCssVars,
   close,
@@ -48,22 +37,6 @@ vi.mock('@telegram-apps/bridge', async () => {
 beforeEach(() => {
   vi.restoreAllMocks();
   resetPackageState();
-  [
-    themeParams.isCssVarsBound,
-    themeParams.isMounted,
-    themeParams.state,
-    headerColor,
-    backgroundColor,
-    state,
-    isMounted,
-    isDark,
-    isCssVarsBound,
-    bottomBarColor,
-    bottomBarColorRGB,
-    backgroundColorRGB,
-    headerColorRGB,
-  ].forEach(resetSignal);
-
   createWindow();
   setPropertySpy = vi
     .spyOn(document.documentElement.style, 'setProperty')
@@ -106,13 +79,13 @@ describe('bindCssVars', () => {
     describe('background color', () => {
       it('should set --tg-bg-color == backgroundColorRGB() when theme changes', () => {
         bindCssVars();
-        themeParams.state.set({ secondaryBgColor: '#ddddaa' });
+        tpState.set({ secondaryBgColor: '#ddddaa' });
         setPropertySpy.mockClear();
         backgroundColor.set('secondary_bg_color');
         expect(setPropertySpy).toHaveBeenCalledOnce();
         expect(setPropertySpy).toHaveBeenCalledWith('--tg-bg-color', '#ddddaa');
 
-        themeParams.state.set({ bgColor: '#aafedd' });
+        tpState.set({ bgColor: '#aafedd' });
         setPropertySpy.mockClear();
         backgroundColor.set('bg_color');
         expect(setPropertySpy).toHaveBeenCalledOnce();
@@ -128,13 +101,13 @@ describe('bindCssVars', () => {
     describe('header color', () => {
       it('should set --tg-header-color == headerColorRGB() when theme changes', () => {
         bindCssVars();
-        themeParams.state.set({ secondaryBgColor: '#ddddaa' });
+        tpState.set({ secondaryBgColor: '#ddddaa' });
         setPropertySpy.mockClear();
         headerColor.set('secondary_bg_color');
         expect(setPropertySpy).toHaveBeenCalledOnce();
         expect(setPropertySpy).toHaveBeenCalledWith('--tg-header-color', '#ddddaa');
 
-        themeParams.state.set({ bgColor: '#aafedd' });
+        tpState.set({ bgColor: '#aafedd' });
         setPropertySpy.mockClear();
         headerColor.set('bg_color');
         expect(setPropertySpy).toHaveBeenCalledOnce();
@@ -150,19 +123,19 @@ describe('bindCssVars', () => {
     describe('bottom bar color', () => {
       it('should set --tg-bottom-bar-color == bottomBarColorRGB() when theme changes', () => {
         bindCssVars();
-        themeParams.state.set({ bgColor: '#aafedd' });
+        tpState.set({ bgColor: '#aafedd' });
         setPropertySpy.mockClear();
         bottomBarColor.set('bg_color');
         expect(setPropertySpy).toHaveBeenCalledOnce();
         expect(setPropertySpy).toHaveBeenCalledWith('--tg-bottom-bar-color', '#aafedd');
 
-        themeParams.state.set({ secondaryBgColor: '#ddddaa' });
+        tpState.set({ secondaryBgColor: '#ddddaa' });
         setPropertySpy.mockClear();
         bottomBarColor.set('secondary_bg_color');
         expect(setPropertySpy).toHaveBeenCalledOnce();
         expect(setPropertySpy).toHaveBeenCalledWith('--tg-bottom-bar-color', '#ddddaa');
 
-        themeParams.state.set({ bottomBarBgColor: '#ddaacc' });
+        tpState.set({ bottomBarBgColor: '#ddaacc' });
         setPropertySpy.mockClear();
         bottomBarColor.set('bottom_bar_bg_color');
         expect(setPropertySpy).toHaveBeenCalledOnce();
@@ -208,6 +181,29 @@ describe('mounted', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('web_app_set_header_color', { color_key: 'secondary_bg_color' });
     });
+  });
+});
+
+describe('mount', () => {
+  it('should call postEvent with "web_app_set_background_color"', () => {
+    const spy = mockPostEvent();
+    mount();
+    expect(spy).toHaveBeenCalledTimes(3);
+    expect(spy).toHaveBeenNthCalledWith(1, 'web_app_set_background_color', { color: 'bg_color' });
+  });
+
+  it('should call postEvent with "web_app_set_bottom_bar_color"', () => {
+    const spy = mockPostEvent();
+    mount();
+    expect(spy).toHaveBeenCalledTimes(3);
+    expect(spy).toHaveBeenNthCalledWith(2, 'web_app_set_bottom_bar_color', { color: 'bottom_bar_bg_color' });
+  });
+
+  it('should call postEvent with "web_app_set_header_color"', () => {
+    const spy = mockPostEvent();
+    mount();
+    expect(spy).toHaveBeenCalledTimes(3);
+    expect(spy).toHaveBeenNthCalledWith(3, 'web_app_set_header_color', { color_key: 'bg_color' });
   });
 });
 

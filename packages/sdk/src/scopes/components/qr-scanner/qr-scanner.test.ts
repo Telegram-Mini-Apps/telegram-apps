@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { dispatchMiniAppsEvent } from 'test-utils';
 
-import { resetPackageState, resetSignal } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { $version } from '@/scopes/globals.js';
 
@@ -9,7 +9,6 @@ import { close, open, isSupported, isOpened } from './qr-scanner.js';
 
 beforeEach(() => {
   resetPackageState();
-  resetSignal(isOpened);
   vi.restoreAllMocks();
   mockPostEvent();
 });

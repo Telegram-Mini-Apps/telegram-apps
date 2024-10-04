@@ -1,5 +1,5 @@
 import { computed, type Computed, signal } from '@telegram-apps/signals';
-import type { InitData } from '@telegram-apps/bridge';
+import { type InitData, retrieveLaunchParams } from '@telegram-apps/bridge';
 
 /* USUAL */
 
@@ -10,7 +10,7 @@ export const state = signal<InitData | undefined>(undefined);
 
 /* COMPUTED */
 
-function createStateComputed<K extends keyof InitData>(key: K): Computed<InitData[K] | undefined> {
+function fromState<K extends keyof InitData>(key: K): Computed<InitData[K] | undefined> {
   return computed(() => {
     const s = state();
     return s ? s[key] : undefined;
@@ -20,12 +20,12 @@ function createStateComputed<K extends keyof InitData>(key: K): Computed<InitDat
 /**
  * @see InitData.authDate
  */
-export const authDate = createStateComputed('authDate');
+export const authDate = fromState('authDate');
 
 /**
  * @see InitData.canSendAfter
  */
-export const canSendAfter = createStateComputed('canSendAfter');
+export const canSendAfter = fromState('canSendAfter');
 
 /**
  * Date after which it is allowed to call
@@ -43,27 +43,27 @@ export const canSendAfterDate = computed(() => {
 /**
  * @see InitData.chat
  */
-export const chat = createStateComputed('chat');
+export const chat = fromState('chat');
 
 /**
  * @see InitData.chatType
  */
-export const chatType = createStateComputed('chatType');
+export const chatType = fromState('chatType');
 
 /**
  * @see InitData.chatInstance
  */
-export const chatInstance = createStateComputed('chatInstance');
+export const chatInstance = fromState('chatInstance');
 
 /**
  * @see InitData.hash
  */
-export const hash = createStateComputed('hash');
+export const hash = fromState('hash');
 
 /**
  * @see InitData.queryId
  */
-export const queryId = createStateComputed('queryId');
+export const queryId = fromState('queryId');
 
 /**
  * Raw representation of init data.
@@ -73,14 +73,23 @@ export const raw = signal<string | undefined>();
 /**
  * @see InitData.receiver
  */
-export const receiver = createStateComputed('receiver');
+export const receiver = fromState('receiver');
+
+/**
+ * Restores the component state.
+ */
+export function restore(): void {
+  const lp = retrieveLaunchParams();
+  state.set(lp.initData);
+  raw.set(lp.initDataRaw);
+}
 
 /**
  * @see InitData.startParam
  */
-export const startParam = createStateComputed('startParam');
+export const startParam = fromState('startParam');
 
 /**
  * @see InitData.user
  */
-export const user = createStateComputed('user');
+export const user = fromState('user');

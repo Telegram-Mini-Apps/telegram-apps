@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState, resetSignal } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 import { $version } from '@/scopes/globals.js';
 
 import {
@@ -17,7 +17,6 @@ import {
 
 beforeEach(() => {
   resetPackageState();
-  [isVerticalEnabled, isMounted].forEach(resetSignal);
   vi.restoreAllMocks();
   mockPostEvent();
 });
@@ -50,7 +49,6 @@ describe('mounted', () => {
     });
   });
 });
-
 
 describe('not mounted', () => {
   describe('disableVerticalSwipes', () => {
@@ -99,12 +97,17 @@ describe('isSupported', () => {
 });
 
 describe('mount', () => {
-  afterEach(unmount);
-
   it('should set isMounted = true', () => {
     expect(isMounted()).toBe(false);
     mount();
     expect(isMounted()).toBe(true);
+  });
+
+  it('should call postEvent with "web_app_setup_swipe_behavior"', () => {
+    const spy = mockPostEvent();
+    mount();
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: false });
   });
 
   describe('page reload', () => {

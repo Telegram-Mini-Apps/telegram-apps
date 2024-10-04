@@ -17,7 +17,8 @@ import { isPageReload } from '@telegram-apps/navigation';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 
 import { isCssVarsBound, state, isMounted } from './signals.js';
-import { type GetCssVarNameFn, parse } from './static.js';
+import { parseThemeParams } from './parseThemeParams.js';
+import type { GetCssVarNameFn } from './types.js';
 
 type StorageValue = ThemeParams;
 
@@ -89,7 +90,7 @@ export function mount(): void {
  * @param e - event data.
  */
 const onThemeChanged: EventListener<'theme_changed'> = (e) => {
-  const value = parse(e.theme_params);
+  const value = parseThemeParams(e.theme_params);
   state.set(value);
   setStorageValue<StorageValue>(STORAGE_KEY, value);
 };

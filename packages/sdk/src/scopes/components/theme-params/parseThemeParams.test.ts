@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parse } from './static.js';
+import { parseThemeParams } from './parseThemeParams.js';
 
 describe('parse', () => {
   describe.each([
@@ -19,11 +19,11 @@ describe('parse', () => {
     { from: 'text_color', to: 'textColor' },
   ])('$to', ({ from, to }) => {
     it(`should throw if "${from}" property contains not a string in format "#RRGGBB"`, () => {
-      expect(() => parse({ [from]: 999 })).toThrow();
+      expect(() => parseThemeParams({ [from]: 999 })).toThrow();
     });
 
     it(`should map to "${to}" property parsing it as string in "#RRGGBB" format`, () => {
-      expect(parse({ [from]: '#aabbcc' })).toStrictEqual({ [to]: '#aabbcc' });
+      expect(parseThemeParams({ [from]: '#aabbcc' })).toStrictEqual({ [to]: '#aabbcc' });
     });
   });
 });

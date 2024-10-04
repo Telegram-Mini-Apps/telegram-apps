@@ -3,9 +3,8 @@ import { mockSessionStorageSetItem } from 'test-utils';
 import { emitMiniAppsEvent, type ThemeParams } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetSignal, resetPackageState } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 
-import * as themeParams from '@/scopes/components/theme-params/instance.js';
 import { $version } from '@/scopes/globals.js';
 
 import {
@@ -18,7 +17,6 @@ import {
   internalState,
   backgroundColor,
   hasShineEffect,
-  state,
   position,
 } from './signals.js';
 import { onClick, offClick, setParams, mount, unmount, isSupported } from './methods.js';
@@ -39,22 +37,6 @@ vi.mock('@telegram-apps/bridge', async () => {
 beforeEach(() => {
   vi.restoreAllMocks();
   resetPackageState();
-  [
-    themeParams.isCssVarsBound,
-    themeParams.isMounted,
-    themeParams.state,
-    text,
-    textColor,
-    isMounted,
-    isEnabled,
-    isLoaderVisible,
-    isVisible,
-    internalState,
-    backgroundColor,
-    hasShineEffect,
-    state,
-    position,
-  ].forEach(resetSignal);
   mockPostEvent();
 });
 

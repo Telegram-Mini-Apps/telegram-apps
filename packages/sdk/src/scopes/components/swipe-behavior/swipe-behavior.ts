@@ -3,6 +3,7 @@ import { getStorageValue, setStorageValue, supports } from '@telegram-apps/bridg
 import { signal } from '@telegram-apps/signals';
 
 import { $version, postEvent } from '@/scopes/globals.js';
+import { subAndCall } from '@/utils/subAndCall.js';
 
 type StorageValue = boolean;
 
@@ -49,12 +50,13 @@ export function isSupported(): boolean {
 export function mount(): void {
   if (!isMounted()) {
     isVerticalEnabled.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
-    isVerticalEnabled.sub(onStateChanged);
+    subAndCall(isVerticalEnabled, onStateChanged);
     isMounted.set(true);
   }
 }
 
-function onStateChanged(value: boolean): void {
+function onStateChanged(): void {
+  const value = isVerticalEnabled();
   postEvent(MINI_APPS_METHOD, { allow_vertical_swipe: value });
   setStorageValue<StorageValue>(STORAGE_KEY, value);
 }

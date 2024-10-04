@@ -14,6 +14,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 
 import { $version, postEvent, request } from '@/scopes/globals.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
+import { subAndCall } from '@/utils/subAndCall.js';
 import { ERR_ALREADY_CALLED, ERR_NOT_AVAILABLE } from '@/errors.js';
 
 import {
@@ -24,7 +25,7 @@ import {
   isAuthenticating,
   isMounting,
 } from './signals.js';
-import { request as requestBiometry } from './static.js';
+import { requestBiometry } from './requestBiometry.js';
 import { eventToState } from './eventToState.js';
 import type {
   State,
@@ -162,7 +163,7 @@ export const mount = createMountFn<State>(
   },
   result => {
     on(BIOMETRY_INFO_RECEIVED_EVENT, onBiometryInfoReceived);
-    state.sub(onStateChanged);
+    subAndCall(state, onStateChanged);
     state.set(result);
   },
   { isMounted, mountError, isMounting },
@@ -172,7 +173,8 @@ const onBiometryInfoReceived: EventListener<'biometry_info_received'> = e => {
   state.set(eventToState(e));
 };
 
-function onStateChanged(s: State | undefined): void {
+function onStateChanged(): void {
+  const s = state();
   s && setStorageValue<StorageValue>(STORAGE_KEY, s);
 }
 

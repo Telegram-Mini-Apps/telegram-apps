@@ -3,9 +3,7 @@ import { mockSessionStorageSetItem } from 'test-utils';
 import { emitMiniAppsEvent, type ThemeParams } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetSignal, resetPackageState } from '@test-utils/reset.js';
-
-import * as themeParams from '@/scopes/components/theme-params/instance.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 
 import {
   text,
@@ -17,7 +15,6 @@ import {
   internalState,
   backgroundColor,
   hasShineEffect,
-  state,
 } from './signals.js';
 import { onClick, offClick, setParams, mount, unmount } from './methods.js';
 
@@ -37,21 +34,6 @@ vi.mock('@telegram-apps/bridge', async () => {
 beforeEach(() => {
   vi.restoreAllMocks();
   resetPackageState();
-  [
-    themeParams.isCssVarsBound,
-    themeParams.isMounted,
-    themeParams.state,
-    text,
-    textColor,
-    isMounted,
-    isEnabled,
-    isLoaderVisible,
-    isVisible,
-    internalState,
-    backgroundColor,
-    hasShineEffect,
-    state,
-  ].forEach(resetSignal);
   mockPostEvent();
 });
 
@@ -152,6 +134,21 @@ describe('not mounted', () => {
 });
 
 describe('mount', () => {
+  it('should call postEvent with "web_app_setup_main_button"', () => {
+    const spy = mockPostEvent();
+    mount();
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith('web_app_setup_main_button', {
+      color: '#2481cc',
+      has_shine_effect: false,
+      is_active: true,
+      is_progress_visible: false,
+      is_visible: false,
+      text: 'Continue',
+      text_color: '#ffffff',
+    });
+  });
+
   it('should set isMounted = true', () => {
     expect(isMounted()).toBe(false);
     mount();
