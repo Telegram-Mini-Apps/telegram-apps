@@ -28,5 +28,6 @@ export type {
   ThemeParams,
   ThemeParamsKey,
 } from './types.js';
+export * from './parseThemeParams.js';
 
 export { serializeThemeParams } from '@telegram-apps/transformers';
