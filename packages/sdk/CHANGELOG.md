@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 2.4.0
+
+### Minor Changes
+
+- 96dec34: Make mountable components now send their state to the Telegram application on mount.
+
 ## 2.3.1
 
 ### Patch Changes
