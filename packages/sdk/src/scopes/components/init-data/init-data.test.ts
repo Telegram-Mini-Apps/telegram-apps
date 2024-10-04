@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { InitData } from '@telegram-apps/bridge';
 
-import { resetPackageState } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 
 import { raw, state, restore } from './init-data.js';
 

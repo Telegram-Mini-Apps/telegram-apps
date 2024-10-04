@@ -1,4 +1,4 @@
-import { resetSignal } from '@test-utils/reset.js';
+import { resetSignal } from '@test-utils/reset/reset.js';
 
 import {
   isMounted,
@@ -12,7 +12,7 @@ import {
   isEnabled,
   isLoaderVisible,
   position,
-} from './signals.js';
+} from '@/scopes/components/secondary-button/signals.js';
 
 export function resetSecondaryButton() {
   [

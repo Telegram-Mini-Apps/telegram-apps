@@ -1,4 +1,4 @@
-import { resetSignal } from '@test-utils/reset.js';
+import { resetSignal } from '@test-utils/reset/reset.js';
 
 import {
   state,
@@ -11,7 +11,7 @@ import {
   height,
   stableHeight,
   isStable,
-} from './signals.js';
+} from '@/scopes/components/viewport/signals.js';
 
 export function resetViewport() {
   [

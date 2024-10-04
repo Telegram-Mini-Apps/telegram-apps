@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
 import { createWindow } from 'test-utils';
 import { emitMiniAppsEvent } from '@telegram-apps/bridge';
-import { resetPackageState } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 
 import { bindCssVars, mount } from './methods.js';

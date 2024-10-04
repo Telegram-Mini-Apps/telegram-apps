@@ -1,4 +1,4 @@
-import { resetSignal } from '@test-utils/reset.js';
+import { resetSignal } from '@test-utils/reset/reset.js';
 
 import {
   isMounted,
@@ -11,7 +11,7 @@ import {
   headerColor,
   isCssVarsBound,
   isDark,
-} from './signals.js';
+} from '@/scopes/components/mini-app/signals.js';
 
 export function resetMiniApp() {
   [

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { toSearchParams } from 'test-utils';
 
-import { resetPackageState } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 
 import { parseInitData } from './parseInitData.js';
 

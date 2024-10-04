@@ -1,4 +1,4 @@
-import { resetSignal } from '@test-utils/reset.js';
+import { resetSignal } from '@test-utils/reset/reset.js';
 
 import {
   isMounted,
@@ -7,7 +7,7 @@ import {
   isMounting,
   isRequestingAccess,
   isAuthenticating,
-} from './signals.js';
+} from '@/scopes/components/biometry/signals.js';
 
 export function resetBiometry() {
   [

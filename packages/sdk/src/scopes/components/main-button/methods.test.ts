@@ -3,7 +3,7 @@ import { mockSessionStorageSetItem } from 'test-utils';
 import { emitMiniAppsEvent, type ThemeParams } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 
 import {
   text,

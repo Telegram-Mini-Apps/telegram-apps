@@ -1,7 +1,7 @@
 import { describe, vi, expect, it, afterEach, beforeEach } from 'vitest';
 import { dispatchMiniAppsEvent } from 'test-utils';
 
-import { resetPackageState } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 
 import { readTextFromClipboard, shareStory } from './uncategorized.js';

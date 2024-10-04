@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { resetPackageState, resetSignal } from '@test-utils/reset.js';
+import { resetPackageState, resetSignal } from '@test-utils/reset/reset.js';
 
 import { state as tpState } from '@/scopes/components/theme-params/signals.js';
 

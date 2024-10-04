@@ -3,7 +3,7 @@ import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } 
 import { emitMiniAppsEvent } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 
 import { $version } from '@/scopes/globals.js';
 

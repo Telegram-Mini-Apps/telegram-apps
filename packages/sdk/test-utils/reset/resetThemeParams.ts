@@ -1,4 +1,4 @@
-import { resetSignal } from '@test-utils/reset.js';
+import { resetSignal } from '@test-utils/reset/reset.js';
 
 import {
   state,
@@ -20,7 +20,7 @@ import {
   hintColor,
   sectionHeaderTextColor,
   bottomBarBgColor,
-} from './signals.js';
+} from '@/scopes/components/theme-params/signals.js';
 
 export function resetThemeParams() {
   [

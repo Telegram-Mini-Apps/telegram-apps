@@ -3,7 +3,7 @@ import { createWindow } from 'test-utils';
 import type { ThemeParams } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
 import { state as tpState } from '@/scopes/components/theme-params/signals.js';
 import { $version } from '@/scopes/globals.js';
 

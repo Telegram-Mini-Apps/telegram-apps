@@ -1,4 +1,4 @@
-import { resetSignal } from '@test-utils/reset.js';
+import { resetSignal } from '@test-utils/reset/reset.js';
 
 import {
   raw,
@@ -14,7 +14,7 @@ import {
   chatInstance,
   hash,
   user,
-} from './init-data.js';
+} from '@/scopes/components/init-data/init-data.js';
 
 export function resetInitData() {
   [

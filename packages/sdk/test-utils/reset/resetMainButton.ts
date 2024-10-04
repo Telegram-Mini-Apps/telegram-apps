@@ -1,4 +1,4 @@
-import { resetSignal } from '@test-utils/reset.js';
+import { resetSignal } from '@test-utils/reset/reset.js';
 
 import {
   isMounted,
@@ -11,7 +11,7 @@ import {
   textColor,
   backgroundColor,
   internalState,
-} from './signals.js';
+} from '@/scopes/components/main-button/signals.js';
 
 export function resetMainButton() {
   [
