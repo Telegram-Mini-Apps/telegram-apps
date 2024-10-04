@@ -12,7 +12,7 @@ import {
 import type { HeaderColor, State } from './types.js';
 
 // #__NO_SIDE_EFFECTS__
-function colorBasedOn(signal: Computed<'bg_color' | 'secondary_bg_color' | RGB>) {
+function rgbBasedOn(signal: Computed<'bg_color' | 'secondary_bg_color' | RGB>) {
   return computed<RGB | undefined>(() => {
     const color = signal();
 
@@ -33,7 +33,7 @@ export const backgroundColor = signal<BackgroundColor>('bg_color');
  * This value requires the Theme Params component to be mounted to extract a valid RGB value
  * of the color key.
  */
-export const backgroundColorRGB = colorBasedOn(backgroundColor);
+export const backgroundColorRGB = rgbBasedOn(backgroundColor);
 
 
 /**
@@ -71,7 +71,7 @@ export const headerColor = signal<HeaderColor>('bg_color');
  * This value requires the Theme Params component to be mounted to extract a valid RGB value
  * of the color key.
  */
-export const headerColorRGB = colorBasedOn(headerColor);
+export const headerColorRGB = rgbBasedOn(headerColor);
 
 /**
  * True if the component is currently mounted.
@@ -82,8 +82,6 @@ export const isMounted = signal(false);
  * True if CSS variables are currently bound.
  */
 export const isCssVarsBound = signal(false);
-
-/* COMPUTED */
 
 /**
  * True if the current Mini App background color is recognized as dark.
