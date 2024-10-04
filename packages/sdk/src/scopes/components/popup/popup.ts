@@ -1,9 +1,9 @@
 import { TypedError, supports } from '@telegram-apps/bridge';
+import { signal } from '@telegram-apps/signals';
 
 import { $version, request } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 
-import { isOpened } from './signals.js';
 import { prepareParams } from './prepareParams.js';
 import type { OpenOptions } from './types.js';
 
@@ -15,6 +15,11 @@ const MINI_APPS_METHOD = 'web_app_open_popup';
 export function isSupported(): boolean {
   return supports(MINI_APPS_METHOD, $version());
 }
+
+/**
+ * True if a popup is currently opened.
+ */
+export const isOpened = signal(false);
 
 /**
  * A method that shows a native popup described by the `params` argument.
