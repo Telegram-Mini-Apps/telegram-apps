@@ -3,6 +3,7 @@ import { getStorageValue, setStorageValue } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
+import { subAndCall } from '@/utils/subAndCall.js';
 
 type StorageValue = boolean;
 
@@ -41,12 +42,13 @@ export function enableConfirmation(): void {
 export function mount(): void {
   if (!isMounted()) {
     isConfirmationEnabled.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
-    isConfirmationEnabled.sub(onStateChanged);
+    subAndCall(isConfirmationEnabled, onStateChanged);
     isMounted.set(true);
   }
 }
 
-function onStateChanged(value: boolean): void {
+function onStateChanged(): void {
+  const value = isConfirmationEnabled();
   postEvent('web_app_setup_closing_behavior', { need_confirmation: value });
   setStorageValue<StorageValue>(STORAGE_KEY, value);
 }

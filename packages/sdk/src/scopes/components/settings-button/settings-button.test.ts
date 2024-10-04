@@ -3,7 +3,7 @@ import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } 
 import { emitMiniAppsEvent } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState, resetSignal } from '@test-utils/reset.js';
+import { resetPackageState } from '@test-utils/reset.js';
 
 import { $version } from '@/scopes/globals.js';
 
@@ -21,7 +21,6 @@ import {
 
 beforeEach(() => {
   resetPackageState();
-  [isVisible, isMounted].forEach(resetSignal);
   vi.restoreAllMocks();
   mockPostEvent();
 });
@@ -118,7 +117,12 @@ describe('isSupported', () => {
 });
 
 describe('mount', () => {
-  afterEach(unmount);
+  it('should call postEvent with "web_app_setup_settings_button"', () => {
+    const spy = mockPostEvent();
+    mount();
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith('web_app_setup_settings_button', { is_visible: false });
+  });
 
   it('should set isMounted = true', () => {
     expect(isMounted()).toBe(false);

@@ -10,6 +10,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 import { signal } from '@telegram-apps/signals';
 
 import { $version, postEvent } from '@/scopes/globals.js';
+import { subAndCall } from '@/utils/subAndCall.js';
 
 
 type StorageValue = boolean;
@@ -51,14 +52,15 @@ export const isMounted = signal(false);
 export function mount(): void {
   if (!isMounted()) {
     isVisible.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
-    isVisible.sub(onStateChanged);
+    subAndCall(isVisible, onStateChanged);
     isMounted.set(true);
   }
 }
 
-function onStateChanged(isVisible: boolean): void {
-  postEvent(MINI_APPS_METHOD, { is_visible: isVisible });
-  setStorageValue<StorageValue>(STORAGE_KEY, isVisible);
+function onStateChanged(): void {
+  const value = isVisible();
+  postEvent(MINI_APPS_METHOD, { is_visible: value });
+  setStorageValue<StorageValue>(STORAGE_KEY, value);
 }
 
 /**

@@ -7,7 +7,7 @@ import {
   setCssVar,
   TypedError,
   type RGB,
-  type BottomBarColor, BackgroundColor,
+  type BottomBarColor,
 } from '@telegram-apps/bridge';
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
@@ -17,10 +17,10 @@ import { postEvent } from '@/scopes/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { withSupports } from '@/scopes/withSupports.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
+import { mount as tpMount } from '@/scopes/components/theme-params/methods.js';
 import {
-  mount as tpMount,
   headerBackgroundColor as tpHeaderBackgroundColor,
-} from '@/scopes/components/theme-params/instance.js';
+} from '@/scopes/components/theme-params/signals.js';
 
 import {
   headerColor,
@@ -34,6 +34,7 @@ import {
   backgroundColorRGB,
 } from './signals.js';
 import type { GetCssVarNameFn, HeaderColor, State } from './types.js';
+import { subAndCall } from '@/utils/subAndCall.js';
 
 type StorageValue = State;
 
@@ -114,27 +115,32 @@ export function mount(): void {
   if (!isMounted()) {
     const s = isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY);
     tpMount();
+
     backgroundColor.set(s ? s.backgroundColor : 'bg_color');
-    backgroundColor.sub(onBgColorChanged);
     bottomBarColor.set(s ? s.bottomBarColor : 'bottom_bar_bg_color');
-    bottomBarColor.sub(onBottomBarBgColorChanged);
     headerColor.set(s ? s.headerColor : tpHeaderBackgroundColor() || 'bg_color');
-    headerColor.sub(onHeaderColorChanged);
+
+    subAndCall(backgroundColor, onBgColorChanged);
+    subAndCall(bottomBarColor, onBottomBarBgColorChanged);
+    subAndCall(headerColor, onHeaderColorChanged);
+
     isMounted.set(true);
   }
 }
 
-function onBgColorChanged(color: BackgroundColor): void {
+function onBgColorChanged(): void {
+  const color = backgroundColor();
   saveState();
   postEvent(SET_BG_COLOR_METHOD, { color });
 }
 
-function onBottomBarBgColorChanged(color: BottomBarColor): void {
+function onBottomBarBgColorChanged(): void {
   saveState();
-  postEvent(SET_BOTTOM_BAR_BG_COLOR_METHOD, { color });
+  postEvent(SET_BOTTOM_BAR_BG_COLOR_METHOD, { color: bottomBarColor() });
 }
 
-function onHeaderColorChanged(color: HeaderColor): void {
+function onHeaderColorChanged(): void {
+  const color = headerColor();
   saveState();
   postEvent(SET_HEADER_COLOR_METHOD, isRGB(color) ? { color } : { color_key: color });
 }

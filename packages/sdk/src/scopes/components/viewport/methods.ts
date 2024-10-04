@@ -15,6 +15,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 import { postEvent } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
+import { subAndCall } from '@/utils/subAndCall.js';
 
 import { type GetCSSVarNameFn, request } from './static.js';
 import {
@@ -138,7 +139,7 @@ export const mount = createMountFn<State>(
   },
   result => {
     on('viewport_changed', onViewportChanged);
-    state.sub(onStateChanged);
+    subAndCall(state, onStateChanged);
     state.set(formatState(result));
   },
   { isMounted, isMounting, mountError },
@@ -153,8 +154,8 @@ const onViewportChanged: EventListener<'viewport_changed'> = (data) => {
   }));
 };
 
-function onStateChanged(s: State): void {
-  setStorageValue<StorageValue>('viewport', s);
+function onStateChanged(): void {
+  setStorageValue<StorageValue>('viewport', state());
 }
 
 /**
