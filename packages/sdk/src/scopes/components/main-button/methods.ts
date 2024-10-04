@@ -8,6 +8,7 @@ import {
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals.js';
+import { subAndCall } from '@/utils/subAndCall.js';
 
 import { internalState, isMounted, state } from './signals.js';
 import type { State } from './types.js';
@@ -30,7 +31,7 @@ export function mount(): void {
     prev && internalState.set(prev);
 
     internalState.sub(onInternalStateChanged);
-    state.sub(onStateChanged);
+    subAndCall(state, onStateChanged);
     isMounted.set(true);
   }
 }
@@ -56,7 +57,9 @@ function onInternalStateChanged(state: State): void {
   setStorageValue<StorageValue>(STORAGE_KEY, state);
 }
 
-function onStateChanged(s: Required<State>): void {
+function onStateChanged(): void {
+  const s = state();
+
   // We should not commit changes until the payload is correct.
   // Some version of Telegram will crash due to the empty value of the text.
   s.text && postEvent(MINI_APPS_METHOD, {
