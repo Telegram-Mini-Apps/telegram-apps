@@ -11,6 +11,7 @@ import { searchParams, object, number, string, date } from '@telegram-apps/trans
 import { invokeCustomMethod, request } from '@/scopes/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { ERR_ACCESS_DENIED, ERR_ALREADY_CALLED } from '@/errors.js';
+import { signal } from '@telegram-apps/signals';
 
 /**
  * Requested contact information.
@@ -29,10 +30,15 @@ export interface RequestedContact {
 const REQUEST_PHONE_METHOD = 'web_app_request_phone';
 const REQUEST_WRITE_ACCESS_METHOD = 'web_app_request_write_access';
 
-// FIXME: Signals
+/**
+ * True if phone access is currently being requested.
+ */
+export const isRequestingPhoneAccess = signal(false);
 
-let isRequestingPhoneAccess: boolean | undefined;
-let isRequestingWriteAccess: boolean | undefined;
+/**
+ * True if write access is currently being requested.
+ */
+export const isRequestingWriteAccess = signal(false);
 
 /**
  * Attempts to get requested contact.
@@ -123,15 +129,15 @@ export const requestContact = withIsSupported(
  */
 export const requestPhoneAccess = withIsSupported(
   (options?: ExecuteWithOptions): Promise<PhoneRequestedStatus> => {
-    if (isRequestingPhoneAccess) {
+    if (isRequestingPhoneAccess()) {
       throw new TypedError(ERR_ALREADY_CALLED);
     }
-    isRequestingPhoneAccess = true;
+    isRequestingPhoneAccess.set(true);
 
     return request(REQUEST_PHONE_METHOD, 'phone_requested', options)
       .then(r => r.status)
       .finally(() => {
-        isRequestingPhoneAccess = undefined;
+        isRequestingPhoneAccess.set(false);
       });
   }, REQUEST_PHONE_METHOD,
 );
@@ -143,15 +149,15 @@ export const requestPhoneAccess = withIsSupported(
  */
 export const requestWriteAccess = withIsSupported(
   (options?: ExecuteWithOptions): Promise<WriteAccessRequestedStatus> => {
-    if (isRequestingWriteAccess) {
+    if (isRequestingWriteAccess()) {
       throw new TypedError(ERR_ALREADY_CALLED);
     }
-    isRequestingWriteAccess = true;
+    isRequestingWriteAccess.set(true);
 
     return request(REQUEST_WRITE_ACCESS_METHOD, 'write_access_requested', options)
       .then(r => r.status)
       .finally(() => {
-        isRequestingWriteAccess = undefined;
+        isRequestingWriteAccess.set(false);
       });
   }, REQUEST_WRITE_ACCESS_METHOD,
 );
