@@ -1,11 +1,11 @@
-import { mockTelegramEnv, isTMA, InitData } from '@telegram-apps/sdk-react';
+import { mockTelegramEnv, isTMA, parseInitData } from '@telegram-apps/sdk-react';
 
 // It is important, to mock the environment only for development purposes. When building the
 // application, import.meta.env.DEV will become false, and the code inside will be tree-shaken,
 // so you will not see it in your final bundle.
 if (import.meta.env.DEV) {
   (() => {
-    let shouldMock = false;
+    let shouldMock;
     const MOCK_KEY = '____mocked';
 
     // We don't mock if we are already in a mini app.
@@ -14,7 +14,7 @@ if (import.meta.env.DEV) {
       // In case we did, we should do it again.
       // The reason is the page could be reloaded, and we should apply mock again, because
       // mocking also enables modifying the window object.
-      shouldMock = !!sessionStorage.getItem(MOCK_KEY);
+      shouldMock = !sessionStorage.getItem(MOCK_KEY);
     } else {
       shouldMock = true;
     }
@@ -56,7 +56,7 @@ if (import.meta.env.DEV) {
         subtitleTextColor: '#708499',
         textColor: '#f5f5f5',
       },
-      initData: InitData.parse(initDataRaw),
+      initData: parseInitData(initDataRaw),
       initDataRaw,
       version: '7.2',
       platform: 'tdesktop',
