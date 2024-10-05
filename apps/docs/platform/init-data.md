@@ -211,9 +211,7 @@ This section provides a complete list of parameters used in initialization data.
       </a>
     </td>
     <td>
-      <i>Optional</i>. An object containing information about the chat with the bot in which
-      the Mini Apps was launched. It is returned only for Mini Apps opened through the attachments 
-      menu.
+      <i>Optional</i>. An object containing data about the chat where the bot was launched via the attachment menu. Returned for supergroups, channels and group chats – only for Mini Apps launched via the attachment menu.
     </td>
   </tr>
 
