@@ -1,4 +1,4 @@
-import { InitData, isTMA, mockTelegramEnv } from '@telegram-apps/sdk-react';
+import { parseInitData, isTMA, mockTelegramEnv } from '@telegram-apps/sdk-react';
 
 import { useClientOnce } from '@/hooks/useClientOnce';
 
@@ -16,7 +16,7 @@ export function useTelegramMock(): void {
       // In case we did, we should do it again.
       // The reason is the page could be reloaded, and we should apply mock again, because
       // mocking also enables modifying the window object.
-      shouldMock = !!sessionStorage.getItem(MOCK_KEY);
+      shouldMock = !sessionStorage.getItem(MOCK_KEY);
     } else {
       shouldMock = true;
     }
@@ -58,7 +58,7 @@ export function useTelegramMock(): void {
         subtitleTextColor: '#708499',
         textColor: '#f5f5f5',
       },
-      initData: InitData.parse(initDataRaw),
+      initData: parseInitData(initDataRaw),
       initDataRaw,
       version: '7.2',
       platform: 'tdesktop',
