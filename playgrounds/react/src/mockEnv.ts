@@ -14,7 +14,7 @@ if (import.meta.env.DEV) {
       // In case we did, we should do it again.
       // The reason is the page could be reloaded, and we should apply mock again, because
       // mocking also enables modifying the window object.
-      shouldMock = !sessionStorage.getItem(MOCK_KEY);
+      shouldMock = !!sessionStorage.getItem(MOCK_KEY);
     } else {
       shouldMock = true;
     }
@@ -58,7 +58,7 @@ if (import.meta.env.DEV) {
       },
       initData: parseInitData(initDataRaw),
       initDataRaw,
-      version: '7.2',
+      version: '8',
       platform: 'tdesktop',
     });
     sessionStorage.setItem(MOCK_KEY, '1');

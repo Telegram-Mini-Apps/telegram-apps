@@ -16,7 +16,7 @@ export function useTelegramMock(): void {
       // In case we did, we should do it again.
       // The reason is the page could be reloaded, and we should apply mock again, because
       // mocking also enables modifying the window object.
-      shouldMock = !sessionStorage.getItem(MOCK_KEY);
+      shouldMock = !!sessionStorage.getItem(MOCK_KEY);
     } else {
       shouldMock = true;
     }
@@ -60,7 +60,7 @@ export function useTelegramMock(): void {
       },
       initData: parseInitData(initDataRaw),
       initDataRaw,
-      version: '7.10',
+      version: '8',
       platform: 'tdesktop',
     });
     sessionStorage.setItem(MOCK_KEY, '1');
