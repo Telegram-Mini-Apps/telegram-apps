@@ -8,7 +8,8 @@ Mono-repository, containing all the packages, connected with comfortable and saf
 development on Telegram Mini Apps platform. To learn more about specific packages, follow
 their own [documentations](https://docs.telegram-mini-apps.com).
 
-> ⚠️ Working with @telegram-apps packages, you must not install the SDK from Telegram presented by
+> [!WARNING]
+> Working with @telegram-apps packages, you must not install the SDK from Telegram presented by
 > a single file - telegram-web-app.js. Using both @telegram-apps packages and telegram-web-app.js
 > will surely lead to bugs.
 
