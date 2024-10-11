@@ -35,6 +35,9 @@ export const packagesSidebar: Sidebar = {
   [BASE]: [
     section('CLI', {
       '@telegram-apps/create-mini-app': 'telegram-apps-create-mini-app',
+      '@telegram-apps/mate': ['telegram-apps-mate', {
+        'Hosting': 'hosting'
+      }],
     }),
     section('TypeScript', {
       '@telegram-apps/signals': 'telegram-apps-signals',
@@ -110,11 +113,17 @@ export const packagesSidebar: Sidebar = {
           ])],
         }],
       }],
-      '@telegram-apps/sdk-react': [{ url: 'telegram-apps-sdk-react', page: false }, {
+      '@telegram-apps/sdk-react': [{
+        url: 'telegram-apps-sdk-react',
+        page: false
+      }, {
         '@1.x': '1-x',
         '@2.x': '2-x',
       }],
-      '@telegram-apps/sdk-solid': [{ url: 'telegram-apps-sdk-solid', page: false }, {
+      '@telegram-apps/sdk-solid': [{
+        url: 'telegram-apps-sdk-solid',
+        page: false
+      }, {
         '@1.x': '1-x',
         '@2.x': '2-x',
       }],
