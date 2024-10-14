@@ -12,7 +12,7 @@ hero:
       link: /zh/platform/about
     - theme: alt
       text: 包
-      link: /packages/telegram-apps-create-mini-app
+      link: /zh/packages/telegram-apps-create-mini-app
 features:
   - icon: 💻
     title: 多平台
