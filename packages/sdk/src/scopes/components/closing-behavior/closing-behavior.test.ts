@@ -1,8 +1,10 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
+import { TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
+import { $version } from '@/scopes/globals.js';
 
 import {
   disableConfirmation,
@@ -17,69 +19,6 @@ beforeEach(() => {
   resetPackageState();
   vi.restoreAllMocks();
   mockPostEvent();
-});
-
-describe('mounted', () => {
-  beforeEach(mount);
-  afterEach(unmount);
-
-  describe('disableConfirmation', () => {
-    it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: false }', () => {
-      isConfirmationEnabled.set(true);
-      const spy = mockPostEvent();
-      disableConfirmation();
-      disableConfirmation();
-      disableConfirmation();
-      expect(spy).toBeCalledTimes(1);
-      expect(spy).toBeCalledWith('web_app_setup_closing_behavior', { need_confirmation: false });
-    });
-  });
-
-  describe('enableConfirmation', () => {
-    it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: true }', () => {
-      isConfirmationEnabled.set(false);
-      const spy = mockPostEvent();
-      enableConfirmation();
-      enableConfirmation();
-      enableConfirmation();
-      expect(spy).toBeCalledTimes(1);
-      expect(spy).toBeCalledWith('web_app_setup_closing_behavior', { need_confirmation: true });
-    });
-  });
-});
-
-
-describe('not mounted', () => {
-  describe('disableConfirmation', () => {
-    it('should not call postEvent', () => {
-      isConfirmationEnabled.set(true);
-      const spy = mockPostEvent();
-      disableConfirmation();
-      disableConfirmation();
-      disableConfirmation();
-      expect(spy).toBeCalledTimes(0);
-    });
-  });
-
-  describe('enableConfirmation', () => {
-    it('should not call postEvent', () => {
-      isConfirmationEnabled.set(false);
-      const spy = mockPostEvent();
-      enableConfirmation();
-      enableConfirmation();
-      enableConfirmation();
-      expect(spy).toBeCalledTimes(0);
-    });
-  });
-});
-
-describe('disableConfirmation', () => {
-  it('should set isConfirmationNeeded = false', () => {
-    isConfirmationEnabled.set(true);
-    expect(isConfirmationEnabled()).toBe(true);
-    disableConfirmation();
-    expect(isConfirmationEnabled()).toBe(false);
-  });
 });
 
 describe('mount', () => {
@@ -149,11 +88,59 @@ describe('unmount', () => {
   });
 });
 
-describe('enableConfirmation', () => {
-  it('should set isConfirmationNeeded = true', () => {
-    isConfirmationEnabled.set(false);
-    expect(isConfirmationEnabled()).toBe(false);
-    enableConfirmation();
-    expect(isConfirmationEnabled()).toBe(true);
+describe('mounted', () => {
+  beforeEach(mount);
+
+  describe('disableConfirmation', () => {
+    it('should set isConfirmationNeeded = false', () => {
+      isConfirmationEnabled.set(true);
+      expect(isConfirmationEnabled()).toBe(true);
+      disableConfirmation();
+      expect(isConfirmationEnabled()).toBe(false);
+    });
+
+    it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: false }', () => {
+      isConfirmationEnabled.set(true);
+      const spy = mockPostEvent();
+      disableConfirmation();
+      disableConfirmation();
+      disableConfirmation();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_closing_behavior', { need_confirmation: false });
+    });
+  });
+
+  describe('enableConfirmation', () => {
+    it('should set isConfirmationNeeded = true', () => {
+      isConfirmationEnabled.set(false);
+      expect(isConfirmationEnabled()).toBe(false);
+      enableConfirmation();
+      expect(isConfirmationEnabled()).toBe(true);
+    });
+
+    it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: true }', () => {
+      isConfirmationEnabled.set(false);
+      const spy = mockPostEvent();
+      enableConfirmation();
+      enableConfirmation();
+      enableConfirmation();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_closing_behavior', { need_confirmation: true });
+    });
+  });
+});
+
+describe('unmounted', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
+  it.each([
+    { fn: disableConfirmation, name: 'disableConfirmation' },
+    { fn: enableConfirmation, name: 'enableConfirmation' },
+  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
+    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
+    expect(fn).not.toThrow();
   });
 });
