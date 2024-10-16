@@ -48,14 +48,15 @@ export const isMounted = signal(false);
  *
  * This function restores the component state and is automatically saving it in the local storage
  * if it changed.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function mount(): void {
+export const mount = withIsSupported((): void => {
   if (!isMounted()) {
     isVisible.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
     subAndCall(isVisible, onStateChanged);
     isMounted.set(true);
   }
-}
+}, isSupported);
 
 function onStateChanged(): void {
   const value = isVisible();
