@@ -38,9 +38,9 @@ import { subAndCall } from '@/utils/subAndCall.js';
 
 type StorageValue = State;
 
-const SET_BG_COLOR_METHOD = 'web_app_set_background_color';
-const SET_BOTTOM_BAR_BG_COLOR_METHOD = 'web_app_set_bottom_bar_color';
-const SET_HEADER_COLOR_METHOD = 'web_app_set_header_color';
+const WEB_APP_SET_BACKGROUND_COLOR = 'web_app_set_background_color';
+const WEB_APP_SET_BOTTOM_BAR_COLOR = 'web_app_set_bottom_bar_color';
+const WEB_APP_SET_HEADER_COLOR = 'web_app_set_header_color';
 const STORAGE_KEY = 'miniApp';
 
 /**
@@ -131,18 +131,18 @@ export function mount(): void {
 function onBgColorChanged(): void {
   const color = backgroundColor();
   saveState();
-  postEvent(SET_BG_COLOR_METHOD, { color });
+  postEvent(WEB_APP_SET_BACKGROUND_COLOR, { color });
 }
 
 function onBottomBarBgColorChanged(): void {
   saveState();
-  postEvent(SET_BOTTOM_BAR_BG_COLOR_METHOD, { color: bottomBarColor() });
+  postEvent(WEB_APP_SET_BOTTOM_BAR_COLOR, { color: bottomBarColor() });
 }
 
 function onHeaderColorChanged(): void {
   const color = headerColor();
   saveState();
-  postEvent(SET_HEADER_COLOR_METHOD, isRGB(color) ? { color } : { color_key: color });
+  postEvent(WEB_APP_SET_HEADER_COLOR, isRGB(color) ? { color } : { color_key: color });
 }
 
 /**
@@ -168,14 +168,14 @@ function saveState() {
  */
 export const setBackgroundColor = withIsSupported((color: RGB): void => {
   backgroundColor.set(color);
-}, SET_BG_COLOR_METHOD);
+}, WEB_APP_SET_BACKGROUND_COLOR);
 
 /**
  * Updates the bottom bar background color.
  */
 export const setBottomBarColor = withIsSupported((color: BottomBarColor) => {
   bottomBarColor.set(color);
-}, SET_BOTTOM_BAR_BG_COLOR_METHOD);
+}, WEB_APP_SET_BOTTOM_BAR_COLOR);
 
 /**
  * Updates the header color.
@@ -183,8 +183,8 @@ export const setBottomBarColor = withIsSupported((color: BottomBarColor) => {
 export const setHeaderColor = withSupports(
   withIsSupported((color: HeaderColor): void => {
     headerColor.set(color);
-  }, SET_HEADER_COLOR_METHOD),
-  { color: [SET_HEADER_COLOR_METHOD, 'color'] },
+  }, WEB_APP_SET_HEADER_COLOR),
+  { color: [WEB_APP_SET_HEADER_COLOR, 'color'] },
 );
 
 /**
