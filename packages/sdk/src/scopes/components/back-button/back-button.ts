@@ -10,6 +10,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 import { signal } from '@telegram-apps/signals';
 
 import { $version, postEvent } from '@/scopes/globals.js';
+import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 
 
@@ -20,21 +21,21 @@ const CLICK_EVENT = 'back_button_pressed';
 const STORAGE_KEY = 'backButton';
 
 /**
- * Hides the back button.
+ * Hides the Back Button.
  */
 export function hide(): void {
-  isVisible.set(false)
+  isVisible.set(false);
 }
 
 /**
- * @returns True if the back button is supported.
+ * @returns True if the Back Button is supported.
  */
 export function isSupported(): boolean {
   return supports(MINI_APPS_METHOD, $version());
 }
 
 /**
- * True if the component is currently visible.
+ * True if the Back Button is currently visible.
  */
 export const isVisible = signal(false);
 
@@ -65,7 +66,7 @@ function onStateChanged(): void {
 }
 
 /**
- * Add a new back button click listener.
+ * Add a new Back Button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
  */
@@ -74,7 +75,7 @@ export function onClick(fn: EventListener<'back_button_pressed'>): VoidFunction 
 }
 
 /**
- * Removes the back button click listener.
+ * Removes the Back Button click listener.
  * @param fn - an event listener.
  */
 export function offClick(fn: EventListener<'back_button_pressed'>): void {
@@ -82,10 +83,10 @@ export function offClick(fn: EventListener<'back_button_pressed'>): void {
 }
 
 /**
- * Shows the back button.
+ * Shows the Back Button.
  */
 export function show(): void {
-  isVisible.set(true)
+  isVisible.set(true);
 }
 
 /**
