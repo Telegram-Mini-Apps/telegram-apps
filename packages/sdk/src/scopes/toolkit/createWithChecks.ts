@@ -5,7 +5,7 @@ import { withIsMounted } from '@/scopes/toolkit/withIsMounted.js';
 import type { WithIsSupported } from '@/scopes/toolkit/withIsSupported.js';
 
 /*@__NO_SIDE_EFFECTS__*/
-export function createWithIsSupportedAndMounted(
+export function createWithChecks(
   isSupportedOrMethod: MethodName | (() => boolean),
   isMounted: () => boolean,
 ) {

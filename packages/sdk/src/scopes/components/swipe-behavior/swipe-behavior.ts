@@ -5,9 +5,7 @@ import { signal } from '@telegram-apps/signals';
 import { $version, postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
-import {
-  createWithIsSupportedAndMounted,
-} from '@/scopes/toolkit/createWithIsSupportedAndMounted.js';
+import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
 
 type StorageValue = boolean;
 
@@ -20,7 +18,7 @@ const STORAGE_KEY = 'swipeBehavior';
 export const isMounted = signal(false);
 
 const withIsSupported = createWithIsSupported(isSupported);
-const withChecks = createWithIsSupportedAndMounted(isSupported, isMounted);
+const withChecks = createWithChecks(isSupported, isMounted);
 
 /**
  * Disables vertical swipes.

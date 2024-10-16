@@ -24,9 +24,7 @@ import {
 import { subAndCall } from '@/utils/subAndCall.js';
 import { withSupports } from '@/scopes/toolkit/withSupports.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
-import {
-  createWithIsSupportedAndMounted,
-} from '@/scopes/toolkit/createWithIsSupportedAndMounted.js';
+import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
 
 import {
   headerColor,
@@ -52,7 +50,7 @@ const STORAGE_KEY = 'miniApp';
 
 const withComponentSupported = createWithIsSupported(isSupported);
 const withIsMounted = createWithIsMounted(isMounted);
-const withChecks = createWithIsSupportedAndMounted(isSupported, isMounted);
+const withChecks = createWithChecks(isSupported, isMounted);
 
 /**
  * Creates CSS variables connected with the mini app.

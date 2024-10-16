@@ -10,9 +10,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 import { $version, postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
-import {
-  createWithIsSupportedAndMounted,
-} from '@/scopes/toolkit/createWithIsSupportedAndMounted.js';
+import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
 
 import { internalState, isMounted, state } from './signals.js';
 import type { State } from './types.js';
@@ -24,7 +22,7 @@ const SECONDARY_BUTTON_PRESSED = 'secondary_button_pressed';
 const STORAGE_KEY = 'secondaryButton';
 
 const withIsSupported = createWithIsSupported(isSupported);
-const withChecks = createWithIsSupportedAndMounted(isSupported, isMounted);
+const withChecks = createWithChecks(isSupported, isMounted);
 
 /**
  * @returns True if the Secondary Button is supported.
