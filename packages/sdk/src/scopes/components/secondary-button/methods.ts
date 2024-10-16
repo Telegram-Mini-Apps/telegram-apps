@@ -9,21 +9,28 @@ import { isPageReload } from '@telegram-apps/navigation';
 
 import { $version, postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
+import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
+import {
+  createWithIsSupportedAndMounted,
+} from '@/scopes/toolkit/createWithIsSupportedAndMounted.js';
 
 import { internalState, isMounted, state } from './signals.js';
 import type { State } from './types.js';
 
 type StorageValue = State;
 
-const MINI_APPS_METHOD = 'web_app_setup_secondary_button';
-const CLICK_EVENT = 'secondary_button_pressed';
+const WEB_APP_SETUP_SECONDARY_BUTTON = 'web_app_setup_secondary_button';
+const SECONDARY_BUTTON_PRESSED = 'secondary_button_pressed';
 const STORAGE_KEY = 'secondaryButton';
+
+const withIsSupported = createWithIsSupported(isSupported);
+const withChecks = createWithIsSupportedAndMounted(isSupported, isMounted);
 
 /**
  * @returns True if the Secondary Button is supported.
  */
 export function isSupported(): boolean {
-  return supports(MINI_APPS_METHOD, $version());
+  return supports(WEB_APP_SETUP_SECONDARY_BUTTON, $version());
 }
 
 /**
@@ -31,8 +38,9 @@ export function isSupported(): boolean {
  *
  * This function restores the component state and is automatically saving it in the local storage
  * if it changed.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function mount(): void {
+export const mount = withIsSupported((): void => {
   if (!isMounted()) {
     const prev = isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY);
     prev && internalState.set(prev);
@@ -41,24 +49,28 @@ export function mount(): void {
     subAndCall(state, onStateChanged);
     isMounted.set(true);
   }
-}
+});
 
 /**
  * Adds a new main button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function onClick(fn: EventListener<'secondary_button_pressed'>): VoidFunction {
-  return on(CLICK_EVENT, fn);
-}
+export const onClick = withIsSupported(
+  (fn: EventListener<'secondary_button_pressed'>): VoidFunction => on(SECONDARY_BUTTON_PRESSED, fn),
+);
 
 /**
  * Removes the main button click listener.
  * @param fn - an event listener.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function offClick(fn: EventListener<'secondary_button_pressed'>): void {
-  off(CLICK_EVENT, fn);
-}
+export const offClick = withIsSupported(
+  (fn: EventListener<'secondary_button_pressed'>): void => {
+    off(SECONDARY_BUTTON_PRESSED, fn);
+  },
+);
 
 function onInternalStateChanged(s: State): void {
   setStorageValue<StorageValue>(STORAGE_KEY, s);
@@ -69,7 +81,7 @@ function onStateChanged(): void {
 
   // We should not commit changes until the payload is correct. Some version of Telegram will
   // crash due to the empty value of the text.
-  s.text && postEvent(MINI_APPS_METHOD, {
+  s.text && postEvent(WEB_APP_SETUP_SECONDARY_BUTTON, {
     color: s.backgroundColor,
     has_shine_effect: s.hasShineEffect,
     is_active: s.isEnabled,
@@ -84,24 +96,27 @@ function onStateChanged(): void {
 /**
  * Updates the main button state.
  * @param updates - state changes to perform.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export function setParams(updates: Partial<State>): void {
+export const setParams = withChecks((updates: Partial<State>): void => {
   internalState.set({
     ...internalState(),
     ...Object.fromEntries(
       Object.entries(updates).filter(([, v]) => v !== undefined),
     ),
   });
-}
+});
 
 /**
  * Unmounts the component, removing the listener, saving the component state in the local storage.
  *
  * Note that this function does not remove listeners, added via the `onClick` function.
  * @see onClick
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function unmount(): void {
+export const unmount = withIsSupported((): void => {
   internalState.unsub(onInternalStateChanged);
   state.unsub(onStateChanged);
   isMounted.set(false);
-}
+});
