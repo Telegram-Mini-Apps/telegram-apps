@@ -7,7 +7,7 @@ import { resetPackageState } from '@test-utils/reset/reset.js';
 import { state as tpState } from '@/scopes/components/theme-params/signals.js';
 import { $version } from '@/scopes/globals.js';
 
-import { headerColor, backgroundColor, bottomBarColor } from './signals.js';
+import { headerColor, backgroundColor, bottomBarColor, isMounted } from './signals.js';
 import {
   bindCssVars,
   close,
@@ -17,6 +17,7 @@ import {
   setBottomBarColor,
   setHeaderColor,
   isSupported,
+  unmount,
 } from './methods.js';
 
 type SetPropertyFn = typeof document.documentElement.style.setProperty;
@@ -47,6 +48,11 @@ beforeEach(() => {
 });
 
 describe('bindCssVars', () => {
+  beforeEach(() => {
+    $version.set('10');
+    isMounted.set(true);
+  });
+
   describe('background color', () => {
     it('should set --tg-bg-color == backgroundColorRGB()', () => {
       backgroundColor.set('#fedcba');
@@ -177,37 +183,40 @@ describe('isSupported', () => {
 });
 
 describe('mount', () => {
-  it('should throw if version is less than 6.1', () => {
-    $version.set('6.0');
-    expect(mount).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('6.1');
-    expect(mount).not.toThrow();
-  });
-
   beforeEach(() => {
-    $version.set('10');
+    $version.set('6.1');
   });
 
   it('should call postEvent with "web_app_set_background_color"', () => {
     const spy = mockPostEvent();
     mount();
-    expect(spy).toHaveBeenCalledTimes(3);
+    expect(spy).toHaveBeenCalledTimes(2);
     expect(spy).toHaveBeenNthCalledWith(1, 'web_app_set_background_color', { color: 'bg_color' });
-  });
-
-  it('should call postEvent with "web_app_set_bottom_bar_color"', () => {
-    const spy = mockPostEvent();
-    mount();
-    expect(spy).toHaveBeenCalledTimes(3);
-    expect(spy).toHaveBeenNthCalledWith(2, 'web_app_set_bottom_bar_color', { color: 'bottom_bar_bg_color' });
   });
 
   it('should call postEvent with "web_app_set_header_color"', () => {
     const spy = mockPostEvent();
     mount();
-    expect(spy).toHaveBeenCalledTimes(3);
-    expect(spy).toHaveBeenNthCalledWith(3, 'web_app_set_header_color', { color_key: 'bg_color' });
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenNthCalledWith(2, 'web_app_set_header_color', { color_key: 'bg_color' });
+  });
+
+  describe('web_app_set_bottom_bar_color', () => {
+    it('should not call postEvent with method if version is 7.9 or less', () => {
+      $version.set('7.9');
+      const spy = mockPostEvent();
+      mount();
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(spy).not.toHaveBeenCalledWith('web_app_set_bottom_bar_color', expect.anything());
+    });
+
+    it('should call postEvent with method if version is 7.10 or more', () => {
+      $version.set('7.10');
+      const spy = mockPostEvent();
+      mount();
+      expect(spy).toHaveBeenCalledTimes(3);
+      expect(spy).toHaveBeenNthCalledWith(2, 'web_app_set_bottom_bar_color', { color: 'bottom_bar_bg_color' });
+    });
   });
 });
 
@@ -221,14 +230,6 @@ describe('ready', () => {
 });
 
 describe('setBackgroundColor', () => {
-  it('should throw if version is less than 6.1', () => {
-    $version.set('6.0');
-    expect(() => setBackgroundColor('#ffaaaa')).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('6.1');
-    expect(() => setBackgroundColor('#ffaaaa')).not.toThrow();
-  });
-
   describe('isSupported', () => {
     it('should return false if version is less than 6.1. True otherwise', () => {
       $version.set('6.0');
@@ -244,14 +245,6 @@ describe('setBackgroundColor', () => {
 });
 
 describe('setBottomBarColor', () => {
-  it('should throw if version is less than 7.10', () => {
-    $version.set('7.9');
-    expect(() => setBottomBarColor('#ffaaaa')).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('7.10');
-    expect(() => setBottomBarColor('#ffaaaa')).not.toThrow();
-  });
-
   describe('isSupported', () => {
     it('should return false if version is less than 7.10. True otherwise', () => {
       $version.set('7.9');
@@ -267,14 +260,6 @@ describe('setBottomBarColor', () => {
 });
 
 describe('setHeaderColor', () => {
-  it('should throw if version is less than 6.1', () => {
-    $version.set('6.0');
-    expect(() => setHeaderColor('bg_color')).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('6.1');
-    expect(() => setHeaderColor('bg_color')).not.toThrow();
-  });
-
   describe('isSupported', () => {
     it('should return false if version is less than 6.1. True otherwise', () => {
       $version.set('6.0');
@@ -289,9 +274,15 @@ describe('setHeaderColor', () => {
   });
 
   describe('supports', () => {
+    beforeEach(() => {
+      isMounted.set(true);
+    });
+
     it('should throw if version is less than 6.9', () => {
       $version.set('6.8');
-      expect(() => setHeaderColor('#ffaaaa')).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+      expect(() => setHeaderColor('#ffaaaa')).toThrow(
+        new TypedError('ERR_NOT_SUPPORTED', 'Parameter "color" is not supported'),
+      );
 
       $version.set('6.9');
       expect(() => setHeaderColor('#ffaaaa')).not.toThrow();
@@ -312,39 +303,44 @@ describe('setHeaderColor', () => {
   });
 });
 
-describe('mounted', () => {
+describe('support check', () => {
+  beforeEach(() => {
+    isMounted.set(true);
+  });
+
+  it.each([
+    { fn: bindCssVars, name: 'bindCssVars', version: '6.1' },
+    { fn: mount, name: 'mount', version: '6.1' },
+    { fn: () => setBackgroundColor('bg_color'), name: 'setBackgroundColor', version: '6.1' },
+    { fn: () => setHeaderColor('bg_color'), name: 'setHeaderColor', version: '6.1' },
+    { fn: () => setBottomBarColor('bg_color'), name: 'setBottomBarColor', version: '7.10' },
+    { fn: unmount, name: 'unmount', version: '6.1' },
+  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than $version', ({
+    fn,
+    version,
+  }) => {
+    const [major, minor] = version.split('.').map(Number);
+    $version.set(`${major}.${minor - 1}`);
+    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set(version);
+    expect(fn).not.toThrow();
+  });
+});
+
+describe('mount check', () => {
   beforeEach(() => {
     $version.set('10');
-    mount();
   });
 
-  describe('setBackgroundColor', () => {
-    it('should call "web_app_set_background_color" method with { color: {{color}} }', () => {
-      const spy = mockPostEvent();
-      expect(spy).toHaveBeenCalledTimes(0);
-      setBackgroundColor('#abcdef');
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_set_background_color', { color: '#abcdef' });
-    });
-  });
-
-  describe('setBottomBarColor', () => {
-    it('should call "web_app_set_bottom_bar_color" method with { color: {{color}} }', () => {
-      const spy = mockPostEvent();
-      expect(spy).toHaveBeenCalledTimes(0);
-      setBottomBarColor('#abcdef');
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_set_bottom_bar_color', { color: '#abcdef' });
-    });
-  });
-
-  describe('setHeaderColor', () => {
-    it('should call "web_app_set_header_color" method with { color_key: {{color_key}} }', () => {
-      const spy = mockPostEvent();
-      expect(spy).toHaveBeenCalledTimes(0);
-      setHeaderColor('secondary_bg_color');
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_set_header_color', { color_key: 'secondary_bg_color' });
-    });
+  it.each([
+    { fn: bindCssVars, name: 'bindCssVars' },
+    { fn: () => setBackgroundColor('bg_color'), name: 'setBackgroundColor' },
+    { fn: () => setHeaderColor('bg_color'), name: 'setHeaderColor' },
+    { fn: () => setBottomBarColor('bg_color'), name: 'setBottomBarColor' },
+  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
+    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
+    expect(fn).not.toThrow();
   });
 });
