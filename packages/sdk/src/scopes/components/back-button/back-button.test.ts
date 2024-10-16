@@ -47,9 +47,12 @@ describe('isSupported', () => {
 });
 
 describe('mount', () => {
-  it('should throw if not supported', () => {
+  it('should throw if version is less than 6.1', () => {
     $version.set('6.0');
-    expect(() => mount()).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+    expect(mount).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('6.1');
+    expect(mount).not.toThrow();
   });
 
   beforeEach(() => {
