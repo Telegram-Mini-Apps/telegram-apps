@@ -11,7 +11,7 @@ import { signal } from '@telegram-apps/signals';
 
 import { $version, postEvent } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
-import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 
 interface OpenSharedOptions extends ExecuteWithOptions {
   /**
@@ -20,10 +20,12 @@ interface OpenSharedOptions extends ExecuteWithOptions {
   text?: string;
 }
 
-const CLOSE_METHOD = 'web_app_close_scan_qr_popup';
-const OPEN_METHOD = 'web_app_open_scan_qr_popup';
-const CLOSED_EVENT = 'scan_qr_popup_closed';
-const SCANNED_EVENT = 'qr_text_received';
+const WEB_APP_CLOSE_SCAN_QR_POPUP = 'web_app_close_scan_qr_popup';
+const WEB_APP_OPEN_SCAN_QR_POPUP = 'web_app_open_scan_qr_popup';
+const SCAN_QR_POPUP_CLOSED = 'scan_qr_popup_closed';
+const QR_TEXT_RECEIVED = 'qr_text_received';
+
+const withIsSupported = createWithIsSupported(isSupported);
 
 /**
  * Closes the scanner.
@@ -31,8 +33,8 @@ const SCANNED_EVENT = 'qr_text_received';
  */
 export const close = withIsSupported((): void => {
   isOpened.set(false);
-  postEvent(CLOSE_METHOD);
-}, isSupported);
+  postEvent(WEB_APP_CLOSE_SCAN_QR_POPUP);
+});
 
 /**
  * True if the scanner is currently opened.
@@ -43,7 +45,7 @@ export const isOpened = signal(false);
  * @returns True if the QR scanner is supported.
  */
 export function isSupported(): boolean {
-  return supports(OPEN_METHOD, $version());
+  return supports(WEB_APP_OPEN_SCAN_QR_POPUP, $version());
 }
 
 /**
@@ -98,11 +100,11 @@ function _open(options?: OpenSharedOptions & {
         promise.resolve();
       }),
       // Whenever user closed the scanner, update the isOpened signal state.
-      on(CLOSED_EVENT, () => {
+      on(SCAN_QR_POPUP_CLOSED, () => {
         isOpened.set(false);
       }),
       // Whenever some QR was scanned, we should check if it must be captured.
-      on(SCANNED_EVENT, (event) => {
+      on(QR_TEXT_RECEIVED, (event) => {
         if (onCaptured) {
           onCaptured(event.data);
         } else if (capture && capture(event.data)) {
@@ -116,7 +118,7 @@ function _open(options?: OpenSharedOptions & {
       .catch(close)
       .finally(cleanup);
 
-    (options.postEvent || postEvent)(OPEN_METHOD, { text });
+    (options.postEvent || postEvent)(WEB_APP_OPEN_SCAN_QR_POPUP, { text });
 
     return promise;
   }, options);
@@ -125,4 +127,4 @@ function _open(options?: OpenSharedOptions & {
 /**
  * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export const open = withIsSupported(_open, isSupported)
+export const open = withIsSupported(_open)

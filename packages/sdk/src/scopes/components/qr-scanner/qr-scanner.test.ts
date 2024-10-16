@@ -145,3 +145,16 @@ describe('open', () => {
     });
   });
 });
+
+describe('support check', () => {
+  it.each([
+    { fn: close, name: 'close' },
+    { fn: open, name: 'open' },
+  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 6.4', ({ fn }) => {
+    $version.set('6.3');
+    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('6.4');
+    expect(fn).not.toThrow();
+  });
+});
