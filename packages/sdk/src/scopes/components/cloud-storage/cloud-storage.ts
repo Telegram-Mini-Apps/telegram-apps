@@ -2,23 +2,26 @@ import { CancelablePromise, type ExecuteWithOptions, supports } from '@telegram-
 import { array, object, string } from '@telegram-apps/transformers';
 
 import { $version, invokeCustomMethod } from '@/scopes/globals.js';
+import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 
-const MINI_APPS_METHOD = 'web_app_invoke_custom_method';
+const WEB_APP_INVOKE_CUSTOM_METHOD = 'web_app_invoke_custom_method';
+
+const withIsSupported = createWithIsSupported(isSupported);
 
 /**
  * Deletes specified key or keys from the cloud storage.
  * @param keyOrKeys - key or keys to delete.
  * @param options - request execution options.
  */
-export function deleteItem(
+export const deleteItem = withIsSupported((
   keyOrKeys: string | string[],
   options?: ExecuteWithOptions,
-): CancelablePromise<void> {
+): CancelablePromise<void> => {
   const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
   return keys.length
     ? invokeCustomMethod('deleteStorageValues', { keys }, options).then()
     : CancelablePromise.resolve();
-}
+});
 
 /**
  * @param keys - keys list.
@@ -26,7 +29,7 @@ export function deleteItem(
  * @returns Map, where a key is one of the specified in the `keys` argument, and a value is
  * a corresponding storage value.
  */
-export function getItem<K extends string>(
+function _getItem<K extends string>(
   keys: K[],
   options?: ExecuteWithOptions,
 ): CancelablePromise<Record<K, string>>;
@@ -37,9 +40,9 @@ export function getItem<K extends string>(
  * @return Value of the specified key. If the key was not created previously, the function
  * will return an empty string.
  */
-export function getItem(key: string, options?: ExecuteWithOptions): CancelablePromise<string>;
+function _getItem(key: string, options?: ExecuteWithOptions): CancelablePromise<string>;
 
-export function getItem(
+function _getItem(
   keyOrKeys: string | string[],
   options?: ExecuteWithOptions,
 ): CancelablePromise<string | Record<string, string>> {
@@ -57,18 +60,25 @@ export function getItem(
 }
 
 /**
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ */
+export const getItem = withIsSupported(_getItem);
+
+/**
  * Returns a list of all keys presented in the cloud storage.
  * @param options - request execution options.
  */
-export function getKeys(options?: ExecuteWithOptions): CancelablePromise<string[]> {
-  return invokeCustomMethod('getStorageKeys', {}, options).then(array(string())());
-}
+export const getKeys = withIsSupported(
+  (options?: ExecuteWithOptions): CancelablePromise<string[]> => {
+    return invokeCustomMethod('getStorageKeys', {}, options).then(array(string())());
+  },
+);
 
 /**
  * @returns True if the cloud storage is supported.
  */
 export function isSupported(): boolean {
-  return supports(MINI_APPS_METHOD, $version());
+  return supports(WEB_APP_INVOKE_CUSTOM_METHOD, $version());
 }
 
 /**
@@ -77,10 +87,11 @@ export function isSupported(): boolean {
  * @param value - storage value.
  * @param options - request execution options.
  */
-export function setItem(
-  key: string,
-  value: string,
-  options?: ExecuteWithOptions,
-): CancelablePromise<void> {
-  return invokeCustomMethod('saveStorageValue', { key, value }, options).then();
-}
+export const setItem = withIsSupported(
+  (key: string, value: string, options?: ExecuteWithOptions): CancelablePromise<void> => {
+    return invokeCustomMethod('saveStorageValue', {
+      key,
+      value,
+    }, options).then();
+  },
+);
