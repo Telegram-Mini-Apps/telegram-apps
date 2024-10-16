@@ -11,6 +11,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 
 import { $version, postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
+import { withIsSupported } from '@/scopes/withIsSupported.js';
 
 type StorageValue = boolean;
 
@@ -47,14 +48,15 @@ export function isSupported(): boolean {
  *
  * This function restores the component state and is automatically saving it in the local storage
  * if it changed.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function mount(): void {
+export const mount = withIsSupported((): void => {
   if (!isMounted()) {
     isVisible.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
     subAndCall(isVisible, onStateChanged);
     isMounted.set(true);
   }
-}
+}, isSupported);
 
 function onStateChanged() {
   const value = isVisible();
