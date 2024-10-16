@@ -9,7 +9,7 @@ import {
 import { searchParams, object, number, string, date } from '@telegram-apps/transformers';
 
 import { invokeCustomMethod, request } from '@/scopes/globals.js';
-import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
 import { ERR_ACCESS_DENIED, ERR_ALREADY_CALLED } from '@/errors.js';
 import { signal } from '@telegram-apps/signals';
 
@@ -27,8 +27,8 @@ export interface RequestedContact {
   hash: string;
 }
 
-const REQUEST_PHONE_METHOD = 'web_app_request_phone';
-const REQUEST_WRITE_ACCESS_METHOD = 'web_app_request_write_access';
+const WEB_APP_REQUEST_PHONE = 'web_app_request_phone';
+const WEB_APP_REQUEST_WRITE_ACCESS = 'web_app_request_write_access';
 
 /**
  * True if phone access is currently being requested.
@@ -114,7 +114,7 @@ export const requestContact = withIsSupported(
       }, options,
     );
   },
-  REQUEST_PHONE_METHOD,
+  WEB_APP_REQUEST_PHONE,
 );
 
 /**
@@ -134,12 +134,12 @@ export const requestPhoneAccess = withIsSupported(
     }
     isRequestingPhoneAccess.set(true);
 
-    return request(REQUEST_PHONE_METHOD, 'phone_requested', options)
+    return request(WEB_APP_REQUEST_PHONE, 'phone_requested', options)
       .then(r => r.status)
       .finally(() => {
         isRequestingPhoneAccess.set(false);
       });
-  }, REQUEST_PHONE_METHOD,
+  }, WEB_APP_REQUEST_PHONE,
 );
 
 /**
@@ -154,10 +154,10 @@ export const requestWriteAccess = withIsSupported(
     }
     isRequestingWriteAccess.set(true);
 
-    return request(REQUEST_WRITE_ACCESS_METHOD, 'write_access_requested', options)
+    return request(WEB_APP_REQUEST_WRITE_ACCESS, 'write_access_requested', options)
       .then(r => r.status)
       .finally(() => {
         isRequestingWriteAccess.set(false);
       });
-  }, REQUEST_WRITE_ACCESS_METHOD,
+  }, WEB_APP_REQUEST_WRITE_ACCESS,
 );
