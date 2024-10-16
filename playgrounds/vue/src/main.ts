@@ -17,6 +17,6 @@ const app = createApp(App);
 
 app.use(router);
 app.use(TonConnectUIPlugin, {
-  manifestUrl: new URL('tonconnect-manifest.json', window.location.href).toString(),
+  manifestUrl: new URL('vue-template/tonconnect-manifest.json', window.location.href).toString(),
 });
 app.mount('#app');

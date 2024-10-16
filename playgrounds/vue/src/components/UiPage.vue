@@ -17,13 +17,12 @@ const props = withDefaults(defineProps<{
 const router = useRouter();
 
 onMounted(() => {
-  if (typeof props.back === 'undefined' || props.back) {
+  if (props.back) {
     backButton.show();
-    onBeforeUnmount(() => {
-      backButton.onClick(() => {
-        router.go(-1);
-      });
+    const unsub = backButton.onClick(() => {
+      router.go(-1);
     });
+    onBeforeUnmount(unsub);
   } else {
     backButton.hide();
   }
