@@ -33,6 +33,8 @@ export {
   ERR_DATA_INVALID_SIZE,
   ERR_NOT_AVAILABLE,
   ERR_ALREADY_CALLED,
+  ERR_NOT_SUPPORTED,
+  ERR_NOT_MOUNTED,
 } from '@/errors.js';
 export { init, type InitOptions } from '@/init.js';
 
