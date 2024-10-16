@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { dispatchMiniAppsEvent } from 'test-utils';
+import { TypedError } from '@telegram-apps/bridge';
 
 import { resetPackageState } from '@test-utils/reset/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
@@ -14,6 +15,18 @@ beforeEach(() => {
 });
 
 describe('close', () => {
+  it('should throw if version is less than 6.4', () => {
+    $version.set('6.3');
+    expect(close).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('6.4');
+    expect(close).not.toThrow();
+  });
+
+  beforeEach(() => {
+    $version.set('10');
+  });
+
   it('should set isOpened = false', () => {
     isOpened.set(true);
     expect(isOpened()).toBe(true);
@@ -44,6 +57,18 @@ describe('isSupported', () => {
 });
 
 describe('open', () => {
+  it('should throw if version is less than 6.4', () => {
+    $version.set('6.3');
+    expect(() => open()).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('6.4');
+    expect(() => open()).not.toThrow();
+  });
+
+  beforeEach(() => {
+    $version.set('10');
+  });
+
   describe('common mode', () => {
     it('should call "web_app_open_scan_qr_popup" method with { text: string } and catch "qr_text_received" event returning event "data" property if "capture" returned true', async () => {
       const spy = mockPostEvent();

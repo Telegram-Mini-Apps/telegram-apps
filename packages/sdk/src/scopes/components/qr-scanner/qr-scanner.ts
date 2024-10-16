@@ -11,6 +11,7 @@ import { signal } from '@telegram-apps/signals';
 
 import { $version, postEvent } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
+import { withIsSupported } from '@/scopes/withIsSupported.js';
 
 interface OpenSharedOptions extends ExecuteWithOptions {
   /**
@@ -26,11 +27,12 @@ const SCANNED_EVENT = 'qr_text_received';
 
 /**
  * Closes the scanner.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function close(): void {
+export const close = withIsSupported((): void => {
   isOpened.set(false);
   postEvent(CLOSE_METHOD);
-}
+}, isSupported);
 
 /**
  * True if the scanner is currently opened.
@@ -53,7 +55,7 @@ export function isSupported(): boolean {
  * @returns A promise with QR content presented as string or undefined if the scanner was closed.
  * @throws {TypedError} ERR_ALREADY_CALLED
  */
-export function open(options?: OpenSharedOptions & {
+function _open(options?: OpenSharedOptions & {
   /**
    * Function, which should return true if a scanned QR should be captured.
    * @param qr - scanned QR content.
@@ -69,7 +71,7 @@ export function open(options?: OpenSharedOptions & {
  * @param options - method options.
  * @throws {TypedError} ERR_ALREADY_CALLED
  */
-export function open(options: OpenSharedOptions & {
+function _open(options: OpenSharedOptions & {
   /**
    * Function which will be called if some QR code was scanned.
    * @param qr - scanned QR content.
@@ -77,7 +79,7 @@ export function open(options: OpenSharedOptions & {
   onCaptured: (qr: string) => void;
 }): CancelablePromise<void>;
 
-export function open(options?: OpenSharedOptions & {
+function _open(options?: OpenSharedOptions & {
   onCaptured?: (qr: string) => void;
   capture?: (qr: string) => boolean;
 }): CancelablePromise<string | void> {
@@ -119,3 +121,8 @@ export function open(options?: OpenSharedOptions & {
     return promise;
   }, options);
 }
+
+/**
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ */
+export const open = withIsSupported(_open, isSupported)
