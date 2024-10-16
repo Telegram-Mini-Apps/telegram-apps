@@ -75,6 +75,19 @@ describe('open', () => {
       expect(spy).toHaveBeenCalledWith('web_app_close_scan_qr_popup', undefined);
     });
 
+    it('should call "web_app_close_scan_qr_popup" if QR was scanned', async () => {
+      const spy = mockPostEvent();
+      const promise = open();
+      spy.mockClear();
+      dispatchMiniAppsEvent("qr_text_received", { data: "QR1" });
+      await promise;
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        "web_app_close_scan_qr_popup",
+        undefined
+      );
+    });
+
     it('should return promise with undefined if "scan_qr_popup_closed" event was received', async () => {
       const promise = open({
         capture() {
