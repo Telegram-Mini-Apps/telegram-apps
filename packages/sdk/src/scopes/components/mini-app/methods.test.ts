@@ -75,7 +75,10 @@ describe('bindCssVars', () => {
   });
 
   describe('mounted', () => {
-    beforeEach(mount);
+    beforeEach(() => {
+      $version.set('10');
+      mount();
+    });
 
     describe('background color', () => {
       it('should set --tg-bg-color == backgroundColorRGB() when theme changes', () => {
@@ -285,22 +288,35 @@ describe('setHeaderColor', () => {
     });
   });
 
-  describe('supports "color"', () => {
-    it('should return false if version is less than 6.9. True otherwise', () => {
+  describe('supports', () => {
+    it('should throw if version is less than 6.9', () => {
       $version.set('6.8');
-      expect(setHeaderColor.supports('color')).toBe(false);
+      expect(() => setHeaderColor('#ffaaaa')).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
 
       $version.set('6.9');
-      expect(setHeaderColor.supports('color')).toBe(true);
+      expect(() => setHeaderColor('#ffaaaa')).not.toThrow();
+    });
 
-      $version.set('6.10');
-      expect(setHeaderColor.supports('color')).toBe(true);
+    describe('color', () => {
+      it('should return false if version is less than 6.9. True otherwise', () => {
+        $version.set('6.8');
+        expect(setHeaderColor.supports('color')).toBe(false);
+
+        $version.set('6.9');
+        expect(setHeaderColor.supports('color')).toBe(true);
+
+        $version.set('6.10');
+        expect(setHeaderColor.supports('color')).toBe(true);
+      });
     });
   });
 });
 
 describe('mounted', () => {
-  beforeEach(mount);
+  beforeEach(() => {
+    $version.set('10');
+    mount();
+  });
 
   describe('setBackgroundColor', () => {
     it('should call "web_app_set_background_color" method with { color: {{color}} }', () => {

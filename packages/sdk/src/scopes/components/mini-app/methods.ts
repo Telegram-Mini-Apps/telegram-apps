@@ -17,7 +17,7 @@ import type { Computed } from '@telegram-apps/signals';
 import { $version, postEvent } from '@/scopes/globals.js';
 import { withIsSupported } from '@/scopes/withIsSupported.js';
 import { withSupports } from '@/scopes/withSupports.js';
-import { ERR_ALREADY_CALLED } from '@/errors.js';
+import { ERR_ALREADY_CALLED, ERR_NOT_SUPPORTED } from '@/errors.js';
 import { mount as tpMount } from '@/scopes/components/theme-params/methods.js';
 import {
   headerBackgroundColor as tpHeaderBackgroundColor,
@@ -198,9 +198,14 @@ export const setBottomBarColor = withIsSupported((color: BottomBarColor) => {
  */
 export const setHeaderColor = withSupports(
   withIsSupported((color: HeaderColor): void => {
+    if (isRGB(color) && !supports(WEB_APP_SET_HEADER_COLOR, 'color', $version())) {
+      throw new TypedError(ERR_NOT_SUPPORTED);
+    }
     headerColor.set(color);
   }, WEB_APP_SET_HEADER_COLOR),
-  { color: [WEB_APP_SET_HEADER_COLOR, 'color'] },
+  {
+    color: [WEB_APP_SET_HEADER_COLOR, 'color'],
+  },
 );
 
 /**
