@@ -23,6 +23,11 @@ beforeEach(() => {
 });
 
 describe('disableVerticalSwipes', () => {
+  beforeEach(() => {
+    isMounted.set(true);
+    $version.set('10');
+  });
+
   it('should set isVerticalSwipesEnabled = false', () => {
     isVerticalEnabled.set(true);
     expect(isVerticalEnabled()).toBe(true);
@@ -32,6 +37,11 @@ describe('disableVerticalSwipes', () => {
 });
 
 describe('enableVerticalSwipes', () => {
+  beforeEach(() => {
+    isMounted.set(true);
+    $version.set('10');
+  });
+
   it('should set isVerticalSwipesEnabled = true', () => {
     isVerticalEnabled.set(false);
     expect(isVerticalEnabled()).toBe(false);
@@ -166,26 +176,36 @@ describe('mounted', () => {
   });
 });
 
-describe('not mounted', () => {
-  describe('disableVerticalSwipes', () => {
-    it('should not call postEvent', () => {
-      isVerticalEnabled.set(true);
-      const spy = mockPostEvent();
-      disableVertical();
-      disableVertical();
-      disableVertical();
-      expect(spy).toBeCalledTimes(0);
-    });
+describe('support check', () => {
+  beforeEach(() => {
+    isMounted.set(true);
   });
 
-  describe('enableVerticalSwipes', () => {
-    it('should not call postEvent', () => {
-      isVerticalEnabled.set(false);
-      const spy = mockPostEvent();
-      enableVertical();
-      enableVertical();
-      enableVertical();
-      expect(spy).toBeCalledTimes(0);
-    });
+  it.each([
+    { fn: disableVertical, name: 'disableVertical' },
+    { fn: enableVertical, name: 'enableVertical' },
+    { fn: mount, name: 'mount' },
+    { fn: unmount, name: 'unmount' },
+  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 7.7', ({ fn }) => {
+    $version.set('7.6');
+    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('7.7');
+    expect(fn).not.toThrow();
+  });
+});
+
+describe('mount check', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
+  it.each([
+    { fn: disableVertical, name: 'disableVertical' },
+    { fn: enableVertical, name: 'enableVertical' },
+  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
+    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
+    expect(fn).not.toThrow();
   });
 });
