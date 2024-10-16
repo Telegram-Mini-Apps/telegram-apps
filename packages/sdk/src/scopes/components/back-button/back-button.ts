@@ -18,8 +18,8 @@ import {
 
 type StorageValue = boolean;
 
-const MINI_APPS_METHOD = 'web_app_setup_back_button';
-const CLICK_EVENT = 'back_button_pressed';
+const WEB_APP_SETUP_BACK_BUTTON = 'web_app_setup_back_button';
+const BACK_BUTTON_PRESSED = 'back_button_pressed';
 const STORAGE_KEY = 'backButton';
 
 const withIsSupported = createWithIsSupported(isSupported);
@@ -36,7 +36,7 @@ export const hide = withChecks((): void => {
  * @returns True if the Back Button is supported.
  */
 export function isSupported(): boolean {
-  return supports(MINI_APPS_METHOD, $version());
+  return supports(WEB_APP_SETUP_BACK_BUTTON, $version());
 }
 
 /**
@@ -66,7 +66,7 @@ export const mount = withIsSupported((): void => {
 
 function onStateChanged(): void {
   const value = isVisible();
-  postEvent(MINI_APPS_METHOD, { is_visible: value });
+  postEvent(WEB_APP_SETUP_BACK_BUTTON, { is_visible: value });
   setStorageValue<StorageValue>(STORAGE_KEY, value);
 }
 
@@ -76,7 +76,7 @@ function onStateChanged(): void {
  * @returns A function to remove bound listener.
  */
 export const onClick = withIsSupported(
-  (fn: EventListener<'back_button_pressed'>): VoidFunction => on(CLICK_EVENT, fn),
+  (fn: EventListener<'back_button_pressed'>): VoidFunction => on(BACK_BUTTON_PRESSED, fn),
 );
 
 /**
@@ -84,7 +84,7 @@ export const onClick = withIsSupported(
  * @param fn - an event listener.
  */
 export const offClick = withIsSupported((fn: EventListener<'back_button_pressed'>): void => {
-  off(CLICK_EVENT, fn);
+  off(BACK_BUTTON_PRESSED, fn);
 });
 
 /**
