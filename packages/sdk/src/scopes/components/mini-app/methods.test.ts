@@ -151,37 +151,12 @@ describe('bindCssVars', () => {
   });
 });
 
-describe('mounted', () => {
-  beforeEach(mount);
-
-  describe('setBackgroundColor', () => {
-    it('should call "web_app_set_background_color" method with { color: {{color}} }', () => {
-      const spy = mockPostEvent();
-      expect(spy).toHaveBeenCalledTimes(0);
-      setBackgroundColor('#abcdef');
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_set_background_color', { color: '#abcdef' });
-    });
-  });
-
-  describe('setBottomBarColor', () => {
-    it('should call "web_app_set_bottom_bar_color" method with { color: {{color}} }', () => {
-      const spy = mockPostEvent();
-      expect(spy).toHaveBeenCalledTimes(0);
-      setBottomBarColor('#abcdef');
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_set_bottom_bar_color', { color: '#abcdef' });
-    });
-  });
-
-  describe('setHeaderColor', () => {
-    it('should call "web_app_set_header_color" method with { color_key: {{color_key}} }', () => {
-      const spy = mockPostEvent();
-      expect(spy).toHaveBeenCalledTimes(0);
-      setHeaderColor('secondary_bg_color');
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_set_header_color', { color_key: 'secondary_bg_color' });
-    });
+describe('close', () => {
+  it('should call "web_app_close" with "return_back" option', () => {
+    const spy = mockPostEvent();
+    close(false);
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith('web_app_close', { return_back: false });
   });
 });
 
@@ -230,15 +205,6 @@ describe('mount', () => {
     mount();
     expect(spy).toHaveBeenCalledTimes(3);
     expect(spy).toHaveBeenNthCalledWith(3, 'web_app_set_header_color', { color_key: 'bg_color' });
-  });
-});
-
-describe('close', () => {
-  it('should call "web_app_close" with "return_back" option', () => {
-    const spy = mockPostEvent();
-    close(false);
-    expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith('web_app_close', { return_back: false });
   });
 });
 
@@ -305,6 +271,40 @@ describe('setHeaderColor', () => {
 
       $version.set('6.10');
       expect(setHeaderColor.supports('color')).toBe(true);
+    });
+  });
+});
+
+describe('mounted', () => {
+  beforeEach(mount);
+
+  describe('setBackgroundColor', () => {
+    it('should call "web_app_set_background_color" method with { color: {{color}} }', () => {
+      const spy = mockPostEvent();
+      expect(spy).toHaveBeenCalledTimes(0);
+      setBackgroundColor('#abcdef');
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('web_app_set_background_color', { color: '#abcdef' });
+    });
+  });
+
+  describe('setBottomBarColor', () => {
+    it('should call "web_app_set_bottom_bar_color" method with { color: {{color}} }', () => {
+      const spy = mockPostEvent();
+      expect(spy).toHaveBeenCalledTimes(0);
+      setBottomBarColor('#abcdef');
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('web_app_set_bottom_bar_color', { color: '#abcdef' });
+    });
+  });
+
+  describe('setHeaderColor', () => {
+    it('should call "web_app_set_header_color" method with { color_key: {{color_key}} }', () => {
+      const spy = mockPostEvent();
+      expect(spy).toHaveBeenCalledTimes(0);
+      setHeaderColor('secondary_bg_color');
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('web_app_set_header_color', { color_key: 'secondary_bg_color' });
     });
   });
 });
