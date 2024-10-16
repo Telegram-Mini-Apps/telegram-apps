@@ -11,20 +11,31 @@ import { isPageReload } from '@telegram-apps/navigation';
 
 import { $version, postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
-import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
+import {
+  createWithIsSupportedAndMounted,
+} from '@/scopes/toolkit/createWithIsSupportedAndMounted.js';
 
 type StorageValue = boolean;
 
-const MINI_APPS_METHOD = 'web_app_setup_settings_button';
-const CLICK_EVENT = 'settings_button_pressed';
+const WEB_APP_SETUP_SETTINGS_BUTTON = 'web_app_setup_settings_button';
+const SETTINGS_BUTTON_PRESSED = 'settings_button_pressed';
 const STORAGE_KEY = 'settingsButton';
+
+/**
+ * True if the component is currently mounted.
+ */
+export const isMounted = signal(false);
+
+const withIsSupported = createWithIsSupported(isSupported);
+const withChecks = createWithIsSupportedAndMounted(isSupported, isMounted);
 
 /**
  * Hides the settings button.
  */
-export function hide(): void {
+export const hide = withChecks((): void => {
   isVisible.set(false);
-}
+});
 
 /**
  * True if the component is currently visible.
@@ -32,15 +43,10 @@ export function hide(): void {
 export const isVisible = signal(false);
 
 /**
- * True if the component is currently mounted.
- */
-export const isMounted = signal(false);
-
-/**
  * @returns True if the settings button is supported.
  */
 export function isSupported(): boolean {
-  return supports(MINI_APPS_METHOD, $version());
+  return supports(WEB_APP_SETUP_SETTINGS_BUTTON, $version());
 }
 
 /**
@@ -56,11 +62,11 @@ export const mount = withIsSupported((): void => {
     subAndCall(isVisible, onStateChanged);
     isMounted.set(true);
   }
-}, isSupported);
+});
 
 function onStateChanged() {
   const value = isVisible();
-  postEvent(MINI_APPS_METHOD, { is_visible: value });
+  postEvent(WEB_APP_SETUP_SETTINGS_BUTTON, { is_visible: value });
   setStorageValue<StorageValue>(STORAGE_KEY, value);
 }
 
@@ -69,24 +75,26 @@ function onStateChanged() {
  * @param fn - event listener.
  * @returns A function to remove bound listener.
  */
-export function onClick(fn: EventListener<'settings_button_pressed'>): VoidFunction {
-  return on(CLICK_EVENT, fn);
-}
+export const onClick = withIsSupported(
+  (fn: EventListener<'settings_button_pressed'>): VoidFunction => on(SETTINGS_BUTTON_PRESSED, fn),
+);
 
 /**
  * Removes the settings button click listener.
  * @param fn - an event listener.
  */
-export function offClick(fn: EventListener<'settings_button_pressed'>): void {
-  off(CLICK_EVENT, fn);
-}
+export const offClick = withIsSupported(
+  (fn: EventListener<'settings_button_pressed'>): void => {
+    off(SETTINGS_BUTTON_PRESSED, fn);
+  },
+);
 
 /**
  * Shows the settings button.
  */
-export function show(): void {
+export const show = withChecks((): void => {
   isVisible.set(true);
-}
+});
 
 /**
  * Unmounts the component, removing the listener, saving the component state in the local storage.
@@ -94,7 +102,7 @@ export function show(): void {
  * Note that this function does not remove listeners, added via the `onClick` function.
  * @see onClick
  */
-export function unmount() {
+export const unmount = withChecks(() => {
   isVisible.unsub(onStateChanged);
   isMounted.set(false);
-}
+});

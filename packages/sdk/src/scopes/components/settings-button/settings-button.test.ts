@@ -26,6 +26,11 @@ beforeEach(() => {
 });
 
 describe('hide', () => {
+  beforeEach(() => {
+    $version.set('10');
+    isMounted.set(true);
+  });
+
   it('should set isVisible = false', () => {
     isVisible.set(true);
     expect(isVisible()).toBe(true);
@@ -46,6 +51,10 @@ describe('isSupported', () => {
 });
 
 describe('mount', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
   it('should throw if version is less than 6.10', () => {
     $version.set('6.9');
     expect(mount).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
@@ -103,6 +112,41 @@ describe('mount', () => {
   });
 });
 
+describe('onClick', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
+  it('should add click listener', () => {
+    const fn = vi.fn();
+    onClick(fn);
+    emitMiniAppsEvent('settings_button_pressed', {});
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it('should remove added listener if returned function was called', () => {
+    const fn = vi.fn();
+    const off = onClick(fn);
+    off();
+    emitMiniAppsEvent('settings_button_pressed', {});
+    expect(fn).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('offClick', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
+  it('should remove click listener', () => {
+    const fn = vi.fn();
+    onClick(fn);
+    offClick(fn);
+    emitMiniAppsEvent('settings_button_pressed', {});
+    expect(fn).toHaveBeenCalledTimes(0);
+  });
+});
+
 describe('unmount', () => {
   beforeEach(() => {
     $version.set('10');
@@ -127,34 +171,12 @@ describe('unmount', () => {
   });
 });
 
-describe('onClick', () => {
-  it('should add click listener', () => {
-    const fn = vi.fn();
-    onClick(fn);
-    emitMiniAppsEvent('settings_button_pressed', {});
-    expect(fn).toHaveBeenCalledTimes(1);
-  });
-
-  it('should remove added listener if returned function was called', () => {
-    const fn = vi.fn();
-    const off = onClick(fn);
-    off();
-    emitMiniAppsEvent('settings_button_pressed', {});
-    expect(fn).toHaveBeenCalledTimes(0);
-  });
-});
-
-describe('offClick', () => {
-  it('should remove click listener', () => {
-    const fn = vi.fn();
-    onClick(fn);
-    offClick(fn);
-    emitMiniAppsEvent('settings_button_pressed', {});
-    expect(fn).toHaveBeenCalledTimes(0);
-  });
-});
-
 describe('show', () => {
+  beforeEach(() => {
+    $version.set('10');
+    isMounted.set(true);
+  });
+
   it('should set isVisible = true', () => {
     isVisible.set(false);
     expect(isVisible()).toBe(false);
@@ -196,42 +218,38 @@ describe('mounted', () => {
   });
 });
 
-describe('not mounted', () => {
-  describe('hide', () => {
-    it('should not call postEvent', () => {
-      isVisible.set(true);
-      const spy = vi.fn();
-      mockPostEvent(spy);
-      hide();
-      expect(spy).toBeCalledTimes(0);
-    });
-
-    it('should not save state in storage', () => {
-      isVisible.set(true);
-      const spy = mockSessionStorageSetItem();
-      hide();
-      expect(spy).toBeCalledTimes(0);
-    });
+describe('support check', () => {
+  beforeEach(() => {
+    isMounted.set(true);
   });
 
-  describe('show', () => {
-    it('should not call postEvent', () => {
-      isVisible.set(false);
-      const spy = vi.fn();
-      mockPostEvent(spy);
-      show();
-      show();
-      show();
-      expect(spy).toBeCalledTimes(0);
-    });
+  it.each([
+    { fn: hide, name: 'hide' },
+    { fn: mount, name: 'mount' },
+    { fn: () => onClick(console.log), name: 'onClick' },
+    { fn: () => offClick(console.log), name: 'offClick' },
+    { fn: show, name: 'show' },
+    { fn: unmount, name: 'unmount' },
+  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 6.10', ({ fn }) => {
+    $version.set('6.9');
+    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
 
-    it('should not save state in storage', () => {
-      isVisible.set(false);
-      const spy = mockSessionStorageSetItem();
-      show();
-      show();
-      show();
-      expect(spy).toBeCalledTimes(0);
-    });
+    $version.set('6.10');
+    expect(fn).not.toThrow();
+  });
+});
+
+describe('mount check', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
+  it.each([
+    { fn: hide, name: 'hide' },
+    { fn: show, name: 'show' },
+  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
+    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
+    expect(fn).not.toThrow();
   });
 });
