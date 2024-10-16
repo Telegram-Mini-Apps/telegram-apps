@@ -107,7 +107,7 @@ export const show = withChecks((): void => {
  * @see onClick
  * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export const unmount = withChecks(() => {
+export const unmount = withIsSupported(() => {
   isVisible.unsub(onStateChanged);
   isMounted.set(false);
 });
