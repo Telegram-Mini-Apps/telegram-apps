@@ -58,7 +58,7 @@ export function withIsSupported<F extends (...args: any) => any>(
     if (!isSupported()) {
       throw new TypedError(ERR_NOT_SUPPORTED);
     }
-    fn(...args);
+    return fn(...args);
   }) as F, {
     isSupported,
   });
