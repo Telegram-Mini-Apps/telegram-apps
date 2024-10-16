@@ -1,7 +1,7 @@
 import type { ExecuteWithOptions, CancelablePromise } from '@telegram-apps/bridge';
 
 import { request } from '@/scopes/globals.js';
-import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
 
 import { eventToState } from './eventToState.js';
 import type { State } from './types.js';
