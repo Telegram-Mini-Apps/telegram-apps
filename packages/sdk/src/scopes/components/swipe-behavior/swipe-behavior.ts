@@ -1,11 +1,12 @@
 import { isPageReload } from '@telegram-apps/navigation';
-import { getStorageValue, setStorageValue, supports } from '@telegram-apps/bridge';
+import { getStorageValue, setStorageValue } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
-import { $version, postEvent } from '@/scopes/globals.js';
+import { postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
 type StorageValue = boolean;
 
@@ -16,6 +17,11 @@ const STORAGE_KEY = 'swipeBehavior';
  * True if the component is currently mounted.
  */
 export const isMounted = signal(false);
+
+/**
+ * @returns True if the Swipe Behavior is supported.
+ */
+export const isSupported = createIsSupported(WEB_APP_SETUP_SWIPE_BEHAVIOR);
 
 const withIsSupported = createWithIsSupported(isSupported);
 const withChecks = createWithChecks(isSupported, isMounted);
@@ -42,13 +48,6 @@ export const enableVertical = withChecks((): void => {
  * True if vertical swipes are enabled.
  */
 export const isVerticalEnabled = signal(false);
-
-/**
- * @returns True if the back button is supported.
- */
-export function isSupported(): boolean {
-  return supports(WEB_APP_SETUP_SWIPE_BEHAVIOR, $version());
-}
 
 /**
  * Mounts the component.

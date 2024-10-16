@@ -3,14 +3,15 @@ import {
   on,
   getStorageValue,
   setStorageValue,
-  type EventListener, supports,
+  type EventListener,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { $version, postEvent } from '@/scopes/globals.js';
+import { postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
 import { internalState, isMounted, state } from './signals.js';
 import type { State } from './types.js';
@@ -21,15 +22,13 @@ const WEB_APP_SETUP_SECONDARY_BUTTON = 'web_app_setup_secondary_button';
 const SECONDARY_BUTTON_PRESSED = 'secondary_button_pressed';
 const STORAGE_KEY = 'secondaryButton';
 
-const withIsSupported = createWithIsSupported(isSupported);
-const withChecks = createWithChecks(isSupported, isMounted);
-
 /**
  * @returns True if the Secondary Button is supported.
  */
-export function isSupported(): boolean {
-  return supports(WEB_APP_SETUP_SECONDARY_BUTTON, $version());
-}
+export const isSupported = createIsSupported(WEB_APP_SETUP_SECONDARY_BUTTON);
+
+const withIsSupported = createWithIsSupported(isSupported);
+const withChecks = createWithChecks(isSupported, isMounted);
 
 /**
  * Mounts the component.

@@ -1,17 +1,17 @@
 import {
   TypedError,
-  supports,
   type ExecuteWithOptions,
   type InvoiceStatus,
   type ExecuteWithPostEvent,
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
-import { $version, request } from '@/scopes/globals.js';
+import { request } from '@/scopes/globals.js';
 import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_ALREADY_CALLED } from '@/errors.js';
 import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
-const MINI_APPS_METHOD = 'web_app_open_invoice';
+const WEB_APP_OPEN_INVOICE = 'web_app_open_invoice';
 
 /**
  * True if the invoice is currently opened.
@@ -19,11 +19,9 @@ const MINI_APPS_METHOD = 'web_app_open_invoice';
 export const isOpened = signal(false);
 
 /**
- * @returns True if the invoice is supported.
+ * @returns True if the Invoice is supported.
  */
-export function isSupported(): boolean {
-  return supports(MINI_APPS_METHOD, $version());
-}
+export const isSupported = createIsSupported(WEB_APP_OPEN_INVOICE);
 
 /**
  * Opens an invoice using its slug.
@@ -88,7 +86,7 @@ export async function _open(
 
   isOpened.set(true);
 
-  return request(MINI_APPS_METHOD, 'invoice_closed', {
+  return request(WEB_APP_OPEN_INVOICE, 'invoice_closed', {
     ...options,
     params: { slug },
     capture: (data) => slug === data.slug,

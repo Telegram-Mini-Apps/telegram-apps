@@ -1,5 +1,4 @@
 import {
-  supports,
   on,
   off,
   TypedError,
@@ -12,7 +11,7 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { $version, postEvent, request } from '@/scopes/globals.js';
+import { postEvent, request } from '@/scopes/globals.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { ERR_ALREADY_CALLED, ERR_NOT_AVAILABLE } from '@/errors.js';
@@ -33,6 +32,7 @@ import type {
   RequestAccessOptions,
   UpdateTokenOptions,
 } from './types.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
 type StorageValue = State;
 
@@ -93,9 +93,7 @@ export function authenticate(options?: AuthenticateOptions): CancelablePromise<{
 /**
  * @returns True if the biometry manager is supported.
  */
-export function isSupported(): boolean {
-  return supports(REQUEST_AUTH_METHOD, $version());
-}
+export const isSupported = createIsSupported(REQUEST_AUTH_METHOD);
 
 /**
  * Opens the biometric access settings for bots. Useful when you need to request biometrics

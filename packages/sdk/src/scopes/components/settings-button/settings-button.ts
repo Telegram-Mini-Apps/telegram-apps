@@ -3,16 +3,16 @@ import {
   on,
   getStorageValue,
   setStorageValue,
-  supports,
   type EventListener,
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { $version, postEvent } from '@/scopes/globals.js';
+import { postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
 type StorageValue = boolean;
 
@@ -25,11 +25,16 @@ const STORAGE_KEY = 'settingsButton';
  */
 export const isMounted = signal(false);
 
+/**
+ * @returns True if the settings button is supported.
+ */
+export const isSupported = createIsSupported(WEB_APP_SETUP_SETTINGS_BUTTON);
+
 const withIsSupported = createWithIsSupported(isSupported);
 const withChecks = createWithChecks(isSupported, isMounted);
 
 /**
- * Hides the settings button.
+ * Hides the Settings Button.
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
@@ -41,13 +46,6 @@ export const hide = withChecks((): void => {
  * True if the component is currently visible.
  */
 export const isVisible = signal(false);
-
-/**
- * @returns True if the settings button is supported.
- */
-export function isSupported(): boolean {
-  return supports(WEB_APP_SETUP_SETTINGS_BUTTON, $version());
-}
 
 /**
  * Mounts the component.
@@ -71,7 +69,7 @@ function onStateChanged() {
 }
 
 /**
- * Add a new settings button click listener.
+ * Add a new Settings Button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -81,7 +79,7 @@ export const onClick = withIsSupported(
 );
 
 /**
- * Removes the settings button click listener.
+ * Removes the Settings Button click listener.
  * @param fn - an event listener.
  * @throws {TypedError} ERR_NOT_SUPPORTED
  */
@@ -92,7 +90,7 @@ export const offClick = withIsSupported(
 );
 
 /**
- * Shows the settings button.
+ * Shows the Settings Button.
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  */

@@ -1,13 +1,18 @@
-import {
-  supports,
-  type ImpactHapticFeedbackStyle,
-  type NotificationHapticFeedbackType,
+import type {
+  ImpactHapticFeedbackStyle,
+  NotificationHapticFeedbackType,
 } from '@telegram-apps/bridge';
 
-import { $version, postEvent } from '@/scopes/globals.js';
+import { postEvent } from '@/scopes/globals.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
 const WEB_APP_TRIGGER_HAPTIC_FEEDBACK = 'web_app_trigger_haptic_feedback';
+
+/**
+ * @returns True if the Haptic Feedback is supported.
+ */
+export const isSupported = createIsSupported(WEB_APP_TRIGGER_HAPTIC_FEEDBACK);
 
 const withIsSupported = createWithIsSupported(isSupported);
 
@@ -20,13 +25,6 @@ const withIsSupported = createWithIsSupported(isSupported);
 export const impactOccurred = withIsSupported((style: ImpactHapticFeedbackStyle): void => {
   postEvent(WEB_APP_TRIGGER_HAPTIC_FEEDBACK, { type: 'impact', impact_style: style });
 });
-
-/**
- * @returns True if the haptic feedback is supported.
- */
-export function isSupported(): boolean {
-  return supports(WEB_APP_TRIGGER_HAPTIC_FEEDBACK, $version());
-}
 
 /**
  * A method tells that a task or action has succeeded, failed, or produced a warning. The Telegram

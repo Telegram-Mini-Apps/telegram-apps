@@ -4,14 +4,14 @@ import {
   TypedError,
   on,
   EnhancedPromise,
-  supports,
   type ExecuteWithOptions,
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
-import { $version, postEvent } from '@/scopes/globals.js';
+import { postEvent } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
 interface OpenSharedOptions extends ExecuteWithOptions {
   /**
@@ -24,6 +24,11 @@ const WEB_APP_CLOSE_SCAN_QR_POPUP = 'web_app_close_scan_qr_popup';
 const WEB_APP_OPEN_SCAN_QR_POPUP = 'web_app_open_scan_qr_popup';
 const SCAN_QR_POPUP_CLOSED = 'scan_qr_popup_closed';
 const QR_TEXT_RECEIVED = 'qr_text_received';
+
+/**
+ * @returns True if the QR scanner is supported.
+ */
+export const isSupported = createIsSupported(WEB_APP_OPEN_SCAN_QR_POPUP);
 
 const withIsSupported = createWithIsSupported(isSupported);
 
@@ -40,13 +45,6 @@ export const close = withIsSupported((): void => {
  * True if the scanner is currently opened.
  */
 export const isOpened = signal(false);
-
-/**
- * @returns True if the QR scanner is supported.
- */
-export function isSupported(): boolean {
-  return supports(WEB_APP_OPEN_SCAN_QR_POPUP, $version());
-}
 
 /**
  * Opens the scanner and returns a promise which will be resolved with the QR content if the

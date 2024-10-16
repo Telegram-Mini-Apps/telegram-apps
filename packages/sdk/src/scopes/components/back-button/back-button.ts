@@ -3,16 +3,16 @@ import {
   on,
   getStorageValue,
   setStorageValue,
-  supports,
   type EventListener,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 import { signal } from '@telegram-apps/signals';
 
-import { $version, postEvent } from '@/scopes/globals.js';
+import { postEvent } from '@/scopes/globals.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
 import { subAndCall } from '@/utils/subAndCall.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
 type StorageValue = boolean;
 
@@ -25,6 +25,11 @@ const STORAGE_KEY = 'backButton';
  */
 export const isMounted = signal(false);
 
+/**
+ * @returns True if the Back Button is supported.
+ */
+export const isSupported = createIsSupported(WEB_APP_SETUP_BACK_BUTTON);
+
 const withIsSupported = createWithIsSupported(isSupported);
 const withChecks = createWithChecks(isSupported, isMounted);
 
@@ -36,13 +41,6 @@ const withChecks = createWithChecks(isSupported, isMounted);
 export const hide = withChecks((): void => {
   isVisible.set(false);
 });
-
-/**
- * @returns True if the Back Button is supported.
- */
-export function isSupported(): boolean {
-  return supports(WEB_APP_SETUP_BACK_BUTTON, $version());
-}
 
 /**
  * True if the Back Button is currently visible.

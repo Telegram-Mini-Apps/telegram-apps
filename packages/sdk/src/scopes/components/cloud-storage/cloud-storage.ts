@@ -1,10 +1,16 @@
-import { CancelablePromise, type ExecuteWithOptions, supports } from '@telegram-apps/bridge';
+import { CancelablePromise, type ExecuteWithOptions } from '@telegram-apps/bridge';
 import { array, object, string } from '@telegram-apps/transformers';
 
-import { $version, invokeCustomMethod } from '@/scopes/globals.js';
+import { invokeCustomMethod } from '@/scopes/globals.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
 const WEB_APP_INVOKE_CUSTOM_METHOD = 'web_app_invoke_custom_method';
+
+/**
+ * @returns True if the Cloud Storage is supported.
+ */
+export const isSupported = createIsSupported(WEB_APP_INVOKE_CUSTOM_METHOD);
 
 const withIsSupported = createWithIsSupported(isSupported);
 
@@ -75,13 +81,6 @@ export const getKeys = withIsSupported(
     return invokeCustomMethod('getStorageKeys', {}, options).then(array(string())());
   },
 );
-
-/**
- * @returns True if the cloud storage is supported.
- */
-export function isSupported(): boolean {
-  return supports(WEB_APP_INVOKE_CUSTOM_METHOD, $version());
-}
 
 /**
  * Saves specified value by key.
