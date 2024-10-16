@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 2.4.1
+
+### Patch Changes
+
+- 521a23e: Fix qr scanner capture logic
+
 ## 2.4.0
 
 ### Minor Changes
