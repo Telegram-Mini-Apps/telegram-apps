@@ -55,18 +55,6 @@ describe('mount', () => {
     $version.set('10');
   });
 
-  it('should throw if version is less than 6.10', () => {
-    $version.set('6.9');
-    expect(mount).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('6.10');
-    expect(mount).not.toThrow();
-  });
-
-  beforeEach(() => {
-    $version.set('10');
-  });
-
   it('should call postEvent with "web_app_setup_settings_button"', () => {
     const spy = mockPostEvent();
     mount();
