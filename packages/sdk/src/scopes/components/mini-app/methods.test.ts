@@ -16,6 +16,7 @@ import {
   setBackgroundColor,
   setBottomBarColor,
   setHeaderColor,
+  isSupported,
 } from './methods.js';
 
 type SetPropertyFn = typeof document.documentElement.style.setProperty;
@@ -181,6 +182,19 @@ describe('mounted', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('web_app_set_header_color', { color_key: 'secondary_bg_color' });
     });
+  });
+});
+
+describe('isSupported', () => {
+  it('should return false if version is less than 6.1. True otherwise', () => {
+    $version.set('6.0');
+    expect(isSupported()).toBe(false);
+
+    $version.set('6.1');
+    expect(isSupported()).toBe(true);
+
+    $version.set('6.2');
+    expect(isSupported()).toBe(true);
   });
 });
 
