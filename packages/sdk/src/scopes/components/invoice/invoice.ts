@@ -9,6 +9,7 @@ import { signal } from '@telegram-apps/signals';
 
 import { $version, request } from '@/scopes/globals.js';
 import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_ALREADY_CALLED } from '@/errors.js';
+import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
 
 const MINI_APPS_METHOD = 'web_app_open_invoice';
 
@@ -33,7 +34,7 @@ export function isSupported(): boolean {
  * @throws {TypedError} ERR_INVALID_HOSTNAME
  * @throws {TypedError} ERR_INVALID_SLUG
  */
-export function open(slug: string, options?: ExecuteWithPostEvent): Promise<InvoiceStatus>;
+export function _open(slug: string, options?: ExecuteWithPostEvent): Promise<InvoiceStatus>;
 
 /**
  * Opens an invoice using its url.
@@ -49,13 +50,13 @@ export function open(slug: string, options?: ExecuteWithPostEvent): Promise<Invo
  * @throws {TypedError} ERR_INVALID_HOSTNAME
  * @throws {TypedError} ERR_INVALID_SLUG
  */
-export function open(
+export function _open(
   url: string,
   type: 'url',
   options?: ExecuteWithPostEvent,
 ): Promise<InvoiceStatus>;
 
-export async function open(
+export async function _open(
   urlOrSlug: string,
   optionsOrType?: 'url' | ExecuteWithOptions,
   options?: ExecuteWithOptions,
@@ -97,3 +98,8 @@ export async function open(
       isOpened.set(false);
     });
 }
+
+/**
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ */
+export const open = withIsSupported(_open, isSupported);
