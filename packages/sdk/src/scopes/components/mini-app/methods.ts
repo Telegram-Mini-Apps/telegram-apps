@@ -178,6 +178,7 @@ function saveState() {
 
 /**
  * Updates the background color.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const setBackgroundColor = withIsSupported((color: RGB): void => {
   backgroundColor.set(color);
@@ -185,6 +186,7 @@ export const setBackgroundColor = withIsSupported((color: RGB): void => {
 
 /**
  * Updates the bottom bar background color.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const setBottomBarColor = withIsSupported((color: BottomBarColor) => {
   bottomBarColor.set(color);
@@ -192,6 +194,7 @@ export const setBottomBarColor = withIsSupported((color: BottomBarColor) => {
 
 /**
  * Updates the header color.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const setHeaderColor = withSupports(
   withIsSupported((color: HeaderColor): void => {

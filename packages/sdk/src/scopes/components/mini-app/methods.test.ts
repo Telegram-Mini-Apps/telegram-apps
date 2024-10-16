@@ -218,6 +218,14 @@ describe('ready', () => {
 });
 
 describe('setBackgroundColor', () => {
+  it('should throw if version is less than 6.1', () => {
+    $version.set('6.0');
+    expect(() => setBackgroundColor('#ffaaaa')).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('6.1');
+    expect(() => setBackgroundColor('#ffaaaa')).not.toThrow();
+  });
+
   describe('isSupported', () => {
     it('should return false if version is less than 6.1. True otherwise', () => {
       $version.set('6.0');
@@ -233,6 +241,14 @@ describe('setBackgroundColor', () => {
 });
 
 describe('setBottomBarColor', () => {
+  it('should throw if version is less than 7.10', () => {
+    $version.set('7.9');
+    expect(() => setBottomBarColor('#ffaaaa')).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('7.10');
+    expect(() => setBottomBarColor('#ffaaaa')).not.toThrow();
+  });
+
   describe('isSupported', () => {
     it('should return false if version is less than 7.10. True otherwise', () => {
       $version.set('7.9');
@@ -248,6 +264,14 @@ describe('setBottomBarColor', () => {
 });
 
 describe('setHeaderColor', () => {
+  it('should throw if version is less than 6.1', () => {
+    $version.set('6.0');
+    expect(() => setHeaderColor('bg_color')).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('6.1');
+    expect(() => setHeaderColor('bg_color')).not.toThrow();
+  });
+
   describe('isSupported', () => {
     it('should return false if version is less than 6.1. True otherwise', () => {
       $version.set('6.0');
