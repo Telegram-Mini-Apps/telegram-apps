@@ -1,5 +1,12 @@
 # @telegram-apps/sdk-solid
 
+## 2.0.6
+
+### Patch Changes
+
+- Updated dependencies [521a23e]
+  - @telegram-apps/sdk@2.4.1
+
 ## 2.0.5
 
 ### Patch Changes
