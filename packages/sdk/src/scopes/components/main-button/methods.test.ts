@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageSetItem } from 'test-utils';
-import { emitMiniAppsEvent, type ThemeParams } from '@telegram-apps/bridge';
+import { emitMiniAppsEvent, type ThemeParams, TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
@@ -117,22 +117,6 @@ describe('mounted', () => {
   });
 });
 
-describe('not mounted', () => {
-  describe('setParams', () => {
-    it('should not call postEvent', () => {
-      const spy = mockPostEvent();
-      setParams({ text: 'ABC' });
-      expect(spy).toHaveBeenCalledTimes(0);
-    });
-
-    it('should not save state in storage', () => {
-      const spy = mockSessionStorageSetItem();
-      setParams({ text: 'ABC' });
-      expect(spy).toHaveBeenCalledTimes(0);
-    });
-  });
-});
-
 describe('mount', () => {
   it('should call postEvent with "web_app_setup_main_button"', () => {
     const spy = mockPostEvent();
@@ -237,6 +221,10 @@ describe('offClick', () => {
 });
 
 describe('setParams', () => {
+  beforeEach(() => {
+    isMounted.set(true);
+  });
+
   it('should merge passed object with the state', () => {
     internalState.set({
       backgroundColor: '#123456',
@@ -286,5 +274,15 @@ describe('unmount', () => {
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('mount check', () => {
+  it.each([
+    { fn: () => setParams({}), name: 'setParams' },
+  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
+    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
+    expect(fn).not.toThrow();
   });
 });
