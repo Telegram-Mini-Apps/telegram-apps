@@ -122,8 +122,9 @@ export function isSupported(): boolean {
  *
  * Internally, the function mounts the Theme Params component to work with correctly extracted
  * theme palette values.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function mount(): void {
+export const mount = withIsSupported((): void => {
   if (!isMounted()) {
     const s = isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY);
     tpMount();
@@ -138,7 +139,7 @@ export function mount(): void {
 
     isMounted.set(true);
   }
-}
+}, isSupported);
 
 function onBgColorChanged(): void {
   const color = backgroundColor();

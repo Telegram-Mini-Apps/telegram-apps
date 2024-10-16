@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
 import { createWindow } from 'test-utils';
-import type { ThemeParams } from '@telegram-apps/bridge';
+import { ThemeParams, TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
@@ -199,6 +199,18 @@ describe('isSupported', () => {
 });
 
 describe('mount', () => {
+  it('should throw if version is less than 6.1', () => {
+    $version.set('6.0');
+    expect(mount).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('6.1');
+    expect(mount).not.toThrow();
+  });
+
+  beforeEach(() => {
+    $version.set('10');
+  });
+
   it('should call postEvent with "web_app_set_background_color"', () => {
     const spy = mockPostEvent();
     mount();
