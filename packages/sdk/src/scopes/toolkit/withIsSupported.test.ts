@@ -31,4 +31,13 @@ describe('returned function', () => {
     $version.set('10');
     expect(fn).not.toThrow();
   });
+
+  it('should throw if isSupported function returned false', () => {
+    let supported = false;
+    const fn = withIsSupported(() => null, () => supported);
+    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    supported = true;
+    expect(fn).not.toThrow();
+  });
 });
