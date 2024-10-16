@@ -75,7 +75,7 @@ function onStateChanged(): void {
  * @param fn - event listener.
  * @returns A function to remove bound listener.
  */
-export const onClick = withChecks(
+export const onClick = withIsSupported(
   (fn: EventListener<'back_button_pressed'>): VoidFunction => on(CLICK_EVENT, fn),
 );
 
@@ -83,7 +83,7 @@ export const onClick = withChecks(
  * Removes the Back Button click listener.
  * @param fn - an event listener.
  */
-export const offClick = withChecks((fn: EventListener<'back_button_pressed'>): void => {
+export const offClick = withIsSupported((fn: EventListener<'back_button_pressed'>): void => {
   off(CLICK_EVENT, fn);
 });
 
