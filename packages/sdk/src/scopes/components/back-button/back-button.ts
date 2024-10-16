@@ -22,11 +22,18 @@ const WEB_APP_SETUP_BACK_BUTTON = 'web_app_setup_back_button';
 const BACK_BUTTON_PRESSED = 'back_button_pressed';
 const STORAGE_KEY = 'backButton';
 
+/**
+ * True if the component is currently mounted.
+ */
+export const isMounted = signal(false);
+
 const withIsSupported = createWithIsSupported(isSupported);
-const withChecks = createWithIsSupportedAndMounted(isSupported, () => isMounted());
+const withChecks = createWithIsSupportedAndMounted(isSupported, isMounted);
 
 /**
  * Hides the Back Button.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const hide = withChecks((): void => {
   isVisible.set(false);
@@ -43,11 +50,6 @@ export function isSupported(): boolean {
  * True if the Back Button is currently visible.
  */
 export const isVisible = signal(false);
-
-/**
- * True if the component is currently mounted.
- */
-export const isMounted = signal(false);
 
 /**
  * Mounts the component.
@@ -74,6 +76,7 @@ function onStateChanged(): void {
  * Add a new Back Button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const onClick = withIsSupported(
   (fn: EventListener<'back_button_pressed'>): VoidFunction => on(BACK_BUTTON_PRESSED, fn),
@@ -82,6 +85,7 @@ export const onClick = withIsSupported(
 /**
  * Removes the Back Button click listener.
  * @param fn - an event listener.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const offClick = withIsSupported((fn: EventListener<'back_button_pressed'>): void => {
   off(BACK_BUTTON_PRESSED, fn);
@@ -89,6 +93,8 @@ export const offClick = withIsSupported((fn: EventListener<'back_button_pressed'
 
 /**
  * Shows the Back Button.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const show = withChecks((): void => {
   isVisible.set(true);
@@ -99,8 +105,9 @@ export const show = withChecks((): void => {
  *
  * Note that this function does not remove listeners, added via the `onClick` function.
  * @see onClick
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export const unmount = withChecks((): void => {
+export const unmount = withIsSupported((): void => {
   isVisible.unsub(onStateChanged);
   isMounted.set(false);
 });

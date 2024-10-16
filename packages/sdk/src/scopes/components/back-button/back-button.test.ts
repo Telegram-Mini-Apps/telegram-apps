@@ -236,7 +236,6 @@ describe('mount check', () => {
   it.each([
     { fn: hide, name: 'hide' },
     { fn: show, name: 'show' },
-    { fn: unmount, name: 'unmount' },
   ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
     expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
     isMounted.set(true);
