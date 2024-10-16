@@ -15,6 +15,7 @@ import {
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { ERR_ALREADY_CALLED } from '@/errors.js';
+import { withIsMounted } from '@/scopes/toolkit/withIsMounted.js';
 
 import { isCssVarsBound, state, isMounted } from './signals.js';
 import { parseThemeParams } from './parseThemeParams.js';
@@ -42,7 +43,7 @@ const THEME_CHANGED_EVENT = 'theme_changed';
  * @returns Function to stop updating variables.
  * @throws TypedError ERR_ALREADY_CALLED
  */
-export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
+export const bindCssVars = withIsMounted((getCSSVarName?: GetCssVarNameFn): VoidFunction => {
   if (isCssVarsBound()) {
     throw new TypedError(ERR_ALREADY_CALLED);
   }
@@ -69,7 +70,7 @@ export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
     state.unsub(actualize);
     isCssVarsBound.set(false);
   };
-}
+}, isMounted);
 
 /**
  * Mounts the component.
