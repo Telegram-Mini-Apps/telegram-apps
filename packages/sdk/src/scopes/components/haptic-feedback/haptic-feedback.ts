@@ -15,6 +15,7 @@ const withIsSupported = createWithIsSupported(isSupported);
  * A method tells that an impact occurred. The Telegram app may play the appropriate haptics based
  * on style value passed.
  * @param style - impact style.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const impactOccurred = withIsSupported((style: ImpactHapticFeedbackStyle): void => {
   postEvent(WEB_APP_TRIGGER_HAPTIC_FEEDBACK, { type: 'impact', impact_style: style });
@@ -31,6 +32,7 @@ export function isSupported(): boolean {
  * A method tells that a task or action has succeeded, failed, or produced a warning. The Telegram
  * app may play the appropriate haptics based on type value passed.
  * @param type - notification type.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const notificationOccurred = withIsSupported((type: NotificationHapticFeedbackType): void => {
   postEvent(WEB_APP_TRIGGER_HAPTIC_FEEDBACK, { type: 'notification', notification_type: type });
@@ -42,6 +44,7 @@ export const notificationOccurred = withIsSupported((type: NotificationHapticFee
  *
  * Do not use this feedback when the user makes or confirms a selection; use it only when the
  * selection changes.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const selectionChanged = withIsSupported((): void => {
   postEvent(WEB_APP_TRIGGER_HAPTIC_FEEDBACK, { type: 'selection_change' });

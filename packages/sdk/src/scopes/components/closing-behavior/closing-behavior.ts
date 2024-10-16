@@ -19,6 +19,7 @@ const withIsMounted = createWithIsMounted(isMounted);
 
 /**
  * Disables the confirmation dialog when closing the Mini App.
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const disableConfirmation = withIsMounted((): void => {
   isConfirmationEnabled.set(false);
@@ -31,6 +32,7 @@ export const isConfirmationEnabled = signal(false);
 
 /**
  * Enables the confirmation dialog when closing the Mini App.
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const enableConfirmation = withIsMounted((): void => {
   isConfirmationEnabled.set(true);

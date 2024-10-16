@@ -30,6 +30,8 @@ const withChecks = createWithChecks(isSupported, isMounted);
 
 /**
  * Hides the settings button.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const hide = withChecks((): void => {
   isVisible.set(false);
@@ -72,6 +74,7 @@ function onStateChanged() {
  * Add a new settings button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const onClick = withIsSupported(
   (fn: EventListener<'settings_button_pressed'>): VoidFunction => on(SETTINGS_BUTTON_PRESSED, fn),
@@ -80,6 +83,7 @@ export const onClick = withIsSupported(
 /**
  * Removes the settings button click listener.
  * @param fn - an event listener.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const offClick = withIsSupported(
   (fn: EventListener<'settings_button_pressed'>): void => {
@@ -89,6 +93,8 @@ export const offClick = withIsSupported(
 
 /**
  * Shows the settings button.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const show = withChecks((): void => {
   isVisible.set(true);
@@ -99,6 +105,7 @@ export const show = withChecks((): void => {
  *
  * Note that this function does not remove listeners, added via the `onClick` function.
  * @see onClick
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const unmount = withChecks(() => {
   isVisible.unsub(onStateChanged);

@@ -79,6 +79,7 @@ function onStateChanged(): void {
 /**
  * Updates the main button state.
  * @param updates - state changes to perform.
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const setParams = withIsMounted((updates: Partial<State>): void => {
   internalState.set({

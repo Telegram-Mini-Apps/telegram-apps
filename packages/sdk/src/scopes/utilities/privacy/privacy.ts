@@ -72,6 +72,7 @@ function getRequestedContact(options?: ExecuteWithOptions): CancelablePromise<Re
  * @param options - additional options.
  * @throws {TypedError} ERR_ACCESS_DENIED
  * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const requestContact = withIsSupported(
   (options?: ExecuteWithOptions): CancelablePromise<RequestedContact> => {
@@ -126,6 +127,7 @@ export const requestContact = withIsSupported(
  * @param options - additional options.
  * @see requestContact
  * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const requestPhoneAccess = withIsSupported(
   (options?: ExecuteWithOptions): Promise<PhoneRequestedStatus> => {
@@ -146,6 +148,7 @@ export const requestPhoneAccess = withIsSupported(
  * Requests write message access to the current user.
  * @param options - additional options.
  * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const requestWriteAccess = withIsSupported(
   (options?: ExecuteWithOptions): Promise<WriteAccessRequestedStatus> => {

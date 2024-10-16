@@ -12,6 +12,7 @@ const withIsSupported = createWithIsSupported(isSupported);
  * Deletes specified key or keys from the cloud storage.
  * @param keyOrKeys - key or keys to delete.
  * @param options - request execution options.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const deleteItem = withIsSupported((
   keyOrKeys: string | string[],
@@ -67,6 +68,7 @@ export const getItem = withIsSupported(_getItem);
 /**
  * Returns a list of all keys presented in the cloud storage.
  * @param options - request execution options.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const getKeys = withIsSupported(
   (options?: ExecuteWithOptions): CancelablePromise<string[]> => {
@@ -86,6 +88,7 @@ export function isSupported(): boolean {
  * @param key - storage key.
  * @param value - storage value.
  * @param options - request execution options.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const setItem = withIsSupported(
   (key: string, value: string, options?: ExecuteWithOptions): CancelablePromise<void> => {

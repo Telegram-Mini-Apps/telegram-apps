@@ -51,7 +51,8 @@ interface StorageValue {
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * viewport property.
  * @returns Function to stop updating variables.
- * @throws TypedError ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const bindCssVars = withIsMounted((getCSSVarName?: GetCSSVarNameFn): VoidFunction => {
   if (isCssVarsBound()) {

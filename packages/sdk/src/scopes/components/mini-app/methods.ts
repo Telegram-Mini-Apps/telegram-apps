@@ -23,8 +23,10 @@ import {
 } from '@/scopes/components/theme-params/signals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { withSupports } from '@/scopes/toolkit/withSupports.js';
+import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
+import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
 
 import {
   headerColor,
@@ -38,8 +40,6 @@ import {
   backgroundColorRGB,
 } from './signals.js';
 import type { GetCssVarNameFn, HeaderColor, State } from './types.js';
-import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
-import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
 
 type StorageValue = State;
 
@@ -66,6 +66,8 @@ const withChecks = createWithChecks(isSupported, isMounted);
  * mini app key.
  * @returns Function to stop updating variables.
  * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const bindCssVars = withChecks((getCSSVarName?: GetCssVarNameFn): VoidFunction => {
   if (isCssVarsBound()) {
@@ -186,6 +188,7 @@ function saveState() {
 /**
  * Updates the background color.
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const setBackgroundColor = withIsSupported(
   withIsMounted((color: BackgroundColor): void => {
@@ -197,6 +200,7 @@ export const setBackgroundColor = withIsSupported(
 /**
  * Updates the bottom bar background color.
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const setBottomBarColor = withIsSupported(
   withIsMounted((color: BottomBarColor) => {
@@ -208,6 +212,7 @@ export const setBottomBarColor = withIsSupported(
 /**
  * Updates the header color.
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const setHeaderColor = withSupports(
   withIsSupported(

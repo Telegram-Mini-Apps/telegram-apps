@@ -45,6 +45,7 @@ export interface ShareStoryOptions extends ExecuteWithPostEvent {
  * in cases:
  * - A value in the clipboard is not a text.
  * - Access to the clipboard is not granted.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const readTextFromClipboard = withIsSupported(
   (options?: ExecuteWithOptions): CancelablePromise<string | null> => {
@@ -80,7 +81,7 @@ export function sendData(data: string): void {
 
 /**
  * A method that opens the native story editor.
- * @since v7.8
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const shareStory = withIsSupported(
   (mediaUrl: string, options?: ShareStoryOptions) => {
@@ -102,6 +103,7 @@ export const shareStory = withIsSupported(
  * length is 256 symbols.
  * @param chatTypes - List of chat types which could be chosen to send the message. Could be
  * empty list.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const switchInlineQuery = withIsSupported(
   (query: string, chatTypes?: SwitchInlineQueryChatType[]) => {
