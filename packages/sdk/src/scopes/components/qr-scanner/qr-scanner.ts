@@ -103,7 +103,7 @@ export function open(options?: OpenSharedOptions & {
       on(SCANNED_EVENT, (event) => {
         if (onCaptured) {
           onCaptured(event.data);
-        } else if (capture && capture(event.data)) {
+        } else if (!capture || capture(event.data)) {
           promise.resolve(event.data);
           close();
         }
