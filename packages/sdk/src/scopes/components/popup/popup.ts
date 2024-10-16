@@ -3,18 +3,18 @@ import { signal } from '@telegram-apps/signals';
 
 import { $version, request } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
-import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
 
 import { prepareParams } from './prepareParams.js';
 import type { OpenOptions } from './types.js';
 
-const MINI_APPS_METHOD = 'web_app_open_popup';
+const WEB_APP_OPEN_POPUP = 'web_app_open_popup';
 
 /**
  * @returns True if the back button is supported.
  */
 export function isSupported(): boolean {
-  return supports(MINI_APPS_METHOD, $version());
+  return supports(WEB_APP_OPEN_POPUP, $version());
 }
 
 /**
@@ -47,7 +47,7 @@ export const open = withIsSupported(
     isOpened.set(true);
 
     try {
-      const { button_id: buttonId = null } = await request(MINI_APPS_METHOD, 'popup_closed', {
+      const { button_id: buttonId = null } = await request(WEB_APP_OPEN_POPUP, 'popup_closed', {
         ...options,
         params: prepareParams(options),
       });
