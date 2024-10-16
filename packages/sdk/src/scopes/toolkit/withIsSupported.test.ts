@@ -1,7 +1,7 @@
 import { it, describe, expect, beforeEach } from 'vitest';
 import { TypedError } from '@telegram-apps/bridge';
 
-import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
 import { $version } from '@/scopes/globals.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
 

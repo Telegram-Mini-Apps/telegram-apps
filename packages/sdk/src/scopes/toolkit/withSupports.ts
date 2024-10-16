@@ -1,9 +1,8 @@
 import {
+  MethodNameWithVersionedParams,
+  MethodVersionedParams,
   supports,
-  type MethodVersionedParams,
-  type MethodNameWithVersionedParams,
 } from '@telegram-apps/bridge';
-
 import { $version } from '@/scopes/globals.js';
 
 type HasCheckSupportMethodTuple = {
