@@ -36,11 +36,11 @@ import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
 type StorageValue = State;
 
-const REQUEST_AUTH_METHOD = 'web_app_biometry_request_auth';
-const REQUEST_ACCESS_METHOD = 'web_app_biometry_request_access';
-const OPEN_SETTINGS_METHOD = 'web_app_biometry_open_settings';
-const UPDATE_TOKEN_METHOD = 'web_app_biometry_update_token';
-const BIOMETRY_INFO_RECEIVED_EVENT = 'biometry_info_received';
+const WEB_APP_BIOMETRY_REQUEST_AUTH = 'web_app_biometry_request_auth';
+const WEB_APP_BIOMETRY_REQUEST_ACCESS = 'web_app_biometry_request_access';
+const WEB_APP_BIOMETRY_OPEN_SETTINGS = 'web_app_biometry_open_settings';
+const WEB_APP_BIOMETRY_UPDATE_TOKEN = 'web_app_biometry_update_token';
+const BIOMETRY_INFO_RECEIVED = 'biometry_info_received';
 const STORAGE_KEY = 'biometry';
 
 /**
@@ -74,7 +74,7 @@ export function authenticate(options?: AuthenticateOptions): CancelablePromise<{
   isAuthenticating.set(true);
 
   options ||= {};
-  return request(REQUEST_AUTH_METHOD, 'biometry_auth_requested', {
+  return request(WEB_APP_BIOMETRY_REQUEST_AUTH, 'biometry_auth_requested', {
     ...options,
     params: { reason: (options.reason || '').trim() },
   })
@@ -93,7 +93,7 @@ export function authenticate(options?: AuthenticateOptions): CancelablePromise<{
 /**
  * @returns True if the biometry manager is supported.
  */
-export const isSupported = createIsSupported(REQUEST_AUTH_METHOD);
+export const isSupported = createIsSupported(WEB_APP_BIOMETRY_REQUEST_AUTH);
 
 /**
  * Opens the biometric access settings for bots. Useful when you need to request biometrics
@@ -104,7 +104,7 @@ export const isSupported = createIsSupported(REQUEST_AUTH_METHOD);
  * @since 7.2
  */
 export function openSettings(): void {
-  postEvent(OPEN_SETTINGS_METHOD);
+  postEvent(WEB_APP_BIOMETRY_OPEN_SETTINGS);
 }
 
 /**
@@ -121,7 +121,7 @@ export function requestAccess(options?: RequestAccessOptions): CancelablePromise
   isRequestingAccess.set(true);
 
   options ||= {};
-  return request(REQUEST_ACCESS_METHOD, BIOMETRY_INFO_RECEIVED_EVENT, {
+  return request(WEB_APP_BIOMETRY_REQUEST_ACCESS, BIOMETRY_INFO_RECEIVED, {
     ...options,
     params: { reason: options.reason || '' },
   })
@@ -160,7 +160,7 @@ export const mount = createMountFn<State>(
     return requestBiometry(options);
   },
   result => {
-    on(BIOMETRY_INFO_RECEIVED_EVENT, onBiometryInfoReceived);
+    on(BIOMETRY_INFO_RECEIVED, onBiometryInfoReceived);
     subAndCall(state, onStateChanged);
     state.set(result);
   },
@@ -180,7 +180,7 @@ function onStateChanged(): void {
  * Unmounts the component.
  */
 export function unmount(): void {
-  off(BIOMETRY_INFO_RECEIVED_EVENT, onBiometryInfoReceived);
+  off(BIOMETRY_INFO_RECEIVED, onBiometryInfoReceived);
   state.unsub(onStateChanged);
 }
 
@@ -191,7 +191,7 @@ export function unmount(): void {
  */
 export function updateToken(options?: UpdateTokenOptions): CancelablePromise<BiometryTokenUpdateStatus> {
   options ||= {};
-  return request(UPDATE_TOKEN_METHOD, 'biometry_token_updated', {
+  return request(WEB_APP_BIOMETRY_UPDATE_TOKEN, 'biometry_token_updated', {
     ...options,
     params: {
       token: options.token || '',
