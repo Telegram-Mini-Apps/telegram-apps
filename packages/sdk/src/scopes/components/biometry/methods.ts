@@ -33,8 +33,8 @@ import type {
   UpdateTokenOptions,
 } from './types.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
+import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
 
 type StorageValue = State;
 
@@ -51,7 +51,7 @@ const STORAGE_KEY = 'biometry';
 export const isSupported = createIsSupported(WEB_APP_BIOMETRY_REQUEST_AUTH);
 
 const withIsSupported = createWithIsSupported(isSupported);
-const withChecks = createWithChecks(isSupported, isMounted);
+const withIsMounted = createWithIsMounted(isMounted);
 
 /**
  * Attempts to authenticate a user using biometrics and fetch a previously stored
@@ -61,8 +61,9 @@ const withChecks = createWithChecks(isSupported, isMounted);
  * @returns Token from the local secure storage saved previously or undefined.
  * @throws {TypedError} ERR_ALREADY_CALLED
  * @throws {TypedError} ERR_NOT_AVAILABLE
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const authenticate = withChecks(
+export const authenticate = withIsMounted(
   (options?: AuthenticateOptions): CancelablePromise<{
     /**
      * Authentication status.
@@ -120,8 +121,9 @@ export const openSettings = withIsSupported((): void => {
  * @returns Promise with true, if access was granted.
  * @throws {TypedError} ERR_ALREADY_CALLED
  * @throws {TypedError} ERR_NOT_AVAILABLE
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const requestAccess = withChecks(
+export const requestAccess = withIsMounted(
   (options?: RequestAccessOptions): CancelablePromise<boolean> => {
     if (isRequestingAccess()) {
       return CancelablePromise.reject(new TypedError(ERR_ALREADY_CALLED));
@@ -184,17 +186,18 @@ function onStateChanged(): void {
 /**
  * Unmounts the component.
  */
-export const unmount = withIsSupported((): void => {
+export function unmount() {
   off(BIOMETRY_INFO_RECEIVED, onBiometryInfoReceived);
   state.unsub(onStateChanged);
-});
+}
 
 /**
  * Updates the biometric token in a secure storage on the device.
  * @since 7.2
  * @returns Promise with `true`, if token was updated.
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const updateToken = withChecks(
+export const updateToken = withIsMounted(
   (options?: UpdateTokenOptions): CancelablePromise<BiometryTokenUpdateStatus> => {
     options ||= {};
     return request(WEB_APP_BIOMETRY_UPDATE_TOKEN, 'biometry_token_updated', {

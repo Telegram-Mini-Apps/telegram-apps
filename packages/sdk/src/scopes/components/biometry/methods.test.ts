@@ -7,14 +7,13 @@ import { $version } from '@/scopes/globals.js';
 
 import {
   isSupported,
-  unmount,
   updateToken,
   mount,
   requestAccess,
   authenticate,
   openSettings,
 } from './methods.js';
-import { isMounted } from './signals.js';
+import { isMounted, state } from './signals.js';
 
 beforeEach(() => {
   resetPackageState();
@@ -35,13 +34,19 @@ describe('isSupported', () => {
 describe('support check', () => {
   beforeEach(() => {
     isMounted.set(true);
+    state.set({
+      available: true,
+      type: 'face',
+      token: '',
+      tokenSaved: true,
+      accessGranted: true,
+      accessRequested: true,
+      deviceId: '',
+    });
   });
 
   it.each([
     { fn: openSettings, name: 'openSettings' },
-    { fn: requestAccess, name: 'requestAccess' },
-    { fn: unmount, name: 'unmount' },
-    { fn: updateToken, name: 'updateToken' },
     { fn: mount, name: 'mount' },
   ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 7.2', ({ fn }) => {
     $version.set('7.1');
@@ -50,12 +55,26 @@ describe('support check', () => {
     $version.set('7.2');
     expect(fn).not.toThrow(new TypedError('ERR_NOT_SUPPORTED'));
   });
+});
 
-  it("'authenticate' function should throw ERR_NOT_SUPPORTED if version is less than 7.2", async () => {
-    $version.set('7.1');
-    expect(authenticate).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+describe('mount check', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
 
-    $version.set('7.2');
+  it.each([
+    { fn: requestAccess, name: 'requestAccess' },
+    { fn: updateToken, name: 'updateToken' },
+  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
+    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
+    expect(fn).not.toThrow();
+  });
+
+  it("'authenticate' function should throw ERR_NOT_MOUNTED if component was not mounted", async () => {
+    expect(authenticate).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
     await expect(authenticate).rejects.toThrow(new TypedError('ERR_NOT_AVAILABLE'));
   })
 });
+
