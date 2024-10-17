@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 1.3.0
+
+### Minor Changes
+
+- 5346f76: "Add web_app_share_to_story" to `supports` checks.
+
 ## 1.2.1
 
 ### Patch Changes
