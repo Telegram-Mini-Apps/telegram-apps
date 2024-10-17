@@ -4,7 +4,6 @@ import {
   request as _request,
   invokeCustomMethod as _invokeCustomMethod,
   createPostEvent,
-  supports,
   type PostEventFn,
   type Version,
   type CreatePostEventMode,
@@ -13,7 +12,6 @@ import {
   type ExecuteWithOptions,
   type CustomMethodParams,
   type CustomMethodName,
-  type MethodName,
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
@@ -133,11 +131,3 @@ export const request = ((method: any, eventOrEvents: any, options: any) => {
 export const postEvent = ((method: any, params: any) => {
   return $postEvent()(method, params);
 }) as PostEventFn;
-
-/**
- * @returns True if the Mini Apps method supported.
- * @param method - Mini Apps method name.
- */
-export function isMethodSupported(method: MethodName): boolean {
-  return supports(method, $version());
-}
