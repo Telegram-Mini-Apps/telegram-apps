@@ -11,8 +11,8 @@ import { isPageReload } from '@telegram-apps/navigation';
 import { postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
-import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
+import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
 
 type StorageValue = boolean;
 
@@ -31,14 +31,13 @@ export const isMounted = signal(false);
 export const isSupported = createIsSupported(WEB_APP_SETUP_SETTINGS_BUTTON);
 
 const withIsSupported = createWithIsSupported(isSupported);
-const withChecks = createWithChecks(isSupported, isMounted);
+const withIsMounted = createWithIsMounted(isMounted);
 
 /**
  * Hides the Settings Button.
- * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const hide = withChecks((): void => {
+export const hide = withIsMounted((): void => {
   isVisible.set(false);
 });
 
@@ -91,10 +90,9 @@ export const offClick = withIsSupported(
 
 /**
  * Shows the Settings Button.
- * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const show = withChecks((): void => {
+export const show = withIsMounted((): void => {
   isVisible.set(true);
 });
 
@@ -103,9 +101,8 @@ export const show = withChecks((): void => {
  *
  * Note that this function does not remove listeners, added via the `onClick` function.
  * @see onClick
- * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export const unmount = withIsSupported(() => {
+export function unmount() {
   isVisible.unsub(onStateChanged);
   isMounted.set(false);
-});
+}
