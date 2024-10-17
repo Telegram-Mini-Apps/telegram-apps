@@ -2,8 +2,6 @@
 "@telegram-apps/sdk": minor
 ---
 
-This Pull Request introduces stricter SDK usage requirements.
-
 We realized that many developers might be using the SDK without knowing that some functionality they're using may not work. This is due to the non-strict `postEvent` function in the `init` function:
 
 ```ts
