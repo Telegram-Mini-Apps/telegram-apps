@@ -5,8 +5,8 @@ import { signal } from '@telegram-apps/signals';
 import { postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
-import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
+import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
 
 type StorageValue = boolean;
 
@@ -24,23 +24,21 @@ export const isMounted = signal(false);
 export const isSupported = createIsSupported(WEB_APP_SETUP_SWIPE_BEHAVIOR);
 
 const withIsSupported = createWithIsSupported(isSupported);
-const withChecks = createWithChecks(isSupported, isMounted);
+const withIsMounted = createWithIsMounted(isMounted);
 
 /**
  * Disables vertical swipes.
- * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const disableVertical = withChecks((): void => {
+export const disableVertical = withIsMounted((): void => {
   isVerticalEnabled.set(false);
 });
 
 /**
  * Enables vertical swipes.
- * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const enableVertical = withChecks((): void => {
+export const enableVertical = withIsMounted((): void => {
   isVerticalEnabled.set(true);
 });
 
@@ -72,10 +70,8 @@ function onStateChanged(): void {
 
 /**
  * Unmounts the component, removing the listener, saving the component state in the local storage.
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const unmount = withIsSupported((): void => {
+export function unmount(): void {
   isVerticalEnabled.unsub(onStateChanged);
   isMounted.set(false);
-});
+}

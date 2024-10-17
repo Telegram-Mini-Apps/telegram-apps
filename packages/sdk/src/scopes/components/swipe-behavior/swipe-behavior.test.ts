@@ -182,10 +182,7 @@ describe('support check', () => {
   });
 
   it.each([
-    { fn: disableVertical, name: 'disableVertical' },
-    { fn: enableVertical, name: 'enableVertical' },
     { fn: mount, name: 'mount' },
-    { fn: unmount, name: 'unmount' },
   ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 7.7', ({ fn }) => {
     $version.set('7.6');
     expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
