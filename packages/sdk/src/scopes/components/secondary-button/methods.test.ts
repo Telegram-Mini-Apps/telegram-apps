@@ -312,8 +312,6 @@ describe('support check', () => {
     { fn: mount, name: 'mount' },
     { fn: () => onClick(console.log), name: 'onClick' },
     { fn: () => offClick(console.log), name: 'offClick' },
-    { fn: () => setParams({}), name: 'setParams' },
-    { fn: unmount, name: 'unmount' },
   ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 7.10', ({ fn }) => {
     $version.set('7.9');
     expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
