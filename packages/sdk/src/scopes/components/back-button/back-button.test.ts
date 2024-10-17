@@ -213,11 +213,9 @@ describe('support check', () => {
   });
 
   it.each([
-    { fn: hide, name: 'hide' },
     { fn: mount, name: 'mount' },
     { fn: () => onClick(console.log), name: 'onClick' },
     { fn: () => offClick(console.log), name: 'offClick' },
-    { fn: show, name: 'show' },
     { fn: unmount, name: 'unmount' },
   ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 6.1', ({ fn }) => {
     $version.set('6.0');

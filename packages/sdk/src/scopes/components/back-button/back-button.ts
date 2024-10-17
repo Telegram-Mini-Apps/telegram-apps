@@ -10,9 +10,9 @@ import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
-import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
+import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
 
 type StorageValue = boolean;
 
@@ -31,14 +31,13 @@ export const isMounted = signal(false);
 export const isSupported = createIsSupported(WEB_APP_SETUP_BACK_BUTTON);
 
 const withIsSupported = createWithIsSupported(isSupported);
-const withChecks = createWithChecks(isSupported, isMounted);
+const withIsMounted = createWithIsMounted(isMounted);
 
 /**
  * Hides the Back Button.
- * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const hide = withChecks((): void => {
+export const hide = withIsMounted((): void => {
   isVisible.set(false);
 });
 
@@ -92,7 +91,7 @@ export const offClick = withIsSupported((fn: EventListener<'back_button_pressed'
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const show = withChecks((): void => {
+export const show = withIsMounted((): void => {
   isVisible.set(true);
 });
 
