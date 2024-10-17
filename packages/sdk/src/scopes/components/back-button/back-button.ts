@@ -88,7 +88,6 @@ export const offClick = withIsSupported((fn: EventListener<'back_button_pressed'
 
 /**
  * Shows the Back Button.
- * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const show = withIsMounted((): void => {
@@ -100,9 +99,8 @@ export const show = withIsMounted((): void => {
  *
  * Note that this function does not remove listeners, added via the `onClick` function.
  * @see onClick
- * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export const unmount = withIsSupported((): void => {
+export function unmount(): void {
   isVisible.unsub(onStateChanged);
   isMounted.set(false);
-});
+}
