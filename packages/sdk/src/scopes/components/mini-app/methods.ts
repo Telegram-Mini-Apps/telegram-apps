@@ -6,15 +6,16 @@ import {
   deleteCssVar,
   setCssVar,
   TypedError,
+  supports,
   type RGB,
   type BottomBarColor,
   type BackgroundColor,
 } from '@telegram-apps/bridge';
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
-import type { Computed } from '@telegram-apps/signals';
+import { computed, type Computed } from '@telegram-apps/signals';
 
-import { isMethodSupported, postEvent } from '@/scopes/globals.js';
+import { $version, postEvent } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 import { mount as tpMount } from '@/scopes/components/theme-params/methods.js';
 import {
@@ -45,6 +46,17 @@ const WEB_APP_SET_BACKGROUND_COLOR = 'web_app_set_background_color';
 const WEB_APP_SET_BOTTOM_BAR_COLOR = 'web_app_set_bottom_bar_color';
 const WEB_APP_SET_HEADER_COLOR = 'web_app_set_header_color';
 const STORAGE_KEY = 'miniApp';
+
+/**
+ * True if the Mini App component is supported.
+ */
+export const isSupported = computed(() => {
+  return ([
+    WEB_APP_SET_BACKGROUND_COLOR,
+    WEB_APP_SET_BOTTOM_BAR_COLOR,
+    WEB_APP_SET_HEADER_COLOR,
+  ] as const).some(method => supports(method, $version()));
+});
 
 const withComponentSupported = createWithIsSupported(isSupported);
 const withIsMounted = createWithIsMounted(isMounted);
@@ -108,17 +120,6 @@ export const bindCssVars = withIsMounted((getCSSVarName?: GetCssVarNameFn): Void
  */
 export function close(returnBack?: boolean): void {
   postEvent('web_app_close', { return_back: returnBack });
-}
-
-/**
- * @returns True if the Mini App component is supported.
- */
-export function isSupported(): boolean {
-  return ([
-    WEB_APP_SET_BACKGROUND_COLOR,
-    WEB_APP_SET_BOTTOM_BAR_COLOR,
-    WEB_APP_SET_HEADER_COLOR,
-  ] as const).some(isMethodSupported);
 }
 
 /**
