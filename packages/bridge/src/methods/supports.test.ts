@@ -104,6 +104,9 @@ describe.each<[
   ['7.7', [
     'web_app_setup_swipe_behavior',
   ]],
+  ['7.8', [
+    'web_app_share_to_story',
+  ]],
   ['7.10', [
     'web_app_setup_secondary_button',
     'web_app_set_bottom_bar_color',

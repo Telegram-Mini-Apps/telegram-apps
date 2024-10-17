@@ -1,6 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageSetItem } from 'test-utils';
-import { emitMiniAppsEvent, type ThemeParams } from '@telegram-apps/bridge';
+import { emitMiniAppsEvent, type ThemeParams, TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
@@ -81,80 +81,11 @@ describe('isSupported', () => {
   });
 });
 
-describe('mounted', () => {
-  beforeEach(mount);
-  afterEach(unmount);
-
-  describe('setParams', () => {
-    it('should save the state in storage key tapps/secondaryButton', () => {
-      internalState.set({
-        backgroundColor: '#123456',
-        hasShineEffect: true,
-        isEnabled: true,
-        isLoaderVisible: true,
-        isVisible: true,
-        position: 'top',
-        text: 'TEXT',
-        textColor: '#789abc',
-      });
-
-      const spy = mockSessionStorageSetItem();
-      setParams({
-        backgroundColor: '#111111',
-      });
-
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('tapps/secondaryButton', '{"backgroundColor":"#111111","hasShineEffect":true,"isEnabled":true,"isLoaderVisible":true,"isVisible":true,"position":"top","text":"TEXT","textColor":"#789abc"}');
-    });
-
-    it('should call "web_app_setup_secondary_button" only if text is not empty', () => {
-      const spy = mockPostEvent();
-      internalState.set({
-        backgroundColor: '#123456',
-        hasShineEffect: false,
-        isEnabled: true,
-        isLoaderVisible: true,
-        isVisible: true,
-        position: 'bottom',
-        text: '',
-        textColor: '#789abc',
-      });
-      setParams({ text: '' });
-
-      expect(spy).toHaveBeenCalledTimes(0);
-      setParams({ text: 'abc' });
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_setup_secondary_button', {
-        color: '#123456',
-        has_shine_effect: false,
-        is_active: true,
-        is_progress_visible: true,
-        is_visible: true,
-        position: 'bottom',
-        text: 'abc',
-        text_color: '#789abc',
-      });
-    });
-  });
-});
-
-describe('not mounted', () => {
-  describe('setParams', () => {
-    it('should not call postEvent', () => {
-      const spy = mockPostEvent();
-      setParams({ text: 'ABC' });
-      expect(spy).toHaveBeenCalledTimes(0);
-    });
-
-    it('should not save state in storage', () => {
-      const spy = mockSessionStorageSetItem();
-      setParams({ text: 'ABC' });
-      expect(spy).toHaveBeenCalledTimes(0);
-    });
-  });
-});
-
 describe('mount', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
   it('should set isMounted = true', () => {
     expect(isMounted()).toBe(false);
     mount();
@@ -214,6 +145,10 @@ describe('mount', () => {
 });
 
 describe('onClick', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
   it('should add click listener', () => {
     const fn = vi.fn();
     onClick(fn);
@@ -233,6 +168,10 @@ describe('onClick', () => {
 });
 
 describe('offClick', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
   it('should remove click listener', () => {
     const fn = vi.fn();
     onClick(fn);
@@ -243,6 +182,11 @@ describe('offClick', () => {
 });
 
 describe('setParams', () => {
+  beforeEach(() => {
+    $version.set('10');
+    isMounted.set(true);
+  });
+
   it('should merge passed object with the state', () => {
     internalState.set({
       backgroundColor: '#123456',
@@ -277,7 +221,10 @@ describe('setParams', () => {
 });
 
 describe('unmount', () => {
-  beforeEach(mount);
+  beforeEach(() => {
+    $version.set('10');
+    mount();
+  });
 
   it('should stop calling postEvent function and session storage updates when something changes', () => {
     const postEventSpy = mockPostEvent();
@@ -294,5 +241,96 @@ describe('unmount', () => {
 
     expect(postEventSpy).toHaveBeenCalledTimes(0);
     expect(storageSpy).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('mounted', () => {
+  beforeEach(() => {
+    $version.set('10');
+    mount();
+  });
+
+  describe('setParams', () => {
+    it('should save the state in storage key tapps/secondaryButton', () => {
+      internalState.set({
+        backgroundColor: '#123456',
+        hasShineEffect: true,
+        isEnabled: true,
+        isLoaderVisible: true,
+        isVisible: true,
+        position: 'top',
+        text: 'TEXT',
+        textColor: '#789abc',
+      });
+
+      const spy = mockSessionStorageSetItem();
+      setParams({
+        backgroundColor: '#111111',
+      });
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('tapps/secondaryButton', '{"backgroundColor":"#111111","hasShineEffect":true,"isEnabled":true,"isLoaderVisible":true,"isVisible":true,"position":"top","text":"TEXT","textColor":"#789abc"}');
+    });
+
+    it('should call "web_app_setup_secondary_button" only if text is not empty', () => {
+      const spy = mockPostEvent();
+      internalState.set({
+        backgroundColor: '#123456',
+        hasShineEffect: false,
+        isEnabled: true,
+        isLoaderVisible: true,
+        isVisible: true,
+        position: 'bottom',
+        text: '',
+        textColor: '#789abc',
+      });
+      setParams({ text: '' });
+
+      expect(spy).toHaveBeenCalledTimes(0);
+      setParams({ text: 'abc' });
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('web_app_setup_secondary_button', {
+        color: '#123456',
+        has_shine_effect: false,
+        is_active: true,
+        is_progress_visible: true,
+        is_visible: true,
+        position: 'bottom',
+        text: 'abc',
+        text_color: '#789abc',
+      });
+    });
+  });
+});
+
+describe('support check', () => {
+  beforeEach(() => {
+    isMounted.set(true);
+  });
+
+  it.each([
+    { fn: mount, name: 'mount' },
+    { fn: () => onClick(console.log), name: 'onClick' },
+    { fn: () => offClick(console.log), name: 'offClick' },
+  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 7.10', ({ fn }) => {
+    $version.set('7.9');
+    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('7.10');
+    expect(fn).not.toThrow();
+  });
+});
+
+describe('mount check', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
+  it.each([
+    { fn: () => setParams({}), name: 'setParams' },
+  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
+    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
+    expect(fn).not.toThrow();
   });
 });

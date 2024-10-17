@@ -1,6 +1,7 @@
 export {
   bindCssVars as bindMiniAppCssVars,
   close as closeMiniApp,
+  isSupported as isMiniAppSupported,
   mount as mountMiniApp,
   ready as miniAppReady,
   setHeaderColor as setMiniAppHeaderColor,

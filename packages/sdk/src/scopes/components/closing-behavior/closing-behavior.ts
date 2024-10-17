@@ -4,22 +4,26 @@ import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
+import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
 
 type StorageValue = boolean;
 
 const STORAGE_KEY = 'closingConfirmation';
 
 /**
- * Disables the confirmation dialog when closing the Mini App.
- */
-export function disableConfirmation(): void {
-  isConfirmationEnabled.set(false);
-}
-
-/**
  * True if the component is currently mounted.
  */
 export const isMounted = signal(false);
+
+const withIsMounted = createWithIsMounted(isMounted);
+
+/**
+ * Disables the confirmation dialog when closing the Mini App.
+ * @throws {TypedError} ERR_NOT_MOUNTED
+ */
+export const disableConfirmation = withIsMounted((): void => {
+  isConfirmationEnabled.set(false);
+});
 
 /**
  * True if the confirmation dialog should be shown while the user is trying to close the Mini App.
@@ -28,10 +32,11 @@ export const isConfirmationEnabled = signal(false);
 
 /**
  * Enables the confirmation dialog when closing the Mini App.
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export function enableConfirmation(): void {
+export const enableConfirmation = withIsMounted((): void => {
   isConfirmationEnabled.set(true);
-}
+});
 
 /**
  * Mounts the component.

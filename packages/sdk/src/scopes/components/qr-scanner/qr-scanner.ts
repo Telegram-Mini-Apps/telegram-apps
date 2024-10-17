@@ -4,13 +4,14 @@ import {
   TypedError,
   on,
   EnhancedPromise,
-  supports,
   type ExecuteWithOptions,
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
-import { $version, postEvent } from '@/scopes/globals.js';
+import { postEvent } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
+import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
 interface OpenSharedOptions extends ExecuteWithOptions {
   /**
@@ -19,30 +20,31 @@ interface OpenSharedOptions extends ExecuteWithOptions {
   text?: string;
 }
 
-const CLOSE_METHOD = 'web_app_close_scan_qr_popup';
-const OPEN_METHOD = 'web_app_open_scan_qr_popup';
-const CLOSED_EVENT = 'scan_qr_popup_closed';
-const SCANNED_EVENT = 'qr_text_received';
+const WEB_APP_CLOSE_SCAN_QR_POPUP = 'web_app_close_scan_qr_popup';
+const WEB_APP_OPEN_SCAN_QR_POPUP = 'web_app_open_scan_qr_popup';
+const SCAN_QR_POPUP_CLOSED = 'scan_qr_popup_closed';
+const QR_TEXT_RECEIVED = 'qr_text_received';
+
+/**
+ * @returns True if the QR scanner is supported.
+ */
+export const isSupported = createIsSupported(WEB_APP_OPEN_SCAN_QR_POPUP);
+
+const withIsSupported = createWithIsSupported(isSupported);
 
 /**
  * Closes the scanner.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function close(): void {
+export const close = withIsSupported((): void => {
   isOpened.set(false);
-  postEvent(CLOSE_METHOD);
-}
+  postEvent(WEB_APP_CLOSE_SCAN_QR_POPUP);
+});
 
 /**
  * True if the scanner is currently opened.
  */
 export const isOpened = signal(false);
-
-/**
- * @returns True if the QR scanner is supported.
- */
-export function isSupported(): boolean {
-  return supports(OPEN_METHOD, $version());
-}
 
 /**
  * Opens the scanner and returns a promise which will be resolved with the QR content if the
@@ -53,7 +55,7 @@ export function isSupported(): boolean {
  * @returns A promise with QR content presented as string or undefined if the scanner was closed.
  * @throws {TypedError} ERR_ALREADY_CALLED
  */
-export function open(options?: OpenSharedOptions & {
+function _open(options?: OpenSharedOptions & {
   /**
    * Function, which should return true if a scanned QR should be captured.
    * @param qr - scanned QR content.
@@ -69,7 +71,7 @@ export function open(options?: OpenSharedOptions & {
  * @param options - method options.
  * @throws {TypedError} ERR_ALREADY_CALLED
  */
-export function open(options: OpenSharedOptions & {
+function _open(options: OpenSharedOptions & {
   /**
    * Function which will be called if some QR code was scanned.
    * @param qr - scanned QR content.
@@ -77,7 +79,7 @@ export function open(options: OpenSharedOptions & {
   onCaptured: (qr: string) => void;
 }): CancelablePromise<void>;
 
-export function open(options?: OpenSharedOptions & {
+function _open(options?: OpenSharedOptions & {
   onCaptured?: (qr: string) => void;
   capture?: (qr: string) => boolean;
 }): CancelablePromise<string | void> {
@@ -96,11 +98,11 @@ export function open(options?: OpenSharedOptions & {
         promise.resolve();
       }),
       // Whenever user closed the scanner, update the isOpened signal state.
-      on(CLOSED_EVENT, () => {
+      on(SCAN_QR_POPUP_CLOSED, () => {
         isOpened.set(false);
       }),
       // Whenever some QR was scanned, we should check if it must be captured.
-      on(SCANNED_EVENT, (event) => {
+      on(QR_TEXT_RECEIVED, (event) => {
         if (onCaptured) {
           onCaptured(event.data);
         } else if (!capture || capture(event.data)) {
@@ -114,8 +116,13 @@ export function open(options?: OpenSharedOptions & {
       .catch(close)
       .finally(cleanup);
 
-    (options.postEvent || postEvent)(OPEN_METHOD, { text });
+    (options.postEvent || postEvent)(WEB_APP_OPEN_SCAN_QR_POPUP, { text });
 
     return promise;
   }, options);
 }
+
+/**
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ */
+export const open = withIsSupported(_open)

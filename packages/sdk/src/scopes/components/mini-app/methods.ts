@@ -6,21 +6,26 @@ import {
   deleteCssVar,
   setCssVar,
   TypedError,
+  supports,
   type RGB,
   type BottomBarColor,
+  type BackgroundColor,
 } from '@telegram-apps/bridge';
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
-import type { Computed } from '@telegram-apps/signals';
+import { computed, type Computed } from '@telegram-apps/signals';
 
-import { postEvent } from '@/scopes/globals.js';
-import { withIsSupported } from '@/scopes/withIsSupported.js';
-import { withSupports } from '@/scopes/withSupports.js';
+import { $version, postEvent } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 import { mount as tpMount } from '@/scopes/components/theme-params/methods.js';
 import {
   headerBackgroundColor as tpHeaderBackgroundColor,
 } from '@/scopes/components/theme-params/signals.js';
+import { subAndCall } from '@/utils/subAndCall.js';
+import { withSupports } from '@/scopes/toolkit/withSupports.js';
+import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
+import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
+import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
 
 import {
   headerColor,
@@ -34,14 +39,27 @@ import {
   backgroundColorRGB,
 } from './signals.js';
 import type { GetCssVarNameFn, HeaderColor, State } from './types.js';
-import { subAndCall } from '@/utils/subAndCall.js';
 
 type StorageValue = State;
 
-const SET_BG_COLOR_METHOD = 'web_app_set_background_color';
-const SET_BOTTOM_BAR_BG_COLOR_METHOD = 'web_app_set_bottom_bar_color';
-const SET_HEADER_COLOR_METHOD = 'web_app_set_header_color';
+const WEB_APP_SET_BACKGROUND_COLOR = 'web_app_set_background_color';
+const WEB_APP_SET_BOTTOM_BAR_COLOR = 'web_app_set_bottom_bar_color';
+const WEB_APP_SET_HEADER_COLOR = 'web_app_set_header_color';
 const STORAGE_KEY = 'miniApp';
+
+/**
+ * True if the Mini App component is supported.
+ */
+export const isSupported = computed(() => {
+  return ([
+    WEB_APP_SET_BACKGROUND_COLOR,
+    WEB_APP_SET_BOTTOM_BAR_COLOR,
+    WEB_APP_SET_HEADER_COLOR,
+  ] as const).some(method => supports(method, $version()));
+});
+
+const withComponentSupported = createWithIsSupported(isSupported);
+const withIsMounted = createWithIsMounted(isMounted);
 
 /**
  * Creates CSS variables connected with the mini app.
@@ -57,8 +75,10 @@ const STORAGE_KEY = 'miniApp';
  * mini app key.
  * @returns Function to stop updating variables.
  * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
+export const bindCssVars = withIsMounted((getCSSVarName?: GetCssVarNameFn): VoidFunction => {
   if (isCssVarsBound()) {
     throw new TypedError(ERR_ALREADY_CALLED);
   }
@@ -92,7 +112,7 @@ export function bindCssVars(getCSSVarName?: GetCssVarNameFn): VoidFunction {
   isCssVarsBound.set(true);
 
   return cleanup;
-}
+});
 
 /**
  * Closes the Mini App.
@@ -110,8 +130,9 @@ export function close(returnBack?: boolean): void {
  *
  * Internally, the function mounts the Theme Params component to work with correctly extracted
  * theme palette values.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function mount(): void {
+export const mount = withComponentSupported((): void => {
   if (!isMounted()) {
     const s = isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY);
     tpMount();
@@ -120,29 +141,28 @@ export function mount(): void {
     bottomBarColor.set(s ? s.bottomBarColor : 'bottom_bar_bg_color');
     headerColor.set(s ? s.headerColor : tpHeaderBackgroundColor() || 'bg_color');
 
-    subAndCall(backgroundColor, onBgColorChanged);
-    subAndCall(bottomBarColor, onBottomBarBgColorChanged);
-    subAndCall(headerColor, onHeaderColorChanged);
+    setBackgroundColor.isSupported() && subAndCall(backgroundColor, onBgColorChanged);
+    setBottomBarColor.isSupported() && subAndCall(bottomBarColor, onBottomBarBgColorChanged);
+    setHeaderColor.isSupported() && subAndCall(headerColor, onHeaderColorChanged);
 
     isMounted.set(true);
   }
-}
+});
 
 function onBgColorChanged(): void {
-  const color = backgroundColor();
   saveState();
-  postEvent(SET_BG_COLOR_METHOD, { color });
+  postEvent(WEB_APP_SET_BACKGROUND_COLOR, { color: backgroundColor() });
 }
 
 function onBottomBarBgColorChanged(): void {
   saveState();
-  postEvent(SET_BOTTOM_BAR_BG_COLOR_METHOD, { color: bottomBarColor() });
+  postEvent(WEB_APP_SET_BOTTOM_BAR_COLOR, { color: bottomBarColor() });
 }
 
 function onHeaderColorChanged(): void {
   const color = headerColor();
   saveState();
-  postEvent(SET_HEADER_COLOR_METHOD, isRGB(color) ? { color } : { color_key: color });
+  postEvent(WEB_APP_SET_HEADER_COLOR, isRGB(color) ? { color } : { color_key: color });
 }
 
 /**
@@ -165,26 +185,43 @@ function saveState() {
 
 /**
  * Updates the background color.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const setBackgroundColor = withIsSupported((color: RGB): void => {
-  backgroundColor.set(color);
-}, SET_BG_COLOR_METHOD);
+export const setBackgroundColor = withIsSupported(
+  withIsMounted((color: BackgroundColor): void => {
+    backgroundColor.set(color);
+  }),
+  WEB_APP_SET_BACKGROUND_COLOR,
+);
 
 /**
  * Updates the bottom bar background color.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const setBottomBarColor = withIsSupported((color: BottomBarColor) => {
-  bottomBarColor.set(color);
-}, SET_BOTTOM_BAR_BG_COLOR_METHOD);
+export const setBottomBarColor = withIsSupported(
+  withIsMounted((color: BottomBarColor) => {
+    bottomBarColor.set(color);
+  }),
+  WEB_APP_SET_BOTTOM_BAR_COLOR,
+);
 
 /**
  * Updates the header color.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const setHeaderColor = withSupports(
-  withIsSupported((color: HeaderColor): void => {
-    headerColor.set(color);
-  }, SET_HEADER_COLOR_METHOD),
-  { color: [SET_HEADER_COLOR_METHOD, 'color'] },
+  withIsSupported(
+    withIsMounted((color: HeaderColor): void => {
+      headerColor.set(color);
+    }),
+    WEB_APP_SET_HEADER_COLOR,
+  ),
+  {
+    color: [WEB_APP_SET_HEADER_COLOR, 'color', isRGB],
+  },
 );
 
 /**

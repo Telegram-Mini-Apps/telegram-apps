@@ -5,18 +5,18 @@ import {
   TypedError,
   type ExecuteWithOptions,
   type SwitchInlineQueryChatType,
-  type ExecuteWithPostEvent,
+  type ExecuteWithPostEvent, supports,
 } from '@telegram-apps/bridge';
 
-import { postEvent, createRequestId, request } from '@/scopes/globals.js';
-import { withIsSupported } from '@/scopes/withIsSupported.js';
+import { postEvent, createRequestId, request, $version } from '@/scopes/globals.js';
+import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
 import { ERR_DATA_INVALID_SIZE } from '@/errors.js';
 
-const READ_TEXT_FROM_CLIPBOARD_METHOD = 'web_app_read_text_from_clipboard';
-const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
-const SHARE_STORY_METHOD = 'web_app_share_to_story';
+const WEB_APP_READ_TEXT_FROM_CLIPBOARD = 'web_app_read_text_from_clipboard';
+const WEB_APP_SWITCH_INLINE_QUERY = 'web_app_switch_inline_query';
+const WEB_APP_SHARE_TO_STORY = 'web_app_share_to_story';
 
-interface ShareStoryOptions extends ExecuteWithPostEvent {
+export interface ShareStoryOptions extends ExecuteWithPostEvent {
   /**
    * The caption to be added to the media.
    * 0-200 characters for regular users and 0-2048 characters for premium subscribers.
@@ -45,17 +45,18 @@ interface ShareStoryOptions extends ExecuteWithPostEvent {
  * in cases:
  * - A value in the clipboard is not a text.
  * - Access to the clipboard is not granted.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const readTextFromClipboard = withIsSupported(
   (options?: ExecuteWithOptions): CancelablePromise<string | null> => {
     const reqId = createRequestId();
 
-    return request(READ_TEXT_FROM_CLIPBOARD_METHOD, 'clipboard_text_received', {
+    return request(WEB_APP_READ_TEXT_FROM_CLIPBOARD, 'clipboard_text_received', {
       ...options,
       params: { req_id: reqId },
       capture: captureSameReq(reqId),
     }).then(({ data = null }) => data);
-  }, READ_TEXT_FROM_CLIPBOARD_METHOD,
+  }, WEB_APP_READ_TEXT_FROM_CLIPBOARD,
 );
 
 /**
@@ -80,17 +81,17 @@ export function sendData(data: string): void {
 
 /**
  * A method that opens the native story editor.
- * @since v7.8
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const shareStory = withIsSupported(
   (mediaUrl: string, options?: ShareStoryOptions) => {
     options ||= {};
-    (options.postEvent || postEvent)(SHARE_STORY_METHOD, {
+    (options.postEvent || postEvent)(WEB_APP_SHARE_TO_STORY, {
       text: options.text,
       media_url: mediaUrl,
       widget_link: options.widgetLink,
     });
-  }, SHARE_STORY_METHOD,
+  }, WEB_APP_SHARE_TO_STORY,
 );
 
 /**
@@ -102,14 +103,16 @@ export const shareStory = withIsSupported(
  * length is 256 symbols.
  * @param chatTypes - List of chat types which could be chosen to send the message. Could be
  * empty list.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
 export const switchInlineQuery = withIsSupported(
   (query: string, chatTypes?: SwitchInlineQueryChatType[]) => {
-    postEvent(SWITCH_INLINE_QUERY_METHOD, {
+    postEvent(WEB_APP_SWITCH_INLINE_QUERY, {
       query: query,
       chat_types: chatTypes || [],
     });
   },
-  SWITCH_INLINE_QUERY_METHOD,
-  () => !!retrieveLaunchParams().botInline,
+  () => {
+    return supports(WEB_APP_SWITCH_INLINE_QUERY, $version()) && !!retrieveLaunchParams().botInline;
+  }
 );

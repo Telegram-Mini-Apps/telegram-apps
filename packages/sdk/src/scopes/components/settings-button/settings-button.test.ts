@@ -1,6 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
-import { emitMiniAppsEvent } from '@telegram-apps/bridge';
+import { emitMiniAppsEvent, TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
@@ -25,78 +25,12 @@ beforeEach(() => {
   mockPostEvent();
 });
 
-describe('mounted', () => {
-  beforeEach(mount);
-  afterEach(unmount);
-
-  describe('hide', () => {
-    it('should call postEvent with "web_app_setup_settings_button" and { is_visible: false }', () => {
-      isVisible.set(true);
-      const spy = vi.fn();
-      mockPostEvent(spy);
-      hide();
-      hide();
-      hide();
-      expect(spy).toBeCalledTimes(1);
-      expect(spy).toBeCalledWith('web_app_setup_settings_button', { is_visible: false });
-    });
-  });
-
-  describe('show', () => {
-    it('should call postEvent with "web_app_setup_settings_button" and { is_visible: true }', () => {
-      isVisible.set(false);
-      const spy = vi.fn();
-      mockPostEvent(spy);
-      show();
-      show();
-      show();
-      expect(spy).toBeCalledTimes(1);
-      expect(spy).toBeCalledWith('web_app_setup_settings_button', { is_visible: true });
-    });
-  });
-});
-
-describe('not mounted', () => {
-  describe('hide', () => {
-    it('should not call postEvent', () => {
-      isVisible.set(true);
-      const spy = vi.fn();
-      mockPostEvent(spy);
-      hide();
-      expect(spy).toBeCalledTimes(0);
-    });
-
-    it('should not save state in storage', () => {
-      isVisible.set(true);
-      const spy = mockSessionStorageSetItem();
-      hide();
-      expect(spy).toBeCalledTimes(0);
-    });
-  });
-
-  describe('show', () => {
-    it('should not call postEvent', () => {
-      isVisible.set(false);
-      const spy = vi.fn();
-      mockPostEvent(spy);
-      show();
-      show();
-      show();
-      expect(spy).toBeCalledTimes(0);
-    });
-
-    it('should not save state in storage', () => {
-      isVisible.set(false);
-      const spy = mockSessionStorageSetItem();
-      show();
-      show();
-      show();
-      expect(spy).toBeCalledTimes(0);
-    });
-  });
-});
-
 describe('hide', () => {
+  beforeEach(() => {
+    $version.set('10');
+    isMounted.set(true);
+  });
+
   it('should set isVisible = false', () => {
     isVisible.set(true);
     expect(isVisible()).toBe(true);
@@ -117,6 +51,10 @@ describe('isSupported', () => {
 });
 
 describe('mount', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
   it('should call postEvent with "web_app_setup_settings_button"', () => {
     const spy = mockPostEvent();
     mount();
@@ -162,8 +100,46 @@ describe('mount', () => {
   });
 });
 
+describe('onClick', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
+  it('should add click listener', () => {
+    const fn = vi.fn();
+    onClick(fn);
+    emitMiniAppsEvent('settings_button_pressed', {});
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it('should remove added listener if returned function was called', () => {
+    const fn = vi.fn();
+    const off = onClick(fn);
+    off();
+    emitMiniAppsEvent('settings_button_pressed', {});
+    expect(fn).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('offClick', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
+  it('should remove click listener', () => {
+    const fn = vi.fn();
+    onClick(fn);
+    offClick(fn);
+    emitMiniAppsEvent('settings_button_pressed', {});
+    expect(fn).toHaveBeenCalledTimes(0);
+  });
+});
+
 describe('unmount', () => {
-  beforeEach(mount);
+  beforeEach(() => {
+    $version.set('10');
+    mount();
+  });
 
   it('should stop calling postEvent function and session storage updates when isVisible changes', () => {
     const postEventSpy = mockPostEvent();
@@ -183,38 +159,82 @@ describe('unmount', () => {
   });
 });
 
-describe('onClick', () => {
-  it('should add click listener', () => {
-    const fn = vi.fn();
-    onClick(fn);
-    emitMiniAppsEvent('settings_button_pressed', {});
-    expect(fn).toHaveBeenCalledTimes(1);
-  });
-
-  it('should remove added listener if returned function was called', () => {
-    const fn = vi.fn();
-    const off = onClick(fn);
-    off();
-    emitMiniAppsEvent('settings_button_pressed', {});
-    expect(fn).toHaveBeenCalledTimes(0);
-  });
-});
-
-describe('offClick', () => {
-  it('should remove click listener', () => {
-    const fn = vi.fn();
-    onClick(fn);
-    offClick(fn);
-    emitMiniAppsEvent('settings_button_pressed', {});
-    expect(fn).toHaveBeenCalledTimes(0);
-  });
-});
-
 describe('show', () => {
+  beforeEach(() => {
+    $version.set('10');
+    isMounted.set(true);
+  });
+
   it('should set isVisible = true', () => {
     isVisible.set(false);
     expect(isVisible()).toBe(false);
     show();
     expect(isVisible()).toBe(true);
+  });
+});
+
+describe('mounted', () => {
+  beforeEach(() => {
+    $version.set('10');
+    mount();
+  });
+
+  describe('hide', () => {
+    it('should call postEvent with "web_app_setup_settings_button" and { is_visible: false }', () => {
+      isVisible.set(true);
+      const spy = vi.fn();
+      mockPostEvent(spy);
+      hide();
+      hide();
+      hide();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_settings_button', { is_visible: false });
+    });
+  });
+
+  describe('show', () => {
+    it('should call postEvent with "web_app_setup_settings_button" and { is_visible: true }', () => {
+      isVisible.set(false);
+      const spy = vi.fn();
+      mockPostEvent(spy);
+      show();
+      show();
+      show();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_settings_button', { is_visible: true });
+    });
+  });
+});
+
+describe('support check', () => {
+  beforeEach(() => {
+    isMounted.set(true);
+  });
+
+  it.each([
+    { fn: mount, name: 'mount' },
+    { fn: () => onClick(console.log), name: 'onClick' },
+    { fn: () => offClick(console.log), name: 'offClick' },
+  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 6.10', ({ fn }) => {
+    $version.set('6.9');
+    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('6.10');
+    expect(fn).not.toThrow();
+  });
+});
+
+describe('mount check', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
+  it.each([
+    { fn: hide, name: 'hide' },
+    { fn: show, name: 'show' },
+  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
+    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
+    expect(fn).not.toThrow();
   });
 });

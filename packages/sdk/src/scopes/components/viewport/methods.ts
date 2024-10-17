@@ -16,6 +16,7 @@ import { postEvent } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 import { subAndCall } from '@/utils/subAndCall.js';
+import { withIsMounted } from '@/scopes/toolkit/withIsMounted.js';
 
 import { type GetCSSVarNameFn, request } from './static.js';
 import {
@@ -50,9 +51,10 @@ interface StorageValue {
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * viewport property.
  * @returns Function to stop updating variables.
- * @throws TypedError ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export function bindCssVars(getCSSVarName?: GetCSSVarNameFn): VoidFunction {
+export const bindCssVars = withIsMounted((getCSSVarName?: GetCSSVarNameFn): VoidFunction => {
   if (isCssVarsBound()) {
     throw new TypedError(ERR_ALREADY_CALLED);
   }
@@ -74,7 +76,7 @@ export function bindCssVars(getCSSVarName?: GetCSSVarNameFn): VoidFunction {
     state.unsub(actualize);
     isCssVarsBound.set(false);
   };
-}
+}, isMounted);
 
 /**
  * A method that expands the Mini App to the maximum available height. To find out if the Mini

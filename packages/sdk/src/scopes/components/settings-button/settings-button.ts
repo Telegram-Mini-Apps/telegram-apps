@@ -3,32 +3,22 @@ import {
   on,
   getStorageValue,
   setStorageValue,
-  supports,
   type EventListener,
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { $version, postEvent } from '@/scopes/globals.js';
+import { postEvent } from '@/scopes/globals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
+import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
+import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
 
 type StorageValue = boolean;
 
-const MINI_APPS_METHOD = 'web_app_setup_settings_button';
-const CLICK_EVENT = 'settings_button_pressed';
+const WEB_APP_SETUP_SETTINGS_BUTTON = 'web_app_setup_settings_button';
+const SETTINGS_BUTTON_PRESSED = 'settings_button_pressed';
 const STORAGE_KEY = 'settingsButton';
-
-/**
- * Hides the settings button.
- */
-export function hide(): void {
-  isVisible.set(false);
-}
-
-/**
- * True if the component is currently visible.
- */
-export const isVisible = signal(false);
 
 /**
  * True if the component is currently mounted.
@@ -38,53 +28,73 @@ export const isMounted = signal(false);
 /**
  * @returns True if the settings button is supported.
  */
-export function isSupported(): boolean {
-  return supports(MINI_APPS_METHOD, $version());
-}
+export const isSupported = createIsSupported(WEB_APP_SETUP_SETTINGS_BUTTON);
+
+const withIsSupported = createWithIsSupported(isSupported);
+const withIsMounted = createWithIsMounted(isMounted);
+
+/**
+ * Hides the Settings Button.
+ * @throws {TypedError} ERR_NOT_MOUNTED
+ */
+export const hide = withIsMounted((): void => {
+  isVisible.set(false);
+});
+
+/**
+ * True if the component is currently visible.
+ */
+export const isVisible = signal(false);
 
 /**
  * Mounts the component.
  *
  * This function restores the component state and is automatically saving it in the local storage
  * if it changed.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function mount(): void {
+export const mount = withIsSupported((): void => {
   if (!isMounted()) {
     isVisible.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
     subAndCall(isVisible, onStateChanged);
     isMounted.set(true);
   }
-}
+});
 
 function onStateChanged() {
   const value = isVisible();
-  postEvent(MINI_APPS_METHOD, { is_visible: value });
+  postEvent(WEB_APP_SETUP_SETTINGS_BUTTON, { is_visible: value });
   setStorageValue<StorageValue>(STORAGE_KEY, value);
 }
 
 /**
- * Add a new settings button click listener.
+ * Add a new Settings Button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function onClick(fn: EventListener<'settings_button_pressed'>): VoidFunction {
-  return on(CLICK_EVENT, fn);
-}
+export const onClick = withIsSupported(
+  (fn: EventListener<'settings_button_pressed'>): VoidFunction => on(SETTINGS_BUTTON_PRESSED, fn),
+);
 
 /**
- * Removes the settings button click listener.
+ * Removes the Settings Button click listener.
  * @param fn - an event listener.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export function offClick(fn: EventListener<'settings_button_pressed'>): void {
-  off(CLICK_EVENT, fn);
-}
+export const offClick = withIsSupported(
+  (fn: EventListener<'settings_button_pressed'>): void => {
+    off(SETTINGS_BUTTON_PRESSED, fn);
+  },
+);
 
 /**
- * Shows the settings button.
+ * Shows the Settings Button.
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export function show(): void {
+export const show = withIsMounted((): void => {
   isVisible.set(true);
-}
+});
 
 /**
  * Unmounts the component, removing the listener, saving the component state in the local storage.

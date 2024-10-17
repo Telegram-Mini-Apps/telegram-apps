@@ -1,4 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { TypedError } from '@telegram-apps/bridge';
 import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
@@ -21,65 +22,31 @@ beforeEach(() => {
   mockPostEvent();
 });
 
-describe('mounted', () => {
-  beforeEach(mount);
-  afterEach(unmount);
-
-  describe('disableVerticalSwipes', () => {
-    it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: false }', () => {
-      isVerticalEnabled.set(true);
-      const spy = mockPostEvent();
-      disableVertical();
-      disableVertical();
-      disableVertical();
-      expect(spy).toBeCalledTimes(1);
-      expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: false });
-    });
-  });
-
-  describe('enableVerticalSwipes', () => {
-    it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: true }', () => {
-      isVerticalEnabled.set(false);
-      const spy = mockPostEvent();
-      enableVertical();
-      enableVertical();
-      enableVertical();
-      expect(spy).toBeCalledTimes(1);
-      expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: true });
-    });
-  });
-});
-
-describe('not mounted', () => {
-  describe('disableVerticalSwipes', () => {
-    it('should not call postEvent', () => {
-      isVerticalEnabled.set(true);
-      const spy = mockPostEvent();
-      disableVertical();
-      disableVertical();
-      disableVertical();
-      expect(spy).toBeCalledTimes(0);
-    });
-  });
-
-  describe('enableVerticalSwipes', () => {
-    it('should not call postEvent', () => {
-      isVerticalEnabled.set(false);
-      const spy = mockPostEvent();
-      enableVertical();
-      enableVertical();
-      enableVertical();
-      expect(spy).toBeCalledTimes(0);
-    });
-  });
-});
-
 describe('disableVerticalSwipes', () => {
+  beforeEach(() => {
+    isMounted.set(true);
+    $version.set('10');
+  });
+
   it('should set isVerticalSwipesEnabled = false', () => {
     isVerticalEnabled.set(true);
     expect(isVerticalEnabled()).toBe(true);
     disableVertical();
     expect(isVerticalEnabled()).toBe(false);
+  });
+});
+
+describe('enableVerticalSwipes', () => {
+  beforeEach(() => {
+    isMounted.set(true);
+    $version.set('10');
+  });
+
+  it('should set isVerticalSwipesEnabled = true', () => {
+    isVerticalEnabled.set(false);
+    expect(isVerticalEnabled()).toBe(false);
+    enableVertical();
+    expect(isVerticalEnabled()).toBe(true);
   });
 });
 
@@ -97,6 +64,18 @@ describe('isSupported', () => {
 });
 
 describe('mount', () => {
+  it('should throw if version is less than 7.7', () => {
+    $version.set('7.6');
+    expect(mount).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('7.7');
+    expect(mount).not.toThrow();
+  });
+
+  beforeEach(() => {
+    $version.set('10');
+  });
+
   it('should set isMounted = true', () => {
     expect(isMounted()).toBe(false);
     mount();
@@ -143,7 +122,10 @@ describe('mount', () => {
 });
 
 describe('unmount', () => {
-  beforeEach(mount);
+  beforeEach(() => {
+    $version.set('10');
+    mount();
+  });
 
   it('should stop calling postEvent function and session storage updates when isVerticalSwipesEnabled changes', () => {
     const postEventSpy = mockPostEvent();
@@ -163,11 +145,64 @@ describe('unmount', () => {
   });
 });
 
-describe('enableVerticalSwipes', () => {
-  it('should set isVerticalSwipesEnabled = true', () => {
-    isVerticalEnabled.set(false);
-    expect(isVerticalEnabled()).toBe(false);
-    enableVertical();
-    expect(isVerticalEnabled()).toBe(true);
+describe('mounted', () => {
+  beforeEach(() => {
+    $version.set('10');
+    mount();
+  });
+
+  describe('disableVerticalSwipes', () => {
+    it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: false }', () => {
+      isVerticalEnabled.set(true);
+      const spy = mockPostEvent();
+      disableVertical();
+      disableVertical();
+      disableVertical();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: false });
+    });
+  });
+
+  describe('enableVerticalSwipes', () => {
+    it('should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: true }', () => {
+      isVerticalEnabled.set(false);
+      const spy = mockPostEvent();
+      enableVertical();
+      enableVertical();
+      enableVertical();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: true });
+    });
+  });
+});
+
+describe('support check', () => {
+  beforeEach(() => {
+    isMounted.set(true);
+  });
+
+  it.each([
+    { fn: mount, name: 'mount' },
+  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 7.7', ({ fn }) => {
+    $version.set('7.6');
+    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set('7.7');
+    expect(fn).not.toThrow();
+  });
+});
+
+describe('mount check', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
+  it.each([
+    { fn: disableVertical, name: 'disableVertical' },
+    { fn: enableVertical, name: 'enableVertical' },
+  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
+    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
+    expect(fn).not.toThrow();
   });
 });

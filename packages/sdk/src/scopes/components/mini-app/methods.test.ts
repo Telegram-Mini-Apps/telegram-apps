@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
 import { createWindow } from 'test-utils';
-import type { ThemeParams } from '@telegram-apps/bridge';
+import { ThemeParams, TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
 import { state as tpState } from '@/scopes/components/theme-params/signals.js';
 import { $version } from '@/scopes/globals.js';
 
-import { headerColor, backgroundColor, bottomBarColor } from './signals.js';
+import { headerColor, backgroundColor, bottomBarColor, isMounted } from './signals.js';
 import {
   bindCssVars,
   close,
@@ -16,6 +16,7 @@ import {
   setBackgroundColor,
   setBottomBarColor,
   setHeaderColor,
+  isSupported,
 } from './methods.js';
 
 type SetPropertyFn = typeof document.documentElement.style.setProperty;
@@ -46,6 +47,11 @@ beforeEach(() => {
 });
 
 describe('bindCssVars', () => {
+  beforeEach(() => {
+    $version.set('10');
+    isMounted.set(true);
+  });
+
   describe('background color', () => {
     it('should set --tg-bg-color == backgroundColorRGB()', () => {
       backgroundColor.set('#fedcba');
@@ -74,7 +80,10 @@ describe('bindCssVars', () => {
   });
 
   describe('mounted', () => {
-    beforeEach(mount);
+    beforeEach(() => {
+      $version.set('10');
+      mount();
+    });
 
     describe('background color', () => {
       it('should set --tg-bg-color == backgroundColorRGB() when theme changes', () => {
@@ -150,69 +159,63 @@ describe('bindCssVars', () => {
   });
 });
 
-describe('mounted', () => {
-  beforeEach(mount);
-
-  describe('setBackgroundColor', () => {
-    it('should call "web_app_set_background_color" method with { color: {{color}} }', () => {
-      const spy = mockPostEvent();
-      expect(spy).toHaveBeenCalledTimes(0);
-      setBackgroundColor('#abcdef');
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_set_background_color', { color: '#abcdef' });
-    });
-  });
-
-  describe('setBottomBarColor', () => {
-    it('should call "web_app_set_bottom_bar_color" method with { color: {{color}} }', () => {
-      const spy = mockPostEvent();
-      expect(spy).toHaveBeenCalledTimes(0);
-      setBottomBarColor('#abcdef');
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_set_bottom_bar_color', { color: '#abcdef' });
-    });
-  });
-
-  describe('setHeaderColor', () => {
-    it('should call "web_app_set_header_color" method with { color_key: {{color_key}} }', () => {
-      const spy = mockPostEvent();
-      expect(spy).toHaveBeenCalledTimes(0);
-      setHeaderColor('secondary_bg_color');
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_set_header_color', { color_key: 'secondary_bg_color' });
-    });
-  });
-});
-
-describe('mount', () => {
-  it('should call postEvent with "web_app_set_background_color"', () => {
-    const spy = mockPostEvent();
-    mount();
-    expect(spy).toHaveBeenCalledTimes(3);
-    expect(spy).toHaveBeenNthCalledWith(1, 'web_app_set_background_color', { color: 'bg_color' });
-  });
-
-  it('should call postEvent with "web_app_set_bottom_bar_color"', () => {
-    const spy = mockPostEvent();
-    mount();
-    expect(spy).toHaveBeenCalledTimes(3);
-    expect(spy).toHaveBeenNthCalledWith(2, 'web_app_set_bottom_bar_color', { color: 'bottom_bar_bg_color' });
-  });
-
-  it('should call postEvent with "web_app_set_header_color"', () => {
-    const spy = mockPostEvent();
-    mount();
-    expect(spy).toHaveBeenCalledTimes(3);
-    expect(spy).toHaveBeenNthCalledWith(3, 'web_app_set_header_color', { color_key: 'bg_color' });
-  });
-});
-
 describe('close', () => {
   it('should call "web_app_close" with "return_back" option', () => {
     const spy = mockPostEvent();
     close(false);
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith('web_app_close', { return_back: false });
+  });
+});
+
+describe('isSupported', () => {
+  it('should return false if version is less than 6.1. True otherwise', () => {
+    $version.set('6.0');
+    expect(isSupported()).toBe(false);
+
+    $version.set('6.1');
+    expect(isSupported()).toBe(true);
+
+    $version.set('6.2');
+    expect(isSupported()).toBe(true);
+  });
+});
+
+describe('mount', () => {
+  beforeEach(() => {
+    $version.set('6.1');
+  });
+
+  it('should call postEvent with "web_app_set_background_color"', () => {
+    const spy = mockPostEvent();
+    mount();
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenNthCalledWith(1, 'web_app_set_background_color', { color: 'bg_color' });
+  });
+
+  it('should call postEvent with "web_app_set_header_color"', () => {
+    const spy = mockPostEvent();
+    mount();
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenNthCalledWith(2, 'web_app_set_header_color', { color_key: 'bg_color' });
+  });
+
+  describe('web_app_set_bottom_bar_color', () => {
+    it('should not call postEvent with method if version is 7.9 or less', () => {
+      $version.set('7.9');
+      const spy = mockPostEvent();
+      mount();
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(spy).not.toHaveBeenCalledWith('web_app_set_bottom_bar_color', expect.anything());
+    });
+
+    it('should call postEvent with method if version is 7.10 or more', () => {
+      $version.set('7.10');
+      const spy = mockPostEvent();
+      mount();
+      expect(spy).toHaveBeenCalledTimes(3);
+      expect(spy).toHaveBeenNthCalledWith(2, 'web_app_set_bottom_bar_color', { color: 'bottom_bar_bg_color' });
+    });
   });
 });
 
@@ -269,16 +272,72 @@ describe('setHeaderColor', () => {
     });
   });
 
-  describe('supports "color"', () => {
-    it('should return false if version is less than 6.9. True otherwise', () => {
+  describe('supports', () => {
+    beforeEach(() => {
+      isMounted.set(true);
+    });
+
+    it('should throw if version is less than 6.9', () => {
       $version.set('6.8');
-      expect(setHeaderColor.supports('color')).toBe(false);
+      expect(() => setHeaderColor('#ffaaaa')).toThrow(
+        new TypedError('ERR_NOT_SUPPORTED', 'Parameter "color" is not supported'),
+      );
 
       $version.set('6.9');
-      expect(setHeaderColor.supports('color')).toBe(true);
-
-      $version.set('6.10');
-      expect(setHeaderColor.supports('color')).toBe(true);
+      expect(() => setHeaderColor('#ffaaaa')).not.toThrow();
     });
+
+    describe('color', () => {
+      it('should return false if version is less than 6.9. True otherwise', () => {
+        $version.set('6.8');
+        expect(setHeaderColor.supports('color')).toBe(false);
+
+        $version.set('6.9');
+        expect(setHeaderColor.supports('color')).toBe(true);
+
+        $version.set('6.10');
+        expect(setHeaderColor.supports('color')).toBe(true);
+      });
+    });
+  });
+});
+
+describe('support check', () => {
+  beforeEach(() => {
+    isMounted.set(true);
+  });
+
+  it.each([
+    { fn: mount, name: 'mount', version: '6.1' },
+    { fn: () => setBackgroundColor('bg_color'), name: 'setBackgroundColor', version: '6.1' },
+    { fn: () => setHeaderColor('bg_color'), name: 'setHeaderColor', version: '6.1' },
+    { fn: () => setBottomBarColor('bg_color'), name: 'setBottomBarColor', version: '7.10' },
+  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than $version', ({
+    fn,
+    version,
+  }) => {
+    const [major, minor] = version.split('.').map(Number);
+    $version.set(`${major}.${minor - 1}`);
+    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+
+    $version.set(version);
+    expect(fn).not.toThrow();
+  });
+});
+
+describe('mount check', () => {
+  beforeEach(() => {
+    $version.set('10');
+  });
+
+  it.each([
+    { fn: bindCssVars, name: 'bindCssVars' },
+    { fn: () => setBackgroundColor('bg_color'), name: 'setBackgroundColor' },
+    { fn: () => setHeaderColor('bg_color'), name: 'setHeaderColor' },
+    { fn: () => setBottomBarColor('bg_color'), name: 'setBottomBarColor' },
+  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
+    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
+    expect(fn).not.toThrow();
   });
 });

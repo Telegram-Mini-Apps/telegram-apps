@@ -1,16 +1,17 @@
 import {
   TypedError,
-  supports,
   type ExecuteWithOptions,
   type InvoiceStatus,
   type ExecuteWithPostEvent,
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
-import { $version, request } from '@/scopes/globals.js';
+import { request } from '@/scopes/globals.js';
 import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_ALREADY_CALLED } from '@/errors.js';
+import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
-const MINI_APPS_METHOD = 'web_app_open_invoice';
+const WEB_APP_OPEN_INVOICE = 'web_app_open_invoice';
 
 /**
  * True if the invoice is currently opened.
@@ -18,11 +19,9 @@ const MINI_APPS_METHOD = 'web_app_open_invoice';
 export const isOpened = signal(false);
 
 /**
- * @returns True if the invoice is supported.
+ * @returns True if the Invoice is supported.
  */
-export function isSupported(): boolean {
-  return supports(MINI_APPS_METHOD, $version());
-}
+export const isSupported = createIsSupported(WEB_APP_OPEN_INVOICE);
 
 /**
  * Opens an invoice using its slug.
@@ -33,7 +32,7 @@ export function isSupported(): boolean {
  * @throws {TypedError} ERR_INVALID_HOSTNAME
  * @throws {TypedError} ERR_INVALID_SLUG
  */
-export function open(slug: string, options?: ExecuteWithPostEvent): Promise<InvoiceStatus>;
+export function _open(slug: string, options?: ExecuteWithPostEvent): Promise<InvoiceStatus>;
 
 /**
  * Opens an invoice using its url.
@@ -49,13 +48,13 @@ export function open(slug: string, options?: ExecuteWithPostEvent): Promise<Invo
  * @throws {TypedError} ERR_INVALID_HOSTNAME
  * @throws {TypedError} ERR_INVALID_SLUG
  */
-export function open(
+export function _open(
   url: string,
   type: 'url',
   options?: ExecuteWithPostEvent,
 ): Promise<InvoiceStatus>;
 
-export async function open(
+export async function _open(
   urlOrSlug: string,
   optionsOrType?: 'url' | ExecuteWithOptions,
   options?: ExecuteWithOptions,
@@ -87,7 +86,7 @@ export async function open(
 
   isOpened.set(true);
 
-  return request(MINI_APPS_METHOD, 'invoice_closed', {
+  return request(WEB_APP_OPEN_INVOICE, 'invoice_closed', {
     ...options,
     params: { slug },
     capture: (data) => slug === data.slug,
@@ -97,3 +96,8 @@ export async function open(
       isOpened.set(false);
     });
 }
+
+/**
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ */
+export const open = withIsSupported(_open, isSupported);

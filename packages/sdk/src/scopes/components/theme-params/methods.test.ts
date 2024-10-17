@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
 import { createWindow } from 'test-utils';
-import { emitMiniAppsEvent } from '@telegram-apps/bridge';
+import { emitMiniAppsEvent, TypedError } from '@telegram-apps/bridge';
 import { resetPackageState } from '@test-utils/reset/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 
 import { bindCssVars, mount } from './methods.js';
-import { state } from './signals.js';
+import { isMounted, state } from './signals.js';
 
 type SetPropertyFn = typeof document.documentElement.style.setProperty;
 let setSpy: MockInstance<SetPropertyFn>;
@@ -32,6 +32,8 @@ beforeEach(() => {
 });
 
 describe('bindCssVars', () => {
+  beforeEach(mount);
+
   it('should set --tg-theme-{key} CSS vars, where key is kebab-cased theme keys', () => {
     state.set({
       bgColor: '#abcdef',
@@ -49,7 +51,6 @@ describe('bindCssVars', () => {
       accentTextColor: '#000011',
     });
     bindCssVars();
-    mount();
 
     setSpy.mockClear();
     emitMiniAppsEvent('theme_changed', {
@@ -84,7 +85,6 @@ describe('bindCssVars', () => {
       accentTextColor: '#000011',
     });
     const cleanup = bindCssVars();
-    mount();
 
     setSpy.mockClear();
     emitMiniAppsEvent('theme_changed', {
@@ -104,5 +104,15 @@ describe('bindCssVars', () => {
       },
     });
     expect(setSpy).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe('mount check', () => {
+  it.each([
+    { fn: bindCssVars, name: 'bindCssVars' },
+  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
+    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
+    isMounted.set(true);
+    expect(fn).not.toThrow();
   });
 });

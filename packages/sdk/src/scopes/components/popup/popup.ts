@@ -1,20 +1,20 @@
-import { TypedError, supports } from '@telegram-apps/bridge';
+import { TypedError } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
-import { $version, request } from '@/scopes/globals.js';
+import { request } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
+import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 
 import { prepareParams } from './prepareParams.js';
 import type { OpenOptions } from './types.js';
 
-const MINI_APPS_METHOD = 'web_app_open_popup';
+const WEB_APP_OPEN_POPUP = 'web_app_open_popup';
 
 /**
- * @returns True if the back button is supported.
+ * @returns True if the Popup is supported.
  */
-export function isSupported(): boolean {
-  return supports(MINI_APPS_METHOD, $version());
-}
+export const isSupported = createIsSupported(WEB_APP_OPEN_POPUP);
 
 /**
  * True if a popup is currently opened.
@@ -36,20 +36,24 @@ export const isOpened = signal(false);
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid buttons length.
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid button id length.
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid text length.
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  */
-export async function open(options: OpenOptions): Promise<string | null> {
-  if (isOpened()) {
-    throw new TypedError(ERR_ALREADY_CALLED);
-  }
-  isOpened.set(true);
+export const open = withIsSupported(
+  async (options: OpenOptions): Promise<string | null> => {
+    if (isOpened()) {
+      throw new TypedError(ERR_ALREADY_CALLED);
+    }
+    isOpened.set(true);
 
-  try {
-    const { button_id: buttonId = null } = await request(MINI_APPS_METHOD, 'popup_closed', {
-      ...options,
-      params: prepareParams(options),
-    });
-    return buttonId;
-  } finally {
-    isOpened.set(false);
-  }
-}
+    try {
+      const { button_id: buttonId = null } = await request(WEB_APP_OPEN_POPUP, 'popup_closed', {
+        ...options,
+        params: prepareParams(options),
+      });
+      return buttonId;
+    } finally {
+      isOpened.set(false);
+    }
+  },
+  isSupported,
+);

@@ -1,1 +1,7 @@
-export { readTextFromClipboard, sendData, switchInlineQuery, shareStory } from './uncategorized.js';
+export {
+  readTextFromClipboard,
+  sendData,
+  switchInlineQuery,
+  shareStory,
+  type ShareStoryOptions,
+} from './uncategorized.js';

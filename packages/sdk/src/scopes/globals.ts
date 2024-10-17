@@ -6,7 +6,6 @@ import {
   createPostEvent,
   type PostEventFn,
   type Version,
-  type CreatePostEventMode,
   type RequestFn,
   type CancelablePromise,
   type ExecuteWithOptions,
@@ -35,7 +34,7 @@ export interface ConfigureOptions {
    * @default 'strict'
    * @see createPostEvent
    */
-  postEvent?: PostEventFn | CreatePostEventMode;
+  postEvent?: PostEventFn;
 }
 
 /**
@@ -68,7 +67,7 @@ export function configure(options?: ConfigureOptions): void {
   $postEvent.set(
     typeof optionsPostEvent === 'function'
       ? optionsPostEvent
-      : createPostEvent(v, optionsPostEvent),
+      : createPostEvent(v),
   );
 }
 
