@@ -24,7 +24,6 @@ import { subAndCall } from '@/utils/subAndCall.js';
 import { withSupports } from '@/scopes/toolkit/withSupports.js';
 import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
 import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
-import { createWithChecks } from '@/scopes/toolkit/createWithChecks.js';
 import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
 
 import {
@@ -49,7 +48,6 @@ const STORAGE_KEY = 'miniApp';
 
 const withComponentSupported = createWithIsSupported(isSupported);
 const withIsMounted = createWithIsMounted(isMounted);
-const withChecks = createWithChecks(isSupported, isMounted);
 
 /**
  * Creates CSS variables connected with the mini app.
@@ -68,7 +66,7 @@ const withChecks = createWithChecks(isSupported, isMounted);
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const bindCssVars = withChecks((getCSSVarName?: GetCssVarNameFn): VoidFunction => {
+export const bindCssVars = withIsMounted((getCSSVarName?: GetCssVarNameFn): VoidFunction => {
   if (isCssVarsBound()) {
     throw new TypedError(ERR_ALREADY_CALLED);
   }
@@ -228,9 +226,9 @@ export const setHeaderColor = withSupports(
 /**
  * Unmounts the component, removing the listener, saving the component state in the local storage.
  */
-export const unmount = withComponentSupported((): void => {
+export function unmount(): void {
   backgroundColor.unsub(onBgColorChanged);
   bottomBarColor.unsub(onBottomBarBgColorChanged);
   headerColor.unsub(onHeaderColorChanged);
   isMounted.set(false);
-});
+}

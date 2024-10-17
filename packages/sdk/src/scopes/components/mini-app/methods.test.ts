@@ -17,7 +17,6 @@ import {
   setBottomBarColor,
   setHeaderColor,
   isSupported,
-  unmount,
 } from './methods.js';
 
 type SetPropertyFn = typeof document.documentElement.style.setProperty;
@@ -309,12 +308,10 @@ describe('support check', () => {
   });
 
   it.each([
-    { fn: bindCssVars, name: 'bindCssVars', version: '6.1' },
     { fn: mount, name: 'mount', version: '6.1' },
     { fn: () => setBackgroundColor('bg_color'), name: 'setBackgroundColor', version: '6.1' },
     { fn: () => setHeaderColor('bg_color'), name: 'setHeaderColor', version: '6.1' },
     { fn: () => setBottomBarColor('bg_color'), name: 'setBottomBarColor', version: '7.10' },
-    { fn: unmount, name: 'unmount', version: '6.1' },
   ])('$name function should throw ERR_NOT_SUPPORTED if version is less than $version', ({
     fn,
     version,
