@@ -1,7 +1,12 @@
 import { defineConfig } from 'vitepress';
 
-import { packagesNavItem, packagesSidebar } from './packages';
-import { platformNavItem, platformSidebar } from './platform';
+import { packagesLinksGenerator } from './packages';
+import { platformLinksGenerator } from './platform';
+
+import { zh } from "./zh";
+
+const { packagesNavItem, packagesSidebar } = packagesLinksGenerator();
+const { platformNavItem, platformSidebar } = platformLinksGenerator();
 
 function withSlashes(value: string | undefined): string {
   if (!value) {
@@ -25,12 +30,18 @@ export default defineConfig({
   // https://vitepress.dev/reference/site-config#base
   base: withSlashes(process.env.DOCS_BASE_URL),
 
+  ignoreDeadLinks: true,
+
   // Internationalization.
   // https://vitepress.dev/guide/i18n
   locales: {
     root: {
       label: 'English',
       lang: 'en',
+    },
+    zh: {
+      label: "中文",
+      ...zh,
     },
   },
 
