@@ -139,7 +139,7 @@ export const mount = withComponentSupported((): void => {
 
     backgroundColor.set(s ? s.backgroundColor : 'bg_color');
     bottomBarColor.set(s ? s.bottomBarColor : 'bottom_bar_bg_color');
-    headerColor.set(s ? s.headerColor : tpHeaderBackgroundColor() || 'bg_color');
+    headerColor.set(s ? s.headerColor : 'bg_color');
 
     setBackgroundColor.isSupported() && subAndCall(backgroundColor, onBgColorChanged);
     setBottomBarColor.isSupported() && subAndCall(bottomBarColor, onBottomBarBgColorChanged);
