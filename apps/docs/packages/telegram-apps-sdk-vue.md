@@ -19,7 +19,7 @@ application.
 
 > [!TIP]
 > Since this package offers utility functions that extend the functionality
-> of [@telegram-apps/sdk](../telegram-apps-sdk/2-x.md), it is recommended to review the SDK package
+> of [@telegram-apps/sdk](./telegram-apps-sdk/2-x.md), it is recommended to review the SDK package
 > documentation first.
 
 ## Installation
@@ -44,7 +44,7 @@ yarn add @telegram-apps/sdk-vue
 :::
 
 > [!INFO]
-> This package fully re-exports the [@telegram-apps/sdk](../telegram-apps-sdk/2-x) package, so
+> This package fully re-exports the [@telegram-apps/sdk](./telegram-apps-sdk/2-x) package, so
 > you don't need to install it separately.
 
 ## Usage
@@ -103,7 +103,7 @@ onUnmounted(() => {
 
 ### `useSignal`
 
-A helper that allows you to use our [signals](../telegram-apps-signals.md) in the application. It
+A helper that allows you to use our [signals](./telegram-apps-signals.md) in the application. It
 returns a Vue ref which updates every time, our signal changes.
 
 ```vue
