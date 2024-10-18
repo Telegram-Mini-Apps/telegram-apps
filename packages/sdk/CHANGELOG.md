@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 2.5.1
+
+### Patch Changes
+
+- 4c9581f: Fix invalid Mini App mount using theme params RGB header color
+
 ## 2.5.0
 
 ### Minor Changes
