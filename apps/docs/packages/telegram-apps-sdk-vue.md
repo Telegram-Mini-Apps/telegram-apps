@@ -2,7 +2,7 @@
 outline: [ 2, 3 ]
 ---
 
-# @telegram-apps/sdk-vue@2
+# @telegram-apps/sdk-vue
 
 <p style="display: inline-flex; gap: 8px">
   <a href="https://npmjs.com/package/@telegram-apps/sdk-vue">
@@ -122,8 +122,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    backButton.hide();
-  });
+  backButton.hide();
+});
 </script>
 
 <template></template>
