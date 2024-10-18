@@ -18,9 +18,6 @@ import { computed, type Computed } from '@telegram-apps/signals';
 import { $version, postEvent } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
 import { mount as tpMount } from '@/scopes/components/theme-params/methods.js';
-import {
-  headerBackgroundColor as tpHeaderBackgroundColor,
-} from '@/scopes/components/theme-params/signals.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { withSupports } from '@/scopes/toolkit/withSupports.js';
 import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
