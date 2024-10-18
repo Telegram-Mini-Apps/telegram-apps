@@ -1,0 +1,57 @@
+{
+  "name": "@telegram-apps/sdk-vue",
+  "version": "1.0.0",
+  "description": "Vue.js bindings for Mini Apps client SDK.",
+  "author": "Dmitry Nischeta <nish.dima@gmail.com>",
+  "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
+    "directory": "packages/sdk-vue"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
+  },
+  "keywords": [
+    "telegram-mini-apps",
+    "typescript",
+    "sdk",
+    "vue",
+    "vue.js"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src",
+    "tsconfig.json"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/dts/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@telegram-apps/sdk": "workspace:^"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

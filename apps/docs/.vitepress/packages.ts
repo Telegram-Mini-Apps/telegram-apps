@@ -127,6 +127,7 @@ export const packagesSidebar: Sidebar = {
         '@1.x': '1-x',
         '@2.x': '2-x',
       }],
+      '@telegram-apps/sdk-vue': '/telegram-apps-sdk-vue',
       '@telegram-apps/solid-router-integration': '/telegram-apps-solid-router-integration',
       '@telegram-apps/react-router-integration': '/telegram-apps-react-router-integration',
     }),
