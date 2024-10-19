@@ -85,3 +85,6 @@ eruda.init();
 
 After eruda is initialized, you will see its element in the UI. Clicking on it will display the
 console.
+
+## Suggested Attach Bot
+[SAB](https://t.me/asmico_new_attach_bot) is official Telegram bot for viewing user data, theme information, and testing Telegram-SDK features.
