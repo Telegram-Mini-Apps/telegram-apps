@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 2.5.2
+
+### Patch Changes
+
+- 0ed8e95: Fix invalid initial value for swipeBehavior.isVerticalEnabled
+
 ## 2.5.1
 
 ### Patch Changes
