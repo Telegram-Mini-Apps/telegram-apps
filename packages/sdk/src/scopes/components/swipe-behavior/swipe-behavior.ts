@@ -45,7 +45,7 @@ export const enableVertical = withIsMounted((): void => {
 /**
  * True if vertical swipes are enabled.
  */
-export const isVerticalEnabled = signal(false);
+export const isVerticalEnabled = signal(true);
 
 /**
  * Mounts the component.
