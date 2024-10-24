@@ -21,7 +21,7 @@ returns a promise which will be resolved upon the scanner was closed.
 ```ts [Variable]
 import { qrScanner } from '@telegram-apps/sdk';
 
-if (qrScanner.open.isSupported()) {
+if (qrScanner.isSupported()) {
   qrScanner.isOpened(); // false
   const promise = qrScanner.open({
     text: 'Scan the QR',
