@@ -1,3 +1,7 @@
+---
+outline: [2, 3]
+---
+
 # Hosting
 
 With Mate's fast and reliable hosting, developers can effectively manage static
@@ -185,10 +189,13 @@ i Maximum files count: 100
 To avoid repeatedly specifying parameters, Mate allows creating a special
 configuration with all the parameters included.
 
-Here’s a complete config example with the parameters
-mentioned [previously](#step-3-deploy-the-project).
+To start using the Mate config along with the optional commands' options,
+create the `mate.yml` or `mate.json` file in the project root directory
+with the following example content:
 
-```yml
+:::code-group
+
+```yml [mate.yml]
 deploy:
   projectId: 48
   directory: dist
@@ -196,10 +203,29 @@ deploy:
   tag: latest
 ```
 
+```json [mate.json]
+{
+  "deploy": {
+    "projectId": 48,
+    "directory": "dist",
+    "token": "aabbccdd",
+    "tag": "latest"
+  }
+}
+```
+
+:::
+
 Then, the `info` and `upload` commands will retrieve the values from the
 configuration.
 
 ```bash
+# Both of these commands will use the following 
+# options from the Mate config:
+# --project = 48
+# --dir "dist"
+# --token "aabbccdd"
+# --tag "latest"
 mate deploy info
 mate deploy upload
 ```
