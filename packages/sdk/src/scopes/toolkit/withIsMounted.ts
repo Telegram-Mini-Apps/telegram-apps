@@ -1,8 +1,9 @@
 import { TypedError } from '@telegram-apps/bridge';
 
 import { ERR_NOT_MOUNTED } from '@/errors.js';
+import type { AnyFn } from '@/types.js';
 
-export function withIsMounted<Fn extends (...args: any[]) => any>(
+export function withIsMounted<Fn extends AnyFn>(
   fn: Fn,
   isMounted: () => boolean,
 ): Fn {
