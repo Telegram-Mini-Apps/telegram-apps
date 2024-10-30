@@ -128,6 +128,7 @@ export const packagesSidebar: Sidebar = {
         '@2.x': '2-x',
       }],
       '@telegram-apps/sdk-vue': '/telegram-apps-sdk-vue',
+      '@telegram-apps/sdk-svelte': '/telegram-apps-sdk-svelte',
       '@telegram-apps/solid-router-integration': '/telegram-apps-solid-router-integration',
       '@telegram-apps/react-router-integration': '/telegram-apps-react-router-integration',
     }),
