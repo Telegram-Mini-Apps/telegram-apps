@@ -103,7 +103,7 @@ returns a Svelte ref which updates every time, our signal changes.
 
 ```svelte
 <script>
-  import { onMount onDestroy } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { backButton, useSignal } from '@telegram-apps/sdk-svelte';
 
   const isVisible = useSignal(backButton.isVisible);
