@@ -25,6 +25,7 @@ export { $postEvent, $version, $createRequestId } from '@/scopes/globals.js';
 
 export { isColorDark } from '@/utils/isColorDark.js';
 export { isSSR } from '@/utils/isSSR.js';
+export { safeCall } from '@/utils/safeCall.js';
 export {
   ERR_POPUP_INVALID_PARAMS,
   ERR_INVALID_HOSTNAME,
