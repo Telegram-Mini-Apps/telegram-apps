@@ -13,6 +13,7 @@ import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js
 import { subAndCall } from '@/utils/subAndCall.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
+import { createSafeWrap, safeWrap } from '@/scopes/toolkit/safeWrap.js';
 
 type StorageValue = boolean;
 
@@ -21,9 +22,11 @@ const BACK_BUTTON_PRESSED = 'back_button_pressed';
 const STORAGE_KEY = 'backButton';
 
 /**
- * True if the component is currently mounted.
+ * True if the Back Button is currently mounted.
  */
 export const isMounted = signal(false);
+
+const wrap = createSafeWrap('backButton', isMounted);
 
 /**
  * @returns True if the Back Button is supported.
@@ -37,9 +40,9 @@ const withIsMounted = createWithIsMounted(isMounted);
  * Hides the Back Button.
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const hide = withIsMounted((): void => {
+export const hide = safeWrap((): void => {
   isVisible.set(false);
-});
+}, isSupported, isMounted);
 
 /**
  * True if the Back Button is currently visible.
