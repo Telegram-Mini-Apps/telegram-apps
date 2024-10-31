@@ -23,7 +23,7 @@ export function compress(
     let buffer = Buffer.from([]);
     stream.on('error', reject);
     stream.on('data', b => {
-      buffer = Buffer.concat([buffer, b]);
+      buffer = Buffer.from([...buffer, ...b]);
     });
     stream.on('end', () => resolve(buffer));
   });
