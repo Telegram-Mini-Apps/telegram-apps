@@ -24,14 +24,15 @@ export function init(debug: boolean): void {
   miniApp.mount();
   themeParams.mount();
   initData.restore();
-  void viewport.mount().catch(e => {
+  
+  void viewport.mount().then(() => {
+    // Define components-related CSS variables.
+    viewport.bindCssVars();
+    miniApp.bindCssVars();
+    themeParams.bindCssVars();
+  }).catch((e: any) => {
     console.error('Something went wrong mounting the viewport', e);
   });
-
-  // Define components-related CSS variables.
-  viewport.bindCssVars();
-  miniApp.bindCssVars();
-  themeParams.bindCssVars();
 
   // Add Eruda if needed.
   debug && import('eruda')
