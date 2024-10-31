@@ -65,12 +65,12 @@ export const zh = defineConfig({
     },
 
     editLink: {
-      text: 'Edit this page on GitHub',
+      text: '在 GitHub 上编辑此页面',
       pattern: 'https://github.com/telegram-mini-apps/telegram-apps/edit/master/apps/docs/:path',
     },
 
     nav: [
-      { text: "Home", link: LANG_PREFIX },
+      { text: "主页", link: LANG_PREFIX },
       platformNavItem,
       packagesNavItem,
     ],

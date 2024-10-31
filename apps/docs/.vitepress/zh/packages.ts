@@ -28,7 +28,7 @@ export const packagesLinksGenerator = (prefix: string = "") => {
   const section = sectionGen(BASE);
 
   const packagesNavItem: NavItemWithLink = {
-    text: "Packages",
+    text: "软件包",
     link: `${BASE}/telegram-apps-create-mini-app`,
   };
 

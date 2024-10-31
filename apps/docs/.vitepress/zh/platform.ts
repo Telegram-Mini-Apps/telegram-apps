@@ -6,7 +6,7 @@ export const platformLinksGenerator = (prefix: string = "") => {
   const section = sectionGen(BASE);
 
   const platformNavItem = {
-    text: "Platform",
+    text: "平台",
     link: `${BASE}/about`,
   };
 
