@@ -36,6 +36,7 @@ export {
   ERR_ALREADY_CALLED,
   ERR_NOT_SUPPORTED,
   ERR_NOT_MOUNTED,
+  ERR_NOT_INITIALIZED,
 } from '@/errors.js';
 export { init, type InitOptions } from '@/init.js';
 
