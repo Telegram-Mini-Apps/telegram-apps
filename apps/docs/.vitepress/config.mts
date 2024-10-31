@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress';
 import { packagesLinksGenerator } from './packages';
 import { platformLinksGenerator } from './platform';
 
-import { zh } from "./zh";
+import { zh } from "./zh/config";
 
 const { packagesNavItem, packagesSidebar } = packagesLinksGenerator();
 const { platformNavItem, platformSidebar } = platformLinksGenerator();
