@@ -1,7 +1,11 @@
 import type { AnyFn } from '@/types.js';
 import { If, MethodName, supports, TypedError } from '@telegram-apps/bridge';
 import { $version } from '@/scopes/globals.js';
-import { ERR_NOT_INITIALIZED, ERR_NOT_MOUNTED, ERR_NOT_SUPPORTED } from '@/errors.js';
+import {
+  ERR_NOT_INITIALIZED,
+  ERR_NOT_MOUNTED,
+  ERR_NOT_SUPPORTED,
+} from '@/errors.js';
 
 export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
   & Fn
@@ -33,6 +37,7 @@ export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
    * the current Mini Apps version including some possible additional
    * conditions.
    *
+   * @deprecated Use `isAvailable()`.
    * @returns True if this function is supported.
    *
    * @example
