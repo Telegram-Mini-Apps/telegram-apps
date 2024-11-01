@@ -1,34 +1,41 @@
-import { CancelablePromise, type ExecuteWithOptions } from '@telegram-apps/bridge';
+import {
+  CancelablePromise,
+  type ExecuteWithOptions,
+} from '@telegram-apps/bridge';
 import { array, object, string } from '@telegram-apps/transformers';
 
 import { invokeCustomMethod } from '@/scopes/globals.js';
-import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
+import { createSafeWrap } from '@/scopes/toolkit/createSafeWrap.js';
 
 const WEB_APP_INVOKE_CUSTOM_METHOD = 'web_app_invoke_custom_method';
 
 /**
- * @returns True if the Cloud Storage is supported.
+ * @returns True if the Cloud Storage component is supported.
  */
 export const isSupported = createIsSupported(WEB_APP_INVOKE_CUSTOM_METHOD);
 
-const withIsSupported = createWithIsSupported(isSupported);
+const wrapSupport = createSafeWrap('cloudStorage', undefined, isSupported);
 
 /**
  * Deletes specified key or keys from the cloud storage.
  * @param keyOrKeys - key or keys to delete.
  * @param options - request execution options.
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  */
-export const deleteItem = withIsSupported((
-  keyOrKeys: string | string[],
-  options?: ExecuteWithOptions,
-): CancelablePromise<void> => {
-  const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
-  return keys.length
-    ? invokeCustomMethod('deleteStorageValues', { keys }, options).then()
-    : CancelablePromise.resolve();
-});
+export const deleteItem = wrapSupport(
+  'deleteItem',
+  (
+    keyOrKeys: string | string[],
+    options?: ExecuteWithOptions,
+  ): CancelablePromise<void> => {
+    const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
+    return keys.length
+      ? invokeCustomMethod('deleteStorageValues', { keys }, options).then()
+      : CancelablePromise.resolve();
+  },
+);
 
 /**
  * @param keys - keys list.
@@ -68,15 +75,18 @@ function _getItem(
 
 /**
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  */
-export const getItem = withIsSupported(_getItem);
+export const getItem = wrapSupport('getItem', _getItem);
 
 /**
  * Returns a list of all keys presented in the cloud storage.
  * @param options - request execution options.
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  */
-export const getKeys = withIsSupported(
+export const getKeys = wrapSupport(
+  'getKeys',
   (options?: ExecuteWithOptions): CancelablePromise<string[]> => {
     return invokeCustomMethod('getStorageKeys', {}, options).then(array(string())());
   },
@@ -88,8 +98,10 @@ export const getKeys = withIsSupported(
  * @param value - storage value.
  * @param options - request execution options.
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  */
-export const setItem = withIsSupported(
+export const setItem = wrapSupport(
+  'setItem',
   (key: string, value: string, options?: ExecuteWithOptions): CancelablePromise<void> => {
     return invokeCustomMethod('saveStorageValue', {
       key,
