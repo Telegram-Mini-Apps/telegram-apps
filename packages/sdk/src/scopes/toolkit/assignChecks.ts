@@ -1,5 +1,6 @@
+import { type If, type MethodName, supports, TypedError } from '@telegram-apps/bridge';
+
 import type { AnyFn } from '@/types.js';
-import { If, MethodName, supports, TypedError } from '@telegram-apps/bridge';
 import { $version } from '@/scopes/globals.js';
 import {
   ERR_NOT_INITIALIZED,
@@ -37,12 +38,11 @@ export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
    * the current Mini Apps version including some possible additional
    * conditions.
    *
-   * @deprecated Use `isAvailable()`.
    * @returns True if this function is supported.
    *
    * @example
    * if (setMiniAppBottomBarColor.isSupported()) {
-   *   setMiniAppBottomBarColor('#ff00aa');
+   *   console.log('Mini App bottom bar is supported');
    * }
    */
   isSupported: () => boolean;
@@ -64,6 +64,10 @@ interface Options {
    */
   isMounted?: () => boolean;
   /**
+   * Should the package init check be performed.
+   */
+  checkInit?: boolean;
+  /**
    * Mini Apps method name or function returning true determining if
    * the function is supported.
    */
@@ -79,24 +83,35 @@ interface Options {
  */
 
 /*@__NO_SIDE_EFFECTS__*/
-export function safeWrap<Fn extends AnyFn, O extends Options>(
+export function assignChecks<Fn extends AnyFn, O extends Options>(
   fn: Fn,
   {
-    isSupported: isSupportedOrMethod,
-    isMounted,
+    isSupported: maybeIsSupported,
+    isMounted: maybeIsMounted,
     component,
+    checkInit,
     ...options
   }: O,
 ): SafeWrapped<Fn, O extends { isSupported: any } ? true : false> {
-  const isSupported = isSupportedOrMethod
-    ? typeof isSupportedOrMethod === 'function'
-      ? isSupportedOrMethod
-      : () => supports(isSupportedOrMethod, $version())
-    : undefined;
-  const isInitialized = () => $version() !== '0.0';
-  const isAvailable = () => {
-    return isInitialized() && (!isMounted || isMounted()) && (!isSupported || isSupported());
-  };
+  function isSupported() {
+    return maybeIsSupported
+      ? typeof maybeIsSupported === 'function'
+        ? maybeIsSupported()
+        : supports(maybeIsSupported, $version())
+      : true;
+  }
+
+  function isMounted() {
+    return !maybeIsMounted || maybeIsMounted();
+  }
+
+  function isInitialized(): boolean {
+    return !checkInit || $version() !== '0.0';
+  }
+
+  function isAvailable() {
+    return isInitialized() && isSupported() && isMounted();
+  }
 
   return Object.assign(
     (...args: Parameters<Fn>): ReturnType<Fn> => {
@@ -106,13 +121,13 @@ export function safeWrap<Fn extends AnyFn, O extends Options>(
           'The package was not initialized. Consider using the package init() function',
         );
       }
-      if (isSupported && !isSupported()) {
+      if (!isSupported()) {
         throw new TypedError(
           ERR_NOT_SUPPORTED,
           `${component}.${options.method}() method is not supported in Mini Apps version ${$version()}`,
         );
       }
-      if (isMounted && !isMounted()) {
+      if (!isMounted()) {
         throw new TypedError(
           ERR_NOT_MOUNTED,
           `${component} component is not mounted. Consider using the mount() method`,
@@ -122,6 +137,6 @@ export function safeWrap<Fn extends AnyFn, O extends Options>(
     },
     fn,
     { isAvailable },
-    isSupported ? { isSupported } : {},
+    maybeIsSupported ? { isSupported } : {},
   ) as SafeWrapped<Fn, O extends { isSupported: any } ? true : false>;
 }
