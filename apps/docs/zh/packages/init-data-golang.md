@@ -12,8 +12,7 @@ go get github.com/telegram-mini-apps/init-data-golang
 
 ## 验证
 
-如果过期时间设置为 "0"，函数将跳过过期时间检查。 不过，
-，建议指定一个非零值，因为这一检查对于防止
+如果过期时间设置为 "0"，函数将跳过过期时间检查。 不过，建议指定一个非零值，因为这一检查对于防止
 使用被盗的旧初始化数据非常重要。
 
 ```go
@@ -105,5 +104,4 @@ func main() {
 
 ## GoDoc
 
-要查看 GoDoc 文档，
-，请访问 [此链接](https://pkg.go.dev/github.com/telegram-mini-apps/init-data-golang)。
+要查看 GoDoc 文档，请访问 [此链接](https://pkg.go.dev/github.com/telegram-mini-apps/init-data-golang)。

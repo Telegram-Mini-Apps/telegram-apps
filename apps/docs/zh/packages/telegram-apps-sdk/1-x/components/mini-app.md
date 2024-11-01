@@ -126,8 +126,7 @@ miniApp.ready()；
 miniApp.close()；
 ```
 
-如果您想将应用程序打包到底部应用程序栏，但不想关闭它，
-，请考虑使用第一个参数 `returnBack: boolean`。
+如果您想将应用程序打包到底部应用程序栏，但不想关闭它，请考虑使用第一个参数 `returnBack: boolean`。
 
 ```ts
 //

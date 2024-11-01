@@ -143,8 +143,7 @@ request('web_app_open_invoice', 'invoice_closed', {
 })；
 ```
 
-默认情况下，"request "函数会捕获具有所需名称的第一个事件。 在这种情况下，
-，只有当事件具有预期的标签时，该函数才会捕获事件，特定于
+默认情况下，"request "函数会捕获具有所需名称的第一个事件。 在这种情况下，只有当事件具有预期的标签时，该函数才会捕获事件，特定于
 [invoice_closed](../../platform/events.md#invoice-closed) 事件。
 
 当传递一个事件数组时，`capture` 函数将收到一个对象，其中包含
@@ -188,8 +187,7 @@ invokeCustomMethod('deleteStorageValues', { keys: ['a'] }, 'ABC')；
 。
 
 与`request`函数不同，`invokeCustomMethod`函数会解析结果，并检查
-是否包含`error`属性。 如果是，函数会抛出相应的错误；否则，
-，返回 `result` 属性。
+是否包含`error`属性。 如果是，函数会抛出相应的错误；否则，返回 `result` 属性。
 
 ## 检查方法支持
 

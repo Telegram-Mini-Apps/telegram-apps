@@ -55,8 +55,7 @@ Telegram 小应用程序通过名为
 _header_ 和 _body_ 等部分组成）中，Telegram 迷你应用程序也允许更改其颜色。
 
 要更改标题颜色，开发人员应使用
-[web_app_set_header_color](methods.md#web-app-set-header-color) 方法，
-，该方法提供了一种通过使用主题键或自定义 RGB 字符串来设置颜色的方法。
+[web_app_set_header_color](methods.md#web-app-set-header-color) 方法，该方法提供了一种通过使用主题键或自定义 RGB 字符串来设置颜色的方法。
 
 要更新主体颜色，需要使用
 [web_app_set_background_color](methods.md#web-app-set-background-color)

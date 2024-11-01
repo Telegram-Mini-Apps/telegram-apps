@@ -95,8 +95,7 @@ request({
 
 #### 超时
 
-选项负责分配请求超时。 如果超时，
-，则会出现错误。
+选项负责分配请求超时。 如果超时，则会出现错误。
 
 ```typescript
 import { request, isTimeoutError } from '@telegram-apps/sdk';

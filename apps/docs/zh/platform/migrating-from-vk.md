@@ -38,8 +38,7 @@ vk 和 telegram 的主要区别在于如何授权用户。
 
 #### 后台
 
-Vk 没有授权任何自定义库。 您需要使用密钥手动计算 `signParams` 的哈希值，
-，该密钥在 vk miniapp 设置中提供。
+Vk 没有授权任何自定义库。 您需要使用密钥手动计算 `signParams` 的哈希值，该密钥在 vk miniapp 设置中提供。
 
 ```ts
 const VK_APP_SECRET_KEY = 'VK_APP_SECRET_KEY';
@@ -80,8 +79,7 @@ const vkUserId = signParams.vk_user_id；
 
 #### 后台
 
-Telegram 也有类似的机制。 但你可以使用软件包 `@tma.js/init-data-node` 来验证`initData`，
-，使用由 `@BotFather` 提供的秘钥，而不是手动验证。
+Telegram 也有类似的机制。 但你可以使用软件包 `@tma.js/init-data-node` 来验证`initData`，使用由 `@BotFather` 提供的秘钥，而不是手动验证。
 
 ```ts
 import { validate } from '@tma.js/init-data-node';
