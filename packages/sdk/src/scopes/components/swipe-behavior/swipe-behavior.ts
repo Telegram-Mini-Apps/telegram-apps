@@ -3,43 +3,51 @@ import { getStorageValue, setStorageValue } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
-import { subAndCall } from '@/utils/subAndCall.js';
-import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
+import { createSafeWrap } from '@/scopes/toolkit/createSafeWrap.js';
 
 type StorageValue = boolean;
 
 const WEB_APP_SETUP_SWIPE_BEHAVIOR = 'web_app_setup_swipe_behavior';
-const STORAGE_KEY = 'swipeBehavior';
+const COMPONENT_NAME = 'swipeBehavior';
 
 /**
- * True if the component is currently mounted.
+ * True if the Swipe Behavior component is currently mounted.
  */
 export const isMounted = signal(false);
 
 /**
- * @returns True if the Swipe Behavior is supported.
+ * @returns True if the Swipe Behavior component is supported.
  */
 export const isSupported = createIsSupported(WEB_APP_SETUP_SWIPE_BEHAVIOR);
 
-const withIsSupported = createWithIsSupported(isSupported);
-const withIsMounted = createWithIsMounted(isMounted);
+const wrapMount = createSafeWrap(COMPONENT_NAME, isMounted);
+const wrapSupport = createSafeWrap(COMPONENT_NAME, undefined, isSupported);
 
 /**
  * Disables vertical swipes.
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @example
+ * if (disableVertical.isAvailable()) {
+ *   disableVertical();
+ * }
  */
-export const disableVertical = withIsMounted((): void => {
-  isVerticalEnabled.set(false);
+export const disableVertical = wrapMount('disableVertical', (): void => {
+  setVerticalEnabled(false);
 });
 
 /**
  * Enables vertical swipes.
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @example
+ * if (enableVertical.isAvailable()) {
+ *   enableVertical();
+ * }
  */
-export const enableVertical = withIsMounted((): void => {
-  isVerticalEnabled.set(true);
+export const enableVertical = wrapMount('enableVertical', (): void => {
+  setVerticalEnabled(true);
 });
 
 /**
@@ -48,30 +56,35 @@ export const enableVertical = withIsMounted((): void => {
 export const isVerticalEnabled = signal(true);
 
 /**
- * Mounts the component.
- *
- * This function restores the component state and is automatically saving it in the local storage
- * if it changed.
+ * Mounts the Swipe Behavior component restoring its state.
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @example
+ * if (mount.isAvailable()) {
+ *   mount();
+ * }
  */
-export const mount = withIsSupported((): void => {
+export const mount = wrapSupport('mount', (): void => {
   if (!isMounted()) {
-    isVerticalEnabled.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
-    subAndCall(isVerticalEnabled, onStateChanged);
+    setVerticalEnabled(
+      isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false,
+      true,
+    );
     isMounted.set(true);
   }
 });
 
-function onStateChanged(): void {
-  const value = isVerticalEnabled();
-  postEvent(WEB_APP_SETUP_SWIPE_BEHAVIOR, { allow_vertical_swipe: value });
-  setStorageValue<StorageValue>(STORAGE_KEY, value);
+function setVerticalEnabled(value: boolean, force?: boolean): void {
+  if (value !== isVerticalEnabled() || force) {
+    postEvent(WEB_APP_SETUP_SWIPE_BEHAVIOR, { allow_vertical_swipe: value });
+    setStorageValue<StorageValue>(COMPONENT_NAME, value);
+    isVerticalEnabled.set(value);
+  }
 }
 
 /**
- * Unmounts the component, removing the listener, saving the component state in the local storage.
+ * Unmounts the Swipe Behavior component.
  */
 export function unmount(): void {
-  isVerticalEnabled.unsub(onStateChanged);
   isMounted.set(false);
 }
