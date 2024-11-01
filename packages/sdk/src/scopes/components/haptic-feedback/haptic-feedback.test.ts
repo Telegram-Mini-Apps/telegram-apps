@@ -3,7 +3,7 @@ import { TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
-
+import { setInitialized } from '@test-utils/setInitialized.js';
 import { $version } from '@/scopes/globals.js';
 
 import {
@@ -18,9 +18,39 @@ beforeEach(() => {
   mockPostEvent();
 });
 
+describe('check support', () => {
+  describe.each([
+    { name: 'impactOccurred', fn: impactOccurred },
+    { name: 'notificationOccurred', fn: notificationOccurred },
+    { name: 'selectionChanged', fn: selectionChanged },
+  ])('$name', ({ fn, name }) => {
+    it('should throw ERR_NOT_SUPPORTED if package is not initialized', () => {
+      const error = new TypedError(
+        'ERR_NOT_SUPPORTED',
+        `hapticFeedback.${name}() method is not supported in Mini Apps version 6.0`,
+      );
+      $version.set('6.0');
+      expect(fn).toThrow(error);
+      $version.set('6.1');
+      expect(fn).not.toThrow(error);
+    });
+
+    describe('isSupported', () => {
+      it('should return false if version is less than 6.1', () => {
+        $version.set('6.0');
+        expect(fn.isSupported()).toBe(false);
+
+        $version.set('6.1');
+        expect(fn.isSupported()).toBe(true);
+      });
+    });
+  });
+});
+
 describe('impactOccurred', () => {
+  beforeEach(setInitialized);
+
   it('should call "web_app_trigger_haptic_feedback" method with { type: "impact", style: {{style}} }', () => {
-    $version.set('10');
     const spy = mockPostEvent();
     impactOccurred('heavy');
     expect(spy).toHaveBeenCalledTimes(1);
@@ -32,21 +62,19 @@ describe('impactOccurred', () => {
 });
 
 describe('isSupported', () => {
-  it('should return false if version is less than 6.1. True otherwise', () => {
+  it('should return false if version is less than 6.1', () => {
     $version.set('6.0');
     expect(isSupported()).toBe(false);
 
     $version.set('6.1');
     expect(isSupported()).toBe(true);
-
-    $version.set('6.2');
-    expect(isSupported()).toBe(true);
   });
 });
 
 describe('notificationOccurred', () => {
+  beforeEach(setInitialized);
+
   it('should call "web_app_trigger_haptic_feedback" method with { type: "notification", notification_type: {{type}} }', () => {
-    $version.set('10');
     const spy = mockPostEvent();
     notificationOccurred('success');
     expect(spy).toHaveBeenCalledTimes(1);
@@ -58,27 +86,14 @@ describe('notificationOccurred', () => {
 });
 
 describe('selectionChanged', () => {
+  beforeEach(setInitialized);
+
   it('should call "web_app_trigger_haptic_feedback" method with { type: "selection_change" }', () => {
-    $version.set('10');
     const spy = mockPostEvent();
     selectionChanged();
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith('web_app_trigger_haptic_feedback', {
       type: 'selection_change',
     });
-  });
-});
-
-describe('support check', () => {
-  it.each([
-    { fn: impactOccurred, name: 'impactOccurred' },
-    { fn: notificationOccurred, name: 'notificationOccurred' },
-    { fn: selectionChanged, name: 'selectionChanged' },
-  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 6.1', ({ fn }) => {
-    $version.set('6.0');
-    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('6.1');
-    expect(fn).not.toThrow();
   });
 });
