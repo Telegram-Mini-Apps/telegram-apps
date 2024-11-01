@@ -9,19 +9,17 @@ import { signal } from '@telegram-apps/signals';
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals.js';
-import { subAndCall } from '@/utils/subAndCall.js';
-import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
+import { createSafeWrap } from '@/scopes/toolkit/createSafeWrap.js';
 
 type StorageValue = boolean;
 
 const WEB_APP_SETUP_SETTINGS_BUTTON = 'web_app_setup_settings_button';
 const SETTINGS_BUTTON_PRESSED = 'settings_button_pressed';
-const STORAGE_KEY = 'settingsButton';
+const COMPONENT_NAME = 'settingsButton';
 
 /**
- * True if the component is currently mounted.
+ * True if the Settings Button component is currently mounted.
  */
 export const isMounted = signal(false);
 
@@ -30,59 +28,86 @@ export const isMounted = signal(false);
  */
 export const isSupported = createIsSupported(WEB_APP_SETUP_SETTINGS_BUTTON);
 
-const withIsSupported = createWithIsSupported(isSupported);
-const withIsMounted = createWithIsMounted(isMounted);
+const wrapMount = createSafeWrap(COMPONENT_NAME, isMounted);
+const wrapSupport = createSafeWrap(COMPONENT_NAME, undefined, isSupported);
 
 /**
  * Hides the Settings Button.
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @example
+ * if (hide.isAvailable()) {
+ *   hide();
+ * }
  */
-export const hide = withIsMounted((): void => {
-  isVisible.set(false);
+export const hide = wrapMount('hide', (): void => {
+  setVisibility(false);
 });
 
 /**
- * True if the component is currently visible.
+ * True if the Settings Button component is currently visible.
  */
 export const isVisible = signal(false);
 
 /**
- * Mounts the component.
- *
- * This function restores the component state and is automatically saving it in the local storage
- * if it changed.
+ * Mounts the Back Button component restoring its state.
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @example
+ * if (mount.isAvailable()) {
+ *   mount();
+ * }
  */
-export const mount = withIsSupported((): void => {
+export const mount = wrapSupport('mount', (): void => {
   if (!isMounted()) {
-    isVisible.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
-    subAndCall(isVisible, onStateChanged);
+    setVisibility(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false, true);
     isMounted.set(true);
   }
 });
 
-function onStateChanged() {
-  const value = isVisible();
-  postEvent(WEB_APP_SETUP_SETTINGS_BUTTON, { is_visible: value });
-  setStorageValue<StorageValue>(STORAGE_KEY, value);
+function setVisibility(value: boolean, force?: boolean): void {
+  if (value !== isVisible() || force) {
+    postEvent(WEB_APP_SETUP_SETTINGS_BUTTON, { is_visible: value });
+    setStorageValue<StorageValue>(COMPONENT_NAME, value);
+    isVisible.set(value);
+  }
 }
 
 /**
- * Add a new Settings Button click listener.
+ * Adds a new Settings Button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @example
+ * if (onClick.isAvailable()) {
+ *   const off = onClick(() => {
+ *     console.log('User clicked the Back Button);
+ *     off();
+ *   });
+ * }
  */
-export const onClick = withIsSupported(
+export const onClick = wrapSupport(
+  'onClick',
   (fn: EventListener<'settings_button_pressed'>): VoidFunction => on(SETTINGS_BUTTON_PRESSED, fn),
 );
 
 /**
  * Removes the Settings Button click listener.
  * @param fn - an event listener.
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @example
+ * if (offClick.isAvailable()) {
+ *   function listener() {
+ *     console.log('User clicked the Back Button);
+ *     offClick(listener);
+ *   }
+ *   onClick(listener);
+ * }
  */
-export const offClick = withIsSupported(
+export const offClick = wrapSupport(
+  'offClick',
   (fn: EventListener<'settings_button_pressed'>): void => {
     off(SETTINGS_BUTTON_PRESSED, fn);
   },
@@ -90,19 +115,24 @@ export const offClick = withIsSupported(
 
 /**
  * Shows the Settings Button.
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @example
+ * if (show.isAvailable()) {
+ *   show();
+ * }
  */
-export const show = withIsMounted((): void => {
-  isVisible.set(true);
+export const show = wrapMount('show', (): void => {
+  setVisibility(true);
 });
 
 /**
- * Unmounts the component, removing the listener, saving the component state in the local storage.
+ * Unmounts the Settings Button component.
  *
- * Note that this function does not remove listeners, added via the `onClick` function.
+ * Note that this function does not remove listeners added via the `onClick` function,
+ * so you have to remove them on your own.
  * @see onClick
  */
-export function unmount() {
-  isVisible.unsub(onStateChanged);
+export function unmount(): void {
   isMounted.set(false);
 }
