@@ -89,15 +89,15 @@ export const packagesLinksGenerator = (prefix: string = "") => {
                 "初始数据": [
                   "init-data",
                   {
-                    "初始数据": "init-data",
-                    "聊天": "chat",
-                    "用户": "user",
+                    "InitData": "init-data",
+                    "Chat": "chat",
+                    "User": "user",
                   },
                 ],
                 "导航": [
                   "navigation",
                   {
-                    "浏览器导航": "browser-navigator",
+                    "BrowserNavigator": "browser-navigator",
                   },
                 ],
                 "CSS 变量": "css-variables",
@@ -107,7 +107,7 @@ export const packagesLinksGenerator = (prefix: string = "") => {
               "2-x",
               {
                 "初始化": "initializing",
-                "范围": "scopes",
+                "作用域": "scopes",
                 "组件": [
                   { url: "components", page: false },
                   fromEntries([
