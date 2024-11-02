@@ -1,3 +1,7 @@
+---
+outline: [2, 3]
+---
+
 # 托管
 
 借助 Mate 快速可靠的托管服务，开发人员可以有效地管理其迷你应用程序的静态
@@ -36,17 +40,17 @@ Mate 允许创建多达五个部署标签，使开发人员能够
 
 #### 使用示例
 
-常见的使用情况是项目有两个版本：最新 "和
-"暂存"。 开发人员可以使用 "最新 "版本进行生产，而
-"暂存 "版本则供质量保证团队使用。
+常见的使用情况是项目有两个版本：`latest` 和
+`staging`。 开发人员可以使用 `latest` 版本进行生产，而
+`staging` 版本则供质量保证团队使用。
 
-部署 "暂存 "资产后，质量保证团队会检查暂存状态
-是否可接受。 然后，同样的资产可以使用 "latest "标签进行部署，用于
+部署 `staging` 资产后，质量保证团队会检查暂存状态
+是否可接受。 然后，同样的资产可以使用 `latest` 标签进行部署，用于
 生产。
 
-#### 关于基地 URL
+#### 关于Base URL
 
-部署静态资产时，Mate 使用以下基本 URL 模式：
+部署静态资产时，Mate 使用以下Base URL 模式：
 
 ```
 https://{storage_key}.tapps.global/{tag}
@@ -54,10 +58,10 @@ https://{storage_key}.tapps.global/{tag}
 
 下面是一些关于这些参数的信息，以供参考：
 
-- storage_key"：已部署项目的唯一密钥。 该值为
+- `storage_key`：已部署项目的唯一密钥。 该值为
   ，不可配置，并在创建项目时分配给项目。
-- tag"：部署标记。 该值在部署过程中由
-  开发人员设置。 例如，"staging"、"latest"、"dev "等。
+- `tag`：部署标记。 该值在部署过程中由
+  开发人员设置。 例如，`staging`、`latest`、`dev` 等。
 
 ## 入门
 
@@ -65,14 +69,14 @@ https://{storage_key}.tapps.global/{tag}
 
 要开始使用托管功能，必须注册项目并
 获取其部署令牌。 要获取令牌，请访问
-到 [@tma_mate_bot](https://t.me/tma_mate_bot)，然后按 "开始 "按钮，
+到 [@tma_mate_bot](https://t.me/tma_mate_bot)，然后按 `Start` 按钮，
 开始与机器人对话。
 
 <p align="center">
   <img src="/mate/start.png" width="320"/>
 </p>
 
-然后，按下 "创建项目 "按钮，并按照指定规则输入要创建的项目名称
+然后，按下 `Create a Project` 按钮，并按照指定规则输入要创建的项目名称
 。
 
 <p align="center">
@@ -80,13 +84,11 @@ https://{storage_key}.tapps.global/{tag}
 </p>
 
 完成这一步后，机器人将返回创建的项目信息，包括
-**部署令牌**。
+**deployment token**。
 
-### 第 2 步：更新静态资产基础 URL
+### 第 2 步：更新静态资产 Base URL
 
-部署项目前，确保所有静态资产都有一个有效的基本
-URL。 您可以了解有关 Mate 如何生成静态资产基础
-URL [此处](#about-base-url)的更多信息。
+部署项目前，确保所有静态资产都有一个有效的 Base URL。 您可以了解有关 Mate 如何生成静态资产 Base URL [此处](#about-base-url)的更多信息。
 
 要使用特定标签检索项目部署信息，请使用
 以下命令：
@@ -98,33 +100,33 @@ mate deploy info \
   --tag {TAG}
 ```
 
-这里，"DEPLOYMENT_TOKEN "和 "PROJECT_ID "值指的是从上一步收到的部署
+这里，`DEPLOYMENT_TOKEN` 和 `PROJECT_ID` 值指的是从上一步收到的部署
 标记和项目标识符。 `TAG` 是
 部署版本标记名称。
 
 输出示例
 
 ```
-✔ 已获取 paper-planes 的部署信息（id 48） 项目
-项目标题：paper-planes
-项目简短标题
+✔ Fetched deploy information for paper-planes (id 48) project
+Project Title: paper-planes
+Short title of the project
 --------
-基本路径（使用标签 "staging"）： https://35f105bd6b.tapps.global/staging
-此路径将用作与此项目相关的上传资产的基本路径。 
-请考虑在捆绑程序中使用此值作为基本路径。也可以使用 --tag 选项使用不同的标记。
+Base Path (using tag "staging"): https://35f105bd6b.tapps.global/staging
+This path will be used as a base path for the uploaded assets associated with this project. 
+Consider using this value as a base path in your bundler. You can also use different tags using the --tag option.
 --------
-允许的文件扩展名：html、css、js、cjs、mjs、png、jpg、jpeg、webp、ttf、woff、woff2、eot、json、ico
-允许上传的文件扩展名。
+Allowed file extensions: html, css, js, cjs, mjs, png, jpg, jpeg, webp, ttf, woff, woff2, eot, json, ico
+Files extensions that are allowed to be uploaded.
 --------
-最大文件大小：10485760 字节
-最大上传文件大小。
+Maximum size: 10485760 bytes
+Maximum upload size.
 --------
-最大文件数：100
-单次上传可包含的最大文件数。
+Maximum files count: 100
+Maximum number of files a single upload can contain.
 ```
 
-https://35f105bd6b.tapps.global/staging "是项目捆绑程序应
-使用的基本 URL。
+`https://35f105bd6b.tapps.global/staging` 是项目捆绑程序应
+使用的 Base URL。
 
 下面介绍如何使用 [Vite](https://vitejs.dev)。
 
@@ -133,7 +135,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   base: 'https://35f105bd6b.tapps.global/staging'
-})；
+});
 ```
 
 ### 步骤 3：部署项目
@@ -146,8 +148,8 @@ export default defineConfig({
 假设条件如下
 
 - 已创建 ID 为 `48` 和令牌为 `aabbccdd` 的项目。
-- 名为 "dist "的文件夹包含迷你应用程序构建的所有静态资产。
-- 部署静态资产时需要使用标签 "latest"。
+- 名为 `dist` 的文件夹包含迷你应用程序构建的所有静态资产。
+- 部署静态资产时需要使用标签 `latest`。
 
 要在这些条件下部署项目，请运行以下命令：
 
@@ -162,14 +164,14 @@ mate deploy upload \
 以下是可能的输出结果：
 
 ```
-✔ 已获取 paper-planes (id 48) 项目的部署信息
-i 资产基本路径（使用标签 "最新"）： 
+✔ Fetched deploy information for paper-planes (id 48) project
+i Assets base path (using tag "latest"): 
 https://35f105bd6b.tapps.global/latest
-i 允许的文件扩展名：html、css、js、cjs、mjs、png、jpg、jpeg、webp、ttf、woff、woff2、eot、json、ico
-i 最大上传大小：10485760 字节
-i 最大文件数：100
-✔ 目录压缩成功，从 24185 字节压缩到 7168 字节
-✔ 档案上传成功
+i Allowed file extensions: html, css, js, cjs, mjs, png, jpg, jpeg, webp, ttf, woff, woff2, eot, json, ico
+i Maximum upload size: 10485760 bytes
+i Maximum files count: 100
+✔ Directory compressed successfully from 24185 to 7168 bytes
+✔ Archive uploaded successfully
 📁 dist
 ╰ 📄 index.js (https://35f105bd6b.tapps.global/latest/index.js)
 ```
@@ -182,24 +184,42 @@ i 最大文件数：100
 
 ## 使用配置
 
-为避免重复指定参数，Mate 允许创建一个包含所有参数的特殊
-配置。
+为避免重复指定参数，Mate 允许创建包含所有参数的特殊配置。
 
-下面是一个完整的配置示例，其中包含
-[之前](#step-3-deploy-the-project) 提到的参数。
+要开始使用 Mate 配置和可选命令选项，请在项目根目录下创建包含以下示例内容的 `mate.yml` 或 `mate.json` 文件：
 
-```yml
-部署：
-  projectId：48
+:::code-group
+
+```yml [mate.yml]
+deploy:
+  projectId: 48
   directory: dist
   token: aabbccdd
   tag: latest
 ```
 
-然后，"info "和 "upload "命令将从
-配置中获取值。
+```json [mate.json]
+{
+  "deploy": {
+    "projectId": 48,
+    "directory": "dist",
+    "token": "aabbccdd",
+    "tag": "latest"
+  }
+}
+```
+
+:::
+
+然后，`info` 和 `upload` 命令将从配置中获取值。
 
 ```bash
+# Both of these commands will use the following 
+# options from the Mate config:
+# --project = 48
+# --dir "dist"
+# --token "aabbccdd"
+# --tag "latest"
 mate deploy info
 mate deploy upload
 ```
