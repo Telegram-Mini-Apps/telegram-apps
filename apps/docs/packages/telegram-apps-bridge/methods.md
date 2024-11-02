@@ -152,7 +152,7 @@ the `event: EventName` and `payload?: EventPayload` properties.
 
 ## Invoking Custom Methods
 
-Custom methods aro those methods which can be used with
+Custom methods are those methods which can be used with
 the [web_app_invoke_custom_method](../../platform/methods.md#web-app-invoke-custom-method) Mini Apps
 method.
 
