@@ -1,0 +1,32 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"strict": true,
+		"importHelpers": true,
+		"moduleResolution": "node",
+		"experimentalDecorators": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"verbatimModuleSyntax": true,
+		"sourceMap": true,
+		"types": ["node", "svelte", "svelte/store", "svelte/motion", "svelte/transition", "svelte/animate", "svelte/easing"],
+		"baseUrl": ".",
+		"paths": {
+			"/*": ["./*"],
+			"@graphite-frontend/*": ["./*"],
+			"@graphite/*": ["src/*"]
+		},
+		"lib": ["ESNext", "DOM", "DOM.Iterable", "ScriptHost"]
+	},
+	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.svelte", "*.ts", "*.js", "*.cjs"],
+	"exclude": ["node_modules"],
+	"ts-node": {
+		"compilerOptions": {
+			"module": "commonjs",
+			"useDefineForClassFields": false,
+			"noImplicitOverride": true
+		}
+	}
+}

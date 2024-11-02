@@ -9,9 +9,9 @@ export function useSignal<T>(signal: {
     (): T;
     sub(fn: (v: T) => void): VoidFunction;
 }): Writable<T> {
-    const _value = writable<T>();
+    const _value = writable<T>(signal());
     const unsub = signal.sub((value) => {
-        _value.set(value);
+        _value.update(() => (value));
     });
     onDestroy(unsub);
 
