@@ -1,7 +1,7 @@
-# 视口
+# `视口`
 
 实现 Telegram Mini
-Apps [viewport](../../../../.platform/viewport.md) 功能。
+Apps [viewport](../../../../platform/viewport.md) 功能。
 
 ## 初始化
 
@@ -10,7 +10,7 @@ Apps [viewport](../../../../.platform/viewport.md) 功能。
 ```typescript
 import { initViewport } from '@telegram-apps/sdk';
 
-const [viewport] = initViewport()；  
+const [viewport] = initViewport();  
 ```
 
 ::: info
@@ -33,7 +33,7 @@ const [viewport] = initViewport();
 const vp = await viewport;
 
 if (!vp.isExpanded) {
-    vp.expand(); // 将展开迷你应用程序，如果它不是
+    vp.expand(); // will expand the Mini App, if it's not
 }
 ```
 
@@ -54,20 +54,20 @@ if (!vp.isExpanded) {
 import {requestViewport} from '@telegram-apps/sdk';
 
 requestViewport().then((data) => {
-    // Output：
+    // Output:
     // { height: 122, isExpanded: false, width: 375, isStateStable: true }
     console.log(data);
-})；
+});
 ```
 
-## 活动
+## 事件 {#events}
 
-可被 [跟踪]（#events）的事件列表：
+可被 [跟踪](#events) 的事件列表：
 
-| 活动                                  | 听众                                               | 触发条件                  |
+| 事件                                  | 监听器                                               | 触发条件                  |
 | ----------------------------------- | ------------------------------------------------ | --------------------- |
-| 改变                                  | `() => void`                                     | 组件中的某些部分发生了变化         |
-| 改变高度                                | (高度：数字) => void\`\`           | 高度 "属性已更改             |
-| change:isExpanded   | `(isExpanded: boolean) => void`. | 更改了 `isExpanded` 属性   |
-| change:stableHeight | `(stableHeight: boolean) => void`                | 更改了 `stableHeight` 属性 |
-| 改变宽度                                | `(width: boolean) => void`                       | 更改了 `width` 属性        |
+| `change`                              | `() => void`                                     | 组件中的某些部分发生了变化         |
+| `change:height`                      | `(height: number) => void`                       | 高度 "属性已更改             |
+| `change:isExpanded`                  | `(isExpanded: boolean) => void`                  | 更改了 `isExpanded` 属性   |
+| `change:stableHeight`                | `(stableHeight: boolean) => void`                | 更改了 `stableHeight` 属性 |
+| `change:width`                       | `(width: boolean) => void`                       | 更改了 `width` 属性        |

@@ -1,4 +1,4 @@
-# 方法与活动
+# 方法与事件
 
 本节 SDK 涵盖与
 [apps communication](../../../platform/apps-communication.md) 相关的主题。
@@ -10,14 +10,14 @@
 ```typescript
 import { postEvent } from '@telegram-apps/sdk';
 
-postEvent('web_app_setup_back_button', { is_visible: true })；
+postEvent('web_app_setup_back_button', { is_visible: true });
 ```
 
 该功能会根据当前
 环境功能自动找到发送该事件的正确方法。 为提高准确性，它可确定当前的 Telegram 应用类型，并
 选择适当的流量。
 
-### 请求
+### `request`
 
 如果需要调用某些 Telegram 小应用程序方法
 并接收指定事件，则应使用 `request` 函数。 例如，开发人员希望
@@ -34,12 +34,12 @@ const viewport = await request({
 });
 
 console.log(viewport);
-// Output：
+// Output:
 // {
-// is_state_stable: true,
-// is_expanded: false,
-// height: 320
-// }；
+//   is_state_stable: true,
+//   is_expanded: false,
+//   height: 320
+// };
 ```
 
 如果 Telegram 小应用程序方法接受参数，则应在第三个参数的 `params`
@@ -50,16 +50,16 @@ import { request } from '@telegram-apps/sdk';
 
 const buttonId = await request({
   method: 'web_app_open_popup',
-  event：popup_closed',
-  params：{
+  event: 'popup_closed',
+  params: {
     title: 'Caution',
-    message：Should we delete you account?',
+    message: 'Should we delete you account?',
     buttons: [
       { id: 'yes', type: 'ok' },
       { id: 'no', type: 'cancel' },
     ],
   },
-})；
+});
 ```
 
 此外，您还可以同时跟踪多个事件：
@@ -69,7 +69,7 @@ import { request } from '@telegram-apps/sdk';
 
 const result = await request({
   method: 'web_app_open_scan_qr_popup',
-  event：['qr_text_received', 'scan_qr_popup_closed'],
+  event: ['qr_text_received', 'scan_qr_popup_closed'],
 });
 
 // result will either be qr_text_received or 
@@ -78,9 +78,9 @@ const result = await request({
 
 该函数允许传递其他选项，如 `postEvent`、`timeout` 和 `capture`。
 
-#### postEvent
+#### `postEvent`
 
-我们使用 "postEvent "选项重写方法，该方法用于调用 Telegram 迷你应用程序
+我们使用 `postEvent` 选项重写方法，该方法用于调用 Telegram 迷你应用程序
 方法。
 
 ```typescript
@@ -88,14 +88,14 @@ import { request, createPostEvent } from '@telegram-apps/sdk';
 
 request({
   method: 'web_app_request_viewport',
-  event：viewport_changed',
+  event: 'viewport_changed',
   postEvent: createPostEvent('6.5'),
-})；
+});
 ```
 
-#### 超时
+#### `timeout`
 
-选项负责分配请求超时。 如果超时，则会出现错误。
+`timeout` 选项负责分配请求超时。 如果超时，则会出现错误。
 
 ```typescript
 import { request, isTimeoutError } from '@telegram-apps/sdk';
@@ -103,20 +103,20 @@ import { request, isTimeoutError } from '@telegram-apps/sdk';
 try {
   await request({
     method: 'web_app_invoke_custom_method',
-    event：custom_method_invoked',
-    timeout：5000,
-    params：{
+    event: 'custom_method_invoked',
+    timeout: 5000,
+    params: {
       req_id: '1',
       method: 'deleteStorageValues',
-      params：{ keys：['a'] },
+      params: { keys: ['a'] },
     },
   });
 } catch (e) {
-  console.error(isTimeoutError(e) ?'Timeout error' : 'Some different error', e);
+  console.error(isTimeoutError(e) ? 'Timeout error' : 'Some different error', e);
 }
 ```
 
-#### 捕获
+#### `capture`
 
 `capture` 属性是一个函数，允许开发人员确定是否应捕获 Mini Apps
 事件并从 `request` 函数中返回：
@@ -126,16 +126,16 @@ const slug = 'jjKSJnm1k23lodd';
 
 request({
   method: 'web_app_open_invoice',
-  event：invoice_closed',
-  params： { slug },
+  event: 'invoice_closed',
+  params: { slug },
   capture(data) {
     return slug === data.slug;
   },
-})；
+});
 ```
 
-默认情况下，"request "函数会捕获带有所需名称的第一个事件。 在
-的情况下，"request "函数只有在事件具有预期的标签时才会捕获事件。
+默认情况下，`request` 函数会捕获带有所需名称的第一个事件。 在
+的情况下，`request` 函数只有在事件具有预期的标签时才会捕获事件。
 
 ## 调用自定义方法
 
@@ -153,11 +153,11 @@ const reqId = 'ABC';
 
 request({
   method: 'web_app_invoke_custom_method',
-  event：custom_method_invoked',
-  params：{
+  event: 'custom_method_invoked',
+  params: {
     req_id: reqId,
     method: 'deleteStorageValues',
-    params：{ keys：['a'] },
+    params: { keys: ['a'] },
   },
   capture(data) {
     return data.req_id === reqId;
@@ -165,21 +165,21 @@ request({
 });
 ```
 
-这样，我们就可以使用`invokeCustomMethod`函数重写它了：
+这样，我们就可以使用 `invokeCustomMethod` 函数重写它了：
 
 ```typescript
 import { invokeCustomMethod } from '@telegram-apps/sdk';
 
-invokeCustomMethod('deleteStorageValues', { keys: ['a'] }, 'ABC')；
+invokeCustomMethod('deleteStorageValues', { keys: ['a'] }, 'ABC');
 ```
 
 与`request`函数相反，`invokeCustomMethod`函数解析结果，并
 检查是否包含`error`属性。 如果出现这种情况，函数将抛出相应的
 错误。 否则，将返回 `result` 属性。
 
-## 聆听活动
+## 事件监听
 
-### 开 "和 "关
+### `on` 和 `off`
 
 要开始处理事件，开发人员可以使用 `on` 和 `off` 函数。 下面是
 `on` 函数的基本用法：
@@ -187,14 +187,14 @@ invokeCustomMethod('deleteStorageValues', { keys: ['a'] }, 'ABC')；
 ```typescript
 import { on } from '@telegram-apps/sdk';
 
-// 开始监听 "viewport_changed "事件。
-// 返回值是一个函数，用于移除此事件监听器。
+// Start listening to "viewport_changed" event. Returned value
+// is a function, which removes this event listener.
 const removeListener = on('viewport_changed', payload => {
   console.log('Viewport changed:', payload);
 });
 
-// 移除此事件监听器。
-removeListener()；
+// Remove this event listener.
+removeListener();
 ```
 
 要停止监听事件，开发人员也可以使用 `off` 函数：
@@ -202,7 +202,7 @@ removeListener()；
 ```typescript
 import { on, off, type MiniAppsEventListener } from '@telegram-apps/sdk';
 
-const listener：MiniAppsEventListener<'viewport_changed'> = payload => {
+const listener: MiniAppsEventListener<'viewport_changed'> = payload => {
   console.log('Viewport changed:', payload);
 };
 
@@ -210,7 +210,7 @@ const listener：MiniAppsEventListener<'viewport_changed'> = payload => {
 on('viewport_changed', listener);
 
 // Remove event listener.
-off('viewport_changed', listener)；
+off('viewport_changed', listener);
 ```
 
 要只调用监听器一次，请使用第三个布尔参数。
@@ -218,16 +218,16 @@ off('viewport_changed', listener)；
 ```typescript
 import { on } from '@telegram-apps/sdk';
 
-// 将在第一次监听器执行后自动移除。
+// Will be automatically removed after the first listener execution.
 on('viewport_changed', (payload) => {
   console.log('Viewport changed:', payload);
-}, true)；
+}, true);
 ```
 
-### 订阅 "和 "取消订阅
+### `subscribe` 和 `unsubscribe`
 
 要监听从本地 Telegram 应用程序发送的所有事件，开发人员应使用
-，如 `subscribe` 和 `unsubscribe`：
+`subscribe` 和 `unsubscribe`：
 
 ```typescript
 import {
@@ -236,7 +236,7 @@ import {
   type MiniAppsGlobalEventListener,
 } from '@telegram-apps/sdk';
 
-const listener：MiniAppsSubscribeListener = (event) => {
+const listener: MiniAppsSubscribeListener = (event) => {
   console.log('Received event', event);
 };
 
@@ -244,7 +244,7 @@ const listener：MiniAppsSubscribeListener = (event) => {
 subscribe(listener);
 
 // Remove this listener.
-unsubscribe(listener)；
+unsubscribe(listener);
 ```
 
 监听器接受一个包含 `name` 和 `payload` 属性的对象，这些属性是迷你应用程序
@@ -252,7 +252,7 @@ unsubscribe(listener)；
 
 ## 检查方法支持
 
-postEvent "函数本身未检查当前本地 Telegram
+`postEvent` 函数本身未检查当前本地 Telegram
 应用程序是否支持指定方法。 为此，开发人员可以使用 `supports` 函数，该函数接受 Mini Apps
 方法名称和当前平台版本：
 
@@ -280,7 +280,7 @@ supports('web_app_open_link', 'try_instant_view', '6.7'); // true
 
 :::
 
-### 创建更安全的 "postEvent
+### 创建更安全的 `postEvent`
 
 该软件包包含一个名为 `createPostEvent` 的函数，它将当前 Mini Apps
 版本作为输入。 它返回 `postEvent` 函数，内部检查是否支持指定的
@@ -291,11 +291,11 @@ import { createPostEvent } from '@telegram-apps/sdk';
 
 const postEvent = createPostEvent('6.5');
 
-// will work fine.
+// Will work fine.
 postEvent('web_app_read_text_from_clipboard');
 
-// will throw an error.
-postEvent('web_app_request_phone')；
+// Will throw an error.
+postEvent('web_app_request_phone');
 ```
 
 强烈建议使用此 `postEvent` 生成器，以确保方法调用按照
@@ -309,10 +309,10 @@ postEvent('web_app_request_phone')；
 ```typescript
 import { setDebug } from '@telegram-apps/sdk';
 
-setDebug(true)；
+setDebug(true);
 ```
 
-## 目标原产地
+## 目标源
 
 如果软件包在浏览器环境（iframe）中使用，则软件包会使用
 函数 `window.parent.postMessage` 。 此功能需要指定目标来源，以确保
@@ -323,7 +323,7 @@ setDebug(true)；
 ```typescript
 import { setTargetOrigin } from '@telegram-apps/sdk';
 
-setTargetOrigin('https://myendpoint.org')；
+setTargetOrigin('https://myendpoint.org');
 ```
 
 ::: warning

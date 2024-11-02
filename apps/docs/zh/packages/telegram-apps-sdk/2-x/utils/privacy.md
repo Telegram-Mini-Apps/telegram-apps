@@ -1,6 +1,6 @@
-# 隐私权
+# 隐私
 
-## 请求电话接入
+## `requestPhoneAccess`
 
 要请求访问用户的电话信息，请使用 `requestPhoneAccess` 方法。 如果用户
 授予访问权限，开发者的机器人就会收到手机详细信息。
@@ -14,7 +14,7 @@ if (requestPhoneAccess.isSupported()) {
 }
 ```
 
-## 请求写入访问权限
+## `requestWriteAccess`
 
 要请求向用户发送消息的权限，请使用 `requestWriteAccess` 方法。
 
@@ -27,7 +27,8 @@ if (requestWriteAccess.isSupported()) {
 }
 ```
 
-## 请求联系
+
+## `requestContact`
 
 要检索用户的联系信息，请使用 `requestContact` 方法。
 
@@ -37,14 +38,14 @@ import { requestContact } from '@telegram-apps/sdk';
 if (requestContact.isSupported()) {
   const contact = await requestContact();
   // {
-  // contact：{
-  // userId：1,
-  // phoneNumber: '+987654321',
-  // firstName：Vladislav',
-  // lastName：'Kibenko'
-  // },
-  // authDate：Date(12345678),
-  // hash：'abcdefgh'
+  //   contact: {
+  //     userId: 1,
+  //     phoneNumber: '+987654321',
+  //     firstName: 'Vladislav',
+  //     lastName: 'Kibenko'
+  //   },
+  //   authDate: Date(12345678),
+  //   hash: 'abcdefgh'
   // };
 }
 ```

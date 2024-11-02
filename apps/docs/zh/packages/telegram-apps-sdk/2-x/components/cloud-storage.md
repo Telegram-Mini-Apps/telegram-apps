@@ -18,7 +18,7 @@ cloudStorage.isSupported(); // boolean
 ```ts [Functions]
 import { isCloudStorageSupported } from '@telegram-apps/sdk';
 
-isCloudStorageSupported(); // 布尔型
+isCloudStorageSupported(); // boolean
 ```
 
 :::
@@ -30,13 +30,13 @@ isCloudStorageSupported(); // 布尔型
 ::: code-group
 
 ```ts [Variable]
-await cloudStorage.setItem('a', 'a-value')；
+await cloudStorage.setItem('a', 'a-value');
 ```
 
 ```ts [Functions]
 import { setCloudStorageItem } from '@telegram-apps/sdk';
 
-await setCloudStorageItem('a', 'a-value')；
+await setCloudStorageItem('a', 'a-value');
 ```
 
 :::
@@ -48,13 +48,13 @@ await setCloudStorageItem('a', 'a-value')；
 ::: code-group
 
 ```ts [Variable]
-const keys = await cloudStorage.getKeys(); // ['a', 'b', 'c'] ['a','b','c']。
+const keys = await cloudStorage.getKeys(); // ['a', 'b', 'c']
 ```
 
 ```ts [Functions]
 import { getCloudStorageKeys } from '@telegram-apps/sdk';
 
-const keys = await getCloudStorageKeys(); // ['a', 'b', 'c'].
+const keys = await getCloudStorageKeys(); // ['a', 'b', 'c']
 ```
 
 :::
@@ -65,18 +65,18 @@ const keys = await getCloudStorageKeys(); // ['a', 'b', 'c'].
 
 ```ts [Variable]
 const nonExistent = await cloudStorage.getItem('non-existent');
-// 结果是空字符串：''
+// The result is an empty string: ''
 
 const existent = await cloudStorage.getItem('a');
-// 结果是'a'键的值。示例：'a-value'
+// The result is the value of the 'a' key. Example: 'a-value'
 
 const values = await cloudStorage.getItem(['a', 'b', 'non-existent']);
-// 结果是键'a'、'b'和'non-existent'的记录。 
-// 示例
-{ // 
-// a：a-value', 
-// b: 'b-value', 
-// 'non-existent': '', 
+// The result is a record of the keys 'a', 'b', and 'non-existent'. 
+// Example:
+// { 
+//   a: 'a-value', 
+//   b: 'b-value', 
+//   'non-existent': '', 
 // }
 ```
 
@@ -84,18 +84,18 @@ const values = await cloudStorage.getItem(['a', 'b', 'non-existent']);
 import { getCloudStorageItem } from '@telegram-apps/sdk';
 
 const nonExistent = await getCloudStorageItem('non-existent');
-// 结果是空字符串：''
+// The result is an empty string: ''
 
 const existent = await getCloudStorageItem('a');
-// 结果是'a'键的值。示例：'a-value'
+// The result is the value of the 'a' key. Example: 'a-value'
 
 const values = await getCloudStorageItem(['a', 'b', 'non-existent']);
-// 结果是'a'、'b'和'non-existent'键的记录。 
-// 示例
-{ // 
-// a：a-value', 
-// b: 'b-value', 
-// 'non-existent': '', 
+// The result is a record of the keys 'a', 'b', and 'non-existent'. 
+// Example:
+// { 
+//   a: 'a-value', 
+//   b: 'b-value', 
+//   'non-existent': '', 
 // }
 ```
 
@@ -109,14 +109,14 @@ const values = await getCloudStorageItem(['a', 'b', 'non-existent']);
 
 ```ts [Variable]
 await cloudStorage.deleteItem('a');
-await cloudStorage.deleteItem(['a', 'b', 'c'])；
+await cloudStorage.deleteItem(['a', 'b', 'c']);
 ```
 
 ```ts [Functions]
 import { deleteCloudStorageItem } from '@telegram-apps/sdk';
 
 await deleteCloudStorageItem('a');
-await deleteCloudStorageItem(['a', 'b', 'c'])；
+await deleteCloudStorageItem(['a', 'b', 'c']);
 ```
 
 :::

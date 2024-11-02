@@ -24,7 +24,7 @@ isInvoiceSupported(); // boolean
 
 :::
 
-## 开幕
+## 开票
 
 要打开发票，需要使用 `open` 方法。 这种方法允许使用发票的 URL 或 slug 打开发票
 。
@@ -45,8 +45,8 @@ invoice.isOpened(); // true
 const status = await promise;
 invoice.isOpened(); // false
 
-// 或者在 URL 模式下：
-await invoice.open('https://t.me/invoice/abIIks213', 'url')；
+// Or in URL mode:
+await invoice.open('https://t.me/invoice/abIIks213', 'url');
 ```
 
 ```ts [Functions]
@@ -58,8 +58,8 @@ isInvoiceOpened(); // true
 const status = await promise;
 isInvoiceOpened(); // false
 
-// 或者在 URL 模式下：
-await openInvoice('https://t.me/invoice/abIIks213', 'url')；
+// Or in URL mode:
+await openInvoice('https://t.me/invoice/abIIks213', 'url');
 ```
 
 :::

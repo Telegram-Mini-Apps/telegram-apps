@@ -1,6 +1,6 @@
 # 弹出窗口
 
-负责 Telegram 迷你应用程序 [popup](../../../../.platform/popup.md) 的💠[组件](../scopes.md)。
+负责 Telegram 迷你应用程序 [popup](../../../../platform/popup.md) 的💠[组件](../scopes.md)。
 
 ## 检查支持
 
@@ -23,7 +23,7 @@ isPopupSupported(); // boolean
 
 :::
 
-## 开幕
+## 打开
 
 要打开弹出窗口，需要调用 `open` 方法，指定弹出窗口的属性：标题、
 信息和最多 3 个按钮的列表。
@@ -41,7 +41,7 @@ import { popup } from '@telegram-apps/sdk';
 // popup.isOpened() -> false
 const promise = popup.open({
   title: 'Hello!',
-  message：Here is a test message.',
+  message: 'Here is a test message.',
   buttons: [{ id: 'my-id', type: 'default', text: 'Default text' }],
 });
 // popup.isOpened() -> true
@@ -55,7 +55,7 @@ import { openPopup, isPopupOpened } from '@telegram-apps/sdk';
 // isPopupOpened() -> false
 const promise = openPopup({
   title: 'Hello!',
-  message：Here is a test message.',
+  message: 'Here is a test message.',
   buttons: [{ id: 'my-id', type: 'default', text: 'Default text' }],
 });
 // isPopupOpened() -> true

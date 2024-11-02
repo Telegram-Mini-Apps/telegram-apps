@@ -1,7 +1,7 @@
 # 视口
 
 负责 Telegram Mini
-Apps [viewport](../../../../.platform/viewport.md) 的💠[组件](../scopes.md)。
+Apps [viewport](../../../../platform/viewport.md) 的💠[组件](../scopes.md)。
 
 ## 安装
 
@@ -53,7 +53,7 @@ isViewportMounted(); // false
 ## 绑定 CSS 变量
 
 要通过 CSS 变量公开 `viewport` 属性，请使用 `bindCssVars` 方法。
-调用该方法后，"isCssVarsBound "信号属性会被更新。
+调用该方法后，`isCssVarsBound` 信号属性会被更新。
 
 此方法可选择接受一个函数，该函数可将 `width`、`height`
 和 `stableHeight` 的值转换为 CSS 变量名。 默认情况下，数值会通过
@@ -63,13 +63,13 @@ isViewportMounted(); // false
 
 ```ts [Variable]
 viewport.bindCssVars();
-// 创建 CSS 变量，如
+// Creates CSS variables like:
 // --tg-viewport-height: 675px
 // --tg-viewport-width: 320px
 // --tg-viewport-stable-height: 675px
 
 viewport.bindCssVars(key => `--my-prefix-${key}`);
-// 创建类似的 CSS 变量：
+// Creates CSS variables like:
 // --my-prefix-height: 675px
 // --my-prefix-width: 320px
 // --my-prefix-stableHeight: 675px
@@ -84,13 +84,13 @@ import {
 } from '@telegram-apps/sdk';
 
 bindViewportCssVars();
-// Creates CSS variables like：
+// Creates CSS variables like:
 // --tg-viewport-height: 675px
 // --tg-viewport-width: 320px
 // --tg-viewport-stable-height: 675px
 
 bindViewportCssVars(key => `--my-prefix-${key}`);
-// 创建 CSS 变量：
+// Creates CSS variables like:
 // --my-prefix-height: 675px
 // --my-prefix-width: 320px
 // --my-prefix-stableHeight: 675px
@@ -107,13 +107,13 @@ isViewportCssVarsBound(); // true
 ::: code-group
 
 ```ts [Variable]
-viewport.expand()；
+viewport.expand();
 ```
 
 ```ts [Functions]
 import { expandViewport } from '@telegram-apps/sdk';
 
-expandViewport()；
+expandViewport();
 ```
 
 :::

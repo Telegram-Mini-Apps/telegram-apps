@@ -118,7 +118,7 @@ const offClick = settingsButton.onClick(listener);
 offClick();
 // or
 settingsButton.onClick(listener);
-settingsButton.offClick(listener)；
+settingsButton.offClick(listener);
 ```
 
 ```ts [Functions]
@@ -132,7 +132,7 @@ const offClick = onSettingsButtonClick(listener);
 offClick();
 // or
 onSettingsButtonClick(listener);
-offSettingsButtonClick(listener)；
+offSettingsButtonClick(listener);
 ```
 
 :::

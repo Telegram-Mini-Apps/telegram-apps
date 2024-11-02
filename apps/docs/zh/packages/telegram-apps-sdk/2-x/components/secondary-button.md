@@ -73,7 +73,7 @@ isSecondaryButtonMounted(); // false
 > [!WARNING]
 > 该组件的属性取决于 [Mini App](mini-app.md)
 > 和 [Theme Params](theme-params.md) 组件的值。 具体来说，二级按钮使用 Mini
-> App 的 "bottomBarBgColor "和一些主题参数颜色。 在使用辅助按钮之前，请确保将这些组件安装到
+> App 的 `bottomBarBgColor` 和一些主题参数颜色。 在使用辅助按钮之前，请确保将这些组件安装到
 > 。
 
 ## 设置属性
@@ -96,7 +96,7 @@ secondaryButton.setParams({
   isVisible: true,
   position: 'top',
   text: 'My text',
-  textColor: '#ffffffff'
+  textColor: '#ffffff'
 });
 secondaryButton.backgroundColor(); // '#000000'
 secondaryButton.hasShineEffect(); // true
@@ -105,18 +105,18 @@ secondaryButton.isLoaderVisible(); // true
 secondaryButton.isVisible(); // true
 secondaryButton.position(); // 'top'
 secondaryButton.text(); // 'My text'
-secondaryButton.textColor(); // '#ffffffff'
+secondaryButton.textColor(); // '#ffffff'
 
 secondaryButton.state();
 // {
-// backgroundColor: '#000000',
-// hasShineEffect: true,
-// isActive: true,
-// isLoaderVisible: true,
-// isVisible: true,
-// position: 'top',
-// text: 'My text',
-// textColor: '#ffffffff'
+//   backgroundColor: '#000000',
+//   hasShineEffect: true,
+//   isActive: true,
+//   isLoaderVisible: true,
+//   isVisible: true,
+//   position: 'top',
+//   text: 'My text',
+//   textColor: '#ffffff'
 // }
 ```
 
@@ -126,43 +126,43 @@ import {
   secondaryButtonBackgroundColor,
   secondaryButtonHasShineEffect,
   isSecondaryButtonVisible,
-  isSecondaryButtonEnabled、
+  isSecondaryButtonEnabled,
   isSecondaryButtonLoaderVisible,
   secondaryButtonState,
   secondaryButtonTextColor,
   secondaryButtonText,
   secondaryButtonPosition,
-} from '@telegram-apps/sdk'；
+} from '@telegram-apps/sdk';
 
 setSecondaryButtonParams({
-  backgroundColor：'#000000',
+  backgroundColor: '#000000',
   hasShineEffect: true,
   isEnabled: true,
   isLoaderVisible: true,
   isVisible: true,
   position: 'top',
   text: 'My text',
-  textColor：'#ffffffff'
+  textColor: '#ffffff'
 });
 secondaryButtonBackgroundColor(); // '#000000'
 secondaryButtonHasShineEffect(); // true
 isSecondaryButtonEnabled(); // true
 isSecondaryButtonLoaderVisible(); // true
-isSecondaryButtonVisible()；// true
+isSecondaryButtonVisible(); // true
 secondaryButtonPosition(); // 'top'
 secondaryButtonText(); // 'My text'
-secondaryButtonTextColor(); // '#ffffffffff'
+secondaryButtonTextColor(); // '#ffffff'
 
 secondaryButtonState();
 // {
-// backgroundColor：'#000000',
-// hasShineEffect: true,
-// isActive: true,
-// isLoaderVisible: true,
-// isVisible: true,
-// position: 'top',
-// text: 'My text',
-// textColor: '#ffffffff'
+//   backgroundColor: '#000000',
+//   hasShineEffect: true,
+//   isActive: true,
+//   isLoaderVisible: true,
+//   isVisible: true,
+//   position: 'top',
+//   text: 'My text',
+//   textColor: '#ffffff'
 // }
 ```
 
@@ -184,7 +184,7 @@ const offClick = secondaryButton.onClick(listener);
 offClick();
 // or
 secondaryButton.onClick(listener);
-secondaryButton.offClick(listener)；
+secondaryButton.offClick(listener);
 ```
 
 ```ts [Functions]
@@ -194,14 +194,14 @@ import {
 } from '@telegram-apps/sdk';
 
 function listener() {
-  console.log('Clicked！');
+  console.log('Clicked!');
 }
 
 const offClick = onSecondaryButtonClick(listener);
 offClick();
 // or
 onSecondaryButtonClick(listener);
-offSecondaryButtonClick(listener)；
+offSecondaryButtonClick(listener);
 ```
 
 :::

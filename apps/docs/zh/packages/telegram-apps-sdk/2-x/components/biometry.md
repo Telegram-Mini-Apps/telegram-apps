@@ -28,11 +28,9 @@ isBiometrySupported(); // boolean
 在使用组件之前，必须先安装组件。
 
 这个过程是异步的，因为生物测量数据需要向 Telegram 应用程序申请。
-在进程中，"isMounting "信号将被设置为 "true"，并在
-完成后更新为 "false"。
+在进程中，`isMounting` 信号将被设置为 `true`，并在完成后更新为 `false`。
 
-如果挂载成功，"isMounted "信号将设为 "true"。 如果出现错误，
-`mountError` 信号将反映错误。
+如果挂载成功，`isMounted` 信号将设为 `true`。 如果出现错误，`mountError` 信号将反映错误。
 
 ::: code-group
 
@@ -61,7 +59,7 @@ import {
 try {
   const promise = mountBiometry();
   isBiometryMounting(); // true
-  await promise；
+  await promise;
   isBiometryMounting(); // false
   isBiometryMounted(); // true
 } catch (err) {
@@ -99,7 +97,7 @@ isBiometryMounted(); // false
 ::: code-group
 
 ```ts [Variable]
-const granted = await biometry.requestAccess(); // 布尔型
+const granted = await biometry.requestAccess(); // boolean
 ```
 
 ```ts [Functions]
@@ -116,7 +114,7 @@ const granted = await requestBiometryAccess(); // boolean
 
 它可选择接受一个具有以下属性的对象：
 
-- reason?：string\`：要向用户显示的身份验证原因。
+- `reason?: string`: 要向用户显示的身份验证原因。
 
 该方法返回一个包含 `status` （`'failed'` 或`'authorized'`）的对象，如果成功，
 `token: string`。
@@ -170,7 +168,7 @@ const updated = await biometry.updateToken({
 await biometry.updateToken({
   reason: 'Will set a new one',
   token: 'new token',
-})；
+});
 ```
 
 ```ts [Functions]
@@ -183,7 +181,7 @@ const updated = await updateBiometryToken({
 await updateBiometryToken({
   reason: 'Will set a new one',
   token: 'new token',
-})；
+});
 ```
 
 :::
@@ -196,13 +194,13 @@ await updateBiometryToken({
 ::: code-group
 
 ```ts [Variable]
-biometry.openSettings()；
+biometry.openSettings();
 ```
 
 ```ts [Functions]
 import { openBiometrySettings } from '@telegram-apps/sdk';
 
-openBiometrySettings()；
+openBiometrySettings();
 ```
 
 :::

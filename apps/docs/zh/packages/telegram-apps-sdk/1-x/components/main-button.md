@@ -1,6 +1,6 @@
 # 主按钮
 
-执行 Telegram 迷你应用程序 [主按钮](.../.../.../.../platform/main-button.md)。
+执行 Telegram 迷你应用程序 [主按钮](../../../../platform/main-button.md)。
 
 ## 初始化
 
@@ -9,7 +9,7 @@
 ```typescript
 import { initMainButton } from '@telegram-apps/sdk';
 
-const [mainButton] = initMainButton()；  
+const [mainButton] = initMainButton();  
 ```
 
 ## 按钮可见性
@@ -28,7 +28,7 @@ console.log(mainButton.isVisible); // false
 ## 装载机
 
 主按钮内部可以显示一个加载器。 要控制其可见性，
-使用 `showLoader()` 和 `hideLoader()` 方法。 isLoaderVisible\` 属性将被更改。
+使用 `showLoader()` 和 `hideLoader()` 方法。 `isLoaderVisible` 属性将被更改。
 
 ```typescript
 mainButton.showLoader();
@@ -61,7 +61,7 @@ console.log(mainButton.isEnabled); // false
 
 ```typescript
 mainButton.setBackgroundColor('#ffffaa');
-console.log(mainButton.color); // "#ffffaa
+console.log(mainButton.color); // '#ffffaa'
 ```
 
 ## 文字颜色
@@ -71,7 +71,7 @@ console.log(mainButton.color); // "#ffffaa
 
 ```typescript
 mainButton.setTextColor('#cca233');
-console.log(mainButton.textColor); // '#cca233'.
+console.log(mainButton.textColor); // '#cca233'
 ```
 
 ## 文本
@@ -81,7 +81,7 @@ console.log(mainButton.textColor); // '#cca233'.
 
 ```typescript
 mainButton.setText('Submit');
-console.log(mainButton.text); // "提交
+console.log(mainButton.text); // 'Submit'
 ```
 
 ## 设置多个属性
@@ -94,20 +94,20 @@ mainButton.setParams({
   backgroundColor: '#aa1388',
   text: 'Stop',
   isVisible: true,
-})；
+});
 ```
 
-## 活动
+## 事件
 
-可被 [跟踪]（#events）的事件列表：
+可被 [跟踪](#events) 的事件列表：
 
-| 活动                                     | 听众                                                            | 触发条件                     |
+| 事件                                     | 监听器                                                            | 触发条件                     |
 | -------------------------------------- | ------------------------------------------------------------- | ------------------------ |
-| 点击                                     | `() => void`                                                  | 点击了主按钮                   |
-| 改变                                     | `() => void`                                                  | 组件中的某些部分发生了变化            |
-| 改变:背景颜色                | \`(value: RGB) => void\`\` | 更改了 `backgroundColor` 属性 |
-| change:isLoaderVisible | `(value: boolean) => void`                                    | 更改了 `isLoaderVisible` 属性 |
-| change:isEnabled       | `(value: boolean) => void`                                    | 已更改 `isEnabled` 属性       |
+| `click`                                     | `() => void`                                                  | 点击了主按钮                   |
+| `change`                                     | `() => void`                                                  | 组件中的某些部分发生了变化            |
+| `change:backgroundColor`                | `(value: RGB) => void` | 更改了 `backgroundColor` 属性 |
+| `change:isLoaderVisible` | `(value: boolean) => void`                                    | 更改了 `isLoaderVisible` 属性 |
+| `change:isEnabled`       | `(value: boolean) => void`                                    | 已更改 `isEnabled` 属性       |
 | `change:isVisible`                     | `(value: boolean) => void`                                    | 更改了 `isVisible` 属性       |
 | `change:text`                          | `(value: string) => void`                                     | 更改了 `text` 属性            |
-| 改变:文本颜色                | \`(value: RGB) => void\`\` | 更改了 `textColor` 属性       |
+| `change:textColor`       | `(value: RGB) => void`                                    | 更改了 `textColor` 属性       |

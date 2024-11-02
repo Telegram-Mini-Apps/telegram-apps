@@ -1,7 +1,5 @@
 ---
-outline:
-  - 2
-  - 3
+outline: [2, 3]
 ---
 
 # 组件
@@ -29,7 +27,7 @@ mb.on('click', () => {
   bb.show();
 });
 
-// 点击 BackButton 将其隐藏并显示 MainButton。
+// Clicking the BackButton hides it and shows the MainButton.
 bb.on('click', () => {
   mb.show();
   bb.hide();
@@ -43,11 +41,11 @@ mb
   .enable()
   .show();
 
-// 当我们不再需要 BackButton 和 MainButton 时，我们可以 
-// 执行清理。调用清理后，初始化的 
-// 组件将不会接收任何事件。
+// When we don't need BackButton and MainButton anymore, we can 
+// perform a cleanup. After calling a cleanup, the initialized 
+// component will not receive any events.
 cleanupMb();
-cleanupBb()；
+cleanupBb();
 ```
 
 :::info
@@ -58,9 +56,9 @@ cleanupBb()；
 
 :::
 
-## 活动
+## 事件
 
-组件实例通过 "on "和 "off "方法使用常见的事件监听方式。
+组件实例通过 `on` 和 `off` 方法使用常见的事件监听方式。
 下面是使用 `BackButton` 组件的示例：
 
 ```typescript
@@ -71,12 +69,12 @@ const [bb] = initBackButton();
 // Clicking the BackButton hides it and shows the MainButton.
 bb.on('click', () => {
   console.log('BackButton clicked.');
-})；
+});
 ```
 
 您可以在组件文档中找到支持的事件列表。
 
-## 方法支持
+## 方法支持 {#methods-support}
 
 几乎每个组件都能检查当前
 Mini Apps 版本是否支持其方法。 要检查是否支持某些方法，开发人员应使用组件

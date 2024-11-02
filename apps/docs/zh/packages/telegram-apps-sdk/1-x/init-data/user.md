@@ -1,63 +1,63 @@
-# 用户
+# `User`
 
-### 添加到附件菜单
+### `addedToAttachmentMenu`
 
-类型：布尔", _可选_
+类型：`boolean`, _可选_
 
 如果该用户在附件菜单中添加了机器人，则为 True。
 
-### 允许写入文件
+### `allowsWriteToPm`
 
-类型：布尔", _可选_
+类型：`boolean`, _可选_
 
 如果该用户允许机器人向其发送信息，则为 "true"。
 
-### 名字
+### `firstName`
 
-类型：字符串
+类型：`string`
 
 用户或机器人的名字。
 
 ### `id`
 
-类型：数字
+类型：`number`
 
 用户或机器人的唯一标识符。
 
-### 是机器人
+### `isBot`
 
-类型：布尔", _可选_
+类型：`boolean`, _可选_
 
-如果该用户是机器人，则为 True。 仅在 "接收器 "字段中返回。
+如果该用户是机器人，则为 True。 仅在 `receiver` 字段中返回。
 
-### isPremium
+### `isPremium`
 
-类型：布尔", _可选_
+类型：`boolean`, _可选_
 
 如果该用户是 Telegram 高级用户，则为 True。
 
-### 姓氏
+### `lastName`
 
-类型：字符串", _optional_
+类型：`string`, _可选_
 
 用户或机器人的姓氏。
 
-### 语言代码
+### `languageCode`
 
-类型：字符串", _optional_
+类型：`string`, _可选_
 
 用户语言的[IETF 语言标记](https://en.wikipedia.org/wiki/IETF_language_tag)。 仅返回用户字段中的
 。
 
 ### `photoUrl`
 
-类型：字符串", _optional_
+类型：`string`, _可选_
 
 用户个人照片的 URL。 照片可以是 .jpeg 或 .svg 格式。 仅返回从附件菜单启动的 Web
 应用程序。
 
-### 用户名
+### `username`
 
-类型：字符串", _optional_
+类型：`string`, _可选_
 
 用户或机器人的用户名。

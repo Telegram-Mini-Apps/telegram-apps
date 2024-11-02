@@ -1,7 +1,7 @@
 # 返回按钮
 
-💠[组件]（.../scopes.md）负责 Telegram Mini
-Apps [返回按钮]（.../../.../平台/返回按钮.md）。
+💠[组件](../scopes.md) 负责 Telegram Mini
+Apps [返回按钮](../../../../platform/back-button.md) 。
 
 ## 检查支持
 
@@ -112,7 +112,7 @@ const offClick = backButton.onClick(listener);
 offClick();
 // or
 backButton.onClick(listener);
-backButton.offClick(listener)；
+backButton.offClick(listener);
 ```
 
 ```ts [Functions]
@@ -126,7 +126,7 @@ const offClick = onBackButtonClick(listener);
 offClick();
 // or
 onBackButtonClick(listener);
-offBackButtonClick(listener)；
+offBackButtonClick(listener);
 ```
 
 :::

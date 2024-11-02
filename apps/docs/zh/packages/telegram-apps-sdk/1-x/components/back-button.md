@@ -9,7 +9,7 @@
 ```typescript
 import { initBackButton } from '@telegram-apps/sdk';
 
-const [backButton] = initBackButton()；  
+const [backButton] = initBackButton();  
 ```
 
 ## 展示与隐藏
@@ -23,18 +23,18 @@ console.log(backButton.isVisible); // true
 
 backButton.hide();
 console.log(backButton.isVisible); // false  
-```
+```  
 
-## 活动
+## 事件 {#events}
 
-可被 [跟踪]（#events）的事件列表：
+可被 [跟踪](#events) 的事件列表：
 
-| 活动                 | 听众                         | 触发条件               |
+| 事件                 | 监听函数                         | 触发条件               |
 | ------------------ | -------------------------- | ------------------ |
-| 点击                 | `() => void`               | 点击了返回按钮            |
-| 改变                 | `() => void`               | 组件中的某些部分发生了变化      |
+| `click`            | `() => void`               | 点击了返回按钮            |
+| `change`           | `() => void`               | 组件中的某些部分发生了变化      |
 | `change:isVisible` | `(value: boolean) => void` | 更改了 `isVisible` 属性 |
 
-## 方法支持
+## 方法支持 {#methods-support}
 
-方法列表，可用于 [支持检查](#methods-support)：显示 "和 "隐藏
+方法列表，可用于 [支持检查](#methods-support)：`show` 和 `hide`

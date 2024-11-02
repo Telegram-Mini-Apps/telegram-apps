@@ -1,6 +1,6 @@
 # 弹出窗口
 
-执行 Telegram 迷你应用程序 [popup](.../.../.../.../platform/popup.md)。
+执行 Telegram 迷你应用程序 [popup](../../../../platform/popup.md)。
 
 ## 初始化
 
@@ -9,7 +9,7 @@
 ```typescript
 import { initPopup } from '@telegram-apps/sdk';
 
-const popup = initPopup()；  
+const popup = initPopup();  
 ```
 
 ## 打开新弹出式窗口
@@ -21,13 +21,13 @@ const popup = initPopup()；
 popup
   .open({
     title: 'Hello!',
-    message：'Here is a test message.',
+    message: 'Here is a test message.',
     buttons: [{ id: 'my-id', type: 'default', text: 'Default text' }],
   })
   .then(buttonId => {
     console.log(
       buttonId === null 
-        ?'User did not click any button'
+        ? 'User did not click any button'
         : `User clicked a button with ID "${buttonId}"`
     );
   });
@@ -38,15 +38,15 @@ console.log(popup.isOpened); // true
 该方法返回一个承诺，该承诺将与点击的按钮标识符一起实现。 在
 的情况下，如果用户没有点击任何按钮，该方法将返回 `null`。
 
-## 活动
+## 事件
 
-可被 [跟踪]（#events）的事件列表：
+可被 [跟踪](#events) 的事件列表：
 
-| 活动      | 听众                         | 触发条件              |
+| 事件      | 监听器                         | 触发条件              |
 | ------- | -------------------------- | ----------------- |
-| 已更改     | `() => void`               | 组件中的某些部分发生了变化     |
-| 已更改：已打开 | `(value: boolean) => void` | 更改了 `isOpened` 属性 |
+| `changed`     | `() => void`               | 组件中的某些部分发生了变化     |
+| `changed:isOpened` | `(value: boolean) => void` | 更改了 `isOpened` 属性 |
 
-## 方法支持
+## 方法支持 {#methods-support}
 
-方法列表，可用于 [支持检查]（#methods-support）：打开
+方法列表，可用于 [支持检查](#methods-support)：`open`

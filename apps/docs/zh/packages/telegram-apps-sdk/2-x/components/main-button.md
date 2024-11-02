@@ -1,7 +1,7 @@
 # 主按钮
 
 负责 Telegram Mini
-Apps [main button](../../../../.platform/main-button.md) 的💠[组件](../scopes.md)。
+Apps [main button](../../../../platform/main-button.md) 的💠[组件](../scopes.md)。
 
 ## 安装
 
@@ -67,7 +67,7 @@ mainButton.setParams({
   isLoaderVisible: true,
   isVisible: true,
   text: 'My text',
-  textColor: '#ffffffff'
+  textColor: '#ffffff'
 });
 mainButton.backgroundColor(); // '#000000'
 mainButton.hasShineEffect(); // true
@@ -75,17 +75,17 @@ mainButton.isEnabled(); // true
 mainButton.isLoaderVisible(); // true
 mainButton.isVisible(); // true
 mainButton.text(); // 'My text'
-mainButton.textColor(); // '#ffffffff'
+mainButton.textColor(); // '#ffffff'
 
 mainButton.state();
 // {
-// backgroundColor: '#000000',
-// hasShineEffect: true,
-// isActive: true,
-// isLoaderVisible: true,
-// isVisible: true,
-// text: 'My text',
-// textColor: '#ffffffff'
+//   backgroundColor: '#000000',
+//   hasShineEffect: true,
+//   isActive: true,
+//   isLoaderVisible: true,
+//   isVisible: true,
+//   text: 'My text',
+//   textColor: '#ffffff'
 // }
 ```
 
@@ -100,34 +100,34 @@ import {
   mainButtonState,
   mainButtonTextColor,
   mainButtonText,
-} from '@telegram-apps/sdk'；
+} from '@telegram-apps/sdk';
 
 setMainButtonParams({
-  backgroundColor：'#000000',
+  backgroundColor: '#000000',
   hasShineEffect: true,
   isEnabled: true,
   isLoaderVisible: true,
   isVisible: true,
   text: 'My text',
-  textColor：'#ffffffff'
+  textColor: '#ffffff'
 });
 mainButtonBackgroundColor(); // '#000000'
 mainButtonHasShineEffect(); // true
 isMainButtonEnabled(); // true
-isMainButtonLoaderVisible()；// true
+isMainButtonLoaderVisible(); // true
 isMainButtonVisible(); // true
 mainButtonText(); // 'My text'
-mainButtonTextColor(); // '#ffffffffff'
+mainButtonTextColor(); // '#ffffff'
 
 mainButtonState();
 // {
-// backgroundColor：'#000000',
-// hasShineEffect: true,
-// isActive: true,
-// isLoaderVisible: true,
-// isVisible: true,
-// text: 'My text',
-// textColor: '#ffffffff'
+//   backgroundColor: '#000000',
+//   hasShineEffect: true,
+//   isActive: true,
+//   isLoaderVisible: true,
+//   isVisible: true,
+//   text: 'My text',
+//   textColor: '#ffffff'
 // }
 ```
 
@@ -149,7 +149,7 @@ const offClick = mainButton.onClick(listener);
 offClick();
 // or
 mainButton.onClick(listener);
-mainButton.offClick(listener)；
+mainButton.offClick(listener);
 ```
 
 ```ts [Functions]
@@ -159,14 +159,14 @@ import {
 } from '@telegram-apps/sdk';
 
 function listener() {
-  console.log('Clicked！');
+  console.log('Clicked!');
 }
 
 const offClick = onMainButtonClick(listener);
 offClick();
 // or
 onMainButtonClick(listener);
-offMainButtonClick(listener)；
+offMainButtonClick(listener);
 ```
 
 :::

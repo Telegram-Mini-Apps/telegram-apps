@@ -1,7 +1,7 @@
 # 主题参数
 
 本节 SDK 涵盖与
-[主题参数] 相关的主题（.../../../platform/theming.md）。
+[主题参数](../../../platform/theming.md) 相关的主题。
 
 ## 解析
 
@@ -18,17 +18,17 @@ parseThemeParams({
   accent_text_color: "#6ab2f2",
   bg_color: "#17212b",
   button_color: "#5288c1",
-  button_text_color: "#ffffffff",
+  button_text_color: "#ffffff",
   destructive_text_color: "#ec3942",
-  header_bg_color："#17212b",
+  header_bg_color: "#17212b",
   hint_color: "#708499",
   link_color: "#6ab3f3",
   secondary_bg_color: "#232e3c",
-  section_bg_color："#17212b",
+  section_bg_color: "#17212b",
   section_header_text_color: "#6ab3f3",
   subtitle_text_color: "#708499",
   text_color: "#f5f5f5"
-})；
+});
 ```
 
 ```typescript [Expected result]
@@ -36,17 +36,17 @@ const result = {
   accentTextColor: "#6ab2f2",
   bgColor: "#17212b",
   buttonColor: "#5288c1",
-  buttonTextColor: "#ffffffff",
+  buttonTextColor: "#ffffff",
   destructiveTextColor: "#ec3942",
   headerBgColor: "#17212b",
-  hintColor："#708499",
+  hintColor: "#708499",
   linkColor: "#6ab3f3",
   secondaryBgColor: "#232e3c",
   sectionBgColor: "#17212b",
   sectionHeaderTextColor: "#6ab3f3",
   subtitleTextColor: "#708499",
   textColor: "#f5f5f5"
-}；
+};
 ```
 
 :::
@@ -65,32 +65,32 @@ serializeThemeParams({
   accentTextColor: "#6ab2f2",
   bgColor: "#17212b",
   buttonColor: "#5288c1",
-  buttonTextColor: "#ffffffff",
+  buttonTextColor: "#ffffff",
   destructiveTextColor: "#ec3942",
-  headerBgColor："#17212b",
+  headerBgColor: "#17212b",
   hintColor: "#708499",
   linkColor: "#6ab3f3",
   secondaryBgColor: "#232e3c",
-  sectionBgColor："#17212b",
+  sectionBgColor: "#17212b",
   sectionHeaderTextColor: "#6ab3f3",
   subtitleTextColor: "#708499",
   textColor: "#f5f5f5"
 });
 
-// Result：
-//`{
-// "accent_text_color": "#6ab2f2",
-// "bg_color": "#17212b",
-// "button_color": "#5288c1",
-// "button_text_color"："#ffffff",
-// "destructive_text_color": "#ec3942",
-// "header_bg_color": "#17212b",
-// "hint_color"："#708499",
-// "link_color": "#6ab3f3",
-// "secondary_bg_color": "#232e3c",
-// "section_bg_color"："#17212b",
-// "section_header_text_color": "#6ab3f3",
-// "subtitle_text_color": "#708499",
-// "text_color": "#f5f5f5"
+// Result:
+// `{
+//   "accent_text_color":"#6ab2f2",
+//   "bg_color":"#17212b",
+//   "button_color":"#5288c1",
+//   "button_text_color":"#ffffff",
+//   "destructive_text_color":"#ec3942",
+//   "header_bg_color":"#17212b",
+//   "hint_color":"#708499",
+//   "link_color":"#6ab3f3",
+//   "secondary_bg_color":"#232e3c",
+//   "section_bg_color":"#17212b",
+//   "section_header_text_color":"#6ab3f3",
+//   "subtitle_text_color":"#708499",
+//   "text_color":"#f5f5f5"
 // }`
 ```

@@ -1,7 +1,7 @@
 # 关闭行为
 
 负责 Telegram Mini
-Apps [关闭行为] 的💠[组件]（.../scopes.md）（.../../.../../platform/closing-behavior.md）。
+Apps [关闭行为](../../../../platform/closing-behavior.md) 的💠[组件](../scopes.md)。
 
 ## 安装
 
@@ -45,12 +45,12 @@ import {
 } from '@telegram-apps/sdk';
 
 unmountClosingBehavior();
-isClosingBehaviorMounted(); // false
+isClosingBehaviorMounted(); //  false
 ```
 
 :::
 
-## 闭幕确认
+## 关闭确认
 
 要更改关闭确认行为，请使用 `enableConfirmation()`
 和 `disableConfirmation()` 方法。 这些方法会更新 `isConfirmationEnabled` 信号

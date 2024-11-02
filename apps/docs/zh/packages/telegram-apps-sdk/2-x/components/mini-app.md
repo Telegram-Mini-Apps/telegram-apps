@@ -50,7 +50,7 @@ isMiniAppMounted(); // false
 ## 绑定 CSS 变量
 
 要通过 CSS 变量公开 `miniApp` 属性，请使用 `bindCssVars` 方法。
-调用该方法后，"isCssVarsBound "信号属性会被更新。
+调用该方法后，`isCssVarsBound` 信号属性会被更新。
 
 此方法可选择接受一个函数，该函数可将 `bgColor` 和 `headerColor`
 的值转换为 CSS 变量名。 默认情况下，数值会以前缀 `--tg-` 转换为 kebab 大小写。
@@ -59,14 +59,14 @@ isMiniAppMounted(); // false
 
 ```ts [Variable]
 miniApp.bindCssVars();
-// 创建 CSS 变量，如
-// --tg-bg-color：#aabbcc
-// --tg-header-color：#aabbcc
+// Creates CSS variables like:
+// --tg-bg-color: #aabbcc
+// --tg-header-color: #aabbcc
 
 miniApp.bindCssVars(key => `--my-prefix-${key}`);
-// 创建类似的 CSS 变量：
-// --my-prefix-bgColor：#aabbcc
-// --my-prefix-headerColor：#aabbcc
+// Creates CSS variables like:
+// --my-prefix-bgColor: #aabbcc
+// --my-prefix-headerColor: #aabbcc
 
 miniApp.isCssVarsBound(); // true
 ```
@@ -75,14 +75,14 @@ miniApp.isCssVarsBound(); // true
 import { bindMiniAppCssVars, isMiniAppCssVarsBound } from '@telegram-apps/sdk';
 
 bindMiniAppCssVars();
-// 创建 CSS 变量，如
-// --tg-bg-color：#aabbcc
-// --tg-header-color：#aabbcc
+// Creates CSS variables like:
+// --tg-bg-color: #aabbcc
+// --tg-header-color: #aabbcc
 
 bindMiniAppCssVars(key => `--my-prefix-${key}`);
-// 创建类似的 CSS 变量：
-// --my-prefix-bgColor：#aabbcc
-// --my-prefix-headerColor：#aabbcc
+// Creates CSS variables like:
+// --my-prefix-bgColor: #aabbcc
+// --my-prefix-headerColor: #aabbcc
 
 isMiniAppCssVarsBound(); // true
 ```
@@ -94,8 +94,7 @@ isMiniAppCssVarsBound(); // true
 要更改迷你应用程序的标题颜色，可使用方法 `setHeaderColor`。 反过来，
 会更新 `headerColor` 信号属性值。
 
-该方法接受 RGB 颜色值或以下
-字符串之一：bg_color`、`secondary_bg_color\`。
+该方法接受 RGB 颜色值或以下字符串之一：`bg_color`、`secondary_bg_color`。
 
 ::: code-group
 
@@ -108,7 +107,7 @@ if (miniApp.setHeaderColor.isSupported()) {
 if (
   miniApp.setHeaderColor.isSupported()
   && miniApp.setHeaderColor.supports('color')
-){
+) {
   miniApp.setHeaderColor('#aabbcc');
   miniApp.headerColor(); // '#aabbcc'
 }
@@ -128,7 +127,7 @@ if (setMiniAppHeaderColor.isSupported()) {
 if (
   setMiniAppHeaderColor.isSupported()
   && setMiniAppHeaderColor.supports('color')
-){
+) {
   setMiniAppHeaderColor('#aabbcc');
   miniAppHeaderColor(); // '#aabbcc'
 }
@@ -145,8 +144,8 @@ if (
 
 ```ts [Variable]
 if (miniApp.setBackgroundColor.isSupported()) {
-  miniApp.setBackgroundColor('#ffffffff');
-  miniApp.backgroundColor(); // '#ffffffff'
+  miniApp.setBackgroundColor('#ffffff');
+  miniApp.backgroundColor(); // '#ffffff'
 }
 ```
 
@@ -157,8 +156,8 @@ import {
 } from '@telegram-apps/sdk';
 
 if (setMiniAppBackgroundColor.isSupported()) {
-  setMiniAppBackgroundColor('#ffffffff');
-  miniAppBackgroundColor(); // '#ffffffff'
+  setMiniAppBackgroundColor('#ffffff');
+  miniAppBackgroundColor(); // '#ffffff'
 }
 ```
 
@@ -166,25 +165,25 @@ if (setMiniAppBackgroundColor.isSupported()) {
 
 ## 方法
 
-### 关闭
+### `close`
 
 要关闭迷你应用程序，请使用 `close` 方法。
 
 ::: code-group
 
 ```ts [Variable]
-miniApp.close()；
+miniApp.close();
 ```
 
 ```ts [Functions]
 import { closeMiniApp } from '@telegram-apps/sdk';
 
-closeMiniApp()；
+closeMiniApp();
 ```
 
 :::
 
-### 已准备好
+### `ready`
 
 要发出 Mini App 已准备好显示的信号，请使用 `ready` 方法。 调用后，
 加载占位符会被隐藏，而迷你应用程序则会显示出来。
@@ -192,17 +191,17 @@ closeMiniApp()；
 ::: code-group
 
 ```ts [Variable]
-miniApp.ready()；
+miniApp.ready();
 ```
 
 ```ts [Functions]
 import { miniAppReady } from '@telegram-apps/sdk';
 
-miniAppReady()；
+miniAppReady();
 ```
 
 :::
 
-> [！提示]
+> [!TIP]
 > 在加载基本界面元素后尽早调用该函数，以确保
 > 顺畅的用户体验。
