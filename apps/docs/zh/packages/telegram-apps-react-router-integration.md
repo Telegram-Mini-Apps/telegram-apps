@@ -10,8 +10,7 @@
   </a>
 </p>
 
-Telegram Mini Apps [Navigator](telegram-apps-sdk/1-x/navigation.md) 集成
-for [react-router-dom](https://www.npmjs.com/package/react-router-dom).
+Telegram Mini Apps [Navigator](telegram-apps-sdk/1-x/navigation.md) 和 [react-router-dom](https://www.npmjs.com/package/react-router-dom) 的集成.
 
 ## 安装
 
@@ -52,13 +51,13 @@ import {
 import { IndexPage } from './IndexPage.js';
 
 function App() {
-  // 创建一个新的应用程序导航器，并将其附加到浏览器历史记录，这样它就可以修改
-  // 浏览器历史记录并监听其更改。
+  // Create a new application navigator and attach it to the browser history, so it could modify
+  // it and listen to its changes.
   const navigator = useMemo(() => initNavigator('app-navigation-state'), []);
   const [location, reactNavigator] = useIntegration(navigator);
 
-  // 不要忘记附加导航器，使其能够控制 BackButton 状态以及
-  // 浏览器历史记录。
+  // Don't forget to attach the navigator to allow it to control the BackButton state as well
+  // as browser history.
   useEffect(() => {
     navigator.attach();
     return () => navigator.detach();
@@ -68,7 +67,7 @@ function App() {
     <Router location={location} navigator={reactNavigator}>
       <Routes>
         <Route path={'/'} component={IndexPage}/>
-        <Route path={'*'} element={<Navigate href={'/'}/></Routes>}/><Routes>
+        <Route path={'*'} element={<Navigate href={'/'}/>}/>
       </Routes>
     </Router>
   );

@@ -10,7 +10,7 @@
   </a>
 </p>
 
-我们在整个 `@telegram-apps` 软件包中使用的信号实现。
+我们在整个 `@telegram-apps` 软件包中使用的 signals 实现。
 
 ## 安装
 
@@ -30,22 +30,22 @@ yarn add @telegram-apps/signals
 
 :::
 
-## 信号
+## Signal
 
-信号 "函数是最简单的信号构造函数，被其他软件包函数所使用。 要
-创建新信号，只需传递初始值即可：
+`signal` 函数是最简单的 signal 构造函数，被其他软件包函数所使用。 要
+创建新 signal，只需传递初始值即可：
 
 ```ts
 import { signal } from '@telegram-apps/signals';
 
-const isVisible = signal(false)；
+const isVisible = signal(false);
 ```
 
 返回值代表一个具有实用方法的函数。 函数本身返回
 当前信号值。
 
 ```ts
-console.log('The element is', isVisible() ?'可见'：'不可见'）；
+console.log('The element is', isVisible() ? 'visible' : 'invisible');
 ```
 
 该函数还接受选项作为第二个参数。 开发人员可以指定
@@ -55,21 +55,21 @@ console.log('The element is', isVisible() ?'可见'：'不可见'）；
 ```ts
 const s = signal(10, {
   equals(current, next) {
-    // 如果下一个值比当前值高，将不会更新信号。
-    //
+    // Will not update the signal if the next value is
+    // higher than the current one.
     return next > current;
-  } }.
+  }
 });
-s.set(20); // 将不会更新信号
-s.set(5); // 将更新信号
+s.set(20); // will not update the signal
+s.set(5); // will update the signal
 ```
 
-### 设置
+### `set`
 
 要设置新值，请使用 `set` 方法：
 
 ```ts
-isVisible.set(true)；
+isVisible.set(true);
 ```
 
 ### `sub`
@@ -82,8 +82,8 @@ const removeListener = isVisible.sub((current, prev) => {
   console.log('Value changed from', prev, 'to', current);
 });
 
-// 在需要时移除监听器。
-removeListener()；
+// Remove the listener whenever needed.
+removeListener();
 ```
 
 要只调用监听器一次，请使用第二个：
@@ -95,7 +95,7 @@ function listener(current: boolean, prev: boolean) {
 
 isVisible.sub(listener, true);
 // or
-isVisible.sub(listener, { once: true })；
+isVisible.sub(listener, { once: true });
 ```
 
 ### `unsub`
@@ -109,8 +109,8 @@ function listener(current: boolean, prev: boolean) {
 
 isVisible.sub(listener);
 
-// 在需要时移除监听器。
-isVisible.unsub(listener)；
+// Remove the listener whenever needed.
+isVisible.unsub(listener);
 ```
 
 ### `unsubAll`
@@ -118,7 +118,7 @@ isVisible.unsub(listener)；
 要移除所有监听器，请使用 `unsubAll` 方法：
 
 ```ts
-isVisible.unsubAll()；
+isVisible.unsubAll();
 ```
 
 ::: info
@@ -127,7 +127,7 @@ isVisible.unsubAll()；
 
 :::
 
-### 复位
+### `reset`
 
 要恢复到最初指定的值，请使用 `reset` 方法：
 
@@ -139,19 +139,19 @@ isVisible.set(true); // isVisible becomes true
 isVisible.reset(); // isVisible becomes false again
 ```
 
-### 销毁
+### `destroy`
 
 当不再需要该信号且该信号没有被任何计算信号监听时，开发者
 可以使用 `destroy` 方法强制移除所有监听者：
 
 ```ts
-isVisible.destroy()；
+isVisible.destroy();
 ```
 
-## 计算
+## Computed
 
-计算 "函数构建了一个计算信号，当被调用信号的任何
-发生变化时，该信号会自动重新计算。
+`computed` 函数构建了一个计算 signal，当被调用signal的任何
+发生变化时，该 signal 会自动重新计算。
 
 这里有一个例子：
 
@@ -170,10 +170,10 @@ b.set(5); // sum becomes 10
 
 ## 批量更改
 
-批处理 "函数创建一个作用域，在此对信号突变进行批处理。
+`batch` 函数创建一个作用域，在此对 signal 突变进行批处理。
 
-当开发人员希望防止计算信号在几个
-相关信号连续变化时重新计算时，该功能非常有用。
+当开发人员希望防止计算 signal 在几个
+相关 signal 连续变化时重新计算时，该功能非常有用。
 
 ```ts
 import { signal, computed, batch } from '@telegram-apps/signals';
@@ -183,26 +183,26 @@ const b = signal(2);
 const c = signal(3);
 const sum = computed(() => a() + b() + c()); // 6
 
-// 如果没有批处理，重新计算会发生 3 次：
-a.set(2); // sum 重新计算后变为 7
-b.set(3); // sum 重新计算后变为 8 c.set(4); // sum 重新计算后变为 9 // 重置每个信号。set(3); // sum 重新计算后变成 8
-c.set(4); // sum 重新计算后变成 9
+// Without batching, re-computation happens 3 times:
+a.set(2); // sum recomputes and becomes 7
+b.set(3); // sum recomputes and becomes 8
+c.set(4); // sum recomputes and becomes 9
 
-// 重置每个信号。
+// Reset each signal.
 a.reset();
 b.reset();
 c.reset();
-// 注意：reset 调用 set 方法，这也会导致
-// sum 信号重新计算。
+// Note: reset calls the set method, which also causes
+// the sum signal to recompute.
 
-// 现在，让我们使用 batch 函数进行优化：
+// Now, let's optimize using the batch function:
 batch(() => {
   a.set(2);
   b.set(3);
   c.set(4);
 });
-// 此时，sum 将只重新计算一次，因为
-// batch 会使 sum 信号等待函数完成，
-// 然后触发重新计算。
+// At this point, sum will recompute only once because
+// batch causes the sum signal to wait for the function to complete,
+// and then it triggers the recomputation.
 console.log(sum()); // 9
 ```

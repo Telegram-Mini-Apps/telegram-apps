@@ -10,8 +10,8 @@
   </a>
 </p>
 
-Telegram Mini Apps [Navigator](telegram-apps-sdk/1-x/navigation.md) 集成
-for [@solidjs/router](https://www.npmjs.com/package/@solidjs/router)。
+Telegram Mini Apps [Navigator](telegram-apps-sdk/1-x/navigation.md) 和 [@solidjs/router](https://www.npmjs.com/package/@solidjs/router) 的集成 。
+
 
 ## 安装
 
@@ -44,22 +44,22 @@ import { onCleanup } from 'solid-js';
 import { initNavigator } from '@telegram-apps/sdk-solid';
 import { createRouter } from '@telegram-apps/solid-router-integration';
 
-import { IndexPage } from './IndexPage.
+import { IndexPage } from './IndexPage.js';
 
+function App() {
+  // We should create navigator to pass it to integration creation.
+  const navigator = initNavigator('app-navigator-state');
 
+  // Then, to allow this navigator update current browser history, 
+  // we should attach it. Otherwise, it will work in memory mode.
+  void navigator.attach();
+  onCleanup(() => {
+    navigator.detach();
+  });
 
-  const navigator = initNavigator('app-navigator-state'); // 然后，为了允许该导航器更新当前浏览器历史记录， // 我们应该附加它。 void navigator.attach(); onCleanup(() => { navigator.detach(); }); const Router = createRouter(navigator); return (
+  const Router = createRouter(navigator);
 
- 
-
-
-
-
-
-
-
-
-
+  return (
     <Router>
       <Routes>
         <Route path={'/'} component={IndexPage}/>

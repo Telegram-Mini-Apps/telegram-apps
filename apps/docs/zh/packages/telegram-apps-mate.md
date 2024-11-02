@@ -11,23 +11,23 @@ Mate 是 Telegram Mini Apps
 :::code-group
 
 ```bash [pnpm]
-# 本地
+# Locally.
 pnpm i -D @telegram-apps/mate
-# 全球
+# Globally.
 pnpm i -g @telegram-apps/mate
 ```
 
 ```bash [npm]
-# 本地。
+# Locally.
 npm i -D @telegram-apps/mate
-# 全球。
+# Globally.
 npm i -g @telegram-apps/mate
 ```
 
 ```bash [yarn]
-# 本地。
+# Locally.
 yarn add -D @telegram-apps/mate
-# 全局。
+# Globally.
 yarn global add @telegram-apps/mate
 ```
 
@@ -39,7 +39,7 @@ yarn global add @telegram-apps/mate
 mate --help
 ```
 
-> [！提示]
+> [!TIP]
 > 强烈建议在本地安装软件包，以避免
 > 对软件包版本的混淆，并确保
 > 开发团队内部使用体验的一致性。
