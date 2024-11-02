@@ -11,10 +11,10 @@
 
 ## 检索
 
-### 发射参数
+### 应用启动参数
 
 Telegram 小应用程序通过名为
-的启动参数 [tgWebAppThemeParams](launch-parameters.md#tgwebappthemeparams) 提供主题数据。 该
+ [tgWebAppThemeParams](launch-parameters.md#tgwebappthemeparams) 的应用启动参数提供主题数据。 该
 参数表示一个序列化 JSON 对象，其中包含一系列可选属性，每个
 属性描述一种调色板颜色。
 
@@ -22,32 +22,32 @@ Telegram 小应用程序通过名为
 
 ```json
 {
-  "accent_text_color"："#6ab2f2",
-  "bg_color"："#17212b",
-  "button_color"："#5288c1",
-  "button_text_color"："#ffffff",
-  "bottom_bar_bg_color"："#ffffff",
-  "destructive_text_color"："#ec3942",
-  "header_bg_color"："#17212b",
-  "hint_color"："#708499",
-  "link_color"："#6ab3f3",
-  "secondary_bg_color"："#232e3c",
-  "section_bg_color"："#17212b",
-  "section_header_text_color"："#6ab3f3",
-  "subtitle_text_color"："#708499",
-  "text_color"："#f5f5f5"
+  "accent_text_color": "#6ab2f2",
+  "bg_color": "#17212b",
+  "button_color": "#5288c1",
+  "button_text_color": "#ffffff",
+  "bottom_bar_bg_color": "#ffffff",
+  "destructive_text_color": "#ec3942",
+  "header_bg_color": "#17212b",
+  "hint_color": "#708499",
+  "link_color": "#6ab3f3",
+  "secondary_bg_color": "#232e3c",
+  "section_bg_color": "#17212b",
+  "section_header_text_color": "#6ab3f3",
+  "subtitle_text_color": "#708499",
+  "text_color": "#f5f5f5"
 }
 ```
 
 ### Telegram 迷你应用程序方法
 
-不过，通过发射参数检索主题数据并不是唯一的方法。 Telegram 小应用程序
-还允许通过名为 [web_app_request_theme] 的方法
-获取主题（methods.md#web-app-request-theme）。
+不过，通过应用启动参数检索主题数据并不是唯一的方法。 Telegram 小应用程序
+还允许通过名为 [web_app_request_theme](methods.md#web-app-request-theme) 的方法
+获取主题。
 
 调用此方法后，Telegram 将发出名为 [theme_changed](events.md#theme-changed) 的事件
 。 该事件
-的有效载荷包含一个名为 "theme_params "的属性，其格式如上一节所述。
+的有效载荷包含一个名为 `theme_params` 的属性，其格式如上一节所述。
 
 ## 背景和标题颜色
 

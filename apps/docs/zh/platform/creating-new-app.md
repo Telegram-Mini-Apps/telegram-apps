@@ -16,8 +16,8 @@ Apps 平台上开发新应用程序的过程，了解创建应用程序到底需
 实体。 在
 生产环境中进行开发是一种低级趣味的表现，因此如果无法避免，请严格使用。
 
-要创建应用程序，我们应该使用测试环境。 您可以在 [this](test-environment.md) 文章中了解有关切换到
-的更多信息。
+要创建应用程序，我们应该使用测试环境。 您可以在 [这篇文章](test-environment.md) 中了解有关切换到
+测试环境的更多信息。
 
 说到开发人员从测试环境中获得的优势，有必要提及
 使用 HTTP 链接而不是 HTTPS 以及直接使用 IP 的机会。
@@ -30,7 +30,7 @@ Apps 平台上开发新应用程序的过程，了解创建应用程序到底需
 机器人 [BotFather](https://t.me/botfather)，并使用 `/newbot`'命令，然后通过建议的
 流程，指定所有必要的数据。
 
-创建机器人后，需要使用"/newapp "命令，并再次通过
+创建机器人后，需要使用 `/newapp` 命令，并再次通过
 程序创建另一个实体--Telegram 迷你应用程序，并将其链接到
 Telegram 机器人。 从现在起，创建的应用程序将通过
 表格 `https://t.me/{mybot}/{myapp}` 的直接链接提供。
@@ -50,8 +50,7 @@ BotFather 的 `/setmenubutton`命令。
 
 ### 获取
 
-要了解有关为迷你应用程序获取链接的更多信息，请参阅 [this](getting-app-link.md)
-文章。
+要了解有关为迷你应用程序获取链接的更多信息，请参阅 [这篇文章](getting-app-link.md)。
 
 ### 应用
 
@@ -79,7 +78,7 @@ BotFather 的 `/setmenubutton`命令。
 
 1. 发送 BotFather 命令 `/myapps`。
 2. 选择所需的应用程序。
-3. 单击 "编辑链接 "并安装新链接。
+3. 单击 `Edit link` 并安装新链接。
 
 现在，当用户点击格式为 `https://t.me/{mybot}/{myapp}` 的链接时，Telegram
 将显示源地址为设置中指定 URL 的网页组件。
@@ -87,7 +86,7 @@ BotFather 的 `/setmenubutton`命令。
 ## 调试应用程序
 
 有时，有必要对开发的应用程序进行调试。 要了解更多信息，请参阅
-[this](debugging.md)文章。
+[这篇文章](debugging.md)。
 
 [//]: # "## Additional"
 [//]: #

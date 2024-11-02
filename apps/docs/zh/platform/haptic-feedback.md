@@ -9,12 +9,12 @@
 
 目前有三种通知用于不同的情况：
 
-- impact"，当 UI 组件发生碰撞时。
-- selection_change"，当用户更改选择时。
-- 通知"，当某些操作执行完毕时。
+- `impact`，当 UI 组件发生碰撞时。
+- `selection_change`，当用户更改选择时。
+- `notification`，当某些操作执行完毕时。
 
 几乎每种类型都有自己的子类型。 为了产生触觉反馈，Telegram 小应用程序
-提供了 [web_app_trigger_haptic_feedback](methods.md#webapp-trigger-haptic-feedback)
+提供了 [web_app_trigger_haptic_feedback](methods.md#web-app-trigger-haptic-feedback)
 方法。
 
 ::: warning

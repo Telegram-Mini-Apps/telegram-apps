@@ -2,11 +2,11 @@
 
 ::: tip
 
-从 Mini Apps 7.7\*\*版本开始，您可以使用一种特殊方法防止应用程序因向下滑动而关闭
+从 Mini Apps **7.7** 版本开始，您可以使用一种特殊方法防止应用程序因向下滑动而关闭
 。
 
 - [迷你应用程序方法](methods.md#web-app-setup-swipe-behavior)
-- [@telegram-apps/sdk 组件](.../packages/telegram-apps-sdk/2-x/components/swipe-behavior.md)
+- [@telegram-apps/sdk 组件](../packages/telegram-apps-sdk/2-x/components/swipe-behavior.md)
 
 :::
 
@@ -53,9 +53,9 @@ Telegram 迷你应用程序允许开发人员操控关闭按钮的可见性，�
     .mobile-wrap {
       position: absolute;
       left: 0;
-      top：0;
+      top: 0;
       right: 0;
-      bottom：0;
+      bottom: 0;
       overflow-x: hidden;
       overflow-y: auto;
       background: red;
@@ -64,13 +64,13 @@ Telegram 迷你应用程序允许开发人员操控关闭按钮的可见性，�
     .mobile-content {
       height: calc(100% + 1px);
       background: green;
-    } </style> <style>
+    }
   </style>
 </head>
 <body>
   <div id="wrap">
     <div id="content">
-      我的应用程序放在这里。
+      My application goes here.
     </div>
   </div>
   <script src="https://unpkg.com/@telegram-apps/sdk@1.0.0/dist/index.iife.js"></script>
@@ -79,12 +79,12 @@ Telegram 迷你应用程序允许开发人员操控关闭按钮的可见性，�
       var { retrieveLaunchParams, postEvent } = window.telegramApps.sdk;
       var lp = retrieveLaunchParams();
 
-      // 有些版本的 Telegram 不需要上面的类。
+      // Some versions of Telegram don't need the classes above.
       if (['macos', 'tdesktop', 'weba', 'web', 'webk'].includes(lp.platform)) {
         return;
-      } // 扩展应用程序。
+      }
 
-      //
+      // Expand the application.
       postEvent('web_app_expand');
 
       document.body.classList.add('mobile-body');

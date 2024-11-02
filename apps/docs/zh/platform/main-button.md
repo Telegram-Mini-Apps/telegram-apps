@@ -1,6 +1,6 @@
 # 主按钮
 
-主按钮](/components/main-button.png)
+![主按钮](/components/main-button.png)
 
 主按钮是一个组件，通常在需要执行某些最终
 操作时使用。
@@ -15,7 +15,7 @@
 还可以更新文字和背景颜色。
 
 要更新任何主按钮属性，Telegram 小应用程序提供了
-[web_app_setup_main_button](methods.md#webapp-setup-main-button) 方法。
+[web_app_setup_main_button](methods.md#web-app-setup-main-button)方法。
 当用户点击主按钮时，Telegram 应用程序会发出
 [main_button_pressed](events.md#main-button-pressed) 事件。
 

@@ -1,7 +1,5 @@
 ---
-outline:
-  - 2
-  - 4
+outline: [ 2, 4 ]
 ---
 
 # 获取应用程序链接
@@ -36,7 +34,7 @@ Telegram 只接受具有有效 SSL 证书并使用 HTTPS 协议的链接。 与
 本文档接下来的章节将使用 [Vite](https://vitejs.dev)作为
 应用程序的基本捆绑程序。
 
-## 用于发展
+## 关于开发
 
 应用程序开发过程被认为是永无止境的。 长期应用的
 总是需要维护的，为此，宜通过降低
@@ -52,7 +50,7 @@ Telegram 只接受具有有效 SSL 证书并使用 HTTPS 协议的链接。 与
 
 :::
 
-### 当地
+### 在本地环境
 
 用于开发的本地链接是指仅对当前设备可用的链接。
 
@@ -65,19 +63,19 @@ Telegram 只接受具有有效 SSL 证书并使用 HTTPS 协议的链接。 与
 ```ts
 import { defineConfig } from 'vite';
 
-export default defineConfig()；
+export default defineConfig();
 ```
 
 你会在控制台中看到一条信息：
 
 ```bash
-VITE 112 毫秒内准备就绪
+VITE ready in 112 ms
 
-➜ 本地：http://localhost:5173
-➜ 按 h + enter 显示帮助
+➜  Local:   http://localhost:5173
+➜  press h + enter to show help
 ```
 
-现在，您可以在浏览器中打开 "本地 "链接（"http://localhost:5173"），查看
+现在，您可以在浏览器中打开 `本地` 链接 (`http://localhost:5173`)，查看
 应用程序。
 
 您可能已经注意到，该链接不符合 BotFather 的要求，因为它必须使用
@@ -96,46 +94,46 @@ import { defineConfig } from 'vite';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 
 export default defineConfig({
-  plugins：[
+  plugins: [
     basicSsl(),
   ],
-})；
+});
 ```
 
 您可能会发现还有一些其他有用的选项。 要了解更多相关信息，请访问
-插件的 [docs](https://www.npmjs.com/package/@vitejs/plugin-basic-ssl) 。
+插件的 [文档](https://www.npmjs.com/package/@vitejs/plugin-basic-ssl) 。
 
 启动开发服务器后，您会看到类似的信息：
 
 ```bash
-VITE 在 275 毫秒内准备就绪
+VITE ready in 275 ms
 
-➜ 本地：https://localhost:5173
-➜ 按 h + enter 显示帮助
+➜  Local:   https://localhost:5173
+➜  press h + enter to show help
 ```
 
-本地 "链接 (`https://localhost:5173`)指的是本地开发服务器。 在浏览器、Telegram for macOS、Telegram Desktop 或 Telegram Web A/K 中打开此链接
+`本地` 链接 (`https://localhost:5173`)指的是本地开发服务器。 在浏览器、Telegram for macOS、Telegram Desktop 或 Telegram Web A/K 中打开此链接
 ，会出现一条与不信任证书相关的警告
 消息。
 
 <img
-src="/untrusted-cert-warning.png"
-class="guides-image"
-style="border：1px solid #ebebeb"
+   src="/untrusted-cert-warning.png"
+   class="guides-image"
+   style="border: 1px solid #ebebeb"
 />
 
 只需将此作为例外，然后继续申请。
 
 #### mkcert
 
-[mkcert](https://github.com/FiloSottile/mkcert)是一个允许开发人员生成 SSL
+[mkcert](https://github.com/FiloSottile/mkcert) 是一个允许开发人员生成 SSL
 证书及相关私钥的工具。 它还会创建一个证书颁发机构，使
 本地设备信任生成的证书。 这里是
 [安装指南](https://github.com/FiloSottile/mkcert?tab=readme-ov-file#installation)。
 
 比方说，您想创建一个只有您的设备知道的自定义域，仅用于开发目的。 让它类似于 `tma.internal`。 为了让当前设备
 知道哪个 IP 与该域相关联，我们应该修改
-[hosts](https://en.wikipedia.org/wiki/Hosts_\(file\)) 文件，并将 `tma.internal` 映射到 `127.0.0.1`。
+[hosts](https://en.wikipedia.org/wiki/Hosts_(file)) 文件，并将 `tma.internal` 映射到 `127.0.0.1`。
 
 然后，运行指定该域的 mkcert 工具，就会收到两个文件：SSL
 证书和私钥。 这两个文件都应在 Vite 配置中指定。
@@ -148,14 +146,14 @@ import { resolve } from 'node:path';
 import { readFileSync } from 'node:fs';
 
 export default defineConfig({
-  server：{
+  server: {
     host: 'tma.internal',
     https: {
       cert: readFileSync(resolve('tma.internal.pem')),
       key: readFileSync(resolve('tma.internal-key.pem')),
     },
   },
-})；
+});
 ```
 
 ### 网络
@@ -173,7 +171,7 @@ export default defineConfig({
   server: {
     host: true,
   },
-})；
+});
 ```
 
 或者，我们可以使用以下命令：`vite --host`.
@@ -181,11 +179,11 @@ export default defineConfig({
 启动开发服务器后，您会在控制台中看到类似的信息：
 
 ```bash
-  VITE v5.2.12 15 毫秒内准备就绪
+  VITE v5.2.12  ready in 15 ms
 
-  ➜ 本地：http://localhost:5173
-  ➜ 网络：http://172.20.10.8:5173
-  ➜ 按 h + enter 键显示帮助
+  ➜  Local:   http://localhost:5173
+  ➜  Network: http://172.20.10.8:5173
+  ➜  press h + enter to show help
 ```
 
 现在，你可以在同一网络的设备上访问 "网络 "链接 (`http://172.20.10.8:5173`)。
@@ -231,7 +229,7 @@ ngrok http --domain=example.free.ngrok.app 5432
 隧道建立后，打开 Mini App 的用户将被转发到您开发的
 服务器。
 
-#### 本地隧道
+#### Localtunnel
 
 [Localtunnel](https://localtunnel.github.io/www/) 是一个完全免费的 ngrok 替代软件。 要使用 localtunnel 启动
 ，需要使用 npm 安装相应的软件包：
