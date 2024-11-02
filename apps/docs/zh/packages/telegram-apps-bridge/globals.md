@@ -1,15 +1,15 @@
-# 全球
+# 全局变量
 
 所谓全局值，是指在软件包的所有方法中使用的全局值。
 
 ## `$debug`
 
-$debug信号负责启用或禁用额外的调试日志。
+`$debug` 信号负责启用或禁用额外的调试日志。
 
 ```typescript
 import { $debug } from '@telegram-apps/bridge';
 
-$debug.set(true)；
+$debug.set(true);
 ```
 
 将其设置为 `true`后，在调用 `postEvent` 函数或接收
@@ -24,9 +24,9 @@ Mini Apps 事件时就会看到日志。
 ```typescript
 import { $targetOrigin } from '@telegram-apps/bridge';
 
-$targetOrigin.set('https://i-know-what-i-am.doing')；
+$targetOrigin.set('https://i-know-what-i-am.doing');
 ```
 
-> [！警告]
+> [!WARNING]
 > 强烈建议不要覆盖此值，否则可能导致安全问题。
 > 只有在确定其影响时才指定该值。

@@ -1,7 +1,7 @@
-# 发射参数
+# 启动参数
 
 启动参数对小型应用程序的生命周期至关重要。 要了解有关启动
-参数及其重要性的更多信息，请阅读 [this](../../platform/launch-parameters.md)
+参数及其重要性的更多信息，请阅读 [这篇文章](../../platform/launch-parameters.md)
 一文。
 
 该软件包允许开发人员使用
@@ -11,5 +11,5 @@
 ```typescript
 import { retrieveLaunchParams } from '@telegram-apps/bridge';
 
-const launchParams = retrieveLaunchParams()；
+const launchParams = retrieveLaunchParams();
 ```

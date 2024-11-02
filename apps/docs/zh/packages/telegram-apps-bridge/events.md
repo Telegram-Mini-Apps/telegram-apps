@@ -1,4 +1,4 @@
-# 活动
+# 事件
 
 本文涵盖与 [apps communication](../../platform/apps-communication.md)
 事件相关的主题。
@@ -14,29 +14,29 @@
 ```typescript
 import { defineEventHandlers } from '@telegram-apps/bridge';
 
-defineEventHandlers()；
+defineEventHandlers();
 ```
 
 这种设置通过监听
 和处理必要的事件，确保迷你应用能与原生 Telegram 应用正确交互。
 
-## 开 "和 "关
+## `on` 和 `off`
 
-要开始处理事件，需要使用 "on "和 "off "函数。
+要开始处理事件，需要使用 `on` 和 `off` 函数。
 
-下面是 "on "函数的一个基本示例：
+下面是 `on` 函数的一个基本示例：
 
 ```typescript
 import { on } from '@telegram-apps/bridge';
 
-// 开始监听 "viewport_changed "事件。
-// 返回值是一个移除此事件监听器的函数。
+// Start listening to the "viewport_changed" event. The returned value
+// is a function that removes this event listener.
 const removeListener = on('viewport_changed', (payload) => {
   console.log('Viewport changed:', payload);
 });
 
-// 移除此事件监听器。
-removeListener()；
+// Remove this event listener.
+removeListener();
 ```
 
 另外，要停止监听事件，开发人员可以使用 `off` 功能：
@@ -44,7 +44,7 @@ removeListener()；
 ```typescript
 import { on, off, type EventListener } from '@telegram-apps/bridge';
 
-const listener：EventListener<'viewport_changed'> = (payload) => {
+const listener: EventListener<'viewport_changed'> = (payload) => {
   console.log('Viewport changed:', payload);
 };
 
@@ -52,7 +52,7 @@ const listener：EventListener<'viewport_changed'> = (payload) => {
 on('viewport_changed', listener);
 
 // Remove the event listener.
-off('viewport_changed', listener)；
+off('viewport_changed', listener);
 ```
 
 要只调用监听器一次，则使用第三个布尔参数：
@@ -60,13 +60,13 @@ off('viewport_changed', listener)；
 ```typescript
 import { on } from '@telegram-apps/bridge';
 
-// 将在第一次监听器执行后自动移除。
+// Will automatically be removed after the first listener execution.
 on('viewport_changed', (payload) => {
   console.log('Viewport changed:', payload);
-}, true)；
+}, true);
 ```
 
-## 订阅 "和 "取消订阅
+## `subscribe` 和 `unsubscribe`
 
 要监听本地 Telegram 应用程序发送的所有事件，需要使用 `subscribe`
 和 `unsubscribe` 功能：
@@ -78,7 +78,7 @@ import {
   type SubscribeListener,
 } from '@telegram-apps/bridge';
 
-const listener：SubscribeListener = (event) => {
+const listener: SubscribeListener = (event) => {
   console.log('Received event', event);
 };
 
@@ -86,5 +86,5 @@ const listener：SubscribeListener = (event) => {
 subscribe(listener);
 
 // Remove the listener.
-unsubscribe(listener)；
+unsubscribe(listener);
 ```
