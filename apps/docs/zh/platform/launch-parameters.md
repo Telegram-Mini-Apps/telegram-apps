@@ -1,6 +1,6 @@
-# 发射参数
+# 应用启动参数 {#Launch Parameters}
 
-启动参数是本地 Telegram 应用程序
+应用启动参数是本地 Telegram 应用程序
 传递给小应用程序的参数列表。 它可以帮助开发者找出 Telegram 应用程序的特征，
 当前设备，获取用户的基本信息等。
 
@@ -14,12 +14,11 @@ Telegram 本地应用程序会在 URL
 
 ## 提取
 
-重要的是要记住，"hash "是一个字符串属性，而 Telegram 传输的是整个属性列表
+重要的是要记住，`hash` 是一个字符串属性，而 Telegram 传输的是整个属性列表
 ，之后就会出现格式化和处理该列表的问题。 事实上，一切都很简单。
 
 Telegram 本地应用程序将启动参数列表作为查询参数传递，并将
-结果字符串保存在 `window.location.hash` 中。 因此，为了提取发射
-参数，只需执行以下操作即可：
+结果字符串保存在 `window.location.hash` 中。 因此，为了提取启动参数，只需执行以下操作即可：
 
 ```typescript title="Example on how to extract launch parameters"
 const hash = window.location.hash.slice(1);
@@ -38,27 +37,26 @@ console.log(params.get('tgWebAppVersion')); // "6.2"
 
 ## 参数列表
 
-### tgWebAppVersion
+### `tgWebAppVersion`
 
 本地应用程序使用的当前 Telegram 迷你应用程序版本。 例如，在调用 Telegram Mini
-Apps [methods](methods.md)之前，该参数是
+Apps [方法](methods.md)之前，该参数是
 的重要使用参数，以确保它们受支持。
 
-### tgWebAppData
+### `tgWebAppData`
 
 包含描述当前用户的数据、数据符号和一些有用的值。 要了解更多信息，
-访问 [Init Data](init-data.md) 页面。
+访问 [初始数据](init-data.md) 页面。
 
-### tgWebAppPlatform
+### `tgWebAppPlatform`
 
 [Telegram 应用程序标识符](about.md#supported-applications)。 例如，当
 开发人员需要根据设备显示不同视觉效果的组件时，它可以作为
-因素
-来决定应用程序的视觉风格。
+判断因素来决定应用程序的视觉风格。
 
-### 主题参数
+### `tgWebAppThemeParams`
 
-Telegram 本地应用程序 [主题] 的参数（theming.md）。 该参数
+Telegram 本地应用程序 [主题](theming.md) 的参数。 该参数
 甚至在渲染加载器时也可用于设计应用程序的样式。
 
 该参数的值是转换为字符串的 JSON 对象。 要获得更方便的
@@ -67,26 +65,26 @@ Telegram 本地应用程序 [主题] 的参数（theming.md）。 该参数
 ```typescript
 const theme = {
   bg_color: '#212121',
-  text_color: '#ffffffff',
-  hint_color: '#aaaaaaaa',
+  text_color: '#ffffff',
+  hint_color: '#aaaaaa',
   link_color: '#8774e1',
   button_color: '#8774e1',
-  button_text_color: '#ffffffff',
+  button_text_color: '#ffffff',
   secondary_bg_color: '#0f0f0f',
-}；
+};
 ```
 
-### tgWebAppShowSettings
+### `tgWebAppShowSettings`
 
 仅 Telegram SDK 使用的参数，用于在启动时显示 "设置 "按钮。 对于外部开发人员来说，没有任何其他意义。
 
-### tgWebAppBotInline
+### `tgWebAppBotInline`
 
 添加该参数是为了防止当前应用程序以内联模式启动。
 允许调用 Telegram 迷你应用程序方法
-，如 [web_app_switch_inline_query]（methods.md#web-app-switch-inline-query）。
+，如 [web_app_switch_inline_query](methods.md#web-app-switch-inline-query)。
 
-### tgWebAppStartParam
+### `tgWebAppStartParam`
 
 参数，包含在机器人或应用程序
-链接中传递的自定义字符串值。 [了解更多信息]（start-parameter.md）。
+链接中传递的自定义字符串值。 [了解更多信息](start-parameter.md)。
