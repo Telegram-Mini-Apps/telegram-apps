@@ -20,6 +20,32 @@ The hosting service is free, though there are some limitations on data transfer.
 > adjustments. If your app already distinguishes between static and dynamic
 > requests, integration will be much simpler.
 
+
+###	Important Recommendation:
+When deploying an SPA on a static hosting platform (like Mate's hosting), it’s crucial to choose
+routing methods that do not depend on server-side configurations.
+
+Hash-based routing (using the # symbol in URLs) is a simple and effective way to manage routes without needing server support. Many frameworks offer built-in solutions or plugins to implement this type of routing.
+
+For instance, if you are using *React*, use `HashRouter` instead of `BrowserRouter`:
+
+```jsx
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+
+function App() {
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        {/* Other routes */}
+      </Switch>
+    </Router>
+  );
+}
+
+export default App;
+```
+
 ## Features
 
 ### Lightning Speed
@@ -183,6 +209,28 @@ i Maximum files count: 100
 > excluding private ones (starting with the `.` symbol). All other types of
 > files (such as symlinks) are forbidden. If found during the deployment process,
 > the CLI tool will throw a corresponding error.
+
+### Step 4: Verify Deployment and Configure Telegram Mini-App
+
+After deploying, it’s recommended to verify that your application is working correctly 
+by accessing it via the direct link:
+
+```
+https://{storage_key}.tapps.global/{tag}/index.html
+```
+
+If everything functions properly, use this link as the web app URL when creating your Telegram mini-app.
+
+**Example:**
+
+If your storage_key is 35f105bd6b and your tag is latest, the link will look like this:
+
+```
+https://35f105bd6b.tapps.global/latest/index.html
+```
+
+Ensure that when you navigate to this link, your application loads and operates without errors. This guarantees 
+that your Telegram mini-app will work correctly with your hosting setup.
 
 ## Using Config
 
