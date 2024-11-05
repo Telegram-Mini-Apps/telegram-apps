@@ -6,25 +6,26 @@ import tsEslint from 'typescript-eslint';
 import globals from 'globals';
 
 export default tsEslint.config(
-	js.configs.recommended,
-	...tsEslint.configs.recommended,
-	...eslintPluginSvelte.configs['flat/recommended'],
-	eslintConfigPrettier,
-	...eslintPluginSvelte.configs['flat/prettier'],
-	{
+  js.configs.recommended,
+  ...tsEslint.configs.recommended,
+
+  ...eslintPluginSvelte.configs['flat/recommended'],
+  eslintConfigPrettier,
+  ...eslintPluginSvelte.configs['flat/prettier'],
+  {
     languageOptions: {
-			ecmaVersion: 2022,
-			sourceType: 'module',
-			globals: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: {
         ...globals.node,
-        ...globals.browser
+        ...globals.browser,
       },
-			parser: svelteParser,
-			parserOptions: {
-				parser: tsEslint.parser,
-				extraFileExtensions: ['.svelte']
-			},
-		},
+      parser: svelteParser,
+      parserOptions: {
+        parser: tsEslint.parser,
+        extraFileExtensions: ['.svelte'],
+      },
+    },
   },
   {
     ignores: [
@@ -35,5 +36,5 @@ export default tsEslint.config(
       '**/node_modules',
       '**/package',
     ],
-  },
+  }
 );
