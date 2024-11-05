@@ -14,8 +14,8 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { ERR_ALREADY_CALLED } from '@/errors.js';
-import { withIsMounted } from '@/scopes/toolkit/withIsMounted.js';
+import { ERR_ALREADY_CALLED, ERR_VARS_ALREADY_BOUND } from '@/errors.js';
+import { createAssignChecks } from '@/scopes/toolkit/createAssignChecks.js';
 
 import { isCssVarsBound, state, isMounted } from './signals.js';
 import { parseThemeParams } from './parseThemeParams.js';
@@ -23,8 +23,10 @@ import type { GetCssVarNameFn } from './types.js';
 
 type StorageValue = ThemeParams;
 
-const STORAGE_KEY = 'themeParams';
+const COMPONENT_NAME = 'themeParams';
 const THEME_CHANGED_EVENT = 'theme_changed';
+
+const wrapMount = createAssignChecks(COMPONENT_NAME, isMounted);
 
 /**
  * Creates CSS variables connected with the current theme parameters.
@@ -41,36 +43,41 @@ const THEME_CHANGED_EVENT = 'theme_changed';
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * theme parameters key.
  * @returns Function to stop updating variables.
- * @throws TypedError ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_VARS_ALREADY_BOUND
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const bindCssVars = withIsMounted((getCSSVarName?: GetCssVarNameFn): VoidFunction => {
-  if (isCssVarsBound()) {
-    throw new TypedError(ERR_ALREADY_CALLED);
-  }
-  getCSSVarName ||= (prop) => `--tg-theme-${camelToKebab(prop)}`;
+export const bindCssVars = wrapMount(
+  'bindCssVars',
+  (getCSSVarName?: GetCssVarNameFn): VoidFunction => {
+    if (isCssVarsBound()) {
+      throw new TypedError(ERR_VARS_ALREADY_BOUND);
+    }
+    getCSSVarName ||= (prop) => `--tg-theme-${camelToKebab(prop)}`;
 
-  function forEachEntry(fn: (key: string, value: RGB) => void): void {
-    Object.entries(state()).forEach(([k, v]) => {
-      v && fn(k, v);
-    });
-  }
+    function forEachEntry(fn: (key: string, value: RGB) => void): void {
+      Object.entries(state()).forEach(([k, v]) => {
+        v && fn(k, v);
+      });
+    }
 
-  function actualize(): void {
-    forEachEntry((k, v) => {
-      setCssVar(getCSSVarName!(k), v);
-    });
-  }
+    function actualize(): void {
+      forEachEntry((k, v) => {
+        setCssVar(getCSSVarName!(k), v);
+      });
+    }
 
-  actualize();
-  state.sub(actualize);
-  isCssVarsBound.set(true);
+    actualize();
+    state.sub(actualize);
+    isCssVarsBound.set(true);
 
-  return () => {
-    forEachEntry(deleteCssVar);
-    state.unsub(actualize);
-    isCssVarsBound.set(false);
-  };
-}, isMounted);
+    return () => {
+      forEachEntry(deleteCssVar);
+      state.unsub(actualize);
+      isCssVarsBound.set(false);
+    };
+  },
+);
 
 /**
  * Mounts the component.
@@ -81,7 +88,7 @@ export const bindCssVars = withIsMounted((getCSSVarName?: GetCssVarNameFn): Void
 export function mount(): void {
   if (!isMounted()) {
     on(THEME_CHANGED_EVENT, onThemeChanged);
-    state.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || retrieveLaunchParams().themeParams);
+    state.set(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || retrieveLaunchParams().themeParams);
     isMounted.set(true);
   }
 }
@@ -93,7 +100,7 @@ export function mount(): void {
 const onThemeChanged: EventListener<'theme_changed'> = (e) => {
   const value = parseThemeParams(e.theme_params);
   state.set(value);
-  setStorageValue<StorageValue>(STORAGE_KEY, value);
+  setStorageValue<StorageValue>(COMPONENT_NAME, value);
 };
 
 /**

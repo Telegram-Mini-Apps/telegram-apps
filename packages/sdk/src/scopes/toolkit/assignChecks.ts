@@ -1,4 +1,10 @@
-import { type If, type MethodName, supports, TypedError } from '@telegram-apps/bridge';
+import {
+  ERR_UNKNOWN_ENV,
+  type If,
+  type MethodName,
+  supports,
+  TypedError,
+} from '@telegram-apps/bridge';
 
 import type { AnyFn } from '@/types.js';
 import { $version } from '@/scopes/globals.js';
@@ -7,30 +13,41 @@ import {
   ERR_NOT_MOUNTED,
   ERR_NOT_SUPPORTED,
 } from '@/errors.js';
+import { isTMA } from '@telegram-apps/bridge';
+
+export type IsSupported = (() => boolean) | MethodName;
 
 export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
   & Fn
   & {
   /**
-   * The method which is mostly used to check if the function call will
-   * not surely lead to error.
+   * The method which is used to check if the function is available in the
+   * current environment.
    *
-   * It checks if the component is mounted and the function itself is
-   * supported. It also checks if the package itself is initialized.
+   * The method may throw an error if the current environment is Telegram Mini
+   * Apps, but the package was not initialized.
    *
-   * You should use this function when possible because it provides
+   * It does the following:
+   * 1. If the current environment is not TMA, return `false`.
+   * 2. Check if the package was initialized. If it wasn't, throw an error. It
+   * will happen because we will not be able to check if the function is
+   * supported as long as it will use an invalid Mini Apps version to do it.
+   * 3. If the `isSupported()` function was passed, check if it returns `true`.
+   * 4. If the `isMounted` signal was passed, check if it returns `true`.
+   *
+   * *You should use this function when possible because it provides
    * must-have code security mechanisms and makes a developer sure that
-   * he is using the package properly.
+   * he is using the package properly.*
    *
-   * @returns True if the owner component is mounted, function is supported
-   * and the packages initialized.
+   * @returns True if the function is available in the current environment.
+   * @throws {TypedError} ERR_NOT_INITIALIZED
    *
    * @example
    * if (showBackButton.isAvailable()) {
    *   showBackButton();
    * }
    */
-  isAvailable: () => boolean;
+  isAvailable(): boolean;
 }
   & If<S, {
   /**
@@ -39,7 +56,6 @@ export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
    * conditions.
    *
    * @returns True if this function is supported.
-   *
    * @example
    * if (setMiniAppBottomBarColor.isSupported()) {
    *   console.log('Mini App bottom bar is supported');
@@ -48,30 +64,12 @@ export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
   isSupported: () => boolean;
 }, {}>
 
-export type IsSupported = MethodName | (() => boolean);
-
 interface Options {
-  /**
-   * The owner component name.
-   */
   component: string;
-  /**
-   * The method name.
-   */
   method: string;
-  /**
-   * Signal returning true if the owner component is mounted.
-   */
   isMounted?: () => boolean;
-  /**
-   * Should the package init check be performed.
-   */
   checkInit?: boolean;
-  /**
-   * Mini Apps method name or function returning true determining if
-   * the function is supported.
-   */
-  isSupported?: IsSupported,
+  isSupported?: IsSupported;
 }
 
 /**
@@ -93,6 +91,8 @@ export function assignChecks<Fn extends AnyFn, O extends Options>(
     ...options
   }: O,
 ): SafeWrapped<Fn, O extends { isSupported: any } ? true : false> {
+  const method = `${component}.${options.method}()`;
+
   function isSupported() {
     return maybeIsSupported
       ? typeof maybeIsSupported === 'function'
@@ -101,21 +101,40 @@ export function assignChecks<Fn extends AnyFn, O extends Options>(
       : true;
   }
 
+  function isInitialized(): boolean {
+    return $version() !== '0.0';
+  }
+
   function isMounted() {
     return !maybeIsMounted || maybeIsMounted();
   }
 
-  function isInitialized(): boolean {
-    return !checkInit || $version() !== '0.0';
-  }
-
   function isAvailable() {
-    return isInitialized() && isSupported() && isMounted();
+    // Non-TMA environments don't support our functions.
+    if (!isTMA('simple')) {
+      return false;
+    }
+
+    // Check if the package is initialized.
+    if (checkInit && !isInitialized()) {
+      throw new TypedError(
+        ERR_NOT_INITIALIZED,
+        `Can't check if the ${method} method is available: the package is not initialized. Consider using the package init() function`,
+      );
+    }
+    return isSupported() && isMounted();
   }
 
   return Object.assign(
     (...args: Parameters<Fn>): ReturnType<Fn> => {
-      if (!isInitialized()) {
+      if (!isTMA('simple')) {
+        throw new TypedError(
+          ERR_UNKNOWN_ENV,
+          `${method} method can't be called outside Mini Apps environment`,
+        );
+      }
+
+      if (checkInit && !isInitialized()) {
         throw new TypedError(
           ERR_NOT_INITIALIZED,
           'The package was not initialized. Consider using the package init() function',

@@ -10,7 +10,10 @@ import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createSafeWrap } from '@/scopes/toolkit/createSafeWrap.js';
+import { createAssignMounted } from '@/scopes/toolkit/createAssignMounted.js';
+import {
+  createAssignSupported,
+} from '@/scopes/toolkit/createAssignSupported.js';
 
 type StorageValue = boolean;
 
@@ -28,8 +31,8 @@ export const isMounted = signal(false);
  */
 export const isSupported = createIsSupported(WEB_APP_SETUP_BACK_BUTTON);
 
-const wrapMount = createSafeWrap(COMPONENT_NAME, isMounted);
-const wrapSupport = createSafeWrap(COMPONENT_NAME, undefined, isSupported);
+const assignMounted = createAssignMounted(COMPONENT_NAME, isMounted);
+const assignSupported = createAssignSupported(COMPONENT_NAME, isSupported);
 
 /**
  * Hides the Back Button component.
@@ -40,7 +43,7 @@ const wrapSupport = createSafeWrap(COMPONENT_NAME, undefined, isSupported);
  *   hide();
  * }
  */
-export const hide = wrapMount('hide', (): void => {
+export const hide = assignMounted('hide', (): void => {
   setVisibility(false);
 });
 
@@ -58,7 +61,7 @@ export const isVisible = signal(false);
  *   mount();
  * }
  */
-export const mount = wrapSupport('mount', (): void => {
+export const mount = assignSupported('mount', (): void => {
   if (!isMounted()) {
     setVisibility(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false, true);
     isMounted.set(true);
@@ -87,7 +90,7 @@ function setVisibility(value: boolean, force?: boolean): void {
  *   });
  * }
  */
-export const onClick = wrapSupport(
+export const onClick = assignSupported(
   'onClick',
   (fn: EventListener<'back_button_pressed'>): VoidFunction => on(BACK_BUTTON_PRESSED, fn),
 );
@@ -106,7 +109,7 @@ export const onClick = wrapSupport(
  *   onClick(listener);
  * }
  */
-export const offClick = wrapSupport(
+export const offClick = assignSupported(
   'offClick',
   (fn: EventListener<'back_button_pressed'>): void => {
     off(BACK_BUTTON_PRESSED, fn);
@@ -122,7 +125,7 @@ export const offClick = wrapSupport(
  *   show();
  * }
  */
-export const show = wrapMount('show', (): void => {
+export const show = assignMounted('show', (): void => {
   setVisibility(true);
 });
 

@@ -24,7 +24,7 @@ describe('check support', () => {
     { name: 'notificationOccurred', fn: notificationOccurred },
     { name: 'selectionChanged', fn: selectionChanged },
   ])('$name', ({ fn, name }) => {
-    it('should throw ERR_NOT_SUPPORTED if package is not initialized', () => {
+    it('should throw ERR_NOT_SUPPORTED if version is less than 6.1', () => {
       const error = new TypedError(
         'ERR_NOT_SUPPORTED',
         `hapticFeedback.${name}() method is not supported in Mini Apps version 6.0`,

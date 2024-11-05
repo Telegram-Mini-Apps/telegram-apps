@@ -6,7 +6,7 @@ import { array, object, string } from '@telegram-apps/transformers';
 
 import { invokeCustomMethod } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createSafeWrap } from '@/scopes/toolkit/createSafeWrap.js';
+import { createAssignChecks } from '@/scopes/toolkit/createAssignChecks.js';
 
 const WEB_APP_INVOKE_CUSTOM_METHOD = 'web_app_invoke_custom_method';
 
@@ -15,7 +15,7 @@ const WEB_APP_INVOKE_CUSTOM_METHOD = 'web_app_invoke_custom_method';
  */
 export const isSupported = createIsSupported(WEB_APP_INVOKE_CUSTOM_METHOD);
 
-const wrapSupport = createSafeWrap('cloudStorage', undefined, isSupported);
+const wrapSupport = createAssignChecks('cloudStorage', undefined, isSupported);
 
 /**
  * Deletes specified key or keys from the cloud storage.

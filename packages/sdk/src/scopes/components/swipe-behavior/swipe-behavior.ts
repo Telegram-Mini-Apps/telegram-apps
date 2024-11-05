@@ -4,7 +4,7 @@ import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createSafeWrap } from '@/scopes/toolkit/createSafeWrap.js';
+import { createAssignChecks } from '@/scopes/toolkit/createAssignChecks.js';
 
 type StorageValue = boolean;
 
@@ -21,8 +21,8 @@ export const isMounted = signal(false);
  */
 export const isSupported = createIsSupported(WEB_APP_SETUP_SWIPE_BEHAVIOR);
 
-const wrapMount = createSafeWrap(COMPONENT_NAME, isMounted);
-const wrapSupport = createSafeWrap(COMPONENT_NAME, undefined, isSupported);
+const wrapMount = createAssignChecks(COMPONENT_NAME, isMounted);
+const wrapSupport = createAssignChecks(COMPONENT_NAME, undefined, isSupported);
 
 /**
  * Disables vertical swipes.

@@ -27,6 +27,7 @@ import {
   isMounting,
 } from './signals.js';
 import type { State } from './types.js';
+import { createAssignChecks } from '@/scopes/toolkit/createAssignChecks.js';
 
 interface StorageValue {
   height: number;
@@ -34,6 +35,10 @@ interface StorageValue {
   stableHeight: number;
   width: number;
 }
+
+const COMPONENT_NAME = 'viewport';
+
+const wrapMount = createAssignChecks(COMPONENT_NAME, isMounted);
 
 /**
  * Creates CSS variables connected with the current viewport.
@@ -52,31 +57,35 @@ interface StorageValue {
  * viewport property.
  * @returns Function to stop updating variables.
  * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
-export const bindCssVars = withIsMounted((getCSSVarName?: GetCSSVarNameFn): VoidFunction => {
-  if (isCssVarsBound()) {
-    throw new TypedError(ERR_ALREADY_CALLED);
-  }
-  getCSSVarName ||= (prop) => `--tg-viewport-${camelToKebab(prop)}`;
-  const props = ['height', 'width', 'stableHeight'] as const;
+export const bindCssVars = wrapMount(
+  'bindCssVars',
+  (getCSSVarName?: GetCSSVarNameFn): VoidFunction => {
+    if (isCssVarsBound()) {
+      throw new TypedError(ERR_ALREADY_CALLED);
+    }
+    getCSSVarName ||= (prop) => `--tg-viewport-${camelToKebab(prop)}`;
+    const props = ['height', 'width', 'stableHeight'] as const;
 
-  function actualize(): void {
-    props.forEach(prop => {
-      setCssVar(getCSSVarName!(prop), `${state()[prop]}px`);
-    });
-  }
+    function actualize(): void {
+      props.forEach(prop => {
+        setCssVar(getCSSVarName!(prop), `${state()[prop]}px`);
+      });
+    }
 
-  actualize();
-  state.sub(actualize);
-  isCssVarsBound.set(true);
+    actualize();
+    state.sub(actualize);
+    isCssVarsBound.set(true);
 
-  return () => {
-    props.forEach(deleteCssVar);
-    state.unsub(actualize);
-    isCssVarsBound.set(false);
-  };
-}, isMounted);
+    return () => {
+      props.forEach(deleteCssVar);
+      state.unsub(actualize);
+      isCssVarsBound.set(false);
+    };
+  },
+);
 
 /**
  * A method that expands the Mini App to the maximum available height. To find out if the Mini

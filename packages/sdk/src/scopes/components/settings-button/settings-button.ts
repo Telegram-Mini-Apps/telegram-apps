@@ -10,7 +10,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createSafeWrap } from '@/scopes/toolkit/createSafeWrap.js';
+import { createAssignChecks } from '@/scopes/toolkit/createAssignChecks.js';
 
 type StorageValue = boolean;
 
@@ -28,8 +28,8 @@ export const isMounted = signal(false);
  */
 export const isSupported = createIsSupported(WEB_APP_SETUP_SETTINGS_BUTTON);
 
-const wrapMount = createSafeWrap(COMPONENT_NAME, isMounted);
-const wrapSupport = createSafeWrap(COMPONENT_NAME, undefined, isSupported);
+const wrapMount = createAssignChecks(COMPONENT_NAME, isMounted);
+const wrapSupport = createAssignChecks(COMPONENT_NAME, undefined, isSupported);
 
 /**
  * Hides the Settings Button.

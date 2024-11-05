@@ -63,7 +63,7 @@ describe('check support', () => {
   describe.each([
     { name: 'mount', fn: mount },
   ])('$name', ({ fn, name }) => {
-    it('should throw ERR_NOT_SUPPORTED if package is not initialized', () => {
+    it('should throw ERR_NOT_SUPPORTED if not supported', () => {
       const error = new TypedError(
         'ERR_NOT_SUPPORTED',
         `swipeBehavior.${name}() method is not supported in Mini Apps version 6.0`,

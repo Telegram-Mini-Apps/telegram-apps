@@ -71,7 +71,7 @@ describe('check support', () => {
     { name: 'onClick', fn: onClick },
     { name: 'offClick', fn: offClick },
   ])('$name', ({ fn, name }) => {
-    it('should throw ERR_NOT_SUPPORTED if package is not initialized', () => {
+    it('should throw ERR_NOT_SUPPORTED if not supported', () => {
       const error = new TypedError(
         'ERR_NOT_SUPPORTED',
         `backButton.${name}() method is not supported in Mini Apps version 6.0`,

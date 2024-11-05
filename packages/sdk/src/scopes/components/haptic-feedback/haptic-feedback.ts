@@ -5,7 +5,7 @@ import type {
 
 import { postEvent } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createSafeWrap } from '@/scopes/toolkit/createSafeWrap.js';
+import { createAssignChecks } from '@/scopes/toolkit/createAssignChecks.js';
 
 const WEB_APP_TRIGGER_HAPTIC_FEEDBACK = 'web_app_trigger_haptic_feedback';
 
@@ -14,7 +14,7 @@ const WEB_APP_TRIGGER_HAPTIC_FEEDBACK = 'web_app_trigger_haptic_feedback';
  */
 export const isSupported = createIsSupported(WEB_APP_TRIGGER_HAPTIC_FEEDBACK);
 
-const wrapSupport = createSafeWrap('hapticFeedback', undefined, isSupported);
+const wrapSupport = createAssignChecks('hapticFeedback', undefined, isSupported);
 
 /**
  * A method tells that an impact occurred. The Telegram app may play the appropriate haptics based
