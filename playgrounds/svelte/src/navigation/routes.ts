@@ -6,7 +6,7 @@ import LaunchParamsPage from '@/pages/LaunchParamsPage/LaunchParamsPage.svelte';
 interface Route {
   id: string;
   path: string;
-  Component?: typeof SvelteComponent<any>;
+  Component?: typeof SvelteComponent;
   title: string;
 }
   

@@ -20,7 +20,9 @@ import {
     initSDK();
   
     // Mount all components used in the project.
-    backButton.isSupported() && backButton.mount();
+    if (backButton.isSupported()) {
+      backButton.mount();
+    }
     miniApp.mount();
     themeParams.mount();
     initData.restore();
@@ -30,13 +32,15 @@ import {
       viewport.bindCssVars(key => `--my-prefix-${key}`);
       miniApp.bindCssVars();
       themeParams.bindCssVars();
-    }).catch((e: any) => {
+    }).catch((e: unknown) => {
       console.error('Something went wrong mounting the viewport', e);
     });
   
     // Add Eruda if needed.
-    debug && import('eruda')
+    if (debug) {
+      import('eruda')
       .then((lib) => lib.default.init())
       .catch(console.error);
+    }
   }
   

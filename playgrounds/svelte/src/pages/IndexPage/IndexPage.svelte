@@ -1,9 +1,7 @@
 <script lang="ts">
   import './IndexPage.css';
-  import { Router, Route } from 'svelte-routing';
-  import Link from '@/components/Link/Link.svelte';
+  import { Router } from 'svelte-routing';
   import Page from '@/components/Page/Page.svelte';
-  import routes from '@/navigation/routes.js';
   import Nav from '@/components/Nav/Nav.svelte';
 </script>
 

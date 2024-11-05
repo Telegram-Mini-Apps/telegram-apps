@@ -33,7 +33,7 @@
 </script>
 
 <div>
-  {#each rows as { title, value, meta }, idx}
+  {#each rows as { title, value, meta }}
     <div class="display-data__line">
       <span class="display-data__line-title">{title}</span>
       <span class="display-data__line-value">
