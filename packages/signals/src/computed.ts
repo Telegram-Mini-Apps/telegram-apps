@@ -26,18 +26,23 @@ export function computed<T>(
 ): Computed<T> {
   let deps = new Set<Signal<unknown>>();
 
-  // We set the initial value as undefined, because the computed signal is lazy.
-  // It will not be computed until it was either called or subscribed to.
-  const s = signal<T>(compute(), options);
+  // An underlying signal.
+  let $signal: Signal<T> | undefined;
+
+  function s(): Signal<T> {
+    return $signal || ($signal = signal<T>(compute(), options));
+  }
 
   function update() {
-    s.set(compute());
+    s().set(compute());
   }
 
   function compute(): T {
     // As long as in this iteration, we may receive new signals as dependencies, we stop
     // listening to the previous signals.
-    deps.forEach(s => s.unsub(update, { signal: true }));
+    deps.forEach(s => {
+      s.unsub(update, { signal: true });
+    });
 
     // Signals we collected during current computation.
     const collectedSignals = new Set<Signal<unknown>>();
@@ -64,11 +69,19 @@ export function computed<T>(
   }
 
   return Object.assign(function computed(): T {
-    return s();
+    return s()();
   }, {
-    destroy: s.destroy,
-    sub: s.sub,
-    unsub: s.unsub,
-    unsubAll: s.unsubAll,
+    destroy() {
+      s().destroy();
+    },
+    sub(...args) {
+      return s().sub(...args);
+    },
+    unsub(...args) {
+      s().unsub(...args);
+    },
+    unsubAll(...args) {
+      s().unsubAll(...args);
+    },
   } satisfies Pick<Computed<T>, 'destroy' | 'sub' | 'unsub' | 'unsubAll'>);
 }
