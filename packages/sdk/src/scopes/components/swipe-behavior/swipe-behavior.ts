@@ -4,7 +4,10 @@ import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createAssignChecks } from '@/scopes/toolkit/createAssignChecks.js';
+import { createWrapSafeCommon } from '@/scopes/toolkit/createWrapSafeCommon.js';
+import {
+  createWrapSafeSupported
+} from '@/scopes/toolkit/createWrapSafeSupported.js';
 
 type StorageValue = boolean;
 
@@ -21,32 +24,36 @@ export const isMounted = signal(false);
  */
 export const isSupported = createIsSupported(WEB_APP_SETUP_SWIPE_BEHAVIOR);
 
-const wrapMount = createAssignChecks(COMPONENT_NAME, isMounted);
-const wrapSupport = createAssignChecks(COMPONENT_NAME, undefined, isSupported);
+const wrapSafe = createWrapSafeCommon(COMPONENT_NAME, isMounted, WEB_APP_SETUP_SWIPE_BEHAVIOR);
+const wrapSupported = createWrapSafeSupported(COMPONENT_NAME, WEB_APP_SETUP_SWIPE_BEHAVIOR);
 
 /**
  * Disables vertical swipes.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  * @example
  * if (disableVertical.isAvailable()) {
  *   disableVertical();
  * }
  */
-export const disableVertical = wrapMount('disableVertical', (): void => {
+export const disableVertical = wrapSafe('disableVertical', (): void => {
   setVerticalEnabled(false);
 });
 
 /**
  * Enables vertical swipes.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  * @example
  * if (enableVertical.isAvailable()) {
  *   enableVertical();
  * }
  */
-export const enableVertical = wrapMount('enableVertical', (): void => {
+export const enableVertical = wrapSafe('enableVertical', (): void => {
   setVerticalEnabled(true);
 });
 
@@ -57,14 +64,15 @@ export const isVerticalEnabled = signal(true);
 
 /**
  * Mounts the Swipe Behavior component restoring its state.
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  * @example
  * if (mount.isAvailable()) {
  *   mount();
  * }
  */
-export const mount = wrapSupport('mount', (): void => {
+export const mount = wrapSupported('mount', (): void => {
   if (!isMounted()) {
     setVerticalEnabled(
       isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false,
@@ -84,6 +92,8 @@ function setVerticalEnabled(value: boolean, force?: boolean): void {
 
 /**
  * Unmounts the Swipe Behavior component.
+ * @example
+ * unmount();
  */
 export function unmount(): void {
   isMounted.set(false);
