@@ -1,8 +1,11 @@
-import type { ExecuteWithOptions, CancelablePromise } from '@telegram-apps/bridge';
+import type {
+  ExecuteWithOptions,
+  CancelablePromise,
+} from '@telegram-apps/bridge';
 
 import { request as _request } from '@/scopes/globals.js';
 
-export interface RequestResult {
+export interface RequestViewportResult {
   height: number;
   isExpanded: boolean;
   isStable: boolean;
@@ -12,8 +15,14 @@ export interface RequestResult {
 /**
  * Requests viewport actual information from the Telegram application.
  * @param options - request options.
+ * @example
+ * const viewport = await request({
+ *   timeout: 1000
+ * });
  */
-export function request(options?: ExecuteWithOptions): CancelablePromise<RequestResult> {
+export function requestViewport(
+  options?: ExecuteWithOptions,
+): CancelablePromise<RequestViewportResult> {
   return _request('web_app_request_viewport', 'viewport_changed', options).then(r => ({
     height: r.height,
     width: r.width,
@@ -21,5 +30,3 @@ export function request(options?: ExecuteWithOptions): CancelablePromise<Request
     isStable: r.is_state_stable,
   }));
 }
-
-export type * from './types.js';

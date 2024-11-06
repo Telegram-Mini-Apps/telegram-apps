@@ -13,12 +13,14 @@ import {
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals.js';
-import { ERR_ALREADY_CALLED } from '@/errors.js';
+import { ERR_VARS_ALREADY_BOUND } from '@/errors.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 import { subAndCall } from '@/utils/subAndCall.js';
-import { withIsMounted } from '@/scopes/toolkit/withIsMounted.js';
+import {
+  createWrapSafeMounted,
+} from '@/scopes/toolkit/createWrapSafeMounted.js';
 
-import { type GetCSSVarNameFn, request } from './static.js';
+import { requestViewport } from './requestViewport.js';
 import {
   state,
   mountError,
@@ -26,8 +28,8 @@ import {
   isCssVarsBound,
   isMounting,
 } from './signals.js';
+import type { GetCSSVarNameFn } from './types.js';
 import type { State } from './types.js';
-import { createAssignChecks } from '@/scopes/toolkit/createAssignChecks.js';
 
 interface StorageValue {
   height: number;
@@ -38,7 +40,7 @@ interface StorageValue {
 
 const COMPONENT_NAME = 'viewport';
 
-const wrapMount = createAssignChecks(COMPONENT_NAME, isMounted);
+const wrapSafe = createWrapSafeMounted(COMPONENT_NAME, isMounted);
 
 /**
  * Creates CSS variables connected with the current viewport.
@@ -51,20 +53,27 @@ const wrapMount = createAssignChecks(COMPONENT_NAME, isMounted);
  * - `--tg-viewport-width`
  * - `--tg-viewport-stable-height`
  *
- * Variables are being automatically updated if viewport was changed.
+ * Variables are being automatically updated if the viewport was changed.
  *
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * viewport property.
  * @returns Function to stop updating variables.
- * @throws {TypedError} ERR_ALREADY_CALLED
- * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_VARS_ALREADY_BOUND
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @example
+ * if (bindCssVars.isAvailable()) {
+ *   bindCssVars();
+ * }
  */
-export const bindCssVars = wrapMount(
+export const bindCssVars = wrapSafe(
   'bindCssVars',
   (getCSSVarName?: GetCSSVarNameFn): VoidFunction => {
     if (isCssVarsBound()) {
-      throw new TypedError(ERR_ALREADY_CALLED);
+      throw new TypedError(
+        ERR_VARS_ALREADY_BOUND,
+        'CSS variables are already bound',
+      );
     }
     getCSSVarName ||= (prop) => `--tg-viewport-${camelToKebab(prop)}`;
     const props = ['height', 'width', 'stableHeight'] as const;
@@ -91,6 +100,8 @@ export const bindCssVars = wrapMount(
  * A method that expands the Mini App to the maximum available height. To find out if the Mini
  * App is expanded to the maximum height, refer to the value of the `isExpanded`.
  * @see isExpanded
+ * @example
+ * expand();
  */
 export function expand(): void {
   postEvent('web_app_expand');
@@ -114,7 +125,7 @@ function formatState(state: State): State {
 export const mount = createMountFn<State>(
   options => {
     // Try to restore the state using the storage.
-    const s = isPageReload() && getStorageValue<StorageValue>('viewport');
+    const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
     if (s) {
       return s;
     }
@@ -141,7 +152,7 @@ export const mount = createMountFn<State>(
     // We were unable to retrieve data locally. In this case, we are sending a request returning
     // the viewport information.
     options.timeout ||= 1000;
-    return request(options).then(data => ({
+    return requestViewport(options).then(data => ({
       height: data.height,
       isExpanded: data.isExpanded,
       stableHeight: data.isStable ? data.height : state().stableHeight,
@@ -178,7 +189,10 @@ function truncate(value: number): number {
 }
 
 /**
- * Unmounts the component, removing the listener, saving the component state in the local storage.
+ * Unmounts the component, removing the listener, saving the component state
+ * in the local storage.
+ * @example
+ * unmount();
  */
 export function unmount(): void {
   off('viewport_changed', onViewportChanged);
