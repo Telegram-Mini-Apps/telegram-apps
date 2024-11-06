@@ -10,7 +10,10 @@ import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createAssignChecks } from '@/scopes/toolkit/createAssignChecks.js';
+import { createWrapSafeCommon } from '@/scopes/toolkit/createWrapSafeCommon.js';
+import {
+  createWrapSafeSupported
+} from '@/scopes/toolkit/createWrapSafeSupported.js';
 
 type StorageValue = boolean;
 
@@ -28,19 +31,21 @@ export const isMounted = signal(false);
  */
 export const isSupported = createIsSupported(WEB_APP_SETUP_SETTINGS_BUTTON);
 
-const wrapMount = createAssignChecks(COMPONENT_NAME, isMounted);
-const wrapSupport = createAssignChecks(COMPONENT_NAME, undefined, isSupported);
+const wrapSafe = createWrapSafeCommon(COMPONENT_NAME, isMounted, WEB_APP_SETUP_SETTINGS_BUTTON);
+const wrapSupported = createWrapSafeSupported(COMPONENT_NAME, WEB_APP_SETUP_SETTINGS_BUTTON);
 
 /**
  * Hides the Settings Button.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  * @example
  * if (hide.isAvailable()) {
  *   hide();
  * }
  */
-export const hide = wrapMount('hide', (): void => {
+export const hide = wrapSafe('hide', (): void => {
   setVisibility(false);
 });
 
@@ -51,6 +56,7 @@ export const isVisible = signal(false);
 
 /**
  * Mounts the Back Button component restoring its state.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @example
@@ -58,7 +64,7 @@ export const isVisible = signal(false);
  *   mount();
  * }
  */
-export const mount = wrapSupport('mount', (): void => {
+export const mount = wrapSupported('mount', (): void => {
   if (!isMounted()) {
     setVisibility(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false, true);
     isMounted.set(true);
@@ -77,6 +83,7 @@ function setVisibility(value: boolean, force?: boolean): void {
  * Adds a new Settings Button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @example
@@ -87,7 +94,7 @@ function setVisibility(value: boolean, force?: boolean): void {
  *   });
  * }
  */
-export const onClick = wrapSupport(
+export const onClick = wrapSupported(
   'onClick',
   (fn: EventListener<'settings_button_pressed'>): VoidFunction => on(SETTINGS_BUTTON_PRESSED, fn),
 );
@@ -95,6 +102,7 @@ export const onClick = wrapSupport(
 /**
  * Removes the Settings Button click listener.
  * @param fn - an event listener.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @example
@@ -106,7 +114,7 @@ export const onClick = wrapSupport(
  *   onClick(listener);
  * }
  */
-export const offClick = wrapSupport(
+export const offClick = wrapSupported(
   'offClick',
   (fn: EventListener<'settings_button_pressed'>): void => {
     off(SETTINGS_BUTTON_PRESSED, fn);
@@ -115,14 +123,16 @@ export const offClick = wrapSupport(
 
 /**
  * Shows the Settings Button.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  * @example
  * if (show.isAvailable()) {
  *   show();
  * }
  */
-export const show = wrapMount('show', (): void => {
+export const show = wrapSafe('show', (): void => {
   setVisibility(true);
 });
 
