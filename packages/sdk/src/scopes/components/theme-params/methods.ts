@@ -14,8 +14,10 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { ERR_ALREADY_CALLED, ERR_VARS_ALREADY_BOUND } from '@/errors.js';
-import { createAssignChecks } from '@/scopes/toolkit/createAssignChecks.js';
+import { ERR_VARS_ALREADY_BOUND } from '@/errors.js';
+import {
+  createWrapSafeMounted
+} from '@/scopes/toolkit/createWrapSafeMounted.js';
 
 import { isCssVarsBound, state, isMounted } from './signals.js';
 import { parseThemeParams } from './parseThemeParams.js';
@@ -26,7 +28,7 @@ type StorageValue = ThemeParams;
 const COMPONENT_NAME = 'themeParams';
 const THEME_CHANGED_EVENT = 'theme_changed';
 
-const wrapMount = createAssignChecks(COMPONENT_NAME, isMounted);
+const wrapSafe = createWrapSafeMounted(COMPONENT_NAME, isMounted);
 
 /**
  * Creates CSS variables connected with the current theme parameters.
@@ -43,15 +45,22 @@ const wrapMount = createAssignChecks(COMPONENT_NAME, isMounted);
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * theme parameters key.
  * @returns Function to stop updating variables.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_VARS_ALREADY_BOUND
- * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @example
+ * if (bindCssVars.isAvailable()) {
+ *   bindCssVars();
+ * }
  */
-export const bindCssVars = wrapMount(
+export const bindCssVars = wrapSafe(
   'bindCssVars',
   (getCSSVarName?: GetCssVarNameFn): VoidFunction => {
     if (isCssVarsBound()) {
-      throw new TypedError(ERR_VARS_ALREADY_BOUND);
+      throw new TypedError(
+        ERR_VARS_ALREADY_BOUND,
+        'CSS variables are already bound',
+      );
     }
     getCSSVarName ||= (prop) => `--tg-theme-${camelToKebab(prop)}`;
 
@@ -84,6 +93,8 @@ export const bindCssVars = wrapMount(
  *
  * This function restores the component state and is automatically saving it in the local storage
  * if it changed.
+ * @example
+ * mount();
  */
 export function mount(): void {
   if (!isMounted()) {
@@ -105,6 +116,8 @@ const onThemeChanged: EventListener<'theme_changed'> = (e) => {
 
 /**
  * Unmounts the component, removing the listener, saving the component state in the local storage.
+ * @example
+ * unmount();
  */
 export function unmount(): void {
   off(THEME_CHANGED_EVENT, onThemeChanged);
