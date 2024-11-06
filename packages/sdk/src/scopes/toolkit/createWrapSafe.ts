@@ -1,9 +1,9 @@
 import type { AnyFn } from '@/types.js';
 import {
   IsSupported,
-  assignChecks,
+  wrapSafe,
   SafeWrapped,
-} from '@/scopes/toolkit/assignChecks.js';
+} from '@/scopes/toolkit/wrapSafe.js';
 
 export interface SafeWrapFn<S extends boolean> {
   <Fn extends AnyFn>(name: string, fn: Fn): SafeWrapped<Fn, S>;
@@ -16,11 +16,11 @@ interface Options {
   checkInit?: boolean;
 }
 
-export function createAssignChecks<O extends Options>(
+export function createWrapSafe<O extends Options>(
   component: string,
   { checkInit, ...rest }: O,
 ): SafeWrapFn<O extends { isSupported: any } ? true : false> {
-  return ((name, fn) => assignChecks(fn, {
+  return ((name, fn) => wrapSafe(fn, {
     ...rest,
     component,
     checkInit: typeof checkInit === 'boolean' ? checkInit : true,
