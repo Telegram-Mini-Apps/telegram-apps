@@ -3,7 +3,7 @@ import { getStorageValue, setStorageValue } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
-import { createAssignMounted, } from '@/scopes/toolkit/createAssignMounted.js';
+import { createWrapSafeMounted, } from '@/scopes/toolkit/createWrapSafeMounted.js';
 
 type StorageValue = boolean;
 
@@ -14,31 +14,31 @@ const COMPONENT_NAME = 'closingBehavior';
  */
 export const isMounted = signal(false);
 
-// Do not check init, because the component methods do not depend on
-// the Mini Apps version.
-const assignMounted = createAssignMounted(COMPONENT_NAME, isMounted, false);
+const wrapMounted = createWrapSafeMounted(COMPONENT_NAME, isMounted);
 
 /**
  * Disables closing confirmation dialog.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_MOUNTED
  * @example
  * if (disableConfirmation.isAvailable()) {
  *   disableConfirmation();
  * }
  */
-export const disableConfirmation = assignMounted('disableConfirmation', (): void => {
+export const disableConfirmation = wrapMounted('disableConfirmation', (): void => {
   setClosingConfirmation(false);
 });
 
 /**
  * Enables closing confirmation dialog.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_MOUNTED
  * @example
  * if (enableConfirmation.isAvailable()) {
  *   enableConfirmation();
  * }
  */
-export const enableConfirmation = assignMounted('enableConfirmation', (): void => {
+export const enableConfirmation = wrapMounted('enableConfirmation', (): void => {
   setClosingConfirmation(true);
 });
 
