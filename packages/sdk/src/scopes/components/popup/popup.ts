@@ -3,8 +3,10 @@ import { signal } from '@telegram-apps/signals';
 
 import { request } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
-import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
+import {
+  createWrapSafeSupported
+} from '@/scopes/toolkit/createWrapSafeSupported.js';
 
 import { prepareParams } from './prepareParams.js';
 import type { OpenOptions } from './types.js';
@@ -21,6 +23,8 @@ export const isSupported = createIsSupported(WEB_APP_OPEN_POPUP);
  */
 export const isOpened = signal(false);
 
+const wrapSupported = createWrapSafeSupported('popup', WEB_APP_OPEN_POPUP);
+
 /**
  * A method that shows a native popup described by the `params` argument.
  * The promise will be resolved when the popup is closed. Resolved value will have
@@ -36,9 +40,23 @@ export const isOpened = signal(false);
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid buttons length.
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid button id length.
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid text length.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @example
+ * if (open.isAvailable()) {
+ *   const buttonId = await open({
+ *     title: 'Confirm action',
+ *     message: 'Do you really want to buy this burger?',
+ *     buttons: [
+ *       { id: 'yes', text: 'Yes' },
+ *       { id: 'no', type: 'destructive', text: 'No' },
+ *     ],
+ *   });
+ * }
  */
-export const open = withIsSupported(
+export const open = wrapSupported(
+  'open',
   async (options: OpenOptions): Promise<string | null> => {
     if (isOpened()) {
       throw new TypedError(ERR_ALREADY_CALLED);
@@ -55,5 +73,4 @@ export const open = withIsSupported(
       isOpened.set(false);
     }
   },
-  isSupported,
 );
