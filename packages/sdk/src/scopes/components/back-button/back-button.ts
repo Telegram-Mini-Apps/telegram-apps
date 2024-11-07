@@ -20,6 +20,11 @@ const CLICK_EVENT_NAME = 'back_button_pressed';
 const COMPONENT_NAME = 'backButton';
 
 /**
+ * Signal indicating if the Back Button is currently visible.
+ */
+export const isVisible = signal(false);
+
+/**
  * Signal indicating if the Back Button is currently mounted.
  */
 export const isMounted = signal(false);
@@ -33,7 +38,7 @@ const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, SETUP_METHOD_
 const wrapSupported = createWrapSupported(COMPONENT_NAME, SETUP_METHOD_NAME);
 
 /**
- * Hides the Back Button component.
+ * Hides the Back Button.
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -49,12 +54,7 @@ export const hide = wrapComplete('hide', (): void => {
 });
 
 /**
- * Signal indicating if the Back Button component is currently visible.
- */
-export const isVisible = signal(false);
-
-/**
- * Mounts the Back Button component restoring its state.
+ * Mounts the Back Button restoring its state.
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -124,7 +124,7 @@ export const offClick = wrapSupported(
 );
 
 /**
- * Shows the Back Button component.
+ * Shows the Back Button.
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -140,7 +140,7 @@ export const show = wrapComplete('show', (): void => {
 });
 
 /**
- * Unmounts the Back Button component.
+ * Unmounts the Back Button.
  *
  * Note that this function does not remove listeners added via the `onClick`
  * function, so you have to remove them on your own.
