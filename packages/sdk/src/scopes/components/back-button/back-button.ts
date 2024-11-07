@@ -10,10 +10,10 @@ import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createAssignMounted } from '@/scopes/toolkit/createAssignMounted.js';
+import { createWrapSafeCommon } from '@/scopes/toolkit/createWrapSafeCommon.js';
 import {
-  createAssignSupported,
-} from '@/scopes/toolkit/createAssignSupported.js';
+  createWrapSafeSupported
+} from '@/scopes/toolkit/createWrapSafeSupported.js';
 
 type StorageValue = boolean;
 
@@ -31,19 +31,21 @@ export const isMounted = signal(false);
  */
 export const isSupported = createIsSupported(WEB_APP_SETUP_BACK_BUTTON);
 
-const assignMounted = createAssignMounted(COMPONENT_NAME, isMounted);
-const assignSupported = createAssignSupported(COMPONENT_NAME, isSupported);
+const wrapSafe = createWrapSafeCommon(COMPONENT_NAME, isMounted, WEB_APP_SETUP_BACK_BUTTON);
+const wrapSupported = createWrapSafeSupported(COMPONENT_NAME, WEB_APP_SETUP_BACK_BUTTON);
 
 /**
  * Hides the Back Button component.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  * @example
  * if (hide.isAvailable()) {
  *   hide();
  * }
  */
-export const hide = assignMounted('hide', (): void => {
+export const hide = wrapSafe('hide', (): void => {
   setVisibility(false);
 });
 
@@ -54,6 +56,7 @@ export const isVisible = signal(false);
 
 /**
  * Mounts the Back Button component restoring its state.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @example
@@ -61,7 +64,7 @@ export const isVisible = signal(false);
  *   mount();
  * }
  */
-export const mount = assignSupported('mount', (): void => {
+export const mount = wrapSupported('mount', (): void => {
   if (!isMounted()) {
     setVisibility(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false, true);
     isMounted.set(true);
@@ -80,6 +83,7 @@ function setVisibility(value: boolean, force?: boolean): void {
  * Adds a new Back Button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @example
@@ -90,7 +94,7 @@ function setVisibility(value: boolean, force?: boolean): void {
  *   });
  * }
  */
-export const onClick = assignSupported(
+export const onClick = wrapSupported(
   'onClick',
   (fn: EventListener<'back_button_pressed'>): VoidFunction => on(BACK_BUTTON_PRESSED, fn),
 );
@@ -98,6 +102,7 @@ export const onClick = assignSupported(
 /**
  * Removes the Back Button click listener.
  * @param fn - an event listener.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @example
@@ -109,7 +114,7 @@ export const onClick = assignSupported(
  *   onClick(listener);
  * }
  */
-export const offClick = assignSupported(
+export const offClick = wrapSupported(
   'offClick',
   (fn: EventListener<'back_button_pressed'>): void => {
     off(BACK_BUTTON_PRESSED, fn);
@@ -118,14 +123,16 @@ export const offClick = assignSupported(
 
 /**
  * Shows the Back Button component.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
  * @example
  * if (show.isAvailable()) {
  *   show();
  * }
  */
-export const show = assignMounted('show', (): void => {
+export const show = wrapSafe('show', (): void => {
   setVisibility(true);
 });
 
