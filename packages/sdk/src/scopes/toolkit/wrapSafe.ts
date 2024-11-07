@@ -18,8 +18,9 @@ import { isSSR } from '@/utils/isSSR.js';
 import type { AnyFn } from '@/types.js';
 
 export type IsSupported =
-  // (() => boolean) fixme
-  | MethodName;
+// (() => boolean) fixme
+  | MethodName
+  | MethodName[];
 
 export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
   & Fn
@@ -55,7 +56,8 @@ export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
    * It is highly recommended to use this signal only in certain narrow cases
    * when only the function support check is required.
    *
-   * To check if the function is available for use, use the `isAvailable` signal.
+   * To check if the function is available for use, use the `isAvailable`
+   * signal.
    *
    * @returns True if this function is supported.
    * @see isAvailable
@@ -81,22 +83,26 @@ interface Options {
  */
 
 /*@__NO_SIDE_EFFECTS__*/
-export function wrapSafe<Fn extends AnyFn, O extends Options>(
-  fn: Fn,
-  {
-    isSupported,
-    isMounted,
-    component,
-    checkInit,
-    method,
-  }: O,
-): SafeWrapped<Fn, O extends { isSupported: any } ? true : false> {
+export function wrapSafe<Fn extends AnyFn, O extends Options>(fn: Fn, {
+  isSupported,
+  isMounted,
+  component,
+  checkInit,
+  method,
+}: O): SafeWrapped<Fn, O extends { isSupported: any } ? true : false> {
+  if (typeof checkInit !== 'boolean') {
+    checkInit = true;
+  }
+
   const fullMethod = `${component}.${method}()`;
 
   const $isSupported = computed(() => {
     return isSupported
-      // Mini Apps method specified.
-      ? supports(isSupported, $version())
+      ? Array.isArray(isSupported)
+        // Mini Apps methods specified.
+        ? isSupported.some(m => supports(m, $version()))
+        // Mini Apps method specified.
+        : supports(isSupported, $version())
       // Support function or Mini Apps method was not specified.
       // The function is supported by default then.
       : true;

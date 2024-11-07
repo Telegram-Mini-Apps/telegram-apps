@@ -18,12 +18,11 @@ interface Options {
 
 export function createWrapSafe<O extends Options>(
   component: string,
-  { checkInit, ...rest }: O,
+  options: O,
 ): SafeWrapFn<O extends { isSupported: any } ? true : false> {
   return ((name, fn) => wrapSafe(fn, {
-    ...rest,
+    ...options,
     component,
-    checkInit: typeof checkInit === 'boolean' ? checkInit : true,
     method: name,
   })) as SafeWrapFn<boolean>;
 }
