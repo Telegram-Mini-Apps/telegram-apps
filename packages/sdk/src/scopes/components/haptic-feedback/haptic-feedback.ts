@@ -5,20 +5,18 @@ import type {
 
 import { postEvent } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import {
-  createWrapSafeSupported
-} from '@/scopes/toolkit/createWrapSafeSupported.js';
+import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
 
-const WEB_APP_TRIGGER_HAPTIC_FEEDBACK = 'web_app_trigger_haptic_feedback';
-const wrapSupport = createWrapSafeSupported('hapticFeedback', WEB_APP_TRIGGER_HAPTIC_FEEDBACK);
+const HAPTIC_METHOD_NAME = 'web_app_trigger_haptic_feedback';
+const wrapSupport = createWrapSupported('hapticFeedback', HAPTIC_METHOD_NAME);
 
 /**
- * @returns True if the Haptic Feedback component is supported.
+ * Signal indicating if the Haptic Feedback is supported.
  */
-export const isSupported = createIsSupported(WEB_APP_TRIGGER_HAPTIC_FEEDBACK);
+export const isSupported = createIsSupported(HAPTIC_METHOD_NAME);
 
 /**
- * A method tells that an impact occurred. The Telegram app may play the
+ * A method that tells if an impact occurred. The Telegram app may play the
  * appropriate haptics based on style value passed.
  * @param style - impact style.
  * @throws {TypedError} ERR_UNKNOWN_ENV
@@ -32,7 +30,7 @@ export const isSupported = createIsSupported(WEB_APP_TRIGGER_HAPTIC_FEEDBACK);
 export const impactOccurred = wrapSupport(
   'impactOccurred',
   (style: ImpactHapticFeedbackStyle): void => {
-    postEvent(WEB_APP_TRIGGER_HAPTIC_FEEDBACK, {
+    postEvent(HAPTIC_METHOD_NAME, {
       type: 'impact',
       impact_style: style,
     });
@@ -55,7 +53,7 @@ export const impactOccurred = wrapSupport(
 export const notificationOccurred = wrapSupport(
   'notificationOccurred',
   (type: NotificationHapticFeedbackType): void => {
-    postEvent(WEB_APP_TRIGGER_HAPTIC_FEEDBACK, {
+    postEvent(HAPTIC_METHOD_NAME, {
       type: 'notification',
       notification_type: type,
     });
@@ -79,6 +77,6 @@ export const notificationOccurred = wrapSupport(
 export const selectionChanged = wrapSupport(
   'selectionChanged',
   (): void => {
-    postEvent(WEB_APP_TRIGGER_HAPTIC_FEEDBACK, { type: 'selection_change' });
+    postEvent(HAPTIC_METHOD_NAME, { type: 'selection_change' });
   },
 );
