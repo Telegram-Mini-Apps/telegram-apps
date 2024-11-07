@@ -10,29 +10,27 @@ import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createWrapSafeCommon } from '@/scopes/toolkit/createWrapSafeCommon.js';
-import {
-  createWrapSafeSupported
-} from '@/scopes/toolkit/createWrapSafeSupported.js';
+import { createWrapComplete } from '@/scopes/toolkit/createWrapComplete.js';
+import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
 
 type StorageValue = boolean;
 
-const WEB_APP_SETUP_BACK_BUTTON = 'web_app_setup_back_button';
-const BACK_BUTTON_PRESSED = 'back_button_pressed';
+const SETUP_METHOD_NAME = 'web_app_setup_back_button';
+const CLICK_EVENT_NAME = 'back_button_pressed';
 const COMPONENT_NAME = 'backButton';
 
 /**
- * True if the Back Button is currently mounted.
+ * Signal indicating if the Back Button is currently mounted.
  */
 export const isMounted = signal(false);
 
 /**
- * @returns True if the Back Button is supported.
+ * Signal indicating if the Back Button is supported.
  */
-export const isSupported = createIsSupported(WEB_APP_SETUP_BACK_BUTTON);
+export const isSupported = createIsSupported(SETUP_METHOD_NAME);
 
-const wrapSafe = createWrapSafeCommon(COMPONENT_NAME, isMounted, WEB_APP_SETUP_BACK_BUTTON);
-const wrapSupported = createWrapSafeSupported(COMPONENT_NAME, WEB_APP_SETUP_BACK_BUTTON);
+const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, SETUP_METHOD_NAME);
+const wrapSupported = createWrapSupported(COMPONENT_NAME, SETUP_METHOD_NAME);
 
 /**
  * Hides the Back Button component.
@@ -40,17 +38,18 @@ const wrapSupported = createWrapSafeSupported(COMPONENT_NAME, WEB_APP_SETUP_BACK
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @since Mini Apps v6.1
  * @example
  * if (hide.isAvailable()) {
  *   hide();
  * }
  */
-export const hide = wrapSafe('hide', (): void => {
+export const hide = wrapComplete('hide', (): void => {
   setVisibility(false);
 });
 
 /**
- * True if the Back Button component is currently visible.
+ * Signal indicating if the Back Button component is currently visible.
  */
 export const isVisible = signal(false);
 
@@ -59,6 +58,7 @@ export const isVisible = signal(false);
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @since Mini Apps v6.1
  * @example
  * if (mount.isAvailable()) {
  *   mount();
@@ -66,14 +66,14 @@ export const isVisible = signal(false);
  */
 export const mount = wrapSupported('mount', (): void => {
   if (!isMounted()) {
-    setVisibility(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false, true);
+    setVisibility(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false);
     isMounted.set(true);
   }
 });
 
-function setVisibility(value: boolean, force?: boolean): void {
-  if (value !== isVisible() || force) {
-    postEvent(WEB_APP_SETUP_BACK_BUTTON, { is_visible: value });
+function setVisibility(value: boolean): void {
+  if (value !== isVisible()) {
+    postEvent(SETUP_METHOD_NAME, { is_visible: value });
     setStorageValue<StorageValue>(COMPONENT_NAME, value);
     isVisible.set(value);
   }
@@ -86,6 +86,7 @@ function setVisibility(value: boolean, force?: boolean): void {
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @since Mini Apps v6.1
  * @example
  * if (onClick.isAvailable()) {
  *   const off = onClick(() => {
@@ -96,7 +97,7 @@ function setVisibility(value: boolean, force?: boolean): void {
  */
 export const onClick = wrapSupported(
   'onClick',
-  (fn: EventListener<'back_button_pressed'>): VoidFunction => on(BACK_BUTTON_PRESSED, fn),
+  (fn: EventListener<'back_button_pressed'>): VoidFunction => on(CLICK_EVENT_NAME, fn),
 );
 
 /**
@@ -105,6 +106,7 @@ export const onClick = wrapSupported(
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @since Mini Apps v6.1
  * @example
  * if (offClick.isAvailable()) {
  *   function listener() {
@@ -117,7 +119,7 @@ export const onClick = wrapSupported(
 export const offClick = wrapSupported(
   'offClick',
   (fn: EventListener<'back_button_pressed'>): void => {
-    off(BACK_BUTTON_PRESSED, fn);
+    off(CLICK_EVENT_NAME, fn);
   },
 );
 
@@ -127,20 +129,21 @@ export const offClick = wrapSupported(
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @since Mini Apps v6.1
  * @example
  * if (show.isAvailable()) {
  *   show();
  * }
  */
-export const show = wrapSafe('show', (): void => {
+export const show = wrapComplete('show', (): void => {
   setVisibility(true);
 });
 
 /**
  * Unmounts the Back Button component.
  *
- * Note that this function does not remove listeners added via the `onClick` function,
- * so you have to remove them on your own.
+ * Note that this function does not remove listeners added via the `onClick`
+ * function, so you have to remove them on your own.
  * @see onClick
  */
 export function unmount(): void {
