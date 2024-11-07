@@ -1,22 +1,24 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { TypedError } from '@telegram-apps/bridge';
 import {
   mockSessionStorageGetItem,
   mockPageReload,
   mockSessionStorageSetItem,
 } from 'test-utils';
+import { TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
 import { setInitialized } from '@test-utils/setInitialized.js';
+import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import { mockSSR } from '@test-utils/mockSSR.js';
 
 import {
-  disableConfirmation,
-  enableConfirmation,
+  isMounted,
   mount,
   unmount,
-  isMounted,
+  enableConfirmation,
   isConfirmationEnabled,
+  disableConfirmation,
 } from './closing-behavior.js';
 
 beforeEach(() => {
@@ -25,85 +27,122 @@ beforeEach(() => {
   mockPostEvent();
 });
 
-function setReady() {
-  isMounted.set(true);
+function setAvailable() {
   setInitialized();
+  mockMiniAppsEnv();
+  isMounted.set(true);
 }
 
-describe('check initialization and mount', () => {
-  describe.each([
-    { name: 'disableConfirmation', fn: disableConfirmation },
-    { name: 'enableConfirmation', fn: enableConfirmation },
-  ])('$name', ({ fn }) => {
-    it('should throw ERR_NOT_INITIALIZED if package is not initialized', () => {
-      const error = new TypedError(
-        'ERR_NOT_INITIALIZED',
-        'The package was not initialized. Consider using the package init() function',
+describe.each([
+  ['disableConfirmation', disableConfirmation],
+  ['enableConfirmation', enableConfirmation],
+  ['mount', mount],
+] as const)('%s', (name, fn) => {
+  it('should throw ERR_UNKNOWN_ENV if not in Mini Apps', () => {
+    const err = new TypedError(
+      'ERR_UNKNOWN_ENV',
+      `Unable to call the closingBehavior.${name}() method: it can't be called outside Mini Apps`,
+    );
+    expect(fn).toThrow(err);
+    mockMiniAppsEnv();
+    expect(fn).not.toThrow(err);
+  });
+
+  describe('mini apps env', () => {
+    beforeEach(mockMiniAppsEnv);
+
+    it('should throw ERR_UNKNOWN_ENV if called on the server', () => {
+      mockSSR();
+      expect(fn).toThrow(
+        new TypedError(
+          'ERR_UNKNOWN_ENV',
+          `Unable to call the closingBehavior.${name}() method: it can't be called outside Mini Apps`,
+        ),
       );
-      expect(fn).toThrow(error);
-      setInitialized();
-      expect(fn).not.toThrow(error);
-    });
-
-    describe('initialized', () => {
-      beforeEach(setInitialized);
-
-      it('should throw ERR_NOT_MOUNTED if component was not mounted', () => {
-        const error = new TypedError(
-          'ERR_NOT_MOUNTED',
-          'closingBehavior component is not mounted. Consider using the mount() method',
-        );
-        expect(fn).toThrow(error);
-        isMounted.set(true);
-        expect(fn).not.toThrow(error);
-      });
     });
   });
 });
 
 describe.each([
-  { name: 'disableConfirmation', fn: disableConfirmation, value: false },
-  { name: 'enableConfirmation', fn: enableConfirmation, value: true },
-])('$name', ({ fn, value }) => {
-  beforeEach(setReady);
+  ['disableConfirmation', disableConfirmation, false],
+  ['enableConfirmation', enableConfirmation, true],
+])('%s', (name, fn, value) => {
+  describe('mini apps env', () => {
+    beforeEach(mockMiniAppsEnv);
 
-  it(`should set isConfirmationEnabled = ${value}`, () => {
-    isConfirmationEnabled.set(!value);
-    expect(isConfirmationEnabled()).toBe(!value);
-    fn();
-    expect(isConfirmationEnabled()).toBe(value);
+    it('should throw ERR_NOT_MOUNTED if closingBehavior is not mounted', () => {
+      expect(fn).toThrow(
+        new TypedError(
+          'ERR_NOT_MOUNTED',
+          `Unable to call the closingBehavior.${name}() method: the component is not mounted. Use the closingBehavior.mount() method`,
+        ),
+      );
+    });
+
+    describe('mounted', () => {
+      beforeEach(() => {
+        isMounted.set(true);
+      });
+
+      it('should not throw', () => {
+        expect(fn).not.toThrow();
+      });
+    });
   });
 
-  it(`should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: ${value} }`, () => {
-    isConfirmationEnabled.set(!value);
-    const spy = mockPostEvent();
-    fn();
-    fn();
-    expect(spy).toBeCalledTimes(1);
-    expect(spy).toBeCalledWith('web_app_setup_closing_behavior', { need_confirmation: value });
+  describe('env is ready', () => {
+    beforeEach(setAvailable);
+
+    it(`should set isConfirmationEnabled = ${value}`, () => {
+      isConfirmationEnabled.set(!value);
+      expect(isConfirmationEnabled()).toBe(!value);
+      fn();
+      expect(isConfirmationEnabled()).toBe(value);
+    });
+
+    it(`should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: ${value} }`, () => {
+      isConfirmationEnabled.set(!value);
+      const spy = mockPostEvent();
+      fn();
+      fn();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_closing_behavior', { need_confirmation: value });
+    });
+
+    it(`should call sessionStorage.setItem with "tapps/closingBehavior" and "${value}" if value changed`, () => {
+      isConfirmationEnabled.set(value);
+      const spy = mockSessionStorageSetItem();
+      fn();
+      // Should call retrieveLaunchParams.
+      expect(spy).toHaveBeenCalledOnce();
+
+      spy.mockClear();
+
+      isConfirmationEnabled.set(!value);
+      fn();
+      // Should call retrieveLaunchParams + save component state.
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(spy).toHaveBeenNthCalledWith(2, 'tapps/closingBehavior', String(value));
+    });
   });
+});
 
-  it(`should call sessionStorage.setItem with "tapps/closingBehavior" and "${value}" if value changed`, () => {
-    isConfirmationEnabled.set(value);
-    const spy = mockSessionStorageSetItem();
-    fn();
-    expect(spy).not.toHaveBeenCalled();
+describe.each([
+  ['mount', mount],
+] as const)('%s', (_, fn) => {
+  describe('mini apps env', () => {
+    beforeEach(mockMiniAppsEnv);
 
-    isConfirmationEnabled.set(!value);
-    fn();
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('tapps/closingBehavior', String(value));
+    it('should not throw', () => {
+      expect(fn).not.toThrow();
+    });
   });
 });
 
 describe('mount', () => {
-  beforeEach(setInitialized);
-
-  it('should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: false }', () => {
-    const spy = mockPostEvent();
-    mount();
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('web_app_setup_closing_behavior', { need_confirmation: false });
+  beforeEach(() => {
+    mockMiniAppsEnv();
+    setInitialized();
   });
 
   it('should set isMounted = true', () => {
@@ -125,7 +164,7 @@ describe('mount', () => {
       expect(isConfirmationEnabled()).toBe(true);
     });
 
-    it('should set isVerticalSwipesEnabled false if session storage key "tapps/closingBehavior" not presented', () => {
+    it('should set isConfirmationEnabled false if session storage key "tapps/closingBehavior" not presented', () => {
       const spy = mockSessionStorageGetItem(() => null);
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
@@ -135,7 +174,7 @@ describe('mount', () => {
   });
 
   describe('first launch', () => {
-    it('should set isVerticalSwipesEnabled false', () => {
+    it('should set isConfirmationEnabled false', () => {
       mount();
       expect(isConfirmationEnabled()).toBe(false);
     });
@@ -143,7 +182,7 @@ describe('mount', () => {
 });
 
 describe('unmount', () => {
-  beforeEach(setReady);
+  beforeEach(setAvailable);
 
   it('should set isMounted = false', () => {
     expect(isMounted()).toBe(true);
