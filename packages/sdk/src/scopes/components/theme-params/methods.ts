@@ -1,7 +1,6 @@
 import {
   off,
   on,
-  TypedError,
   camelToKebab,
   getStorageValue,
   setStorageValue,
@@ -14,7 +13,7 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { ERR_VARS_ALREADY_BOUND } from '@/errors.js';
+import { throwCssVarsBound } from '@/scopes/toolkit/throwCssVarsBound.js';
 import {
   createWrapSafeMounted
 } from '@/scopes/toolkit/createWrapSafeMounted.js';
@@ -56,12 +55,8 @@ const wrapSafe = createWrapSafeMounted(COMPONENT_NAME, isMounted);
 export const bindCssVars = wrapSafe(
   'bindCssVars',
   (getCSSVarName?: GetCssVarNameFn): VoidFunction => {
-    if (isCssVarsBound()) {
-      throw new TypedError(
-        ERR_VARS_ALREADY_BOUND,
-        'CSS variables are already bound',
-      );
-    }
+    isCssVarsBound() && throwCssVarsBound();
+
     getCSSVarName ||= (prop) => `--tg-theme-${camelToKebab(prop)}`;
 
     function forEachEntry(fn: (key: string, value: RGB) => void): void {

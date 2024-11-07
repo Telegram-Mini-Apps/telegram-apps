@@ -20,9 +20,7 @@ import { ERR_ALREADY_CALLED } from '@/errors.js';
 import { mount as tpMount } from '@/scopes/components/theme-params/methods.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import { withSupports } from '@/scopes/toolkit/withSupports.js';
-import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
-import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
-import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
+import { throwCssVarsBound } from '@/scopes/toolkit/throwCssVarsBound.js';
 
 import {
   headerColor,
@@ -71,14 +69,13 @@ const withIsMounted = createWithIsMounted(isMounted);
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * mini app key.
  * @returns Function to stop updating variables.
- * @throws {TypedError} ERR_ALREADY_CALLED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_VARS_ALREADY_BOUND
  * @throws {TypedError} ERR_NOT_MOUNTED
  */
 export const bindCssVars = withIsMounted((getCSSVarName?: GetCssVarNameFn): VoidFunction => {
-  if (isCssVarsBound()) {
-    throw new TypedError(ERR_ALREADY_CALLED);
-  }
+  isCssVarsBound() && throwCssVarsBound();
+
   const [addCleanup, cleanup] = createCbCollector();
 
   /**

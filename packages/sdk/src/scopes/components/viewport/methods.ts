@@ -7,18 +7,17 @@ import {
   setStorageValue,
   deleteCssVar,
   setCssVar,
-  TypedError,
   type EventListener,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals.js';
-import { ERR_VARS_ALREADY_BOUND } from '@/errors.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 import { subAndCall } from '@/utils/subAndCall.js';
 import {
   createWrapSafeMounted,
 } from '@/scopes/toolkit/createWrapSafeMounted.js';
+import { throwCssVarsBound } from '@/scopes/toolkit/throwCssVarsBound.js';
 
 import { requestViewport } from './requestViewport.js';
 import {
@@ -69,12 +68,8 @@ const wrapSafe = createWrapSafeMounted(COMPONENT_NAME, isMounted);
 export const bindCssVars = wrapSafe(
   'bindCssVars',
   (getCSSVarName?: GetCSSVarNameFn): VoidFunction => {
-    if (isCssVarsBound()) {
-      throw new TypedError(
-        ERR_VARS_ALREADY_BOUND,
-        'CSS variables are already bound',
-      );
-    }
+    isCssVarsBound() && throwCssVarsBound();
+
     getCSSVarName ||= (prop) => `--tg-viewport-${camelToKebab(prop)}`;
     const props = ['height', 'width', 'stableHeight'] as const;
 
