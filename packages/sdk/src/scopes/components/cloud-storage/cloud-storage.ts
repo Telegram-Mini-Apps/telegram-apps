@@ -20,6 +20,7 @@ export const isSupported = createIsSupported(INVOKE_METHOD_NAME);
  * Deletes specified key or keys from the cloud storage.
  * @param keyOrKeys - key or keys to delete.
  * @param options - request execution options.
+ * @since Mini Apps v6.9
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -48,6 +49,7 @@ export const deleteItem = wrapSupported('deleteItem', (
  * @param options - request execution options.
  * @returns Map, where a key is one of the specified in the `keys` argument,
  * and a value is a corresponding storage value.
+ * @since Mini Apps v6.9
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -67,6 +69,7 @@ function _getItem<K extends string>(
  * @param options - request execution options.
  * @return Value of the specified key. If the key was not created previously,
  * the function will return an empty string.
+ * @since Mini Apps v6.9
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -99,6 +102,7 @@ export const getItem = wrapSupported('getItem', _getItem);
 /**
  * Returns a list of all keys presented in the cloud storage.
  * @param options - request execution options.
+ * @since Mini Apps v6.9
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -119,6 +123,7 @@ export const getKeys = wrapSupported('getKeys', (
  * @param key - storage key.
  * @param value - storage value.
  * @param options - request execution options.
+ * @since Mini Apps v6.9
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
