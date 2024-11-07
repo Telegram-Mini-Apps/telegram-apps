@@ -1,6 +1,6 @@
 import { createWrapSafe, SafeWrapFn } from '@/scopes/toolkit/createWrapSafe.js';
 
-export function createWrapSafeMounted(
+export function createWrapMounted(
   component: string,
   isMounted: () => boolean,
 ): SafeWrapFn<false> {
