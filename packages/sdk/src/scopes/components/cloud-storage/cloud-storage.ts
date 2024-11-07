@@ -6,17 +6,15 @@ import { array, object, string } from '@telegram-apps/transformers';
 
 import { invokeCustomMethod } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import {
-  createWrapSafeSupported
-} from '@/scopes/toolkit/createWrapSafeSupported.js';
+import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
 
-const WEB_APP_INVOKE_CUSTOM_METHOD = 'web_app_invoke_custom_method';
-const wrapSupported = createWrapSafeSupported('cloudStorage', WEB_APP_INVOKE_CUSTOM_METHOD);
+const INVOKE_METHOD_NAME = 'web_app_invoke_custom_method';
+const wrapSupported = createWrapSupported('cloudStorage', INVOKE_METHOD_NAME);
 
 /**
- * @returns True if the Cloud Storage component is supported.
+ * Signal indicating if the Cloud Storage is supported.
  */
-export const isSupported = createIsSupported(WEB_APP_INVOKE_CUSTOM_METHOD);
+export const isSupported = createIsSupported(INVOKE_METHOD_NAME);
 
 /**
  * Deletes specified key or keys from the cloud storage.
@@ -25,37 +23,34 @@ export const isSupported = createIsSupported(WEB_APP_INVOKE_CUSTOM_METHOD);
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
- * @example Single key.
+ * @example Deleting a single key
  * if (deleteItem.isAvailable()) {
  *   await deleteItem('my-key');
  * }
- * @example Multiple keys.
+ * @example Deleting multiple keys
  * if (deleteItem.isAvailable()) {
  *   await deleteItem(['key1', 'key2']);
  * }
  */
-export const deleteItem = wrapSupported(
-  'deleteItem',
-  (
-    keyOrKeys: string | string[],
-    options?: ExecuteWithOptions,
-  ): CancelablePromise<void> => {
-    const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
-    return keys.length
-      ? invokeCustomMethod('deleteStorageValues', { keys }, options).then()
-      : CancelablePromise.resolve();
-  },
-);
+export const deleteItem = wrapSupported('deleteItem', (
+  keyOrKeys: string | string[],
+  options?: ExecuteWithOptions,
+): CancelablePromise<void> => {
+  const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
+  return keys.length
+    ? invokeCustomMethod('deleteStorageValues', { keys }, options).then()
+    : CancelablePromise.resolve();
+});
 
 /**
+ * Gets multiple keys' values from the cloud storage.
  * @param keys - keys list.
  * @param options - request execution options.
- * @returns Map, where a key is one of the specified in the `keys` argument, and a value is
- * a corresponding storage value.
+ * @returns Map, where a key is one of the specified in the `keys` argument,
+ * and a value is a corresponding storage value.
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
  * @example
  * if (deleteItem.isAvailable()) {
  *   const { key1, key2 } = await getItem(['key1', 'key2']);
@@ -67,14 +62,14 @@ function _getItem<K extends string>(
 ): CancelablePromise<Record<K, string>>;
 
 /**
+ * Gets a single key value from the cloud storage.
  * @param key - cloud storage key.
  * @param options - request execution options.
- * @return Value of the specified key. If the key was not created previously, the function
- * will return an empty string.
+ * @return Value of the specified key. If the key was not created previously,
+ * the function will return an empty string.
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
  * @example
  * if (getItem.isAvailable()) {
  *   const keyValue = await getItem('my-key');
@@ -112,15 +107,15 @@ export const getItem = wrapSupported('getItem', _getItem);
  *   const keysArray = await getKeys();
  * }
  */
-export const getKeys = wrapSupported(
-  'getKeys',
-  (options?: ExecuteWithOptions): CancelablePromise<string[]> => {
-    return invokeCustomMethod('getStorageKeys', {}, options).then(array(string())());
-  },
-);
+export const getKeys = wrapSupported('getKeys', (
+  options?: ExecuteWithOptions,
+): CancelablePromise<string[]> => {
+  return invokeCustomMethod('getStorageKeys', {}, options)
+    .then(array(string())());
+});
 
 /**
- * Saves specified value by key.
+ * Saves the specified value by a key.
  * @param key - storage key.
  * @param value - storage value.
  * @param options - request execution options.
@@ -132,12 +127,13 @@ export const getKeys = wrapSupported(
  *   await setItem('key', 'value');
  * }
  */
-export const setItem = wrapSupported(
-  'setItem',
-  (key: string, value: string, options?: ExecuteWithOptions): CancelablePromise<void> => {
-    return invokeCustomMethod('saveStorageValue', {
-      key,
-      value,
-    }, options).then();
-  },
-);
+export const setItem = wrapSupported('setItem', (
+  key: string,
+  value: string,
+  options?: ExecuteWithOptions,
+): CancelablePromise<void> => {
+  return invokeCustomMethod('saveStorageValue', {
+    key,
+    value,
+  }, options).then();
+});
