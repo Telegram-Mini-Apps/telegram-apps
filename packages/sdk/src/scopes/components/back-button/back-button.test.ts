@@ -9,6 +9,8 @@ import { emitMiniAppsEvent, TypedError } from '@telegram-apps/bridge';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
 import { setInitialized } from '@test-utils/setInitialized.js';
+import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import { mockSSR } from '@test-utils/mockSSR.js';
 import { $version } from '@/scopes/globals.js';
 
 import {
@@ -29,66 +31,177 @@ beforeEach(() => {
   mockPostEvent();
 });
 
-function setReady() {
-  isMounted.set(true);
+function setAvailable() {
   setInitialized();
+  mockMiniAppsEnv();
+  isMounted.set(true);
 }
 
-describe('check initialization and mount', () => {
-  describe.each([
-    { name: 'hide', fn: hide },
-    { name: 'show', fn: show },
-  ])('$name', ({ fn }) => {
-    it('should throw ERR_NOT_INITIALIZED if package is not initialized', () => {
-      const error = new TypedError(
-        'ERR_NOT_INITIALIZED',
-        'The package was not initialized. Consider using the package init() function',
+describe.each([
+  ['hide', hide],
+  ['show', show],
+  ['mount', mount],
+  ['onClick', onClick],
+  ['offClick', offClick],
+] as const)('%s', (name, fn) => {
+  it('should throw ERR_UNKNOWN_ENV if not in Mini Apps', () => {
+    const err = new TypedError(
+      'ERR_UNKNOWN_ENV',
+      `Unable to call the backButton.${name}() method: it can't be called outside Mini Apps`,
+    );
+    expect(fn).toThrow(err);
+    mockMiniAppsEnv();
+    expect(fn).not.toThrow(err);
+  });
+
+  describe('mini apps env', () => {
+    beforeEach(mockMiniAppsEnv);
+
+    it('should throw ERR_UNKNOWN_ENV if called on the server', () => {
+      mockSSR();
+      expect(fn).toThrow(
+        new TypedError(
+          'ERR_UNKNOWN_ENV',
+          `Unable to call the backButton.${name}() method: it can't be called outside Mini Apps`,
+        ),
       );
-      expect(fn).toThrow(error);
-      setInitialized();
-      expect(fn).not.toThrow(error);
     });
 
-    describe('initialized', () => {
+    it('should throw ERR_NOT_INITIALIZED if package is not initialized', () => {
+      const err = new TypedError(
+        'ERR_NOT_INITIALIZED',
+        `Unable to call the backButton.${name}() method: the SDK was not initialized. Use the SDK init() function`,
+      );
+      expect(fn).toThrow(err);
+      setInitialized();
+      expect(fn).not.toThrow(err);
+    });
+
+    describe('package initialized', () => {
       beforeEach(setInitialized);
 
-      it('should throw ERR_NOT_MOUNTED if component was not mounted', () => {
-        const error = new TypedError(
-          'ERR_NOT_MOUNTED',
-          'backButton component is not mounted. Consider using the mount() method',
+      it('should throw ERR_NOT_SUPPORTED if Mini Apps version is less than 6.1', () => {
+        $version.set('6.0');
+        expect(fn).toThrow(
+          new TypedError(
+            'ERR_NOT_INITIALIZED',
+            `Unable to call the backButton.${name}() method: it is unsupported in Mini Apps version 6.0`,
+          ),
         );
-        expect(fn).toThrow(error);
-        isMounted.set(true);
-        expect(fn).not.toThrow(error);
+        $version.set('6.1');
+        expect(fn).not.toThrow(
+          new TypedError(
+            'ERR_NOT_INITIALIZED',
+            `Unable to call the backButton.${name}() method: it is unsupported in Mini Apps version 6.1`,
+          ),
+        );
       });
+    });
+  });
+
+  describe('isSupported', () => {
+    it('should return true only if Mini Apps version is 6.1 or higher. False otherwise', () => {
+      $version.set('6.0');
+      expect(fn.isSupported()).toBe(false);
+      $version.set('6.1');
+      expect(fn.isSupported()).toBe(true);
     });
   });
 });
 
-describe('check support', () => {
-  describe.each([
-    { name: 'mount', fn: mount },
-    { name: 'onClick', fn: onClick },
-    { name: 'offClick', fn: offClick },
-  ])('$name', ({ fn, name }) => {
-    it('should throw ERR_NOT_SUPPORTED if not supported', () => {
-      const error = new TypedError(
-        'ERR_NOT_SUPPORTED',
-        `backButton.${name}() method is not supported in Mini Apps version 6.0`,
-      );
-      $version.set('6.0');
-      expect(fn).toThrow(error);
-      $version.set('6.1');
-      expect(fn).not.toThrow(error);
+describe.each([
+  ['hide', hide, false],
+  ['show', show, true],
+])('%s', (name, fn, value) => {
+  describe('mini apps env', () => {
+    beforeEach(mockMiniAppsEnv);
+
+    describe('package initialized', () => {
+      beforeEach(setInitialized);
+
+      describe('Mini Apps version is 6.1', () => {
+        beforeEach(() => {
+          $version.set('6.1');
+        });
+
+        it('should throw ERR_NOT_MOUNTED if backButton is not mounted', () => {
+          expect(fn).toThrow(
+            new TypedError(
+              'ERR_NOT_MOUNTED',
+              `Unable to call the backButton.${name}() method: the component is not mounted. Use the backButton.mount() method`,
+            ),
+          );
+        });
+
+        describe('mounted', () => {
+          beforeEach(() => {
+            isMounted.set(true);
+          });
+
+          it('should not throw', () => {
+            expect(fn).not.toThrow();
+          });
+        });
+      });
+    });
+  });
+
+  describe('env is ready', () => {
+    beforeEach(setAvailable);
+
+    it(`should set isVisible = ${value}`, () => {
+      isVisible.set(!value);
+      expect(isVisible()).toBe(!value);
+      fn();
+      expect(isVisible()).toBe(value);
     });
 
-    describe('isSupported', () => {
-      it('should return false if version is less than 6.1', () => {
-        $version.set('6.0');
-        expect(fn.isSupported()).toBe(false);
+    it(`should call postEvent with "web_app_setup_back_button" and { is_visible: ${value} }`, () => {
+      isVisible.set(!value);
+      const spy = mockPostEvent();
+      fn();
+      fn();
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('web_app_setup_back_button', { is_visible: value });
+    });
 
-        $version.set('6.1');
-        expect(fn.isSupported()).toBe(true);
+    it(`should call sessionStorage.setItem with "tapps/backButton" and "${value}" if value changed`, () => {
+      isVisible.set(value);
+      const spy = mockSessionStorageSetItem();
+      fn();
+      // Should call retrieveLaunchParams.
+      expect(spy).toHaveBeenCalledOnce();
+
+      spy.mockClear();
+
+      isVisible.set(!value);
+      fn();
+      // Should call retrieveLaunchParams + save component state.
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(spy).toHaveBeenNthCalledWith(2, 'tapps/backButton', String(value));
+    });
+  });
+});
+
+describe.each([
+  ['mount', mount],
+  ['onClick', onClick],
+  ['offClick', offClick],
+] as const)('%s', (_, fn) => {
+  describe('mini apps env', () => {
+    beforeEach(mockMiniAppsEnv);
+
+    describe('package initialized', () => {
+      beforeEach(setInitialized);
+
+      describe('Mini Apps version is 6.1', () => {
+        beforeEach(() => {
+          $version.set('6.1');
+        });
+
+        it('should not throw', () => {
+          expect(fn).not.toThrow();
+        });
       });
     });
   });
@@ -104,49 +217,10 @@ describe('isSupported', () => {
   });
 });
 
-describe.each([
-  { name: 'hide', fn: hide, value: false },
-  { name: 'show', fn: show, value: true },
-])('$name', ({ fn, value }) => {
-  beforeEach(setReady);
-
-  it(`should set isVisible = ${value}`, () => {
-    isVisible.set(!value);
-    expect(isVisible()).toBe(!value);
-    fn();
-    expect(isVisible()).toBe(value);
-  });
-
-  it(`should call postEvent with "web_app_setup_back_button" and { is_visible: ${value} }`, () => {
-    isVisible.set(!value);
-    const spy = mockPostEvent();
-    fn();
-    fn();
-    expect(spy).toBeCalledTimes(1);
-    expect(spy).toBeCalledWith('web_app_setup_back_button', { is_visible: value });
-  });
-
-  it(`should call sessionStorage.setItem with "tapps/backButton" and "${value}" if value changed`, () => {
-    isVisible.set(value);
-    const spy = mockSessionStorageSetItem();
-    fn();
-    expect(spy).not.toHaveBeenCalled();
-
-    isVisible.set(!value);
-    fn();
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('tapps/backButton', String(value));
-  });
-});
-
 describe('mount', () => {
-  beforeEach(setInitialized);
-
-  it('should call postEvent with "web_app_setup_back_button"', () => {
-    const spy = mockPostEvent();
-    mount();
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('web_app_setup_back_button', { is_visible: false });
+  beforeEach(() => {
+    mockMiniAppsEnv();
+    setInitialized();
   });
 
   it('should set isMounted = true', () => {
@@ -186,7 +260,7 @@ describe('mount', () => {
 });
 
 describe('onClick', () => {
-  beforeEach(setReady);
+  beforeEach(setAvailable);
 
   it('should add click listener', () => {
     const fn = vi.fn();
@@ -205,7 +279,7 @@ describe('onClick', () => {
 });
 
 describe('offClick', () => {
-  beforeEach(setReady);
+  beforeEach(setAvailable);
 
   it('should remove click listener', () => {
     const fn = vi.fn();
@@ -217,7 +291,7 @@ describe('offClick', () => {
 });
 
 describe('unmount', () => {
-  beforeEach(setReady);
+  beforeEach(setAvailable);
 
   it('should set isMounted = false', () => {
     expect(isMounted()).toBe(true);
