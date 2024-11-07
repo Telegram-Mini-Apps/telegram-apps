@@ -7,46 +7,62 @@ import {
 import { signal } from '@telegram-apps/signals';
 
 import { request } from '@/scopes/globals.js';
-import { ERR_INVALID_HOSTNAME, ERR_INVALID_SLUG, ERR_ALREADY_CALLED } from '@/errors.js';
-import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
+import {
+  ERR_INVALID_HOSTNAME,
+  ERR_INVALID_SLUG,
+  ERR_ALREADY_CALLED,
+} from '@/errors.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
+import {
+  createWrapSafeSupported
+} from '@/scopes/toolkit/createWrapSafeSupported.js';
 
 const WEB_APP_OPEN_INVOICE = 'web_app_open_invoice';
 
 /**
- * True if the invoice is currently opened.
+ * True if an invoice is currently opened.
  */
 export const isOpened = signal(false);
 
 /**
- * @returns True if the Invoice is supported.
+ * @returns True if the Invoice component is supported.
  */
 export const isSupported = createIsSupported(WEB_APP_OPEN_INVOICE);
 
+const wrapSafe = createWrapSafeSupported('invoice', WEB_APP_OPEN_INVOICE);
+
 /**
  * Opens an invoice using its slug.
- * Example of the value: `jd231xxSd1`
  * @param slug - invoice slug.
  * @param options - additional options.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  * @throws {TypedError} ERR_ALREADY_CALLED
- * @throws {TypedError} ERR_INVALID_HOSTNAME
- * @throws {TypedError} ERR_INVALID_SLUG
+ * @example
+ * if (open.isAvailable()) {
+ *   const status = await open('gkljs@@n1mdf');
+ * }
  */
 export function _open(slug: string, options?: ExecuteWithPostEvent): Promise<InvoiceStatus>;
 
 /**
  * Opens an invoice using its url.
- *
- * The function expects to pass a link in a full format, with the hostname "t.me".
- * Examples:
- * - `https://t.me/$jd231xxSd1`
- * - `https://t.me/invoice/jd231xxSd1`
  * @param url - invoice URL.
  * @param type - value type.
  * @param options - additional options.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
  * @throws {TypedError} ERR_ALREADY_CALLED
  * @throws {TypedError} ERR_INVALID_HOSTNAME
  * @throws {TypedError} ERR_INVALID_SLUG
+ * @example
+ * if (open.isAvailable()) {
+ *   const status = await open('https://t.me/$gkljs@@n1mdf', 'url');
+ * }
  */
 export function _open(
   url: string,
@@ -97,7 +113,4 @@ export async function _open(
     });
 }
 
-/**
- * @throws {TypedError} ERR_NOT_SUPPORTED
- */
-export const open = withIsSupported(_open, isSupported);
+export const open = wrapSafe('open', _open);
