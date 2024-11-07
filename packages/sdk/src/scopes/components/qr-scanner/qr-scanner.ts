@@ -10,8 +10,10 @@ import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
 import { ERR_ALREADY_CALLED } from '@/errors.js';
-import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
+import {
+  createWrapSafeSupported,
+} from '@/scopes/toolkit/createWrapSafeSupported.js';
 
 interface OpenSharedOptions extends ExecuteWithOptions {
   /**
@@ -30,13 +32,19 @@ const QR_TEXT_RECEIVED = 'qr_text_received';
  */
 export const isSupported = createIsSupported(WEB_APP_OPEN_SCAN_QR_POPUP);
 
-const withIsSupported = createWithIsSupported(isSupported);
+const wrapSupported = createWrapSafeSupported('qrScanner', WEB_APP_OPEN_SCAN_QR_POPUP);
 
 /**
  * Closes the scanner.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @example
+ * if (close.isAvailable()) {
+ *   close();
+ * }
  */
-export const close = withIsSupported((): void => {
+export const close = wrapSupported('close', (): void => {
   isOpened.set(false);
   postEvent(WEB_APP_CLOSE_SCAN_QR_POPUP);
 });
@@ -47,12 +55,13 @@ export const close = withIsSupported((): void => {
 export const isOpened = signal(false);
 
 /**
- * Opens the scanner and returns a promise which will be resolved with the QR content if the
- * `capture` function returned true.
+ * Opens the scanner and returns a promise which will be resolved with the QR
+ * content if the `capture` function returned true.
  *
  * Promise may also be resolved to null if the scanner was closed.
  * @param options - method options.
- * @returns A promise with QR content presented as string or undefined if the scanner was closed.
+ * @returns A promise with QR content presented as string or undefined if the
+ * scanner was closed.
  * @throws {TypedError} ERR_ALREADY_CALLED
  */
 function _open(options?: OpenSharedOptions & {
@@ -64,10 +73,11 @@ function _open(options?: OpenSharedOptions & {
 }): CancelablePromise<string | undefined>;
 
 /**
- * Opens the scanner and calls the `onCaptured` function each time, a QR was scanned.
+ * Opens the scanner and calls the `onCaptured` function each time, a QR was
+ * scanned.
  *
- * The method does not return anything and expects the scanner to be closed externally by a user
- * or via the `close` method.
+ * The method does not return anything and expects the scanner to be closed
+ * externally by a user or via the `close` method.
  * @param options - method options.
  * @throws {TypedError} ERR_ALREADY_CALLED
  */
@@ -92,8 +102,8 @@ function _open(options?: OpenSharedOptions & {
     options ||= {};
     const { onCaptured, text, capture } = options;
     const [, cleanup] = createCbCollector(
-      // Whenever the scanner was closed for some reason (by a developer or a user), we should
-      // resolve the promise with undefined.
+      // Whenever the scanner was closed for some reason (by a developer or a
+      // user), we should resolve the promise with undefined.
       isOpened.sub(() => {
         promise.resolve();
       }),
@@ -123,6 +133,13 @@ function _open(options?: OpenSharedOptions & {
 }
 
 /**
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_ALREADY_CALLED
+ * @example
+ * if (open.isAvailable()) {
+ *   open().then(console.log);
+ * }
  */
-export const open = withIsSupported(_open)
+export const open = wrapSupported('open', _open);
