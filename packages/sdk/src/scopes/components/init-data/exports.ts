@@ -15,4 +15,5 @@ export {
   startParam as initDataStartParam,
 } from './exports.variable.js';
 export * as initData from './exports.variable.js';
-export * from './parseInitData.js';
+
+export { parseInitData } from './parseInitData.js';
