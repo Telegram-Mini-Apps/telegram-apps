@@ -56,6 +56,9 @@ export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
    * It is highly recommended to use this signal only in certain narrow cases
    * when only the function support check is required.
    *
+   * This signal is not applying additional operations like checking if the
+   * current environment is Mini Apps and the SDK is initialized.
+   *
    * To check if the function is available for use, use the `isAvailable`
    * signal.
    *
@@ -73,7 +76,6 @@ interface Options {
   component: string;
   method: string;
   isMounted?: () => boolean;
-  checkInit?: boolean;
   isSupported?: IsSupported;
 }
 
@@ -87,13 +89,8 @@ export function wrapSafe<Fn extends AnyFn, O extends Options>(fn: Fn, {
   isSupported,
   isMounted,
   component,
-  checkInit,
   method,
 }: O): SafeWrapped<Fn, O extends { isSupported: any } ? true : false> {
-  if (typeof checkInit !== 'boolean') {
-    checkInit = true;
-  }
-
   const fullMethod = `${component}.${method}()`;
 
   const $isSupported = computed(() => {
@@ -119,7 +116,7 @@ export function wrapSafe<Fn extends AnyFn, O extends Options>(fn: Fn, {
   });
 
   const $isInitialized = computed(() => {
-    return checkInit && $version() !== '0.0';
+    return $version() !== '0.0';
   });
   const $isMounted = computed(() => {
     return !isMounted || isMounted();
@@ -127,24 +124,24 @@ export function wrapSafe<Fn extends AnyFn, O extends Options>(fn: Fn, {
 
   return Object.assign(
     (...args: Parameters<Fn>): ReturnType<Fn> => {
-      if (!isTMA('simple') || isSSR()) {
+      const errMessagePrefix = `Unable to call the ${fullMethod} method:`;
+
+      if (isSSR() || !isTMA('simple')) {
         throw new TypedError(
           ERR_UNKNOWN_ENV,
-          `${fullMethod} method can't be called outside Mini Apps`,
+          `${errMessagePrefix} it can't be called outside Mini Apps`,
         );
       }
-
-      const errMessagePrefix = `Unable to call the ${method} method:`;
       if (!$isInitialized()) {
         throw new TypedError(
           ERR_NOT_INITIALIZED,
-          `${errMessagePrefix} the package was not initialized. Use the package init() function`,
+          `${errMessagePrefix} the SDK was not initialized. Use the SDK init() function`,
         );
       }
       if (!$isSupported()) {
         throw new TypedError(
           ERR_NOT_SUPPORTED,
-          `${errMessagePrefix} the method is unsupported${
+          `${errMessagePrefix} it is unsupported${
             typeof isSupported === 'string'
               ? ` in Mini Apps version ${$version()}`
               : ''
@@ -154,20 +151,20 @@ export function wrapSafe<Fn extends AnyFn, O extends Options>(fn: Fn, {
       if (!$isMounted()) {
         throw new TypedError(
           ERR_NOT_MOUNTED,
-          `${errMessagePrefix} the component is not mounted. Use the mount() method`,
+          `${errMessagePrefix} the component is not mounted. Use the ${component}.mount() method`,
         );
       }
       return fn(...args);
     },
     fn,
     {
-      isAvailable: computed(() => {
-        return isTMA('simple')
+      isAvailable: computed(
+        () => isTMA('simple')
           && !isSSR()
           && $isInitialized()
           && $isSupported()
-          && $isMounted();
-      }),
+          && $isMounted(),
+      ),
     },
     isSupported ? {
       isSupported: $isSupported,

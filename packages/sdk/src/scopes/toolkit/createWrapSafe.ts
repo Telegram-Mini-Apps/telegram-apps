@@ -13,7 +13,6 @@ export interface SafeWrapFn<S extends boolean> {
 interface Options {
   isMounted?: () => boolean;
   isSupported?: IsSupported;
-  checkInit?: boolean;
 }
 
 export function createWrapSafe<O extends Options>(
