@@ -1,67 +1,70 @@
 import {
   TypedError,
-  type ExecuteWithOptions,
   type InvoiceStatus,
   type ExecuteWithPostEvent,
 } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
 import { request } from '@/scopes/globals.js';
+import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
+import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
 import {
   ERR_INVALID_HOSTNAME,
   ERR_INVALID_SLUG,
   ERR_ALREADY_CALLED,
 } from '@/errors.js';
-import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import {
-  createWrapSafeSupported
-} from '@/scopes/toolkit/createWrapSafeSupported.js';
 
-const WEB_APP_OPEN_INVOICE = 'web_app_open_invoice';
+const OPEN_METHOD = 'web_app_open_invoice';
+const wrapSupported = createWrapSupported('invoice', OPEN_METHOD);
 
 /**
- * True if an invoice is currently opened.
+ * Signal indicating if an invoice is opened.
  */
 export const isOpened = signal(false);
 
 /**
- * @returns True if the Invoice component is supported.
+ * Signal indicating if invoices are supported.
  */
-export const isSupported = createIsSupported(WEB_APP_OPEN_INVOICE);
-
-const wrapSafe = createWrapSafeSupported('invoice', WEB_APP_OPEN_INVOICE);
+export const isSupported = createIsSupported(OPEN_METHOD);
 
 /**
  * Opens an invoice using its slug.
  * @param slug - invoice slug.
  * @param options - additional options.
+ * @since Mini Apps v6.1
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
  * @throws {TypedError} ERR_ALREADY_CALLED
  * @example
  * if (open.isAvailable()) {
- *   const status = await open('gkljs@@n1mdf');
+ *   const status = await open('kJNFS331');
  * }
  */
-export function _open(slug: string, options?: ExecuteWithPostEvent): Promise<InvoiceStatus>;
+export function _open(
+  slug: string,
+  options?: ExecuteWithPostEvent,
+): Promise<InvoiceStatus>;
 
 /**
  * Opens an invoice using its url.
  * @param url - invoice URL.
  * @param type - value type.
  * @param options - additional options.
+ * @since Mini Apps v6.1
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
  * @throws {TypedError} ERR_ALREADY_CALLED
  * @throws {TypedError} ERR_INVALID_HOSTNAME
  * @throws {TypedError} ERR_INVALID_SLUG
  * @example
  * if (open.isAvailable()) {
- *   const status = await open('https://t.me/$gkljs@@n1mdf', 'url');
+ *   const status = await open('https://t.me/$kJNFS331', 'url');
+ * }
+ * @example
+ * if (open.isAvailable()) {
+ *   const status = await open('https://t.me/invoice/kJNFS331', 'url');
  * }
  */
 export function _open(
@@ -72,10 +75,11 @@ export function _open(
 
 export async function _open(
   urlOrSlug: string,
-  optionsOrType?: 'url' | ExecuteWithOptions,
-  options?: ExecuteWithOptions,
+  optionsOrType?: 'url' | ExecuteWithPostEvent,
+  options?: ExecuteWithPostEvent,
 ): Promise<InvoiceStatus> {
   if (isOpened()) {
+    // TODO: ERR_ALREADY_OPENED
     throw new TypedError(ERR_ALREADY_CALLED);
   }
 
@@ -84,7 +88,7 @@ export async function _open(
   if (optionsOrType === 'url') {
     const { hostname, pathname } = new URL(urlOrSlug, window.location.href);
     if (hostname !== 't.me') {
-      throw new TypedError(ERR_INVALID_HOSTNAME);
+      throw new TypedError(ERR_INVALID_HOSTNAME, `Link has unexpected hostname: ${hostname}`);
     }
 
     // Valid examples:
@@ -92,17 +96,21 @@ export async function _open(
     // "/$my-slug"
     const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
     if (!match) {
-      throw new TypedError(ERR_INVALID_SLUG);
+      throw new TypedError(
+        ERR_INVALID_SLUG,
+        `Expected to receive a link with a pathname in format "/invoice/{slug}" or "/\${slug}"`
+      );
     }
     [, , slug] = match;
   } else {
+    // todo: validate slug?
     slug = urlOrSlug;
     options = optionsOrType;
   }
 
   isOpened.set(true);
 
-  return request(WEB_APP_OPEN_INVOICE, 'invoice_closed', {
+  return request(OPEN_METHOD, 'invoice_closed', {
     ...options,
     params: { slug },
     capture: (data) => slug === data.slug,
@@ -113,4 +121,4 @@ export async function _open(
     });
 }
 
-export const open = wrapSafe('open', _open);
+export const open = wrapSupported('open', _open);
