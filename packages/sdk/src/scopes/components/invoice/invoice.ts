@@ -11,7 +11,7 @@ import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
 import {
   ERR_INVALID_HOSTNAME,
   ERR_INVALID_SLUG,
-  ERR_ALREADY_CALLED,
+  ERR_ALREADY_OPENED,
 } from '@/errors.js';
 
 const OPEN_METHOD = 'web_app_open_invoice';
@@ -35,7 +35,7 @@ export const isSupported = createIsSupported(OPEN_METHOD);
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_ALREADY_OPENED
  * @example
  * if (open.isAvailable()) {
  *   const status = await open('kJNFS331');
@@ -55,7 +55,7 @@ export function _open(
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_ALREADY_OPENED
  * @throws {TypedError} ERR_INVALID_HOSTNAME
  * @throws {TypedError} ERR_INVALID_SLUG
  * @example
@@ -79,8 +79,7 @@ export async function _open(
   options?: ExecuteWithPostEvent,
 ): Promise<InvoiceStatus> {
   if (isOpened()) {
-    // TODO: ERR_ALREADY_OPENED
-    throw new TypedError(ERR_ALREADY_CALLED);
+    throw new TypedError(ERR_ALREADY_OPENED, 'An invoice is already opened');
   }
 
   let slug: string;
@@ -98,7 +97,7 @@ export async function _open(
     if (!match) {
       throw new TypedError(
         ERR_INVALID_SLUG,
-        `Expected to receive a link with a pathname in format "/invoice/{slug}" or "/\${slug}"`
+        `Expected to receive a link with a pathname in format "/invoice/{slug}" or "/\${slug}"`,
       );
     }
     [, , slug] = match;

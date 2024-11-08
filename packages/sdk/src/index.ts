@@ -37,6 +37,8 @@ export {
   ERR_NOT_SUPPORTED,
   ERR_NOT_MOUNTED,
   ERR_NOT_INITIALIZED,
+  ERR_ALREADY_OPENED,
+  ERR_CSS_VARS_ALREADY_BOUND,
 } from '@/errors.js';
 export { init, type InitOptions } from '@/init.js';
 

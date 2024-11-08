@@ -9,11 +9,9 @@ import {
 import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
-import { ERR_ALREADY_CALLED } from '@/errors.js';
+import { ERR_ALREADY_OPENED } from '@/errors.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import {
-  createWrapSupported,
-} from '@/scopes/toolkit/createWrapSupported.js';
+import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
 
 interface OpenSharedOptions extends ExecuteWithOptions {
   /**
@@ -70,7 +68,7 @@ export const isSupported = createIsSupported(OPEN_METHOD);
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_ALREADY_OPENED
  * @example Without `capture` option
  * if (open.isAvailable()) {
  *   const qr = await open({ text: 'Scan any QR' });
@@ -105,7 +103,7 @@ function _open(options?: OpenSharedOptions & {
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_ALREADY_OPENED
  * @example
  * if (open.isAvailable()) {
  *   const promise = await open({
@@ -133,8 +131,7 @@ function _open(options?: OpenSharedOptions & {
 }): CancelablePromise<string | void> {
   return CancelablePromise.withFn((abortSignal) => {
     if (isOpened()) {
-      // TODO: ERR_ALREADY_OPENED
-      throw new TypedError(ERR_ALREADY_CALLED);
+      throw new TypedError(ERR_ALREADY_OPENED, 'The QR Scanner is already opened');
     }
     isOpened.set(true);
 

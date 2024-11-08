@@ -2,7 +2,7 @@ import { TypedError } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
 import { request } from '@/scopes/globals.js';
-import { ERR_ALREADY_CALLED } from '@/errors.js';
+import { ERR_ALREADY_OPENED } from '@/errors.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
 
@@ -32,7 +32,7 @@ export const isSupported = createIsSupported(OPEN_METHOD);
  *
  * @param options - popup parameters.
  * @since Mini Apps v6.2
- * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_ALREADY_OPENED
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid title
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid message
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid buttons count
@@ -57,8 +57,7 @@ export const open = wrapSupported(
   'open',
   async (options: OpenOptions): Promise<string | null> => {
     if (isOpened()) {
-      // TODO: ERR_ALREADY_OPENED
-      throw new TypedError(ERR_ALREADY_CALLED);
+      throw new TypedError(ERR_ALREADY_OPENED, 'A popup is already opened');
     }
     isOpened.set(true);
 
