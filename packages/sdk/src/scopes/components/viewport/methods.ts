@@ -13,10 +13,8 @@ import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
-import { subAndCall } from '@/utils/subAndCall.js';
-import {
-  createWrapSafeMounted,
-} from '@/scopes/toolkit/createWrapSafeMounted.js';
+import { createWrapMounted } from '@/scopes/toolkit/createWrapMounted.js';
+import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
 import { throwCssVarsBound } from '@/scopes/toolkit/throwCssVarsBound.js';
 
 import { requestViewport } from './requestViewport.js';
@@ -38,8 +36,8 @@ interface StorageValue {
 }
 
 const COMPONENT_NAME = 'viewport';
-
-const wrapSafe = createWrapSafeMounted(COMPONENT_NAME, isMounted);
+const wrapBasic = createWrapBasic(COMPONENT_NAME);
+const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
 
 /**
  * Creates CSS variables connected with the current viewport.
@@ -60,12 +58,17 @@ const wrapSafe = createWrapSafeMounted(COMPONENT_NAME, isMounted);
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_VARS_ALREADY_BOUND
  * @throws {TypedError} ERR_NOT_MOUNTED
- * @example
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @example Using no arguments
  * if (bindCssVars.isAvailable()) {
  *   bindCssVars();
  * }
+ * @example Using custom CSS vars generator
+ * if (bindCssVars.isAvailable()) {
+ *   bindCssVars(key => `--my-prefix-${key}`);
+ * }
  */
-export const bindCssVars = wrapSafe(
+export const bindCssVars = wrapMounted(
   'bindCssVars',
   (getCSSVarName?: GetCSSVarNameFn): VoidFunction => {
     isCssVarsBound() && throwCssVarsBound();
@@ -94,31 +97,30 @@ export const bindCssVars = wrapSafe(
 /**
  * A method that expands the Mini App to the maximum available height. To find out if the Mini
  * App is expanded to the maximum height, refer to the value of the `isExpanded`.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @see isExpanded
  * @example
- * expand();
+ * if (expand.isAvailable()) {
+ *   expand();
+ * }
  */
-export function expand(): void {
+export const expand = wrapBasic('expand', (): void => {
   postEvent('web_app_expand');
-}
-
-function formatState(state: State): State {
-  return {
-    isExpanded: state.isExpanded,
-    height: truncate(state.height),
-    width: truncate(state.width),
-    stableHeight: truncate(state.stableHeight),
-  };
-}
+});
 
 /**
- * Mounts the component.
- *
- * This function restores the component state and is automatically saving it in the local storage
- * if it changed.
+ * Mounts the Viewport component.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_ALREADY_CALLED
+ * @example
+ * if (mount.isAvailable() && !isMounting()) {
+ *   await mount();
+ * }
  */
 export const mount = createMountFn<State>(
-  options => {
+  wrapBasic('mount', options => {
     // Try to restore the state using the storage.
     const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
     if (s) {
@@ -144,8 +146,8 @@ export const mount = createMountFn<State>(
       };
     }
 
-    // We were unable to retrieve data locally. In this case, we are sending a request returning
-    // the viewport information.
+    // We were unable to retrieve data locally. In this case, we are sending
+    // a request returning the viewport information.
     options.timeout ||= 1000;
     return requestViewport(options).then(data => ({
       height: data.height,
@@ -153,25 +155,30 @@ export const mount = createMountFn<State>(
       stableHeight: data.isStable ? data.height : state().stableHeight,
       width: data.width,
     }));
-  },
+  }),
   result => {
     on('viewport_changed', onViewportChanged);
-    subAndCall(state, onStateChanged);
-    state.set(formatState(result));
+    setState(result);
   },
   { isMounted, isMounting, mountError },
 );
 
 const onViewportChanged: EventListener<'viewport_changed'> = (data) => {
-  state.set(formatState({
+  setState({
     height: data.height,
-    width: data.width,
     isExpanded: data.is_expanded,
     stableHeight: data.is_state_stable ? data.height : state().stableHeight,
-  }));
+    width: data.width,
+  });
 };
 
-function onStateChanged(): void {
+function setState(s: State) {
+  state.set({
+    isExpanded: s.isExpanded,
+    height: truncate(s.height),
+    width: truncate(s.width),
+    stableHeight: truncate(s.stableHeight),
+  });
   setStorageValue<StorageValue>('viewport', state());
 }
 
@@ -184,12 +191,9 @@ function truncate(value: number): number {
 }
 
 /**
- * Unmounts the component, removing the listener, saving the component state
- * in the local storage.
- * @example
- * unmount();
+ * Unmounts the Viewport.
  */
 export function unmount(): void {
   off('viewport_changed', onViewportChanged);
-  state.unsub(onStateChanged);
+  isMounted.set(false);
 }
