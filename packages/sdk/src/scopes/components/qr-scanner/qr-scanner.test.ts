@@ -2,11 +2,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { dispatchMiniAppsEvent } from 'test-utils';
 import { TypedError } from '@telegram-apps/bridge';
 
-import { resetPackageState } from '@test-utils/reset/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
+import { setInitialized } from '@test-utils/setInitialized.js';
+import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import { mockSSR } from '@test-utils/mockSSR.js';
 import { $version } from '@/scopes/globals.js';
 
-import { close, open, isSupported, isOpened } from './qr-scanner.js';
+import { close, open, isOpened, isSupported } from './qr-scanner.js';
 
 beforeEach(() => {
   resetPackageState();
@@ -14,18 +17,92 @@ beforeEach(() => {
   mockPostEvent();
 });
 
-describe('close', () => {
-  it('should throw if version is less than 6.4', () => {
+function setAvailable() {
+  setInitialized();
+  mockMiniAppsEnv();
+}
+
+describe.each([
+  ['close', close],
+  ['open', open],
+] as const)('%s', (name, fn) => {
+  it('should throw ERR_UNKNOWN_ENV if not in Mini Apps', () => {
+    const err = new TypedError(
+      'ERR_UNKNOWN_ENV',
+      `Unable to call the qrScanner.${name}() method: it can't be called outside Mini Apps`,
+    );
+    expect(fn).toThrow(err);
+    mockMiniAppsEnv();
+    expect(fn).not.toThrow(err);
+  });
+
+  describe('mini apps env', () => {
+    beforeEach(mockMiniAppsEnv);
+
+    it('should throw ERR_UNKNOWN_ENV if called on the server', () => {
+      mockSSR();
+      expect(fn).toThrow(
+        new TypedError(
+          'ERR_UNKNOWN_ENV',
+          `Unable to call the qrScanner.${name}() method: it can't be called outside Mini Apps`,
+        ),
+      );
+    });
+
+    it('should throw ERR_NOT_INITIALIZED if package is not initialized', () => {
+      const err = new TypedError(
+        'ERR_NOT_INITIALIZED',
+        `Unable to call the qrScanner.${name}() method: the SDK was not initialized. Use the SDK init() function`,
+      );
+      expect(fn).toThrow(err);
+      setInitialized();
+      expect(fn).not.toThrow(err);
+    });
+
+    describe('package initialized', () => {
+      beforeEach(setInitialized);
+
+      it('should throw ERR_NOT_SUPPORTED if Mini Apps version is less than 6.4', () => {
+        $version.set('6.3');
+        expect(fn).toThrow(
+          new TypedError(
+            'ERR_NOT_SUPPORTED',
+            `Unable to call the qrScanner.${name}() method: it is unsupported in Mini Apps version 6.3`,
+          ),
+        );
+        $version.set('6.4');
+        expect(fn).not.toThrow(
+          new TypedError(
+            'ERR_NOT_SUPPORTED',
+            `Unable to call the qrScanner.${name}() method: it is unsupported in Mini Apps version 6.4`,
+          ),
+        );
+      });
+    });
+  });
+
+  describe('isSupported', () => {
+    it('should return true only if Mini Apps version is 6.4 or higher. False otherwise', () => {
+      $version.set('6.3');
+      expect(fn.isSupported()).toBe(false);
+      $version.set('6.4');
+      expect(fn.isSupported()).toBe(true);
+    });
+  });
+});
+
+describe('isSupported', () => {
+  it('should return false if version is less than 6.4', () => {
     $version.set('6.3');
-    expect(close).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
+    expect(isSupported()).toBe(false);
 
     $version.set('6.4');
-    expect(close).not.toThrow();
+    expect(isSupported()).toBe(true);
   });
+});
 
-  beforeEach(() => {
-    $version.set('10');
-  });
+describe('close', () => {
+  beforeEach(setAvailable);
 
   it('should set isOpened = false', () => {
     isOpened.set(true);
@@ -43,31 +120,8 @@ describe('close', () => {
   });
 });
 
-describe('isSupported', () => {
-  it('should return false if version is less than 6.4. True otherwise', () => {
-    $version.set('6.3');
-    expect(isSupported()).toBe(false);
-
-    $version.set('6.4');
-    expect(isSupported()).toBe(true);
-
-    $version.set('6.5');
-    expect(isSupported()).toBe(true);
-  });
-});
-
 describe('open', () => {
-  it('should throw if version is less than 6.4', () => {
-    $version.set('6.3');
-    expect(() => open()).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('6.4');
-    expect(() => open()).not.toThrow();
-  });
-
-  beforeEach(() => {
-    $version.set('10');
-  });
+  beforeEach(setAvailable);
 
   describe('common mode', () => {
     it('should call "web_app_open_scan_qr_popup" method with { text: string } and catch "qr_text_received" event returning event "data" property if "capture" returned true', async () => {
@@ -104,12 +158,12 @@ describe('open', () => {
       const spy = mockPostEvent();
       const promise = open();
       spy.mockClear();
-      dispatchMiniAppsEvent("qr_text_received", { data: "QR1" });
+      dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
       await promise;
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
-        "web_app_close_scan_qr_popup",
-        undefined
+        'web_app_close_scan_qr_popup',
+        undefined,
       );
     });
 
@@ -156,18 +210,5 @@ describe('open', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('QR1');
     });
-  });
-});
-
-describe('support check', () => {
-  it.each([
-    { fn: close, name: 'close' },
-    { fn: open, name: 'open' },
-  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 6.4', ({ fn }) => {
-    $version.set('6.3');
-    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('6.4');
-    expect(fn).not.toThrow();
   });
 });
