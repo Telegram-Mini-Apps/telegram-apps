@@ -1,10 +1,15 @@
 import { computed, type Computed, signal } from '@telegram-apps/signals';
 
-import { buttonColor, buttonTextColor } from '@/scopes/components/theme-params/signals.js';
+import {
+  buttonColor,
+  buttonTextColor,
+} from '@/scopes/components/theme-params/signals.js';
 
 import type { State } from './types.js';
 
-function fromState<K extends keyof Required<State>>(key: K): Computed<Required<State>[K]> {
+function fromState<K extends keyof Required<State>>(
+  key: K,
+): Computed<Required<State>[K]> {
   return computed(() => state()[key]);
 }
 
@@ -29,41 +34,41 @@ export const state = computed<Required<State>>(() => {
 });
 
 /**
- * True if the component is currently mounted.
+ * Signal indicating if the Main Button is currently mounted.
  */
 export const isMounted = signal(false);
 
 /**
- * @see State.backgroundColor
+ * Signal containing the current Main Button background color.
  */
 export const backgroundColor = fromState('backgroundColor');
 
 /**
- * @see State.hasShineEffect
+ * Signal indicating if the Main Button has a shining effect.
  */
 export const hasShineEffect = fromState('hasShineEffect');
 
 /**
- * @see State.isEnabled
+ * Signal indicating if the Main Button is currently active and can be clicked.
  */
 export const isEnabled = fromState('isEnabled');
 
 /**
- * @see State.isLoaderVisible
+ * Signal indicating if the Main Button displays a loader inside it.
  */
 export const isLoaderVisible = fromState('isLoaderVisible');
 
 /**
- * @see State.isVisible
+ * Signal indicating if the Main Button is currently visible.
  */
 export const isVisible = fromState('isVisible');
 
 /**
- * @see State.text
+ * Signal containing the Main Button text.
  */
 export const text = fromState('text');
 
 /**
- * @see State.textColor
+ * Signal containing the current Main Button text color.
  */
 export const textColor = fromState('textColor');
