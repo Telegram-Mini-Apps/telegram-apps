@@ -1,38 +1,72 @@
 import { beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
-import { createWindow } from 'test-utils';
 import { emitMiniAppsEvent, TypedError } from '@telegram-apps/bridge';
-import { resetPackageState } from '@test-utils/reset/reset.js';
+
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
+import { setInitialized } from '@test-utils/setInitialized.js';
+import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import { mockSSR } from '@test-utils/mockSSR.js';
 
 import { bindCssVars, mount } from './methods.js';
-import { isMounted, state } from './signals.js';
-
-type SetPropertyFn = typeof document.documentElement.style.setProperty;
-let setSpy: MockInstance<SetPropertyFn>;
-
-vi.mock('@telegram-apps/bridge', async () => {
-  const m = await vi.importActual('@telegram-apps/bridge');
-  return {
-    ...m,
-    retrieveLaunchParams: vi.fn(() => ({
-      themeParams: {},
-    })),
-  };
-});
+import { state } from './signals.js';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
   resetPackageState();
-  createWindow();
+  vi.restoreAllMocks();
   mockPostEvent();
-  setSpy = vi
-    .spyOn(document.documentElement.style, 'setProperty')
-    .mockImplementation(() => {
+});
+
+describe.each([
+  ['bindCssVars', bindCssVars],
+  ['mount', mount],
+] as const)('%s', (name, fn) => {
+  it('should throw ERR_UNKNOWN_ENV if not in Mini Apps', () => {
+    const err = new TypedError(
+      'ERR_UNKNOWN_ENV',
+      `Unable to call the themeParams.${name}() method: it can't be called outside Mini Apps`,
+    );
+    expect(fn).toThrow(err);
+    mockMiniAppsEnv();
+    expect(fn).not.toThrow(err);
+  });
+
+  describe('mini apps env', () => {
+    beforeEach(mockMiniAppsEnv);
+
+    it('should throw ERR_UNKNOWN_ENV if called on the server', () => {
+      mockSSR();
+      expect(fn).toThrow(
+        new TypedError(
+          'ERR_UNKNOWN_ENV',
+          `Unable to call the themeParams.${name}() method: it can't be called outside Mini Apps`,
+        ),
+      );
     });
+
+    it('should throw ERR_NOT_INITIALIZED if package is not initialized', () => {
+      const err = new TypedError(
+        'ERR_NOT_INITIALIZED',
+        `Unable to call the themeParams.${name}() method: the SDK was not initialized. Use the SDK init() function`,
+      );
+      expect(fn).toThrow(err);
+      setInitialized();
+      expect(fn).not.toThrow(err);
+    });
+  });
 });
 
 describe('bindCssVars', () => {
-  beforeEach(mount);
+  type SetPropertyFn = typeof document.documentElement.style.setProperty;
+  let setSpy: MockInstance<SetPropertyFn>;
+
+  beforeEach(() => {
+    setInitialized();
+    mockMiniAppsEnv();
+    mount();
+    setSpy = vi
+      .spyOn(document.documentElement.style, 'setProperty')
+      .mockImplementation(() => null);
+  });
 
   it('should set --tg-theme-{key} CSS vars, where key is kebab-cased theme keys', () => {
     state.set({
@@ -104,15 +138,5 @@ describe('bindCssVars', () => {
       },
     });
     expect(setSpy).toHaveBeenCalledTimes(3);
-  });
-});
-
-describe('mount check', () => {
-  it.each([
-    { fn: bindCssVars, name: 'bindCssVars' },
-  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
-    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
-    isMounted.set(true);
-    expect(fn).not.toThrow();
   });
 });

@@ -14,9 +14,8 @@ import {
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { throwCssVarsBound } from '@/scopes/toolkit/throwCssVarsBound.js';
-import {
-  createWrapSafeMounted
-} from '@/scopes/toolkit/createWrapSafeMounted.js';
+import { createWrapMounted } from '@/scopes/toolkit/createWrapMounted.js';
+import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
 
 import { isCssVarsBound, state, isMounted } from './signals.js';
 import { parseThemeParams } from './parseThemeParams.js';
@@ -27,7 +26,8 @@ type StorageValue = ThemeParams;
 const COMPONENT_NAME = 'themeParams';
 const THEME_CHANGED_EVENT = 'theme_changed';
 
-const wrapSafe = createWrapSafeMounted(COMPONENT_NAME, isMounted);
+const wrapBasic = createWrapBasic(COMPONENT_NAME);
+const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
 
 /**
  * Creates CSS variables connected with the current theme parameters.
@@ -45,14 +45,19 @@ const wrapSafe = createWrapSafeMounted(COMPONENT_NAME, isMounted);
  * theme parameters key.
  * @returns Function to stop updating variables.
  * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_VARS_ALREADY_BOUND
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_CSS_VARS_ALREADY_BOUND
  * @throws {TypedError} ERR_NOT_MOUNTED
- * @example
+ * @example Using no arguments
  * if (bindCssVars.isAvailable()) {
  *   bindCssVars();
  * }
+ * @example Using custom CSS vars generator
+ * if (bindCssVars.isAvailable()) {
+ *   bindCssVars(key => `--my-prefix-${key}`);
+ * }
  */
-export const bindCssVars = wrapSafe(
+export const bindCssVars = wrapMounted(
   'bindCssVars',
   (getCSSVarName?: GetCssVarNameFn): VoidFunction => {
     isCssVarsBound() && throwCssVarsBound();
@@ -84,25 +89,27 @@ export const bindCssVars = wrapSafe(
 );
 
 /**
- * Mounts the component.
- *
- * This function restores the component state and is automatically saving it in the local storage
- * if it changed.
+ * Mounts the Theme Params component restoring its state.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  * @example
- * mount();
+ * if (mount.isAvailable()) {
+ *   mount();
+ * }
  */
-export function mount(): void {
+export const mount = wrapBasic('mount', (): void => {
   if (!isMounted()) {
     on(THEME_CHANGED_EVENT, onThemeChanged);
-    state.set(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || retrieveLaunchParams().themeParams);
+    state.set(
+      isPageReload()
+      && getStorageValue<StorageValue>(COMPONENT_NAME)
+      || retrieveLaunchParams().themeParams,
+    );
     isMounted.set(true);
   }
-}
+});
 
-/**
- * Actualizes the theme parameters whenever an according event was received.
- * @param e - event data.
- */
 const onThemeChanged: EventListener<'theme_changed'> = (e) => {
   const value = parseThemeParams(e.theme_params);
   state.set(value);
@@ -110,9 +117,7 @@ const onThemeChanged: EventListener<'theme_changed'> = (e) => {
 };
 
 /**
- * Unmounts the component, removing the listener, saving the component state in the local storage.
- * @example
- * unmount();
+ * Unmounts the Theme Params component.
  */
 export function unmount(): void {
   off(THEME_CHANGED_EVENT, onThemeChanged);
