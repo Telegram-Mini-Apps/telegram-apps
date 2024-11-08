@@ -4,10 +4,12 @@ import {
   CancelablePromise,
   TypedError,
 } from '@telegram-apps/bridge';
-import { ERR_ALREADY_CALLED } from '@/errors.js';
+
+import { ERR_ALREADY_MOUNTING } from '@/errors.js';
 
 /**
  * Creates a mount function for a component.
+ * @param component - the component name.
  * @param mount - function mounting the component.
  * @param onMounted - callback which will be called with the mount result.
  * @param mountPromise - signal containing mount promise.
@@ -16,6 +18,7 @@ import { ERR_ALREADY_CALLED } from '@/errors.js';
  */
 // #__NO_SIDE_EFFECTS__
 export function createMountFn<T = void>(
+  component: string,
   mount: (options: AsyncOptions) => (T | CancelablePromise<T>),
   onMounted: (result: T) => void,
   {
@@ -34,8 +37,10 @@ export function createMountFn<T = void>(
         return;
       }
       if (isMounting()) {
-        // TODO: ERR_ALREADY_MOUNTING
-        throw new TypedError(ERR_ALREADY_CALLED);
+        throw new TypedError(
+          ERR_ALREADY_MOUNTING,
+          `The ${component} component is already mounting`,
+        );
       }
       isMounting.set(true);
 

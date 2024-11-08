@@ -113,13 +113,14 @@ export const expand = wrapBasic('expand', (): void => {
  * Mounts the Viewport component.
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_ALREADY_MOUNTING
  * @example
  * if (mount.isAvailable() && !isMounting()) {
  *   await mount();
  * }
  */
 export const mount = createMountFn<State>(
+  COMPONENT_NAME,
   wrapBasic('mount', options => {
     // Try to restore the state using the storage.
     const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);

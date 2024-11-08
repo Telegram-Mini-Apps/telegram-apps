@@ -39,6 +39,7 @@ export {
   ERR_NOT_INITIALIZED,
   ERR_ALREADY_OPENED,
   ERR_CSS_VARS_ALREADY_BOUND,
+  ERR_ALREADY_MOUNTING,
 } from '@/errors.js';
 export { init, type InitOptions } from '@/init.js';
 
