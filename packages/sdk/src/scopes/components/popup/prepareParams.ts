@@ -10,8 +10,8 @@ import type { OpenOptions } from './types.js';
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid title
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid message
  * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid buttons count
- * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid button id length.
- * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid text length.
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid button id length
+ * @throws {TypedError} ERR_POPUP_INVALID_PARAMS: Invalid button text length
  */
 export function prepareParams(params: OpenOptions): PopupParams {
   const message = params.message.trim();
