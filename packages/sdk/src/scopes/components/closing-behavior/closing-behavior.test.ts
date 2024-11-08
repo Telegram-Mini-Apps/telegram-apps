@@ -60,9 +60,36 @@ describe.each([
         ),
       );
     });
+
+    it('should throw ERR_NOT_INITIALIZED if package is not initialized', () => {
+      const err = new TypedError(
+        'ERR_NOT_INITIALIZED',
+        `Unable to call the closingBehavior.${name}() method: the SDK was not initialized. Use the SDK init() function`,
+      );
+      expect(fn).toThrow(err);
+      setInitialized();
+      expect(fn).not.toThrow(err);
+    });
   });
 });
 
+describe.each([
+  ['mount', mount],
+] as const)('%s', (_, fn) => {
+  describe('mini apps env', () => {
+    beforeEach(mockMiniAppsEnv);
+
+    describe('package initialized', () => {
+      beforeEach(setInitialized);
+
+      it('should not throw', () => {
+        expect(fn).not.toThrow();
+      });
+    });
+  });
+});
+
+// disableConfirmation + enableConfirmation complete
 describe.each([
   ['disableConfirmation', disableConfirmation, false],
   ['enableConfirmation', enableConfirmation, true],
@@ -70,22 +97,26 @@ describe.each([
   describe('mini apps env', () => {
     beforeEach(mockMiniAppsEnv);
 
-    it('should throw ERR_NOT_MOUNTED if closingBehavior is not mounted', () => {
-      expect(fn).toThrow(
-        new TypedError(
-          'ERR_NOT_MOUNTED',
-          `Unable to call the closingBehavior.${name}() method: the component is not mounted. Use the closingBehavior.mount() method`,
-        ),
-      );
-    });
+    describe('package initialized', () => {
+      beforeEach(setInitialized);
 
-    describe('mounted', () => {
-      beforeEach(() => {
-        isMounted.set(true);
+      it('should throw ERR_NOT_MOUNTED if closingBehavior is not mounted', () => {
+        expect(fn).toThrow(
+          new TypedError(
+            'ERR_NOT_MOUNTED',
+            `Unable to call the closingBehavior.${name}() method: the component is not mounted. Use the closingBehavior.mount() method`,
+          ),
+        );
       });
 
-      it('should not throw', () => {
-        expect(fn).not.toThrow();
+      describe('mounted', () => {
+        beforeEach(() => {
+          isMounted.set(true);
+        });
+
+        it('should not throw', () => {
+          expect(fn).not.toThrow();
+        });
       });
     });
   });
@@ -123,18 +154,6 @@ describe.each([
       // Should call retrieveLaunchParams + save component state.
       expect(spy).toHaveBeenCalledTimes(2);
       expect(spy).toHaveBeenNthCalledWith(2, 'tapps/closingBehavior', String(value));
-    });
-  });
-});
-
-describe.each([
-  ['mount', mount],
-] as const)('%s', (_, fn) => {
-  describe('mini apps env', () => {
-    beforeEach(mockMiniAppsEnv);
-
-    it('should not throw', () => {
-      expect(fn).not.toThrow();
     });
   });
 });
