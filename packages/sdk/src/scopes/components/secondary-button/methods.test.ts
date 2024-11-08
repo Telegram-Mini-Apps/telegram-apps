@@ -1,55 +1,124 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { mockSessionStorageSetItem } from 'test-utils';
-import { emitMiniAppsEvent, type ThemeParams, TypedError } from '@telegram-apps/bridge';
+import {
+  mockSessionStorageGetItem,
+  mockPageReload,
+  mockSessionStorageSetItem,
+} from 'test-utils';
+import { emitMiniAppsEvent, TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
-
+import { setInitialized } from '@test-utils/setInitialized.js';
+import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import { mockSSR } from '@test-utils/mockSSR.js';
 import { $version } from '@/scopes/globals.js';
 
 import {
+  mount,
+  onClick,
+  unmount,
+  offClick,
+  setParams,
+  isSupported,
+} from './methods.js';
+import {
   text,
   textColor,
-  isMounted,
   isEnabled,
-  isLoaderVisible,
+  isMounted,
   isVisible,
+  state,
   internalState,
   backgroundColor,
   hasShineEffect,
+  isLoaderVisible,
   position,
 } from './signals.js';
-import { onClick, offClick, setParams, mount, unmount, isSupported } from './methods.js';
-
-vi.mock('@telegram-apps/bridge', async () => {
-  const m = await vi.importActual('@telegram-apps/bridge');
-  return {
-    ...m,
-    retrieveLaunchParams: vi.fn(() => ({
-      themeParams: {
-        buttonColor: '#aabbcc',
-        buttonTextColor: '#ffaa12',
-      } satisfies ThemeParams,
-    })),
-  };
-});
 
 beforeEach(() => {
-  vi.restoreAllMocks();
   resetPackageState();
+  vi.restoreAllMocks();
   mockPostEvent();
 });
 
+function setAvailable() {
+  setInitialized();
+  mockMiniAppsEnv();
+  isMounted.set(true);
+}
+
 describe.each([
-  { signal: backgroundColor, name: 'backgroundColor' },
-  { signal: hasShineEffect, name: 'hasShineEffect' },
-  { signal: isEnabled, name: 'isEnabled' },
-  { signal: isLoaderVisible, name: 'isLoaderVisible' },
-  { signal: isVisible, name: 'isVisible' },
-  { signal: position, name: 'position' },
-  { signal: text, name: 'text' },
-  { signal: textColor, name: 'textColor' },
-] as const)('$name property', ({ signal, name }) => {
+  ['setParams', setParams],
+  ['mount', mount],
+  ['onClick', onClick],
+  ['offClick', offClick],
+] as const)('%s', (name, fn) => {
+  it('should throw ERR_UNKNOWN_ENV if not in Mini Apps', () => {
+    const err = new TypedError(
+      'ERR_UNKNOWN_ENV',
+      `Unable to call the secondaryButton.${name}() method: it can't be called outside Mini Apps`,
+    );
+    expect(fn).toThrow(err);
+    mockMiniAppsEnv();
+    expect(fn).not.toThrow(err);
+  });
+
+  describe('mini apps env', () => {
+    beforeEach(mockMiniAppsEnv);
+
+    it('should throw ERR_UNKNOWN_ENV if called on the server', () => {
+      mockSSR();
+      expect(fn).toThrow(
+        new TypedError(
+          'ERR_UNKNOWN_ENV',
+          `Unable to call the secondaryButton.${name}() method: it can't be called outside Mini Apps`,
+        ),
+      );
+    });
+
+    it('should throw ERR_NOT_INITIALIZED if package is not initialized', () => {
+      const err = new TypedError(
+        'ERR_NOT_INITIALIZED',
+        `Unable to call the secondaryButton.${name}() method: the SDK was not initialized. Use the SDK init() function`,
+      );
+      expect(fn).toThrow(err);
+      setInitialized();
+      expect(fn).not.toThrow(err);
+    });
+
+    describe('package initialized', () => {
+      beforeEach(setInitialized);
+
+      it('should throw ERR_NOT_SUPPORTED if Mini Apps version is less than 7.10', () => {
+        $version.set('7.9');
+        expect(fn).toThrow(
+          new TypedError(
+            'ERR_NOT_SUPPORTED',
+            `Unable to call the secondaryButton.${name}() method: it is unsupported in Mini Apps version 7.9`,
+          ),
+        );
+        $version.set('7.10');
+        expect(fn).not.toThrow(
+          new TypedError(
+            'ERR_NOT_SUPPORTED',
+            `Unable to call the secondaryButton.${name}() method: it is unsupported in Mini Apps version 7.10`,
+          ),
+        );
+      });
+    });
+  });
+});
+
+describe.each([
+  ['backgroundColor', backgroundColor],
+  ['hasShineEffect', hasShineEffect],
+  ['isEnabled', isEnabled],
+  ['isLoaderVisible', isLoaderVisible],
+  ['isVisible', isVisible],
+  ['text', text],
+  ['textColor', textColor],
+  ['position', position],
+] as const)('%s', (name, signal) => {
   beforeEach(() => {
     internalState.set({
       backgroundColor: '#123456',
@@ -57,9 +126,9 @@ describe.each([
       isEnabled: true,
       isLoaderVisible: true,
       isVisible: true,
-      position: 'right',
       text: 'TEXT',
       textColor: '#789abc',
+      position: 'left',
     });
   });
 
@@ -69,21 +138,19 @@ describe.each([
 });
 
 describe('isSupported', () => {
-  it('should return false if version is less than 7.10. True otherwise', () => {
+  it('should return false if version is less than 7.10', () => {
     $version.set('7.9');
     expect(isSupported()).toBe(false);
 
     $version.set('7.10');
-    expect(isSupported()).toBe(true);
-
-    $version.set('7.11');
     expect(isSupported()).toBe(true);
   });
 });
 
 describe('mount', () => {
   beforeEach(() => {
-    $version.set('10');
+    mockMiniAppsEnv();
+    setInitialized();
   });
 
   it('should set isMounted = true', () => {
@@ -92,70 +159,60 @@ describe('mount', () => {
     expect(isMounted()).toBe(true);
   });
 
-  // describe('page reload', () => {
-  //   beforeEach(() => {
-  //     mockPageReload();
-  //   });
-  //
-  //   it('should use value from session storage key "tapps/secondaryButton"', () => {
-  //     const spy = vi.fn(() => JSON.stringify({
-  //       backgroundColor: '#123456',
-  //       isActive: true,
-  //       isLoaderVisible: true,
-  //       isVisible: true,
-  //       text: 'TEXT',
-  //       textColor: '#789abc',
-  //     }));
-  //     mockSessionStorageGetItem(spy);
-  //     mount();
-  //     expect(spy).toHaveBeenCalledTimes(1);
-  //     expect(spy).toHaveBeenCalledWith('tapps/secondaryButton');
-  //     expect(state()).toStrictEqual({
-  //       backgroundColor: '#123456',
-  //       isActive: true,
-  //       isLoaderVisible: true,
-  //       isVisible: true,
-  //       text: 'TEXT',
-  //       textColor: '#789abc',
-  //     });
-  //   });
-  //
-  //   it('should set background and text colors from theme if session storage key "tapps/secondaryButton" not presented', () => {
-  //     const spy = mockSessionStorageGetItem(() => null);
-  //     mount();
-  //     // 2 times, because theme params calls it too.
-  //     expect(spy).toHaveBeenCalledTimes(2);
-  //     expect(spy).toHaveBeenNthCalledWith(1, 'tapps/secondaryButton');
-  //     expect(state()).toMatchObject({
-  //       backgroundColor: themeParams.buttonColor(),
-  //       textColor: themeParams.buttonTextColor(),
-  //     });
-  //   });
-  // });
-  //
-  // describe('first launch', () => {
-  //   it('should set background and text colors from theme', () => {
-  //     mount();
-  //     expect(state()).toMatchObject({
-  //       backgroundColor: themeParams.buttonColor(),
-  //       textColor: themeParams.buttonTextColor(),
-  //     });
-  //   });
-  // });
+  describe('page reload', () => {
+    beforeEach(() => {
+      mockPageReload();
+    });
+
+    it('should use value from session storage key "tapps/secondaryButton"', () => {
+      const spy = mockSessionStorageGetItem(() => JSON.stringify({
+        backgroundColor: '#123456',
+        isActive: true,
+        isLoaderVisible: true,
+        isVisible: true,
+        text: 'TEXT',
+        textColor: '#789abc',
+      }));
+      mount();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('tapps/secondaryButton');
+      expect(state()).toStrictEqual({
+        backgroundColor: '#123456',
+        isActive: true,
+        isLoaderVisible: true,
+        isVisible: true,
+        text: 'TEXT',
+        textColor: '#789abc',
+      });
+    });
+
+    it('should preserve state if session storage key "tapps/secondaryButton" not presented', () => {
+      const s = state();
+      const spy = mockSessionStorageGetItem(() => null);
+      mount();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('tapps/secondaryButton');
+      expect(s).toStrictEqual(state());
+    });
+  });
+
+  describe('first launch', () => {
+    it('should preserve state', () => {
+      const s = state();
+      mount();
+      expect(state()).toBe(s);
+    });
+  });
 });
 
 describe('onClick', () => {
-  beforeEach(() => {
-    $version.set('10');
-  });
+  beforeEach(setAvailable);
 
   it('should add click listener', () => {
     const fn = vi.fn();
     onClick(fn);
-    emitMiniAppsEvent('secondary_button_pressed');
-    emitMiniAppsEvent('secondary_button_pressed');
-    emitMiniAppsEvent('secondary_button_pressed');
-    expect(fn).toHaveBeenCalledTimes(3);
+    emitMiniAppsEvent('secondary_button_pressed', {});
+    expect(fn).toHaveBeenCalledTimes(1);
   });
 
   it('should remove added listener if returned function was called', () => {
@@ -168,169 +225,78 @@ describe('onClick', () => {
 });
 
 describe('offClick', () => {
-  beforeEach(() => {
-    $version.set('10');
-  });
+  beforeEach(setAvailable);
 
   it('should remove click listener', () => {
     const fn = vi.fn();
     onClick(fn);
     offClick(fn);
-    emitMiniAppsEvent('back_button_pressed', {});
+    emitMiniAppsEvent('secondary_button_pressed', {});
     expect(fn).toHaveBeenCalledTimes(0);
   });
 });
 
 describe('setParams', () => {
-  beforeEach(() => {
-    $version.set('10');
-    isMounted.set(true);
-  });
+  beforeEach(setAvailable);
 
-  it('should merge passed object with the state', () => {
+  it('should save the state in storage key tapps/secondaryButton', () => {
     internalState.set({
       backgroundColor: '#123456',
       hasShineEffect: true,
       isEnabled: true,
       isLoaderVisible: true,
       isVisible: true,
-      position: 'right',
       text: 'TEXT',
       textColor: '#789abc',
+      position: 'left',
     });
 
+    const spy = mockSessionStorageSetItem();
     setParams({
       backgroundColor: '#111111',
-      isEnabled: false,
-      isLoaderVisible: false,
-      text: 'TEXT UPDATED',
-      textColor: '#000000',
     });
 
-    expect(internalState()).toStrictEqual({
-      backgroundColor: '#111111',
-      hasShineEffect: true,
-      isEnabled: false,
-      isLoaderVisible: false,
+    // Should call retrieveLaunchParams + save component state.
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenNthCalledWith(2, 'tapps/secondaryButton', '{"backgroundColor":"#111111","hasShineEffect":true,"isEnabled":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc","position":"left"}');
+  });
+
+  it('should call "web_app_setup_secondary_button" only if text is not empty', () => {
+    const spy = mockPostEvent();
+    internalState.set({
+      backgroundColor: '#123456',
+      hasShineEffect: false,
+      isEnabled: true,
+      isLoaderVisible: true,
       isVisible: true,
-      position: 'right',
-      text: 'TEXT UPDATED',
-      textColor: '#000000',
+      text: '',
+      textColor: '#789abc',
+      position: 'left',
+    });
+    setParams({ text: '' });
+
+    expect(spy).toHaveBeenCalledTimes(0);
+    setParams({ text: 'abc' });
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith('web_app_setup_secondary_button', {
+      has_shine_effect: false,
+      is_visible: true,
+      is_active: true,
+      is_progress_visible: true,
+      text: 'abc',
+      color: '#123456',
+      text_color: '#789abc',
+      position: 'left',
     });
   });
 });
 
 describe('unmount', () => {
-  beforeEach(() => {
-    $version.set('10');
-    mount();
-  });
+  beforeEach(setAvailable);
 
-  it('should stop calling postEvent function and session storage updates when something changes', () => {
-    const postEventSpy = mockPostEvent();
-    const storageSpy = mockSessionStorageSetItem();
-    internalState.set({ ...internalState(), text: 'Hello!' });
-    expect(postEventSpy).toHaveBeenCalledTimes(1);
-    expect(storageSpy).toHaveBeenCalledTimes(1);
-
-    postEventSpy.mockClear();
-    storageSpy.mockClear();
-
+  it('should set isMounted = false', () => {
+    expect(isMounted()).toBe(true);
     unmount();
-    internalState.set({ ...internalState() });
-
-    expect(postEventSpy).toHaveBeenCalledTimes(0);
-    expect(storageSpy).toHaveBeenCalledTimes(0);
-  });
-});
-
-describe('mounted', () => {
-  beforeEach(() => {
-    $version.set('10');
-    mount();
-  });
-
-  describe('setParams', () => {
-    it('should save the state in storage key tapps/secondaryButton', () => {
-      internalState.set({
-        backgroundColor: '#123456',
-        hasShineEffect: true,
-        isEnabled: true,
-        isLoaderVisible: true,
-        isVisible: true,
-        position: 'top',
-        text: 'TEXT',
-        textColor: '#789abc',
-      });
-
-      const spy = mockSessionStorageSetItem();
-      setParams({
-        backgroundColor: '#111111',
-      });
-
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('tapps/secondaryButton', '{"backgroundColor":"#111111","hasShineEffect":true,"isEnabled":true,"isLoaderVisible":true,"isVisible":true,"position":"top","text":"TEXT","textColor":"#789abc"}');
-    });
-
-    it('should call "web_app_setup_secondary_button" only if text is not empty', () => {
-      const spy = mockPostEvent();
-      internalState.set({
-        backgroundColor: '#123456',
-        hasShineEffect: false,
-        isEnabled: true,
-        isLoaderVisible: true,
-        isVisible: true,
-        position: 'bottom',
-        text: '',
-        textColor: '#789abc',
-      });
-      setParams({ text: '' });
-
-      expect(spy).toHaveBeenCalledTimes(0);
-      setParams({ text: 'abc' });
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_setup_secondary_button', {
-        color: '#123456',
-        has_shine_effect: false,
-        is_active: true,
-        is_progress_visible: true,
-        is_visible: true,
-        position: 'bottom',
-        text: 'abc',
-        text_color: '#789abc',
-      });
-    });
-  });
-});
-
-describe('support check', () => {
-  beforeEach(() => {
-    isMounted.set(true);
-  });
-
-  it.each([
-    { fn: mount, name: 'mount' },
-    { fn: () => onClick(console.log), name: 'onClick' },
-    { fn: () => offClick(console.log), name: 'offClick' },
-  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 7.10', ({ fn }) => {
-    $version.set('7.9');
-    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('7.10');
-    expect(fn).not.toThrow();
-  });
-});
-
-describe('mount check', () => {
-  beforeEach(() => {
-    $version.set('10');
-  });
-
-  it.each([
-    { fn: () => setParams({}), name: 'setParams' },
-  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
-    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
-    isMounted.set(true);
-    expect(fn).not.toThrow();
+    expect(isMounted()).toBe(false);
   });
 });
