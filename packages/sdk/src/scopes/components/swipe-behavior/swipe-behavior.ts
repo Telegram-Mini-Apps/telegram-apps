@@ -4,31 +4,37 @@ import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createWrapSafeCommon } from '@/scopes/toolkit/createWrapSafeCommon.js';
+import { createWrapComplete } from '@/scopes/toolkit/createWrapComplete.js';
 import {
-  createWrapSafeSupported
-} from '@/scopes/toolkit/createWrapSafeSupported.js';
+  createWrapSupported
+} from '@/scopes/toolkit/createWrapSupported.js';
 
 type StorageValue = boolean;
 
-const WEB_APP_SETUP_SWIPE_BEHAVIOR = 'web_app_setup_swipe_behavior';
+const SETUP_METHOD_NAME = 'web_app_setup_swipe_behavior';
 const COMPONENT_NAME = 'swipeBehavior';
 
 /**
- * True if the Swipe Behavior component is currently mounted.
+ * Signal indicating if the Swipe Behavior component is currently mounted.
  */
 export const isMounted = signal(false);
 
 /**
- * @returns True if the Swipe Behavior component is supported.
+ * Signal indicating if the Swipe Behavior is supported.
  */
-export const isSupported = createIsSupported(WEB_APP_SETUP_SWIPE_BEHAVIOR);
+export const isSupported = createIsSupported(SETUP_METHOD_NAME);
 
-const wrapSafe = createWrapSafeCommon(COMPONENT_NAME, isMounted, WEB_APP_SETUP_SWIPE_BEHAVIOR);
-const wrapSupported = createWrapSafeSupported(COMPONENT_NAME, WEB_APP_SETUP_SWIPE_BEHAVIOR);
+/**
+ * Signal indicating if vertical swipes are enabled.
+ */
+export const isVerticalEnabled = signal(true);
+
+const wrapSupported = createWrapSupported(COMPONENT_NAME, SETUP_METHOD_NAME);
+const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, SETUP_METHOD_NAME);
 
 /**
  * Disables vertical swipes.
+ * @since Mini Apps v7.7
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -38,12 +44,13 @@ const wrapSupported = createWrapSafeSupported(COMPONENT_NAME, WEB_APP_SETUP_SWIP
  *   disableVertical();
  * }
  */
-export const disableVertical = wrapSafe('disableVertical', (): void => {
+export const disableVertical = wrapComplete('disableVertical', (): void => {
   setVerticalEnabled(false);
 });
 
 /**
  * Enables vertical swipes.
+ * @since Mini Apps v7.7
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -53,17 +60,13 @@ export const disableVertical = wrapSafe('disableVertical', (): void => {
  *   enableVertical();
  * }
  */
-export const enableVertical = wrapSafe('enableVertical', (): void => {
+export const enableVertical = wrapComplete('enableVertical', (): void => {
   setVerticalEnabled(true);
 });
 
 /**
- * True if vertical swipes are enabled.
- */
-export const isVerticalEnabled = signal(true);
-
-/**
  * Mounts the Swipe Behavior component restoring its state.
+ * @since Mini Apps v7.7
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -84,7 +87,7 @@ export const mount = wrapSupported('mount', (): void => {
 
 function setVerticalEnabled(value: boolean, force?: boolean): void {
   if (value !== isVerticalEnabled() || force) {
-    postEvent(WEB_APP_SETUP_SWIPE_BEHAVIOR, { allow_vertical_swipe: value });
+    postEvent(SETUP_METHOD_NAME, { allow_vertical_swipe: value });
     setStorageValue<StorageValue>(COMPONENT_NAME, value);
     isVerticalEnabled.set(value);
   }
@@ -92,8 +95,6 @@ function setVerticalEnabled(value: boolean, force?: boolean): void {
 
 /**
  * Unmounts the Swipe Behavior component.
- * @example
- * unmount();
  */
 export function unmount(): void {
   isMounted.set(false);
