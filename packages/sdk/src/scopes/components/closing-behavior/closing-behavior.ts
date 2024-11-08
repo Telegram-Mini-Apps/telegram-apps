@@ -28,6 +28,7 @@ const wrapBasic = createWrapBasic(COMPONENT_NAME);
  * Disables the closing confirmation dialog.
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @example
  * if (disableConfirmation.isAvailable()) {
  *   disableConfirmation();
@@ -41,6 +42,7 @@ export const disableConfirmation = wrapMounted('disableConfirmation', (): void =
  * Enables the closing confirmation dialog.
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @example
  * if (enableConfirmation.isAvailable()) {
  *   enableConfirmation();
@@ -53,6 +55,7 @@ export const enableConfirmation = wrapMounted('enableConfirmation', (): void => 
 /**
  * Mounts the Closing Behavior component restoring its state.
  * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @example
  * if (mount.isAvailable()) {
  *   mount();
