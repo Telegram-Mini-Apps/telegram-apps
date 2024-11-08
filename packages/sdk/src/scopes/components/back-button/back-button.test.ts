@@ -84,14 +84,14 @@ describe.each([
         $version.set('6.0');
         expect(fn).toThrow(
           new TypedError(
-            'ERR_NOT_INITIALIZED',
+            'ERR_NOT_SUPPORTED',
             `Unable to call the backButton.${name}() method: it is unsupported in Mini Apps version 6.0`,
           ),
         );
         $version.set('6.1');
         expect(fn).not.toThrow(
           new TypedError(
-            'ERR_NOT_INITIALIZED',
+            'ERR_NOT_SUPPORTED',
             `Unable to call the backButton.${name}() method: it is unsupported in Mini Apps version 6.1`,
           ),
         );

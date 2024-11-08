@@ -90,7 +90,7 @@ function setVisibility(value: boolean): void {
  * @example
  * if (onClick.isAvailable()) {
  *   const off = onClick(() => {
- *     console.log('User clicked the Back Button);
+ *     console.log('User clicked the Back Button');
  *     off();
  *   });
  * }
@@ -110,7 +110,7 @@ export const onClick = wrapSupported(
  * @example
  * if (offClick.isAvailable()) {
  *   function listener() {
- *     console.log('User clicked the Back Button);
+ *     console.log('User clicked the Back Button');
  *     offClick(listener);
  *   }
  *   onClick(listener);
