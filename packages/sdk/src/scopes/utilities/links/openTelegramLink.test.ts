@@ -8,7 +8,7 @@ import { mockSSR } from '@test-utils/mockSSR.js';
 import { setInitialized } from '@test-utils/setInitialized.js';
 import { $version } from '@/scopes/globals.js';
 
-import { openLink, openTelegramLink, shareURL } from './links.js';
+import { openTelegramLink } from './openTelegramLink.js';
 
 beforeEach(() => {
   resetPackageState();
@@ -22,9 +22,7 @@ function setAvailable() {
 }
 
 describe.each([
-  ['openLink', openLink],
   ['openTelegramLink', openTelegramLink],
-  ['shareURL', shareURL],
 ] as const)('%s', (name, fn) => {
   it('should throw ERR_UNKNOWN_ENV if not in Mini Apps', () => {
     const err = new TypedError(
@@ -61,30 +59,6 @@ describe.each([
   });
 });
 
-describe('openLink', () => {
-  beforeEach(setAvailable);
-
-  it('should throw ERR_INVALID_URL if passed invalid URL', () => {
-    expect(() => openLink('invalid')).toThrow(
-      new TypedError('ERR_INVALID_URL', '"invalid" is invalid URL'),
-    );
-  });
-
-  it('should call "web_app_open_link" with formatted URL and passed options', () => {
-    const spy = mockPostEvent();
-    openLink('https://ya.ru', {
-      tryBrowser: 'tor',
-      tryInstantView: true,
-    });
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('web_app_open_link', {
-      url: 'https://ya.ru/',
-      try_browser: 'tor',
-      try_instant_view: true,
-    });
-  });
-});
-
 describe('openTelegramLink', () => {
   beforeEach(setAvailable);
 
@@ -114,27 +88,6 @@ describe('openTelegramLink', () => {
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith('web_app_open_tg_link', {
       path_full: '/share/url?url=text',
-    });
-  });
-});
-
-describe('shareURL', () => {
-  beforeEach(setAvailable);
-
-  it('should call "web_app_open_tg_link" with path_full = "share/url?url={url}&text={text}"', () => {
-    const spy = mockPostEvent();
-
-    shareURL('https://telegram.org');
-    expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith('web_app_open_tg_link', {
-      path_full: '/share/url?url=https%3A%2F%2Ftelegram.org&text=',
-    });
-
-    spy.mockClear();
-    shareURL('https://telegram.org', 'Wow, cool messenger');
-    expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith('web_app_open_tg_link', {
-      path_full: '/share/url?url=https%3A%2F%2Ftelegram.org&text=Wow%2C%20cool%20messenger',
     });
   });
 });
