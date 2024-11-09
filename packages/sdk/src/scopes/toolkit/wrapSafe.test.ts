@@ -14,9 +14,8 @@ describe('returned function', () => {
   describe('isSupported', () => {
     describe('as mini apps method', () => {
       it('should return true if passed method is supported', () => {
-        const fn = wrapSafe(() => null, {
+        const fn = wrapSafe('fn', () => null, {
           component: 'cmp',
-          method: 'm',
           isSupported: 'web_app_setup_settings_button',
         });
 
@@ -50,9 +49,8 @@ describe('returned function', () => {
   describe('isAvailable', () => {
     describe('non-TMA', () => {
       it('should return false in browser', () => {
-        const fn = wrapSafe(() => null, {
+        const fn = wrapSafe('fn', () => null, {
           component: 'cmp',
-          method: 'm',
         });
 
         expect(fn.isAvailable()).toBe(false);
@@ -66,9 +64,8 @@ describe('returned function', () => {
           });
         vi.spyOn(global, 'window', 'get').mockImplementationOnce(() => undefined as any);
         expect(
-          wrapSafe(() => null, {
+          wrapSafe('fn', () => null, {
             component: 'cmp',
-            method: 'm',
           }).isAvailable(),
         ).toBe(false);
       });
@@ -85,17 +82,15 @@ describe('returned function', () => {
 
       it('should return false if SDK is not initialized', () => {
         expect(
-          wrapSafe(() => null, {
+          wrapSafe('fn', () => null, {
             component: 'cmp',
-            method: 'm',
           }).isAvailable(),
         ).toBe(false);
       });
 
       it('should return false if isSupported returned false', () => {
-        const fn = wrapSafe(() => null, {
+        const fn = wrapSafe('fn', () => null, {
           component: 'cmp',
-          method: 'm',
           isSupported: 'web_app_setup_settings_button',
         });
         $version.set('6');
@@ -104,9 +99,8 @@ describe('returned function', () => {
       });
 
       it('should return false if isMounted returned false', () => {
-        const fn = wrapSafe(() => null, {
+        const fn = wrapSafe('fn', () => null, {
           component: 'cmp',
-          method: 'm',
           isMounted: () => false,
         });
         $version.set('10');
@@ -116,35 +110,31 @@ describe('returned function', () => {
       it('should return true if SDK is initialized, isSupported is omitted or returned true as well as isMounted', () => {
         $version.set('10');
         expect(
-          wrapSafe(() => null, {
+          wrapSafe('fn', () => null, {
             component: 'cmp',
-            method: 'm',
-          }).isAvailable()
+          }).isAvailable(),
         ).toBe(true);
 
         expect(
-          wrapSafe(() => null, {
+          wrapSafe('fn', () => null, {
             component: 'cmp',
-            method: 'm',
-            isSupported: 'web_app_close'
-          }).isAvailable()
-        ).toBe(true);
-
-        expect(
-          wrapSafe(() => null, {
-            component: 'cmp',
-            method: 'm',
-            isMounted: () => true
-          }).isAvailable()
-        ).toBe(true);
-
-        expect(
-          wrapSafe(() => null, {
-            component: 'cmp',
-            method: 'm',
             isSupported: 'web_app_close',
-            isMounted: () => true
-          }).isAvailable()
+          }).isAvailable(),
+        ).toBe(true);
+
+        expect(
+          wrapSafe('fn', () => null, {
+            component: 'cmp',
+            isMounted: () => true,
+          }).isAvailable(),
+        ).toBe(true);
+
+        expect(
+          wrapSafe('fn', () => null, {
+            component: 'cmp',
+            isSupported: 'web_app_close',
+            isMounted: () => true,
+          }).isAvailable(),
         ).toBe(true);
       });
     });
