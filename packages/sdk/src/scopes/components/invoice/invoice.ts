@@ -9,7 +9,7 @@ import { request } from '@/scopes/globals.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
 import {
-  ERR_INVALID_HOSTNAME,
+  ERR_INVALID_URL,
   ERR_INVALID_SLUG,
   ERR_ALREADY_OPENED,
 } from '@/errors.js';
@@ -56,7 +56,7 @@ export function _open(
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_ALREADY_OPENED
- * @throws {TypedError} ERR_INVALID_HOSTNAME
+ * @throws {TypedError} ERR_INVALID_URL
  * @throws {TypedError} ERR_INVALID_SLUG
  * @example
  * if (open.isAvailable()) {
@@ -87,7 +87,7 @@ export async function _open(
   if (optionsOrType === 'url') {
     const { hostname, pathname } = new URL(urlOrSlug, window.location.href);
     if (hostname !== 't.me') {
-      throw new TypedError(ERR_INVALID_HOSTNAME, `Link has unexpected hostname: ${hostname}`);
+      throw new TypedError(ERR_INVALID_URL, `Link has unexpected hostname: ${hostname}`);
     }
 
     // Valid examples:

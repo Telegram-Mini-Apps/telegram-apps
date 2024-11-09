@@ -28,7 +28,7 @@ export { isSSR } from '@/utils/isSSR.js';
 export { safeCall } from '@/utils/safeCall.js';
 export {
   ERR_POPUP_INVALID_PARAMS,
-  ERR_INVALID_HOSTNAME,
+  ERR_INVALID_URL,
   ERR_INVALID_SLUG,
   ERR_ACCESS_DENIED,
   ERR_DATA_INVALID_SIZE,
