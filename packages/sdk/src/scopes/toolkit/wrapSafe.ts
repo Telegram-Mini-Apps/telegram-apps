@@ -92,6 +92,7 @@ export function wrapSafe<Fn extends AnyFn, O extends Options>(fn: Fn, {
   method,
 }: O): SafeWrapped<Fn, O extends { isSupported: any } ? true : false> {
   const fullMethod = `${component ? `${component}.` : ''}${method}()`;
+  const isFn = !component;
 
   const $isSupported = computed(() => {
     return isSupported
@@ -124,7 +125,7 @@ export function wrapSafe<Fn extends AnyFn, O extends Options>(fn: Fn, {
 
   return Object.assign(
     (...args: Parameters<Fn>): ReturnType<Fn> => {
-      const errMessagePrefix = `Unable to call the ${fullMethod} method:`;
+      const errMessagePrefix = `Unable to call the ${fullMethod} ${isFn ? 'function' : 'method'}:`;
 
       if (isSSR() || !isTMA('simple')) {
         throw new TypedError(
