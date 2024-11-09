@@ -6,8 +6,8 @@ import {
 } from '@/scopes/toolkit/wrapSafe.js';
 
 export interface SafeWrapFn<S extends boolean> {
-  <Fn extends AnyFn>(name: string, fn: Fn): SafeWrapped<Fn, S>;
-  <Fn extends AnyFn>(name: string, fn: Fn, isSupported: IsSupported): SafeWrapped<Fn, true>;
+  <Fn extends AnyFn>(method: string, fn: Fn): SafeWrapped<Fn, S>;
+  <Fn extends AnyFn>(method: string, fn: Fn, isSupported: IsSupported): SafeWrapped<Fn, true>;
 }
 
 interface Options {
@@ -26,9 +26,8 @@ export function createWrapSafe(
   component?: string,
   options?: Options,
 ): SafeWrapFn<boolean> {
-  return ((name, fn) => wrapSafe(fn, {
+  return ((method, fn) => wrapSafe(method, fn, {
     ...options,
     component,
-    method: name,
   })) as SafeWrapFn<boolean>;
 }

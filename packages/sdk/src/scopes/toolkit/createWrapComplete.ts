@@ -6,7 +6,7 @@ export function createWrapComplete(
   isMounted: () => boolean,
   isSupported: IsSupported,
 ): SafeWrapFn<true> {
-  return (name, fn) => wrapSafe(fn, {
+  return (name, fn) => wrapSafe(name, fn, {
     component,
     method: name,
     isMounted,

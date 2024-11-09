@@ -17,10 +17,16 @@ import {
 import { isSSR } from '@/utils/isSSR.js';
 import type { AnyFn } from '@/types.js';
 
+interface CustomSupportValidator {
+  fn: () => boolean;
+  error: string;
+}
+
 export type IsSupported =
-// (() => boolean) fixme
   | MethodName
-  | MethodName[];
+  | CustomSupportValidator
+  | (MethodName | CustomSupportValidator)[]
+  | { any: (MethodName | CustomSupportValidator)[] };
 
 export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
   & Fn
@@ -74,58 +80,94 @@ export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
 
 interface Options {
   component?: string;
-  method: string;
   isMounted?: () => boolean;
   isSupported?: IsSupported;
 }
 
-/**
- * Adds the `isAvailable` and `isSupported` signals to the function checking
- * if the function call is safe.
- */
+export function wrapSafe<Fn extends AnyFn>(
+  method: string,
+  fn: Fn,
+): SafeWrapped<Fn, false>;
+
+export function wrapSafe<Fn extends AnyFn, O extends Options>(
+  method: string,
+  fn: Fn,
+  options: O,
+): SafeWrapped<Fn, O extends { isSupported: any } ? true : false>
 
 /*@__NO_SIDE_EFFECTS__*/
-export function wrapSafe<Fn extends AnyFn, O extends Options>(fn: Fn, {
-  isSupported,
-  isMounted,
-  component,
-  method,
-}: O): SafeWrapped<Fn, O extends { isSupported: any } ? true : false> {
-  const fullMethod = `${component ? `${component}.` : ''}${method}()`;
-  const isFn = !component;
+export function wrapSafe<Fn extends AnyFn>(
+  method: string,
+  fn: Fn,
+  { isSupported, isMounted, component }: Options = {},
+): SafeWrapped<Fn, boolean> {
+  // Full function identifier.
+  const fullName = `${component ? `${component}.` : ''}${method}()`;
 
-  const $isSupported = computed(() => {
-    return isSupported
-      ? Array.isArray(isSupported)
-        // Mini Apps methods specified.
-        ? isSupported.some(m => supports(m, $version()))
-        // Mini Apps method specified.
-        : supports(isSupported, $version())
-      // Support function or Mini Apps method was not specified.
-      // The function is supported by default then.
-      : true;
-    // fixme
-    // return isSupported
-    //   ? typeof isSupported === 'string'
-    //     // Mini Apps method specified.
-    //     ? supports(isSupported, $version())
-    //     // Custom function specified.
-    //     : isSupported()
-    //   // Support function or Mini Apps method was not specified.
-    //   // The function is supported by default then.
-    //   : true;
-  });
+  // Simplify the isSupported value to work with an array of validators or a single object.
+  isSupported = isSupported
+    ? Array.isArray(isSupported)
+      // (MethodName | CustomSupportValidator)[]
+      ? isSupported
+      : typeof isSupported === 'object' && 'any' in isSupported
+        // { any: (MethodName | CustomSupportValidator)[] }
+        ? isSupported
+        // MethodName | CustomSupportValidator
+        : [isSupported]
+    : undefined;
 
-  const $isInitialized = computed(() => {
-    return $version() !== '0.0';
-  });
-  const $isMounted = computed(() => {
-    return !isMounted || isMounted();
-  });
+  /**
+   * @returns An error related to support check.
+   */
+  const supportError = (): string | undefined => {
+    // isSupported was not specified. In this case we assume that the function has no dependencies
+    // and is always supported.
+    if (!isSupported) {
+      return;
+    }
+
+    const defaultErr = `it is unsupported in Mini Apps version ${$version()}`;
+
+    function getError(item: MethodName | CustomSupportValidator): string | undefined {
+      return typeof item === 'string'
+        ? supports(item, $version())
+          ? undefined
+          : defaultErr
+        : item.fn()
+          ? undefined
+          : item.error;
+    }
+
+    // Should check each array item.
+    // (MethodName | CustomSupportValidator)[]
+    if (Array.isArray(isSupported)) {
+      for (const item of isSupported) {
+        const err = getError(item);
+        if (err) {
+          return err;
+        }
+      }
+      return;
+    }
+
+    // Should check if any item didn't return an error.
+    let lastErr: string | undefined;
+    for (const item of isSupported.any) {
+      lastErr = getError(item);
+      if (!lastErr) {
+        return;
+      }
+    }
+    return defaultErr;
+  };
+
+  const $isSupported = computed(() => !supportError());
+  const $isInitialized = computed(() => $version() !== '0.0');
+  const $isMounted = computed(() => !isMounted || isMounted());
 
   return Object.assign(
     (...args: Parameters<Fn>): ReturnType<Fn> => {
-      const errMessagePrefix = `Unable to call the ${fullMethod} ${isFn ? 'function' : 'method'}:`;
+      const errMessagePrefix = `Unable to call the ${fullName} ${component ? 'method' : 'function'}:`;
 
       if (isSSR() || !isTMA('simple')) {
         throw new TypedError(
@@ -139,15 +181,9 @@ export function wrapSafe<Fn extends AnyFn, O extends Options>(fn: Fn, {
           `${errMessagePrefix} the SDK was not initialized. Use the SDK init() function`,
         );
       }
-      if (!$isSupported()) {
-        throw new TypedError(
-          ERR_NOT_SUPPORTED,
-          `${errMessagePrefix} it is unsupported${
-            typeof isSupported === 'string'
-              ? ` in Mini Apps version ${$version()}`
-              : ''
-          }`,
-        );
+      const supportErr = supportError();
+      if (supportErr) {
+        throw new TypedError(ERR_NOT_SUPPORTED, `${errMessagePrefix} ${supportErr}`);
       }
       if (!$isMounted()) {
         throw new TypedError(
@@ -170,5 +206,5 @@ export function wrapSafe<Fn extends AnyFn, O extends Options>(fn: Fn, {
     isSupported ? {
       isSupported: $isSupported,
     } : {},
-  ) as SafeWrapped<Fn, O extends { isSupported: any } ? true : false>;
+  );
 }
