@@ -15,10 +15,17 @@ interface Options {
   isSupported?: IsSupported;
 }
 
+export function createWrapSafe(component?: string): SafeWrapFn<false>;
+
 export function createWrapSafe<O extends Options>(
   component: string,
   options: O,
-): SafeWrapFn<O extends { isSupported: any } ? true : false> {
+): SafeWrapFn<O extends { isSupported: any } ? true : false>;
+
+export function createWrapSafe(
+  component?: string,
+  options?: Options,
+): SafeWrapFn<boolean> {
   return ((name, fn) => wrapSafe(fn, {
     ...options,
     component,

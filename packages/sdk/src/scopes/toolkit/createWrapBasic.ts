@@ -1,8 +1,3 @@
-import {
-  createWrapSafe,
-  type SafeWrapFn,
-} from '@/scopes/toolkit/createWrapSafe.js';
+import { createWrapSafe } from '@/scopes/toolkit/createWrapSafe.js';
 
-export function createWrapBasic(component: string): SafeWrapFn<false> {
-  return createWrapSafe(component, {});
-}
+export const createWrapBasic = createWrapSafe;

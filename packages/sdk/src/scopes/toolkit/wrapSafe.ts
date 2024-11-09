@@ -73,7 +73,7 @@ export type SafeWrapped<Fn extends AnyFn, S extends boolean> =
 }, {}>
 
 interface Options {
-  component: string;
+  component?: string;
   method: string;
   isMounted?: () => boolean;
   isSupported?: IsSupported;
@@ -91,7 +91,7 @@ export function wrapSafe<Fn extends AnyFn, O extends Options>(fn: Fn, {
   component,
   method,
 }: O): SafeWrapped<Fn, O extends { isSupported: any } ? true : false> {
-  const fullMethod = `${component}.${method}()`;
+  const fullMethod = `${component ? `${component}.` : ''}${method}()`;
 
   const $isSupported = computed(() => {
     return isSupported
