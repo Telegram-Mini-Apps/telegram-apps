@@ -1,4 +1,4 @@
-import { signal } from '@telegram-apps/signals';
+import { computed, signal } from '@telegram-apps/signals';
 
 import type { State } from './types.js';
 
@@ -31,3 +31,11 @@ export const isMounting = signal<boolean>(false);
  * Error occurred while mounting the component.
  */
 export const mountError = signal<Error | undefined>(undefined);
+
+/**
+ * Signal indicating biometry is available.
+ */
+export const isAvailable = computed(() => {
+  const s = state();
+  return s && s.available;
+});

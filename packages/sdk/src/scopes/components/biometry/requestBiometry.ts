@@ -1,19 +1,31 @@
 import type { ExecuteWithOptions, CancelablePromise } from '@telegram-apps/bridge';
 
 import { request } from '@/scopes/globals.js';
-import { withIsSupported } from '@/scopes/toolkit/withIsSupported.js';
+import { wrapSafe } from '@/scopes/toolkit/wrapSafe.js';
 
 import { eventToState } from './eventToState.js';
 import type { State } from './types.js';
 
-const WEB_APP_BIOMETRY_GET_INFO = 'web_app_biometry_get_info';
+const GET_INFO_METHOD = 'web_app_biometry_get_info';
 
 /**
  * Requests biometry information.
+ * @since Mini Apps v7.2
  * @param options - additional execution options.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @example
+ * if (requestBiometry.isAvailable()) {
+ *   const biometryState = await requestBiometry();
+ * }
  */
-export const requestBiometry = withIsSupported(
+export const requestBiometry = wrapSafe(
+  'requestBiometry',
   (options?: ExecuteWithOptions): CancelablePromise<State> => {
-    return request(WEB_APP_BIOMETRY_GET_INFO, 'biometry_info_received', options).then(eventToState);
-  }, WEB_APP_BIOMETRY_GET_INFO,
+    return request(GET_INFO_METHOD, 'biometry_info_received', options).then(eventToState);
+  },
+  {
+    isSupported: GET_INFO_METHOD,
+  },
 );
