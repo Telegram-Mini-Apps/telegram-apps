@@ -1,13 +1,20 @@
 import type { AnyFn } from '@/types.js';
 import {
-  IsSupported,
   wrapSafe,
-  SafeWrapped,
+  type IsSupported,
+  type SafeWrapped,
+  type Supports,
 } from '@/scopes/toolkit/wrapSafe.js';
 
 export interface SafeWrapFn<S extends boolean> {
-  <Fn extends AnyFn>(method: string, fn: Fn): SafeWrapped<Fn, S>;
-  <Fn extends AnyFn>(method: string, fn: Fn, isSupported: IsSupported): SafeWrapped<Fn, true>;
+  <Fn extends AnyFn>(method: string, fn: Fn): SafeWrapped<Fn, S, never>;
+  <Fn extends AnyFn>(method: string, fn: Fn, isSupported: IsSupported): SafeWrapped<Fn, true, never>;
+  <Fn extends AnyFn, S extends Supports<Fn>>(
+    method: string,
+    fn: Fn,
+    isSupported: IsSupported,
+    supports: S,
+  ): SafeWrapped<Fn, true, S>;
 }
 
 interface Options {
@@ -26,8 +33,11 @@ export function createWrapSafe(
   component?: string,
   options?: Options,
 ): SafeWrapFn<boolean> {
-  return ((method, fn) => wrapSafe(method, fn, {
+  options ||= {};
+  return ((method, fn, overrideIsSupported, supports) => wrapSafe(method, fn, {
     ...options,
+    isSupported: overrideIsSupported || options.isSupported,
+    supports,
     component,
   })) as SafeWrapFn<boolean>;
 }
