@@ -8,7 +8,7 @@ import { emitMiniAppsEvent, TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
-import { setInitialized } from '@test-utils/setInitialized.js';
+import { setMaxVersion } from '@test-utils/setMaxVersion.js';
 import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
 import { mockSSR } from '@test-utils/mockSSR.js';
 
@@ -39,7 +39,7 @@ beforeEach(() => {
 });
 
 function setAvailable() {
-  setInitialized();
+  setMaxVersion();
   mockMiniAppsEnv();
   isMounted.set(true);
 }
@@ -79,7 +79,7 @@ describe.each([
         `Unable to call the mainButton.${name}() method: the SDK was not initialized. Use the SDK init() function`,
       );
       expect(fn).toThrow(err);
-      setInitialized();
+      setMaxVersion();
       expect(fn).not.toThrow(err);
     });
   });
@@ -114,7 +114,7 @@ describe.each([
 describe('mount', () => {
   beforeEach(() => {
     mockMiniAppsEnv();
-    setInitialized();
+    setMaxVersion();
   });
 
   it('should set isMounted = true', () => {

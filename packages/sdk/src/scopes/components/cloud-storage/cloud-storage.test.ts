@@ -3,7 +3,7 @@ import { emitMiniAppsEvent, TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
-import { setInitialized } from '@test-utils/setInitialized.js';
+import { setMaxVersion } from '@test-utils/setMaxVersion.js';
 import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
 import { mockSSR } from '@test-utils/mockSSR.js';
 import { $createRequestId, $version } from '@/scopes/globals.js';
@@ -23,7 +23,7 @@ beforeEach(() => {
 });
 
 function setAvailable() {
-  setInitialized();
+  setMaxVersion();
   mockMiniAppsEnv();
 }
 
@@ -62,12 +62,12 @@ describe.each([
         `Unable to call the cloudStorage.${name}() method: the SDK was not initialized. Use the SDK init() function`,
       );
       expect(fn).toThrow(err);
-      setInitialized();
+      setMaxVersion();
       expect(fn).not.toThrow(err);
     });
 
     describe('package initialized', () => {
-      beforeEach(setInitialized);
+      beforeEach(setMaxVersion);
 
       it('should throw ERR_NOT_SUPPORTED if Mini Apps version is less than 6.9', () => {
         $version.set('6.8');

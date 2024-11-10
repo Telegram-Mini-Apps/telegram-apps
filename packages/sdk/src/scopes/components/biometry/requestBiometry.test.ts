@@ -5,7 +5,7 @@ import { resetPackageState } from '@test-utils/reset/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
 import { mockSSR } from '@test-utils/mockSSR.js';
-import { setInitialized } from '@test-utils/setInitialized.js';
+import { setMaxVersion } from '@test-utils/setMaxVersion.js';
 import { $version } from '@/scopes/globals.js';
 
 import { requestBiometry } from './requestBiometry.js';
@@ -45,12 +45,12 @@ describe('mini apps env', () => {
       `Unable to call the requestBiometry() function: the SDK was not initialized. Use the SDK init() function`,
     );
     expect(requestBiometry).toThrow(err);
-    setInitialized();
+    setMaxVersion();
     expect(requestBiometry).not.toThrow(err);
   });
 
   describe('package initialized', () => {
-    beforeEach(setInitialized);
+    beforeEach(setMaxVersion);
 
     it('should throw ERR_NOT_SUPPORTED if Mini Apps version is less than 7.2', () => {
       $version.set('7.1');

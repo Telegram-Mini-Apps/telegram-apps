@@ -119,49 +119,52 @@ export const expand = wrapBasic('expand', (): void => {
  *   await mount();
  * }
  */
-export const mount = createMountFn<State>(
-  COMPONENT_NAME,
-  wrapBasic('mount', options => {
-    // Try to restore the state using the storage.
-    const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-    if (s) {
-      return s;
-    }
+export const mount = wrapBasic(
+  'mount',
+  createMountFn<State>(
+    COMPONENT_NAME,
+    options => {
+      // Try to restore the state using the storage.
+      const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
+      if (s) {
+        return s;
+      }
 
-    // If the platform has a stable viewport, it means we could use the window global object
-    // properties.
-    if ([
-      'macos',
-      'tdesktop',
-      'unigram',
-      'webk',
-      'weba',
-      'web',
-    ].includes(retrieveLaunchParams().platform)) {
-      const w = window;
-      return {
-        isExpanded: true,
-        height: w.innerHeight,
-        width: w.innerWidth,
-        stableHeight: w.innerHeight,
-      };
-    }
+      // If the platform has a stable viewport, it means we could use the window global object
+      // properties.
+      if ([
+        'macos',
+        'tdesktop',
+        'unigram',
+        'webk',
+        'weba',
+        'web',
+      ].includes(retrieveLaunchParams().platform)) {
+        const w = window;
+        return {
+          isExpanded: true,
+          height: w.innerHeight,
+          width: w.innerWidth,
+          stableHeight: w.innerHeight,
+        };
+      }
 
-    // We were unable to retrieve data locally. In this case, we are sending
-    // a request returning the viewport information.
-    options.timeout ||= 1000;
-    return requestViewport(options).then(data => ({
-      height: data.height,
-      isExpanded: data.isExpanded,
-      stableHeight: data.isStable ? data.height : state().stableHeight,
-      width: data.width,
-    }));
-  }),
-  result => {
-    on('viewport_changed', onViewportChanged);
-    setState(result);
-  },
-  { isMounted, isMounting, mountError },
+      // We were unable to retrieve data locally. In this case, we are sending
+      // a request returning the viewport information.
+      options.timeout ||= 1000;
+      return requestViewport(options).then(data => ({
+        height: data.height,
+        isExpanded: data.isExpanded,
+        stableHeight: data.isStable ? data.height : state().stableHeight,
+        width: data.width,
+      }));
+    },
+    result => {
+      on('viewport_changed', onViewportChanged);
+      setState(result);
+    },
+    { isMounted, isMounting, mountError },
+  ),
 );
 
 const onViewportChanged: EventListener<'viewport_changed'> = (data) => {
