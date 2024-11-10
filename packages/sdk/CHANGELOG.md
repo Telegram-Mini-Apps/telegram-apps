@@ -1,5 +1,22 @@
 # @telegram-apps/sdk
 
+## 2.6.0
+
+### Minor Changes
+
+- 11c839c: - Now almost each scope-related method has additional methods/signals: `isAvailable`, `isSupported`, `supports` and `ifAvailable`
+  - Add new errors
+  - Add clear error messages
+  - Add more tests
+
+### Patch Changes
+
+- Updated dependencies [a92abf4]
+- Updated dependencies [16742d5]
+  - @telegram-apps/bridge@1.4.0
+  - @telegram-apps/signals@1.1.0
+  - @telegram-apps/navigation@1.0.5
+
 ## 2.5.2
 
 ### Patch Changes
