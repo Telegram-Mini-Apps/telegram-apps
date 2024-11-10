@@ -8,8 +8,8 @@ import {
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals.js';
-import { createWrapComplete } from '@/scopes/toolkit/createWrapComplete.js';
 import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
+import { createWrapMounted } from '@/scopes/toolkit/createWrapMounted.js';
 
 import { internalState, isMounted, state } from './signals.js';
 import type { State } from './types.js';
@@ -21,7 +21,7 @@ const CLICK_EVENT_NAME = 'main_button_pressed';
 const COMPONENT_NAME = 'mainButton';
 
 const wrapBasic = createWrapBasic(COMPONENT_NAME);
-const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, SETUP_METHOD_NAME);
+const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
 
 /**
  * Mounts the Main Button restoring its state.
@@ -97,7 +97,7 @@ export const offClick = wrapBasic(
  *   });
  * }
  */
-export const setParams = wrapComplete(
+export const setParams = wrapMounted(
   'setParams',
   (updates: Partial<State>): void => {
     internalState.set({
