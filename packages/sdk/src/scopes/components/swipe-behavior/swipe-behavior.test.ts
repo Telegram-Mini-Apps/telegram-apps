@@ -4,14 +4,13 @@ import {
   mockPageReload,
   mockSessionStorageSetItem,
 } from 'test-utils';
-import { TypedError } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
 import { setMaxVersion } from '@test-utils/setMaxVersion.js';
 import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
-import { mockSSR } from '@test-utils/mockSSR.js';
-import { $version } from '@/scopes/globals.js';
+import { testSafety } from '@test-utils/predefined/testSafety.js';
+import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
 
 import {
   isMounted,
@@ -36,168 +35,58 @@ function setAvailable() {
 }
 
 describe.each([
-  ['disableVertical', disableVertical],
-  ['enableVertical', enableVertical],
-  ['mount', mount],
-] as const)('%s', (name, fn) => {
-  it('should throw ERR_UNKNOWN_ENV if not in Mini Apps', () => {
-    const err = new TypedError(
-      'ERR_UNKNOWN_ENV',
-      `Unable to call the swipeBehavior.${name}() method: it can't be called outside Mini Apps`,
-    );
-    expect(fn).toThrow(err);
-    mockMiniAppsEnv();
-    expect(fn).not.toThrow(err);
-  });
-
-  describe('mini apps env', () => {
-    beforeEach(mockMiniAppsEnv);
-
-    it('should throw ERR_UNKNOWN_ENV if called on the server', () => {
-      mockSSR();
-      expect(fn).toThrow(
-        new TypedError(
-          'ERR_UNKNOWN_ENV',
-          `Unable to call the swipeBehavior.${name}() method: it can't be called outside Mini Apps`,
-        ),
-      );
-    });
-
-    it('should throw ERR_NOT_INITIALIZED if package is not initialized', () => {
-      const err = new TypedError(
-        'ERR_NOT_INITIALIZED',
-        `Unable to call the swipeBehavior.${name}() method: the SDK was not initialized. Use the SDK init() function`,
-      );
-      expect(fn).toThrow(err);
-      setMaxVersion();
-      expect(fn).not.toThrow(err);
-    });
-
-    describe('package initialized', () => {
-      beforeEach(setMaxVersion);
-
-      it('should throw ERR_NOT_SUPPORTED if Mini Apps version is less than 7.7', () => {
-        $version.set('7.6');
-        expect(fn).toThrow(
-          new TypedError(
-            'ERR_NOT_SUPPORTED',
-            `Unable to call the swipeBehavior.${name}() method: it is unsupported in Mini Apps version 7.6`,
-          ),
-        );
-        $version.set('7.7');
-        expect(fn).not.toThrow(
-          new TypedError(
-            'ERR_NOT_SUPPORTED',
-            `Unable to call the swipeBehavior.${name}() method: it is unsupported in Mini Apps version 7.7`,
-          ),
-        );
-      });
-    });
-  });
-
-  describe('isSupported', () => {
-    it('should return true only if Mini Apps version is 7.7 or higher. False otherwise', () => {
-      $version.set('7.6');
-      expect(fn.isSupported()).toBe(false);
-      $version.set('7.7');
-      expect(fn.isSupported()).toBe(true);
-    });
+  ['disableVertical', disableVertical, isMounted],
+  ['enableVertical', enableVertical, isMounted],
+  ['mount', mount, undefined],
+] as const)('%s', (name, fn, isMounted) => {
+  testSafety(fn, name, {
+    component: 'swipeBehavior',
+    minVersion: '7.7',
+    isMounted,
   });
 });
 
-describe.each([
-  ['mount', mount],
-] as const)('%s', (_, fn) => {
-  describe('mini apps env', () => {
-    beforeEach(mockMiniAppsEnv);
-
-    describe('package initialized', () => {
-      beforeEach(setMaxVersion);
-
-      it('should not throw', () => {
-        expect(fn).not.toThrow();
-      });
-    });
-  });
-});
-
-// disableConfirmation + enableConfirmation complete
 describe.each([
   ['disableVertical', disableVertical, false],
   ['enableVertical', enableVertical, true],
-])('%s', (name, fn, value) => {
-  describe('mini apps env', () => {
-    beforeEach(mockMiniAppsEnv);
+])('%s', (_, fn, value) => {
+  beforeEach(setAvailable);
 
-    describe('package initialized', () => {
-      beforeEach(setMaxVersion);
-
-      it('should throw ERR_NOT_MOUNTED if swipeBehavior is not mounted', () => {
-        expect(fn).toThrow(
-          new TypedError(
-            'ERR_NOT_MOUNTED',
-            `Unable to call the swipeBehavior.${name}() method: the component is not mounted. Use the swipeBehavior.mount() method`,
-          ),
-        );
-      });
-
-      describe('mounted', () => {
-        beforeEach(() => {
-          isMounted.set(true);
-        });
-
-        it('should not throw', () => {
-          expect(fn).not.toThrow();
-        });
-      });
-    });
+  it(`should set isConfirmationEnabled = ${value}`, () => {
+    isVerticalEnabled.set(!value);
+    expect(isVerticalEnabled()).toBe(!value);
+    fn();
+    expect(isVerticalEnabled()).toBe(value);
   });
 
-  describe('env is ready', () => {
-    beforeEach(setAvailable);
+  it(`should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: ${value} }`, () => {
+    isVerticalEnabled.set(!value);
+    const spy = mockPostEvent();
+    fn();
+    fn();
+    expect(spy).toBeCalledTimes(1);
+    expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: value });
+  });
 
-    it(`should set isConfirmationEnabled = ${value}`, () => {
-      isVerticalEnabled.set(!value);
-      expect(isVerticalEnabled()).toBe(!value);
-      fn();
-      expect(isVerticalEnabled()).toBe(value);
-    });
+  it(`should call sessionStorage.setItem with "tapps/swipeBehavior" and "${value}" if value changed`, () => {
+    isVerticalEnabled.set(value);
+    const spy = mockSessionStorageSetItem();
+    fn();
+    // Should call retrieveLaunchParams.
+    expect(spy).toHaveBeenCalledOnce();
 
-    it(`should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: ${value} }`, () => {
-      isVerticalEnabled.set(!value);
-      const spy = mockPostEvent();
-      fn();
-      fn();
-      expect(spy).toBeCalledTimes(1);
-      expect(spy).toBeCalledWith('web_app_setup_swipe_behavior', { allow_vertical_swipe: value });
-    });
+    spy.mockClear();
 
-    it(`should call sessionStorage.setItem with "tapps/swipeBehavior" and "${value}" if value changed`, () => {
-      isVerticalEnabled.set(value);
-      const spy = mockSessionStorageSetItem();
-      fn();
-      // Should call retrieveLaunchParams.
-      expect(spy).toHaveBeenCalledOnce();
-
-      spy.mockClear();
-
-      isVerticalEnabled.set(!value);
-      fn();
-      // Should call retrieveLaunchParams + save component state.
-      expect(spy).toHaveBeenCalledTimes(2);
-      expect(spy).toHaveBeenNthCalledWith(2, 'tapps/swipeBehavior', String(value));
-    });
+    isVerticalEnabled.set(!value);
+    fn();
+    // Should call retrieveLaunchParams + save component state.
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenNthCalledWith(2, 'tapps/swipeBehavior', String(value));
   });
 });
 
 describe('isSupported', () => {
-  it('should return false if version is less than 7.7', () => {
-    $version.set('7.6');
-    expect(isSupported()).toBe(false);
-
-    $version.set('7.7');
-    expect(isSupported()).toBe(true);
-  });
+  testIsSupported(isSupported, '7.7');
 });
 
 describe('mount', () => {

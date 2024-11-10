@@ -5,8 +5,10 @@ import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
 import { setMaxVersion } from '@test-utils/setMaxVersion.js';
 import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
-import { mockSSR } from '@test-utils/mockSSR.js';
+import { testSafety } from '@test-utils/predefined/testSafety.js';
+import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
 import { $version } from '@/scopes/globals.js';
+import { state as tpState } from '@/scopes/components/theme-params/signals.js';
 
 import {
   mount,
@@ -24,7 +26,6 @@ import {
   isMounted,
   headerColor,
 } from './signals.js';
-import { state as tpState } from '@/scopes/components/theme-params/signals.js';
 
 beforeEach(() => {
   resetPackageState();
@@ -38,199 +39,19 @@ function setAvailable() {
   isMounted.set(true);
 }
 
-// basic checks.
 describe.each([
-  ['mount', mount],
-  ['ready', ready],
-  ['setBackgroundColor', setBackgroundColor],
-  ['setBottomBarColor', setBottomBarColor],
-  ['setHeaderColor', setHeaderColor],
-  ['close', close],
-  ['bindCssVars', bindCssVars],
-] as const)('%s', (name, fn) => {
-  it('should throw ERR_UNKNOWN_ENV if not in Mini Apps', () => {
-    const err = new TypedError(
-      'ERR_UNKNOWN_ENV',
-      `Unable to call the miniApp.${name}() method: it can't be called outside Mini Apps`,
-    );
-    expect(fn).toThrow(err);
-    mockMiniAppsEnv();
-    expect(fn).not.toThrow(err);
-  });
-
-  describe('mini apps env', () => {
-    beforeEach(mockMiniAppsEnv);
-
-    it('should throw ERR_UNKNOWN_ENV if called on the server', () => {
-      mockSSR();
-      expect(fn).toThrow(
-        new TypedError(
-          'ERR_UNKNOWN_ENV',
-          `Unable to call the miniApp.${name}() method: it can't be called outside Mini Apps`,
-        ),
-      );
-    });
-
-    it('should throw ERR_NOT_INITIALIZED if package is not initialized', () => {
-      const err = new TypedError(
-        'ERR_NOT_INITIALIZED',
-        `Unable to call the miniApp.${name}() method: the SDK was not initialized. Use the SDK init() function`,
-      );
-      expect(fn).toThrow(err);
-      setMaxVersion();
-      expect(fn).not.toThrow(err);
-    });
-  });
-});
-
-// supported checks.
-describe.each([
-  ['mount', mount],
-  ['setBackgroundColor', setBackgroundColor],
-  ['setHeaderColor', setHeaderColor],
-  ['bindCssVars', bindCssVars],
-] as const)('%s', (name, fn) => {
-  it('should throw ERR_UNKNOWN_ENV if not in Mini Apps', () => {
-    const err = new TypedError(
-      'ERR_UNKNOWN_ENV',
-      `Unable to call the miniApp.${name}() method: it can't be called outside Mini Apps`,
-    );
-    expect(fn).toThrow(err);
-    mockMiniAppsEnv();
-    expect(fn).not.toThrow(err);
-  });
-
-  describe('mini apps env', () => {
-    beforeEach(mockMiniAppsEnv);
-
-    it('should throw ERR_UNKNOWN_ENV if called on the server', () => {
-      mockSSR();
-      expect(fn).toThrow(
-        new TypedError(
-          'ERR_UNKNOWN_ENV',
-          `Unable to call the miniApp.${name}() method: it can't be called outside Mini Apps`,
-        ),
-      );
-    });
-
-    it('should throw ERR_NOT_INITIALIZED if package is not initialized', () => {
-      const err = new TypedError(
-        'ERR_NOT_INITIALIZED',
-        `Unable to call the miniApp.${name}() method: the SDK was not initialized. Use the SDK init() function`,
-      );
-      expect(fn).toThrow(err);
-      setMaxVersion();
-      expect(fn).not.toThrow(err);
-    });
-
-    describe('package initialized', () => {
-      beforeEach(setMaxVersion);
-
-      it('should throw ERR_NOT_SUPPORTED if Mini Apps version is less than 6.1', () => {
-        $version.set('6.0');
-        expect(fn).toThrow(
-          new TypedError(
-            'ERR_NOT_SUPPORTED',
-            `Unable to call the miniApp.${name}() method: it is unsupported in Mini Apps version 6.0`,
-          ),
-        );
-        $version.set('6.1');
-        expect(fn).not.toThrow(
-          new TypedError(
-            'ERR_NOT_SUPPORTED',
-            `Unable to call the miniApp.${name}() method: it is unsupported in Mini Apps version 6.1`,
-          ),
-        );
-      });
-    });
-  });
-
-  describe('isSupported', () => {
-    it('should return true only if Mini Apps version is 6.1 or higher. False otherwise', () => {
-      $version.set('6.0');
-      expect(fn.isSupported()).toBe(false);
-      $version.set('6.1');
-      expect(fn.isSupported()).toBe(true);
-    });
-  });
-});
-
-// complete checks.
-describe.each([
-  ['setBackgroundColor', setBackgroundColor],
-  ['setHeaderColor', setHeaderColor],
-  ['bindCssVars', bindCssVars],
-] as const)('%s', (name, fn) => {
-  describe('mini apps env', () => {
-    beforeEach(mockMiniAppsEnv);
-
-    describe('package initialized', () => {
-      beforeEach(setMaxVersion);
-
-      describe('Mini Apps version is 6.1', () => {
-        beforeEach(() => {
-          $version.set('6.1');
-        });
-
-        it('should throw ERR_NOT_MOUNTED if miniApp is not mounted', () => {
-          expect(fn).toThrow(
-            new TypedError(
-              'ERR_NOT_MOUNTED',
-              `Unable to call the miniApp.${name}() method: the component is not mounted. Use the miniApp.mount() method`,
-            ),
-          );
-        });
-
-        describe('mounted', () => {
-          beforeEach(() => {
-            isMounted.set(true);
-          });
-
-          it('should not throw', () => {
-            expect(fn).not.toThrow();
-          });
-        });
-      });
-    });
-  });
-});
-
-// specific support checks (v7.10).
-describe.each([
-  ['setBottomBarColor', setBottomBarColor],
-] as const)('%s', (name, fn) => {
-  describe('mini apps env', () => {
-    beforeEach(mockMiniAppsEnv);
-
-    describe('package initialized', () => {
-      beforeEach(setMaxVersion);
-
-      it('should throw ERR_NOT_SUPPORTED if Mini Apps version is less than 7.10', () => {
-        $version.set('7.9');
-        expect(fn).toThrow(
-          new TypedError(
-            'ERR_NOT_SUPPORTED',
-            `Unable to call the miniApp.${name}() method: it is unsupported in Mini Apps version 7.9`,
-          ),
-        );
-        $version.set('7.10');
-        expect(fn).not.toThrow(
-          new TypedError(
-            'ERR_NOT_SUPPORTED',
-            `Unable to call the miniApp.${name}() method: it is unsupported in Mini Apps version 7.10`,
-          ),
-        );
-      });
-    });
-  });
-
-  describe('isSupported', () => {
-    it('should return true only if Mini Apps version is 7.10 or higher. False otherwise', () => {
-      $version.set('7.9');
-      expect(fn.isSupported()).toBe(false);
-      $version.set('7.10');
-      expect(fn.isSupported()).toBe(true);
-    });
+  ['mount', mount, {}],
+  ['ready', ready, {}],
+  ['setBackgroundColor', setBackgroundColor, { isMounted }],
+  ['setBottomBarColor', setBottomBarColor, { isMounted, minVersion: '7.10' }],
+  ['setHeaderColor', setHeaderColor, {}],
+  ['close', close, {}],
+  ['bindCssVars', bindCssVars, { isMounted }],
+] as const)('%s', (name, fn, options) => {
+  testSafety(fn, name, {
+    component: 'miniApp',
+    minVersion: '6.1',
+    ...options,
   });
 });
 
@@ -353,16 +174,7 @@ describe('close', () => {
 });
 
 describe('isSupported', () => {
-  it('should return false if version is less than 6.1. True otherwise', () => {
-    $version.set('6.0');
-    expect(isSupported()).toBe(false);
-
-    $version.set('6.1');
-    expect(isSupported()).toBe(true);
-
-    $version.set('6.2');
-    expect(isSupported()).toBe(true);
-  });
+  testIsSupported(isSupported, '6.1');
 });
 
 describe('ready', () => {

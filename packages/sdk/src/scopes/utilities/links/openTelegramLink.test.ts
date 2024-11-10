@@ -4,8 +4,8 @@ import { TypedError } from '@telegram-apps/bridge';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
 import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
-import { mockSSR } from '@test-utils/mockSSR.js';
 import { setMaxVersion } from '@test-utils/setMaxVersion.js';
+import { testSafety } from '@test-utils/predefined/testSafety.js';
 import { $version } from '@/scopes/globals.js';
 
 import { openTelegramLink } from './openTelegramLink.js';
@@ -21,45 +21,9 @@ function setAvailable() {
   setMaxVersion();
 }
 
-describe.each([
-  ['openTelegramLink', openTelegramLink],
-] as const)('%s', (name, fn) => {
-  it('should throw ERR_UNKNOWN_ENV if not in Mini Apps', () => {
-    const err = new TypedError(
-      'ERR_UNKNOWN_ENV',
-      `Unable to call the ${name}() function: it can't be called outside Mini Apps`,
-    );
-    expect(fn).toThrow(err);
-    mockMiniAppsEnv();
-    expect(fn).not.toThrow(err);
-  });
+testSafety(openTelegramLink, 'openTelegramLink', {});
 
-  describe('mini apps env', () => {
-    beforeEach(mockMiniAppsEnv);
-
-    it('should throw ERR_UNKNOWN_ENV if called on the server', () => {
-      mockSSR();
-      expect(fn).toThrow(
-        new TypedError(
-          'ERR_UNKNOWN_ENV',
-          `Unable to call the ${name}() function: it can't be called outside Mini Apps`,
-        ),
-      );
-    });
-
-    it('should throw ERR_NOT_INITIALIZED if package is not initialized', () => {
-      const err = new TypedError(
-        'ERR_NOT_INITIALIZED',
-        `Unable to call the ${name}() function: the SDK was not initialized. Use the SDK init() function`,
-      );
-      expect(fn).toThrow(err);
-      setMaxVersion();
-      expect(fn).not.toThrow(err);
-    });
-  });
-});
-
-describe('openTelegramLink', () => {
+describe('is available', () => {
   beforeEach(setAvailable);
 
   it('should throw ERR_INVALID_URL if URL does not match "https://t.me/.+"', () => {
