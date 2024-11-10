@@ -42,21 +42,25 @@ function testShouldBeMounted(fn: AnyFn, component: string, method: string, isMou
 }
 
 export function testSafety(fn: AnyFn, method: string, options: {
+  call?: () => any;
   component?: string;
   isMounted?: Signal<boolean>;
 }): void;
 
 export function testSafety(fn: FnWithMaybeIsSupported, method: string, options: {
+  call?: () => any;
   isMounted?: Signal<boolean>;
   component?: string;
-  minVersion: string;
+  minVersion?: string;
 }): void;
 
 export function testSafety(fn: FnWithMaybeIsSupported, method: string, {
+  call,
   component,
   minVersion,
   isMounted,
 }: {
+  call?: () => any;
   isMounted?: Signal<boolean>;
   component?: string;
   minVersion?: string;
@@ -67,21 +71,23 @@ export function testSafety(fn: FnWithMaybeIsSupported, method: string, {
     prevVersion = `${b === 0 ? a - 1 : a}.${b === 0 ? 99 : b - 1}`;
   }
 
+  const callFn = call || fn;
+
   // Require running inside Mini Apps.
   it('should throw ERR_UNKNOWN_ENV if not in Mini Apps', () => {
     const err = new TypedError(
       'ERR_UNKNOWN_ENV',
       `${cantCallErrPrefix(method, component)} it can't be called outside Mini Apps`,
     );
-    expect(fn).toThrow(err);
+    expect(callFn).toThrow(err);
     mockMiniAppsEnv();
-    expect(fn).not.toThrow(err);
+    expect(callFn).not.toThrow(err);
   });
 
   // Require running outside server.
   it('should throw ERR_UNKNOWN_ENV if called on the server', () => {
     mockSSR();
-    expect(fn).toThrow(
+    expect(callFn).toThrow(
       new TypedError(
         'ERR_UNKNOWN_ENV',
         `${cantCallErrPrefix(method, component)} it can't be called outside Mini Apps`,
@@ -98,9 +104,9 @@ export function testSafety(fn: FnWithMaybeIsSupported, method: string, {
         'ERR_NOT_INITIALIZED',
         `${cantCallErrPrefix(method, component)} the SDK was not initialized. Use the SDK init() function`,
       );
-      expect(fn).toThrow(err);
+      expect(callFn).toThrow(err);
       $version.set('10');
-      expect(fn).not.toThrow(err);
+      expect(callFn).not.toThrow(err);
     });
 
     if (!fn.isSupported && !isMounted) {
@@ -112,11 +118,11 @@ export function testSafety(fn: FnWithMaybeIsSupported, method: string, {
         $version.set('6.0');
       });
 
-      if (fn.isSupported) {
+      if (fn.isSupported && minVersion) {
         // Require running with some minimal Mini Apps version.
         it(`should throw ERR_NOT_SUPPORTED if Mini Apps version is less than ${minVersion}`, () => {
           $version.set(prevVersion!);
-          expect(fn).toThrow(
+          expect(callFn).toThrow(
             new TypedError(
               'ERR_NOT_SUPPORTED',
               `${cantCallErrPrefix(method, component)} it is unsupported in Mini Apps version ${prevVersion}`,
@@ -124,7 +130,7 @@ export function testSafety(fn: FnWithMaybeIsSupported, method: string, {
           );
 
           $version.set(minVersion!);
-          expect(fn).not.toThrow(
+          expect(callFn).not.toThrow(
             new TypedError(
               'ERR_NOT_SUPPORTED',
               `${cantCallErrPrefix(method, component)} it is unsupported in Mini Apps version ${minVersion}`,
@@ -141,10 +147,10 @@ export function testSafety(fn: FnWithMaybeIsSupported, method: string, {
             $version.set(minVersion!);
           });
 
-          testShouldBeMounted(fn, component!, method, isMounted);
+          testShouldBeMounted(callFn, component!, method, isMounted);
         });
       } else {
-        testShouldBeMounted(fn, component!, method, isMounted!);
+        testShouldBeMounted(callFn, component!, method, isMounted!);
       }
     });
   });
