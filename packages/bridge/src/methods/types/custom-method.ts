@@ -21,6 +21,10 @@ export interface CustomMethodsParams {
     keys: string | string[]
   };
   /**
+   * Returns current server time.
+   */
+  getCurrentTime: {};
+  /**
    * Gets current user contact in case, Mini has access to it.
    */
   getRequestedContact: {};
