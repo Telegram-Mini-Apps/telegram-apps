@@ -1,5 +1,17 @@
 # @telegram-apps/bridge
 
+## 1.4.0
+
+### Minor Changes
+
+- a92abf4: - Add new custom method `getCurrentTime`
+  - Add `web_app_setup_secondary_button` method missing version annotation
+
+### Patch Changes
+
+- Updated dependencies [16742d5]
+  - @telegram-apps/signals@1.1.0
+
 ## 1.3.0
 
 ### Minor Changes
