@@ -8,7 +8,7 @@ import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
 
 const HAPTIC_METHOD_NAME = 'web_app_trigger_haptic_feedback';
-const wrapSupport = createWrapSupported('hapticFeedback', HAPTIC_METHOD_NAME);
+const wrapSupported = createWrapSupported('hapticFeedback', HAPTIC_METHOD_NAME);
 
 /**
  * Signal indicating if the Haptic Feedback is supported.
@@ -19,6 +19,7 @@ export const isSupported = createIsSupported(HAPTIC_METHOD_NAME);
  * A method that tells if an impact occurred. The Telegram app may play the
  * appropriate haptics based on style value passed.
  * @param style - impact style.
+ * @since Mini Apps v6.1
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -27,7 +28,7 @@ export const isSupported = createIsSupported(HAPTIC_METHOD_NAME);
  *   impactOccurred('medium');
  * }
  */
-export const impactOccurred = wrapSupport(
+export const impactOccurred = wrapSupported(
   'impactOccurred',
   (style: ImpactHapticFeedbackStyle): void => {
     postEvent(HAPTIC_METHOD_NAME, {
@@ -42,6 +43,7 @@ export const impactOccurred = wrapSupport(
  * a warning. The Telegram app may play the appropriate haptics based on type
  * value passed.
  * @param type - notification type.
+ * @since Mini Apps v6.1
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -50,7 +52,7 @@ export const impactOccurred = wrapSupport(
  *   notificationOccurred('success');
  * }
  */
-export const notificationOccurred = wrapSupport(
+export const notificationOccurred = wrapSupported(
   'notificationOccurred',
   (type: NotificationHapticFeedbackType): void => {
     postEvent(HAPTIC_METHOD_NAME, {
@@ -66,6 +68,7 @@ export const notificationOccurred = wrapSupport(
  *
  * Do not use this feedback when the user makes or confirms a selection; use
  * it only when the selection changes.
+ * @since Mini Apps v6.1
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
@@ -74,7 +77,7 @@ export const notificationOccurred = wrapSupport(
  *   selectionChanged();
  * }
  */
-export const selectionChanged = wrapSupport(
+export const selectionChanged = wrapSupported(
   'selectionChanged',
   (): void => {
     postEvent(HAPTIC_METHOD_NAME, { type: 'selection_change' });
