@@ -8,13 +8,13 @@ export function testIsSupported(
   },
   minVersion: string,
 ) {
-  const fn = typeof fnOrObj === 'object'
-    ? fnOrObj.isSupported
-    : fnOrObj;
-  const [a, b = 0] = minVersion.split('.').map(Number);
-  const prevVersion = `${b === 0 ? a - 1 : a}.${b === 0 ? 99 : b - 1}`;
-
   it(`should return false if version is less than ${minVersion}`, () => {
+    const fn = typeof fnOrObj === 'object'
+      ? fnOrObj.isSupported
+      : fnOrObj;
+    const [a, b = 0] = minVersion.split('.').map(Number);
+    const prevVersion = `${b === 0 ? a - 1 : a}.${b === 0 ? 99 : b - 1}`;
+
     $version.set(prevVersion);
     expect(fn()).toBe(false);
 
