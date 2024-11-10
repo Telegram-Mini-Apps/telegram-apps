@@ -1,7 +1,6 @@
 import {
   off,
   on,
-  TypedError,
   camelToKebab,
   getStorageValue,
   setStorageValue,
@@ -14,8 +13,9 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { ERR_ALREADY_CALLED } from '@/errors.js';
-import { withIsMounted } from '@/scopes/toolkit/withIsMounted.js';
+import { throwCssVarsBound } from '@/scopes/toolkit/throwCssVarsBound.js';
+import { createWrapMounted } from '@/scopes/toolkit/createWrapMounted.js';
+import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
 
 import { isCssVarsBound, state, isMounted } from './signals.js';
 import { parseThemeParams } from './parseThemeParams.js';
@@ -23,8 +23,11 @@ import type { GetCssVarNameFn } from './types.js';
 
 type StorageValue = ThemeParams;
 
-const STORAGE_KEY = 'themeParams';
+const COMPONENT_NAME = 'themeParams';
 const THEME_CHANGED_EVENT = 'theme_changed';
+
+const wrapBasic = createWrapBasic(COMPONENT_NAME);
+const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
 
 /**
  * Creates CSS variables connected with the current theme parameters.
@@ -41,63 +44,80 @@ const THEME_CHANGED_EVENT = 'theme_changed';
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * theme parameters key.
  * @returns Function to stop updating variables.
- * @throws TypedError ERR_ALREADY_CALLED
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_CSS_VARS_ALREADY_BOUND
+ * @throws {TypedError} ERR_NOT_MOUNTED
+ * @example Using no arguments
+ * if (bindCssVars.isAvailable()) {
+ *   bindCssVars();
+ * }
+ * @example Using custom CSS vars generator
+ * if (bindCssVars.isAvailable()) {
+ *   bindCssVars(key => `--my-prefix-${key}`);
+ * }
  */
-export const bindCssVars = withIsMounted((getCSSVarName?: GetCssVarNameFn): VoidFunction => {
-  if (isCssVarsBound()) {
-    throw new TypedError(ERR_ALREADY_CALLED);
-  }
-  getCSSVarName ||= (prop) => `--tg-theme-${camelToKebab(prop)}`;
+export const bindCssVars = wrapMounted(
+  'bindCssVars',
+  (getCSSVarName?: GetCssVarNameFn): VoidFunction => {
+    isCssVarsBound() && throwCssVarsBound();
 
-  function forEachEntry(fn: (key: string, value: RGB) => void): void {
-    Object.entries(state()).forEach(([k, v]) => {
-      v && fn(k, v);
-    });
-  }
+    getCSSVarName ||= (prop) => `--tg-theme-${camelToKebab(prop)}`;
 
-  function actualize(): void {
-    forEachEntry((k, v) => {
-      setCssVar(getCSSVarName!(k), v);
-    });
-  }
+    function forEachEntry(fn: (key: string, value: RGB) => void): void {
+      Object.entries(state()).forEach(([k, v]) => {
+        v && fn(k, v);
+      });
+    }
 
-  actualize();
-  state.sub(actualize);
-  isCssVarsBound.set(true);
+    function actualize(): void {
+      forEachEntry((k, v) => {
+        setCssVar(getCSSVarName!(k), v);
+      });
+    }
 
-  return () => {
-    forEachEntry(deleteCssVar);
-    state.unsub(actualize);
-    isCssVarsBound.set(false);
-  };
-}, isMounted);
+    actualize();
+    state.sub(actualize);
+    isCssVarsBound.set(true);
+
+    return () => {
+      forEachEntry(deleteCssVar);
+      state.unsub(actualize);
+      isCssVarsBound.set(false);
+    };
+  },
+);
 
 /**
- * Mounts the component.
- *
- * This function restores the component state and is automatically saving it in the local storage
- * if it changed.
+ * Mounts the Theme Params component restoring its state.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @example
+ * if (mount.isAvailable()) {
+ *   mount();
+ * }
  */
-export function mount(): void {
+export const mount = wrapBasic('mount', (): void => {
   if (!isMounted()) {
     on(THEME_CHANGED_EVENT, onThemeChanged);
-    state.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || retrieveLaunchParams().themeParams);
+    state.set(
+      isPageReload()
+      && getStorageValue<StorageValue>(COMPONENT_NAME)
+      || retrieveLaunchParams().themeParams,
+    );
     isMounted.set(true);
   }
-}
+});
 
-/**
- * Actualizes the theme parameters whenever an according event was received.
- * @param e - event data.
- */
 const onThemeChanged: EventListener<'theme_changed'> = (e) => {
   const value = parseThemeParams(e.theme_params);
   state.set(value);
-  setStorageValue<StorageValue>(STORAGE_KEY, value);
+  setStorageValue<StorageValue>(COMPONENT_NAME, value);
 };
 
 /**
- * Unmounts the component, removing the listener, saving the component state in the local storage.
+ * Unmounts the Theme Params component.
  */
 export function unmount(): void {
   off(THEME_CHANGED_EVENT, onThemeChanged);

@@ -32,13 +32,17 @@ appropriate haptic feedback based on the style value passed.
 ::: code-group 
 
 ```ts [Variable]
-hapticFeedback.impactOccurred('medium');
+if (hapticFeedback.impactOccurred.isAvailable()) {
+  hapticFeedback.impactOccurred('medium');
+}
 ```
 
 ```ts [Functions]
 import { hapticFeedbackImpactOccurred } from '@telegram-apps/sdk';
 
-hapticFeedbackImpactOccurred('medium');
+if (hapticFeedbackImpactOccurred.isAvailable()) {
+  hapticFeedbackImpactOccurred('medium');
+}
 ```
 
 :::
@@ -60,13 +64,17 @@ value passed.
 ::: code-group
 
 ```ts [Variable]
-hapticFeedback.notificationOccurred('success');
+if (hapticFeedback.notificationOccurred.isAvailable()) {
+  hapticFeedback.notificationOccurred('success');
+}
 ```
 
 ```ts [Functions]
 import { hapticFeedbackNotificationOccurred } from '@telegram-apps/sdk';
 
-hapticFeedbackNotificationOccurred('success');
+if (hapticFeedbackNotificationOccurred.isAvailable()) {
+  hapticFeedbackNotificationOccurred('success');
+}
 ```
 
 :::
@@ -87,11 +95,15 @@ Use this feedback only when the selection changes, not when a selection is made 
 ::: code-group
 
 ```ts [Variable]
-hapticFeedback.selectionChanged();
+if (hapticFeedback.selectionChanged.isAvailable()) {
+  hapticFeedback.selectionChanged();
+}
 ```
 
 ```ts [Functions]
 import { hapticFeedbackSelectionChanged } from '@telegram-apps/sdk';
 
-hapticFeedbackSelectionChanged();
+if (hapticFeedbackSelectionChanged.isAvailable()) {
+  hapticFeedbackSelectionChanged();
+}
 ```

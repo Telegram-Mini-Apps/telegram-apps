@@ -1,4 +1,4 @@
-import type { BiometryType, ExecuteWithOptions } from '@telegram-apps/bridge';
+import type { BiometryType, AsyncOptions } from '@telegram-apps/bridge';
 
 export type State =
   | {
@@ -49,7 +49,7 @@ export type State =
 
 type Maybe<T> = T | null | undefined;
 
-export interface AuthenticateOptions extends ExecuteWithOptions {
+export interface AuthenticateOptions extends AsyncOptions {
   /**
    * Reason to request biometry data. Should be at least 1 symbol length, but not more than
    * 128 symbols.
@@ -57,7 +57,7 @@ export interface AuthenticateOptions extends ExecuteWithOptions {
   reason?: Maybe<string>;
 }
 
-export interface UpdateTokenOptions extends ExecuteWithOptions {
+export interface UpdateTokenOptions extends AsyncOptions {
   /**
    * Optional string field, containing the reason why the bot is asking to authenticate using biometrics (1-128 chars, used in the prompt).
    */
@@ -69,7 +69,7 @@ export interface UpdateTokenOptions extends ExecuteWithOptions {
   token?: Maybe<string>;
 }
 
-export interface RequestAccessOptions extends ExecuteWithOptions {
+export interface RequestAccessOptions extends AsyncOptions {
   /**
    * The text to be displayed to a user in the popup describing why the bot needs access to
    * biometrics, 0-128 characters.

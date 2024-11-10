@@ -3,65 +3,84 @@ import { getStorageValue, setStorageValue } from '@telegram-apps/bridge';
 import { signal } from '@telegram-apps/signals';
 
 import { postEvent } from '@/scopes/globals.js';
-import { subAndCall } from '@/utils/subAndCall.js';
-import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
+import { createWrapMounted } from '@/scopes/toolkit/createWrapMounted.js';
+import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
 
 type StorageValue = boolean;
 
-const STORAGE_KEY = 'closingConfirmation';
+const COMPONENT_NAME = 'closingBehavior';
 
 /**
- * True if the component is currently mounted.
- */
-export const isMounted = signal(false);
-
-const withIsMounted = createWithIsMounted(isMounted);
-
-/**
- * Disables the confirmation dialog when closing the Mini App.
- * @throws {TypedError} ERR_NOT_MOUNTED
- */
-export const disableConfirmation = withIsMounted((): void => {
-  isConfirmationEnabled.set(false);
-});
-
-/**
- * True if the confirmation dialog should be shown while the user is trying to close the Mini App.
+ * Signal indicating if the confirmation dialog should be shown, while the user
+ * is trying to close the Mini App.
  */
 export const isConfirmationEnabled = signal(false);
 
 /**
- * Enables the confirmation dialog when closing the Mini App.
- * @throws {TypedError} ERR_NOT_MOUNTED
+ * Signal indicating if the Closing Behavior component is currently mounted.
  */
-export const enableConfirmation = withIsMounted((): void => {
-  isConfirmationEnabled.set(true);
+export const isMounted = signal(false);
+
+const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
+const wrapBasic = createWrapBasic(COMPONENT_NAME);
+
+/**
+ * Disables the closing confirmation dialog.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_MOUNTED
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @example
+ * if (disableConfirmation.isAvailable()) {
+ *   disableConfirmation();
+ * }
+ */
+export const disableConfirmation = wrapMounted('disableConfirmation', (): void => {
+  setClosingConfirmation(false);
 });
 
 /**
- * Mounts the component.
- *
- * This function restores the component state and is automatically saving it in the local storage
- * if it changed.
+ * Enables the closing confirmation dialog.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_MOUNTED
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @example
+ * if (enableConfirmation.isAvailable()) {
+ *   enableConfirmation();
+ * }
  */
-export function mount(): void {
+export const enableConfirmation = wrapMounted('enableConfirmation', (): void => {
+  setClosingConfirmation(true);
+});
+
+/**
+ * Mounts the Closing Behavior component restoring its state.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @example
+ * if (mount.isAvailable()) {
+ *   mount();
+ * }
+ */
+export const mount = wrapBasic('mount', (): void => {
   if (!isMounted()) {
-    isConfirmationEnabled.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
-    subAndCall(isConfirmationEnabled, onStateChanged);
+    setClosingConfirmation(
+      isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false,
+    );
     isMounted.set(true);
+  }
+});
+
+function setClosingConfirmation(value: boolean): void {
+  if (value !== isConfirmationEnabled()) {
+    postEvent('web_app_setup_closing_behavior', { need_confirmation: value });
+    setStorageValue<StorageValue>(COMPONENT_NAME, value);
+    isConfirmationEnabled.set(value);
   }
 }
 
-function onStateChanged(): void {
-  const value = isConfirmationEnabled();
-  postEvent('web_app_setup_closing_behavior', { need_confirmation: value });
-  setStorageValue<StorageValue>(STORAGE_KEY, value);
-}
-
 /**
- * Unmounts the component, removing the listener, saving the component state in the local storage.
+ * Unmounts the Closing Behavior component.
  */
 export function unmount(): void {
-  isConfirmationEnabled.unsub(onStateChanged);
   isMounted.set(false);
 }

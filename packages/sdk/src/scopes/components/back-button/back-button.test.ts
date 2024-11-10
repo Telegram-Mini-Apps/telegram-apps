@@ -1,10 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { mockSessionStorageGetItem, mockPageReload, mockSessionStorageSetItem } from 'test-utils';
-import { emitMiniAppsEvent, TypedError } from '@telegram-apps/bridge';
+import {
+  mockSessionStorageGetItem,
+  mockPageReload,
+  mockSessionStorageSetItem,
+} from 'test-utils';
+import { emitMiniAppsEvent } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
-import { $version } from '@/scopes/globals.js';
+import { setMaxVersion } from '@test-utils/setMaxVersion.js';
+import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
+import { testSafety } from '@test-utils/predefined/testSafety.js';
 
 import {
   show,
@@ -24,43 +31,73 @@ beforeEach(() => {
   mockPostEvent();
 });
 
-describe('hide', () => {
-  beforeEach(() => {
-    $version.set('10');
-    isMounted.set(true);
+function setAvailable() {
+  setMaxVersion();
+  mockMiniAppsEnv();
+  isMounted.set(true);
+}
+
+describe.each([
+  ['hide', hide, isMounted],
+  ['show', show, isMounted],
+  ['mount', mount, undefined],
+  ['onClick', onClick, undefined],
+  ['offClick', offClick, undefined],
+] as const)('%s', (name, fn, isMounted) => {
+  testSafety(fn, name, {
+    component: 'backButton',
+    minVersion: '6.1',
+    isMounted,
+  });
+});
+
+describe.each([
+  ['hide', hide, false],
+  ['show', show, true],
+])('%s', (_name, fn, value) => {
+  beforeEach(setAvailable);
+
+  it(`should set isVisible = ${value}`, () => {
+    isVisible.set(!value);
+    expect(isVisible()).toBe(!value);
+    fn();
+    expect(isVisible()).toBe(value);
   });
 
-  it('should set isVisible = false', () => {
-    isVisible.set(true);
-    expect(isVisible()).toBe(true);
-    hide();
-    expect(isVisible()).toBe(false);
+  it(`should call postEvent with "web_app_setup_back_button" and { is_visible: ${value} }`, () => {
+    isVisible.set(!value);
+    const spy = mockPostEvent();
+    fn();
+    fn();
+    expect(spy).toBeCalledTimes(1);
+    expect(spy).toBeCalledWith('web_app_setup_back_button', { is_visible: value });
+  });
+
+  it(`should call sessionStorage.setItem with "tapps/backButton" and "${value}" if value changed`, () => {
+    isVisible.set(value);
+    const spy = mockSessionStorageSetItem();
+    fn();
+    // Should call retrieveLaunchParams.
+    expect(spy).toHaveBeenCalledOnce();
+
+    spy.mockClear();
+
+    isVisible.set(!value);
+    fn();
+    // Should call retrieveLaunchParams + save component state.
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenNthCalledWith(2, 'tapps/backButton', String(value));
   });
 });
 
 describe('isSupported', () => {
-  it('should return false if version is less than 6.1. True otherwise', () => {
-    $version.set('6.0');
-    expect(isSupported()).toBe(false);
-
-    $version.set('6.1');
-    expect(isSupported()).toBe(true);
-
-    $version.set('6.2');
-    expect(isSupported()).toBe(true);
-  });
+  testIsSupported(isSupported, '6.1');
 });
 
 describe('mount', () => {
   beforeEach(() => {
-    $version.set('10');
-  });
-
-  it('should call postEvent with "web_app_setup_back_button"', () => {
-    const spy = mockPostEvent();
-    mount();
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('web_app_setup_back_button', { is_visible: false });
+    mockMiniAppsEnv();
+    setMaxVersion();
   });
 
   it('should set isMounted = true', () => {
@@ -75,8 +112,7 @@ describe('mount', () => {
     });
 
     it('should use value from session storage key "tapps/backButton"', () => {
-      const spy = vi.fn(() => 'true');
-      mockSessionStorageGetItem(spy);
+      const spy = mockSessionStorageGetItem(() => 'true');
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/backButton');
@@ -84,8 +120,7 @@ describe('mount', () => {
     });
 
     it('should set isVisible false if session storage key "tapps/backButton" not presented', () => {
-      const spy = vi.fn(() => null);
-      mockSessionStorageGetItem(spy);
+      const spy = mockSessionStorageGetItem(() => null);
       mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/backButton');
@@ -102,10 +137,7 @@ describe('mount', () => {
 });
 
 describe('onClick', () => {
-  beforeEach(() => {
-    $version.set('10');
-    isMounted.set(true);
-  });
+  beforeEach(setAvailable);
 
   it('should add click listener', () => {
     const fn = vi.fn();
@@ -124,10 +156,7 @@ describe('onClick', () => {
 });
 
 describe('offClick', () => {
-  beforeEach(() => {
-    $version.set('10');
-    isMounted.set(true);
-  });
+  beforeEach(setAvailable);
 
   it('should remove click listener', () => {
     const fn = vi.fn();
@@ -139,103 +168,11 @@ describe('offClick', () => {
 });
 
 describe('unmount', () => {
-  beforeEach(() => {
-    $version.set('10');
-    mount();
-  });
+  beforeEach(setAvailable);
 
-  it('should stop calling postEvent function and session storage updates when isVisible changes', () => {
-    const postEventSpy = mockPostEvent();
-    const storageSpy = mockSessionStorageSetItem();
-    isVisible.set(true);
-    expect(postEventSpy).toHaveBeenCalledTimes(1);
-    expect(storageSpy).toHaveBeenCalledTimes(1);
-
-    postEventSpy.mockClear();
-    storageSpy.mockClear();
-
+  it('should set isMounted = false', () => {
+    expect(isMounted()).toBe(true);
     unmount();
-    isVisible.set(false);
-
-    expect(postEventSpy).toHaveBeenCalledTimes(0);
-    expect(storageSpy).toHaveBeenCalledTimes(0);
-  });
-});
-
-describe('show', () => {
-  beforeEach(() => {
-    $version.set('10');
-    isMounted.set(true);
-  });
-
-  it('should set isVisible = true', () => {
-    isVisible.set(false);
-    expect(isVisible()).toBe(false);
-    show();
-    expect(isVisible()).toBe(true);
-  });
-});
-
-describe('mounted', () => {
-  beforeEach(() => {
-    $version.set('10');
-    mount();
-  });
-
-  describe('hide', () => {
-    it('should call postEvent with "web_app_setup_back_button" and { is_visible: false }', () => {
-      isVisible.set(true);
-      const spy = mockPostEvent();
-      hide();
-      hide();
-      hide();
-      expect(spy).toBeCalledTimes(1);
-      expect(spy).toBeCalledWith('web_app_setup_back_button', { is_visible: false });
-    });
-  });
-
-  describe('show', () => {
-    it('should call postEvent with "web_app_setup_back_button" and { is_visible: true }', () => {
-      isVisible.set(false);
-      const spy = mockPostEvent();
-      show();
-      show();
-      show();
-      expect(spy).toBeCalledTimes(1);
-      expect(spy).toBeCalledWith('web_app_setup_back_button', { is_visible: true });
-    });
-  });
-});
-
-describe('support check', () => {
-  beforeEach(() => {
-    isMounted.set(true);
-  });
-
-  it.each([
-    { fn: mount, name: 'mount' },
-    { fn: () => onClick(console.log), name: 'onClick' },
-    { fn: () => offClick(console.log), name: 'offClick' },
-  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 6.1', ({ fn }) => {
-    $version.set('6.0');
-    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('6.1');
-    expect(fn).not.toThrow();
-  });
-});
-
-describe('mount check', () => {
-  beforeEach(() => {
-    $version.set('10');
-  });
-
-  it.each([
-    { fn: hide, name: 'hide' },
-    { fn: show, name: 'show' },
-  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
-    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
-    isMounted.set(true);
-    expect(fn).not.toThrow();
+    expect(isMounted()).toBe(false);
   });
 });

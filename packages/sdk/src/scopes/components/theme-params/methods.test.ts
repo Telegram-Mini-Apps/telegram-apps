@@ -1,38 +1,43 @@
 import { beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
-import { createWindow } from 'test-utils';
-import { emitMiniAppsEvent, TypedError } from '@telegram-apps/bridge';
-import { resetPackageState } from '@test-utils/reset/reset.js';
+import { emitMiniAppsEvent } from '@telegram-apps/bridge';
+
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
+import { setMaxVersion } from '@test-utils/setMaxVersion.js';
+import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
 
 import { bindCssVars, mount } from './methods.js';
 import { isMounted, state } from './signals.js';
-
-type SetPropertyFn = typeof document.documentElement.style.setProperty;
-let setSpy: MockInstance<SetPropertyFn>;
-
-vi.mock('@telegram-apps/bridge', async () => {
-  const m = await vi.importActual('@telegram-apps/bridge');
-  return {
-    ...m,
-    retrieveLaunchParams: vi.fn(() => ({
-      themeParams: {},
-    })),
-  };
-});
+import { testSafety } from '@test-utils/predefined/testSafety.js';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
   resetPackageState();
-  createWindow();
+  vi.restoreAllMocks();
   mockPostEvent();
-  setSpy = vi
-    .spyOn(document.documentElement.style, 'setProperty')
-    .mockImplementation(() => {
-    });
+});
+
+describe.each([
+  ['bindCssVars', bindCssVars, isMounted],
+  ['mount', mount, undefined],
+] as const)('%s', (name, fn, isMounted) => {
+  testSafety(fn, name, {
+    component: 'themeParams',
+    isMounted,
+  });
 });
 
 describe('bindCssVars', () => {
-  beforeEach(mount);
+  type SetPropertyFn = typeof document.documentElement.style.setProperty;
+  let setSpy: MockInstance<SetPropertyFn>;
+
+  beforeEach(() => {
+    setMaxVersion();
+    mockMiniAppsEnv();
+    mount();
+    setSpy = vi
+      .spyOn(document.documentElement.style, 'setProperty')
+      .mockImplementation(() => null);
+  });
 
   it('should set --tg-theme-{key} CSS vars, where key is kebab-cased theme keys', () => {
     state.set({
@@ -104,15 +109,5 @@ describe('bindCssVars', () => {
       },
     });
     expect(setSpy).toHaveBeenCalledTimes(3);
-  });
-});
-
-describe('mount check', () => {
-  it.each([
-    { fn: bindCssVars, name: 'bindCssVars' },
-  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
-    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
-    isMounted.set(true);
-    expect(fn).not.toThrow();
   });
 });

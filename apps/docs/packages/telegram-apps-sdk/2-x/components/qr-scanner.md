@@ -21,7 +21,7 @@ returns a promise which will be resolved upon the scanner was closed.
 ```ts [Variable]
 import { qrScanner } from '@telegram-apps/sdk';
 
-if (qrScanner.open.isSupported()) {
+if (qrScanner.open.isAvailable()) {
   qrScanner.isOpened(); // false
   const promise = qrScanner.open({
     text: 'Scan the QR',
@@ -44,7 +44,7 @@ import {
   isQrScannerOpened,
 } from '@telegram-apps/sdk';
 
-if (openQrScanner.isSupported()) {
+if (openQrScanner.isAvailable()) {
   isQrScannerOpened(); // false
   const promise = openQrScanner({
     text: 'Scan the QR',
@@ -74,7 +74,7 @@ due to some reason.
 ```ts [Variable]
 import { qrScanner } from '@telegram-apps/sdk';
 
-if (qrScanner.open.isSupported()) {
+if (qrScanner.open.isAvailable()) {
   // Getting the first captured QR.
   qrScanner.isOpened(); // false
   let promise = qrScanner.open({ text: 'Scan any QR' });
@@ -103,7 +103,7 @@ import {
   isQrScannerOpened,
 } from '@telegram-apps/sdk';
 
-if (openQrScanner.isSupported()) {
+if (openQrScanner.isAvailable()) {
   // Getting the first captured QR.
   // isQrScannerOpened() -> false
   let promise = openQrScanner({ text: 'Scan any QR' });

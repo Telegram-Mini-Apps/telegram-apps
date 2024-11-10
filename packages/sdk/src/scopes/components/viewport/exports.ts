@@ -15,3 +15,12 @@ export {
   width as viewportWidth,
 } from './exports.variable.js';
 export * as viewport from './exports.variable.js';
+
+export {
+  requestViewport,
+  type RequestViewportResult
+} from './requestViewport.js';
+export type {
+  State as ViewportState,
+  GetCSSVarNameFn as ViewportGetCSSVarNameFn,
+} from './types.js';

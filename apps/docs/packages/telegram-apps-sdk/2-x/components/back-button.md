@@ -34,15 +34,19 @@ properties. To do so, use the `mount` method. It will update the `isMounted` sig
 ```ts [Variable]
 import { backButton } from '@telegram-apps/sdk';
 
-backButton.mount();
-backButton.isMounted(); // true
+if (backButton.mount.isAvailable()) {
+  backButton.mount();
+  backButton.isMounted(); // true
+}
 ```
 
 ```ts [Functions]
 import { mountBackButton, isBackButtonMounted } from '@telegram-apps/sdk';
 
-mountBackButton();
-isBackButtonMounted(); // true
+if (mountBackButton.isAvailable()) {
+  mountBackButton();
+  isBackButtonMounted(); // true
+}
 ```
 
 :::
@@ -73,11 +77,15 @@ the `isVisible` signal property value.
 ::: code-group
 
 ```ts [Variable]
-backButton.show();
-backButton.isVisible(); // true
+if (backButton.show.isAvailable()) {
+  backButton.show();
+  backButton.isVisible(); // true
+}
 
-backButton.hide();
-backButton.isVisible(); // false
+if (backButton.hide.isAvailable()) {
+  backButton.hide();
+  backButton.isVisible(); // false
+}
 ```
 
 ```ts [Functions]
@@ -87,11 +95,15 @@ import {
   isBackButtonVisible,
 } from '@telegram-apps/sdk';
 
-showBackButton();
-isBackButtonVisible(); // true
+if (showBackButton.isAvailable()) {
+  showBackButton();
+  isBackButtonVisible(); // true
+}
 
-hideBackButton();
-isBackButtonVisible(); // false
+if (hideBackButton.isAvailable()) {
+  hideBackButton();
+  isBackButtonVisible(); // false
+}
 ```
 
 :::
@@ -104,29 +116,33 @@ listener. Alternatively, you can use the `offClick` method.
 ::: code-group
 
 ```ts [Variable]
-function listener() {
-  console.log('Clicked!');
-}
+if (backButton.onClick.isAvailable()) {
+  function listener() {
+    console.log('Clicked!');
+  }
 
-const offClick = backButton.onClick(listener);
-offClick();
-// or
-backButton.onClick(listener);
-backButton.offClick(listener);
+  const offClick = backButton.onClick(listener);
+  offClick();
+  // or
+  backButton.onClick(listener);
+  backButton.offClick(listener);
+}
 ```
 
 ```ts [Functions]
 import { onBackButtonClick, offBackButtonClick } from '@telegram-apps/sdk';
 
-function listener() {
-  console.log('Clicked!');
-}
+if (onBackButtonClick.isAvailable()) {
+  function listener() {
+    console.log('Clicked!');
+  }
 
-const offClick = onBackButtonClick(listener);
-offClick();
-// or
-onBackButtonClick(listener);
-offBackButtonClick(listener);
+  const offClick = onBackButtonClick(listener);
+  offClick();
+  // or
+  onBackButtonClick(listener);
+  offBackButtonClick(listener);
+}
 ```
 
 :::

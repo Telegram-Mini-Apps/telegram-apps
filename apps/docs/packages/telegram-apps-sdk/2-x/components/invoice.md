@@ -39,27 +39,31 @@ Calling the method updates the `isOpened` signal property value.
 ```ts [Variable]
 import { invoice } from '@telegram-apps/sdk';
 
-invoice.isOpened(); // false
-const promise = invoice.open('abIIks213');
-invoice.isOpened(); // true
-const status = await promise;
-invoice.isOpened(); // false
+if (invoice.open.isAvailable()) {
+  invoice.isOpened(); // false
+  const promise = invoice.open('abIIks213');
+  invoice.isOpened(); // true
+  const status = await promise;
+  invoice.isOpened(); // false
 
-// Or in URL mode:
-await invoice.open('https://t.me/invoice/abIIks213', 'url');
+  // Or in URL mode:
+  await invoice.open('https://t.me/invoice/abIIks213', 'url');
+}
 ```
 
 ```ts [Functions]
 import { openInvoice, isInvoiceOpened } from '@telegram-apps/sdk';
 
-isInvoiceOpened(); // false
-const promise = openInvoice('abIIks213');
-isInvoiceOpened(); // true
-const status = await promise;
-isInvoiceOpened(); // false
+if (openInvoice.isAvailable()) {
+  isInvoiceOpened(); // false
+  const promise = openInvoice('abIIks213');
+  isInvoiceOpened(); // true
+  const status = await promise;
+  isInvoiceOpened(); // false
 
-// Or in URL mode:
-await openInvoice('https://t.me/invoice/abIIks213', 'url');
+  // Or in URL mode:
+  await openInvoice('https://t.me/invoice/abIIks213', 'url');
+}
 ```
 
 :::

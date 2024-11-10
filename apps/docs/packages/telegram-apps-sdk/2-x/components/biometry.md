@@ -37,16 +37,18 @@ the `mountError` signal will reflect the error.
 ::: code-group
 
 ```ts [Variable]
-try {
-  const promise = biometry.mount();
-  biometry.isMounting(); // true
-  await promise;
-  biometry.isMounting(); // false
-  biometry.isMounted(); // true
-} catch (err) {
-  biometry.mountError(); // equals "err"
-  biometry.isMounting(); // false
-  biometry.isMounted(); // false
+if (biometry.mount.isAvailable()) {
+  try {
+    const promise = biometry.mount();
+    biometry.isMounting(); // true
+    await promise;
+    biometry.isMounting(); // false
+    biometry.isMounted(); // true
+  } catch (err) {
+    biometry.mountError(); // equals "err"
+    biometry.isMounting(); // false
+    biometry.isMounted(); // false
+  }
 }
 ```
 
@@ -58,16 +60,18 @@ import {
   biometryMountError,
 } from '@telegram-apps/sdk';
 
-try {
-  const promise = mountBiometry();
-  isBiometryMounting(); // true
-  await promise;
-  isBiometryMounting(); // false
-  isBiometryMounted(); // true
-} catch (err) {
-  biometryMountError(); // equals "err"
-  isBiometryMounting(); // false
-  isBiometryMounted(); // false
+if (mountBiometry.isAvailable()) {
+  try {
+    const promise = mountBiometry();
+    isBiometryMounting(); // true
+    await promise;
+    isBiometryMounting(); // false
+    isBiometryMounted(); // true
+  } catch (err) {
+    biometryMountError(); // equals "err"
+    isBiometryMounting(); // false
+    isBiometryMounted(); // false
+  }
 }
 ```
 
@@ -99,13 +103,17 @@ value indicating whether access was granted by the user.
 ::: code-group
 
 ```ts [Variable]
-const granted = await biometry.requestAccess(); // boolean
+if (biometry.requestAccess.isAvailable()) {
+  const granted = await biometry.requestAccess(); // boolean
+}
 ```
 
 ```ts [Functions]
 import { requestBiometryAccess } from '@telegram-apps/sdk';
 
-const granted = await requestBiometryAccess(); // boolean
+if (requestBiometryAccess.isAvailable()) {
+  const granted = await requestBiometryAccess(); // boolean
+}
 ```
 
 :::
@@ -124,28 +132,32 @@ a `token: string`.
 ::: code-group
 
 ```ts [Variable]
-const { status, token } = await biometry.authenticate({
-  reason: 'Please!',
-});
+if (biometry.authenticate.isAvailable()) {
+  const { status, token } = await biometry.authenticate({
+    reason: 'Please!',
+  });
 
-if (status === 'authorized') {
-  console.log(`Authorized. Token: ${token}`);
-} else {
-  console.log('Not authorized');
+  if (status === 'authorized') {
+    console.log(`Authorized. Token: ${token}`);
+  } else {
+    console.log('Not authorized');
+  }
 }
 ```
 
 ```ts [Functions]
 import { authenticateBiometry } from '@telegram-apps/sdk';
 
-const { status, token } = await authenticateBiometry({
-  reason: 'Please!',
-});
+if (authenticateBiometry.isAvailable()) {
+  const { status, token } = await authenticateBiometry({
+    reason: 'Please!',
+  });
 
-if (status === 'authorized') {
-  console.log(`Authorized. Token: ${token}`);
-} else {
-  console.log('Not authorized');
+  if (status === 'authorized') {
+    console.log(`Authorized. Token: ${token}`);
+  } else {
+    console.log('Not authorized');
+  }
 }
 ```
 
@@ -163,27 +175,31 @@ It returns a promise with boolean indicating if any changes were made.
 ::: code-group
 
 ```ts [Variable]
-const updated = await biometry.updateToken({
-  reason: 'Want to delete',
-});
+if (biometry.updateToken.isAvailable()) {
+  const updated = await biometry.updateToken({
+    reason: 'Want to delete',
+  });
 
-await biometry.updateToken({
-  reason: 'Will set a new one',
-  token: 'new token',
-});
+  await biometry.updateToken({
+    reason: 'Will set a new one',
+    token: 'new token',
+  });
+}
 ```
 
 ```ts [Functions]
 import { updateBiometryToken } from '@telegram-apps/sdk';
 
-const updated = await updateBiometryToken({
-  reason: 'Want to delete',
-});
+if (updateBiometryToken.isAvailable()) {
+  const updated = await updateBiometryToken({
+    reason: 'Want to delete',
+  });
 
-await updateBiometryToken({
-  reason: 'Will set a new one',
-  token: 'new token',
-});
+  await updateBiometryToken({
+    reason: 'Will set a new one',
+    token: 'new token',
+  });
+}
 ```
 
 :::
@@ -196,13 +212,17 @@ triggered in response to user interaction.
 ::: code-group
 
 ```ts [Variable]
-biometry.openSettings();
+if (biometry.openSettings.isAvailable()) {
+  biometry.openSettings();
+}
 ```
 
 ```ts [Functions]
 import { openBiometrySettings } from '@telegram-apps/sdk';
 
-openBiometrySettings();
+if (openBiometrySettings.isAvailable()) {
+  openBiometrySettings();
+}
 ```
 
 :::

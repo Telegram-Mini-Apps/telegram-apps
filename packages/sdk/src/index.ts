@@ -25,16 +25,21 @@ export { $postEvent, $version, $createRequestId } from '@/scopes/globals.js';
 
 export { isColorDark } from '@/utils/isColorDark.js';
 export { isSSR } from '@/utils/isSSR.js';
+export { safeCall } from '@/utils/safeCall.js';
 export {
   ERR_POPUP_INVALID_PARAMS,
-  ERR_INVALID_HOSTNAME,
+  ERR_INVALID_URL,
   ERR_INVALID_SLUG,
   ERR_ACCESS_DENIED,
   ERR_DATA_INVALID_SIZE,
   ERR_NOT_AVAILABLE,
-  ERR_ALREADY_CALLED,
   ERR_NOT_SUPPORTED,
   ERR_NOT_MOUNTED,
+  ERR_NOT_INITIALIZED,
+  ERR_ALREADY_OPENED,
+  ERR_CSS_VARS_ALREADY_BOUND,
+  ERR_ALREADY_MOUNTING,
+  ERR_ALREADY_REQUESTING
 } from '@/errors.js';
 export { init, type InitOptions } from '@/init.js';
 

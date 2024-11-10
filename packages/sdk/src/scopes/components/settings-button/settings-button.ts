@@ -9,100 +9,145 @@ import { signal } from '@telegram-apps/signals';
 import { isPageReload } from '@telegram-apps/navigation';
 
 import { postEvent } from '@/scopes/globals.js';
-import { subAndCall } from '@/utils/subAndCall.js';
-import { createWithIsSupported } from '@/scopes/toolkit/createWithIsSupported.js';
 import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createWithIsMounted } from '@/scopes/toolkit/createWithIsMounted.js';
+import { createWrapComplete } from '@/scopes/toolkit/createWrapComplete.js';
+import {
+  createWrapSupported
+} from '@/scopes/toolkit/createWrapSupported.js';
 
 type StorageValue = boolean;
 
-const WEB_APP_SETUP_SETTINGS_BUTTON = 'web_app_setup_settings_button';
-const SETTINGS_BUTTON_PRESSED = 'settings_button_pressed';
-const STORAGE_KEY = 'settingsButton';
+const SETUP_METHOD_NAME = 'web_app_setup_settings_button';
+const CLICK_EVENT_NAME = 'settings_button_pressed';
+const COMPONENT_NAME = 'settingsButton';
 
 /**
- * True if the component is currently mounted.
- */
-export const isMounted = signal(false);
-
-/**
- * @returns True if the settings button is supported.
- */
-export const isSupported = createIsSupported(WEB_APP_SETUP_SETTINGS_BUTTON);
-
-const withIsSupported = createWithIsSupported(isSupported);
-const withIsMounted = createWithIsMounted(isMounted);
-
-/**
- * Hides the Settings Button.
- * @throws {TypedError} ERR_NOT_MOUNTED
- */
-export const hide = withIsMounted((): void => {
-  isVisible.set(false);
-});
-
-/**
- * True if the component is currently visible.
+ * Signal indicating if the Settings Button is currently visible.
  */
 export const isVisible = signal(false);
 
 /**
- * Mounts the component.
- *
- * This function restores the component state and is automatically saving it in the local storage
- * if it changed.
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * Signal indicating if the Settings Button is currently mounted.
  */
-export const mount = withIsSupported((): void => {
+export const isMounted = signal(false);
+
+/**
+ * Signal indicating if the Settings Button is supported.
+ */
+export const isSupported = createIsSupported(SETUP_METHOD_NAME);
+
+const wrapSupported = createWrapSupported(COMPONENT_NAME, SETUP_METHOD_NAME);
+const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, SETUP_METHOD_NAME);
+
+/**
+ * Hides the Settings Button.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_NOT_MOUNTED
+ * @since Mini Apps v6.10
+ * @example
+ * if (hide.isAvailable()) {
+ *   hide();
+ * }
+ */
+export const hide = wrapComplete('hide', (): void => {
+  setVisibility(false);
+});
+
+/**
+ * Mounts the Settings Button restoring its state.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @since Mini Apps v6.10
+ * @example
+ * if (mount.isAvailable()) {
+ *   mount();
+ * }
+ */
+export const mount = wrapSupported('mount', (): void => {
   if (!isMounted()) {
-    isVisible.set(isPageReload() && getStorageValue<StorageValue>(STORAGE_KEY) || false);
-    subAndCall(isVisible, onStateChanged);
+    setVisibility(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false);
     isMounted.set(true);
   }
 });
 
-function onStateChanged() {
-  const value = isVisible();
-  postEvent(WEB_APP_SETUP_SETTINGS_BUTTON, { is_visible: value });
-  setStorageValue<StorageValue>(STORAGE_KEY, value);
+function setVisibility(value: boolean): void {
+  if (value !== isVisible()) {
+    postEvent(SETUP_METHOD_NAME, { is_visible: value });
+    setStorageValue<StorageValue>(COMPONENT_NAME, value);
+    isVisible.set(value);
+  }
 }
 
 /**
- * Add a new Settings Button click listener.
+ * Adds a new Settings Button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @since Mini Apps v6.10
+ * @example
+ * if (onClick.isAvailable()) {
+ *   const off = onClick(() => {
+ *     console.log('User clicked the Settings Button');
+ *     off();
+ *   });
+ * }
  */
-export const onClick = withIsSupported(
-  (fn: EventListener<'settings_button_pressed'>): VoidFunction => on(SETTINGS_BUTTON_PRESSED, fn),
+export const onClick = wrapSupported(
+  'onClick',
+  (fn: EventListener<'settings_button_pressed'>): VoidFunction => on(CLICK_EVENT_NAME, fn),
 );
 
 /**
  * Removes the Settings Button click listener.
  * @param fn - an event listener.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @since Mini Apps v6.10
+ * @example
+ * if (offClick.isAvailable()) {
+ *   function listener() {
+ *     console.log('User clicked the Settings Button');
+ *     offClick(listener);
+ *   }
+ *   onClick(listener);
+ * }
  */
-export const offClick = withIsSupported(
+export const offClick = wrapSupported(
+  'offClick',
   (fn: EventListener<'settings_button_pressed'>): void => {
-    off(SETTINGS_BUTTON_PRESSED, fn);
+    off(CLICK_EVENT_NAME, fn);
   },
 );
 
 /**
  * Shows the Settings Button.
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @since Mini Apps v6.10
+ * @example
+ * if (show.isAvailable()) {
+ *   show();
+ * }
  */
-export const show = withIsMounted((): void => {
-  isVisible.set(true);
+export const show = wrapComplete('show', (): void => {
+  setVisibility(true);
 });
 
 /**
- * Unmounts the component, removing the listener, saving the component state in the local storage.
+ * Unmounts the Settings Button.
  *
- * Note that this function does not remove listeners, added via the `onClick` function.
+ * Note that this function does not remove listeners added via the `onClick`
+ * function, so you have to remove them on your own.
  * @see onClick
  */
-export function unmount() {
-  isVisible.unsub(onStateChanged);
+export function unmount(): void {
   isMounted.set(false);
 }

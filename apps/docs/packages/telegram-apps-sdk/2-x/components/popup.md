@@ -38,29 +38,34 @@ Calling the method updates the `isOpened` signal property value.
 ```ts [Variable]
 import { popup } from '@telegram-apps/sdk';
 
-// popup.isOpened() -> false
-const promise = popup.open({
-  title: 'Hello!',
-  message: 'Here is a test message.',
-  buttons: [{ id: 'my-id', type: 'default', text: 'Default text' }],
-});
-// popup.isOpened() -> true
-const buttonId = await promise;
-// popup.isOpened() -> false 
+if (popup.open.isAvailable()) {
+  // popup.isOpened() -> false
+  const promise = popup.open({
+    title: 'Hello!',
+    message: 'Here is a test message.',
+    buttons: [{ id: 'my-id', type: 'default', text: 'Default text' }],
+  });
+  // popup.isOpened() -> true
+  const buttonId = await promise;
+  // popup.isOpened() -> false
+}
 ```
+
 
 ```ts [Functions]
 import { openPopup, isPopupOpened } from '@telegram-apps/sdk';
 
-// isPopupOpened() -> false
-const promise = openPopup({
-  title: 'Hello!',
-  message: 'Here is a test message.',
-  buttons: [{ id: 'my-id', type: 'default', text: 'Default text' }],
-});
-// isPopupOpened() -> true
-const buttonId = await promise;
-// isPopupOpened() -> false
+if (openPopup.isAvailable()) {
+  // isPopupOpened() -> false
+  const promise = openPopup({
+    title: 'Hello!',
+    message: 'Here is a test message.',
+    buttons: [{ id: 'my-id', type: 'default', text: 'Default text' }],
+  });
+  // isPopupOpened() -> true
+  const buttonId = await promise;
+  // isPopupOpened() -> false
+}
 ```
 
 :::

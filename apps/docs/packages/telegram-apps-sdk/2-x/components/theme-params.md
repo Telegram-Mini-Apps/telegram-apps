@@ -13,8 +13,10 @@ so, use the `mount` method, which updates the `isMounted` signal property.
 ```ts [Variable]
 import { themeParams } from '@telegram-apps/sdk';
 
-themeParams.mount(); 
-themeParams.isMounted(); // true
+if (themeParams.mount.isAvailable()) {
+  themeParams.mount();
+  themeParams.isMounted(); // true
+}
 ```
 
 ```ts [Functions]
@@ -23,8 +25,10 @@ import {
   isThemeParamsMounted,
 } from '@telegram-apps/sdk';
 
-mountThemeParams(); 
-isThemeParamsMounted(); // true
+if (mountThemeParams.isAvailable()) {
+  mountThemeParams();
+  isThemeParamsMounted(); // true
+}
 ```
 
 :::
@@ -66,21 +70,23 @@ returns a CSS variable name. By default, the method transforms the palette key u
 ::: code-group
 
 ```ts [Variable]
-themeParams.bindCssVars();
-// Creates CSS variables like:
-// --tg-theme-button-color: #aabbcc
-// --tg-theme-accent-text-color: #aabbcc
-// --tg-theme-bg-color: #aabbcc
-// ...
+if (themeParams.bindCssVars.isAvailable()) {
+  themeParams.bindCssVars();
+  // Creates CSS variables like:
+  // --tg-theme-button-color: #aabbcc
+  // --tg-theme-accent-text-color: #aabbcc
+  // --tg-theme-bg-color: #aabbcc
+  // ...
 
-themeParams.bindCssVars(key => `--my-prefix-${key}`);
-// Creates CSS variables like:
-// --my-prefix-buttonColor: #aabbcc
-// --my-prefix-accentTextColor: #aabbcc
-// --my-prefix-bgColor: #aabbcc
-// ...
+  themeParams.bindCssVars(key => `--my-prefix-${key}`);
+  // Creates CSS variables like:
+  // --my-prefix-buttonColor: #aabbcc
+  // --my-prefix-accentTextColor: #aabbcc
+  // --my-prefix-bgColor: #aabbcc
+  // ...
 
-// themeParams.isCssVarsBound() -> true
+  // themeParams.isCssVarsBound() -> true
+}
 ```
 
 ```ts [Functions]
@@ -89,21 +95,23 @@ import {
   isThemeParamsCssVarsBound,
 } from '@telegram-apps/sdk';
 
-bindThemeParamsCssVars();
-// Creates CSS variables like:
-// --tg-theme-button-color: #aabbcc
-// --tg-theme-accent-text-color: #aabbcc
-// --tg-theme-bg-color: #aabbcc
-// ...
+if (bindThemeParamsCssVars.isAvailable()) {
+  bindThemeParamsCssVars();
+  // Creates CSS variables like:
+  // --tg-theme-button-color: #aabbcc
+  // --tg-theme-accent-text-color: #aabbcc
+  // --tg-theme-bg-color: #aabbcc
+  // ...
 
-bindThemeParamsCssVars(key => `--my-prefix-${key}`);
-// Creates CSS variables like:
-// --my-prefix-buttonColor: #aabbcc
-// --my-prefix-accentTextColor: #aabbcc
-// --my-prefix-bgColor: #aabbcc
-// ...
-
-// isThemeParamsCssVarsBound() -> true
+  bindThemeParamsCssVars(key => `--my-prefix-${key}`);
+  // Creates CSS variables like:
+  // --my-prefix-buttonColor: #aabbcc
+  // --my-prefix-accentTextColor: #aabbcc
+  // --my-prefix-bgColor: #aabbcc
+  // ...
+  
+  // isThemeParamsCssVarsBound() -> true
+}
 ```
 
 :::

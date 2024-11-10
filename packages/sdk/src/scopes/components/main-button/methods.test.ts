@@ -1,51 +1,70 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { mockSessionStorageSetItem } from 'test-utils';
-import { emitMiniAppsEvent, type ThemeParams, TypedError } from '@telegram-apps/bridge';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  mockSessionStorageGetItem,
+  mockPageReload,
+  mockSessionStorageSetItem,
+} from 'test-utils';
+import { emitMiniAppsEvent } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
+import { setMaxVersion } from '@test-utils/setMaxVersion.js';
+import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
 
+import {
+  mount,
+  onClick,
+  unmount,
+  offClick,
+  setParams,
+} from './methods.js';
 import {
   text,
   textColor,
-  isMounted,
   isEnabled,
-  isLoaderVisible,
+  isMounted,
   isVisible,
+  state,
   internalState,
   backgroundColor,
   hasShineEffect,
+  isLoaderVisible,
 } from './signals.js';
-import { onClick, offClick, setParams, mount, unmount } from './methods.js';
-
-vi.mock('@telegram-apps/bridge', async () => {
-  const m = await vi.importActual('@telegram-apps/bridge');
-  return {
-    ...m,
-    retrieveLaunchParams: vi.fn(() => ({
-      themeParams: {
-        buttonColor: '#aabbcc',
-        buttonTextColor: '#ffaa12',
-      } satisfies ThemeParams,
-    })),
-  };
-});
+import { testSafety } from '@test-utils/predefined/testSafety.js';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
   resetPackageState();
+  vi.restoreAllMocks();
   mockPostEvent();
 });
 
+function setAvailable() {
+  setMaxVersion();
+  mockMiniAppsEnv();
+  isMounted.set(true);
+}
+
 describe.each([
-  { signal: backgroundColor, name: 'backgroundColor' },
-  { signal: hasShineEffect, name: 'hasShineEffect' },
-  { signal: isEnabled, name: 'isEnabled' },
-  { signal: isLoaderVisible, name: 'isLoaderVisible' },
-  { signal: isVisible, name: 'isVisible' },
-  { signal: text, name: 'text' },
-  { signal: textColor, name: 'textColor' },
-] as const)('$name property', ({ signal, name }) => {
+  ['setParams', setParams, { isMounted, call: () => setParams({}) }],
+  ['mount', mount, {}],
+  ['onClick', onClick, {}],
+  ['offClick', offClick, {}],
+] as const)('%s', (name, fn, options) => {
+  testSafety(fn, name, {
+    ...options,
+    component: 'mainButton',
+  });
+});
+
+describe.each([
+  ['backgroundColor', backgroundColor],
+  ['hasShineEffect', hasShineEffect],
+  ['isEnabled', isEnabled],
+  ['isLoaderVisible', isLoaderVisible],
+  ['isVisible', isVisible],
+  ['text', text],
+  ['textColor', textColor],
+] as const)('%s', (name, signal) => {
   beforeEach(() => {
     internalState.set({
       backgroundColor: '#123456',
@@ -63,74 +82,10 @@ describe.each([
   });
 });
 
-describe('mounted', () => {
-  beforeEach(mount);
-  afterEach(unmount);
-
-  describe('setParams', () => {
-    it('should save the state in storage key tapps/mainButton', () => {
-      internalState.set({
-        backgroundColor: '#123456',
-        hasShineEffect: true,
-        isEnabled: true,
-        isLoaderVisible: true,
-        isVisible: true,
-        text: 'TEXT',
-        textColor: '#789abc',
-      });
-
-      const spy = mockSessionStorageSetItem();
-      setParams({
-        backgroundColor: '#111111',
-      });
-
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('tapps/mainButton', '{"backgroundColor":"#111111","hasShineEffect":true,"isEnabled":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc"}');
-    });
-
-    it('should call "web_app_setup_main_button" only if text is not empty', () => {
-      const spy = mockPostEvent();
-      internalState.set({
-        backgroundColor: '#123456',
-        hasShineEffect: false,
-        isEnabled: true,
-        isLoaderVisible: true,
-        isVisible: true,
-        text: '',
-        textColor: '#789abc',
-      });
-      setParams({ text: '' });
-
-      expect(spy).toHaveBeenCalledTimes(0);
-      setParams({ text: 'abc' });
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('web_app_setup_main_button', {
-        has_shine_effect: false,
-        is_visible: true,
-        is_active: true,
-        is_progress_visible: true,
-        text: 'abc',
-        color: '#123456',
-        text_color: '#789abc',
-      });
-    });
-  });
-});
-
 describe('mount', () => {
-  it('should call postEvent with "web_app_setup_main_button"', () => {
-    const spy = mockPostEvent();
-    mount();
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('web_app_setup_main_button', {
-      color: '#2481cc',
-      has_shine_effect: false,
-      is_active: true,
-      is_progress_visible: false,
-      is_visible: false,
-      text: 'Continue',
-      text_color: '#ffffff',
-    });
+  beforeEach(() => {
+    mockMiniAppsEnv();
+    setMaxVersion();
   });
 
   it('should set isMounted = true', () => {
@@ -139,66 +94,60 @@ describe('mount', () => {
     expect(isMounted()).toBe(true);
   });
 
-  // describe('page reload', () => {
-  //   beforeEach(() => {
-  //     mockPageReload();
-  //   });
-  //
-  //   it('should use value from session storage key "tapps/mainButton"', () => {
-  //     const spy = vi.fn(() => JSON.stringify({
-  //       backgroundColor: '#123456',
-  //       isActive: true,
-  //       isLoaderVisible: true,
-  //       isVisible: true,
-  //       text: 'TEXT',
-  //       textColor: '#789abc',
-  //     }));
-  //     mockSessionStorageGetItem(spy);
-  //     mount();
-  //     expect(spy).toHaveBeenCalledTimes(1);
-  //     expect(spy).toHaveBeenCalledWith('tapps/mainButton');
-  //     expect(state()).toStrictEqual({
-  //       backgroundColor: '#123456',
-  //       isActive: true,
-  //       isLoaderVisible: true,
-  //       isVisible: true,
-  //       text: 'TEXT',
-  //       textColor: '#789abc',
-  //     });
-  //   });
-  //
-  //   it('should set background and text colors from theme if session storage key "tapps/mainButton" not presented', () => {
-  //     const spy = mockSessionStorageGetItem(() => null);
-  //     mount();
-  //     // 2 times, because theme params calls it too.
-  //     expect(spy).toHaveBeenCalledTimes(2);
-  //     expect(spy).toHaveBeenNthCalledWith(1, 'tapps/mainButton');
-  //     expect(state()).toMatchObject({
-  //       backgroundColor: themeParams.buttonColor(),
-  //       textColor: themeParams.buttonTextColor(),
-  //     });
-  //   });
-  // });
-  //
-  // describe('first launch', () => {
-  //   it('should set background and text colors from theme', () => {
-  //     mount();
-  //     expect(state()).toMatchObject({
-  //       backgroundColor: themeParams.buttonColor(),
-  //       textColor: themeParams.buttonTextColor(),
-  //     });
-  //   });
-  // });
+  describe('page reload', () => {
+    beforeEach(() => {
+      mockPageReload();
+    });
+
+    it('should use value from session storage key "tapps/mainButton"', () => {
+      const spy = mockSessionStorageGetItem(() => JSON.stringify({
+        backgroundColor: '#123456',
+        isActive: true,
+        isLoaderVisible: true,
+        isVisible: true,
+        text: 'TEXT',
+        textColor: '#789abc',
+      }));
+      mount();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('tapps/mainButton');
+      expect(state()).toStrictEqual({
+        backgroundColor: '#123456',
+        isActive: true,
+        isLoaderVisible: true,
+        isVisible: true,
+        text: 'TEXT',
+        textColor: '#789abc',
+      });
+    });
+
+    it('should preserve state if session storage key "tapps/mainButton" not presented', () => {
+      const s = state();
+      const spy = mockSessionStorageGetItem(() => null);
+      mount();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('tapps/mainButton');
+      expect(s).toStrictEqual(state());
+    });
+  });
+
+  describe('first launch', () => {
+    it('should preserve state', () => {
+      const s = state();
+      mount();
+      expect(state()).toBe(s);
+    });
+  });
 });
 
 describe('onClick', () => {
+  beforeEach(setAvailable);
+
   it('should add click listener', () => {
     const fn = vi.fn();
     onClick(fn);
-    emitMiniAppsEvent('main_button_pressed');
-    emitMiniAppsEvent('main_button_pressed');
-    emitMiniAppsEvent('main_button_pressed');
-    expect(fn).toHaveBeenCalledTimes(3);
+    emitMiniAppsEvent('main_button_pressed', {});
+    expect(fn).toHaveBeenCalledTimes(1);
   });
 
   it('should remove added listener if returned function was called', () => {
@@ -211,21 +160,21 @@ describe('onClick', () => {
 });
 
 describe('offClick', () => {
+  beforeEach(setAvailable);
+
   it('should remove click listener', () => {
     const fn = vi.fn();
     onClick(fn);
     offClick(fn);
-    emitMiniAppsEvent('back_button_pressed', {});
+    emitMiniAppsEvent('main_button_pressed', {});
     expect(fn).toHaveBeenCalledTimes(0);
   });
 });
 
 describe('setParams', () => {
-  beforeEach(() => {
-    isMounted.set(true);
-  });
+  beforeEach(setAvailable);
 
-  it('should merge passed object with the state', () => {
+  it('should save the state in storage key tapps/mainButton', () => {
     internalState.set({
       backgroundColor: '#123456',
       hasShineEffect: true,
@@ -236,53 +185,50 @@ describe('setParams', () => {
       textColor: '#789abc',
     });
 
+    const spy = mockSessionStorageSetItem();
     setParams({
       backgroundColor: '#111111',
-      isEnabled: false,
-      isLoaderVisible: false,
-      text: 'TEXT UPDATED',
-      textColor: '#000000',
     });
 
-    expect(internalState()).toStrictEqual({
-      backgroundColor: '#111111',
-      hasShineEffect: true,
-      isEnabled: false,
-      isLoaderVisible: false,
+    // Should call retrieveLaunchParams + save component state.
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenNthCalledWith(2, 'tapps/mainButton', '{"backgroundColor":"#111111","hasShineEffect":true,"isEnabled":true,"isLoaderVisible":true,"isVisible":true,"text":"TEXT","textColor":"#789abc"}');
+  });
+
+  it('should call "web_app_setup_main_button" only if text is not empty', () => {
+    const spy = mockPostEvent();
+    internalState.set({
+      backgroundColor: '#123456',
+      hasShineEffect: false,
+      isEnabled: true,
+      isLoaderVisible: true,
       isVisible: true,
-      text: 'TEXT UPDATED',
-      textColor: '#000000',
+      text: '',
+      textColor: '#789abc',
+    });
+    setParams({ text: '' });
+
+    expect(spy).toHaveBeenCalledTimes(0);
+    setParams({ text: 'abc' });
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith('web_app_setup_main_button', {
+      has_shine_effect: false,
+      is_visible: true,
+      is_active: true,
+      is_progress_visible: true,
+      text: 'abc',
+      color: '#123456',
+      text_color: '#789abc',
     });
   });
 });
 
 describe('unmount', () => {
-  beforeEach(mount);
+  beforeEach(setAvailable);
 
-  it('should stop calling postEvent function and session storage updates when something changes', () => {
-    const postEventSpy = mockPostEvent();
-    const storageSpy = mockSessionStorageSetItem();
-    internalState.set({ ...internalState(), text: 'Hello!' });
-    expect(postEventSpy).toHaveBeenCalledTimes(1);
-    expect(storageSpy).toHaveBeenCalledTimes(1);
-
-    postEventSpy.mockClear();
-    storageSpy.mockClear();
-
+  it('should set isMounted = false', () => {
+    expect(isMounted()).toBe(true);
     unmount();
-    internalState.set({ ...internalState() });
-
-    expect(postEventSpy).toHaveBeenCalledTimes(0);
-    expect(storageSpy).toHaveBeenCalledTimes(0);
-  });
-});
-
-describe('mount check', () => {
-  it.each([
-    { fn: () => setParams({}), name: 'setParams' },
-  ])('$name function should throw ERR_NOT_MOUNTED if component was not mounted', ({ fn }) => {
-    expect(fn).toThrow(new TypedError('ERR_NOT_MOUNTED'));
-    isMounted.set(true);
-    expect(fn).not.toThrow();
+    expect(isMounted()).toBe(false);
   });
 });

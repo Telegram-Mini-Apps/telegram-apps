@@ -367,6 +367,7 @@ export interface Methods {
   web_app_setup_main_button: CreateParams<ButtonParams, 'has_shine_effect'>;
   /**
    * Updates the secondary button settings.
+   * @since v7.10
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-setup-secondary-button
    */
   web_app_setup_secondary_button: CreateParams<ButtonParams & {

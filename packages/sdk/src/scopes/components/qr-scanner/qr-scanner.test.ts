@@ -1,12 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { dispatchMiniAppsEvent } from 'test-utils';
-import { TypedError } from '@telegram-apps/bridge';
 
-import { resetPackageState } from '@test-utils/reset/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { $version } from '@/scopes/globals.js';
+import { resetPackageState } from '@test-utils/reset/reset.js';
+import { setMaxVersion } from '@test-utils/setMaxVersion.js';
+import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
+import { testSafety } from '@test-utils/predefined/testSafety.js';
 
-import { close, open, isSupported, isOpened } from './qr-scanner.js';
+import { close, open, isOpened, isSupported } from './qr-scanner.js';
 
 beforeEach(() => {
   resetPackageState();
@@ -14,18 +16,27 @@ beforeEach(() => {
   mockPostEvent();
 });
 
+function setAvailable() {
+  setMaxVersion();
+  mockMiniAppsEnv();
+}
+
+describe.each([
+  ['close', close],
+  ['open', open],
+] as const)('%s', (name, fn) => {
+  testSafety(fn, name, {
+    component: 'qrScanner',
+    minVersion: '6.4',
+  });
+});
+
+describe('isSupported', () => {
+  testIsSupported(isSupported, '6.4');
+});
+
 describe('close', () => {
-  it('should throw if version is less than 6.4', () => {
-    $version.set('6.3');
-    expect(close).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('6.4');
-    expect(close).not.toThrow();
-  });
-
-  beforeEach(() => {
-    $version.set('10');
-  });
+  beforeEach(setAvailable);
 
   it('should set isOpened = false', () => {
     isOpened.set(true);
@@ -43,31 +54,8 @@ describe('close', () => {
   });
 });
 
-describe('isSupported', () => {
-  it('should return false if version is less than 6.4. True otherwise', () => {
-    $version.set('6.3');
-    expect(isSupported()).toBe(false);
-
-    $version.set('6.4');
-    expect(isSupported()).toBe(true);
-
-    $version.set('6.5');
-    expect(isSupported()).toBe(true);
-  });
-});
-
 describe('open', () => {
-  it('should throw if version is less than 6.4', () => {
-    $version.set('6.3');
-    expect(() => open()).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('6.4');
-    expect(() => open()).not.toThrow();
-  });
-
-  beforeEach(() => {
-    $version.set('10');
-  });
+  beforeEach(setAvailable);
 
   describe('common mode', () => {
     it('should call "web_app_open_scan_qr_popup" method with { text: string } and catch "qr_text_received" event returning event "data" property if "capture" returned true', async () => {
@@ -104,12 +92,12 @@ describe('open', () => {
       const spy = mockPostEvent();
       const promise = open();
       spy.mockClear();
-      dispatchMiniAppsEvent("qr_text_received", { data: "QR1" });
+      dispatchMiniAppsEvent('qr_text_received', { data: 'QR1' });
       await promise;
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
-        "web_app_close_scan_qr_popup",
-        undefined
+        'web_app_close_scan_qr_popup',
+        undefined,
       );
     });
 
@@ -156,18 +144,5 @@ describe('open', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('QR1');
     });
-  });
-});
-
-describe('support check', () => {
-  it.each([
-    { fn: close, name: 'close' },
-    { fn: open, name: 'open' },
-  ])('$name function should throw ERR_NOT_SUPPORTED if version is less than 6.4', ({ fn }) => {
-    $version.set('6.3');
-    expect(fn).toThrow(new TypedError('ERR_NOT_SUPPORTED'));
-
-    $version.set('6.4');
-    expect(fn).not.toThrow();
   });
 });
