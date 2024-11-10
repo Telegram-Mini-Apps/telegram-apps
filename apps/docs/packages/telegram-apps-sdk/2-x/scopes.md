@@ -1,5 +1,5 @@
 ---
-outline: [2, 3]
+outline: [ 2, 3 ]
 ---
 
 # Scopes
@@ -115,6 +115,9 @@ import { backButton } from '@telegram-apps/sdk';
 
 backButton.show.ifAvailable();
 ```
+
+In case the original method (`backButton.show` in this case) is unavailable, the `ifAvailable`
+method call will return `undefined`.
 
 ## Optimizing Bundle
 

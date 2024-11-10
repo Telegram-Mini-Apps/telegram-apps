@@ -3,25 +3,48 @@
 ## `getCurrentTime`
 
 To retrieve the current Telegram server time, use the `getCurrentTime` function. It returns
-a JavaScript `Date` object describing current Telegram server time.
+a JavaScript `Date` object.
 
-```ts
+::: code-group
+
+```ts [Using isAvailable]
+import { getCurrentTime } from '@telegram-apps/sdk';
+
 if (getCurrentTime.isAvailable()) {
-  const time = await getCurrentTime();
+  const time = await getCurrentTime(); // Date
 }
 ```
+
+```ts [Using ifAvailable]
+import { getCurrentTime } from '@telegram-apps/sdk';
+
+const time = await getCurrentTime.ifAvailable(); // Date | undefined
+```
+
+:::
 
 ## `readTextFromClipboard`
 
 To read text from the clipboard, use the `readTextFromClipboard` function.
 
-```ts
+::: code-group
+
+```ts [Using isAvailable]
 import { readTextFromClipboard } from '@telegram-apps/sdk';
 
-if (readTextFromClipboard.isSupported()) {
+if (readTextFromClipboard.isAvailable()) {
   const contents = await readTextFromClipboard(); // string | null
 }
 ```
+
+```ts [Using ifAvailable]
+import { readTextFromClipboard } from '@telegram-apps/sdk';
+
+const contents = await readTextFromClipboard.ifAvailable(); 
+// string | null | undefined
+```
+
+:::
 
 ## `shareStory`
 
@@ -29,13 +52,23 @@ The `shareStory` method opens the native story editor.
 
 It has one required parameter: a media URL that will be used as the background for the story.
 
-```ts
+::: code-group
+
+```ts [Using isAvailable]
 import { shareStory } from '@telegram-apps/sdk';
 
-if (shareStory.isSupported()) {
+if (shareStory.isAvailable()) {
   shareStory('https://my.media/background.png');
 }
 ```
+
+```ts [Using ifAvailable]
+import { shareStory } from '@telegram-apps/sdk';
+
+shareStory.ifAvailable('https://my.media/background.png');
+```
+
+:::
 
 The function optionally accepts an object with additional options:
 
@@ -63,11 +96,23 @@ shareStory('https://my.media/background.png', {
 To send data to the bot, use the `sendData` function. This function sends a service message to the
 bot and closes the Mini App.
 
-```ts
+::: code-group
+
+```ts [Using isAvailable]
 import { sendData } from '@telegram-apps/sdk';
 
-sendData('my-data-goes-here');
+if (sendData.isAvailable()) {
+  sendData('my-data-goes-here');
+}
 ```
+
+```ts [Using ifAvailable]
+import { sendData } from '@telegram-apps/sdk';
+
+sendData.ifAvailable('my-data-goes-here');
+```
+
+:::
 
 > [!TIP]
 > This function sends data up to 4096 bytes to the bot and is available for Mini Apps launched via a
@@ -84,11 +129,13 @@ To create a message prefixed with the bot username and a specific text, and shar
 chat, use the `switchInlineQuery` method. You can use the second optional argument to specify which
 chat types can be selected to send the message.
 
-```ts
+::: code-group
+
+```ts [Using isAvailable]
 import { switchInlineQuery } from '@telegram-apps/sdk';
 
-if (switchInlineQuery.isSupported()) {
-  await switchInlineQuery('Check this bot!', [
+if (switchInlineQuery.isAvailable()) {
+  switchInlineQuery('Check this bot!', [
     'users',
     'bots',
     'groups',
@@ -96,3 +143,16 @@ if (switchInlineQuery.isSupported()) {
   ]);
 }
 ```
+
+```ts [Using ifAvailable]
+import { switchInlineQuery } from '@telegram-apps/sdk';
+
+switchInlineQuery.ifAvailable('Check this bot!', [
+  'users',
+  'bots',
+  'groups',
+  'channels',
+]);
+```
+
+:::
