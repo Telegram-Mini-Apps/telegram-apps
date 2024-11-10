@@ -18,6 +18,29 @@ type FnWithMaybeIsSupported = AnyFn & {
   isSupported?(): boolean;
 }
 
+function testShouldBeMounted(fn: AnyFn, component: string, method: string, isMounted: Signal<boolean>) {
+  // Require parent component mount.
+  it(`should throw ERR_NOT_MOUNTED if ${component} is not mounted`, () => {
+    expect(fn).toThrow(
+      new TypedError(
+        'ERR_NOT_MOUNTED',
+        `${cantCallErrPrefix(method, component)} the component is not mounted. Use the ${component}.mount() method`,
+      ),
+    );
+  });
+
+  describe('mounted', () => {
+    beforeEach(() => {
+      isMounted!.set(true);
+    });
+
+    // Check if function is not throwing errors when all requirements were met.
+    it('should not throw', () => {
+      expect(fn).not.toThrow();
+    });
+  });
+}
+
 export function testSafety(fn: AnyFn, method: string, options: {
   component?: string;
   isMounted?: Signal<boolean>;
@@ -80,60 +103,55 @@ export function testSafety(fn: FnWithMaybeIsSupported, method: string, {
       expect(fn).not.toThrow(err);
     });
 
-    describe.runIf(fn.isSupported)('package initialized', () => {
+    if (!fn.isSupported && !isMounted) {
+      return;
+    }
+
+    describe('package initialized', () => {
       beforeEach(() => {
         $version.set('6.0');
       });
 
-      // Require running with some minimal Mini Apps version.
-      it(`should throw ERR_NOT_SUPPORTED if Mini Apps version is less than ${minVersion}`, () => {
-        $version.set(prevVersion!);
-        expect(fn).toThrow(
-          new TypedError(
-            'ERR_NOT_SUPPORTED',
-            `${cantCallErrPrefix(method, component)} it is unsupported in Mini Apps version ${prevVersion}`,
-          ),
-        );
-
-        $version.set(minVersion!);
-        expect(fn).not.toThrow(
-          new TypedError(
-            'ERR_NOT_SUPPORTED',
-            `${cantCallErrPrefix(method, component)} it is unsupported in Mini Apps version ${minVersion}`,
-          ),
-        );
-      });
-
-      describe.runIf(isMounted)(`Mini Apps version is ${minVersion}`, () => {
-        beforeEach(() => {
-          $version.set(minVersion!);
-        });
-
-        // Require parent component mount.
-        it(`should throw ERR_NOT_MOUNTED if ${component} is not mounted`, () => {
+      if (fn.isSupported) {
+        // Require running with some minimal Mini Apps version.
+        it(`should throw ERR_NOT_SUPPORTED if Mini Apps version is less than ${minVersion}`, () => {
+          $version.set(prevVersion!);
           expect(fn).toThrow(
             new TypedError(
-              'ERR_NOT_MOUNTED',
-              `${cantCallErrPrefix(method, component)} the component is not mounted. Use the ${component}.mount() method`,
+              'ERR_NOT_SUPPORTED',
+              `${cantCallErrPrefix(method, component)} it is unsupported in Mini Apps version ${prevVersion}`,
+            ),
+          );
+
+          $version.set(minVersion!);
+          expect(fn).not.toThrow(
+            new TypedError(
+              'ERR_NOT_SUPPORTED',
+              `${cantCallErrPrefix(method, component)} it is unsupported in Mini Apps version ${minVersion}`,
             ),
           );
         });
 
-        describe('mounted', () => {
+        if (!isMounted) {
+          return;
+        }
+
+        describe(`Mini Apps version is ${minVersion}`, () => {
           beforeEach(() => {
-            isMounted!.set(true);
+            $version.set(minVersion!);
           });
 
-          // Check if function is not throwing errors when all requirements were met.
-          it('should not throw', () => {
-            expect(fn).not.toThrow();
-          });
+          testShouldBeMounted(fn, component!, method, isMounted);
         });
-      });
+      } else {
+        testShouldBeMounted(fn, component!, method, isMounted!);
+      }
     });
   });
 
-  describe.runIf(fn.isSupported)('isSupported', () => {
-    testIsSupported(fn.isSupported!, minVersion!);
-  });
+  if (fn.isSupported) {
+    describe('isSupported', () => {
+      testIsSupported(fn.isSupported!, minVersion!);
+    });
+  }
 }
