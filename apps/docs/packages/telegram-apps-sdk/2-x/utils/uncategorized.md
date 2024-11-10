@@ -85,3 +85,14 @@ if (switchInlineQuery.isSupported()) {
   ]);
 }
 ```
+
+## `getCurrentTime`
+
+To retrieve the current Telegram server time, use the `getCurrentTime` function. It returns
+a JavaScript `Date` object describing current Telegram server time.
+
+```ts
+if (getCurrentTime.isAvailable()) {
+  const time = await getCurrentTime();
+}
+```
