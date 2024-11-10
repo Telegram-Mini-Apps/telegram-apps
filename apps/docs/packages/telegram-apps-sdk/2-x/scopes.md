@@ -1,3 +1,7 @@
+---
+outline: [2, 3]
+---
+
 # Scopes
 
 This package is designed to give developers full control over its lifecycle, including the
@@ -54,6 +58,63 @@ export * as backButton from 'somewhere';
 When not using the package source code while building the application, the bundler is more likely to
 make `backButton` a non-treeshakeable object. As a result, all dependencies from `somewhere` will be
 bundled, slightly increasing the final bundle size (though not by much).
+
+## Usage Prerequisites
+
+Each SDK method related to 💠components or ⚙️utilities has at least two requirements:
+
+1. **The SDK must be [initialized](./initializing.md)**. This ensures that you are using valid
+   global dependencies (such as `postEvent`).
+
+```ts
+import { init } from '@telegram-apps/sdk';
+
+init();
+```
+
+2. **The method must be run inside Telegram Mini Apps**. Calling the method outside Telegram Mini
+   Apps will not produce the expected behavior.
+
+For component-related methods, there is an additional requirement:
+
+3. **The parent component must be mounted**. This ensures that you are using a properly configured
+   component.
+
+```ts
+import { init, backButton } from '@telegram-apps/sdk';
+
+// Initialize the SDK.
+init();
+
+// Mount the Back Button component.
+backButton.mount();
+```
+
+When all requirements are met, the method call becomes safe.
+
+### Methods Availability
+
+To check if a method is safe to call (available), use the `isAvailable()` signal:
+
+```ts
+import { backButton } from '@telegram-apps/sdk';
+
+if (backButton.show.isAvailable()) {
+  backButton.show();
+}
+```
+
+This signal performs all checks described in the [Usage Prerequisites](#usage-prerequisites) section
+and returns `true` if the current state satisfies them.
+
+As an alternative, you may find the `ifAvailable(...args)` method useful. It calls the original
+function with the provided arguments only if it is available (`isAvailable()` returns `true`):
+
+```ts
+import { backButton } from '@telegram-apps/sdk';
+
+backButton.show.ifAvailable();
+```
 
 ## Optimizing Bundle
 
