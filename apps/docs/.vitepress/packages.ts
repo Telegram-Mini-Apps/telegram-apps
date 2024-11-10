@@ -86,6 +86,7 @@ export const packagesLinksGenerator = (prefix: string = "") => {
           '@2.x': ['2-x', {
             'Initializing': 'initializing',
             'Scopes': 'scopes',
+            'Usage Tips': 'usage-tips',
             'Components': [
               { url: 'components', page: false },
               fromEntries([
