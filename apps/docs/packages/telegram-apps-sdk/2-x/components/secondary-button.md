@@ -33,8 +33,10 @@ properties. To do so, use the `mount` method. It will update the `isMounted` sig
 ```ts [Variable]
 import { secondaryButton } from '@telegram-apps/sdk';
 
-secondaryButton.mount();
-secondaryButton.isMounted(); // true
+if (secondaryButton.mount.isAvailable()) {
+  secondaryButton.mount();
+  secondaryButton.isMounted(); // true
+}
 ```
 
 ```ts [Functions]
@@ -43,8 +45,10 @@ import {
   isSecondaryButtonMounted,
 } from '@telegram-apps/sdk';
 
-mountSecondaryButton();
-isSecondaryButtonMounted(); // true
+if (mountSecondaryButton.isAvailable()) {
+  mountSecondaryButton();
+  isSecondaryButtonMounted(); // true
+}
 ```
 
 :::
@@ -88,36 +92,38 @@ as `backgroundColor`, `hasShineEffect`, `isVisible`, `isEnabled`, `isLoaderVisib
 ::: code-group
 
 ```ts [Variable]
-secondaryButton.setParams({
-  backgroundColor: '#000000',
-  hasShineEffect: true,
-  isEnabled: true,
-  isLoaderVisible: true,
-  isVisible: true,
-  position: 'top',
-  text: 'My text',
-  textColor: '#ffffff'
-});
-secondaryButton.backgroundColor(); // '#000000'
-secondaryButton.hasShineEffect(); // true
-secondaryButton.isEnabled(); // true
-secondaryButton.isLoaderVisible(); // true
-secondaryButton.isVisible(); // true
-secondaryButton.position(); // 'top'
-secondaryButton.text(); // 'My text'
-secondaryButton.textColor(); // '#ffffff'
+if (secondaryButton.setParams.isAvailable()) {
+  secondaryButton.setParams({
+    backgroundColor: '#000000',
+    hasShineEffect: true,
+    isEnabled: true,
+    isLoaderVisible: true,
+    isVisible: true,
+    position: 'top',
+    text: 'My text',
+    textColor: '#ffffff'
+  });
+  secondaryButton.backgroundColor(); // '#000000'
+  secondaryButton.hasShineEffect(); // true
+  secondaryButton.isEnabled(); // true
+  secondaryButton.isLoaderVisible(); // true
+  secondaryButton.isVisible(); // true
+  secondaryButton.position(); // 'top'
+  secondaryButton.text(); // 'My text'
+  secondaryButton.textColor(); // '#ffffff'
 
-secondaryButton.state();
-// {
-//   backgroundColor: '#000000',
-//   hasShineEffect: true,
-//   isActive: true,
-//   isLoaderVisible: true,
-//   isVisible: true,
-//   position: 'top',
-//   text: 'My text',
-//   textColor: '#ffffff'
-// }
+  secondaryButton.state();
+  // {
+  //   backgroundColor: '#000000',
+  //   hasShineEffect: true,
+  //   isActive: true,
+  //   isLoaderVisible: true,
+  //   isVisible: true,
+  //   position: 'top',
+  //   text: 'My text',
+  //   textColor: '#ffffff'
+  // }
+}
 ```
 
 ```ts [Functions]
@@ -134,36 +140,38 @@ import {
   secondaryButtonPosition,
 } from '@telegram-apps/sdk';
 
-setSecondaryButtonParams({
-  backgroundColor: '#000000',
-  hasShineEffect: true,
-  isEnabled: true,
-  isLoaderVisible: true,
-  isVisible: true,
-  position: 'top',
-  text: 'My text',
-  textColor: '#ffffff'
-});
-secondaryButtonBackgroundColor(); // '#000000'
-secondaryButtonHasShineEffect(); // true
-isSecondaryButtonEnabled(); // true
-isSecondaryButtonLoaderVisible(); // true
-isSecondaryButtonVisible(); // true
-secondaryButtonPosition(); // 'top'
-secondaryButtonText(); // 'My text'
-secondaryButtonTextColor(); // '#ffffff'
+if (setSecondaryButtonParams.isAvailable()) {
+  setSecondaryButtonParams({
+    backgroundColor: '#000000',
+    hasShineEffect: true,
+    isEnabled: true,
+    isLoaderVisible: true,
+    isVisible: true,
+    position: 'top',
+    text: 'My text',
+    textColor: '#ffffff'
+  });
+  secondaryButtonBackgroundColor(); // '#000000'
+  secondaryButtonHasShineEffect(); // true
+  isSecondaryButtonEnabled(); // true
+  isSecondaryButtonLoaderVisible(); // true
+  isSecondaryButtonVisible(); // true
+  secondaryButtonPosition(); // 'top'
+  secondaryButtonText(); // 'My text'
+  secondaryButtonTextColor(); // '#ffffff'
 
-secondaryButtonState();
-// {
-//   backgroundColor: '#000000',
-//   hasShineEffect: true,
-//   isActive: true,
-//   isLoaderVisible: true,
-//   isVisible: true,
-//   position: 'top',
-//   text: 'My text',
-//   textColor: '#ffffff'
-// }
+  secondaryButtonState();
+  // {
+  //   backgroundColor: '#000000',
+  //   hasShineEffect: true,
+  //   isActive: true,
+  //   isLoaderVisible: true,
+  //   isVisible: true,
+  //   position: 'top',
+  //   text: 'My text',
+  //   textColor: '#ffffff'
+  // }
+}
 ```
 
 :::
@@ -176,15 +184,17 @@ listener. Alternatively, you can use the `offClick` method.
 ::: code-group
 
 ```ts [Variable]
-function listener() {
-  console.log('Clicked!');
-}
+if (secondaryButton.onClick.isAvailable()) {
+  function listener() {
+    console.log('Clicked!');
+  }
 
-const offClick = secondaryButton.onClick(listener);
-offClick();
-// or
-secondaryButton.onClick(listener);
-secondaryButton.offClick(listener);
+  const offClick = secondaryButton.onClick(listener);
+  offClick();
+  // or
+  secondaryButton.onClick(listener);
+  secondaryButton.offClick(listener);
+}
 ```
 
 ```ts [Functions]
@@ -193,15 +203,17 @@ import {
   offSecondaryButtonClick,
 } from '@telegram-apps/sdk';
 
-function listener() {
-  console.log('Clicked!');
-}
+if (onSecondaryButtonClick.isAvailable()) {
+  function listener() {
+    console.log('Clicked!');
+  }
 
-const offClick = onSecondaryButtonClick(listener);
-offClick();
-// or
-onSecondaryButtonClick(listener);
-offSecondaryButtonClick(listener);
+  const offClick = onSecondaryButtonClick(listener);
+  offClick();
+  // or
+  onSecondaryButtonClick(listener);
+  offSecondaryButtonClick(listener);
+}
 ```
 
 :::

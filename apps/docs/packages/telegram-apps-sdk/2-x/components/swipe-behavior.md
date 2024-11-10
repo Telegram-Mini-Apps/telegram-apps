@@ -33,8 +33,10 @@ To do so, use the `mount` method. It will update the `isMounted` signal property
 ```ts [Variable]
 import { swipeBehavior } from '@telegram-apps/sdk';
 
-swipeBehavior.mount();
-swipeBehavior.isMounted(); // true
+if (swipeBehavior.mount.isAvailable()) {
+  swipeBehavior.mount();
+  swipeBehavior.isMounted(); // true
+}
 ```
 
 ```ts [Functions]
@@ -43,8 +45,10 @@ import {
   isSwipeBehaviorMounted,
 } from '@telegram-apps/sdk';
 
-mountSwipeBehavior(); 
-isSwipeBehaviorMounted(); // true
+if (mountSwipeBehavior.isAvailable()) {
+  mountSwipeBehavior();
+  isSwipeBehaviorMounted(); // true
+}
 ```
 
 :::
@@ -78,11 +82,15 @@ Calling these methods, update the `isVerticalEnabled` signal property value.
 ::: code-group
 
 ```ts [Variable]
-swipeBehavior.enableVertical();
-swipeBehavior.isVerticalEnabled(); // true
+if (swipeBehavior.enableVertical.isAvailable()) {
+  swipeBehavior.enableVertical();
+  swipeBehavior.isVerticalEnabled(); // true
+}
 
-swipeBehavior.disableVertical();
-swipeBehavior.isVerticalEnabled(); // false
+if (swipeBehavior.disableVertical.isAvailable()) {
+  swipeBehavior.disableVertical();
+  swipeBehavior.isVerticalEnabled(); // false
+}
 ```
 
 ```ts [Functions]
@@ -92,11 +100,15 @@ import {
   isVerticalSwipesEnabled,
 } from '@telegram-apps/sdk';
 
-enableVerticalSwipes();
-isVerticalSwipesEnabled(); // true
+if (enableVerticalSwipes.isAvailable()) {
+  enableVerticalSwipes();
+  isVerticalSwipesEnabled(); // true
+}
 
-disableVerticalSwipes();
-isVerticalSwipesEnabled(); // false
+if (disableVerticalSwipes.isAvailable()) {
+  disableVerticalSwipes();
+  isVerticalSwipesEnabled(); // false
+}
 ```
 
 :::

@@ -30,13 +30,17 @@ To set a key value, use the `setItem` method.
 ::: code-group
 
 ```ts [Variable]
-await cloudStorage.setItem('a', 'a-value');
+if (cloudStorage.setItem.isAvailable()) {
+  await cloudStorage.setItem('a', 'a-value');
+}
 ```
 
 ```ts [Functions]
 import { setCloudStorageItem } from '@telegram-apps/sdk';
 
-await setCloudStorageItem('a', 'a-value');
+if (setCloudStorageItem.isAvailable()) {
+  await setCloudStorageItem('a', 'a-value');
+}
 ```
 
 :::
@@ -48,13 +52,17 @@ To retrieve a list of all existing keys, use the `getKeys` method.
 ::: code-group
 
 ```ts [Variable]
-const keys = await cloudStorage.getKeys(); // ['a', 'b', 'c']
+if (cloudStorage.getKeys.isAvailable()) {
+  const keys = await cloudStorage.getKeys(); // ['a', 'b', 'c']
+}
 ```
 
 ```ts [Functions]
 import { getCloudStorageKeys } from '@telegram-apps/sdk';
 
-const keys = await getCloudStorageKeys(); // ['a', 'b', 'c']
+if (getCloudStorageKeys.isAvailable()) {
+  const keys = await getCloudStorageKeys(); // ['a', 'b', 'c']
+}
 ```
 
 :::
@@ -64,39 +72,43 @@ To get the value of a specific key or multiple keys, use the `getItem` method.
 ::: code-group
 
 ```ts [Variable]
-const nonExistent = await cloudStorage.getItem('non-existent');
-// The result is an empty string: ''
+if (cloudStorage.getItem.isAvailable()) {
+  const nonExistent = await cloudStorage.getItem('non-existent');
+  // The result is an empty string: ''
 
-const existent = await cloudStorage.getItem('a');
-// The result is the value of the 'a' key. Example: 'a-value'
+  const existent = await cloudStorage.getItem('a');
+  // The result is the value of the 'a' key. Example: 'a-value'
 
-const values = await cloudStorage.getItem(['a', 'b', 'non-existent']);
-// The result is a record of the keys 'a', 'b', and 'non-existent'. 
-// Example:
-// { 
-//   a: 'a-value', 
-//   b: 'b-value', 
-//   'non-existent': '', 
-// }
+  const values = await cloudStorage.getItem(['a', 'b', 'non-existent']);
+  // The result is a record of the keys 'a', 'b', and 'non-existent'. 
+  // Example:
+  // { 
+  //   a: 'a-value', 
+  //   b: 'b-value', 
+  //   'non-existent': '', 
+  // }
+}
 ```
 
 ```ts [Functions]
 import { getCloudStorageItem } from '@telegram-apps/sdk';
 
-const nonExistent = await getCloudStorageItem('non-existent');
-// The result is an empty string: ''
+if (getCloudStorageItem.isAvailable()) {
+  const nonExistent = await getCloudStorageItem('non-existent');
+  // The result is an empty string: ''
 
-const existent = await getCloudStorageItem('a');
-// The result is the value of the 'a' key. Example: 'a-value'
+  const existent = await getCloudStorageItem('a');
+  // The result is the value of the 'a' key. Example: 'a-value'
 
-const values = await getCloudStorageItem(['a', 'b', 'non-existent']);
-// The result is a record of the keys 'a', 'b', and 'non-existent'. 
-// Example:
-// { 
-//   a: 'a-value', 
-//   b: 'b-value', 
-//   'non-existent': '', 
-// }
+  const values = await getCloudStorageItem(['a', 'b', 'non-existent']);
+  // The result is a record of the keys 'a', 'b', and 'non-existent'. 
+  // Example:
+  // { 
+  //   a: 'a-value', 
+  //   b: 'b-value', 
+  //   'non-existent': '', 
+  // }
+}
 ```
 
 :::
@@ -108,15 +120,19 @@ To delete a key or a list of keys, use the `deleteItem` method.
 ::: code-group
 
 ```ts [Variable]
-await cloudStorage.deleteItem('a');
-await cloudStorage.deleteItem(['a', 'b', 'c']);
+if (cloudStorage.deleteItem.isAvailable()) {
+  await cloudStorage.deleteItem('a');
+  await cloudStorage.deleteItem(['a', 'b', 'c']);
+}
 ```
 
 ```ts [Functions]
 import { deleteCloudStorageItem } from '@telegram-apps/sdk';
 
-await deleteCloudStorageItem('a');
-await deleteCloudStorageItem(['a', 'b', 'c']);
+if (deleteCloudStorageItem.isAvailable()) {
+  await deleteCloudStorageItem('a');
+  await deleteCloudStorageItem(['a', 'b', 'c']);
+}
 ```
 
 :::

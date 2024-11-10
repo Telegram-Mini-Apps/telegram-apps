@@ -13,8 +13,10 @@ properties. To do so, use the `mount` method. It will update the `isMounted` sig
 ```ts [Variable]
 import { closingBehavior } from '@telegram-apps/sdk';
 
-closingBehavior.mount();
-closingBehavior.isMounted(); // true
+if (closingBehavior.mount.isAvailable()) {
+  closingBehavior.mount();
+  closingBehavior.isMounted(); // true
+}
 ```
 
 ```ts [Functions]
@@ -23,8 +25,10 @@ import {
   isClosingBehaviorMounted,
 } from '@telegram-apps/sdk';
 
-mountClosingBehavior();
-isClosingBehaviorMounted(); // true
+if (mountClosingBehavior.isAvailable()) {
+  mountClosingBehavior();
+  isClosingBehaviorMounted(); // true
+}
 ```
 
 :::
@@ -59,11 +63,15 @@ property value.
 ::: code-group
 
 ```ts [Variable]
-closingBehavior.enableConfirmation();
-closingBehavior.isConfirmationEnabled(); // true
+if (closingBehavior.enableConfirmation.isAvailable()) {
+  closingBehavior.enableConfirmation();
+  closingBehavior.isConfirmationEnabled(); // true
+}
 
-closingBehavior.disableConfirmation();
-closingBehavior.isConfirmationEnabled(); // false
+if (closingBehavior.disableConfirmation.isAvailable()) {
+  closingBehavior.disableConfirmation();
+  closingBehavior.isConfirmationEnabled(); // false
+}
 ```
 
 ```ts [Functions]
@@ -72,11 +80,15 @@ import {
   disableClosingConfirmation,
 } from '@telegram-apps/sdk';
 
-enableClosingConfirmation();
-isClosingConfirmationEnabled(); // true
+if (enableClosingConfirmation.isAvailable()) {
+  enableClosingConfirmation();
+  isClosingConfirmationEnabled(); // true
+}
 
-disableClosingConfirmation();
-isClosingConfirmationEnabled(); // false
+if (disableClosingConfirmation.isAvailable()) {
+  disableClosingConfirmation();
+  isClosingConfirmationEnabled(); // false
+}
 ```
 
 :::

@@ -12,15 +12,19 @@ the `isMounted` signal property.
 ```ts [Variable]
 import { miniApp } from '@telegram-apps/sdk';
 
-miniApp.mount();
-miniApp.isMounted(); // true
+if (miniApp.mount.isAvailable()) {
+  miniApp.mount();
+  miniApp.isMounted(); // true
+}
 ```
 
 ```ts [Functions]
 import { mountMiniApp, isMiniAppMounted } from '@telegram-apps/sdk';
 
-mountMiniApp();
-isMiniAppMounted(); // true
+if (mountMiniApp.isAvailable()) {
+  mountMiniApp();
+  isMiniAppMounted(); // true
+}
 ```
 
 :::
@@ -58,33 +62,37 @@ into CSS variable names. By default, values are converted to kebab case with the
 ::: code-group
 
 ```ts [Variable]
-miniApp.bindCssVars();
-// Creates CSS variables like:
-// --tg-bg-color: #aabbcc
-// --tg-header-color: #aabbcc
+if (miniApp.bindCssVars.isAvailable()) {
+  miniApp.bindCssVars();
+  // Creates CSS variables like:
+  // --tg-bg-color: #aabbcc
+  // --tg-header-color: #aabbcc
 
-miniApp.bindCssVars(key => `--my-prefix-${key}`);
-// Creates CSS variables like:
-// --my-prefix-bgColor: #aabbcc
-// --my-prefix-headerColor: #aabbcc
+  miniApp.bindCssVars(key => `--my-prefix-${key}`);
+  // Creates CSS variables like:
+  // --my-prefix-bgColor: #aabbcc
+  // --my-prefix-headerColor: #aabbcc
 
-miniApp.isCssVarsBound(); // true
+  miniApp.isCssVarsBound(); // true
+}
 ```
 
 ```ts [Functions]
 import { bindMiniAppCssVars, isMiniAppCssVarsBound } from '@telegram-apps/sdk';
 
-bindMiniAppCssVars();
-// Creates CSS variables like:
-// --tg-bg-color: #aabbcc
-// --tg-header-color: #aabbcc
+if (bindMiniAppCssVars.isAvailable()) {
+  bindMiniAppCssVars();
+  // Creates CSS variables like:
+  // --tg-bg-color: #aabbcc
+  // --tg-header-color: #aabbcc
 
-bindMiniAppCssVars(key => `--my-prefix-${key}`);
-// Creates CSS variables like:
-// --my-prefix-bgColor: #aabbcc
-// --my-prefix-headerColor: #aabbcc
+  bindMiniAppCssVars(key => `--my-prefix-${key}`);
+  // Creates CSS variables like:
+  // --my-prefix-bgColor: #aabbcc
+  // --my-prefix-headerColor: #aabbcc
 
-isMiniAppCssVarsBound(); // true
+  isMiniAppCssVarsBound(); // true
+}
 ```
 
 :::
@@ -100,14 +108,14 @@ strings: `bg_color`, `secondary_bg_color`.
 ::: code-group
 
 ```ts [Variable]
-if (miniApp.setHeaderColor.isSupported()) {
+if (miniApp.setHeaderColor.isAvailable()) {
   miniApp.setHeaderColor('bg_color');
   miniApp.headerColor(); // 'bg_color'
 }
 
 if (
-  miniApp.setHeaderColor.isSupported()
-  && miniApp.setHeaderColor.supports('color')
+  miniApp.setHeaderColor.isAvailable()
+  && miniApp.setHeaderColor.supports('rgb')
 ) {
   miniApp.setHeaderColor('#aabbcc');
   miniApp.headerColor(); // '#aabbcc'
@@ -120,14 +128,14 @@ import {
   miniAppHeaderColor,
 } from '@telegram-apps/sdk';
 
-if (setMiniAppHeaderColor.isSupported()) {
+if (setMiniAppHeaderColor.isAvailable()) {
   setMiniAppHeaderColor('bg_color');
   miniAppHeaderColor(); // 'bg_color'
 }
 
 if (
-  setMiniAppHeaderColor.isSupported()
-  && setMiniAppHeaderColor.supports('color')
+  setMiniAppHeaderColor.isAvailable()
+  && setMiniAppHeaderColor.supports('rgb')
 ) {
   setMiniAppHeaderColor('#aabbcc');
   miniAppHeaderColor(); // '#aabbcc'
@@ -144,7 +152,7 @@ this method updates the `headerColor` signal property value.
 ::: code-group
 
 ```ts [Variable]
-if (miniApp.setBackgroundColor.isSupported()) {
+if (miniApp.setBackgroundColor.isAvailable()) {
   miniApp.setBackgroundColor('#ffffff');
   miniApp.backgroundColor(); // '#ffffff'
 }
@@ -156,7 +164,7 @@ import {
   miniAppBackgroundColor,
 } from '@telegram-apps/sdk';
 
-if (setMiniAppBackgroundColor.isSupported()) {
+if (setMiniAppBackgroundColor.isAvailable()) {
   setMiniAppBackgroundColor('#ffffff');
   miniAppBackgroundColor(); // '#ffffff'
 }
@@ -173,13 +181,17 @@ To close the mini application, use the `close` method.
 ::: code-group
 
 ```ts [Variable]
-miniApp.close();
+if (miniApp.close.isAvailable()) {
+  miniApp.close();
+}
 ```
 
 ```ts [Functions]
 import { closeMiniApp } from '@telegram-apps/sdk';
 
-closeMiniApp();
+if (miniApp.close.isAvailable()) {
+  miniApp.close();
+}
 ```
 
 :::
@@ -192,13 +204,17 @@ loading placeholder is hidden, and the Mini App is shown.
 ::: code-group
 
 ```ts [Variable]
-miniApp.ready();
+if (miniApp.ready.isAvailable()) {
+  miniApp.ready();
+}
 ```
 
 ```ts [Functions]
 import { miniAppReady } from '@telegram-apps/sdk';
 
-miniAppReady();
+if (miniAppReady.isAvailable()) {
+  miniAppReady();
+}
 ```
 
 :::

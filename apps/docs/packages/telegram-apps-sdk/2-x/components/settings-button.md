@@ -34,8 +34,10 @@ To do so, use the `mount` method. It will update the `isMounted` signal property
 ```ts [Variable]
 import { settingsButton } from '@telegram-apps/sdk';
 
-settingsButton.mount();
-settingsButton.isMounted(); // true
+if (settingsButton.mount.isAvailable()) {
+  settingsButton.mount();
+  settingsButton.isMounted(); // true
+}
 ```
 
 ```ts [Functions]
@@ -44,8 +46,10 @@ import {
   isSettingsButtonMounted,
 } from '@telegram-apps/sdk';
 
-mountSettingsButton();
-isSettingsButtonMounted(); // true
+if (mountSettingsButton.isAvailable()) {
+  mountSettingsButton();
+  isSettingsButtonMounted(); // true
+}
 ```
 
 :::
@@ -79,11 +83,15 @@ the `isVisible` signal property value.
 ::: code-group
 
 ```ts [Variable]
-settingsButton.show();
-settingsButton.isVisible(); // true
+if (settingsButton.show.isAvailable()) {
+  settingsButton.show();
+  settingsButton.isVisible(); // true
+}
 
-settingsButton.hide();
-settingsButton.isVisible(); // false
+if (settingsButton.hide.isAvailable()) {
+  settingsButton.hide();
+  settingsButton.isVisible(); // false
+}
 ```
 
 ```ts [Functions]
@@ -93,11 +101,15 @@ import {
   isSettingsButtonVisible,
 } from '@telegram-apps/sdk';
 
-showSettingsButton();
-isSettingsButtonVisible(); // true
+if (showSettingsButton.isAvailable()) {
+  showSettingsButton();
+  isSettingsButtonVisible(); // true
+}
 
-hideSettingsButton();
-isSettingsButtonVisible(); // false
+if (hideSettingsButton.isAvailable()) {
+  hideSettingsButton();
+  isSettingsButtonVisible(); // false
+}
 ```
 
 :::
@@ -110,29 +122,36 @@ listener. Alternatively, you can use the `offClick` method.
 ::: code-group
 
 ```ts [Variable]
-function listener() {
-  console.log('Clicked!');
-}
+if (settingsButton.onClick.isAvailable()) {
+  function listener() {
+    console.log('Clicked!');
+  }
 
-const offClick = settingsButton.onClick(listener);
-offClick();
-// or
-settingsButton.onClick(listener);
-settingsButton.offClick(listener);
+  const offClick = settingsButton.onClick(listener);
+  offClick();
+  // or
+  settingsButton.onClick(listener);
+  settingsButton.offClick(listener);
+}
 ```
 
 ```ts [Functions]
-import { onSettingsButtonClick, offSettingsButtonClick } from '@telegram-apps/sdk';
+import {
+  onSettingsButtonClick,
+  offSettingsButtonClick,
+} from '@telegram-apps/sdk';
 
-function listener() {
-  console.log('Clicked!');
+if (onSettingsButtonClick.isAvailable()) {
+  function listener() {
+    console.log('Clicked!');
+  }
+
+  const offClick = onSettingsButtonClick(listener);
+  offClick();
+  // or
+  onSettingsButtonClick(listener);
+  offSettingsButtonClick(listener);
 }
-
-const offClick = onSettingsButtonClick(listener);
-offClick();
-// or
-onSettingsButtonClick(listener);
-offSettingsButtonClick(listener);
 ```
 
 :::
