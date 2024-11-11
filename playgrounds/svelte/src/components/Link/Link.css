@@ -1,0 +1,4 @@
+.index-link__item {
+  text-decoration: none;
+  color: var(--tg-theme-link-color);
+}
