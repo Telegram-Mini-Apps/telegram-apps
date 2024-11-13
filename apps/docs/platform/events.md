@@ -239,9 +239,9 @@ Available since: **v6.9**
 
 Application received phone access request status.
 
-| Field  | Type     | Description                         |
-|--------|----------|-------------------------------------|
-| status | `string` | Request status. Can only be `sent`. |
+| Field  | Type     | Description                             |
+|--------|----------|-----------------------------------------|
+| status | `string` | Request status. Can only be `sent` or `cancelled`. |
 
 ### `popup_closed`
 
@@ -322,6 +322,6 @@ Available since: **v6.9**
 
 Application received write access request status.
 
-| Field  | Type     | Description                            |
-|--------|----------|----------------------------------------|
-| status | `string` | Request status. Can only be `allowed`. |
+| Field  | Type     | Description                                           |
+|--------|----------|-------------------------------------------------------|
+| status | `string` | Request status. Can only be `allowed` or `cancelled`. |
