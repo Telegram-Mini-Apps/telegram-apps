@@ -18,4 +18,4 @@
 
 Your personal mate in Telegram Mini Apps development. 
 
-The package documentation has been moved [here](https://telegram-mini-apps.gitbook.io/mate).
+The package documentation has been moved [here](https://docs.telegram-mini-apps.com/packages/telegram-apps-mate).
