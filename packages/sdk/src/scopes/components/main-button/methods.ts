@@ -62,7 +62,7 @@ export const onClick = wrapBasic(
 );
 
 /**
- * Removes the Back Button click listener.
+ * Removes the Main Button click listener.
  * @param fn - an event listener.
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
