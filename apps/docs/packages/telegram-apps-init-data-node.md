@@ -122,7 +122,7 @@ import { validate, isErrorOfType } from '@telegram-apps/init-data-node';
 try {
   validate('init-data', 'token');
 } catch (e) {
-  if (isErrorOfType('ERR_SIGN_INVALID')) {
+  if (isErrorOfType(e, 'ERR_SIGN_INVALID')) {
     console.log('Sign is invalid');
   }
 }
