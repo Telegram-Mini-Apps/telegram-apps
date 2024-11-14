@@ -2,7 +2,7 @@
   import { Router, Route } from 'svelte-routing';
   import IndexPage from '@/pages/IndexPage/IndexPage.svelte';
   import routes from '@/navigation/routes.js';
-  import TonConnectProvider from './tonconnect/TonConnectProvider.svelte';
+  import { TonConnectProvider } from '@/tonconnect';
 
   const manifestUrl = new URL(
     'tonconnect-manifest.json',

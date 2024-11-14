@@ -9,9 +9,9 @@
       <li class="index-page__link-item">
         <Link
           className={'index-page__link'}
+          Icon={IconComponent}
           {title}
           {path}
-          Icon={IconComponent}
         />
       </li>
     {/if}
