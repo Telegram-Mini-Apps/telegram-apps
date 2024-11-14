@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 2.6.1
+
+### Patch Changes
+
+- 9683cd7: Replace "Back button" to "Main button" in the main button docs
+
 ## 2.6.0
 
 ### Minor Changes
