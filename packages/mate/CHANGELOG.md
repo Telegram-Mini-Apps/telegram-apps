@@ -1,5 +1,11 @@
 # @telegram-apps/mate
 
+## 0.0.24
+
+### Patch Changes
+
+- c7fa46f: Fix invalid link in README
+
 ## 0.0.23
 
 ### Patch Changes
