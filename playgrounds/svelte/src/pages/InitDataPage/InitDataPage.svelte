@@ -8,7 +8,7 @@
   import DisplayData, {
     type IRow,
   } from '@/components/DisplayData/DisplayData.svelte';
-  import { derived } from 'svelte/store'
+  import { derived } from 'svelte/store';
 
   import './InitDataPage.css';
 
@@ -16,44 +16,53 @@
   const initDataRaw = useSignal(sdkInitData.raw);
   const canSendAfterDate = useSignal(sdkInitData.canSendAfterDate);
 
-  const initDataRows = derived([initData, initDataRaw, canSendAfterDate], ([$initData, $initDataRaw, $canSendAfterDate]) => {
-    return $initDataRaw && [
-        { title: 'raw', value: $initDataRaw },
-        { title: 'auth_date', value: $initData.authDate.toLocaleString() },
-        { title: 'auth_date (raw)', value: $initData.authDate.getTime() / 1000 },
-        { title: 'hash', value: $initData.hash },
-        { title: 'can_send_after', value: $canSendAfterDate?.toISOString() },
-        { title: 'can_send_after (raw)', value: $initData.canSendAfter },
-        { title: 'query_id', value: $initData.queryId },
-        { title: 'start_param', value: $initData.startParam },
-        { title: 'chat_type', value: $initData.chatType },
-        { title: 'chat_instance', value: $initData.chatInstance },
-      ];
-  });
+  const initDataRows = derived(
+    [initData, initDataRaw, canSendAfterDate],
+    ([$initData, $initDataRaw, $canSendAfterDate]) => {
+      return (
+        $initDataRaw &&
+        $initData && [
+          { title: 'raw', value: $initDataRaw },
+          { title: 'auth_date', value: $initData.authDate.toLocaleString() },
+          {
+            title: 'auth_date (raw)',
+            value: $initData.authDate.getTime() / 1000,
+          },
+          { title: 'hash', value: $initData.hash },
+          { title: 'can_send_after', value: $canSendAfterDate?.toISOString() },
+          { title: 'can_send_after (raw)', value: $initData.canSendAfter },
+          { title: 'query_id', value: $initData.queryId },
+          { title: 'start_param', value: $initData.startParam },
+          { title: 'chat_type', value: $initData.chatType },
+          { title: 'chat_instance', value: $initData.chatInstance },
+        ]
+      );
+    }
+  );
 
   const userRows = derived([initData], ([$initData]) => {
     const user = $initData?.user;
     return user && getUserRows(user);
-  })
+  });
 
   const receiverRows = derived([initData], ([$initData]) => {
     const receiver = $initData?.receiver;
     return receiver && getUserRows(receiver);
-  })
+  });
 
   const chatRows = derived([initData], ([$initData]) => {
     const chat = $initData?.chat;
 
     return chat
       ? [
-        { title: 'id', value: chat.id.toString() },
-        { title: 'title', value: chat.title },
-        { title: 'type', value: chat.type },
-        { title: 'username', value: chat.username },
-        { title: 'photo_url', value: chat.photoUrl },
-      ]
+          { title: 'id', value: chat.id.toString() },
+          { title: 'title', value: chat.title },
+          { title: 'type', value: chat.type },
+          { title: 'username', value: chat.username },
+          { title: 'photo_url', value: chat.photoUrl },
+        ]
       : undefined;
-  })
+  });
 
   function getUserRows(user: User): IRow[] {
     return [
@@ -112,4 +121,3 @@
     </div>
   {/if}
 </Page>
-
