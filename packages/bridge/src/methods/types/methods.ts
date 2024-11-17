@@ -276,6 +276,18 @@ export interface Methods {
    */
   web_app_ready: CreateParams;
   /**
+   * Requests fullscreen mode for miniapp.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-fullscreen
+   */
+  web_app_request_fullscreen: CreateParams;
+  /**
+   * Exits fullscreen mode for miniapp.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-exit-fullscreen
+   */
+  web_app_exit_fullscreen: CreateParams;
+  /**
    * Requests access to current user's phone.
    * @since v6.9
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-phone

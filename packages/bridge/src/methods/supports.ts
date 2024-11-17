@@ -101,6 +101,9 @@ export function supports(
     case 'web_app_setup_secondary_button':
     case 'web_app_set_bottom_bar_color':
       return versionLessOrEqual('7.10', paramOrVersion);
+    case 'web_app_request_fullscreen':
+    case 'web_app_exit_fullscreen':
+      return versionLessOrEqual('8.0', paramOrVersion);
     default:
       return [
         'iframe_ready',

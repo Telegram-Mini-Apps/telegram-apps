@@ -7,6 +7,7 @@ import type {
   BiometryAuthRequestStatus,
   BiometryType,
   BiometryTokenUpdateStatus,
+  FullScreenErrorStatus,
 } from './misc.js';
 
 /**
@@ -134,6 +135,28 @@ export interface Events {
      */
     error?: string;
   };
+  /**
+   * App entered or exited full screen mode.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#fullscreen-changed
+   */
+  fullscreen_changed: {
+    /**
+     * Is application currently fullscreen.
+     */
+    is_fullscreen: boolean;
+  }
+  /**
+   * App failed to expand to full screen.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#fullscreen-changed
+   */
+  fullscreen_failed: {
+    /**
+     * Full Screen mode status error.
+     */
+    error: FullScreenErrorStatus;
+  }
   /**
    * An invoice was closed.
    * @see https://docs.telegram-mini-apps.com/platform/events#invoice-closed

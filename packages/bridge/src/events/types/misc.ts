@@ -14,3 +14,5 @@ export type BiometryType = 'finger' | 'face' | string;
 export type BiometryTokenUpdateStatus = 'updated' | 'removed' | 'failed' | string;
 
 export type BiometryAuthRequestStatus = 'failed' | 'authorized' | string;
+
+export type FullScreenErrorStatus = 'UNSUPPORTED' | 'ALREADY_FULLSCREEN' | string;
