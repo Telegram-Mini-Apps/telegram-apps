@@ -1,9 +1,6 @@
 import {
-  on,
-  off,
   getStorageValue,
   setStorageValue,
-  type EventListener,
   type FullScreenErrorStatus,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
@@ -87,10 +84,8 @@ export const exitFullScreen = wrapComplete('exitFullScreen', (): void => {
  */
 export const mount = wrapSupported('mount', (): void => {
   if (!isMounted()) {
-    setFullScreenMode(
-      isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false,
-      true,
-    );
+    // do not call request here, otherwise app will collapse unintended
+    setState(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false);
     isMounted.set(true);
   }
 });
@@ -98,8 +93,11 @@ export const mount = wrapSupported('mount', (): void => {
 function setFullScreenMode(value: boolean, force?: boolean) {
   if (value !== isFullScreen() || force) {
     const METHOD = value ? REQUEST_METHOD_NAME : EXIT_METHOD_NAME;
-    request(METHOD, CHANGED_EVENT_NAME)
-      .then(r => setState(r.is_fullscreen))
+    request(METHOD, [CHANGED_EVENT_NAME, FAILED_EVENT_NAME])
+      .then(r => {
+        if ('error' in r) processError(r.error);
+        else setState(r.is_fullscreen);
+      })
       .catch(processError);
   }
 }
@@ -111,102 +109,17 @@ function setState(value: boolean): void {
 
 function processError(error: FullScreenErrorStatus): void {
   switch (error) {
-    case 'UNSUPPORTED':
-      console.log("FullScreen is unsupported by this device!");
-      break;
     case 'ALREADY_FULLSCREEN':
-      console.log("App is already in Full Screen!")
+      if (!isFullScreen()) setState(true);
+      break;
+    case 'UNSUPPORTED':
+      setState(false);
+      console.log("FullScreen is unsupported by this device!");
       break;
     default:
     // TODO: do nothing?
   }
 }
-
-/**
- * Adds a new Full Screen change listener.
- * Occurs whenever the Mini App enters or exits fullscreen mode.
- * @param fn - event listener.
- * @returns A function to remove bound listener.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @since Mini Apps v8.0
- * @example
- * if (onChanged.isAvailable()) {
- *   const off = onChanged(() => {
- *     console.log('Full screen state changed');
- *     off();
- *   });
- * }
- */
-export const onChanged = wrapComplete(
-  'onChanged',
-  (fn: EventListener<'fullscreen_changed'>): VoidFunction => on(CHANGED_EVENT_NAME, fn),
-);
-
-/**
- * Removes the Full Screen change listener.
- * @param fn - an event listener.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @since Mini Apps v8.0
- * @example
- * if (offChanged.isAvailable()) {
- *   function listener() {
- *     console.log('Full screen state changed');
- *     offChanged(listener);
- *   }
- *   onChanged(listener);
- * }
- */
-export const offChanged = wrapComplete(
-  'offChanged',
-  (fn: EventListener<'fullscreen_changed'>): void => off(CHANGED_EVENT_NAME, fn),
-);
-
-/**
- * Adds a new Full Screen error listener.
- * Occurs if a request to enter fullscreen mode fails.
- * @param fn - event listener.
- * @returns A function to remove bound listener.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @since Mini Apps v8.0
- * @example
- * if (onFailed.isAvailable()) {
- *   const off = onFailed(() => {
- *     console.error('Failed to enable Full Screen');
- *     off();
- *   });
- * }
- */
-export const onFailed = wrapComplete(
-  'onFailed',
-  (fn: EventListener<'fullscreen_failed'>): VoidFunction => on(FAILED_EVENT_NAME, fn),
-);
-
-/**
- * Removes the Full Screen error listener.
- * @param fn - an event listener.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @since Mini Apps v8.0
- * @example
- * if (offChanged.isAvailable()) {
- *   function listener() {
- *     console.log('Failed to enable Full Screen');
- *     offChanged(listener);
- *   }
- *   onChanged(listener);
- * }
- */
-export const offFailed = wrapComplete(
-  'offFailed',
-  (fn: EventListener<'fullscreen_failed'>): void => off(FAILED_EVENT_NAME, fn),
-);
 
 /**
  * Unmounts the Full Screen component.
