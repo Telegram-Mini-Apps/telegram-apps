@@ -70,14 +70,14 @@ function getRequestedContact(options?: AsyncOptions): CancelablePromise<Requeste
 export const requestContact = wrapSafe(
   'requestContact',
   (options?: AsyncOptions): CancelablePromise<RequestedContact> => {
-    return new CancelablePromise(
-      async (res, _, abortSignal) => {
+    return CancelablePromise.withFn(
+      async (abortSignal) => {
         const asyncOptions = { abortSignal };
 
         // First of all, let's try to get the requested contact.
         // Probably, we already requested it before.
         try {
-          return res(await getRequestedContact(asyncOptions));
+          return await getRequestedContact(asyncOptions);
         } catch {
         }
 
@@ -93,7 +93,7 @@ export const requestContact = wrapSafe(
         // We are trying to retrieve the requested contact until the deadline was reached.
         while (!abortSignal.aborted) {
           try {
-            return res(await getRequestedContact(asyncOptions));
+            return await getRequestedContact(asyncOptions);
           } catch {
           }
 
@@ -103,6 +103,10 @@ export const requestContact = wrapSafe(
           // Increase the sleep time not to kill the backend service.
           sleepTime += 50;
         }
+
+        // Reachable code, but the promise will be rejected and this result will be
+        // ignored.
+        return null as any;
       }, options,
     );
   },
