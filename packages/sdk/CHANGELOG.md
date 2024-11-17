@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 2.6.2
+
+### Patch Changes
+
+- 78508aa: Fix `requestContact` invalid async executor
+
 ## 2.6.1
 
 ### Patch Changes
