@@ -17,6 +17,7 @@ import { resetSwipeBehavior } from '@test-utils/reset/resetSwipeBehavior.js';
 import { resetThemeParams } from '@test-utils/reset/resetThemeParams.js';
 import { resetViewport } from '@test-utils/reset/resetViewport.js';
 import { resetPrivacy } from '@test-utils/reset/resetPrivacy.js';
+import {resetFullScreen} from "@test-utils/reset/resetFullScreen.js";
 
 export function resetSignal(s: Signal<any> | Computed<any>) {
   s.unsubAll();
@@ -29,6 +30,7 @@ export function resetPackageState() {
     resetBackButton,
     resetBiometry,
     resetClosingBehavior,
+    resetFullScreen,
     resetInitData,
     resetInvoice,
     resetMainButton,
