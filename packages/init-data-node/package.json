@@ -53,16 +53,16 @@
     "build": "rimraf dist && pnpm run build:node && pnpm run build:web"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "tsconfig": "workspace:*",
-    "test-utils": "workspace:*"
+    "@types/node": "^22.9.0",
+    "test-utils": "workspace:*",
+    "tsconfig": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@telegram-apps/toolkit": "workspace:^",
-    "@telegram-apps/types": "workspace:^",
-    "@telegram-apps/transformers": "workspace:^"
+    "@telegram-apps/transformers": "workspace:^",
+    "@telegram-apps/types": "workspace:^"
   }
 }
