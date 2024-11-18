@@ -39,7 +39,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@inquirer/core": "^8.2.4",
+    "@inquirer/core": "^10.1.0",
     "ansi-escapes": "^7.0.0",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
