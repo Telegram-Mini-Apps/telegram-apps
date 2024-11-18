@@ -376,6 +376,18 @@ the [clipboard_text_received](events.md#clipboard-text-received) event.
 Notifies Telegram about current application is ready to be shown. This method will make Telegram to
 remove application loader and display Mini App.
 
+### `web_app_request_fullscreen`
+
+Available since: **v8.0**
+
+Requests full screen mode for mini app.
+
+### `web_app_exit_fullscreen`
+
+Available since: **v8.0**
+
+Requests exiting full screen mode for mini app.
+
 ### `web_app_request_phone`
 
 Available since: **v6.9**

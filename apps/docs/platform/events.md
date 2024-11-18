@@ -31,8 +31,8 @@ interface MessageJSON {
 Then, lets imagine how we could process an event from Telegram application:
 
 ```typescript
-window.addEventListener('message', ({ data }) => {
-  const { eventType, eventData } = JSON.parse(data);
+window.addEventListener('message', ({data}) => {
+  const {eventType, eventData} = JSON.parse(data);
   console.log(eventType, eventData);
 });
 ```
@@ -84,7 +84,7 @@ package, which greatly eases integration.
 Here's how to use it:
 
 ```ts
-import { on } from '@telegram-apps/sdk';
+import {on} from '@telegram-apps/sdk';
 
 // Start listening to "viewport_changed" event. Returned value
 // is a function, which removes this event listener.
@@ -172,6 +172,35 @@ Custom method invocation completed.
 | result | `unknown` | _Optional_. Method invocation successful result. |
 | error  | `string`  | _Optional_. Method invocation error code.        |
 
+### `fullscreen_changed`
+
+Available since: **v8.0**
+
+Occurs whenever the Mini App enters or exits fullscreen mode.
+eventHandler receives no parameters.
+The current fullscreen state can be checked via isFullscreen.
+
+| Field         | Type      | Description                          |
+|---------------|-----------|--------------------------------------|
+| is_fullscreen | `boolean` | Is application currently fullscreen. |
+
+### `fullscreen_failed`
+
+Available since: **v8.0**
+
+Occurs whenever the Mini App enters or exits fullscreen mode.
+eventHandler receives no parameters.
+The current fullscreen state can be checked via isFullscreen.
+
+| Field | Type                    | Description                    |
+|-------|-------------------------|--------------------------------|
+| error | `FullScreenErrorStatus` | Full Screen mode status error. |
+
+**FullScreenErrorStatus:**
+
+- **UNSUPPORTED** – Fullscreen mode is not supported on this device or platform.
+- **ALREADY_FULLSCREEN** – The Mini App is already in fullscreen mode.
+
 ### `invoice_closed`
 
 An invoice was closed.
@@ -239,8 +268,8 @@ Available since: **v6.9**
 
 Application received phone access request status.
 
-| Field  | Type     | Description                             |
-|--------|----------|-----------------------------------------|
+| Field  | Type     | Description                                        |
+|--------|----------|----------------------------------------------------|
 | status | `string` | Request status. Can only be `sent` or `cancelled`. |
 
 ### `popup_closed`

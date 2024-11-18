@@ -17,6 +17,7 @@ export const platformLinksGenerator = (prefix: string = "") => {
       }),
       section("Functional Features", {
         "Closing Behavior": "closing-behavior",
+        "Full Screen": "full-screen",
         "Swipe Behavior": "swipe-behavior",
         "Haptic Feedback": "haptic-feedback",
       }),
