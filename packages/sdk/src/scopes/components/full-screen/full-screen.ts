@@ -11,6 +11,8 @@ import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
 import { createWrapComplete } from '@/scopes/toolkit/createWrapComplete.js';
 import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
 
+import { FullScreenStatus } from "@/scopes/components/full-screen/types.js";
+
 type StorageValue = boolean;
 
 const REQUEST_METHOD_NAME = 'web_app_request_fullscreen';
@@ -27,9 +29,9 @@ const COMPONENT_NAME = 'fullScreen';
 export const isMounted = signal(false);
 
 /**
- * Signal indicating if the Full Screen is supported.
+ * Signal indicating if the Full Screen is supported by telegram version.
  */
-export const isSupported = createIsSupported(REQUEST_METHOD_NAME);
+export const isSupported = createIsSupported(REQUEST_METHOD_NAME) || createIsSupported(EXIT_METHOD_NAME);
 
 /**
  * Signal indicating if fullscreen mode is active.
@@ -40,19 +42,20 @@ const wrapSupported = createWrapSupported(COMPONENT_NAME, REQUEST_METHOD_NAME);
 const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, REQUEST_METHOD_NAME);
 
 /**
- * Request full screen mode.
+ * Requests full screen mode.
  * @since Mini Apps v8.0
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @returns {Promise<FullScreenStatus>} current status of full screen, boolean or error
  * @example
  * if (requestFullScreen.isAvailable()) {
  *   requestFullScreen();
  * }
  */
-export const requestFullScreen = wrapComplete('requestFullScreen', (): void => {
-  setFullScreenMode(true);
+export const requestFullScreen = wrapComplete('requestFullScreen', (): Promise<FullScreenStatus> => {
+  return setFullScreenMode(true);
 });
 
 /**
@@ -62,13 +65,14 @@ export const requestFullScreen = wrapComplete('requestFullScreen', (): void => {
  * @throws {TypedError} ERR_NOT_INITIALIZED
  * @throws {TypedError} ERR_NOT_SUPPORTED
  * @throws {TypedError} ERR_NOT_MOUNTED
+ * @returns {Promise<FullScreenStatus>} current status of full screen, boolean or error
  * @example
  * if (exitFullScreen.isAvailable()) {
  *   exitFullScreen();
  * }
  */
-export const exitFullScreen = wrapComplete('exitFullScreen', (): void => {
-  setFullScreenMode(false);
+export const exitFullScreen = wrapComplete('exitFullScreen', (): Promise<FullScreenStatus> => {
+  return setFullScreenMode(false);
 });
 
 /**
@@ -84,22 +88,18 @@ export const exitFullScreen = wrapComplete('exitFullScreen', (): void => {
  */
 export const mount = wrapSupported('mount', (): void => {
   if (!isMounted()) {
-    // do not call request here, otherwise app will collapse unintended
+    // do not call request here, otherwise app will collapse unintended (user sees additional flickering)
     setState(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false);
     isMounted.set(true);
   }
 });
 
-function setFullScreenMode(value: boolean, force?: boolean) {
-  if (value !== isFullScreen() || force) {
-    const METHOD = value ? REQUEST_METHOD_NAME : EXIT_METHOD_NAME;
-    request(METHOD, [CHANGED_EVENT_NAME, FAILED_EVENT_NAME])
-      .then(r => {
-        if ('error' in r) processError(r.error);
-        else setState(r.is_fullscreen);
-      })
-      .catch(processError);
-  }
+async function setFullScreenMode(value: boolean): Promise<FullScreenStatus> {
+  const METHOD = value ? REQUEST_METHOD_NAME : EXIT_METHOD_NAME;
+  const r = await request(METHOD, [CHANGED_EVENT_NAME, FAILED_EVENT_NAME]);
+  if ('error' in r) return processError(r.error);
+  else setState(r.is_fullscreen);
+  return isFullScreen();
 }
 
 function setState(value: boolean): void {
@@ -107,17 +107,16 @@ function setState(value: boolean): void {
   isFullScreen.set(value);
 }
 
-function processError(error: FullScreenErrorStatus): void {
+function processError(error: FullScreenErrorStatus): FullScreenErrorStatus {
   switch (error) {
     case 'ALREADY_FULLSCREEN':
       if (!isFullScreen()) setState(true);
-      break;
+      return 'ALREADY_FULLSCREEN';
     case 'UNSUPPORTED':
       setState(false);
-      console.log("FullScreen is unsupported by this device!");
-      break;
+      return 'UNSUPPORTED';
     default:
-    // TODO: do nothing?
+      return error;
   }
 }
 

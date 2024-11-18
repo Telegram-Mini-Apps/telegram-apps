@@ -15,4 +15,4 @@ export type BiometryTokenUpdateStatus = 'updated' | 'removed' | 'failed' | strin
 
 export type BiometryAuthRequestStatus = 'failed' | 'authorized' | string;
 
-export type FullScreenErrorStatus = 'UNSUPPORTED' | 'ALREADY_FULLSCREEN' | string;
+export type FullScreenErrorStatus = 'ALREADY_FULLSCREEN' | 'UNSUPPORTED' | string;
