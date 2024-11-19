@@ -294,6 +294,18 @@ export interface Methods {
    */
   web_app_request_phone: CreateMethodParams;
   /**
+   * Requests safe area of the user's phone.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-safe-area
+   */
+  web_app_request_safe_area: CreateParams;
+  /**
+   * Requests content safe area of the user's phone.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-content-safe-area
+   */
+  web_app_request_content_safe_area: CreateParams;
+  /**
    * Requests current theme from Telegram. As a result, Telegram will create `theme_changed` event.
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-theme
    */

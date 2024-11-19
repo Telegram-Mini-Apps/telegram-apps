@@ -7,6 +7,7 @@ import type {
   BiometryAuthRequestStatus,
   BiometryType,
   BiometryTokenUpdateStatus,
+  SafeAreaInset,
   FullScreenErrorStatus,
 } from './misc.js';
 
@@ -249,6 +250,30 @@ export interface Events {
    * @see https://docs.telegram-mini-apps.com/platform/events#settings-button-pressed
    */
   settings_button_pressed: never;
+  /**
+   * Occurs whenever the device's safe area insets change
+   * (e.g., due to orientation change or screen adjustments).
+   * @since Mini Apps v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#safe_area_changed
+   * */
+  safe_area_changed: {
+    /**
+     * Safe area inset values.
+     */
+    safeAreaInset: SafeAreaInset;
+  };
+  /**
+   * Occurs when the safe area for content changes
+   * (e.g., due to orientation change or screen adjustments).
+   * @since Mini Apps v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#content_safe_area_changed
+   * */
+  content_safe_area_changed: {
+    /**
+     * Safe area content inset values.
+     */
+    contentSafeAreaInset: SafeAreaInset;
+  };
   /**
    * Occurs whenever theme settings are changed in the user's Telegram app
    * (including switching to night mode).
