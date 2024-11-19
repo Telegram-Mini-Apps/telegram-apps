@@ -6,7 +6,7 @@
 "@telegram-apps/sdk-react": patch
 "@telegram-apps/sdk-svelte": patch
 "svelte-template": patch
-"vue-project": patch
+"vue-template": patch
 ---
 
 Bump repository libraries
