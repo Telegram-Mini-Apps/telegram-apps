@@ -45,7 +45,7 @@
     "vitest": "^2.1.5"
   },
   "type": "module",
-  "packageManager": "pnpm@9.1.0",
+  "packageManager": "pnpm@9.13.2",
   "name": "monorepo",
   "config": {
     "commitizen": {

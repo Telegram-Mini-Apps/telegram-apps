@@ -24,10 +24,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        id: pnpm-install
-        with:
-          version: 9
-          run_install: false
 
       - name: Rollup
         run: pnpm run ci:packages:rollup
