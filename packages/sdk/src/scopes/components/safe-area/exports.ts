@@ -5,14 +5,8 @@ export {
   unmount as unmountSafeArea,
 } from './methods.js';
 export {
-  safeAreaInsetTop as safeAreaInsetTop,
-  safeAreaInsetBottom as safeAreaInsetBottom,
-  safeAreaInsetLeft as safeAreaInsetLeft,
-  safeAreaInsetRight as safeAreaInsetRight,
-  contentSafeAreaInsetTop as contentSafeAreaInsetTop,
-  contentSafeAreaInsetBottom as contentSafeAreaInsetBottom,
-  contentSafeAreaInsetLeft as contentSafeAreaInsetLeft,
-  contentSafeAreaInsetRight as contentSafeAreaInsetRight,
+  inset as safeAreaInset,
+  contentInset as contentSafeAreaInset,
 
   isMounted as isSafeAreaMounted,
   isCssVarsBound as isSafeAreaCssVarsBound,

@@ -20,11 +20,12 @@ import {createWrapComplete} from '@/scopes/toolkit/createWrapComplete.js';
 import {createWrapSupported} from '@/scopes/toolkit/createWrapSupported.js';
 
 import {
+  contentInset,
   isCssVarsBound,
-  state,
+  initialValue,
+  inset,
   isMounted,
-  safeAreaInset,
-  contentSafeAreaInset, initialValue,
+  state,
 } from './signals.js';
 import {GetCSSVarNameFn, State} from './types.js';
 import {SafeAreaInset} from "@telegram-apps/bridge";
@@ -99,7 +100,7 @@ export const bindCssVars = wrapComplete(
       getCSSVarName ||= (prop) => `--tg-${camelToKebab(component)}-${camelToKebab(prop)}`;
 
     function actualize(component: Component): void {
-      const fn = component === "safeArea" ? safeAreaInset : contentSafeAreaInset;
+      const fn = component === "safeArea" ? inset : contentInset;
       props.forEach(prop => {
         setCssVar(getCompCSSVarName(component)(prop), `${fn()[prop]}px`);
       });
@@ -196,11 +197,11 @@ const onContentSafeAreaChanged: EventListener<'content_safe_area_changed'> = (da
 };
 
 function setSafeAreaState(safeArea: SafeAreaInset) {
-  setState('safeAreaInset', safeAreaInset, safeArea);
+  setState('safeAreaInset', inset, safeArea);
 }
 
 function setContentSafeAreaState(safeArea: SafeAreaInset) {
-  setState('contentSafeAreaInset', contentSafeAreaInset, safeArea);
+  setState('contentSafeAreaInset', contentInset, safeArea);
 }
 
 function setState(fnName: string, fn: Signal<SafeAreaInset>, s: SafeAreaInset) {
