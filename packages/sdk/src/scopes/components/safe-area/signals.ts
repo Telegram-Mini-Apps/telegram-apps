@@ -3,7 +3,7 @@ import {computed, signal} from '@telegram-apps/signals';
 import {SafeAreaInset} from "@telegram-apps/bridge";
 import {State} from "@/scopes/components/safe-area/types.js";
 
-const initialValue: SafeAreaInset = {
+export const initialValue: SafeAreaInset = {
   top: 0,
   bottom: 0,
   left: 0,

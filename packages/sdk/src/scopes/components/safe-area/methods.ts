@@ -3,7 +3,6 @@ import {
   on,
   retrieveLaunchParams,
   camelToKebab,
-  createCbCollector,
   getStorageValue,
   setStorageValue,
   deleteCssVar,
@@ -15,8 +14,7 @@ import {
 import {isPageReload} from '@telegram-apps/navigation';
 import {computed, type Signal} from '@telegram-apps/signals';
 
-import {$version, postEvent} from '@/scopes/globals.js';
-import {mount as tpMount} from '@/scopes/components/theme-params/methods.js';
+import {$version} from '@/scopes/globals.js';
 import {throwCssVarsBound} from '@/scopes/toolkit/throwCssVarsBound.js';
 import {createWrapComplete} from '@/scopes/toolkit/createWrapComplete.js';
 import {createWrapSupported} from '@/scopes/toolkit/createWrapSupported.js';
@@ -26,10 +24,12 @@ import {
   state,
   isMounted,
   safeAreaInset,
-  contentSafeAreaInset,
+  contentSafeAreaInset, initialValue,
 } from './signals.js';
-import {GetCSSVarNameFn} from './types.js';
+import {GetCSSVarNameFn, State} from './types.js';
 import {SafeAreaInset} from "@telegram-apps/bridge";
+import {createMountFn} from "@/scopes/createMountFn.js";
+import {isMounting, mountError} from "@/scopes/components/viewport/signals.js";
 
 type StorageValue = SafeAreaInset;
 
@@ -130,8 +130,6 @@ export const bindCssVars = wrapComplete(
  * This function restores the component state and is automatically saving it in the local storage
  * if it changed.
  *
- * Internally, the function mounts the Theme Params component to work with correctly extracted
- * theme palette values.
  * @since Mini Apps v8.0
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_NOT_INITIALIZED
@@ -143,37 +141,57 @@ export const bindCssVars = wrapComplete(
  */
 export const mount = wrapSupported(
   'mount',
-  (): void => {
-    if (!isMounted()) {
+  createMountFn<State>(
+    COMPONENT_NAME,
+    (_) => {
+      if (isMounted()) return;
+
+      // Try to restore the state using the storage.
       const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-      isMounted.set(true);
-    }
-  },
+      if (s) {
+        return s;
+      }
+
+      // If the platform has a stable viewport, it means we could use the window global object
+      // properties.
+      if ([
+        'macos',
+        'tdesktop',
+        'unigram',
+        'webk',
+        'weba',
+        'web',
+      ].includes(retrieveLaunchParams().platform)) {
+        return {
+          safeAreaInset: initialValue,
+          contentSafeAreaInset: initialValue
+        };
+      }
+    },
+    result => {
+      on('safe_area_changed', onSafeAreaChanged);
+      on('content_safe_area_changed', onContentSafeAreaChanged);
+      setGlobalState(result);
+    },
+    {isMounted, isMounting, mountError},
+  ),
 );
 
 const onSafeAreaChanged: EventListener<'safe_area_changed'> = (data) => {
-  setState(
-    'safeAreaInset',
-    safeAreaInset,
-    {
-      top: data.safeAreaInset.top,
-      bottom: data.safeAreaInset.bottom,
-      left: data.safeAreaInset.left,
-      right: data.safeAreaInset.right,
-    });
+  setSafeAreaState(data.safeAreaInset);
 };
 
 const onContentSafeAreaChanged: EventListener<'content_safe_area_changed'> = (data) => {
-  setState(
-    'contentSafeAreaInset',
-    contentSafeAreaInset,
-    {
-      top: data.contentSafeAreaInset.top,
-      bottom: data.contentSafeAreaInset.bottom,
-      left: data.contentSafeAreaInset.left,
-      right: data.contentSafeAreaInset.right,
-    });
+  setContentSafeAreaState(data.contentSafeAreaInset);
 };
+
+function setSafeAreaState(safeArea: SafeAreaInset) {
+  setState('safeAreaInset', safeAreaInset, safeArea);
+}
+
+function setContentSafeAreaState(safeArea: SafeAreaInset) {
+  setState('contentSafeAreaInset', contentSafeAreaInset, safeArea);
+}
 
 function setState(fnName: string, fn: Signal<SafeAreaInset>, s: SafeAreaInset) {
   fn.set({
@@ -183,6 +201,11 @@ function setState(fnName: string, fn: Signal<SafeAreaInset>, s: SafeAreaInset) {
     right: truncate(s.right),
   });
   setStorageValue<StorageValue>(fnName, fn());
+}
+
+function setGlobalState(state: State) {
+  setSafeAreaState(state.safeAreaInset);
+  setSafeAreaState(state.contentSafeAreaInset);
 }
 
 /**
