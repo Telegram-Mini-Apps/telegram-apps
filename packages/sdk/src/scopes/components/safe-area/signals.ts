@@ -37,3 +37,13 @@ export const state = computed<State>(() => ({
   safeAreaInset: safeAreaInset(),
   contentSafeAreaInset: contentSafeAreaInset(),
 }));
+
+export const safeAreaInsetTop = computed(() => safeAreaInset()['top']);
+export const safeAreaInsetBottom = computed(() => safeAreaInset()['bottom']);
+export const safeAreaInsetLeft = computed(() => safeAreaInset()['left']);
+export const safeAreaInsetRight = computed(() => safeAreaInset()['right']);
+
+export const contentSafeAreaInsetTop = computed(() => contentSafeAreaInset()['top']);
+export const contentSafeAreaInsetBottom = computed(() => contentSafeAreaInset()['bottom']);
+export const contentSafeAreaInsetLeft = computed(() => contentSafeAreaInset()['left']);
+export const contentSafeAreaInsetRight = computed(() => contentSafeAreaInset()['right']);

@@ -12,21 +12,24 @@ import {
   type EventListener,
   type MethodName,
 } from '@telegram-apps/bridge';
-import { isPageReload } from '@telegram-apps/navigation';
-import { computed, type Computed } from '@telegram-apps/signals';
+import {isPageReload} from '@telegram-apps/navigation';
+import {computed, type Computed} from '@telegram-apps/signals';
 
-import { $version, postEvent } from '@/scopes/globals.js';
-import { mount as tpMount } from '@/scopes/components/theme-params/methods.js';
-import { throwCssVarsBound } from '@/scopes/toolkit/throwCssVarsBound.js';
-import { createWrapComplete } from '@/scopes/toolkit/createWrapComplete.js';
-import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
+import {$version, postEvent} from '@/scopes/globals.js';
+import {mount as tpMount} from '@/scopes/components/theme-params/methods.js';
+import {throwCssVarsBound} from '@/scopes/toolkit/throwCssVarsBound.js';
+import {createWrapComplete} from '@/scopes/toolkit/createWrapComplete.js';
+import {createWrapSupported} from '@/scopes/toolkit/createWrapSupported.js';
 
 import {
   isCssVarsBound,
   state,
   isMounted,
+  safeAreaInset,
+  contentSafeAreaInset,
 } from './signals.js';
-import type { GetCssVarNameFn, State } from './types.js';
+import {GetCSSVarNameFn, State} from './types.js';
+import {SafeAreaInset} from "@telegram-apps/bridge";
 
 type StorageValue = State;
 
@@ -57,9 +60,15 @@ const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, isSupportedSc
  * Creates CSS variables connected with the mini app.
  *
  * Default variables:
- * - `--tg-bg-color`
- * - `--tg-header-color`
- * - `--tg-bottom-bar-color`
+ * - `--tg-safe-area-inset-top`
+ * - `--tg-safe-area-inset-bottom`
+ * - `--tg-safe-area-inset-left`
+ * - `--tg-safe-area-inset-right`
+
+ * - `--tg-content-safe-area-inset-top`
+ * - `--tg-content-safe-area-inset-bottom`
+ * - `--tg-content-safe-area-inset-left`
+ * - `--tg-content-safe-area-inset-right`
  *
  * Variables are being automatically updated if theme parameters were changed.
  *
@@ -81,39 +90,37 @@ const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, isSupportedSc
  */
 export const bindCssVars = wrapComplete(
   'bindCssVars',
-  (getCSSVarName?: GetCssVarNameFn): VoidFunction => {
+  (getCSSVarName?: GetCSSVarNameFn): VoidFunction => {
     isCssVarsBound() && throwCssVarsBound();
 
-    const [addCleanup, cleanup] = createCbCollector();
+    type Component = "safeArea" | "contentSafeArea";
+    const props = ['top', 'bottom', 'left', 'right'] as const;
 
-    /**
-     * Binds specified CSS variable to a signal.
-     * @param cssVar - CSS variable name.
-     * @param signal - signal to listen changes to.
-     */
-    function bind(cssVar: string, signal: Computed<RGB | undefined>) {
-      function update() {
-        setCssVar(cssVar, signal() || null);
-      }
+    const getCompCSSVarName = (component: Component) =>
+      getCSSVarName ||= (prop) => `--tg-${camelToKebab(component)}-${camelToKebab(prop)}`;
 
-      // Instantly set CSS variable.
-      update();
-
-      // Remember to clean this relation up.
-      addCleanup(signal.sub(update), deleteCssVar.bind(null, cssVar));
+    function actualize(component: Component): void {
+      const fn = component === "safeArea" ? safeAreaInset : contentSafeAreaInset;
+      props.forEach(prop => {
+        setCssVar(getCompCSSVarName(component)(prop), `${fn()[prop]}px`);
+      });
     }
 
-    getCSSVarName ||= (prop) => `--tg-${camelToKebab(prop)}`;
-    bind(getCSSVarName('bgColor'), backgroundColorRGB);
-    bind(getCSSVarName('bottomBarColor'), bottomBarColorRGB);
-    bind(getCSSVarName('headerColor'), headerColorRGB);
-    addCleanup(() => {
-      isCssVarsBound.set(false);
-    });
+    const actualizeSA = () => actualize("safeArea");
+    const actualizeCSA = () => actualize("contentSafeArea");
 
+    actualizeSA();
+    actualizeCSA();
+    state.sub(actualizeSA);
+    state.sub(actualizeCSA);
     isCssVarsBound.set(true);
 
-    return cleanup;
+    return () => {
+      props.forEach(deleteCssVar);
+      state.unsub(actualizeSA);
+      state.unsub(actualizeCSA);
+      isCssVarsBound.set(false);
+    };
   },
 );
 
@@ -170,7 +177,7 @@ export const setBackgroundColor = wrapComplete(
   'setBackgroundColor',
   (color: BackgroundColor): void => {
     if (color !== backgroundColor()) {
-      postEvent(SET_BG_COLOR_METHOD, { color });
+      postEvent(SET_BG_COLOR_METHOD, {color});
       backgroundColor.set(color);
       saveState();
     }
@@ -194,7 +201,7 @@ export const setBottomBarColor = wrapComplete(
   'setBottomBarColor',
   (color: BottomBarColor) => {
     if (color !== bottomBarColor()) {
-      postEvent(SET_BOTTOM_BAR_COLOR_METHOD, { color });
+      postEvent(SET_BOTTOM_BAR_COLOR_METHOD, {color});
       bottomBarColor.set(color);
       saveState();
     }
@@ -222,7 +229,7 @@ export const setHeaderColor = wrapComplete(
   'setHeaderColor',
   (color: HeaderColor): void => {
     if (color !== headerColor()) {
-      postEvent(SET_HEADER_COLOR_METHOD, isRGB(color) ? { color } : { color_key: color });
+      postEvent(SET_HEADER_COLOR_METHOD, isRGB(color) ? {color} : {color_key: color});
       headerColor.set(color);
       saveState();
     }
