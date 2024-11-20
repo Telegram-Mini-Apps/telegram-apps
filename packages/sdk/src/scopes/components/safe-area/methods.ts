@@ -30,13 +30,12 @@ import {GetCSSVarNameFn, State} from './types.js';
 import {SafeAreaInset} from "@telegram-apps/bridge";
 import {createMountFn} from "@/scopes/createMountFn.js";
 import {isMounting, mountError} from "@/scopes/components/viewport/signals.js";
+import {requestInsets} from "@/scopes/components/safe-area/requestSafeArea.js";
 
 type StorageValue = SafeAreaInset;
 
 const REQUEST_METHOD = 'web_app_request_safe_area';
 const REQUEST_CONTENT_METHOD = 'web_app_request_content_safe_area';
-const CHANGED_EVENT = 'safe_area_changed';
-const CONTENT_CHANGED_EVENT = 'content_safe_area_changed';
 const COMPONENT_NAME = 'safeArea';
 
 const isSupportedSchema = {
@@ -143,13 +142,19 @@ export const mount = wrapSupported(
   'mount',
   createMountFn<State>(
     COMPONENT_NAME,
-    (_) => {
-      if (isMounted()) return;
+    options => {
+      if(isMounted()) return state();
 
       // Try to restore the state using the storage.
-      const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-      if (s) {
-        return s;
+      if (isPageReload()) {
+        const insets = getStorageValue<StorageValue>('safeAreaInset');
+        const contentInsets = getStorageValue<StorageValue>('contentSafeAreaInset');
+        if (insets && contentInsets) {
+          return {
+            safeAreaInset: insets,
+            contentSafeAreaInset: contentInsets
+          };
+        }
       }
 
       // If the platform has a stable viewport, it means we could use the window global object
@@ -167,6 +172,11 @@ export const mount = wrapSupported(
           contentSafeAreaInset: initialValue
         };
       }
+
+      // We were unable to retrieve data locally. In this case, we are sending
+      // a request returning the viewport information.
+      options.timeout ||= 1000;
+      return requestInsets(options);
     },
     result => {
       on('safe_area_changed', onSafeAreaChanged);
@@ -200,7 +210,7 @@ function setState(fnName: string, fn: Signal<SafeAreaInset>, s: SafeAreaInset) {
     left: truncate(s.left),
     right: truncate(s.right),
   });
-  setStorageValue<StorageValue>(fnName, fn());
+  setStorageValue<SafeAreaInset>(fnName, fn());
 }
 
 function setGlobalState(state: State) {
