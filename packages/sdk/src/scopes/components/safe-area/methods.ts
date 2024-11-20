@@ -13,7 +13,7 @@ import {
   type MethodName,
 } from '@telegram-apps/bridge';
 import {isPageReload} from '@telegram-apps/navigation';
-import {computed, type Computed} from '@telegram-apps/signals';
+import {computed, type Signal} from '@telegram-apps/signals';
 
 import {$version, postEvent} from '@/scopes/globals.js';
 import {mount as tpMount} from '@/scopes/components/theme-params/methods.js';
@@ -28,10 +28,10 @@ import {
   safeAreaInset,
   contentSafeAreaInset,
 } from './signals.js';
-import {GetCSSVarNameFn, State} from './types.js';
+import {GetCSSVarNameFn} from './types.js';
 import {SafeAreaInset} from "@telegram-apps/bridge";
 
-type StorageValue = State;
+type StorageValue = SafeAreaInset;
 
 const REQUEST_METHOD = 'web_app_request_safe_area';
 const REQUEST_CONTENT_METHOD = 'web_app_request_content_safe_area';
@@ -146,103 +146,58 @@ export const mount = wrapSupported(
   (): void => {
     if (!isMounted()) {
       const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-      tpMount();
-
-      setBackgroundColor.ifAvailable(s ? s.backgroundColor : 'bg_color');
-      setBottomBarColor.ifAvailable(s ? s.bottomBarColor : 'bottom_bar_bg_color');
-      setHeaderColor.ifAvailable(s ? s.headerColor : 'bg_color');
-
       isMounted.set(true);
     }
   },
 );
 
-function saveState() {
-  setStorageValue<StorageValue>(COMPONENT_NAME, state());
+const onSafeAreaChanged: EventListener<'safe_area_changed'> = (data) => {
+  setState(
+    'safeAreaInset',
+    safeAreaInset,
+    {
+      top: data.safeAreaInset.top,
+      bottom: data.safeAreaInset.bottom,
+      left: data.safeAreaInset.left,
+      right: data.safeAreaInset.right,
+    });
+};
+
+const onContentSafeAreaChanged: EventListener<'content_safe_area_changed'> = (data) => {
+  setState(
+    'contentSafeAreaInset',
+    contentSafeAreaInset,
+    {
+      top: data.contentSafeAreaInset.top,
+      bottom: data.contentSafeAreaInset.bottom,
+      left: data.contentSafeAreaInset.left,
+      right: data.contentSafeAreaInset.right,
+    });
+};
+
+function setState(fnName: string, fn: Signal<SafeAreaInset>, s: SafeAreaInset) {
+  fn.set({
+    top: truncate(s.top),
+    bottom: truncate(s.bottom),
+    left: truncate(s.left),
+    right: truncate(s.right),
+  });
+  setStorageValue<StorageValue>(fnName, fn());
 }
 
 /**
- * Updates the background color.
- * @since Mini Apps v6.1
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
- * @example
- * if (setBackgroundColor.isAvailable()) {
- *   setBackgroundColor('bg_color');
- * }
+ * Formats value to make it stay in bounds [0, +Inf).
+ * @param value - value to format.
  */
-export const setBackgroundColor = wrapComplete(
-  'setBackgroundColor',
-  (color: BackgroundColor): void => {
-    if (color !== backgroundColor()) {
-      postEvent(SET_BG_COLOR_METHOD, {color});
-      backgroundColor.set(color);
-      saveState();
-    }
-  },
-  SET_BG_COLOR_METHOD,
-);
+function truncate(value: number): number {
+  return Math.max(value, 0);
+}
 
 /**
- * Updates the bottom bar background color.
- * @since Mini Apps v7.10
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
- * @example
- * if (setBottomBarColor.isAvailable()) {
- *   setBottomBarColor('ff11a3');
- * }
- */
-export const setBottomBarColor = wrapComplete(
-  'setBottomBarColor',
-  (color: BottomBarColor) => {
-    if (color !== bottomBarColor()) {
-      postEvent(SET_BOTTOM_BAR_COLOR_METHOD, {color});
-      bottomBarColor.set(color);
-      saveState();
-    }
-  },
-  SET_BOTTOM_BAR_COLOR_METHOD,
-);
-
-/**
- * Updates the header color.
- * @since Mini Apps v6.1
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
- * @example Using known color key
- * if (setHeaderColor.isAvailable()) {
- *   setHeaderColor('bg_color');
- * }
- * @example Using RGB
- * if (setHeaderColor.isAvailable() && setHeaderColor.supports.rgb()) {
- *   setHeaderColor('#ffaabb');
- * }
- */
-export const setHeaderColor = wrapComplete(
-  'setHeaderColor',
-  (color: HeaderColor): void => {
-    if (color !== headerColor()) {
-      postEvent(SET_HEADER_COLOR_METHOD, isRGB(color) ? {color} : {color_key: color});
-      headerColor.set(color);
-      saveState();
-    }
-  },
-  SET_HEADER_COLOR_METHOD,
-  {
-    rgb: [SET_HEADER_COLOR_METHOD, 'color', isRGB],
-  },
-);
-
-/**
- * Unmounts the component, removing the listener, saving the component state in the local storage.
+ * Unmounts the component, removing the listeners, saving the component state in the local storage.
  */
 export function unmount(): void {
+  off('safe_area_changed', onSafeAreaChanged);
+  off('content_safe_area_changed', onContentSafeAreaChanged);
   isMounted.set(false);
 }

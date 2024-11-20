@@ -1,23 +1,21 @@
 export {
   bindCssVars as bindSafeAreaCssVars,
-  close as closeSafeArea,
   isSupported as isSafeAreaSupported,
   mount as mountSafeArea,
-  ready as safeAreaReady,
-  setHeaderColor as setSafeAreaHeaderColor,
-  setBackgroundColor as setSafeAreaBackgroundColor,
-  setBottomBarColor as setSafeAreaBottomBarColor,
   unmount as unmountSafeArea,
 } from './methods.js';
 export {
-  backgroundColor as safeAreaBackgroundColor,
-  bottomBarColor as safeAreaBottomBarColor,
-  bottomBarColorRGB as safeAreaBottomBarColorRGB,
-  headerColor as safeAreaHeaderColor,
-  headerColorRGB as safeAreaHeaderColorRGB,
+  safeAreaInsetTop as safeAreaInsetTop,
+  safeAreaInsetBottom as safeAreaInsetBottom,
+  safeAreaInsetLeft as safeAreaInsetLeft,
+  safeAreaInsetRight as safeAreaInsetRight,
+  contentSafeAreaInsetTop as contentSafeAreaInsetTop,
+  contentSafeAreaInsetBottom as contentSafeAreaInsetBottom,
+  contentSafeAreaInsetLeft as contentSafeAreaInsetLeft,
+  contentSafeAreaInsetRight as contentSafeAreaInsetRight,
+
   isMounted as isSafeAreaMounted,
   isCssVarsBound as isSafeAreaCssVarsBound,
-  isDark as isSafeAreaDark,
   state as safeAreaState,
 } from './signals.js';
 export type {
