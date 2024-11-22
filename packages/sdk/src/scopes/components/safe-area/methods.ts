@@ -217,7 +217,7 @@ function setState(fnName: methodName, fn: Signal<SafeAreaInset>, s: SafeAreaInse
 
 function setGlobalState(state: State) {
   setSafeAreaState(state.inset);
-  setSafeAreaState(state.contentInset);
+  setContentSafeAreaState(state.contentInset);
 }
 
 /**
