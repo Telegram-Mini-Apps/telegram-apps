@@ -17,8 +17,8 @@ export function requestInsets(
   ]).then(([safeAreaInset, contentSafeAreaInset]) => {
     return new CancelablePromise<State>((resolve) => {
       resolve({
-        safeAreaInset: safeAreaInset,
-        contentSafeAreaInset: contentSafeAreaInset
+        inset: safeAreaInset,
+        contentInset: contentSafeAreaInset
       });
     });
   });

@@ -33,7 +33,7 @@ import {createMountFn} from "@/scopes/createMountFn.js";
 import {isMounting, mountError} from "@/scopes/components/safe-area/signals.js";
 import {requestInsets} from "@/scopes/components/safe-area/requestSafeArea.js";
 
-type StorageValue = SafeAreaInset;
+type StorageValue = State;
 
 const REQUEST_METHOD = 'web_app_request_safe_area';
 const REQUEST_CONTENT_METHOD = 'web_app_request_content_safe_area';
@@ -148,13 +148,9 @@ export const mount = wrapSupported(
 
       // Try to restore the state using the storage.
       if (isPageReload()) {
-        const insets = getStorageValue<StorageValue>('safeAreaInset');
-        const contentInsets = getStorageValue<StorageValue>('contentSafeAreaInset');
-        if (insets && contentInsets) {
-          return {
-            safeAreaInset: insets,
-            contentSafeAreaInset: contentInsets
-          };
+        const storedState = getStorageValue<StorageValue>(COMPONENT_NAME);
+        if (storedState) {
+          return storedState;
         }
       }
 
@@ -169,8 +165,8 @@ export const mount = wrapSupported(
         'web',
       ].includes(retrieveLaunchParams().platform)) {
         return {
-          safeAreaInset: initialValue,
-          contentSafeAreaInset: initialValue
+          inset: initialValue,
+          contentInset: initialValue
         };
       }
 
@@ -196,27 +192,32 @@ const onContentSafeAreaChanged: EventListener<'content_safe_area_changed'> = (da
   setContentSafeAreaState(data);
 };
 
+type methodName = 'inset' | 'contentInset';
+
 function setSafeAreaState(safeArea: SafeAreaInset) {
-  setState('safeAreaInset', inset, safeArea);
+  setState('inset', inset, safeArea);
 }
 
 function setContentSafeAreaState(safeArea: SafeAreaInset) {
-  setState('contentSafeAreaInset', contentInset, safeArea);
+  setState('contentInset', contentInset, safeArea);
 }
 
-function setState(fnName: string, fn: Signal<SafeAreaInset>, s: SafeAreaInset) {
+function setState(fnName: methodName, fn: Signal<SafeAreaInset>, s: SafeAreaInset) {
   fn.set({
     top: truncate(s.top),
     bottom: truncate(s.bottom),
     left: truncate(s.left),
     right: truncate(s.right),
   });
-  setStorageValue<SafeAreaInset>(fnName, fn());
+  setStorageValue<StorageValue>(COMPONENT_NAME, {
+    inset: fnName === 'inset' ? fn() : state().inset,
+    contentInset: fnName === 'contentInset' ? fn() : state().contentInset,
+  });
 }
 
 function setGlobalState(state: State) {
-  setSafeAreaState(state.safeAreaInset);
-  setSafeAreaState(state.contentSafeAreaInset);
+  setSafeAreaState(state.inset);
+  setSafeAreaState(state.contentInset);
 }
 
 /**

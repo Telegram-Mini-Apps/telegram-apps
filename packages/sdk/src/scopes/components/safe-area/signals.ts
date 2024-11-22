@@ -45,6 +45,6 @@ export const mountError = signal<Error | undefined>(undefined);
  * Complete component state.
  */
 export const state = computed<State>(() => ({
-  safeAreaInset: inset(),
-  contentSafeAreaInset: contentInset(),
+  inset: inset(),
+  contentInset: contentInset(),
 }));

@@ -8,8 +8,10 @@ export {
   inset as safeAreaInset,
   contentInset as contentSafeAreaInset,
 
-  isMounted as isSafeAreaMounted,
   isCssVarsBound as isSafeAreaCssVarsBound,
+  isMounted as isSafeAreaMounted,
+  isMounting as isSafeAreaMounting,
+  mountError as safeAreaMountError,
   state as safeAreaState,
 } from './signals.js';
 export type {

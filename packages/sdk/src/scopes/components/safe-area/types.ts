@@ -1,8 +1,8 @@
 import { SafeAreaInset } from "@telegram-apps/bridge";
 
 export interface State {
-  safeAreaInset: SafeAreaInset;
-  contentSafeAreaInset: SafeAreaInset;
+  inset: SafeAreaInset;
+  contentInset: SafeAreaInset;
 }
 
 export interface GetCSSVarNameFn {
