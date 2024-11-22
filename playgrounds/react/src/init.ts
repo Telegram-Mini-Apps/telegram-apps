@@ -2,6 +2,7 @@ import {
   backButton,
   viewport,
   themeParams,
+  safeArea,
   miniApp,
   initData,
   $debug,
@@ -24,7 +25,11 @@ export function init(debug: boolean): void {
   miniApp.mount();
   themeParams.mount();
   initData.restore();
-  
+
+  void safeArea.mount().catch((e: any) => {
+    console.error('Something went wrong mounting the safe area', e);
+  });
+
   void viewport.mount().then(() => {
     // Define components-related CSS variables.
     viewport.bindCssVars();
