@@ -401,6 +401,20 @@ Requests access to current user's phone.
 Requests current [theme](theming.md) from Telegram. As a result, Telegram will
 create [theme_changed](events.md#theme-changed) event.
 
+### `web_app_request_safe_area`
+
+Available since: **v8.0**
+
+Requests current [safe area](safe-area.md) information from Telegram. As a result,
+Telegram will create [safe_area_changed](events.md#safe-area-changed) event.
+
+### `web_app_request_content_safe_area`
+
+Available since: **v8.0**
+
+Requests current [content safe area](content-safe-area.md) information from Telegram. As a result,
+Telegram will create [content_safe_area_changed](events.md#content-safe-area-changed) event.
+
 ### `web_app_request_viewport`
 
 Requests current [viewport](viewport.md) information from Telegram. As a result,

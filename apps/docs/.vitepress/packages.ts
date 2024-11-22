@@ -101,6 +101,7 @@ export const packagesLinksGenerator = (prefix: string = '') => {
                 scope('mini-app'),
                 scope('popup'),
                 scope('qr-scanner', 'QR Scanner'),
+                scope('safe-area'),
                 scope('secondary-button'),
                 scope('settings-button'),
                 scope('swipe-behavior'),
