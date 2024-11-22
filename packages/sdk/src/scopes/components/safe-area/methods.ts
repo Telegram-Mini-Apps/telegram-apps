@@ -1,12 +1,12 @@
 import {
+  camelToKebab,
+  deleteCssVar,
+  getStorageValue,
   off,
   on,
   retrieveLaunchParams,
-  camelToKebab,
-  getStorageValue,
-  setStorageValue,
-  deleteCssVar,
   setCssVar,
+  setStorageValue,
   supports,
   type EventListener,
   type MethodName,
@@ -30,7 +30,7 @@ import {
 import {GetCSSVarNameFn, State} from './types.js';
 import {SafeAreaInset} from "@telegram-apps/bridge";
 import {createMountFn} from "@/scopes/createMountFn.js";
-import {isMounting, mountError} from "@/scopes/components/viewport/signals.js";
+import {isMounting, mountError} from "@/scopes/components/safe-area/signals.js";
 import {requestInsets} from "@/scopes/components/safe-area/requestSafeArea.js";
 
 type StorageValue = SafeAreaInset;
@@ -144,7 +144,7 @@ export const mount = wrapSupported(
   createMountFn<State>(
     COMPONENT_NAME,
     options => {
-      if(isMounted()) return state();
+      if (isMounted()) return state();
 
       // Try to restore the state using the storage.
       if (isPageReload()) {
@@ -189,11 +189,11 @@ export const mount = wrapSupported(
 );
 
 const onSafeAreaChanged: EventListener<'safe_area_changed'> = (data) => {
-  setSafeAreaState(data.safeAreaInset);
+  setSafeAreaState(data);
 };
 
 const onContentSafeAreaChanged: EventListener<'content_safe_area_changed'> = (data) => {
-  setContentSafeAreaState(data.contentSafeAreaInset);
+  setContentSafeAreaState(data);
 };
 
 function setSafeAreaState(safeArea: SafeAreaInset) {

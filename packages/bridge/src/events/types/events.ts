@@ -256,24 +256,14 @@ export interface Events {
    * @since Mini Apps v8.0
    * @see https://docs.telegram-mini-apps.com/platform/events#safe_area_changed
    * */
-  safe_area_changed: {
-    /**
-     * Safe area inset values.
-     */
-    safeAreaInset: SafeAreaInset;
-  };
+  safe_area_changed: SafeAreaInset;
   /**
    * Occurs when the safe area for content changes
    * (e.g., due to orientation change or screen adjustments).
    * @since Mini Apps v8.0
    * @see https://docs.telegram-mini-apps.com/platform/events#content_safe_area_changed
    * */
-  content_safe_area_changed: {
-    /**
-     * Safe area content inset values.
-     */
-    contentSafeAreaInset: SafeAreaInset;
-  };
+  content_safe_area_changed: SafeAreaInset;
   /**
    * Occurs whenever theme settings are changed in the user's Telegram app
    * (including switching to night mode).

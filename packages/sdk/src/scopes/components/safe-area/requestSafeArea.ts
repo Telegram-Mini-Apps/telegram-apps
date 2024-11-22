@@ -16,7 +16,10 @@ export function requestInsets(
     requestContentSafeArea(options)
   ]).then(([safeAreaInset, contentSafeAreaInset]) => {
     return new CancelablePromise<State>((resolve) => {
-      resolve({safeAreaInset, contentSafeAreaInset});
+      resolve({
+        safeAreaInset: safeAreaInset,
+        contentSafeAreaInset: contentSafeAreaInset
+      });
     });
   });
 }
@@ -32,8 +35,7 @@ export function requestInsets(
 export function requestSafeArea(
   options?: ExecuteWithOptions,
 ): CancelablePromise<SafeAreaInset> {
-  return _request('web_app_request_safe_area', 'safe_area_changed', options)
-    .then(r => r.safeAreaInset);
+  return _request('web_app_request_safe_area', 'safe_area_changed', options);
 }
 
 /**
@@ -47,6 +49,5 @@ export function requestSafeArea(
 export function requestContentSafeArea(
   options?: ExecuteWithOptions,
 ): CancelablePromise<SafeAreaInset> {
-  return _request('web_app_request_content_safe_area', 'content_safe_area_changed', options)
-    .then(r => r.contentSafeAreaInset);
+  return _request('web_app_request_content_safe_area', 'content_safe_area_changed', options);
 }
