@@ -81,12 +81,17 @@ if (safeArea.bindCssVars.isAvailable()) {
   // --tg-content-safe-area-inset-left: 0px;
   // --tg-content-safe-area-inset-right: 0px;
 
-  safeArea.bindCssVars(key => `--my-prefix-${key}`);
+  safeArea.bindCssVars((component, property) => `--my-prefix-${component}-${property}`);
   // Creates CSS variables like:
+  // --my-prefix-safeArea-top: 0px;
+  // --my-prefix-safeArea-bottom: 30px;
+  // --my-prefix-safeArea-bottom: 40px;
+  // --my-prefix-safeArea-right: 40px;
   
-  // --my-prefix-safe-area-inset-top: 0px;
-  // --my-prefix-content-safe-area-inset-top: 40px;
-  // ...and so on
+  // --my-prefix-contentSafeArea-top: 40px;
+  // --my-prefix-contentSafeArea-bottom: 0px;
+  // --my-prefix-contentSafeArea-left: 0px;
+  // --my-prefix-contentSafeArea-right: 0px;
 
   safeArea.isCssVarsBound(); // true
 }
@@ -111,11 +116,17 @@ if (bindSafeAreaCssVars.isAvailable()) {
   // --tg-content-safe-area-inset-left: 0px;
   // --tg-content-safe-area-inset-right: 0px;
 
-  bindSafeAreaCssVars(key => `--my-prefix-${key}`);
+  bindSafeAreaCssVars((component, property) => `--my-prefix-${component}-${property}`);
   // Creates CSS variables like:
-  // --my-prefix-safe-area-inset-top: 0px;
-  // --my-prefix-content-safe-area-inset-top: 40px;
-  // ...and so on
+  // --my-prefix-safeArea-top: 0px;
+  // --my-prefix-safeArea-bottom: 30px;
+  // --my-prefix-safeArea-bottom: 40px;
+  // --my-prefix-safeArea-right: 40px;
+
+  // --my-prefix-contentSafeArea-top: 40px;
+  // --my-prefix-contentSafeArea-bottom: 0px;
+  // --my-prefix-contentSafeArea-left: 0px;
+  // --my-prefix-contentSafeArea-right: 0px;
 
   isSafeAreaCssVarsBound(); // true
 }

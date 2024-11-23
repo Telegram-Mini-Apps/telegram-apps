@@ -85,7 +85,7 @@ const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, isSupportedSc
  * }
  * @example Using custom CSS vars generator
  * if (bindCssVars.isAvailable()) {
- *   bindCssVars(key => `--my-prefix-${key}`);
+ *   bindCssVars((component, property) => `--my-prefix-${component}-${property}`);
  * }
  */
 export const bindCssVars = wrapComplete(
@@ -96,13 +96,12 @@ export const bindCssVars = wrapComplete(
     type Component = "safeArea" | "contentSafeArea";
     const props = ['top', 'bottom', 'left', 'right'] as const;
 
-    const getCompCSSVarName = (component: Component) =>
-      getCSSVarName ||= (prop) => `--tg-${camelToKebab(component)}-${camelToKebab(prop)}`;
+    getCSSVarName ||= (component, prop) => `--tg-${camelToKebab(component)}-${camelToKebab(prop)}`;
 
     function actualize(component: Component): void {
       const fn = component === "safeArea" ? inset : contentInset;
       props.forEach(prop => {
-        setCssVar(getCompCSSVarName(component)(prop), `${fn()[prop]}px`);
+        setCssVar(getCSSVarName!(component, prop), `${fn()[prop]}px`);
       });
     }
 
@@ -111,14 +110,14 @@ export const bindCssVars = wrapComplete(
 
     actualizeSA();
     actualizeCSA();
-    state.sub(actualizeSA);
-    state.sub(actualizeCSA);
+    inset.sub(actualizeSA);
+    contentInset.sub(actualizeCSA);
     isCssVarsBound.set(true);
 
     return () => {
       props.forEach(deleteCssVar);
-      state.unsub(actualizeSA);
-      state.unsub(actualizeCSA);
+      inset.unsub(actualizeSA);
+      contentInset.unsub(actualizeCSA);
       isCssVarsBound.set(false);
     };
   },
@@ -147,6 +146,7 @@ export const mount = wrapSupported(
       if (isMounted()) return state();
 
       // Try to restore the state using the storage.
+      // TODO: do not restore if orientation changed
       if (isPageReload()) {
         const storedState = getStorageValue<StorageValue>(COMPONENT_NAME);
         if (storedState) {

@@ -5,10 +5,13 @@ export interface State {
   contentInset: SafeAreaInset;
 }
 
+type Component = "safeArea" | "contentSafeArea";
+
 export interface GetCSSVarNameFn {
   /**
-   * @param property - safe area insets
+   * @param component - safe area or content safe area component
+   * @param property - safe area insets property
    * @returns Computed complete CSS variable name.
    */
-  (property: Extract<keyof SafeAreaInset, string>): string;
+  (component: Component, property: Extract<keyof SafeAreaInset, string>): string;
 }

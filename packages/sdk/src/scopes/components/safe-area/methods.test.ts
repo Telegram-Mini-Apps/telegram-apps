@@ -18,6 +18,7 @@ describe.each([
 ] as const)('%s', (name, fn, isMounted) => {
   testSafety(fn, name, {
     component: 'safeArea',
+    minVersion: '8.0',
     isMounted,
   });
 });

@@ -31,7 +31,9 @@ export function init(debug: boolean): void {
   themeParams.mount();
   initData.restore();
 
-  void safeArea.mount().catch((e: any) => {
+  void safeArea.mount().then(() => {
+    safeArea.bindCssVars();
+  }).catch((e: any) => {
     console.error('Something went wrong mounting the safe area', e);
   });
 
