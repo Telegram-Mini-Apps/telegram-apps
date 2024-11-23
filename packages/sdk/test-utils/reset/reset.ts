@@ -11,6 +11,7 @@ import { resetMainButton } from '@test-utils/reset/resetMainButton.js';
 import { resetMiniApp } from '@test-utils/reset/resetMiniApp.js';
 import { resetPopup } from '@test-utils/reset/resetPopup.js';
 import { resetQrScanner } from '@test-utils/reset/resetQrScanner.js';
+import { resetSafeArea } from "@test-utils/reset/resetSafeArea.js";
 import { resetSecondaryButton } from '@test-utils/reset/resetSecondaryButton.js';
 import { resetSettingsButton } from '@test-utils/reset/resetSettingsButton.js';
 import { resetSwipeBehavior } from '@test-utils/reset/resetSwipeBehavior.js';
@@ -36,6 +37,7 @@ export function resetPackageState() {
     resetPopup,
     resetPrivacy,
     resetQrScanner,
+    resetSafeArea,
     resetSecondaryButton,
     resetSettingsButton,
     resetSwipeBehavior,
