@@ -1,5 +1,11 @@
 # @telegram-apps/init-data-node
 
+## 1.1.2
+
+### Patch Changes
+
+- 11b8478: Bump repository libraries
+
 ## 1.1.1
 
 ### Patch Changes

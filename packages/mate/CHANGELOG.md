@@ -1,5 +1,11 @@
 # @telegram-apps/mate
 
+## 0.0.25
+
+### Patch Changes
+
+- 11b8478: Bump repository libraries
+
 ## 0.0.24
 
 ### Patch Changes

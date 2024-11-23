@@ -1,5 +1,11 @@
 # vue-template
 
+## 0.0.5
+
+### Patch Changes
+
+- 11b8478: Bump repository libraries
+
 ## 0.0.4
 
 ### Patch Changes

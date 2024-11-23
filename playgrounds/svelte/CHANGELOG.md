@@ -1,5 +1,13 @@
 # svelte-template
 
+## 0.0.5
+
+### Patch Changes
+
+- 11b8478: Bump repository libraries
+- Updated dependencies [11b8478]
+  - @telegram-apps/sdk-svelte@1.0.5
+
 ## 0.0.4
 
 ### Patch Changes
