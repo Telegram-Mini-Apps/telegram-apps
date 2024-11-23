@@ -1,9 +1,7 @@
 <script lang="ts">
   import Page from '@/components/Page/Page.svelte';
   import { useTonWallet, TonConnectButton } from '@/tonconnect';
-  import DisplayData, {
-    type IRow,
-  } from '@/components/DisplayData/DisplayData.svelte';
+  import DisplayData from '@/components/DisplayData/DisplayData.svelte';
   import Link from '@/components/Link/Link.svelte';
   import { derived, type Writable } from 'svelte/store';
   import type { ConnectedWallet } from '@tonconnect/ui';

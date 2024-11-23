@@ -46,7 +46,7 @@
     "@telegram-apps/sdk": "workspace:^"
   },
   "peerDependencies": {
-    "svelte": "^5.1.3"
+    "svelte": "^5.2.3"
   },
   "devDependencies": {
     "tsconfig": "workspace:*"

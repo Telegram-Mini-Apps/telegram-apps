@@ -14,7 +14,9 @@ module.exports = {
         node: true
       },
       files: [
-        '.eslintrc.{js,cjs}'
+        '.eslintrc.{js,cjs}',
+        '*.ts',
+        '*.tsx'
       ],
       parserOptions: {
         sourceType: 'script'

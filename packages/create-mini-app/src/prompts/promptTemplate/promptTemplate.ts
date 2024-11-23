@@ -133,7 +133,7 @@ export const promptTemplate = createPrompt<Template, {}>(
     const paddingLeft = ' '.repeat(PADDING_HOR_LEFT);
     const paddingRight = ' '.repeat(PADDING_HOR_RIGHT);
 
-    const message = spaces(usePromptPrefix(completed), theme.style.message('Preferred technologies:'));
+    const message = spaces(usePromptPrefix(completed), theme.style.message('Preferred technologies:', 'idle'));
 
     if (completed) {
       const lang = findTitleByNameAndValue('language', template!.language);

@@ -75,7 +75,7 @@ export const promptGitRepo = createPrompt<string, {}>((_, done) => {
   return [
     spaces(
       usePromptPrefix(completed),
-      theme.style.message('Git remote repository URL:'),
+      theme.style.message('Git remote repository URL:', 'idle'),
       useInputPrefix(completed),
       completed
         ? theme.style.answer(value ? value : chalk.italic('not specified'))

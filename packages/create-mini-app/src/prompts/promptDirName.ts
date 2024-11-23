@@ -96,7 +96,7 @@ export const promptDirName = createPrompt<string, Config>(
     return [
       spaces(
         usePromptPrefix(completed),
-        theme.style.message('Directory name:'),
+        theme.style.message('Directory name:', 'idle'),
         useInputPrefix(completed),
         completed
           ? theme.style.answer(value)

@@ -54,11 +54,11 @@ export function spawnWithSpinner({
 }: TerminalOptions | OperationOptions): Promise<void> {
   const { style } = theme;
   const spinner = ora({
-    text: style.message(title),
+    text: style.message(title, 'loading'),
     hideCursor: false,
   }).start();
 
-  const success = titleSuccess && style.message(titleSuccess);
+  const success = titleSuccess && style.message(titleSuccess, 'done');
 
   if (typeof command === 'function') {
     return command()
