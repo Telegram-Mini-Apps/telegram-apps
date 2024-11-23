@@ -56,7 +56,6 @@ export const packagesLinksGenerator = (prefix: string = "") => {
               BiometryManager: 'biometry-manager',
               ClosingBehavior: 'closing-behavior',
               CloudStorage: 'cloud-storage',
-              FullScreen: 'full-screen',
               HapticFeedback: 'haptic-feedback',
               InitData: 'init-data',
               Invoice: 'invoice',
