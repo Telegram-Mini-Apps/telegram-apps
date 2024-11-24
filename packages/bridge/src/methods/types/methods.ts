@@ -276,7 +276,7 @@ export interface Methods {
    */
   web_app_ready: CreateParams;
   /**
-   * Requests fullscreen mode for miniapp.
+   * Requests to open the mini app in fullscreen.
    * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-fullscreen
    */

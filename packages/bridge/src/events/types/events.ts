@@ -44,34 +44,40 @@ export interface Events {
   biometry_info_received:
     | {
     /**
-     * If true, indicates that biometric authentication is available on the current device.
+     * If true, indicates that biometric authentication is available on the
+     * current device.
      */
     available: false;
   }
     | {
     /**
-     * If true, indicates that biometric authentication is available on the current device.
+     * If true, indicates that biometric authentication is available on the
+     * current device.
      */
     available: true;
     /**
-     * Indicates whether the app has previously requested permission to use biometrics.
+     * Indicates whether the app has previously requested permission to use
+     * biometrics.
      */
     access_requested: boolean;
     /**
-     * Indicates whether the user has granted the app permission to use biometrics.
+     * Indicates whether the user has granted the app permission to use
+     * biometrics.
      *
      * If false and access_requested is true may indicate that:
      *
      * - The user has simply canceled the permission popup, in which case
-     * a `web_app_biometry_request_access` event can be emitted to re-open the popup.
+     * a `web_app_biometry_request_access` event can be emitted to re-open the
+     * popup.
      *
-     * - The user has denied the app permission to use biometrics, in which case the app should
-     * open a prompt notifying the user that the biometric settings must be changed to use
-     * biometrics.
+     * - The user has denied the app permission to use biometrics, in which
+     * case the app should open a prompt notifying the user that the biometric
+     * settings must be changed to use biometrics.
      */
     access_granted: boolean;
     /**
-     * A unique device identifier that can be used to match the token to the device.
+     * A unique device identifier that can be used to match the token to the
+     * device.
      */
     device_id: string;
     /**
@@ -95,8 +101,8 @@ export interface Events {
      * One of:
      * - `updated` - If the token was successfully updated.
      * - `removed` - If the token was successfully removed.
-     * - `failed` - If biometric authentication failed, or the app doesn't have permission to
-     * use biometrics.
+     * - `failed` - If biometric authentication failed, or the app doesn't have
+     * permission to use biometrics.
      */
     status: BiometryTokenUpdateStatus;
   };
@@ -107,12 +113,13 @@ export interface Events {
    */
   clipboard_text_received: {
     /**
-     * Passed during the `web_app_read_text_from_clipboard` method invocation `req_id` value.
+     * Passed during the `web_app_read_text_from_clipboard` method invocation
+     * `req_id` value.
      */
     req_id: string;
     /**
-     * Data extracted from the clipboard. The returned value will have the type `string` only in
-     * the case, application has access to the clipboard.
+     * Data extracted from the clipboard. The returned value will have the type
+     * `string` only in the case, application has access to the clipboard.
      */
     data?: string | null;
   };
@@ -136,19 +143,19 @@ export interface Events {
     error?: string;
   };
   /**
-   * App entered or exited full screen mode.
-   * @since 8.0
+   * App entered or exited fullscreen mode.
+   * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/events#fullscreen-changed
    */
   fullscreen_changed: {
     /**
-     * Is application currently fullscreen.
+     * Is application currently in the fullscreen mode.
      */
     is_fullscreen: boolean;
-  }
+  };
   /**
-   * App failed to expand to full screen.
-   * @since 8.0
+   * App failed to expand to the fullscreen mode.
+   * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/events#fullscreen-changed
    */
   fullscreen_failed: {
@@ -156,7 +163,7 @@ export interface Events {
      * Full Screen mode status error.
      */
     error: FullScreenErrorStatus;
-  }
+  };
   /**
    * An invoice was closed.
    * @see https://docs.telegram-mini-apps.com/platform/events#invoice-closed
@@ -193,8 +200,8 @@ export interface Events {
    */
   popup_closed: {
     /**
-     * Identifier of the clicked button. In case, the popup was closed without clicking any button,
-     * this property will be omitted.
+     * Identifier of the clicked button. In case, the popup was closed without
+     * clicking any button, this property will be omitted.
      */
     button_id?: string;
   };
@@ -228,9 +235,11 @@ export interface Events {
    */
   secondary_button_pressed: never;
   /**
-   * The event which is usually sent by the Telegram web application. Its payload represents
-   * `<style/>` tag html content, a developer could use. The stylesheet described in the payload
-   * will help the developer to stylize the app scrollbar (but he is still able to do it himself).
+   * The event which is usually sent by the Telegram web application. Its
+   * payload represents
+   * `<style/>` tag html content, a developer could use. The stylesheet
+   * described in the payload will help the developer to stylize the app
+   * scrollbar (but he is still able to do it himself).
    * @see https://docs.telegram-mini-apps.com/platform/events#set-custom-style
    */
   set_custom_style: string;
@@ -247,7 +256,8 @@ export interface Events {
    */
   theme_changed: {
     /**
-     * Map where the key is a theme stylesheet key and value is  the corresponding color in
+     * Map where the key is a theme stylesheet key and value is  the
+     * corresponding color in
      * `#RRGGBB` format.
      */
     theme_params: {
@@ -290,8 +300,8 @@ export interface Events {
     };
   };
   /**
-   * Occurs whenever the viewport has been changed. For example, when the user started
-   * dragging the application or called the expansion method.
+   * Occurs whenever the viewport has been changed. For example, when the user
+   * started dragging the application or called the expansion method.
    * @see https://docs.telegram-mini-apps.com/platform/events#viewport-changed
    */
   viewport_changed: {
@@ -308,7 +318,8 @@ export interface Events {
      */
     is_expanded: boolean;
     /**
-     * Is the viewport current state stable and not going to change in the next moment.
+     * Is the viewport current state stable and not going to change in the next
+     * moment.
      */
     is_state_stable: boolean;
   };
