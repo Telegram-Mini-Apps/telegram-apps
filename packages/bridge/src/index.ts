@@ -3,9 +3,9 @@ export { isIframe } from '@/env/isIframe.js';
 export { isTMA } from '@/env/isTMA.js';
 export { mockTelegramEnv } from '@/env/mockTelegramEnv.js';
 
-export { defineEventHandlers } from '@/events/handling/defineEventHandlers.js';
-export { removeEventHandlers } from '@/events/handling/removeEventHandlers.js';
+export { defineEventHandlers } from '@/events/listening/defineEventHandlers.js';
 export { on } from '@/events/listening/on.js';
+export { removeEventHandlers } from '@/events/listening/removeEventHandlers.js';
 export { off } from '@/events/listening/off.js';
 export { subscribe } from '@/events/listening/subscribe.js';
 export type { EventListener, SubscribeListener } from '@/events/listening/types.js';
