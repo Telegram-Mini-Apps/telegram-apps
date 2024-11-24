@@ -1,6 +1,7 @@
 import type { InitData } from './init-data.js';
 import type { Platform } from './common.js';
 import type { ThemeParams } from './theme-params.js';
+import type { RGB } from './colors.js';
 
 /**
  * Telegram Mini Apps launch parameters.
@@ -12,8 +13,16 @@ export interface LaunchParams {
    */
   botInline?: boolean;
   /**
-   * Current launch init data. Can be missing in case, application was launched via
-   * KeyboardButton.
+   * TODO: This property is not documented by the Telegram team.
+   */
+  defaultColors?: Record<string, RGB>;
+  /**
+   * Is fullscreen mode enabled.
+   */
+  fullscreen?: boolean;
+  /**
+   * Current launch init data. Can be missing in case, application was launched
+   * via KeyboardButton.
    */
   initData?: InitData;
   /**
