@@ -53,48 +53,43 @@ Here is a simple usage example of the package:
 
 :::code-group
 
-```tsx [index.tsx]
+```ts [index.ts]
 import { createApp } from 'vue';
-import { init, backButton } from '@telegram-apps/sdk-vue';
-
-import { BackButton } from './BackButton.vue';
+import { init } from '@telegram-apps/sdk-vue';
+import App from './App.vue';
 
 // Initialize the package.
 init();
 
-const app = createApp(BackButton);
-
-// Mount the Back Button, so we will work with 
-// the actual component properties.
-backButton.mount();
+const app = createApp(App);
 
 app.mount('#root');
 ```
 
-```vue [BackButton.vue]
-/**
- * Component which controls the Back Button visibility.
- */
+```vue [PopupButton.vue]
 <script setup lang="ts">
-import { watchEffect, onMounted, onUnmounted } from 'vue';
-import { backButton, useSignal } from '@telegram-apps/sdk-vue';
+/**
+ * Component which opens native Telegram Popup.
+ */
+import { popup } from '@telegram-apps/sdk-vue'
 
-const isVisible = useSignal(backButton.isVisible);
+const props = defineProps<{ title: string, message: string }>()
 
-watchEffect(() => {
-  console.log('The button is', isVisible.value ? 'visible' : 'invisible');
-});
+function open() {
+  if (popup.isSupported()) {
+    popup.open(props);
+    return;
+  }
 
-onMounted(() => {
-  backButton.show();
-});
-
-onUnmounted(() => {
-  backButton.hide();
-});
+  // Open fallback HTML dialog...
+}
 </script>
 
-<template></template>
+<template>
+  <button aria-haspopup="dialog" @click="open">
+    Open popup
+  </button>
+</template>
 ```
 
 :::
@@ -106,41 +101,59 @@ onUnmounted(() => {
 A helper that allows you to use our [signals](./telegram-apps-signals.md) in the application. It
 returns a Vue ref which updates every time, our signal changes.
 
-```vue
-<script setup lang="ts">
-import { watchEffect, onMounted, onUnmounted } from 'vue';
-import { backButton, useSignal } from '@telegram-apps/sdk-vue';
+```ts [useMainButton.vue]
+/**
+ * Composable which encapsulates mainButton interaction logic
+ */
+import { mainButton, useSignal } from '@telegram-apps/sdk-vue';
 
-const isVisible = useSignal(backButton.isVisible);
+export function useMainButton() {
+  if (!mainButton.isMounted()) {
+    mainButton.mount();
+  }
 
-watchEffect(() => {
-  console.log('The button is', isVisible.value ? 'visible' : 'invisible');
-});
+  const isVisible = useSignal(mainButton.isVisible);
 
-onMounted(() => {
-  backButton.show();
-});
-
-onUnmounted(() => {
-  backButton.hide();
-});
-</script>
-
-<template></template>
+  return { isVisible };
+}
 ```
 
 ### `useLaunchParams`
 
-A function that returns the mini application's launch parameters.
+A function that returns the mini application's launch parameters. For Vue.js it's just `retrieveLaunchParams` function from `@telegram-apps/sdk`.
 
-```vue
-<script setup lang="ts">
+```ts [useInitApp.ts]
+/**
+ * Composable which encapsulates start param processing logic
+ */
 import { useLaunchParams } from '@telegram-apps/sdk-vue';
 
-const lp = useLaunchParams();
-</script>
+export function useInitApp() {
+  const lp = useLaunchParams();
 
-<template>
-  <div>Start param: {{ lp.startParam }}</div>
-</template>
+  if (lp.startParam) {
+    switch (lp.startParam) {
+      case 'navigate-to-page':
+        // evaluate navigation
+        return;
+    }
+  }
+}
+```
+
+## Vue Router integration
+
+Telegram application uses URL's hash to transmit launch parameters into TMA, see [that article](https://docs.telegram-mini-apps.com/platform/launch-parameters#transmission-method) for more details.
+
+Therefore, [Vue router](https://router.vuejs.org/) should use [HTML5 mode](https://router.vuejs.org/guide/essentials/history-mode.html#HTML5-Mode):
+
+```ts [router.ts]
+import { createRouter, createWebHistory } from 'vue-router'
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    //...
+  ],
+})
 ```
