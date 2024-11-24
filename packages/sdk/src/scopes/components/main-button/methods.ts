@@ -10,6 +10,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 import { postEvent } from '@/scopes/globals.js';
 import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
 import { createWrapMounted } from '@/scopes/toolkit/createWrapMounted.js';
+import { removeUndefined } from '@/utils/removeUndefined.js';
 
 import { internalState, isMounted, state } from './signals.js';
 import type { State } from './types.js';
@@ -100,12 +101,7 @@ export const offClick = wrapBasic(
 export const setParams = wrapMounted(
   'setParams',
   (updates: Partial<State>): void => {
-    internalState.set({
-      ...internalState(),
-      ...Object.fromEntries(
-        Object.entries(updates).filter(([, v]) => v !== undefined),
-      ),
-    });
+    internalState.set({ ...internalState(), ...removeUndefined(updates) });
     setStorageValue<StorageValue>(COMPONENT_NAME, internalState());
 
     // We should not commit changes until the payload is correct.
