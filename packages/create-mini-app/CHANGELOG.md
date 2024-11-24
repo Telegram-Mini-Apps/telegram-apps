@@ -1,5 +1,11 @@
 # @telegram-apps/create-mini-app
 
+## 1.1.1
+
+### Patch Changes
+
+- 11b8478: Bump repository libraries
+
 ## 1.1.0
 
 ### Minor Changes
