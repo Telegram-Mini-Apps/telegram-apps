@@ -1,5 +1,5 @@
 ---
-outline: [ 2, 3 ]
+outline: [2, 3]
 ---
 
 # @telegram-apps/sdk-svelte
@@ -54,7 +54,7 @@ Here is a simple usage example of the package:
 :::code-group
 
 ```svelte [index.svelte]
-<script>
+<script lang="ts">
   import { init, backButton } from '@telegram-apps/sdk-svelte';
 
   import { BackButton } from './BackButton.svelte';
@@ -63,16 +63,14 @@ Here is a simple usage example of the package:
   init();
 </script>
 
-<template>
-  <BackButton />
-</template>
+<BackButton />
 ```
 
 ```svelte [BackButton.svelte]
 /**
  * Component which controls the Back Button visibility.
  */
-<script>
+<script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { backButton, useSignal } from '@telegram-apps/sdk-svelte';
 
@@ -88,8 +86,6 @@ Here is a simple usage example of the package:
     backButton.hide();
   });
 </script>
-
-<template></template>
 ```
 
 :::
@@ -102,7 +98,7 @@ A helper that allows you to use our [signals](./telegram-apps-signals.md) in the
 returns a Svelte ref which updates every time, our signal changes.
 
 ```svelte
-<script>
+<script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { backButton, useSignal } from '@telegram-apps/sdk-svelte';
 
@@ -118,8 +114,6 @@ returns a Svelte ref which updates every time, our signal changes.
     backButton.hide();
   });
 </script>
-
-<template></template>
 ```
 
 ### `useLaunchParams`
@@ -127,13 +121,11 @@ returns a Svelte ref which updates every time, our signal changes.
 A function that returns the mini application's launch parameters.
 
 ```svelte
-<script>
+<script lang="ts">
   import { useLaunchParams } from '@telegram-apps/sdk-svelte';
 
   const lp = useLaunchParams();
 </script>
 
-<template>
-  <div>Start param: {{ lp.startParam }}</div>
-</template>
+<div>Start param: {lp.startParam}</div>
 ```
