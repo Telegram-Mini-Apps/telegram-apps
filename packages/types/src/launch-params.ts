@@ -1,7 +1,6 @@
 import type { InitData } from './init-data.js';
 import type { Platform } from './common.js';
 import type { ThemeParams } from './theme-params.js';
-import type { RGB } from './colors.js';
 
 /**
  * Telegram Mini Apps launch parameters.
@@ -15,7 +14,7 @@ export interface LaunchParams {
   /**
    * TODO: This property is not documented by the Telegram team.
    */
-  defaultColors?: Record<string, RGB>;
+  defaultColors?: ThemeParams;
   /**
    * Is fullscreen mode enabled.
    */
