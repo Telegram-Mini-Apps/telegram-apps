@@ -15,6 +15,8 @@ export const launchParams: TransformerGen<LaunchParams> = (optional) => {
 
   return searchParams<LaunchParams>({
     botInline: ['tgWebAppBotInline', boolOptional],
+    defaultColors: ['tgWebAppDefaultColors', themeParams(true)],
+    fullscreen: ['tgWebAppFullscreen', boolOptional],
     initData: ['tgWebAppData', initData(true)],
     initDataRaw: ['tgWebAppData', stringOptional],
     platform: ['tgWebAppPlatform', string],
@@ -26,11 +28,19 @@ export const launchParams: TransformerGen<LaunchParams> = (optional) => {
 };
 
 /**
- * Serializes launch parameters to representation sent from the Telegram application.
+ * Serializes launch parameters to representation sent from the Telegram
+ * application.
  */
 // #__NO_SIDE_EFFECTS__
 export function serializeLaunchParams(lp: LaunchParams): string {
-  const { initDataRaw, startParam, showSettings, botInline } = lp;
+  const {
+    initDataRaw,
+    startParam,
+    showSettings,
+    botInline,
+    fullscreen,
+    defaultColors,
+  } = lp;
 
   const params = new URLSearchParams();
 
@@ -41,6 +51,8 @@ export function serializeLaunchParams(lp: LaunchParams): string {
   startParam && params.set('tgWebAppStartParam', startParam);
   typeof showSettings === 'boolean' && params.set('tgWebAppShowSettings', showSettings ? '1' : '0');
   typeof botInline === 'boolean' && params.set('tgWebAppBotInline', botInline ? '1' : '0');
+  typeof fullscreen === 'boolean' && params.set('tgWebAppFullscreen', fullscreen ? '1' : '0');
+  defaultColors && params.set('tgWebAppDefaultColors', serializeThemeParams(defaultColors))
 
   return params.toString();
 }
