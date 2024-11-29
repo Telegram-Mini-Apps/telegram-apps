@@ -1,6 +1,7 @@
 export interface State {
   height: number;
   isExpanded: boolean;
+  isFullscreen: boolean;
   stableHeight: number;
   width: number;
 }
