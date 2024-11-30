@@ -1,52 +1,51 @@
 # Viewport
 
-The term **Viewport** describes the **visible part** of a Mini App. Since the Mini App can be
-displayed differently on various platforms, using viewport information is allowed to ensure the
-correct display of the Mini App.
+The term **Viewport** refers to the **visible portion** of a Mini App. Since Mini Apps can appear
+differently across various platforms, viewport information is used to ensure the Mini App is
+displayed correctly.
 
-Viewport data is described through four properties:
+Viewport data is defined by the following properties:
 
-- The `width` and `height` properties define the dimensions of the visible part of the Mini App.
-- The `stability` property is a flag that equals `true` whenever the Mini App is considered as not
-  going to change its size in the next moment.
-- The `expansion` property is also a flag that equals `true` whenever the Mini App has reached its
-  maximum height.
-
-## Views
-
-Applications can be opened in various ways, and each method might present a different visual
-representation of the viewport.
-
-For example, an application opened via the menu button will display an input field in the lower part
-of the interface. At the same time, opening an application using a direct link will result in the
-user not seeing any additional elements in the interface.
-
-<img
-  src="/components/viewport/views.png"
-  srcset="/components/viewport/views.png, /components/viewport/views@2x.png 2x"
-  class="guides-image"
-/>
+- **`width`** and **`height`**: Specify the dimensions of the visible area of the Mini App.
+- **`stability`**: A boolean flag that is `true` when the Mini App's size is not expected to change
+  imminently.
+- **`expansion`**: A boolean flag that is `true` when the Mini App has reached its maximum height.
+- **`fullscreen`**: A boolean flag indicating whether the application is displayed in fullscreen
+  mode.
 
 ## Expanding
 
-In case, application is opened in mobile version of Telegram (both Android and iOS), it will be
-displayed in native component, called `BottomSheet`. It represents draggable from bottom to top
-block, which could be expanded to the entire screen size. To do this, user could drag it to the
-upper bound of the screen, but developer is able to do it programmatically too.
+When an application is opened in the mobile version of Telegram (on both Android and iOS), it is
+displayed within a native component called **`BottomSheet`**. This is a draggable block that appears
+at the bottom of the screen and can be expanded to cover the entire screen. Users can expand it by
+dragging it to the top edge of the screen, but developers can also trigger this programmatically.
 
-By default, application is minimized (not expanded), it has minimal allowed height. To expand
-application via code, developer should
-call [web_app_expand](methods.md#web-app-expand) method.
+By default, the application opens in a minimized state with the minimum allowed height. To expand
+the application via code, developers can call the [**`web_app_expand`**](methods.md#web-app-expand)
+method.
 
-<img
-  src="/components/viewport/expansion.png"
-  srcset="/components/viewport/expansion.png, /components/viewport/expansion@2x.png 2x"
-  class="guides-image"
+<img  
+src="/components/viewport/expansion.png"  
+srcset="/components/viewport/expansion.png, /components/viewport/expansion@2x.png 2x"  
+class="guides-image"  
 />
 
-During the process of dragging, viewport is considered not stable. For developer, it means, that he
-should not probably do any resizes or something like that, as long as viewport dimensions could
-change in the next moment.
+While the **`BottomSheet`** is being dragged, the viewport is considered unstable. For developers,
+this means avoiding any resizing actions or similar operations, as viewport dimensions may change
+momentarily.
 
-Other platforms open Mini App already maximized in medium-size window and call
-of [web_app_expand](methods.md#web-app-expand) method will have no effect.
+On other platforms, Mini Apps open maximized by default within a medium-sized window. In these
+cases, calling the [web_app_expand](methods.md#web-app-expand) method will have no effect.
+
+## Fullscreen
+
+![Full screen](/functionality/full-screen.png)
+
+Mini apps can be launched in **fullscreen mode**, which expands the application to cover the entire
+device screen, removing both the top and bottom bars of Telegram.
+
+This mode is particularly suitable for games and media-focused applications.
+
+To control fullscreen mode, Telegram Mini Apps provides such methods
+as [web_app_request_fullscreen](methods.md#web_app_request_fullscreen)
+and [web_app_exit_fullscreen](methods.md#web_app_exit_fullscreen).
