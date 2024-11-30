@@ -211,7 +211,7 @@ export const mount = wrapBasic(
       on(INFO_RECEIVED_EVENT, onBiometryInfoReceived);
       setState(result);
     },
-    { isMounted, mountError, isMounting },
+    { isMounted, error: mountError, isMounting },
   ),
 );
 

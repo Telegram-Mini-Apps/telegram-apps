@@ -36,7 +36,7 @@ export const mountError = signal<Error | undefined>(undefined);
 /**
  * Signal containing the mount process promise.
  */
-export const mountPromise = signal<CancelablePromise<void>>();
+export const mountPromise = signal<CancelablePromise<State>>();
 
 //#endregion
 
