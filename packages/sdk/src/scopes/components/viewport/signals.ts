@@ -19,24 +19,24 @@ export const state = signal<State>({
 //#region Mount.
 
 /**
- * True if the component is currently mounted.
+ * Signal indicating if the component is currently mounted.
  */
 export const isMounted = signal(false);
 
 /**
- * True if the component is currently mounting.
+ * Signal indicating if the component is currently mounting.
  */
 export const isMounting = computed(() => !!mountPromise());
 
 /**
- * Error occurred while mounting the component.
+ * Signal containing the error occurred during mount.
  */
 export const mountError = signal<Error | undefined>(undefined);
 
 /**
  * Signal containing the mount process promise.
  */
-export const mountPromise = signal<CancelablePromise<State>>();
+export const mountPromise = signal<CancelablePromise<State> | undefined>();
 
 //#endregion
 
