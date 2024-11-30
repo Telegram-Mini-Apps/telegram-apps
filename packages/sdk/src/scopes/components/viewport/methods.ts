@@ -11,11 +11,15 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 
-import { postEvent } from '@/scopes/globals.js';
+import { postEvent, request } from '@/scopes/globals.js';
 import { createMountFn } from '@/scopes/createMountFn.js';
 import { createWrapMounted } from '@/scopes/toolkit/createWrapMounted.js';
 import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
 import { throwCssVarsBound } from '@/scopes/toolkit/throwCssVarsBound.js';
+import { ERR_FULLSCREEN_FAILED } from '@/errors.js';
+import { removeUndefined } from '@/utils/removeUndefined.js';
+import { createWrapComplete } from '@/scopes/toolkit/createWrapComplete.js';
+import { signalifyAsyncFn } from '@/scopes/signalifyAsyncFn.js';
 
 import { requestViewport } from './requestViewport.js';
 import {
@@ -23,24 +27,24 @@ import {
   mountError,
   isMounted,
   isCssVarsBound,
-  isMounting, mountPromise,
+  mountPromise,
+  changeFullscreenPromise,
+  changeFullscreenError,
+  isFullscreen,
 } from './signals.js';
 import type { GetCSSVarNameFn } from './types.js';
 import type { State } from './types.js';
-import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
-import { ERR_ALREADY_MOUNTING } from '@/errors.js';
-import { batch } from '@telegram-apps/signals';
-import { removeUndefined } from '@/utils/removeUndefined.js';
 
 type StorageValue = State;
 
 const COMPONENT_NAME = 'viewport';
-const REQUEST_FS_METHOD_NAME = 'web_app_request_fullscreen';
-const EXIT_FS_METHOD_NAME = 'web_app_exit_fullscreen';
+const FS_REQUEST_METHOD_NAME = 'web_app_request_fullscreen';
+const FS_FAILED_EVENT_NAME = 'fullscreen_failed';
+const FS_CHANGED_EVENT_NAME = 'fullscreen_changed';
+
 const wrapBasic = createWrapBasic(COMPONENT_NAME);
 const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
-// const wrapFSSupported = createWrapSupported(COMPONENT_NAME,
-// REQUEST_FS_METHOD_NAME)
+const wrapFSComplete = createWrapComplete(COMPONENT_NAME, isMounted, FS_REQUEST_METHOD_NAME);
 
 /**
  * Creates CSS variables connected with the current viewport.
@@ -115,39 +119,6 @@ export const expand = wrapBasic('expand', (): void => {
   postEvent('web_app_expand');
 });
 
-function retrieveState(options?: AsyncOptions): CancelablePromise<State> {
-  // Try to restore the state using the storage.
-  const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-  if (s) {
-    return CancelablePromise.resolve(s);
-  }
-
-  // If the platform has a stable viewport, it means we could use the
-  // window global object properties.
-  const lp = retrieveLaunchParams();
-  const isFullscreen = !!lp.fullscreen;
-  if (['macos', 'tdesktop', 'unigram', 'webk', 'weba', 'web'].includes(lp.platform)) {
-    const w = window;
-    return CancelablePromise.resolve({
-      isExpanded: true,
-      isFullscreen,
-      height: w.innerHeight,
-      width: w.innerWidth,
-      stableHeight: w.innerHeight,
-    });
-  }
-
-  // We were unable to retrieve data locally. In this case, we are
-  // sending a request returning the viewport information.
-  return requestViewport(options).then(data => ({
-    height: data.height,
-    isExpanded: data.isExpanded,
-    isFullscreen,
-    stableHeight: data.isStable ? data.height : state().stableHeight,
-    width: data.width,
-  }));
-}
-
 /**
  * Mounts the Viewport component.
  * @throws {TypedError} ERR_UNKNOWN_ENV
@@ -158,54 +129,49 @@ function retrieveState(options?: AsyncOptions): CancelablePromise<State> {
  *   await mount();
  * }
  */
-export const mount = wrapBasic(
-  'mount',
-  (options?: AsyncOptions): CancelablePromise<State> => {
-    return CancelablePromise.withFn<State>(async abortSignal => {
-      // We prevent calling several concurrent mount processes. We would
-      // allow it but only in case, the current function wouldn't
-      // accept any options.
-      if (isMounting()) {
-        throw new TypedError(
-          ERR_ALREADY_MOUNTING,
-          `The ${COMPONENT_NAME} component is already mounting`,
-        );
-      }
+export const mount = wrapBasic('mount', createMountFn(
+  COMPONENT_NAME,
+  (options) => {
+    // Try to restore the state using the storage.
+    const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
+    if (s) {
+      return s;
+    }
 
-      // The component is already mounted, return its state.
-      if (isMounted()) {
-        return state();
-      }
+    // If the platform has a stable viewport, it means we could use the
+    // window global object properties.
+    const lp = retrieveLaunchParams();
+    const isFullscreen = !!lp.fullscreen;
+    if (['macos', 'tdesktop', 'unigram', 'webk', 'weba', 'web'].includes(lp.platform)) {
+      const w = window;
+      return {
+        isExpanded: true,
+        isFullscreen,
+        height: w.innerHeight,
+        width: w.innerWidth,
+        stableHeight: w.innerHeight,
+      };
+    }
 
-      // Start mounting process.
-      const promise = retrieveState({ abortSignal });
-      mountPromise.set(promise);
-      let result: [true, State] | [false, Error];
-      try {
-        result = [true, await promise];
-      } catch (e) {
-        result = [false, e as Error];
-      }
-
-      // Actualize all related signals state.
-      batch(() => {
-        mountPromise.set(undefined);
-        if (result[0]) {
-          state.set(result[1]);
-          on('viewport_changed', onViewportChanged);
-          on('fullscreen_changed', onFullscreenChanged);
-        } else {
-          mountError.set(result[1]);
-        }
-      });
-
-      if (!result[0]) {
-        throw result[1];
-      }
-      return result[1];
-    }, options);
+    // We were unable to retrieve data locally. In this case, we are
+    // sending a request returning the viewport information.
+    return requestViewport(options).then(data => ({
+      height: data.height,
+      isExpanded: data.isExpanded,
+      isFullscreen,
+      stableHeight: data.isStable ? data.height : state().stableHeight,
+      width: data.width,
+    }));
   },
-);
+  () => {
+    on('viewport_changed', onViewportChanged);
+    on(FS_CHANGED_EVENT_NAME, onFullscreenChanged);
+  },
+  isMounted,
+  state,
+  mountPromise,
+  mountError,
+));
 
 const onViewportChanged: EventListener<'viewport_changed'> = (data) => {
   setState({
@@ -219,6 +185,76 @@ const onViewportChanged: EventListener<'viewport_changed'> = (data) => {
 const onFullscreenChanged: EventListener<'fullscreen_changed'> = (data) => {
   setState({ isFullscreen: data.is_fullscreen });
 };
+
+function fsChangeGen(
+  method: string,
+  requestMethod: 'web_app_exit_fullscreen' | 'web_app_request_fullscreen',
+) {
+  return wrapFSComplete(method, signalifyAsyncFn(
+    (options?: AsyncOptions): CancelablePromise<void> => {
+      return request(requestMethod, [FS_CHANGED_EVENT_NAME, FS_FAILED_EVENT_NAME], options)
+        .then(result => {
+          if ('error' in result) {
+            if (result.error === 'ALREADY_FULLSCREEN') {
+              return true;
+            }
+            throw new TypedError(ERR_FULLSCREEN_FAILED, 'Fullscreen request failed', result.error);
+          }
+          return result.is_fullscreen;
+        })
+        .then(result => {
+          isFullscreen() !== result && setState({ isFullscreen: result });
+        });
+    },
+    () => new TypedError('abc'),
+    changeFullscreenPromise,
+    changeFullscreenError,
+  ));
+}
+
+/**
+ * Requests fullscreen mode for the mini application.
+ * @since Mini Apps v8.0
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_MOUNTED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_FULLSCREEN_FAILED
+ * @example Using `isAvailable()`
+ * if (requestFullscreen.isAvailable() && !isChangingFullscreen()) {
+ *   await requestFullscreen();
+ * }
+ * @example Using `ifAvailable()`
+ * if (!isChangingFullscreen()) {
+ *   await requestFullscreen.ifAvailable();
+ * }
+ */
+export const requestFullscreen = fsChangeGen(
+  'requestFullscreen',
+  FS_REQUEST_METHOD_NAME,
+);
+
+/**
+ * Exits mini application fullscreen mode.
+ * @since Mini Apps v8.0
+ * @throws {TypedError} ERR_UNKNOWN_ENV
+ * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {TypedError} ERR_NOT_MOUNTED
+ * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {TypedError} ERR_FULLSCREEN_FAILED
+ * @example Using `isAvailable()`
+ * if (exitFullscreen.isAvailable() && !isChangingFullscreen()) {
+ *   await exitFullscreen();
+ * }
+ * @example Using `ifAvailable()`
+ * if (!isChangingFullscreen()) {
+ *   await exitFullscreen.ifAvailable();
+ * }
+ */
+export const exitFullscreen = fsChangeGen(
+  'exitFullscreen',
+  'web_app_exit_fullscreen',
+);
 
 function setState(s: Partial<State>) {
   const { height, stableHeight, width } = s;

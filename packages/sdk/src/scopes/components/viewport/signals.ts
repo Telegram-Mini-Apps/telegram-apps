@@ -117,20 +117,20 @@ export const width = createStateComputed('width');
 export const isFullscreen = createStateComputed('isFullscreen');
 
 /**
- * Signal containing fullscreen request promise.
+ * Signal containing fullscreen request or exit promise.
  */
-export const requestFullscreenPromise = signal<CancelablePromise<void>>();
+export const changeFullscreenPromise = signal<CancelablePromise<void>>();
 
 /**
- * Signal indicating if the fullscreen mode is currently being requested.
+ * Signal indicating if the fullscreen mode request is currently in progress.
  */
-export const isRequestingFullscreen = computed(() => {
-  return !!requestFullscreenPromise();
+export const isChangingFullscreen = computed(() => {
+  return !!changeFullscreenPromise();
 });
 
 /**
- * Signal containing the latest fullscreen request error.
+ * Signal containing an error received during the last fullscreen mode request.
  */
-export const requestFullscreenError = signal<void>();
+export const changeFullscreenError = signal<Error | undefined>();
 
 //#endregion

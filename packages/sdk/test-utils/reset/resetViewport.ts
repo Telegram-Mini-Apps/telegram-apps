@@ -11,6 +11,11 @@ import {
   height,
   stableHeight,
   isStable,
+  isChangingFullscreen,
+  isFullscreen,
+  changeFullscreenError,
+  changeFullscreenPromise,
+  mountPromise,
 } from '@/scopes/components/viewport/signals.js';
 
 export function resetViewport() {
@@ -25,5 +30,10 @@ export function resetViewport() {
     height,
     stableHeight,
     isStable,
+    isChangingFullscreen,
+    isFullscreen,
+    changeFullscreenError,
+    changeFullscreenPromise,
+    mountPromise,
   ].forEach(resetSignal);
 }
