@@ -1,5 +1,19 @@
 # @telegram-apps/sdk
 
+## 2.7.0
+
+### Minor Changes
+
+- 1d3a1e9: Enhance the `viewport` with new fullscreen functionality.
+
+### Patch Changes
+
+- Updated dependencies [a037cc9]
+- Updated dependencies [7b2f160]
+  - @telegram-apps/bridge@1.5.0
+  - @telegram-apps/transformers@1.1.0
+  - @telegram-apps/navigation@1.0.6
+
 ## 2.6.2
 
 ### Patch Changes

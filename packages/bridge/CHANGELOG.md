@@ -1,5 +1,20 @@
 # @telegram-apps/bridge
 
+## 1.5.0
+
+### Minor Changes
+
+- a037cc9: Remove `viewport_changed` event generation on window resize as it is currently supported by the most of Telegram applications.
+
+  Implement `fullscreen_changed`, `fullscreen_failed`, `web_app_request_fullscreen` and `web_app_exit_fullscreen` events and methods.
+
+### Patch Changes
+
+- Updated dependencies [6d5c74d]
+- Updated dependencies [7b2f160]
+  - @telegram-apps/types@1.1.0
+  - @telegram-apps/transformers@1.1.0
+
 ## 1.4.0
 
 ### Minor Changes
