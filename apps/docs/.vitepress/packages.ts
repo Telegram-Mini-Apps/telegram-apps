@@ -1,6 +1,6 @@
-import type { DefaultTheme } from "vitepress";
+import type { DefaultTheme } from 'vitepress';
 
-import { sectionGen } from "./utils";
+import { sectionGen } from './utils';
 
 type Sidebar = DefaultTheme.Sidebar;
 type NavItemWithLink = DefaultTheme.NavItemWithLink;
@@ -8,7 +8,7 @@ type NavItemWithLink = DefaultTheme.NavItemWithLink;
 function scope(path: string, title?: string): [string, string] {
   title ||=
     path[0].toUpperCase() +
-    path.slice(1).replace(/-./g, (m) => " " + m[1].toUpperCase());
+    path.slice(1).replace(/-./g, (m) => ' ' + m[1].toUpperCase());
 
   return [title, path];
 }
@@ -22,13 +22,13 @@ function fromEntries(entries: [string, any][]): Record<string, any> {
   return result;
 }
 
-export const packagesLinksGenerator = (prefix: string = "") => {
-  const BASE = prefix + "/packages";
+export const packagesLinksGenerator = (prefix: string = '') => {
+  const BASE = prefix + '/packages';
 
   const section = sectionGen(BASE);
 
   const packagesNavItem: NavItemWithLink = {
-    text: "Packages",
+    text: 'Packages',
     link: `${BASE}/telegram-apps-create-mini-app`,
   };
 
@@ -37,7 +37,7 @@ export const packagesLinksGenerator = (prefix: string = "") => {
       section('CLI', {
         '@telegram-apps/create-mini-app': 'telegram-apps-create-mini-app',
         '@telegram-apps/mate': ['telegram-apps-mate', {
-          'Hosting': 'hosting'
+          'Hosting': 'hosting',
         }],
       }),
       section('TypeScript', {
@@ -94,7 +94,6 @@ export const packagesLinksGenerator = (prefix: string = "") => {
                 scope('biometry'),
                 scope('closing-behavior'),
                 scope('cloud-storage'),
-                scope('full-screen'),
                 scope('haptic-feedback'),
                 scope('init-data'),
                 scope('invoice'),
@@ -118,14 +117,14 @@ export const packagesLinksGenerator = (prefix: string = "") => {
         }],
         '@telegram-apps/sdk-react': [{
           url: 'telegram-apps-sdk-react',
-          page: false
+          page: false,
         }, {
           '@1.x': '1-x',
           '@2.x': '2-x',
         }],
         '@telegram-apps/sdk-solid': [{
           url: 'telegram-apps-sdk-solid',
-          page: false
+          page: false,
         }, {
           '@1.x': '1-x',
           '@2.x': '2-x',
