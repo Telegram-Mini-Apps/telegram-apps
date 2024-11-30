@@ -31,8 +31,8 @@ interface MessageJSON {
 Then, lets imagine how we could process an event from Telegram application:
 
 ```typescript
-window.addEventListener('message', ({data}) => {
-  const {eventType, eventData} = JSON.parse(data);
+window.addEventListener('message', ({ data }) => {
+  const { eventType, eventData } = JSON.parse(data);
   console.log(eventType, eventData);
 });
 ```
@@ -84,7 +84,7 @@ package, which greatly eases integration.
 Here's how to use it:
 
 ```ts
-import {on} from '@telegram-apps/sdk';
+import { on } from '@telegram-apps/sdk';
 
 // Start listening to "viewport_changed" event. Returned value
 // is a function, which removes this event listener.
@@ -176,9 +176,7 @@ Custom method invocation completed.
 
 Available since: **v8.0**
 
-Occurs whenever the Mini App enters or exits fullscreen mode.
-eventHandler receives no parameters.
-The current fullscreen state can be checked via isFullscreen.
+Occurs whenever the mini app enters or exits the fullscreen mode.
 
 | Field         | Type      | Description                          |
 |---------------|-----------|--------------------------------------|
@@ -188,18 +186,38 @@ The current fullscreen state can be checked via isFullscreen.
 
 Available since: **v8.0**
 
-Occurs whenever the Mini App enters or exits fullscreen mode.
-eventHandler receives no parameters.
-The current fullscreen state can be checked via isFullscreen.
+Occurs whenever the mini app enters or exits the fullscreen mode.
 
-| Field | Type                    | Description                    |
-|-------|-------------------------|--------------------------------|
-| error | `FullScreenErrorStatus` | Full Screen mode status error. |
+<table>
+  <thead>
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
 
-**FullScreenErrorStatus:**
+  <tr>
+    <td>error</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      Fullscreen mode status error.
+      <ul>
+        <li>
+          <code>UNSUPPORTED</code>, fullscreen mode is not supported on this device or platform
+        </li>
+        <li>
+          <code>ALREADY_FULLSCREEN</code>, the Mini App is already in fullscreen mode
+        </li>
+      </ul>
+    </td>
+  </tr>
 
-- **UNSUPPORTED** – Fullscreen mode is not supported on this device or platform.
-- **ALREADY_FULLSCREEN** – The Mini App is already in fullscreen mode.
+  </tbody>
+</table>
 
 ### `invoice_closed`
 
@@ -207,13 +225,11 @@ An invoice was closed.
 
 <table>
   <thead>
-
   <tr>
     <th>Field</th>
     <th>Type</th>
     <th>Description</th>
   </tr>
-
   </thead>
   <tbody>
 
@@ -221,7 +237,7 @@ An invoice was closed.
     <td>slug</td>
     <td>
       <code>string</code>
-   </td>
+    </td>
     <td>
       Passed during the&nbsp;
       <a href="./methods#web-app-open-invoice">
