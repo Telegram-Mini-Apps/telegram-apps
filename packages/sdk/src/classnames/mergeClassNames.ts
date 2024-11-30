@@ -1,19 +1,14 @@
 import { isRecord } from '@telegram-apps/transformers';
+import type {
+  UnionRequiredKeys,
+  UnionOptionalKeys,
+} from '@telegram-apps/toolkit';
 
 import { classNames } from './classNames.js';
 
-type UnionStringKeys<U> = U extends U
-  ? { [K in keyof U]-?: U[K] extends string | undefined ? K : never }[keyof U]
-  : never;
-
-type UnionRequiredKeys<U> = U extends U
-  ? { [K in UnionStringKeys<U>]: ({} extends Pick<U, K> ? never : K) }[UnionStringKeys<U>]
-  : never;
-
-type UnionOptionalKeys<U> = Exclude<UnionStringKeys<U>, UnionRequiredKeys<U>>;
-
 export type MergeClassNames<Tuple extends any[]> =
-// Removes all types from union that will be ignored by the mergeClassNames function.
+// Removes all types from union that will be ignored by the mergeClassNames
+// function.
   Exclude<Tuple[number], number | string | null | undefined | any[] | boolean> extends infer Union
     ?
     & { [K in UnionRequiredKeys<Union>]: string; }
@@ -23,8 +18,8 @@ export type MergeClassNames<Tuple extends any[]> =
 /**
  * Merges two sets of classnames.
  *
- * The function expects to pass an array of objects with values that could be passed to
- * the `classNames` function.
+ * The function expects to pass an array of objects with values that could be
+ * passed to the `classNames` function.
  * @returns An object with keys from all objects with merged values.
  * @see classNames
  */

@@ -1,11 +1,12 @@
 import { computed, signal } from '@telegram-apps/signals';
+import type { CancelablePromise } from '@telegram-apps/toolkit';
 
 import type { State } from './types.js';
 
 /**
  * Complete biometry manager state.
  */
-export const state = signal<State | undefined>();
+export const state = signal<State>({ available: false});
 
 /**
  * True if the manager is currently authenticating.
@@ -17,20 +18,29 @@ export const isAuthenticating = signal<boolean>(false);
  */
 export const isRequestingAccess = signal<boolean>(false);
 
+//#region Mount.
+
 /**
- * True if the component is currently mounted.
+ * Signal indicating if the component is currently mounted.
  */
 export const isMounted = signal(false);
 
 /**
- * True if the component is currently mounting.
+ * Signal indicating if the component is currently mounting.
  */
-export const isMounting = signal<boolean>(false);
+export const isMounting = computed(() => !!mountPromise());
 
 /**
- * Error occurred while mounting the component.
+ * Signal containing the error occurred during mount.
  */
-export const mountError = signal<Error | undefined>(undefined);
+export const mountError = signal<Error | undefined>();
+
+/**
+ * Signal containing the mount process promise.
+ */
+export const mountPromise = signal<CancelablePromise<State> | undefined>();
+
+//#endregion
 
 /**
  * Signal indicating biometry is available.

@@ -21,11 +21,11 @@ import { ERR_ALREADY_REQUESTING, ERR_NOT_AVAILABLE } from '@/errors.js';
 
 import {
   state,
-  mountError,
   isMounted,
   isRequestingAccess,
   isAuthenticating,
-  isMounting,
+  mountError,
+  mountPromise,
 } from './signals.js';
 import { requestBiometry } from './requestBiometry.js';
 import { eventToState } from './eventToState.js';
@@ -199,21 +199,21 @@ export const requestAccess = wrapComplete(
  *   await mount();
  * }
  */
-export const mount = wrapBasic(
-  'mount',
-  createMountFn<State>(
-    COMPONENT_NAME,
-    (options) => {
-      const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-      return s ? s : requestBiometry(options);
-    },
-    result => {
-      on(INFO_RECEIVED_EVENT, onBiometryInfoReceived);
-      setState(result);
-    },
-    { isMounted, mountError, isMounting },
-  ),
-);
+export const mount = wrapBasic('mount', createMountFn<State>(
+  COMPONENT_NAME,
+  (options) => {
+    const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
+    return s ? s : requestBiometry(options);
+  },
+  result => {
+    on(INFO_RECEIVED_EVENT, onBiometryInfoReceived);
+    setState(result);
+  },
+  isMounted,
+  state,
+  mountPromise,
+  mountError,
+));
 
 const onBiometryInfoReceived: EventListener<'biometry_info_received'> = e => {
   setState(eventToState(e));

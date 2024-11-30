@@ -115,7 +115,10 @@ describe.each<[
       method: 'web_app_setup_main_button',
       parameter: 'has_shine_effect',
     },
-  ]]
+  ]],
+  ['8.0', [
+    'web_app_request_fullscreen',
+  ]],
 ])('%s', (version, methods) => {
   const higher = increaseVersion(version, 1);
   const lower = increaseVersion(version, -1);

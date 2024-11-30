@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@telegram-apps/transformers": "workspace:^",
+    "@telegram-apps/toolkit": "workspace:^",
     "@telegram-apps/bridge": "workspace:^",
     "@telegram-apps/navigation": "workspace:^",
     "@telegram-apps/signals": "workspace:^"

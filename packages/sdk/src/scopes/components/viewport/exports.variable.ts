@@ -1,2 +1,25 @@
-export * from './signals.js';
-export * from './methods.js';
+export {
+  changeFullscreenError,
+  changeFullscreenPromise,
+  height,
+  isMounted,
+  isStable,
+  isChangingFullscreen,
+  isMounting,
+  isExpanded,
+  isFullscreen,
+  isCssVarsBound,
+  mountPromise,
+  mountError,
+  state,
+  stableHeight,
+  width,
+} from './signals.js';
+export {
+  bindCssVars,
+  exitFullscreen,
+  expand,
+  mount,
+  requestFullscreen,
+  unmount,
+} from './methods.js';

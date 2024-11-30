@@ -172,19 +172,64 @@ Custom method invocation completed.
 | result | `unknown` | _Optional_. Method invocation successful result. |
 | error  | `string`  | _Optional_. Method invocation error code.        |
 
+### `fullscreen_changed`
+
+Available since: **v8.0**
+
+Occurs whenever the mini app enters or exits the fullscreen mode.
+
+| Field         | Type      | Description                          |
+|---------------|-----------|--------------------------------------|
+| is_fullscreen | `boolean` | Is application currently fullscreen. |
+
+### `fullscreen_failed`
+
+Available since: **v8.0**
+
+Occurs whenever the mini app enters or exits the fullscreen mode.
+
+<table>
+  <thead>
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <tr>
+    <td>error</td>
+    <td>
+      <code>string</code>
+    </td>
+    <td>
+      Fullscreen mode status error.
+      <ul>
+        <li>
+          <code>UNSUPPORTED</code>, fullscreen mode is not supported on this device or platform
+        </li>
+        <li>
+          <code>ALREADY_FULLSCREEN</code>, the Mini App is already in fullscreen mode
+        </li>
+      </ul>
+    </td>
+  </tr>
+
+  </tbody>
+</table>
+
 ### `invoice_closed`
 
 An invoice was closed.
 
 <table>
   <thead>
-
   <tr>
     <th>Field</th>
     <th>Type</th>
     <th>Description</th>
   </tr>
-
   </thead>
   <tbody>
 
@@ -192,7 +237,7 @@ An invoice was closed.
     <td>slug</td>
     <td>
       <code>string</code>
-   </td>
+    </td>
     <td>
       Passed during the&nbsp;
       <a href="./methods#web-app-open-invoice">
@@ -239,8 +284,8 @@ Available since: **v6.9**
 
 Application received phone access request status.
 
-| Field  | Type     | Description                             |
-|--------|----------|-----------------------------------------|
+| Field  | Type     | Description                                        |
+|--------|----------|----------------------------------------------------|
 | status | `string` | Request status. Can only be `sent` or `cancelled`. |
 
 ### `popup_closed`

@@ -84,6 +84,31 @@ describe('launchParams', () => {
       () => launchParams()(toSearchParams({ ...baseLaunchParams, tgWebAppThemeParams: '' })),
     ).toThrow();
   });
+
+  it('should create "defaultColors" property from the "tgWebAppDefaultColors" as theme params', () => {
+    expect(
+      launchParams()(toSearchParams({
+        ...baseLaunchParams,
+        tgWebAppDefaultColors: JSON.stringify({ bg_color: '#000' }),
+      })),
+    ).toMatchObject({
+      defaultColors: {
+        bgColor: '#000000',
+      },
+    });
+    expect(
+      () => launchParams()(toSearchParams({ ...baseLaunchParams, tgWebAppDefaultColors: '' })),
+    ).toThrow();
+  });
+
+  it('should create "fullscreen" property from the "tgWebAppFullscreen" as boolean', () => {
+    expect(
+      launchParams()(toSearchParams({ ...baseLaunchParams, tgWebAppFullscreen: false })),
+    ).toMatchObject({ fullscreen: false });
+    expect(
+      () => launchParams()(toSearchParams({ ...baseLaunchParams, tgWebAppFullscreen: {} })),
+    ).toThrow();
+  });
 });
 
 describe('serializeLaunchParams', () => {
@@ -131,15 +156,35 @@ describe('serializeLaunchParams', () => {
     })).toBe('tgWebAppPlatform=android&tgWebAppThemeParams=%7B%7D&tgWebAppVersion=7.0&tgWebAppBotInline=1');
   });
 
+  it('should append tgWebAppFullscreen = fullscreen, if specified', () => {
+    expect(serializeLaunchParams({
+      platform: 'android',
+      themeParams: {},
+      version: '7.0',
+      fullscreen: true,
+    })).toBe('tgWebAppPlatform=android&tgWebAppThemeParams=%7B%7D&tgWebAppVersion=7.0&tgWebAppFullscreen=1');
+  });
+
+  it('should append tgWebAppDefaultColors = defaultColors, if specified', () => {
+    expect(serializeLaunchParams({
+      platform: 'android',
+      themeParams: {},
+      version: '7.0',
+      defaultColors: {},
+    })).toBe('tgWebAppPlatform=android&tgWebAppThemeParams=%7B%7D&tgWebAppVersion=7.0&tgWebAppDefaultColors=%7B%7D');
+  });
+
   it('should append all optional properties', () => {
     expect(serializeLaunchParams({
       platform: 'android',
       themeParams: {},
+      fullscreen: true,
+      defaultColors: {},
       version: '7.0',
       initDataRaw: 'init-data-raw',
       startParam: 'start-param',
       showSettings: true,
       botInline: true,
-    })).toBe('tgWebAppPlatform=android&tgWebAppThemeParams=%7B%7D&tgWebAppVersion=7.0&tgWebAppData=init-data-raw&tgWebAppStartParam=start-param&tgWebAppShowSettings=1&tgWebAppBotInline=1');
+    })).toBe('tgWebAppPlatform=android&tgWebAppThemeParams=%7B%7D&tgWebAppVersion=7.0&tgWebAppData=init-data-raw&tgWebAppStartParam=start-param&tgWebAppShowSettings=1&tgWebAppBotInline=1&tgWebAppFullscreen=1&tgWebAppDefaultColors=%7B%7D');
   });
 });

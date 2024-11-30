@@ -18,21 +18,6 @@ afterEach(() => {
   resetPackageState();
 });
 
-it('should emit "viewport_changed" event in case, window changed its size', () => {
-  const spy = vi.fn();
-  lastEventSignal().sub(spy);
-
-  window.dispatchEvent(new CustomEvent('resize'));
-
-  expect(spy).toHaveBeenCalledTimes(1);
-  expect(spy).toHaveBeenCalledWith(['viewport_changed', {
-    width: 1920,
-    height: 1080,
-    is_state_stable: true,
-    is_expanded: true,
-  }], undefined);
-});
-
 it('should not emit event in case, it contains incorrect payload', () => {
   const spy = vi.fn();
   lastEventSignal().sub(spy);

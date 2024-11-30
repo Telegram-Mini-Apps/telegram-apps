@@ -1,4 +1,5 @@
 import { computed, type Computed, signal } from '@telegram-apps/signals';
+import { CancelablePromise } from '@telegram-apps/toolkit';
 
 import type { State } from './types.js';
 
@@ -10,29 +11,39 @@ import type { State } from './types.js';
 export const state = signal<State>({
   height: 0,
   width: 0,
+  isFullscreen: false,
   isExpanded: false,
   stableHeight: 0,
 });
 
+//#region Mount.
+
 /**
- * True if the component is currently mounted.
+ * Signal indicating if the component is currently mounted.
  */
 export const isMounted = signal(false);
+
+/**
+ * Signal indicating if the component is currently mounting.
+ */
+export const isMounting = computed(() => !!mountPromise());
+
+/**
+ * Signal containing the error occurred during mount.
+ */
+export const mountError = signal<Error | undefined>(undefined);
+
+/**
+ * Signal containing the mount process promise.
+ */
+export const mountPromise = signal<CancelablePromise<State> | undefined>();
+
+//#endregion
 
 /**
  * True if CSS variables are currently bound.
  */
 export const isCssVarsBound = signal(false);
-
-/**
- * True if the component is currently mounting.
- */
-export const isMounting = signal<boolean>(false);
-
-/**
- * Error occurred while mounting the component.
- */
-export const mountError = signal<Error | undefined>(undefined);
 
 /* COMPUTED */
 
@@ -43,31 +54,33 @@ function createStateComputed<K extends keyof State>(key: K): Computed<State[K] |
 /**
  * The current height of the **visible area** of the Mini App.
  *
- * The application can display just the top part of the Mini App, with its lower part remaining
- * outside the screen area. From this position, the user can "pull" the Mini App to its
- * maximum height, while the bot can do the same by calling `expand` method. As the position of
- * the Mini App changes, the current height value of the visible area will be updated  in real
- * time.
+ * The application can display just the top part of the Mini App, with its
+ * lower part remaining outside the screen area. From this position, the user
+ * can "pull" the Mini App to its maximum height, while the bot can do the same
+ * by calling `expand` method. As the position of the Mini App changes, the
+ * current height value of the visible area will be updated  in real time.
  *
- * Please note that the refresh rate of this value is not sufficient to smoothly follow the
- * lower border of the window. It should not be used to pin interface elements to the bottom
- * of the visible area. It's more appropriate to use the value of the `stableHeight`
- * field for this purpose.
+ * Please note that the refresh rate of this value is not sufficient to
+ * smoothly follow the lower border of the window. It should not be used to pin
+ * interface elements to the bottom of the visible area. It's more appropriate
+ * to use the value of the `stableHeight` field for this purpose.
  *
  * @see stableHeight
  */
 export const height = createStateComputed('height');
 
 /**
- * True if the Mini App is expanded to the maximum available height. Otherwise, if
- * the Mini App occupies part of the screen and can be expanded to the full height using
+ * True if the Mini App is expanded to the maximum available height. Otherwise,
+ * if the Mini App occupies part of the screen and can be expanded to the full
+ * height using
  * `expand` method.
  * @see expand
  */
 export const isExpanded = createStateComputed('isExpanded');
 
 /**
- * True if the current viewport height is stable and is not going to change in the next moment.
+ * True if the current viewport height is stable and is not going to change in
+ * the next moment.
  */
 export const isStable = computed(() => {
   const s = state();
@@ -77,14 +90,15 @@ export const isStable = computed(() => {
 /**
  * The height of the visible area of the Mini App in its last stable state.
  *
- * The application can display just the top part of the Mini App, with its lower part remaining
- * outside the screen area. From this position, the user can "pull" the Mini App to its
- * maximum height, while the application can do the same by calling `expand` method.
+ * The application can display just the top part of the Mini App, with its
+ * lower part remaining outside the screen area. From this position, the user
+ * can "pull" the Mini App to its maximum height, while the application can do
+ * the same by calling `expand` method.
  *
- * Unlike the value of `height`, the value of `stableHeight` does not change as the position
- * of the Mini App changes with user gestures or during animations. The value of `stableHeight`
- * will be updated after all gestures and animations are completed and the Mini App reaches its
- * final size.
+ * Unlike the value of `height`, the value of `stableHeight` does not change as
+ * the position of the Mini App changes with user gestures or during
+ * animations. The value of `stableHeight` will be updated after all gestures
+ * and animations are completed and the Mini App reaches its final size.
  *
  * @see height
  */
@@ -94,3 +108,29 @@ export const stableHeight = createStateComputed('stableHeight');
  * Currently visible area width.
  */
 export const width = createStateComputed('width');
+
+//#region Fullscreen mode.
+
+/**
+ * Signal indicating if the viewport is currently in fullscreen mode.
+ */
+export const isFullscreen = createStateComputed('isFullscreen');
+
+/**
+ * Signal containing fullscreen request or exit promise.
+ */
+export const changeFullscreenPromise = signal<CancelablePromise<void>>();
+
+/**
+ * Signal indicating if the fullscreen mode request is currently in progress.
+ */
+export const isChangingFullscreen = computed(() => {
+  return !!changeFullscreenPromise();
+});
+
+/**
+ * Signal containing an error received during the last fullscreen mode request.
+ */
+export const changeFullscreenError = signal<Error | undefined>();
+
+//#endregion

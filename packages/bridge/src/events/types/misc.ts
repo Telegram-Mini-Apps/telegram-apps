@@ -11,6 +11,15 @@ export type WriteAccessRequestedStatus = 'allowed' | string;
 
 export type BiometryType = 'finger' | 'face' | string;
 
-export type BiometryTokenUpdateStatus = 'updated' | 'removed' | 'failed' | string;
+export type BiometryTokenUpdateStatus =
+  | 'updated'
+  | 'removed'
+  | 'failed'
+  | string;
 
 export type BiometryAuthRequestStatus = 'failed' | 'authorized' | string;
+
+export type FullScreenErrorStatus =
+  | 'ALREADY_FULLSCREEN'
+  | 'UNSUPPORTED'
+  | string;

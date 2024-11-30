@@ -12,8 +12,16 @@ export interface LaunchParams {
    */
   botInline?: boolean;
   /**
-   * Current launch init data. Can be missing in case, application was launched via
-   * KeyboardButton.
+   * TODO: This property is not documented by the Telegram team.
+   */
+  defaultColors?: ThemeParams;
+  /**
+   * Is fullscreen mode enabled.
+   */
+  fullscreen?: boolean;
+  /**
+   * Current launch init data. Can be missing in case, application was launched
+   * via KeyboardButton.
    */
   initData?: InitData;
   /**
