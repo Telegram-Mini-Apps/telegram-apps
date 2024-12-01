@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 2.7.1
+
+### Patch Changes
+
+- 3e81316: Fix `fullscreen` should only be exposed in viewport
+
 ## 2.7.0
 
 ### Minor Changes
