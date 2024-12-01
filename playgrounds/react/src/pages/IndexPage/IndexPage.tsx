@@ -39,7 +39,7 @@ export const IndexPage: FC = () => {
           <Link to="/viewport-params">
             <Cell subtitle="Viewport constraints, Full Screen status, etc.">Viewport Parameters</Cell>
           </Link>
-        </Section>=
+        </Section>
       </List>
     </Page>
   );
