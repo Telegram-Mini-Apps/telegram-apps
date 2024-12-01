@@ -118,6 +118,7 @@ describe.each<[
   ]],
   ['8.0', [
     'web_app_request_fullscreen',
+    'web_app_exit_fullscreen'
   ]],
 ])('%s', (version, methods) => {
   const higher = increaseVersion(version, 1);
