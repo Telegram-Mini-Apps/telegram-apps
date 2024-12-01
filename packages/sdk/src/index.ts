@@ -94,6 +94,7 @@ export type {
   CustomMethodName,
   CustomMethodParams,
   CustomMethodsParams,
+  CreateMethodParams,
   EventListener,
   EventName,
   EventPayload,
