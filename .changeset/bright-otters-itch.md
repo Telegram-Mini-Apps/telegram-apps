@@ -1,6 +1,5 @@
 ---
-"@telegram-apps/bridge": minor
-"@telegram-apps/sdk": minor
+"@telegram-apps/sdk": patch
 ---
 
 Fix `fullscreen` should only be exposed in viewport
