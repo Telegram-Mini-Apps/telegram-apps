@@ -141,14 +141,16 @@ To enable the fullscreen mode, the method `requestFullscreen` is used:
 ```ts [Variable]
 if (viewport.requestFullscreen.isAvailable()) {
   await viewport.requestFullscreen();
+  viewport.isFullscreen(); // true
 }
 ```
 
 ```ts [Functions]
-import { requestFullscreen } from '@telegram-apps/sdk';
+import { requestFullscreen, isFullscreen } from '@telegram-apps/sdk';
 
 if (requestFullscreen.isAvailable()) {
   await requestFullscreen();
+  isFullscreen(); // true
 }
 ```
 
@@ -161,14 +163,16 @@ To exit the fullscreen mode, use the `exitFullscreen` method:
 ```ts [Variable]
 if (viewport.exitFullscreen.isAvailable()) {
   await viewport.exitFullscreen();
+  viewport.isFullscreen(); // false
 }
 ```
 
 ```ts [Functions]
-import { exitFullscreen } from '@telegram-apps/sdk';
+import { exitFullscreen, isFullscreen } from '@telegram-apps/sdk';
 
 if (exitFullscreen.isAvailable()) {
   await exitFullscreen();
+  isFullscreen(); // false
 }
 ```
 

@@ -5,7 +5,6 @@ export * from '@/scopes/components/back-button/exports.js';
 export * from '@/scopes/components/biometry/exports.js';
 export * from '@/scopes/components/closing-behavior/exports.js';
 export * from '@/scopes/components/cloud-storage/exports.js';
-export * from '@/scopes/components/full-screen/exports.js';
 export * from '@/scopes/components/haptic-feedback/exports.js';
 export * from '@/scopes/components/init-data/exports.js';
 export * from '@/scopes/components/invoice/exports.js';
@@ -95,6 +94,7 @@ export type {
   CustomMethodName,
   CustomMethodParams,
   CustomMethodsParams,
+  CreateMethodParams,
   EventListener,
   EventName,
   EventPayload,
