@@ -5,7 +5,6 @@ import { InitDataPage } from '@/pages/InitDataPage.tsx';
 import { LaunchParamsPage } from '@/pages/LaunchParamsPage.tsx';
 import { ThemeParamsPage } from '@/pages/ThemeParamsPage.tsx';
 import { TONConnectPage } from '@/pages/TONConnectPage/TONConnectPage';
-import { SafeAreaParamsPage } from "@/pages/SafeAreaParamsPage.tsx";
 import { ViewportParamsPage } from "@/pages/ViewportParamsPage.tsx";
 
 interface Route {
@@ -21,7 +20,6 @@ export const routes: Route[] = [
   { path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params' },
   { path: '/theme-params', Component: ThemeParamsPage, title: 'Theme Params' },
   { path: '/viewport-params', Component: ViewportParamsPage, title: 'Viewport Params' },
-  { path: '/safe-area-params', Component: SafeAreaParamsPage, title: 'SafeArea Params' },
   {
     path: '/ton-connect',
     Component: TONConnectPage,

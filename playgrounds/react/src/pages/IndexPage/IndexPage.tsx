@@ -36,11 +36,8 @@ export const IndexPage: FC = () => {
           <Link to="/theme-params">
             <Cell subtitle="Telegram application palette information">Theme Parameters</Cell>
           </Link>
-          <Link to="/safe-area-params">
-            <Cell subtitle="Telegram application safe area information">Safe Area Parameters</Cell>
-          </Link>
           <Link to="/viewport-params">
-            <Cell subtitle="Viewport constraints, Full Screen status, etc.">Viewport Parameters</Cell>
+            <Cell subtitle="Viewport, Full Screen, Safe Area">Viewport Parameters</Cell>
           </Link>
         </Section>
       </List>

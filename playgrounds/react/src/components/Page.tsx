@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { backButton, safeArea, useSignal } from '@telegram-apps/sdk-react';
+import { backButton, useSignal, viewport } from '@telegram-apps/sdk-react';
 import { PropsWithChildren, useEffect } from 'react';
 
 export function Page({children, back = true}: PropsWithChildren<{
@@ -10,8 +10,8 @@ export function Page({children, back = true}: PropsWithChildren<{
 }>) {
   const navigate = useNavigate();
 
-  const inset = useSignal(safeArea.inset);
-  const contentInset = useSignal(safeArea.contentInset);
+  const inset = useSignal(viewport.safeAreaInsets);
+  const contentInset = useSignal(viewport.contentSafeAreaInsets);
 
   useEffect(() => {
     if (back) {
