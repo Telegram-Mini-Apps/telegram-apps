@@ -1,6 +1,6 @@
 import type { RGB } from '@telegram-apps/types';
 
-import type {
+import {
   PhoneRequestedStatus,
   InvoiceStatus,
   WriteAccessRequestedStatus,
@@ -9,6 +9,7 @@ import type {
   BiometryTokenUpdateStatus,
   SafeAreaInsets,
   FullScreenErrorStatus,
+  EmojiStatusAccessRequestedStatus,
 } from './misc.js';
 
 /**
@@ -159,7 +160,7 @@ export interface Events {
     /**
      * Request status.
      */
-    status: 'allowed' | string;
+    status: EmojiStatusAccessRequestedStatus;
   };
   /**
    * Failed to set custom emoji status.

@@ -7,6 +7,8 @@ export type InvoiceStatus =
 
 export type PhoneRequestedStatus = 'sent' | 'cancelled' | string;
 
+export type EmojiStatusAccessRequestedStatus = 'allowed' | string;
+
 export type WriteAccessRequestedStatus = 'allowed' | string;
 
 export type BiometryType = 'finger' | 'face' | string;
