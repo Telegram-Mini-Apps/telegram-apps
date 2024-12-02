@@ -12,7 +12,6 @@ export * from '@/scopes/components/main-button/exports.js';
 export * from '@/scopes/components/mini-app/exports.js';
 export * from '@/scopes/components/popup/exports.js';
 export * from '@/scopes/components/qr-scanner/exports.js';
-export * from '@/scopes/components/safe-area/exports.js';
 export * from '@/scopes/components/secondary-button/exports.js';
 export * from '@/scopes/components/settings-button/exports.js';
 export * from '@/scopes/components/swipe-behavior/exports.js';
