@@ -1,39 +1,53 @@
 import { resetSignal } from '@test-utils/reset/reset.js';
 
 import {
-  state,
-  mountError,
-  isMounted,
-  isCssVarsBound,
+  contentSafeAreaInsets,
+  contentSafeAreaInsetTop,
+  contentSafeAreaInsetBottom,
+  contentSafeAreaInsetLeft,
+  contentSafeAreaInsetRight,
+} from '@/scopes/components/viewport/signals/content-safe-area-insets.js';
+import { isCssVarsBound } from '@/scopes/components/viewport/signals/css-vars.js';
+import { height, stableHeight, width } from '@/scopes/components/viewport/signals/dimensions.js';
+import { isExpanded, isStable } from '@/scopes/components/viewport/signals/flags.js';
+import {
   isMounting,
-  width,
-  isExpanded,
-  height,
-  stableHeight,
-  isStable,
-  isChangingFullscreen,
-  isFullscreen,
-  changeFullscreenError,
-  changeFullscreenPromise,
+  mountError,
   mountPromise,
-} from '@/scopes/components/viewport/signals.js';
+  isMounted,
+} from '@/scopes/components/viewport/signals/mounting.js';
+import {
+  safeAreaInsetBottom,
+  safeAreaInsetLeft,
+  safeAreaInsetRight,
+  safeAreaInsetTop,
+  safeAreaInsets,
+} from '@/scopes/components/viewport/signals/safe-area-insets.js';
+import { state } from '@/scopes/components/viewport/signals/state.js';
+
 
 export function resetViewport() {
   [
-    state,
-    mountError,
-    isMounted,
+    contentSafeAreaInsets,
+    contentSafeAreaInsetTop,
+    contentSafeAreaInsetBottom,
+    contentSafeAreaInsetLeft,
+    contentSafeAreaInsetRight,
     isCssVarsBound,
-    isMounting,
-    width,
-    isExpanded,
     height,
     stableHeight,
+    width,
+    isExpanded,
     isStable,
-    isChangingFullscreen,
-    isFullscreen,
-    changeFullscreenError,
-    changeFullscreenPromise,
+    isMounting,
+    mountError,
     mountPromise,
+    isMounted,
+    safeAreaInsetBottom,
+    safeAreaInsetLeft,
+    safeAreaInsetRight,
+    safeAreaInsetTop,
+    safeAreaInsets,
+    state,
   ].forEach(resetSignal);
 }
