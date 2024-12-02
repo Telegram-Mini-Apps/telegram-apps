@@ -14,7 +14,6 @@ import { signalifyAsyncFn } from '@/scopes/signalifyAsyncFn.js';
  * @param mount - function mounting the component
  * @param onMounted - function that will be called whenever mount was completed.
  * @param isMounted - signal containing the current mount completion state
- * @param data - signal containing the current mount state
  * @param promise - signal containing the mount promise
  * @param error - signal containing the mount error
  */
@@ -24,10 +23,9 @@ export function createMountFn<R>(
   mount: (options?: AsyncOptions) => R | CancelablePromise<R>,
   onMounted: (result: R) => void,
   isMounted: Signal<boolean>,
-  data: Signal<R>,
   promise: Signal<CancelablePromise<R> | undefined>,
   error: Signal<Error | undefined>,
-): (options?: AsyncOptions) => CancelablePromise<R> {
+): (options?: AsyncOptions) => CancelablePromise<void> {
   const noConcurrent = signalifyAsyncFn(
     mount,
     () => new TypedError(
@@ -43,12 +41,10 @@ export function createMountFn<R>(
       if (!isMounted()) {
         const result = await noConcurrent(options);
         batch(() => {
-          data.set(result);
           isMounted.set(true);
           onMounted(result);
         });
       }
-      return data();
     });
   };
 }
