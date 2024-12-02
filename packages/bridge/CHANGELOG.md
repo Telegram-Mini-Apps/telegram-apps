@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 1.6.0
+
+### Minor Changes
+
+- 0de133d: Add Safe Area functionality
+
 ## 1.5.0
 
 ### Minor Changes

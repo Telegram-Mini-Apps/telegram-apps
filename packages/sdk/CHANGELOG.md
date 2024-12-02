@@ -1,5 +1,17 @@
 # @telegram-apps/sdk
 
+## 2.8.0
+
+### Minor Changes
+
+- 0de133d: Add Safe Area functionality
+
+### Patch Changes
+
+- Updated dependencies [0de133d]
+  - @telegram-apps/bridge@1.6.0
+  - @telegram-apps/navigation@1.0.7
+
 ## 2.7.1
 
 ### Patch Changes
