@@ -181,6 +181,12 @@ export interface Methods {
     data: string;
   }>;
   /**
+   * Exits fullscreen mode for miniapp.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-exit-fullscreen
+   */
+  web_app_exit_fullscreen: CreateMethodParams;
+  /**
    * Expands the Mini App.
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-expand
    */
@@ -276,17 +282,17 @@ export interface Methods {
    */
   web_app_ready: CreateMethodParams;
   /**
+   * Requests content safe area of the user's phone.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-content-safe-area
+   */
+  web_app_request_content_safe_area: CreateMethodParams;
+  /**
    * Requests to open the mini app in fullscreen.
    * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-fullscreen
    */
   web_app_request_fullscreen: CreateMethodParams;
-  /**
-   * Exits fullscreen mode for miniapp.
-   * @since v8.0
-   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-exit-fullscreen
-   */
-  web_app_exit_fullscreen: CreateMethodParams;
   /**
    * Requests access to current user's phone.
    * @since v6.9
@@ -299,12 +305,6 @@ export interface Methods {
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-safe-area
    */
   web_app_request_safe_area: CreateMethodParams;
-  /**
-   * Requests content safe area of the user's phone.
-   * @since v8.0
-   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-content-safe-area
-   */
-  web_app_request_content_safe_area: CreateMethodParams;
   /**
    * Requests current theme from Telegram. As a result, Telegram will create `theme_changed` event.
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-theme
