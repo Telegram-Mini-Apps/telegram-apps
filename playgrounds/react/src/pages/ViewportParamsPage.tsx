@@ -1,9 +1,10 @@
 import {
+  hapticFeedback,
   useSignal,
   viewport
 } from '@telegram-apps/sdk-react';
 
-import {List} from '@telegram-apps/telegram-ui';
+import {Button, List} from '@telegram-apps/telegram-ui';
 import {FC, useEffect, useState} from 'react';
 
 import {DisplayData, DisplayDataRow} from '@/components/DisplayData/DisplayData.tsx';
@@ -49,8 +50,40 @@ export const ViewportParamsPage: FC = () => {
     setContentSafeAreaRows(getSafeAreaRows(contentInset));
   }, [contentInset]);
 
+  const requestFullscreen = () => {
+    hapticFeedback.impactOccurred("medium");
+    void viewport.requestFullscreen();
+  }
+
+  const exitFullscreen = () => {
+    hapticFeedback.impactOccurred("medium");
+    void viewport.exitFullscreen();
+  }
+
   return (
     <Page>
+      <div style={{
+        display: "flex",
+        padding: "1rem",
+        gap: "1rem",
+      }}>
+        <Button
+          mode="filled"
+          size="l"
+          onClick={requestFullscreen}
+          style={{flex: "1 1 0%"}}
+        >
+          Request fullscreen
+        </Button>
+        <Button
+          mode="filled"
+          size="l"
+          onClick={exitFullscreen}
+          style={{flex: "1 1 0%"}}
+        >
+          Exit fullscreen
+        </Button>
+      </div>
       <List>
         <DisplayData
           header={'App mode'}

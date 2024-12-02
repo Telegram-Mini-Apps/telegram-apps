@@ -24,7 +24,7 @@ export function Page({children, back = true}: PropsWithChildren<{
   }, [back]);
 
   return <div style={{
-    paddingTop: contentInset.top,
+    paddingTop: inset.top + contentInset.top,
     paddingLeft: inset.left,
     paddingRight: inset.right,
   }}>
