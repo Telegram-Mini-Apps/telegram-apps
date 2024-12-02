@@ -40,7 +40,7 @@ cases, calling the [web_app_expand](methods.md#web-app-expand) method will have 
 
 ## Fullscreen
 
-![Full screen](../public/functionality/full-screen.png)
+![Full screen](/functionality/full-screen.png)
 
 Mini apps can be launched in **fullscreen mode**, which expands the application to cover the entire
 device screen, removing both the top and bottom bars of Telegram.
