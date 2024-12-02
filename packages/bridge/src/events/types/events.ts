@@ -125,6 +125,13 @@ export interface Events {
     data?: string | null;
   };
   /**
+   * Occurs when the safe area for content changes
+   * (e.g., due to orientation change or screen adjustments).
+   * @since Mini Apps v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#content_safe_area_changed
+   * */
+  content_safe_area_changed: SafeAreaInsets;
+  /**
    * Custom method invocation completed.
    * @since v6.9
    * @see https://docs.telegram-mini-apps.com/platform/events#custom-method-invoked
@@ -224,6 +231,13 @@ export interface Events {
    */
   reload_iframe: never;
   /**
+   * Occurs whenever the device's safe area insets change
+   * (e.g., due to orientation change or screen adjustments).
+   * @since Mini Apps v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#safe_area_changed
+   * */
+  safe_area_changed: SafeAreaInsets;
+  /**
    * QR scanner was closed.
    * @since v6.4
    * @see https://docs.telegram-mini-apps.com/platform/events#scan-qr-popup-closed
@@ -250,20 +264,6 @@ export interface Events {
    * @see https://docs.telegram-mini-apps.com/platform/events#settings-button-pressed
    */
   settings_button_pressed: never;
-  /**
-   * Occurs whenever the device's safe area insets change
-   * (e.g., due to orientation change or screen adjustments).
-   * @since Mini Apps v8.0
-   * @see https://docs.telegram-mini-apps.com/platform/events#safe_area_changed
-   * */
-  safe_area_changed: SafeAreaInsets;
-  /**
-   * Occurs when the safe area for content changes
-   * (e.g., due to orientation change or screen adjustments).
-   * @since Mini Apps v8.0
-   * @see https://docs.telegram-mini-apps.com/platform/events#content_safe_area_changed
-   * */
-  content_safe_area_changed: SafeAreaInsets;
   /**
    * Occurs whenever theme settings are changed in the user's Telegram app
    * (including switching to night mode).
