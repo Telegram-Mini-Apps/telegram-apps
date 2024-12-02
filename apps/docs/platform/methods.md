@@ -386,13 +386,11 @@ Requests full screen mode for mini app.
 
 Available since: **v8.0**
 
-Requests exiting full screen mode for mini app.
+Requests exiting the fullscreen mode for mini app.
 
 ### `web_app_request_phone`
 
 Available since: **v6.9**
-
-[//]: # (TODO: Check if it is right. It probably requests other user phone.)
 
 Requests access to current user's phone.
 
@@ -405,15 +403,19 @@ create [theme_changed](events.md#theme-changed) event.
 
 Available since: **v8.0**
 
-Requests current [safe area](safe-area.md) information from Telegram. As a result,
-Telegram will create [safe_area_changed](events.md#safe-area-changed) event.
+Requests the current safe area information from Telegram.
+
+As a result, Telegram triggers the
+[**`safe_area_changed`**](events.md#safe-area-changed) event.
 
 ### `web_app_request_content_safe_area`
 
 Available since: **v8.0**
 
-Requests current [content safe area](content-safe-area.md) information from Telegram. As a result,
-Telegram will create [content_safe_area_changed](events.md#content-safe-area-changed) event.
+Requests the current content safe area information from Telegram.
+
+As a result, Telegram triggers the
+[**`content_safe_area_changed`**](events.md#content-safe-area-changed) event.
 
 ### `web_app_request_viewport`
 
