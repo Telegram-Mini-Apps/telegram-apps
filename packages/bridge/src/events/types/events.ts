@@ -10,6 +10,7 @@ import {
   SafeAreaInsets,
   FullScreenErrorStatus,
   EmojiStatusAccessRequestedStatus,
+  EmojiStatusFailedError,
 } from './misc.js';
 
 /**
@@ -167,7 +168,9 @@ export interface Events {
    * @see https://docs.telegram-mini-apps.com/platform/events#emoji-status-failed
    * @since v8.0
    */
-  emoji_status_failed: never;
+  emoji_status_failed: {
+    error: EmojiStatusFailedError;
+  };
   /**
    * Custom emoji status set.
    * @see https://docs.telegram-mini-apps.com/platform/events#emoji-status-set
