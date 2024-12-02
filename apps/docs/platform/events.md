@@ -191,6 +191,28 @@ Custom method invocation completed.
 | result | `unknown` | _Optional_. Method invocation result.     |
 | error  | `string`  | _Optional_. Method invocation error code. |
 
+### `emoji_status_access_requested`
+
+Available since: **v8.0**
+
+Request to set custom emoji status was requested.
+
+| Field  | Type     | Description                                                |
+|--------|----------|------------------------------------------------------------|
+| status | `string` | Request status. Possible values: `allowed` or `cancelled`. |
+
+### `emoji_status_failed`
+
+Available since: **v8.0**
+
+Failed to set custom emoji status.
+
+### `emoji_status_set`
+
+Available since: **v8.0**
+
+Custom emoji status set.
+
 ### `fullscreen_changed`
 
 Available since: **v8.0**

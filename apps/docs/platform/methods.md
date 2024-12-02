@@ -128,7 +128,7 @@ Opens the biometric access settings for bots. Useful when you need to request bi
 access to users who haven't granted it yet.
 
 > [!INFO]
-> This method can be called only in response to user interaction with the Mini App interface 
+> This method can be called only in response to user interaction with the Mini App interface
 > (e.g. a click inside the Mini App or on the main button)
 
 ### `web_app_biometry_request_access`
@@ -388,6 +388,12 @@ Requests the current content safe area information from Telegram.
 As a result, Telegram triggers the
 [**`content_safe_area_changed`**](events.md#content-safe-area-changed) event.
 
+### `web_app_request_emoji_status_access`
+
+Available since: **v8.0**
+
+Shows a native popup requesting permission for the bot to manage user's emoji status.
+
 ### `web_app_request_fullscreen`
 
 Available since: **v8.0**
@@ -444,6 +450,17 @@ Updates the Mini App bottom bar background color.
 | Field | Type     | Description                                                                                                                                   |
 |-------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------|
 | color | `string` | The Mini App bottom bar background color in `#RRGGBB` format, or one of the values: `bg_color`, `secondary_bg_color` or `bottom_bar_bg_color` |
+
+### `web_app_set_emoji_status`
+
+Available since: **v8.0**
+
+Opens a dialog allowing the user to set the specified custom emoji as their status.
+
+| Field           | Type     | Description                                        |
+|-----------------|----------|----------------------------------------------------|
+| custom_emoji_id | `string` | Custom emoji identifier to set.                    |
+| duration        | `number` | _Optional_. The status expiration time in seconds. |
 
 ### `web_app_set_header_color`
 
