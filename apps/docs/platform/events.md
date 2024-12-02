@@ -31,8 +31,8 @@ interface MessageJSON {
 Then, lets imagine how we could process an event from Telegram application:
 
 ```typescript
-window.addEventListener('message', ({data}) => {
-  const {eventType, eventData} = JSON.parse(data);
+window.addEventListener('message', ({ data }) => {
+  const { eventType, eventData } = JSON.parse(data);
   console.log(eventType, eventData);
 });
 ```
@@ -84,7 +84,7 @@ package, which greatly eases integration.
 Here's how to use it:
 
 ```ts
-import {on} from '@telegram-apps/sdk';
+import { on } from '@telegram-apps/sdk';
 
 // Start listening to "viewport_changed" event. Returned value
 // is a function, which removes this event listener.
