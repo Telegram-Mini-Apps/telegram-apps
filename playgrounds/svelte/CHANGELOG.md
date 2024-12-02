@@ -1,5 +1,11 @@
 # svelte-template
 
+## 0.0.9
+
+### Patch Changes
+
+- @telegram-apps/sdk-svelte@1.0.9
+
 ## 0.0.8
 
 ### Patch Changes
