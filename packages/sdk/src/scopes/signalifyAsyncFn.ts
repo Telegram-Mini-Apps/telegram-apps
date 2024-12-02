@@ -1,7 +1,7 @@
 import { batch, type Signal } from '@telegram-apps/signals';
-import { type AsyncOptions, CancelablePromise, type TypedError } from '@telegram-apps/bridge';
+import { CancelablePromise, type TypedError } from '@telegram-apps/bridge';
 
-type AllowedFn<R> = (options?: AsyncOptions) => R | CancelablePromise<R>;
+type AllowedFn<Args extends any[], R> = (...args: Args) => R | CancelablePromise<R>;
 
 /**
  * Function doing the following:
@@ -13,13 +13,13 @@ type AllowedFn<R> = (options?: AsyncOptions) => R | CancelablePromise<R>;
  * @param error - signal containing the last call error.
  */
 // #__NO_SIDE_EFFECTS__
-export function signalifyAsyncFn<Fn extends AllowedFn<Result>, Result>(
+export function signalifyAsyncFn<Fn extends AllowedFn<Args, Result>, Args extends any[], Result>(
   fn: Fn,
   createPendingError: () => TypedError<any>,
   promise: Signal<CancelablePromise<Result> | undefined>,
   error: Signal<Error | undefined>,
 ): Fn {
-  return Object.assign((options?: AsyncOptions): CancelablePromise<Result> => {
+  return Object.assign((...args: Args): CancelablePromise<Result> => {
     return CancelablePromise
       .resolve()
       .then(async () => {
@@ -32,7 +32,7 @@ export function signalifyAsyncFn<Fn extends AllowedFn<Result>, Result>(
 
         // Start performing the wrapped function.
         batch(() => {
-          promise.set(CancelablePromise.resolve(fn(options)));
+          promise.set(CancelablePromise.resolve(fn(...args)));
           error.set(undefined);
         });
         let result: [completed: true, result: Result] | [completed: false, err: Error];
