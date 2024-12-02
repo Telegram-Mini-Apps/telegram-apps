@@ -300,6 +300,21 @@ Application received phone access request status.
 
 Parent iframe requested current iframe reload.
 
+### `safe_area_changed`
+
+This event occurs whenever the safe area changes in the user's Telegram app, such as when the user
+switches to landscape mode.
+
+The **safe area** prevents content from overlapping with system UI elements like notches or
+navigation bars.
+
+| Field  | Type     | Description                                                                                |
+|--------|----------|--------------------------------------------------------------------------------------------|
+| top    | `number` | The top inset in pixels, representing the space to avoid at the top of the screen          |
+| bottom | `number` | The bottom inset in pixels, representing the space to avoid at the bottom of the screen    |
+| left   | `number` | The left inset in pixels, representing the space to avoid on the left side of the screen   |
+| right  | `number` | The right inset in pixels, representing the space to avoid on the right side of the screen |
+
 ### `qr_text_received`
 
 Available since: **v6.4**
@@ -343,32 +358,22 @@ including switching to night mode).
 |--------------|--------------------------|--------------------------------------------------------------------------------------------------------|
 | theme_params | `Record<string, string>` | Map where the key is a theme stylesheet key and value is  the corresponding color in `#RRGGBB` format. |
 
-### `safe_area_changed`
-
-Occurs whenever [the safe area](safe_area.md) was changed in the user's Telegram app.
-For example, user switched to landscape mode.
-Safe area helps to avoid overlap with system UI elements like notches or navigation bars.
-
-| Field  | Type     | Description                                                                                                                                                     |
-|--------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| top    | `number` | The top inset in pixels, representing the space to avoid at the top of the screen. Also available as the CSS variable var(--tg-safe-area-inset-top).            |
-| bottom | `number` | The bottom inset in pixels, representing the space to avoid at the bottom of the screen. Also available as the CSS variable var(--tg-safe-area-inset-bottom).   |
-| left   | `number` | The left inset in pixels, representing the space to avoid on the left side of the screen. Also available as the CSS variable var(--tg-safe-area-inset-left).    |
-| right  | `number` | The right inset in pixels, representing the space to avoid on the right side of the screen. Also available as the CSS variable var(--tg-safe-area-inset-right). |
-
 ### `content_safe_area_changed`
 
-Occurs whenever [the content safe area](safe_area.md) was changed in the user's Telegram app.
-For example, user switched to landscape mode.
-Safe area helps to avoid overlap with avoiding overlap with Telegram UI elements.
-Content Safe Area is inside Device Safe Area and only covers Telegram UI.
+This event occurs whenever the content safe area changes in the user's Telegram app. For instance,
+when a user switches to landscape mode.
 
-| Field  | Type     | Description                                                                                                                                                                   |
-|--------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| top    | `number` | The top inset in pixels, representing the space to avoid at the top of the content area. Also available as the CSS variable var(--tg-content-safe-area-inset-top).            |
-| bottom | `number` | The bottom inset in pixels, representing the space to avoid at the bottom of the content area. Also available as the CSS variable var(--tg-content-safe-area-inset-bottom).   |
-| left   | `number` | The left inset in pixels, representing the space to avoid on the left side of the content area. Also available as the CSS variable var(--tg-content-safe-area-inset-left).    |
-| right  | `number` | The right inset in pixels, representing the space to avoid on the right side of the content area. Also available as the CSS variable var(--tg-content-safe-area-inset-right). |
+The **safe area** ensures that content does not overlap with Telegram's UI elements.
+
+The **content safe area** is a subset of the device's safe area, specifically covering Telegram's
+UI.
+
+| Field  | Type     | Description                                                                                      |
+|--------|----------|--------------------------------------------------------------------------------------------------|
+| top    | `number` | The top inset in pixels, representing the space to avoid at the top of the content area          |
+| bottom | `number` | The bottom inset in pixels, representing the space to avoid at the bottom of the content area    |
+| left   | `number` | The left inset in pixels, representing the space to avoid on the left side of the content area   |
+| right  | `number` | The right inset in pixels, representing the space to avoid on the right side of the content area |
 
 ### `viewport_changed`
 
