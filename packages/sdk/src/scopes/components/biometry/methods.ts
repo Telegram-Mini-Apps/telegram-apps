@@ -210,7 +210,6 @@ export const mount = wrapBasic('mount', createMountFn<State>(
     setState(result);
   },
   isMounted,
-  state,
   mountPromise,
   mountError,
 ));

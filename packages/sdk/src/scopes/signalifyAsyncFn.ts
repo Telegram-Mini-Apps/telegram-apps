@@ -1,9 +1,5 @@
 import { batch, type Signal } from '@telegram-apps/signals';
-import {
-  type AsyncOptions,
-  CancelablePromise,
-  type TypedError,
-} from '@telegram-apps/toolkit';
+import { type AsyncOptions, CancelablePromise, type TypedError } from '@telegram-apps/bridge';
 
 type AllowedFn<R> = (options?: AsyncOptions) => R | CancelablePromise<R>;
 

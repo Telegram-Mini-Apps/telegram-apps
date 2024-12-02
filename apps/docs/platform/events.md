@@ -119,10 +119,10 @@ Biometry authentication request completed. This event usually occurs in a respon
 
 If authentication was successful, the event contains a token from the local secure storage.
 
-| Field  | Type                         | Description                                                                                                |
-|--------|------------------------------|------------------------------------------------------------------------------------------------------------|
-| status | `'failed'` or `'authorized'` | Authentication status.                                                                                     |
-| token  | `string`                     | _Optional_. Token from the local secure storage saved previously. Passed only if `status` is `authorized`. |
+| Field  | Type     | Description                                                                                                |
+|--------|----------|------------------------------------------------------------------------------------------------------------|
+| status | `string` | Authentication status. Possible values: `failed` or `authorized`.                                          |
+| token  | `string` | _Optional_. Token from the local secure storage saved previously. Passed only if `status` is `authorized`. |
 
 ### `biometry_info_received`
 
@@ -130,14 +130,14 @@ Available since: **v7.2**
 
 Biometry settings were received.
 
-| Field            | Type                   | Description                                                                   |
-|------------------|------------------------|-------------------------------------------------------------------------------|
-| available        | `boolean`              | Shows whether biometry is available.                                          |
-| access_requested | `boolean`              | Shows whether permission to use biometrics has been requested.                |
-| access_granted   | `boolean`              | Shows whether permission to use biometrics has been granted.                  |
-| device_id        | `string`               | A unique device identifier that can be used to match the token to the device. |
-| token_saved      | `boolean`              | Show whether local secure storage contains previously saved token.            |
-| type             | `'face'` or `'finger'` | The type of biometrics currently available on the device.                     |
+| Field            | Type      | Description                                                                                    |
+|------------------|-----------|------------------------------------------------------------------------------------------------|
+| available        | `boolean` | Shows whether biometry is available.                                                           |
+| access_requested | `boolean` | Shows whether permission to use biometrics has been requested.                                 |
+| access_granted   | `boolean` | Shows whether permission to use biometrics has been granted.                                   |
+| device_id        | `string`  | A unique device identifier that can be used to match the token to the device.                  |
+| token_saved      | `boolean` | Show whether local secure storage contains previously saved token.                             |
+| type             | `string`  | The type of biometrics currently available on the device. Possible values: `face` or `finger`. |
 
 ### `biometry_token_updated`
 
@@ -145,9 +145,9 @@ Available since: **v7.2**
 
 Biometry token was updated.
 
-| Field  | Type                   | Description    |
-|--------|------------------------|----------------|
-| status | `updated` or `removed` | Update status. |
+| Field  | Type     | Description                                             |
+|--------|----------|---------------------------------------------------------|
+| status | `string` | Update status. Possible values: `updated` or `removed`. |
 
 ### `clipboard_text_received`
 
@@ -160,17 +160,36 @@ Telegram application attempted to extract text from clipboard.
 | req_id | `string`           | Passed during the [web_app_read_text_from_clipboard](methods.md#web-app-read-text-from-clipboard) method invocation `req_id` value.                      |
 | data   | `string` or `null` | _Optional_. Data extracted from the clipboard. The returned value will have the type `string` only in the case, application has access to the clipboard. |
 
+### `content_safe_area_changed`
+
+Available since: **v8.0**
+
+This event occurs whenever the content safe area changes in the user's Telegram app. For instance,
+when a user switches to landscape mode.
+
+The **safe area** ensures that content does not overlap with Telegram's UI elements.
+
+The **content safe area** is a subset of the device's safe area, specifically covering Telegram's
+UI.
+
+| Field  | Type     | Description                                                                                      |
+|--------|----------|--------------------------------------------------------------------------------------------------|
+| top    | `number` | The top inset in pixels, representing the space to avoid at the top of the content area          |
+| bottom | `number` | The bottom inset in pixels, representing the space to avoid at the bottom of the content area    |
+| left   | `number` | The left inset in pixels, representing the space to avoid on the left side of the content area   |
+| right  | `number` | The right inset in pixels, representing the space to avoid on the right side of the content area |
+
 ### `custom_method_invoked`
 
 Available since: **v6.9**
 
 Custom method invocation completed.
 
-| Field  | Type      | Description                                      |
-|--------|-----------|--------------------------------------------------|
-| req_id | `string`  | Unique identifier of this invocation.            |
-| result | `unknown` | _Optional_. Method invocation successful result. |
-| error  | `string`  | _Optional_. Method invocation error code.        |
+| Field  | Type      | Description                               |
+|--------|-----------|-------------------------------------------|
+| req_id | `string`  | Unique identifier of this invocation.     |
+| result | `unknown` | _Optional_. Method invocation result.     |
+| error  | `string`  | _Optional_. Method invocation error code. |
 
 ### `fullscreen_changed`
 
@@ -178,9 +197,9 @@ Available since: **v8.0**
 
 Occurs whenever the mini app enters or exits the fullscreen mode.
 
-| Field         | Type      | Description                          |
-|---------------|-----------|--------------------------------------|
-| is_fullscreen | `boolean` | Is application currently fullscreen. |
+| Field         | Type      | Description                                                   |
+|---------------|-----------|---------------------------------------------------------------|
+| is_fullscreen | `boolean` | Indicates if the application is currently in fullscreen mode. |
 
 ### `fullscreen_failed`
 
@@ -188,91 +207,18 @@ Available since: **v8.0**
 
 Occurs whenever the mini app enters or exits the fullscreen mode.
 
-<table>
-  <thead>
-  <tr>
-    <th>Field</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  </thead>
-  <tbody>
-
-  <tr>
-    <td>error</td>
-    <td>
-      <code>string</code>
-    </td>
-    <td>
-      Fullscreen mode status error.
-      <ul>
-        <li>
-          <code>UNSUPPORTED</code>, fullscreen mode is not supported on this device or platform
-        </li>
-        <li>
-          <code>ALREADY_FULLSCREEN</code>, the Mini App is already in fullscreen mode
-        </li>
-      </ul>
-    </td>
-  </tr>
-
-  </tbody>
-</table>
+| Field | Type     | Description                                                                           |
+|-------|----------|---------------------------------------------------------------------------------------|
+| error | `string` | Fullscreen mode status error. Possible values: `UNSUPPORTED` or `ALREADY_FULLSCREEN`. |
 
 ### `invoice_closed`
 
 An invoice was closed.
 
-<table>
-  <thead>
-  <tr>
-    <th>Field</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  </thead>
-  <tbody>
-
-  <tr>
-    <td>slug</td>
-    <td>
-      <code>string</code>
-    </td>
-    <td>
-      Passed during the&nbsp;
-      <a href="./methods#web-app-open-invoice">
-        <code>web_app_open_invoice</code>
-      </a>&nbsp;
-      method invocation <code>slug</code> value.
-    </td>
-  </tr>
-
-  <tr>
-    <td>status</td>
-    <td>
-      <code>string</code>
-    </td>
-    <td>
-      Invoice status. Values:
-      <ul>
-        <li>
-          <code>paid</code>, invoice was paid
-        </li>
-        <li>
-          <code>failed</code>, invoice failed
-        </li>
-        <li>
-          <code>pending</code>, invoice is currently pending
-        </li>
-        <li>
-          <code>cancelled</code>, invoice was cancelled
-        </li>
-      </ul>
-    </td>
-  </tr>
-
-  </tbody>
-</table>
+| Field  | Type     | Description                                                                                               |
+|--------|----------|-----------------------------------------------------------------------------------------------------------|
+| slug   | `string` | Passed during the [web_app_open_invoice](methods.md#web-app-open-invoice) method invocation `slug` value. |
+| status | `string` | Invoice status. Possible values: `paid`, `failed`, `pending` or `cancelled`.                              |
 
 ### `main_button_pressed`
 
@@ -296,10 +242,6 @@ Application received phone access request status.
 |-----------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
 | button_id | `string` | _Optional_. Identifier of the clicked button. In case, the popup was closed without clicking any button, this property will be omitted. |
 
-### `reload_iframe`
-
-Parent iframe requested current iframe reload.
-
 ### `qr_text_received`
 
 Available since: **v6.4**
@@ -309,6 +251,27 @@ The QR scanner scanned some QR and extracted its content.
 | Field | Type     | Description                             |
 |-------|----------|-----------------------------------------|
 | data  | `string` | _Optional_. Data extracted from the QR. |
+
+### `reload_iframe`
+
+Parent iframe requested current iframe reload.
+
+### `safe_area_changed`
+
+Available since: **v8.0**
+
+This event occurs whenever the safe area changes in the user's Telegram app, such as when the user
+switches to landscape mode.
+
+The **safe area** prevents content from overlapping with system UI elements like notches or
+navigation bars.
+
+| Field  | Type     | Description                                                                                |
+|--------|----------|--------------------------------------------------------------------------------------------|
+| top    | `number` | The top inset in pixels, representing the space to avoid at the top of the screen          |
+| bottom | `number` | The bottom inset in pixels, representing the space to avoid at the bottom of the screen    |
+| left   | `number` | The left inset in pixels, representing the space to avoid on the left side of the screen   |
+| right  | `number` | The right inset in pixels, representing the space to avoid on the right side of the screen |
 
 ### `scan_qr_popup_closed`
 
@@ -332,12 +295,12 @@ developer to stylize the app scrollbar (but he is still able to do it himself).
 
 Available since: **v6.1**
 
-Occurs when the [Settings Button](settings-button.md) was pressed.
+Occurs whenever the [Settings Button](settings-button.md) was pressed.
 
 ### `theme_changed`
 
-Occurs whenever [the theme](theming.md) was changed in the user's Telegram app (
-including switching to night mode).
+Occurs whenever [the theme](theming.md) was changed in the user's Telegram app (including switching
+to night mode).
 
 | Field        | Type                     | Description                                                                                            |
 |--------------|--------------------------|--------------------------------------------------------------------------------------------------------|
@@ -355,11 +318,10 @@ user started dragging the application or called the expansion method.
 | is_expanded     | `boolean` | Is the viewport currently expanded.                                              |
 | is_state_stable | `boolean` | Is the viewport current state stable and not going to change in the next moment. |
 
-::: tip
-Pay attention to the fact, that send rate of this method is not enough to smoothly resize the
-application window. You should probably use a stable height instead of the current one, or handle
-this problem in another way.
-:::
+> [!TIP]
+> Pay attention to the fact, that send rate of this method is not enough to smoothly resize the
+> application window. You should probably use a stable height instead of the current one, or handle
+> this problem in another way.
 
 ### `write_access_requested`
 

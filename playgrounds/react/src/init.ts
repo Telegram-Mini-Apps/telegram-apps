@@ -2,6 +2,7 @@ import {
   backButton,
   viewport,
   themeParams,
+  safeArea,
   miniApp,
   initData,
   $debug,
@@ -15,6 +16,11 @@ export function init(debug: boolean): void {
   // Set @telegram-apps/sdk-react debug mode.
   $debug.set(debug);
 
+  // Add Eruda if needed.
+  debug && import('eruda')
+    .then((lib) => lib.default.init())
+    .catch(console.error);
+
   // Initialize special event handlers for Telegram Desktop, Android, iOS, etc. Also, configure
   // the package.
   initSDK();
@@ -24,7 +30,13 @@ export function init(debug: boolean): void {
   miniApp.mount();
   themeParams.mount();
   initData.restore();
-  
+
+  void safeArea.mount().then(() => {
+    safeArea.bindCssVars();
+  }).catch((e: any) => {
+    console.error('Something went wrong mounting the safe area', e);
+  });
+
   void viewport.mount().then(() => {
     // Define components-related CSS variables.
     viewport.bindCssVars();
@@ -33,9 +45,4 @@ export function init(debug: boolean): void {
   }).catch((e: any) => {
     console.error('Something went wrong mounting the viewport', e);
   });
-
-  // Add Eruda if needed.
-  debug && import('eruda')
-    .then((lib) => lib.default.init())
-    .catch(console.error);
 }

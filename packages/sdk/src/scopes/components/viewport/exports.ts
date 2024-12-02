@@ -20,14 +20,24 @@ export {
   stableHeight as viewportStableHeight,
   unmount as unmountViewport,
   width as viewportWidth,
+  safeAreaInsetBottom as viewportSafeAreaInsetBottom,
+  safeAreaInsetLeft as viewportSafeAreaInsetLeft,
+  safeAreaInsetRight as viewportSafeAreaInsetRight,
+  safeAreaInsetTop as viewportSafeAreaInsetTop,
+  safeAreaInsets as viewportSafeAreaInsets,
+  contentSafeAreaInsets as viewportContentSafeAreaInsets,
+  contentSafeAreaInsetTop as viewportContentSafeAreaInsetTop,
+  contentSafeAreaInsetBottom as viewportContentSafeAreaInsetBottom,
+  contentSafeAreaInsetLeft as viewportContentSafeAreaInsetLeft,
+  contentSafeAreaInsetRight as viewportContentSafeAreaInsetRight,
 } from './exports.variable.js';
 export * as viewport from './exports.variable.js';
 
-export {
-  requestViewport,
-  type RequestViewportResult
-} from './requestViewport.js';
+export { requestContentSafeAreaInsets } from './methods/static/requestContentSafeAreaInsets.js';
+export { requestSafeAreaInsets } from './methods/static/requestSafeAreaInsets.js';
+export { requestViewport, type RequestViewportResult } from './methods/static/requestViewport.js';
 export type {
   State as ViewportState,
   GetCSSVarNameFn as ViewportGetCSSVarNameFn,
+  GetCSSVarNameKey as ViewportGetCSSVarNameKey,
 } from './types.js';

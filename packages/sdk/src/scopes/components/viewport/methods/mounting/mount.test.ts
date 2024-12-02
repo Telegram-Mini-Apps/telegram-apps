@@ -5,10 +5,13 @@ import { testSafety } from '@test-utils/predefined/testSafety.js';
 import { resetPackageState } from '@test-utils/reset/reset.js';
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
 import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
-import { setMaxVersion } from '@test-utils/setMaxVersion.js';
 
-import { mount, expand, bindCssVars, exitFullscreen, requestFullscreen } from './methods.js';
-import { isMounted } from './signals.js';
+import { mount } from '@/scopes/components/viewport/methods/mounting/mount.js';
+import { isMounted } from '@/scopes/components/viewport/signals/mounting.js';
+import { isFullscreen } from '@/scopes/components/viewport/signals/fullscreen.js';
+import { isExpanded } from '@/scopes/components/viewport/signals/flags.js';
+import { $version } from '@/scopes/globals.js';
+import { state } from '@/scopes/components/viewport/signals/state.js';
 
 beforeEach(() => {
   resetPackageState();
@@ -16,24 +19,16 @@ beforeEach(() => {
   mockPostEvent();
 });
 
-describe.each([
-  ['mount', mount, undefined, undefined],
-  ['expand', expand, undefined, undefined],
-  ['bindCssVars', bindCssVars, isMounted, undefined],
-  ['exitFullscreen', exitFullscreen, isMounted, '8.0'],
-  ['requestFullscreen', requestFullscreen, isMounted, '8.0'],
-] as const)('%s', (name, fn, isMounted, minVersion) => {
-  testSafety(fn, name, {
+describe('safety', () => {
+  testSafety(mount, 'mount', {
     component: 'viewport',
-    minVersion,
-    isMounted,
   });
 });
 
-describe('mount', () => {
+describe('is safe', () => {
   beforeEach(() => {
     mockMiniAppsEnv();
-    setMaxVersion();
+    $version.set('7.9');
   });
 
   it('should set isMounted = true', async () => {
@@ -49,43 +44,56 @@ describe('mount', () => {
 
     it('should use values from session storage key "tapps/viewport"', async () => {
       const storageState = {
+        contentSafeAreaInsets: {
+          bottom: 331,
+          left: 2,
+          right: 5,
+          top: 1,
+        },
+        height: 333,
         isExpanded: true,
         isFullscreen: true,
-        height: 1000,
-        width: 2000,
-        stableHeight: 1000,
+        safeAreaInsets: {
+          bottom: 55,
+          left: 12,
+          right: 31,
+          top: 5,
+        },
+        stableHeight: 12,
+        width: 444,
       };
       const spy = mockSessionStorageGetItem(() => {
         return JSON.stringify(storageState);
       });
 
-      const state = await mount();
+      await mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/viewport');
-      expect(state).toEqual(storageState);
+      expect(state()).toEqual(storageState);
     });
 
     it('should set isFullscreen false if session storage key "tapps/viewport" is not present', async () => {
       const spy = mockSessionStorageGetItem(() => null);
 
-      const state = await mount();
+      await mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/viewport');
-      expect(state.isFullscreen).toBe(false);
+      expect(isFullscreen()).toBe(false);
     });
 
     it('should set isExpanded true if session storage key "tapps/viewport" is not present', async () => {
       const spy = mockSessionStorageGetItem(() => null);
-      const state = await mount();
+      await mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/viewport');
-      expect(state.isExpanded).toBe(true);
+      expect(isExpanded()).toBe(true);
     });
   });
 
   describe('first launch', () => {
     it('should set isFullscreen false', async () => {
-      expect((await mount()).isFullscreen).toBe(false)
+      await mount();
+      expect(isFullscreen()).toBe(false);
     });
 
     // TODO: Incorrect test. This value depends on the platform also.

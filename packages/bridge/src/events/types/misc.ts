@@ -23,3 +23,10 @@ export type FullScreenErrorStatus =
   | 'ALREADY_FULLSCREEN'
   | 'UNSUPPORTED'
   | string;
+
+export interface SafeAreaInsets {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+}

@@ -118,7 +118,7 @@ Notifies parent iframe about the current iframe is going to reload.
 
 Available since: **v7.2**
 
-Requests current biometry settings.
+Requests the current biometry settings.
 
 ### `web_app_biometry_open_settings`
 
@@ -127,12 +127,9 @@ Available since: **v7.2**
 Opens the biometric access settings for bots. Useful when you need to request biometrics
 access to users who haven't granted it yet.
 
-::: info
-
-This method can be called only in response to user interaction with the Mini
-App interface (e.g. a click inside the Mini App or on the main button)
-
-:::
+> [!INFO]
+> This method can be called only in response to user interaction with the Mini App interface 
+> (e.g. a click inside the Mini App or on the main button)
 
 ### `web_app_biometry_request_access`
 
@@ -187,6 +184,12 @@ class [Message](https://core.telegram.org/bots/api#message).
 | Field | Type     | Description                                                          |
 |-------|----------|----------------------------------------------------------------------|
 | data  | `string` | Data to send to a bot. Should not have size of more than 4096 bytes. |
+
+### `web_app_exit_fullscreen`
+
+Available since: **v8.0**
+
+Requests exiting the fullscreen mode for mini app.
 
 ### `web_app_expand`
 
@@ -376,34 +379,44 @@ the [clipboard_text_received](events.md#clipboard-text-received) event.
 Notifies Telegram about current application is ready to be shown. This method will make Telegram to
 remove application loader and display Mini App.
 
+### `web_app_request_content_safe_area`
+
+Available since: **v8.0**
+
+Requests the current content safe area information from Telegram.
+
+As a result, Telegram triggers the
+[**`content_safe_area_changed`**](events.md#content-safe-area-changed) event.
+
 ### `web_app_request_fullscreen`
 
 Available since: **v8.0**
 
 Requests full screen mode for mini app.
 
-### `web_app_exit_fullscreen`
-
-Available since: **v8.0**
-
-Requests exiting full screen mode for mini app.
-
 ### `web_app_request_phone`
 
 Available since: **v6.9**
 
-[//]: # (TODO: Check if it is right. It probably requests other user phone.)
-
 Requests access to current user's phone.
+
+### `web_app_request_safe_area`
+
+Available since: **v8.0**
+
+Requests the current safe area information from Telegram.
+
+As a result, Telegram triggers the
+[**`safe_area_changed`**](events.md#safe-area-changed) event.
 
 ### `web_app_request_theme`
 
-Requests current [theme](theming.md) from Telegram. As a result, Telegram will
+Requests the current [theme](theming.md) from Telegram. As a result, Telegram will
 create [theme_changed](events.md#theme-changed) event.
 
 ### `web_app_request_viewport`
 
-Requests current [viewport](viewport.md) information from Telegram. As a result,
+Requests the current [viewport](viewport.md) information from Telegram. As a result,
 Telegram will create [viewport_changed](events.md#viewport-changed) event.
 
 ### `web_app_request_write_access`

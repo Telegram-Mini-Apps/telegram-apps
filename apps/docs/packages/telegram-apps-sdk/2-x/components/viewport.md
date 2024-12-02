@@ -177,3 +177,64 @@ if (exitFullscreen.isAvailable()) {
 ```
 
 :::
+
+## Safe Area Insets
+
+The viewport component offers access to two types of insets:
+
+- **Safe area insets**
+- **Content safe area insets**
+
+For more details on the differences between these inset types, visit the
+[**Viewport**](../../../../platform/viewport.md) page.
+
+The component provides access to these insets through the following signals:
+
+::: code-group
+
+```ts [Variable]
+// Objects with numeric properties "top", "bottom", "left" and "right".
+viewport.safeAreaInsets();
+viewport.contentSafeAreaInsets();
+
+// Numeric values.
+viewport.safeAreaInsetTop();
+viewport.safeAreaInsetBottom();
+viewport.safeAreaInsetLeft();
+viewport.safeAreaInsetRight();
+viewport.contentSafeAreaInsetTop();
+viewport.contentSafeAreaInsetBottom();
+viewport.contentSafeAreaInsetLeft();
+viewport.contentSafeAreaInsetRight();
+```
+
+```ts [Functions]
+import {
+  viewportSafeAreaInsets,
+  viewportSafeAreaInsetTop,
+  viewportSafeAreaInsetBottom,
+  viewportSafeAreaInsetLeft,
+  viewportSafeAreaInsetRight,
+  viewportContentSafeAreaInsets,
+  viewportContentSafeAreaInsetTop,
+  viewportContentSafeAreaInsetBottom,
+  viewportContentSafeAreaInsetLeft,
+  viewportContentSafeAreaInsetRight,
+} from '@telegram-apps/sdk';
+
+// Objects with numeric properties "top", "bottom", "left" and "right".
+viewportSafeAreaInsets();
+viewportContentSafeAreaInsets();
+
+// Numeric values.
+viewportSafeAreaInsetTop();
+viewportSafeAreaInsetBottom();
+viewportSafeAreaInsetLeft();
+viewportSafeAreaInsetRight();
+viewportContentSafeAreaInsetTop();
+viewportContentSafeAreaInsetBottom();
+viewportContentSafeAreaInsetLeft();
+viewportContentSafeAreaInsetRight();
+```
+
+:::
