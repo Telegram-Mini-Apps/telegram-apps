@@ -13,12 +13,18 @@ import { signalifyAsyncFn } from '@/scopes/signalifyAsyncFn.js';
 
 const METHOD = 'web_app_request_emoji_status_access';
 
+/**
+ * Signal containing the emoji status access request promise.
+ */
 export const requestEmojiStatusAccessPromise = signal<CancelablePromise<EmojiStatusAccessRequestedStatus> | undefined>();
 
+/**
+ * Signal containing the last emoji status access request error.
+ */
 export const requestEmojiStatusAccessError = signal<Error | undefined>();
 
 /**
- * Signal indicating if the emoji status set is currently being requested.
+ * Signal indicating if the emoji status access is currently being requested.
  */
 export const isRequestingEmojiStatusAccess = computed(() => !!requestEmojiStatusAccessPromise());
 
@@ -36,7 +42,7 @@ export const isRequestingEmojiStatusAccess = computed(() => !!requestEmojiStatus
  * }
  */
 export const requestEmojiStatusAccess = wrapSafe(
-  'requestPhoneAccess',
+  'requestEmojiStatusAccess',
   signalifyAsyncFn(
     (options?: AsyncOptions): CancelablePromise<EmojiStatusAccessRequestedStatus> => {
       return request(METHOD, 'emoji_status_access_requested', options)
