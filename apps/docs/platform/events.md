@@ -207,6 +207,10 @@ Available since: **v8.0**
 
 Failed to set custom emoji status.
 
+| Field | Type     | Description                                                                             |
+|-------|----------|-----------------------------------------------------------------------------------------|
+| error | `string` | Emoji set failure reason. Possible values: `SUGGESTED_EMOJI_INVALID` or `USER_DECLINED` |
+
 ### `emoji_status_set`
 
 Available since: **v8.0**
