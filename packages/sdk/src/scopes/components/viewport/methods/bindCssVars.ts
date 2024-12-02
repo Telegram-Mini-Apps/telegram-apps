@@ -32,11 +32,19 @@ import type { GetCSSVarNameFn } from '../types.js';
  * - `--tg-viewport-height`
  * - `--tg-viewport-width`
  * - `--tg-viewport-stable-height`
+ * - `--tg-viewport-content-safe-area-inset-top`
+ * - `--tg-viewport-content-safe-area-inset-bottom`
+ * - `--tg-viewport-content-safe-area-inset-left`
+ * - `--tg-viewport-content-safe-area-inset-right`
+ * - `--tg-viewport-safe-area-inset-top`
+ * - `--tg-viewport-safe-area-inset-bottom`
+ * - `--tg-viewport-safe-area-inset-left`
+ * - `--tg-viewport-safe-area-inset-right`
  *
  * Variables are being automatically updated if the viewport was changed.
  *
- * @param getCSSVarName - function, returning complete CSS variable name for
- *   the specified viewport property.
+ * @param getCSSVarName - function, returning computed complete CSS variable name. The CSS
+ * variable will only be defined if the function returned non-empty string value.
  * @returns Function to stop updating variables.
  * @throws {TypedError} ERR_UNKNOWN_ENV
  * @throws {TypedError} ERR_VARS_ALREADY_BOUND
