@@ -195,7 +195,7 @@ Custom method invocation completed.
 
 Available since: **v8.0**
 
-Request to set custom emoji status was requested.
+Access to set custom emoji status was requested.
 
 | Field  | Type     | Description                                                |
 |--------|----------|------------------------------------------------------------|
