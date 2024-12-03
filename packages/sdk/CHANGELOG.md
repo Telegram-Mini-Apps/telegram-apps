@@ -1,5 +1,17 @@
 # @telegram-apps/sdk
 
+## 2.9.0
+
+### Minor Changes
+
+- 554750e: Add emoji status-related functionality.
+
+### Patch Changes
+
+- Updated dependencies [7c6d9d3]
+  - @telegram-apps/bridge@1.7.0
+  - @telegram-apps/navigation@1.0.8
+
 ## 2.8.1
 
 ### Patch Changes

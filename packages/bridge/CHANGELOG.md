@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 1.7.0
+
+### Minor Changes
+
+- 7c6d9d3: Add methods and events connected with custom emoji set.
+
 ## 1.6.0
 
 ### Minor Changes
