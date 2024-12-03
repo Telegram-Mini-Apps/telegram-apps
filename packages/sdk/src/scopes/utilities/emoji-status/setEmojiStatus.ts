@@ -1,28 +1,17 @@
 import { computed, signal } from '@telegram-apps/signals';
-import {
-  type AsyncOptions,
-  type CancelablePromise,
-  TypedError,
-} from '@telegram-apps/bridge';
+import { TypedError } from '@telegram-apps/bridge';
 
 import { ERR_ALREADY_REQUESTING, ERR_EMOJI_STATUS_SET_FAILED } from '@/errors.js';
 import { request } from '@/scopes/globals.js';
 import { wrapSafe } from '@/scopes/toolkit/wrapSafe.js';
 import { signalifyAsyncFn } from '@/scopes/signalifyAsyncFn.js';
 
-export interface SetEmojiStatusOptions extends AsyncOptions {
-  /**
-   * The status expiration time in seconds.
-   */
-  duration?: number;
-}
-
 const METHOD = 'web_app_set_emoji_status';
 
 /**
  * Signal containing the emoji status access request promise.
  */
-export const setEmojiStatusPromise = signal<CancelablePromise<void> | undefined>();
+export const setEmojiStatusPromise = signal<Promise<void> | undefined>();
 
 /**
  * Signal containing the last emoji status access request error.
@@ -51,20 +40,17 @@ export const isSettingEmojiStatus = computed(() => !!setEmojiStatusPromise());
 export const setEmojiStatus = wrapSafe(
   'setEmojiStatus',
   signalifyAsyncFn(
-    (customEmojiId: string, options?: SetEmojiStatusOptions): CancelablePromise<void> => {
-      options ||= {};
-      return request(METHOD, ['emoji_status_set', 'emoji_status_failed'], {
-        ...options,
+    async (customEmojiId: string, duration?: number): Promise<void> => {
+      const result = await request(METHOD, ['emoji_status_set', 'emoji_status_failed'], {
         params: {
           custom_emoji_id: customEmojiId,
-          duration: options.duration,
+          duration,
         },
-      })
-        .then(r => {
-          if (r && 'error' in r) {
-            throw new TypedError(ERR_EMOJI_STATUS_SET_FAILED, 'Failed to set emoji status', r.error);
-          }
-        });
+      });
+
+      if (result && 'error' in result) {
+        throw new TypedError(ERR_EMOJI_STATUS_SET_FAILED, 'Failed to set emoji status', result.error);
+      }
     },
     () => new TypedError(
       ERR_ALREADY_REQUESTING,
@@ -72,6 +58,7 @@ export const setEmojiStatus = wrapSafe(
     ),
     setEmojiStatusPromise,
     setEmojiStatusError,
+    false,
   ),
   { isSupported: METHOD },
 );

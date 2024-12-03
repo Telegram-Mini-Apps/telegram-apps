@@ -1,10 +1,5 @@
 import { computed, signal } from '@telegram-apps/signals';
-import {
-  type AsyncOptions,
-  type CancelablePromise,
-  type EmojiStatusAccessRequestedStatus,
-  TypedError,
-} from '@telegram-apps/bridge';
+import { type EmojiStatusAccessRequestedStatus, TypedError } from '@telegram-apps/bridge';
 
 import { ERR_ALREADY_REQUESTING } from '@/errors.js';
 import { request } from '@/scopes/globals.js';
@@ -16,7 +11,7 @@ const METHOD = 'web_app_request_emoji_status_access';
 /**
  * Signal containing the emoji status access request promise.
  */
-export const requestEmojiStatusAccessPromise = signal<CancelablePromise<EmojiStatusAccessRequestedStatus> | undefined>();
+export const requestEmojiStatusAccessPromise = signal<Promise<EmojiStatusAccessRequestedStatus> | undefined>();
 
 /**
  * Signal containing the last emoji status access request error.
@@ -44,8 +39,8 @@ export const isRequestingEmojiStatusAccess = computed(() => !!requestEmojiStatus
 export const requestEmojiStatusAccess = wrapSafe(
   'requestEmojiStatusAccess',
   signalifyAsyncFn(
-    (options?: AsyncOptions): CancelablePromise<EmojiStatusAccessRequestedStatus> => {
-      return request(METHOD, 'emoji_status_access_requested', options)
+    (): Promise<EmojiStatusAccessRequestedStatus> => {
+      return request(METHOD, 'emoji_status_access_requested')
         .then(r => r.status);
     },
     () => new TypedError(
@@ -54,6 +49,7 @@ export const requestEmojiStatusAccess = wrapSafe(
     ),
     requestEmojiStatusAccessPromise,
     requestEmojiStatusAccessError,
+    false,
   ),
   { isSupported: METHOD },
 );
