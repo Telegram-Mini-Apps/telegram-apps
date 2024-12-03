@@ -10,6 +10,7 @@ import { mount } from '@/scopes/components/viewport/methods/mounting/mount.js';
 import { isMounted } from '@/scopes/components/viewport/signals/mounting.js';
 import { isFullscreen } from '@/scopes/components/viewport/signals/fullscreen.js';
 import { isExpanded } from '@/scopes/components/viewport/signals/flags.js';
+import { isVisible } from '@/scopes/components/viewport/signals/visibility.js';
 import { $version } from '@/scopes/globals.js';
 import { state } from '@/scopes/components/viewport/signals/state.js';
 
@@ -88,6 +89,15 @@ describe('is safe', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/viewport');
       expect(isExpanded()).toBe(true);
+    });
+
+    it('should set isVisible true if session storage key "tapps/viewport" is not present', async () => {
+      const spy = mockSessionStorageGetItem(() => null);
+
+      await mount();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('tapps/viewport');
+      expect(isVisible()).toBe(true);
     });
   });
 
