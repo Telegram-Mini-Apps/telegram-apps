@@ -53,6 +53,7 @@ describe('is safe', () => {
         height: 333,
         isExpanded: true,
         isFullscreen: true,
+        isVisible: true,
         safeAreaInsets: {
           bottom: 55,
           left: 12,

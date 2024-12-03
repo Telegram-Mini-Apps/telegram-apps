@@ -377,6 +377,20 @@ export interface Events {
     is_visible: boolean;
   };
   /**
+   * Occurs when App is 'activated'
+   * e.g. shown on screen after it being collapsed or hidden
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#activated
+   */
+  activated: never;
+  /**
+   * Occurs when App is 'deactivated'
+   * e.g. collapsed or hidden by user
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#deactivated
+   */
+  deactivated: never;
+  /**
    * Application received write access request status.
    * @since v6.9
    * @see https://docs.telegram-mini-apps.com/platform/events#write-access-requested
