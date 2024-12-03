@@ -5,6 +5,7 @@ export interface State {
   height: number;
   isExpanded: boolean;
   isFullscreen: boolean;
+  isVisible: boolean;
   safeAreaInsets: SafeAreaInsets;
   stableHeight: number;
   width: number;

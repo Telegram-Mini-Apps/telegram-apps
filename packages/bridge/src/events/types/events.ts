@@ -366,6 +366,17 @@ export interface Events {
     is_state_stable: boolean;
   };
   /**
+   * App shown or hidden (in another tab or collapsed).
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#visibility_changed
+   */
+  visibility_changed: {
+    /**
+     * Is application currently visible on screen.
+     */
+    is_visible: boolean;
+  };
+  /**
    * Application received write access request status.
    * @since v6.9
    * @see https://docs.telegram-mini-apps.com/platform/events#write-access-requested

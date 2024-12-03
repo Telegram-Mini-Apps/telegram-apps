@@ -9,7 +9,8 @@ import {
   CSA_CHANGED_EVENT,
   FS_CHANGED_EVENT,
   SA_CHANGED_EVENT,
-  VIEWPORT_CHANGED_EVENT
+  VIEWPORT_CHANGED_EVENT,
+  VISIBILITY_CHANGED_EVENT
 } from '../../const.js';
 import { isMounted, mountPromise, mountError } from '../../signals/mounting.js';
 import { getStateFromStorage, setState } from '../../signals/state.js';
@@ -20,7 +21,13 @@ import { requestSafeAreaInsets } from '../static/requestSafeAreaInsets.js';
 import { requestViewport } from '../static/requestViewport.js';
 import type { State } from '../../types.js';
 
-import { onContentSafeAreaChanged, onFullscreenChanged, onSafeAreaChanged, onViewportChanged } from './shared.js';
+import {
+  onContentSafeAreaChanged,
+  onFullscreenChanged,
+  onSafeAreaChanged,
+  onViewportChanged,
+  onVisibilityChanged
+} from './shared.js';
 
 /**
  * Mounts the Viewport component.
@@ -57,6 +64,7 @@ export const mount = wrapBasic('mount', createMountFn<State>(
       const shared = {
         contentSafeAreaInsets: retrievedContentSafeAreaInsets,
         isFullscreen: !!lp.fullscreen,
+        isVisible: true,
         safeAreaInsets: retrievedSafeAreaInsets,
       };
       if (['macos', 'tdesktop', 'unigram', 'webk', 'weba', 'web'].includes(lp.platform)) {
@@ -86,6 +94,7 @@ export const mount = wrapBasic('mount', createMountFn<State>(
     on(FS_CHANGED_EVENT, onFullscreenChanged);
     on(SA_CHANGED_EVENT, onSafeAreaChanged);
     on(CSA_CHANGED_EVENT, onContentSafeAreaChanged);
+    on(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
     setState(result);
   },
   isMounted,
