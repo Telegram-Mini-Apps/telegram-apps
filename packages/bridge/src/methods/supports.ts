@@ -105,6 +105,8 @@ export function supports(
     case 'web_app_request_content_safe_area':
     case 'web_app_request_fullscreen':
     case 'web_app_exit_fullscreen':
+    case 'web_app_set_emoji_status':
+    case 'web_app_request_emoji_status_access':
       return versionLessOrEqual('8.0', paramOrVersion);
     default:
       return [

@@ -17,6 +17,7 @@ export * from '@/scopes/components/settings-button/exports.js';
 export * from '@/scopes/components/swipe-behavior/exports.js';
 export * from '@/scopes/components/theme-params/exports.js';
 export * from '@/scopes/components/viewport/exports.js';
+export * from '@/scopes/utilities/emoji-status/exports.js';
 export * from '@/scopes/utilities/links/exports.js';
 export * from '@/scopes/utilities/privacy/exports.js';
 export * from '@/scopes/utilities/uncategorized/exports.js';
@@ -41,6 +42,7 @@ export {
   ERR_ALREADY_MOUNTING,
   ERR_ALREADY_REQUESTING,
   ERR_FULLSCREEN_FAILED,
+  ERR_EMOJI_STATUS_SET_FAILED,
 } from '@/errors.js';
 export { init, type InitOptions } from '@/init.js';
 

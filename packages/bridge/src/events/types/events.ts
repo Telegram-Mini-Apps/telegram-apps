@@ -1,6 +1,6 @@
 import type { RGB } from '@telegram-apps/types';
 
-import type {
+import {
   PhoneRequestedStatus,
   InvoiceStatus,
   WriteAccessRequestedStatus,
@@ -9,6 +9,8 @@ import type {
   BiometryTokenUpdateStatus,
   SafeAreaInsets,
   FullScreenErrorStatus,
+  EmojiStatusAccessRequestedStatus,
+  EmojiStatusFailedError,
 } from './misc.js';
 
 /**
@@ -150,6 +152,31 @@ export interface Events {
      */
     error?: string;
   };
+  /**
+   * Request to set custom emoji status was requested.
+   * @see https://docs.telegram-mini-apps.com/platform/events#emoji-status-access-requested
+   * @since v8.0
+   */
+  emoji_status_access_requested: {
+    /**
+     * Request status.
+     */
+    status: EmojiStatusAccessRequestedStatus;
+  };
+  /**
+   * Failed to set custom emoji status.
+   * @see https://docs.telegram-mini-apps.com/platform/events#emoji-status-failed
+   * @since v8.0
+   */
+  emoji_status_failed: {
+    error: EmojiStatusFailedError;
+  };
+  /**
+   * Custom emoji status set.
+   * @see https://docs.telegram-mini-apps.com/platform/events#emoji-status-set
+   * @since v8.0
+   */
+  emoji_status_set: never;
   /**
    * App entered or exited fullscreen mode.
    * @since v8.0

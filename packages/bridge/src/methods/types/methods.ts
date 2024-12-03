@@ -288,6 +288,12 @@ export interface Methods {
    */
   web_app_request_content_safe_area: CreateMethodParams;
   /**
+   * Shows a native popup requesting permission for the bot to manage user's emoji status.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-emoji-status-access
+   */
+  web_app_request_emoji_status_access: CreateMethodParams;
+  /**
    * Requests to open the mini app in fullscreen.
    * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-fullscreen
@@ -343,6 +349,21 @@ export interface Methods {
      * Color to set.
      */
     color: BottomBarColor;
+  }>;
+  /**
+   * Opens a dialog allowing the user to set the specified custom emoji as their status.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-set-emoji-status
+   */
+  web_app_set_emoji_status: CreateMethodParams<{
+    /**
+     * Custom emoji identifier to set.
+     */
+    custom_emoji_id: string;
+    /**
+     * The status expiration time in seconds.
+     */
+    duration?: number;
   }>;
   /**
    * Updates the Mini App header color.

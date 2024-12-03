@@ -118,7 +118,9 @@ describe.each<[
   ]],
   ['8.0', [
     'web_app_request_fullscreen',
-    'web_app_exit_fullscreen'
+    'web_app_exit_fullscreen',
+    'web_app_set_emoji_status',
+    'web_app_request_emoji_status_access',
   ]],
 ])('%s', (version, methods) => {
   const higher = increaseVersion(version, 1);
