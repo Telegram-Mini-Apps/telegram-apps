@@ -33,6 +33,7 @@ const settings = {
       solid: 'solidjs-template',
       next: 'nextjs-template',
       jquery: 'typescript-template',
+      vue: 'vuejs-template',
     },
     tsdk: {
       react: 'reactjs-tsdk-template',
