@@ -1,5 +1,11 @@
 # @telegram-apps/create-mini-app
 
+## 1.2.0
+
+### Minor Changes
+
+- b73bccf: Add vue.js template.
+
 ## 1.1.1
 
 ### Patch Changes
