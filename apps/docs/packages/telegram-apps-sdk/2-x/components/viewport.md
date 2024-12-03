@@ -110,6 +110,25 @@ if (bindViewportCssVars.isAvailable()) {
 
 :::
 
+## Visibility
+
+To track if mini app is visible, use `isVisible` signal.
+Invisible means app is collapsed or in another tab.
+
+::: code-group
+
+```ts [Variable]
+viewport.isVisible();
+```
+
+```ts [Functions]
+import { isVisible } from '@telegram-apps/sdk';
+
+isVisible()
+```
+
+:::
+
 ## Expanding
 
 To expand the viewport, use the `expand` method.

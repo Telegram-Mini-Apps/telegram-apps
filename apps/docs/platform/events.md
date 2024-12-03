@@ -349,6 +349,16 @@ user started dragging the application or called the expansion method.
 > application window. You should probably use a stable height instead of the current one, or handle
 > this problem in another way.
 
+### `visibility_changed`
+
+Available since: **v8.0**
+
+Occurs whenever the mini app is visible or hidden (means collapsed or in another tab).
+
+| Field      | Type      | Description                                        |
+|------------|-----------|----------------------------------------------------|
+| is_visible | `boolean` | Indicates if the application is currently visible. |
+
 ### `write_access_requested`
 
 Available since: **v6.9**
