@@ -1,5 +1,11 @@
 # vue-template
 
+## 0.0.9
+
+### Patch Changes
+
+- @telegram-apps/sdk-vue@1.0.8
+
 ## 0.0.8
 
 ### Patch Changes

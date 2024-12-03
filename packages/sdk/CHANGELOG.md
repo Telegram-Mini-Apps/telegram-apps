@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 2.8.1
+
+### Patch Changes
+
+- 2250c37: Fix Safe Area state update
+
 ## 2.8.0
 
 ### Minor Changes
