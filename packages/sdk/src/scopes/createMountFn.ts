@@ -23,7 +23,7 @@ export function createMountFn<R>(
   mount: (options?: AsyncOptions) => R | CancelablePromise<R>,
   onMounted: (result: R) => void,
   isMounted: Signal<boolean>,
-  promise: Signal<CancelablePromise<R> | undefined>,
+  promise: Signal<CancelablePromise<Awaited<R>> | undefined>,
   error: Signal<Error | undefined>,
 ): (options?: AsyncOptions) => CancelablePromise<void> {
   const noConcurrent = signalifyAsyncFn(
