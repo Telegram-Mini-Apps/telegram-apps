@@ -1,5 +1,7 @@
 export { requestFullscreen } from './methods/fullscreen/requestFullscreen.js';
 export { exitFullscreen } from './methods/fullscreen/exitFullscreen.js';
+export { onActivated, offActivated } from './methods/visibility/onActivated.js';
+export { onDeactivated, offDeactivated } from './methods/visibility/onDeactivated.js';
 export { mount } from './methods/mounting/mount.js';
 export { unmount } from './methods/mounting/unmount.js';
 export { bindCssVars } from './methods/bindCssVars.js';
