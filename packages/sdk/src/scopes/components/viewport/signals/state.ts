@@ -25,6 +25,7 @@ export const state = signal<State>({
   height: 0,
   isExpanded: false,
   isFullscreen: false,
+  isVisible: true,
   safeAreaInsets: initialInsets,
   stableHeight: 0,
   width: 0,

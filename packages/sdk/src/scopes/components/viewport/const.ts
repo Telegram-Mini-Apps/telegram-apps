@@ -5,5 +5,6 @@ export const FS_CHANGED_EVENT = 'fullscreen_changed';
 export const SA_CHANGED_EVENT = 'safe_area_changed';
 export const CSA_CHANGED_EVENT = 'content_safe_area_changed';
 export const VIEWPORT_CHANGED_EVENT = 'viewport_changed';
+export const VISIBILITY_CHANGED_EVENT = 'visibility_changed';
 export const REQUEST_SAFE_AREA_METHOD = 'web_app_request_safe_area';
 export const REQUEST_CONTENT_SAFE_AREA_METHOD = 'web_app_request_content_safe_area';
