@@ -13,7 +13,7 @@ the Telegram client environment sending data to the Mini App through the URL's h
 the Mini App to access essential information upon launch.
 
 The native Telegram application transmits a list of these parameters in the dynamic part of the URL 
-(in the hash #). To access these parameters, you need to use the window.location.hash property in your JavaScript code.
+(in the hash #). To access these parameters, you need to use the `window.location.hash` property in your JavaScript code.
 
 ## Extraction
 
