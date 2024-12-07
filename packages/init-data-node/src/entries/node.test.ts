@@ -8,7 +8,8 @@ const sp = 'user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%20%2B
 const spOld = 'auth_date=1&chat_instance=8134722200314281151&chat_type=private&user=%7B%22allows_write_to_pm%22%3Atrue%2C%22first_name%22%3A%22Vladislav+%2B+-+%3F+%2F%22%2C%22id%22%3A279058397%2C%22is_premium%22%3Atrue%2C%22language_code%22%3A%22ru%22%2C%22last_name%22%3A%22Kibenko%22%2C%22photo_url%22%3A%22https%3A%2F%2Ft.me%2Fi%2Fuserpic%2F320%2F4FPEE4tmP3ATHa57u6MqTDih13LTOiMoKoLDRG4PnSA.svg%22%2C%22username%22%3A%22vdkfrost%22%7D&signature=zL-ucjNyREiHDE8aihFwpfR9aggP2xiAo3NSpfe-p7IbCisNlDKlo7Kb6G4D0Ao2mBrSgEk4maLSdv6MLIlADQ&hash=b2e387ba89f433607d2492aad63bb04328b0f3d28585fd149617c8ef129566a2';
 const spObject = new URLSearchParams(sp);
 
-const secretToken = '7342037359:AAFZehRPBRs8Seg40oDjTMIW8uTGPuW1zfQ';
+const botId = 7342037359;
+const secretToken = `${botId}:AAFZehRPBRs8Seg40oDjTMIW8uTGPuW1zfQ`;
 const secretTokenHashed = 'c0881d6d547967540dcb06d7378a2c2b2c79a8f915ae70a4a37a8a04de0da32b';
 
 describe('hashToken', () => {

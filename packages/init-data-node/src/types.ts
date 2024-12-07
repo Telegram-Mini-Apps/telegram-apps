@@ -21,6 +21,13 @@ export interface CreateHmacFn<Async extends boolean> {
   (data: Text, key: Text): Async extends true ? Promise<ArrayBuffer> : ArrayBuffer;
 }
 
+/**
+ * 3-rd party verification function.
+ */
+export interface Verify3rdFn<Async extends boolean> {
+  (data: string, key: string, signature: string): Async extends true ? Promise<boolean> : boolean;
+}
+
 export interface SharedOptions {
   /**
    * True, if token is already hashed.
