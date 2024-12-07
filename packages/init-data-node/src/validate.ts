@@ -1,7 +1,5 @@
 import { TypedError } from '@telegram-apps/toolkit';
-import type { InitData } from '@telegram-apps/types';
 
-import { initDataToSearchParams } from './initDataToSearchParams.js';
 import type { SharedOptions, SignDataAsyncFn, SignDataSyncFn, Text } from './types.js';
 import {
   ERR_AUTH_DATE_INVALID,
@@ -23,7 +21,7 @@ export interface ValidateOptions extends SharedOptions {
   expiresIn?: number;
 }
 
-export type ValidateValue = InitData | string | URLSearchParams;
+export type ValidateValue = string | URLSearchParams;
 
 function processSign(actual: string, expected: string): void | never {
   if (actual !== expected) {
@@ -83,11 +81,7 @@ export function validate(
 
   // Iterate over all key-value pairs of parsed parameters and find required
   // parameters.
-  new URLSearchParams(
-    typeof value === 'string' || value instanceof URLSearchParams
-      ? value
-      : initDataToSearchParams(value),
-  ).forEach((value, key) => {
+  (typeof value === 'string' ? new URLSearchParams(value) : value).forEach((value, key) => {
     if (key === 'hash') {
       hash = value;
       return;
