@@ -1,5 +1,18 @@
 # @telegram-apps/init-data-node
 
+## 1.2.0
+
+### Minor Changes
+
+- 341a7fd: Add utilities related to 3-rd party validation. Git rid of Node.js `Buffer`.
+
+### Patch Changes
+
+- Updated dependencies [d5e3d90]
+- Updated dependencies [12e0cd1]
+  - @telegram-apps/types@1.2.0
+  - @telegram-apps/transformers@1.2.0
+
 ## 1.1.3
 
 ### Patch Changes

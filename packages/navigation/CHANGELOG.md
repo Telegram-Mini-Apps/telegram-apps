@@ -1,5 +1,11 @@
 # @telegram-apps/navigation
 
+## 1.0.9
+
+### Patch Changes
+
+- @telegram-apps/bridge@1.7.1
+
 ## 1.0.8
 
 ### Patch Changes

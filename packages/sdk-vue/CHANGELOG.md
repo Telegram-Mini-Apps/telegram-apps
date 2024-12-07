@@ -1,5 +1,11 @@
 # @telegram-apps/sdk-vue
 
+## 1.0.10
+
+### Patch Changes
+
+- @telegram-apps/sdk@2.9.1
+
 ## 1.0.9
 
 ### Patch Changes
