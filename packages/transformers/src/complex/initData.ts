@@ -57,6 +57,7 @@ export const initData: TransformerGen<InitData> = (optional) => {
       queryId: stringOptional,
       receiver: user,
       startParam: stringOptional,
+      signature: string,
       user,
     }),
     'initData',

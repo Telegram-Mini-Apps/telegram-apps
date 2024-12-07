@@ -1,3 +1,7 @@
+---
+outline: [2, 3]
+---
+
 # @telegram-apps/init-data-node
 
 <p style="display: flex; gap: 8px; min-height: 20px">
@@ -133,6 +137,45 @@ duration is set to 1 day (86,400 seconds). It is recommended to always check the
 initialization data, as it could be stolen but still remain valid. To disable this feature,
 pass `{ expiresIn: 0 }` as the third argument.
 
+### `validate3rd`
+
+The `validate3rd` function is used to check if the passed init data was signed by Telegram. As
+well as the `validate` function, this one accepts the init data in the same format.
+
+As the second argument, it accepts the Telegram Bot identifier that was used to sign this
+init data.
+
+The third argument is an object with the following properties:
+
+- `expiresIn` is responsible for init data expiration validation
+- `test: boolean`: should be equal `true` if the init data was received in the test Telegram
+  environment
+
+Here is the usage example:
+
+```ts
+const initData =
+  'user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%20%2B%20-%20%3F%20%5C%2F%22%2C%22last_name%22%3A%22Kibenko%22%2C%22username%22%3A%22vdkfrost%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F4FPEE4tmP3ATHa57u6MqTDih13LTOiMoKoLDRG4PnSA.svg%22%7D' +
+  '&chat_instance=8134722200314281151' +
+  '&chat_type=private' +
+  '&auth_date=1733584787' +
+  '&signature=zL-ucjNyREiHDE8aihFwpfR9aggP2xiAo3NSpfe-p7IbCisNlDKlo7Kb6G4D0Ao2mBrSgEk4maLSdv6MLIlADQ' +
+  '&hash=2174df5b000556d044f3f020384e879c8efcab55ddea2ced4eb752e93e7080d6';
+const botId = 7342037359;
+
+await validate3rd(initData, botId);
+```
+
+Function will throw an error in one of these cases:
+
+- `ERR_AUTH_DATE_INVALID`: `auth_date` is empty or not found
+- `ERR_SIGNATURE_MISSING`: `signature` is empty or not found
+- `ERR_SIGN_INVALID`: signature is invalid
+- `ERR_EXPIRED`: init data expired
+
+> [!WARNING]
+> This function uses **Web Crypto API** instead of Node.js modules.
+
 ### `isValid`
 
 Alternatively, to check the init data validity, a developer could use the `isValid` function.
@@ -141,10 +184,25 @@ It doesn't throw an error, but returns a boolean value indicating the init data 
 ```ts
 import { isValid } from '@telegram-apps/init-data-node';
 
-if (isValid('init-data')) {
+if (isValid('init-data', 'my-bot-token')) {
   console.log('Init data is fine');
 }
 ```
+
+### `isValid3rd`
+
+Does the same as the `isValid` function, but checks if the init data was signed by Telegram:
+
+```ts
+import { isValid3rd } from '@telegram-apps/init-data-node';
+
+if (await isValid3rd('init-data')) {
+  console.log('Init data is fine');
+}
+```
+
+> [!WARNING]
+> This function uses **Web Crypto API** instead of Node.js modules.
 
 ## Signing
 

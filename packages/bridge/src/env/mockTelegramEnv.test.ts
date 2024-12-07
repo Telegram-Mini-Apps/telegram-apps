@@ -43,15 +43,16 @@ const lp: LaunchParams = {
       lastName: 'Rogue',
       username: 'rogue',
     },
+    signature: 'abc',
   },
-  initDataRaw: 'user=%7B%22id%22%3A99281932%2C%22first_name%22%3A%22Andrew%22%2C%22last_name%22%3A%22Rogue%22%2C%22username%22%3A%22rogue%22%2C%22language_code%22%3A%22en%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=8428209589180549439&chat_type=sender&start_param=debug&auth_date=1716922846&hash=89d6079ad6762351f38c6dbbc41bb53048019256a9443988af7a48bcad16ba31',
+  initDataRaw: 'user=%7B%22id%22%3A99281932%2C%22first_name%22%3A%22Andrew%22%2C%22last_name%22%3A%22Rogue%22%2C%22username%22%3A%22rogue%22%2C%22language_code%22%3A%22en%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=8428209589180549439&chat_type=sender&start_param=debug&auth_date=1716922846&hash=89d6079ad6762351f38c6dbbc41bb53048019256a9443988af7a48bcad16ba31&signature=abc',
   version: '7.2',
   platform: 'tdesktop',
   botInline: false,
   showSettings: false
 };
 
-const lpString = 'tgWebAppPlatform=tdesktop&tgWebAppThemeParams=%7B%22accent_text_color%22%3A%22%236ab2f2%22%2C%22bg_color%22%3A%22%2317212b%22%2C%22button_color%22%3A%22%235288c1%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22destructive_text_color%22%3A%22%23ec3942%22%2C%22header_bg_color%22%3A%22%2317212b%22%2C%22hint_color%22%3A%22%23708499%22%2C%22link_color%22%3A%22%236ab3f3%22%2C%22secondary_bg_color%22%3A%22%23232e3c%22%2C%22section_bg_color%22%3A%22%2317212b%22%2C%22section_header_text_color%22%3A%22%236ab3f3%22%2C%22subtitle_text_color%22%3A%22%23708499%22%2C%22text_color%22%3A%22%23f5f5f5%22%7D&tgWebAppVersion=7.2&tgWebAppData=user%3D%257B%2522id%2522%253A99281932%252C%2522first_name%2522%253A%2522Andrew%2522%252C%2522last_name%2522%253A%2522Rogue%2522%252C%2522username%2522%253A%2522rogue%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522is_premium%2522%253Atrue%252C%2522allows_write_to_pm%2522%253Atrue%257D%26chat_instance%3D8428209589180549439%26chat_type%3Dsender%26start_param%3Ddebug%26auth_date%3D1716922846%26hash%3D89d6079ad6762351f38c6dbbc41bb53048019256a9443988af7a48bcad16ba31&tgWebAppShowSettings=0&tgWebAppBotInline=0';
+const lpString = 'tgWebAppPlatform=tdesktop&tgWebAppThemeParams=%7B%22accent_text_color%22%3A%22%236ab2f2%22%2C%22bg_color%22%3A%22%2317212b%22%2C%22button_color%22%3A%22%235288c1%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22destructive_text_color%22%3A%22%23ec3942%22%2C%22header_bg_color%22%3A%22%2317212b%22%2C%22hint_color%22%3A%22%23708499%22%2C%22link_color%22%3A%22%236ab3f3%22%2C%22secondary_bg_color%22%3A%22%23232e3c%22%2C%22section_bg_color%22%3A%22%2317212b%22%2C%22section_header_text_color%22%3A%22%236ab3f3%22%2C%22subtitle_text_color%22%3A%22%23708499%22%2C%22text_color%22%3A%22%23f5f5f5%22%7D&tgWebAppVersion=7.2&tgWebAppData=user%3D%257B%2522id%2522%253A99281932%252C%2522first_name%2522%253A%2522Andrew%2522%252C%2522last_name%2522%253A%2522Rogue%2522%252C%2522username%2522%253A%2522rogue%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522is_premium%2522%253Atrue%252C%2522allows_write_to_pm%2522%253Atrue%257D%26chat_instance%3D8428209589180549439%26chat_type%3Dsender%26start_param%3Ddebug%26auth_date%3D1716922846%26hash%3D89d6079ad6762351f38c6dbbc41bb53048019256a9443988af7a48bcad16ba31%26signature%3Dabc&tgWebAppShowSettings=0&tgWebAppBotInline=0';
 
 it('should save passed launch parameters in session storage', () => {
   const setItem = mockSessionStorageSetItem();

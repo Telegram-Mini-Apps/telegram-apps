@@ -1,14 +1,14 @@
 import { TypedError } from '@telegram-apps/toolkit';
 
-import type { SharedOptions, SignDataAsyncFn, SignDataSyncFn, Text } from './types.js';
+import type { Verify3rdFn } from './types.js';
 import {
   ERR_AUTH_DATE_INVALID,
   ERR_EXPIRED,
-  ERR_HASH_INVALID,
   ERR_SIGN_INVALID,
+  ERR_SIGNATURE_MISSING,
 } from './errors.js';
 
-export interface ValidateOptions extends SharedOptions {
+export interface Validate3rdOptions {
   /**
    * Time in seconds which states, how long from creation time init data is considered valid.
    *
@@ -19,62 +19,67 @@ export interface ValidateOptions extends SharedOptions {
    * @default 86400 (1 day)
    */
   expiresIn?: number;
+  /**
+   * When true, uses the test environment public key to validate init data.
+   * @default false
+   */
+  test?: boolean;
 }
 
-export type ValidateValue = string | URLSearchParams;
+export type Validate3rdValue = string | URLSearchParams;
 
-function processSign(actual: string, expected: string): void | never {
-  if (actual !== expected) {
+function processResult(verified: boolean): void | never {
+  if (!verified) {
     throw new TypedError(ERR_SIGN_INVALID, 'Sign is invalid');
   }
   return;
 }
 
 /**
- * Validates passed init data.
+ * Validates passed init data using a publicly known Ee25519 key.
  * @param value - value to check.
- * @param token - bot secret token.
- * @param signData - function signing data.
+ * @param botId - bot identifier
+ * @param verify - function to verify sign
  * @param options - additional validation options.
  * @throws {Error} ERR_SIGN_INVALID
  * @throws {Error} ERR_AUTH_DATE_INVALID
- * @throws {Error} ERR_HASH_INVALID
+ * @throws {Error} ERR_SIGNATURE_MISSING
  * @throws {Error} ERR_EXPIRED
  */
-export function validate(
-  value: ValidateValue,
-  token: Text,
-  signData: SignDataSyncFn,
-  options?: ValidateOptions,
+export function validate3rd(
+  value: Validate3rdValue,
+  botId: number,
+  verify: Verify3rdFn<false>,
+  options?: Validate3rdOptions,
 ): void | never;
 
 /**
- * Validates passed init data.
+ * Validates passed init data using a publicly known Ee25519 key.
  * @param value - value to check.
- * @param token - bot secret token.
- * @param signData - function signing data.
+ * @param botId - bot identifier
+ * @param verify - function to verify sign
  * @param options - additional validation options.
  * @throws {Error} ERR_SIGN_INVALID
  * @throws {Error} ERR_AUTH_DATE_INVALID
- * @throws {Error} ERR_HASH_INVALID
+ * @throws {Error} ERR_SIGNATURE_MISSING
  * @throws {Error} ERR_EXPIRED
  */
-export function validate(
-  value: ValidateValue,
-  token: Text,
-  signData: SignDataAsyncFn,
-  options?: ValidateOptions,
+export function validate3rd(
+  value: Validate3rdValue,
+  botId: number,
+  verify: Verify3rdFn<true>,
+  options?: Validate3rdOptions,
 ): Promise<void>;
 
-export function validate(
-  value: ValidateValue,
-  token: Text,
-  signData: SignDataSyncFn | SignDataAsyncFn,
-  options: ValidateOptions = {},
+export function validate3rd(
+  value: Validate3rdValue,
+  botId: number,
+  verify: Verify3rdFn<boolean>,
+  options: Validate3rdOptions = {},
 ): void | never | Promise<void> {
   // Init data required params.
   let authDate: Date | undefined;
-  let hash: string | undefined;
+  let signature: string | undefined;
 
   // All search params pairs presented as `k=v`.
   const pairs: string[] = [];
@@ -83,7 +88,11 @@ export function validate(
   // parameters.
   (typeof value === 'string' ? new URLSearchParams(value) : value).forEach((value, key) => {
     if (key === 'hash') {
-      hash = value;
+      return;
+    }
+
+    if (key === 'signature') {
+      signature = value;
       return;
     }
 
@@ -97,9 +106,9 @@ export function validate(
     pairs.push(`${key}=${value}`);
   });
 
-  // Hash and auth date always required.
-  if (!hash) {
-    throw new TypedError(ERR_HASH_INVALID, 'Hash is invalid');
+  // Signature and auth date always required.
+  if (!signature) {
+    throw new TypedError(ERR_SIGNATURE_MISSING, 'Signature is missing');
   }
 
   if (!authDate) {
@@ -115,13 +124,13 @@ export function validate(
     }
   }
 
-  // According to docs, we sort all the pairs in alphabetical order.
-  pairs.sort();
+  const verified = verify(
+    `${botId}:WebAppData\n${pairs.sort().join('\n')}`,
+    options.test
+      ? '40055058a4ee38156a06562e52eece92a771bcd8346a8c4615cb7376eddf72ec'
+      : 'e7bf03a2fa4602af4580703d88dda5bb59f32ed8b02a56c187fe7d34caed242d',
+    signature,
+  );
 
-  const sign = signData(pairs.join('\n'), token, options);
-
-  return typeof sign === 'string'
-    ? processSign(sign, hash)
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    : sign.then(v => processSign(v, hash!));
+  return typeof verified === 'boolean' ? processResult(verified) : verified.then(processResult);
 }

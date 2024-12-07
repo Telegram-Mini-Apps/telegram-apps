@@ -5,11 +5,15 @@ import { initData } from './initData.js';
 
 describe('auth_date', () => {
   it('should throw an error in case, this property is missing', () => {
-    expect(() => initData()(toSearchParams({ hash: 'abcd' }))).toThrow();
+    expect(() => initData()(toSearchParams({ hash: 'abcd', signature: 'aabb' }))).toThrow();
   });
 
   it('should parse source property as Date and pass it to the "authDate" property', () => {
-    expect(initData()(toSearchParams({ auth_date: 1, hash: 'abcd' }))).toMatchObject({
+    expect(initData()(toSearchParams({
+      auth_date: 1,
+      hash: 'abcd',
+      signature: 'aabb',
+    }))).toMatchObject({
       authDate: new Date(1000),
     });
   });
@@ -22,6 +26,7 @@ describe('can_send_after', () => {
         auth_date: 1,
         hash: 'abcd',
         can_send_after: 8882,
+        signature: 'aabb',
       })),
     ).toMatchObject({
       canSendAfter: 8882,
@@ -35,6 +40,7 @@ describe('chat', () => {
       initData()(toSearchParams({
         auth_date: 1,
         hash: 'abcd',
+        signature: 'aabb',
         chat: {
           id: 5,
           type: 'group chat',
@@ -59,6 +65,7 @@ describe('hash', () => {
   it('should throw an error in case, this property is missing', () => {
     expect(
       () => initData()(toSearchParams({
+        signature: 'aabb',
         auth_date: 1,
       })),
     ).toThrow();
@@ -67,6 +74,7 @@ describe('hash', () => {
   it('should parse source property as string and pass it to the "hash" property', () => {
     expect(
       initData()(toSearchParams({
+        signature: 'aabb',
         auth_date: 1,
         hash: 'abcd',
       })),
@@ -87,6 +95,7 @@ describe.each([
       initData()(toSearchParams({
         auth_date: 1,
         hash: 'abcd',
+        signature: 'aabb',
         [from]: 'my custom property',
       })),
     ).toMatchObject({
@@ -101,6 +110,7 @@ describe.each(['user', 'receiver'])('%s', (property) => {
       initData()(toSearchParams({
         auth_date: 1,
         hash: 'abcd',
+        signature: 'aabb',
         [property]: {
           added_to_attachment_menu: true,
           allows_write_to_pm: false,

@@ -8,18 +8,16 @@ import type { CreateHmacFn, SignData, Text } from '../types.js';
 const createHmac: CreateHmacFn<true> = async (data, key) => {
   const encoder = new TextEncoder();
 
-  return Buffer.from(
-    await crypto.subtle.sign(
-      'HMAC',
-      await crypto.subtle.importKey(
-        'raw',
-        typeof key === 'string' ? encoder.encode(key) : key,
-        { name: 'HMAC', hash: 'SHA-256' },
-        false,
-        ['sign', 'verify'],
-      ),
-      encoder.encode(data.toString()),
+  return crypto.subtle.sign(
+    'HMAC',
+    await crypto.subtle.importKey(
+      'raw',
+      typeof key === 'string' ? encoder.encode(key) : key,
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign', 'verify'],
     ),
+    typeof data === 'string' ? encoder.encode(data) : data,
   );
 };
 
@@ -28,7 +26,7 @@ const createHmac: CreateHmacFn<true> = async (data, key) => {
  * Hashes specified token using a string, expected during init data sign.
  * @param token - token to hash.
  */
-export function hashToken(token: Text): Promise<Buffer> {
+export function hashToken(token: Text): Promise<ArrayBuffer> {
   return _hashToken(token, createHmac);
 }
 
