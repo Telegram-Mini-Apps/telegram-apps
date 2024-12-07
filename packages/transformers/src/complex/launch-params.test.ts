@@ -10,7 +10,10 @@ describe('launchParams', () => {
     tgWebAppVersion: '7.0',
   };
 
-  it(`should not throw if ${['tgWebAppBotInline', 'tgWebAppData', 'tgWebAppShowSettings', 'tgWebAppStartParam'].join(', ')} parameters are missing`, () => {
+  it(`should not throw if ${['tgWebAppBotInline',
+    'tgWebAppData',
+    'tgWebAppShowSettings',
+    'tgWebAppStartParam'].join(', ')} parameters are missing`, () => {
     expect(() => launchParams()(toSearchParams(baseLaunchParams))).not.toThrow();
   });
 
@@ -27,12 +30,13 @@ describe('launchParams', () => {
     expect(
       launchParams()(toSearchParams({
         ...baseLaunchParams,
-        tgWebAppData: toSearchParams({ auth_date: 1, hash: 'abc' }),
+        tgWebAppData: toSearchParams({ auth_date: 1, hash: 'abc', signature: 'aabb' }),
       })),
     ).toMatchObject({
       initData: {
         authDate: new Date(1000),
         hash: 'abc',
+        signature: 'aabb',
       },
     });
     // TODO: err
@@ -42,9 +46,9 @@ describe('launchParams', () => {
     expect(
       launchParams()(toSearchParams({
         ...baseLaunchParams,
-        tgWebAppData: toSearchParams({ auth_date: 1, hash: 'abc' }),
+        tgWebAppData: toSearchParams({ auth_date: 1, hash: 'abc', signature: 'aabb' }),
       })),
-    ).toMatchObject({ initDataRaw: 'auth_date=1&hash=abc' });
+    ).toMatchObject({ initDataRaw: 'auth_date=1&hash=abc&signature=aabb' });
     // todo: err
   });
 
