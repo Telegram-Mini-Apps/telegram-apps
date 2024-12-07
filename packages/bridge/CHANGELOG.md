@@ -1,5 +1,14 @@
 # @telegram-apps/bridge
 
+## 1.7.1
+
+### Patch Changes
+
+- Updated dependencies [d5e3d90]
+- Updated dependencies [12e0cd1]
+  - @telegram-apps/types@1.2.0
+  - @telegram-apps/transformers@1.2.0
+
 ## 1.7.0
 
 ### Minor Changes

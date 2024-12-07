@@ -1,5 +1,11 @@
 # @telegram-apps/types
 
+## 1.2.0
+
+### Minor Changes
+
+- d5e3d90: Define InitData.signature.
+
 ## 1.1.0
 
 ### Minor Changes
