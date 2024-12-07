@@ -59,11 +59,12 @@ export function initDataToSearchParams({
         : undefined,
       chat_instance: data.chatInstance,
       chat_type: data.chatType || undefined,
-      hash: data.hash,
       query_id: data.queryId,
       receiver: serializeUser(receiver),
       start_param: data.startParam || undefined,
       user: serializeUser(user),
+      signature: data.signature,
+      hash: data.hash,
     }),
   );
 }
