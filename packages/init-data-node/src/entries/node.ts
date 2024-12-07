@@ -7,8 +7,18 @@ import { validate as _validate, type ValidateOptions, type ValidateValue } from 
 import { isValid as _isValid } from '../isValid.js';
 import type { CreateHmacFn, SignData, Text } from '../types.js';
 
+/**
+ * Converts Text to Node.js Buffer.
+ * @param text - text to convert
+ */
+function textToBuffer(text: Text): Buffer {
+  return Buffer.from(typeof text === 'string' ? text : new Uint8Array(text));
+}
+
 const createHmac: CreateHmacFn<false> = (data, key) => {
-  return nodeCreateHmac('sha256', key).update(data).digest();
+  return nodeCreateHmac('sha256', textToBuffer(key))
+    .update(textToBuffer(data))
+    .digest();
 };
 
 /**
@@ -16,7 +26,7 @@ const createHmac: CreateHmacFn<false> = (data, key) => {
  * @param token - token to hash.
  */
 export function hashToken(token: Text): Buffer {
-  return _hashToken(token, createHmac);
+  return Buffer.from(_hashToken(token, createHmac));
 }
 
 /**
