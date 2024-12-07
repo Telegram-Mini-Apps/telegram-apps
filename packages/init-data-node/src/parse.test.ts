@@ -9,7 +9,7 @@ describe('auth_date', () => {
   });
 
   it('should parse source property as Date and pass it to the "authDate" property', () => {
-    expect(parse(toSearchParams({ auth_date: 1, hash: 'abcd' }))).toMatchObject({
+    expect(parse(toSearchParams({ auth_date: 1, hash: 'abcd', signature: 'aa' }))).toMatchObject({
       authDate: new Date(1000),
     });
   });
@@ -22,6 +22,7 @@ describe('can_send_after', () => {
         auth_date: 1,
         hash: 'abcd',
         can_send_after: 8882,
+        signature: 'aa',
       })),
     ).toMatchObject({
       canSendAfter: 8882,
@@ -42,6 +43,7 @@ describe('chat', () => {
           photo_url: 'https://johny.com',
           username: 'Johny Chat',
         },
+        signature: 'aa'
       })),
     ).toMatchObject({
       chat: {
@@ -60,6 +62,7 @@ describe('hash', () => {
     expect(
       () => parse(toSearchParams({
         auth_date: 1,
+        signature: 'aa'
       })),
     ).toThrow();
   });
@@ -69,6 +72,7 @@ describe('hash', () => {
       parse(toSearchParams({
         auth_date: 1,
         hash: 'abcd',
+        signature: 'aa'
       })),
     ).toMatchObject({
       hash: 'abcd',
@@ -87,6 +91,7 @@ describe.each([
       parse(toSearchParams({
         auth_date: 1,
         hash: 'abcd',
+        signature: 'aa',
         [from]: 'my custom property',
       })),
     ).toMatchObject({
@@ -101,6 +106,7 @@ describe.each(['user', 'receiver'])('%s', (property) => {
       parse(toSearchParams({
         auth_date: 1,
         hash: 'abcd',
+        signature: 'aa',
         [property]: {
           added_to_attachment_menu: true,
           allows_write_to_pm: false,
