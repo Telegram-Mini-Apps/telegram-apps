@@ -85,18 +85,18 @@ describe('options', () => {
       expect(globalPostEvent).toHaveBeenCalledWith('web_app_request_phone', undefined);
     });
 
-    it('should reject promise if postEvent threw an error', () => {
+    it('should reject promise if postEvent threw an error', async () => {
       const promise = request('web_app_request_phone', 'phone_requested', {
         postEvent() {
           throw new Error('Nope!');
         },
       });
-      void expect(promise).rejects.toStrictEqual(new Error('Nope!'));
+      await expect(promise).rejects.toStrictEqual(new Error('Nope!'));
     });
   });
 
   describe('capture', () => {
-    it('should capture an event in case, capture method returned true', () => {
+    it('should capture an event in case, capture method returned true', async () => {
       const promise = request('web_app_request_phone', 'phone_requested', {
         timeout: 1000,
         capture: ({ status }) => status === 'allowed',
