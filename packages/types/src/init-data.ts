@@ -135,6 +135,10 @@ export interface InitData {
    */
   startParam?: string;
   /**
+   * Init data signature used during 3-rd party validation.
+   */
+  signature: string;
+  /**
    * An object containing data about the current user.
    */
   user?: User;
