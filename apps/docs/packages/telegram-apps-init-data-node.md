@@ -184,7 +184,7 @@ It doesn't throw an error, but returns a boolean value indicating the init data 
 ```ts
 import { isValid } from '@telegram-apps/init-data-node';
 
-if (isValid('init-data', 'my-bot-token')) {
+if (isValid('... init data', 'my-bot-token')) {
   console.log('Init data is fine');
 }
 ```
@@ -196,7 +196,9 @@ Does the same as the `isValid` function, but checks if the init data was signed 
 ```ts
 import { isValid3rd } from '@telegram-apps/init-data-node';
 
-if (await isValid3rd('init-data')) {
+const botId = 7342037359;
+
+if (await isValid3rd('... init data', botId)) {
   console.log('Init data is fine');
 }
 ```
