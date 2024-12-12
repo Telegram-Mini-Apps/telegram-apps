@@ -34,7 +34,7 @@ To parse the value as init data, use the `parseInitData` function.
 ```ts
 import { parseInitData } from '@telegram-apps/sdk';
 
-const initData = parseInitData();
+const initData = parseInitData('auth_date=123&query_id=anQQ231vs&...');
 // {
 //   user: {
 //     id: 99281932,
