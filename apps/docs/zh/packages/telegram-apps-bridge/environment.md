@@ -1,4 +1,4 @@
-# 环境
+# Environment
 
 此软件包只能在 Telegram 应用程序中使用。 由于非 Telegram
 环境缺乏 Telegram 特有的特性，调用
@@ -26,7 +26,7 @@
 import { isTMA } from '@telegram-apps/bridge';
 
 if (isTMA('simple')) {
-  console.log('It\'s Telegram Mini Apps');
+  console.log('It\'s Telegram小程序');
 }
 ```
 
@@ -41,7 +41,7 @@ if (isTMA('simple')) {
 import { isTMA } from '@telegram-apps/bridge';
 
 if (await isTMA()) {
-  console.log('It\'s Telegram Mini Apps');
+  console.log('It\'s Telegram小程序');
 }
 ```
 
@@ -50,7 +50,7 @@ if (await isTMA()) {
 
 ```ts
 if (await isTMA({ timeout: 50 })) {
-  console.log('It\'s Telegram Mini Apps');
+  console.log('It\'s Telegram小程序');
 }
 ```
 
