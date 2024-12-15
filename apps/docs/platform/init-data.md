@@ -1,5 +1,5 @@
 ---
-outline: [ 2, 3 ]
+outline: [ 2, 4 ]
 ---
 
 # Init Data
@@ -79,7 +79,19 @@ Init data validation is one of the most important parts in communication
 between client and server. It's validity guarantees, that init data can be trusted
 and used in the future code execution.
 
-Knowing, that init data is presented as query parameters list, to validate
+> [!TIP]
+> To avoid possible problems related to the init data validation process, we recommend utilizing
+> well-established and tested packages:
+> - For Node: [@telegram-apps/init-data-node](../packages/telegram-apps-init-data-node)
+> - For GoLang: [init-data-golang](../packages/init-data-golang.md)
+
+### Using Telegram Bot Token
+
+Init data validation is one of the most important parts in communication
+between client and server. It's validity guarantees, that init data can be trusted
+and used in the future code execution.
+
+Knowing that init data is presented as query parameters list, to validate
 them, developer should follow the steps:
 
 1. Iterate over all key-value pairs and create an array of string values in
@@ -94,28 +106,9 @@ them, developer should follow the steps:
 5. Compare the `hash` value received in the 1-st step with the result of the 4-th step.
 6. If these values are equal, passed init data can be trusted.
 
-::: tip
-In real-world applications, it is recommended to use additional mechanisms for verifying
-initialization data. For example, add their expiration date. This check can be implemented using
-the `auth_date` parameter, which is responsible for the date when the parameters were created. This
-solution will allow in case of theft of initialization data to prevent their constant use by an
-attacker.
-:::
+#### Example
 
-::: tip
-
-To avoid possible problems related to the init data validation process, we recommend utilizing
-well-established and
-tested packages:
-
-- For Node: [@telegram-apps/init-data-node](../packages/telegram-apps-init-data-node)
-- For GoLang: [init-data-golang](../packages/init-data-golang.md)
-
-:::
-
-### Example
-
-#### 1. Initial Input
+##### 1. Initial Input
 
 - **Telegram Bot token**: This value is used to sign the init data, and we will need it in the later
   steps of the validation process.
@@ -130,7 +123,7 @@ tested packages:
 query_id=AAHdF6IQAAAAAN0XohDhrOrc&user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%22%2C%22last_name%22%3A%22Kibenko%22%2C%22username%22%3A%22vdkfrost%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%7D&auth_date=1662771648&hash=c501b71e775f74ce10e377dea85a7ea24ecd640b223ea86dfe453e0eaed2e2b2
 ```
 
-#### 2. Create Key-Value Pairs and Extract Signature
+##### 2. Create Key-Value Pairs and Extract Signature
 
 As per the validation process, we should parse the init data as query parameters. Then, take all
 key-value pairs excluding the `hash` key, join them with the `=` symbol, and sort them in
@@ -148,7 +141,7 @@ The signature is the value in the `hash` key. In this case, it equals:
 c501b71e775f74ce10e377dea85a7ea24ecd640b223ea86dfe453e0eaed2e2b2
 ```
 
-#### 3. Create Telegram Bot Token Signature
+##### 3. Create Telegram Bot Token Signature
 
 To verify if the init data is signed correctly, we need to sign it ourselves. First, we must create
 an HMAC-SHA256 signature of the Telegram Bot token, using the `WebAppData` value as the
@@ -165,10 +158,11 @@ HMAC-SHA256(
 
 > [!WARNING]  
 > The received value must not be transformed into a hexadecimal sequence, as shown above. In the
-> next step, use it as-is (an array of bytes), but you can use the hexadecimal value to check if your
+> next step, use it as-is (an array of bytes), but you can use the hexadecimal value to check if
+> your
 > code generates the hash correctly.
 
-#### 4. Create and Compare Init Data Signature
+##### 4. Create and Compare Init Data Signature
 
 Finally, we compute the init data signature.
 
@@ -186,6 +180,121 @@ HMAC-SHA256(
 
 Now, by comparing the result with the `hash` value from Step 2, we can confirm that they are
 identical. This means we can trust the passed init data.
+
+### Using Telegram Public Key
+
+Another useful feature Telegram provides is it allows validating init data without knowing
+the bot secret token, but its identifier.
+
+At the moment, there are 2 Ed25519 public keys Telegram provides:
+
+- For production environment: `e7bf03a2fa4602af4580703d88dda5bb59f32ed8b02a56c187fe7d34caed242d`
+- For test environment: `40055058a4ee38156a06562e52eece92a771bcd8346a8c4615cb7376eddf72ec`
+
+To perform this kind of validation (called third-party validation), follow these steps:
+
+1. Iterate over all key-value pairs and create an array of string values in
+   format `{key}={value}`. Key `hash` should be excluded. The `signature` key should also be
+   excluded, but memoized. It represents the init data sign and will be used in the final step of
+   the validation process.
+2. Sort the computed array in the alphabetical order.
+3. Concatenate Telegram Bot identifier issued the init data with the `WebAppData` string using the
+   semicolon (`:`) and append a linebreak (`\n`).
+4. Join the pairs from the 2-nd step with the linebreak (`\n`) and append the final value to the
+   value from the 3-rd step.
+5. Verify Ed25519 signature using the value from the `signature` init data key.
+6. If verification is successful, the init data can be trusted.
+
+#### Example
+
+##### 1. Initial Input
+
+- **Production environment**: We are validating init data in the production environment. So, this
+  Ed25519 public key will be used:
+
+```
+e7bf03a2fa4602af4580703d88dda5bb59f32ed8b02a56c187fe7d34caed242d
+```
+
+- **Init data**: This data should be passed directly from the mini application to the server as-is.
+
+```
+user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%20%2B%20-%20%3F%20%5C%2F%22%2C%22last_name%22%3A%22Kibenko%22%2C%22username%22%3A%22vdkfrost%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F4FPEE4tmP3ATHa57u6MqTDih13LTOiMoKoLDRG4PnSA.svg%22%7D&chat_instance=8134722200314281151&chat_type=private&auth_date=1733584787&hash=2174df5b000556d044f3f020384e879c8efcab55ddea2ced4eb752e93e7080d6&signature=zL-ucjNyREiHDE8aihFwpfR9aggP2xiAo3NSpfe-p7IbCisNlDKlo7Kb6G4D0Ao2mBrSgEk4maLSdv6MLIlADQ
+```
+
+##### 2. Create Key-Value Pairs and Extract Signature
+
+As per the validation process, we should parse the init data as query parameters. Then, take all
+key-value pairs excluding the `hash` and `signature` keys, join them with the `=` symbol, and sort
+them in alphabetical order. The final array must be joined with the linebreak symbol (`\n`).
+
+The result will be:
+
+```
+auth_date=1733584787\nchat_instance=8134722200314281151\nchat_type=private\nuser={"id":279058397,"first_name":"Vladislav + - ? \/","last_name":"Kibenko","username":"vdkfrost","language_code":"ru","is_premium":true,"allows_write_to_pm":true,"photo_url":"https:\/\/t.me\/i\/userpic\/320\/4FPEE4tmP3ATHa57u6MqTDih13LTOiMoKoLDRG4PnSA.svg"}
+```
+
+The signature is the value in the `signature` key. In this case, it equals:
+
+```
+zL-ucjNyREiHDE8aihFwpfR9aggP2xiAo3NSpfe-p7IbCisNlDKlo7Kb6G4D0Ao2mBrSgEk4maLSdv6MLIlADQ
+```
+
+Nevertheless, in the future steps, we should convert it to a bytes array, assuming that this value
+is base64-encoded.
+
+> [!DANGER]  
+> At the moment, Telegram sends an invalid signature. Some programming languages (e.g., Go) consider
+> the signature as an invalid base64 value, as long as it doesn't fully comply with the standard.
+> When using the signature, remember to add paddings (`=` signs) at the end of the value in case
+> they are needed. In this example, the proper value would be:
+> ```  
+> zL-ucjNyREiHDE8aihFwpfR9aggP2xiAo3NSpfe-p7IbCisNlDKlo7Kb6G4D0Ao2mBrSgEk4maLSdv6MLIlADQ==
+> ```
+
+##### 3. Create Data-Check String
+
+Now, let's create a data-check string. To do so, we should join the Telegram Bot token with
+the `WebAppData` string using the semicolon (`:`) and append a linebreak. Then, the sorted init data
+from the previous step should be appended.
+
+Here is the result:
+
+```
+7342037359:WebAppData\nauth_date=1733584787\nchat_instance=8134722200314281151\nchat_type=private\nuser={"id":279058397,"first_name":"Vladislav + - ? \/","last_name":"Kibenko","username":"vdkfrost","language_code":"ru","is_premium":true,"allows_write_to_pm":true,"photo_url":"https:\/\/t.me\/i\/userpic\/320\/4FPEE4tmP3ATHa57u6MqTDih13LTOiMoKoLDRG4PnSA.svg"}
+```
+
+##### 4. Verify Ed25519 Signature
+
+Finally, we verify the signature.
+
+As long as we are in the production environment, we will use the corresponding Ed25519 public key:
+
+```
+e7bf03a2fa4602af4580703d88dda5bb59f32ed8b02a56c187fe7d34caed242d
+```
+
+This value must be converted to a bytes array, assuming that the value is a hexadecimal sequence.
+
+So here is the result of verification:
+
+```
+Ed25519-Verify(
+  7342037359:WebAppData\nauth_date=1733584787\nchat_instance=8134722200314281151\nchat_type=private\nuser={"id":279058397,"first_name":"Vladislav + - ? \/","last_name":"Kibenko","username":"vdkfrost","language_code":"ru","is_premium":true,"allows_write_to_pm":true,"photo_url":"https:\/\/t.me\/i\/userpic\/320\/4FPEE4tmP3ATHa57u6MqTDih13LTOiMoKoLDRG4PnSA.svg"},
+  *public key (as a hexadecimal sequence) converted to bytes array*,
+  *signature (as a base64-encoded value) converted to bytes array*
+) == true
+```
+
+If the verification is successful, the init data can be trusted.
+
+### Recommendation
+
+In real-world applications, it is recommended to use additional mechanisms for verifying
+initialization data. For example, add their expiration date. This check can be implemented using
+the `auth_date` parameter, which is responsible for the date when the parameters were created.
+This solution will allow in case of theft of initialization data to prevent their constant use by
+an attacker.
 
 ## Parameters List
 
