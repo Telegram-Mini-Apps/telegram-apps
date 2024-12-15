@@ -281,7 +281,7 @@ importers:
         version: link:../sdk
     devDependencies:
       '@types/react':
-        specifier: ^19.0.1
+        specifier: ^19.0.0
         version: 19.0.1
       react:
         specifier: ^19.0.0
