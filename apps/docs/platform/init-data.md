@@ -1,3 +1,7 @@
+---
+outline: [ 2, 3 ]
+---
+
 # Init Data
 
 In the list of [launch parameters](launch-parameters), initialization data is located in
@@ -84,7 +88,7 @@ them, developer should follow the steps:
 2. Sort the computed array in the alphabetical order.
 3. Create HMAC-SHA256 using key `WebAppData` and apply it to the Telegram Bot
    token, that is bound to your Mini App.
-4. Create HMAC-SHA256 using the result of the 3-rd step as a key. Apply
+4. Create HMAC-SHA256 using the result of the previous step as a key. Apply
    it to the pairs array joined with linebreak (`\n`) received in the 2-nd step
    and present the result as hex symbols sequence.
 5. Compare the `hash` value received in the 1-st step with the result of the 4-th step.
@@ -111,63 +115,77 @@ tested packages:
 
 ### Example
 
-Let's imagine, we have this input:
+#### 1. Initial Input
+
+- **Telegram Bot token**: This value is used to sign the init data, and we will need it in the later
+  steps of the validation process.
 
 ```
-Telegram Bot token:
-5768337691:AAGDAe6rjxu1cUgxK4BizYi--Utc3J9v5AU
-
-Init data:
-user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%22%2C%22last_name%22%3A%22Kibenko%22%2C%22username%22%3A%22vdkfrost%22%2C%22language_code%22%3A%22en%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%7D
-&chat_instance=-3788475317572404878
-&chat_type=private
-&auth_date=1709144340
-&hash=371697738012ebd26a111ace4aff23ee265596cd64026c8c3677956a85ca1827
+5768337691:AAH5YkoiEuPk8-FZa32hStHTqXiLPtAEhx8
 ```
 
-After the 1-st and 2-nd steps we should receive the following data:
+- **Init data**: This data should be passed directly from the mini application to the server as-is.
 
-```js
-// Sorted pairs.
-[
-  'auth_date=1709144340',
-  'chat_instance=-3788475317572404878',
-  'chat_type=private',
-  'user={"id":279058397,"first_name":"Vladislav","last_name":"Kibenko","username":"vdkfrost","language_code":"en","is_premium":true,"allows_write_to_pm":true}'
-]
-
-// Hash.
-'371697738012ebd26a111ace4aff23ee265596cd64026c8c3677956a85ca1827'
+```
+query_id=AAHdF6IQAAAAAN0XohDhrOrc&user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%22%2C%22last_name%22%3A%22Kibenko%22%2C%22username%22%3A%22vdkfrost%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%7D&auth_date=1662771648&hash=c501b71e775f74ce10e377dea85a7ea24ecd640b223ea86dfe453e0eaed2e2b2
 ```
 
-Then, create HMAC-SHA256 required in the 3-rd step. It should be based on the
-`WebAppData` string literal value and Telegram Bot token.
+#### 2. Create Key-Value Pairs and Extract Signature
+
+As per the validation process, we should parse the init data as query parameters. Then, take all
+key-value pairs excluding the `hash` key, join them with the `=` symbol, and sort them in
+alphabetical order. The final array must be joined with the linebreak symbol (`\n`).
+
+The result will be:
+
+```
+auth_date=1662771648\nquery_id=AAHdF6IQAAAAAN0XohDhrOrc\nuser={"id":279058397,"first_name":"Vladislav","last_name":"Kibenko","username":"vdkfrost","language_code":"ru","is_premium":true}
+```
+
+The signature is the value in the `hash` key. In this case, it equals:
+
+```
+c501b71e775f74ce10e377dea85a7ea24ecd640b223ea86dfe453e0eaed2e2b2
+```
+
+#### 3. Create Telegram Bot Token Signature
+
+To verify if the init data is signed correctly, we need to sign it ourselves. First, we must create
+an HMAC-SHA256 signature of the Telegram Bot token, using the `WebAppData` value as the
+cryptographic key.
+
+Here is the result:
 
 ```
 HMAC-SHA256(
-  "WebAppData", 
-  "5768337691:AAGDAe6rjxu1cUgxK4BizYi--Utc3J9v5AU"
-) = "aa492a44bdf019c759defb1698c1d77690189973945491a756051cdc1207a449"
+  5768337691:AAH5YkoiEuPk8-FZa32hStHTqXiLPtAEhx8,
+  WebAppData
+) = a5c609aa52f63cb5e6d8ceb6e4138726ea82bbc36bb786d64482d445ea38ee5f
 ```
 
-Finally, let's compute the init data sign using the sorted pairs received in
-the 2-nd step and the value from the 3-rd step:
+> [!WARNING]  
+> The received value must not be transformed into a hexadecimal sequence, as shown above. In the
+> next step, use it as-is (an array of bytes), but you can use the hexadecimal value to check if your
+> code generates the hash correctly.
+
+#### 4. Create and Compare Init Data Signature
+
+Finally, we compute the init data signature.
+
+To do this, create another HMAC-SHA256 signature using the transformed init data from Step 2 as the
+input, and the hash we received in Step 3 as the cryptographic key.
+
+Here is the result:
 
 ```
-joined_pairs =
-   "auth_date=1709144340
-   chat_instance=-3788475317572404878
-   chat_type=private
-   user={\"id\":279058397,\"first_name\":\"Vladislav\",\"last_name\":\"Kibenko\",\"username\":\"vdkfrost\",\"language_code\":\"en\",\"is_premium\":true,\"allows_write_to_pm\":true}"
-
 HMAC-SHA256(
-  "aa492a44bdf019c759defb1698c1d77690189973945491a756051cdc1207a449",
-  joined_pairs,
-) = "371697738012ebd26a111ace4aff23ee265596cd64026c8c3677956a85ca1827"
+  auth_date=1662771648\nquery_id=AAHdF6IQAAAAAN0XohDhrOrc\nuser={"id":279058397,"first_name":"Vladislav","last_name":"Kibenko","username":"vdkfrost","language_code":"ru","is_premium":true},
+  *signature from Step 3*,
+) = c501b71e775f74ce10e377dea85a7ea24ecd640b223ea86dfe453e0eaed2e2b2
 ```
 
-Now, comparing the last received result with the `hash` value from the 1-st step,
-we can see, that they are equal. It means, we can trust the passed init data.
+Now, by comparing the result with the `hash` value from Step 2, we can confirm that they are
+identical. This means we can trust the passed init data.
 
 ## Parameters List
 
