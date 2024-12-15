@@ -1,5 +1,11 @@
 # @telegram-apps/sdk-react
 
+## 2.0.20
+
+### Patch Changes
+
+- 26e48b3: Allow using `react@19`
+
 ## 2.0.19
 
 ### Patch Changes
