@@ -69,6 +69,14 @@ export interface Methods {
    */
   iframe_will_reload: CreateMethodParams;
   /**
+   * Prompts the user to add the Mini App to the home screen. Note that if the device cannot
+   * determine the installation status, the event may not be received even if the icon has
+   * been added.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-add-to-home-screen
+   */
+  web_app_add_to_home_screen: CreateMethodParams;
+  /**
    * Emitted by bot mini apps to ask the client to initialize the biometric authentication manager
    * object for the current bot, emitting a `biometry_info_received` event on completion.
    *
@@ -148,6 +156,13 @@ export interface Methods {
      */
     token: string;
   }>;
+  /**
+   * Sends a request to the native Telegram application to check if the current mini
+   * application is added to the device's home screen.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-check-home-screen
+   */
+  web_app_check_home_screen: CreateMethodParams;
   /**
    * Closes Mini App.
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-close
