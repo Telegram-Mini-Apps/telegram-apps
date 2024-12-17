@@ -1,5 +1,12 @@
 # @telegram-apps/create-mini-app
 
+## 1.3.0
+
+### Minor Changes
+
+- 393122f: Deprecate JavaScript, jQuery and Pure TypeScript templates. Don't push any commits when the
+  template was cloned.
+
 ## 1.2.0
 
 ### Minor Changes
