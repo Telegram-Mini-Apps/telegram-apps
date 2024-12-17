@@ -1,5 +1,5 @@
-import { Section } from './types.js';
-import { Framework, Language, SDK } from '../../types.js';
+import type { Section } from './types.js';
+import type { Framework, Language, SDK } from '../types.js';
 
 export const sections: Section[] = [
   {
@@ -25,8 +25,8 @@ export const sections: Section[] = [
       { title: 'React.js', value: 'react', defaultChecked: true },
       { title: 'Solid.js', value: 'solid' },
       { title: 'Next.js', value: 'next' },
-      { title: 'jQuery', value: 'jquery' },
       { title: 'Vue.js', value: 'vue' },
+      { title: 'jQuery', value: 'jquery' },
       { title: 'None', value: 'none' },
     ],
   },

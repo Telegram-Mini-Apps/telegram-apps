@@ -1,4 +1,4 @@
-import type { Framework, Language, SDK } from '../../types.js';
+import type { Framework, Language, SDK } from '../types.js';
 
 interface CreateSection<N, V> {
   title: string;
@@ -10,6 +10,7 @@ export interface Choice<V> {
   title: string;
   value: V;
   defaultChecked?: boolean;
+  deprecationReason?: string;
 }
 
 export type Section =
