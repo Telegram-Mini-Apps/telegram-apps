@@ -62,7 +62,6 @@ export const mount = wrapBasic('mount', createMountFn<State>(
       const shared = {
         contentSafeAreaInsets: retrievedContentSafeAreaInsets,
         isFullscreen: !!lp.fullscreen,
-        isVisible: true,
         safeAreaInsets: retrievedSafeAreaInsets,
       };
       if (['macos', 'tdesktop', 'unigram', 'webk', 'weba', 'web'].includes(lp.platform)) {

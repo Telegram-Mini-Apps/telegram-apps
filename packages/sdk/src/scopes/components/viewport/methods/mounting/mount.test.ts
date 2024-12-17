@@ -53,7 +53,6 @@ describe('is safe', () => {
         height: 333,
         isExpanded: true,
         isFullscreen: true,
-        isVisible: true,
         safeAreaInsets: {
           bottom: 55,
           left: 12,
@@ -88,14 +87,6 @@ describe('is safe', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/viewport');
       expect(isExpanded()).toBe(true);
-    });
-
-    it('should set isVisible true if session storage key "tapps/viewport" is not present', async () => {
-      const spy = mockSessionStorageGetItem(() => null);
-
-      await mount();
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('tapps/viewport');
     });
   });
 
