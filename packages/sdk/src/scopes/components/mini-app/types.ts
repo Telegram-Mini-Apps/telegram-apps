@@ -9,6 +9,7 @@ export interface State {
   backgroundColor: BackgroundColor;
   bottomBarColor: BottomBarColor;
   headerColor: HeaderColor;
+  isActive: boolean;
 }
 
 export interface GetCssVarNameFn {

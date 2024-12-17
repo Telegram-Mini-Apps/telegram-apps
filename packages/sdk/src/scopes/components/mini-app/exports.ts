@@ -11,6 +11,7 @@ export {
 } from './methods.js';
 export {
   backgroundColor as miniAppBackgroundColor,
+  backgroundColorRGB as miniAppBackgroundColorRGB,
   bottomBarColor as miniAppBottomBarColor,
   bottomBarColorRGB as miniAppBottomBarColorRGB,
   headerColor as miniAppHeaderColor,
@@ -18,6 +19,7 @@ export {
   isMounted as isMiniAppMounted,
   isCssVarsBound as isMiniAppCssVarsBound,
   isDark as isMiniAppDark,
+  isActive as isMiniAppActive,
   state as miniAppState,
 } from './signals.js';
 export type {
