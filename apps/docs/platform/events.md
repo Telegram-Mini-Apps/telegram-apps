@@ -353,11 +353,14 @@ user started dragging the application or called the expansion method.
 
 Available since: **v8.0**
 
-Occurs whenever the mini app is visible or hidden (means collapsed or in another tab).
+Active state assumes that the native Telegram client is currently working with the
+current mini application. It is important to note that this is not related to the
+mini application’s visibility, but rather its selection among other currently opened
+mini applications.
 
-| Field      | Type      | Description                                        |
-|------------|-----------|----------------------------------------------------|
-| is_visible | `boolean` | Indicates if the application is currently visible. |
+| Field      | Type      | Description                                       |
+|------------|-----------|---------------------------------------------------|
+| is_visible | `boolean` | Indicates if the application is currently active. |
 
 ### `write_access_requested`
 
