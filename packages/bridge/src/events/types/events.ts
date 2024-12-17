@@ -366,13 +366,18 @@ export interface Events {
     is_state_stable: boolean;
   };
   /**
-   * App shown or hidden (in another tab or collapsed).
+   * Occurs whenever the mini app becomes active or inactive.
+   *
+   * Active state assumes that the native Telegram client is currently working with the
+   * current mini application. It is important to note that this is not related to the
+   * mini application’s visibility, but rather its selection among other currently opened
+   * mini applications.
    * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/events#visibility_changed
    */
   visibility_changed: {
     /**
-     * Is application currently visible on screen.
+     * Indicates if the application is currently active.
      */
     is_visible: boolean;
   };
