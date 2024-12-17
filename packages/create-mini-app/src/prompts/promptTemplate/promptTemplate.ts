@@ -62,7 +62,7 @@ export const promptTemplate = createPrompt<Template, {}>(
       }, []),
     );
 
-    // True, if used confirmed his choice.
+    // True, if user confirmed his choice.
     const [completed, setCompleted] = useState(false);
 
     // Chosen template.
@@ -219,13 +219,13 @@ export const promptTemplate = createPrompt<Template, {}>(
 
       // Help tip.
       // theme.style.help(
-        [
+      [
         `${theme.style.key('space')} to select`,
         theme.style.key(figures.arrowUp),
         theme.style.key(figures.arrowDown),
         `${theme.style.key(figures.arrowLeft)} and ${theme.style.key(figures.arrowDown)} to change the cursor`,
       ].join(', '),
-    // ),
+      // ),
 
       new Separator().separator,
 
