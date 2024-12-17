@@ -114,6 +114,14 @@ event.
 
 Notifies parent iframe about the current iframe is going to reload.
 
+### `web_app_add_to_home_screen`
+
+Available since: **v8.0**
+
+Prompts the user to add the Mini App to the home screen. Note that if the device cannot
+determine the installation status, the event may not be received even if the icon has
+been added.
+
 ### `web_app_biometry_get_info`
 
 Available since: **v7.2**
@@ -161,6 +169,13 @@ string.
 | Field | Type     | Description                                     |
 |-------|----------|-------------------------------------------------|
 | token | `string` | Token to store. Has max length of 1024 symbols. |
+
+### `web_app_check_home_screen`
+
+Available since: **v8.0**
+
+Sends a request to the native Telegram application to check if the current mini
+application is added to the device's home screen.
 
 ### `web_app_close`
 

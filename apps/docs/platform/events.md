@@ -237,6 +237,29 @@ Occurs whenever the mini app enters or exits the fullscreen mode.
 |-------|----------|---------------------------------------------------------------------------------------|
 | error | `string` | Fullscreen mode status error. Possible values: `UNSUPPORTED` or `ALREADY_FULLSCREEN`. |
 
+### `home_screen_added`
+
+Available since: **v8.0**
+
+The mini application was added to the device's home screen.
+
+### `home_screen_checked`
+
+Available since: **v8.0**
+
+The status of the mini application being added to the home screen has been checked.
+
+| Field  | Type     | Description                                                                                                                        |
+|--------|----------|------------------------------------------------------------------------------------------------------------------------------------|
+| status | `string` | The status of the mini application being added to the home screen. Possible values: `unsupported`, `unknown`, `added` and `missed` |
+
+- `unsupported` – the feature is not supported, and it is not possible to add the icon to the home
+  screen,
+- `unknown` – the feature is supported, and the icon can be added, but it is not possible to
+  determine if the icon has already been added,
+- `added` – the icon has already been added to the home screen,
+- `missed` – the icon has not been added to the home screen.
+
 ### `invoice_closed`
 
 An invoice was closed.
