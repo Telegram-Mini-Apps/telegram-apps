@@ -16,10 +16,6 @@ export const onFullscreenChanged: EventListener<'fullscreen_changed'> = (data) =
   setState({ isFullscreen: data.is_fullscreen });
 };
 
-export const onVisibilityChanged: EventListener<'visibility_changed'> = (data) => {
-  setState({ isVisible: data.is_visible });
-};
-
 export const onSafeAreaChanged: EventListener<'safe_area_changed'> = (data) => {
   setState({ safeAreaInsets: data });
 };

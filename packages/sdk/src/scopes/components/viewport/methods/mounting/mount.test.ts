@@ -10,7 +10,6 @@ import { mount } from '@/scopes/components/viewport/methods/mounting/mount.js';
 import { isMounted } from '@/scopes/components/viewport/signals/mounting.js';
 import { isFullscreen } from '@/scopes/components/viewport/signals/fullscreen.js';
 import { isExpanded } from '@/scopes/components/viewport/signals/flags.js';
-import { isVisible } from '@/scopes/components/viewport/signals/visibility.js';
 import { $version } from '@/scopes/globals.js';
 import { state } from '@/scopes/components/viewport/signals/state.js';
 
@@ -97,7 +96,6 @@ describe('is safe', () => {
       await mount();
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('tapps/viewport');
-      expect(isVisible()).toBe(true);
     });
   });
 

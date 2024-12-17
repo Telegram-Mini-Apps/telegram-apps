@@ -8,7 +8,6 @@ export {
   isCssVarsBound as isViewportCssVarsBound,
   isChangingFullscreen,
   isFullscreen,
-  isVisible,
   isMounting as isViewportMounting,
   isMounted as isViewportMounted,
   mount as mountViewport,

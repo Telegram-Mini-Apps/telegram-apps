@@ -21,7 +21,6 @@ export {
   isFullscreen,
   isChangingFullscreen,
 } from './signals/fullscreen.js';
-export { isVisible } from './signals/visibility.js';
 export { isMounted, isMounting, mountError, mountPromise } from './signals/mounting.js';
 export {
   safeAreaInsets,

@@ -10,7 +10,6 @@ import {
   FS_CHANGED_EVENT,
   SA_CHANGED_EVENT,
   VIEWPORT_CHANGED_EVENT,
-  VISIBILITY_CHANGED_EVENT
 } from '../../const.js';
 import { isMounted, mountPromise, mountError } from '../../signals/mounting.js';
 import { getStateFromStorage, setState } from '../../signals/state.js';
@@ -26,7 +25,6 @@ import {
   onFullscreenChanged,
   onSafeAreaChanged,
   onViewportChanged,
-  onVisibilityChanged
 } from './shared.js';
 
 /**
@@ -94,7 +92,6 @@ export const mount = wrapBasic('mount', createMountFn<State>(
     on(FS_CHANGED_EVENT, onFullscreenChanged);
     on(SA_CHANGED_EVENT, onSafeAreaChanged);
     on(CSA_CHANGED_EVENT, onContentSafeAreaChanged);
-    on(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
     setState(result);
   },
   isMounted,
