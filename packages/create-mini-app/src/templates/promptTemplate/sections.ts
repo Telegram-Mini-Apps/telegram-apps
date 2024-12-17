@@ -1,5 +1,5 @@
-import { Section } from './types.js';
-import { Framework, Language, SDK } from '../../types.js';
+import type { Section } from './types.js';
+import type { Framework, Language, SDK } from '../types.js';
 
 export const sections: Section[] = [
   {

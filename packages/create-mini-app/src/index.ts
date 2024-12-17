@@ -2,18 +2,20 @@
 import process from 'node:process';
 import { rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { URL } from 'node:url';
+import { existsSync } from 'node:fs';
 
 import chalk from 'chalk';
 import { program } from 'commander';
 
 import { cloneTemplate } from './cloneTemplate.js';
 import { isGitInstalled } from './isGitInstalled.js';
-import { promptTemplate } from './prompts/promptTemplate/promptTemplate.js';
-import { promptDirName } from './prompts/promptDirName.js';
-import { promptGitRepo } from './prompts/promptGitRepo.js';
+import { promptTemplate } from './templates/promptTemplate/promptTemplate.js';
 import { spawnWithSpinner } from './spawnWithSpinner.js';
 import { lines } from './utils/lines.js';
-import type { TemplateRepository } from './types.js';
+import type { TemplateRepository } from './templates/types.js';
+import { input } from './prompts/input.js';
+import { createCustomTheme } from './createCustomTheme.js';
 
 import packageJson from '../package.json';
 
@@ -22,73 +24,118 @@ program
   .description(packageJson.description)
   .version(packageJson.version)
   .action(async () => {
+    const theme = createCustomTheme();
+
     // Check if git is installed.
     if (!await isGitInstalled()) {
-      console.error('To run this CLI tool, you must have git installed. Installation guide: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git');
+      console.log(
+        theme.style.error('To run this CLI tool, you must have git installed. Installation guide: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git'),
+      );
       process.exit(1);
     }
 
-    // Prompt the project root directory name.
+    // Step 1: Prompt the project root directory.
     let rootDir: string | null = null;
     try {
-      rootDir = await promptDirName({ defaultValue: 'mini-app' });
+      rootDir = await input({
+        message: 'Directory name:',
+        required: true,
+        default: 'mini-app',
+        hint: 'This directory will be used as a root directory for the project. It is allowed to use alphanumeric latin letters, dashes and dots.',
+        theme,
+        validate(value) {
+          if (['.', '..'].includes(value)) {
+            return 'Value is not a valid directory name';
+          }
+
+          if (!value.match(/^[a-zA-Z0-9\-.]+$/)) {
+            return 'Value contains invalid symbols';
+          }
+
+          if (existsSync(resolve(value))) {
+            return `Directory "${value}" already exists`;
+          }
+        },
+      });
     } catch {
       process.exit(0);
     }
 
-    // Prompt the target template.
+    // Step 2: Prompt the target template.
     let repository: TemplateRepository;
     try {
-      const { repository: promptRepo } = await promptTemplate({});
+      const { repository: promptRepo } = await promptTemplate({ theme });
       repository = promptRepo;
     } catch {
       process.exit(0);
     }
 
-    // Prompt Git repo information.
+    // Step 3: Prompt future Git repository information.
     let gitRepo: string | undefined;
     try {
-      gitRepo = await promptGitRepo({});
+      gitRepo = await input({
+        message: 'Git remote repository URL:',
+        validate(value) {
+          // Check if it is SSH connection string.
+          if (value.match(/\w+@[\w\-.]+:[\w-]+\/[\w./]+/)) {
+            return;
+          }
+
+          // Check if the specified value is URL.
+          try {
+            new URL(value);
+            return '';
+          } catch {
+            return 'Value is not considered as URL link or SSH connection string.';
+          }
+        },
+        theme,
+        hint: lines(
+          'This value will be used to connect created project with your remote Git repository. It should either be an HTTPS link or SSH connection string.',
+          `Leave value empty and press ${theme.style.key('enter')} to skip this step.`,
+          chalk.bold('Examples'),
+          'SSH: git@github.com:user/repo.git',
+          'URL: https://github.com/user/repo.git',
+        ),
+      });
     } catch {
       process.exit(0);
     }
 
-    // Clone the template.
+    // Step 4: Clone the template.
     try {
-      await cloneTemplate(rootDir, repository);
+      await cloneTemplate(rootDir, repository, theme);
     } catch {
       process.exit(1);
     }
 
-    // Remove the .git folder.
+    // Step 5: Remove the .git folder.
     try {
       await spawnWithSpinner({
-        title: 'Removing the .git directory.',
+        message: 'Removing the .git directory.',
         command: () => rm(resolve(rootDir, '.git'), { recursive: true }),
-        titleFail: (err: string) => `Failed to remove the .git directory. Error: ${err}`,
-        titleSuccess: '.git directory removed.',
+        messageFail: (err: string) => `Failed to remove the .git directory. Error: ${err}`,
+        messageSuccess: '.git directory removed.',
+        theme,
       });
     } catch {
       process.exit(1);
     }
 
-    // Initialize new .git folder if required.
+    // Step 6: Initialize a new .git folder and configure remote.
     if (gitRepo) {
       try {
         await spawnWithSpinner({
-          title: `Initializing Git repository: ${gitRepo}`,
+          message: `Initializing Git repository: ${gitRepo}`,
           command: [
             `cd "${rootDir}"`,
             'git init',
-            'git add -A',
-            'git commit -m "first commit"',
-            'git branch -M master',
             `git remote add origin "${gitRepo}"`,
-            'git push -u origin master',
           ].join(' && '),
-          titleFail: (error) => `Failed to initialize Git repository. ${error}`,
-          titleSuccess: 'Git repository initialized.',
-        })
+          messageFail: (error) => `Failed to initialize Git repository. ${error}`,
+          messageSuccess: `Git repository initialized. Remote "origin" was set to "${gitRepo}"`,
+          theme,
+        });
       } catch {
         // We are not doing anything as long as this step is not really that important.
         // Nevertheless, a developer will be notified about something went wrong.

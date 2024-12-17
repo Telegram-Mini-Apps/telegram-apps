@@ -6,40 +6,41 @@ import {
   useKeypress,
   useState,
 } from '@inquirer/core';
+import figures from 'figures';
 
 import { spaces } from '../utils/spaces.js';
-import { usePromptPrefix } from '../utils/usePromptPrefix.js';
-import { useInputPrefix } from '../utils/useInputPrefix.js';
 import { lines } from '../utils/lines.js';
 import type { CustomTheme } from '../types.js';
 
 export const input = createPrompt<string, {
   /**
-   * Message to insert between the prefix and input.
-   */
-  message?: string;
-  theme?: CustomTheme;
-  /**
    * Input default value.
    */
   default?: string;
   /**
-   * Validation function.
-   * @param value
-   */
-  validate?: (value: string) => string | undefined | null,
-  /**
    * Input-related hint.
    */
   hint?: string;
+  /**
+   * Message to insert between the prefix and input.
+   */
+  message?: string;
+  required?: boolean,
+  theme: CustomTheme;
+  /**
+   * Validation function.
+   * @param value
+   */
+  validate?: (value: string) => string | undefined | null;
 }>(({
   theme,
   default: defaultValue,
   message,
   validate,
   hint,
+  required,
 }, done) => {
-  const { style } = makeTheme(theme);
+  const { style, prefix } = makeTheme(theme);
   const [value, setValue] = useState('');
   const [error, setError] = useState<string>();
   const [completed, setCompleted] = useState(false);
@@ -61,12 +62,12 @@ export const input = createPrompt<string, {
         return rl.write(value);
       }
       return value
-        ? error
-          ? undefined
-          : confirm(value)
+        ? confirm(value)
         : defaultValue
           ? confirm(defaultValue)
-          : setError('The value must be provided');
+          : required
+            ? setError('The value must be provided')
+            : confirm('');
     }
 
     if (key.name === 'tab' && !value) {
@@ -84,12 +85,13 @@ export const input = createPrompt<string, {
 
   return [
     spaces(
-      usePromptPrefix(completed),
+      prefix[completed ? 'done' : 'idle'],
       message && style.message(message, 'idle'),
-      useInputPrefix(completed),
+      // TODO: We need some specific style for it.
+      style.placeholder(completed ? figures.ellipsis : figures.pointerSmall),
       completed
         ? style.answer(value)
-        : value || (defaultValue ? style.placeholder(defaultValue) : ''),
+        : value || (defaultValue ? style.defaultAnswer(defaultValue) : ''),
     ),
     completed ? undefined : lines(hint && style.help(hint), error && style.error(error)),
   ];

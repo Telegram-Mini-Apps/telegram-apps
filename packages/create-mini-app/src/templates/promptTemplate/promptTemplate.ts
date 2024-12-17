@@ -14,17 +14,15 @@ import chalk from 'chalk';
 import figures from 'figures';
 
 import { lines } from '../../utils/lines.js';
-import { usePromptPrefix } from '../../utils/usePromptPrefix.js';
-import { findTemplate } from '../../templates.js';
-import { theme } from '../../theme.js';
+import { findTemplate } from '../templates.js';
 import { spaces } from '../../utils/spaces.js';
-import type { Template } from '../../types.js';
+import type { Template } from '../types.js';
+import type { CustomTheme } from '../../types.js';
 
 import { findTitleByNameAndValue, sections } from './sections.js';
-import { Cell, SelectedChoices } from './types.js';
-import { usePointer } from '../../utils/usePointer.js';
+import type { Cell, SelectedChoices } from './types.js';
 
-/* Table settings. */
+//#region Table settings.
 
 const CORNER_TOP_LEFT = figures.lineDownBoldRightBold; // ┌
 const CORNER_TOP_RIGHT = figures.lineDownBoldLeftBold; // ┐
@@ -37,8 +35,12 @@ const LINE_VER = figures.lineVerticalBold; // ━
 const PADDING_HOR_LEFT = 1;
 const PADDING_HOR_RIGHT = 3;
 
-export const promptTemplate = createPrompt<Template, {}>(
-  (_, done) => {
+//#endregion
+
+export const promptTemplate = createPrompt<Template, { theme: CustomTheme }>(
+  ({
+    theme: { style, prefix },
+  }, done) => {
     // Selection coordinates.
     const [x, setX] = useState(0);
     const [y, setY] = useState(0);
@@ -62,13 +64,11 @@ export const promptTemplate = createPrompt<Template, {}>(
       }, []),
     );
 
-    // True, if user confirmed his choice.
+    // True, if the user confirmed his choice.
     const [completed, setCompleted] = useState(false);
 
     // Chosen template.
-    const template = useMemo(() => {
-      return findTemplate(selected.language, selected.sdk, selected.framework);
-    }, [selected]);
+    const template = findTemplate(selected.language, selected.sdk, selected.framework);
 
     // Maximum Y user can reach.
     const maxY = useMemo(() => sections[x].choices.length - 1, [x]);
@@ -100,12 +100,14 @@ export const promptTemplate = createPrompt<Template, {}>(
           const isSelected = selected[section.name] === choice.value;
           const choiceLength = choice.title.length + 4;
 
-          const pointer = isActive ? usePointer() : ' ';
+          const pointer = isActive ? prefix.pointer : ' ';
           const cursor = isSelected
             ? template
-              ? chalk.green(figures.radioOn)
+              ? template.deprecationReason
+                ? chalk.yellow(figures.radioOn)
+                : chalk.green(figures.radioOn)
               : chalk.red(figures.radioOn)
-            : theme.style.muted(figures.radioOff);
+            : style.placeholder(figures.radioOff);
 
           lengths[sIdx] = Math.max(lengths[sIdx], choiceLength);
 
@@ -133,7 +135,10 @@ export const promptTemplate = createPrompt<Template, {}>(
     const paddingLeft = ' '.repeat(PADDING_HOR_LEFT);
     const paddingRight = ' '.repeat(PADDING_HOR_RIGHT);
 
-    const message = spaces(usePromptPrefix(completed), theme.style.message('Preferred technologies:', 'idle'));
+    const message = spaces(
+      prefix[completed ? 'done' : 'idle'],
+      style.message('Preferred technologies:', 'idle'),
+    );
 
     if (completed) {
       const lang = findTitleByNameAndValue('language', template!.language);
@@ -218,23 +223,26 @@ export const promptTemplate = createPrompt<Template, {}>(
       [CORNER_BOTTOM_LEFT, horizontalColumnLines.join(LINE_HOR_T_UP), CORNER_BOTTOM_RIGHT].join(''),
 
       // Help tip.
-      // theme.style.help(
       [
-        `${theme.style.key('space')} to select`,
-        theme.style.key(figures.arrowUp),
-        theme.style.key(figures.arrowDown),
-        `${theme.style.key(figures.arrowLeft)} and ${theme.style.key(figures.arrowDown)} to change the cursor`,
+        `${style.key('space')} to select`,
+        style.key(figures.arrowUp),
+        style.key(figures.arrowDown),
+        `${style.key(figures.arrowLeft)} and ${style.key(figures.arrowDown)} to change the cursor`,
       ].join(', '),
-      // ),
 
       new Separator().separator,
 
+      // Deprecation warning.
+      template && template.deprecationReason
+        ? style.warning(template.deprecationReason)
+        : undefined,
+
       // Selection status.
       template
-        ? theme.style.success(`A template using these technologies was discovered. Press ${theme.style.key('enter')} to proceed.`)
-        : theme.style.error('Unable to find a template using these technologies'),
+        ? style.success(`A template using these technologies was discovered. Press ${style.key('enter')} to proceed.`)
+        : style.error('Unable to find a template using these technologies'),
 
-      theme.style.help(
+      style.help(
         'According to selected technologies, the CLI tool will pick a corresponding template, which will be used as a base for your application.',
       ),
 
