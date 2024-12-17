@@ -1,5 +1,17 @@
 # @telegram-apps/sdk
 
+## 2.10.0
+
+### Minor Changes
+
+- 7d6ec83: Add functionality related to the mini apps active state.
+
+### Patch Changes
+
+- Updated dependencies [3366f0c]
+  - @telegram-apps/bridge@1.8.0
+  - @telegram-apps/navigation@1.0.10
+
 ## 2.9.1
 
 ### Patch Changes

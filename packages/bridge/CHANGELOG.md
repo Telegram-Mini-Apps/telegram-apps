@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 1.8.0
+
+### Minor Changes
+
+- 3366f0c: Add `visibility_changed` event.
+
 ## 1.7.1
 
 ### Patch Changes
