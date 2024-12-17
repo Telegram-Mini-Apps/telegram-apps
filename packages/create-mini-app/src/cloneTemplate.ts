@@ -1,7 +1,8 @@
 import chalk from 'chalk';
 
 import { spawnWithSpinner } from './spawnWithSpinner.js';
-import type { TemplateRepository } from './types.js';
+import type { TemplateRepository } from './templates/types.js';
+import type { CustomTheme } from './types.js';
 
 /**
  * Clones the template.
@@ -9,6 +10,7 @@ import type { TemplateRepository } from './types.js';
  * @param https - repository https link.
  * @param ssh - repository ssh link.
  * @param link - repository GitHub link.
+ * @param theme - inquirer theme.
  */
 export async function cloneTemplate(
   rootDir: string,
@@ -16,16 +18,18 @@ export async function cloneTemplate(
     clone: { https, ssh },
     link,
   }: TemplateRepository,
+  theme: CustomTheme,
 ): Promise<void> {
-  const titleSuccess = `Cloned template: ${chalk.blue(link)}`;
+  const messageSuccess = `Cloned template: ${chalk.blue(link)}`;
 
   // Clone the template using HTTPS.
   try {
     await spawnWithSpinner({
       command: `git clone "${https}" "${rootDir}"`,
-      title: `Cloning the template from GitHub (HTTPS): ${chalk.bold.blue(https)}`,
-      titleFail: (error) => `Failed to load the template using HTTPS. ${error}`,
-      titleSuccess,
+      message: `Cloning the template from GitHub (HTTPS): ${chalk.bold.blue(https)}`,
+      messageFail: (error) => `Failed to load the template using HTTPS. ${error}`,
+      messageSuccess,
+      theme,
     });
     return;
   } catch {
@@ -34,8 +38,9 @@ export async function cloneTemplate(
   // Clone the template using SSH.
   await spawnWithSpinner({
     command: `git clone "${ssh}" "${rootDir}"`,
-    title: `Cloning the template from GitHub (SSH): ${chalk.bold.blue(ssh)}`,
-    titleFail: (error) => `Failed to load the template using SSH. ${error}`,
-    titleSuccess,
+    message: `Cloning the template from GitHub (SSH): ${chalk.bold.blue(ssh)}`,
+    messageFail: (error) => `Failed to load the template using SSH. ${error}`,
+    messageSuccess,
+    theme,
   });
 }

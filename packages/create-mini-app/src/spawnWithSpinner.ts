@@ -3,21 +3,14 @@ import { spawn } from 'node:child_process';
 import chalk from 'chalk';
 import ora from 'ora';
 
-import { theme } from './theme.js';
+import { CustomTheme } from './types.js';
+
 
 interface SharedOptions {
-  /**
-   * Spinner title.
-   */
-  title: string;
-  /**
-   * Text displayed when process completed successfully.
-   */
-  titleSuccess?: string;
-  /**
-   * Text displayed when process failed.
-   */
-  titleFail?: string | ((error: string) => string);
+  message: string;
+  messageSuccess?: string;
+  messageFail?: string | ((error: string) => string);
+  theme: CustomTheme;
 }
 
 interface TerminalOptions extends SharedOptions {
@@ -48,17 +41,21 @@ function formatError(e: unknown): string {
  */
 export function spawnWithSpinner({
   command,
-  title,
-  titleFail,
-  titleSuccess,
+  message,
+  messageFail,
+  messageSuccess,
+  theme: {
+    style,
+    spinner: themeSpinner
+  },
 }: TerminalOptions | OperationOptions): Promise<void> {
-  const { style } = theme;
   const spinner = ora({
-    text: style.message(title, 'loading'),
+    text: style.message(message, 'loading'),
     hideCursor: false,
+    spinner: themeSpinner,
   }).start();
 
-  const success = titleSuccess && style.message(titleSuccess, 'done');
+  const success = messageSuccess && style.message(messageSuccess, 'done');
 
   if (typeof command === 'function') {
     return command()
@@ -69,10 +66,10 @@ export function spawnWithSpinner({
         const errString = formatError(e);
         spinner.fail(
           style.error(
-            titleFail
-              ? typeof titleFail === 'string'
-                ? titleFail
-                : titleFail(errString)
+            messageFail
+              ? typeof messageFail === 'string'
+                ? messageFail
+                : messageFail(errString)
               : errString,
           ),
         );
@@ -108,10 +105,10 @@ export function spawnWithSpinner({
 
       const errString = errBuf.length ? errBuf.toString() : `Error code: ${code}`;
       const errorMessage = style.error(
-        titleFail
-          ? typeof titleFail === 'string'
-            ? titleFail
-            : titleFail(errString)
+        messageFail
+          ? typeof messageFail === 'string'
+            ? messageFail
+            : messageFail(errString)
           : errString,
       );
 
