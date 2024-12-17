@@ -9,7 +9,7 @@ import {
   CSA_CHANGED_EVENT,
   FS_CHANGED_EVENT,
   SA_CHANGED_EVENT,
-  VIEWPORT_CHANGED_EVENT
+  VIEWPORT_CHANGED_EVENT,
 } from '../../const.js';
 import { isMounted, mountPromise, mountError } from '../../signals/mounting.js';
 import { getStateFromStorage, setState } from '../../signals/state.js';
@@ -20,7 +20,12 @@ import { requestSafeAreaInsets } from '../static/requestSafeAreaInsets.js';
 import { requestViewport } from '../static/requestViewport.js';
 import type { State } from '../../types.js';
 
-import { onContentSafeAreaChanged, onFullscreenChanged, onSafeAreaChanged, onViewportChanged } from './shared.js';
+import {
+  onContentSafeAreaChanged,
+  onFullscreenChanged,
+  onSafeAreaChanged,
+  onViewportChanged,
+} from './shared.js';
 
 /**
  * Mounts the Viewport component.

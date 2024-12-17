@@ -6,9 +6,13 @@ import {
   deleteCssVar,
   setCssVar,
   supports,
+  on,
+  off,
+  type EventListener,
   type RGB,
   type BottomBarColor,
-  type BackgroundColor, MethodName,
+  type BackgroundColor,
+  type MethodName,
 } from '@telegram-apps/bridge';
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
@@ -31,6 +35,7 @@ import {
   headerColorRGB,
   bottomBarColorRGB,
   backgroundColorRGB,
+  isActive,
 } from './signals.js';
 import type { GetCssVarNameFn, HeaderColor, State } from './types.js';
 
@@ -39,6 +44,7 @@ type StorageValue = State;
 const SET_BG_COLOR_METHOD = 'web_app_set_background_color';
 const SET_BOTTOM_BAR_COLOR_METHOD = 'web_app_set_bottom_bar_color';
 const SET_HEADER_COLOR_METHOD = 'web_app_set_header_color';
+const VISIBILITY_CHANGED_EVENT = 'visibility_changed';
 const COMPONENT_NAME = 'miniApp';
 
 const isSupportedSchema = {
@@ -138,6 +144,11 @@ export const close = wrapBasic('close', (returnBack?: boolean): void => {
   postEvent('web_app_close', { return_back: returnBack });
 });
 
+const onVisibilityChanged: EventListener<'visibility_changed'> = (data) => {
+  isActive.set(data.is_visible);
+  saveState();
+};
+
 /**
  * Mounts the component.
  *
@@ -165,6 +176,9 @@ export const mount = wrapSupported(
       setBackgroundColor.ifAvailable(s ? s.backgroundColor : 'bg_color');
       setBottomBarColor.ifAvailable(s ? s.bottomBarColor : 'bottom_bar_bg_color');
       setHeaderColor.ifAvailable(s ? s.headerColor : 'bg_color');
+      isActive.set(s ? s.isActive : true);
+
+      on(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
 
       isMounted.set(true);
     }
@@ -280,5 +294,6 @@ export const setHeaderColor = wrapComplete(
  * Unmounts the component, removing the listener, saving the component state in the local storage.
  */
 export function unmount(): void {
+  off(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
   isMounted.set(false);
 }

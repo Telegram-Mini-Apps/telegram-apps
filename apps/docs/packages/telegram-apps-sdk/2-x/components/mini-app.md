@@ -159,7 +159,7 @@ if (miniApp.setBackgroundColor.isAvailable()) {
 ```
 
 ```ts [Functions]
-import { 
+import {
   setMiniAppBackgroundColor,
   miniAppBackgroundColor,
 } from '@telegram-apps/sdk';
@@ -168,6 +168,27 @@ if (setMiniAppBackgroundColor.isAvailable()) {
   setMiniAppBackgroundColor('#ffffff');
   miniAppBackgroundColor(); // '#ffffff'
 }
+```
+
+:::
+
+## Active State
+
+The mini application becomes inactive if it is wrapped into the bottom native Telegram client tray
+or if the currently active tab of the mini apps browser is changed to another one.
+
+To track if the mini application is currently active, use the `isActive` signal.
+
+::: code-group
+
+```ts [Variable]
+miniApp.isActive();
+```
+
+```ts [Functions]
+import { isMiniAppActive } from '@telegram-apps/sdk';
+
+isMiniAppActive()
 ```
 
 :::

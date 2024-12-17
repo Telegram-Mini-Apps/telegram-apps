@@ -92,10 +92,16 @@ export const isDark = computed(() => {
 });
 
 /**
+ * Signal indicating if the mini app is currently active.
+ */
+export const isActive = signal(true);
+
+/**
  * Complete component state.
  */
 export const state = computed<State>(() => ({
   backgroundColor: backgroundColor(),
   bottomBarColor: bottomBarColor(),
   headerColor: headerColor(),
+  isActive: isActive(),
 }));

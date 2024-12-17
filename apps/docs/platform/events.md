@@ -349,6 +349,19 @@ user started dragging the application or called the expansion method.
 > application window. You should probably use a stable height instead of the current one, or handle
 > this problem in another way.
 
+### `visibility_changed`
+
+Available since: **v8.0**
+
+Active state assumes that the native Telegram client is currently working with the
+current mini application. It is important to note that this is not related to the
+mini application’s visibility, but rather its selection among other currently opened
+mini applications.
+
+| Field      | Type      | Description                                       |
+|------------|-----------|---------------------------------------------------|
+| is_visible | `boolean` | Indicates if the application is currently active. |
+
 ### `write_access_requested`
 
 Available since: **v6.9**
