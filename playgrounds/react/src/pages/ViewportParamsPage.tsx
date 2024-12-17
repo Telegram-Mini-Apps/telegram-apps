@@ -33,7 +33,6 @@ export const ViewportParamsPage: FC = () => {
     setModeRows([
       {title: "is_fullscreen", value: viewportState.isFullscreen},
       {title: "is_expanded", value: viewportState.isExpanded},
-      {title: "is_visible", value: viewportState.isVisible},
     ]);
 
     setViewportRows([
