@@ -34,3 +34,5 @@ export interface SafeAreaInsets {
   left: number;
   right: number;
 }
+
+export type HomeScreenStatus = 'unsupported' | 'unknown' | 'added' | 'missed' | string;

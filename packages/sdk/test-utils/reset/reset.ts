@@ -17,6 +17,7 @@ import { resetSwipeBehavior } from '@test-utils/reset/resetSwipeBehavior.js';
 import { resetThemeParams } from '@test-utils/reset/resetThemeParams.js';
 import { resetViewport } from '@test-utils/reset/resetViewport.js';
 import { resetPrivacy } from '@test-utils/reset/resetPrivacy.js';
+import { resetHomeScreen } from '@test-utils/reset/resetHomeScreen.js';
 
 export function resetSignal(s: Signal<any> | Computed<any>) {
   s.unsubAll();
@@ -41,6 +42,7 @@ export function resetPackageState() {
     resetSwipeBehavior,
     resetThemeParams,
     resetViewport,
+    resetHomeScreen,
   ].forEach(reset => reset());
   [$postEvent, $version, $createRequestId].forEach(resetSignal);
 }
