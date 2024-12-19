@@ -1,5 +1,17 @@
 # @telegram-apps/bridge
 
+## 1.9.0
+
+### Minor Changes
+
+- bb72227: Implement `home_screen_added`, `home_screen_checked` and `home_screen_failed` events. Implement `web_app_add_to_home_screen` and `web_app_check_home_screen` methods.
+
+### Patch Changes
+
+- Updated dependencies [3a93d64]
+  - @telegram-apps/toolkit@1.1.0
+  - @telegram-apps/transformers@1.2.1
+
 ## 1.8.0
 
 ### Minor Changes

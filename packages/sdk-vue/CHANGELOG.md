@@ -1,5 +1,12 @@
 # @telegram-apps/sdk-vue
 
+## 1.0.12
+
+### Patch Changes
+
+- Updated dependencies [ea81517]
+  - @telegram-apps/sdk@2.11.0
+
 ## 1.0.11
 
 ### Patch Changes
