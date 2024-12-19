@@ -226,6 +226,12 @@ export interface Events {
     status?: HomeScreenStatus;
   };
   /**
+   * User declined the request to add the current mini application to the device's home screen.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#home_screen_failed
+   */
+  home_screen_failed: never;
+  /**
    * An invoice was closed.
    * @see https://docs.telegram-mini-apps.com/platform/events#invoice-closed
    */
