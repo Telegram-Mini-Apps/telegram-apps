@@ -110,6 +110,7 @@ export const packagesLinksGenerator = (prefix: string = '') => {
             ],
             'Utilities': [{ url: 'utils', page: false }, fromEntries([
               scope('emoji-status'),
+              scope('home-screen'),
               scope('links'),
               scope('privacy'),
               scope('uncategorized'),
