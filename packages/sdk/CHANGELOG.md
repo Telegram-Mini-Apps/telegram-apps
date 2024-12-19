@@ -1,5 +1,20 @@
 # @telegram-apps/sdk
 
+## 2.11.0
+
+### Minor Changes
+
+- ea81517: Implement add to home screen-related functionality.
+
+### Patch Changes
+
+- Updated dependencies [3a93d64]
+- Updated dependencies [bb72227]
+  - @telegram-apps/toolkit@1.1.0
+  - @telegram-apps/bridge@1.9.0
+  - @telegram-apps/navigation@1.0.11
+  - @telegram-apps/transformers@1.2.1
+
 ## 2.10.0
 
 ### Minor Changes

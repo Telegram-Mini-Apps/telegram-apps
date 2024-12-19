@@ -1,5 +1,14 @@
 # @telegram-apps/navigation
 
+## 1.0.11
+
+### Patch Changes
+
+- Updated dependencies [3a93d64]
+- Updated dependencies [bb72227]
+  - @telegram-apps/toolkit@1.1.0
+  - @telegram-apps/bridge@1.9.0
+
 ## 1.0.10
 
 ### Patch Changes
