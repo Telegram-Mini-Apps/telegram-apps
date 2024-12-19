@@ -260,6 +260,12 @@ The status of the mini application being added to the home screen has been check
 - `added` – the icon has already been added to the home screen,
 - `missed` – the icon has not been added to the home screen.
 
+### `home_screen_failed`
+
+Available since: **v8.0**
+
+User declined the request to add the current mini application to the device's home screen.
+
 ### `invoice_closed`
 
 An invoice was closed.
