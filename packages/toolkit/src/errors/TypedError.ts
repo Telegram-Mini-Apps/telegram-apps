@@ -13,6 +13,7 @@ export class TypedError<T extends string> extends Error {
         cause: typeof messageOrOptions === 'object' ? messageOrOptions.cause : cause,
       },
     );
+    this.name = 'TypedError';
     Object.setPrototypeOf(this, TypedError.prototype);
   }
 }
