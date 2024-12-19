@@ -1,7 +1,11 @@
-export { addToHomeScreen } from './addToHomeScreen.js';
 export {
   checkHomeScreenStatusError,
   checkHomeScreenStatusPromise,
   isCheckingHomeScreenStatus,
   checkHomeScreenStatus,
-} from './checkHomeScreenStatus.js';
+  offAddedToHomeScreen,
+  onAddedToHomeScreen,
+  addToHomeScreen,
+  offAddToHomeScreenFailed,
+  onAddToHomeScreenFailed,
+} from './home-screen.js';
