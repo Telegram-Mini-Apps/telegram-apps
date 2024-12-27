@@ -1,5 +1,11 @@
 # @telegram-apps/types
 
+## 1.2.1
+
+### Patch Changes
+
+- 68e4a6d: Remove src and tsconfig files from distributive
+
 ## 1.2.0
 
 ### Minor Changes

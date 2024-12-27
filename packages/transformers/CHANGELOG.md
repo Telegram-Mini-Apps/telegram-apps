@@ -1,5 +1,14 @@
 # @telegram-apps/transformers
 
+## 1.2.2
+
+### Patch Changes
+
+- 68e4a6d: Remove src and tsconfig files from distributive
+- Updated dependencies [68e4a6d]
+  - @telegram-apps/toolkit@1.1.1
+  - @telegram-apps/types@1.2.1
+
 ## 1.2.1
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @telegram-apps/navigation
 
+## 1.0.12
+
+### Patch Changes
+
+- 68e4a6d: Remove src and tsconfig files from distributive
+- Updated dependencies [68e4a6d]
+  - @telegram-apps/signals@1.1.1
+  - @telegram-apps/toolkit@1.1.1
+  - @telegram-apps/bridge@1.9.1
+
 ## 1.0.11
 
 ### Patch Changes

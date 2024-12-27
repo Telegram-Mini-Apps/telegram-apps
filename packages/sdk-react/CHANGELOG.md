@@ -1,5 +1,13 @@
 # @telegram-apps/sdk-react
 
+## 2.0.23
+
+### Patch Changes
+
+- 68e4a6d: Remove src and tsconfig files from distributive
+- Updated dependencies [68e4a6d]
+  - @telegram-apps/sdk@2.11.1
+
 ## 2.0.22
 
 ### Patch Changes
