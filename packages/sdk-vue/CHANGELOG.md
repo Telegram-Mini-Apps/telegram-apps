@@ -1,5 +1,13 @@
 # @telegram-apps/sdk-vue
 
+## 1.0.13
+
+### Patch Changes
+
+- 68e4a6d: Remove src and tsconfig files from distributive
+- Updated dependencies [68e4a6d]
+  - @telegram-apps/sdk@2.11.1
+
 ## 1.0.12
 
 ### Patch Changes

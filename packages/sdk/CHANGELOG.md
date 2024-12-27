@@ -1,5 +1,17 @@
 # @telegram-apps/sdk
 
+## 2.11.1
+
+### Patch Changes
+
+- 68e4a6d: Remove src and tsconfig files from distributive
+- Updated dependencies [68e4a6d]
+  - @telegram-apps/transformers@1.2.2
+  - @telegram-apps/navigation@1.0.12
+  - @telegram-apps/signals@1.1.1
+  - @telegram-apps/toolkit@1.1.1
+  - @telegram-apps/bridge@1.9.1
+
 ## 2.11.0
 
 ### Minor Changes

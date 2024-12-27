@@ -1,5 +1,11 @@
 # @telegram-apps/mate
 
+## 0.0.26
+
+### Patch Changes
+
+- 68e4a6d: Remove src and tsconfig files from distributive
+
 ## 0.0.25
 
 ### Patch Changes
