@@ -20,9 +20,7 @@
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist",
-    "src",
-    "tsconfig.json"
+    "dist"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

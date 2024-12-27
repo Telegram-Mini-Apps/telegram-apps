@@ -22,9 +22,7 @@
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist",
-    "src",
-    "tsconfig.json"
+    "dist"
   ],
   "main": "./dist/entries/node.cjs",
   "module": "./dist/entries/node.js",
