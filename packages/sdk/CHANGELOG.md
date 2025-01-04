@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 2.11.2
+
+### Patch Changes
+
+- 8ed92d4: Use `web_app_check_home_screen` in `checkHomeScreenStatus`
+
 ## 2.11.1
 
 ### Patch Changes
