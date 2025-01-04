@@ -72,7 +72,7 @@ export const checkHomeScreenStatus = wrapSafe(
   'checkHomeScreenStatus',
   signalifyAsyncFn(
     (options?: AsyncOptions): CancelablePromise<HomeScreenStatus> => {
-      return request(METHOD, 'home_screen_checked', options)
+      return request('web_app_check_home_screen', 'home_screen_checked', options)
         .then(r => r.status || 'unknown');
     },
     () => new TypedError(
