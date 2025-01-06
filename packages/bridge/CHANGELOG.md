@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 1.9.2
+
+### Patch Changes
+
+- bd6c0c5: Update the link returned if the `retrieveLaunchParams` function failed.
+
 ## 1.9.1
 
 ### Patch Changes
