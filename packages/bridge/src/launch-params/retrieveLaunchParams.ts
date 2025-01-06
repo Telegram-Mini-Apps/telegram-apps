@@ -42,7 +42,7 @@ export function retrieveLaunchParams(): LaunchParams {
   throw new TypedError(ERR_RETRIEVE_LP_FAILED, [
     'Unable to retrieve launch parameters from any known source. Perhaps, you have opened your app outside Telegram?',
     '📖 Refer to docs for more information:',
-    'https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/environment',
+    'https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/environment',
     'Collected errors:',
     ...errors.map(e => `— ${unwrapError(e)}`),
   ].join('\n'));
