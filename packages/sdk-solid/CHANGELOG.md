@@ -1,5 +1,11 @@
 # @telegram-apps/sdk-solid
 
+## 2.0.23
+
+### Patch Changes
+
+- @telegram-apps/sdk@2.11.3
+
 ## 2.0.22
 
 ### Patch Changes
