@@ -1,11 +1,17 @@
 export { camelToKebab } from './casing/camelToKebab.js';
 export { camelToSnake, type CamelToSnakeCase } from './casing/camelToSnake.js';
 export {
-  camelToSnakeObjKeys, type ConvertCamelKeysToSnakeCase,
+  camelToSnakeObjKeys,
+  type ConvertCamelKeysToSnakeCase,
 } from './casing/camelToSnakeObjKeys.js';
+export {
+  deepSnakeToCamelObjKeys,
+  type DeepConvertSnakeKeysToCamelCase,
+} from './casing/deepSnakeToCamelObjKeys.js';
 export { snakeToCamel, type SnakeToCamelCase } from './casing/snakeToCamel.js';
 export {
-  snakeToCamelObjKeys, type ConvertSnakeKeysToCamelCase,
+  snakeToCamelObjKeys,
+  type ConvertSnakeKeysToCamelCase,
 } from './casing/snakeToCamelObjKeys.js';
 
 export { isErrorOfType } from './errors/isErrorOfType.js';
