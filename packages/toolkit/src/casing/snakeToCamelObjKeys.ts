@@ -1,9 +1,7 @@
 import { snakeToCamel, type SnakeToCamelCase } from '@/casing/snakeToCamel.js';
 
 export type ConvertSnakeKeysToCamelCase<T> = {
-  [K in keyof T as SnakeToCamelCase<string & K>]: T[K] extends object
-    ? ConvertSnakeKeysToCamelCase<T[K]>
-    : T[K];
+  [K in keyof T as SnakeToCamelCase<string & K>]: T[K];
 };
 
 /**
