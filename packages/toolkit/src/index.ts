@@ -1,7 +1,12 @@
 export { camelToKebab } from './casing/camelToKebab.js';
-export { camelToSnake } from './casing/camelToSnake.js';
+export { camelToSnake, type CamelToSnakeCase } from './casing/camelToSnake.js';
+export {
+  camelToSnakeObjKeys, type ConvertCamelKeysToSnakeCase,
+} from './casing/camelToSnakeObjKeys.js';
 export { snakeToCamel, type SnakeToCamelCase } from './casing/snakeToCamel.js';
-export { snakeToCamelObjKeys, type ConvertSnakeKeysToCamelCase } from './casing/snakeToCamelObjKeys.js';
+export {
+  snakeToCamelObjKeys, type ConvertSnakeKeysToCamelCase,
+} from './casing/snakeToCamelObjKeys.js';
 
 export { isErrorOfType } from './errors/isErrorOfType.js';
 export { createTypedErrorPredicate } from './errors/createTypedErrorPredicate.js';
