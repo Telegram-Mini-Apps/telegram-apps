@@ -22,5 +22,5 @@ export type ThemeParamsKey =
  * Defines palette used by the Telegram application.
  */
 export interface ThemeParams {
-  [key: ThemeParamsKey | string]: RGB | undefined;
+  [key: ThemeParamsKey | string]: RGB;
 }
