@@ -2,7 +2,7 @@ import type { SnakeToCamelCase } from '@telegram-apps/toolkit';
 
 import type { RGB } from './colors.js';
 
-type KnownThemeParamsKey =
+export type KnownThemeParamsKey =
   | 'accent_text_color'
   | 'bg_color'
   | 'button_color'
@@ -19,9 +19,11 @@ type KnownThemeParamsKey =
   | 'subtitle_text_color'
   | 'text_color';
 
+export type KnownThemeParamsKeyCamelCased = SnakeToCamelCase<KnownThemeParamsKey>;
+
 /**
  * Application [theme parameters](https://docs.telegram-mini-apps.com/platform/theming).
  * Defines palette used by the Telegram application.
  */
 export type ThemeParams = Record<KnownThemeParamsKey | string, RGB>;
-export type ThemeParamsCamelCased = Record<SnakeToCamelCase<KnownThemeParamsKey> | string, RGB>
+export type ThemeParamsCamelCased = Record<KnownThemeParamsKeyCamelCased | string, RGB>
