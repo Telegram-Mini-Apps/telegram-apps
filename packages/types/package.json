@@ -33,6 +33,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "build": "vite build -c vite.config.ts"
   },
+  "dependencies": {
+    "@telegram-apps/toolkit": "workspace:^"
+  },
   "devDependencies": {
     "tsconfig": "workspace:*"
   },
