@@ -1,8 +1,7 @@
 import { snakeToCamelObjKeys } from '@/casing/snakeToCamelObjKeys.js';
 import type { SnakeToCamelCase } from '@/casing/snakeToCamel.js';
 
-export type DeepConvertSnakeKeysToCamelCase<T> =
-  T extends infer U
+export type DeepConvertSnakeKeysToCamelCase<T> = T extends infer U
     ? U extends object
       ? U extends Date
         ? U
@@ -10,8 +9,8 @@ export type DeepConvertSnakeKeysToCamelCase<T> =
           ? DeepConvertSnakeKeysToCamelCase<Item>[]
           : {
             [K in keyof U as SnakeToCamelCase<string & K>]: DeepConvertSnakeKeysToCamelCase<U[K]>
-          }
-      : never
+          } & {}
+      : U
     : T;
 
 /**
