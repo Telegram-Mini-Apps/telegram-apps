@@ -1,40 +1,35 @@
 import { optional, string, looseObject, pipe, transform, type InferOutput } from 'valibot';
 
-import { jsonParse, query, queryToRecord, transformUsing } from '@/transformers.js';
 import { themeParams } from '@/themeParams.js';
-import { InitDataQuery, serializeInitDataQuery } from '@/init-data.js';
+import { initData, serializeInitDataQuery } from '@/init-data.js';
 import { serializeToQuery } from '@/serializeToQuery.js';
+import { ccQueryTransformerBasedOn } from '@/ccQueryTransformerBasedOn.js';
+import { ccJsonTransformerBasedOn } from '@/ccJsonTransformerBasedOn.js';
 
-const defaultedBoolean = optional(
+const OptionalBoolean = optional(
   pipe(string(), transform(v => v === '1')),
-  '',
 );
-const tp = pipe(string(), jsonParse(), themeParams());
+const tp = ccJsonTransformerBasedOn(themeParams());
 
-/**
- * Transformer extracting launch parameters in its initial format from the query parameters.
- */
-export const LaunchParamsQuery = pipe(
-  query(),
-  queryToRecord(),
-  transformUsing(looseObject({
-    tgWebAppBotInline: defaultedBoolean,
-    tgWebAppData: optional(InitDataQuery),
-    tgWebAppDefaultColors: optional(tp, '{}'),
-    tgWebAppFullscreen: defaultedBoolean,
-    tgWebAppPlatform: string(),
-    tgWebAppShowSettings: defaultedBoolean,
-    tgWebAppStartParam: optional(string()),
-    tgWebAppThemeParams: tp,
-    tgWebAppVersion: string(),
-  })),
-);
+const LaunchParamsObject = looseObject({
+  tgWebAppBotInline: OptionalBoolean,
+  tgWebAppData: optional(initData()),
+  tgWebAppDefaultColors: optional(tp()),
+  tgWebAppFullscreen: OptionalBoolean,
+  tgWebAppPlatform: string(),
+  tgWebAppShowSettings: OptionalBoolean,
+  tgWebAppStartParam: optional(string()),
+  tgWebAppThemeParams: tp(),
+  tgWebAppVersion: string(),
+});
+
+export const launchParams = ccQueryTransformerBasedOn(LaunchParamsObject);
 
 /**
  * Serializes the LaunchParamsQuery shape.
  * @param value - value to serialize.
  */
-export function serializeLaunchParamsQuery(value: InferOutput<typeof LaunchParamsQuery>): string {
+export function serializeLaunchParamsQuery(value: InferOutput<typeof LaunchParamsObject>): string {
   return serializeToQuery(value, (k, v) => {
     return k === 'tgWebAppData' ? serializeInitDataQuery(v as any) : JSON.stringify(v);
   });

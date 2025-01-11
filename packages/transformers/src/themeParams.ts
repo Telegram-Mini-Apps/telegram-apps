@@ -44,7 +44,7 @@ export function themeParams(camelCase?: false): ThemeParamsSchema<KnownThemePara
 export function themeParams(camelCase: true): ThemeParamsSchema<KnownThemeParamsKeyCamelCased>;
 export function themeParams(camelCase?: boolean): ThemeParamsSchema<string> {
   return record(
-    pipe(string(), transform(camelCase ? snakeToCamel : input => input)),
-    pipe(string(), check(isRGB), transform(input => input as RGB)),
+    pipe(string(), transform(camelCase ? snakeToCamel : i => i)),
+    pipe(string(), check(isRGB), transform(i => i as RGB)),
   );
 }

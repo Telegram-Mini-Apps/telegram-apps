@@ -4,7 +4,7 @@
  * @param onObject - function returning serialized object value.
  */
 export function serializeToQuery(
-  value: Record<string, unknown>,
+  value: object,
   onObject?: (key: string, value: object) => string,
 ): string {
   onObject ||= (_, value) => JSON.stringify(value);

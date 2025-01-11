@@ -11,14 +11,13 @@ import {
   type BaseSchema,
   type InferOutput,
 } from 'valibot';
-import type { InitData } from '@telegram-apps/types';
+import type { Chat, InitData, User } from '@telegram-apps/types';
 
-import { query, queryToRecord, transformUsing, jsonParse } from '@/transformers.js';
+import { ccJsonTransformerBasedOn } from '@/ccJsonTransformerBasedOn.js';
+import { ccQueryTransformerBasedOn } from '@/ccQueryTransformerBasedOn.js';
 import { serializeToQuery } from '@/serializeToQuery.js';
 
-const User = pipe(
-  string(),
-  jsonParse(),
+export const user = ccJsonTransformerBasedOn(
   looseObject({
     added_to_attachment_menu: optional(boolean()),
     allows_write_to_pm: optional(boolean()),
@@ -30,53 +29,45 @@ const User = pipe(
     language_code: optional(string()),
     photo_url: optional(string()),
     username: optional(string()),
+  } satisfies {
+    [K in keyof User]-?: BaseSchema<unknown, User[K], any>;
   }),
 );
 
-/**
- * Transformer extracting init data in its initial format from the query parameters.
- */
-export const InitDataQuery = pipe(
-  query(),
-  queryToRecord(),
-  transformUsing(looseObject({
-    auth_date: pipe(
-      string(),
-      transform(input => new Date(Number(input) * 1000)),
-      date(),
-    ),
-    can_send_after: optional(pipe(string(), transform(Number), integer())),
-    chat: optional(
-      pipe(
-        string(),
-        jsonParse(),
-        looseObject({
-          id: number(),
-          photo_url: optional(string()),
-          type: string(),
-          title: string(),
-          username: optional(string()),
-        }),
-      ),
-    ),
-    chat_type: optional(string()),
-    chat_instance: optional(string()),
-    hash: string(),
-    query_id: optional(string()),
-    receiver: optional(User),
-    start_param: optional(string()),
-    signature: string(),
-    user: optional(User),
-  } satisfies {
-    // Making sure, we specified transformers for all init data properties.
-    [K in keyof InitData]-?: BaseSchema<string | undefined, InitData[K], any>;
-  })),
-);
+export const chat = ccJsonTransformerBasedOn(looseObject({
+  id: number(),
+  photo_url: optional(string()),
+  type: string(),
+  title: string(),
+  username: optional(string()),
+} satisfies {
+  [K in keyof Chat]-?: BaseSchema<unknown, Chat[K], any>;
+}));
+
+const InitDataObject = looseObject({
+  auth_date: pipe(
+    string(),
+    transform(input => new Date(Number(input) * 1000)),
+    date(),
+  ),
+  can_send_after: optional(pipe(string(), transform(Number), integer())),
+  chat: optional(chat()),
+  chat_type: optional(string()),
+  chat_instance: optional(string()),
+  hash: string(),
+  query_id: optional(string()),
+  receiver: optional(user()),
+  start_param: optional(string()),
+  signature: string(),
+  user: optional(user()),
+} satisfies { [K in keyof InitData]-?: unknown });
+
+export const initData = ccQueryTransformerBasedOn(InitDataObject);
 
 /**
  * Serializes the InitDataQuery shape.
  * @param value - value to serialize.
  */
-export function serializeInitDataQuery(value: InferOutput<typeof InitDataQuery>): string {
+export function serializeInitDataQuery(value: InferOutput<typeof InitDataObject>): string {
   return serializeToQuery(value);
 }
