@@ -30,7 +30,7 @@ export function mockTelegramEnv({ launchParams, onEvent }: {
     }[MethodName] | [string, unknown],
     next: () => void,
   ) => void;
-}): void {
+} = {}): void {
   // If launch parameters were passed, save them in the session storage, so
   // the retrieveLaunchParams function would return them.
   launchParams && saveToStorage(
@@ -81,5 +81,5 @@ export function mockTelegramEnv({ launchParams, onEvent }: {
     },
   };
 
-  logInfo('Environment was mocked by the mockTelegramEnv function');
+  logInfo(false, 'Environment was mocked by the mockTelegramEnv function');
 }
