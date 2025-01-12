@@ -1,4 +1,4 @@
-import { fn, object } from '@telegram-apps/transformers';
+import { is, looseObject, function as fn } from 'valibot';
 import { TypedError } from '@telegram-apps/toolkit';
 
 import { logInfo } from '@/debug.js';
@@ -49,15 +49,9 @@ export function postEvent(
   eventType: MethodName,
   eventData?: MethodParams<MethodName>,
 ): void {
-  logInfo('Posting event:', eventData ? { eventType, eventData } : { eventType });
+  logInfo(false, 'Posting event:', eventData ? { eventType, eventData } : { eventType });
 
   const w = window;
-
-  // Telegram for iOS and macOS.
-  if (hasWebviewProxy(w)) {
-    w.TelegramWebviewProxy.postEvent(eventType, JSON.stringify(eventData));
-    return;
-  }
 
   const message = JSON.stringify({ eventType, eventData });
 
@@ -66,10 +60,15 @@ export function postEvent(
     return w.parent.postMessage(message, $targetOrigin());
   }
 
+  // Telegram for iOS and macOS and Telegram Desktop.
+  if (hasWebviewProxy(w)) {
+    w.TelegramWebviewProxy.postEvent(eventType, JSON.stringify(eventData));
+    return;
+  }
+
   // Telegram for Windows Phone or Android.
-  const { external } = w;
-  if (object({ notify: fn() })().isValid(external)) {
-    external.notify(message);
+  if (is(looseObject({ external: looseObject({ notify: fn() }) }), w)) {
+    w.external.notify(message);
     return;
   }
 
