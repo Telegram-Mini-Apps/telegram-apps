@@ -13,23 +13,27 @@ import {
   type UnionSchema,
 } from 'valibot';
 
-import { type DeepConvertSnakeKeysToCamelCase, deepSnakeToCamelObjKeys } from '@telegram-apps/toolkit';
+import {
+  type DeepConvertSnakeKeysToCamelCase,
+  deepSnakeToCamelObjKeys,
+} from '@telegram-apps/toolkit';
 
 type RequiredSchema = BaseSchema<unknown, object, BaseIssue<unknown>>;
 
+export type CCQueryTransformerPipe<Output> = SchemaWithPipe<[
+  UnionSchema<[
+    StringSchema<undefined>,
+    InstanceSchema<typeof URLSearchParams, undefined>
+  ], undefined>,
+  TransformAction<
+    string | URLSearchParams,
+    Output
+  >,
+]>
+
 export interface CCQueryTransformer<Schema extends RequiredSchema> {
-  <CamelCase extends boolean | undefined>(camelCase?: CamelCase): SchemaWithPipe<[
-    UnionSchema<[
-      StringSchema<undefined>,
-      InstanceSchema<typeof URLSearchParams, undefined>
-    ], undefined>,
-    TransformAction<
-      string | URLSearchParams,
-      CamelCase extends true
-        ? DeepConvertSnakeKeysToCamelCase<InferOutput<Schema>>
-        : InferOutput<Schema>
-    >,
-  ]>;
+  (camelCase?: false): CCQueryTransformerPipe<InferOutput<Schema>>;
+  (camelCase: true): CCQueryTransformerPipe<DeepConvertSnakeKeysToCamelCase<InferOutput<Schema>>>;
 }
 
 /**

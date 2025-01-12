@@ -11,18 +11,19 @@ import {
   type TransformAction,
 } from 'valibot';
 
-import { type DeepConvertSnakeKeysToCamelCase, deepSnakeToCamelObjKeys } from '@telegram-apps/toolkit';
+import {
+  type DeepConvertSnakeKeysToCamelCase,
+  deepSnakeToCamelObjKeys,
+} from '@telegram-apps/toolkit';
+
+export type CCJsonTransformerPipe<Output> = SchemaWithPipe<[
+  StringSchema<undefined>,
+  TransformAction<string, Output>
+]>;
 
 export interface CCJsonTransformer<Schema extends BaseSchema<unknown, object, BaseIssue<unknown>>> {
-  <CamelCase extends boolean | undefined>(camelCase?: CamelCase): SchemaWithPipe<[
-    StringSchema<undefined>,
-    TransformAction<
-      string,
-      CamelCase extends true
-        ? DeepConvertSnakeKeysToCamelCase<InferOutput<Schema>>
-        : InferOutput<Schema>
-    >,
-  ]>;
+  (camelCase?: false): CCJsonTransformerPipe<InferOutput<Schema>>;
+  (camelCase: true): CCJsonTransformerPipe<DeepConvertSnakeKeysToCamelCase<InferOutput<Schema>>>;
 }
 
 /**
