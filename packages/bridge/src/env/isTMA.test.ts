@@ -1,4 +1,4 @@
-import { CancelablePromise } from '@telegram-apps/toolkit';
+import { CancelablePromise } from 'better-promises';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createWindow, mockSessionStorageGetItem, mockWindow } from 'test-utils';
 
