@@ -17,7 +17,7 @@ import { ccJsonTransformerBasedOn } from '@/ccJsonTransformerBasedOn.js';
 import { ccQueryTransformerBasedOn } from '@/ccQueryTransformerBasedOn.js';
 import { serializeToQuery } from '@/serializeToQuery.js';
 
-export const user = ccJsonTransformerBasedOn(
+export const userJson = ccJsonTransformerBasedOn(
   looseObject({
     added_to_attachment_menu: optional(boolean()),
     allows_write_to_pm: optional(boolean()),
@@ -34,7 +34,7 @@ export const user = ccJsonTransformerBasedOn(
   }),
 );
 
-export const chat = ccJsonTransformerBasedOn(looseObject({
+export const chatJson = ccJsonTransformerBasedOn(looseObject({
   id: number(),
   photo_url: optional(string()),
   type: string(),
@@ -44,30 +44,32 @@ export const chat = ccJsonTransformerBasedOn(looseObject({
   [K in keyof Chat]-?: BaseSchema<unknown, Chat[K], any>;
 }));
 
-const InitDataObject = looseObject({
+const schema = looseObject({
   auth_date: pipe(
     string(),
     transform(input => new Date(Number(input) * 1000)),
     date(),
   ),
   can_send_after: optional(pipe(string(), transform(Number), integer())),
-  chat: optional(chat()),
+  chat: optional(chatJson()),
   chat_type: optional(string()),
   chat_instance: optional(string()),
   hash: string(),
   query_id: optional(string()),
-  receiver: optional(user()),
+  receiver: optional(userJson()),
   start_param: optional(string()),
   signature: string(),
-  user: optional(user()),
+  user: optional(userJson()),
 } satisfies { [K in keyof InitData]-?: unknown });
 
-export const initData = ccQueryTransformerBasedOn(InitDataObject);
+export const initDataQuery = ccQueryTransformerBasedOn(schema);
+
+export type InitDataShape = InferOutput<typeof schema>;
 
 /**
  * Serializes the InitDataQuery shape.
  * @param value - value to serialize.
  */
-export function serializeInitDataQuery(value: InferOutput<typeof InitDataObject>): string {
+export function serializeInitDataQuery(value: InitDataShape | InitData): string {
   return serializeToQuery(value);
 }
