@@ -1,11 +1,11 @@
 import {
-  CancelablePromise,
   createCbCollector,
   type If,
   type IsNever,
 } from '@telegram-apps/toolkit';
+import { CancelablePromise } from 'better-promises';
 
-import { on } from '@/events/listening/on.js';
+import { on } from '@/events/emitter.js';
 import { postEvent } from '@/methods/postEvent.js';
 import type {
   MethodName,

@@ -1,4 +1,4 @@
-import { isRecord } from '@telegram-apps/transformers';
+import { any, is, looseObject } from 'valibot';
 import { TypedError } from '@telegram-apps/toolkit';
 import type { Version } from '@telegram-apps/types';
 
@@ -74,9 +74,8 @@ export function createPostEvent(
     // Method could use parameters, which are supported only in specific versions of Mini Apps.
     // We are validating only those parameters, which are not backward compatible.
     if (
-      isRecord(params)
-      && method === 'web_app_set_header_color'
-      && 'color' in params
+      method === 'web_app_set_header_color'
+      && is(looseObject({ color: any() }), params)
       && !supports(method, 'color', version)
     ) {
       return onUnsupported({ version, method, param: 'color' });

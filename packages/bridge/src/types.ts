@@ -1,4 +1,4 @@
-import type { AsyncOptions } from '@telegram-apps/toolkit';
+import type { PromiseOptions } from 'better-promises';
 
 import type { PostEventFn } from '@/methods/postEvent.js';
 
@@ -9,5 +9,5 @@ export interface ExecuteWithPostEvent {
   postEvent?: PostEventFn;
 }
 
-export interface ExecuteWithOptions extends AsyncOptions, ExecuteWithPostEvent {
+export interface ExecuteWithOptions extends PromiseOptions, ExecuteWithPostEvent {
 }
