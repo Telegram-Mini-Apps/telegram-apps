@@ -25,7 +25,26 @@ describe('log', () => {
     const spy = vi.fn();
     vi.spyOn(console, 'log').mockImplementation(spy);
 
-    log('Test');
+    log(false, 'Test');
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(
+      '%c09:09:43.007%c / %cSDK',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      'Test',
+    );
+  });
+
+  it('should ignore shouldLog if force is true', () => {
+    const [log] = createLogger('SDK', { shouldLog: false });
+    const spy = vi.fn();
+    vi.spyOn(console, 'log').mockImplementation(spy);
+
+    log(false, 'Test');
+    expect(spy).not.toHaveBeenCalled();
+
+    log(true, 'Test');
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith(
       '%c09:09:43.007%c / %cSDK',
@@ -43,7 +62,26 @@ describe('error', () => {
     const spy = vi.fn();
     vi.spyOn(console, 'error').mockImplementation(spy);
 
-    error('Test');
+    error(false, 'Test');
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(
+      '%c09:09:43.007%c / %cSDK',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      'Test',
+    );
+  });
+
+  it('should ignore shouldLog if force is true', () => {
+    const [, error] = createLogger('SDK', { shouldLog: false });
+    const spy = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation(spy);
+
+    error(false, 'Test');
+    expect(spy).not.toHaveBeenCalled();
+
+    error(true, 'Test');
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith(
       '%c09:09:43.007%c / %cSDK',
