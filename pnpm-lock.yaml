@@ -101,6 +101,15 @@ importers:
       '@telegram-apps/types':
         specifier: workspace:^
         version: link:../types
+      better-promises:
+        specifier: ^0.0.5
+        version: 0.0.5
+      mitt:
+        specifier: ^3.0.1
+        version: 3.0.1
+      valibot:
+        specifier: 1.0.0-beta.11
+        version: 1.0.0-beta.11(typescript@5.6.3)
     devDependencies:
       test-utils:
         specifier: workspace:*
@@ -345,6 +354,10 @@ importers:
         version: link:../tsconfig
 
   packages/toolkit:
+    dependencies:
+      better-promises:
+        specifier: ^0.0.5
+        version: 0.0.5
     devDependencies:
       test-utils:
         specifier: workspace:*
@@ -361,6 +374,9 @@ importers:
       '@telegram-apps/types':
         specifier: workspace:^
         version: link:../types
+      valibot:
+        specifier: 1.0.0-beta.11
+        version: 1.0.0-beta.11(typescript@5.6.3)
     devDependencies:
       test-utils:
         specifier: workspace:*
@@ -372,6 +388,10 @@ importers:
   packages/tsconfig: {}
 
   packages/types:
+    dependencies:
+      '@telegram-apps/toolkit':
+        specifier: workspace:^
+        version: link:../toolkit
     devDependencies:
       tsconfig:
         specifier: workspace:*
@@ -379,9 +399,18 @@ importers:
 
   playgrounds/custom:
     dependencies:
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      ramda:
+        specifier: ^0.30.1
+        version: 0.30.1
       tsconfig:
         specifier: workspace:*
         version: link:../../packages/tsconfig
+      valibot:
+        specifier: 1.0.0-beta.11
+        version: 1.0.0-beta.11(typescript@5.6.3)
     devDependencies:
       '@vitejs/plugin-basic-ssl':
         specifier: ^1.1.0
@@ -3216,6 +3245,9 @@ packages:
   better-path-resolve@1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
     engines: {node: '>=4'}
+
+  better-promises@0.0.5:
+    resolution: {integrity: sha512-ubJM3VJEnsg3PmwYA3Hw/X0q8ABpN4uIzoqPoDYyi+jR1CN3wjwcpPcewBz6LYLQnwdyJLgwVCO6VyxEB+xDaA==}
 
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -6337,6 +6369,14 @@ packages:
 
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
+
+  valibot@1.0.0-beta.11:
+    resolution: {integrity: sha512-Ztl5Iks1Ql7Z6CwkS5oyqguN3G8tmUiNlsHpqbDt6DLMpm+eu+n8Q7f921gI3uHvNZ8xDVkd4cEJP5t+lELOfw==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   validate-html-nesting@1.2.2:
     resolution: {integrity: sha512-hGdgQozCsQJMyfK5urgFcWEqsSSrK63Awe0t/IMR0bZ0QMtnuaiHzThW81guu3qx9abLi99NEuiaN6P9gVYsNg==}
@@ -10128,6 +10168,8 @@ snapshots:
     dependencies:
       is-windows: 1.0.2
 
+  better-promises@0.0.5: {}
+
   binary-extensions@2.3.0: {}
 
   birpc@0.2.19: {}
@@ -13721,6 +13763,10 @@ snapshots:
   uuid@9.0.1: {}
 
   v8-compile-cache-lib@3.0.1: {}
+
+  valibot@1.0.0-beta.11(typescript@5.6.3):
+    optionalDependencies:
+      typescript: 5.6.3
 
   validate-html-nesting@1.2.2: {}
 
