@@ -1,4 +1,4 @@
-import type { LaunchParams } from '@telegram-apps/types';
+import type { LaunchParamsShape } from '@telegram-apps/transformers';
 
 import { parseLaunchParams } from './parseLaunchParams.js';
 
@@ -7,7 +7,7 @@ import { parseLaunchParams } from './parseLaunchParams.js';
  * @returns Launch parameters from the specified URL.
  * @throws Error if function was unable to extract launch parameters from the passed URL.
  */
-export function retrieveFromUrl(urlString: string): LaunchParams {
+export function retrieveFromUrl(urlString: string): LaunchParamsShape {
   return parseLaunchParams(
     urlString
       // Replace everything before this first hashtag or question sign.

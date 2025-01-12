@@ -1,4 +1,4 @@
-import type { LaunchParams } from '@telegram-apps/types';
+import type { LaunchParamsShape } from '@telegram-apps/transformers';
 import { TypedError } from '@telegram-apps/toolkit';
 
 import { ERR_RETRIEVE_LP_FAILED } from '@/errors.js';
@@ -18,7 +18,7 @@ function unwrapError(e: unknown): string {
  * @returns Launch parameters from any known source.
  * @throws {TypedError} ERR_RETRIEVE_LP_FAILED
  */
-export function retrieveLaunchParams(): LaunchParams {
+export function retrieveLaunchParams(): LaunchParamsShape {
   const errors: unknown[] = [];
 
   for (const retrieve of [

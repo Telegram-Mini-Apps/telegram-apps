@@ -14,10 +14,10 @@ it('should retrieve launch params from the window.performance. Throw an error if
     }] as any);
 
   expect(retrieveFromPerformance()).toStrictEqual({
-    platform: 'tdesktop',
-    version: '7.0',
-    themeParams: {},
-    startParam: 'START',
+    tgWebAppPlatform: 'tdesktop',
+    tgWebAppVersion: '7.0',
+    tgWebAppThemeParams: {},
+    tgWebAppStartParam: 'START',
   });
 
   spy.mockImplementationOnce(() => []);
