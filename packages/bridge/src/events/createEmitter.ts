@@ -17,8 +17,7 @@ export interface OnFn<E> {
    * @param handler - event listener.
    * @param once - should listener be called only once.
    * @returns Function to remove bound event listener.
-   */
-  <K extends keyof E>(type: K, handler: Handler<E[K]>, once?: boolean): VoidFunction;
+   */<K extends keyof E>(type: K, handler: Handler<E[K]>, once?: boolean): VoidFunction;
   /**
    * Adds a listener for all events.
    * @param type - event name.
@@ -35,8 +34,7 @@ export interface OffFn<E> {
    * @param type - event to listen.
    * @param handler - event listener to remove.
    * @param once - had this listener to be called only once.
-   */
-  <K extends keyof E>(type: K, handler: Handler<E[K]>, once?: boolean): void;
+   */<K extends keyof E>(type: K, handler: Handler<E[K]>, once?: boolean): void;
   /**
    * Removes a listener for all events.
    * @param type - event to stop listening.
@@ -111,7 +109,11 @@ export function createEmitter<E extends object>(
 
       function fn(...args: any[]) {
         once && cleanup();
-        handler(...args);
+        if (event === '*') {
+          handler(args);
+        } else {
+          handler(...args);
+        }
       }
 
       emitter.on(event, fn);
@@ -129,6 +131,10 @@ export function createEmitter<E extends object>(
     off,
     // eslint-disable-next-line @typescript-eslint/unbound-method
     emitter.emit,
-    emitter.all.clear.bind(emitter.all),
+    function offAll() {
+      emitter.all.clear();
+      map.clear();
+      onEmpty();
+    },
   ];
 }
