@@ -8,6 +8,10 @@ export {
   type CamelCaseTransformerPipe,
 } from './camel-casing/createCamelCaseGen.js';
 export {
+  createCamelCaseSchemaParserGen,
+  type CamelCaseSchemaParser,
+} from './camel-casing/createCamelCaseSchemaParserGen.js';
+export {
   createJsonCamelCaseGen,
   type CamelCaseJsonTransformer,
   type CamelCaseJsonTransformerPipe,
@@ -22,6 +26,9 @@ export type { CamelCaseTransformerFn } from './camel-casing/types.js';
 export { initDataQuery, initDataChatJson, initDataUserJson } from './generators/init-data.js';
 export { launchParamsQuery } from './generators/launchParamsQuery.js';
 export { themeParams } from './generators/themeParams.js';
+
+export { parseInitDataQuery } from './parsers/parseInitDataQuery.js';
+export { parseLaunchParams } from './parsers/parseLaunchParams.js';
 
 export {
   InitDataQuerySchema,
