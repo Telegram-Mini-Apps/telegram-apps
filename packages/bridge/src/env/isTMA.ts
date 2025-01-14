@@ -37,15 +37,15 @@ export function isTMA(
     }
   }
 
-  return CancelablePromise.withFn(async () => {
+  return CancelablePromise.withFn(async (abortSignal) => {
     if (hasWebviewProxy(window)) {
       return true;
     }
     try {
-      await request('web_app_request_theme', 'theme_changed', { timeout: 100 });
+      await request('web_app_request_theme', 'theme_changed', { abortSignal });
       return true;
     } catch {
       return false;
     }
-  }, optionsOrType);
+  }, optionsOrType || { timeout: 100 });
 }
