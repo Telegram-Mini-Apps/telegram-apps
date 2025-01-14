@@ -1,8 +1,3 @@
-import type {
-  ConvertSnakeKeysToCamelCase,
-  DeepConvertSnakeKeysToCamelCase,
-} from '@telegram-apps/toolkit';
-
 /**
  * Known type of chat.
  */
@@ -145,7 +140,3 @@ export interface InitData {
    */
   user?: User;
 }
-
-export type UserCamelCased = ConvertSnakeKeysToCamelCase<User>;
-export type ChatCamelCased = ConvertSnakeKeysToCamelCase<Chat>;
-export type InitDataCamelCased = DeepConvertSnakeKeysToCamelCase<InitData>;
