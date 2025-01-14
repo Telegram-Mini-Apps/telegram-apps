@@ -1,12 +1,15 @@
-import { is, parse, pipe, string, transform } from 'valibot';
-import type { LaunchParams } from '@telegram-apps/types';
-import { type LaunchParamsShape, MiniAppsMessage } from '@telegram-apps/transformers';
+import { is, parse, pipe, string } from 'valibot';
+import {
+  jsonParse,
+  parseLaunchParamsQuery,
+  type LaunchParamsLike,
+  MiniAppsMessageSchema,
+} from '@telegram-apps/transformers';
 import type { If, IsNever } from '@telegram-apps/toolkit';
 
-import { parseLaunchParams } from '@/launch-params/parseLaunchParams.js';
-import { saveToStorage } from '@/launch-params/storage.js';
 import { logInfo } from '@/debug.js';
 import { isIframe } from '@/env/isIframe.js';
+import { saveToStorage } from '@/launch-params/storage.js';
 import type { MethodName, MethodParams } from '@/methods/types/index.js';
 
 /**
@@ -17,7 +20,7 @@ export function mockTelegramEnv({ launchParams, onEvent }: {
    * Launch parameters to mock. They will be saved in the session storage making
    * the `retrieveLaunchParams` function return them.
    */
-  launchParams?: LaunchParamsShape | LaunchParams | string | URLSearchParams;
+  launchParams?: LaunchParamsLike | string | URLSearchParams;
   /**
    * Function that will be called if a Mini Apps method call was requested by the mini app.
    * @param event - event information.
@@ -35,14 +38,18 @@ export function mockTelegramEnv({ launchParams, onEvent }: {
   // the retrieveLaunchParams function would return them.
   launchParams && saveToStorage(
     typeof launchParams === 'string' || launchParams instanceof URLSearchParams
-      ? parseLaunchParams(launchParams)
+      ? parseLaunchParamsQuery(launchParams)
       : launchParams,
   );
 
   // Original postEvent firstly checks if the current environment is iframe.
   // That's why we have a separate branch for this environment here too.
   if (isIframe()) {
-    const MiniAppsMessageJson = pipe(string(), transform(JSON.parse), MiniAppsMessage);
+    const MiniAppsMessageJson = pipe(
+      string(),
+      jsonParse(),
+      MiniAppsMessageSchema,
+    );
 
     // As long as postEvent uses window.parent.postMessage, we should rewire it.
     const postMessage = window.parent.postMessage.bind(window.parent);
