@@ -41,11 +41,6 @@
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "build": "vite build -c vite.config.ts"
   },
-  "dependencies": {
-    "@telegram-apps/bridge": "workspace:^",
-    "@telegram-apps/signals": "workspace:^",
-    "@telegram-apps/toolkit": "workspace:^"
-  },
   "devDependencies": {
     "test-utils": "workspace:*",
     "tsconfig": "workspace:*"
