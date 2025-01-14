@@ -9,8 +9,11 @@ export default defineConfig({
     tsconfigPaths(),
     // Allows using self-signed certificates to run the dev server using HTTPS.
     // https://www.npmjs.com/package/vite-plugin-mkcert
-    mkcert(),
+    process.env.HTTPS && mkcert(),
   ],
+  server: {
+    host: true,
+  },
   build: {
     outDir: 'dist',
     emptyOutDir: true,

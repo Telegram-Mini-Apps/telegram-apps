@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:host": "vite --host",
+    "dev:https": "cross-env HTTPS=true vite",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -13,6 +13,7 @@
     "tsconfig": "workspace:*"
   },
   "devDependencies": {
-    "@vitejs/plugin-basic-ssl": "^1.1.0"
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "cross-env": "^7.0.3"
   }
 }
