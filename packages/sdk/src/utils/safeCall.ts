@@ -1,6 +1,4 @@
-export type SafeCallResult<T, E> =
-  | { result: T }
-  | { error: E }
+export type SafeCallResult<Data, Error> = [ok: true, data: Data] | [ok: false, error: Error];
 
 /**
  * Calls the function and prevents it from throwing error. It returns an object
@@ -11,8 +9,8 @@ export type SafeCallResult<T, E> =
  */
 export function safeCall<T, E = unknown>(fn: () => T): SafeCallResult<T, E> {
   try {
-    return { result: fn() };
+    return [true, fn()];
   } catch (error) {
-    return { error: error as E };
+    return [false, error as E];
   }
 }
