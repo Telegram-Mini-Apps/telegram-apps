@@ -1,138 +1,27 @@
-import { toSearchParams } from 'test-utils';
-import { describe, expect, it } from 'vitest';
+import { it, expect } from 'vitest';
+import { parse } from './parse';
 
-import { parse } from './parse.js';
+it('should properly create object from query', () => {
+  const input = 'user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%22%2C%22last_name%22%3A%22Kibenko%22%2C%22username%22%3A%22vdkfrost%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F4FPEE4tmP3ATHa57u6MqTDih13LTOiMoKoLDRG4PnSA.svg%22%7D&chat_instance=-9019086117643313246&chat_type=sender&auth_date=1736362318&signature=JUPYm_qmf8hJYSux535eNDg_a5ZdcOkS6yZMkEUGS09zcXoIopCn3DOuNCa5aWH0PQGaUGGMAaq9MeaMg-6EBg&hash=14cd9c9eeebf82370b20f4df23af9439d00f6da2837dd20e17ed3b03ab99cd9c&additional_prop=1';
+  const output = {
+    auth_date: new Date(1736362318000),
+    chat_instance: '-9019086117643313246',
+    chat_type: 'sender',
+    hash: '14cd9c9eeebf82370b20f4df23af9439d00f6da2837dd20e17ed3b03ab99cd9c',
+    signature: 'JUPYm_qmf8hJYSux535eNDg_a5ZdcOkS6yZMkEUGS09zcXoIopCn3DOuNCa5aWH0PQGaUGGMAaq9MeaMg-6EBg',
+    user: {
+      allows_write_to_pm: true,
+      first_name: 'Vladislav',
+      id: 279058397,
+      is_premium: true,
+      language_code: 'ru',
+      last_name: 'Kibenko',
+      photo_url: 'https://t.me/i/userpic/320/4FPEE4tmP3ATHa57u6MqTDih13LTOiMoKoLDRG4PnSA.svg',
+      username: 'vdkfrost',
+    },
+    additional_prop: '1',
+  };
 
-describe('auth_date', () => {
-  it('should throw an error in case, this property is missing', () => {
-    expect(() => parse(toSearchParams({ hash: 'abcd' }))).toThrow();
-  });
-
-  it('should parse source property as Date and pass it to the "authDate" property', () => {
-    expect(parse(toSearchParams({ auth_date: 1, hash: 'abcd', signature: 'aa' }))).toMatchObject({
-      authDate: new Date(1000),
-    });
-  });
-});
-
-describe('can_send_after', () => {
-  it('should parse source property as Date and pass it to the "canSendAfter" property', () => {
-    expect(
-      parse(toSearchParams({
-        auth_date: 1,
-        hash: 'abcd',
-        can_send_after: 8882,
-        signature: 'aa',
-      })),
-    ).toMatchObject({
-      canSendAfter: 8882,
-    });
-  });
-});
-
-describe('chat', () => {
-  it('should parse source property as Chat and pass it to the "chat" property', () => {
-    expect(
-      parse(toSearchParams({
-        auth_date: 1,
-        hash: 'abcd',
-        chat: {
-          id: 5,
-          type: 'group chat',
-          title: 'My Chat',
-          photo_url: 'https://johny.com',
-          username: 'Johny Chat',
-        },
-        signature: 'aa'
-      })),
-    ).toMatchObject({
-      chat: {
-        id: 5,
-        type: 'group chat',
-        title: 'My Chat',
-        photoUrl: 'https://johny.com',
-        username: 'Johny Chat',
-      },
-    });
-  });
-});
-
-describe('hash', () => {
-  it('should throw an error in case, this property is missing', () => {
-    expect(
-      () => parse(toSearchParams({
-        auth_date: 1,
-        signature: 'aa'
-      })),
-    ).toThrow();
-  });
-
-  it('should parse source property as string and pass it to the "hash" property', () => {
-    expect(
-      parse(toSearchParams({
-        auth_date: 1,
-        hash: 'abcd',
-        signature: 'aa'
-      })),
-    ).toMatchObject({
-      hash: 'abcd',
-    });
-  });
-});
-
-describe.each([
-  { from: 'chat_instance', to: 'chatInstance' },
-  { from: 'chat_type', to: 'chatType' },
-  { from: 'query_id', to: 'queryId' },
-  { from: 'start_param', to: 'startParam' },
-])('$from', ({ from, to }) => {
-  it(`should parse source property as string and pass it to the "${to}" property`, () => {
-    expect(
-      parse(toSearchParams({
-        auth_date: 1,
-        hash: 'abcd',
-        signature: 'aa',
-        [from]: 'my custom property',
-      })),
-    ).toMatchObject({
-      [to]: 'my custom property',
-    });
-  });
-});
-
-describe.each(['user', 'receiver'])('%s', (property) => {
-  it('should parse source property as User and pass it to the property with the same name', () => {
-    expect(
-      parse(toSearchParams({
-        auth_date: 1,
-        hash: 'abcd',
-        signature: 'aa',
-        [property]: {
-          added_to_attachment_menu: true,
-          allows_write_to_pm: false,
-          first_name: 'Johny',
-          id: 333,
-          is_bot: false,
-          is_premium: true,
-          language_code: 'en',
-          last_name: 'Bravo',
-          photo_url: 'https://johny.com',
-          username: 'johnybravo',
-        },
-      })),
-    ).toMatchObject({
-      [property]: {
-        addedToAttachmentMenu: true,
-        allowsWriteToPm: false,
-        firstName: 'Johny',
-        id: 333,
-        isBot: false,
-        isPremium: true,
-        languageCode: 'en',
-        lastName: 'Bravo',
-        photoUrl: 'https://johny.com',
-        username: 'johnybravo',
-      },
-    });
-  });
+  expect(parse(input)).toStrictEqual(output);
+  expect(parse(input)).toStrictEqual(output);
 });

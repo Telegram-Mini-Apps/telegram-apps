@@ -8,7 +8,6 @@ import type { Verify3rdFn } from '../types.js';
 
 export type { Chat, ChatType, InitData, User } from '@telegram-apps/types';
 export { TypedError, isErrorOfType } from '@telegram-apps/toolkit';
-export { ERR_PARSE, ERR_UNEXPECTED_VALUE } from '@telegram-apps/transformers';
 
 export { initDataToSearchParams } from '../initDataToSearchParams.js';
 export { parse } from '../parse.js';
