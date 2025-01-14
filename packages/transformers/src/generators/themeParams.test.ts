@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { is, parse } from 'valibot';
 
-import { themeParams } from '@/themeParams.js';
+import { themeParams } from '@/generators/themeParams.js';
 
 describe('themeParams', () => {
   it('should properly validate the value', () => {

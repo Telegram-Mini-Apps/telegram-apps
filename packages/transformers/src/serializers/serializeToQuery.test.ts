@@ -1,5 +1,5 @@
 import { it, expect } from 'vitest';
-import { serializeToQuery } from '@/serializeToQuery.js';
+import { serializeToQuery } from '@/serializers/serializeToQuery.js';
 
 it('should convert boolean to 1 or 0', () => {
   expect(serializeToQuery({ v: false })).toBe('v=0');

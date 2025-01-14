@@ -1,6 +1,6 @@
 import { expect, it, describe } from 'vitest';
 
-import { isRGB, isRGBShort, toRGB } from '@/rgb.js';
+import { isRGB, isRGBShort, toRGB } from '@/validation/rgb.js';
 
 describe('isRGB', () => {
   it('should return true for correct full RGB representation', () => {
