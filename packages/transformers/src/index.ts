@@ -28,7 +28,7 @@ export { launchParamsQuery } from './generators/launchParamsQuery.js';
 export { themeParams } from './generators/themeParams.js';
 
 export { parseInitDataQuery } from './parsers/parseInitDataQuery.js';
-export { parseLaunchParams } from './parsers/parseLaunchParams.js';
+export { parseLaunchParamsQuery } from './parsers/parseLaunchParamsQuery.js';
 
 export {
   InitDataQuerySchema,

@@ -3,7 +3,7 @@ import type { CamelCaseQueryTransformerPipe } from '@/camel-casing/createQueryCa
 import { LaunchParamsSchema } from '@/schemas/LaunchParamsSchema.js';
 import { launchParamsQuery } from '@/generators/launchParamsQuery.js';
 
-export const parseLaunchParams = createCamelCaseSchemaParserGen<
+export const parseLaunchParamsQuery = createCamelCaseSchemaParserGen<
   string | URLSearchParams,
   CamelCaseQueryTransformerPipe<typeof LaunchParamsSchema, false>
 >(launchParamsQuery());
