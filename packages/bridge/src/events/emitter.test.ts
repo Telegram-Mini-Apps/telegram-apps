@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createWindow } from 'test-utils';
 
 import { resetPackageState } from '@/resetPackageState.js';
-import { emitMiniAppsEvent } from '@/events/emitMiniAppsEvent.js';
+import { emitEvent } from '@/events/emitEvent.js';
 
 import { off, on } from './emitter.js';
 
@@ -22,8 +22,8 @@ describe('on', () => {
       is_expanded: false,
       is_state_stable: false,
     };
-    emitMiniAppsEvent('viewport_changed', eventData);
-    emitMiniAppsEvent('theme_changed', { theme_params: {} });
+    emitEvent('viewport_changed', eventData);
+    emitEvent('theme_changed', { theme_params: {} });
 
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith(eventData);
@@ -39,15 +39,15 @@ describe('on', () => {
       is_expanded: false,
       is_state_stable: false,
     };
-    emitMiniAppsEvent('viewport_changed', eventData);
-    emitMiniAppsEvent('viewport_changed', eventData);
+    emitEvent('viewport_changed', eventData);
+    emitEvent('viewport_changed', eventData);
 
     expect(listener).toHaveBeenCalledTimes(1);
   });
 
   it('should remove listener if returned callback was called', () => {
     const listener = vi.fn();
-    const emit = () => emitMiniAppsEvent('viewport_changed', {
+    const emit = () => emitEvent('viewport_changed', {
       height: 123,
       width: 321,
       is_expanded: false,
@@ -67,13 +67,13 @@ describe('on', () => {
     const listener = vi.fn();
     on('*', listener);
 
-    emitMiniAppsEvent('viewport_changed', {
+    emitEvent('viewport_changed', {
       height: 123,
       width: 321,
       is_expanded: false,
       is_state_stable: false,
     });
-    emitMiniAppsEvent('theme_changed', { theme_params: {} });
+    emitEvent('theme_changed', { theme_params: {} });
 
     expect(listener).toHaveBeenCalledTimes(2);
     expect(listener).toHaveBeenNthCalledWith(1, ['viewport_changed', {
@@ -92,9 +92,9 @@ describe('on', () => {
     expect(window).not.toHaveProperty('Telegram');
     on('*', vi.fn());
     expect(window).toMatchObject({
-      TelegramGameProxy_receiveEvent: emitMiniAppsEvent,
-      TelegramGameProxy: { receiveEvent: emitMiniAppsEvent },
-      Telegram: { WebView: { receiveEvent: emitMiniAppsEvent } },
+      TelegramGameProxy_receiveEvent: emitEvent,
+      TelegramGameProxy: { receiveEvent: emitEvent },
+      Telegram: { WebView: { receiveEvent: emitEvent } },
     });
   });
 
@@ -167,7 +167,7 @@ describe('on', () => {
           it(`should properly process case ${idx}`, () => {
             const listener = vi.fn();
             on(event as any, listener);
-            emitMiniAppsEvent(event, input);
+            emitEvent(event, input);
             expect(listener).toHaveBeenCalledTimes(1);
             expect(listener).toHaveBeenCalledWith(expected);
           });
@@ -178,7 +178,7 @@ describe('on', () => {
       it('should properly process event', () => {
         const listener = vi.fn();
         on(event as any, listener);
-        emitMiniAppsEvent(event, test.input);
+        emitEvent(event, test.input);
         expect(listener).toHaveBeenCalledTimes(1);
         expect(listener).toHaveBeenCalledWith(test.input);
       });
@@ -189,7 +189,7 @@ describe('on', () => {
 describe('off', () => {
   it('should remove listener', () => {
     const listener = vi.fn();
-    const emit = () => emitMiniAppsEvent('viewport_changed', {
+    const emit = () => emitEvent('viewport_changed', {
       height: 123,
       width: 321,
       is_expanded: false,
@@ -213,9 +213,9 @@ describe('off', () => {
     const listener = vi.fn();
     on('*', listener);
     expect(window).toMatchObject({
-      TelegramGameProxy_receiveEvent: emitMiniAppsEvent,
-      TelegramGameProxy: { receiveEvent: emitMiniAppsEvent },
-      Telegram: { WebView: { receiveEvent: emitMiniAppsEvent } },
+      TelegramGameProxy_receiveEvent: emitEvent,
+      TelegramGameProxy: { receiveEvent: emitEvent },
+      Telegram: { WebView: { receiveEvent: emitEvent } },
     });
     off('*', listener);
     expect(window).not.toHaveProperty('TelegramGameProxy_receiveEvent');

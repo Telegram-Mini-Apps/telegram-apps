@@ -14,7 +14,7 @@ import { AbortError, TimeoutError } from 'better-promises';
 import { resetPackageState } from '@/resetPackageState.js';
 import { postEvent as globalPostEvent } from '@/methods/postEvent.js';
 import { request } from './request.js';
-import { emitMiniAppsEvent } from '@/events/emitMiniAppsEvent.js';
+import { emitEvent } from '@/events/emitEvent.js';
 
 vi.mock('@/methods/postEvent.js', async () => {
   const { postEvent: actualPostEvent } = await vi.importActual('@/methods/postEvent.js');
@@ -58,7 +58,7 @@ describe('options', () => {
       });
 
       vi.advanceTimersByTime(500);
-      emitMiniAppsEvent('phone_requested', { status: 'allowed' });
+      emitEvent('phone_requested', { status: 'allowed' });
       vi.advanceTimersByTime(1000);
 
       await expect(promise).resolves.toStrictEqual({ status: 'allowed' });
@@ -69,7 +69,7 @@ describe('options', () => {
     it('should use specified postEvent property', async () => {
       const postEvent = vi.fn();
       const promise = request('web_app_request_phone', 'phone_requested', { postEvent });
-      emitMiniAppsEvent('phone_requested', { status: 'allowed' });
+      emitEvent('phone_requested', { status: 'allowed' });
       await promise;
 
       expect(postEvent).toHaveBeenCalledWith('web_app_request_phone', undefined);
@@ -77,7 +77,7 @@ describe('options', () => {
 
     it('should use global postEvent function if according property was not specified', async () => {
       const promise = request('web_app_request_phone', 'phone_requested');
-      emitMiniAppsEvent('phone_requested', { status: 'allowed' });
+      emitEvent('phone_requested', { status: 'allowed' });
       await promise;
 
       expect(globalPostEvent).toHaveBeenCalledWith('web_app_request_phone', undefined);
@@ -101,7 +101,7 @@ describe('options', () => {
       });
 
       vi.advanceTimersByTime(500);
-      emitMiniAppsEvent('phone_requested', { status: 'allowed' });
+      emitEvent('phone_requested', { status: 'allowed' });
       vi.advanceTimersByTime(1000);
 
       await expect(promise).resolves.toStrictEqual({ status: 'allowed' });
@@ -113,7 +113,7 @@ describe('options', () => {
         capture: ({ status }) => status === 'allowed',
       });
 
-      emitMiniAppsEvent('phone_requested', { status: 'declined' });
+      emitEvent('phone_requested', { status: 'declined' });
       vi.advanceTimersByTime(1000);
 
       await expect(promise).rejects.toBeInstanceOf(TimeoutError);
@@ -140,7 +140,7 @@ describe('with request id', () => {
       capture: (({ req_id }) => req_id === 'a'),
     });
 
-    emitMiniAppsEvent('clipboard_text_received', { req_id: 'b' });
+    emitEvent('clipboard_text_received', { req_id: 'b' });
     vi.advanceTimersByTime(1500);
 
     await expect(promise).rejects.toBeInstanceOf(TimeoutError);
@@ -157,7 +157,7 @@ describe('with request id', () => {
       },
     );
 
-    emitMiniAppsEvent('clipboard_text_received', {
+    emitEvent('clipboard_text_received', {
       req_id: 'a',
       data: 'from clipboard',
     });
@@ -179,7 +179,7 @@ describe('multiple events', () => {
         { timeout: 1000 },
       );
 
-      emitMiniAppsEvent('phone_requested', { status: 'allowed' });
+      emitEvent('phone_requested', { status: 'allowed' });
       vi.advanceTimersByTime(1500);
 
       await expect(promise).resolves.toStrictEqual({ status: 'allowed' });
@@ -197,7 +197,7 @@ describe('multiple events', () => {
         },
       );
 
-      emitMiniAppsEvent('write_access_requested', { status: 'declined' });
+      emitEvent('write_access_requested', { status: 'declined' });
       vi.advanceTimersByTime(1500);
 
       await expect(promise).resolves.toStrictEqual({ status: 'declined' });

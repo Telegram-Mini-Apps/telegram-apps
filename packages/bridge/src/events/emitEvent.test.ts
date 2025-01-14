@@ -1,7 +1,7 @@
 import { expect, it, vi } from 'vitest';
 import { mockWindow } from 'test-utils';
 
-import { emitMiniAppsEvent } from './emitMiniAppsEvent.js';
+import { emitEvent } from './emitEvent.js';
 
 it('should call window.dispatchEvent with the Message event containing properties "data" property equal to { eventType, eventData } stringified and "source" property equal to window.parent', () => {
   const dispatchEvent = vi.fn();
@@ -9,7 +9,7 @@ it('should call window.dispatchEvent with the Message event containing propertie
     dispatchEvent,
     parent: 'PARENT',
   } as any);
-  emitMiniAppsEvent('test', 'some-data');
+  emitEvent('test', 'some-data');
   expect(dispatchEvent).toHaveBeenCalledOnce();
   expect(dispatchEvent.mock.calls[0][0]).toBeInstanceOf(MessageEvent);
   expect(dispatchEvent.mock.calls[0][0]).toMatchObject({

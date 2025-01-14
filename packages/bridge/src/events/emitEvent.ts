@@ -9,7 +9,7 @@ import type { EventWithoutPayload, EventWithPayload, EventPayload } from '@/even
  * messages sent from the parent iframe.
  * @param eventType - event name.
  */
-export function emitMiniAppsEvent<E extends EventWithoutPayload>(eventType: E): void;
+export function emitEvent<E extends EventWithoutPayload>(eventType: E): void;
 
 /**
  * Emits an event with payload sent from the Telegram native application like it was sent in
@@ -21,7 +21,7 @@ export function emitMiniAppsEvent<E extends EventWithoutPayload>(eventType: E): 
  * @param eventType - event name.
  * @param eventData - event payload.
  */
-export function emitMiniAppsEvent<E extends EventWithPayload>(
+export function emitEvent<E extends EventWithPayload>(
   eventType: E,
   eventData: EventPayload<E>,
 ): void;
@@ -36,7 +36,7 @@ export function emitMiniAppsEvent<E extends EventWithPayload>(
  * @param eventType - event name.
  * @param eventData - event payload.
  */
-export function emitMiniAppsEvent<E extends string>(
+export function emitEvent<E extends string>(
   eventType: E,
   eventData: E extends EventWithoutPayload
     ? never
@@ -55,7 +55,7 @@ export function emitMiniAppsEvent<E extends string>(
  * @param eventType - event name.
  * @param eventData - event payload.
  */
-export function emitMiniAppsEvent(eventType: string, eventData?: unknown): void {
+export function emitEvent(eventType: string, eventData?: unknown): void {
   window.dispatchEvent(new MessageEvent('message', {
     data: JSON.stringify({ eventType, eventData }),
     // We specify window.parent to imitate the case, the parent iframe sent us this event.

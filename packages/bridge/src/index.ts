@@ -4,7 +4,7 @@ export { isTMA } from '@/env/isTMA.js';
 export { mockTelegramEnv } from '@/env/mockTelegramEnv.js';
 
 export type * from '@/events/types/index.js';
-export { emitMiniAppsEvent } from '@/events/emitMiniAppsEvent.js';
+export { emitEvent } from '@/events/emitEvent.js';
 export { on, off, offAll } from '@/events/emitter.js';
 export type { EventListener, SubscribeListener } from '@/events/types/listening.js';
 
