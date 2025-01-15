@@ -1,9 +1,5 @@
-import {
-  createCbCollector,
-  defineEventHandlers,
-  on,
-  removeEventHandlers,
-} from '@telegram-apps/bridge';
+import { on } from '@telegram-apps/bridge';
+import { createCbCollector } from '@telegram-apps/toolkit';
 
 import { postEvent, configure, type ConfigureOptions } from '@/scopes/globals.js';
 
@@ -25,15 +21,11 @@ export function init(options?: InitOptions): VoidFunction {
   // Configure the package global dependencies.
   configure(options);
 
-  // Define event handlers, so we could receive the events from the Telegram application.
-  defineEventHandlers();
-
   const [addCleanup, cleanup] = createCbCollector(
     on('reload_iframe', () => {
       postEvent('iframe_will_reload');
       window.location.reload();
     }),
-    removeEventHandlers,
   );
 
   const { acceptCustomStyles = true } = options || {};
