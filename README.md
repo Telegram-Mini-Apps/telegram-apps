@@ -1,6 +1,6 @@
 [code-badge]: https://img.shields.io/badge/source-black?logo=github
 
-# @telegram-apps
+# @DoGGYBoYBot
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
