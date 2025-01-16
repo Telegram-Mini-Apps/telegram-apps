@@ -2,7 +2,7 @@ import { vi, describe, expect, it, afterEach, beforeEach } from 'vitest';
 
 import { resetPackageState } from '@test-utils/reset/reset.js';
 
-import { wrapSafe } from '@/scopes/toolkit/wrapSafe.js';
+import { wrapSafe } from '@/wrapSafe.js';
 import { $version } from '@/scopes/globals.js';
 
 afterEach(() => {
