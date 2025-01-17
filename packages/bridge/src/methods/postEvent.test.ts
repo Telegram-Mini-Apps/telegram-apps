@@ -9,6 +9,7 @@ import { createWindow } from 'test-utils';
 
 import { $targetOrigin } from './$targetOrigin.js';
 import { postEvent } from './postEvent.js';
+import { UnknownEnvError } from '@/errors.js';
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -68,7 +69,7 @@ describe('env: common mobile', () => {
     expect(spy).toHaveBeenCalledTimes(0);
     postEvent('web_app_set_header_color', { color_key: 'bg_color' });
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith('web_app_set_header_color','{"color_key":"bg_color"}');
+    expect(spy).toHaveBeenCalledWith('web_app_set_header_color', '{"color_key":"bg_color"}');
   });
 });
 
@@ -98,7 +99,7 @@ describe('env: window mobile', () => {
 describe('env: unknown', () => {
   it('should throw', () => {
     createWindow();
-    expect(() => postEvent('web_app_close')).toThrow('ERR_UNKNOWN_ENV');
+    expect(() => postEvent('web_app_close')).toThrow(new UnknownEnvError);
   });
 });
 

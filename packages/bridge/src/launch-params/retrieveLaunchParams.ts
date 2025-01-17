@@ -2,19 +2,11 @@ import { LaunchParamsSchema, parseLaunchParamsQuery } from '@telegram-apps/trans
 import {
   type DeepConvertSnakeKeysToCamelCase,
   deepSnakeToCamelObjKeys,
-  TypedError,
 } from '@telegram-apps/toolkit';
 import type { InferOutput } from 'valibot';
 
-import { ERR_RETRIEVE_LP_FAILED } from '@/errors.js';
+import { LaunchParamsRetrieveError } from '@/errors.js';
 import { retrieveFromStorage, saveToStorage } from '@/launch-params/storage.js';
-
-function unwrapError(e: unknown): string {
-  if (e instanceof Error) {
-    return e.message + (e.cause ? `\n  ${unwrapError(e.cause)}` : '');
-  }
-  return JSON.stringify(e);
-}
 
 /**
  * @param urlString - URL to extract launch parameters from.
@@ -47,14 +39,16 @@ function retrieveFromPerformance() {
 /**
  * @returns Launch parameters from any known source.
  * @param camelCase - should the output be camel-cased.
- * @throws {TypedError} ERR_RETRIEVE_LP_FAILED
+ * @throws {LaunchParamsRetrieveError} Unable to retrieve launch parameters. They are probably
+ * invalid.
  */
 export function retrieveLaunchParams(camelCase?: false): InferOutput<typeof LaunchParamsSchema>;
 
 /**
  * @returns Launch parameters from any known source.
  * @param camelCase - should the output be camel-cased.
- * @throws {TypedError} ERR_RETRIEVE_LP_FAILED
+ * @throws {LaunchParamsRetrieveError} Unable to retrieve launch parameters. They are probably
+ * invalid.
  */
 export function retrieveLaunchParams(camelCase: true): DeepConvertSnakeKeysToCamelCase<
   InferOutput<typeof LaunchParamsSchema>
@@ -62,7 +56,8 @@ export function retrieveLaunchParams(camelCase: true): DeepConvertSnakeKeysToCam
 
 /**
  * @returns Launch parameters from any known source.
- * @throws {TypedError} ERR_RETRIEVE_LP_FAILED
+ * @throws {LaunchParamsRetrieveError} Unable to retrieve launch parameters. They are probably
+ * invalid.
  */
 export function retrieveLaunchParams(camelCase?: boolean):
   | InferOutput<typeof LaunchParamsSchema>
@@ -87,11 +82,5 @@ export function retrieveLaunchParams(camelCase?: boolean):
     }
   }
 
-  throw new TypedError(ERR_RETRIEVE_LP_FAILED, [
-    'Unable to retrieve launch parameters from any known source. Perhaps, you have opened your app outside Telegram?',
-    '📖 Refer to docs for more information:',
-    'https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/environment',
-    'Collected errors:',
-    ...errors.map(e => `— ${unwrapError(e)}`),
-  ].join('\n'));
+  throw new LaunchParamsRetrieveError(errors);
 }

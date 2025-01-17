@@ -36,11 +36,16 @@ export {
 
 export { setDebug } from '@/debug.js';
 export {
-  ERR_METHOD_UNSUPPORTED,
-  ERR_METHOD_PARAMETER_UNSUPPORTED,
-  ERR_CUSTOM_METHOD_ERR_RESPONSE,
-  ERR_UNKNOWN_ENV,
-  ERR_RETRIEVE_LP_FAILED,
+  LaunchParamsRetrieveError,
+  isLaunchParamsRetrieveError,
+  MethodUnsupportedError,
+  isMethodUnsupportedError,
+  InvokeCustomMethodError,
+  isInvokeCustomMethodError,
+  MethodParameterUnsupportedError,
+  isMethodMethodParameterUnsupportedError,
+  UnknownEnvError,
+  isUnknownEnvError,
 } from '@/errors.js';
 export { resetPackageState } from '@/resetPackageState.js';
 export type { ExecuteWithOptions, ExecuteWithPostEvent } from '@/types.js';

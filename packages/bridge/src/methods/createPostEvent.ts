@@ -1,8 +1,6 @@
 import { any, is, looseObject } from 'valibot';
-import { TypedError } from '@telegram-apps/toolkit';
 import type { Version } from '@telegram-apps/types';
 
-import { ERR_METHOD_PARAMETER_UNSUPPORTED, ERR_METHOD_UNSUPPORTED } from '@/errors.js';
 import { supports } from '@/methods/supports.js';
 import { type PostEventFn, postEvent } from '@/methods/postEvent.js';
 import type {
@@ -10,6 +8,7 @@ import type {
   MethodNameWithVersionedParams,
   MethodVersionedParams,
 } from '@/methods/types/index.js';
+import { MethodParameterUnsupportedError, MethodUnsupportedError } from '@/errors.js';
 
 export type OnUnsupportedFn = (
   data: { version: Version } & (
@@ -25,15 +24,15 @@ export type OnUnsupportedFn = (
 export type CreatePostEventMode = 'strict' | 'non-strict';
 
 /**
- * Creates a function which checks if specified method and parameters are supported.
+ * Creates a function that checks if the specified method and parameters are supported.
  *
- * If method or parameters are unsupported, the `onUnsupported` function will be called.
+ * If the method or parameters are unsupported, the `onUnsupported` function will be called.
  *
  * If `strict` or `non-strict` value was passed as the second argument, the function
  * will create its own `onUnsupported` function with behavior depending on the value passed.
  *
- * - Passing `strict` will make function to throw a `TypedError` error
- * with `ERR_METHOD_UNSUPPORTED` or `ERR_METHOD_PARAMETER_UNSUPPORTED` type.
+ * - Passing `strict` will make the function to throw a `MethodParameterUnsupportedError`
+ * or a `MethodUnsupportedError` error.
  * - Passing `non-strict` will just warn you about something being unsupported.
  *
  * @param version - Telegram Mini Apps version.
@@ -48,25 +47,18 @@ export function createPostEvent(
     ? onUnsupportedOrMode
     : data => {
       const { method, version } = data;
-      let message: string;
-      let error: string;
-
-      if ('param' in data) {
-        message = `Parameter "${data.param}" of "${method}" method is unsupported in Mini Apps version ${version}`;
-        error = ERR_METHOD_PARAMETER_UNSUPPORTED;
-      } else {
-        message = `Method "${method}" is unsupported in Mini Apps version ${version}`;
-        error = ERR_METHOD_UNSUPPORTED;
-      }
+      const error = 'param' in data
+        ? new MethodParameterUnsupportedError(method, data.param, version)
+        : new MethodUnsupportedError(method, version);
 
       if (onUnsupportedOrMode === 'strict') {
-        throw new TypedError(error, message);
+        throw error;
       }
-      return console.warn(message);
+      return console.warn(error.message);
     };
 
   return ((method: any, params: any) => {
-    // Firstly, check if a method is supported.
+    // Firstly, check if the method is supported.
     if (!supports(method, version)) {
       return onUnsupported({ version, method });
     }

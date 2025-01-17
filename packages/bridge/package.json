@@ -49,6 +49,7 @@
     "@telegram-apps/transformers": "workspace:^",
     "@telegram-apps/types": "workspace:^",
     "better-promises": "^0.0.5",
+    "error-kid": "^0.0.3",
     "mitt": "^3.0.1",
     "valibot": "1.0.0-beta.11"
   },

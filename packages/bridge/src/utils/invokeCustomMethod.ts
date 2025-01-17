@@ -1,10 +1,9 @@
-import { TypedError } from '@telegram-apps/toolkit';
 import { CancelablePromise } from 'better-promises';
 
-import { ERR_CUSTOM_METHOD_ERR_RESPONSE } from '@/errors.js';
 import { captureSameReq } from '@/methods/captureSameReq.js';
 import type { ExecuteWithOptions } from '@/types.js';
 import type { CustomMethodName, CustomMethodParams } from '@/methods/types/index.js';
+import { InvokeCustomMethodError } from '@/errors.js';
 
 import { request } from './request.js';
 
@@ -14,7 +13,7 @@ import { request } from './request.js';
  * @param params - method parameters.
  * @param requestId - request identifier.
  * @param options - additional options.
- * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
+ * @throws {InvokeCustomMethodError} Invocation completed with some error.
  */
 export function invokeCustomMethod<M extends CustomMethodName>(
   method: M,
@@ -29,7 +28,7 @@ export function invokeCustomMethod<M extends CustomMethodName>(
  * @param params - method parameters.
  * @param requestId - request identifier.
  * @param options - additional options.
- * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
+ * @throws {InvokeCustomMethodError} Invocation completed with some error.
  */
 export function invokeCustomMethod(
   method: string,
@@ -51,7 +50,7 @@ export function invokeCustomMethod(
   })
     .then(({ result, error }) => {
       if (error) {
-        throw new TypedError(ERR_CUSTOM_METHOD_ERR_RESPONSE, error);
+        throw new InvokeCustomMethodError(error);
       }
       return result;
     });
