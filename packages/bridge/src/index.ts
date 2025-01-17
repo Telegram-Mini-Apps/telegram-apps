@@ -11,7 +11,7 @@ export type { EventListener, SubscribeListener } from '@/events/types/listening.
 export { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
 
 export type * from '@/methods/types/index.js';
-export { $targetOrigin } from '@/methods/$targetOrigin.js';
+export { targetOrigin } from '@/methods/targetOrigin.js';
 export { captureSameReq } from '@/methods/captureSameReq.js';
 export {
   createPostEvent,

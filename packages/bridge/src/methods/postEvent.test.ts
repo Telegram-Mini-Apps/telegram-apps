@@ -7,7 +7,7 @@ import {
 } from 'vitest';
 import { createWindow } from 'test-utils';
 
-import { $targetOrigin } from './$targetOrigin.js';
+import { targetOrigin } from './targetOrigin.js';
 import { postEvent } from './postEvent.js';
 import { UnknownEnvError } from '@/errors.js';
 
@@ -105,7 +105,7 @@ describe('env: unknown', () => {
 
 describe('target origin', () => {
   afterEach(() => {
-    $targetOrigin.reset();
+    targetOrigin.reset();
   });
 
   it('should use globally set target origin', () => {
@@ -115,7 +115,7 @@ describe('target origin', () => {
       parent: { postMessage } as any,
     });
 
-    $targetOrigin.set('here we go!');
+    targetOrigin.set('here we go!');
     postEvent('web_app_set_header_color', { color_key: 'bg_color' });
 
     expect(postMessage).toHaveBeenCalledOnce();

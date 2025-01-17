@@ -4,7 +4,7 @@ import { logInfo } from '@/debug.js';
 import { isIframe } from '@/env/isIframe.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { UnknownEnvError } from '@/errors.js';
-import { $targetOrigin } from '@/methods/$targetOrigin.js';
+import { targetOrigin } from '@/methods/targetOrigin.js';
 import type {
   MethodName,
   MethodNameWithOptionalParams,
@@ -56,7 +56,7 @@ export function postEvent(
 
   // Telegram Web.
   if (isIframe()) {
-    return w.parent.postMessage(message, $targetOrigin());
+    return w.parent.postMessage(message, targetOrigin());
   }
 
   // Telegram for iOS and macOS and Telegram Desktop.

@@ -1,4 +1,4 @@
-import { $targetOrigin } from '@/methods/$targetOrigin.js';
+import { targetOrigin } from '@/methods/targetOrigin.js';
 import { setDebug } from '@/debug.js';
 import { offAll } from '@/events/emitter.js';
 
@@ -9,6 +9,6 @@ import { offAll } from '@/events/emitter.js';
 export function resetPackageState() {
   offAll();
   setDebug(false);
-  $targetOrigin.unsubAll();
-  $targetOrigin.reset();
+  targetOrigin.unsubAll();
+  targetOrigin.reset();
 }
