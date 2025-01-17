@@ -12,7 +12,7 @@ import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
  *
  * In case you need stricter checks, use async override of this function.
  */
-export function isTMA(type: 'simple'): boolean;
+export function isTMA(): boolean;
 
 /**
  * Returns promise with true if the current environment is Telegram Mini Apps.
@@ -23,12 +23,13 @@ export function isTMA(type: 'simple'): boolean;
  *
  * In case you need less strict checks, use sync override of this function.
  */
-export function isTMA(options?: PromiseOptions): CancelablePromise<boolean>
+export function isTMA(type: 'complete', options?: PromiseOptions): CancelablePromise<boolean>
 
 export function isTMA(
-  optionsOrType?: PromiseOptions | 'simple',
+  type?: 'complete',
+  options?: PromiseOptions,
 ): boolean | CancelablePromise<boolean> {
-  if (optionsOrType === 'simple') {
+  if (!type) {
     try {
       retrieveLaunchParams();
       return true;
@@ -47,5 +48,5 @@ export function isTMA(
     } catch {
       return false;
     }
-  }, optionsOrType || { timeout: 100 });
+  }, options || { timeout: 100 });
 }
