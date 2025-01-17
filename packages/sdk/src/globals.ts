@@ -5,14 +5,15 @@ import {
   invokeCustomMethod as _invokeCustomMethod,
   createPostEvent,
   type PostEventFn,
-  type Version,
   type RequestFn,
-  type CancelablePromise,
   type ExecuteWithOptions,
   type CustomMethodParams,
   type CustomMethodName,
 } from '@telegram-apps/bridge';
-import { signal } from '@telegram-apps/signals';
+import type { Version } from '@telegram-apps/types';
+import type { CancelablePromise } from 'better-promises';
+
+import { createSignal } from '@/signals-registry.js';
 
 export interface ConfigureOptions {
   /**
@@ -37,23 +38,13 @@ export interface ConfigureOptions {
   postEvent?: PostEventFn;
 }
 
-/**
- * Signal with a request identifier generator. Usually, you don't need to set this value manually.
- */
-export const $createRequestId = signal((() => {
-  let requestId = 0;
-  return () => (requestId += 1).toString();
-})());
+const $lastRequestId = createSignal(0);
+const $postEvent = createSignal<PostEventFn>(_postEvent);
 
 /**
- * Signal with a currently used postEvent function across the package.
+ * Signal with a currently supported maximum Mini Apps version.
  */
-export const $postEvent = signal<PostEventFn>(_postEvent);
-
-/**
- * Signal with a currently supported maximum Mini Apps version. This value is usually set via
- */
-export const $version = signal<Version>('0.0');
+export const $version = createSignal<Version>('0.0');
 
 /**
  * Configures package global dependencies.
@@ -62,7 +53,7 @@ export const $version = signal<Version>('0.0');
 export function configure(options?: ConfigureOptions): void {
   options ||= {};
   const { postEvent: optionsPostEvent } = options;
-  const v = options.version || retrieveLaunchParams().version;
+  const v = options.version || retrieveLaunchParams().tgWebAppVersion;
   $version.set(v);
   $postEvent.set(
     typeof optionsPostEvent === 'function'
@@ -72,10 +63,11 @@ export function configure(options?: ConfigureOptions): void {
 }
 
 /**
- * Creates a new request id.
+ * @returns A new request identifier.
  */
 export function createRequestId(): string {
-  return $createRequestId()();
+  $lastRequestId.set($lastRequestId() + 1);
+  return $lastRequestId().toString();
 }
 
 /**
@@ -83,7 +75,7 @@ export function createRequestId(): string {
  * @param method - method name.
  * @param params - method parameters.
  * @param options - additional options.
- * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
+ * @throws {InvokeCustomMethodError} Invocation completed with some error.
  */
 export function invokeCustomMethod<M extends CustomMethodName>(
   method: M,
@@ -96,7 +88,7 @@ export function invokeCustomMethod<M extends CustomMethodName>(
  * @param method - method name.
  * @param params - method parameters.
  * @param options - additional options.
- * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
+ * @throws {InvokeCustomMethodError} Invocation completed with some error.
  */
 export function invokeCustomMethod(
   method: string,
