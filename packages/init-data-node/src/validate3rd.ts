@@ -1,11 +1,9 @@
-import { TypedError } from '@telegram-apps/toolkit';
-
 import type { Verify3rdFn } from './types.js';
 import {
-  ERR_AUTH_DATE_INVALID,
-  ERR_EXPIRED,
-  ERR_SIGN_INVALID,
-  ERR_SIGNATURE_MISSING,
+  AuthDateInvalidError,
+  ExpiredError,
+  SignatureInvalidError,
+  SignatureMissingError,
 } from './errors.js';
 
 export interface Validate3rdOptions {
@@ -30,7 +28,7 @@ export type Validate3rdValue = string | URLSearchParams;
 
 function processResult(verified: boolean): void | never {
   if (!verified) {
-    throw new TypedError(ERR_SIGN_INVALID, 'Sign is invalid');
+    throw new SignatureInvalidError();
   }
   return;
 }
@@ -41,10 +39,10 @@ function processResult(verified: boolean): void | never {
  * @param botId - bot identifier
  * @param verify - function to verify sign
  * @param options - additional validation options.
- * @throws {Error} ERR_SIGN_INVALID
- * @throws {Error} ERR_AUTH_DATE_INVALID
- * @throws {Error} ERR_SIGNATURE_MISSING
- * @throws {Error} ERR_EXPIRED
+ * @throws {SignatureInvalidError} Signature is invalid.
+ * @throws {AuthDateInvalidError} "auth_date" property is missing or invalid.
+ * @throws {SignatureMissingError} "hash" property is missing.
+ * @throws {ExpiredError} Init data is expired.
  */
 export function validate3rd(
   value: Validate3rdValue,
@@ -59,10 +57,10 @@ export function validate3rd(
  * @param botId - bot identifier
  * @param verify - function to verify sign
  * @param options - additional validation options.
- * @throws {Error} ERR_SIGN_INVALID
- * @throws {Error} ERR_AUTH_DATE_INVALID
- * @throws {Error} ERR_SIGNATURE_MISSING
- * @throws {Error} ERR_EXPIRED
+ * @throws {SignatureInvalidError} Signature is invalid.
+ * @throws {AuthDateInvalidError} "auth_date" property is missing or invalid.
+ * @throws {SignatureMissingError} "hash" property is missing.
+ * @throws {ExpiredError} Init data is expired.
  */
 export function validate3rd(
   value: Validate3rdValue,
@@ -79,6 +77,7 @@ export function validate3rd(
 ): void | never | Promise<void> {
   // Init data required params.
   let authDate: Date | undefined;
+  let authDateString: string | undefined;
   let signature: string | undefined;
 
   // All search params pairs presented as `k=v`.
@@ -97,6 +96,7 @@ export function validate3rd(
     }
 
     if (key === 'auth_date') {
+      authDateString = value;
       const authDateNum = parseInt(value, 10);
       if (!Number.isNaN(authDateNum)) {
         authDate = new Date(authDateNum * 1000);
@@ -108,19 +108,21 @@ export function validate3rd(
 
   // Signature and auth date always required.
   if (!signature) {
-    throw new TypedError(ERR_SIGNATURE_MISSING, 'Signature is missing');
+    throw new SignatureMissingError(true);
   }
 
   if (!authDate) {
-    throw new TypedError(ERR_AUTH_DATE_INVALID, 'Auth date is invalid');
+    throw new AuthDateInvalidError(authDateString);
   }
 
   // In case, expiration time passed, we do additional parameters check.
   const { expiresIn = 86400 } = options;
   if (expiresIn > 0) {
     // Check if init data expired.
-    if (+authDate + expiresIn * 1000 < Date.now()) {
-      throw new TypedError(ERR_EXPIRED, 'Init data is expired');
+    const expiresAtTs = authDate.getTime() + expiresIn * 1000;
+    const nowTs = Date.now();
+    if (expiresAtTs < nowTs) {
+      throw new ExpiredError(authDate, new Date(expiresAtTs), new Date(nowTs));
     }
   }
 

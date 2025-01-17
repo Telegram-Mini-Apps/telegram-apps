@@ -7,17 +7,19 @@ import { isValid3rd as _isValid3rd } from '../isValid3rd.js';
 import type { Verify3rdFn } from '../types.js';
 
 export type { Chat, ChatType, InitData, User } from '@telegram-apps/types';
-export { TypedError, isErrorOfType } from '@telegram-apps/toolkit';
 
-export { initDataToSearchParams } from '../initDataToSearchParams.js';
 export { parse } from '../parse.js';
 export type { ValidateOptions, ValidateValue } from '../validate.js';
 export type { SignData, Text, CreateHmacFn } from '../types.js';
 export {
-  ERR_HASH_INVALID,
-  ERR_AUTH_DATE_INVALID,
-  ERR_EXPIRED,
-  ERR_SIGN_INVALID,
+  SignatureMissingError,
+  SignatureInvalidError,
+  ExpiredError,
+  AuthDateInvalidError,
+  isSignatureMissingError,
+  isAuthDateInvalidError,
+  isExpiredError,
+  isSignatureInvalidError,
 } from '../errors.js';
 
 export type { Validate3rdValue, Validate3rdOptions, Verify3rdFn };
@@ -38,10 +40,10 @@ const verify3rd: Verify3rdFn<true> = async (data, key, signature) => {
  * @param value - value to check.
  * @param botId - bot identifier
  * @param options - additional validation options.
- * @throws {Error} ERR_SIGN_INVALID
- * @throws {Error} ERR_AUTH_DATE_INVALID
- * @throws {Error} ERR_SIGNATURE_MISSING
- * @throws {Error} ERR_EXPIRED
+ * @throws {SignatureInvalidError} Signature is invalid.
+ * @throws {AuthDateInvalidError} "auth_date" property is missing or invalid.
+ * @throws {SignatureMissingError} "hash" property is missing.
+ * @throws {ExpiredError} Init data is expired.
  */
 export async function validate3rd(
   value: Validate3rdValue,
