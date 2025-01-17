@@ -14,10 +14,6 @@ export {
   type ConvertSnakeKeysToCamelCase,
 } from './casing/snakeToCamelObjKeys.js';
 
-export { isErrorOfType } from './errors/isErrorOfType.js';
-export { createTypedErrorPredicate } from './errors/createTypedErrorPredicate.js';
-export { TypedError, type TypedErrorOptions } from './errors/TypedError.js';
-
 export { getStorageValue, setStorageValue } from './storage/storage.js';
 
 export type * from './types/logical.js';
