@@ -9,8 +9,8 @@ import {
 const signals: (Signal<any> | Computed<any>)[] = [];
 
 /**
- * Creates a new signal with initial value.
- * @param initialValue - initial value.
+ * Creates a new signal with the initial value.
+ * @param initialValue - the initial value.
  * @param options - additional options.
  */
 export function createSignal<T>(
@@ -19,8 +19,8 @@ export function createSignal<T>(
 ): Signal<T>;
 
 /**
- * Creates a new signal without initial value.
- * @param initialValue
+ * Creates a new signal without the initial value.
+ * @param initialValue - the initial value.
  * @param options - additional options.
  */
 export function createSignal<T>(
@@ -45,10 +45,7 @@ export function createSignal<T>(
  * @param options - additional functions.
  */
 // #__NO_SIDE_EFFECTS__
-export function createComputed<T>(
-  fn: (prev?: T) => T,
-  options?: SignalOptions<T>,
-): Computed<T> {
+export function createComputed<T>(fn: (prev?: T) => T, options?: SignalOptions<T>): Computed<T> {
   const s = computed(fn, options);
   signals.push(s);
   return s;
@@ -62,4 +59,35 @@ export function resetSignals() {
     s.unsubAll();
     'reset' in s && s.reset();
   });
+}
+
+/**
+ * @returns A tuple, containing a manual and computed signals. The computed signal is based on
+ * the manual one.
+ * @param initialValue - the initial value.
+ * @param options - additional options.
+ */
+export function createProtectedSignal<T>(
+  initialValue: T,
+  options?: SignalOptions<T>,
+): [Signal<T>, Computed<T>];
+
+/**
+ * @returns A tuple, containing a manual and computed signals. The computed signal is based on
+ * the manual one.
+ * @param initialValue - an initial value.
+ * @param options - additional options.
+ */
+export function createProtectedSignal<T>(
+  initialValue?: T,
+  options?: SignalOptions<T | undefined>,
+): [Signal<T | undefined>, Computed<T | undefined>];
+
+// #__NO_SIDE_EFFECTS__
+export function createProtectedSignal<T>(
+  initialValue?: T,
+  options?: SignalOptions<T | undefined>,
+): [Signal<T | undefined>, Computed<T | undefined>] {
+  const s = createSignal(initialValue, options);
+  return [s, createComputed(s)];
 }
