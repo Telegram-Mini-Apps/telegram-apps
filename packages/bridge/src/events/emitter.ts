@@ -37,7 +37,7 @@ const transformers = {
   ),
   viewport_changed: looseObject({
     height: number(),
-    width: nullish(number(), window.innerWidth),
+    width: nullish(number(), () => window.innerWidth),
     is_state_stable: boolean(),
     is_expanded: boolean(),
   }),
