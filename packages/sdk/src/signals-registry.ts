@@ -67,7 +67,7 @@ export function resetSignals() {
  * @param initialValue - the initial value.
  * @param options - additional options.
  */
-export function createProtectedSignal<T>(
+export function createSignalsTuple<T>(
   initialValue: T,
   options?: SignalOptions<T>,
 ): [Signal<T>, Computed<T>];
@@ -78,13 +78,13 @@ export function createProtectedSignal<T>(
  * @param initialValue - an initial value.
  * @param options - additional options.
  */
-export function createProtectedSignal<T>(
+export function createSignalsTuple<T>(
   initialValue?: T,
   options?: SignalOptions<T | undefined>,
 ): [Signal<T | undefined>, Computed<T | undefined>];
 
 // #__NO_SIDE_EFFECTS__
-export function createProtectedSignal<T>(
+export function createSignalsTuple<T>(
   initialValue?: T,
   options?: SignalOptions<T | undefined>,
 ): [Signal<T | undefined>, Computed<T | undefined>] {
