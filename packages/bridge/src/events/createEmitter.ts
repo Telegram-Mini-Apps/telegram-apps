@@ -132,9 +132,10 @@ export function createEmitter<E extends object>(
     // eslint-disable-next-line @typescript-eslint/unbound-method
     emitter.emit,
     function offAll() {
+      const prevSize = emitter.all.size;
       emitter.all.clear();
       map.clear();
-      onEmpty();
+      prevSize && onEmpty();
     },
   ];
 }
