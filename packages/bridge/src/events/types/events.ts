@@ -438,7 +438,7 @@ export type EventName = keyof Events;
 export type EventPayload<E extends EventName> = Events[E];
 
 export type EventWithoutPayload = {
-  [E in EventName]: If<IsNever<EventPayload<E>>, never, E>
+  [E in EventName]: If<IsNever<EventPayload<E>>, E, never>
 }[EventName];
 
 export type EventWithPayload = {
