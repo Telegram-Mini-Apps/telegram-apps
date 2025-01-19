@@ -13,7 +13,7 @@ import {
 import type { Version } from '@telegram-apps/types';
 import type { CancelablePromise } from 'better-promises';
 
-import { createSignal } from '@/signals-registry.js';
+import { createSignal, createSignalsTuple } from '@/signals-registry.js';
 
 export interface ConfigureOptions {
   /**
@@ -39,12 +39,12 @@ export interface ConfigureOptions {
 }
 
 const $lastRequestId = createSignal(0);
-const $postEvent = createSignal<PostEventFn>(_postEvent);
+export const $postEvent = createSignal<PostEventFn>(_postEvent);
 
 /**
  * Signal with a currently supported maximum Mini Apps version.
  */
-export const $version = createSignal<Version>('0.0');
+export const [_version, version] = createSignalsTuple<Version>('0.0');
 
 /**
  * Configures package global dependencies.
@@ -54,7 +54,7 @@ export function configure(options?: ConfigureOptions): void {
   options ||= {};
   const { postEvent: optionsPostEvent } = options;
   const v = options.version || retrieveLaunchParams().tgWebAppVersion;
-  $version.set(v);
+  _version.set(v);
   $postEvent.set(
     typeof optionsPostEvent === 'function'
       ? optionsPostEvent
