@@ -1,22 +1,18 @@
 import {
-  ERR_UNKNOWN_ENV,
   type MethodName,
   supports,
   isTMA,
   type MethodNameWithVersionedParams,
   type MethodVersionedParams,
 } from '@telegram-apps/bridge';
-import { type Computed, computed } from '@telegram-apps/signals';
-import { type If, type IsNever, TypedError } from '@telegram-apps/toolkit';
+import type { Computed } from '@telegram-apps/signals';
+import type { If, IsNever } from '@telegram-apps/toolkit';
 
-import { $version } from '@/scopes/globals.js';
-import {
-  ERR_NOT_INITIALIZED,
-  ERR_NOT_MOUNTED,
-  ERR_NOT_SUPPORTED,
-} from '@/errors.js';
+import { version } from '@/globals.js';
+import { FunctionUnavailableError } from '@/errors.js';
 import { isSSR } from '@/utils/isSSR.js';
 import type { AnyFn } from '@/types.js';
+import { createComputed } from '@/signals-registry.js';
 
 export type CustomSupportValidatorFn = () => string | undefined;
 
@@ -199,7 +195,7 @@ export function wrapSafe<Fn extends AnyFn>(
   function supportsOption(option: string): boolean {
     if (optionSupports) {
       const tuple = optionSupports[option];
-      return supports(tuple[0], tuple[1], $version());
+      return supports(tuple[0], tuple[1], version());
     }
     return true;
   }
@@ -217,9 +213,9 @@ export function wrapSafe<Fn extends AnyFn>(
     function getError(item: MethodName | CustomSupportValidatorFn): string | undefined {
       return typeof item === 'function'
         ? item()
-        : supports(item, $version())
+        : supports(item, version())
           ? undefined
-          : `it is unsupported in Mini Apps version ${$version()}`;
+          : `it is unsupported in Mini Apps version ${version()}`;
     }
 
     const isSupportedItems = Array.isArray(isSupported) ? isSupported : isSupported.any;
@@ -240,7 +236,7 @@ export function wrapSafe<Fn extends AnyFn>(
   function supportsOptionError(...args: Parameters<Fn>): string | undefined {
     for (const k in optionSupports) {
       if (optionSupports[k][2](...args) && !supportsOption(k)) {
-        return `option ${k} is not supported in Mini Apps version ${$version()}`;
+        return `option ${k} is not supported in Mini Apps version ${version()}`;
       }
     }
   }
@@ -249,15 +245,15 @@ export function wrapSafe<Fn extends AnyFn>(
   if (optionSupports) {
     supportsMap = {};
     for (const option in optionSupports) {
-      supportsMap[option] = computed(() => supportsOption(option));
+      supportsMap[option] = createComputed(() => supportsOption(option));
     }
   }
 
-  const $isSupported = computed(() => !supportErrors());
-  const $isInitialized = computed(() => $version() !== '0.0');
-  const $isMounted = computed(() => !isMounted || isMounted());
-  const $isAvailable = computed(
-    () => isTMA('simple')
+  const $isSupported = createComputed(() => !supportErrors().length);
+  const $isInitialized = createComputed(() => version() !== '0.0');
+  const $isMounted = createComputed(() => !isMounted || isMounted());
+  const $isAvailable = createComputed(
+    () => isTMA()
       && !isSSR()
       && $isInitialized()
       && $isSupported()
@@ -268,31 +264,25 @@ export function wrapSafe<Fn extends AnyFn>(
     (...args: Parameters<Fn>): ReturnType<Fn> => {
       const errMessagePrefix = `Unable to call the ${functionId} ${component ? 'method' : 'function'}:`;
 
-      if (isSSR() || !isTMA('simple')) {
-        throw new TypedError(
-          ERR_UNKNOWN_ENV,
-          `${errMessagePrefix} it can't be called outside Mini Apps`,
-        );
+      if (isSSR() || !isTMA()) {
+        throw new FunctionUnavailableError(`${errMessagePrefix} it can't be called outside Mini Apps`);
       }
       if (!$isInitialized()) {
-        throw new TypedError(
-          ERR_NOT_INITIALIZED,
-          `${errMessagePrefix} the SDK was not initialized. Use the SDK init() function`,
-        );
+        throw new FunctionUnavailableError(`${errMessagePrefix} the SDK was not initialized. Use the SDK init() function`);
       }
       const supportErr = supportErrors();
       if (supportErr.length) {
-        throw new TypedError(ERR_NOT_SUPPORTED, `${errMessagePrefix} ${supportErr.join(' / ')}`);
+        throw new FunctionUnavailableError(`${errMessagePrefix} ${supportErr.join(' / ')}`);
       }
       const supportsOptionErr = supportsOptionError(...args);
       if (supportsOptionErr) {
-        throw new TypedError(ERR_NOT_SUPPORTED, `${errMessagePrefix} ${supportsOptionErr}`);
+        throw new FunctionUnavailableError(`${errMessagePrefix} ${supportsOptionErr}`);
       }
       if (!$isMounted()) {
         const message = isMounting && isMounting()
           ? 'mounting. Wait for the mount completion'
           : `unmounted. Use the ${component}.mount() method`;
-        throw new TypedError(ERR_NOT_MOUNTED, `${errMessagePrefix} the component is ${message}`);
+        throw new FunctionUnavailableError(`${errMessagePrefix} the component is ${message}`);
       }
       return fn(...args);
     },

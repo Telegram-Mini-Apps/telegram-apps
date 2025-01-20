@@ -1,12 +1,12 @@
 import {
   createWrapSafe,
   type SafeWrapFn,
-} from '@/scopes/toolkit/createWrapSafe.js';
-import type { IsSupported } from '@/scopes/toolkit/wrapSafe.js';
+} from '@/scopes/wrappers/createWrapSafe.js';
+import type { IsSupportedType } from '@/scopes/wrappers/wrapSafe.js';
 
 export function createWrapSupported(
   component: string,
-  isSupported: IsSupported,
+  isSupported: IsSupportedType,
 ): SafeWrapFn<true> {
   return createWrapSafe(component, { isSupported });
 }

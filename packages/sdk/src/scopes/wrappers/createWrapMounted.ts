@@ -1,4 +1,4 @@
-import { createWrapSafe, type SafeWrapFn } from '@/scopes/toolkit/createWrapSafe.js';
+import { createWrapSafe, type SafeWrapFn } from '@/scopes/wrappers/createWrapSafe.js';
 
 export function createWrapMounted(
   component: string,
