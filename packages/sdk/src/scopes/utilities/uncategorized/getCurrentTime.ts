@@ -7,6 +7,14 @@ import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 /**
  * @returns Current server time.
  * @param options - execution options.
+ * @since Mini Apps v6.9
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @example
+ * if (getCurrentTime.isAvailable()) {
+ *   const time = await getCurrentTime();
+ * }
  */
 export const getCurrentTime = wrapSafe(
   'getCurrentTime',
