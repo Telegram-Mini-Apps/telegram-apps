@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { dispatchMiniAppsEvent } from 'test-utils';
+import { emitEvent } from '@telegram-apps/bridge';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/reset/reset.js';
+import { resetPackageState } from '@test-utils/resetPackageState.js';
 import { setMaxVersion } from '@test-utils/setMaxVersion.js';
 import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
 import { testSafety } from '@test-utils/predefined/testSafety.js';
@@ -22,7 +22,7 @@ function setAvailable() {
 
 testSafety(readTextFromClipboard, 'readTextFromClipboard', {
   minVersion: '6.4',
-})
+});
 
 describe('is available', () => {
   beforeEach(setAvailable);
@@ -36,7 +36,7 @@ describe('is available', () => {
       req_id: expect.stringMatching(/\d+/),
     });
 
-    dispatchMiniAppsEvent('clipboard_text_received', {
+    emitEvent('clipboard_text_received', {
       req_id: (spy.mock.calls[0][1] as any).req_id,
       data: 'Some text',
     });
