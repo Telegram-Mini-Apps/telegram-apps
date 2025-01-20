@@ -1,7 +1,7 @@
-import { retrieveLaunchParams, type SwitchInlineQueryChatType } from '@telegram-apps/bridge';
+import type { SwitchInlineQueryChatType } from '@telegram-apps/bridge';
 
-import { postEvent } from '@/scopes/globals.js';
-import { wrapSafe } from '@/scopes/toolkit/wrapSafe.js';
+import { postEvent } from '@/globals.js';
+import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 
 const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
 
@@ -15,9 +15,9 @@ const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
  * @param chatTypes - List of chat types which could be chosen to send the message. Could be an
  * empty list.
  * @since Mini Apps v6.7
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @example
  * if (switchInlineQuery.isAvailable()) {
  *   switchInlineQuery('my query goes here', ['users']);
@@ -30,11 +30,5 @@ export const switchInlineQuery = wrapSafe(
       query: query,
       chat_types: chatTypes || [],
     });
-  },
-  {
-    isSupported: [SWITCH_INLINE_QUERY_METHOD, {
-      fn: () => !!retrieveLaunchParams().botInline,
-      error: 'Mini App should be ran in Bot inline mode',
-    }],
   },
 );
