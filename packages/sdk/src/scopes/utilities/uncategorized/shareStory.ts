@@ -1,5 +1,5 @@
-import { wrapSafe } from '@/scopes/toolkit/wrapSafe.js';
-import { postEvent } from '@/scopes/globals.js';
+import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
+import { postEvent } from '@/globals.js';
 
 const SHARE_STORY_METHOD = 'web_app_share_to_story';
 
@@ -30,9 +30,9 @@ export interface ShareStoryOptions {
 /**
  * Opens the native story editor.
  * @since Mini Apps v7.8
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @example
  * if (shareStory.isAvailable()) {
  *   shareStory('https://example.com/background.png', {
