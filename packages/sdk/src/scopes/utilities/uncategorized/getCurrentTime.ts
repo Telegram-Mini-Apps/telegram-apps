@@ -1,8 +1,8 @@
-import type { AsyncOptions, CancelablePromise } from '@telegram-apps/bridge';
-import { date } from '@telegram-apps/transformers';
+import type { PromiseOptions, CancelablePromise } from 'better-promises';
+import { date, integer, number, parse, pipe, transform } from 'valibot';
 
-import { invokeCustomMethod } from '@/scopes/globals.js';
-import { wrapSafe } from '@/scopes/toolkit/wrapSafe.js';
+import { invokeCustomMethod } from '@/globals.js';
+import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 
 /**
  * @returns Current server time.
@@ -10,10 +10,13 @@ import { wrapSafe } from '@/scopes/toolkit/wrapSafe.js';
  */
 export const getCurrentTime = wrapSafe(
   'getCurrentTime',
-  (options?: AsyncOptions): CancelablePromise<Date> => {
-    return invokeCustomMethod('getCurrentTime', {}, options).then(date());
+  (options?: PromiseOptions): CancelablePromise<Date> => {
+    return invokeCustomMethod('getCurrentTime', {}, options).then(value => {
+      return parse(
+        pipe(number(), integer(), transform(v => new Date(v * 1000)), date()),
+        value,
+      );
+    });
   },
-  {
-    isSupported: 'web_app_invoke_custom_method',
-  },
+  { isSupported: 'web_app_invoke_custom_method' },
 );
