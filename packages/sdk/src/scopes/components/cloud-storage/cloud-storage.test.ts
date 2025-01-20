@@ -14,6 +14,7 @@ import {
   deleteItem,
   getItem,
   isSupported,
+  clear,
 } from './cloud-storage.js';
 
 beforeEach(() => {
@@ -32,6 +33,7 @@ describe.each([
   ['getKeys', getKeys],
   ['deleteItem', deleteItem],
   ['getItem', getItem],
+  ['clear', clear],
 ] as const)('%s', (name, fn) => {
   testSafety(fn, name, {
     component: 'cloudStorage',

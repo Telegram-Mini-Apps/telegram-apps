@@ -143,3 +143,19 @@ export const setItem = wrapSupported('setItem', (
     value,
   }, options).then();
 });
+
+/**
+ * Clears the cloud storage.
+ * @param options - additional options.
+ * @since Mini Apps v6.9
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @example
+ * if (clear.isAvailable()) {
+ *   await clear();
+ * }
+ */
+export const clear = wrapSupported('clear', (
+  options?: ExecuteWithOptions,
+) => getKeys(options).then(deleteItem));
