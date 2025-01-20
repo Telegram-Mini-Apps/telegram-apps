@@ -23,6 +23,12 @@ export interface ConfigureOptions {
    */
   version?: Version;
   /**
+   * True if the application is currently run in the inline mode.
+   * @default Being extracted using the `retrieveLaunchParams` function.
+   * @see retrieveLaunchParams
+   */
+  inlineMode?: boolean;
+  /**
    * Custom postEvent function.
    *
    * Passing the "strict" value creates a function, which always checks if specified call supported
@@ -42,6 +48,11 @@ const $lastRequestId = createSignal(0);
 export const $postEvent = createSignal<PostEventFn>(_postEvent);
 
 /**
+ * Signal with True if the application is currently run in the inline mode.
+ */
+export const [_inlineMode, inlineMode] = createSignalsTuple<boolean>(false);
+
+/**
  * Signal with a currently supported maximum Mini Apps version.
  */
 export const [_version, version] = createSignalsTuple<Version>('0.0');
@@ -52,9 +63,26 @@ export const [_version, version] = createSignalsTuple<Version>('0.0');
  */
 export function configure(options?: ConfigureOptions): void {
   options ||= {};
-  const { postEvent: optionsPostEvent } = options;
-  const v = options.version || retrieveLaunchParams().tgWebAppVersion;
+  const {
+    postEvent: optionsPostEvent,
+    version: optionsVersion,
+    inlineMode: optionsInlineMode,
+  } = options;
+  let v: string;
+  let inline: boolean;
+
+  if (optionsVersion !== undefined && optionsInlineMode !== undefined) {
+    v = optionsVersion;
+    inline = optionsInlineMode;
+  } else {
+    const lp = retrieveLaunchParams();
+    v = optionsVersion === undefined ? lp.tgWebAppVersion : optionsVersion;
+    inline = optionsInlineMode === undefined
+      ? lp.tgWebAppBotInline || false
+      : optionsInlineMode;
+  }
   _version.set(v);
+  _inlineMode.set(inline);
   $postEvent.set(
     typeof optionsPostEvent === 'function'
       ? optionsPostEvent
