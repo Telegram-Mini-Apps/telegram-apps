@@ -14,7 +14,7 @@ import { CancelablePromise } from 'better-promises';
  * @param $error - signal containing the last call error.
  */
 // #__NO_SIDE_EFFECTS__
-export function signalifyFn<T, Fn extends (...args: any) => PromiseLike<T>>(
+export function signalifyFn<T, Fn extends (...args: any) => T | PromiseLike<T>>(
   fn: Fn,
   createPendingError: () => Error,
   $promise: Signal<CancelablePromise<T> | undefined>,
