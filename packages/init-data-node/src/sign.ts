@@ -51,6 +51,7 @@ export function sign(
       ...data,
       auth_date: authDate,
       hash: '',
+      signature: data.signature || '',
     }),
   );
   searchParams.delete('hash');

@@ -4,7 +4,9 @@ import type { SignDataOptions } from './signData.js';
 
 export type Text = string | ArrayBuffer;
 
-export type SignData = Omit<InitDataLike, 'auth_date' | 'hash'>;
+export type SignData =
+  & Omit<InitDataLike, 'auth_date' | 'hash' | 'signature'>
+  & Partial<Pick<InitDataLike, 'signature'>>;
 
 export interface SignDataSyncFn {
   (data: Text, key: Text, options?: SignDataOptions): string;
