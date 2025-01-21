@@ -1,18 +1,17 @@
 import {
   off,
   on,
-  getStorageValue,
-  setStorageValue,
   type EventListener,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
+import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
-import { postEvent } from '@/scopes/globals.js';
-import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createWrapComplete } from '@/scopes/toolkit/createWrapComplete.js';
-import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
+import { postEvent } from '@/globals.js';
+import { createIsSupported } from '@/scopes/createIsSupported.js';
+import { createWrapComplete } from '@/scopes/wrappers/createWrapComplete.js';
+import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
 
-import { internalState, isMounted, state } from './signals.js';
+import { internalState, isMounted, _isMounted, state } from './signals.js';
 import type { State } from './types.js';
 
 type StorageValue = State;
@@ -31,9 +30,9 @@ export const isSupported = createIsSupported(SETUP_METHOD_NAME);
 
 /**
  * Mounts the Secondary Button restoring its state.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (mount.isAvailable()) {
  *   mount();
@@ -43,7 +42,7 @@ export const mount = wrapSupported('mount', (): void => {
   if (!isMounted()) {
     const prev = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
     prev && internalState.set(prev);
-    isMounted.set(true);
+    _isMounted.set(true);
   }
 });
 
@@ -51,9 +50,9 @@ export const mount = wrapSupported('mount', (): void => {
  * Adds a new Secondary Button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (onClick.isAvailable()) {
  *   const off = onClick(() => {
@@ -70,9 +69,9 @@ export const onClick = wrapSupported(
 /**
  * Removes the Secondary Button click listener.
  * @param fn - an event listener.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (offClick.isAvailable()) {
  *   function listener() {
@@ -92,10 +91,10 @@ export const offClick = wrapSupported(
 /**
  * Updates the Secondary Button state.
  * @param updates - state changes to perform.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_MOUNTED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The parent component is not mounted
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (setParams.isAvailable()) {
  *   setParams({
@@ -141,5 +140,5 @@ export const setParams = wrapComplete(
  * @see onClick
  */
 export function unmount(): void {
-  isMounted.set(false);
+  _isMounted.set(false);
 }
