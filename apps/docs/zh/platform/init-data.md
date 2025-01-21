@@ -143,8 +143,7 @@ user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%22%2C%22last_name
 '371697738012ebd26a111ace4aff23ee265596cd64026c8c3677956a85ca1827'
 ```
 
-然后，创建第 3 步所需的 HMAC-SHA256。  它应基于
-`WebAppData` 字面字符串值和 Telegram Bot token。
+然后，创建第 3 步所需的 HMAC-SHA256。它应基于 `WebAppData` 字面字符串值和 Telegram Bot token。
 
 ```
 HMAC-SHA256(
@@ -153,15 +152,14 @@ HMAC-SHA256(
 ) = "aa492a44bdf019c759defb1698c1d77690189973945491a756051cdc1207a449"
 ```
 
-最后，让我们使用
-第 2 步收到的排序对和第 3 步的值来计算初始数据符号：
+最后，让我们使用第 2 步收到的排序对和第 3 步的值来计算初始数据符号：
 
 ```
 joined_pairs =
-   "auth_date=1709144340
-   chat_instance=-3788475317572404878
-   chat_type=private
-   user={\"id\":279058397,\"first_name\":\"Vladislav\",\"last_name\":\"Kibenko\",\"username\":\"vdkfrost\",\"language_code\":\"en\",\"is_premium\":true,\"allows_write_to_pm\":true}"
+  "auth_date=1709144340
+  chat_instance=-3788475317572404878
+  chat_type=private
+  user={\"id\":279058397,\"first_name\":\"Vladislav\",\"last_name\":\"Kibenko\",\"username\":\"vdkfrost\",\"language_code\":\"en\",\"is_premium\":true,\"allows_write_to_pm\":true}"
 
 HMAC-SHA256(
   "aa492a44bdf019c759defb1698c1d77690189973945491a756051cdc1207a449",
@@ -169,7 +167,7 @@ HMAC-SHA256(
 ) = "371697738012ebd26a111ace4aff23ee265596cd64026c8c3677956a85ca1827"
 ```
 
-现在，将最后收到的结果与第 1 步中的 `hash` 值进行比较，我们可以看到它们是相等的。  这意味着，我们可以信任传递的 init 数据。
+现在，将最后收到的结果与第 1 步中的 `hash` 值进行比较，我们可以看到它们是相等的。这意味着，我们可以信任传递的 init 数据。
 
 ## 参数列表 {#parameters-list}
 
@@ -180,143 +178,78 @@ HMAC-SHA256(
   <tr>
     <th>参数</th>
     <th>类型</th>
-    <th>说明                                          </th>
+    <th>说明</th>
   </tr>
 </thead>
 <tbody>
   <tr>
     <td>auth_date</td>
-    <td>
-      <code>number</code>
-    </td>
-    <td>
-      初始化数据的创建日期。  是一个数字，代表 Unix 时间戳。
-    </td>
+    <td><code>number</code></td>
+    <td>初始化数据的创建日期。是一个数字，代表 Unix 时间戳。</td>
   </tr>
-
+  
   <tr>
     <td>can_send_after</td>
-    <td>
-      <code>number</code>
-    </td>
-    <td>
-      <i>可选</i>。 通过
-      <a href="https://core.telegram.org/bots/api#answerwebappquery">answerWebAppQuery</a> 方法发送消息的秒数。
-    
-    </td>
+    <td><code>number</code></td>
+    <td><i>可选</i>。通过 <a href="https://core.telegram.org/bots/api#answerwebappquery">answerWebAppQuery</a> 方法发送消息的秒数。</td>
   </tr>
 
   <tr>
     <td>chat</td>
-    <td>
-      <a href="#chat">
-        <code>Chat</code>
-      </a>
-    </td>
-    <td>
-      <i>可选</i>。 包含通过附件菜单启动机器人的聊天数据的对象。 返回超级群组、频道和群组聊天 - 仅适用于通过附件菜单启动的小程序。
-    </td>
+    <td><a href="#chat"><code>Chat</code></a></td>
+    <td><i>可选</i>。包含通过附件菜单启动机器人的聊天数据的对象。返回超级群组、频道和群组聊天 - 仅适用于通过附件菜单启动的小程序。</td>
   </tr>
 
   <tr>
     <td>chat_type</td>
+    <td><code>string</code></td>
     <td>
-      <code>string</code>
-    </td>
-    <td>
-      <i>可选</i>。 打开小程序的聊天类型。 值：      
-<ul>
-        <li>
-          <code>sender</code>
-        </li>
-        <li>
-          <code>private</code>
-        </li>
-        <li>
-          <code>group</code>
-        </li>
-        <li>
-          <code>supergroup</code>
-        </li>
-        <li>
-          <code>channel</code>
-        </li>
+      <i>可选</i>。打开小程序的聊天类型。值：      
+      <ul>
+        <li><code>sender</code></li>
+        <li><code>private</code></li>
+        <li><code>group</code></li>
+        <li><code>supergroup</code></li>
+        <li><code>channel</code></li>
       </ul>
-      <i>可选</i>。 全局标识符，表示打开小程序的聊天窗口。
       仅返回通过直接链接打开的申请表。
     </td>
   </tr>
 
   <tr>
     <td>chat_instance</td>
-    <td>
-      <code>string</code>
-    </td>
-    <td>
-      <i>可选</i>。 全局标识符，表示打开小程序的聊天窗口。
-      仅返回通过直接链接打开的申请表。
-    
-    </td>
+    <td><code>string</code></td>
+    <td><i>可选</i>。全局标识符，表示打开小程序的聊天窗口。仅返回通过直接链接打开的申请表。</td>
   </tr>
 
   <tr>
     <td>hash</td>
-    <td>
-      <code>string</code>
-    </td>
+    <td><code>string</code></td>
     <td>初始化数据签名。</td>
   </tr>
 
   <tr>
     <td>query_id</td>
-    <td>
-      <code>string</code>
-    </td>
-    <td>
-      <i>可选</i>。 小程序的唯一会话 ID。 在
-      通过
-      <0>answerWebAppQuery</0> 方法发送信息的过程中使用。
-    
-    </td>
+    <td><code>string</code></td>
+    <td><i>可选</i>。小程序的唯一会话 ID。在通过<code>answerWebAppQuery</code>方法发送信息的过程中使用。</td>
   </tr>
 
   <tr>
     <td>receiver</td>
-    <td>
-      <a href="#user">
-        <code>User</code>
-      </a>
-    </td>
-    <td>
-      <i>可选</i>。 一个对象，包含当前用户在 
-      聊天时的聊天伙伴数据，机器人是通过附件菜单启动的。 仅对私人聊天 
-      和通过附件菜单启动的小程序返回。
-    </td>
+    <td><a href="#user"><code>User</code></a></td>
+    <td><i>可选</i>。一个对象，包含当前用户在聊天时的聊天伙伴数据，机器人是通过附件菜单启动的。仅对私人聊天和通过附件菜单启动的小程序返回。</td>
   </tr>
 
   <tr>
     <td>start_param</td>
-    <td>
-      <code>string</code>
-    </td>
-    <td>
-      <i>可选</i>。 链接中指定的<code>startattach</code>或<code>startapp</code>查询 
-      参数的值。  只有通过 
-      附件菜单打开的小程序才会返回。
-    </td>
+    <td><code>string</code></td>
+    <td><i>可选</i>。链接中指定的<code>startattach</code>或<code>startapp</code>查询参数的值。只有通过附件菜单打开的小程序才会返回。</td>
   </tr>
 
   <tr>
     <td>user</td>
-    <td>
-      <a href="#user">
-        <code>User</code>
-      </a>
-    </td>
-    <td>
-      <i>可选</i>。 包含当前用户信息的对象。
-    
-    </td>
+    <td><a href="#user"><code>User</code></a></td>
+    <td><i>可选</i>。包含当前用户信息的对象。</td>
   </tr>
 
 </tbody>
@@ -339,61 +272,39 @@ HMAC-SHA256(
 <tbody>
   <tr>
     <td>id</td>
-    <td>
-      <code>number</code>
-    </td>
+    <td><code>number</code></td>
     <td>唯一聊天 ID。</td>
   </tr>
 
   <tr>
     <td>type</td>
-    <td>
-      <code>string</code>
-    </td>
+    <td><code>string</code></td>
     <td>
       Chat type. 值：      
-<ul>
-        <li>
-          <code>group</code>
-        </li>
-        <li>
-          <code>supergroup</code>
-        </li>
-        <li>
-          <code>channel</code>
-        </li>
+      <ul>
+        <li><code>group</code></li>
+        <li><code>supergroup</code></li>
+        <li><code>channel</code></li>
       </ul>
     </td>
   </tr>
 
   <tr>
     <td>title</td>
-    <td>
-      <code>string</code>
-    </td>
+    <td><code>string</code></td>
     <td>聊天标题。</td>
   </tr>
 
   <tr>
     <td>photo_url</td>
-    <td>
-      <code>string</code>
-    </td>
-    <td>
-      <i>可选</i>。 聊天照片链接。 照片可以是<code>.jpeg</code>和
-      <code>.svg</code>格式。 只有通过附件 
-      菜单打开的小程序才会返回。
-    </td>
+    <td><code>string</code></td>
+    <td><i>可选</i>。聊天照片链接。照片可以是<code>.jpeg</code>和<code>.svg</code>格式。只有通过附件菜单打开的小程序才会返回。</td>
   </tr>
 
   <tr>
     <td>username</td>
-    <td>
-      <code>string</code>
-    </td>
-    <td>
-      <i>可选</i>。 聊天用户登录。
-    </td>
+    <td><code>string</code></td>
+    <td><i>可选</i>。聊天用户登录。</td>
   </tr>
 </tbody>
 </table>

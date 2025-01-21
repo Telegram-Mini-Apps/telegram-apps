@@ -148,11 +148,8 @@ navigator.forward();
 ### `go`
 
 按指定的 delta 值更改当前活动的历史项目索引。 如果更新后的索引指向一个不存在的历史项，该方法不会更改
-索引。 在指定 `fit` 参数之前，
-。 如果指定了它，该方法会调整传入的 delta，使
-适合`[0, history.length - 1]`范围。 如果更新后的索引指向一个不存在的历史项，该方法不会更改
-索引。 这发生在指定 `fit` 参数之前。 如果指定了它，该方法会调整传入的 delta，使其
-适合`[0, history.length - 1]`范围。
+索引。 在指定 `fit` 参数之前。 如果指定了它，该方法会调整传入的 delta，使
+适合`[0, history.length - 1]`范围。 
 
 ```typescript
 // Goes back in history by 3 entries.
