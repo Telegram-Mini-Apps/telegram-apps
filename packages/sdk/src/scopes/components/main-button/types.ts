@@ -1,4 +1,4 @@
-import type { RGB } from '@telegram-apps/bridge';
+import type { RGB } from '@telegram-apps/types';
 
 export interface State {
   backgroundColor?: RGB;
