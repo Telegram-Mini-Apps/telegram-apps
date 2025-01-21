@@ -6,16 +6,18 @@ import {
 } from 'test-utils';
 
 import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/reset/reset.js';
+import { resetPackageState } from '@test-utils/resetPackageState.js';
 import { setMaxVersion } from '@test-utils/setMaxVersion.js';
 import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
 import { testSafety } from '@test-utils/predefined/testSafety.js';
 
 import {
+  _isMounted,
   isMounted,
   mount,
   unmount,
   enableConfirmation,
+  _isConfirmationEnabled,
   isConfirmationEnabled,
   disableConfirmation,
 } from './closing-behavior.js';
@@ -29,11 +31,11 @@ beforeEach(() => {
 function setAvailable() {
   setMaxVersion();
   mockMiniAppsEnv();
-  isMounted.set(true);
+  _isMounted.set(true);
 }
 
 describe.each([
-  ['disableConfirmation', disableConfirmation, { isMounted }],
+  ['disableConfirmation', disableConfirmation, { isMounted: _isMounted }],
   ['enableConfirmation', enableConfirmation, {}],
   ['mount', mount, {}],
 ] as const)('%s', (name, fn, options) => {
@@ -50,14 +52,14 @@ describe.each([
   beforeEach(setAvailable);
 
   it(`should set isConfirmationEnabled = ${value}`, () => {
-    isConfirmationEnabled.set(!value);
+    _isConfirmationEnabled.set(!value);
     expect(isConfirmationEnabled()).toBe(!value);
     fn();
     expect(isConfirmationEnabled()).toBe(value);
   });
 
   it(`should call postEvent with "web_app_setup_closing_behavior" and { need_confirmation: ${value} }`, () => {
-    isConfirmationEnabled.set(!value);
+    _isConfirmationEnabled.set(!value);
     const spy = mockPostEvent();
     fn();
     fn();
@@ -66,7 +68,7 @@ describe.each([
   });
 
   it(`should call sessionStorage.setItem with "tapps/closingBehavior" and "${value}" if value changed`, () => {
-    isConfirmationEnabled.set(value);
+    _isConfirmationEnabled.set(value);
     const spy = mockSessionStorageSetItem();
     fn();
     // Should call retrieveLaunchParams.
@@ -74,7 +76,7 @@ describe.each([
 
     spy.mockClear();
 
-    isConfirmationEnabled.set(!value);
+    _isConfirmationEnabled.set(!value);
     fn();
     // Should call retrieveLaunchParams + save component state.
     expect(spy).toHaveBeenCalledTimes(2);
