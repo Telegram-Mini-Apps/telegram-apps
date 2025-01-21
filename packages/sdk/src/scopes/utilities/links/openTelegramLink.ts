@@ -1,8 +1,8 @@
-import { supports, TypedError } from '@telegram-apps/bridge';
+import { supports } from '@telegram-apps/bridge';
 
-import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
-import { ERR_INVALID_URL } from '@/errors.js';
-import { $version, postEvent } from '@/scopes/globals.js';
+import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
+import { InvalidArgumentsError } from '@/errors.js';
+import { version, postEvent } from '@/globals.js';
 
 const OPEN_TG_LINK_METHOD = 'web_app_open_tg_link';
 const wrapBasic = createWrapBasic();
@@ -13,9 +13,9 @@ const wrapBasic = createWrapBasic();
  *
  * The Mini App will be closed.
  * @param url - URL to be opened.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_INVALID_URL
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {InvalidArgumentsError} Invalid URL passed
  * @example
  * if (openTelegramLink.isAvailable()) {
  *   openTelegramLink('https://t.me/heyqbnk');
@@ -26,10 +26,10 @@ export const openTelegramLink = wrapBasic(
   (url: string | URL): void => {
     const urlString = url.toString();
     if (!urlString.match(/^https:\/\/t.me\/.+/)) {
-      throw new TypedError(ERR_INVALID_URL, `"${urlString}" is invalid URL`);
+      throw new InvalidArgumentsError(`"${urlString}" is invalid URL`);
     }
 
-    if (!supports(OPEN_TG_LINK_METHOD, $version())) {
+    if (!supports(OPEN_TG_LINK_METHOD, version())) {
       window.location.href = urlString;
       return;
     }

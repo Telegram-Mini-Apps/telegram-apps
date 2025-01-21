@@ -9,4 +9,5 @@ export {
   isSettingEmojiStatus,
   setEmojiStatusError,
   setEmojiStatusPromise,
+  type SetEmojiStatusOptions,
 } from './setEmojiStatus.js';

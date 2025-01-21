@@ -1,8 +1,8 @@
-import { type OpenLinkBrowser, TypedError } from '@telegram-apps/bridge';
+import type { OpenLinkBrowser } from '@telegram-apps/bridge';
 
-import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
-import { ERR_INVALID_URL } from '@/errors.js';
-import { postEvent } from '@/scopes/globals.js';
+import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
+import { InvalidArgumentsError } from '@/errors.js';
+import { postEvent } from '@/globals.js';
 
 export interface OpenLinkOptions {
   /**
@@ -26,9 +26,9 @@ const wrapBasic = createWrapBasic();
  * interaction with the Mini App interface (e.g. click inside the Mini App or on the main button).
  * @param url - URL to be opened.
  * @param options - additional options.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_INVALID_URL
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {InvalidArgumentsError} Invalid URL passed
  * @example
  * if (openLink.isAvailable()) {
  *   openLink('https://google.com', {
@@ -44,7 +44,7 @@ export const openLink = wrapBasic(
       try {
         url = new URL(url);
       } catch (e) {
-        throw new TypedError(ERR_INVALID_URL, `"${url.toString()}" is invalid URL`, e);
+        throw new InvalidArgumentsError(`"${url.toString()}" is invalid URL`, e);
       }
     }
     options ||= {};

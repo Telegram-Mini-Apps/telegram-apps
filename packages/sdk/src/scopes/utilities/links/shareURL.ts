@@ -1,4 +1,4 @@
-import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
+import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
 import { openTelegramLink } from '@/scopes/utilities/links/openTelegramLink.js';
 
 const wrapBasic = createWrapBasic();
@@ -10,8 +10,9 @@ const wrapBasic = createWrapBasic();
  * This method uses Telegram's Share Links.
  * @param url - URL to share.
  * @param text - text to append after the URL.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {InvalidArgumentsError} Invalid URL passed
  * @see https://core.telegram.org/api/links#share-links
  * @see https://core.telegram.org/widgets/share#custom-buttons
  */
