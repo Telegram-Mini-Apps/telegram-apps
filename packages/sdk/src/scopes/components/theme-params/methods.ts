@@ -1,24 +1,26 @@
 import {
   off,
   on,
-  camelToKebab,
-  getStorageValue,
-  setStorageValue,
   retrieveLaunchParams,
-  deleteCssVar,
-  setCssVar,
   type EventListener,
-  type RGB,
-  type ThemeParams,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
+import { getStorageValue, setStorageValue, snakeToKebab } from '@telegram-apps/toolkit';
+import type { RGB, ThemeParams } from '@telegram-apps/types';
 
-import { throwCssVarsBound } from '@/scopes/toolkit/throwCssVarsBound.js';
-import { createWrapMounted } from '@/scopes/toolkit/createWrapMounted.js';
-import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
+import { createWrapMounted } from '@/scopes/wrappers/createWrapMounted.js';
+import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
+import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
+import { CSSVarsBoundError } from '@/errors.js';
 
-import { isCssVarsBound, state, isMounted } from './signals.js';
-import { parseThemeParams } from './parseThemeParams.js';
+import {
+  isCssVarsBound,
+  state,
+  isMounted,
+  _isCssVarsBound,
+  _state,
+  _isMounted,
+} from './signals.js';
 import type { GetCssVarNameFn } from './types.js';
 
 type StorageValue = ThemeParams;
@@ -33,7 +35,7 @@ const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
  * Creates CSS variables connected with the current theme parameters.
  *
  * By default, created CSS variables names are following the pattern "--tg-theme-{name}", where
- * {name} is a theme parameters key name converted from camel case to kebab case.
+ * {name} is a theme parameters key name converted from snake case to kebab case.
  *
  * Default variables:
  * - `--tg-theme-bg-color`
@@ -44,10 +46,10 @@ const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * theme parameters key.
  * @returns Function to stop updating variables.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_CSS_VARS_ALREADY_BOUND
- * @throws {TypedError} ERR_NOT_MOUNTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {CSSVarsBoundError} CSS variables are already bound
+ * @throws {FunctionNotAvailableError} The parent component is not mounted
  * @example Using no arguments
  * if (bindCssVars.isAvailable()) {
  *   bindCssVars();
@@ -60,9 +62,11 @@ const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
 export const bindCssVars = wrapMounted(
   'bindCssVars',
   (getCSSVarName?: GetCssVarNameFn): VoidFunction => {
-    isCssVarsBound() && throwCssVarsBound();
+    if (isCssVarsBound()) {
+      throw new CSSVarsBoundError();
+    }
 
-    getCSSVarName ||= (prop) => `--tg-theme-${camelToKebab(prop)}`;
+    getCSSVarName ||= (prop) => `--tg-theme-${snakeToKebab(prop)}`;
 
     function forEachEntry(fn: (key: string, value: RGB) => void): void {
       Object.entries(state()).forEach(([k, v]) => {
@@ -78,21 +82,21 @@ export const bindCssVars = wrapMounted(
 
     actualize();
     state.sub(actualize);
-    isCssVarsBound.set(true);
+    _isCssVarsBound.set(true);
 
     return () => {
       forEachEntry(deleteCssVar);
       state.unsub(actualize);
-      isCssVarsBound.set(false);
+      _isCssVarsBound.set(false);
     };
   },
 );
 
 /**
  * Mounts the Theme Params component restoring its state.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (mount.isAvailable()) {
  *   mount();
@@ -101,18 +105,17 @@ export const bindCssVars = wrapMounted(
 export const mount = wrapBasic('mount', (): void => {
   if (!isMounted()) {
     on(THEME_CHANGED_EVENT, onThemeChanged);
-    state.set(
+    _state.set(
       isPageReload()
       && getStorageValue<StorageValue>(COMPONENT_NAME)
-      || retrieveLaunchParams().themeParams,
+      || retrieveLaunchParams().tgWebAppThemeParams,
     );
-    isMounted.set(true);
+    _isMounted.set(true);
   }
 });
 
-const onThemeChanged: EventListener<'theme_changed'> = (e) => {
-  const value = parseThemeParams(e.theme_params);
-  state.set(value);
+const onThemeChanged: EventListener<'theme_changed'> = ({ theme_params: value }) => {
+  _state.set(value);
   setStorageValue<StorageValue>(COMPONENT_NAME, value);
 };
 
@@ -121,5 +124,5 @@ const onThemeChanged: EventListener<'theme_changed'> = (e) => {
  */
 export function unmount(): void {
   off(THEME_CHANGED_EVENT, onThemeChanged);
-  isMounted.set(false);
+  _isMounted.set(false);
 }

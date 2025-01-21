@@ -25,9 +25,4 @@ export {
 export * as themeParams from './exports.variable.js';
 export type {
   GetCssVarNameFn as ThemeParamsGetCssVarNameFn,
-  ThemeParams,
-  ThemeParamsKey,
 } from './types.js';
-export { parseThemeParams } from './parseThemeParams.js';
-
-export { serializeThemeParams } from '@telegram-apps/transformers';
