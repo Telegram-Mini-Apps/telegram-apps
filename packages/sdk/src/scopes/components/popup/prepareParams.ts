@@ -1,17 +1,17 @@
 import { type PopupParams } from '@telegram-apps/bridge';
 
-import { OpenFailedError } from '@/errors.js';
+import { InvalidArgumentsError } from '@/errors.js';
 
 import type { OpenOptions } from './types.js';
 
 /**
  * Prepares popup parameters before sending them to native app.
  * @param params - popup parameters.
- * @throws {OpenFailedError} Invalid title
- * @throws {OpenFailedError} Invalid message
- * @throws {OpenFailedError} Invalid buttons count
- * @throws {OpenFailedError} Invalid button id length
- * @throws {OpenFailedError} Invalid button text length
+ * @throws {InvalidArgumentsError} Invalid title
+ * @throws {InvalidArgumentsError} Invalid message
+ * @throws {InvalidArgumentsError} Invalid buttons count
+ * @throws {InvalidArgumentsError} Invalid button id length
+ * @throws {InvalidArgumentsError} Invalid button text length
  */
 export function prepareParams(params: OpenOptions): PopupParams {
   const message = params.message.trim();
@@ -19,13 +19,13 @@ export function prepareParams(params: OpenOptions): PopupParams {
   const buttons = params.buttons || [];
 
   if (title.length > 64) {
-    throw new OpenFailedError(`Invalid title: ${title}`);
+    throw new InvalidArgumentsError(`Invalid title: ${title}`);
   }
   if (!message || message.length > 256) {
-    throw new OpenFailedError(`Invalid message: ${message}`);
+    throw new InvalidArgumentsError(`Invalid message: ${message}`);
   }
   if (buttons.length > 3) {
-    throw new OpenFailedError(`Invalid buttons count: ${buttons.length}`);
+    throw new InvalidArgumentsError(`Invalid buttons count: ${buttons.length}`);
   }
 
   return {
@@ -35,13 +35,13 @@ export function prepareParams(params: OpenOptions): PopupParams {
       ? buttons.map((b, idx) => {
         const id = b.id || '';
         if (id.length > 64) {
-          throw new OpenFailedError(`Button with index ${idx} has invalid id: ${id}`);
+          throw new InvalidArgumentsError(`Button with index ${idx} has invalid id: ${id}`);
         }
 
         if (!b.type || b.type === 'default' || b.type === 'destructive') {
           const text = b.text.trim();
           if (!text || text.length > 64) {
-            throw new OpenFailedError(`Button with index ${idx} has invalid text: ${text}`);
+            throw new InvalidArgumentsError(`Button with index ${idx} has invalid text: ${text}`);
           }
           return { type: b.type, text, id };
         }

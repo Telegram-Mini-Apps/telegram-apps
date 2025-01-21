@@ -1,7 +1,7 @@
 import { expect, it, describe } from 'vitest';
 
 import { prepareParams } from './prepareParams.js';
-import { OpenFailedError } from '@/errors.js';
+import { InvalidArgumentsError } from '@/errors.js';
 
 /**
  * Creates test text.
@@ -12,7 +12,7 @@ function text(length: number): string {
 }
 
 function createError(message: string) {
-  return new OpenFailedError( message);
+  return new InvalidArgumentsError(message);
 }
 
 describe('title', () => {

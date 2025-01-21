@@ -1,10 +1,10 @@
 import { request } from '@/globals.js';
 import { createIsSupported } from '@/scopes/createIsSupported.js';
 import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
+import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
 
 import { prepareParams } from './prepareParams.js';
 import type { OpenOptions } from './types.js';
-import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
 
 const OPEN_METHOD = 'web_app_open_popup';
 const wrapSupported = createWrapSupported('popup', OPEN_METHOD);
@@ -15,15 +15,15 @@ const wrapSupported = createWrapSupported('popup', OPEN_METHOD);
 export const isSupported = createIsSupported(OPEN_METHOD);
 
 const [
-  noConcurrent,
-  openPromise,
-  isOpened,
-  openError,
-] = defineNonConcurrentFn((options: OpenOptions) => {
-  return request(OPEN_METHOD, 'popup_closed', {
+  fn,
+  [, openPromise, isOpened],
+  [, openError],
+] = defineNonConcurrentFn(async (options: OpenOptions) => {
+  const { button_id: buttonId } = await request(OPEN_METHOD, 'popup_closed', {
     ...options,
     params: prepareParams(options),
-  }).then(({ button_id }) => button_id === undefined ? null : button_id);
+  });
+  return buttonId === undefined ? null : buttonId;
 }, 'A popup is already opened');
 
 /**
@@ -36,11 +36,11 @@ const [
  *
  * @param options - popup parameters.
  * @since Mini Apps v6.2
- * @throws {OpenFailedError} Invalid title
- * @throws {OpenFailedError} Invalid message
- * @throws {OpenFailedError} Invalid buttons count
- * @throws {OpenFailedError} Invalid button id length
- * @throws {OpenFailedError} Invalid button text length
+ * @throws {InvalidArgumentsError} Invalid title
+ * @throws {InvalidArgumentsError} Invalid message
+ * @throws {InvalidArgumentsError} Invalid buttons count
+ * @throws {InvalidArgumentsError} Invalid button id length
+ * @throws {InvalidArgumentsError} Invalid button text length
  * @throws {ConcurrentCallError} A popup is already opened
  * @throws {FunctionNotAvailableError} The environment is unknown
  * @throws {FunctionNotAvailableError} The SDK is not initialized
@@ -57,5 +57,5 @@ const [
  *   });
  * }
  */
-export const open = wrapSupported('open', noConcurrent);
+export const open = wrapSupported('open', fn);
 export { openError, openPromise, isOpened };
