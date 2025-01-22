@@ -1,11 +1,13 @@
 import { describe, vi, expect, it, beforeEach } from 'vitest';
 
-import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/resetPackageState.js';
-import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
-import { setMaxVersion } from '@test-utils/setMaxVersion.js';
+import {
+  mockPostEvent,
+  resetPackageState,
+  mockMiniAppsEnv,
+  setMaxVersion,
+  setVersion,
+} from '@test-utils/utils.js';
 import { testSafety } from '@test-utils/predefined/testSafety.js';
-import { _version } from '@/globals.js';
 import { InvalidArgumentsError } from '@/errors.js';
 
 import { openTelegramLink } from './openTelegramLink.js';
@@ -39,7 +41,7 @@ describe('is available', () => {
   });
 
   it('should change window.location.href, if "web_app_open_tg_link" is not supported', () => {
-    _version.set('6.0');
+    setVersion('6.0');
     const spy = vi.spyOn(window.location, 'href', 'set');
     openTelegramLink('https://t.me/share/url?url=text');
     expect(spy).toHaveBeenCalledOnce();

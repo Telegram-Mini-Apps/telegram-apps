@@ -1,12 +1,11 @@
 import { beforeEach, describe, vi } from 'vitest';
 
 import { testSafety } from '@test-utils/predefined/testSafety.js';
-import { resetPackageState } from '@test-utils/resetPackageState.js';
-import { mockPostEvent } from '@test-utils/mockPostEvent.js';
+import { resetPackageState, mockPostEvent } from '@test-utils/utils.js';
 
 import {
   offAddedToHomeScreen,
-  onAddedToHomeScreen
+  onAddedToHomeScreen,
 } from './added-to-home-screen.js';
 
 beforeEach(() => {

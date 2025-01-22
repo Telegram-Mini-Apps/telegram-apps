@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { setVersion } from '@test-utils/setVersion.js';
+import { setVersion } from '@test-utils/utils.js';
 
 export function testIsSupported(
   fnOrObj: (() => boolean) | {

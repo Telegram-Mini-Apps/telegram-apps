@@ -1,9 +1,8 @@
 import { vi, describe, expect, it, afterEach, beforeEach } from 'vitest';
 
-import { resetPackageState } from '@test-utils/resetPackageState.js';
+import { resetPackageState, setVersion } from '@test-utils/utils.js';
 
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
-import { _version } from '@/globals.js';
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -19,9 +18,9 @@ describe('returned function', () => {
           isSupported: 'web_app_setup_settings_button',
         });
 
-        _version.set('6.9');
+        setVersion('6.9');
         expect(fn.isSupported()).toBe(false);
-        _version.set('6.10');
+        setVersion('6.10');
         expect(fn.isSupported()).toBe(true);
       });
     });
@@ -93,9 +92,9 @@ describe('returned function', () => {
           component: 'cmp',
           isSupported: 'web_app_setup_settings_button',
         });
-        _version.set('6');
+        setVersion('6');
         expect(fn.isAvailable()).toBe(false);
-        _version.set('10');
+        setVersion('10');
       });
 
       it('should return false if isMounted returned false', () => {
@@ -103,12 +102,12 @@ describe('returned function', () => {
           component: 'cmp',
           isMounted: () => false,
         });
-        _version.set('10');
+        setVersion('10');
         expect(fn.isAvailable()).toBe(false);
       });
 
       it('should return true if SDK is initialized, isSupported is omitted or returned true as well as isMounted', () => {
-        _version.set('10');
+        setVersion('10');
         expect(
           wrapSafe('fn', () => null, {
             component: 'cmp',

@@ -6,10 +6,12 @@ import {
 } from 'test-utils';
 import { emitEvent } from '@telegram-apps/bridge';
 
-import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/resetPackageState.js';
-import { setMaxVersion } from '@test-utils/setMaxVersion.js';
-import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import {
+  resetPackageState,
+  setMaxVersion,
+  mockMiniAppsEnv,
+  mockPostEvent,
+} from '@test-utils/utils.js';
 import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
 import { testSafety } from '@test-utils/predefined/testSafety.js';
 
