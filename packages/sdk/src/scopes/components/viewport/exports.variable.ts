@@ -1,9 +1,13 @@
-export { requestFullscreen } from './methods/fullscreen/requestFullscreen.js';
-export { exitFullscreen } from './methods/fullscreen/exitFullscreen.js';
-export { mount } from './methods/mounting/mount.js';
-export { unmount } from './methods/mounting/unmount.js';
-export { bindCssVars } from './methods/bindCssVars.js';
-export { expand } from './methods/expand.js';
+export { bindCssVars, isCssVarsBound } from './css-vars.js';
+export { expand } from './expand.js';
+export {
+  requestFullscreen,
+  isFullscreen,
+  exitFullscreen,
+  changeFullscreenError,
+  changeFullscreenPromise,
+} from './fullscreen.js';
+export { mount, isMounted, isMounting, mountError, mountPromise, unmount } from './mounting.js';
 
 export {
   contentSafeAreaInsetRight,
@@ -11,22 +15,15 @@ export {
   contentSafeAreaInsetBottom,
   contentSafeAreaInsetTop,
   contentSafeAreaInsets,
-} from './signals/content-safe-area-insets.js';
-export { isCssVarsBound } from './signals/css-vars.js';
-export { stableHeight, width, height } from './signals/dimensions.js';
-export { isStable, isExpanded } from './signals/flags.js';
-export {
-  changeFullscreenError,
-  changeFullscreenPromise,
-  isFullscreen,
-  isChangingFullscreen,
-} from './signals/fullscreen.js';
-export { isMounted, isMounting, mountError, mountPromise } from './signals/mounting.js';
-export {
+  width,
+  height,
+  stableHeight,
+  isStable,
+  isExpanded,
   safeAreaInsets,
   safeAreaInsetTop,
   safeAreaInsetRight,
   safeAreaInsetLeft,
   safeAreaInsetBottom,
-} from './signals/safe-area-insets.js';
-export { state } from './signals/state.js';
+  state,
+} from './signals.js';

@@ -2,16 +2,16 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockPageReload, mockSessionStorageGetItem } from 'test-utils';
 
 import { testSafety } from '@test-utils/predefined/testSafety.js';
-import { resetPackageState } from '@test-utils/reset/reset.js';
-import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import {
+  resetPackageState,
+  mockPostEvent,
+  mockMiniAppsEnv,
+  setLaunchParams,
+} from '@test-utils/utils.js';
 
-import { mount } from '@/scopes/components/viewport/methods/mounting/mount.js';
-import { isMounted } from '@/scopes/components/viewport/signals/mounting.js';
-import { isFullscreen } from '@/scopes/components/viewport/signals/fullscreen.js';
-import { isExpanded } from '@/scopes/components/viewport/signals/flags.js';
-import { $version } from '@/scopes/globals.js';
-import { state } from '@/scopes/components/viewport/signals/state.js';
+import { mount, isMounted } from './mounting.js';
+import { state, isExpanded } from './signals.js';
+import { isFullscreen } from './fullscreen.js';
 
 beforeEach(() => {
   resetPackageState();
@@ -28,7 +28,10 @@ describe('safety', () => {
 describe('is safe', () => {
   beforeEach(() => {
     mockMiniAppsEnv();
-    $version.set('7.9');
+    setLaunchParams({
+      tgWebAppVersion: '7.9',
+      tgWebAppPlatform: 'tdesktop',
+    });
   });
 
   it('should set isMounted = true', async () => {

@@ -1,32 +1,39 @@
-import { camelToKebab, deleteCssVar, setCssVar } from '@telegram-apps/bridge';
+import { camelToKebab } from '@telegram-apps/toolkit';
+import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 
-import { throwCssVarsBound } from '@/scopes/toolkit/throwCssVarsBound.js';
+import { CSSVarsBoundError } from '@/errors.js';
+import { createSignalsTuple } from '@/signals-registry.js';
+import { createWrapMounted } from '@/scopes/wrappers/createWrapMounted.js';
+import { COMPONENT_NAME } from '@/scopes/components/viewport/const.js';
+import { isMounted } from '@/scopes/components/viewport/mounting.js';
 
-import { isCssVarsBound } from '../signals/css-vars.js';
-import { height, width, stableHeight } from '../signals/dimensions.js';
 import {
   safeAreaInsetBottom,
   safeAreaInsetTop,
   safeAreaInsetRight,
   safeAreaInsetLeft,
-} from '../signals/safe-area-insets.js';
-import {
+  height,
+  width,
+  stableHeight,
   contentSafeAreaInsetBottom,
   contentSafeAreaInsetTop,
   contentSafeAreaInsetRight,
   contentSafeAreaInsetLeft,
-} from '../signals/content-safe-area-insets.js';
+} from './signals.js';
+import type { GetCSSVarNameFn } from './types.js';
 
-import { wrapMounted } from './wrappers.js';
-import type { GetCSSVarNameFn } from '../types.js';
+const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
+
+/**
+ * True if CSS variables are currently bound.
+ */
+export const [_isCssVarsBound, isCssVarsBound] = createSignalsTuple(false);
 
 /**
  * Creates CSS variables connected with the current viewport.
  *
- * By default, created CSS variables names are following the pattern
- * "--tg-theme-{name}", where
- * {name} is a theme parameters key name converted from camel case to kebab
- * case.
+ * By default, created CSS variables names are following the pattern "--tg-theme-{name}", where
+ * {name} is a viewport property name converted from camel case to kebab case.
  *
  * Default variables:
  * - `--tg-viewport-height`
@@ -46,10 +53,10 @@ import type { GetCSSVarNameFn } from '../types.js';
  * @param getCSSVarName - function, returning computed complete CSS variable name. The CSS
  * variable will only be defined if the function returned non-empty string value.
  * @returns Function to stop updating variables.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_VARS_ALREADY_BOUND
- * @throws {TypedError} ERR_NOT_MOUNTED
- * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {CSSVarsBoundError} CSS variables are already bound
+ * @throws {FunctionNotAvailableError} The parent component is not mounted
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @example Using no arguments
  * if (bindCssVars.isAvailable()) {
  *   bindCssVars();
@@ -62,7 +69,9 @@ import type { GetCSSVarNameFn } from '../types.js';
 export const bindCssVars = wrapMounted(
   'bindCssVars',
   (getCSSVarName?: GetCSSVarNameFn): VoidFunction => {
-    isCssVarsBound() && throwCssVarsBound();
+    if (isCssVarsBound()) {
+      throw new CSSVarsBoundError();
+    }
 
     getCSSVarName ||= (prop) => `--tg-viewport-${camelToKebab(prop)}`;
 
@@ -97,7 +106,7 @@ export const bindCssVars = wrapMounted(
     settings.forEach(setting => {
       setting[0]();
     });
-    isCssVarsBound.set(true);
+    _isCssVarsBound.set(true);
 
     return () => {
       settings.forEach(s => {
@@ -106,7 +115,7 @@ export const bindCssVars = wrapMounted(
         // Remove CSS variable.
         deleteCssVar(s[2]);
       });
-      isCssVarsBound.set(false);
+      _isCssVarsBound.set(false);
     };
   },
 );
