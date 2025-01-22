@@ -6,6 +6,8 @@ import {
   type SignalOptions,
 } from '@telegram-apps/signals';
 
+export type SignalsTuple<T> = [Signal<T>, Computed<T>];
+
 const signals: (Signal<any> | Computed<any>)[] = [];
 
 /**
@@ -70,7 +72,7 @@ export function resetSignals() {
 export function createSignalsTuple<T>(
   initialValue: T,
   options?: SignalOptions<T>,
-): [Signal<T>, Computed<T>];
+): SignalsTuple<T>;
 
 /**
  * @returns A tuple, containing a manual and computed signals. The computed signal is based on
@@ -81,13 +83,13 @@ export function createSignalsTuple<T>(
 export function createSignalsTuple<T>(
   initialValue?: T,
   options?: SignalOptions<T | undefined>,
-): [Signal<T | undefined>, Computed<T | undefined>];
+): SignalsTuple<T | undefined>;
 
 // #__NO_SIDE_EFFECTS__
 export function createSignalsTuple<T>(
   initialValue?: T,
   options?: SignalOptions<T | undefined>,
-): [Signal<T | undefined>, Computed<T | undefined>] {
+): SignalsTuple<T | undefined> {
   const s = createSignal(initialValue, options);
   return [s, createComputed(s)];
 }
