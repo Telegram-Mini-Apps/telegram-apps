@@ -1,6 +1,5 @@
 export {
   state,
-  isMounted,
   isDark,
   accentTextColor,
   buttonTextColor,
@@ -19,4 +18,12 @@ export {
   bottomBarBgColor,
   isCssVarsBound,
 } from './signals.js';
-export * from './methods.js';
+export {
+  mount,
+  isMounted,
+  isMounting,
+  mountError,
+  mountPromise,
+  unmount,
+  bindCssVars,
+} from './methods.js';

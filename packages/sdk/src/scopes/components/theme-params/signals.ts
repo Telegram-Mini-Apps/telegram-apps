@@ -5,11 +5,6 @@ import { isColorDark } from '@/utils/isColorDark.js';
 import { createComputed, createSignalsTuple } from '@/signals-registry.js';
 
 /**
- * True if the component is currently mounted.
- */
-export const [_isMounted, isMounted] = createSignalsTuple(false);
-
-/**
  * True if CSS variables are currently bound.
  */
 export const [_isCssVarsBound, isCssVarsBound] = createSignalsTuple(false);

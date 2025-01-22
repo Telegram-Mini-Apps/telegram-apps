@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
 import { emitEvent } from '@telegram-apps/bridge';
+import { setStorageValue } from '@telegram-apps/toolkit';
 
 import {
   mockPostEvent,
@@ -7,10 +8,11 @@ import {
   setMaxVersion,
   mockMiniAppsEnv,
 } from '@test-utils/utils.js';
-
-import { bindCssVars, mount } from './methods.js';
-import { _isMounted, _state } from './signals.js';
 import { testSafety } from '@test-utils/predefined/testSafety.js';
+
+import { _isMounted, bindCssVars, mount } from './methods.js';
+import { _state } from './signals.js';
+import { mockPageReload } from 'test-utils';
 
 beforeEach(() => {
   resetPackageState();
@@ -32,13 +34,18 @@ describe('bindCssVars', () => {
   type SetPropertyFn = typeof document.documentElement.style.setProperty;
   let setSpy: MockInstance<SetPropertyFn>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    setStorageValue('themeParams', {
+      bg_color: '#ffffff',
+      secondary_bg_color: '#000000'
+    });
+    mockPageReload();
     setMaxVersion();
     mockMiniAppsEnv();
-    mount();
     setSpy = vi
       .spyOn(document.documentElement.style, 'setProperty')
       .mockImplementation(() => null);
+    await mount();
   });
 
   it('should set --tg-theme-{key} CSS vars, where key is kebab-cased theme keys', () => {

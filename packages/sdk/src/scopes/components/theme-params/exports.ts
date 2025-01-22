@@ -21,6 +21,9 @@ export {
   sectionHeaderTextColor as themeParamsSectionHeaderTextColor,
   textColor as themeParamsTextColor,
   unmount as unmountThemeParams,
+  mountError as themeParamsMountError,
+  isMounting as isThemeParamsMounting,
+  mountPromise as themeParamsMountPromise,
 } from './exports.variable.js';
 export * as themeParams from './exports.variable.js';
 export type {

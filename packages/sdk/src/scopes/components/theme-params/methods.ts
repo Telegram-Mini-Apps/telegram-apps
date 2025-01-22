@@ -1,7 +1,6 @@
 import {
   off,
   on,
-  retrieveLaunchParams,
   type EventListener,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
@@ -12,23 +11,44 @@ import { createWrapMounted } from '@/scopes/wrappers/createWrapMounted.js';
 import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
 import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 import { CSSVarsBoundError } from '@/errors.js';
+import { defineMountFn } from '@/scopes/defineMountFn.js';
+import { request } from '@/globals.js';
 
-import {
-  isCssVarsBound,
-  state,
-  isMounted,
-  _isCssVarsBound,
-  _state,
-  _isMounted,
-} from './signals.js';
+import { _isCssVarsBound, _state } from './signals.js';
 import type { GetCssVarNameFn } from './types.js';
 
 type StorageValue = ThemeParams;
 
 const COMPONENT_NAME = 'themeParams';
 const THEME_CHANGED_EVENT = 'theme_changed';
-
 const wrapBasic = createWrapBasic(COMPONENT_NAME);
+
+const onThemeChanged: EventListener<'theme_changed'> = ({ theme_params: value }) => {
+  _state.set(value);
+  setStorageValue<StorageValue>(COMPONENT_NAME, value);
+};
+
+const [
+  mountFn,
+  [, mountPromise, isMounting],
+  [, mountError],
+  [_isMounted, isMounted],
+] = defineMountFn(
+  COMPONENT_NAME,
+  async abortSignal => {
+    const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
+    if (s) {
+      return s;
+    }
+    const data = await request('web_app_request_theme', 'theme_changed', { abortSignal });
+    return data.theme_params;
+  },
+  s => {
+    on(THEME_CHANGED_EVENT, onThemeChanged);
+    _state.set(s);
+  },
+);
+
 const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
 
 /**
@@ -62,14 +82,14 @@ const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
 export const bindCssVars = wrapMounted(
   'bindCssVars',
   (getCSSVarName?: GetCssVarNameFn): VoidFunction => {
-    if (isCssVarsBound()) {
+    if (_isCssVarsBound()) {
       throw new CSSVarsBoundError();
     }
 
     getCSSVarName ||= (prop) => `--tg-theme-${snakeToKebab(prop)}`;
 
     function forEachEntry(fn: (key: string, value: RGB) => void): void {
-      Object.entries(state()).forEach(([k, v]) => {
+      Object.entries(_state()).forEach(([k, v]) => {
         v && fn(k, v);
       });
     }
@@ -81,12 +101,12 @@ export const bindCssVars = wrapMounted(
     }
 
     actualize();
-    state.sub(actualize);
+    _state.sub(actualize);
     _isCssVarsBound.set(true);
 
     return () => {
       forEachEntry(deleteCssVar);
-      state.unsub(actualize);
+      _state.unsub(actualize);
       _isCssVarsBound.set(false);
     };
   },
@@ -102,27 +122,15 @@ export const bindCssVars = wrapMounted(
  *   mount();
  * }
  */
-export const mount = wrapBasic('mount', (): void => {
-  if (!isMounted()) {
-    on(THEME_CHANGED_EVENT, onThemeChanged);
-    _state.set(
-      isPageReload()
-      && getStorageValue<StorageValue>(COMPONENT_NAME)
-      || retrieveLaunchParams().tgWebAppThemeParams,
-    );
-    _isMounted.set(true);
-  }
-});
-
-const onThemeChanged: EventListener<'theme_changed'> = ({ theme_params: value }) => {
-  _state.set(value);
-  setStorageValue<StorageValue>(COMPONENT_NAME, value);
-};
+export const mount = wrapBasic('mount', mountFn);
+export { mountError, mountPromise, isMounting, isMounted, _isMounted };
 
 /**
  * Unmounts the Theme Params component.
  */
 export function unmount(): void {
+  const p = mountPromise();
+  p && p.cancel();
   off(THEME_CHANGED_EVENT, onThemeChanged);
   _isMounted.set(false);
 }
