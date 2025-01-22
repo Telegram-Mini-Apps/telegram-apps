@@ -10,24 +10,25 @@ import {
   type CustomMethodParams,
   type CustomMethodName,
 } from '@telegram-apps/bridge';
-import type { Version } from '@telegram-apps/types';
 import type { CancelablePromise } from 'better-promises';
+import type { LaunchParamsLike } from '@telegram-apps/transformers';
 
-import { createSignal, createSignalsTuple } from '@/signals-registry.js';
+import { createComputed, createSignal, createSignalsTuple } from '@/signals-registry.js';
+
+/**
+ * Launch parameters stored in the package state.
+ */
+export type PackageLaunchParams =
+  & Omit<LaunchParamsLike, 'tgWebAppThemeParams'>
+  & Partial<Pick<LaunchParamsLike, 'tgWebAppThemeParams'>>;
 
 export interface ConfigureOptions {
   /**
-   * A maximum supported Mini Apps version.
+   * Launch parameters used across the package.
    * @default Being extracted using the `retrieveLaunchParams` function.
    * @see retrieveLaunchParams
    */
-  version?: Version;
-  /**
-   * True if the application is currently run in the inline mode.
-   * @default Being extracted using the `retrieveLaunchParams` function.
-   * @see retrieveLaunchParams
-   */
-  inlineMode?: boolean;
+  launchParams?: PackageLaunchParams;
   /**
    * Custom postEvent function.
    *
@@ -46,16 +47,13 @@ export interface ConfigureOptions {
 
 const $lastRequestId = createSignal(0);
 export const $postEvent = createSignal<PostEventFn>(_postEvent);
+export const [_launchParams, launchParams] =
+  createSignalsTuple<PackageLaunchParams>({
+    tgWebAppPlatform: 'unknown',
+    tgWebAppVersion: '0.0',
+  });
 
-/**
- * Signal with True if the application is currently run in the inline mode.
- */
-export const [_inlineMode, inlineMode] = createSignalsTuple<boolean>(false);
-
-/**
- * Signal with a currently supported maximum Mini Apps version.
- */
-export const [_version, version] = createSignalsTuple<Version>('0.0');
+export const version = createComputed(() => launchParams().tgWebAppVersion);
 
 /**
  * Configures package global dependencies.
@@ -63,30 +61,13 @@ export const [_version, version] = createSignalsTuple<Version>('0.0');
  */
 export function configure(options?: ConfigureOptions): void {
   options ||= {};
-  const {
-    postEvent: optionsPostEvent,
-    version: optionsVersion,
-    inlineMode: optionsInlineMode,
-  } = options;
-  let v: string;
-  let inline: boolean;
-
-  if (optionsVersion !== undefined && optionsInlineMode !== undefined) {
-    v = optionsVersion;
-    inline = optionsInlineMode;
-  } else {
-    const lp = retrieveLaunchParams();
-    v = optionsVersion === undefined ? lp.tgWebAppVersion : optionsVersion;
-    inline = optionsInlineMode === undefined
-      ? lp.tgWebAppBotInline || false
-      : optionsInlineMode;
-  }
-  _version.set(v);
-  _inlineMode.set(inline);
+  const { postEvent } = options;
+  const lp = options.launchParams || retrieveLaunchParams();
+  _launchParams.set(lp);
   $postEvent.set(
-    typeof optionsPostEvent === 'function'
-      ? optionsPostEvent
-      : createPostEvent(v),
+    typeof postEvent === 'function'
+      ? postEvent
+      : createPostEvent(lp.tgWebAppVersion),
   );
 }
 
