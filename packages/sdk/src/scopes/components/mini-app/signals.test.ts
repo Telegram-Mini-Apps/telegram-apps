@@ -1,46 +1,31 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { resetPackageState, resetSignal } from '@test-utils/reset/reset.js';
+import { resetPackageState } from '@test-utils/utils.js';
 
-import { state as tpState } from '@/scopes/components/theme-params/signals.js';
+import { _state as tpState } from '@/scopes/components/theme-params/signals.js';
 
 import {
-  bottomBarColor,
+  _headerColor,
+  _backgroundColor,
   bottomBarColorRGB,
-  backgroundColor,
   backgroundColorRGB,
-  headerColor,
   headerColorRGB,
-  isMounted,
-  isDark,
-  isCssVarsBound,
-  state,
+  _bottomBarColor,
 } from './signals.js';
 
 beforeEach(() => {
   resetPackageState();
-  [
-    bottomBarColorRGB,
-    backgroundColor,
-    bottomBarColor,
-    headerColorRGB,
-    headerColor,
-    isMounted,
-    isDark,
-    isCssVarsBound,
-    state,
-  ].forEach(resetSignal);
   vi.restoreAllMocks();
 });
 
 describe('bottomBarColorRGB', () => {
   it('should return value of bottomBarColor signal if it is RGB', () => {
-    bottomBarColor.set('#ffaabb');
+    _bottomBarColor.set('#ffaabb');
     expect(bottomBarColorRGB()).toBe('#ffaabb');
   });
 
   describe('bottomBarColor signal value is "bottom_bar_bg_color"', () => {
     beforeEach(() => {
-      bottomBarColor.set('bottom_bar_bg_color');
+      _bottomBarColor.set('bottom_bar_bg_color');
     });
 
     it('should return value of theme\'s bottomBarBgColor property if it exists', () => {
@@ -70,14 +55,14 @@ describe('bottomBarColorRGB', () => {
       bgColor: '#ffffff',
       secondaryBgColor: '#000000',
     });
-    headerColor.set(value);
+    _headerColor.set(value);
     expect(headerColorRGB()).toBe(tpState()[source]);
   });
 });
 
 describe('backgroundColorRGB', () => {
   it('should return value of backgroundColor signal if it is RGB', () => {
-    backgroundColor.set('#ffaabb');
+    _backgroundColor.set('#ffaabb');
     expect(backgroundColorRGB()).toBe('#ffaabb');
   });
 
@@ -92,14 +77,14 @@ describe('backgroundColorRGB', () => {
       bgColor: '#ffffff',
       secondaryBgColor: '#000000',
     });
-    backgroundColor.set(value);
+    _backgroundColor.set(value);
     expect(backgroundColorRGB()).toBe(tpState()[source]);
   });
 });
 
 describe('headerColorRGB', () => {
   it('should return value of headerColor signal if it is RGB', () => {
-    headerColor.set('#ffaabb');
+    _headerColor.set('#ffaabb');
     expect(headerColorRGB()).toBe('#ffaabb');
   });
 
@@ -114,7 +99,7 @@ describe('headerColorRGB', () => {
       bgColor: '#ffffff',
       secondaryBgColor: '#000000',
     });
-    headerColor.set(value);
+    _headerColor.set(value);
     expect(headerColorRGB()).toBe(tpState()[source]);
   });
 });

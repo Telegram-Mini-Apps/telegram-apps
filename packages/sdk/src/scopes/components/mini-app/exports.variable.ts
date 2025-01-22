@@ -1,2 +1,27 @@
-export * from './methods.js';
-export * from './signals.js';
+export {
+  isSupported,
+  close,
+  bindCssVars,
+  mountError,
+  isMounted,
+  isMounting,
+  mountPromise,
+  mount,
+  ready,
+  unmount,
+  setBottomBarColor,
+  setHeaderColor,
+  setBackgroundColor,
+} from './methods.js';
+export {
+  state,
+  isDark,
+  isCssVarsBound,
+  backgroundColorRGB,
+  headerColor,
+  headerColorRGB,
+  bottomBarColorRGB,
+  backgroundColor,
+  bottomBarColor,
+  isActive,
+} from './signals.js';
