@@ -1,6 +1,6 @@
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 import { InvalidDataError } from '@/errors.js';
-import { inlineMode, postEvent } from '@/globals.js';
+import { launchParams, postEvent } from '@/globals.js';
 
 /**
  * Sends data to the bot.
@@ -35,7 +35,9 @@ export const sendData = wrapSafe(
   },
   {
     isSupported() {
-      return inlineMode() ? undefined : 'The application must be launched in the inline mode';
+      return launchParams().tgWebAppBotInline
+        ? undefined
+        : 'The application must be launched in the inline mode';
     },
   },
 );
