@@ -203,11 +203,11 @@ export function wrapSafe<Fn extends AnyFn>(
   /**
    * @returns All found errors according to the isSupported variable value.
    */
-  function supportErrors(): string[] {
+  function supportError(): string | undefined {
     // isSupported was not specified.
     // In this case, we assume that the function has no dependencies and is always supported.
     if (!isSupported) {
-      return [];
+      return;
     }
 
     function getError(item: MethodName | CustomSupportValidatorFn): string | undefined {
@@ -222,12 +222,14 @@ export function wrapSafe<Fn extends AnyFn>(
     const errors = isSupportedItems.map(getError).filter(Boolean) as string[];
 
     return Array.isArray(isSupported)
-      // An array is passed.
-      // Should return all found errors.
-      ? errors
+      // An array is passed. It means, the function is supported only in case no errors were
+      // returned.
+      ? errors[0]
       // An object with the "any" property is passed.
       // Should return nothing if at least one item didn't return an error.
-      : errors.length === isSupportedItems.length ? errors : [];
+      : errors.length === isSupportedItems.length
+        ? errors[errors.length - 1]
+        : undefined;
   }
 
   /**
@@ -249,7 +251,7 @@ export function wrapSafe<Fn extends AnyFn>(
     }
   }
 
-  const $isSupported = createComputed(() => !supportErrors().length);
+  const $isSupported = createComputed(() => !supportError());
   const $isInitialized = createComputed(() => version() !== '0.0');
   const $isMounted = createComputed(() => !isMounted || isMounted());
   const $isAvailable = createComputed(
@@ -270,9 +272,9 @@ export function wrapSafe<Fn extends AnyFn>(
       if (!$isInitialized()) {
         throw new FunctionUnavailableError(`${errMessagePrefix} the SDK was not initialized. Use the SDK init() function`);
       }
-      const supportErr = supportErrors();
-      if (supportErr.length) {
-        throw new FunctionUnavailableError(`${errMessagePrefix} ${supportErr.join(' / ')}`);
+      const supportErr = supportError();
+      if (supportErr) {
+        throw new FunctionUnavailableError(`${errMessagePrefix} ${supportErr}`);
       }
       const supportsOptionErr = supportsOptionError(...args);
       if (supportsOptionErr) {
