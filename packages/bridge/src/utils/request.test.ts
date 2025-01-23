@@ -9,7 +9,7 @@ import {
   it,
   vi,
 } from 'vitest';
-import { AbortError, TimeoutError } from 'better-promises';
+import { TimeoutError } from 'better-promises';
 
 import { resetPackageState } from '@/resetPackageState.js';
 import { postEvent as globalPostEvent } from '@/methods/postEvent.js';
@@ -127,7 +127,7 @@ describe('options', () => {
         abortSignal: controller.signal,
       });
       controller.abort(new Error('ABORTED'));
-      await expect(p).rejects.toBeInstanceOf(AbortError);
+      await expect(p).rejects.toStrictEqual(new Error('ABORTED'));
     });
   });
 });
