@@ -6,7 +6,7 @@ import {
   createPostEvent,
   type PostEventFn,
   type RequestFn,
-  type ExecuteWithOptions,
+  type InvokeCustomMethodOptions,
   type CustomMethodParams,
   type CustomMethodName,
 } from '@telegram-apps/bridge';
@@ -14,6 +14,7 @@ import type { CancelablePromise } from 'better-promises';
 import type { LaunchParamsLike } from '@telegram-apps/transformers';
 
 import { createComputed, createSignal, createSignalsTuple } from '@/signals-registry.js';
+import { logInfo } from '@/debug.js';
 
 /**
  * Launch parameters stored in the package state.
@@ -69,6 +70,7 @@ export function configure(options?: ConfigureOptions): void {
       ? postEvent
       : createPostEvent(lp.tgWebAppVersion),
   );
+  logInfo(false, 'The package was configured. Launch params:', _launchParams());
 }
 
 /**
@@ -89,7 +91,7 @@ export function createRequestId(): string {
 export function invokeCustomMethod<M extends CustomMethodName>(
   method: M,
   params: CustomMethodParams<M>,
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ): CancelablePromise<unknown>;
 
 /**
@@ -102,13 +104,13 @@ export function invokeCustomMethod<M extends CustomMethodName>(
 export function invokeCustomMethod(
   method: string,
   params: object,
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ): CancelablePromise<unknown>;
 
 export function invokeCustomMethod(
   method: string,
   params: object,
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ): CancelablePromise<unknown> {
   return _invokeCustomMethod(method, params, createRequestId(), {
     ...options || {},

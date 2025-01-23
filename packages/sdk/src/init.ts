@@ -1,7 +1,8 @@
 import { on } from '@telegram-apps/bridge';
 import { createCbCollector } from '@telegram-apps/toolkit';
 
-import { postEvent, configure, type ConfigureOptions } from '@/globals.js';
+import { postEvent, configure, type ConfigureOptions, _launchParams } from '@/globals.js';
+import { logInfo } from '@/debug.js';
 
 export interface InitOptions extends ConfigureOptions {
   /**
@@ -23,6 +24,7 @@ export function init(options?: InitOptions): VoidFunction {
 
   const [addCleanup, cleanup] = createCbCollector(
     on('reload_iframe', () => {
+      logInfo(false, 'Received a request to reload the page');
       postEvent('iframe_will_reload');
       window.location.reload();
     }),
@@ -55,6 +57,8 @@ export function init(options?: InitOptions): VoidFunction {
   //
   // It really has no effect outside non-Telegram web environment.
   postEvent('iframe_ready', { reload_supported: true });
+
+  logInfo(false, 'The package was initialized');
 
   return cleanup;
 }
