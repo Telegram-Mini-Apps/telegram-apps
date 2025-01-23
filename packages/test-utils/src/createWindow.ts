@@ -3,7 +3,7 @@ import { vi, type MockInstance } from 'vitest';
 import { mockWindow, type Wnd } from './mockWindow';
 import { createDomEmitter } from './createDomEmitter';
 
-export type WindowSpy = MockInstance<[], Wnd>;
+export type WindowSpy = MockInstance<() => Wnd>;
 
 /**
  * Mocks window and returns created spy.
