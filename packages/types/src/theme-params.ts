@@ -21,4 +21,4 @@ export type KnownThemeParamsKey =
  * Application [theme parameters](https://docs.telegram-mini-apps.com/platform/theming).
  * Defines palette used by the Telegram application.
  */
-export type ThemeParams = Record<KnownThemeParamsKey | string, RGB>;
+export type ThemeParams = Partial<Record<KnownThemeParamsKey | string, RGB>>;
