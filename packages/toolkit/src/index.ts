@@ -13,6 +13,7 @@ export {
   snakeToCamelObjKeys,
   type ConvertSnakeKeysToCamelCase,
 } from './casing/snakeToCamelObjKeys.js';
+export { snakeToKebab } from './casing/snakeToKebab.js';
 
 export { getStorageValue, setStorageValue } from './storage/storage.js';
 
