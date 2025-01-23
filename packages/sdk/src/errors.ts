@@ -1,15 +1,56 @@
-export const ERR_POPUP_INVALID_PARAMS = 'ERR_POPUP_INVALID_PARAMS';
-export const ERR_INVALID_URL = 'ERR_INVALID_URL';
-export const ERR_INVALID_SLUG = 'ERR_INVALID_SLUG';
-export const ERR_DATA_INVALID_SIZE = 'ERR_DATA_INVALID_SIZE';
-export const ERR_ACCESS_DENIED = 'ERR_ACCESS_DENIED';
-export const ERR_ALREADY_REQUESTING = 'ERR_ALREADY_REQUESTING';
-export const ERR_ALREADY_OPENED = 'ERR_ALREADY_OPENED';
-export const ERR_ALREADY_MOUNTING = 'ERR_ALREADY_MOUNTING';
-export const ERR_CSS_VARS_ALREADY_BOUND = 'ERR_VARS_ALREADY_BOUND';
-export const ERR_NOT_AVAILABLE = 'ERR_NOT_AVAILABLE';
-export const ERR_NOT_INITIALIZED = 'ERR_NOT_INITIALIZED';
-export const ERR_NOT_SUPPORTED = 'ERR_NOT_SUPPORTED';
-export const ERR_NOT_MOUNTED = 'ERR_NOT_MOUNTED';
-export const ERR_FULLSCREEN_FAILED = 'ERR_FULLSCREEN_FAILED';
-export const ERR_EMOJI_STATUS_SET_FAILED = 'ERR_EMOJI_STATUS_SET_FAILED';
+import { errorClass } from 'error-kid';
+
+function proxyMessage(message?: string): [string?] {
+  return [message];
+}
+
+export const [
+  CSSVarsBoundError,
+  isCSSVarsBoundError,
+] = errorClass('CSSVarsBoundError', 'CSS variables are already bound');
+
+export const [
+  NotAvailableError,
+  isNotAvailableError,
+] = errorClass<[message: string]>('NotAvailableError', proxyMessage);
+
+export const [
+  InvalidEnvError,
+  isInvalidEnvError,
+] = errorClass<[message?: string]>('InvalidEnvError', proxyMessage);
+
+export const [
+  FunctionUnavailableError,
+  isFunctionNotAvailableError,
+] = errorClass<[message?: string]>('FunctionNotAvailableError', proxyMessage);
+
+export const [
+  InvalidArgumentsError,
+  isInvalidArguments,
+] = errorClass<[message: string, cause?: unknown]>(
+  'InvalidArgumentsError',
+  (message, cause) => [message, { cause }],
+);
+
+export const [
+  ConcurrentCallError,
+  isConcurrentCallError,
+] = errorClass<[message: string]>('ConcurrentCallError', proxyMessage);
+
+export const [
+  SetEmojiStatusError,
+  isSetEmojiStatusError,
+] = errorClass<[error: string]>(
+  'SetEmojiStatusError',
+  error => [`Failed to set emoji status: ${error}`],
+);
+
+export const [
+  AccessDeniedError,
+  isAccessDeniedError,
+] = errorClass<[message: string]>('AccessDeniedError', proxyMessage);
+
+export const [
+  FullscreenFailedError,
+  isFullscreenFailedError,
+] = errorClass<[message: string]>('FullscreenFailedError', proxyMessage);
