@@ -22,14 +22,18 @@ export { postEvent, type PostEventFn } from '@/methods/postEvent.js';
 export { supports } from '@/methods/supports.js';
 
 export { compareVersions } from '@/utils/compareVersions.js';
-export { invokeCustomMethod } from '@/utils/invokeCustomMethod.js';
+export {
+  invokeCustomMethod,
+  type InvokeCustomMethodOptions,
+  type InvokeCustomMethodFn,
+} from '@/utils/invokeCustomMethod.js';
 export {
   request,
   type RequestCaptureEventsFn,
   type RequestCaptureEventFn,
   type RequestResult,
   type RequestCaptureFnEventsPayload,
-  type RequestBasicOptions,
+  type RequestOptions,
   type RequestCaptureFn,
   type RequestFn,
 } from '@/utils/request.js';
@@ -48,4 +52,3 @@ export {
   isUnknownEnvError,
 } from '@/errors.js';
 export { resetPackageState } from '@/resetPackageState.js';
-export type { ExecuteWithOptions, ExecuteWithPostEvent } from '@/types.js';

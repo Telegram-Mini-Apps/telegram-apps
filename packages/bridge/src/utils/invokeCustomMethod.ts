@@ -1,11 +1,13 @@
 import { CancelablePromise } from 'better-promises';
 
 import { captureSameReq } from '@/methods/captureSameReq.js';
-import type { ExecuteWithOptions } from '@/types.js';
 import type { CustomMethodName, CustomMethodParams } from '@/methods/types/index.js';
 import { InvokeCustomMethodError } from '@/errors.js';
 
-import { request } from './request.js';
+import { request, type RequestOptions } from './request.js';
+
+export type InvokeCustomMethodOptions = Omit<RequestOptions<'custom_method_invoked'>, 'capture'>;
+export type InvokeCustomMethodFn = typeof invokeCustomMethod;
 
 /**
  * Invokes known custom method. Returns method execution result.
@@ -19,7 +21,7 @@ export function invokeCustomMethod<M extends CustomMethodName>(
   method: M,
   params: CustomMethodParams<M>,
   requestId: string,
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ): CancelablePromise<unknown>;
 
 /**
@@ -34,14 +36,14 @@ export function invokeCustomMethod(
   method: string,
   params: object,
   requestId: string,
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ): CancelablePromise<unknown>;
 
 export function invokeCustomMethod(
   method: string,
   params: object,
   requestId: string,
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ): CancelablePromise<unknown> {
   return request('web_app_invoke_custom_method', 'custom_method_invoked', {
     ...options || {},
