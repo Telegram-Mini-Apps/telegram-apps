@@ -38,12 +38,12 @@ export function isTMA(
     }
   }
 
-  return CancelablePromise.withFn(async (abortSignal) => {
+  return CancelablePromise.withFn(async context => {
     if (hasWebviewProxy(window)) {
       return true;
     }
     try {
-      await request('web_app_request_theme', 'theme_changed', { abortSignal });
+      await request('web_app_request_theme', 'theme_changed', context);
       return true;
     } catch {
       return false;
