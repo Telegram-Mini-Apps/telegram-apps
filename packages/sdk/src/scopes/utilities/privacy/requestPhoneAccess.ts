@@ -22,7 +22,7 @@ const [
  * @param options - additional options.
  * @since Mini Apps v6.9
  * @see requestContact
- * @throws {TypedError} ERR_ALREADY_REQUESTING
+ * @throws {ConcurrentCallError} Phone access request is currently in progress
  * @throws {FunctionNotAvailableError} The environment is unknown
  * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @throws {FunctionNotAvailableError} The function is not supported
