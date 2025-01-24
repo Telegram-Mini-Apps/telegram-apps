@@ -1,5 +1,5 @@
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
-import { InvalidDataError } from '@/errors.js';
+import { InvalidArgumentsError } from '@/errors.js';
 import { launchParams, postEvent } from '@/globals.js';
 
 /**
@@ -15,8 +15,8 @@ import { launchParams, postEvent } from '@/globals.js';
  * @throws {FunctionNotAvailableError} The function is not supported
  * @throws {FunctionNotAvailableError} The environment is unknown
  * @throws {FunctionNotAvailableError} The application must be launched in the inline mode
- * @throws {InvalidDataError} Maximum size of data to send is 4096 bytes
- * @throws {InvalidDataError} Attempted to send empty data
+ * @throws {InvalidArgumentsError} Maximum size of data to send is 4096 bytes
+ * @throws {InvalidArgumentsError} Attempted to send empty data
  * @example
  * if (sendData.isAvailable()) {
  *   sendData('Here comes my data');
@@ -27,7 +27,7 @@ export const sendData = wrapSafe(
   (data: string): void => {
     const { size } = new Blob([data]);
     if (!size || size > 4096) {
-      throw new InvalidDataError(size
+      throw new InvalidArgumentsError(size
         ? 'Maximum size of data to send is 4096 bytes'
         : 'Attempted to send empty data');
     }
