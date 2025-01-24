@@ -18,12 +18,11 @@ const [
   fn,
   [, openPromise, isOpened],
   [, openError],
-] = defineNonConcurrentFn(async (options: OpenOptions) => {
-  const { button_id: buttonId } = await request(OPEN_METHOD, 'popup_closed', {
+] = defineNonConcurrentFn((options: OpenOptions) => {
+  return request(OPEN_METHOD, 'popup_closed', {
     ...options,
     params: prepareParams(options),
-  });
-  return buttonId === undefined ? null : buttonId;
+  }).then(({ button_id: buttonId }) => buttonId === undefined ? null : buttonId);
 }, 'A popup is already opened');
 
 /**

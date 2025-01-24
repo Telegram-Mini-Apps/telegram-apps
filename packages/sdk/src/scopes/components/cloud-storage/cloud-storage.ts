@@ -1,10 +1,10 @@
-import type { ExecuteWithOptions } from '@telegram-apps/bridge';
 import { CancelablePromise } from 'better-promises';
 import { array, check, parse, pipe, record, string } from 'valibot';
 
 import { invokeCustomMethod } from '@/globals.js';
 import { createIsSupported } from '@/scopes/createIsSupported.js';
 import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
+import type { InvokeCustomMethodOptions } from '@telegram-apps/bridge';
 
 const INVOKE_METHOD_NAME = 'web_app_invoke_custom_method';
 const wrapSupported = createWrapSupported('cloudStorage', INVOKE_METHOD_NAME);
@@ -33,7 +33,7 @@ export const isSupported = createIsSupported(INVOKE_METHOD_NAME);
  */
 export const deleteItem = wrapSupported('deleteItem', (
   keyOrKeys: string | string[],
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ): CancelablePromise<void> => {
   const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
   return keys.length
@@ -58,7 +58,7 @@ export const deleteItem = wrapSupported('deleteItem', (
  */
 function _getItem<K extends string>(
   keys: K[],
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ): CancelablePromise<Record<K, string>>;
 
 /**
@@ -76,11 +76,11 @@ function _getItem<K extends string>(
  *   const keyValue = await getItem('my-key');
  * }
  */
-function _getItem(key: string, options?: ExecuteWithOptions): CancelablePromise<string>;
+function _getItem(key: string, options?: InvokeCustomMethodOptions): CancelablePromise<string>;
 
 function _getItem(
   keyOrKeys: string | string[],
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ): CancelablePromise<string | Record<string, string>> {
   const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
 
@@ -112,7 +112,7 @@ export const getItem = wrapSupported('getItem', _getItem);
  * }
  */
 export const getKeys = wrapSupported('getKeys', (
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ): CancelablePromise<string[]> => {
   return invokeCustomMethod('getStorageKeys', {}, options).then(
     data => parse(array(string()), data),
@@ -136,7 +136,7 @@ export const getKeys = wrapSupported('getKeys', (
 export const setItem = wrapSupported('setItem', (
   key: string,
   value: string,
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ): CancelablePromise<void> => {
   return invokeCustomMethod('saveStorageValue', {
     key,
@@ -157,5 +157,5 @@ export const setItem = wrapSupported('setItem', (
  * }
  */
 export const clear = wrapSupported('clear', (
-  options?: ExecuteWithOptions,
+  options?: InvokeCustomMethodOptions,
 ) => getKeys(options).then(deleteItem));

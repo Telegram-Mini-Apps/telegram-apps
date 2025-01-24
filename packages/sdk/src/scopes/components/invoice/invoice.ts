@@ -1,17 +1,19 @@
-import type { InvoiceStatus, ExecuteWithOptions } from '@telegram-apps/bridge';
+import type { InvoiceStatus } from '@telegram-apps/bridge';
+import type { CancelablePromise } from 'better-promises';
 
 import { request } from '@/globals.js';
 import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
 import { InvalidArgumentsError } from '@/errors.js';
 import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
 import { createIsSupported } from '@/scopes/createIsSupported.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
 
 const METHOD_NAME = 'web_app_open_invoice';
 const wrapSupported = createWrapSupported('invoice', METHOD_NAME);
 
 /**
-  * Signal indicating if invoices are supported.
-  */
+ * Signal indicating if invoices are supported.
+ */
 export const isSupported = createIsSupported(METHOD_NAME);
 
 /**
@@ -28,7 +30,7 @@ export const isSupported = createIsSupported(METHOD_NAME);
  *   const status = await open('kJNFS331');
  * }
  */
-function _open(slug: string, options?: ExecuteWithOptions): Promise<InvoiceStatus>;
+function _open(slug: string, options?: RequestOptionsNoCapture): CancelablePromise<InvoiceStatus>;
 
 /**
  * Opens an invoice using its url.
@@ -50,13 +52,13 @@ function _open(slug: string, options?: ExecuteWithOptions): Promise<InvoiceStatu
  *   const status = await open('https://t.me/invoice/kJNFS331', 'url');
  * }
  */
-function _open(url: string, type: 'url', options?: ExecuteWithOptions): Promise<InvoiceStatus>;
+function _open(url: string, type: 'url', options?: RequestOptionsNoCapture): CancelablePromise<InvoiceStatus>;
 
-async function _open(
+function _open(
   urlOrSlug: string,
-  optionsOrType?: 'url' | ExecuteWithOptions,
-  options?: ExecuteWithOptions,
-): Promise<InvoiceStatus> {
+  optionsOrType?: 'url' | RequestOptionsNoCapture,
+  options?: RequestOptionsNoCapture,
+): CancelablePromise<InvoiceStatus> {
   let slug: string;
   if (optionsOrType === 'url') {
     const { hostname, pathname } = new URL(urlOrSlug, window.location.href);
@@ -80,12 +82,12 @@ async function _open(
     options = optionsOrType;
   }
 
-  const data = await request(METHOD_NAME, 'invoice_closed', {
+  return request(METHOD_NAME, 'invoice_closed', {
     ...options,
     params: { slug },
     capture: (data) => slug === data.slug,
-  });
-  return data.status;
+  })
+    .then(d => d.status);
 }
 
 const [
@@ -95,9 +97,4 @@ const [
 ] = defineNonConcurrentFn(_open, 'Invoice is already opened');
 
 export const open = wrapSupported('open', fn);
-
-export {
-  openPromise,
-  isOpened,
-  openError,
-};
+export { openPromise, isOpened, openError };

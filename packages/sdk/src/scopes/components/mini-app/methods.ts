@@ -38,8 +38,11 @@ import {
   setStorageValue,
 } from '@telegram-apps/toolkit';
 import { RGB } from '@telegram-apps/types';
+
 import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 import { defineMountFn } from '@/scopes/defineMountFn.js';
+import { signalCancel } from '@/scopes/signalCancel.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
 
 type StorageValue = State;
 
@@ -76,9 +79,10 @@ const [
   [_isMounted, isMounted],
 ] = defineMountFn(
   COMPONENT_NAME,
-  async abortSignal => {
-    await tpMount({ abortSignal });
-    return isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || undefined;
+  (options?: RequestOptionsNoCapture) => {
+    return tpMount(options).then(() => {
+      return isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || undefined;
+    });
   },
   s => {
     setBackgroundColor.ifAvailable(s ? s.backgroundColor : 'bg_color');
@@ -303,9 +307,7 @@ export const setHeaderColor = wrapComplete(
  * Unmounts the component, removing the listener, saving the component state in the local storage.
  */
 export function unmount(): void {
-  const p = mountPromise();
-  p && p.cancel();
-
+  signalCancel(mountPromise);
   off(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
   _isMounted.set(false);
 }
