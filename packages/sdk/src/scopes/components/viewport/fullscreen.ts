@@ -38,17 +38,19 @@ function createFullscreenFn(method: string, isRequest?: boolean) {
   return wrapComplete(
     method,
     defineNonConcurrentFn(
-      async (options?: PromiseOptions) => {
-        const data = await request(
+      (options?: PromiseOptions) => {
+        return request(
           isRequest ? REQUEST_METHOD_NAME : 'web_app_exit_fullscreen',
           [FS_CHANGED_EVENT, 'fullscreen_failed'],
           options,
-        );
-        if ('error' in data && data.error !== 'ALREADY_FULLSCREEN') {
-          throw new FullscreenFailedError(data.error);
-        }
-        const value = 'is_fullscreen' in data ? data.is_fullscreen : true;
-        value !== isFullscreen() && setState({ isFullscreen: value });
+        )
+          .then(data => {
+            if ('error' in data && data.error !== 'ALREADY_FULLSCREEN') {
+              throw new FullscreenFailedError(data.error);
+            }
+            const value = 'is_fullscreen' in data ? data.is_fullscreen : true;
+            value !== isFullscreen() && setState({ isFullscreen: value });
+          });
       },
       'Fullscreen mode change is already being requested',
       {

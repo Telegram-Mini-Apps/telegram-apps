@@ -1,8 +1,9 @@
-import type { CancelablePromise, PromiseOptions } from 'better-promises';
+import type { CancelablePromise } from 'better-promises';
 import type { EventPayload } from '@telegram-apps/bridge';
 
 import { request } from '@/globals.js';
 import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
 
 import {
   COMPONENT_NAME,
@@ -28,7 +29,7 @@ const wrapSafe = createWrapSupported(COMPONENT_NAME, REQUEST_SA_METHOD_NAME);
  */
 export const requestContentSafeAreaInsets = wrapSafe(
   'requestContentSafeAreaInsets',
-  (options?: PromiseOptions): CancelablePromise<EventPayload<'content_safe_area_changed'>> => {
+  (options?: RequestOptionsNoCapture): CancelablePromise<EventPayload<'content_safe_area_changed'>> => {
     return request(REQUEST_SA_METHOD_NAME, CSA_CHANGED_EVENT, options);
   },
 );
@@ -42,7 +43,7 @@ export const requestContentSafeAreaInsets = wrapSafe(
  * }
  */
 export function requestViewport(
-  options?: PromiseOptions,
+  options?: RequestOptionsNoCapture,
 ): CancelablePromise<EventPayload<'viewport_changed'>> {
   return request('web_app_request_viewport', VIEWPORT_CHANGED_EVENT, options);
 }
@@ -61,7 +62,7 @@ export function requestViewport(
  */
 export const requestSafeAreaInsets = wrapSafe(
   'requestSafeAreaInsets',
-  (options?: PromiseOptions): CancelablePromise<EventPayload<'safe_area_changed'>> => {
+  (options?: RequestOptionsNoCapture): CancelablePromise<EventPayload<'safe_area_changed'>> => {
     return request(REQUEST_SA_METHOD_NAME, SA_CHANGED_EVENT, options);
   },
 );

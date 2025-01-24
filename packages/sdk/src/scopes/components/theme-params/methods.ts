@@ -6,6 +6,7 @@ import {
 import { isPageReload } from '@telegram-apps/navigation';
 import { getStorageValue, setStorageValue, snakeToKebab } from '@telegram-apps/toolkit';
 import type { RGB, ThemeParams } from '@telegram-apps/types';
+import { CancelablePromise } from 'better-promises';
 
 import { createWrapMounted } from '@/scopes/wrappers/createWrapMounted.js';
 import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
@@ -13,6 +14,7 @@ import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 import { CSSVarsBoundError } from '@/errors.js';
 import { defineMountFn } from '@/scopes/defineMountFn.js';
 import { request } from '@/globals.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
 
 import { _isCssVarsBound, _state } from './signals.js';
 import type { GetCssVarNameFn } from './types.js';
@@ -35,13 +37,11 @@ const [
   [_isMounted, isMounted],
 ] = defineMountFn(
   COMPONENT_NAME,
-  async abortSignal => {
+  (options?: RequestOptionsNoCapture) => {
     const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-    if (s) {
-      return s;
-    }
-    const data = await request('web_app_request_theme', 'theme_changed', { abortSignal });
-    return data.theme_params;
+    return s
+      ? CancelablePromise.resolve(s)
+      : request('web_app_request_theme', 'theme_changed', options).then(d => d.theme_params);
   },
   s => {
     on(THEME_CHANGED_EVENT, onThemeChanged);
@@ -119,7 +119,7 @@ export const bindCssVars = wrapMounted(
  * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (mount.isAvailable()) {
- *   mount();
+ *   await mount();
  * }
  */
 export const mount = wrapBasic('mount', mountFn);
