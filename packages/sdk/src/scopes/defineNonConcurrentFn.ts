@@ -1,41 +1,74 @@
 import { CancelablePromise } from 'better-promises';
-
-import { ConcurrentCallError } from '@/errors.js';
 import {
-  defineAsyncFn,
-  type DefineAsyncFnResult,
-  type DefineAsyncOptions,
-} from '@/scopes/defineAsyncFn.js';
+  batch,
+  type Computed,
+  type Signal,
+} from '@telegram-apps/signals';
+import { createComputed, createSignalsTuple, type SignalsTuple } from '@/signals-registry.js';
+import { ConcurrentCallError } from '@/errors.js';
 
-/**
- * Uses the defineAsyncFn function and returning its result, but adds an additional check to
- * prevent the function from being called concurrently.
- * @param fn - a wrapped function.
- * @param errorMessage - a message to place in the ConcurrentCallError constructor if concurrent
- * call was performed.
- * @param options - additional options.
- */
-export function defineNonConcurrentFn<Fn extends (...args: any) => any>(
+export function defineNonConcurrentFn<Fn extends (...args: any) => CancelablePromise<any>>(
   fn: Fn,
   errorMessage: string,
-  options?: DefineAsyncOptions<Awaited<ReturnType<Fn>>>,
-): DefineAsyncFnResult<Fn> {
-  const [
-    asyncFn,
-    [_promise, ...restPromise],
-    [_error, error],
-  ] = defineAsyncFn(fn, options);
+  options?: {
+    /**
+     * A signal with the promise to use instead of the generated one.
+     */
+    promise?: Signal<CancelablePromise<Awaited<ReturnType<Fn>>> | undefined>;
+    /**
+     * A signal with the error to use instead of the generated one.
+     */
+    error?: Signal<Error | undefined>;
+  },
+): [
+  fn: Fn,
+  promise: [
+    ...SignalsTuple<CancelablePromise<Awaited<ReturnType<Fn>>> | undefined>,
+    isRequesting: Computed<boolean>,
+  ],
+  error: SignalsTuple<Error | undefined>
+] {
+  options ||= {};
+  const {
+    promise: optionsPromise,
+    error: optionsError,
+  } = options;
+  const [_promise, promise] =
+    optionsPromise
+      ? [optionsPromise, createComputed(optionsPromise)]
+      : createSignalsTuple<CancelablePromise<Awaited<ReturnType<Fn>>> | undefined>();
+  const [_error, error] =
+    optionsError
+      ? [optionsError, createComputed(optionsError)]
+      : createSignalsTuple<Error | undefined>();
 
   return [
-    (...args) => CancelablePromise.withFn(() => {
+    Object.assign((...args: Parameters<Fn>): CancelablePromise<Awaited<ReturnType<Fn>>> => {
       if (_promise()) {
         const err = new ConcurrentCallError(errorMessage);
         _error.set(err);
-        throw err;
+        return CancelablePromise.reject(err);
       }
-      return asyncFn(...args);
-    }),
-    [_promise, ...restPromise],
+
+      batch(() => {
+        _promise.set(fn(...args));
+        _error.set(undefined);
+      });
+
+      let error: Error | undefined;
+      return promise()!
+        .catch(e => {
+          error = e;
+          throw e;
+        })
+        .finally(() => {
+          batch(() => {
+            _promise.set(undefined);
+            _error.set(error);
+          });
+        });
+    }, fn),
+    [_promise, promise, createComputed(() => !!promise())],
     [_error, error],
   ];
 }
