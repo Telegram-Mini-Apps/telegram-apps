@@ -1,8 +1,7 @@
-import type { PromiseOptions } from 'better-promises';
-
 import { request } from '@/globals.js';
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
 
 const METHOD_NAME = 'web_app_request_phone';
 
@@ -10,9 +9,8 @@ const [
   fn,
   [, requestPhoneAccessPromise, isRequestingPhoneAccess],
   [, requestPhoneAccessError],
-] = defineNonConcurrentFn(async (options?: PromiseOptions) => {
-  const data = await request(METHOD_NAME, 'phone_requested', options);
-  return data.status;
+] = defineNonConcurrentFn((options?: RequestOptionsNoCapture) => {
+  return request(METHOD_NAME, 'phone_requested', options).then(d => d.status);
 }, 'Phone access request is currently in progress');
 
 /**
@@ -36,9 +34,4 @@ const [
 export const requestPhoneAccess = wrapSafe('requestPhoneAccess', fn, {
   isSupported: METHOD_NAME,
 });
-
-export {
-  requestPhoneAccessPromise,
-  requestPhoneAccessError,
-  isRequestingPhoneAccess,
-};
+export { requestPhoneAccessPromise, requestPhoneAccessError, isRequestingPhoneAccess };

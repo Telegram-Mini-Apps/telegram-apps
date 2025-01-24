@@ -1,9 +1,10 @@
 import type { WriteAccessRequestedStatus } from '@telegram-apps/bridge';
-import type { PromiseOptions } from 'better-promises';
+import type { CancelablePromise } from 'better-promises';
 
 import { request } from '@/globals.js';
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
 
 const METHOD_NAME = 'web_app_request_write_access';
 
@@ -12,9 +13,8 @@ const [
   [, requestWriteAccessPromise, isRequestingWriteAccess],
   [, requestWriteAccessError],
 ] = defineNonConcurrentFn(
-  async (options?: PromiseOptions): Promise<WriteAccessRequestedStatus> => {
-    const data = await request(METHOD_NAME, 'write_access_requested', options);
-    return data.status;
+  (options?: RequestOptionsNoCapture): CancelablePromise<WriteAccessRequestedStatus> => {
+    return request(METHOD_NAME, 'write_access_requested', options).then(d => d.status);
   },
   'Write access request is currently in progress',
 );
@@ -35,9 +35,4 @@ const [
 export const requestWriteAccess = wrapSafe('requestWriteAccess', fn, {
   isSupported: METHOD_NAME,
 });
-
-export {
-  requestWriteAccessPromise,
-  requestWriteAccessError,
-  isRequestingWriteAccess,
-};
+export { requestWriteAccessPromise, requestWriteAccessError, isRequestingWriteAccess };
