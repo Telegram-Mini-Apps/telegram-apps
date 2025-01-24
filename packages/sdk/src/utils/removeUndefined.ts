@@ -9,8 +9,10 @@ type RemoveUndefined<T> = {
  * @param value - an object to remove undefined values from.
  */
 export function removeUndefined<T extends {}>(value: T): RemoveUndefined<T> {
-  // TODO: Check via caniuse: Object.fromEntries
-  return Object.fromEntries(
-    Object.entries(value).filter((tuple) => tuple[1] !== undefined),
-  ) as RemoveUndefined<T>;
+  const result = {} as RemoveUndefined<T>;
+  for (const k in value) {
+    const v = value[k];
+    v !== undefined && ((result as any)[k] = v);
+  }
+  return result;
 }
