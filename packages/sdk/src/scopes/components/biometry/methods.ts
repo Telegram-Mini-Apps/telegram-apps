@@ -4,10 +4,11 @@ import {
   type BiometryTokenUpdateStatus,
   type BiometryAuthRequestStatus,
   type EventListener,
+  type EventPayload,
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
-import type { CancelablePromise } from 'better-promises';
+import { CancelablePromise } from 'better-promises';
 
 import { postEvent, request } from '@/globals.js';
 import { defineMountFn } from '@/scopes/defineMountFn.js';
@@ -20,13 +21,13 @@ import { NotAvailableError } from '@/errors.js';
 
 import { _state } from './signals.js';
 import { requestBiometry } from './requestBiometry.js';
-import { eventToState } from './eventToState.js';
 import type {
   State,
   AuthenticateOptions,
   RequestAccessOptions,
   UpdateTokenOptions,
 } from './types.js';
+import { signalCancel } from '@/scopes/signalCancel.js';
 
 type StorageValue = State;
 
@@ -52,7 +53,7 @@ const [
   COMPONENT_NAME,
   abortSignal => {
     const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-    return s ? s : requestBiometry({ abortSignal }).then(eventToState);
+    return s ? CancelablePromise.resolve(s) : requestBiometry({ abortSignal }).then(eventToState);
   },
   s => {
     on(INFO_RECEIVED_EVENT, onBiometryInfoReceived);
@@ -68,12 +69,35 @@ function throwNotAvailable(): never {
   throw new NotAvailableError('Biometry is not available');
 }
 
+/**
+ * Converts `biometry_info_received` to some common shape.
+ * @param event - event payload.
+ * @see biometry_info_received
+ */
+export function eventToState(event: EventPayload<'biometry_info_received'>): State {
+  let available = false;
+  let tokenSaved = false;
+  let deviceId = '';
+  let accessRequested = false;
+  let type = '';
+  let accessGranted = false;
+  if (event.available) {
+    available = true;
+    tokenSaved = event.token_saved;
+    deviceId = event.device_id;
+    accessRequested = event.access_requested;
+    type = event.type;
+    accessGranted = event.access_granted;
+  }
+  return { available, tokenSaved, deviceId, type, accessGranted, accessRequested };
+}
+
 const [
   authFn,
   [, authPromise, isAuthenticating],
   [, authError],
 ] = defineNonConcurrentFn(
-  async (options?: AuthenticateOptions): Promise<{
+  (options?: AuthenticateOptions): CancelablePromise<{
     /**
      * Authentication status.
      */
@@ -83,23 +107,22 @@ const [
      */
     token?: string;
   }> => {
-    const s = _state();
-    if (!s.available) {
-      throwNotAvailable();
-    }
-    const data = await request(
-      REQUEST_AUTH_METHOD,
-      'biometry_auth_requested',
-      {
+    return CancelablePromise.withFn(async context => {
+      const s = _state();
+      if (!s.available) {
+        throwNotAvailable();
+      }
+      const data = await request(REQUEST_AUTH_METHOD, 'biometry_auth_requested', {
         ...options,
+        ...context,
         params: { reason: ((options || {}).reason || '').trim() },
-      },
-    );
-    const { token } = data;
-    if (typeof token === 'string') {
-      setState({ ...s, token });
-    }
-    return data;
+      });
+      const { token } = data;
+      if (typeof token === 'string') {
+        setState({ ...s, token });
+      }
+      return data;
+    }, options);
   },
   'Biometry authentication is already in progress',
 );
@@ -149,18 +172,21 @@ const [
   [, requestAccessPromise, isRequestingAccess],
   [, requestAccessError],
 ] = defineNonConcurrentFn(
-  async (options?: RequestAccessOptions): Promise<boolean> => {
-    const data = await request('web_app_biometry_request_access', INFO_RECEIVED_EVENT, {
-      ...options,
-      params: { reason: (options || {}).reason || '' },
-    }).then(eventToState);
+  (options?: RequestAccessOptions): CancelablePromise<boolean> => {
+    return CancelablePromise.withFn(async context => {
+      const data = await request('web_app_biometry_request_access', INFO_RECEIVED_EVENT, {
+        ...options,
+        ...context,
+        params: { reason: (options || {}).reason || '' },
+      }).then(eventToState);
 
-    if (!data.available) {
-      throwNotAvailable();
-    }
-    setState(data);
+      if (!data.available) {
+        throwNotAvailable();
+      }
+      setState(data);
 
-    return data.accessGranted;
+      return data.accessGranted;
+    }, options);
   },
   'Biometry access request is already in progress',
 );
@@ -208,11 +234,7 @@ function setState(s: State): void {
  * Unmounts the component.
  */
 export function unmount() {
-  [authPromise, requestAccessPromise, mountPromise].forEach(s => {
-    const p = s();
-    p && p.cancel();
-  });
-
+  [authPromise, requestAccessPromise, mountPromise].forEach(signalCancel);
   off(INFO_RECEIVED_EVENT, onBiometryInfoReceived);
   _isMounted.set(false);
 }
