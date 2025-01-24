@@ -12,8 +12,8 @@ export interface SetEmojiStatusOptions extends RequestOptionsNoCapture {
 
 const [
   fn,
-  [, setEmojiStatusPromise, isSettingEmojiStatus],
-  [, setEmojiStatusError],
+  tPromise,
+  tError,
 ] = defineNonConcurrentFn(
   (customEmojiId: string, options?: SetEmojiStatusOptions) => {
     return request(METHOD, ['emoji_status_set', 'emoji_status_failed'], {
@@ -50,4 +50,5 @@ const [
 export const setEmojiStatus = wrapSafe('setEmojiStatus', fn, {
   isSupported: METHOD,
 });
-export { isSettingEmojiStatus, setEmojiStatusPromise, setEmojiStatusError };
+export const [, setEmojiStatusPromise, isSettingEmojiStatus] = tPromise;
+export const [, setEmojiStatusError] = tError;

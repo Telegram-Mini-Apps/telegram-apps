@@ -10,8 +10,8 @@ const METHOD_NAME = 'web_app_request_write_access';
 
 const [
   fn,
-  [, requestWriteAccessPromise, isRequestingWriteAccess],
-  [, requestWriteAccessError],
+  tPromise,
+  tError,
 ] = defineNonConcurrentFn(
   (options?: RequestOptionsNoCapture): CancelablePromise<WriteAccessRequestedStatus> => {
     return request(METHOD_NAME, 'write_access_requested', options).then(d => d.status);
@@ -35,4 +35,5 @@ const [
 export const requestWriteAccess = wrapSafe('requestWriteAccess', fn, {
   isSupported: METHOD_NAME,
 });
-export { requestWriteAccessPromise, requestWriteAccessError, isRequestingWriteAccess };
+export const [, requestWriteAccessPromise, isRequestingWriteAccess] = tPromise;
+export const [, requestWriteAccessError] = tError;

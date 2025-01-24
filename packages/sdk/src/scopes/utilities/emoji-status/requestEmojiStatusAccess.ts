@@ -7,8 +7,8 @@ const METHOD = 'web_app_request_emoji_status_access';
 
 const [
   fn,
-  [, requestEmojiStatusAccessPromise, isRequestingEmojiStatusAccess],
-  [, requestEmojiStatusAccessError],
+  tPromise,
+  tError,
 ] = defineNonConcurrentFn((options?: RequestOptionsNoCapture) => {
   return request(METHOD, 'emoji_status_access_requested', options).then(d => d.status);
 }, 'Emoji status access request is already in progress');
@@ -31,9 +31,5 @@ export const requestEmojiStatusAccess = wrapSafe(
   fn,
   { isSupported: METHOD },
 );
-
-export {
-  requestEmojiStatusAccessPromise,
-  requestEmojiStatusAccessError,
-  isRequestingEmojiStatusAccess,
-};
+export const [, requestEmojiStatusAccessPromise, isRequestingEmojiStatusAccess] = tPromise;
+export const [, requestEmojiStatusAccessError] = tError;

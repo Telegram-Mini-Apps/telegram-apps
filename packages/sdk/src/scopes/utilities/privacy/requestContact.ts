@@ -90,8 +90,8 @@ async function getRequestedContact(options?: InvokeCustomMethodOptions): Promise
 
 const [
   fn,
-  [, requestContactPromise, isRequestingContact],
-  [, requestContactError],
+  tPromise,
+  tError,
 ] = defineNonConcurrentFn(
   (options?: PromiseOptions): CancelablePromise<RequestedContact> => {
     return new CancelablePromise<RequestedContact>(async (res, _, context) => {
@@ -154,4 +154,5 @@ const [
 export const requestContact = wrapSafe('requestContact', fn, {
   isSupported: 'web_app_request_phone',
 });
-export { requestContactPromise, requestContactError, isRequestingContact };
+export const [, requestContactPromise, isRequestingContact] = tPromise;
+export const [, requestContactError] = tError;

@@ -92,9 +92,10 @@ function _open(
 
 const [
   fn,
-  [, openPromise, isOpened],
-  [, openError],
+  tOpenPromise,
+  tOpenError,
 ] = defineNonConcurrentFn(_open, 'Invoice is already opened');
 
 export const open = wrapSupported('open', fn);
-export { openPromise, isOpened, openError };
+export const [, openPromise, isOpened] = tOpenPromise;
+export const [, openError] = tOpenError;

@@ -42,9 +42,9 @@ const onContentSafeAreaChanged: EventListener<'content_safe_area_changed'> = (da
 
 const [
   fn,
-  [, mountPromise, isMounting],
-  [, mountError],
-  [_isMounted, isMounted],
+  tMountPromise,
+  tMountError,
+  tIsMounted,
 ] = defineMountFn(
   COMPONENT_NAME,
   (options?: RequestOptionsNoCapture) => {
@@ -114,7 +114,9 @@ const [
  * }
  */
 export const mount = wrapBasic('mount', fn);
-export { mountPromise, mountError, isMounting, isMounted, _isMounted };
+export const [, mountPromise, isMounting] = tMountPromise;
+export const [, mountError] = tMountError;
+export const [_isMounted, isMounted] = tIsMounted;
 
 /**
  * Unmounts the Viewport.

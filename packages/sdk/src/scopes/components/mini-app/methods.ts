@@ -74,9 +74,9 @@ const onVisibilityChanged: EventListener<'visibility_changed'> = (data) => {
 
 const [
   mountFn,
-  [, mountPromise, isMounting],
-  [, mountError],
-  [_isMounted, isMounted],
+  tMountPromise,
+  tMountError,
+  tIsMounted,
 ] = defineMountFn(
   COMPONENT_NAME,
   (options?: RequestOptionsNoCapture) => {
@@ -96,7 +96,7 @@ const [
 
 const wrapBasic = createWrapBasic(COMPONENT_NAME);
 const wrapSupported = createWrapSupported(COMPONENT_NAME, isSupportedSchema);
-const wrapComplete = createWrapComplete(COMPONENT_NAME, _isMounted, isSupportedSchema);
+const wrapComplete = createWrapComplete(COMPONENT_NAME, tIsMounted[0], isSupportedSchema);
 
 /**
  * Creates CSS variables connected with the mini app.
@@ -196,7 +196,9 @@ export const close = wrapBasic('close', (returnBack?: boolean): void => {
  * }
  */
 export const mount = wrapSupported('mount', mountFn);
-export { mountPromise, mountError, isMounting, _isMounted, isMounted };
+export const [, mountPromise, isMounting] = tMountPromise;
+export const [, mountError] = tMountError;
+export const [_isMounted, isMounted] = tIsMounted;
 
 /**
  * Informs the Telegram app that the Mini App is ready to be displayed.

@@ -1,4 +1,5 @@
-import type { RGB, SecondaryButtonPosition } from '@telegram-apps/bridge';
+import type { SecondaryButtonPosition } from '@telegram-apps/bridge';
+import type { RGB } from '@telegram-apps/types';
 
 export interface State {
   /**

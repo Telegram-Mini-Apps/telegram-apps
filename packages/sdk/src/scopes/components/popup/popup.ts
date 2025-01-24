@@ -16,8 +16,8 @@ export const isSupported = createIsSupported(OPEN_METHOD);
 
 const [
   fn,
-  [, openPromise, isOpened],
-  [, openError],
+  tOpenPromise,
+  tOpenError,
 ] = defineNonConcurrentFn((options: OpenOptions) => {
   return request(OPEN_METHOD, 'popup_closed', {
     ...options,
@@ -57,4 +57,5 @@ const [
  * }
  */
 export const open = wrapSupported('open', fn);
-export { openError, openPromise, isOpened };
+export const [, openPromise, isOpened] = tOpenPromise;
+export const [, openError] = tOpenError;

@@ -18,6 +18,7 @@ import type { RequestOptionsNoCapture } from '@/types.js';
 
 import { _isCssVarsBound, _state } from './signals.js';
 import type { GetCssVarNameFn } from './types.js';
+import { signalCancel } from '@/scopes/signalCancel.js';
 
 type StorageValue = ThemeParams;
 
@@ -32,9 +33,9 @@ const onThemeChanged: EventListener<'theme_changed'> = ({ theme_params: value })
 
 const [
   mountFn,
-  [, mountPromise, isMounting],
-  [, mountError],
-  [_isMounted, isMounted],
+  tMountPromise,
+  tMountError,
+  tIsMounted,
 ] = defineMountFn(
   COMPONENT_NAME,
   (options?: RequestOptionsNoCapture) => {
@@ -49,7 +50,7 @@ const [
   },
 );
 
-const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
+const wrapMounted = createWrapMounted(COMPONENT_NAME, tIsMounted[0]);
 
 /**
  * Creates CSS variables connected with the current theme parameters.
@@ -123,14 +124,15 @@ export const bindCssVars = wrapMounted(
  * }
  */
 export const mount = wrapBasic('mount', mountFn);
-export { mountError, mountPromise, isMounting, isMounted, _isMounted };
+export const [, mountPromise, isMounting] = tMountPromise;
+export const [, mountError] = tMountError;
+export const [_isMounted, isMounted] = tIsMounted;
 
 /**
  * Unmounts the Theme Params component.
  */
 export function unmount(): void {
-  const p = mountPromise();
-  p && p.cancel();
+  signalCancel(mountPromise);
   off(THEME_CHANGED_EVENT, onThemeChanged);
   _isMounted.set(false);
 }

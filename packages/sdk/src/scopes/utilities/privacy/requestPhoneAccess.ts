@@ -7,8 +7,8 @@ const METHOD_NAME = 'web_app_request_phone';
 
 const [
   fn,
-  [, requestPhoneAccessPromise, isRequestingPhoneAccess],
-  [, requestPhoneAccessError],
+  tPromise,
+  tError,
 ] = defineNonConcurrentFn((options?: RequestOptionsNoCapture) => {
   return request(METHOD_NAME, 'phone_requested', options).then(d => d.status);
 }, 'Phone access request is currently in progress');
@@ -34,4 +34,5 @@ const [
 export const requestPhoneAccess = wrapSafe('requestPhoneAccess', fn, {
   isSupported: METHOD_NAME,
 });
-export { requestPhoneAccessPromise, requestPhoneAccessError, isRequestingPhoneAccess };
+export const [, requestPhoneAccessPromise, isRequestingPhoneAccess] = tPromise;
+export const [, requestPhoneAccessError] = tError;

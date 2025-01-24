@@ -148,9 +148,10 @@ function _open(
 
 const [
   openFn,
-  [, openPromise, isOpened],
-  [, openError],
+  tOpenPromise,
+  tOpenError,
 ] = defineNonConcurrentFn(_open, 'The QR Scanner is already opened');
 
 export const open = wrapSupported('open', openFn);
-export { openPromise, openError, isOpened };
+export const [, openPromise, isOpened] = tOpenPromise;
+export const [, openError] = tOpenError;

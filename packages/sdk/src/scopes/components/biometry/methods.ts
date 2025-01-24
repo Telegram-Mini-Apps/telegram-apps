@@ -39,32 +39,6 @@ const onBiometryInfoReceived: EventListener<'biometry_info_received'> = e => {
   setState(eventToState(e));
 };
 
-/**
- * @returns True if the biometry manager is supported.
- */
-export const isSupported = createIsSupported(REQUEST_AUTH_METHOD);
-
-const [
-  mountFn,
-  [, mountPromise, isMounting],
-  [, mountError],
-  [_isMounted, isMounted],
-] = defineMountFn(
-  COMPONENT_NAME,
-  abortSignal => {
-    const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-    return s ? CancelablePromise.resolve(s) : requestBiometry({ abortSignal }).then(eventToState);
-  },
-  s => {
-    on(INFO_RECEIVED_EVENT, onBiometryInfoReceived);
-    setState(s);
-  },
-);
-
-const wrapBasic = createWrapBasic(COMPONENT_NAME);
-const wrapSupported = createWrapSupported(COMPONENT_NAME, REQUEST_AUTH_METHOD);
-const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, REQUEST_AUTH_METHOD);
-
 function throwNotAvailable(): never {
   throw new NotAvailableError('Biometry is not available');
 }
@@ -74,7 +48,7 @@ function throwNotAvailable(): never {
  * @param event - event payload.
  * @see biometry_info_received
  */
-export function eventToState(event: EventPayload<'biometry_info_received'>): State {
+function eventToState(event: EventPayload<'biometry_info_received'>): State {
   let available = false;
   let tokenSaved = false;
   let deviceId = '';
@@ -92,10 +66,52 @@ export function eventToState(event: EventPayload<'biometry_info_received'>): Sta
   return { available, tokenSaved, deviceId, type, accessGranted, accessRequested };
 }
 
+/**
+ * @returns True if the biometry manager is supported.
+ */
+export const isSupported = createIsSupported(REQUEST_AUTH_METHOD);
+
+const [
+  mountFn,
+  tMountPromise,
+  tMountError,
+  tIsMounted,
+] = defineMountFn(
+  COMPONENT_NAME,
+  abortSignal => {
+    const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
+    return s ? CancelablePromise.resolve(s) : requestBiometry({ abortSignal }).then(eventToState);
+  },
+  s => {
+    on(INFO_RECEIVED_EVENT, onBiometryInfoReceived);
+    setState(s);
+  },
+);
+
+const wrapBasic = createWrapBasic(COMPONENT_NAME);
+const wrapSupported = createWrapSupported(COMPONENT_NAME, REQUEST_AUTH_METHOD);
+const wrapComplete = createWrapComplete(COMPONENT_NAME, tIsMounted[0], REQUEST_AUTH_METHOD);
+
+/**
+ * Mounts the Biometry component.
+ * @since Mini Apps v7.2
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @example
+ * if (mount.isAvailable()) {
+ *   await mount();
+ * }
+ */
+export const mount = wrapBasic('mount', mountFn);
+export const [, mountPromise, isMounting] = tMountPromise;
+export const [, mountError] = tMountError;
+export const [_isMounted, isMounted] = tIsMounted;
+
 const [
   authFn,
-  [, authPromise, isAuthenticating],
-  [, authError],
+  tAuthPromise,
+  tAuthError,
 ] = defineNonConcurrentFn(
   (options?: AuthenticateOptions): CancelablePromise<{
     /**
@@ -146,7 +162,8 @@ const [
  * }
  */
 export const authenticate = wrapComplete('authenticate', authFn);
-export { authError, authPromise, isAuthenticating };
+export const [, authPromise, isAuthenticating] = tAuthPromise;
+export const [, authError] = tAuthError;
 
 /**
  * Opens the biometric access settings for bots. Useful when you need to request biometrics
@@ -169,8 +186,8 @@ export const openSettings = wrapSupported('openSettings', (): void => {
 
 const [
   requestAccessFn,
-  [, requestAccessPromise, isRequestingAccess],
-  [, requestAccessError],
+  tRequestAccessPromise,
+  tRequestAccessError,
 ] = defineNonConcurrentFn(
   (options?: RequestAccessOptions): CancelablePromise<boolean> => {
     return CancelablePromise.withFn(async context => {
@@ -209,21 +226,8 @@ const [
  * }
  */
 export const requestAccess = wrapComplete('requestAccess', requestAccessFn);
-export { requestAccessError, requestAccessPromise, isRequestingAccess };
-
-/**
- * Mounts the Biometry component.
- * @since Mini Apps v7.2
- * @throws {FunctionNotAvailableError} The environment is unknown
- * @throws {FunctionNotAvailableError} The SDK is not initialized
- * @throws {FunctionNotAvailableError} The function is not supported
- * @example
- * if (mount.isAvailable()) {
- *   await mount();
- * }
- */
-export const mount = wrapBasic('mount', mountFn);
-export { mountPromise, mountError, isMounting, _isMounted, isMounted };
+export const [, requestAccessPromise, isRequestingAccess] = tRequestAccessPromise;
+export const [, requestAccessError] = tRequestAccessError;
 
 function setState(s: State): void {
   _state.set(s);

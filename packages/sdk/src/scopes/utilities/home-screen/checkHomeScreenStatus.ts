@@ -9,8 +9,8 @@ const METHOD_NAME = 'web_app_check_home_screen';
 
 const [
   fn,
-  [, checkHomeScreenStatusPromise, isCheckingHomeScreenStatus],
-  [, checkHomeScreenStatusError],
+  tPromise,
+  tError,
 ] = defineNonConcurrentFn((options?: PromiseOptions): CancelablePromise<HomeScreenStatus> => {
   return request(METHOD_NAME, 'home_screen_checked', options).then(d => d.status || 'unknown');
 }, 'Check home screen status request is currently in progress');
@@ -32,4 +32,5 @@ const [
 export const checkHomeScreenStatus = wrapSafe('checkHomeScreenStatus', fn, {
   isSupported: METHOD_NAME,
 });
-export { checkHomeScreenStatusPromise, isCheckingHomeScreenStatus, checkHomeScreenStatusError };
+export const [, checkHomeScreenStatusPromise, isCheckingHomeScreenStatus] = tPromise;
+export const [, checkHomeScreenStatusError] = tError;
