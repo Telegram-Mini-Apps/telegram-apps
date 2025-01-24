@@ -50,7 +50,7 @@
     "@telegram-apps/toolkit": "workspace:^",
     "@telegram-apps/transformers": "workspace:^",
     "@telegram-apps/types": "workspace:^",
-    "better-promises": "^0.3.0",
+    "better-promises": "^0.3.1",
     "error-kid": "^0.0.4",
     "valibot": "1.0.0-beta.14"
   },
