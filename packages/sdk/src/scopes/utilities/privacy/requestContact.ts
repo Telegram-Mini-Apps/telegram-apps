@@ -11,14 +11,15 @@ import {
   transform,
   ValiError,
 } from 'valibot';
+import type { InvokeCustomMethodOptions } from '@telegram-apps/bridge';
 
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 import { invokeCustomMethod } from '@/globals.js';
 import { AccessDeniedError } from '@/errors.js';
-
-import { requestPhoneAccess } from './requestPhoneAccess.js';
 import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
 import { sleep } from '@/utils/sleep.js';
+
+import { requestPhoneAccess } from './requestPhoneAccess.js';
 
 /**
  * Requested contact information.
@@ -39,7 +40,7 @@ export interface RequestedContact {
  * @param options - execution options.
  * @throws {ValiError} Response has invalid structure
  */
-async function getRequestedContact(options?: PromiseOptions): Promise<RequestedContact> {
+async function getRequestedContact(options?: InvokeCustomMethodOptions): Promise<RequestedContact> {
   const data = await invokeCustomMethod('getRequestedContact', {}, {
     ...options,
     timeout: (options || {}).timeout || 5000,
@@ -93,13 +94,11 @@ const [
   [, requestContactError],
 ] = defineNonConcurrentFn(
   (options?: PromiseOptions): CancelablePromise<RequestedContact> => {
-    return new CancelablePromise<RequestedContact>(async (res, _, abortSignal) => {
-      const asyncOptions = { abortSignal };
-
+    return new CancelablePromise<RequestedContact>(async (res, _, context) => {
       // First of all, let's try to get the requested contact. Probably, we already requested it
       // before.
       try {
-        return res(await getRequestedContact(asyncOptions));
+        return res(await getRequestedContact(context));
       } catch (e) {
         if (e instanceof ValiError) {
           throw e;
@@ -107,7 +106,7 @@ const [
       }
 
       // Then, request access to the user's phone.
-      const status = await requestPhoneAccess(asyncOptions);
+      const status = await requestPhoneAccess(context);
       if (status !== 'sent') {
         throw new AccessDeniedError('User denied access');
       }
@@ -116,9 +115,9 @@ const [
       let sleepTime = 50;
 
       // We are trying to retrieve the requested contact until the deadline was reached.
-      while (!abortSignal.aborted) {
+      while (!context.isAborted()) {
         try {
-          return res(await getRequestedContact(asyncOptions));
+          return res(await getRequestedContact(context));
         } catch (e) {
           if (e instanceof ValiError) {
             throw e;
@@ -155,9 +154,4 @@ const [
 export const requestContact = wrapSafe('requestContact', fn, {
   isSupported: 'web_app_request_phone',
 });
-
-export {
-  requestContactPromise,
-  requestContactError,
-  isRequestingContact,
-};
+export { requestContactPromise, requestContactError, isRequestingContact };
