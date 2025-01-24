@@ -22,6 +22,5 @@ export type * from './types/misc.js';
 export type * from './types/predicates.js';
 export type * from './types/unions.js';
 
-export { addEventListener } from './addEventListener.js';
 export { createCbCollector, type CallbackFn } from './createCbCollector.js';
 export { createLogger } from './createLogger.js';
