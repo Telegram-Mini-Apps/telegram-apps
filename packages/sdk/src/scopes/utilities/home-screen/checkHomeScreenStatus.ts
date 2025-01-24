@@ -1,4 +1,4 @@
-import type { PromiseOptions } from 'better-promises';
+import type { CancelablePromise, PromiseOptions } from 'better-promises';
 import type { HomeScreenStatus } from '@telegram-apps/bridge';
 
 import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
@@ -11,9 +11,8 @@ const [
   fn,
   [, checkHomeScreenStatusPromise, isCheckingHomeScreenStatus],
   [, checkHomeScreenStatusError],
-] = defineNonConcurrentFn(async (options?: PromiseOptions): Promise<HomeScreenStatus> => {
-  const data = await request(METHOD_NAME, 'home_screen_checked', options);
-  return data.status || 'unknown';
+] = defineNonConcurrentFn((options?: PromiseOptions): CancelablePromise<HomeScreenStatus> => {
+  return request(METHOD_NAME, 'home_screen_checked', options).then(d => d.status || 'unknown');
 }, 'Check home screen status request is currently in progress');
 
 /**
@@ -33,9 +32,4 @@ const [
 export const checkHomeScreenStatus = wrapSafe('checkHomeScreenStatus', fn, {
   isSupported: METHOD_NAME,
 });
-
-export {
-  checkHomeScreenStatusPromise,
-  isCheckingHomeScreenStatus,
-  checkHomeScreenStatusError,
-};
+export { checkHomeScreenStatusPromise, isCheckingHomeScreenStatus, checkHomeScreenStatusError };
