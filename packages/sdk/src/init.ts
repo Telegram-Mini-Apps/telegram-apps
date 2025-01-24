@@ -1,7 +1,7 @@
 import { on } from '@telegram-apps/bridge';
 import { createCbCollector } from '@telegram-apps/toolkit';
 
-import { postEvent, configure, type ConfigureOptions, _launchParams } from '@/globals.js';
+import { postEvent, configure, type ConfigureOptions } from '@/globals.js';
 import { logInfo } from '@/debug.js';
 
 export interface InitOptions extends ConfigureOptions {
