@@ -1,5 +1,4 @@
-import type { ExecuteWithOptions } from '@telegram-apps/bridge';
-
+import type { RequestOptionsNoCapture } from '@/types.js';
 import { request } from '@/globals.js';
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
@@ -10,9 +9,8 @@ const [
   fn,
   [, requestEmojiStatusAccessPromise, isRequestingEmojiStatusAccess],
   [, requestEmojiStatusAccessError],
-] = defineNonConcurrentFn(async (options?: ExecuteWithOptions) => {
-  const data = await request(METHOD, 'emoji_status_access_requested', options);
-  return data.status;
+] = defineNonConcurrentFn((options?: RequestOptionsNoCapture) => {
+  return request(METHOD, 'emoji_status_access_requested', options).then(d => d.status);
 }, 'Emoji status access request is already in progress');
 
 /**

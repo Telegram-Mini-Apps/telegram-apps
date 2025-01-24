@@ -1,5 +1,4 @@
-import type { ExecuteWithOptions } from '@telegram-apps/bridge';
-
+import type { RequestOptionsNoCapture } from '@/types.js';
 import { SetEmojiStatusError } from '@/errors.js';
 import { request } from '@/globals.js';
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
@@ -7,26 +6,28 @@ import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
 
 const METHOD = 'web_app_set_emoji_status';
 
-export interface SetEmojiStatusOptions extends ExecuteWithOptions {
+export interface SetEmojiStatusOptions extends RequestOptionsNoCapture {
   duration?: number;
 }
 
 const [
   fn,
-  [, promise, isRequesting],
-  [, error],
+  [, setEmojiStatusPromise, isSettingEmojiStatus],
+  [, setEmojiStatusError],
 ] = defineNonConcurrentFn(
-  async (customEmojiId: string, options?: SetEmojiStatusOptions) => {
-    const data = await request(METHOD, ['emoji_status_set', 'emoji_status_failed'], {
+  (customEmojiId: string, options?: SetEmojiStatusOptions) => {
+    return request(METHOD, ['emoji_status_set', 'emoji_status_failed'], {
       params: {
         custom_emoji_id: customEmojiId,
         duration: (options || {}).duration,
       },
       ...options,
-    });
-    if (data && 'error' in data) {
-      throw new SetEmojiStatusError(data.error);
-    }
+    })
+      .then(d => {
+        if (d && 'error' in d) {
+          throw new SetEmojiStatusError(d.error);
+        }
+      });
   },
   'Emoji status set request is currently in progress',
 );
@@ -46,14 +47,7 @@ const [
  *   const statusSet = await setEmojiStatus('5361800828313167608');
  * }
  */
-export const setEmojiStatus = wrapSafe(
-  'setEmojiStatus',
-  fn,
-  { isSupported: METHOD },
-);
-
-export {
-  isRequesting as isSettingEmojiStatus,
-  promise as setEmojiStatusPromise,
-  error as setEmojiStatusError,
-};
+export const setEmojiStatus = wrapSafe('setEmojiStatus', fn, {
+  isSupported: METHOD,
+});
+export { isSettingEmojiStatus, setEmojiStatusPromise, setEmojiStatusError };
