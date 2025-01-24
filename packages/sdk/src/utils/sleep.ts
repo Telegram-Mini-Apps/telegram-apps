@@ -6,8 +6,5 @@ import { CancelablePromise } from 'better-promises';
  * @param abortSignal - signal to stop function execution.
  */
 export function sleep(duration: number, abortSignal?: AbortSignal): CancelablePromise<void> {
-  return new CancelablePromise(r => {
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval
-    setTimeout(r, duration);
-  }, { abortSignal });
+  return new CancelablePromise<void>({ abortSignal, timeout: duration }).catch(() => {});
 }
