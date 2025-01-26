@@ -12,7 +12,7 @@ import {
   VIEWPORT_CHANGED_EVENT,
 } from './const.js';
 
-const REQUEST_SA_METHOD_NAME = 'web_app_request_content_safe_area';
+const REQUEST_SA_METHOD_NAME = 'web_app_request_safe_area';
 const wrapSafe = createWrapSupported(COMPONENT_NAME, REQUEST_SA_METHOD_NAME);
 
 /**
@@ -30,7 +30,7 @@ const wrapSafe = createWrapSupported(COMPONENT_NAME, REQUEST_SA_METHOD_NAME);
 export const requestContentSafeAreaInsets = wrapSafe(
   'requestContentSafeAreaInsets',
   (options?: RequestOptionsNoCapture): AbortablePromise<EventPayload<'content_safe_area_changed'>> => {
-    return request(REQUEST_SA_METHOD_NAME, CSA_CHANGED_EVENT, options);
+    return request('web_app_request_content_safe_area', CSA_CHANGED_EVENT, options);
   },
 );
 
