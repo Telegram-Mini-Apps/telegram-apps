@@ -28,7 +28,7 @@ const transformers = {
   }),
   custom_method_invoked: looseObject({
     req_id: string(),
-    result: unknown(),
+    result: optional(unknown()),
     error: optional(string()),
   }),
   popup_closed: nullish(
