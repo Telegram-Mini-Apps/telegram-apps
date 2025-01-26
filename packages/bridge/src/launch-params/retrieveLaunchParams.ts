@@ -8,6 +8,10 @@ import type { InferOutput } from 'valibot';
 import { LaunchParamsRetrieveError } from '@/errors.js';
 import { retrieveFromStorage, saveToStorage } from '@/launch-params/storage.js';
 
+export type RetrieveLPResult = InferOutput<typeof LaunchParamsSchema>;
+export type RetrieveLPResultCamelCased =
+  DeepConvertSnakeKeysToCamelCase<InferOutput<typeof LaunchParamsSchema>>;
+
 /**
  * @param urlString - URL to extract launch parameters from.
  * @returns Launch parameters from the specified URL.
@@ -42,7 +46,7 @@ function retrieveFromPerformance() {
  * @throws {LaunchParamsRetrieveError} Unable to retrieve launch parameters. They are probably
  * invalid.
  */
-export function retrieveLaunchParams(camelCase?: false): InferOutput<typeof LaunchParamsSchema>;
+export function retrieveLaunchParams(camelCase?: false): RetrieveLPResult;
 
 /**
  * @returns Launch parameters from any known source.
@@ -50,9 +54,7 @@ export function retrieveLaunchParams(camelCase?: false): InferOutput<typeof Laun
  * @throws {LaunchParamsRetrieveError} Unable to retrieve launch parameters. They are probably
  * invalid.
  */
-export function retrieveLaunchParams(camelCase: true): DeepConvertSnakeKeysToCamelCase<
-  InferOutput<typeof LaunchParamsSchema>
->;
+export function retrieveLaunchParams(camelCase: true): RetrieveLPResultCamelCased;
 
 /**
  * @returns Launch parameters from any known source.

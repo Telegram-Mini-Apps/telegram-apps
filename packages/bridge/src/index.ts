@@ -8,7 +8,11 @@ export { emitEvent } from '@/events/emitEvent.js';
 export { on, off, offAll } from '@/events/emitter.js';
 export type { EventListener, SubscribeListener } from '@/events/types/listening.js';
 
-export { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
+export {
+  retrieveLaunchParams,
+  type RetrieveLPResultCamelCased,
+  type RetrieveLPResult,
+} from '@/launch-params/retrieveLaunchParams.js';
 
 export type * from '@/methods/types/index.js';
 export { targetOrigin } from '@/methods/targetOrigin.js';
