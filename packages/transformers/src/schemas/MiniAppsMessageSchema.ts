@@ -1,6 +1,6 @@
-import { string, looseObject, unknown } from 'valibot';
+import { string, looseObject, unknown, optional } from 'valibot';
 
 export const MiniAppsMessageSchema = looseObject({
   eventType: string(),
-  eventData: unknown(),
+  eventData: optional(unknown()),
 });

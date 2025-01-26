@@ -12,7 +12,7 @@ import type { Chat, InitData, User } from '@telegram-apps/types';
 
 import { initDataChatJson, initDataUserJson } from '@/generators/init-data.js';
 
-const lazyUser = lazy(() => optional(initDataUserJson()));
+const lazyUser = optional(lazy(() => initDataUserJson()));
 
 export const InitDataChatSchema = looseObject({
   id: number(),
@@ -42,7 +42,7 @@ export const InitDataQuerySchema = looseObject({
     date(),
   ),
   can_send_after: optional(pipe(string(), transform(Number), integer())),
-  chat: lazy(() => optional(initDataChatJson())),
+  chat: optional(lazy(() => initDataChatJson())),
   chat_type: optional(string()),
   chat_instance: optional(string()),
   hash: string(),
