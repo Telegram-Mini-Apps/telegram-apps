@@ -8,8 +8,6 @@ export {
   setBackgroundColor as setMiniAppBackgroundColor,
   setBottomBarColor as setMiniAppBottomBarColor,
   unmount as unmountMiniApp,
-} from './methods.js';
-export {
   backgroundColor as miniAppBackgroundColor,
   backgroundColorRGB as miniAppBackgroundColorRGB,
   bottomBarColor as miniAppBottomBarColor,
@@ -21,10 +19,13 @@ export {
   isDark as isMiniAppDark,
   isActive as isMiniAppActive,
   state as miniAppState,
-} from './signals.js';
+  mountPromise as miniAppMountPromise,
+  isMounting as isMiniAppMounting,
+  mountError as miniAppMountError,
+} from './exports.variable.js';
+export * as miniApp from './exports.variable.js';
 export type {
   HeaderColor as MiniAppHeaderColor,
   GetCssVarNameFn as MiniAppGetCssVarNameFn,
   State as MiniAppState,
 } from './types.js';
-export * as miniApp from './exports.variable.js';

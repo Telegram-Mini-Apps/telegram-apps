@@ -1,12 +1,10 @@
-import {
-  CancelablePromise,
-  type ExecuteWithOptions,
-} from '@telegram-apps/bridge';
-import { array, object, string } from '@telegram-apps/transformers';
+import { AbortablePromise } from 'better-promises';
+import { array, check, parse, pipe, record, string } from 'valibot';
 
-import { invokeCustomMethod } from '@/scopes/globals.js';
-import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
+import { invokeCustomMethod } from '@/globals.js';
+import { createIsSupported } from '@/scopes/createIsSupported.js';
+import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
+import type { InvokeCustomMethodOptions } from '@telegram-apps/bridge';
 
 const INVOKE_METHOD_NAME = 'web_app_invoke_custom_method';
 const wrapSupported = createWrapSupported('cloudStorage', INVOKE_METHOD_NAME);
@@ -21,9 +19,9 @@ export const isSupported = createIsSupported(INVOKE_METHOD_NAME);
  * @param keyOrKeys - key or keys to delete.
  * @param options - request execution options.
  * @since Mini Apps v6.9
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example Deleting a single key
  * if (deleteItem.isAvailable()) {
  *   await deleteItem('my-key');
@@ -35,12 +33,12 @@ export const isSupported = createIsSupported(INVOKE_METHOD_NAME);
  */
 export const deleteItem = wrapSupported('deleteItem', (
   keyOrKeys: string | string[],
-  options?: ExecuteWithOptions,
-): CancelablePromise<void> => {
+  options?: InvokeCustomMethodOptions,
+): AbortablePromise<void> => {
   const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
   return keys.length
     ? invokeCustomMethod('deleteStorageValues', { keys }, options).then()
-    : CancelablePromise.resolve();
+    : AbortablePromise.resolve();
 });
 
 /**
@@ -50,9 +48,9 @@ export const deleteItem = wrapSupported('deleteItem', (
  * @returns Map, where a key is one of the specified in the `keys` argument,
  * and a value is a corresponding storage value.
  * @since Mini Apps v6.9
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (deleteItem.isAvailable()) {
  *   const { key1, key2 } = await getItem(['key1', 'key2']);
@@ -60,8 +58,8 @@ export const deleteItem = wrapSupported('deleteItem', (
  */
 function _getItem<K extends string>(
   keys: K[],
-  options?: ExecuteWithOptions,
-): CancelablePromise<Record<K, string>>;
+  options?: InvokeCustomMethodOptions,
+): AbortablePromise<Record<K, string>>;
 
 /**
  * Gets a single key value from the cloud storage.
@@ -70,31 +68,33 @@ function _getItem<K extends string>(
  * @return Value of the specified key. If the key was not created previously,
  * the function will return an empty string.
  * @since Mini Apps v6.9
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (getItem.isAvailable()) {
  *   const keyValue = await getItem('my-key');
  * }
  */
-function _getItem(key: string, options?: ExecuteWithOptions): CancelablePromise<string>;
+function _getItem(key: string, options?: InvokeCustomMethodOptions): AbortablePromise<string>;
 
 function _getItem(
   keyOrKeys: string | string[],
-  options?: ExecuteWithOptions,
-): CancelablePromise<string | Record<string, string>> {
+  options?: InvokeCustomMethodOptions,
+): AbortablePromise<string | Record<string, string>> {
   const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
 
   return keys.length
     ? invokeCustomMethod('getStorageValues', { keys }, options).then(data => {
-      const result = object(
-        Object.fromEntries(keys.map((k) => [k, string()])),
-      )()(data);
-
-      return Array.isArray(keyOrKeys) ? result : result[keyOrKeys];
+      return parse(
+        record(
+          pipe(string(), check(v => keys.includes(v))),
+          string(),
+        ),
+        data,
+      );
     })
-    : CancelablePromise.resolve(typeof keyOrKeys === 'string' ? '' : {});
+    : AbortablePromise.resolve(typeof keyOrKeys === 'string' ? '' : {});
 }
 
 export const getItem = wrapSupported('getItem', _getItem);
@@ -103,19 +103,20 @@ export const getItem = wrapSupported('getItem', _getItem);
  * Returns a list of all keys presented in the cloud storage.
  * @param options - request execution options.
  * @since Mini Apps v6.9
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (getKeys.isAvailable()) {
  *   const keysArray = await getKeys();
  * }
  */
 export const getKeys = wrapSupported('getKeys', (
-  options?: ExecuteWithOptions,
-): CancelablePromise<string[]> => {
-  return invokeCustomMethod('getStorageKeys', {}, options)
-    .then(array(string())());
+  options?: InvokeCustomMethodOptions,
+): AbortablePromise<string[]> => {
+  return invokeCustomMethod('getStorageKeys', {}, options).then(
+    data => parse(array(string()), data),
+  );
 });
 
 /**
@@ -124,9 +125,9 @@ export const getKeys = wrapSupported('getKeys', (
  * @param value - storage value.
  * @param options - request execution options.
  * @since Mini Apps v6.9
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (setItem.isAvailable()) {
  *   await setItem('key', 'value');
@@ -135,10 +136,26 @@ export const getKeys = wrapSupported('getKeys', (
 export const setItem = wrapSupported('setItem', (
   key: string,
   value: string,
-  options?: ExecuteWithOptions,
-): CancelablePromise<void> => {
+  options?: InvokeCustomMethodOptions,
+): AbortablePromise<void> => {
   return invokeCustomMethod('saveStorageValue', {
     key,
     value,
   }, options).then();
 });
+
+/**
+ * Clears the cloud storage.
+ * @param options - additional options.
+ * @since Mini Apps v6.9
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @example
+ * if (clear.isAvailable()) {
+ *   await clear();
+ * }
+ */
+export const clear = wrapSupported('clear', (
+  options?: InvokeCustomMethodOptions,
+) => getKeys(options).then(deleteItem));

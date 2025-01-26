@@ -1,10 +1,12 @@
-import type { InitData } from '@telegram-apps/types';
+import { InitDataLike } from '@telegram-apps/transformers';
 
 import type { SignDataOptions } from './signData.js';
 
 export type Text = string | ArrayBuffer;
 
-export type SignData = Omit<InitData, 'authDate' | 'hash'>;
+export type SignData =
+  & Omit<InitDataLike, 'auth_date' | 'hash' | 'signature'>
+  & Partial<Pick<InitDataLike, 'signature'>>;
 
 export interface SignDataSyncFn {
   (data: Text, key: Text, options?: SignDataOptions): string;

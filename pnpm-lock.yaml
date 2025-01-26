@@ -101,6 +101,18 @@ importers:
       '@telegram-apps/types':
         specifier: workspace:^
         version: link:../types
+      better-promises:
+        specifier: ^0.4.0
+        version: 0.4.0
+      error-kid:
+        specifier: ^0.0.4
+        version: 0.0.4
+      mitt:
+        specifier: ^3.0.1
+        version: 3.0.1
+      valibot:
+        specifier: 1.0.0-beta.14
+        version: 1.0.0-beta.14(typescript@5.6.3)
     devDependencies:
       test-utils:
         specifier: workspace:*
@@ -155,15 +167,15 @@ importers:
 
   packages/init-data-node:
     dependencies:
-      '@telegram-apps/toolkit':
-        specifier: workspace:^
-        version: link:../toolkit
       '@telegram-apps/transformers':
         specifier: workspace:^
         version: link:../transformers
       '@telegram-apps/types':
         specifier: workspace:^
         version: link:../types
+      error-kid:
+        specifier: ^0.0.3
+        version: 0.0.3
     devDependencies:
       '@types/node':
         specifier: ^22.9.0
@@ -231,16 +243,6 @@ importers:
         version: 5.1.2(typescript@5.6.3)(vite@5.4.11(@types/node@22.9.0))
 
   packages/navigation:
-    dependencies:
-      '@telegram-apps/bridge':
-        specifier: workspace:^
-        version: link:../bridge
-      '@telegram-apps/signals':
-        specifier: workspace:^
-        version: link:../signals
-      '@telegram-apps/toolkit':
-        specifier: workspace:^
-        version: link:../toolkit
     devDependencies:
       test-utils:
         specifier: workspace:*
@@ -266,6 +268,18 @@ importers:
       '@telegram-apps/transformers':
         specifier: workspace:^
         version: link:../transformers
+      '@telegram-apps/types':
+        specifier: workspace:^
+        version: link:../types
+      better-promises:
+        specifier: ^0.4.0
+        version: 0.4.0
+      error-kid:
+        specifier: ^0.0.4
+        version: 0.0.4
+      valibot:
+        specifier: 1.0.0-beta.14
+        version: 1.0.0-beta.14(typescript@5.6.3)
     devDependencies:
       test-utils:
         specifier: workspace:*
@@ -361,6 +375,9 @@ importers:
       '@telegram-apps/types':
         specifier: workspace:^
         version: link:../types
+      valibot:
+        specifier: 1.0.0-beta.14
+        version: 1.0.0-beta.14(typescript@5.6.3)
     devDependencies:
       test-utils:
         specifier: workspace:*
@@ -386,6 +403,9 @@ importers:
       '@vitejs/plugin-basic-ssl':
         specifier: ^1.1.0
         version: 1.1.0(vite@5.4.11(@types/node@22.10.1))
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
 
   playgrounds/next:
     dependencies:
@@ -3217,6 +3237,9 @@ packages:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
     engines: {node: '>=4'}
 
+  better-promises@0.4.0:
+    resolution: {integrity: sha512-AcKkTUSd4o1vMf41eBbHW1NkY7vrXeNI6etitGdQE54WFXsF2wkfonrKA06Za7lViRNyT/cMvj5z+DScqhYW8A==}
+
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
@@ -3472,6 +3495,11 @@ packages:
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
 
+  cross-env@7.0.3:
+    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
+    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
+    hasBin: true
+
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
@@ -3680,6 +3708,12 @@ packages:
 
   error-ex@1.3.2:
     resolution: {integrity: sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==}
+
+  error-kid@0.0.3:
+    resolution: {integrity: sha512-HI7kpQzlqELtvzSqKTw0FPWyaYIxkdgQes04TSJhpYDf2/A8a2Prz2iJU6H46fdVzCzIC9LxD5uHkiujFZ+LRQ==}
+
+  error-kid@0.0.4:
+    resolution: {integrity: sha512-x+yQhY56SorLMnX6kOf+z3JCv2QBurcWEDcIjgxYtVr4fGeCfAtOdZOCyWttkHHDFPtL2PqnaRUmphbmALJd9w==}
 
   error-stack-parser-es@0.1.5:
     resolution: {integrity: sha512-xHku1X40RO+fO8yJ8Wh2f2rZWVjqyhb1zgq1yZ8aZRQkv6OOKhKWRUaht3eSCUbAOBaKIgM+ykwFLE+QUxgGeg==}
@@ -6337,6 +6371,14 @@ packages:
 
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
+
+  valibot@1.0.0-beta.14:
+    resolution: {integrity: sha512-tLyV2rE5QL6U29MFy3xt4AqMrn+/HErcp2ZThASnQvPMwfSozjV1uBGKIGiegtZIGjinJqn0SlBdannf18wENA==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   validate-html-nesting@1.2.2:
     resolution: {integrity: sha512-hGdgQozCsQJMyfK5urgFcWEqsSSrK63Awe0t/IMR0bZ0QMtnuaiHzThW81guu3qx9abLi99NEuiaN6P9gVYsNg==}
@@ -10128,6 +10170,10 @@ snapshots:
     dependencies:
       is-windows: 1.0.2
 
+  better-promises@0.4.0:
+    dependencies:
+      error-kid: 0.0.4
+
   binary-extensions@2.3.0: {}
 
   birpc@0.2.19: {}
@@ -10393,6 +10439,10 @@ snapshots:
 
   create-require@1.1.1: {}
 
+  cross-env@7.0.3:
+    dependencies:
+      cross-spawn: 7.0.6
+
   cross-spawn@7.0.6:
     dependencies:
       path-key: 3.1.1
@@ -10588,6 +10638,10 @@ snapshots:
     dependencies:
       is-arrayish: 0.2.1
     optional: true
+
+  error-kid@0.0.3: {}
+
+  error-kid@0.0.4: {}
 
   error-stack-parser-es@0.1.5: {}
 
@@ -13721,6 +13775,10 @@ snapshots:
   uuid@9.0.1: {}
 
   v8-compile-cache-lib@3.0.1: {}
+
+  valibot@1.0.0-beta.14(typescript@5.6.3):
+    optionalDependencies:
+      typescript: 5.6.3
 
   validate-html-nesting@1.2.2: {}
 

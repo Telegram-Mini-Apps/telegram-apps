@@ -1,20 +1,19 @@
-import type { ExecuteWithOptions, CancelablePromise } from '@telegram-apps/bridge';
+import type { EventPayload } from '@telegram-apps/bridge';
+import type { AbortablePromise } from 'better-promises';
 
-import { request } from '@/scopes/globals.js';
-import { wrapSafe } from '@/scopes/toolkit/wrapSafe.js';
+import { request } from '@/globals.js';
+import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
 
-import { eventToState } from './eventToState.js';
-import type { State } from './types.js';
-
-const GET_INFO_METHOD = 'web_app_biometry_get_info';
+const METHOD_NAME = 'web_app_biometry_get_info';
 
 /**
  * Requests biometry information.
  * @since Mini Apps v7.2
  * @param options - additional execution options.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (requestBiometry.isAvailable()) {
  *   const biometryState = await requestBiometry();
@@ -22,10 +21,8 @@ const GET_INFO_METHOD = 'web_app_biometry_get_info';
  */
 export const requestBiometry = wrapSafe(
   'requestBiometry',
-  (options?: ExecuteWithOptions): CancelablePromise<State> => {
-    return request(GET_INFO_METHOD, 'biometry_info_received', options).then(eventToState);
+  (options?: RequestOptionsNoCapture): AbortablePromise<EventPayload<'biometry_info_received'>> => {
+    return request(METHOD_NAME, 'biometry_info_received', options);
   },
-  {
-    isSupported: GET_INFO_METHOD,
-  },
+  { isSupported: METHOD_NAME },
 );

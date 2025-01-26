@@ -12,6 +12,12 @@ export {
   updateToken as updateBiometryToken,
   isAuthenticating as isAuthenticatingBiometry,
   isRequestingAccess as isRequestingBiometryAccess,
+  requestAccessPromise as requestBiometryAccessPromise,
+  requestAccessError as requestBiometryAccessError,
+  mountPromise as mountBiometryPromise,
+  authError as biometryAuthError,
+  authPromise as biometryAuthPromise,
+  isAvailable as isBiometryAvailable,
 } from './exports.variable.js';
 export * as biometry from './exports.variable.js';
 

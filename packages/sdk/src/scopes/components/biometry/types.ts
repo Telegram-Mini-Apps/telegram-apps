@@ -1,17 +1,12 @@
-import type { BiometryType, AsyncOptions } from '@telegram-apps/bridge';
+import type { BiometryType } from '@telegram-apps/bridge';
 
-export type State =
-  | {
+import type { RequestOptionsNoCapture } from '@/types.js';
+
+export interface State {
   /**
    * If true, indicates that biometric authentication is available on the current device.
    */
-  available: false;
-}
-  | {
-  /**
-   * If true, indicates that biometric authentication is available on the current device.
-   */
-  available: true;
+  available: boolean;
   /**
    * Indicates whether the app has previously requested permission to use biometrics.
    */
@@ -45,11 +40,11 @@ export type State =
    * Last retrieved token.
    */
   token?: string;
-};
+}
 
 type Maybe<T> = T | null | undefined;
 
-export interface AuthenticateOptions extends AsyncOptions {
+export interface AuthenticateOptions extends RequestOptionsNoCapture {
   /**
    * Reason to request biometry data. Should be at least 1 symbol length, but not more than
    * 128 symbols.
@@ -57,7 +52,7 @@ export interface AuthenticateOptions extends AsyncOptions {
   reason?: Maybe<string>;
 }
 
-export interface UpdateTokenOptions extends AsyncOptions {
+export interface UpdateTokenOptions extends RequestOptionsNoCapture {
   /**
    * Optional string field, containing the reason why the bot is asking to authenticate using biometrics (1-128 chars, used in the prompt).
    */
@@ -69,7 +64,7 @@ export interface UpdateTokenOptions extends AsyncOptions {
   token?: Maybe<string>;
 }
 
-export interface RequestAccessOptions extends AsyncOptions {
+export interface RequestAccessOptions extends RequestOptionsNoCapture {
   /**
    * The text to be displayed to a user in the popup describing why the bot needs access to
    * biometrics, 0-128 characters.

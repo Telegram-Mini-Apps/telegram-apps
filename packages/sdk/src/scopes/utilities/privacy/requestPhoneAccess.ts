@@ -1,16 +1,17 @@
-import { signal } from '@telegram-apps/signals';
-import { type AsyncOptions, type PhoneRequestedStatus, TypedError } from '@telegram-apps/bridge';
+import { request } from '@/globals.js';
+import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
+import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
 
-import { ERR_ALREADY_REQUESTING } from '@/errors.js';
-import { request } from '@/scopes/globals.js';
-import { wrapSafe } from '@/scopes/toolkit/wrapSafe.js';
+const METHOD_NAME = 'web_app_request_phone';
 
-export const REQUEST_PHONE_METHOD = 'web_app_request_phone';
-
-/**
- * Signal indicating if phone access is currently being requested.
- */
-export const isRequestingPhoneAccess = signal(false);
+const [
+  fn,
+  tPromise,
+  tError,
+] = defineNonConcurrentFn((options?: RequestOptionsNoCapture) => {
+  return request(METHOD_NAME, 'phone_requested', options).then(d => d.status);
+}, 'Phone access request is currently in progress');
 
 /**
  * Requests current user phone access. Method returns promise, which resolves
@@ -21,30 +22,17 @@ export const isRequestingPhoneAccess = signal(false);
  * @param options - additional options.
  * @since Mini Apps v6.9
  * @see requestContact
- * @throws {TypedError} ERR_ALREADY_REQUESTING
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {ConcurrentCallError} Phone access request is currently in progress
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (requestPhoneAccess.isAvailable()) {
  *   const status = await requestPhoneAccess();
  * }
  */
-export const requestPhoneAccess = wrapSafe(
-  'requestPhoneAccess',
-  (options?: AsyncOptions): Promise<PhoneRequestedStatus> => {
-    if (isRequestingPhoneAccess()) {
-      throw new TypedError(ERR_ALREADY_REQUESTING, 'Phone access request is currently in progress');
-    }
-    isRequestingPhoneAccess.set(true);
-
-    return request(REQUEST_PHONE_METHOD, 'phone_requested', options)
-      .then(r => r.status)
-      .finally(() => {
-        isRequestingPhoneAccess.set(false);
-      });
-  },
-  {
-    isSupported: REQUEST_PHONE_METHOD,
-  },
-);
+export const requestPhoneAccess = wrapSafe('requestPhoneAccess', fn, {
+  isSupported: METHOD_NAME,
+});
+export const [, requestPhoneAccessPromise, isRequestingPhoneAccess] = tPromise;
+export const [, requestPhoneAccessError] = tError;

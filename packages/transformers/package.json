@@ -41,8 +41,9 @@
     "build": "vite build -c vite.config.ts"
   },
   "dependencies": {
+    "@telegram-apps/toolkit": "workspace:^",
     "@telegram-apps/types": "workspace:^",
-    "@telegram-apps/toolkit": "workspace:^"
+    "valibot": "1.0.0-beta.14"
   },
   "devDependencies": {
     "test-utils": "workspace:*",

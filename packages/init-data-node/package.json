@@ -59,8 +59,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@telegram-apps/toolkit": "workspace:^",
     "@telegram-apps/transformers": "workspace:^",
-    "@telegram-apps/types": "workspace:^"
+    "@telegram-apps/types": "workspace:^",
+    "error-kid": "^0.0.3"
   }
 }

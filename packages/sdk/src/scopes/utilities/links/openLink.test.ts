@@ -1,11 +1,13 @@
 import { describe, vi, expect, it, beforeEach } from 'vitest';
-import { TypedError } from '@telegram-apps/bridge';
 
-import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/reset/reset.js';
-import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
-import { setMaxVersion } from '@test-utils/setMaxVersion.js';
+import {
+  mockPostEvent,
+  resetPackageState,
+  mockMiniAppsEnv,
+  setMaxVersion,
+} from '@test-utils/utils.js';
 import { testSafety } from '@test-utils/predefined/testSafety.js';
+import { InvalidArgumentsError } from '@/errors.js';
 
 import { openLink } from './openLink.js';
 
@@ -25,9 +27,9 @@ testSafety(openLink, 'openLink', {});
 describe('is available', () => {
   beforeEach(setAvailable);
 
-  it('should throw ERR_INVALID_URL if passed invalid URL', () => {
+  it('should throw InvalidArgumentsError if passed invalid URL', () => {
     expect(() => openLink('invalid')).toThrow(
-      new TypedError('ERR_INVALID_URL', '"invalid" is invalid URL'),
+      new InvalidArgumentsError('"invalid" is invalid URL'),
     );
   });
 

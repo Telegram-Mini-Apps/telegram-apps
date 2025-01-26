@@ -1,11 +1,8 @@
-import {
-  createCbCollector,
-  defineEventHandlers,
-  on,
-  removeEventHandlers,
-} from '@telegram-apps/bridge';
+import { on } from '@telegram-apps/bridge';
+import { createCbCollector } from '@telegram-apps/toolkit';
 
-import { postEvent, configure, type ConfigureOptions } from '@/scopes/globals.js';
+import { postEvent, configure, type ConfigureOptions } from '@/globals.js';
+import { logInfo } from '@/debug.js';
 
 export interface InitOptions extends ConfigureOptions {
   /**
@@ -25,15 +22,12 @@ export function init(options?: InitOptions): VoidFunction {
   // Configure the package global dependencies.
   configure(options);
 
-  // Define event handlers, so we could receive the events from the Telegram application.
-  defineEventHandlers();
-
   const [addCleanup, cleanup] = createCbCollector(
     on('reload_iframe', () => {
+      logInfo(false, 'Received a request to reload the page');
       postEvent('iframe_will_reload');
       window.location.reload();
     }),
-    removeEventHandlers,
   );
 
   const { acceptCustomStyles = true } = options || {};
@@ -63,6 +57,8 @@ export function init(options?: InitOptions): VoidFunction {
   //
   // It really has no effect outside non-Telegram web environment.
   postEvent('iframe_ready', { reload_supported: true });
+
+  logInfo(false, 'The package was initialized');
 
   return cleanup;
 }

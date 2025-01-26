@@ -1,4 +1,4 @@
-import { initDataToSearchParams } from './initDataToSearchParams.js';
+import { serializeInitDataQuery } from '@telegram-apps/transformers';
 
 import type { SharedOptions, SignData, SignDataAsyncFn, SignDataSyncFn, Text } from './types.js';
 
@@ -46,20 +46,25 @@ export function sign(
   options?: SignOptions,
 ): string | Promise<string> {
   // Create search parameters, which will be signed further.
-  const sp = initDataToSearchParams({
-    ...data,
-    authDate,
-  });
+  const searchParams = new URLSearchParams(
+    serializeInitDataQuery({
+      ...data,
+      auth_date: authDate,
+      hash: '',
+      signature: data.signature || '',
+    }),
+  );
+  searchParams.delete('hash');
 
   // Convert search params to pairs and sort the final array.
-  const pairs = [...sp.entries()]
+  const pairs = [...searchParams.entries()]
     .map(([name, value]) => `${name}=${value}`)
     .sort();
 
   // Compute sign, append it to the params and return.
   function processSign(s: string): string {
-    sp.append('hash', s);
-    return sp.toString();
+    searchParams.append('hash', s);
+    return searchParams.toString();
   }
 
   const sign = signData(pairs.join('\n'), key, options);

@@ -1,11 +1,13 @@
-import { CancelablePromise, TypedError } from '@telegram-apps/toolkit';
+import { AbortablePromise } from 'better-promises';
 
-import { ERR_CUSTOM_METHOD_ERR_RESPONSE } from '@/errors.js';
 import { captureSameReq } from '@/methods/captureSameReq.js';
-import type { ExecuteWithOptions } from '@/types.js';
 import type { CustomMethodName, CustomMethodParams } from '@/methods/types/index.js';
+import { InvokeCustomMethodError } from '@/errors.js';
 
-import { request } from './request.js';
+import { request, type RequestOptions } from './request.js';
+
+export type InvokeCustomMethodOptions = Omit<RequestOptions<'custom_method_invoked'>, 'capture'>;
+export type InvokeCustomMethodFn = typeof invokeCustomMethod;
 
 /**
  * Invokes known custom method. Returns method execution result.
@@ -13,14 +15,14 @@ import { request } from './request.js';
  * @param params - method parameters.
  * @param requestId - request identifier.
  * @param options - additional options.
- * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
+ * @throws {InvokeCustomMethodError} Invocation completed with some error.
  */
 export function invokeCustomMethod<M extends CustomMethodName>(
   method: M,
   params: CustomMethodParams<M>,
   requestId: string,
-  options?: ExecuteWithOptions,
-): CancelablePromise<unknown>;
+  options?: InvokeCustomMethodOptions,
+): AbortablePromise<unknown>;
 
 /**
  * Invokes unknown custom method. Returns method execution result.
@@ -28,21 +30,21 @@ export function invokeCustomMethod<M extends CustomMethodName>(
  * @param params - method parameters.
  * @param requestId - request identifier.
  * @param options - additional options.
- * @throws {TypedError} ERR_CUSTOM_METHOD_ERR_RESPONSE
+ * @throws {InvokeCustomMethodError} Invocation completed with some error.
  */
 export function invokeCustomMethod(
   method: string,
   params: object,
   requestId: string,
-  options?: ExecuteWithOptions,
-): CancelablePromise<unknown>;
+  options?: InvokeCustomMethodOptions,
+): AbortablePromise<unknown>;
 
 export function invokeCustomMethod(
   method: string,
   params: object,
   requestId: string,
-  options?: ExecuteWithOptions,
-): CancelablePromise<unknown> {
+  options?: InvokeCustomMethodOptions,
+): AbortablePromise<unknown> {
   return request('web_app_invoke_custom_method', 'custom_method_invoked', {
     ...options || {},
     params: { method, params, req_id: requestId },
@@ -50,7 +52,7 @@ export function invokeCustomMethod(
   })
     .then(({ result, error }) => {
       if (error) {
-        throw new TypedError(ERR_CUSTOM_METHOD_ERR_RESPONSE, error);
+        throw new InvokeCustomMethodError(error);
       }
       return result;
     });

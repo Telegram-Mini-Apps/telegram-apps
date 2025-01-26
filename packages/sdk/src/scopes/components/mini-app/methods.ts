@@ -1,43 +1,48 @@
 import {
-  getStorageValue,
-  setStorageValue,
-  createCbCollector,
-  camelToKebab,
-  deleteCssVar,
-  setCssVar,
   supports,
   on,
   off,
   type EventListener,
-  type RGB,
   type BottomBarColor,
   type BackgroundColor,
   type MethodName,
 } from '@telegram-apps/bridge';
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
-import { computed, type Computed } from '@telegram-apps/signals';
+import type { Computed } from '@telegram-apps/signals';
 
-import { $version, postEvent } from '@/scopes/globals.js';
-import { mount as tpMount } from '@/scopes/components/theme-params/methods.js';
-import { throwCssVarsBound } from '@/scopes/toolkit/throwCssVarsBound.js';
-import { createWrapComplete } from '@/scopes/toolkit/createWrapComplete.js';
-import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
-import { createWrapBasic } from '@/scopes/toolkit/createWrapBasic.js';
+import { version, postEvent } from '@/globals.js';
+import { mount as mountThemeParams } from '@/scopes/components/theme-params/methods.js';
+import { createWrapComplete } from '@/scopes/wrappers/createWrapComplete.js';
+import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
+import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
 
 import {
-  headerColor,
-  backgroundColor,
-  isCssVarsBound,
+  _isCssVarsBound,
   state,
-  isMounted,
-  bottomBarColor,
   headerColorRGB,
   bottomBarColorRGB,
   backgroundColorRGB,
-  isActive,
+  _isActive,
+  _backgroundColor,
+  _bottomBarColor,
+  _headerColor,
 } from './signals.js';
 import type { GetCssVarNameFn, HeaderColor, State } from './types.js';
+import { createComputed } from '@/signals-registry.js';
+import { CSSVarsBoundError } from '@/errors.js';
+import {
+  camelToKebab,
+  createCbCollector,
+  getStorageValue,
+  setStorageValue,
+} from '@telegram-apps/toolkit';
+import { RGB } from '@telegram-apps/types';
+
+import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
+import { defineMountFn } from '@/scopes/defineMountFn.js';
+import { signalCancel } from '@/scopes/signalCancel.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
 
 type StorageValue = State;
 
@@ -58,13 +63,40 @@ const isSupportedSchema = {
 /**
  * True if the Mini App component is supported.
  */
-export const isSupported = computed(() => {
-  return isSupportedSchema.any.some(method => supports(method, $version()));
+export const isSupported = createComputed(() => {
+  return isSupportedSchema.any.some(method => supports(method, version()));
 });
+
+const onVisibilityChanged: EventListener<'visibility_changed'> = (data) => {
+  _isActive.set(data.is_visible);
+  saveState();
+};
+
+const [
+  mountFn,
+  tMountPromise,
+  tMountError,
+  tIsMounted,
+] = defineMountFn(
+  COMPONENT_NAME,
+  (options?: RequestOptionsNoCapture) => {
+    return mountThemeParams(options).then(() => {
+      return isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || undefined;
+    });
+  },
+  s => {
+    setBackgroundColor.ifAvailable(s ? s.backgroundColor : 'bg_color');
+    setBottomBarColor.ifAvailable(s ? s.bottomBarColor : 'bottom_bar_bg_color');
+    setHeaderColor.ifAvailable(s ? s.headerColor : 'bg_color');
+    _isActive.set(s ? s.isActive : true);
+
+    on(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
+  },
+);
 
 const wrapBasic = createWrapBasic(COMPONENT_NAME);
 const wrapSupported = createWrapSupported(COMPONENT_NAME, isSupportedSchema);
-const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, isSupportedSchema);
+const wrapComplete = createWrapComplete(COMPONENT_NAME, tIsMounted[0], isSupportedSchema);
 
 /**
  * Creates CSS variables connected with the mini app.
@@ -79,10 +111,10 @@ const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, isSupportedSc
  * @param getCSSVarName - function, returning complete CSS variable name for the specified
  * mini app key.
  * @returns Function to stop updating variables.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_VARS_ALREADY_BOUND
- * @throws {TypedError} ERR_NOT_MOUNTED
- * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {CSSVarsBoundError} CSS variables are already bound
+ * @throws {FunctionNotAvailableError} The parent component is not mounted
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @example Using no arguments
  * if (bindCssVars.isAvailable()) {
  *   bindCssVars();
@@ -95,7 +127,9 @@ const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, isSupportedSc
 export const bindCssVars = wrapComplete(
   'bindCssVars',
   (getCSSVarName?: GetCssVarNameFn): VoidFunction => {
-    isCssVarsBound() && throwCssVarsBound();
+    if (_isCssVarsBound()) {
+      throw new CSSVarsBoundError();
+    }
 
     const [addCleanup, cleanup] = createCbCollector();
 
@@ -121,10 +155,10 @@ export const bindCssVars = wrapComplete(
     bind(getCSSVarName('bottomBarColor'), bottomBarColorRGB);
     bind(getCSSVarName('headerColor'), headerColorRGB);
     addCleanup(() => {
-      isCssVarsBound.set(false);
+      _isCssVarsBound.set(false);
     });
 
-    isCssVarsBound.set(true);
+    _isCssVarsBound.set(true);
 
     return cleanup;
   },
@@ -133,8 +167,8 @@ export const bindCssVars = wrapComplete(
 /**
  * Closes the Mini App.
  * @param returnBack - should the client return to the previous activity.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @example
  * if (close.isAvailable()) {
  *   close();
@@ -143,11 +177,6 @@ export const bindCssVars = wrapComplete(
 export const close = wrapBasic('close', (returnBack?: boolean): void => {
   postEvent('web_app_close', { return_back: returnBack });
 });
-
-const onVisibilityChanged: EventListener<'visibility_changed'> = (data) => {
-  isActive.set(data.is_visible);
-  saveState();
-};
 
 /**
  * Mounts the component.
@@ -158,32 +187,18 @@ const onVisibilityChanged: EventListener<'visibility_changed'> = (data) => {
  * Internally, the function mounts the Theme Params component to work with correctly extracted
  * theme palette values.
  * @since Mini Apps v6.1
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (mount.isAvailable()) {
- *   mount();
+ *   await mount();
  * }
  */
-export const mount = wrapSupported(
-  'mount',
-  (): void => {
-    if (!isMounted()) {
-      const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-      tpMount();
-
-      setBackgroundColor.ifAvailable(s ? s.backgroundColor : 'bg_color');
-      setBottomBarColor.ifAvailable(s ? s.bottomBarColor : 'bottom_bar_bg_color');
-      setHeaderColor.ifAvailable(s ? s.headerColor : 'bg_color');
-      isActive.set(s ? s.isActive : true);
-
-      on(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
-
-      isMounted.set(true);
-    }
-  },
-);
+export const mount = wrapSupported('mount', mountFn);
+export const [, mountPromise, isMounting] = tMountPromise;
+export const [, mountError] = tMountError;
+export const [_isMounted, isMounted] = tIsMounted;
 
 /**
  * Informs the Telegram app that the Mini App is ready to be displayed.
@@ -196,8 +211,8 @@ export const mount = wrapSupported(
  *
  * If the method is not called, the placeholder will be hidden only when the
  * page was fully loaded.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @example
  * if (ready.isAvailable()) {
  *   ready();
@@ -214,10 +229,10 @@ function saveState() {
 /**
  * Updates the background color.
  * @since Mini Apps v6.1
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @throws {FunctionNotAvailableError} The parent component is not mounted
  * @example
  * if (setBackgroundColor.isAvailable()) {
  *   setBackgroundColor('bg_color');
@@ -226,9 +241,9 @@ function saveState() {
 export const setBackgroundColor = wrapComplete(
   'setBackgroundColor',
   (color: BackgroundColor): void => {
-    if (color !== backgroundColor()) {
+    if (color !== _backgroundColor()) {
       postEvent(SET_BG_COLOR_METHOD, { color });
-      backgroundColor.set(color);
+      _backgroundColor.set(color);
       saveState();
     }
   },
@@ -238,10 +253,10 @@ export const setBackgroundColor = wrapComplete(
 /**
  * Updates the bottom bar background color.
  * @since Mini Apps v7.10
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @throws {FunctionNotAvailableError} The parent component is not mounted
  * @example
  * if (setBottomBarColor.isAvailable()) {
  *   setBottomBarColor('ff11a3');
@@ -250,9 +265,9 @@ export const setBackgroundColor = wrapComplete(
 export const setBottomBarColor = wrapComplete(
   'setBottomBarColor',
   (color: BottomBarColor) => {
-    if (color !== bottomBarColor()) {
+    if (color !== _bottomBarColor()) {
       postEvent(SET_BOTTOM_BAR_COLOR_METHOD, { color });
-      bottomBarColor.set(color);
+      _bottomBarColor.set(color);
       saveState();
     }
   },
@@ -262,10 +277,10 @@ export const setBottomBarColor = wrapComplete(
 /**
  * Updates the header color.
  * @since Mini Apps v6.1
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @throws {FunctionNotAvailableError} The parent component is not mounted
  * @example Using known color key
  * if (setHeaderColor.isAvailable()) {
  *   setHeaderColor('bg_color');
@@ -278,9 +293,9 @@ export const setBottomBarColor = wrapComplete(
 export const setHeaderColor = wrapComplete(
   'setHeaderColor',
   (color: HeaderColor): void => {
-    if (color !== headerColor()) {
+    if (color !== _headerColor()) {
       postEvent(SET_HEADER_COLOR_METHOD, isRGB(color) ? { color } : { color_key: color });
-      headerColor.set(color);
+      _headerColor.set(color);
       saveState();
     }
   },
@@ -294,6 +309,7 @@ export const setHeaderColor = wrapComplete(
  * Unmounts the component, removing the listener, saving the component state in the local storage.
  */
 export function unmount(): void {
+  signalCancel(mountPromise);
   off(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
-  isMounted.set(false);
+  _isMounted.set(false);
 }

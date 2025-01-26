@@ -13,6 +13,7 @@ import type {
   EmojiStatusFailedError,
   HomeScreenStatus,
 } from './misc.js';
+import type { If, IsNever } from '@telegram-apps/toolkit';
 
 /**
  * Map where key is known event name, and value is its listener.
@@ -435,3 +436,11 @@ export type EventName = keyof Events;
  * Payload of the specified Mini Apps event.
  */
 export type EventPayload<E extends EventName> = Events[E];
+
+export type EventWithoutPayload = {
+  [E in EventName]: If<IsNever<EventPayload<E>>, E, never>
+}[EventName];
+
+export type EventWithPayload = {
+  [E in EventName]: undefined extends EventPayload<E> ? never : E
+}[EventName];

@@ -25,7 +25,7 @@ export interface SubOptions {
    */
   once?: boolean;
   /**
-   * Was this listener added by other signal.
+   * True if the subscriber was added by another signal.
    */
   signal?: boolean;
 }

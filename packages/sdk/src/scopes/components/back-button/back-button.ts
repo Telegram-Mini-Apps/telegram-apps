@@ -1,17 +1,12 @@
-import {
-  off,
-  on,
-  getStorageValue,
-  setStorageValue,
-  type EventListener,
-} from '@telegram-apps/bridge';
+import { off, on, type EventListener } from '@telegram-apps/bridge';
+import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 import { isPageReload } from '@telegram-apps/navigation';
-import { signal } from '@telegram-apps/signals';
 
-import { postEvent } from '@/scopes/globals.js';
-import { createIsSupported } from '@/scopes/toolkit/createIsSupported.js';
-import { createWrapComplete } from '@/scopes/toolkit/createWrapComplete.js';
-import { createWrapSupported } from '@/scopes/toolkit/createWrapSupported.js';
+import { createSignalsTuple } from '@/signals-registry.js';
+import { postEvent } from '@/globals.js';
+import { createIsSupported } from '@/scopes/createIsSupported.js';
+import { createWrapComplete } from '@/scopes/wrappers/createWrapComplete.js';
+import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
 
 type StorageValue = boolean;
 
@@ -22,12 +17,12 @@ const COMPONENT_NAME = 'backButton';
 /**
  * Signal indicating if the Back Button is currently visible.
  */
-export const isVisible = signal(false);
+export const [_isVisible, isVisible] = createSignalsTuple(false);
 
 /**
  * Signal indicating if the Back Button is currently mounted.
  */
-export const isMounted = signal(false);
+export const [_isMounted, isMounted] = createSignalsTuple(false);
 
 /**
  * Signal indicating if the Back Button is supported.
@@ -39,10 +34,11 @@ const wrapSupported = createWrapSupported(COMPONENT_NAME, SETUP_METHOD_NAME);
 
 /**
  * Hides the Back Button.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
+ * @param
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @throws {FunctionNotAvailableError} The parent component is not mounted
  * @since Mini Apps v6.1
  * @example
  * if (hide.isAvailable()) {
@@ -55,9 +51,10 @@ export const hide = wrapComplete('hide', (): void => {
 
 /**
  * Mounts the Back Button restoring its state.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @param
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @since Mini Apps v6.1
  * @example
  * if (mount.isAvailable()) {
@@ -67,7 +64,7 @@ export const hide = wrapComplete('hide', (): void => {
 export const mount = wrapSupported('mount', (): void => {
   if (!isMounted()) {
     setVisibility(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false);
-    isMounted.set(true);
+    _isMounted.set(true);
   }
 });
 
@@ -75,7 +72,7 @@ function setVisibility(value: boolean): void {
   if (value !== isVisible()) {
     postEvent(SETUP_METHOD_NAME, { is_visible: value });
     setStorageValue<StorageValue>(COMPONENT_NAME, value);
-    isVisible.set(value);
+    _isVisible.set(value);
   }
 }
 
@@ -83,9 +80,9 @@ function setVisibility(value: boolean): void {
  * Adds a new Back Button click listener.
  * @param fn - event listener.
  * @returns A function to remove bound listener.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @since Mini Apps v6.1
  * @example
  * if (onClick.isAvailable()) {
@@ -103,9 +100,9 @@ export const onClick = wrapSupported(
 /**
  * Removes the Back Button click listener.
  * @param fn - an event listener.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @since Mini Apps v6.1
  * @example
  * if (offClick.isAvailable()) {
@@ -125,10 +122,10 @@ export const offClick = wrapSupported(
 
 /**
  * Shows the Back Button.
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
- * @throws {TypedError} ERR_NOT_MOUNTED
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @throws {FunctionNotAvailableError} The parent component is not mounted
  * @since Mini Apps v6.1
  * @example
  * if (show.isAvailable()) {
@@ -147,5 +144,5 @@ export const show = wrapComplete('show', (): void => {
  * @see onClick
  */
 export function unmount(): void {
-  isMounted.set(false);
+  _isMounted.set(false);
 }

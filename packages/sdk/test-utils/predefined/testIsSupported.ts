@@ -1,24 +1,26 @@
 import { expect, it } from 'vitest';
 
-import { $version } from '@/scopes/globals.js';
+import { setVersion } from '@test-utils/utils.js';
 
 export function testIsSupported(
   fnOrObj: (() => boolean) | {
     isSupported(): boolean;
   },
-  minVersion: string,
+  minVersion?: string,
 ) {
-  it(`should return false if version is less than ${minVersion}`, () => {
-    const fn = typeof fnOrObj === 'object'
-      ? fnOrObj.isSupported
-      : fnOrObj;
-    const [a, b = 0] = minVersion.split('.').map(Number);
-    const prevVersion = `${b === 0 ? a - 1 : a}.${b === 0 ? 99 : b - 1}`;
+  if (minVersion) {
+    it(`should return false if version is less than ${minVersion}`, () => {
+      const fn = typeof fnOrObj === 'object'
+        ? fnOrObj.isSupported
+        : fnOrObj;
+      const [a, b = 0] = minVersion.split('.').map(Number);
+      const prevVersion = `${b === 0 ? a - 1 : a}.${b === 0 ? 99 : b - 1}`;
 
-    $version.set(prevVersion);
-    expect(fn()).toBe(false);
+      setVersion(prevVersion);
+      expect(fn()).toBe(false);
 
-    $version.set(minVersion);
-    expect(fn()).toBe(true);
-  });
+      setVersion(minVersion);
+      expect(fn()).toBe(true);
+    });
+  }
 }

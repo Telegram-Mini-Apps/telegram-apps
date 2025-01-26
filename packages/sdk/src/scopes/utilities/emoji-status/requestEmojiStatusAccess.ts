@@ -1,36 +1,26 @@
-import { computed, signal } from '@telegram-apps/signals';
-import { type EmojiStatusAccessRequestedStatus, TypedError } from '@telegram-apps/bridge';
-
-import { ERR_ALREADY_REQUESTING } from '@/errors.js';
-import { request } from '@/scopes/globals.js';
-import { wrapSafe } from '@/scopes/toolkit/wrapSafe.js';
-import { signalifyAsyncFn } from '@/scopes/signalifyAsyncFn.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
+import { request } from '@/globals.js';
+import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
+import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
 
 const METHOD = 'web_app_request_emoji_status_access';
 
-/**
- * Signal containing the emoji status access request promise.
- */
-export const requestEmojiStatusAccessPromise = signal<Promise<EmojiStatusAccessRequestedStatus> | undefined>();
-
-/**
- * Signal containing the last emoji status access request error.
- */
-export const requestEmojiStatusAccessError = signal<Error | undefined>();
-
-/**
- * Signal indicating if the emoji status access is currently being requested.
- */
-export const isRequestingEmojiStatusAccess = computed(() => !!requestEmojiStatusAccessPromise());
+const [
+  fn,
+  tPromise,
+  tError,
+] = defineNonConcurrentFn((options?: RequestOptionsNoCapture) => {
+  return request(METHOD, 'emoji_status_access_requested', options).then(d => d.status);
+}, 'Emoji status access request is already in progress');
 
 /**
  * Shows a native popup requesting permission for the bot to manage user's emoji status.
  * @param options - additional options.
  * @since Mini Apps v8.0
- * @throws {TypedError} ERR_ALREADY_REQUESTING
- * @throws {TypedError} ERR_UNKNOWN_ENV
- * @throws {TypedError} ERR_NOT_INITIALIZED
- * @throws {TypedError} ERR_NOT_SUPPORTED
+ * @throws {ConcurrentCallError} Emoji status access request is already in progress
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
  * @example
  * if (requestEmojiStatusAccess.isAvailable()) {
  *   const status = await requestEmojiStatusAccess();
@@ -38,18 +28,8 @@ export const isRequestingEmojiStatusAccess = computed(() => !!requestEmojiStatus
  */
 export const requestEmojiStatusAccess = wrapSafe(
   'requestEmojiStatusAccess',
-  signalifyAsyncFn(
-    (): Promise<EmojiStatusAccessRequestedStatus> => {
-      return request(METHOD, 'emoji_status_access_requested')
-        .then(r => r.status);
-    },
-    () => new TypedError(
-      ERR_ALREADY_REQUESTING,
-      'Emoji status access request is currently in progress',
-    ),
-    requestEmojiStatusAccessPromise,
-    requestEmojiStatusAccessError,
-    false,
-  ),
+  fn,
   { isSupported: METHOD },
 );
+export const [, requestEmojiStatusAccessPromise, isRequestingEmojiStatusAccess] = tPromise;
+export const [, requestEmojiStatusAccessError] = tError;

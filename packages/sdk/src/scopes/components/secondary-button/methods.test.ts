@@ -4,12 +4,14 @@ import {
   mockPageReload,
   mockSessionStorageSetItem,
 } from 'test-utils';
-import { emitMiniAppsEvent } from '@telegram-apps/bridge';
+import { emitEvent } from '@telegram-apps/bridge';
 
-import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/reset/reset.js';
-import { setMaxVersion } from '@test-utils/setMaxVersion.js';
-import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import {
+  mockPostEvent,
+  resetPackageState,
+  setMaxVersion,
+  mockMiniAppsEnv,
+} from '@test-utils/utils.js';
 
 import {
   mount,
@@ -24,6 +26,7 @@ import {
   textColor,
   isEnabled,
   isMounted,
+  _isMounted,
   isVisible,
   state,
   internalState,
@@ -44,11 +47,11 @@ beforeEach(() => {
 function setAvailable() {
   setMaxVersion();
   mockMiniAppsEnv();
-  isMounted.set(true);
+  _isMounted.set(true);
 }
 
 describe.each([
-  ['setParams', setParams, { isMounted, call: () => setParams({}) }],
+  ['setParams', setParams, { isMounted: _isMounted, call: () => setParams({}) }],
   ['mount', mount, {}],
   ['onClick', onClick, {}],
   ['offClick', offClick, {}],
@@ -156,7 +159,7 @@ describe('onClick', () => {
   it('should add click listener', () => {
     const fn = vi.fn();
     onClick(fn);
-    emitMiniAppsEvent('secondary_button_pressed', {});
+    emitEvent('secondary_button_pressed');
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
@@ -164,7 +167,7 @@ describe('onClick', () => {
     const fn = vi.fn();
     const off = onClick(fn);
     off();
-    emitMiniAppsEvent('secondary_button_pressed', {});
+    emitEvent('secondary_button_pressed');
     expect(fn).toHaveBeenCalledTimes(0);
   });
 });
@@ -176,7 +179,7 @@ describe('offClick', () => {
     const fn = vi.fn();
     onClick(fn);
     offClick(fn);
-    emitMiniAppsEvent('secondary_button_pressed', {});
+    emitEvent('secondary_button_pressed');
     expect(fn).toHaveBeenCalledTimes(0);
   });
 });

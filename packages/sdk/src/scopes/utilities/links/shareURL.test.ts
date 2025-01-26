@@ -1,9 +1,11 @@
 import { describe, vi, expect, it, beforeEach } from 'vitest';
 
-import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/reset/reset.js';
-import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
-import { setMaxVersion } from '@test-utils/setMaxVersion.js';
+import {
+  mockPostEvent,
+  resetPackageState,
+  mockMiniAppsEnv,
+  setMaxVersion,
+} from '@test-utils/utils.js';
 import { testSafety } from '@test-utils/predefined/testSafety.js';
 
 import { shareURL } from './shareURL.js';

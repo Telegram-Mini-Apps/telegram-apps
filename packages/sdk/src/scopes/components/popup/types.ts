@@ -1,10 +1,10 @@
-import type { ExecuteWithPostEvent } from '@telegram-apps/bridge';
+import { RequestOptionsNoCapture } from '@/types.js';
 
 /**
  * This object describes the native popup.
  * @see https://core.telegram.org/bots/webapps#popupparams
  */
-export interface OpenOptions extends ExecuteWithPostEvent {
+export interface OpenOptions extends RequestOptionsNoCapture {
   /**
    * The text to be displayed in the popup title, 0-64 characters.
    * @default ""

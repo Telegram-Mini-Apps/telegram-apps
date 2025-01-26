@@ -1,12 +1,12 @@
 import {
-  CancelablePromise,
   createCbCollector,
   type If,
   type IsNever,
 } from '@telegram-apps/toolkit';
+import { AbortablePromise, type PromiseOptions } from 'better-promises';
 
-import { on } from '@/events/listening/on.js';
-import { postEvent } from '@/methods/postEvent.js';
+import { on } from '@/events/emitter.js';
+import { postEvent, PostEventFn } from '@/methods/postEvent.js';
 import type {
   MethodName,
   MethodNameWithOptionalParams,
@@ -15,7 +15,6 @@ import type {
   MethodParams,
 } from '@/methods/types/index.js';
 import type { EventName, EventPayload } from '@/events/types/events.js';
-import type { ExecuteWithOptions } from '@/types.js';
 
 type AnyEventName = EventName | EventName[];
 
@@ -45,12 +44,17 @@ export type RequestCaptureFn<E extends AnyEventName> = E extends EventName[]
     ? RequestCaptureEventFn<E>
     : never;
 
-export interface RequestBasicOptions<E extends AnyEventName> extends ExecuteWithOptions {
+export interface RequestOptions<E extends AnyEventName>
+  extends Omit<PromiseOptions, 'rejectOnAbort'> {
   /**
    * Should return true if this event should be captured.
    * The first compatible request will be captured if this property is omitted.
    */
   capture?: RequestCaptureFn<E>;
+  /**
+   * Custom function to call mini apps methods.
+   */
+  postEvent?: PostEventFn;
 }
 
 export type RequestResult<E extends AnyEventName> =
@@ -75,8 +79,8 @@ export type RequestFn = typeof request;
 export function request<M extends MethodNameWithRequiredParams, E extends AnyEventName>(
   method: M,
   eventOrEvents: E,
-  options: RequestBasicOptions<E> & { params: MethodParams<M> },
-): CancelablePromise<RequestResult<E>>;
+  options: RequestOptions<E> & { params: MethodParams<M> },
+): AbortablePromise<RequestResult<E>>;
 
 /**
  * Performs a request waiting for specified events to occur.
@@ -89,8 +93,8 @@ export function request<M extends MethodNameWithRequiredParams, E extends AnyEve
 export function request<M extends MethodNameWithOptionalParams, E extends AnyEventName>(
   method: M,
   eventOrEvents: E,
-  options?: RequestBasicOptions<E> & { params?: MethodParams<M> },
-): CancelablePromise<RequestResult<E>>;
+  options?: RequestOptions<E> & { params?: MethodParams<M> },
+): AbortablePromise<RequestResult<E>>;
 
 /**
  * Performs a request waiting for specified events to occur.
@@ -103,19 +107,19 @@ export function request<M extends MethodNameWithOptionalParams, E extends AnyEve
 export function request<M extends MethodNameWithoutParams, E extends AnyEventName>(
   method: M,
   eventOrEvents: E,
-  options?: RequestBasicOptions<E>,
-): CancelablePromise<RequestResult<E>>;
+  options?: RequestOptions<E>,
+): AbortablePromise<RequestResult<E>>;
 
 export function request<M extends MethodName, E extends AnyEventName>(
   method: M,
   eventOrEvents: E,
-  options?: RequestBasicOptions<E> & { params?: MethodParams<M> },
-): CancelablePromise<RequestResult<E>> {
+  options?: RequestOptions<E> & { params?: MethodParams<M> },
+): AbortablePromise<RequestResult<E>> {
   options ||= {};
   const { capture } = options;
   const [addCleanup, cleanup] = createCbCollector();
 
-  return new CancelablePromise<RequestResult<E>>((resolve) => {
+  return new AbortablePromise<RequestResult<E>>((resolve) => {
     // We need to iterate over all tracked events and create their event listeners.
     ((Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents])).forEach(event => {
       // Each event listener waits for the event to occur.

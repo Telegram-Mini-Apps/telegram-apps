@@ -1,4 +1,4 @@
-import { CancelablePromise } from '@telegram-apps/toolkit';
+import { AbortablePromise } from 'better-promises';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createWindow, mockSessionStorageGetItem, mockWindow } from 'test-utils';
 
@@ -15,26 +15,26 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('async', () => {
+describe('complete', () => {
   it('should return true if current window contains TelegramWebviewProxy property', async () => {
     createWindow({
       TelegramWebviewProxy: {
         postEvent: 123,
       },
     } as any);
-    await expect(isTMA()).resolves.toBe(true);
+    await expect(isTMA('complete')).resolves.toBe(true);
   });
 
   it('should return promise with true value resolved, if requesting theme parameters was successful', async () => {
     createWindow();
-    request.mockImplementationOnce(() => CancelablePromise.resolve({}));
-    await expect(isTMA()).resolves.toBe(true);
+    request.mockImplementationOnce(() => AbortablePromise.resolve({}));
+    await expect(isTMA('complete')).resolves.toBe(true);
   });
 
   it('should return promise with false value resolved, if requesting theme parameters was unsuccessful', async () => {
     createWindow();
-    request.mockImplementationOnce(() => CancelablePromise.reject(new Error('Timed out.')));
-    await expect(isTMA()).resolves.toBe(false);
+    request.mockImplementationOnce(() => AbortablePromise.reject(new Error('Timed out.')));
+    await expect(isTMA('complete')).resolves.toBe(false);
   });
 });
 
@@ -55,10 +55,10 @@ describe('sync', () => {
         return '/abc?tgWebAppStartParam=START#tgWebAppPlatform=tdesktop&tgWebAppVersion=7.0&tgWebAppThemeParams=%7B%7D';
       });
 
-    expect(isTMA('simple')).toBe(true);
+    expect(isTMA()).toBe(true);
   });
 
   it('should return true if env doesnt contain launch params', () => {
-    expect(isTMA('simple')).toBe(false);
+    expect(isTMA()).toBe(false);
   });
 });

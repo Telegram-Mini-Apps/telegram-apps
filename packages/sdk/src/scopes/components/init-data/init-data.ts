@@ -1,43 +1,44 @@
-import { computed, type Computed, signal } from '@telegram-apps/signals';
-import { type InitData, retrieveLaunchParams } from '@telegram-apps/bridge';
+import type { Computed } from '@telegram-apps/signals';
+import { retrieveLaunchParams } from '@telegram-apps/bridge';
+import type { InitData } from '@telegram-apps/types';
 
-/* USUAL */
+import { createComputed, createSignalsTuple } from '@/signals-registry.js';
+import { serializeInitDataQuery } from '@telegram-apps/transformers';
 
 /**
  * Complete component state.
  */
-export const state = signal<InitData | undefined>(undefined);
-
-/* COMPUTED */
+export const [_state, state] =
+  createSignalsTuple<InitData | undefined>(undefined);
 
 function fromState<K extends keyof InitData>(key: K): Computed<InitData[K] | undefined> {
-  return computed(() => {
+  return createComputed(() => {
     const s = state();
     return s ? s[key] : undefined;
   });
 }
 
 /**
- * @see InitData.authDate
+ * @see InitData.auth_date
  */
-export const authDate = fromState('authDate');
+export const authDate = fromState('auth_date');
 
 /**
- * @see InitData.canSendAfter
+ * @see InitData.can_send_after
  */
-export const canSendAfter = fromState('canSendAfter');
+export const canSendAfter = fromState('can_send_after');
 
 /**
  * Date after which it is allowed to call
  * the [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) method.
  */
-export const canSendAfterDate = computed(() => {
+export const canSendAfterDate = createComputed(() => {
   const authDateValue = authDate();
   const canSendAfterValue = canSendAfter();
 
   return canSendAfterValue && authDateValue
     ? new Date(authDateValue.getTime() + canSendAfterValue * 1000)
-    : undefined
+    : undefined;
 });
 
 /**
@@ -46,14 +47,14 @@ export const canSendAfterDate = computed(() => {
 export const chat = fromState('chat');
 
 /**
- * @see InitData.chatType
+ * @see InitData.chat_type
  */
-export const chatType = fromState('chatType');
+export const chatType = fromState('chat_type');
 
 /**
- * @see InitData.chatInstance
+ * @see InitData.chat_instance
  */
-export const chatInstance = fromState('chatInstance');
+export const chatInstance = fromState('chat_instance');
 
 /**
  * @see InitData.hash
@@ -61,14 +62,14 @@ export const chatInstance = fromState('chatInstance');
 export const hash = fromState('hash');
 
 /**
- * @see InitData.queryId
+ * @see InitData.query_id
  */
-export const queryId = fromState('queryId');
+export const queryId = fromState('query_id');
 
 /**
  * Raw representation of init data.
  */
-export const raw = signal<string | undefined>();
+export const [_raw, raw] = createSignalsTuple<string | undefined>();
 
 /**
  * @see InitData.receiver
@@ -80,14 +81,15 @@ export const receiver = fromState('receiver');
  */
 export function restore(): void {
   const lp = retrieveLaunchParams();
-  state.set(lp.initData);
-  raw.set(lp.initDataRaw);
+  const initData = lp.tgWebAppData;
+  _state.set(initData);
+  initData && _raw.set(serializeInitDataQuery(initData));
 }
 
 /**
- * @see InitData.startParam
+ * @see InitData.start_param
  */
-export const startParam = fromState('startParam');
+export const startParam = fromState('start_param');
 
 /**
  * @see InitData.user

@@ -1,5 +1,5 @@
 import type { InitData } from './init-data.js';
-import type { Platform } from './common.js';
+import type { Platform, Version } from './common.js';
 import type { ThemeParams } from './theme-params.js';
 
 /**
@@ -8,44 +8,39 @@ import type { ThemeParams } from './theme-params.js';
  */
 export interface LaunchParams {
   /**
-   * True if Mini App is currently launched in inline mode.
+   * True if Mini App is currently launched in the inline mode.
    */
-  botInline?: boolean;
+  tgWebAppBotInline?: boolean;
+  /**
+   * Current launch init data.
+   */
+  tgWebAppData?: InitData;
   /**
    * TODO: This property is not documented by the Telegram team.
    */
-  defaultColors?: ThemeParams;
+  tgWebAppDefaultColors?: ThemeParams;
   /**
-   * Is fullscreen mode enabled.
+   * True if the fullscreen mode is enabled.
    */
-  fullscreen?: boolean;
+  tgWebAppFullscreen?: boolean;
   /**
-   * Current launch init data. Can be missing in case, application was launched
-   * via KeyboardButton.
+   * Unique Telegram client platform identifier.
    */
-  initData?: InitData;
+  tgWebAppPlatform: Platform;
   /**
-   * The same as initData but in initial, raw format.
+   * True if the application is required to show the Settings Button.
    */
-  initDataRaw?: string;
+  tgWebAppShowSettings?: boolean;
   /**
-   * Current Telegram application identifier.
+   * Start parameter passed in the application direct link.
    */
-  platform: Platform;
-  /**
-   * True if application is required to show the Settings Button.
-   */
-  showSettings?: boolean;
-  /**
-   * Start parameter passed in the application link.
-   */
-  startParam?: string;
+  tgWebAppStartParam?: string;
   /**
    * Mini App palette settings.
    */
-  themeParams: ThemeParams;
+  tgWebAppThemeParams: ThemeParams;
   /**
-   * Current Mini Apps version.
+   * Currently supported Mini Apps' version.
    */
-  version: string;
+  tgWebAppVersion: Version;
 }

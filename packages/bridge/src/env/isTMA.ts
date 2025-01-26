@@ -1,4 +1,4 @@
-import { CancelablePromise, type AsyncOptions } from '@telegram-apps/toolkit';
+import { AbortablePromise, type PromiseOptions } from 'better-promises';
 
 import { request } from '@/utils/request.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
@@ -12,7 +12,7 @@ import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
  *
  * In case you need stricter checks, use async override of this function.
  */
-export function isTMA(type: 'simple'): boolean;
+export function isTMA(): boolean;
 
 /**
  * Returns promise with true if the current environment is Telegram Mini Apps.
@@ -23,10 +23,13 @@ export function isTMA(type: 'simple'): boolean;
  *
  * In case you need less strict checks, use sync override of this function.
  */
-export function isTMA(options?: AsyncOptions): CancelablePromise<boolean>
+export function isTMA(type: 'complete', options?: PromiseOptions): AbortablePromise<boolean>
 
-export function isTMA(optionsOrType?: AsyncOptions | 'simple'): boolean | CancelablePromise<boolean> {
-  if (optionsOrType === 'simple') {
+export function isTMA(
+  type?: 'complete',
+  options?: PromiseOptions,
+): boolean | AbortablePromise<boolean> {
+  if (!type) {
     try {
       retrieveLaunchParams();
       return true;
@@ -35,15 +38,15 @@ export function isTMA(optionsOrType?: AsyncOptions | 'simple'): boolean | Cancel
     }
   }
 
-  return CancelablePromise.withFn(async () => {
+  return AbortablePromise.fn(async context => {
     if (hasWebviewProxy(window)) {
       return true;
     }
     try {
-      await request('web_app_request_theme', 'theme_changed', { timeout: 100 });
+      await request('web_app_request_theme', 'theme_changed', context);
       return true;
     } catch {
       return false;
     }
-  }, optionsOrType);
+  }, options || { timeout: 100 });
 }

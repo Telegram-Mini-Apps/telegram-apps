@@ -1,25 +1,21 @@
-import type { ThemeParams } from '@telegram-apps/bridge';
-import { computed, type Computed, signal } from '@telegram-apps/signals';
+import type { ThemeParams } from '@telegram-apps/types';
+import type { Computed } from '@telegram-apps/signals';
 
 import { isColorDark } from '@/utils/isColorDark.js';
-
-/**
- * True if the component is currently mounted.
- */
-export const isMounted = signal(false);
+import { createComputed, createSignalsTuple } from '@/signals-registry.js';
 
 /**
  * True if CSS variables are currently bound.
  */
-export const isCssVarsBound = signal(false);
+export const [_isCssVarsBound, isCssVarsBound] = createSignalsTuple(false);
 
 /**
  * Complete component state.
  */
-export const state = signal<ThemeParams>({});
+export const [_state, state] = createSignalsTuple<ThemeParams>({});
 
 function fromState<K extends keyof ThemeParams>(key: K): Computed<ThemeParams[K] | undefined> {
-  return computed(() => state()[key]);
+  return createComputed(() => state()[key]);
 }
 
 /**
@@ -51,7 +47,7 @@ export const hintColor = fromState('hintColor');
  * @returns True if the current color scheme is recognized as dark.
  * This value is calculated based on the current theme's background color.
  */
-export const isDark = computed(() => {
+export const isDark = createComputed(() => {
   const { bgColor } = state();
   return !bgColor || isColorDark(bgColor);
 });

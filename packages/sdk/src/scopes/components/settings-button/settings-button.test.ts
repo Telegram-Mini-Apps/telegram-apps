@@ -4,12 +4,14 @@ import {
   mockPageReload,
   mockSessionStorageSetItem,
 } from 'test-utils';
-import { emitMiniAppsEvent } from '@telegram-apps/bridge';
+import { emitEvent } from '@telegram-apps/bridge';
 
-import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/reset/reset.js';
-import { setMaxVersion } from '@test-utils/setMaxVersion.js';
-import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import {
+  mockPostEvent,
+  resetPackageState,
+  setMaxVersion,
+  mockMiniAppsEnv,
+} from '@test-utils/utils.js';
 import { testSafety } from '@test-utils/predefined/testSafety.js';
 import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
 
@@ -22,7 +24,9 @@ import {
   offClick,
   isSupported,
   isVisible,
+  _isVisible,
   isMounted,
+  _isMounted,
 } from './settings-button.js';
 
 beforeEach(() => {
@@ -34,12 +38,12 @@ beforeEach(() => {
 function setAvailable() {
   setMaxVersion();
   mockMiniAppsEnv();
-  isMounted.set(true);
+  _isMounted.set(true);
 }
 
 describe.each([
-  ['hide', hide, isMounted],
-  ['show', show, isMounted],
+  ['hide', hide, _isMounted],
+  ['show', show, _isMounted],
   ['mount', mount, undefined],
   ['onClick', onClick, undefined],
   ['offClick', offClick, undefined],
@@ -58,14 +62,14 @@ describe.each([
   beforeEach(setAvailable);
 
   it(`should set isVisible = ${value}`, () => {
-    isVisible.set(!value);
+    _isVisible.set(!value);
     expect(isVisible()).toBe(!value);
     fn();
     expect(isVisible()).toBe(value);
   });
 
   it(`should call postEvent with "web_app_setup_settings_button" and { is_visible: ${value} }`, () => {
-    isVisible.set(!value);
+    _isVisible.set(!value);
     const spy = mockPostEvent();
     fn();
     fn();
@@ -74,7 +78,7 @@ describe.each([
   });
 
   it(`should call sessionStorage.setItem with "tapps/settingsButton" and "${value}" if value changed`, () => {
-    isVisible.set(value);
+    _isVisible.set(value);
     const spy = mockSessionStorageSetItem();
     fn();
     // Should call retrieveLaunchParams.
@@ -82,7 +86,7 @@ describe.each([
 
     spy.mockClear();
 
-    isVisible.set(!value);
+    _isVisible.set(!value);
     fn();
     // Should call retrieveLaunchParams + save component state.
     expect(spy).toHaveBeenCalledTimes(2);
@@ -142,7 +146,7 @@ describe('onClick', () => {
   it('should add click listener', () => {
     const fn = vi.fn();
     onClick(fn);
-    emitMiniAppsEvent('settings_button_pressed', {});
+    emitEvent('settings_button_pressed');
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
@@ -150,7 +154,7 @@ describe('onClick', () => {
     const fn = vi.fn();
     const off = onClick(fn);
     off();
-    emitMiniAppsEvent('settings_button_pressed', {});
+    emitEvent('settings_button_pressed');
     expect(fn).toHaveBeenCalledTimes(0);
   });
 });
@@ -162,7 +166,7 @@ describe('offClick', () => {
     const fn = vi.fn();
     onClick(fn);
     offClick(fn);
-    emitMiniAppsEvent('settings_button_pressed', {});
+    emitEvent('settings_button_pressed');
     expect(fn).toHaveBeenCalledTimes(0);
   });
 });

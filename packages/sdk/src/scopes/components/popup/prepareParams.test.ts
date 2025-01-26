@@ -1,8 +1,7 @@
 import { expect, it, describe } from 'vitest';
-import { TypedError } from '@telegram-apps/bridge';
 
 import { prepareParams } from './prepareParams.js';
-import { ERR_POPUP_INVALID_PARAMS } from '@/errors.js';
+import { InvalidArgumentsError } from '@/errors.js';
 
 /**
  * Creates test text.
@@ -12,8 +11,8 @@ function text(length: number): string {
   return new Array(length).fill('a').join('');
 }
 
-function createError(message: string): TypedError<'ERR_POPUP_INVALID_PARAMS'> {
-  return new TypedError(ERR_POPUP_INVALID_PARAMS, message);
+function createError(message: string) {
+  return new InvalidArgumentsError(message);
 }
 
 describe('title', () => {

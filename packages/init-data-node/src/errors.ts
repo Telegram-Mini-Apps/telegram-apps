@@ -1,5 +1,36 @@
-export const ERR_AUTH_DATE_INVALID = 'ERR_AUTH_DATE_INVALID';
-export const ERR_HASH_INVALID = 'ERR_HASH_INVALID';
-export const ERR_SIGNATURE_MISSING = 'ERR_SIGNATURE_MISSING';
-export const ERR_EXPIRED = 'ERR_EXPIRED';
-export const ERR_SIGN_INVALID = 'ERR_SIGN_INVALID';
+import { errorClass, errorClassWithData } from 'error-kid';
+
+export const [
+  AuthDateInvalidError,
+  isAuthDateInvalidError,
+] = errorClassWithData<{ value: string | undefined }, [value?: string]>(
+  'AuthDateInvalidError',
+  value => ({ value }),
+  value => [`"auth_date" is invalid: ${value || 'value is missing'}`],
+);
+
+export const [
+  SignatureInvalidError,
+  isSignatureInvalidError,
+] = errorClass('SignatureInvalidError');
+
+export const [
+  SignatureMissingError,
+  isSignatureMissingError,
+] = errorClass<[thirdParty: boolean]>('SignatureMissingError', (thirdParty) => [
+  `"${thirdParty ? 'signature' : 'hash'}" parameter is missing`,
+]);
+
+export const [
+  ExpiredError,
+  isExpiredError,
+] = errorClassWithData<
+  { issuedAt: Date; expiresAt: Date },
+  [issuedAt: Date, expiresAt: Date, now: Date]
+>(
+  'ExpiredError',
+  (issuedAt, expiresAt) => ({ issuedAt, expiresAt }),
+  (issuedAt, expiresAt, now) => [
+    `Init data expired. Issued at ${issuedAt.toISOString()}, expires at ${expiresAt.toISOString()}, now is ${now.toISOString()}`,
+  ],
+);

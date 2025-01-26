@@ -1,2 +1,20 @@
-export * from './methods.js';
-export * from './signals.js';
+export {
+  isMounted,
+  mountPromise,
+  mountError,
+  authPromise,
+  authError,
+  isMounting,
+  requestAccessPromise,
+  mount,
+  unmount,
+  isSupported,
+  openSettings,
+  requestAccess,
+  isRequestingAccess,
+  isAuthenticating,
+  authenticate,
+  updateToken,
+  requestAccessError,
+} from './methods.js';
+export { state, isAvailable } from './signals.js';

@@ -5,15 +5,19 @@ import {
   mockSessionStorageSetItem,
 } from 'test-utils';
 
-import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/reset/reset.js';
-import { setMaxVersion } from '@test-utils/setMaxVersion.js';
-import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import {
+  mockPostEvent,
+  resetPackageState,
+  setMaxVersion,
+  mockMiniAppsEnv,
+} from '@test-utils/utils.js';
 import { testSafety } from '@test-utils/predefined/testSafety.js';
 import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
 
 import {
   isMounted,
+  _isMounted,
+  _isVerticalEnabled,
   mount,
   unmount,
   isSupported,
@@ -31,12 +35,12 @@ beforeEach(() => {
 function setAvailable() {
   setMaxVersion();
   mockMiniAppsEnv();
-  isMounted.set(true);
+  _isMounted.set(true);
 }
 
 describe.each([
-  ['disableVertical', disableVertical, isMounted],
-  ['enableVertical', enableVertical, isMounted],
+  ['disableVertical', disableVertical, _isMounted],
+  ['enableVertical', enableVertical, _isMounted],
   ['mount', mount, undefined],
 ] as const)('%s', (name, fn, isMounted) => {
   testSafety(fn, name, {
@@ -53,14 +57,14 @@ describe.each([
   beforeEach(setAvailable);
 
   it(`should set isConfirmationEnabled = ${value}`, () => {
-    isVerticalEnabled.set(!value);
+    _isVerticalEnabled.set(!value);
     expect(isVerticalEnabled()).toBe(!value);
     fn();
     expect(isVerticalEnabled()).toBe(value);
   });
 
   it(`should call postEvent with "web_app_setup_swipe_behavior" and { allow_vertical_swipe: ${value} }`, () => {
-    isVerticalEnabled.set(!value);
+    _isVerticalEnabled.set(!value);
     const spy = mockPostEvent();
     fn();
     fn();
@@ -69,7 +73,7 @@ describe.each([
   });
 
   it(`should call sessionStorage.setItem with "tapps/swipeBehavior" and "${value}" if value changed`, () => {
-    isVerticalEnabled.set(value);
+    _isVerticalEnabled.set(value);
     const spy = mockSessionStorageSetItem();
     fn();
     // Should call retrieveLaunchParams.
@@ -77,7 +81,7 @@ describe.each([
 
     spy.mockClear();
 
-    isVerticalEnabled.set(!value);
+    _isVerticalEnabled.set(!value);
     fn();
     // Should call retrieveLaunchParams + save component state.
     expect(spy).toHaveBeenCalledTimes(2);

@@ -68,9 +68,10 @@ export function signData(data: Text, key: Text, options?: SignDataOptions): stri
  * @param token - bot secret token.
  * @param options - additional validation options.
  * @throws {TypeError} "auth_date" should present integer
- * @throws {Error} "hash" is empty or not found
- * @throws {Error} "auth_date" is empty or not found
- * @throws {Error} Init data expired
+ * @throws {SignatureInvalidError} Signature is invalid.
+ * @throws {AuthDateInvalidError} "auth_date" property is missing or invalid.
+ * @throws {SignatureMissingError} "hash" property is missing.
+ * @throws {ExpiredError} Init data is expired.
  */
 export function validate(
   value: ValidateValue,

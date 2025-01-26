@@ -18,10 +18,10 @@ describe('retrieveFromStorage', () => {
       return '"tgWebAppPlatform=android&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23ffffff%22%7D&tgWebAppVersion=7.0"';
     });
     expect(retrieveFromStorage()).toStrictEqual({
-      version: '7.0',
-      platform: 'android',
-      themeParams: {
-        bgColor: '#ffffff',
+      tgWebAppVersion: '7.0',
+      tgWebAppPlatform:'android',
+      tgWebAppThemeParams: {
+        bg_color: '#ffffff',
       },
     });
     expect(spy).toHaveBeenCalledOnce();
@@ -33,16 +33,16 @@ describe('retrieveFromStorage', () => {
   it('should call sessionStorage.setItem with "tapps/launchParams" and serialized launch params', () => {
     const spy = vi.spyOn(sessionStorage, 'setItem').mockImplementation(() => undefined);
     saveToStorage({
-      version: '7.0',
-      platform: 'android',
-      themeParams: {
-        bgColor: '#ffffff',
+      tgWebAppVersion: '7.0',
+      tgWebAppPlatform:'android',
+      tgWebAppThemeParams: {
+        bg_color: '#ffffff',
       },
     });
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith(
       'tapps/launchParams',
-      '"tgWebAppPlatform=android&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23ffffff%22%7D&tgWebAppVersion=7.0"',
+      '"tgWebAppVersion=7.0&tgWebAppPlatform=android&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23ffffff%22%7D"',
     );
   });
 });

@@ -1,13 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { emitMiniAppsEvent } from '@telegram-apps/bridge';
+import { emitEvent } from '@telegram-apps/bridge';
 
-import { mockPostEvent } from '@test-utils/mockPostEvent.js';
-import { resetPackageState } from '@test-utils/reset/reset.js';
-import { setMaxVersion } from '@test-utils/setMaxVersion.js';
-import { mockMiniAppsEnv } from '@test-utils/mockMiniAppsEnv.js';
+import {
+  mockPostEvent,
+  resetPackageState,
+  setMaxVersion,
+  mockMiniAppsEnv,
+} from '@test-utils/utils.js';
 import { testSafety } from '@test-utils/predefined/testSafety.js';
 import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
-import { $createRequestId } from '@/scopes/globals.js';
 
 import {
   setItem,
@@ -15,6 +16,7 @@ import {
   deleteItem,
   getItem,
   isSupported,
+  clear,
 } from './cloud-storage.js';
 
 beforeEach(() => {
@@ -33,6 +35,7 @@ describe.each([
   ['getKeys', getKeys],
   ['deleteItem', deleteItem],
   ['getItem', getItem],
+  ['clear', clear],
 ] as const)('%s', (name, fn) => {
   testSafety(fn, name, {
     component: 'cloudStorage',
@@ -44,7 +47,6 @@ describe('deleteItem', () => {
   beforeEach(setAvailable);
 
   it('should call "web_app_invoke_custom_method" with method "deleteStorageValues", params.keys = string[] and req_id. Wait for "custom_method_invoked" event', async () => {
-    $createRequestId.set(() => 'temp');
     const spy = mockPostEvent();
     const promise = deleteItem(['a', 'b']);
     expect(spy).toHaveBeenCalledOnce();
@@ -53,11 +55,11 @@ describe('deleteItem', () => {
       params: {
         keys: ['a', 'b'],
       },
-      req_id: 'temp',
+      req_id: '1',
     });
 
-    emitMiniAppsEvent('custom_method_invoked', {
-      req_id: 'temp',
+    emitEvent('custom_method_invoked', {
+      req_id: '1',
       result: '',
     });
 
@@ -69,7 +71,6 @@ describe('getItem', () => {
   beforeEach(setAvailable);
 
   it('should call "web_app_invoke_custom_method" with method "getStorageValues", params.keys = string[] and req_id. Wait for "custom_method_invoked" event', async () => {
-    $createRequestId.set(() => 'temp');
     const spy = mockPostEvent();
     const promise = getItem(['a', 'b']);
     expect(spy).toHaveBeenCalledOnce();
@@ -78,11 +79,11 @@ describe('getItem', () => {
       params: {
         keys: ['a', 'b'],
       },
-      req_id: 'temp',
+      req_id: '1',
     });
 
-    emitMiniAppsEvent('custom_method_invoked', {
-      req_id: 'temp',
+    emitEvent('custom_method_invoked', {
+      req_id: '1',
       result: {
         a: '123',
         b: '',
@@ -100,18 +101,17 @@ describe('getKeys', () => {
   beforeEach(setAvailable);
 
   it('should call "web_app_invoke_custom_method" with method "getStorageKeys", params = {} and req_id. Wait for "custom_method_invoked" event', async () => {
-    $createRequestId.set(() => 'temp');
     const spy = mockPostEvent();
     const promise = getKeys();
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith('web_app_invoke_custom_method', {
       method: 'getStorageKeys',
       params: {},
-      req_id: 'temp',
+      req_id: '1',
     });
 
-    emitMiniAppsEvent('custom_method_invoked', {
-      req_id: 'temp',
+    emitEvent('custom_method_invoked', {
+      req_id: '1',
       result: ['a', 'b'],
     });
 
@@ -123,7 +123,6 @@ describe('setItem', () => {
   beforeEach(setAvailable);
 
   it('should call "web_app_invoke_custom_method" with method "saveStorageValue", params = { key, value } and req_id. Wait for "custom_method_invoked" event', async () => {
-    $createRequestId.set(() => 'temp');
     const spy = mockPostEvent();
     const promise = setItem('key', 'value');
     expect(spy).toHaveBeenCalledOnce();
@@ -133,11 +132,11 @@ describe('setItem', () => {
         key: 'key',
         value: 'value',
       },
-      req_id: 'temp',
+      req_id: '1',
     });
 
-    emitMiniAppsEvent('custom_method_invoked', {
-      req_id: 'temp',
+    emitEvent('custom_method_invoked', {
+      req_id: '1',
       result: '',
     });
 
