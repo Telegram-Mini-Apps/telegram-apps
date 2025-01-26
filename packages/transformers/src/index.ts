@@ -46,4 +46,8 @@ export {
 export { serializeToQuery } from './serializers/serializeToQuery.js';
 
 export { jsonParse, type JsonParseAction } from './transformers/jsonParse.js';
+export {
+  transformQueryUsing,
+  type TransformQueryUsingAction,
+} from './transformers/transformQueryUsing.js';
 export { isRGB, toRGB, isRGBShort } from './validation/rgb.js';

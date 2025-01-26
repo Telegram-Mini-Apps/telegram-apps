@@ -2,13 +2,12 @@ import {
   type BaseIssue,
   type BaseSchema,
   type InferOutput,
-  instance, type InstanceSchema, parse,
+  instance,
+  type InstanceSchema,
   pipe,
   type SchemaWithPipe,
   string,
   type StringSchema,
-  transform,
-  TransformAction,
   union,
   type UnionSchema,
 } from 'valibot';
@@ -18,6 +17,10 @@ import {
   type ConditionalSnakeKeysAction,
 } from '@/camel-casing/conditionalSnakeKeys.js';
 import type { CamelCaseTransformerFn } from '@/camel-casing/types.js';
+import {
+  transformQueryUsing,
+  type TransformQueryUsingAction,
+} from '@/transformers/transformQueryUsing.js';
 
 type RequiredSchema = BaseSchema<object, object, BaseIssue<unknown>>;
 
@@ -29,7 +32,7 @@ export type CamelCaseQueryTransformerPipe<
     StringSchema<undefined>,
     InstanceSchema<typeof URLSearchParams, undefined>
   ], undefined>,
-  TransformAction<string | URLSearchParams, InferOutput<Schema>>,
+  TransformQueryUsingAction<Schema>,
   ConditionalSnakeKeysAction<InferOutput<Schema>, CamelCase>
 ]>;
 
@@ -48,20 +51,7 @@ export function createQueryCamelCaseGen<Schema extends RequiredSchema>(
 ): CamelCaseQueryTransformer<Schema> {
   return ((camelCase?) => pipe(
     union([string(), instance(URLSearchParams)]),
-    transform(input => {
-      const result: Record<string, string | string[]> = {};
-
-      new URLSearchParams(input).forEach((value, key) => {
-        const accValue = result[key];
-        if (accValue === undefined || !Array.isArray(accValue)) {
-          result[key] = value;
-        } else {
-          accValue.push(value);
-        }
-      });
-
-      return parse(schema, result);
-    }),
+    transformQueryUsing(schema),
     conditionalSnakeKeys<any>(camelCase),
   )) as CamelCaseQueryTransformer<Schema>;
 }
