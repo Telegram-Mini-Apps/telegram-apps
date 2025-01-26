@@ -1,9 +1,9 @@
-import { afterEach, vi, it, expect, beforeEach } from 'vitest';
+import { afterEach, vi, it, expect, beforeEach, describe } from 'vitest';
 import { createWindow } from 'test-utils';
 import { emitEvent } from '@telegram-apps/bridge';
 
-import { resetPackageState } from '@test-utils/resetPackageState.js';
-import { $postEvent, inlineMode, version } from '@/globals.js';
+import { mockMiniAppsEnv, resetPackageState } from '@test-utils/utils.js';
+import { $postEvent, launchParams } from '@/globals.js';
 
 import { init } from './init.js';
 
@@ -20,13 +20,64 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-it('should call configure with options passed to init', () => {
-  createWindow();
-  const postEvent = vi.fn();
-  init({ postEvent, version: '999', inlineMode: true });
-  expect($postEvent()).toEqual(postEvent);
-  expect(version()).toEqual('999');
-  expect(inlineMode()).toEqual(true);
+describe('global signals', () => {
+  beforeEach(() => {
+    createWindow({ env: 'iframe', location: { href: '' } as any });
+  });
+
+  it('should configure postEvent', () => {
+    mockMiniAppsEnv();
+    const postEvent = vi.fn();
+    init({ postEvent });
+    expect($postEvent()).toEqual(postEvent);
+  });
+
+  describe('launch params', () => {
+    it('should use passed', () => {
+      mockMiniAppsEnv();
+      init({
+        launchParams: {
+          tgWebAppPlatform: 'desktop',
+          tgWebAppThemeParams: {},
+          tgWebAppVersion: '11',
+        },
+      });
+      expect(launchParams()).toEqual({
+        tgWebAppPlatform: 'desktop',
+        tgWebAppThemeParams: {},
+        tgWebAppVersion: '11',
+      });
+    });
+
+    it('should retrieve from env if not passed', () => {
+      mockMiniAppsEnv({
+        tgWebAppPlatform: 'macos',
+        tgWebAppThemeParams: {},
+        tgWebAppVersion: '13',
+      });
+      init();
+      expect(launchParams()).toEqual({
+        tgWebAppPlatform: 'macos',
+        tgWebAppThemeParams: {},
+        tgWebAppVersion: '13',
+      });
+    });
+  });
+
+  it('should configure launch params', () => {
+    init({
+      launchParams: {
+        tgWebAppPlatform: 'desktop',
+        tgWebAppThemeParams: {},
+        tgWebAppVersion: '11',
+      },
+    });
+    expect(launchParams()).toEqual({
+      tgWebAppPlatform: 'desktop',
+      tgWebAppThemeParams: {},
+      tgWebAppVersion: '11',
+    });
+  });
 });
 
 it('should listen to "reload_iframe" event, call "iframe_will_reload" method and window.location.reload on receive', () => {
@@ -34,7 +85,14 @@ it('should listen to "reload_iframe" event, call "iframe_will_reload" method and
   createWindow({ location: { reload: reloadSpy } as any });
 
   const postEvent = vi.fn();
-  init({ postEvent, version: '999', inlineMode: false });
+  init({
+    postEvent,
+    launchParams: {
+      tgWebAppVersion: '999',
+      tgWebAppThemeParams: {},
+      tgWebAppPlatform: 'tdesktop',
+    },
+  });
 
   expect(postEvent).toHaveBeenCalledOnce();
   expect(postEvent).toHaveBeenCalledWith('iframe_ready', { reload_supported: true });
@@ -56,7 +114,14 @@ it('should append to document.head <style/> element with id "telegram-custom-sty
     head: { appendChild },
   }) as any);
 
-  init({ postEvent: vi.fn(), version: '999', inlineMode: false });
+  init({
+    postEvent: vi.fn(),
+    launchParams: {
+      tgWebAppVersion: '999',
+      tgWebAppThemeParams: {},
+      tgWebAppPlatform: 'tdesktop',
+    },
+  });
   expect(createElement).toHaveBeenCalledOnce();
   expect(createElement).toHaveBeenCalledWith('style');
   expect(appendChild).toHaveBeenCalledOnce();
@@ -80,7 +145,14 @@ it('should remove "reload_iframe" and "set_custom_style" event listeners, remove
   }) as any);
 
   const postEvent = vi.fn();
-  const cleanup = init({ postEvent, version: '999', inlineMode: false });
+  const cleanup = init({
+    postEvent,
+    launchParams: {
+      tgWebAppVersion: '999',
+      tgWebAppThemeParams: {},
+      tgWebAppPlatform: 'tdesktop',
+    },
+  });
 
   // Check if style element was created and appended.
   expect(createElement).toHaveBeenCalledOnce();
