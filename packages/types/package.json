@@ -1,6 +1,6 @@
 {
   "name": "@telegram-apps/types",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "Telegram Mini Apps related TypeScript types.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
