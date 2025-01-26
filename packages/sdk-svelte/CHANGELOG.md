@@ -1,5 +1,16 @@
 # @telegram-apps/sdk-svelte
 
+## 2.0.0
+
+### Major Changes
+
+- f595786: Major update due to the SDK's major update
+
+### Patch Changes
+
+- Updated dependencies [56cee21]
+  - @telegram-apps/sdk@3.0.0
+
 ## 1.0.16
 
 ### Patch Changes

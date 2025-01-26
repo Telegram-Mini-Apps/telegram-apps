@@ -1,5 +1,18 @@
 # @telegram-apps/sdk
 
+## 3.0.0-beta.1
+
+### Major Changes
+
+- 56cee21: - Update exports from `@telegram-apps/bridge`
+  - Add `better-promises`, `valibot` and `error-kid` as dependencies
+  - Update init data and launch params types
+
+### Patch Changes
+
+- Updated dependencies [935ccef]
+  - @telegram-apps/bridge@2.0.0
+
 ## 2.11.3
 
 ### Patch Changes
