@@ -56,7 +56,7 @@ export function defineNonConcurrentFn<Fn extends (...args: any) => AbortableProm
       });
 
       let error: Error | undefined;
-      return promise()!
+      return _promise()!
         .catch(e => {
           error = e;
           throw e;
