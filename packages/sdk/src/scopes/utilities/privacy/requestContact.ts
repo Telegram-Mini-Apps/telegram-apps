@@ -1,7 +1,8 @@
-import { jsonParse } from '@telegram-apps/transformers';
+import { jsonParse, transformQueryUsing } from '@telegram-apps/transformers';
 import { AbortablePromise, type PromiseOptions } from 'better-promises';
 import {
   date,
+  instance,
   looseObject,
   number,
   optional,
@@ -9,6 +10,7 @@ import {
   pipe,
   string,
   transform,
+  union,
   ValiError,
 } from 'valibot';
 import type { InvokeCustomMethodOptions } from '@telegram-apps/bridge';
@@ -48,41 +50,28 @@ async function getRequestedContact(options?: InvokeCustomMethodOptions): Promise
 
   return parse(
     pipe(
-      string(),
-      transform(input => {
-        const result: Record<string, string | string[]> = {};
-
-        new URLSearchParams(input).forEach((value, key) => {
-          const accValue = result[key];
-          if (accValue === undefined || !Array.isArray(accValue)) {
-            result[key] = value;
-          } else {
-            accValue.push(value);
-          }
-        });
-
-        return parse(
-          looseObject({
-            contact: pipe(
-              string(),
-              jsonParse(),
-              looseObject({
-                user_id: number(),
-                phone_number: string(),
-                first_name: string(),
-                last_name: optional(string()),
-              }),
-            ),
-            auth_date: pipe(
-              string(),
-              transform(input => new Date(Number(input) * 1000)),
-              date(),
-            ),
-            hash: string(),
-          }),
-          result,
-        );
-      }),
+      // todo: Union is unnecessary here, but we use it to comply TypeScript checker.
+      union([string(), instance(URLSearchParams)]),
+      transformQueryUsing(
+        looseObject({
+          contact: pipe(
+            string(),
+            jsonParse(),
+            looseObject({
+              user_id: number(),
+              phone_number: string(),
+              first_name: string(),
+              last_name: optional(string()),
+            }),
+          ),
+          auth_date: pipe(
+            string(),
+            transform(input => new Date(Number(input) * 1000)),
+            date(),
+          ),
+          hash: string(),
+        }),
+      ),
     ),
     data,
   );
