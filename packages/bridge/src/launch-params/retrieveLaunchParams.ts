@@ -8,16 +8,16 @@ import type { InferOutput } from 'valibot';
 import { LaunchParamsRetrieveError } from '@/errors.js';
 import { retrieveFromStorage, saveToStorage } from '@/launch-params/storage.js';
 
-export type RetrieveLPResult = ReturnType<typeof parseLaunchParamsQuery>;
+export type RetrieveLPResult = InferOutput<typeof LaunchParamsSchema>;
 export type RetrieveLPResultCamelCased =
-  DeepConvertSnakeKeysToCamelCase<ReturnType<typeof parseLaunchParamsQuery>>;
+  DeepConvertSnakeKeysToCamelCase<InferOutput<typeof LaunchParamsSchema>>;
 
 /**
  * @param urlString - URL to extract launch parameters from.
  * @returns Launch parameters from the specified URL.
  * @throws Error if function was unable to extract launch parameters from the passed URL.
  */
-function fromURL(urlString: string) {
+function fromURL(urlString: string): RetrieveLPResult {
   return parseLaunchParamsQuery(
     urlString
       // Replace everything before this first hashtag or question sign.
@@ -31,7 +31,7 @@ function fromURL(urlString: string) {
  * @returns Launch parameters based on the first navigation entry.
  * @throws Error if function was unable to extract launch parameters from the navigation entry.
  */
-function retrieveFromPerformance() {
+function retrieveFromPerformance(): RetrieveLPResult {
   const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
   if (!navigationEntry) {
     throw new Error('Unable to get first navigation entry.');
@@ -62,8 +62,8 @@ export function retrieveLaunchParams(camelCase: true): RetrieveLPResultCamelCase
  * invalid.
  */
 export function retrieveLaunchParams(camelCase?: boolean):
-  | InferOutput<typeof LaunchParamsSchema>
-  | DeepConvertSnakeKeysToCamelCase<InferOutput<typeof LaunchParamsSchema>> {
+  | RetrieveLPResult
+  | RetrieveLPResultCamelCased {
   const errors: unknown[] = [];
 
   for (const retrieve of [
