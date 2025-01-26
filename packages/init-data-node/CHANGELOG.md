@@ -1,5 +1,11 @@
 # @telegram-apps/init-data-node
 
+## 2.0.0
+
+### Major Changes
+
+- 9cce56e: Use new init data types which are similar to the natives ones.
+
 ## 1.2.2
 
 ### Patch Changes

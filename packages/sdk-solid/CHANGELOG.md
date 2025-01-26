@@ -1,5 +1,16 @@
 # @telegram-apps/sdk-solid
 
+## 3.0.0
+
+### Major Changes
+
+- f595786: Major update due to the SDK's major update
+
+### Patch Changes
+
+- Updated dependencies [56cee21]
+  - @telegram-apps/sdk@3.0.0
+
 ## 2.0.23
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @telegram-apps/bridge
 
+## 2.0.0
+
+### Major Changes
+
+- 935ccef: - Remove `subscribe`, `unsubscribe`, `defineEventHandlers`, `$debug`, `$targetOrigin` variables.
+  - Allow listening to all events via `on('*', listener)`
+  - Set debug mode via `setDebug`
+  - Simplify `retrieveLaunchParams` and return a reworked `LaunchParams` type
+  - By default `isTMA` know uses simple way via retrieving launch params. `simple` argument was replaced with `complete`
+  - Add `valibot`, `better-promises`, `mitt` and `error-kid` as dependencies
+
 ## 1.9.2
 
 ### Patch Changes
