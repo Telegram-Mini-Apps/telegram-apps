@@ -1,5 +1,11 @@
 # @telegram-apps/types
 
+## 2.0.0
+
+### Major Changes
+
+- 5f755c7: Completely rework the packages.
+
 ## 1.2.1
 
 ### Patch Changes

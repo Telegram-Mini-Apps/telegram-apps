@@ -1,5 +1,20 @@
 # @telegram-apps/sdk
 
+## 3.0.0
+
+### Minor Changes
+
+- c32ba70: Add more exports from @telegram-apps/transformers
+
+### Patch Changes
+
+- Updated dependencies [5f755c7]
+- Updated dependencies [2366db8]
+  - @telegram-apps/toolkit@2.0.0
+  - @telegram-apps/transformers@2.0.0
+  - @telegram-apps/types@2.0.0
+  - @telegram-apps/bridge@2.0.1
+
 ## 3.0.0-beta.1
 
 ### Major Changes

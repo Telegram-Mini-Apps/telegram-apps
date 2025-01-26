@@ -1,5 +1,17 @@
 # @telegram-apps/transformers
 
+## 2.0.0
+
+### Major Changes
+
+- 5f755c7: Completely rework the packages.
+
+### Patch Changes
+
+- Updated dependencies [5f755c7]
+  - @telegram-apps/toolkit@2.0.0
+  - @telegram-apps/types@2.0.0
+
 ## 1.2.2
 
 ### Patch Changes

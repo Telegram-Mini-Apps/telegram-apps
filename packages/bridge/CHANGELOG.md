@@ -1,5 +1,15 @@
 # @telegram-apps/bridge
 
+## 2.0.1
+
+### Patch Changes
+
+- 2366db8: Use more correct types for `RetrieveLPResult` and `RetrieveLPResultCamelCased`
+- Updated dependencies [5f755c7]
+  - @telegram-apps/toolkit@2.0.0
+  - @telegram-apps/transformers@2.0.0
+  - @telegram-apps/types@2.0.0
+
 ## 2.0.0
 
 ### Major Changes
