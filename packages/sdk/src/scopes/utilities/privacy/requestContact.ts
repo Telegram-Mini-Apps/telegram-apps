@@ -1,5 +1,5 @@
 import { jsonParse } from '@telegram-apps/transformers';
-import { CancelablePromise, type PromiseOptions } from 'better-promises';
+import { AbortablePromise, type PromiseOptions } from 'better-promises';
 import {
   date,
   looseObject,
@@ -93,8 +93,8 @@ const [
   tPromise,
   tError,
 ] = defineNonConcurrentFn(
-  (options?: PromiseOptions): CancelablePromise<RequestedContact> => {
-    return new CancelablePromise<RequestedContact>(async (res, _, context) => {
+  (options?: PromiseOptions): AbortablePromise<RequestedContact> => {
+    return new AbortablePromise<RequestedContact>(async (res, _, context) => {
       // First of all, let's try to get the requested contact. Probably, we already requested it
       // before.
       try {

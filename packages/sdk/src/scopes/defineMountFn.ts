@@ -1,5 +1,5 @@
 import { batch, type Computed } from '@telegram-apps/signals';
-import { CancelablePromise } from 'better-promises';
+import { AbortablePromise } from 'better-promises';
 
 import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
 import { createSignalsTuple, type SignalsTuple } from '@/signals-registry.js';
@@ -11,14 +11,14 @@ import { createSignalsTuple, type SignalsTuple } from '@/signals-registry.js';
  * @param onMounted - function that will be called whenever mount was completed.
  */
 // #__NO_SIDE_EFFECTS__
-export function defineMountFn<Fn extends (...args: any) => CancelablePromise<any>>(
+export function defineMountFn<Fn extends (...args: any) => AbortablePromise<any>>(
   component: string,
   mount: Fn,
   onMounted: (result: Awaited<ReturnType<Fn>>) => void,
 ): [
-  fn: (...args: Parameters<Fn>) => CancelablePromise<void>,
+  fn: (...args: Parameters<Fn>) => AbortablePromise<void>,
   promise: [
-    ...SignalsTuple<CancelablePromise<Awaited<ReturnType<Fn>>> | undefined>,
+    ...SignalsTuple<AbortablePromise<Awaited<ReturnType<Fn>>> | undefined>,
     isRequesting: Computed<boolean>,
   ],
   error: SignalsTuple<Error | undefined>,
@@ -30,7 +30,7 @@ export function defineMountFn<Fn extends (...args: any) => CancelablePromise<any
 
   return [
     (...args) => isMounted()
-      ? CancelablePromise.resolve()
+      ? AbortablePromise.resolve()
       : fn(...args).then(data => {
         batch(() => {
           _isMounted.set(true);

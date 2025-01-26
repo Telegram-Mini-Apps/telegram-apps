@@ -10,7 +10,7 @@ import {
   type CustomMethodParams,
   type CustomMethodName,
 } from '@telegram-apps/bridge';
-import type { CancelablePromise } from 'better-promises';
+import type { AbortablePromise } from 'better-promises';
 import type { LaunchParamsLike } from '@telegram-apps/transformers';
 
 import { createComputed, createSignal, createSignalsTuple } from '@/signals-registry.js';
@@ -92,7 +92,7 @@ export function invokeCustomMethod<M extends CustomMethodName>(
   method: M,
   params: CustomMethodParams<M>,
   options?: InvokeCustomMethodOptions,
-): CancelablePromise<unknown>;
+): AbortablePromise<unknown>;
 
 /**
  * Invokes unknown custom method. Returns method execution result.
@@ -105,13 +105,13 @@ export function invokeCustomMethod(
   method: string,
   params: object,
   options?: InvokeCustomMethodOptions,
-): CancelablePromise<unknown>;
+): AbortablePromise<unknown>;
 
 export function invokeCustomMethod(
   method: string,
   params: object,
   options?: InvokeCustomMethodOptions,
-): CancelablePromise<unknown> {
+): AbortablePromise<unknown> {
   return _invokeCustomMethod(method, params, createRequestId(), {
     ...options || {},
     postEvent: postEvent,

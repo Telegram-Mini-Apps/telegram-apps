@@ -1,5 +1,5 @@
 import { captureSameReq } from '@telegram-apps/bridge';
-import type { CancelablePromise } from 'better-promises';
+import type { AbortablePromise } from 'better-promises';
 
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 import { createRequestId, request } from '@/globals.js';
@@ -23,7 +23,7 @@ const METHOD_NAME = 'web_app_read_text_from_clipboard';
  */
 export const readTextFromClipboard = wrapSafe(
   'readTextFromClipboard',
-  (options?: RequestOptionsNoCapture): CancelablePromise<string | null> => {
+  (options?: RequestOptionsNoCapture): AbortablePromise<string | null> => {
     const reqId = createRequestId();
 
     return request(METHOD_NAME, 'clipboard_text_received', {

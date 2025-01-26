@@ -6,7 +6,7 @@ import {
 import { isPageReload } from '@telegram-apps/navigation';
 import { getStorageValue, setStorageValue, snakeToKebab } from '@telegram-apps/toolkit';
 import type { RGB, ThemeParams } from '@telegram-apps/types';
-import { CancelablePromise } from 'better-promises';
+import { AbortablePromise } from 'better-promises';
 
 import { createWrapMounted } from '@/scopes/wrappers/createWrapMounted.js';
 import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
@@ -41,7 +41,7 @@ const [
   (options?: RequestOptionsNoCapture) => {
     const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
     return s
-      ? CancelablePromise.resolve(s)
+      ? AbortablePromise.resolve(s)
       : request('web_app_request_theme', 'theme_changed', options).then(d => d.theme_params);
   },
   s => {

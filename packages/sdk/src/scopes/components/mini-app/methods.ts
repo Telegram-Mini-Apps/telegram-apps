@@ -12,7 +12,7 @@ import { isPageReload } from '@telegram-apps/navigation';
 import type { Computed } from '@telegram-apps/signals';
 
 import { version, postEvent } from '@/globals.js';
-import { mount as tpMount } from '@/scopes/components/theme-params/methods.js';
+import { mount as mountThemeParams } from '@/scopes/components/theme-params/methods.js';
 import { createWrapComplete } from '@/scopes/wrappers/createWrapComplete.js';
 import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
 import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
@@ -80,7 +80,7 @@ const [
 ] = defineMountFn(
   COMPONENT_NAME,
   (options?: RequestOptionsNoCapture) => {
-    return tpMount(options).then(() => {
+    return mountThemeParams(options).then(() => {
       return isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || undefined;
     });
   },

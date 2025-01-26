@@ -3,7 +3,7 @@ import {
   type If,
   type IsNever,
 } from '@telegram-apps/toolkit';
-import { CancelablePromise, type PromiseOptions } from 'better-promises';
+import { AbortablePromise, type PromiseOptions } from 'better-promises';
 
 import { on } from '@/events/emitter.js';
 import { postEvent, PostEventFn } from '@/methods/postEvent.js';
@@ -80,7 +80,7 @@ export function request<M extends MethodNameWithRequiredParams, E extends AnyEve
   method: M,
   eventOrEvents: E,
   options: RequestOptions<E> & { params: MethodParams<M> },
-): CancelablePromise<RequestResult<E>>;
+): AbortablePromise<RequestResult<E>>;
 
 /**
  * Performs a request waiting for specified events to occur.
@@ -94,7 +94,7 @@ export function request<M extends MethodNameWithOptionalParams, E extends AnyEve
   method: M,
   eventOrEvents: E,
   options?: RequestOptions<E> & { params?: MethodParams<M> },
-): CancelablePromise<RequestResult<E>>;
+): AbortablePromise<RequestResult<E>>;
 
 /**
  * Performs a request waiting for specified events to occur.
@@ -108,18 +108,18 @@ export function request<M extends MethodNameWithoutParams, E extends AnyEventNam
   method: M,
   eventOrEvents: E,
   options?: RequestOptions<E>,
-): CancelablePromise<RequestResult<E>>;
+): AbortablePromise<RequestResult<E>>;
 
 export function request<M extends MethodName, E extends AnyEventName>(
   method: M,
   eventOrEvents: E,
   options?: RequestOptions<E> & { params?: MethodParams<M> },
-): CancelablePromise<RequestResult<E>> {
+): AbortablePromise<RequestResult<E>> {
   options ||= {};
   const { capture } = options;
   const [addCleanup, cleanup] = createCbCollector();
 
-  return new CancelablePromise<RequestResult<E>>((resolve) => {
+  return new AbortablePromise<RequestResult<E>>((resolve) => {
     // We need to iterate over all tracked events and create their event listeners.
     ((Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents])).forEach(event => {
       // Each event listener waits for the event to occur.

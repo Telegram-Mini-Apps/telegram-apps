@@ -1,4 +1,4 @@
-import type { CancelablePromise, PromiseOptions } from 'better-promises';
+import type { AbortablePromise, PromiseOptions } from 'better-promises';
 
 import { request } from '@/globals.js';
 import { FullscreenFailedError } from '@/errors.js';
@@ -24,7 +24,7 @@ export const isFullscreen = signalFromState('isFullscreen');
 export const [
   _changeFullscreenPromise,
   changeFullscreenPromise,
-] = createSignalsTuple<CancelablePromise<void>>();
+] = createSignalsTuple<AbortablePromise<void>>();
 
 /**
  * Signal containing an error received during the last fullscreen mode request.

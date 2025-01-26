@@ -1,5 +1,5 @@
 import type { WriteAccessRequestedStatus } from '@telegram-apps/bridge';
-import type { CancelablePromise } from 'better-promises';
+import type { AbortablePromise } from 'better-promises';
 
 import { request } from '@/globals.js';
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
@@ -13,7 +13,7 @@ const [
   tPromise,
   tError,
 ] = defineNonConcurrentFn(
-  (options?: RequestOptionsNoCapture): CancelablePromise<WriteAccessRequestedStatus> => {
+  (options?: RequestOptionsNoCapture): AbortablePromise<WriteAccessRequestedStatus> => {
     return request(METHOD_NAME, 'write_access_requested', options).then(d => d.status);
   },
   'Write access request is currently in progress',

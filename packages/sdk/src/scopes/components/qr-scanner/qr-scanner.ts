@@ -1,6 +1,6 @@
 import { on } from '@telegram-apps/bridge';
 import { createCbCollector } from '@telegram-apps/toolkit';
-import { CancelablePromise, ManualPromise } from 'better-promises';
+import { AbortablePromise, ManualPromise } from 'better-promises';
 
 import { postEvent } from '@/globals.js';
 import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
@@ -82,7 +82,7 @@ function _open(
      */
     capture?: (qr: string) => boolean;
   },
-): CancelablePromise<string | undefined>;
+): AbortablePromise<string | undefined>;
 
 /**
  * Opens the scanner and calls the `onCaptured` function each time, a QR was scanned.
@@ -116,14 +116,14 @@ function _open(
      */
     onCaptured: (qr: string) => void;
   },
-): CancelablePromise<void>;
+): AbortablePromise<void>;
 
 function _open(
   options?: OpenSharedOptions & {
     onCaptured?: (qr: string) => void;
     capture?: (qr: string) => boolean;
   },
-): CancelablePromise<string | undefined | void> {
+): AbortablePromise<string | undefined | void> {
   options ||= {};
   const { onCaptured, text, capture } = options;
   const [, cleanup] = createCbCollector(
@@ -143,7 +143,7 @@ function _open(
   const promise = new ManualPromise<string | void>(options);
   (options.postEvent || postEvent)(OPEN_METHOD, { text });
 
-  return CancelablePromise.resolve(promise).catch(ignoreCanceled).finally(cleanup);
+  return AbortablePromise.resolve(promise).catch(ignoreCanceled).finally(cleanup);
 }
 
 const [

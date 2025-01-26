@@ -1,4 +1,4 @@
-import { CancelablePromise } from 'better-promises';
+import { AbortablePromise } from 'better-promises';
 import {
   batch,
   type Computed,
@@ -7,14 +7,14 @@ import {
 import { createComputed, createSignalsTuple, type SignalsTuple } from '@/signals-registry.js';
 import { ConcurrentCallError } from '@/errors.js';
 
-export function defineNonConcurrentFn<Fn extends (...args: any) => CancelablePromise<any>>(
+export function defineNonConcurrentFn<Fn extends (...args: any) => AbortablePromise<any>>(
   fn: Fn,
   errorMessage: string,
   options?: {
     /**
      * A signal with the promise to use instead of the generated one.
      */
-    promise?: Signal<CancelablePromise<Awaited<ReturnType<Fn>>> | undefined>;
+    promise?: Signal<AbortablePromise<Awaited<ReturnType<Fn>>> | undefined>;
     /**
      * A signal with the error to use instead of the generated one.
      */
@@ -23,7 +23,7 @@ export function defineNonConcurrentFn<Fn extends (...args: any) => CancelablePro
 ): [
   fn: Fn,
   promise: [
-    ...SignalsTuple<CancelablePromise<Awaited<ReturnType<Fn>>> | undefined>,
+    ...SignalsTuple<AbortablePromise<Awaited<ReturnType<Fn>>> | undefined>,
     isRequesting: Computed<boolean>,
   ],
   error: SignalsTuple<Error | undefined>
@@ -36,18 +36,18 @@ export function defineNonConcurrentFn<Fn extends (...args: any) => CancelablePro
   const [_promise, promise] =
     optionsPromise
       ? [optionsPromise, createComputed(optionsPromise)]
-      : createSignalsTuple<CancelablePromise<Awaited<ReturnType<Fn>>> | undefined>();
+      : createSignalsTuple<AbortablePromise<Awaited<ReturnType<Fn>>> | undefined>();
   const [_error, error] =
     optionsError
       ? [optionsError, createComputed(optionsError)]
       : createSignalsTuple<Error | undefined>();
 
   return [
-    Object.assign((...args: Parameters<Fn>): CancelablePromise<Awaited<ReturnType<Fn>>> => {
+    Object.assign((...args: Parameters<Fn>): AbortablePromise<Awaited<ReturnType<Fn>>> => {
       if (_promise()) {
         const err = new ConcurrentCallError(errorMessage);
         _error.set(err);
-        return CancelablePromise.reject(err);
+        return AbortablePromise.reject(err);
       }
 
       batch(() => {

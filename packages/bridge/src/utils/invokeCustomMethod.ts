@@ -1,4 +1,4 @@
-import { CancelablePromise } from 'better-promises';
+import { AbortablePromise } from 'better-promises';
 
 import { captureSameReq } from '@/methods/captureSameReq.js';
 import type { CustomMethodName, CustomMethodParams } from '@/methods/types/index.js';
@@ -22,7 +22,7 @@ export function invokeCustomMethod<M extends CustomMethodName>(
   params: CustomMethodParams<M>,
   requestId: string,
   options?: InvokeCustomMethodOptions,
-): CancelablePromise<unknown>;
+): AbortablePromise<unknown>;
 
 /**
  * Invokes unknown custom method. Returns method execution result.
@@ -37,14 +37,14 @@ export function invokeCustomMethod(
   params: object,
   requestId: string,
   options?: InvokeCustomMethodOptions,
-): CancelablePromise<unknown>;
+): AbortablePromise<unknown>;
 
 export function invokeCustomMethod(
   method: string,
   params: object,
   requestId: string,
   options?: InvokeCustomMethodOptions,
-): CancelablePromise<unknown> {
+): AbortablePromise<unknown> {
   return request('web_app_invoke_custom_method', 'custom_method_invoked', {
     ...options || {},
     params: { method, params, req_id: requestId },

@@ -1,5 +1,5 @@
 import type { EventPayload } from '@telegram-apps/bridge';
-import type { CancelablePromise } from 'better-promises';
+import type { AbortablePromise } from 'better-promises';
 
 import { request } from '@/globals.js';
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
@@ -21,7 +21,7 @@ const METHOD_NAME = 'web_app_biometry_get_info';
  */
 export const requestBiometry = wrapSafe(
   'requestBiometry',
-  (options?: RequestOptionsNoCapture): CancelablePromise<EventPayload<'biometry_info_received'>> => {
+  (options?: RequestOptionsNoCapture): AbortablePromise<EventPayload<'biometry_info_received'>> => {
     return request(METHOD_NAME, 'biometry_info_received', options);
   },
   { isSupported: METHOD_NAME },

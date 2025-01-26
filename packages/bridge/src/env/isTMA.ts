@@ -1,4 +1,4 @@
-import { CancelablePromise, type PromiseOptions } from 'better-promises';
+import { AbortablePromise, type PromiseOptions } from 'better-promises';
 
 import { request } from '@/utils/request.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
@@ -23,12 +23,12 @@ export function isTMA(): boolean;
  *
  * In case you need less strict checks, use sync override of this function.
  */
-export function isTMA(type: 'complete', options?: PromiseOptions): CancelablePromise<boolean>
+export function isTMA(type: 'complete', options?: PromiseOptions): AbortablePromise<boolean>
 
 export function isTMA(
   type?: 'complete',
   options?: PromiseOptions,
-): boolean | CancelablePromise<boolean> {
+): boolean | AbortablePromise<boolean> {
   if (!type) {
     try {
       retrieveLaunchParams();
@@ -38,7 +38,7 @@ export function isTMA(
     }
   }
 
-  return CancelablePromise.withFn(async context => {
+  return AbortablePromise.fn(async context => {
     if (hasWebviewProxy(window)) {
       return true;
     }

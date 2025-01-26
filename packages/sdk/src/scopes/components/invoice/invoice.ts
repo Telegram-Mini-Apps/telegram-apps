@@ -1,5 +1,5 @@
 import type { InvoiceStatus } from '@telegram-apps/bridge';
-import type { CancelablePromise } from 'better-promises';
+import type { AbortablePromise } from 'better-promises';
 
 import { request } from '@/globals.js';
 import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
@@ -30,7 +30,7 @@ export const isSupported = createIsSupported(METHOD_NAME);
  *   const status = await open('kJNFS331');
  * }
  */
-function _open(slug: string, options?: RequestOptionsNoCapture): CancelablePromise<InvoiceStatus>;
+function _open(slug: string, options?: RequestOptionsNoCapture): AbortablePromise<InvoiceStatus>;
 
 /**
  * Opens an invoice using its url.
@@ -52,13 +52,13 @@ function _open(slug: string, options?: RequestOptionsNoCapture): CancelablePromi
  *   const status = await open('https://t.me/invoice/kJNFS331', 'url');
  * }
  */
-function _open(url: string, type: 'url', options?: RequestOptionsNoCapture): CancelablePromise<InvoiceStatus>;
+function _open(url: string, type: 'url', options?: RequestOptionsNoCapture): AbortablePromise<InvoiceStatus>;
 
 function _open(
   urlOrSlug: string,
   optionsOrType?: 'url' | RequestOptionsNoCapture,
   options?: RequestOptionsNoCapture,
-): CancelablePromise<InvoiceStatus> {
+): AbortablePromise<InvoiceStatus> {
   let slug: string;
   if (optionsOrType === 'url') {
     const { hostname, pathname } = new URL(urlOrSlug, window.location.href);

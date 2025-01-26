@@ -1,4 +1,4 @@
-import type { CancelablePromise } from 'better-promises';
+import type { AbortablePromise } from 'better-promises';
 import type { EventPayload } from '@telegram-apps/bridge';
 
 import { request } from '@/globals.js';
@@ -29,7 +29,7 @@ const wrapSafe = createWrapSupported(COMPONENT_NAME, REQUEST_SA_METHOD_NAME);
  */
 export const requestContentSafeAreaInsets = wrapSafe(
   'requestContentSafeAreaInsets',
-  (options?: RequestOptionsNoCapture): CancelablePromise<EventPayload<'content_safe_area_changed'>> => {
+  (options?: RequestOptionsNoCapture): AbortablePromise<EventPayload<'content_safe_area_changed'>> => {
     return request(REQUEST_SA_METHOD_NAME, CSA_CHANGED_EVENT, options);
   },
 );
@@ -44,7 +44,7 @@ export const requestContentSafeAreaInsets = wrapSafe(
  */
 export function requestViewport(
   options?: RequestOptionsNoCapture,
-): CancelablePromise<EventPayload<'viewport_changed'>> {
+): AbortablePromise<EventPayload<'viewport_changed'>> {
   return request('web_app_request_viewport', VIEWPORT_CHANGED_EVENT, options);
 }
 
@@ -62,7 +62,7 @@ export function requestViewport(
  */
 export const requestSafeAreaInsets = wrapSafe(
   'requestSafeAreaInsets',
-  (options?: RequestOptionsNoCapture): CancelablePromise<EventPayload<'safe_area_changed'>> => {
+  (options?: RequestOptionsNoCapture): AbortablePromise<EventPayload<'safe_area_changed'>> => {
     return request(REQUEST_SA_METHOD_NAME, SA_CHANGED_EVENT, options);
   },
 );

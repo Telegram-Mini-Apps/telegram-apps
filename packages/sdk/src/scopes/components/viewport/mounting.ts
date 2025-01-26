@@ -1,6 +1,6 @@
 import { isPageReload } from '@telegram-apps/navigation';
 import { type EventListener, off, on } from '@telegram-apps/bridge';
-import { CancelablePromise } from 'better-promises';
+import { AbortablePromise } from 'better-promises';
 
 import { defineMountFn } from '@/scopes/defineMountFn.js';
 import { launchParams } from '@/globals.js';
@@ -51,10 +51,10 @@ const [
     // Try to restore the state using the storage.
     const s = isPageReload() && getStateFromStorage();
     return s
-      ? CancelablePromise.resolve(s)
-      : CancelablePromise.withFn(async context => {
+      ? AbortablePromise.resolve(s)
+      : AbortablePromise.fn(async context => {
         // Request all insets.
-        const insets = await CancelablePromise.all([
+        const insets = await AbortablePromise.all([
           requestSafeAreaInsets.isAvailable()
             ? requestSafeAreaInsets(context)
             : safeAreaInsets(),

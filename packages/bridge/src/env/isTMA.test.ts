@@ -1,4 +1,4 @@
-import { CancelablePromise } from 'better-promises';
+import { AbortablePromise } from 'better-promises';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createWindow, mockSessionStorageGetItem, mockWindow } from 'test-utils';
 
@@ -27,13 +27,13 @@ describe('complete', () => {
 
   it('should return promise with true value resolved, if requesting theme parameters was successful', async () => {
     createWindow();
-    request.mockImplementationOnce(() => CancelablePromise.resolve({}));
+    request.mockImplementationOnce(() => AbortablePromise.resolve({}));
     await expect(isTMA('complete')).resolves.toBe(true);
   });
 
   it('should return promise with false value resolved, if requesting theme parameters was unsuccessful', async () => {
     createWindow();
-    request.mockImplementationOnce(() => CancelablePromise.reject(new Error('Timed out.')));
+    request.mockImplementationOnce(() => AbortablePromise.reject(new Error('Timed out.')));
     await expect(isTMA('complete')).resolves.toBe(false);
   });
 });

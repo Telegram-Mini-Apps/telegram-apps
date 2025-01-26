@@ -8,7 +8,7 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
-import { CancelablePromise } from 'better-promises';
+import { AbortablePromise } from 'better-promises';
 
 import { postEvent, request } from '@/globals.js';
 import { defineMountFn } from '@/scopes/defineMountFn.js';
@@ -80,7 +80,7 @@ const [
   COMPONENT_NAME,
   abortSignal => {
     const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-    return s ? CancelablePromise.resolve(s) : requestBiometry({ abortSignal }).then(eventToState);
+    return s ? AbortablePromise.resolve(s) : requestBiometry({ abortSignal }).then(eventToState);
   },
   s => {
     on(INFO_RECEIVED_EVENT, onBiometryInfoReceived);
@@ -113,7 +113,7 @@ const [
   tAuthPromise,
   tAuthError,
 ] = defineNonConcurrentFn(
-  (options?: AuthenticateOptions): CancelablePromise<{
+  (options?: AuthenticateOptions): AbortablePromise<{
     /**
      * Authentication status.
      */
@@ -123,7 +123,7 @@ const [
      */
     token?: string;
   }> => {
-    return CancelablePromise.withFn(async context => {
+    return AbortablePromise.fn(async context => {
       const s = _state();
       if (!s.available) {
         throwNotAvailable();
@@ -189,8 +189,8 @@ const [
   tRequestAccessPromise,
   tRequestAccessError,
 ] = defineNonConcurrentFn(
-  (options?: RequestAccessOptions): CancelablePromise<boolean> => {
-    return CancelablePromise.withFn(async context => {
+  (options?: RequestAccessOptions): AbortablePromise<boolean> => {
+    return AbortablePromise.fn(async context => {
       const data = await request('web_app_biometry_request_access', INFO_RECEIVED_EVENT, {
         ...options,
         ...context,
@@ -264,7 +264,7 @@ export function unmount() {
  */
 export const updateToken = wrapComplete(
   'updateToken',
-  (options?: UpdateTokenOptions): CancelablePromise<BiometryTokenUpdateStatus> => {
+  (options?: UpdateTokenOptions): AbortablePromise<BiometryTokenUpdateStatus> => {
     options ||= {};
     return request('web_app_biometry_update_token', 'biometry_token_updated', {
       ...options,
