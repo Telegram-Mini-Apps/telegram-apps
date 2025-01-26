@@ -8,9 +8,9 @@ import type { InferOutput } from 'valibot';
 import { LaunchParamsRetrieveError } from '@/errors.js';
 import { retrieveFromStorage, saveToStorage } from '@/launch-params/storage.js';
 
-export type RetrieveLPResult = InferOutput<typeof LaunchParamsSchema>;
+export type RetrieveLPResult = ReturnType<typeof parseLaunchParamsQuery>;
 export type RetrieveLPResultCamelCased =
-  DeepConvertSnakeKeysToCamelCase<InferOutput<typeof LaunchParamsSchema>>;
+  DeepConvertSnakeKeysToCamelCase<ReturnType<typeof parseLaunchParamsQuery>>;
 
 /**
  * @param urlString - URL to extract launch parameters from.

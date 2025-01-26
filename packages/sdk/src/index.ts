@@ -121,7 +121,17 @@ export {
   type SecondaryButtonPosition,
   type SwitchInlineQueryChatType,
 } from '@telegram-apps/bridge';
-export { isRGB, toRGB, isRGBShort } from '@telegram-apps/transformers';
+export {
+  isRGB,
+  toRGB,
+  isRGBShort,
+  serializeToQuery,
+  serializeInitDataQuery,
+  serializeLaunchParamsQuery,
+  transformQueryUsing,
+  parseInitDataQuery,
+  parseLaunchParamsQuery,
+} from '@telegram-apps/transformers';
 export type {
   RGB,
   User,
