@@ -21,18 +21,32 @@ export const [
   ],
 );
 
+const retrieveLaunchParamsError = [
+  'Unable to retrieve launch parameters from any known source. Perhaps, you have opened your app outside Telegram?',
+  '📖 Refer to docs for more information:',
+  'https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/environment',
+].join('\n');
+
 export const [
   LaunchParamsRetrieveError,
   isLaunchParamsRetrieveError,
 ] = errorClassWithData<unknown[], [errors: unknown[]]>(
   'LaunchParamsRetrieveError',
   errors => errors,
-  [
-    'Unable to retrieve launch parameters from any known source. Perhaps, you have opened your app outside Telegram?',
-    '📖 Refer to docs for more information:',
-    'https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/environment',
-  ].join('\n')
+  retrieveLaunchParamsError,
 );
+
+export const [
+  InvalidLaunchParamsError,
+  isInvalidLaunchParamsError,
+] = errorClass<[string]>('InvalidLaunchParamsError', value => [
+  `Invalid value for launch params: ${value}`,
+]);
+
+export const [
+  InitDataRetrieveError,
+  isInitDataRetrieveError,
+] = errorClass('InitDataRetrieveError', retrieveLaunchParamsError);
 
 export const [UnknownEnvError, isUnknownEnvError] = errorClass('UnknownEnvError');
 
