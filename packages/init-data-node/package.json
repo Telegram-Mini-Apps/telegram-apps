@@ -61,6 +61,6 @@
   "dependencies": {
     "@telegram-apps/transformers": "workspace:^",
     "@telegram-apps/types": "workspace:^",
-    "error-kid": "^0.0.3"
+    "error-kid": "^0.0.4"
   }
 }
