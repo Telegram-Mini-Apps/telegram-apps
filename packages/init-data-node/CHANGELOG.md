@@ -1,5 +1,13 @@
 # @telegram-apps/init-data-node
 
+## 2.0.2
+
+### Patch Changes
+
+- c3749fa: Bump `error-kid`
+- Updated dependencies [cc94a1e]
+  - @telegram-apps/transformers@2.1.0
+
 ## 2.0.1
 
 ### Patch Changes
