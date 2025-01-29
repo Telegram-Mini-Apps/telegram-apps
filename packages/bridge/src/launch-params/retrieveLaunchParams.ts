@@ -2,43 +2,16 @@ import { LaunchParamsSchema, parseLaunchParamsQuery } from '@telegram-apps/trans
 import {
   type DeepConvertSnakeKeysToCamelCase,
   deepSnakeToCamelObjKeys,
+  setStorageValue,
 } from '@telegram-apps/toolkit';
 import type { InferOutput } from 'valibot';
 
 import { LaunchParamsRetrieveError } from '@/errors.js';
-import { retrieveFromStorage, saveToStorage } from '@/launch-params/storage.js';
+import { forEachLpSource } from '@/launch-params/forEachLpSource.js';
 
 export type RetrieveLPResult = InferOutput<typeof LaunchParamsSchema>;
 export type RetrieveLPResultCamelCased =
   DeepConvertSnakeKeysToCamelCase<InferOutput<typeof LaunchParamsSchema>>;
-
-/**
- * @param urlString - URL to extract launch parameters from.
- * @returns Launch parameters from the specified URL.
- * @throws Error if function was unable to extract launch parameters from the passed URL.
- */
-function fromURL(urlString: string): RetrieveLPResult {
-  return parseLaunchParamsQuery(
-    urlString
-      // Replace everything before this first hashtag or question sign.
-      .replace(/^[^?#]*[?#]/, '')
-      // Replace all hashtags and question signs to make it look like some search params.
-      .replace(/[?#]/g, '&'),
-  );
-}
-
-/**
- * @returns Launch parameters based on the first navigation entry.
- * @throws Error if function was unable to extract launch parameters from the navigation entry.
- */
-function retrieveFromPerformance(): RetrieveLPResult {
-  const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
-  if (!navigationEntry) {
-    throw new Error('Unable to get first navigation entry.');
-  }
-
-  return fromURL(navigationEntry.name);
-}
 
 /**
  * @returns Launch parameters from any known source.
@@ -65,24 +38,20 @@ export function retrieveLaunchParams(camelCase?: boolean):
   | RetrieveLPResult
   | RetrieveLPResultCamelCased {
   const errors: unknown[] = [];
+  let launchParams: RetrieveLPResult | undefined;
 
-  for (const retrieve of [
-    // Try to retrieve launch parameters from the current location. This method can return
-    // nothing in case, location was changed, and then the page was reloaded.
-    () => fromURL(window.location.href),
-    // Then, try using the lower level API - window.performance.
-    retrieveFromPerformance,
-    // Finally, try to extract launch parameters from the session storage.
-    retrieveFromStorage,
-  ]) {
+  forEachLpSource(v => {
     try {
-      const lp = retrieve();
-      saveToStorage(lp);
-      return camelCase ? deepSnakeToCamelObjKeys(lp) : lp;
+      launchParams = parseLaunchParamsQuery(v);
+      setStorageValue('launchParams', v);
+      return false;
     } catch (e) {
       errors.push(e);
+      return true;
     }
+  });
+  if (!launchParams) {
+    throw new LaunchParamsRetrieveError(errors);
   }
-
-  throw new LaunchParamsRetrieveError(errors);
+  return camelCase ? deepSnakeToCamelObjKeys(launchParams) : launchParams;
 }
