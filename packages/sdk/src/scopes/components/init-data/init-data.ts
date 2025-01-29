@@ -1,9 +1,8 @@
 import type { Computed } from '@telegram-apps/signals';
-import { retrieveLaunchParams } from '@telegram-apps/bridge';
+import { retrieveLaunchParams, retrieveRawInitData } from '@telegram-apps/bridge';
 import type { InitData } from '@telegram-apps/types';
 
 import { createComputed, createSignalsTuple } from '@/signals-registry.js';
-import { serializeInitDataQuery } from '@telegram-apps/transformers';
 
 /**
  * Complete component state.
@@ -81,9 +80,8 @@ export const receiver = fromState('receiver');
  */
 export function restore(): void {
   const lp = retrieveLaunchParams();
-  const initData = lp.tgWebAppData;
-  _state.set(initData);
-  initData && _raw.set(serializeInitDataQuery(initData));
+  _state.set(lp.tgWebAppData);
+  _raw.set(retrieveRawInitData());
 }
 
 /**

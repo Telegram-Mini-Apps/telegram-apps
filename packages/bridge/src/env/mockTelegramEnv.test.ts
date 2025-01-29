@@ -28,34 +28,44 @@ it('should store launch parameters retuning them from retrieveLaunchParams', () 
       subtitle_text_color: '#708499',
       text_color: '#f5f5f5',
     },
-    tgWebAppData: {
-      auth_date: new Date(1716922846000),
-      chat_instance: '8428209589180549439',
-      chat_type: 'sender',
-      hash: '89d6079ad6762351f38c6dbbc41bb53048019256a9443988af7a48bcad16ba31',
-      start_param: 'debug',
-      user: {
-        allows_write_to_pm: true,
-        first_name: 'Andrew',
-        id: 99281932,
-        is_premium: true,
-        language_code: 'en',
-        last_name: 'Rogue',
-        username: 'rogue',
-      },
-      signature: 'abc',
-    },
+    tgWebAppData: 'chat_type=sender&auth_date=1736409902&signature=FNWSy6kv5n4kkmYYmfTbrgRtswTvwXgHTRWBVjp-YOv2srtMFSYCWZ9nGr_PohWZeWcooFo_oQgsnTJge3JdBA&hash=4c710b1d446dd4fd301c0efbf7c31627eca193a2e657754c9e0612cb1eb71d90v',
     tgWebAppVersion: '7.2',
     tgWebAppPlatform: 'tdesktop',
     tgWebAppBotInline: false,
     tgWebAppShowSettings: false,
   } as const;
 
-  createWindow();
+  createWindow({ location: { href: '' } } as any);
 
   expect(retrieveLaunchParams).toThrow();
   mockTelegramEnv({ launchParams });
-  expect(retrieveLaunchParams()).toStrictEqual(launchParams);
+  expect(retrieveLaunchParams()).toStrictEqual({
+    tgWebAppThemeParams: {
+      accent_text_color: '#6ab2f2',
+      bg_color: '#17212b',
+      button_color: '#5288c1',
+      button_text_color: '#ffffff',
+      destructive_text_color: '#ec3942',
+      header_bg_color: '#17212b',
+      hint_color: '#708499',
+      link_color: '#6ab3f3',
+      secondary_bg_color: '#232e3c',
+      section_bg_color: '#17212b',
+      section_header_text_color: '#6ab3f3',
+      subtitle_text_color: '#708499',
+      text_color: '#f5f5f5',
+    },
+    tgWebAppData: {
+      chat_type: 'sender',
+      auth_date: new Date(1736409902000),
+      signature: 'FNWSy6kv5n4kkmYYmfTbrgRtswTvwXgHTRWBVjp-YOv2srtMFSYCWZ9nGr_PohWZeWcooFo_oQgsnTJge3JdBA',
+      hash: '4c710b1d446dd4fd301c0efbf7c31627eca193a2e657754c9e0612cb1eb71d90v',
+    },
+    tgWebAppVersion: '7.2',
+    tgWebAppPlatform: 'tdesktop',
+    tgWebAppBotInline: false,
+    tgWebAppShowSettings: false,
+  });
 });
 
 describe('env is iframe', () => {

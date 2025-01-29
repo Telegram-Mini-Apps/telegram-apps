@@ -1,16 +1,17 @@
 import { is, parse, pipe, string } from 'valibot';
 import {
+  isLaunchParamsQuery,
   jsonParse,
-  parseLaunchParamsQuery,
   type LaunchParamsLike,
   MiniAppsMessageSchema,
+  serializeLaunchParamsQuery,
 } from '@telegram-apps/transformers';
-import type { If, IsNever } from '@telegram-apps/toolkit';
+import { If, IsNever, setStorageValue } from '@telegram-apps/toolkit';
 
 import { logInfo } from '@/debug.js';
 import { isIframe } from '@/env/isIframe.js';
-import { saveToStorage } from '@/launch-params/storage.js';
 import type { MethodName, MethodParams } from '@/methods/types/index.js';
+import { InvalidLaunchParamsError } from '@/errors.js';
 
 /**
  * Mocks the environment and imitates Telegram Mini Apps behavior.
@@ -19,8 +20,14 @@ export function mockTelegramEnv({ launchParams, onEvent }: {
   /**
    * Launch parameters to mock. They will be saved in the session storage making
    * the `retrieveLaunchParams` function return them.
+   *
+   * Note that this value must have tgWebAppData presented in a raw format as long as you will
+   * need it when retrieving init data in this format. Otherwise, init data may be broken.
    */
-  launchParams?: LaunchParamsLike | string | URLSearchParams;
+  launchParams?:
+    | (Omit<LaunchParamsLike, 'tgWebAppData'> & { tgWebAppData?: string | URLSearchParams })
+    | string
+    | URLSearchParams;
   /**
    * Function that will be called if a Mini Apps method call was requested by the mini app.
    * @param event - event information.
@@ -34,13 +41,27 @@ export function mockTelegramEnv({ launchParams, onEvent }: {
     next: () => void,
   ) => void;
 } = {}): void {
-  // If launch parameters were passed, save them in the session storage, so
-  // the retrieveLaunchParams function would return them.
-  launchParams && saveToStorage(
-    typeof launchParams === 'string' || launchParams instanceof URLSearchParams
-      ? parseLaunchParamsQuery(launchParams)
-      : launchParams,
-  );
+  if (launchParams) {
+    // If launch parameters were passed, save them in the session storage, so
+    // the retrieveLaunchParams function would return them.
+    const launchParamsQuery =
+      typeof launchParams === 'string' || launchParams instanceof URLSearchParams
+        ? launchParams.toString()
+        : (
+          // Here we have to trick serializeLaunchParamsQuery into thinking, it serializes a valid
+          // value. We are doing it because we are working with tgWebAppData presented as a
+          // string, not an object as serializeLaunchParamsQuery requires.
+          serializeLaunchParamsQuery({ ...launchParams, tgWebAppData: undefined })
+          // Then, we just append init data.
+          + (launchParams.tgWebAppData ? `&tgWebAppData=${encodeURIComponent(launchParams.tgWebAppData.toString())}` : '')
+        );
+
+    // Remember to check if launch params are valid.
+    if (!isLaunchParamsQuery(launchParamsQuery)) {
+      throw new InvalidLaunchParamsError(launchParamsQuery);
+    }
+    setStorageValue('launchParams', launchParamsQuery);
+  }
 
   // Original postEvent firstly checks if the current environment is iframe.
   // That's why we have a separate branch for this environment here too.

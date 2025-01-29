@@ -50,4 +50,5 @@ export {
   transformQueryUsing,
   type TransformQueryUsingAction,
 } from './transformers/transformQueryUsing.js';
+export { isLaunchParamsQuery } from './validation/isLaunchParamsQuery.js';
 export { isRGB, toRGB, isRGBShort } from './validation/rgb.js';
