@@ -38,6 +38,6 @@ data's [start_param](init-data.md#parameters-list) property.
 
 ## Restrictions
 
-- Maximum length: **512 symbols**
-- Allowed symbols: **latin alphabet symbols, digits** and **underscore**. The valid regexp for the value
-  is `/[\w]{0,512}/`.
+- Maximum length: **512 characters**
+- Allowed characters: **latin alphabet characters, digits** and the **underscore**. The valid RegExp for the start param value
+  is: `/^\w{0,512}$/`.
