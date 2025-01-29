@@ -1,5 +1,16 @@
 # @telegram-apps/bridge
 
+## 2.1.0
+
+### Minor Changes
+
+- 0e8b869: Add `retrieveRawInitData` utility. Set launchParams.tgWebAppData to string or URLSearchParams in `mockTelegramEnv`
+
+### Patch Changes
+
+- Updated dependencies [cc94a1e]
+  - @telegram-apps/transformers@2.1.0
+
 ## 2.0.1
 
 ### Patch Changes

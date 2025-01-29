@@ -1,5 +1,11 @@
 # @telegram-apps/transformers
 
+## 2.1.0
+
+### Minor Changes
+
+- cc94a1e: Add `isLaunchParamsQuery` utility.
+
 ## 2.0.0
 
 ### Major Changes

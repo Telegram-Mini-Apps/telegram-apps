@@ -1,5 +1,18 @@
 # @telegram-apps/sdk
 
+## 3.1.0
+
+### Minor Changes
+
+- c1d3b56: Fix incorrect `initData.restore()` behavior. Add more exports from bridge.
+
+### Patch Changes
+
+- Updated dependencies [0e8b869]
+- Updated dependencies [cc94a1e]
+  - @telegram-apps/bridge@2.1.0
+  - @telegram-apps/transformers@2.1.0
+
 ## 3.0.0
 
 ### Minor Changes
