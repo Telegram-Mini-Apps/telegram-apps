@@ -62,7 +62,7 @@ export const enableConfirmation = wrapMounted('enableConfirmation', (): void => 
  * }
  */
 export const mount = wrapBasic('mount', (): void => {
-  if (!isMounted()) {
+  if (!_isMounted()) {
     setClosingConfirmation(
       isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false,
     );
@@ -71,7 +71,7 @@ export const mount = wrapBasic('mount', (): void => {
 });
 
 function setClosingConfirmation(value: boolean): void {
-  if (value !== isConfirmationEnabled()) {
+  if (value !== _isConfirmationEnabled()) {
     postEvent('web_app_setup_closing_behavior', { need_confirmation: value });
     setStorageValue<StorageValue>(COMPONENT_NAME, value);
     _isConfirmationEnabled.set(value);

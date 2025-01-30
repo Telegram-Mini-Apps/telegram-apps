@@ -29,7 +29,7 @@ export function defineMountFn<Fn extends (...args: any) => AbortablePromise<any>
   const [_isMounted, isMounted] = createSignalsTuple(false);
 
   return [
-    (...args) => isMounted()
+    (...args) => _isMounted()
       ? AbortablePromise.resolve()
       : fn(...args).then(data => {
         batch(() => {

@@ -13,6 +13,7 @@ import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
 
 import { internalState, isMounted, _isMounted, state } from './signals.js';
 import type { State } from './types.js';
+import { removeUndefined } from '@/utils/removeUndefined.js';
 
 type StorageValue = State;
 
@@ -39,7 +40,7 @@ export const isSupported = createIsSupported(SETUP_METHOD_NAME);
  * }
  */
 export const mount = wrapSupported('mount', (): void => {
-  if (!isMounted()) {
+  if (!_isMounted()) {
     const prev = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
     prev && internalState.set(prev);
     _isMounted.set(true);
@@ -108,12 +109,7 @@ export const offClick = wrapSupported(
 export const setParams = wrapComplete(
   'setParams',
   (updates: Partial<State>): void => {
-    internalState.set({
-      ...internalState(),
-      ...Object.fromEntries(
-        Object.entries(updates).filter(([, v]) => v !== undefined),
-      ),
-    });
+    internalState.set({ ...internalState(), ...removeUndefined(updates) });
     setStorageValue<StorageValue>(COMPONENT_NAME, internalState());
 
     // We should not commit changes until the payload is correct. Some version of Telegram will

@@ -12,7 +12,7 @@ export const [_state, state] =
 
 function fromState<K extends keyof InitData>(key: K): Computed<InitData[K] | undefined> {
   return createComputed(() => {
-    const s = state();
+    const s = _state();
     return s ? s[key] : undefined;
   });
 }

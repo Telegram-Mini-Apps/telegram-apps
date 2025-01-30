@@ -7,11 +7,11 @@ import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
 
 import { COMPONENT_NAME, FS_CHANGED_EVENT } from './const.js';
 import { setState, signalFromState } from './signals.js';
-import { isMounted } from './mounting.js';
+import { _isMounted } from './mounting.js';
 import { createSignalsTuple } from '@/signals-registry.js';
 
 const REQUEST_METHOD_NAME = 'web_app_request_fullscreen';
-const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, REQUEST_METHOD_NAME);
+const wrapComplete = createWrapComplete(COMPONENT_NAME, _isMounted, REQUEST_METHOD_NAME);
 
 /**
  * Signal indicating if the viewport is currently in fullscreen mode.

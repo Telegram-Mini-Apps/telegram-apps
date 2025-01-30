@@ -17,4 +17,4 @@ export const [_state, state] = createSignalsTuple<State>({
 /**
  * Signal indicating biometry is available.
  */
-export const isAvailable = createComputed(() => state().available);
+export const isAvailable = createComputed(() => _state().available);

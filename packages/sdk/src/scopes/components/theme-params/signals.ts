@@ -15,7 +15,7 @@ export const [_isCssVarsBound, isCssVarsBound] = createSignalsTuple(false);
 export const [_state, state] = createSignalsTuple<ThemeParams>({});
 
 function fromState<K extends keyof ThemeParams>(key: K): Computed<ThemeParams[K] | undefined> {
-  return createComputed(() => state()[key]);
+  return createComputed(() => _state()[key]);
 }
 
 /**
@@ -48,7 +48,7 @@ export const hintColor = fromState('hintColor');
  * This value is calculated based on the current theme's background color.
  */
 export const isDark = createComputed(() => {
-  const { bgColor } = state();
+  const { bgColor } = _state();
   return !bgColor || isColorDark(bgColor);
 });
 
