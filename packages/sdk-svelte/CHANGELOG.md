@@ -1,5 +1,12 @@
 # @telegram-apps/sdk-svelte
 
+## 2.0.4
+
+### Patch Changes
+
+- Updated dependencies [e356df3]
+  - @telegram-apps/sdk@3.1.2
+
 ## 2.0.3
 
 ### Patch Changes

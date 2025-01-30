@@ -1,5 +1,13 @@
 # @telegram-apps/sdk
 
+## 3.1.2
+
+### Patch Changes
+
+- e356df3: Remove some errors exported from bridge.
+- Updated dependencies [35d9f85]
+  - @telegram-apps/bridge@2.3.0
+
 ## 3.1.1
 
 ### Patch Changes

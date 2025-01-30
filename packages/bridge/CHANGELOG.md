@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 2.3.0
+
+### Minor Changes
+
+- 35d9f85: Implement `retrieveRawLaunchParams`.
+
 ## 2.2.0
 
 ### Minor Changes
