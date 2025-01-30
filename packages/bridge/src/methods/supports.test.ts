@@ -123,6 +123,18 @@ describe.each<[
     'web_app_request_emoji_status_access',
     'web_app_add_to_home_screen',
     'web_app_check_home_screen',
+    'web_app_check_location',
+    'web_app_open_location_settings',
+    'web_app_request_file_download',
+    'web_app_request_location',
+    'web_app_send_prepared_message',
+    'web_app_start_accelerometer',
+    'web_app_start_device_orientation',
+    'web_app_start_gyroscope',
+    'web_app_stop_accelerometer',
+    'web_app_stop_device_orientation',
+    'web_app_stop_gyroscope',
+    'web_app_toggle_orientation_lock'
   ]],
 ])('%s', (version, methods) => {
   const higher = increaseVersion(version, 1);
