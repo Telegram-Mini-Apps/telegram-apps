@@ -398,7 +398,7 @@ export interface Events {
     access_granted?: Maybe<boolean>;
   };
   /**
-   * The application received the information about the current user location.
+   * Location-related functionality availability status was retrieved.
    * @since 8.0
    * @see https://docs.telegram-mini-apps.com/platform/events#location-requested
    */
@@ -512,7 +512,6 @@ export interface Events {
    * @see https://docs.telegram-mini-apps.com/platform/events#safe_area_changed
    * */
   safe_area_changed: SafeAreaInsets;
-
   /**
    * QR scanner was closed.
    * @since v6.4
@@ -540,7 +539,6 @@ export interface Events {
    * @see https://docs.telegram-mini-apps.com/platform/events#settings-button-pressed
    */
   settings_button_pressed: never;
-
   /**
    * Occurs whenever theme settings are changed in the user's Telegram app
    * (including switching to night mode).
