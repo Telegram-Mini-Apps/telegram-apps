@@ -2,12 +2,10 @@ import { LaunchParamsSchema, parseLaunchParamsQuery } from '@telegram-apps/trans
 import {
   type DeepConvertSnakeKeysToCamelCase,
   deepSnakeToCamelObjKeys,
-  setStorageValue,
 } from '@telegram-apps/toolkit';
 import type { InferOutput } from 'valibot';
 
-import { LaunchParamsRetrieveError } from '@/errors.js';
-import { forEachLpSource } from '@/launch-params/forEachLpSource.js';
+import { retrieveRawLaunchParams } from '@/launch-params/retrieveRawLaunchParams.js';
 
 export type RetrieveLPResult = InferOutput<typeof LaunchParamsSchema>;
 export type RetrieveLPResultCamelCased =
@@ -37,21 +35,6 @@ export function retrieveLaunchParams(camelCase: true): RetrieveLPResultCamelCase
 export function retrieveLaunchParams(camelCase?: boolean):
   | RetrieveLPResult
   | RetrieveLPResultCamelCased {
-  const errors: unknown[] = [];
-  let launchParams: RetrieveLPResult | undefined;
-
-  forEachLpSource(v => {
-    try {
-      launchParams = parseLaunchParamsQuery(v);
-      setStorageValue('launchParams', v);
-      return false;
-    } catch (e) {
-      errors.push(e);
-      return true;
-    }
-  });
-  if (!launchParams) {
-    throw new LaunchParamsRetrieveError(errors);
-  }
+  const launchParams = parseLaunchParamsQuery(retrieveRawLaunchParams());
   return camelCase ? deepSnakeToCamelObjKeys(launchParams) : launchParams;
 }
