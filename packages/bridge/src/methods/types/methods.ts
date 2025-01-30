@@ -554,7 +554,7 @@ export interface Methods {
      * Note that refresh_rate may not be supported on all platforms, so the actual tracking
      * frequency may differ from the specified value.
      */
-    refresh_rate?: number;
+    refresh_rate: number;
   }>;
   /**
    * Starts tracking device orientation data.
@@ -567,7 +567,7 @@ export interface Methods {
      * Note that refresh_rate may not be supported on all platforms, so the actual tracking
      * frequency may differ from the specified value.
      */
-    refresh_rate?: number;
+    refresh_rate: number;
     /**
      * Pass true to receive absolute orientation data, allowing you to determine the device's
      * attitude relative to magnetic north. Use this option if implementing features like a
@@ -590,7 +590,7 @@ export interface Methods {
      * Note that refresh_rate may not be supported on all platforms, so the actual tracking
      * frequency may differ from the specified value.
      */
-    refresh_rate?: number;
+    refresh_rate: number;
   }>;
 
   /**
