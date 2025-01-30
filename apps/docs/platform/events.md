@@ -104,6 +104,40 @@ package's [documentation](../packages/telegram-apps-bridge/events.md#listening-t
 This section contains the list of events, sent from Telegram: their names, description, and
 parameters. Section title means minimal version, from which events inside the section could be sent.
 
+### `accelerometer_changed`
+
+Available since: **v8.0**
+
+Accelerometer data changed.
+
+| Field | Type     | Description                                               |
+|-------|----------|-----------------------------------------------------------|
+| x     | `number` | The current acceleration in the X-axis, measured in m/s². |
+| y     | `number` | The current acceleration in the Y-axis, measured in m/s². |
+| z     | `number` | The current acceleration in the Z-axis, measured in m/s². |
+
+### `accelerometer_failed`
+
+Available since: **v8.0**
+
+Failed to start accelerometer data tracking.
+
+| Field | Type     | Description     |
+|-------|----------|-----------------|
+| error | `string` | Occurred error. |
+
+### `accelerometer_started`
+
+Available since: **v8.0**
+
+Accelerometer data tracking started.
+
+### `accelerometer_stopped`
+
+Available since: **v8.0**
+
+Accelerometer data tracking stopped.
+
 ### `back_button_pressed`
 
 Available since: **v6.1**
@@ -191,6 +225,41 @@ Custom method invocation completed.
 | result | `unknown` | _Optional_. Method invocation result.     |
 | error  | `string`  | _Optional_. Method invocation error code. |
 
+### `device_orientation_changed`
+
+Available since: **v8.0**
+
+Device orientation data changed.
+
+| Field    | Type      | Description                                                                                                |
+|----------|-----------|------------------------------------------------------------------------------------------------------------|
+| absolute | `boolean` | _Optional_.  A boolean that indicates whether the device is providing orientation data in absolute values. |
+| alpha    | `number`  | The rotation around the Z-axis, measured in radians.                                                       |
+| beta     | `number`  | The rotation around the X-axis, measured in radians.                                                       |                                                    
+| gamma    | `number`  | The rotation around the Y-axis, measured in radians.                                                       |
+
+### `device_orientation_failed`
+
+Available since: **v8.0**
+
+Device orientation data tracking failed to start.
+
+| Field | Type     | Description     |
+|-------|----------|-----------------|
+| error | `string` | Occurred error. |
+
+### `device_orientation_started`
+
+Available since: **v8.0**
+
+Device orientation data tracking started.
+
+### `device_orientation_stopped`
+
+Available since: **v8.0**
+
+Device orientation data tracking stopped.
+
 ### `emoji_status_access_requested`
 
 Available since: **v8.0**
@@ -217,6 +286,14 @@ Available since: **v8.0**
 
 Custom emoji status set.
 
+### `file_download_requested`
+
+Available since: **v8.0**
+
+| Field  | Type     | Description                                                      |
+|--------|----------|------------------------------------------------------------------|
+| status | `string` | Request status. Set to `downloading` if the is being downloaded. |
+
 ### `fullscreen_changed`
 
 Available since: **v8.0**
@@ -236,6 +313,40 @@ Occurs whenever the mini app enters or exits the fullscreen mode.
 | Field | Type     | Description                                                                           |
 |-------|----------|---------------------------------------------------------------------------------------|
 | error | `string` | Fullscreen mode status error. Possible values: `UNSUPPORTED` or `ALREADY_FULLSCREEN`. |
+
+### `gyroscope_changed`
+
+Available since: **v8.0**
+
+Gyroscope data changed.
+
+| Field | Type     | Description                                                     |
+|-------|----------|-----------------------------------------------------------------|
+| x     | `number` | The current rotation rate around the X-axis, measured in rad/s. |
+| y     | `number` | The current rotation rate around the Y-axis, measured in rad/s. |
+| z     | `number` | The current rotation rate around the Z-axis, measured in rad/s. |
+
+### `gyroscope_failed`
+
+Available since: **v8.0**
+
+Gyroscope data tracking failed to run.
+
+| Field | Type     | Description     |
+|-------|----------|-----------------|
+| error | `string` | Occurred error. |
+
+### `gyroscope_started`
+
+Available since: **v8.0**
+
+Gyroscope data tracking started.
+
+### `gyroscope_stopped`
+
+Available since: **v8.0**
+
+Gyroscope data tracking stopped.
 
 ### `home_screen_added`
 
@@ -275,6 +386,37 @@ An invoice was closed.
 | slug   | `string` | Passed during the [web_app_open_invoice](methods.md#web-app-open-invoice) method invocation `slug` value. |
 | status | `string` | Invoice status. Possible values: `paid`, `failed`, `pending` or `cancelled`.                              |
 
+### `location_checked`
+
+Available since: **v8.0**
+
+Location-related functionality availability status was retrieved.
+
+| Field            | Type      | Description                                                       |
+|------------------|-----------|-------------------------------------------------------------------|
+| available        | `boolean` | Shows whether location tracking is available.                     |
+| access_requested | `boolean` | Shows whether permission to location tracking has been requested. |
+| access_granted   | `boolean` | Shows whether permission to location tracking has been granted.   |
+
+### `location_requested`
+
+Available since: **v8.0**
+
+The application received the information about the current user location.
+
+| Field               | Type      | Description                                                                                           |
+|---------------------|-----------|-------------------------------------------------------------------------------------------------------|
+| available           | `boolean` | Shows whether location tracking is available.                                                         |
+| latitude            | `number`  | Latitude in degrees. Set only if `available` is True.                                                 |
+| longitude           | `number`  | Longitude in degrees. Set only if `available` is True.                                                |
+| altitude            | `number`  | _Optional_. Altitude above sea level in meters. Set only if `available` is True.                      |
+| course              | `number`  | _Optional_. The direction the device is moving in degrees. Set only if `available` is True.           |
+| speed               | `number`  | _Optional_. The speed of the device in m/s. Set only if `available` is True.                          |
+| horizontal_accuracy | `number`  | _Optional_. Accuracy of the latitude and longitude values in meters. Set only if `available` is True. |
+| vertical_accuracy   | `number`  | _Optional_. Accuracy of the altitude value in meters. Set only if `available` is True.                |
+| course_accuracy     | `number`  | _Optional_. Accuracy of the course value in degrees. Set only if `available` is True.                 |
+| speed_accuracy      | `number`  | _Optional_. Accuracy of the speed value in m/s. Set only if `available` is True.                      |
+
 ### `main_button_pressed`
 
 User clicked the [Main Button](main-button.md).
@@ -296,6 +438,22 @@ Application received phone access request status.
 | Field     | Type     | Description                                                                                                                             |
 |-----------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
 | button_id | `string` | _Optional_. Identifier of the clicked button. In case, the popup was closed without clicking any button, this property will be omitted. |
+
+### `prepared_message_failed`
+
+Available since: **v8.0**
+
+Failed to send a prepared message.
+
+| Field | Type     | Description     |
+|-------|----------|-----------------|
+| error | `string` | Occurred error. |
+
+### `prepared_message_sent`
+
+Available since: **v8.0**
+
+A prepared message was sent.
 
 ### `qr_text_received`
 
