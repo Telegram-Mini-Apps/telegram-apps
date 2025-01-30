@@ -1,4 +1,9 @@
-import { getStorageValue } from '@telegram-apps/toolkit';
+import { isLaunchParamsQuery } from '@telegram-apps/transformers';
+import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
+
+import { LaunchParamsRetrieveError } from '@/errors.js';
+
+const SESSION_STORAGE_KEY = 'launchParams';
 
 /**
  * @param urlString - URL to extract launch parameters from.
@@ -14,11 +19,11 @@ function fromURL(urlString: string): string {
 }
 
 /**
- * Runs the specified function for each value, where the value is one stored in any known
- * launch parameters source.
- * @param fn - function to run. Should return false when the execution must be stopped.
+ * @returns Launch parameters in a raw format from any known source.
+ * @throws {LaunchParamsRetrieveError} Unable to retrieve launch parameters. They are probably
+ * invalid.
  */
-export function forEachLpSource(fn: (value: string) => boolean): void {
+export function retrieveRawLaunchParams(): string {
   for (const retrieve of [
     // Try to retrieve launch parameters from the current location. This method can return
     // nothing in case, location was changed, and then the page was reloaded.
@@ -26,13 +31,15 @@ export function forEachLpSource(fn: (value: string) => boolean): void {
     // Then, try using the lower level API - window.performance.
     () => {
       const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
-      return navigationEntry ? fromURL(navigationEntry.name) : undefined;
+      return navigationEntry && fromURL(navigationEntry.name);
     },
-    () => getStorageValue<string>('launchParams') || '',
+    () => getStorageValue<string>(SESSION_STORAGE_KEY),
   ]) {
     const v = retrieve();
-    if (v && !fn(v)) {
-      return;
+    if (v && isLaunchParamsQuery(v)) {
+      setStorageValue(SESSION_STORAGE_KEY, v);
+      return v;
     }
   }
+  throw new LaunchParamsRetrieveError();
 }

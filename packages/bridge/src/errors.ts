@@ -1,4 +1,4 @@
-import { errorClass, errorClassWithData } from 'error-kid';
+import { errorClass } from 'error-kid';
 import type { Version } from '@telegram-apps/types';
 
 export const [
@@ -30,11 +30,7 @@ const retrieveLaunchParamsError = [
 export const [
   LaunchParamsRetrieveError,
   isLaunchParamsRetrieveError,
-] = errorClassWithData<unknown[], [errors: unknown[]]>(
-  'LaunchParamsRetrieveError',
-  errors => errors,
-  retrieveLaunchParamsError,
-);
+] = errorClass<unknown[]>('LaunchParamsRetrieveError', retrieveLaunchParamsError);
 
 export const [
   InvalidLaunchParamsError,
@@ -42,11 +38,6 @@ export const [
 ] = errorClass<[string]>('InvalidLaunchParamsError', value => [
   `Invalid value for launch params: ${value}`,
 ]);
-
-export const [
-  InitDataRetrieveError,
-  isInitDataRetrieveError,
-] = errorClass('InitDataRetrieveError', retrieveLaunchParamsError);
 
 export const [UnknownEnvError, isUnknownEnvError] = errorClass('UnknownEnvError');
 

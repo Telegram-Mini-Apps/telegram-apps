@@ -13,6 +13,7 @@ export {
   type RetrieveLPResultCamelCased,
   type RetrieveLPResult,
 } from '@/launch-params/retrieveLaunchParams.js';
+export { retrieveRawLaunchParams } from '@/launch-params/retrieveRawLaunchParams.js';
 export { retrieveRawInitData } from '@/launch-params/retrieveRawInitData.js';
 
 export type * from '@/methods/types/index.js';
@@ -55,8 +56,6 @@ export {
   isMethodMethodParameterUnsupportedError,
   UnknownEnvError,
   isUnknownEnvError,
-  InitDataRetrieveError,
-  isInitDataRetrieveError,
   InvalidLaunchParamsError,
   isInvalidLaunchParamsError,
 } from '@/errors.js';
