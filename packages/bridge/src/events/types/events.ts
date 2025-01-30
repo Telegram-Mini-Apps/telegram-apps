@@ -21,6 +21,48 @@ import type { If, IsNever } from '@telegram-apps/toolkit';
  */
 export interface Events {
   /**
+   * Accelerometer data changed.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#accelerometer-changed
+   */
+  accelerometer_changed: {
+    /**
+     * The current acceleration in the X-axis, measured in m/s².
+     */
+    x: number;
+    /**
+     * The current acceleration in the Y-axis, measured in m/s².
+     */
+    y: number;
+    /**
+     * The current acceleration in the Z-axis, measured in m/s².
+     */
+    z: number;
+  };
+  /**
+   * Failed to start accelerometer data tracking.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#accelerometer-failed
+   */
+  accelerometer_failed: {
+    /**
+     * Occurred error.
+     */
+    error: string;
+  };
+  /**
+   * Accelerometer data tracking started.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#accelerometer-started
+   */
+  accelerometer_started: never;
+  /**
+   * Accelerometer data tracking stopped.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#accelerometer-stopped
+   */
+  accelerometer_stopped: never;
+  /**
    * User clicked the BackButton.
    * @since v6.1
    * @see https://docs.telegram-mini-apps.com/platform/events#back-button-pressed
@@ -155,6 +197,53 @@ export interface Events {
     error?: string;
   };
   /**
+   * Device orientation data changed.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#device-orientation-changed
+   */
+  device_orientation_changed: {
+    /**
+     * A boolean that indicates whether the device is providing orientation data in
+     * absolute values.
+     */
+    absolute?: Maybe<boolean>;
+    /**
+     * The rotation around the Z-axis, measured in radians.
+     */
+    alpha: number;
+    /**
+     * The rotation around the X-axis, measured in radians.
+     */
+    beta: number;
+    /**
+     * The rotation around the Y-axis, measured in radians.
+     */
+    gamma: number;
+  };
+  /**
+   * Device orientation data tracking failed to start.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#device-orientation-failed
+   */
+  device_orientation_failed: {
+    /**
+     * Occurred error.
+     */
+    error: string;
+  };
+  /**
+   * Device orientation data tracking started.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#device-orientation-started
+   */
+  device_orientation_started: never;
+  /**
+   * Device orientation data tracking stopped.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#device-orientation-stopped
+   */
+  device_orientation_stopped: never;
+  /**
    * Request to set custom emoji status was requested.
    * @see https://docs.telegram-mini-apps.com/platform/events#emoji-status-access-requested
    * @since v8.0
@@ -180,6 +269,14 @@ export interface Events {
    */
   emoji_status_set: never;
   /**
+   * Application received file download request status.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#file-download-requested
+   */
+  file_download_requested: {
+    status?: Maybe<'downloading' | string>;
+  };
+  /**
    * App entered or exited fullscreen mode.
    * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/events#fullscreen-changed
@@ -201,6 +298,48 @@ export interface Events {
      */
     error: FullScreenErrorStatus;
   };
+  /**
+   * Gyroscope data changed.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#gyroscope-changed
+   */
+  gyroscope_changed: {
+    /**
+     * The current rotation rate around the X-axis, measured in rad/s.
+     */
+    x: number;
+    /**
+     * The current rotation rate around the Y-axis, measured in rad/s.
+     */
+    y: number;
+    /**
+     * The current rotation rate around the Z-axis, measured in rad/s.
+     */
+    z: number;
+  };
+  /**
+   * Gyroscope data tracking failed to run.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#gyroscope-failed
+   */
+  gyroscope_failed: {
+    /**
+     * Occurred error.
+     */
+    error: string;
+  };
+  /**
+   * Gyroscope data tracking started.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#gyroscope-started
+   */
+  gyroscope_started: never;
+  /**
+   * Gyroscope data tracking stopped.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#gyroscope-stopped
+   */
+  gyroscope_stopped: never;
   /**
    * The mini application was added to the device's home screen.
    * @since v8.0
@@ -247,6 +386,64 @@ export interface Events {
     status: InvoiceStatus;
   };
   /**
+   * Checks the location-related functionality availability state.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#location-checked
+   */
+  location_checked:
+    | { available: false }
+    | {
+    available: true;
+    access_requested?: Maybe<boolean>;
+    access_granted?: Maybe<boolean>;
+  };
+  /**
+   * The application received the information about the current user location.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#location-requested
+   */
+  location_requested:
+    | { available: false }
+    | {
+    available: true;
+    /**
+     * Latitude in degrees.
+     */
+    latitude: number;
+    /**
+     * Longitude in degrees.
+     */
+    longitude: number;
+    /**
+     * Altitude above sea level in meters.
+     */
+    altitude?: Maybe<number>;
+    /**
+     * The direction the device is moving in degrees.
+     */
+    course?: Maybe<number>;
+    /**
+     * The speed of the device in m/s.
+     */
+    speed?: Maybe<number>;
+    /**
+     * Accuracy of the latitude and longitude values in meters.
+     */
+    horizontal_accuracy?: Maybe<number>;
+    /**
+     * Accuracy of the altitude value in meters.
+     */
+    vertical_accuracy?: Maybe<number>;
+    /**
+     * Accuracy of the course value in degrees.
+     */
+    course_accuracy?: Maybe<number>;
+    /**
+     * Accuracy of the speed value in m/s.
+     */
+    speed_accuracy?: Maybe<number>;
+  };
+  /**
    * A user clicked the Main Button.
    * @see https://docs.telegram-mini-apps.com/platform/events#main-button-pressed
    */
@@ -274,6 +471,24 @@ export interface Events {
     button_id?: string;
   };
   /**
+   * Failed to send a prepared message.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#prepare-message-failed
+   */
+  prepared_message_failed: {
+    /**
+     * Occurred error.
+     */
+    error: string;
+  };
+
+  /**
+   * A prepared message was sent.
+   * @since 8.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#prepare-message-sent
+   */
+  prepared_message_sent: never;
+  /**
    * The QR scanner scanned some QR and extracted its content.
    * @param payload - event payload.
    * @since v6.4
@@ -297,6 +512,7 @@ export interface Events {
    * @see https://docs.telegram-mini-apps.com/platform/events#safe_area_changed
    * */
   safe_area_changed: SafeAreaInsets;
+
   /**
    * QR scanner was closed.
    * @since v6.4
@@ -324,6 +540,7 @@ export interface Events {
    * @see https://docs.telegram-mini-apps.com/platform/events#settings-button-pressed
    */
   settings_button_pressed: never;
+
   /**
    * Occurs whenever theme settings are changed in the user's Telegram app
    * (including switching to night mode).
