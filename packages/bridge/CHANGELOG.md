@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 2.2.0
+
+### Minor Changes
+
+- fa0a328: Add v8 methods and events.
+
 ## 2.1.0
 
 ### Minor Changes
