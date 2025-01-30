@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 3.1.3
+
+### Patch Changes
+
+- 7825425: Fix problems related to signals' tuples and batched updates
+
 ## 3.1.2
 
 ### Patch Changes
