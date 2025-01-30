@@ -19,7 +19,7 @@ have this interface:
 ```typescript
 interface MessageJSON {
   eventType: string;
-  eventData: any;
+  eventData?: any;
 }
 ```
 
@@ -177,6 +177,12 @@ Available since: **v8.0**
 Sends a request to the native Telegram application to check if the current mini
 application is added to the device's home screen.
 
+### `web_app_check_location`
+
+Available since: **v8.0**
+
+Requests location-related functionality availability state.
+
 ### `web_app_close`
 
 Closes Mini App.
@@ -239,6 +245,17 @@ Opens link in the default browser. Mini App will not be closed.
 |------------------|-----------|--------------------------------------------------------------------------------------------------------|-----------------|
 | url              | `string`  | URL to be opened by Telegram application. Should be a full path with `https` protocol.                 |                 |
 | try_instant_view | `boolean` | _Optional_. Link will be opened in [Instant View](https://instantview.telegram.org/) mode if possible. | `v6.4`          |
+
+### `web_app_open_location_settings`
+
+Available since: **v8.0**
+
+Opens the location access settings for bots. Useful when you need to request location access
+from users who haven't granted it yet.
+
+> [!WARNING]
+> Note that this method can be called only in response to user interaction with the Mini App
+> interface (e.g., a click inside the Mini App or on the main button).
 
 ### `web_app_open_popup`
 
@@ -409,11 +426,28 @@ Available since: **v8.0**
 
 Shows a native popup requesting permission for the bot to manage user's emoji status.
 
+### `web_app_request_file_download`
+
+Available since: **v8.0**
+
+Displays a native popup prompting the user to download a file.
+
+| Field     | Type     | Description                                 |
+|-----------|----------|---------------------------------------------|
+| url       | `string` | The HTTPS URL of the file to be downloaded. |
+| file_name | `string` | The suggested name for the downloaded file. |
+
 ### `web_app_request_fullscreen`
 
 Available since: **v8.0**
 
 Requests full screen mode for mini app.
+
+### `web_app_request_location`
+
+Available since: **v8.0**
+
+Requests location data.
 
 ### `web_app_request_phone`
 
@@ -445,6 +479,16 @@ Telegram will create [viewport_changed](events.md#viewport-changed) event.
 Available since: **v6.9**
 
 Requests write message access to current user.
+
+### `web_app_send_prepared_message`
+
+Available since: **v8.0**
+
+Opens a dialog allowing the user to share a message provided by the bot.
+
+| Field | Type     | Description                                                                                                                                                                                                                                         |
+|-------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| id    | `string` | Identifier of the message ([PreparedInlineMessage](https://core.telegram.org/bots/api#preparedinlinemessage)) previously obtained via the Bot API method [savePreparedInlineMessage](https://core.telegram.org/bots/api#savepreparedinlinemessage). |
 
 ### `web_app_set_background_color`
 
@@ -554,6 +598,55 @@ A method that opens the native story editor.
 | widget_link      | `object` | _Optional_. An object that describes a widget link to be included in the story. Note that only [premium subscribers](https://telegram.org/faq_premium#telegram-premium) can post stories with links. |
 | widget_link.url  | `string` | The URL to be included in the story.                                                                                                                                                                 |
 | widget_link.name | `string` | _Optional_. The name to be displayed for the widget link, 0-48 characters.                                                                                                                           |
+
+### `web_app_start_accelerometer`
+
+Available since: **v8.0**
+
+Starts tracking accelerometer data.
+
+| Field        | Type     | Description                                                                                                                                                                                                             |
+|--------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| refresh_rate | `number` | The refresh rate in milliseconds, with acceptable values ranging from 20 to 1000. Note that `refresh_rate` may not be supported on all platforms, so the actual tracking frequency may differ from the specified value. |
+
+### `web_app_start_device_orientation`
+
+Available since: **v8.0**
+
+Starts tracking device orientation data.
+
+| Field         | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                                                       |
+|---------------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| refresh_rate  | `number`  | The refresh rate in milliseconds, with acceptable values ranging from 20 to 1000. Note that `refresh_rate` may not be supported on all platforms, so the actual tracking frequency may differ from the specified value.                                                                                                                                                                                                           |
+| need_absolute | `boolean` | _Optional_. Pass true to receive absolute orientation data, allowing you to determine the device's attitude relative to magnetic north. Use this option if implementing features like a compass in your app. If relative data is sufficient, pass false. <br/><br/> Keep in mind that some devices may not support absolute orientation data. In such cases, you will receive relative data even if need_absolute=true is passed. |
+
+### `web_app_start_gyroscope`
+
+Available since: **v8.0**
+
+Starts tracking gyroscope data.
+
+| Field        | Type     | Description                                                                                                                                                                                                             |
+|--------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| refresh_rate | `number` | The refresh rate in milliseconds, with acceptable values ranging from 20 to 1000. Note that `refresh_rate` may not be supported on all platforms, so the actual tracking frequency may differ from the specified value. |
+
+### `web_app_stop_accelerometer`
+
+Available since: **v8.0**
+
+Stops tracking accelerometer data.
+
+### `web_app_stop_device_orientation`
+
+Available since: **v8.0**
+
+Stops tracking device orientation data.
+
+### `web_app_stop_gyroscope`
+
+Available since: **v8.0**
+
+Stops tracking gyroscope data.
 
 ### `web_app_setup_secondary_button`
 
@@ -709,6 +802,18 @@ the specified inline query in the input field.
 
   </tbody>
 </table>
+
+### `web_app_toggle_orientation_lock`
+
+Available since: **v8.0**
+
+Locks the Mini App’s orientation to its current mode (either portrait or landscape). Once locked,
+the orientation remains fixed, regardless of device rotation. This is useful if a stable orientation
+is needed during specific interactions.
+
+| Field  | Type      | Description                             |
+|--------|-----------|-----------------------------------------|
+| locked | `boolean` | True if the orientation must be locked. |
 
 ### `web_app_trigger_haptic_feedback`
 

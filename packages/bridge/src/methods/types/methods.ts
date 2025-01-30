@@ -164,6 +164,12 @@ export interface Methods {
    */
   web_app_check_home_screen: CreateMethodParams;
   /**
+   * Requests location-related functionality availability state.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-check-location
+   */
+  web_app_check_location: CreateMethodParams;
+  /**
    * Closes Mini App.
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-close
    */
@@ -246,6 +252,16 @@ export interface Methods {
     try_browser?: OpenLinkBrowser;
   }, 'try_instant_view' | 'try_browser'>;
   /**
+   * Opens the location access settings for bots. Useful when you need to request location access
+   * from users who haven't granted it yet.
+   *
+   * Note that this method can be called only in response to user interaction with the Mini App
+   * interface (e.g., a click inside the Mini App or on the main button).
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-open-location-settings
+   */
+  web_app_open_location_settings: CreateMethodParams;
+  /**
    * Opens a new popup. When a user closes the popup, Telegram creates the `popup_closed` event.
    * @since v6.2
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-open-popup
@@ -309,11 +325,32 @@ export interface Methods {
    */
   web_app_request_emoji_status_access: CreateMethodParams;
   /**
+   * Displays a native popup prompting the user to download a file.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-file-download
+   */
+  web_app_request_file_download: CreateMethodParams<{
+    /**
+     * The HTTPS URL of the file to be downloaded.
+     */
+    url: string;
+    /**
+     * The suggested name for the downloaded file.
+     */
+    file_name: string;
+  }>;
+  /**
    * Requests to open the mini app in fullscreen.
    * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-fullscreen
    */
   web_app_request_fullscreen: CreateMethodParams;
+  /**
+   * Requests location data.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-request-location
+   */
+  web_app_request_location: CreateMethodParams;
   /**
    * Requests access to current user's phone.
    * @since v6.9
@@ -343,6 +380,19 @@ export interface Methods {
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-rqeuest-write-access
    */
   web_app_request_write_access: CreateMethodParams;
+  /**
+   * Opens a dialog allowing the user to share a message provided by the bot.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-send-prepared-message
+   */
+  web_app_send_prepared_message: CreateMethodParams<{
+    /**
+     * Identifier of the message
+     * ([PreparedInlineMessage](https://core.telegram.org/bots/api#preparedinlinemessage)) previously obtained via the Bot API method
+     * [savePreparedInlineMessage](https://core.telegram.org/bots/api#savepreparedinlinemessage).
+     */
+    id: string;
+  }>;
   /**
    * Updates the Mini App background color.
    * @since v6.1
@@ -494,6 +544,76 @@ export interface Methods {
     }
   }>;
   /**
+   * Starts tracking accelerometer data.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-start-accelerometer
+   */
+  web_app_start_accelerometer: CreateMethodParams<{
+    /**
+     * The refresh rate in milliseconds, with acceptable values ranging from 20 to 1000.
+     * Note that refresh_rate may not be supported on all platforms, so the actual tracking
+     * frequency may differ from the specified value.
+     */
+    refresh_rate: number;
+  }>;
+  /**
+   * Starts tracking device orientation data.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-start-device-orientation
+   */
+  web_app_start_device_orientation: CreateMethodParams<{
+    /**
+     * The refresh rate in milliseconds, with acceptable values ranging from 20 to 1000.
+     * Note that refresh_rate may not be supported on all platforms, so the actual tracking
+     * frequency may differ from the specified value.
+     */
+    refresh_rate: number;
+    /**
+     * Pass true to receive absolute orientation data, allowing you to determine the device's
+     * attitude relative to magnetic north. Use this option if implementing features like a
+     * compass in your app. If relative data is sufficient, pass false.
+     *
+     * Keep in mind that some devices may not support absolute orientation data. In such cases,
+     * you will receive relative data even if need_absolute=true is passed.
+     */
+    need_absolute?: boolean;
+  }>;
+
+  /**
+   * Starts tracking gyroscope data.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-start-gyroscope
+   */
+  web_app_start_gyroscope: CreateMethodParams<{
+    /**
+     * The refresh rate in milliseconds, with acceptable values ranging from 20 to 1000.
+     * Note that refresh_rate may not be supported on all platforms, so the actual tracking
+     * frequency may differ from the specified value.
+     */
+    refresh_rate: number;
+  }>;
+
+  /**
+   * Stops tracking accelerometer data.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-stop-accelerometer
+   */
+  web_app_stop_accelerometer: CreateMethodParams;
+
+  /**
+   * Stops tracking device orientation data.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-stop-device-orientation
+   */
+  web_app_stop_device_orientation: CreateMethodParams;
+  /**
+   * Stops tracking gyroscope data.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-stop-gyroscope
+   */
+  web_app_stop_gyroscope: CreateMethodParams;
+
+  /**
    * Inserts the bot's username and the specified inline query in the current chat's input field.
    * Query may be empty, in which case only the bot's username will be inserted. The client prompts
    * the user to choose a specific chat, then opens that chat and inserts the bot's username and
@@ -512,6 +632,14 @@ export interface Methods {
      */
     chat_types: SwitchInlineQueryChatType[];
   }>;
+  /**
+   * Locks the Mini App’s orientation to its current mode (either portrait or landscape). Once
+   * locked, the orientation remains fixed, regardless of device rotation. This is useful if a
+   * stable orientation is needed during specific interactions.
+   * @since v8.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-toggle-orientation-lock
+   */
+  web_app_toggle_orientation_lock: CreateMethodParams<{ locked: boolean }>;
   /**
    * Generates haptic feedback event.
    * @since v6.1

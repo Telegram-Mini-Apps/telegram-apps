@@ -109,6 +109,18 @@ export function supports(
     case 'web_app_add_to_home_screen':
     case 'web_app_check_home_screen':
     case 'web_app_request_emoji_status_access':
+    case 'web_app_check_location':
+    case 'web_app_open_location_settings':
+    case 'web_app_request_file_download':
+    case 'web_app_request_location':
+    case 'web_app_send_prepared_message':
+    case 'web_app_start_accelerometer':
+    case 'web_app_start_device_orientation':
+    case 'web_app_start_gyroscope':
+    case 'web_app_stop_accelerometer':
+    case 'web_app_stop_device_orientation':
+    case 'web_app_stop_gyroscope':
+    case 'web_app_toggle_orientation_lock':
       return versionLessOrEqual('8.0', paramOrVersion);
     default:
       return [
