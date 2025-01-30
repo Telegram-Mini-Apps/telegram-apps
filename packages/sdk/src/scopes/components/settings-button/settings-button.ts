@@ -32,7 +32,7 @@ export const [_isMounted, isMounted] = createSignalsTuple(false);
 export const isSupported = createIsSupported(SETUP_METHOD_NAME);
 
 const wrapSupported = createWrapSupported(COMPONENT_NAME, SETUP_METHOD_NAME);
-const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, SETUP_METHOD_NAME);
+const wrapComplete = createWrapComplete(COMPONENT_NAME, _isMounted, SETUP_METHOD_NAME);
 
 /**
  * Hides the Settings Button.
@@ -62,14 +62,14 @@ export const hide = wrapComplete('hide', (): void => {
  * }
  */
 export const mount = wrapSupported('mount', (): void => {
-  if (!isMounted()) {
+  if (!_isMounted()) {
     setVisibility(isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false);
     _isMounted.set(true);
   }
 });
 
 function setVisibility(value: boolean): void {
-  if (value !== isVisible()) {
+  if (value !== _isVisible()) {
     postEvent(SETUP_METHOD_NAME, { is_visible: value });
     setStorageValue<StorageValue>(COMPONENT_NAME, value);
     _isVisible.set(value);

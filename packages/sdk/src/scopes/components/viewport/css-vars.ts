@@ -5,7 +5,7 @@ import { CSSVarsBoundError } from '@/errors.js';
 import { createSignalsTuple } from '@/signals-registry.js';
 import { createWrapMounted } from '@/scopes/wrappers/createWrapMounted.js';
 import { COMPONENT_NAME } from '@/scopes/components/viewport/const.js';
-import { isMounted } from '@/scopes/components/viewport/mounting.js';
+import { _isMounted } from '@/scopes/components/viewport/mounting.js';
 
 import {
   safeAreaInsetBottom,
@@ -22,7 +22,7 @@ import {
 } from './signals.js';
 import type { GetCSSVarNameFn } from './types.js';
 
-const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
+const wrapMounted = createWrapMounted(COMPONENT_NAME, _isMounted);
 
 /**
  * True if CSS variables are currently bound.
@@ -69,7 +69,7 @@ export const [_isCssVarsBound, isCssVarsBound] = createSignalsTuple(false);
 export const bindCssVars = wrapMounted(
   'bindCssVars',
   (getCSSVarName?: GetCSSVarNameFn): VoidFunction => {
-    if (isCssVarsBound()) {
+    if (_isCssVarsBound()) {
       throw new CSSVarsBoundError();
     }
 

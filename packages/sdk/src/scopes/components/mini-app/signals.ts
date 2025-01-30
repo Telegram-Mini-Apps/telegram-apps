@@ -36,7 +36,7 @@ export const [_backgroundColor, backgroundColor] =
  * This value requires the Theme Params component to be mounted to extract a valid RGB value
  * of the color key.
  */
-export const backgroundColorRGB = rgbBasedOn(backgroundColor);
+export const backgroundColorRGB = rgbBasedOn(_backgroundColor);
 
 
 /**
@@ -52,7 +52,7 @@ export const [_bottomBarColor, bottomBarColor] =
  * of the color key.
  */
 export const bottomBarColorRGB = createComputed<RGB | undefined>(() => {
-  const color = bottomBarColor();
+  const color = _bottomBarColor();
   return isRGB(color)
     ? color
     : color === 'bottom_bar_bg_color'
@@ -75,7 +75,7 @@ export const [_headerColor, headerColor] = createSignalsTuple<HeaderColor>('bg_c
  * This value requires the Theme Params component to be mounted to extract a valid RGB value
  * of the color key.
  */
-export const headerColorRGB = rgbBasedOn(headerColor);
+export const headerColorRGB = rgbBasedOn(_headerColor);
 
 /**
  * True if CSS variables are currently bound.
@@ -99,8 +99,8 @@ export const [_isActive, isActive] = createSignalsTuple(true);
  * Complete component state.
  */
 export const state = createComputed<State>(() => ({
-  backgroundColor: backgroundColor(),
-  bottomBarColor: bottomBarColor(),
-  headerColor: headerColor(),
-  isActive: isActive(),
+  backgroundColor: _backgroundColor(),
+  bottomBarColor: _bottomBarColor(),
+  headerColor: _headerColor(),
+  isActive: _isActive(),
 }));

@@ -30,7 +30,7 @@ export const isSupported = createIsSupported(SETUP_METHOD_NAME);
 export const [_isVerticalEnabled, isVerticalEnabled] = createSignalsTuple(true);
 
 const wrapSupported = createWrapSupported(COMPONENT_NAME, SETUP_METHOD_NAME);
-const wrapComplete = createWrapComplete(COMPONENT_NAME, isMounted, SETUP_METHOD_NAME);
+const wrapComplete = createWrapComplete(COMPONENT_NAME, _isMounted, SETUP_METHOD_NAME);
 
 /**
  * Disables vertical swipes.
@@ -76,7 +76,7 @@ export const enableVertical = wrapComplete('enableVertical', (): void => {
  * }
  */
 export const mount = wrapSupported('mount', (): void => {
-  if (!isMounted()) {
+  if (!_isMounted()) {
     setVerticalEnabled(
       isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || false,
       true,
@@ -86,7 +86,7 @@ export const mount = wrapSupported('mount', (): void => {
 });
 
 function setVerticalEnabled(value: boolean, force?: boolean): void {
-  if (value !== isVerticalEnabled() || force) {
+  if (value !== _isVerticalEnabled() || force) {
     postEvent(SETUP_METHOD_NAME, { allow_vertical_swipe: value });
     setStorageValue<StorageValue>(COMPONENT_NAME, value);
     _isVerticalEnabled.set(value);

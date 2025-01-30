@@ -68,7 +68,7 @@ export function defineNonConcurrentFn<Fn extends (...args: any) => AbortableProm
           });
         });
     }, fn),
-    [_promise, promise, createComputed(() => !!promise())],
+    [_promise, promise, createComputed(() => !!_promise())],
     [_error, error],
   ];
 }

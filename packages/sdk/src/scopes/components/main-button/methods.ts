@@ -33,7 +33,7 @@ const wrapMounted = createWrapMounted(COMPONENT_NAME, isMounted);
  * }
  */
 export const mount = wrapBasic('mount', (): void => {
-  if (!isMounted()) {
+  if (!_isMounted()) {
     const prev = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
     prev && internalState.set(prev);
     _isMounted.set(true);

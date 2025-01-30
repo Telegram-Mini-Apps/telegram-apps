@@ -94,7 +94,7 @@ export function setState(s: Partial<State>): void {
   const { height, stableHeight, width } = s;
 
   _state.set({
-    ...state(),
+    ..._state(),
     ...removeUndefined({
       ...s,
       height: height ? nonNegative(height) : undefined,
@@ -102,7 +102,7 @@ export function setState(s: Partial<State>): void {
       stableHeight: stableHeight ? nonNegative(stableHeight) : undefined,
     }),
   });
-  setStorageValue<State>(COMPONENT_NAME, state());
+  setStorageValue<State>(COMPONENT_NAME, _state());
 }
 
 /**
