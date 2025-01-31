@@ -38,6 +38,5 @@ data's [start_param](init-data.md#parameters-list) property.
 
 ## Restrictions
 
-- Maximum length: **512 characters**
-- Allowed characters: **latin alphabet characters, digits** and the **underscore**. The valid RegExp for the start param value
-  is: `/^\w{0,512}$/`.
+- Only the following characters are allowed: `A-Z`, `a-z`, `0-9`, `_` (underscore) and the `-` (minus). We recommend using [base64url](https://base64.guru/standards/base64url) to encode parameters with binary and other types of content. The parameter can be up to `512` characters long.
+- You can validate start parameter with the following RegExp: `/^[\w-]{0,512}$/`
