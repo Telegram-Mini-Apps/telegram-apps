@@ -1,6 +1,6 @@
 {
   "name": "@telegram-apps/sdk-vue",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Vue.js bindings for Mini Apps client SDK.",
   "author": "Dmitry Nischeta <nish.dima@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",

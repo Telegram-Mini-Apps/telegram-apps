@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 2.3.1
+
+### Patch Changes
+
+- 0e4977e: Use `Maybe` from `@telegram-apps/toolkit` instead of a type from declarations' file
+
 ## 2.3.0
 
 ### Minor Changes
