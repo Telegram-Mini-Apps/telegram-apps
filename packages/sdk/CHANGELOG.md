@@ -1,5 +1,16 @@
 # @telegram-apps/sdk
 
+## 3.2.0
+
+### Minor Changes
+
+- fbcfd81: Implement location manager. Implement `shareMessage`. Add support check to `biometryManager.mount()`.
+
+### Patch Changes
+
+- Updated dependencies [0e4977e]
+  - @telegram-apps/bridge@2.3.1
+
 ## 3.1.3
 
 ### Patch Changes
