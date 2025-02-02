@@ -5,6 +5,7 @@ export * from '@/scopes/components/cloud-storage/exports.js';
 export * from '@/scopes/components/haptic-feedback/exports.js';
 export * from '@/scopes/components/init-data/exports.js';
 export * from '@/scopes/components/invoice/exports.js';
+export * from '@/scopes/components/location-manager/exports.js';
 export * from '@/scopes/components/main-button/exports.js';
 export * from '@/scopes/components/mini-app/exports.js';
 export * from '@/scopes/components/popup/exports.js';
