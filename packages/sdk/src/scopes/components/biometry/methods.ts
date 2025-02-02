@@ -15,7 +15,6 @@ import { defineMountFn } from '@/scopes/defineMountFn.js';
 import { createIsSupported } from '@/scopes/createIsSupported.js';
 import { createWrapComplete } from '@/scopes/wrappers/createWrapComplete.js';
 import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
-import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
 import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
 import { NotAvailableError } from '@/errors.js';
 
@@ -88,7 +87,6 @@ const [
   },
 );
 
-const wrapBasic = createWrapBasic(COMPONENT_NAME);
 const wrapSupported = createWrapSupported(COMPONENT_NAME, REQUEST_AUTH_METHOD);
 const wrapComplete = createWrapComplete(COMPONENT_NAME, tIsMounted[0], REQUEST_AUTH_METHOD);
 
@@ -103,7 +101,7 @@ const wrapComplete = createWrapComplete(COMPONENT_NAME, tIsMounted[0], REQUEST_A
  *   await mount();
  * }
  */
-export const mount = wrapBasic('mount', mountFn);
+export const mount = wrapSupported('mount', mountFn);
 export const [, mountPromise, isMounting] = tMountPromise;
 export const [, mountError] = tMountError;
 export const [_isMounted, isMounted] = tIsMounted;
