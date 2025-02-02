@@ -54,3 +54,8 @@ export const [
   FullscreenFailedError,
   isFullscreenFailedError,
 ] = errorClass<[message: string]>('FullscreenFailedError', proxyMessage);
+
+export const [
+  ShareMessageError,
+  isShareMessageError,
+] = errorClass<[error: string]>('ShareMessageError', proxyMessage);

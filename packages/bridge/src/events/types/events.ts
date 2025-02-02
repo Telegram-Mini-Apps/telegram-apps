@@ -13,7 +13,7 @@ import type {
   EmojiStatusFailedError,
   HomeScreenStatus,
 } from './misc.js';
-import type { If, IsNever } from '@telegram-apps/toolkit';
+import type { If, IsNever, Maybe } from '@telegram-apps/toolkit';
 
 /**
  * Map where key is known event name, and value is its listener.
