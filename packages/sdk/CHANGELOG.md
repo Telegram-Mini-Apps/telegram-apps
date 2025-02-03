@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 3.3.0
+
+### Minor Changes
+
+- c36aa39: Implement `locationManager.openSettings` method. Exports location manager's `unmount` method. Fix invalid method name for `requestLocation`
+
 ## 3.2.0
 
 ### Minor Changes
