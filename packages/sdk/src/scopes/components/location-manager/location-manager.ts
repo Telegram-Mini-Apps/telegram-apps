@@ -5,7 +5,7 @@ import type { EventPayload } from '@telegram-apps/bridge';
 import type { Computed } from '@telegram-apps/signals';
 
 import { defineMountFn } from '@/scopes/defineMountFn.js';
-import { request } from '@/globals.js';
+import { postEvent, request } from '@/globals.js';
 import { createWrapComplete } from '@/scopes/wrappers/createWrapComplete.js';
 import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
 import { NotAvailableError } from '@/errors.js';
@@ -16,6 +16,7 @@ import { createComputed, createSignal } from '@/signals-registry.js';
 
 const COMPONENT_NAME = 'locationManager';
 const CHECK_LOCATION_METHOD = 'web_app_check_location';
+const OPEN_SETTINGS_METHOD = 'web_app_open_location_settings';
 
 export interface State {
   /**
@@ -70,7 +71,6 @@ export const isAccessRequested = fromState('accessRequested');
  * @see location_checked
  */
 function eventToState(event: EventPayload<'location_checked'>): State {
-  console.log(event);
   let available = false;
   let accessRequested: Maybe<boolean>;
   let accessGranted: Maybe<boolean>;
@@ -159,10 +159,28 @@ const [
  *   const location = await requestLocation();
  * }
  */
-export const requestLocation = wrapComplete('getLocation', reqLocationFn);
+export const requestLocation = wrapComplete('requestLocation', reqLocationFn);
 export const [, requestLocationPromise, isRequestingLocation] = tReqLocationPromise;
 export const [, requestLocationError] = tReqLocationError;
 
+/**
+ * Opens the location access settings for bots. Useful when you need to request location access
+ * from users who haven't granted it yet.
+ *
+ * Note that this method can be called only in response to user interaction with the Mini App
+ * interface (e.g., a click inside the Mini App or on the main button).
+ * @since Mini Apps v8.0
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @example
+ * if (openSettings.isAvailable()) {
+ *   openSettings();
+ * }
+ */
+export const openSettings = wrapSupported('openSettings', () => {
+  postEvent(OPEN_SETTINGS_METHOD);
+}, OPEN_SETTINGS_METHOD);
 
 /**
  * Unmounts the component.
