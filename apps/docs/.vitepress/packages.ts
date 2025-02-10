@@ -43,6 +43,14 @@ export const packagesLinksGenerator = (prefix: string = '') => {
       section('TypeScript', {
         '@telegram-apps/signals': 'telegram-apps-signals',
         '@telegram-apps/bridge': ['telegram-apps-bridge', {
+          '@2.x': ['2-x', {
+            'Methods': 'methods',
+            'Events': 'events',
+            'Launch Parameters': 'launch-parameters',
+            'Environment': 'environment',
+            'Globals': 'globals',
+            'Advanced': 'advanced',
+          }],
           'Methods': 'methods',
           'Events': 'events',
           'Environment': 'environment',
@@ -116,6 +124,39 @@ export const packagesLinksGenerator = (prefix: string = '') => {
               scope('uncategorized'),
             ])],
           }],
+          '@3.x': ['3-x', {
+            'Initializing': 'initializing',
+            'Scopes': 'scopes',
+            'Usage Tips': 'usage-tips',
+            'Components': [
+              { url: 'components', page: false },
+              fromEntries([
+                scope('back-button'),
+                scope('biometry'),
+                scope('closing-behavior'),
+                scope('cloud-storage'),
+                scope('haptic-feedback'),
+                scope('init-data'),
+                scope('invoice'),
+                scope('main-button'),
+                scope('mini-app'),
+                scope('popup'),
+                scope('qr-scanner', 'QR Scanner'),
+                scope('secondary-button'),
+                scope('settings-button'),
+                scope('swipe-behavior'),
+                scope('theme-params'),
+                scope('viewport'),
+              ]),
+            ],
+            'Utilities': [{ url: 'utils', page: false }, fromEntries([
+              scope('emoji-status'),
+              scope('home-screen'),
+              scope('links'),
+              scope('privacy'),
+              scope('uncategorized'),
+            ])],
+          }],
         }],
         '@telegram-apps/sdk-react': [{
           url: 'telegram-apps-sdk-react',
@@ -123,6 +164,7 @@ export const packagesLinksGenerator = (prefix: string = '') => {
         }, {
           '@1.x': '1-x',
           '@2.x': '2-x',
+          '@3.x': '3-x',
         }],
         '@telegram-apps/sdk-solid': [{
           url: 'telegram-apps-sdk-solid',
@@ -130,14 +172,21 @@ export const packagesLinksGenerator = (prefix: string = '') => {
         }, {
           '@1.x': '1-x',
           '@2.x': '2-x',
+          '@3.x': '3-x',
         }],
-        '@telegram-apps/sdk-vue': '/telegram-apps-sdk-vue',
-        '@telegram-apps/sdk-svelte': '/telegram-apps-sdk-svelte',
+        '@telegram-apps/sdk-vue': [{ url: 'telegram-apps-sdk-vue' }, {
+          '@2.x': '2-x',
+        }],
+        '@telegram-apps/sdk-svelte': [{ url: 'telegram-apps-sdk-svelte' }, {
+          '@2.x': '2-x',
+        }],
         '@telegram-apps/solid-router-integration': '/telegram-apps-solid-router-integration',
         '@telegram-apps/react-router-integration': '/telegram-apps-react-router-integration',
       }),
       section('Node', {
-        '@telegram-apps/init-data-node': 'telegram-apps-init-data-node',
+        '@telegram-apps/init-data-node': [{ url: 'telegram-apps-init-data-node' }, {
+          '@2.x': '2-x',
+        }],
       }),
       section('GoLang', {
         'init-data-golang': 'init-data-golang',
