@@ -32,15 +32,8 @@ export interface ConfigureOptions {
   launchParams?: PackageLaunchParams;
   /**
    * Custom postEvent function.
-   *
-   * Passing the "strict" value creates a function, which always checks if specified call supported
-   * by currently supported Mini Apps version. If the method is unsupported, an error will be
-   * thrown.
-   *
-   * Passing the "non-strict" value creates a postEvent function not throwing any errors, but
-   * warning about a missing method support.
-   *
-   * @default 'strict'
+   * @default The `createPostEvent` function will be used with the version, specified in
+   * the `launchParams` option.
    * @see createPostEvent
    */
   postEvent?: PostEventFn;
