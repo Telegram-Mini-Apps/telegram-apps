@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 2.3.2
+
+### Patch Changes
+
+- c0469ff: Actualize README.
+
 ## 2.3.1
 
 ### Patch Changes
