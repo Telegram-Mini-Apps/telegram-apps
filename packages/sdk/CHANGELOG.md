@@ -1,5 +1,13 @@
 # @telegram-apps/sdk
 
+## 3.3.1
+
+### Patch Changes
+
+- d035dc5: Actualize ConfigureOptions.postEvent comments.
+- Updated dependencies [c0469ff]
+  - @telegram-apps/bridge@2.3.2
+
 ## 3.3.0
 
 ### Minor Changes
