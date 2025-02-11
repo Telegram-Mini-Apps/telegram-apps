@@ -138,6 +138,7 @@ export const packagesLinksGenerator = (prefix: string = '') => {
                 scope('haptic-feedback'),
                 scope('init-data'),
                 scope('invoice'),
+                scope('location-manager'),
                 scope('main-button'),
                 scope('mini-app'),
                 scope('popup'),
