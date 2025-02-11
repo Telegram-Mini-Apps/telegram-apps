@@ -12,6 +12,7 @@ export {
   requestLocation,
   mountPromise as locationManagerMountPromise,
   isAvailable as isLocationManagerAvailable,
+  isSupported as isLocationManagerSupported,
   openSettings as openLocationManagerSettings,
   unmount as unmountLocationManager,
 } from './exports.variable.js';

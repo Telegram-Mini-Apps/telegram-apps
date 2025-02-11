@@ -13,6 +13,7 @@ import { defineNonConcurrentFn } from '@/scopes/defineNonConcurrentFn.js';
 import { signalCancel } from '@/scopes/signalCancel.js';
 import type { AsyncOptions } from '@/types.js';
 import { createComputed, createSignal } from '@/signals-registry.js';
+import { createIsSupported } from '@/scopes/createIsSupported.js';
 
 const COMPONENT_NAME = 'locationManager';
 const CHECK_LOCATION_METHOD = 'web_app_check_location';
@@ -49,6 +50,11 @@ const state = createSignal<State>({
 function fromState<K extends keyof State>(key: K): Computed<State[K]> {
   return createComputed(() => state()[key]);
 }
+
+/**
+ * Signal indicating whether the location data tracking is currently supported.
+ */
+export const isSupported = createIsSupported(CHECK_LOCATION_METHOD);
 
 /**
  * Signal indicating whether the location data tracking is currently available.
