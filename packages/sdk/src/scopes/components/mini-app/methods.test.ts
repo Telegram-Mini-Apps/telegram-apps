@@ -89,13 +89,13 @@ describe('bindCssVars', () => {
 
     it('should set --tg-bg-color == backgroundColorRGB() when theme changes', () => {
       bindCssVars();
-      tpState.set({ secondaryBgColor: '#ddddaa' });
+      tpState.set({ secondary_bg_color: '#ddddaa' });
       setSpy.mockClear();
       _backgroundColor.set('secondary_bg_color');
       expect(setSpy).toHaveBeenCalledOnce();
       expect(setSpy).toHaveBeenCalledWith('--tg-bg-color', '#ddddaa');
 
-      tpState.set({ bgColor: '#aafedd' });
+      tpState.set({ bg_color: '#aafedd' });
       setSpy.mockClear();
       _backgroundColor.set('bg_color');
       expect(setSpy).toHaveBeenCalledOnce();
@@ -118,13 +118,13 @@ describe('bindCssVars', () => {
 
     it('should set --tg-header-color == headerColorRGB() when theme changes', () => {
       bindCssVars();
-      tpState.set({ secondaryBgColor: '#ddddaa' });
+      tpState.set({ secondary_bg_color: '#ddddaa' });
       setSpy.mockClear();
       _headerColor.set('secondary_bg_color');
       expect(setSpy).toHaveBeenCalledOnce();
       expect(setSpy).toHaveBeenCalledWith('--tg-header-color', '#ddddaa');
 
-      tpState.set({ bgColor: '#aafedd' });
+      tpState.set({ bg_color: '#aafedd' });
       setSpy.mockClear();
       _headerColor.set('bg_color');
       expect(setSpy).toHaveBeenCalledOnce();
@@ -147,19 +147,19 @@ describe('bindCssVars', () => {
 
     it('should set --tg-bottom-bar-color == bottomBarColorRGB() when theme changes', () => {
       bindCssVars();
-      tpState.set({ bgColor: '#aafedd' });
+      tpState.set({ bg_color: '#aafedd' });
       setSpy.mockClear();
       _bottomBarColor.set('bg_color');
       expect(setSpy).toHaveBeenCalledOnce();
       expect(setSpy).toHaveBeenCalledWith('--tg-bottom-bar-color', '#aafedd');
 
-      tpState.set({ secondaryBgColor: '#ddddaa' });
+      tpState.set({ secondary_bg_color: '#ddddaa' });
       setSpy.mockClear();
       _bottomBarColor.set('secondary_bg_color');
       expect(setSpy).toHaveBeenCalledOnce();
       expect(setSpy).toHaveBeenCalledWith('--tg-bottom-bar-color', '#ddddaa');
 
-      tpState.set({ bottomBarBgColor: '#ddaacc' });
+      tpState.set({ bottom_bar_bg_color: '#ddaacc' });
       setSpy.mockClear();
       _bottomBarColor.set('bottom_bar_bg_color');
       expect(setSpy).toHaveBeenCalledOnce();

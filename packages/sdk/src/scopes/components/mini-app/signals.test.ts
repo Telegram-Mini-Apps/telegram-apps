@@ -28,14 +28,14 @@ describe('bottomBarColorRGB', () => {
       _bottomBarColor.set('bottom_bar_bg_color');
     });
 
-    it('should return value of theme\'s bottomBarBgColor property if it exists', () => {
-      tpState.set({ bottomBarBgColor: '#abcdef' });
-      expect(bottomBarColorRGB()).toBe(tpState().bottomBarBgColor);
+    it('should return value of theme\'s bottom_bar_bg_color property if it exists', () => {
+      tpState.set({ bottom_bar_bg_color: '#abcdef' });
+      expect(bottomBarColorRGB()).toBe('#abcdef');
     });
 
     it('should return value of theme\'s secondaryBgColor property if it exists', () => {
-      tpState.set({ secondaryBgColor: '#ddffea' });
-      expect(bottomBarColorRGB()).toBe(tpState().secondaryBgColor);
+      tpState.set({ secondary_bg_color: '#ddffea' });
+      expect(bottomBarColorRGB()).toBe('#ddffea');
     });
 
     it('should return undefined if bottomBarBgColor and secondaryBgColor keys are not presented in theme', () => {
@@ -45,16 +45,13 @@ describe('bottomBarColorRGB', () => {
   });
 
   it.each([
-    { value: 'bg_color', source: 'bgColor' },
-    { value: 'secondary_bg_color', source: 'secondaryBgColor' },
+    { value: 'bg_color', source: 'bg_color' },
+    { value: 'secondary_bg_color', source: 'secondary_bg_color' },
   ] as const)('should return value of theme\'s $source property if headerColor signal value is $value', ({
     value,
     source,
   }) => {
-    tpState.set({
-      bgColor: '#ffffff',
-      secondaryBgColor: '#000000',
-    });
+    tpState.set({ bg_color: '#ffffff', secondary_bg_color: '#000000' });
     _headerColor.set(value);
     expect(headerColorRGB()).toBe(tpState()[source]);
   });
@@ -67,16 +64,13 @@ describe('backgroundColorRGB', () => {
   });
 
   it.each([
-    { value: 'bg_color', source: 'bgColor' },
-    { value: 'secondary_bg_color', source: 'secondaryBgColor' },
+    { value: 'bg_color', source: 'bg_color' },
+    { value: 'secondary_bg_color', source: 'secondary_bg_color' },
   ] as const)('should return value of theme\'s $source property if backgroundColor signal value is $value', ({
     value,
     source,
   }) => {
-    tpState.set({
-      bgColor: '#ffffff',
-      secondaryBgColor: '#000000',
-    });
+    tpState.set({ bg_color: '#ffffff', secondary_bg_color: '#000000' });
     _backgroundColor.set(value);
     expect(backgroundColorRGB()).toBe(tpState()[source]);
   });
@@ -89,16 +83,13 @@ describe('headerColorRGB', () => {
   });
 
   it.each([
-    { value: 'bg_color', source: 'bgColor' },
-    { value: 'secondary_bg_color', source: 'secondaryBgColor' },
+    { value: 'bg_color', source: 'bg_color' },
+    { value: 'secondary_bg_color', source: 'secondary_bg_color' },
   ] as const)('should return value of theme\'s $source property if headerColor signal value is $value', ({
     value,
     source,
   }) => {
-    tpState.set({
-      bgColor: '#ffffff',
-      secondaryBgColor: '#000000',
-    });
+    tpState.set({ bg_color: '#ffffff', secondary_bg_color: '#000000' });
     _headerColor.set(value);
     expect(headerColorRGB()).toBe(tpState()[source]);
   });
