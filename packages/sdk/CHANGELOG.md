@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 3.3.2
+
+### Patch Changes
+
+- 4b5d4f0: Set valid source properties for computed color signals in theme params.
+
 ## 3.3.1
 
 ### Patch Changes
