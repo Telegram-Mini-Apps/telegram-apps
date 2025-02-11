@@ -21,59 +21,59 @@ function fromState<K extends keyof ThemeParams>(key: K): Computed<ThemeParams[K]
 /**
  * @since v6.10
  */
-export const accentTextColor = fromState('accentTextColor');
+export const accentTextColor = fromState('accent_text_color');
 
-export const backgroundColor = fromState('bgColor');
+export const backgroundColor = fromState('bg_color');
 
-export const buttonColor = fromState('buttonColor');
+export const buttonColor = fromState('button_color');
 
-export const buttonTextColor = fromState('buttonTextColor');
+export const buttonTextColor = fromState('button_text_color');
 
 /**
  * @since v7.10
  */
-export const bottomBarBgColor = fromState('bottomBarBgColor');
+export const bottomBarBgColor = fromState('bottom_bar_bg_color');
 
-export const destructiveTextColor = fromState('destructiveTextColor');
+export const destructiveTextColor = fromState('destructive_text_color');
 
 /**
  * @since v6.10
  */
-export const headerBackgroundColor = fromState('headerBgColor');
+export const headerBackgroundColor = fromState('header_bg_color');
 
-export const hintColor = fromState('hintColor');
+export const hintColor = fromState('hint_color');
 
 /**
  * @returns True if the current color scheme is recognized as dark.
  * This value is calculated based on the current theme's background color.
  */
 export const isDark = createComputed(() => {
-  const { bgColor } = _state();
-  return !bgColor || isColorDark(bgColor);
+  const color = backgroundColor();
+  return !color || isColorDark(color);
 });
 
-export const linkColor = fromState('linkColor');
+export const linkColor = fromState('link_color');
 
-export const secondaryBackgroundColor = fromState('secondaryBgColor');
-
-/**
- * @since v6.10
- */
-export const sectionBackgroundColor = fromState('sectionBgColor');
+export const secondaryBackgroundColor = fromState('secondary_bg_color');
 
 /**
  * @since v6.10
  */
-export const sectionHeaderTextColor = fromState('sectionHeaderTextColor');
+export const sectionBackgroundColor = fromState('section_bg_color');
+
+/**
+ * @since v6.10
+ */
+export const sectionHeaderTextColor = fromState('section_header_text_color');
 
 /**
  * @since v7.6
  */
-export const sectionSeparatorColor = fromState('sectionSeparatorColor');
+export const sectionSeparatorColor = fromState('section_separator_color');
 
 /**
  * @since v6.10
  */
-export const subtitleTextColor = fromState('subtitleTextColor');
+export const subtitleTextColor = fromState('subtitle_text_color');
 
-export const textColor = fromState('textColor');
+export const textColor = fromState('text_color');
