@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 3.4.0
+
+### Minor Changes
+
+- 8e392b4: Implement `locationManager.isSupported()`.
+
 ## 3.3.2
 
 ### Patch Changes
