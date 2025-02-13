@@ -122,9 +122,11 @@ mockTelegramEnv({
     tgWebAppThemeParams: themeParams,
     tgWebAppData: new URLSearchParams([
       ['user', JSON.stringify({
+        id: 1,
         first_name: 'Pavel',
       })],
       ['hash', ''],
+      ['signature', ''],
       ['auth_date', Date.now().toString()],
     ]),
     tgWebAppStartParam: 'debug',
