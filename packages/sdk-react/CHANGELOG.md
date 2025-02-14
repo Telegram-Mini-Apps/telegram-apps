@@ -1,5 +1,11 @@
 # @telegram-apps/sdk-react
 
+## 3.1.0
+
+### Minor Changes
+
+- b364831: Prevent useSignal from erroring out during SSR by passing an optional getServerSnapshot function or the signal itself to useSyncExternalStore
+
 ## 3.0.10
 
 ### Patch Changes
