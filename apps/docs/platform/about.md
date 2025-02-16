@@ -64,7 +64,7 @@ applications:
 - [Telegram Web A](https://github.com/Ajaxy/telegram-tt) `weba`;
 - [Telegram Web K](https://github.com/morethanwords/tweb) `web`;
 
-Other applications either don't have implementation for Telegram Mini AppsS or
+Other applications either don't have implementation for Telegram Mini Apps or
 support it too poorly. This will probably be useful in the next sections of the
 documentation.
 
