@@ -9,13 +9,12 @@ Telegram Bots. So, currently, creating a Mini App without creating a Telegram Bo
 
 The platform offers a high variety of available methods to communicate with the Telegram application
 to make your web applications look more native, allow them to simulate native application's
-behavior, and, finally, to **mimic** native applications.
+behavior, and finally, to **mimic** native applications.
 
 ## Required Technologies
 
 Before starting to create an application on the Mini Apps platform, it is important to know what
-Mini Apps are from their technical side. This will lead the developer to language and technology
-selection.
+Mini Apps are from a technical standpoint. This will lead the developer to the selection of language and technology.
 
 Internally, Mini Apps are typical web applications, which are displayed in WebView. In other words,
 they are just a set of static files (mostly `.js`, `.css`, and `.html`). So, to create Mini App, it
@@ -37,21 +36,21 @@ within Telegram.
 
 As we mentioned in the previous section, Mini Apps are add-ons for Telegram Bots. Telegram Bots are
 also a well-known technology that provides functionality for a wide range of use cases. You could create a
-bot to buy a ticket in the cinema, make tell users jokes, generate random numbers, etc. In other
-words, the bot can do whatever the developer thinks of.
+bot to buy a ticket in the cinema, tell jokes, generate random numbers, etc. In other
+words, the bot can do whatever the developer can think of.
 
 The problem is, the visual part of bots is not as good and functional as it could be. Their current
 implementation is "console-like" which is more appropriate for developers, not common users. That's
-when Mini Apps come.
+where Mini Apps are useful.
 
-Using Mini Apps, developers are allowed to create more user-friendly and complex interfaces, which
+Using Mini Apps, developers can create more user-friendly and complex interfaces, which
 are commonly used by typical users. With this technology, the developer is still able to communicate
 with the bot behind Mini App, but, additionally, they can provide some more flexible interfaces to
 interact with.
 
-Mini Apps are usually used when a standard bot interface is not enough. Create a Mini App when you
+Mini Apps are used when a standard bot interface is not enough. Create a Mini App when you
 want to make user life easier when displaying several buttons is not even close to the
-functionality, you want to provide.
+functionality you want to provide.
 
 ## Supported Applications
 
@@ -65,7 +64,7 @@ applications:
 - [Telegram Web A](https://github.com/Ajaxy/telegram-tt) `weba`;
 - [Telegram Web K](https://github.com/morethanwords/tweb) `web`;
 
-Other applications either don't have implementation for Telegram Mini Apps, or
+Other applications either don't have implementation for Telegram Mini Apps or
 support it too poorly. This will probably be useful in the next sections of the
 documentation.
 
