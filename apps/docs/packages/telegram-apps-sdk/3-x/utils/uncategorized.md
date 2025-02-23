@@ -1,5 +1,43 @@
 # Uncategorized
 
+## `copyTextToClipboard`
+
+Copies specified text to the clipboard using all known methods.
+
+```ts
+import { copyTextToClipboard } from '@telegram-apps/sdk';
+
+await copyTextToClipboard('My text goes here');
+```
+
+## `downloadFile`
+
+To request file download, use the `downloadFile` function. It accepts a file URL and its proposed saved name.
+
+::: code-group
+
+```ts [Using isAvailable]
+import { downloadFile } from '@telegram-apps/sdk';
+
+if (downloadFile.isAvailable()) {
+  await downloadFile(
+    'https://telegram.org/js/telegram-web-app.js',
+    'telegram-sdk.js',
+  );
+}
+```
+
+```ts [Using ifAvailable]
+import { downloadFile } from '@telegram-apps/sdk';
+
+await downloadFile.ifAvailable(
+  'https://telegram.org/js/telegram-web-app.js',
+  'telegram-sdk.js',
+);
+```
+
+:::
+
 ## `getCurrentTime`
 
 To retrieve the current Telegram server time, use the `getCurrentTime` function. It returns

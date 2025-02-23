@@ -290,9 +290,9 @@ Custom emoji status set.
 
 Available since: **v8.0**
 
-| Field  | Type     | Description                                                      |
-|--------|----------|------------------------------------------------------------------|
-| status | `string` | Request status. Set to `downloading` if the is being downloaded. |
+| Field  | Type     | Description                                                     |
+|--------|----------|-----------------------------------------------------------------|
+| status | `string` | Request status. Set to `downloading` if a file is being loaded. |
 
 ### `fullscreen_changed`
 

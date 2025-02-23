@@ -432,6 +432,8 @@ Available since: **v8.0**
 
 Displays a native popup prompting the user to download a file.
 
+In turn, the Telegram client emits the [file_download_requested](./events.md#file_download_requested) event.
+
 | Field     | Type     | Description                                 |
 |-----------|----------|---------------------------------------------|
 | url       | `string` | The HTTPS URL of the file to be downloaded. |
