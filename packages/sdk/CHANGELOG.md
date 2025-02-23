@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 3.5.0
+
+### Minor Changes
+
+- c25520f: Implement `copyTextToClipboard` and `downloadFile`.
+
 ## 3.4.0
 
 ### Minor Changes
