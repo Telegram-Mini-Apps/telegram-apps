@@ -546,7 +546,7 @@ export interface Events {
    */
   theme_changed: {
     /**
-     * Map where the key is a theme stylesheet key and value is  the
+     * Map where the key is a theme stylesheet key and value is the
      * corresponding color in
      * `#RRGGBB` format.
      */

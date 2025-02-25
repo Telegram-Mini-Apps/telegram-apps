@@ -184,6 +184,52 @@ describe('on', () => {
       });
     });
   });
+
+  it('should format theme_params if it was in int', () => {
+    const listener = vi.fn();
+    on('theme_changed', listener);
+
+    emitEvent('theme_changed', {
+      theme_params: {
+        accent_text_color: -10177041,
+        bg_color: -14602949,
+        bottom_bar_bg_color: -15393241,
+        button_color: -11491093,
+        button_text_color: -1,
+        destructive_text_color: -1152913,
+        header_bg_color: -14406343,
+        hint_color: -8549479,
+        link_color: -10572831,
+        secondary_bg_color: -15393241,
+        section_bg_color: -14866637,
+        section_header_text_color: -8796932,
+        section_separator_color: -15920616,
+        subtitle_text_color: -8681584,
+        text_color: -1,
+      }
+    });
+
+    expect(listener).toHaveBeenCalledTimes(1);
+    expect(listener).toHaveBeenCalledWith({
+      theme_params: {
+        accent_text_color: "#64b5ef",
+        bg_color: "#212d3b",
+        bottom_bar_bg_color: "#151e27",
+        button_color: "#50a8eb",
+        button_text_color: "#ffffff",
+        destructive_text_color: "#ee686f",
+        header_bg_color: "#242d39",
+        hint_color: "#7d8b99",
+        link_color: "#5eabe1",
+        secondary_bg_color: "#151e27",
+        section_bg_color: "#1d2733",
+        section_header_text_color: "#79c4fc",
+        section_separator_color: "#d1218",
+        subtitle_text_color: "#7b8790",
+        text_color: "#ffffff",
+      }
+    });
+  });
 });
 
 describe('off', () => {

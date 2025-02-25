@@ -12,11 +12,13 @@ import {
   type BaseSchema,
 } from 'valibot';
 import { jsonParse, MiniAppsMessageSchema } from '@telegram-apps/transformers';
+import { RGB, RGBInt } from "@telegram-apps/types";
 
 import { createEmitter } from '@/events/createEmitter.js';
 import type { EventName, EventPayload, Events } from '@/events/types/index.js';
 import { emitEvent } from '@/events/emitEvent.js';
 import { logError } from '@/debug.js';
+import { intToHexColor } from "@/utils/intToHexColor.js";
 
 /**
  * Transformers for problematic Mini Apps events.
@@ -60,8 +62,20 @@ function listener(event: MessageEvent): void {
 
   const { eventType, eventData } = message;
   const schema = transformers[eventType as keyof typeof transformers];
+
   try {
-    const data = schema ? parse(schema, eventData) : eventData;
+    // Format theme params for Android Telegram App
+    let formatedEventData  = eventData;
+    if (eventType === 'theme_changed' && formatedEventData && typeof formatedEventData === 'object' && 'theme_params' in formatedEventData) {
+      formatedEventData = {
+        theme_params: Object.fromEntries(
+            Object.entries(formatedEventData.theme_params as Record<string, RGB | RGBInt | undefined>)
+                .map(([key, value]: [string, RGB | RGBInt | undefined]) => [key, intToHexColor(value)])
+        )
+      };
+    }
+
+    const data = schema ? parse(schema, formatedEventData) : formatedEventData;
     emit(eventType as any, data);
   } catch (cause) {
     logError(
