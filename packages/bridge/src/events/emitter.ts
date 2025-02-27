@@ -11,14 +11,12 @@ import {
   nullish,
   type BaseSchema,
 } from 'valibot';
-import { jsonParse, MiniAppsMessageSchema } from '@telegram-apps/transformers';
-import { RGB, RGBInt } from "@telegram-apps/types";
+import { jsonParse, MiniAppsMessageSchema, themeParams } from '@telegram-apps/transformers';
 
 import { createEmitter } from '@/events/createEmitter.js';
 import type { EventName, EventPayload, Events } from '@/events/types/index.js';
 import { emitEvent } from '@/events/emitEvent.js';
 import { logError } from '@/debug.js';
-import { intToHexColor } from "@/utils/intToHexColor.js";
 
 /**
  * Transformers for problematic Mini Apps events.
@@ -43,6 +41,9 @@ const transformers = {
     is_state_stable: boolean(),
     is_expanded: boolean(),
   }),
+  theme_changed: looseObject({
+    theme_params: themeParams(),
+  }),
 } as const satisfies { [E in EventName]?: BaseSchema<unknown, EventPayload<E>, any> };
 
 function listener(event: MessageEvent): void {
@@ -64,18 +65,7 @@ function listener(event: MessageEvent): void {
   const schema = transformers[eventType as keyof typeof transformers];
 
   try {
-    // Format theme params for Android Telegram App
-    let formatedEventData  = eventData;
-    if (eventType === 'theme_changed' && formatedEventData && typeof formatedEventData === 'object' && 'theme_params' in formatedEventData) {
-      formatedEventData = {
-        theme_params: Object.fromEntries(
-            Object.entries(formatedEventData.theme_params as Record<string, RGB | RGBInt | undefined>)
-                .map(([key, value]: [string, RGB | RGBInt | undefined]) => [key, intToHexColor(value)])
-        )
-      };
-    }
-
-    const data = schema ? parse(schema, formatedEventData) : formatedEventData;
+    const data = schema ? parse(schema, eventData) : eventData;
     emit(eventType as any, data);
   } catch (cause) {
     logError(
