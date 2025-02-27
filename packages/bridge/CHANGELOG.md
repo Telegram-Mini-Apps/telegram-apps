@@ -1,5 +1,16 @@
 # @telegram-apps/bridge
 
+## 2.4.0
+
+### Minor Changes
+
+- a88723a: Add formatter for int theme params
+
+### Patch Changes
+
+- Updated dependencies [a88723a]
+  - @telegram-apps/transformers@2.2.0
+
 ## 2.3.2
 
 ### Patch Changes
