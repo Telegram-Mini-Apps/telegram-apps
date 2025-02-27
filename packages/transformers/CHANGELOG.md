@@ -1,5 +1,11 @@
 # @telegram-apps/transformers
 
+## 2.2.0
+
+### Minor Changes
+
+- a88723a: Add formatter for int theme params
+
 ## 2.1.0
 
 ### Minor Changes
