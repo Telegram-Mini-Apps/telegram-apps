@@ -11,7 +11,7 @@ import {
   nullish,
   type BaseSchema,
 } from 'valibot';
-import { jsonParse, MiniAppsMessageSchema } from '@telegram-apps/transformers';
+import { jsonParse, MiniAppsMessageSchema, themeParams } from '@telegram-apps/transformers';
 
 import { createEmitter } from '@/events/createEmitter.js';
 import type { EventName, EventPayload, Events } from '@/events/types/index.js';
@@ -41,6 +41,9 @@ const transformers = {
     is_state_stable: boolean(),
     is_expanded: boolean(),
   }),
+  theme_changed: looseObject({
+    theme_params: themeParams(),
+  }),
 } as const satisfies { [E in EventName]?: BaseSchema<unknown, EventPayload<E>, any> };
 
 function listener(event: MessageEvent): void {
@@ -60,6 +63,7 @@ function listener(event: MessageEvent): void {
 
   const { eventType, eventData } = message;
   const schema = transformers[eventType as keyof typeof transformers];
+
   try {
     const data = schema ? parse(schema, eventData) : eventData;
     emit(eventType as any, data);
