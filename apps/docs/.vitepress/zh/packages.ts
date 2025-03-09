@@ -172,6 +172,9 @@ export const packagesLinksGenerator = (prefix: string = "") => {
       section("GoLang", {
         "init-data-golang": "init-data-golang",
       }),
+      section('Python', {
+        'telegram-webapp-auth': 'telegram-webapp-auth',
+      }),
     ],
   };
 
