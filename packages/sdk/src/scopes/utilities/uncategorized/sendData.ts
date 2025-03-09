@@ -35,9 +35,11 @@ export const sendData = wrapSafe(
   },
   {
     isSupported() {
-      return launchParams().tgWebAppBotInline
-        ? undefined
-        : 'The application must be launched in the inline mode';
+      // tgWebAppData is set only when the app is launched
+      // via a keyboard button OR from inline mode
+      return launchParams().tgWebAppData !== undefined
+        ? 'The application must be launched via a keyboard button'
+        : undefined;
     },
   },
 );
