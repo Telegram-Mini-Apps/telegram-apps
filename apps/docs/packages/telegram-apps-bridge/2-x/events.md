@@ -60,7 +60,7 @@ import { on } from '@telegram-apps/bridge';
 
 on('*', event => {
   if (event[0] === 'viewport_changed') {
-    console.log('Viewport changed:', payload);
+    console.log('Viewport changed:', event[1]);
     return;
   }
   // ...
