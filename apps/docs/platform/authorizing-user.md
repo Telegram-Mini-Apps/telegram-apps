@@ -9,9 +9,9 @@ First of all, it is required to begin with the transmitting init data from the c
 using this code:
 
 ```typescript
-import { retrieveLaunchParams } from '@telegram-apps/sdk';
+import { retrieveRawInitData } from '@telegram-apps/sdk'
 
-const { initDataRaw } = retrieveLaunchParams();
+const initDataRaw = retrieveRawInitData()
 
 fetch('https://example.com/api', {
   method: 'POST',
