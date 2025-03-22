@@ -1,5 +1,11 @@
 # @telegram-apps/sdk-react
 
+## 3.1.4
+
+### Patch Changes
+
+- eeb4b60: Make @telegram-apps/sdk external during build.
+
 ## 3.1.3
 
 ### Patch Changes
