@@ -1,6 +1,8 @@
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 import { InvalidArgumentsError } from '@/errors.js';
-import { launchParams, postEvent } from '@/globals.js';
+import { postEvent } from '@/globals.js';
+
+const METHOD_NAME = 'web_app_data_send';
 
 /**
  * Sends data to the bot.
@@ -14,7 +16,6 @@ import { launchParams, postEvent } from '@/globals.js';
  * @param data - data to send to bot.
  * @throws {FunctionNotAvailableError} The function is not supported
  * @throws {FunctionNotAvailableError} The environment is unknown
- * @throws {FunctionNotAvailableError} The application must be launched in the inline mode
  * @throws {InvalidArgumentsError} Maximum size of data to send is 4096 bytes
  * @throws {InvalidArgumentsError} Attempted to send empty data
  * @example
@@ -31,15 +32,7 @@ export const sendData = wrapSafe(
         ? 'Maximum size of data to send is 4096 bytes'
         : 'Attempted to send empty data');
     }
-    postEvent('web_app_data_send', { data });
+    postEvent(METHOD_NAME, { data });
   },
-  {
-    isSupported() {
-      // tgWebAppData is set only when the app is launched
-      // via a keyboard button OR from inline mode
-      return launchParams().tgWebAppData !== undefined
-        ? 'The application must be launched via a keyboard button'
-        : undefined;
-    },
-  },
+  { isSupported: METHOD_NAME },
 );
