@@ -1,6 +1,6 @@
 import type { SwitchInlineQueryChatType } from '@telegram-apps/bridge';
 
-import { postEvent } from '@/globals.js';
+import { launchParams, postEvent } from '@/globals.js';
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 
 const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
@@ -18,6 +18,7 @@ const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
  * @throws {FunctionNotAvailableError} The function is not supported
  * @throws {FunctionNotAvailableError} The environment is unknown
  * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The application must be launched in the inline mode
  * @example
  * if (switchInlineQuery.isAvailable()) {
  *   switchInlineQuery('my query goes here', ['users']);
@@ -31,4 +32,11 @@ export const switchInlineQuery = wrapSafe(
       chat_types: chatTypes || [],
     });
   },
+  {
+    isSupported() {
+      return launchParams().tgWebAppBotInline
+        ? undefined
+        : 'The application must be launched in the inline mode';
+    }
+  }
 );
