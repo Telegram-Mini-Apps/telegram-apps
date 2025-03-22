@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 3.5.3
+
+### Patch Changes
+
+- 503171f: Move inline check from sendData to switchInlineQuery.
+
 ## 3.5.2
 
 ### Patch Changes
