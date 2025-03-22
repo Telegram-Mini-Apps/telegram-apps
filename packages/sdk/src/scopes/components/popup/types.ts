@@ -1,10 +1,10 @@
-import { RequestOptionsNoCapture } from '@/types.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
 
 /**
  * This object describes the native popup.
  * @see https://core.telegram.org/bots/webapps#popupparams
  */
-export interface OpenOptions extends RequestOptionsNoCapture {
+export interface ShowOptions extends RequestOptionsNoCapture {
   /**
    * The text to be displayed in the popup title, 0-64 characters.
    * @default ""
@@ -18,14 +18,14 @@ export interface OpenOptions extends RequestOptionsNoCapture {
    * List of buttons to be displayed in the popup, 1-3 buttons.
    * @default [{type: 'close'}]
    */
-  buttons?: OpenOptionsButton[];
+  buttons?: ShowOptionsButton[];
 }
 
 /**
  * This object describes the native popup button.
  * @see https://core.telegram.org/bots/webapps#popupbutton
  */
-export type OpenOptionsButton = {
+export type ShowOptionsButton = {
   /**
    * Identifier of the button, 0-64 characters.
    * @default ""
@@ -55,3 +55,15 @@ export type OpenOptionsButton = {
    */
   type: 'ok' | 'close' | 'cancel';
 });
+
+/**
+ * @deprecated Deprecated for consistence naming, to be removed in the next major update. Use
+ *   `ShowOptions` instead.
+ */
+export type OpenOptions = ShowOptions;
+
+/**
+ * @deprecated Deprecated for consistence naming, to be removed in the next major update. Use
+ *   `ShowOptionsButton` instead.
+ */
+export type OpenOptionsButton = ShowOptionsButton;
