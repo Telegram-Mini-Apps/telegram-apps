@@ -16,14 +16,37 @@ export const isSupported = createIsSupported(OPEN_METHOD);
 
 const [
   fn,
-  tOpenPromise,
-  tOpenError,
+  tPromise,
+  tShowError,
 ] = defineNonConcurrentFn((options: OpenOptions) => {
   return request(OPEN_METHOD, 'popup_closed', {
     ...options,
     params: prepareParams(options),
   }).then(({ button_id: buttonId }) => buttonId === undefined ? null : buttonId);
 }, 'A popup is already opened');
+
+/**
+ * @deprecated Deprecated for consistence naming, to be removed in the next major update. Use
+ *   `show` instead.
+ */
+export const open = wrapSupported('open', fn);
+/**
+ * @deprecated Deprecated for consistence naming, to be removed in the next major update. Use
+ *   `showPromise` instead.
+ */
+const openPromise = tPromise[1];
+/**
+ * @deprecated Deprecated for consistence naming, to be removed in the next major update. Use
+ *   `isShown` instead.
+ */
+const isOpened = tPromise[2];
+/**
+ * @deprecated Deprecated for consistence naming, to be removed in the next major update. Use
+ *   `showError` instead.
+ */
+const openError = tShowError[1];
+
+export { openPromise, isOpened, openError };
 
 /**
  * A method that shows a native popup described by the `params` argument.
@@ -56,6 +79,6 @@ const [
  *   });
  * }
  */
-export const open = wrapSupported('open', fn);
-export const [, openPromise, isOpened] = tOpenPromise;
-export const [, openError] = tOpenError;
+export const show = wrapSupported('show', fn);
+export const [, showPromise, isShown] = tPromise;
+export const [, showError] = tShowError;

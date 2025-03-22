@@ -1,1 +1,11 @@
-export { isOpened, open, isSupported, openPromise, openError } from './popup.js';
+export {
+  isOpened,
+  open,
+  isSupported,
+  openPromise,
+  openError,
+  showError,
+  show,
+  showPromise,
+  isShown,
+} from './popup.js';
