@@ -1,5 +1,11 @@
 # @telegram-apps/sdk-vue
 
+## 2.0.14
+
+### Patch Changes
+
+- eeb4b60: Make @telegram-apps/sdk external during build.
+
 ## 2.0.13
 
 ### Patch Changes
