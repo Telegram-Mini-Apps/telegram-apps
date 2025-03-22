@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 3.5.2
+
+### Patch Changes
+
+- 94a3558: Fix ivalid typings in `openPopup` function.
+
 ## 3.5.1
 
 ### Patch Changes
