@@ -19,7 +19,7 @@ both client-side and backend development to gain a better understanding of the t
 disposal.
 
 > [!WARNING]
-> Working with `@telegram-apps` packages, you <ins>**must not**</ins> use the Telegram library - `telegram-web-app.js`.
+> Working with `@telegram-apps` SDK-related packages (`bridge`, `sdk` and `sdk-*`), you <ins>**must not**</ins> use the Telegram library - `telegram-web-app.js`.
 > Using both `@telegram-apps` packages and `telegram-web-app.js` will surely lead to bugs.
 
 ## Why not Telegram SDK
