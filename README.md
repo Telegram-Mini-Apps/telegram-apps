@@ -20,7 +20,7 @@ disposal.
 
 > [!WARNING]
 > Working with `@telegram-apps` SDK-related packages (`bridge`, `sdk` and `sdk-*`), you <ins>**must not**</ins> use the Telegram library - `telegram-web-app.js`.
-> Using both `@telegram-apps` packages and `telegram-web-app.js` will surely lead to bugs.
+> Using both these packages and `telegram-web-app.js` will surely lead to bugs.
 
 ## Why not Telegram SDK
 
