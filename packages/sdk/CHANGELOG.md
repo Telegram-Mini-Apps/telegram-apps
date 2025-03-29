@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 3.5.4
+
+### Patch Changes
+
+- 82ec9cf: Fix invalid cloud storage get item behavior
+
 ## 3.5.3
 
 ### Patch Changes
