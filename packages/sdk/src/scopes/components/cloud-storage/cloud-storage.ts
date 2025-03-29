@@ -1,5 +1,5 @@
 import { AbortablePromise } from 'better-promises';
-import { array, check, parse, pipe, record, string } from 'valibot';
+import { array, parse, record, string } from 'valibot';
 
 import { invokeCustomMethod } from '@/globals.js';
 import { createIsSupported } from '@/scopes/createIsSupported.js';
@@ -86,15 +86,18 @@ function _getItem(
 
   return keys.length
     ? invokeCustomMethod('getStorageValues', { keys }, options).then(data => {
-      return parse(
-        record(
-          pipe(string(), check(v => keys.includes(v))),
-          string(),
-        ),
-        data,
-      );
+      const response = {
+        // Fulfill the response with probably missing keys.
+        ...keys.reduce<Record<string, string>>((acc, key) => {
+          acc[key] = '';
+          return acc;
+        }, {}),
+        ...parse(record(string(), string()), data),
+      };
+
+      return typeof keyOrKeys === 'string' ? response[keyOrKeys] : response;
     })
-    : AbortablePromise.resolve(typeof keyOrKeys === 'string' ? '' : {});
+    : AbortablePromise.resolve(Array.isArray(keyOrKeys) ? {} : '');
 }
 
 export const getItem = wrapSupported('getItem', _getItem);
