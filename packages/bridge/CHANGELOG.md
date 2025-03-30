@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 2.5.0
+
+### Minor Changes
+
+- 95cef36: Add exports from `better-promises`.
+
 ## 2.4.0
 
 ### Minor Changes
