@@ -125,6 +125,12 @@ export {
   type OpenLinkBrowser,
   type SecondaryButtonPosition,
   type SwitchInlineQueryChatType,
+  isCancelledError,
+  isTimeoutError,
+  CancelledError,
+  TimeoutError,
+  AbortablePromise,
+  ManualPromise,
 } from '@telegram-apps/bridge';
 export {
   isRGB,
