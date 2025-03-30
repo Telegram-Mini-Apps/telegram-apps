@@ -60,3 +60,12 @@ export {
   isInvalidLaunchParamsError,
 } from '@/errors.js';
 export { resetPackageState } from '@/resetPackageState.js';
+
+export {
+  isCancelledError,
+  isTimeoutError,
+  CancelledError,
+  TimeoutError,
+  AbortablePromise,
+  ManualPromise,
+} from 'better-promises';
