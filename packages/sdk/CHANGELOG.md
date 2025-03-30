@@ -1,5 +1,16 @@
 # @telegram-apps/sdk
 
+## 3.6.0
+
+### Minor Changes
+
+- 95cef36: Add exports from `better-promises`.
+
+### Patch Changes
+
+- Updated dependencies [95cef36]
+  - @telegram-apps/bridge@2.5.0
+
 ## 3.5.4
 
 ### Patch Changes
