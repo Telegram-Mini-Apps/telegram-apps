@@ -54,7 +54,7 @@ stack。 Telegram 需要开发者提供的唯一信息就是应用程序的 URL�
 应用程序中使用：
 
 - [Telegram for Android](https://github.com/DrKLO/Telegram) `android`；
-- [Telegram for iOS](https://github.com/TelegramMessenger/Telegram-iOS) `iS`；
+- [Telegram for iOS](https://github.com/TelegramMessenger/Telegram-iOS) `ios`；
 - [Telegram for macOS](https://github.com/overtake/TelegramSwift) `macos`；
 - [Telegram Desktop](https://github.com/telegramdesktop/tdesktop) `tdesktop`；
 - [Telegram Web A](https://github.com/Ajaxy/telegram-tt) `weba`；
