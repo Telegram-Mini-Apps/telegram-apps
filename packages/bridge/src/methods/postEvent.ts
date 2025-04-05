@@ -4,7 +4,6 @@ import { logInfo } from '@/debug.js';
 import { isIframe } from '@/env/isIframe.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { UnknownEnvError } from '@/errors.js';
-import { targetOrigin } from '@/methods/targetOrigin.js';
 import type {
   MethodName,
   MethodNameWithOptionalParams,
@@ -12,6 +11,9 @@ import type {
   MethodNameWithRequiredParams,
   MethodParams,
 } from '@/methods/types/index.js';
+
+import { postMessage } from './postMessage.js';
+import { targetOrigin } from './targetOrigin.js';
 
 export type PostEventFn = typeof postEvent;
 
@@ -56,10 +58,10 @@ export function postEvent(
 
   // Telegram Web.
   if (isIframe()) {
-    return w.parent.postMessage(message, targetOrigin());
+    return postMessage(message, targetOrigin());
   }
 
-  // Telegram for iOS and macOS and Telegram Desktop.
+  // Telegram for iOS, macOS, Android and Telegram Desktop.
   if (hasWebviewProxy(w)) {
     w.TelegramWebviewProxy.postEvent(eventType, JSON.stringify(eventData));
     return;
