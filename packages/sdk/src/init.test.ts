@@ -3,7 +3,7 @@ import { createWindow } from 'test-utils';
 import { emitEvent } from '@telegram-apps/bridge';
 
 import { mockMiniAppsEnv, resetPackageState } from '@test-utils/utils.js';
-import { $postEvent, launchParams } from '@/globals.js';
+import { $postEvent, $launchParams } from '@/globals.js';
 
 import { init } from './init.js';
 
@@ -42,7 +42,7 @@ describe('global signals', () => {
           tgWebAppVersion: '11',
         },
       });
-      expect(launchParams()).toEqual({
+      expect($launchParams()).toEqual({
         tgWebAppPlatform: 'desktop',
         tgWebAppThemeParams: {},
         tgWebAppVersion: '11',
@@ -56,7 +56,7 @@ describe('global signals', () => {
         tgWebAppVersion: '13',
       });
       init();
-      expect(launchParams()).toEqual({
+      expect($launchParams()).toEqual({
         tgWebAppPlatform: 'macos',
         tgWebAppThemeParams: {},
         tgWebAppVersion: '13',
@@ -72,7 +72,7 @@ describe('global signals', () => {
         tgWebAppVersion: '11',
       },
     });
-    expect(launchParams()).toEqual({
+    expect($launchParams()).toEqual({
       tgWebAppPlatform: 'desktop',
       tgWebAppThemeParams: {},
       tgWebAppVersion: '11',
