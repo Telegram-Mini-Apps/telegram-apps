@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 2.7.0
+
+### Minor Changes
+
+- 321cb43: Implement `postMessage` function and related `postMessageImplementation` signal. Enhance `mockTelegramEnv` with `resetPostMessage` option and properly wrap the `window.parent.postMessage` method. Add explanation on why passed launch parameters are invalid.
+
 ## 2.6.0
 
 ### Minor Changes
