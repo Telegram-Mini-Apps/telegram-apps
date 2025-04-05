@@ -5,6 +5,7 @@ import {
   type LaunchParamsLike,
   MiniAppsMessageSchema,
   serializeLaunchParamsQuery,
+  parseLaunchParamsQuery,
 } from '@telegram-apps/transformers';
 import { If, IsNever, setStorageValue } from '@telegram-apps/toolkit';
 
@@ -87,7 +88,11 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
 
     // Remember to check if launch params are valid.
     if (!isLaunchParamsQuery(launchParamsQuery)) {
-      throw new InvalidLaunchParamsError(launchParamsQuery);
+      try {
+        parseLaunchParamsQuery(launchParamsQuery);
+      } catch (e) {
+        throw new InvalidLaunchParamsError(launchParamsQuery, e);
+      }
     }
     setStorageValue('launchParams', launchParamsQuery);
   }
