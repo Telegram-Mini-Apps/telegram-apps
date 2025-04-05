@@ -6,59 +6,85 @@ The 💠[component](../scopes.md) responsible for managing functionality within 
 
 Before using the component, it must be mounted.
 
-This process is asynchronous, as theme parameters need to be requested from the Telegram
-application. The `isMounting` signal will be set to `true` during the process and updated to `false`
-when complete.
+> [!TIP] Actual sync mount
+> To mount the component, use the `mountSync` method. It will update the `isMounted` signal property.
+> 
+> ::: code-group
+> 
+> ```ts [Variable]
+> import { miniApp } from '@telegram-apps/sdk';
+> 
+> if (miniApp.mountSync.isAvailable()) {
+>   miniApp.mountSync();
+>   miniApp.isMounted(); // true
+> }
+> ```
+> 
+> ```ts [Functions]
+> import { mountMiniAppSync, isMiniAppMounted } from '@telegram-apps/sdk';
+> 
+> if (mountMiniAppSync.isAvailable()) {
+>   mountMiniAppSync();
+>   isMiniAppMounted(); // true
+> }
+> ```
+> 
+> :::
 
-If mounting is successful, the `isMounted` signal will be set to `true`. If errors occur,
-the `mountError` signal will reflect the error.
-
-::: code-group
-
-```ts [Variable]
-if (miniApp.mount.isAvailable()) {
-  try {
-    const promise = miniApp.mount();
-    miniApp.isMounting(); // true
-    await promise;
-    miniApp.isMounting(); // false
-    miniApp.isMounted(); // true
-  } catch (err) {
-    miniApp.mountError(); // equals "err"
-    miniApp.isMounting(); // false
-    miniApp.isMounted(); // false
-  }
-}
-```
-
-```ts [Functions]
-import {
-  mountminiApp,
-  isMiniAppMounting,
-  isMiniAppMounted,
-  miniAppMountError,
-} from '@telegram-apps/sdk';
-
-if (mountminiApp.isAvailable()) {
-  try {
-    const promise = mountminiApp();
-    isMiniAppMounting(); // true
-    await promise;
-    isMiniAppMounting(); // false
-    isMiniAppMounted(); // true
-  } catch (err) {
-    miniAppMountError(); // equals "err"
-    isMiniAppMounting(); // false
-    isMiniAppMounted(); // false
-  }
-}
-```
-
-:::
-
-> [!INFO]
-> The `mount` method also mounts the [Theme Params](theme-params.md) scope to extract correctly
-> configured values.
+> [!WARNING] Deprecated async mount
+> This process is asynchronous, as theme parameters need to be requested from the Telegram
+> application. The `isMounting` signal will be set to `true` during the process and updated to `false`
+> when complete.
+>
+> If mounting is successful, the `isMounted` signal will be set to `true`. If errors occur,
+> the `mountError` signal will reflect the error.
+>
+> ::: code-group
+> 
+> ```ts [Variable]
+> if (miniApp.mount.isAvailable()) {
+>   try {
+>     const promise = miniApp.mount();
+>     miniApp.isMounting(); // true
+>     await promise;
+>     miniApp.isMounting(); // false
+>     miniApp.isMounted(); // true
+>   } catch (err) {
+>     miniApp.mountError(); // equals "err"
+>     miniApp.isMounting(); // false
+>     miniApp.isMounted(); // false
+>   }
+> }
+> ```
+> 
+> ```ts [Functions]
+> import {
+>   mountminiApp,
+>   isMiniAppMounting,
+>   isMiniAppMounted,
+>   miniAppMountError,
+> } from '@telegram-apps/sdk';
+> 
+> if (mountminiApp.isAvailable()) {
+>   try {
+>     const promise = mountminiApp();
+>     isMiniAppMounting(); // true
+>     await promise;
+>     isMiniAppMounting(); // false
+>     isMiniAppMounted(); // true
+>   } catch (err) {
+>     miniAppMountError(); // equals "err"
+>     isMiniAppMounting(); // false
+>     isMiniAppMounted(); // false
+>   }
+> }
+> ```
+> 
+> :::
+> 
+> > [!INFO]
+> > The `mount` method also mounts the [Theme Params](theme-params.md) scope to extract correctly
+> > configured values.
 
 To unmount the component, use the `unmount` method:
 

@@ -7,55 +7,81 @@ Apps [theme parameters](../../../../platform/theming.md).
 
 Before using the component, it must be mounted.
 
-This process is asynchronous, as theme parameters need to be requested from the Telegram application.
-The `isMounting` signal will be set to `true` during the process and updated to `false` when
-complete.
+> [!TIP] Actual sync mount
+> To mount the component, use the `mountSync` method. It will update the `isMounted` signal property.
+>
+> ::: code-group
+>
+> ```ts [Variable]
+> import { themeParams } from '@telegram-apps/sdk';
+> 
+> if (themeParams.mountSync.isAvailable()) {
+>   themeParams.mountSync();
+>   themeParams.isMounted(); // true
+> }
+> ```
+>
+> ```ts [Functions]
+> import { mountThemeParamsSync, isThemeParamsMounted } from '@telegram-apps/sdk';
+> 
+> if (mountThemeParamsSync.isAvailable()) {
+>   mountThemeParamsSync();
+>   isThemeParamsMounted(); // true
+> }
+> ```
+>
+> :::
 
-If mounting is successful, the `isMounted` signal will be set to `true`. If errors occur,
-the `mountError` signal will reflect the error.
-
-::: code-group
-
-```ts [Variable]
-if (themeParams.mount.isAvailable()) {
-  try {
-    const promise = themeParams.mount();
-    themeParams.isMounting(); // true
-    await promise;
-    themeParams.isMounting(); // false
-    themeParams.isMounted(); // true
-  } catch (err) {
-    themeParams.mountError(); // equals "err"
-    themeParams.isMounting(); // false
-    themeParams.isMounted(); // false
-  }
-}
-```
-
-```ts [Functions]
-import {
-  mountThemeParams,
-  isThemeParamsMounting,
-  isThemeParamsMounted,
-  themeParamsMountError,
-} from '@telegram-apps/sdk';
-
-if (mountThemeParams.isAvailable()) {
-  try {
-    const promise = mountThemeParams();
-    isThemeParamsMounting(); // true
-    await promise;
-    isThemeParamsMounting(); // false
-    isThemeParamsMounted(); // true
-  } catch (err) {
-    themeParamsMountError(); // equals "err"
-    isThemeParamsMounting(); // false
-    isThemeParamsMounted(); // false
-  }
-}
-```
-
-:::
+> [!WARNING] Deprecated async mount
+> This process is asynchronous, as theme parameters need to be requested from the Telegram application.
+> The `isMounting` signal will be set to `true` during the process and updated to `false` when
+> complete.
+> 
+> If mounting is successful, the `isMounted` signal will be set to `true`. If errors occur,
+> the `mountError` signal will reflect the error.
+> 
+> ::: code-group
+> 
+> ```ts [Variable]
+> if (themeParams.mount.isAvailable()) {
+>   try {
+>     const promise = themeParams.mount();
+>     themeParams.isMounting(); // true
+>     await promise;
+>     themeParams.isMounting(); // false
+>     themeParams.isMounted(); // true
+>   } catch (err) {
+>     themeParams.mountError(); // equals "err"
+>     themeParams.isMounting(); // false
+>     themeParams.isMounted(); // false
+>   }
+> }
+> ```
+> 
+> ```ts [Functions]
+> import {
+>   mountThemeParams,
+>   isThemeParamsMounting,
+>   isThemeParamsMounted,
+>   themeParamsMountError,
+> } from '@telegram-apps/sdk';
+> 
+> if (mountThemeParams.isAvailable()) {
+>   try {
+>     const promise = mountThemeParams();
+>     isThemeParamsMounting(); // true
+>     await promise;
+>     isThemeParamsMounting(); // false
+>     isThemeParamsMounted(); // true
+>   } catch (err) {
+>     themeParamsMountError(); // equals "err"
+>     isThemeParamsMounting(); // false
+>     isThemeParamsMounted(); // false
+>   }
+> }
+> ```
+> 
+> :::
 
 To unmount, use the `unmount` method:
 
