@@ -12,6 +12,7 @@ export {
   setBottomBarColor,
   setHeaderColor,
   setBackgroundColor,
+  mountSync,
 } from './methods.js';
 export {
   state,

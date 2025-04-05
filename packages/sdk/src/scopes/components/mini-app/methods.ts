@@ -9,13 +9,27 @@ import {
 } from '@telegram-apps/bridge';
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
-import type { Computed } from '@telegram-apps/signals';
+import { type Computed, batch } from '@telegram-apps/signals';
+import {
+  camelToKebab,
+  createCbCollector,
+  getStorageValue,
+  setStorageValue,
+} from '@telegram-apps/toolkit';
+import { RGB } from '@telegram-apps/types';
 
 import { version, postEvent } from '@/globals.js';
 import { mount as mountThemeParams } from '@/scopes/components/theme-params/methods.js';
 import { createWrapComplete } from '@/scopes/wrappers/createWrapComplete.js';
 import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
 import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
+import { createComputed } from '@/signals-registry.js';
+import { CSSVarsBoundError } from '@/errors.js';
+import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
+import { defineMountFn } from '@/scopes/defineMountFn.js';
+import { signalCancel } from '@/scopes/signalCancel.js';
+import { mountThemeParamsSync } from '@/scopes/components/theme-params/exports.js';
+import type { RequestOptionsNoCapture } from '@/types.js';
 
 import {
   _isCssVarsBound,
@@ -29,20 +43,6 @@ import {
   _headerColor,
 } from './signals.js';
 import type { GetCssVarNameFn, HeaderColor, State } from './types.js';
-import { createComputed } from '@/signals-registry.js';
-import { CSSVarsBoundError } from '@/errors.js';
-import {
-  camelToKebab,
-  createCbCollector,
-  getStorageValue,
-  setStorageValue,
-} from '@telegram-apps/toolkit';
-import { RGB } from '@telegram-apps/types';
-
-import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
-import { defineMountFn } from '@/scopes/defineMountFn.js';
-import { signalCancel } from '@/scopes/signalCancel.js';
-import type { RequestOptionsNoCapture } from '@/types.js';
 
 type StorageValue = State;
 
@@ -190,15 +190,61 @@ export const close = wrapBasic('close', (returnBack?: boolean): void => {
  * @throws {FunctionNotAvailableError} The environment is unknown
  * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @throws {FunctionNotAvailableError} The function is not supported
+ * @deprecated Use `mountSync`.
  * @example
  * if (mount.isAvailable()) {
  *   await mount();
  * }
  */
 export const mount = wrapSupported('mount', mountFn);
-export const [, mountPromise, isMounting] = tMountPromise;
-export const [, mountError] = tMountError;
+/**
+ * @deprecated The initialization is synchronous. Use `mountSync`.
+ */
+export const isMounting = tMountPromise[2];
+/**
+ * @deprecated The initialization is synchronous. Use `mountSync`.
+ */
+export const mountPromise = tMountPromise[1];
+/**
+ * @deprecated The initialization is synchronous. Use `mountSync`.
+ */
+export const mountError = tMountError[1];
+
 export const [_isMounted, isMounted] = tIsMounted;
+
+/**
+ * Mounts the component.
+ *
+ * This function restores the component state and is automatically saving it in the local storage
+ * if it changed.
+ *
+ * Internally, the function mounts the Theme Params component to work with correctly extracted
+ * theme palette values.
+ * @since Mini Apps v6.1
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @example
+ * if (mountSync.isAvailable()) {
+ *   mountSync();
+ * }
+ */
+export const mountSync = wrapSupported('mount', () => {
+  if (!_isMounted()) {
+    mountThemeParamsSync();
+    const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || undefined;
+
+    setBackgroundColor.ifAvailable(s ? s.backgroundColor : 'bg_color');
+    setBottomBarColor.ifAvailable(s ? s.bottomBarColor : 'bottom_bar_bg_color');
+    setHeaderColor.ifAvailable(s ? s.headerColor : 'bg_color');
+    on(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
+
+    batch(() => {
+      _isActive.set(s ? s.isActive : true);
+      _isMounted.set(true);
+    });
+  }
+});
 
 /**
  * Informs the Telegram app that the Mini App is ready to be displayed.

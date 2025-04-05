@@ -14,6 +14,7 @@ import { _state as tpState } from '@/scopes/components/theme-params/signals.js';
 
 import {
   mount,
+  mountSync,
   ready,
   setBackgroundColor,
   setBottomBarColor,
@@ -46,6 +47,7 @@ function setAvailable() {
 
 describe.each([
   ['mount', mount, {}],
+  ['mountSync', mountSync, {}],
   ['ready', ready, {}],
   ['setBackgroundColor', setBackgroundColor, { isMounted: _isMounted }],
   ['setBottomBarColor', setBottomBarColor, { isMounted: _isMounted, minVersion: '7.10' }],
