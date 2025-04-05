@@ -131,6 +131,9 @@ export {
   TimeoutError,
   AbortablePromise,
   ManualPromise,
+  postMessage,
+  postMessageImplementation,
+  type PostMessage,
 } from '@telegram-apps/bridge';
 export {
   isRGB,

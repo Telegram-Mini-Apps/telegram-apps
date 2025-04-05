@@ -47,9 +47,13 @@ export const [
 export const [
   InvalidLaunchParamsError,
   isInvalidLaunchParamsError,
-] = errorClass<[string]>('InvalidLaunchParamsError', value => [
-  `Invalid value for launch params: ${value}`,
-]);
+] = errorClass<[launchParams: string, cause: unknown]>(
+  'InvalidLaunchParamsError',
+  (launchParams, cause) => [
+    `Invalid value for launch params: ${launchParams}`,
+    { cause },
+  ],
+);
 
 export const [UnknownEnvError, isUnknownEnvError] = errorClass('UnknownEnvError');
 
