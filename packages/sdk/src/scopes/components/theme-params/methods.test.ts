@@ -10,7 +10,7 @@ import {
 } from '@test-utils/utils.js';
 import { testSafety } from '@test-utils/predefined/testSafety.js';
 
-import { _isMounted, bindCssVars, mount } from './methods.js';
+import { _isMounted, bindCssVars, mount, mountSync } from './methods.js';
 import { _state } from './signals.js';
 import { mockPageReload } from 'test-utils';
 
@@ -23,6 +23,7 @@ beforeEach(() => {
 describe.each([
   ['bindCssVars', bindCssVars, _isMounted],
   ['mount', mount, undefined],
+  ['mountSync', mountSync, undefined],
 ] as const)('%s', (name, fn, isMounted) => {
   testSafety(fn, name, {
     component: 'themeParams',

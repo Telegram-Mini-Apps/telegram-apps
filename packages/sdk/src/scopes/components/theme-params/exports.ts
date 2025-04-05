@@ -24,6 +24,7 @@ export {
   mountError as themeParamsMountError,
   isMounting as isThemeParamsMounting,
   mountPromise as themeParamsMountPromise,
+  mountSync as mountThemeParamsSync,
 } from './exports.variable.js';
 export * as themeParams from './exports.variable.js';
 export type {
