@@ -3,7 +3,7 @@ import { type EventListener, off, on } from '@telegram-apps/bridge';
 import { AbortablePromise } from 'better-promises';
 
 import { defineMountFn } from '@/scopes/defineMountFn.js';
-import { launchParams } from '@/globals.js';
+import { $launchParams } from '@/globals.js';
 import { signalCancel } from '@/scopes/signalCancel.js';
 import type { RequestOptionsNoCapture } from '@/types.js';
 
@@ -63,7 +63,7 @@ const [
             : contentSafeAreaInsets(),
         ]);
 
-        const lp = launchParams();
+        const lp = $launchParams();
         const shared = {
           contentSafeAreaInsets: insets[1],
           isFullscreen: !!lp.tgWebAppFullscreen,

@@ -41,13 +41,12 @@ export interface ConfigureOptions {
 
 const $lastRequestId = createSignal(0);
 export const $postEvent = createSignal<PostEventFn>(_postEvent);
-export const [_launchParams, launchParams] =
-  createSignalsTuple<PackageLaunchParams>({
-    tgWebAppPlatform: 'unknown',
-    tgWebAppVersion: '0.0',
-  });
+export const [_$launchParams, $launchParams] = createSignalsTuple<PackageLaunchParams>({
+  tgWebAppPlatform: 'unknown',
+  tgWebAppVersion: '0.0',
+});
 
-export const version = createComputed(() => launchParams().tgWebAppVersion);
+export const version = createComputed(() => $launchParams().tgWebAppVersion);
 
 /**
  * Configures package global dependencies.
@@ -57,13 +56,13 @@ export function configure(options?: ConfigureOptions): void {
   options ||= {};
   const { postEvent } = options;
   const lp = options.launchParams || retrieveLaunchParams();
-  _launchParams.set(lp);
+  _$launchParams.set(lp);
   $postEvent.set(
     typeof postEvent === 'function'
       ? postEvent
       : createPostEvent(lp.tgWebAppVersion),
   );
-  logInfo(false, 'The package was configured. Launch params:', _launchParams());
+  logInfo(false, 'The package was configured. Launch params:', _$launchParams());
 }
 
 /**

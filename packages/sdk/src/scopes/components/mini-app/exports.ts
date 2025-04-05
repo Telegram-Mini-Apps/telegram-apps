@@ -22,6 +22,7 @@ export {
   mountPromise as miniAppMountPromise,
   isMounting as isMiniAppMounting,
   mountError as miniAppMountError,
+  mountSync as mountMiniAppSync,
 } from './exports.variable.js';
 export * as miniApp from './exports.variable.js';
 export type {

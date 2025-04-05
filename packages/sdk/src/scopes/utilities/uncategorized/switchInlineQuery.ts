@@ -1,6 +1,6 @@
 import type { SwitchInlineQueryChatType } from '@telegram-apps/bridge';
 
-import { launchParams, postEvent } from '@/globals.js';
+import { $launchParams, postEvent } from '@/globals.js';
 import { wrapSafe } from '@/scopes/wrappers/wrapSafe.js';
 
 const SWITCH_INLINE_QUERY_METHOD = 'web_app_switch_inline_query';
@@ -34,7 +34,7 @@ export const switchInlineQuery = wrapSafe(
   },
   {
     isSupported() {
-      return launchParams().tgWebAppBotInline
+      return $launchParams().tgWebAppBotInline
         ? undefined
         : 'The application must be launched in the inline mode';
     }

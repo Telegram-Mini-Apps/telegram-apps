@@ -3,7 +3,7 @@ import { mockSessionStorageSetItem } from 'test-utils';
 import { type PostEventFn, resetPackageState as resetBridgeState } from '@telegram-apps/bridge';
 import { type LaunchParamsLike, serializeLaunchParamsQuery } from '@telegram-apps/transformers';
 
-import { $postEvent, _launchParams, launchParams, type PackageLaunchParams } from '@/globals.js';
+import { $postEvent, _$launchParams, $launchParams, type PackageLaunchParams } from '@/globals.js';
 import { resetSignals } from '@/signals-registry.js';
 
 export function mockPostEvent(postEvent: PostEventFn = () => null) {
@@ -31,7 +31,7 @@ export function setLaunchParams(lp: PackageLaunchParams = {
   tgWebAppPlatform: 'tdesktop',
   tgWebAppVersion: '10',
 }) {
-  _launchParams.set(lp);
+  _$launchParams.set(lp);
 }
 
 /**
@@ -39,7 +39,7 @@ export function setLaunchParams(lp: PackageLaunchParams = {
  * @param version
  */
 export function setVersion(version: string) {
-  setLaunchParams({ ...launchParams(), tgWebAppVersion: version });
+  setLaunchParams({ ...$launchParams(), tgWebAppVersion: version });
 }
 
 /**

@@ -1,4 +1,4 @@
-import { isLaunchParamsQuery } from '@telegram-apps/transformers';
+import { isLaunchParamsQuery, parseLaunchParamsQuery } from '@telegram-apps/transformers';
 import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 
 import { LaunchParamsRetrieveError } from '@/errors.js';
@@ -24,22 +24,32 @@ function fromURL(urlString: string): string {
  * invalid.
  */
 export function retrieveRawLaunchParams(): string {
-  for (const retrieve of [
+  const errors: [source: string, error: unknown][] = [];
+  for (const [retrieve, source] of [
     // Try to retrieve launch parameters from the current location. This method can return
     // nothing in case, location was changed, and then the page was reloaded.
-    () => fromURL(window.location.href),
+    [() => fromURL(window.location.href), 'window.location.href'],
     // Then, try using the lower level API - window.performance.
-    () => {
+    [() => {
       const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
       return navigationEntry && fromURL(navigationEntry.name);
-    },
-    () => getStorageValue<string>(SESSION_STORAGE_KEY),
-  ]) {
+    }, 'performance navigation entries'],
+    [() => getStorageValue<string>(SESSION_STORAGE_KEY), 'local storage'],
+  ] as const) {
     const v = retrieve();
-    if (v && isLaunchParamsQuery(v)) {
+    if (!v) {
+      errors.push([source, new Error('Source is empty')]);
+      continue;
+    }
+    if (isLaunchParamsQuery(v)) {
       setStorageValue(SESSION_STORAGE_KEY, v);
       return v;
     }
+    try {
+      parseLaunchParamsQuery(v);
+    } catch (e) {
+      errors.push([source, e]);
+    }
   }
-  throw new LaunchParamsRetrieveError();
+  throw new LaunchParamsRetrieveError(errors);
 }

@@ -26,4 +26,5 @@ export {
   mountPromise,
   unmount,
   bindCssVars,
+  mountSync,
 } from './methods.js';

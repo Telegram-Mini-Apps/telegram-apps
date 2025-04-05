@@ -5,6 +5,7 @@ import {
 } from '@telegram-apps/bridge';
 import { isPageReload } from '@telegram-apps/navigation';
 import { getStorageValue, setStorageValue, snakeToKebab } from '@telegram-apps/toolkit';
+import { batch } from '@telegram-apps/signals';
 import type { RGB, ThemeParams } from '@telegram-apps/types';
 import { AbortablePromise } from 'better-promises';
 
@@ -13,12 +14,12 @@ import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
 import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 import { CSSVarsBoundError } from '@/errors.js';
 import { defineMountFn } from '@/scopes/defineMountFn.js';
-import { request } from '@/globals.js';
+import { $launchParams } from '@/globals.js';
+import { signalCancel } from '@/scopes/signalCancel.js';
 import type { RequestOptionsNoCapture } from '@/types.js';
 
 import { _isCssVarsBound, _state } from './signals.js';
 import type { GetCssVarNameFn } from './types.js';
-import { signalCancel } from '@/scopes/signalCancel.js';
 
 type StorageValue = ThemeParams;
 
@@ -38,11 +39,13 @@ const [
   tIsMounted,
 ] = defineMountFn(
   COMPONENT_NAME,
-  (options?: RequestOptionsNoCapture) => {
-    const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME);
-    return s
-      ? AbortablePromise.resolve(s)
-      : request('web_app_request_theme', 'theme_changed', options).then(d => d.theme_params);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  (_options?: RequestOptionsNoCapture): AbortablePromise<ThemeParams> => {
+    return AbortablePromise.resolve(
+      (isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME))
+      || $launchParams().tgWebAppThemeParams
+      || {},
+    );
   },
   s => {
     on(THEME_CHANGED_EVENT, onThemeChanged);
@@ -118,15 +121,50 @@ export const bindCssVars = wrapMounted(
  * @throws {FunctionNotAvailableError} The environment is unknown
  * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @throws {FunctionNotAvailableError} The function is not supported
+ * @deprecated Use `mountSync`.
  * @example
  * if (mount.isAvailable()) {
  *   await mount();
  * }
  */
 export const mount = wrapBasic('mount', mountFn);
-export const [, mountPromise, isMounting] = tMountPromise;
-export const [, mountError] = tMountError;
+/**
+ * @deprecated The initialization is synchronous. Use `mountSync`.
+ */
+export const isMounting = tMountPromise[2];
+/**
+ * @deprecated The initialization is synchronous. Use `mountSync`.
+ */
+export const mountPromise = tMountPromise[1];
+/**
+ * @deprecated The initialization is synchronous. Use `mountSync`.
+ */
+export const mountError = tMountError[1];
+
 export const [_isMounted, isMounted] = tIsMounted;
+
+/**
+ * Mounts the Theme Params component restoring its state.
+ * @throws {FunctionNotAvailableError} The environment is unknown
+ * @throws {FunctionNotAvailableError} The SDK is not initialized
+ * @throws {FunctionNotAvailableError} The function is not supported
+ * @example
+ * if (mountSync.isAvailable()) {
+ *   mountSync();
+ * }
+ */
+export const mountSync = wrapBasic('mountSync', () => {
+  if (!_isMounted()) {
+    const tp = (isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME))
+      || $launchParams().tgWebAppThemeParams
+      || {};
+    on(THEME_CHANGED_EVENT, onThemeChanged);
+    batch(() => {
+      _state.set(tp);
+      _isMounted.set(true);
+    });
+  }
+});
 
 /**
  * Unmounts the Theme Params component.
