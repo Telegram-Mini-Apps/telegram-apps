@@ -229,7 +229,7 @@ export const [_isMounted, isMounted] = tIsMounted;
  *   mountSync();
  * }
  */
-export const mountSync = wrapSupported('mount', () => {
+export const mountSync = wrapSupported('mountSync', () => {
   if (!_isMounted()) {
     mountThemeParamsSync();
     const s = isPageReload() && getStorageValue<StorageValue>(COMPONENT_NAME) || undefined;
