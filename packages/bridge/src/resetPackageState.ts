@@ -1,6 +1,7 @@
 import { targetOrigin } from '@/methods/targetOrigin.js';
 import { setDebug } from '@/debug.js';
 import { offAll } from '@/events/emitter.js';
+import { postMessageImplementation } from '@/methods/postMessage.js';
 
 /**
  * Resets the package state. Normally, you don't use this function in your application.
@@ -9,6 +10,8 @@ import { offAll } from '@/events/emitter.js';
 export function resetPackageState() {
   offAll();
   setDebug(false);
-  targetOrigin.unsubAll();
-  targetOrigin.reset();
+  [postMessageImplementation, targetOrigin].forEach(s => {
+    s.unsubAll();
+    s.reset();
+  });
 }
