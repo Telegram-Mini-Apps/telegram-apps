@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 2.6.0
+
+### Minor Changes
+
+- 8d1a118: Add collected errors in `retrieveRawLaunchParams`.
+
 ## 2.5.0
 
 ### Minor Changes

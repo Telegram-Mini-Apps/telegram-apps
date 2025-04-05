@@ -1,5 +1,17 @@
 # @telegram-apps/sdk
 
+## 3.7.0
+
+### Minor Changes
+
+- afa91c2: Implement `mountMiniAppSync`. Deprecate all async related entities.
+- 94b6be3: Implement `mountThemeParamsSync`. Don't request theme params in its async version. Deprecate all async mount-related entities.
+
+### Patch Changes
+
+- Updated dependencies [8d1a118]
+  - @telegram-apps/bridge@2.6.0
+
 ## 3.6.0
 
 ### Minor Changes
