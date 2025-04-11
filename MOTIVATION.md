@@ -76,7 +76,7 @@ window.parent.postMessage(JSON.stringify({
 
 This section of code determines which parent iframes can receive `message` events from the
 developer's application. For typical developers, this means determining which iframes are capable of
-receiving [Telegram Mini Apps methods](https://docs.telegram-mini-apps.com/docs/apps-communication/methods)
+receiving [Telegram Mini Apps methods](https://docs.telegram-mini-apps.com/platform/methods)
 data along
 with their parameters. Despite the fact that the average developer does not need to disable
 this security mechanism, Telegram does it for them for "testing purposes".
