@@ -1,5 +1,11 @@
 # @telegram-apps/sdk-react
 
+## 3.2.0
+
+### Minor Changes
+
+- f2d7b13: Bring back `useLaunchParams`. Implement `useRawLaunchParams` and `useRawInitData`.
+
 ## 3.1.9
 
 ### Patch Changes
