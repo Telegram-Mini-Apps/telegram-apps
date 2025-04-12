@@ -72,8 +72,7 @@ in [this](../../../platform/launch-parameters) article, or launch parameters-lik
 in [this](../../../platform/init-data#parameters-list) article.
 
 > [!TIP]
-> Don't be afraid, this value will be validated, and the package will let you know that something is
-> off.
+> Don't worry, this value will be validated, and the package will let you know that something is off.
 
 ### `onEvent`
 
