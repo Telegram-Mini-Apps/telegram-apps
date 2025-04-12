@@ -50,6 +50,7 @@ export const packagesLinksGenerator = (prefix: string = '') => {
             'Environment': 'environment',
             'Globals': 'globals',
             'Advanced': 'advanced',
+            'Migrate v1 -> v2': 'migrate-v1-v2',
           }],
           'Methods': 'methods',
           'Events': 'events',
@@ -157,6 +158,7 @@ export const packagesLinksGenerator = (prefix: string = '') => {
               scope('privacy'),
               scope('uncategorized'),
             ])],
+            'Migrate v2 -> v3': 'migrate-v2-v3',
           }],
         }],
         '@telegram-apps/sdk-react': [{
