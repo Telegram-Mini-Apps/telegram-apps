@@ -158,6 +158,7 @@ export const packagesLinksGenerator = (prefix: string = '') => {
               scope('privacy'),
               scope('uncategorized'),
             ])],
+            'Migrate v2 -> v3': 'migrate-v2-v3',
           }],
         }],
         '@telegram-apps/sdk-react': [{
