@@ -98,12 +98,121 @@ retrieveRawInitData();
 
 ## Changes to `mockTelegramEnv`
 
-### Updated `launchParams` typing
+### Changes to the argument
+
+The function now accepts an object with optional properties `launchParams`, `onEvent` and `resetPostMessage`.
 
 In v2, the `launchParams` option passed to `mockTelegramEnv` supports:
 
 - Query string format (`string` or `URLSearchParams`)
-- Object returned by `retrieveLaunchParams()`
+- Object with the same shape returned by `retrieveLaunchParams()`
 
-However, note one key requirement: if using an object form, the `tgWebAppData` value must be provided as a query string,
-since `retrieveRawInitData()` needs access to that exact format to work correctly.
+However, note one key requirement: if using an object `launchParams`, the `tgWebAppData` value must be provided as a
+query string, since `retrieveRawInitData()` needs access to that exact format to work correctly.
+
+## Changes to signals
+
+### `$debug` variable removed
+
+The `$debug` variable was removed from the package exports. To set debug mode, use the `setDebug` function.
+
+:::code-group
+
+```ts [v1]
+import { $debug } from '@telegram-apps/bridge';
+
+$debug.set(true);
+```
+
+```ts [v2]
+import { setDebug } from '@telegram-apps/bridge';
+
+setDebug(true);
+```
+
+:::
+
+### `$targetOrigin` variable renamed
+
+The `$targetOrigin` variable was renamed to `targetOrigin`.
+
+:::code-group
+
+```ts [v1]
+import { $targetOrigin } from '@telegram-apps/bridge';
+
+$targetOrigin.set('https://my-domain.com');
+```
+
+```ts [v2]
+import { targetOrigin } from '@telegram-apps/bridge';
+
+targetOrigin.set('https://my-domain.com');
+```
+
+:::
+
+## Changes to `isTMA`
+
+The default mode for this function is now `simple`. To use the synchronous way, use the `complete` value.
+
+:::code-group
+
+```ts [v1]
+import { isTMA } from '@telegram-apps/bridge';
+
+if (isTMA('simple')) {
+  // ...
+}
+
+if (await isTMA()) {
+  // ...
+}
+```
+
+```ts [v2]
+import { isTMA } from '@telegram-apps/bridge';
+
+if (isTMA()) {
+  // ...
+}
+
+if (await isTMA('complete')) {
+  // ...
+}
+```
+
+:::
+
+## Changes to events listening
+
+The functions `susbcribe`, `unsubscribe` were removed in favor of the `on` function. To start listening to all events,
+use the `on(*, ...)` expression. To remove bound global listener, use the `off('*', ...)` expression.
+
+:::code-group
+
+```ts [v1]
+import { susbcribe, unsubscribe } from '@telegram-apps/bridge';
+
+function handler(event) {
+
+}
+
+susbcribe(handler);
+unsubscribe(handler);
+```
+
+```ts [v2]
+import { on, off } from '@telegram-apps/bridge';
+
+function handler(event) {
+
+}
+
+on('*', handler);
+off('*', handler);
+```
+
+:::
+
+The function `defineEventHandlers` was also removed. You now have no need to define any special event handlers yourself.
