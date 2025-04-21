@@ -1,9 +1,11 @@
 export {
   requestContact,
+  requestContactComplete,
   isRequestingContact,
   requestContactError,
   requestContactPromise,
   type RequestedContact,
+  type RequestedContactCompleteData,
 } from './requestContact.js';
 export {
   requestPhoneAccess,
