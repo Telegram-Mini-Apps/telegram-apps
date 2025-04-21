@@ -3,8 +3,6 @@ import {
   on,
   off,
   type EventListener,
-  type BottomBarColor,
-  type BackgroundColor,
   type MethodName,
 } from '@telegram-apps/bridge';
 import { isRGB } from '@telegram-apps/transformers';
@@ -19,16 +17,18 @@ import {
 import { RGB } from '@telegram-apps/types';
 
 import { version, postEvent } from '@/globals.js';
-import { mount as mountThemeParams } from '@/scopes/components/theme-params/methods.js';
+import {
+  mount as mountThemeParams,
+  mountSync as mountThemeParamsSync,
+} from '@/scopes/components/theme-params/methods.js';
 import { createWrapComplete } from '@/scopes/wrappers/createWrapComplete.js';
 import { createWrapSupported } from '@/scopes/wrappers/createWrapSupported.js';
 import { createWrapBasic } from '@/scopes/wrappers/createWrapBasic.js';
 import { createComputed } from '@/signals-registry.js';
-import { CSSVarsBoundError } from '@/errors.js';
+import { CSSVarsBoundError, UnknownThemeParamsKeyError } from '@/errors.js';
 import { deleteCssVar, setCssVar } from '@/utils/css-vars.js';
 import { defineMountFn } from '@/scopes/defineMountFn.js';
 import { signalCancel } from '@/scopes/signalCancel.js';
-import { mountThemeParamsSync } from '@/scopes/components/theme-params/exports.js';
 import type { RequestOptionsNoCapture } from '@/types.js';
 
 import {
@@ -42,7 +42,8 @@ import {
   _bottomBarColor,
   _headerColor,
 } from './signals.js';
-import type { GetCssVarNameFn, HeaderColor, State } from './types.js';
+import type { AnyColor, GetCssVarNameFn, State } from './types.js';
+import { rgbBasedOn } from './utils.js';
 
 type StorageValue = State;
 
@@ -279,6 +280,7 @@ function saveState() {
  * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @throws {FunctionNotAvailableError} The function is not supported
  * @throws {FunctionNotAvailableError} The parent component is not mounted
+ * @throws {UnknownThemeParamsKeyError} Unknown theme params key passed
  * @example
  * if (setBackgroundColor.isAvailable()) {
  *   setBackgroundColor('bg_color');
@@ -286,12 +288,17 @@ function saveState() {
  */
 export const setBackgroundColor = wrapComplete(
   'setBackgroundColor',
-  (color: BackgroundColor): void => {
-    if (color !== _backgroundColor()) {
-      postEvent(SET_BG_COLOR_METHOD, { color });
-      _backgroundColor.set(color);
-      saveState();
+  (color: AnyColor): void => {
+    if (color === _backgroundColor()) {
+      return;
     }
+    const rgb = rgbBasedOn(color);
+    if (!rgb) {
+      throw new UnknownThemeParamsKeyError(color);
+    }
+    postEvent(SET_BG_COLOR_METHOD, { color: rgb });
+    _backgroundColor.set(color);
+    saveState();
   },
   SET_BG_COLOR_METHOD,
 );
@@ -303,19 +310,25 @@ export const setBackgroundColor = wrapComplete(
  * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @throws {FunctionNotAvailableError} The function is not supported
  * @throws {FunctionNotAvailableError} The parent component is not mounted
+ * @throws {UnknownThemeParamsKeyError} Unknown theme params key passed
  * @example
  * if (setBottomBarColor.isAvailable()) {
- *   setBottomBarColor('ff11a3');
+ *   setBottomBarColor('#ff11a3');
  * }
  */
 export const setBottomBarColor = wrapComplete(
   'setBottomBarColor',
-  (color: BottomBarColor) => {
-    if (color !== _bottomBarColor()) {
-      postEvent(SET_BOTTOM_BAR_COLOR_METHOD, { color });
-      _bottomBarColor.set(color);
-      saveState();
+  (color: AnyColor) => {
+    if (color === _bottomBarColor()) {
+      return;
     }
+    const rgb = rgbBasedOn(color);
+    if (!rgb) {
+      throw new UnknownThemeParamsKeyError(color);
+    }
+    postEvent(SET_BOTTOM_BAR_COLOR_METHOD, { color: rgb });
+    _bottomBarColor.set(color);
+    saveState();
   },
   SET_BOTTOM_BAR_COLOR_METHOD,
 );
@@ -327,6 +340,7 @@ export const setBottomBarColor = wrapComplete(
  * @throws {FunctionNotAvailableError} The SDK is not initialized
  * @throws {FunctionNotAvailableError} The function is not supported
  * @throws {FunctionNotAvailableError} The parent component is not mounted
+ * @throws {UnknownThemeParamsKeyError} Unknown theme params key passed
  * @example Using known color key
  * if (setHeaderColor.isAvailable()) {
  *   setHeaderColor('bg_color');
@@ -338,12 +352,21 @@ export const setBottomBarColor = wrapComplete(
  */
 export const setHeaderColor = wrapComplete(
   'setHeaderColor',
-  (color: HeaderColor): void => {
-    if (color !== _headerColor()) {
-      postEvent(SET_HEADER_COLOR_METHOD, isRGB(color) ? { color } : { color_key: color });
-      _headerColor.set(color);
-      saveState();
+  (color: AnyColor): void => {
+    if (color === _headerColor()) {
+      return;
     }
+    if (color === 'bg_color' || color === 'secondary_bg_color') {
+      postEvent(SET_HEADER_COLOR_METHOD, { color_key: color });
+    } else {
+      const rgb = rgbBasedOn(color);
+      if (!rgb) {
+        throw new UnknownThemeParamsKeyError(color);
+      }
+      postEvent(SET_HEADER_COLOR_METHOD, { color: rgb });
+    }
+    _headerColor.set(color);
+    saveState();
   },
   SET_HEADER_COLOR_METHOD,
   {
