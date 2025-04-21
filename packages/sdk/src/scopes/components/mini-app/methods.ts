@@ -7,14 +7,14 @@ import {
 } from '@telegram-apps/bridge';
 import { isRGB } from '@telegram-apps/transformers';
 import { isPageReload } from '@telegram-apps/navigation';
-import { type Computed, batch } from '@telegram-apps/signals';
+import { type Computed, type SubscribeListenerFn, batch } from '@telegram-apps/signals';
 import {
   camelToKebab,
   createCbCollector,
   getStorageValue,
   setStorageValue,
 } from '@telegram-apps/toolkit';
-import { RGB } from '@telegram-apps/types';
+import type { RGB, ThemeParams } from '@telegram-apps/types';
 
 import { version, postEvent } from '@/globals.js';
 import {
@@ -44,6 +44,7 @@ import {
 } from './signals.js';
 import type { AnyColor, GetCssVarNameFn, State } from './types.js';
 import { rgbBasedOn } from './utils.js';
+import { themeParamsState } from '@/scopes/components/theme-params/exports.js';
 
 type StorageValue = State;
 
@@ -73,6 +74,25 @@ const onVisibilityChanged: EventListener<'visibility_changed'> = (data) => {
   saveState();
 };
 
+const onThemeParamsChanged: SubscribeListenerFn<ThemeParams> = themeParams => {
+  ([
+    [_headerColor, SET_HEADER_COLOR_METHOD],
+    [_backgroundColor, SET_BG_COLOR_METHOD],
+    [_bottomBarColor, SET_BOTTOM_BAR_COLOR_METHOD],
+  ] as const).forEach(([signal, method]) => {
+    const color = signal();
+    if (!isRGB(color) && (
+      // Header color setter uses additional checks. We don't apply changes if the current
+      // value is a known color key because it updates automatically by itself.
+      method !== SET_HEADER_COLOR_METHOD
+      || (color !== 'bg_color' && color !== 'secondary_bg_color')
+    )) {
+      const rgb = themeParams[color];
+      rgb && postEvent(method, { color: rgb });
+    }
+  });
+};
+
 const [
   mountFn,
   tMountPromise,
@@ -92,6 +112,7 @@ const [
     _isActive.set(s ? s.isActive : true);
 
     on(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
+    themeParamsState.sub(onThemeParamsChanged);
   },
 );
 
@@ -239,6 +260,7 @@ export const mountSync = wrapSupported('mountSync', () => {
     setBottomBarColor.ifAvailable(s ? s.bottomBarColor : 'bottom_bar_bg_color');
     setHeaderColor.ifAvailable(s ? s.headerColor : 'bg_color');
     on(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
+    themeParamsState.sub(onThemeParamsChanged);
 
     batch(() => {
       _isActive.set(s ? s.isActive : true);
@@ -380,5 +402,6 @@ export const setHeaderColor = wrapComplete(
 export function unmount(): void {
   signalCancel(mountPromise);
   off(VISIBILITY_CHANGED_EVENT, onVisibilityChanged);
+  themeParamsState.unsub(onThemeParamsChanged);
   _isMounted.set(false);
 }
