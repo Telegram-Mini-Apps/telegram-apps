@@ -19,8 +19,11 @@ if (requestPhoneAccess.isAvailable()) {
 ```ts [Using ifAvailable]
 import { requestPhoneAccess } from '@telegram-apps/sdk';
 
-const status = await requestPhoneAccess.ifAvailable();
-// status will be 'sent' | 'cancelled' | string | undefined
+const result = requestPhoneAccess.ifAvailable();
+if (result[0]) {
+  // status will be 'sent' | 'cancelled' | string | undefined
+  const status = await result[1];
+}
 ```
 
 :::
@@ -43,8 +46,11 @@ if (requestWriteAccess.isAvailable()) {
 ```ts [Using ifAvailable]
 import { requestWriteAccess } from '@telegram-apps/sdk';
 
-const status = await requestWriteAccess.ifAvailable();
-// status will be 'allowed' | string | undefined
+const result = requestWriteAccess.ifAvailable();
+if (result[0]) {
+  // status will be 'allowed' | string | undefined
+  const status = await result[1];
+}
 ```
 
 :::
@@ -76,17 +82,20 @@ if (requestContact.isAvailable()) {
 ```ts [Using ifAvailable]
 import { requestContact } from '@telegram-apps/sdk';
 
-const contact = await requestContact.ifAvailable();
-// {
-//   contact: {
-//     userId: 1,
-//     phoneNumber: '+987654321',
-//     firstName: 'Vladislav',
-//     lastName: 'Kibenko'
-//   },
-//   authDate: Date(12345678),
-//   hash: 'abcdefgh'
-// } | undefined;
+const result = requestContact.ifAvailable();
+if (result[0]) {
+  const contact = await result[1];
+  // {
+  //   contact: {
+  //     userId: 1,
+  //     phoneNumber: '+987654321',
+  //     firstName: 'Vladislav',
+  //     lastName: 'Kibenko'
+  //   },
+  //   authDate: Date(12345678),
+  //   hash: 'abcdefgh'
+  // };
+}
 ```
 
 :::
