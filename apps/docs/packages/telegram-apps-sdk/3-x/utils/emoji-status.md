@@ -17,7 +17,10 @@ if (requestEmojiStatusAccess.isAvailable()) {
 ```ts [Using ifAvailable]
 import { requestEmojiStatusAccess } from '@telegram-apps/sdk';
 
-const status = await requestEmojiStatusAccess.ifAvailable();
+const result = requestEmojiStatusAccess.ifAvailable();
+if (result[0]) {
+  const status = await result[1];
+}
 ```
 
 :::
@@ -47,10 +50,12 @@ if (setEmojiStatus.isAvailable()) {
 import { setEmojiStatus } from '@telegram-apps/sdk';
 
 // Set for unlimited period of time.
-await setEmojiStatus.ifAvailable('5361800828313167608');
+const foo = setEmojiStatus.ifAvailable('5361800828313167608');
+foo[0] && await foo[1];
 
 // Set for 1 day.
-await setEmojiStatus.ifAvailable('5361800828313167608', 86400);
+const bar = await setEmojiStatus.ifAvailable('5361800828313167608', 86400);
+bar[0] && await bar[1];
 ```
 
 :::

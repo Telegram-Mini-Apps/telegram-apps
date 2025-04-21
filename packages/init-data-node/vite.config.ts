@@ -23,7 +23,12 @@ export default defineConfig((_) => ({
     emptyOutDir: false,
     sourcemap: true,
     rollupOptions: {
-      external: ['node:crypto'],
+      external: [
+        'node:crypto',
+        '@telegram-apps/transformers',
+        '@telegram-apps/types',
+        'error-kid',
+      ],
     },
     lib: {
       entry: {

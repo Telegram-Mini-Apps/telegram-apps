@@ -1,34 +1,26 @@
-import type { Computed } from '@telegram-apps/signals';
 import { isRGB } from '@telegram-apps/transformers';
-import type { BackgroundColor, BottomBarColor } from '@telegram-apps/bridge';
 import type { RGB } from '@telegram-apps/types';
 
 import { isColorDark } from '@/utils/isColorDark.js';
 import {
-  backgroundColor as themeBgColor,
   secondaryBackgroundColor as themeSecondaryBgColor,
-  bottomBarBgColor as themeBottomBarBgColor,
+  state as themeParamsState,
 } from '@/scopes/components/theme-params/signals.js';
 import { createComputed, createSignalsTuple } from '@/signals-registry.js';
+import { rgbComputedBasedOn } from './utils.js';
 
-import type { HeaderColor, State } from './types.js';
-
-// #__NO_SIDE_EFFECTS__
-function rgbBasedOn(signal: Computed<'bg_color' | 'secondary_bg_color' | RGB>) {
-  return createComputed<RGB | undefined>(() => {
-    const color = signal();
-
-    return isRGB(color) ? color : color === 'bg_color'
-      ? themeBgColor()
-      : themeSecondaryBgColor();
-  });
-}
+import type { AnyColor, State } from './types.js';
 
 /**
  * The Mini App background color.
+ *
+ * Represents an RGB color, or theme parameters key, like "bg_color", "secondary_bg_color", etc.
+ *
+ * Note that using a theme parameters key, background color becomes bound to the current
+ * theme parameters, making it automatically being updated whenever theme parameters change.
+ * In order to remove this bind, use an explicit RGB color.
  */
-export const [_backgroundColor, backgroundColor] =
-  createSignalsTuple<BackgroundColor>('bg_color');
+export const [_backgroundColor, backgroundColor] = createSignalsTuple<AnyColor>('bg_color');
 
 /**
  * RGB representation of the background color.
@@ -36,14 +28,13 @@ export const [_backgroundColor, backgroundColor] =
  * This value requires the Theme Params component to be mounted to extract a valid RGB value
  * of the color key.
  */
-export const backgroundColorRGB = rgbBasedOn(_backgroundColor);
+export const backgroundColorRGB = rgbComputedBasedOn(_backgroundColor);
 
 
 /**
  * The Mini App bottom bar background color.
  */
-export const [_bottomBarColor, bottomBarColor] =
-  createSignalsTuple<BottomBarColor>('bottom_bar_bg_color');
+export const [_bottomBarColor, bottomBarColor] = createSignalsTuple<AnyColor>('bottom_bar_bg_color');
 
 /**
  * RGB representation of the bottom bar background color.
@@ -55,19 +46,14 @@ export const bottomBarColorRGB = createComputed<RGB | undefined>(() => {
   const color = _bottomBarColor();
   return isRGB(color)
     ? color
-    : color === 'bottom_bar_bg_color'
-      // Following the logic from the Telegram SDK.
-      // I removed "|| '#ffffff'" because this seems too strange to me. This is just not right.
-      ? themeBottomBarBgColor() || themeSecondaryBgColor()
-      : color === 'secondary_bg_color'
-        ? themeSecondaryBgColor()
-        : themeBgColor();
+    // Falling back to secondary_bg_color following the logic from the Telegram SDK.
+    : themeParamsState()[color] || themeSecondaryBgColor();
 });
 
 /**
  * The Mini App header color.
  */
-export const [_headerColor, headerColor] = createSignalsTuple<HeaderColor>('bg_color');
+export const [_headerColor, headerColor] = createSignalsTuple<AnyColor>('bg_color');
 
 /**
  * RGB representation of the header color.
@@ -75,7 +61,7 @@ export const [_headerColor, headerColor] = createSignalsTuple<HeaderColor>('bg_c
  * This value requires the Theme Params component to be mounted to extract a valid RGB value
  * of the color key.
  */
-export const headerColorRGB = rgbBasedOn(_headerColor);
+export const headerColorRGB = rgbComputedBasedOn(_headerColor);
 
 /**
  * True if CSS variables are currently bound.

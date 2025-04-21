@@ -9,12 +9,14 @@ export function getConfig({
   filename = 'index',
   input,
   formats,
-  declarations = false,
+  declarations,
+  inlineModules,
 }: {
   input: string;
   filename?: string;
   formats: LibraryFormats[];
   declarations?: boolean;
+  inlineModules?: boolean
 }): UserConfigFn {
   return defineConfig(({ mode }) => {
     const tsconfigPath = mode === 'test'
@@ -35,6 +37,19 @@ export function getConfig({
         outDir: 'dist',
         emptyOutDir: false,
         sourcemap: true,
+        rollupOptions: {
+          external: inlineModules ? [] : [
+            '@telegram-apps/bridge',
+            '@telegram-apps/navigation',
+            '@telegram-apps/signals',
+            '@telegram-apps/toolkit',
+            '@telegram-apps/transformers',
+            '@telegram-apps/types',
+            'better-promises',
+            'error-kid',
+            'valibot',
+          ],
+        },
         lib: {
           name: 'telegramApps.sdk',
           entry: input,

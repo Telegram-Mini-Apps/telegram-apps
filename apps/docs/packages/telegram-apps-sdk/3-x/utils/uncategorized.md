@@ -30,10 +30,11 @@ if (downloadFile.isAvailable()) {
 ```ts [Using ifAvailable]
 import { downloadFile } from '@telegram-apps/sdk';
 
-await downloadFile.ifAvailable(
+const foo = downloadFile.ifAvailable(
   'https://telegram.org/js/telegram-web-app.js',
   'telegram-sdk.js',
 );
+foo[0] && await foo[1];
 ```
 
 :::
@@ -56,7 +57,10 @@ if (getCurrentTime.isAvailable()) {
 ```ts [Using ifAvailable]
 import { getCurrentTime } from '@telegram-apps/sdk';
 
-const time = await getCurrentTime.ifAvailable(); // Date | undefined
+const result = getCurrentTime.ifAvailable();
+if (result[0]) {
+  const date = await result[1];
+}
 ```
 
 :::
@@ -78,8 +82,11 @@ if (readTextFromClipboard.isAvailable()) {
 ```ts [Using ifAvailable]
 import { readTextFromClipboard } from '@telegram-apps/sdk';
 
-const contents = await readTextFromClipboard.ifAvailable(); 
-// string | null | undefined
+const result = readTextFromClipboard.ifAvailable();
+if (result[0]) {
+  // string | null | undefined
+  const contents = await result[1];
+}
 ```
 
 :::
