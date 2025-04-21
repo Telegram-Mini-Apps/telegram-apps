@@ -49,9 +49,24 @@ describe.each([
   ['mount', mount, {}],
   ['mountSync', mountSync, {}],
   ['ready', ready, {}],
-  ['setBackgroundColor', setBackgroundColor, { isMounted: _isMounted }],
-  ['setBottomBarColor', setBottomBarColor, { isMounted: _isMounted, minVersion: '7.10' }],
-  ['setHeaderColor', setHeaderColor, {}],
+  ['setBackgroundColor', setBackgroundColor, {
+    isMounted: _isMounted,
+    call() {
+      setBackgroundColor('#ffffff');
+    },
+  }],
+  ['setBottomBarColor', setBottomBarColor, {
+    isMounted: _isMounted,
+    minVersion: '7.10',
+    call() {
+      setBottomBarColor('#ffffff');
+    },
+  }],
+  ['setHeaderColor', setHeaderColor, {
+    call() {
+      setHeaderColor('#ffffff');
+    },
+  }],
   ['close', close, {}],
   ['bindCssVars', bindCssVars, { isMounted: _isMounted }],
 ] as const)('%s', (name, fn, options) => {
@@ -155,9 +170,9 @@ describe('bindCssVars', () => {
       expect(setSpy).toHaveBeenCalledOnce();
       expect(setSpy).toHaveBeenCalledWith('--tg-bottom-bar-color', '#aafedd');
 
-      tpState.set({ secondary_bg_color: '#ddddaa' });
+      tpState.set({ accent_text_color: '#ddddaa' });
       setSpy.mockClear();
-      _bottomBarColor.set('secondary_bg_color');
+      _bottomBarColor.set('accent_text_color');
       expect(setSpy).toHaveBeenCalledOnce();
       expect(setSpy).toHaveBeenCalledWith('--tg-bottom-bar-color', '#ddddaa');
 
@@ -207,9 +222,10 @@ describe('setBackgroundColor', () => {
 
   it('should call postEvent with "web_app_set_background_color"', () => {
     const spy = mockPostEvent();
-    setBackgroundColor('secondary_bg_color');
+    setBackgroundColor('#ff1233');
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith('web_app_set_background_color', { color: 'secondary_bg_color' });
+    expect(spy)
+      .toHaveBeenCalledWith('web_app_set_background_color', { color: '#ff1233' });
   });
 });
 
@@ -237,7 +253,8 @@ describe('setHeaderColor', () => {
     const spy = mockPostEvent();
     setHeaderColor('secondary_bg_color');
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith('web_app_set_header_color', { color_key: 'secondary_bg_color' });
+    expect(spy)
+      .toHaveBeenCalledWith('web_app_set_header_color', { color_key: 'secondary_bg_color' });
   });
 
   it('should throw FunctionUnavailableError if rgb is used and version is less than 6.9', () => {
