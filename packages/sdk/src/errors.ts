@@ -59,3 +59,10 @@ export const [
   ShareMessageError,
   isShareMessageError,
 ] = errorClass<[error: string]>('ShareMessageError', proxyMessage);
+
+export const [
+  UnknownThemeParamsKeyError,
+  isUnknownThemeParamsKeyError,
+] = errorClass<[key: string]>('UnknownThemeParamsKeyError', key => {
+  return [`Unknown theme params key passed: ${key}`];
+});
