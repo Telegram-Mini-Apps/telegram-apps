@@ -1,5 +1,11 @@
 # @telegram-apps/init-data-node
 
+## 2.0.4
+
+### Patch Changes
+
+- ccc133e: Bump `error-kid`.
+
 ## 2.0.3
 
 ### Patch Changes

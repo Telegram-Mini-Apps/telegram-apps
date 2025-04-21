@@ -1,5 +1,19 @@
 # @telegram-apps/sdk
 
+## 3.8.0
+
+### Minor Changes
+
+- 9153b7c: - Implement `requestContactComplete`
+  - Allow using wider range of values in mini-app's `setBackgroundColor`, `setHeaderColor` and `setBottomBarColor` methods
+  - Bump deps
+  - Implement `UnknownThemeParamsKeyError`
+
+### Patch Changes
+
+- Updated dependencies [ca3c434]
+  - @telegram-apps/bridge@2.7.1
+
 ## 3.7.1
 
 ### Patch Changes
