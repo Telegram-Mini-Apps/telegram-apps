@@ -45,3 +45,73 @@ miniApp.mountSync();
 ```
 
 :::
+
+## Changes to `requestContact`
+
+The function now returns data with the fields that were originally presented in response from the Telegram
+client (camelCased).
+
+:::code-group
+
+```ts [v2]
+import { requestContact } from '@telegram-apps/sdk';
+
+if (requestContact.isAvailable()) {
+  const contact = await requestContact();
+  // {
+  //   contact: {
+  //     userId: 1,
+  //     phoneNumber: '+987654321',
+  //     firstName: 'Vladislav',
+  //     lastName: 'Kibenko'
+  //   },
+  //   authDate: Date(12345678),
+  //   hash: 'abcdefgh'
+  // };
+}
+```
+
+```ts [v3]
+import { requestContact } from '@telegram-apps/sdk';
+
+if (requestContact.isAvailable()) {
+  const contact = await requestContact();
+  // {
+  //   contact: {
+  //     user_id: 1,
+  //     phone_number: '+987654321',
+  //     first_name: 'Vladislav',
+  //     last_name: 'Kibenko'
+  //   },
+  //   auth_date: Date(12345678),
+  //   hash: 'abcdefgh'
+  // };
+}
+```
+
+:::
+
+## Changes to `*.ifAvailable()`
+
+The method now returns a tuple, having `false` on the first place if the call is unavailable, and `true` with a
+call result, if the function is available.
+
+:::code-group
+
+```ts [v2]
+import { requestContact } from '@telegram-apps/sdk';
+
+const result = requestContact.ifAvailable();
+// Result will either be a Promise with the contact data or undefined.
+```
+
+```ts [v3]
+import { requestContact } from '@telegram-apps/sdk';
+
+const result = requestContact.ifAvailable();
+// Result will be one of the following:
+// [false]
+// [true, Promise<...>]
+```
+
+:::
