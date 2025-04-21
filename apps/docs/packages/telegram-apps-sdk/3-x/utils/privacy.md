@@ -49,12 +49,9 @@ const status = await requestWriteAccess.ifAvailable();
 
 :::
 
-
 ## `requestContact`
 
 To retrieve a user's contact information, use the `requestContact` method.
-
-
 
 ::: code-group
 
@@ -65,12 +62,12 @@ if (requestContact.isAvailable()) {
   const contact = await requestContact();
   // {
   //   contact: {
-  //     userId: 1,
-  //     phoneNumber: '+987654321',
-  //     firstName: 'Vladislav',
-  //     lastName: 'Kibenko'
+  //     user_id: 1,
+  //     phone_number: '+987654321',
+  //     first_name: 'Vladislav',
+  //     last_name: 'Kibenko'
   //   },
-  //   authDate: Date(12345678),
+  //   auth_date: Date(12345678),
   //   hash: 'abcdefgh'
   // };
 }
@@ -94,6 +91,36 @@ const contact = await requestContact.ifAvailable();
 
 :::
 
+## `requestContactComplete`
 
+This function works the same as [requestContactComplete](#requestContactComplete), but it also returns a raw
+representation of the contact data from the Telegram client, so its signature could be verified.
 
+::: code-group
 
+```ts [Using isAvailable]
+import { requestContactComplete } from '@telegram-apps/sdk';
+
+if (requestContactComplete.isAvailable()) {
+  const contact = await requestContactComplete();
+  // {
+  //   raw: 'contact=...&auth_date=...&hash=...',
+  //   contact: { ... }
+  // }
+}
+```
+
+```ts [Using ifAvailable]
+import { requestContact } from '@telegram-apps/sdk';
+
+const result = requestContact.ifAvailable();
+if (result[0]) {
+  const contact = await result[1];
+  // {
+  //   raw: 'contact=...&auth_date=...&hash=...',
+  //   contact: { ... }
+  // }
+}
+```
+
+:::
