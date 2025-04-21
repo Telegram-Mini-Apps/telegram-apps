@@ -10,12 +10,12 @@ export type HeaderColorKey = KnownColorKey;
 /**
  * Color key which could be used to update Mini App background color.
  */
-export type BackgroundColor = KnownColorKey | RGB;
+export type BackgroundColor = RGB;
 
 /**
  * Color key which could be used to update bottom bar background color.
  */
-export type BottomBarColor = KnownColorKey | 'bottom_bar_bg_color' | RGB;
+export type BottomBarColor = RGB;
 
 /**
  * Position of the secondary button related to the main one.
