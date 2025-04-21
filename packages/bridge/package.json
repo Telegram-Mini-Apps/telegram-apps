@@ -48,10 +48,10 @@
     "@telegram-apps/toolkit": "workspace:^",
     "@telegram-apps/transformers": "workspace:^",
     "@telegram-apps/types": "workspace:^",
-    "better-promises": "^0.4.0",
-    "error-kid": "^0.0.4",
+    "better-promises": "^0.4.1",
+    "error-kid": "^0.0.7",
     "mitt": "^3.0.1",
-    "valibot": "1.0.0-beta.14"
+    "valibot": "1.0.0"
   },
   "devDependencies": {
     "test-utils": "workspace:*",
