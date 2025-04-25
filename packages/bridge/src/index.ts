@@ -45,6 +45,7 @@ export {
   type RequestFn,
 } from '@/utils/request.js';
 
+export { applyPolyfills } from '@/applyPolyfills.js';
 export { setDebug } from '@/debug.js';
 export {
   LaunchParamsRetrieveError,

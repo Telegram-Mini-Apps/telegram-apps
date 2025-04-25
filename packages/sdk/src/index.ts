@@ -133,6 +133,7 @@ export {
   ManualPromise,
   postMessage,
   postMessageImplementation,
+  applyPolyfills,
   type PostMessage,
 } from '@telegram-apps/bridge';
 export {
