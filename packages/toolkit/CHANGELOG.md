@@ -1,5 +1,11 @@
 # @telegram-apps/toolkit
 
+## 2.1.2
+
+### Patch Changes
+
+- 5631780: Remove `force` option in logger methods.
+
 ## 2.1.1
 
 ### Patch Changes

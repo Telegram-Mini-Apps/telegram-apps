@@ -1,5 +1,11 @@
 # @telegram-apps/init-data-node
 
+## 2.0.7
+
+### Patch Changes
+
+- @telegram-apps/transformers@2.2.3
+
 ## 2.0.6
 
 ### Patch Changes
