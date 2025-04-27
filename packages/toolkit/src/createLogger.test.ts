@@ -21,14 +21,14 @@ afterEach(() => {
 
 describe('log', () => {
   it('should call console.log()', () => {
-    const [log] = createLogger('SDK');
+    const { log } = createLogger('SDK');
     const spy = vi.fn();
     vi.spyOn(console, 'log').mockImplementation(spy);
 
     log(false, 'Test');
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith(
-      '%c09:09:43.007%c / %cSDK',
+      '%cINFO 09:09:43.007%c %cSDK',
       expect.anything(),
       expect.anything(),
       expect.anything(),
@@ -37,7 +37,7 @@ describe('log', () => {
   });
 
   it('should ignore shouldLog if force is true', () => {
-    const [log] = createLogger('SDK', { shouldLog: false });
+    const { log } = createLogger('SDK', { shouldLog: false });
     const spy = vi.fn();
     vi.spyOn(console, 'log').mockImplementation(spy);
 
@@ -47,7 +47,7 @@ describe('log', () => {
     log(true, 'Test');
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith(
-      '%c09:09:43.007%c / %cSDK',
+      '%cINFO 09:09:43.007%c %cSDK',
       expect.anything(),
       expect.anything(),
       expect.anything(),
@@ -56,16 +56,20 @@ describe('log', () => {
   });
 });
 
+// describe('forceLog', () => {
+//
+// });
+
 describe('error', () => {
   it('should call console.error()', () => {
-    const [, error] = createLogger('SDK');
+    const { error } = createLogger('SDK');
     const spy = vi.fn();
     vi.spyOn(console, 'error').mockImplementation(spy);
 
     error(false, 'Test');
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith(
-      '%c09:09:43.007%c / %cSDK',
+      '%cERR 09:09:43.007%c %cSDK',
       expect.anything(),
       expect.anything(),
       expect.anything(),
@@ -74,7 +78,7 @@ describe('error', () => {
   });
 
   it('should ignore shouldLog if force is true', () => {
-    const [, error] = createLogger('SDK', { shouldLog: false });
+    const { error } = createLogger('SDK', { shouldLog: false });
     const spy = vi.fn();
     vi.spyOn(console, 'error').mockImplementation(spy);
 
@@ -84,7 +88,7 @@ describe('error', () => {
     error(true, 'Test');
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith(
-      '%c09:09:43.007%c / %cSDK',
+      '%cERR 09:09:43.007%c %cSDK',
       expect.anything(),
       expect.anything(),
       expect.anything(),
