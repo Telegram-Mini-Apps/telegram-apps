@@ -47,6 +47,7 @@ export {
   type ConfigureOptions,
 } from '@/globals.js';
 export { init, type InitOptions } from '@/init.js';
+export { logger as sdkLogger, type Logger as SDKLogger } from '@/logger.js';
 export type { RequestOptionsNoCapture, AsyncOptions } from '@/types.js';
 
 export {
@@ -134,6 +135,8 @@ export {
   postMessage,
   postMessageImplementation,
   type PostMessage,
+  logger as bridgeLogger,
+  type Logger as BridgeLogger,
 } from '@telegram-apps/bridge';
 export {
   isRGB,
