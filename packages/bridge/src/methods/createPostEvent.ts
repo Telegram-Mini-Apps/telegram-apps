@@ -55,7 +55,7 @@ export function createPostEvent(
       if (onUnsupportedOrMode === 'strict') {
         throw error;
       }
-      return logger().warn(true, error.message);
+      return logger().forceWarn(error.message);
     };
 
   return ((method: any, params: any) => {

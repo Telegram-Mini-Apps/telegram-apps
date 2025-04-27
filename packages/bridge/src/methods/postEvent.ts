@@ -50,7 +50,7 @@ export function postEvent(
   eventType: MethodName,
   eventData?: MethodParams<MethodName>,
 ): void {
-  logger().log(false, 'Posting event:', eventData ? { eventType, eventData } : { eventType });
+  logger().log('Posting event:', eventData ? { eventType, eventData } : { eventType });
 
   const w = window;
 

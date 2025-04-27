@@ -62,7 +62,7 @@ export function configure(options?: ConfigureOptions): void {
       ? postEvent
       : createPostEvent(lp.tgWebAppVersion),
   );
-  logger().log(false, 'The package was configured. Launch params:', _$launchParams());
+  logger().log('The package was configured. Launch params:', _$launchParams());
 }
 
 /**

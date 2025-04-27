@@ -18,5 +18,5 @@ export const targetOrigin = signal('https://web.telegram.org');
  */
 export function setTargetOrigin(origin: string) {
   targetOrigin.set(origin);
-  logger().log(false, 'New target origin set', origin);
+  logger().log('New target origin set', origin);
 }
