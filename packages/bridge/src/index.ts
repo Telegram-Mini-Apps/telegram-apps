@@ -18,7 +18,7 @@ export { retrieveRawInitData } from '@/launch-params/retrieveRawInitData.js';
 
 export type * from '@/methods/types/index.js';
 export { postMessage, postMessageImplementation, type PostMessage } from '@/methods/postMessage.js';
-export { targetOrigin } from '@/methods/targetOrigin.js';
+export { targetOrigin, setTargetOrigin } from '@/methods/targetOrigin.js';
 export { captureSameReq } from '@/methods/captureSameReq.js';
 export {
   createPostEvent,
@@ -60,7 +60,15 @@ export {
   InvalidLaunchParamsError,
   isInvalidLaunchParamsError,
 } from '@/errors.js';
+export { logger } from '@/logger.js';
 export { resetPackageState } from '@/resetPackageState.js';
+
+export {
+  createLogger,
+  type LogLevel,
+  type LoggerOptions,
+  type Logger,
+} from '@telegram-apps/toolkit';
 
 export {
   isCancelledError,

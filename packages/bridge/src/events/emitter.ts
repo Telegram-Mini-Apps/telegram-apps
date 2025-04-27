@@ -16,7 +16,7 @@ import { jsonParse, MiniAppsMessageSchema, themeParams } from '@telegram-apps/tr
 import { createEmitter } from '@/events/createEmitter.js';
 import type { EventName, EventPayload, Events } from '@/events/types/index.js';
 import { emitEvent } from '@/events/emitEvent.js';
-import { logError } from '@/debug.js';
+import { logger } from '@/logger.js';
 
 /**
  * Transformers for problematic Mini Apps events.
@@ -64,12 +64,11 @@ function listener(event: MessageEvent): void {
   const { eventType, eventData } = message;
   const schema = transformers[eventType as keyof typeof transformers];
 
+  let data: unknown
   try {
-    const data = schema ? parse(schema, eventData) : eventData;
-    emit(eventType as any, data);
+    data = schema ? parse(schema, eventData) : eventData;
   } catch (cause) {
-    logError(
-      true,
+    return logger().forceError(
       [
         `An error occurred processing the "${eventType}" event from the Telegram application.`,
         'Please, file an issue here:',
@@ -79,6 +78,7 @@ function listener(event: MessageEvent): void {
       cause,
     );
   }
+  emit(eventType as any, data);
 }
 
 export const [

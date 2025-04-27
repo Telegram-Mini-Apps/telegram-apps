@@ -14,7 +14,7 @@ import type { AbortablePromise } from 'better-promises';
 import type { LaunchParamsLike } from '@telegram-apps/transformers';
 
 import { createComputed, createSignal, createSignalsTuple } from '@/signals-registry.js';
-import { logInfo } from '@/debug.js';
+import { logger } from '@/logger.js';
 
 /**
  * Launch parameters stored in the package state.
@@ -62,7 +62,7 @@ export function configure(options?: ConfigureOptions): void {
       ? postEvent
       : createPostEvent(lp.tgWebAppVersion),
   );
-  logInfo(false, 'The package was configured. Launch params:', _$launchParams());
+  logger().log(false, 'The package was configured. Launch params:', _$launchParams());
 }
 
 /**

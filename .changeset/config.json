@@ -9,11 +9,6 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "docs",
-    "custom-playground",
-    "vue-template",
-    "svelte-template",
-    "nextjs-template",
-    "reactjs-template",
-    "solidjs-template"
+    "custom-playground"
   ]
 }

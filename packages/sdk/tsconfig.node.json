@@ -4,6 +4,8 @@
     "composite": true
   },
   "include": [
-    "build"
+    "tools",
+    "vite.config.ts",
+    "vite.iife.config.ts"
   ]
 }

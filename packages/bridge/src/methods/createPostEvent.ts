@@ -9,6 +9,7 @@ import type {
   MethodVersionedParams,
 } from '@/methods/types/index.js';
 import { MethodParameterUnsupportedError, MethodUnsupportedError } from '@/errors.js';
+import { logger } from '@/logger.js';
 
 export type OnUnsupportedFn = (
   data: { version: Version } & (
@@ -54,7 +55,7 @@ export function createPostEvent(
       if (onUnsupportedOrMode === 'strict') {
         throw error;
       }
-      return console.warn(error.message);
+      return logger().warn(error.message);
     };
 
   return ((method: any, params: any) => {

@@ -1,6 +1,6 @@
 import { is, looseObject, function as fn } from 'valibot';
 
-import { logInfo } from '@/debug.js';
+import { logger } from '@/logger.js';
 import { isIframe } from '@/env/isIframe.js';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { UnknownEnvError } from '@/errors.js';
@@ -50,7 +50,7 @@ export function postEvent(
   eventType: MethodName,
   eventData?: MethodParams<MethodName>,
 ): void {
-  logInfo(false, 'Posting event:', eventData ? { eventType, eventData } : { eventType });
+  logger().log(false, 'Posting event:', eventData ? { eventType, eventData } : { eventType });
 
   const w = window;
 
