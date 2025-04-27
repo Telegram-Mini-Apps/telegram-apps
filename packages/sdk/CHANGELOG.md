@@ -1,5 +1,19 @@
 # @telegram-apps/sdk
 
+## 3.9.0
+
+### Minor Changes
+
+- b606f93: Allow mutating the package logger.
+
+### Patch Changes
+
+- Updated dependencies [0c3d369]
+- Updated dependencies [9623c36]
+  - @telegram-apps/toolkit@2.1.0
+  - @telegram-apps/bridge@2.8.0
+  - @telegram-apps/transformers@2.2.1
+
 ## 3.8.0
 
 ### Minor Changes
