@@ -146,5 +146,5 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
     },
   };
 
-  logger().log(false, 'Environment was mocked by the mockTelegramEnv function');
+  logger().log('Environment was mocked by the mockTelegramEnv function');
 }

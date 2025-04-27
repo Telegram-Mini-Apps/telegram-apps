@@ -11,7 +11,7 @@ import { logger } from '@/logger.js';
 export let debug = false;
 
 const listener: SubscribeListener = event => {
-  logger().log(false, 'Event received:', event);
+  logger().log('Event received:', event);
 };
 
 /**
