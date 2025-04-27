@@ -162,3 +162,9 @@ export type {
   KnownThemeParamsKey,
   Version,
 } from '@telegram-apps/types';
+export {
+  createLogger,
+  type LogLevel,
+  type LoggerOptions,
+  type Logger,
+} from '@telegram-apps/toolkit';

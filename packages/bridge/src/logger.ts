@@ -3,7 +3,6 @@ import { signal } from '@telegram-apps/signals';
 
 import { debug } from '@/debug.js';
 
-export type { Logger };
 export const logger = signal<Logger>(createLogger('Bridge', {
   bgColor: '#9147ff',
   textColor: 'white',
