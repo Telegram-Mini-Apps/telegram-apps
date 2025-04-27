@@ -9,7 +9,7 @@ import {
 } from '@telegram-apps/transformers';
 import { If, IsNever, setStorageValue } from '@telegram-apps/toolkit';
 
-import { logInfo } from '@/debug.js';
+import { logger } from '@/logger.js';
 import { isIframe } from '@/env/isIframe.js';
 import type { MethodName, MethodParams } from '@/methods/types/index.js';
 import { InvalidLaunchParamsError } from '@/errors.js';
@@ -146,5 +146,5 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
     },
   };
 
-  logInfo(false, 'Environment was mocked by the mockTelegramEnv function');
+  logger().log(false, 'Environment was mocked by the mockTelegramEnv function');
 }

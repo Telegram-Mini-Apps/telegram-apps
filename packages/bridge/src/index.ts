@@ -60,6 +60,7 @@ export {
   InvalidLaunchParamsError,
   isInvalidLaunchParamsError,
 } from '@/errors.js';
+export { logger, type Logger } from '@/logger.js';
 export { resetPackageState } from '@/resetPackageState.js';
 
 export {
