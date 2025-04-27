@@ -1,5 +1,14 @@
 # @telegram-apps/sdk
 
+## 3.9.1
+
+### Patch Changes
+
+- Updated dependencies [15b9921]
+  - @telegram-apps/toolkit@2.1.1
+  - @telegram-apps/bridge@2.8.1
+  - @telegram-apps/transformers@2.2.2
+
 ## 3.9.0
 
 ### Minor Changes
