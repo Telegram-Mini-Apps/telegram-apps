@@ -1,5 +1,11 @@
 # @telegram-apps/toolkit
 
+## 2.1.1
+
+### Patch Changes
+
+- 15b9921: Add missing `force` option in common logging methods.
+
 ## 2.1.0
 
 ### Minor Changes
