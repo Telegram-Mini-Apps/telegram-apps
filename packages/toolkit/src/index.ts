@@ -23,4 +23,11 @@ export type * from './types/predicates.js';
 export type * from './types/unions.js';
 
 export { createCbCollector, type CallbackFn } from './createCbCollector.js';
-export { createLogger, type Logger, type LoggerOptions, type LogLevel } from './createLogger.js';
+export {
+  createLogger,
+  type Logger,
+  type LoggerOptions,
+  type LogLevel,
+  type LoggerFn,
+  type LoggerForceFn,
+} from './createLogger.js';

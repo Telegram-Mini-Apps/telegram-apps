@@ -13,22 +13,46 @@ export interface LoggerOptions {
   shouldLog?: boolean | (() => boolean);
 }
 
-export interface Logger extends Pick<Console, 'log' | 'warn' | 'error'> {
+export type LoggerFn = (force: boolean, ...args: any[]) => void;
+export type LoggerForceFn = (...args: any[]) => void;
+
+export interface Logger {
   /**
-   * Prints an error message into the console ignoring the `shouldLog` constructor option.
+   * Prints an error message into the console.
+   * @param force - should the `shouldLog` option be ignored.
    * @param args - items to log.
    */
-  forceError: (...args: any[]) => void,
+  error: LoggerFn;
   /**
-   * Prints a log message into the console ignoring the `shouldLog` constructor option.
+   * Prints an error message into the console ignoring the `shouldLog`
+   * constructor option.
    * @param args - items to log.
    */
-  forceLog: (...args: any[]) => void,
+  forceError: LoggerForceFn;
   /**
-   * Prints a warning message into the console ignoring the `shouldLog` constructor option.
+   * Prints a log message into the console ignoring the `shouldLog` constructor
+   * option.
    * @param args - items to log.
    */
-  forceWarn: (...args: any[]) => void,
+  forceLog: LoggerForceFn;
+  /**
+   * Prints a warning message into the console ignoring the `shouldLog`
+   * constructor option.
+   * @param args - items to log.
+   */
+  forceWarn: LoggerForceFn;
+  /**
+   * Prints a log message into the console.
+   * @param force - should the `shouldLog` option be ignored.
+   * @param args - items to log.
+   */
+  log: LoggerFn;
+  /**
+   * Prints a warning message into the console.
+   * @param force - should the `shouldLog` option be ignored.
+   * @param args - items to log.
+   */
+  warn: LoggerFn;
 }
 
 /*@__NO_SIDE_EFFECTS__*/
@@ -84,7 +108,7 @@ export function createLogger(scope: string, options?: LoggerOptions): Logger {
     ['error', 'forceError'],
   ] as const).reduce<Logger>((acc, [level, forceMethod]) => {
     acc[level] = print.bind(undefined, level);
-    acc[forceMethod] = acc[level].bind(null, true);
+    acc[forceMethod] = print.bind(undefined, level, true);
     return acc;
   }, {} as Logger);
 }

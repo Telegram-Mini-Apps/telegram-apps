@@ -167,4 +167,6 @@ export {
   type LogLevel,
   type LoggerOptions,
   type Logger,
+  type LoggerFn,
+  type LoggerForceFn,
 } from '@telegram-apps/toolkit';
