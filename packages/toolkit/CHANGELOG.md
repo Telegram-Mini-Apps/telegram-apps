@@ -1,5 +1,11 @@
 # @telegram-apps/toolkit
 
+## 2.1.0
+
+### Minor Changes
+
+- 0c3d369: Rework `createLogger` utility and update it visual style. Return an object instead of a tuple.
+
 ## 2.0.0
 
 ### Major Changes

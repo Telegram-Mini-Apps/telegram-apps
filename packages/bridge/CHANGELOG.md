@@ -1,5 +1,19 @@
 # @telegram-apps/bridge
 
+## 2.8.0
+
+### Minor Changes
+
+- 9623c36: - Handle target origin related error when calling `window.parent.postMessage`
+  - Implement `setTargetOrigin`
+  - Allow mutating the package logger
+
+### Patch Changes
+
+- Updated dependencies [0c3d369]
+  - @telegram-apps/toolkit@2.1.0
+  - @telegram-apps/transformers@2.2.1
+
 ## 2.7.1
 
 ### Patch Changes

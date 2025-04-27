@@ -1,5 +1,12 @@
 # @telegram-apps/transformers
 
+## 2.2.1
+
+### Patch Changes
+
+- Updated dependencies [0c3d369]
+  - @telegram-apps/toolkit@2.1.0
+
 ## 2.2.0
 
 ### Minor Changes
