@@ -13,13 +13,12 @@ export interface LoggerOptions {
   shouldLog?: boolean | (() => boolean);
 }
 
-export type LoggerFn = (force: boolean, ...args: any[]) => void;
+export type LoggerFn = (...args: any[]) => void;
 export type LoggerForceFn = (...args: any[]) => void;
 
 export interface Logger {
   /**
    * Prints an error message into the console.
-   * @param force - should the `shouldLog` option be ignored.
    * @param args - items to log.
    */
   error: LoggerFn;
@@ -43,13 +42,11 @@ export interface Logger {
   forceWarn: LoggerForceFn;
   /**
    * Prints a log message into the console.
-   * @param force - should the `shouldLog` option be ignored.
    * @param args - items to log.
    */
   log: LoggerFn;
   /**
    * Prints a warning message into the console.
-   * @param force - should the `shouldLog` option be ignored.
    * @param args - items to log.
    */
   warn: LoggerFn;
@@ -107,7 +104,7 @@ export function createLogger(scope: string, options?: LoggerOptions): Logger {
     ['warn', 'forceWarn'],
     ['error', 'forceError'],
   ] as const).reduce<Logger>((acc, [level, forceMethod]) => {
-    acc[level] = print.bind(undefined, level);
+    acc[level] = print.bind(undefined, level, false);
     acc[forceMethod] = print.bind(undefined, level, true);
     return acc;
   }, {} as Logger);
