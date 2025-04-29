@@ -168,6 +168,32 @@ sendData.ifAvailable('my-data-goes-here');
 > the `web_app_data` field in the [Message](https://core.telegram.org/bots/api#message) class for
 > more details.
 
+## `shareMessage`
+
+To share a prepared by your server message, use the `shareMessage` function. It opens a dialog 
+allowing the user to share a message provided by the bot.
+
+::: code-group
+
+```ts [Using isAvailable]
+import { shareMessage } from '@telegram-apps/sdk';
+
+if (shareMessage.isAvailable()) {
+  await shareMessage('my message id');
+}
+```
+
+```ts [Using ifAvailable]
+import { shareMessage } from '@telegram-apps/sdk';
+
+shareMessage.ifAvailable('my message id');
+```
+
+:::
+
+The value passed to the function is a message identifier returned by the [savePreparedInlineMessage](https://core.telegram.org/bots/api#savepreparedinlinemessage)
+Telegram Bot API method.
+
 ## `switchInlineQuery`
 
 To create a message prefixed with the bot username and a specific text, and share it in another
