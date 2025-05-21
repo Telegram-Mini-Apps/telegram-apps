@@ -3,6 +3,9 @@ import {
   retrieveLaunchParams,
   retrieveRawLaunchParams,
   retrieveRawInitData,
+  retrieveAndroidDeviceData,
+  retrieveAndroidDeviceDataFrom,
+  type AndroidDeviceData,
   type RetrieveLPResult,
   type RetrieveLPResultCamelCased,
 } from '@telegram-apps/sdk';
@@ -10,20 +13,21 @@ import {
 /**
  * Returns the underlying signal value updating it each time the signal value changes.
  * @param signal - a signal.
- * @param getServerSnapshot - an optional function returning the signal value snapshot. It is used only during SSR
- * to provide an initial value of the signal. When not set, defaults to the signal itself.
+ * @param getServerSnapshot - an optional function returning the signal value snapshot. It is used
+ *   only during SSR to provide an initial value of the signal. When not set, defaults to the
+ *   signal itself.
  */
 export function useSignal<T>(
   signal: {
     (): T;
     sub(fn: VoidFunction): VoidFunction;
   },
-  getServerSnapshot?: () => T
+  getServerSnapshot?: () => T,
 ): T {
   return useSyncExternalStore(
     (onStoreChange) => signal.sub(onStoreChange),
     signal,
-    getServerSnapshot || signal
+    getServerSnapshot || signal,
   );
 }
 
@@ -61,4 +65,21 @@ export function useRawLaunchParams(): string {
  */
 export function useRawInitData(): string | undefined {
   return useMemo(retrieveRawInitData, []);
+}
+
+/**
+ * Retrieves Android device data from the navigator.userAgent.
+ * @see https://core.telegram.org/bots/webapps#additional-data-in-user-agent
+ */
+export function useAndroidDeviceData(): AndroidDeviceData {
+  return useMemo(retrieveAndroidDeviceData, []);
+}
+
+/**
+ * Retrieves Android device data from the specified User Agent.
+ * @see https://core.telegram.org/bots/webapps#additional-data-in-user-agent
+ * @param userAgent - user agent.
+ */
+export function useAndroidDeviceDataFrom(userAgent: string): AndroidDeviceData {
+  return useMemo(() => retrieveAndroidDeviceDataFrom(userAgent), [userAgent]);
 }
