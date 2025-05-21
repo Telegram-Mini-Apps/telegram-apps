@@ -1,5 +1,16 @@
 # @telegram-apps/sdk-react
 
+## 3.3.0
+
+### Minor Changes
+
+- cddaa5b: Implement `useAndroidDeviceData` and `useAndroidDeviceDataFrom`.
+
+### Patch Changes
+
+- Updated dependencies [6ad4b28]
+  - @telegram-apps/sdk@3.10.0
+
 ## 3.2.4
 
 ### Patch Changes
