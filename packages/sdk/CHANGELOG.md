@@ -1,5 +1,11 @@
 # @telegram-apps/sdk
 
+## 3.10.0
+
+### Minor Changes
+
+- 6ad4b28: Implement `retrieveAndroidDeviceDataFrom` and `retrieveAndroidDeviceData`.
+
 ## 3.9.2
 
 ### Patch Changes
