@@ -91,6 +91,46 @@ if (result[0]) {
 
 :::
 
+## `retrieveAndroidDeviceData`
+
+Retrieves [Android device data](https://core.telegram.org/bots/webapps#additional-data-in-user-agent) from the
+`navigator.userAgent`.
+
+The function always returns an object describing the Android device data with all keys marked as optional.
+
+```ts
+import { retrieveAndroidDeviceData } from '@telegram-apps/sdk';
+
+const data = retrieveAndroidDeviceData();
+// Example complete output:
+// {
+//   manufacturer: 'Samsung',
+//   performanceClass: 'AVERAGE',
+//   model: 'SM-A155F',
+//   androidVersion: '14',
+//   sdkVersion: 34,
+// }
+```
+
+## `retrieveAndroidDeviceDataFrom`
+
+This function works the same as [retrieveAndroidDeviceData](#retrieveandroiddevicedata), but allows passing a custom
+value to parse.
+
+```ts
+import { retrieveAndroidDeviceDataFrom } from '@telegram-apps/sdk';
+
+const data = retrieveAndroidDeviceDataFrom(navigator.userAgent);
+// Example complete output:
+// {
+//   manufacturer: 'Samsung',
+//   performanceClass: 'AVERAGE',
+//   model: 'SM-A155F',
+//   androidVersion: '14',
+//   sdkVersion: 34,
+// }
+```
+
 ## `shareStory`
 
 The `shareStory` method opens the native story editor.
@@ -170,7 +210,7 @@ sendData.ifAvailable('my-data-goes-here');
 
 ## `shareMessage`
 
-To share a prepared by your server message, use the `shareMessage` function. It opens a dialog 
+To share a prepared by your server message, use the `shareMessage` function. It opens a dialog
 allowing the user to share a message provided by the bot.
 
 ::: code-group
@@ -191,7 +231,8 @@ shareMessage.ifAvailable('my message id');
 
 :::
 
-The value passed to the function is a message identifier returned by the [savePreparedInlineMessage](https://core.telegram.org/bots/api#savepreparedinlinemessage)
+The value passed to the function is a message identifier returned by
+the [savePreparedInlineMessage](https://core.telegram.org/bots/api#savepreparedinlinemessage)
 Telegram Bot API method.
 
 ## `switchInlineQuery`
