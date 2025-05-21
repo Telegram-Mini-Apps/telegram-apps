@@ -3,7 +3,7 @@ export { downloadFile } from './downloadFile.js';
 export { getCurrentTime } from './getCurrentTime.js';
 export { readTextFromClipboard } from './readTextFromClipboard.js';
 export { retrieveAndroidDeviceData } from './retrieveAndroidDeviceData.js';
-export { retrieveAndroidDeviceDataFrom } from './retrieveAndroidDeviceDataFrom.js';
+export { retrieveAndroidDeviceDataFrom, type AndroidDeviceData } from './retrieveAndroidDeviceDataFrom.js';
 export { sendData } from './sendData.js';
 export { shareMessage } from './shareMessage.js';
 export { shareStory, type ShareStoryOptions } from './shareStory.js';
