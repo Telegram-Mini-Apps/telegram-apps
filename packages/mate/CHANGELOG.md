@@ -1,5 +1,11 @@
 # @telegram-apps/mate
 
+## 0.0.27
+
+### Patch Changes
+
+- 9b9a368: Update LICENSE file
+
 ## 0.0.26
 
 ### Patch Changes

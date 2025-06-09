@@ -1,5 +1,14 @@
 # @telegram-apps/init-data-node
 
+## 2.0.8
+
+### Patch Changes
+
+- 9b9a368: Update LICENSE file
+- Updated dependencies [9b9a368]
+  - @telegram-apps/transformers@2.2.4
+  - @telegram-apps/types@2.0.1
+
 ## 2.0.7
 
 ### Patch Changes

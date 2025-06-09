@@ -1,5 +1,18 @@
 # @telegram-apps/sdk
 
+## 3.10.1
+
+### Patch Changes
+
+- 9b9a368: Update LICENSE file
+- Updated dependencies [9b9a368]
+  - @telegram-apps/transformers@2.2.4
+  - @telegram-apps/navigation@1.0.14
+  - @telegram-apps/signals@1.1.2
+  - @telegram-apps/toolkit@2.1.3
+  - @telegram-apps/bridge@2.8.3
+  - @telegram-apps/types@2.0.1
+
 ## 3.10.0
 
 ### Minor Changes
