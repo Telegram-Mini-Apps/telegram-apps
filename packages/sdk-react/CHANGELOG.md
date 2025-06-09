@@ -1,5 +1,13 @@
 # @telegram-apps/sdk-react
 
+## 3.3.1
+
+### Patch Changes
+
+- 9b9a368: Update LICENSE file
+- Updated dependencies [9b9a368]
+  - @telegram-apps/sdk@3.10.1
+
 ## 3.3.0
 
 ### Minor Changes

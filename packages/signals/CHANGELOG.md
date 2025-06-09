@@ -1,5 +1,11 @@
 # @telegram-apps/signals
 
+## 1.1.2
+
+### Patch Changes
+
+- 9b9a368: Update LICENSE file
+
 ## 1.1.1
 
 ### Patch Changes

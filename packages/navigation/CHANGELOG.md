@@ -1,5 +1,11 @@
 # @telegram-apps/navigation
 
+## 1.0.14
+
+### Patch Changes
+
+- 9b9a368: Update LICENSE file
+
 ## 1.0.13
 
 ### Patch Changes

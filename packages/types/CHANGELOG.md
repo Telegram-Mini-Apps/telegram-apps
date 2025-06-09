@@ -1,5 +1,11 @@
 # @telegram-apps/types
 
+## 2.0.1
+
+### Patch Changes
+
+- 9b9a368: Update LICENSE file
+
 ## 2.0.0
 
 ### Major Changes

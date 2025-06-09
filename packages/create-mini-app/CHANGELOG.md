@@ -1,5 +1,11 @@
 # @telegram-apps/create-mini-app
 
+## 1.3.1
+
+### Patch Changes
+
+- 9b9a368: Update LICENSE file
+
 ## 1.3.0
 
 ### Minor Changes

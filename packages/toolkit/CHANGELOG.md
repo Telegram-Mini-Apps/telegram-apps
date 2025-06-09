@@ -1,5 +1,11 @@
 # @telegram-apps/toolkit
 
+## 2.1.3
+
+### Patch Changes
+
+- 9b9a368: Update LICENSE file
+
 ## 2.1.2
 
 ### Patch Changes
