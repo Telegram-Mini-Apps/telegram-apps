@@ -139,6 +139,7 @@ export {
   ManualPromise,
   postMessage,
   postMessageImplementation,
+  applyPolyfills,
   type PostMessage,
   logger as bridgeLogger,
   type Logger as BridgeLogger,
