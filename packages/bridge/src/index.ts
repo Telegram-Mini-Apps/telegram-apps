@@ -1,3 +1,6 @@
+export { encodeBase64Url } from '@/base64-url/encodeBase64Url.js';
+export { decodeBase64Url } from '@/base64-url/decodeBase64Url.js';
+
 export { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 export { isIframe } from '@/env/isIframe.js';
 export { isTMA } from '@/env/isTMA.js';
@@ -27,6 +30,10 @@ export {
 } from '@/methods/createPostEvent.js';
 export { postEvent, type PostEventFn } from '@/methods/postEvent.js';
 export { supports } from '@/methods/supports.js';
+
+export { createStartParam } from '@/start-param/createStartParam.js';
+export { decodeStartParam } from '@/start-param/decodeStartParam.js';
+export { isSafeToCreateStartParam } from '@/start-param/isSafeToCreateStartParam.js';
 
 export { compareVersions } from '@/utils/compareVersions.js';
 export {
@@ -69,7 +76,7 @@ export {
   type LoggerOptions,
   type Logger,
   type LoggerFn,
-  type LoggerForceFn
+  type LoggerForceFn,
 } from '@telegram-apps/toolkit';
 
 export {

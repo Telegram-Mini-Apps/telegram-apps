@@ -6,6 +6,6 @@ import { encodeBase64Url } from '@/base64-url/encodeBase64Url.js';
  * @param value - value to check.
  * @see createStartParam
  */
-export function isSafeForStartParam(value: string): boolean {
+export function isSafeToCreateStartParam(value: string): boolean {
   return encodeBase64Url(value).length <= 512;
 }
