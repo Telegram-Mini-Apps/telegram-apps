@@ -51,6 +51,11 @@ export { logger as sdkLogger, type Logger as SDKLogger } from '@/logger.js';
 export type { RequestOptionsNoCapture, AsyncOptions } from '@/types.js';
 
 export {
+  decodeBase64Url,
+  encodeBase64Url,
+  createStartParam,
+  decodeStartParam,
+  isSafeToCreateStartParam,
   isTMA,
   mockTelegramEnv,
   targetOrigin,
