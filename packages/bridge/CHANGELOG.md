@@ -1,5 +1,13 @@
 # @telegram-apps/bridge
 
+## 2.9.0
+
+### Minor Changes
+
+- 0c4b5fd: Implement `applyPolyfills` function.
+- 9d2ca07: - Implement utilities to work with base64url
+  - Implement utilities to work with start param
+
 ## 2.8.3
 
 ### Patch Changes

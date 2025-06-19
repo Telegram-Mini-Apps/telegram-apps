@@ -1,5 +1,18 @@
 # @telegram-apps/sdk
 
+## 3.11.0
+
+### Minor Changes
+
+- 1d5c50d: Re-export utilities to work with base64url and start param from bridge
+
+### Patch Changes
+
+- de228a8: Re-export `applyPolyfills` function from the bridge.
+- Updated dependencies [0c4b5fd]
+- Updated dependencies [9d2ca07]
+  - @telegram-apps/bridge@2.9.0
+
 ## 3.10.1
 
 ### Patch Changes
