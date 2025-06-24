@@ -1,5 +1,11 @@
 # @telegram-apps/types
 
+## 2.0.2
+
+### Patch Changes
+
+- 22263fd: Use "string & {}" instead of "string" in Platform typing for a better support in IDEs.
+
 ## 2.0.1
 
 ### Patch Changes
