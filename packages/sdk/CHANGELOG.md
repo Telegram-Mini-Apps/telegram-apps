@@ -1,5 +1,13 @@
 # @telegram-apps/sdk
 
+## 3.11.1
+
+### Patch Changes
+
+- Updated dependencies [ca06cda]
+- Updated dependencies [9a7df33]
+  - @telegram-apps/bridge@2.10.0
+
 ## 3.11.0
 
 ### Minor Changes
