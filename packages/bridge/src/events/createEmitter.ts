@@ -63,24 +63,52 @@ export function createEmitter<E extends object>(
   emit: EmitFn<E>,
   clear: VoidFunction
 ] {
-  type EventMap = Map<
+  // To understand the event handlers concept here, let's tell the underlying idea.
+  //
+  // We use a Map, where key is an event name, and the value is a Map we call HandlersMap.
+  //
+  // The HandlersMap is a Map, where the key is an event handler, added by the developer.
+  // The corresponding value is a list of tuples, with an internally generated function and a
+  // boolean value responsible for determining if the handler must be called only once. So, you
+  // can imagine the following map as:
+  //
+  // HandlersMap {
+  //   { developer_handler }: Array<[ internally_created_handler, once ]>;
+  // }
+  //
+  // The value for the key represents an array of tuples, as long as a single handler may be added
+  // many times, and for each addition we add a new tuple entry.
+  //
+  // The handler may also be added to be called only once. Trying to remove such kind of handler
+  // using a different value of the "once" argument will lead to nothing. The developer must
+  // specify the same argument value to avoid confusions.
+  //
+  // Here is the final EventToHandlersMap definition:
+  //
+  // EventToHandlersMap {
+  //   { event_name }: HandlersMap {
+  //     { developer_handler }: Array<[ internally_created_handler, once ]>;
+  //   }
+  // }
+  type HandlersMap = Map<
     (...args: any) => void,
     [handler: (...args: any) => void, once: boolean][]
   >;
 
+  const eventToHandlersMap = new Map<keyof E | '*', HandlersMap>();
+
   const emitter = (mitt as any as {
     <E extends Record<EventType, unknown>>(all?: EventHandlerMap<E>): Emitter<E>;
   })<E & Record<string | symbol, unknown>>();
-  const map = new Map<keyof E | '*', EventMap>();
 
   const off: OffFn<E> = (event: keyof E | '*', handler: (...args: any) => void, once?: boolean) => {
     once ||= false;
 
-    const eventMap: EventMap = map.get(event) || new Map();
-    map.set(event, eventMap);
+    const handlersMap: HandlersMap = eventToHandlersMap.get(event) || new Map();
+    eventToHandlersMap.set(event, handlersMap);
 
-    const handlers = eventMap.get(handler) || [];
-    eventMap.set(handler, handlers);
+    const handlers = handlersMap.get(handler) || [];
+    handlersMap.set(handler, handlers);
 
     const index = handlers.findIndex(item => item[1] === once);
     if (index >= 0) {
@@ -91,40 +119,44 @@ export function createEmitter<E extends object>(
       handlers.splice(index, 1);
 
       // If after removal, there are no handlers left, we should remove the entry from the cache.
-      !handlers.length && eventMap.delete(handler);
-      if (!eventMap.size) {
-        map.delete(event);
-        !map.size && onEmpty();
+      if (!handlers.length) {
+        handlersMap.delete(handler);
+        if (!handlersMap.size) {
+          const prevSize = eventToHandlersMap.size;
+          eventToHandlersMap.delete(event);
+          prevSize && !eventToHandlersMap.size && onEmpty();
+        }
       }
     }
   };
 
   return [
     function on(event: keyof E | '*', handler: (...args: any[]) => any, once?: boolean) {
-      !map.size && onFirst();
+      // The events' map became non-empty. Call the onFirst callback.
+      !eventToHandlersMap.size && onFirst();
 
-      function cleanup() {
+      const cleanup = () => {
         off(event as any, handler, once);
-      }
+      };
 
-      function fn(...args: any[]) {
+      const internalHandler = (...args: any[]) => {
         once && cleanup();
         if (event === '*') {
           handler(args);
         } else {
           handler(...args);
         }
-      }
+      };
 
-      emitter.on(event, fn);
+      emitter.on(event, internalHandler);
 
       // Add this handler to the cache, so we could remove it using the passed listener.
-      const eventMap = map.get(event) || new Map();
-      map.set(event, eventMap);
+      const handlersMap: HandlersMap = eventToHandlersMap.get(event) || new Map();
+      eventToHandlersMap.set(event, handlersMap);
 
-      const handlers = eventMap.get(handler) || [];
-      eventMap.set(handler, handlers);
-      handlers.push([fn, once || false]);
+      const handlers = handlersMap.get(handler) || [];
+      handlersMap.set(handler, handlers);
+      handlers.push([internalHandler, once || false]);
 
       return cleanup;
     },
@@ -132,9 +164,9 @@ export function createEmitter<E extends object>(
     // eslint-disable-next-line @typescript-eslint/unbound-method
     emitter.emit,
     function offAll() {
-      const prevSize = emitter.all.size;
+      const prevSize = eventToHandlersMap.size;
       emitter.all.clear();
-      map.clear();
+      eventToHandlersMap.clear();
       prevSize && onEmpty();
     },
   ];
