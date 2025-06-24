@@ -7,8 +7,10 @@ import { defineWithAccessors } from '@/helpers/defineWithAccessors.js';
  * @param prop - object property to rewire.
  */
 export function defineEnhanceableProperty(obj: any, prop: string): void {
-  let value = obj[prop];
+  const value = obj[prop];
   defineWithAccessors(obj, prop, () => value, v => {
-    value = { ...value, ...v };
+    Object.entries(v).forEach(([objKey, objValue]) => {
+      value[objKey] = objValue;
+    });
   });
 }
