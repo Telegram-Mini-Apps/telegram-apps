@@ -1,5 +1,12 @@
 # @telegram-apps/bridge
 
+## 2.10.0
+
+### Minor Changes
+
+- ca06cda: Allow using the @telegram-apps packages along with the Telegram SDK.
+- 9a7df33: Allow passing custom argument value type in `createStartParam`. Enhance `decodeStartParam` functionality with optional parsing.
+
 ## 2.9.0
 
 ### Minor Changes
