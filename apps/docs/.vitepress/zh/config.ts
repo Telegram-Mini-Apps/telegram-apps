@@ -44,17 +44,6 @@ export const zh = defineConfig({
     hostname: 'https://docs.telegram-mini-apps.com',
   },
 
-  // Configure <head/>.
-  // https://vitepress.dev/reference/site-config#head
-  head: [
-    // Add favicon.
-    // https://vitepress.dev/reference/site-config#example-adding-a-favicon
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
-    // Add Mixpanel analytics:
-    // https://docs.mixpanel.com/docs/quickstart/connect-your-data?sdk=javascript
-    ['script', { async: '', src: '/analytics.js' }],
-  ],
-
   themeConfig: {
     logo: '/logo.db0268ac.png',
 
