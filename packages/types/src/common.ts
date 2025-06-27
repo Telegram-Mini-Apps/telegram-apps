@@ -11,7 +11,7 @@ export type Platform =
   | 'unknown'
   | 'web'
   | 'weba'
-  | (string & {});
+  | string;
 
 /**
  * Telegram Mini Apps version in format like "\d+.\d+".
