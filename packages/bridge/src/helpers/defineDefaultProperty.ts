@@ -4,7 +4,6 @@
  * @param prop - object property name.
  * @param value - value to set.
  */
-// #__NO_SIDE_EFFECTS__
 export function defineDefaultProperty(obj: any, prop: string, value: any): void {
   Object.defineProperty(obj, prop, {
     enumerable: true,
