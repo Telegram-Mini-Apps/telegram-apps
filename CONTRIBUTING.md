@@ -40,6 +40,10 @@ packages from the corresponding folder.
 To run the local playground, use the following commands:
 
 ```bash
+# Build packages as long as the playground may 
+# the built versions.
+pnpm run packages:build
+
 # Go to the application folder.
 cd apps/local-playground
 
