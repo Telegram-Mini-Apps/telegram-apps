@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 2.10.3
+
+### Patch Changes
+
+- f746abf: Remove #**NO_SIDE_EFFECTS** annotations in some helpers working with Object.defineProperty fn.
+
 ## 2.10.2
 
 ### Patch Changes
