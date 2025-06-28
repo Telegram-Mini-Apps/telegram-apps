@@ -5,7 +5,6 @@
  * @param get - getter to use.
  * @param set - setter to use.
  */
-// #__NO_SIDE_EFFECTS__
 export function defineWithAccessors(
   obj: any,
   prop: string,
