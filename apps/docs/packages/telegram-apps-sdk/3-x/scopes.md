@@ -163,7 +163,7 @@ import { resolve } from 'node:path';
 export default defineConfig({
   resolve: {
     alias: {
-      '@telegram-apps/sdk': resolve('node_modules/@telegram-apps/sdk/src'),
+      '@telegram-apps/sdk': resolve('node_modules/@telegram-apps/sdk/dist'),
     },
   },
 });
