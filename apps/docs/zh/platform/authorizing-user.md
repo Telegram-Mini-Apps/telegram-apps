@@ -37,7 +37,7 @@ Telegram Mini Apps 而言，第二部分是原始 init 数据。
 Node.js 示例使用 [express](https://www.npmjs.com/package/express) 处理 HTTP 请求。
 
 ```typescript
-import { validate, parse, type InitDataParsed } from '@telegram-apps/init-data-node';
+import { validate, parse, type InitData } from '@telegram-apps/init-data-node';
 import express, {
   type ErrorRequestHandler,
   type RequestHandler,
@@ -49,7 +49,7 @@ import express, {
  * @param res - Response object.
  * @param initData - init data.
  */
-function setInitData(res: Response, initData: InitDataParsed): void {
+function setInitData(res: Response, initData: InitData): void {
   res.locals.initData = initData;
 }
 
@@ -59,7 +59,7 @@ function setInitData(res: Response, initData: InitDataParsed): void {
  * @returns Init data stored in the Response object. Can return undefined in case,
  * the client is not authorized.
  */
-function getInitData(res: Response): InitDataParsed | undefined {
+function getInitData(res: Response): InitData | undefined {
   return res.locals.initData;
 }
 
