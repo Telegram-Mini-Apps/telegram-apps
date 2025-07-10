@@ -13,22 +13,26 @@ export function serializeToQuery(
     Object
       .entries(value)
       .reduce<[string, string][]>((acc, [key, value]) => {
+        if (value === null || value === undefined) {
+          return acc;
+        }
+
+        let parsed: string
+
         if (Array.isArray(value)) {
           acc.push(...value.map(v => [key, String(v)] as [string, string]));
+        } else if (value instanceof Date) {
+          parsed = (value.getTime() / 1000 | 0).toString()
+        } else if (typeof value === 'number' || typeof value === 'string') {
+          parsed = String(value);
+        } else if (typeof value === 'boolean') {
+          parsed = value ? '1' : '0'
         } else {
-          if (value !== null && value !== undefined) {
-            acc.push([
-              key,
-              value instanceof Date
-                ? (value.getTime() / 1000 | 0).toString()
-                : typeof value === 'string' || typeof value === 'number'
-                  ? String(value)
-                  : typeof value === 'boolean'
-                    ? value ? '1' : '0'
-                    : onObject(key, value),
-            ]);
-          }
+          parsed = onObject(key, value)
         }
+
+        acc.push([key, parsed])
+
         return acc;
       }, []),
   ).toString();
