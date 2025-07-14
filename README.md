@@ -18,10 +18,6 @@ Before diving into development, it’s also advisable to explore the available
 both client-side and backend development to gain a better understanding of the tools at your
 disposal.
 
-> [!WARNING]
-> Working with `@telegram-apps` SDK-related packages (`bridge`, `sdk` and `sdk-*`), you <ins>**must not**</ins> use the Telegram library - `telegram-web-app.js`.
-> Using both these packages and `telegram-web-app.js` will surely lead to bugs.
-
 ## Why not Telegram SDK
 
 Why bother creating a project like `@telegram-apps` when there are existing solutions from the developers
