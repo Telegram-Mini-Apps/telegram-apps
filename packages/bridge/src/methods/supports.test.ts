@@ -53,9 +53,7 @@ describe.each<[
     'web_app_set_header_color',
     'web_app_trigger_haptic_feedback',
   ]],
-  ['6.2', [
-    'web_app_open_popup',
-  ]],
+  ['6.2', ['web_app_open_popup']],
   ['6.4', [
     'web_app_read_text_from_clipboard',
     'web_app_close_scan_qr_popup',
@@ -66,9 +64,7 @@ describe.each<[
       parameter: 'try_instant_view',
     },
   ]],
-  ['6.7', [
-    'web_app_switch_inline_query',
-  ]],
+  ['6.7', ['web_app_switch_inline_query']],
   ['6.9', [
     'web_app_invoke_custom_method',
     'web_app_request_write_access',
@@ -79,9 +75,7 @@ describe.each<[
       parameter: 'color',
     },
   ]],
-  ['6.10', [
-    'web_app_setup_settings_button',
-  ]],
+  ['6.10', ['web_app_setup_settings_button']],
   ['7.2', [
     'web_app_biometry_get_info',
     'web_app_biometry_open_settings',
@@ -101,12 +95,8 @@ describe.each<[
       parameter: 'return_back',
     },
   ]],
-  ['7.7', [
-    'web_app_setup_swipe_behavior',
-  ]],
-  ['7.8', [
-    'web_app_share_to_story',
-  ]],
+  ['7.7', ['web_app_setup_swipe_behavior']],
+  ['7.8', ['web_app_share_to_story']],
   ['7.10', [
     'web_app_setup_secondary_button',
     'web_app_set_bottom_bar_color',
@@ -134,8 +124,18 @@ describe.each<[
     'web_app_stop_accelerometer',
     'web_app_stop_device_orientation',
     'web_app_stop_gyroscope',
-    'web_app_toggle_orientation_lock'
+    'web_app_toggle_orientation_lock',
   ]],
+  ['9.0', [
+    'web_app_device_storage_clear',
+    'web_app_device_storage_get_key',
+    'web_app_device_storage_save_key',
+    'web_app_secure_storage_clear',
+    'web_app_secure_storage_get_key',
+    'web_app_secure_storage_restore_key',
+    'web_app_secure_storage_save_key',
+  ]],
+  ['9.1', ['web_app_hide_keyboard']],
 ])('%s', (version, methods) => {
   const higher = increaseVersion(version, 1);
   const lower = increaseVersion(version, -1);

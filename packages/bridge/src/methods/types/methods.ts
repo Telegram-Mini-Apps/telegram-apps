@@ -1,18 +1,26 @@
 import type { If, IsNever } from '@telegram-apps/toolkit';
 import type { RGB } from '@telegram-apps/types';
 
-import type { CreateMethodParams } from './utils.js';
-import type { AnyHapticFeedbackParams } from './haptic-feedback.js';
-import type { PopupParams } from './popup.js';
 import type { AnyInvokeCustomMethodParams } from './custom-method.js';
+import type { AnyHapticFeedbackParams } from './haptic-feedback.js';
 import {
-  HeaderColorKey,
-  SwitchInlineQueryChatType,
-  OpenLinkBrowser,
-  BottomBarColor,
   BackgroundColor,
+  BottomBarColor,
+  HeaderColorKey,
+  OpenLinkBrowser,
   SecondaryButtonPosition,
+  SwitchInlineQueryChatType,
 } from './misc.js';
+import type { PopupParams } from './popup.js';
+import type { CreateMethodParams } from './utils.js';
+
+type WithReqId<T = {}> = T & {
+  /**
+   * Unique request identifier. Should be any unique string to handle the generated event
+   * appropriately.
+   */
+  req_id: string;
+}
 
 interface ButtonParams {
   /**
@@ -148,7 +156,8 @@ export interface Methods {
    */
   web_app_biometry_update_token: CreateMethodParams<{
     /**
-     * Optional string field, containing the reason why the bot is asking to authenticate using biometrics (1-128 chars, used in the prompt).
+     * Optional string field, containing the reason why the bot is asking to authenticate using
+     * biometrics (1-128 chars, used in the prompt).
      */
     reason?: string;
     /**
@@ -202,6 +211,33 @@ export interface Methods {
     data: string;
   }>;
   /**
+   * Clears all keys previously stored by the bot in the device's local storage.
+   * @since 9.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-device-storage-clear
+   */
+  web_app_device_storage_clear: CreateMethodParams<WithReqId>;
+  /**
+   * Receives a value from the device's local storage using the specified key.
+   * @since 9.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-device-storage-get-key
+   */
+  web_app_device_storage_get_key: CreateMethodParams<WithReqId<{ key: string }>>;
+  /**
+   * Stores a value in the device's local storage using the specified key.
+   * @since 9.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-device-storage-save-key
+   */
+  web_app_device_storage_save_key: CreateMethodParams<WithReqId<{
+    /**
+     * A key to use to store the value.
+     */
+    key: string;
+    /**
+     * A value to store for the specified key. Passing `null` will lead to the key removal.
+     */
+    value: string | null;
+  }>>;
+  /**
    * Exits fullscreen mode for miniapp.
    * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-exit-fullscreen
@@ -212,6 +248,13 @@ export interface Methods {
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-expand
    */
   web_app_expand: CreateMethodParams;
+  /**
+   * Hides the on-screen keyboard, if it is currently visible. Does nothing if the keyboard is
+   * not active.
+   * @since v9.1
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-hide-keyboard
+   */
+  web_app_hide_keyboard: CreateMethodParams;
   /**
    * Invokes custom method.
    * @since v6.9
@@ -299,13 +342,7 @@ export interface Methods {
    * @since v6.4
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-read-text-from-clipboard
    */
-  web_app_read_text_from_clipboard: CreateMethodParams<{
-    /**
-     * Unique request identifier. Should be any unique string to handle the generated event
-     * appropriately.
-     */
-    req_id: string;
-  }>;
+  web_app_read_text_from_clipboard: CreateMethodParams<WithReqId>;
   /**
    * Notifies Telegram about current application is ready to be shown. This method will make
    * Telegram to remove application loader and display Mini App.
@@ -381,6 +418,50 @@ export interface Methods {
    */
   web_app_request_write_access: CreateMethodParams;
   /**
+   * Clears all keys previously stored by the bot in the device's secure storage.
+   * @since 9.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-secure-storage-clear
+   */
+  web_app_secure_storage_clear: CreateMethodParams<WithReqId>;
+  /**
+   * Receives a value from the device's secure storage using the specified key.
+   * @since 9.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-secure-storage-get-key
+   */
+  web_app_secure_storage_get_key: CreateMethodParams<WithReqId<{
+    /**
+     * A key to use to store the value.
+     */
+    key: string;
+  }>>;
+  /**
+   * Attempts to restore a key that previously existed on the current device. When called, the user
+   * will be asked for permission to restore the value.
+   * @since 9.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-secure-storage-restore-key
+   */
+  web_app_secure_storage_restore_key: CreateMethodParams<WithReqId<{
+    /**
+     * A key to use to store the value.
+     */
+    key: string;
+  }>>;
+  /**
+   * Stores a value in the device's secure storage using the specified key.
+   * @since 9.0
+   * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-secure-storage-save-key
+   */
+  web_app_secure_storage_save_key: CreateMethodParams<WithReqId<{
+    /**
+     * A key to use to store the value.
+     */
+    key: string;
+    /**
+     * A value to store for the specified key. Passing `null` will lead to the key removal.
+     */
+    value: string | null;
+  }>>;
+  /**
    * Opens a dialog allowing the user to share a message provided by the bot.
    * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-send-prepared-message
@@ -388,7 +469,8 @@ export interface Methods {
   web_app_send_prepared_message: CreateMethodParams<{
     /**
      * Identifier of the message
-     * ([PreparedInlineMessage](https://core.telegram.org/bots/api#preparedinlinemessage)) previously obtained via the Bot API method
+     * ([PreparedInlineMessage](https://core.telegram.org/bots/api#preparedinlinemessage))
+     * previously obtained via the Bot API method
      * [savePreparedInlineMessage](https://core.telegram.org/bots/api#savepreparedinlinemessage).
      */
     id: string;
@@ -470,11 +552,13 @@ export interface Methods {
      */
     need_confirmation: boolean;
   }>;
+
   /**
    * Updates the Main Button settings.
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-setup-main-button
    */
   web_app_setup_main_button: CreateMethodParams<ButtonParams, 'has_shine_effect'>;
+
   /**
    * Updates the secondary button settings.
    * @since v7.10
@@ -493,6 +577,7 @@ export interface Methods {
      */
     position?: SecondaryButtonPosition;
   }>;
+
   /**
    * Updates the current state of the Settings Button.
    * @since v6.10
@@ -512,6 +597,7 @@ export interface Methods {
   web_app_setup_swipe_behavior: CreateMethodParams<{
     allow_vertical_swipe: boolean;
   }>;
+
   /**
    * A method that opens the native story editor.
    * @since v7.8
@@ -592,27 +678,25 @@ export interface Methods {
      */
     refresh_rate: number;
   }>;
-
   /**
    * Stops tracking accelerometer data.
    * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-stop-accelerometer
    */
   web_app_stop_accelerometer: CreateMethodParams;
-
   /**
    * Stops tracking device orientation data.
    * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-stop-device-orientation
    */
   web_app_stop_device_orientation: CreateMethodParams;
+
   /**
    * Stops tracking gyroscope data.
    * @since v8.0
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-stop-gyroscope
    */
   web_app_stop_gyroscope: CreateMethodParams;
-
   /**
    * Inserts the bot's username and the specified inline query in the current chat's input field.
    * Query may be empty, in which case only the bot's username will be inserted. The client prompts
