@@ -1,19 +1,26 @@
 import type { RGB } from '@telegram-apps/types';
 
+import type { If, IsNever, Maybe } from '@telegram-apps/toolkit';
 import type {
-  PhoneRequestedStatus,
-  InvoiceStatus,
-  WriteAccessRequestedStatus,
   BiometryAuthRequestStatus,
-  BiometryType,
   BiometryTokenUpdateStatus,
-  SafeAreaInsets,
-  FullScreenErrorStatus,
+  BiometryType,
   EmojiStatusAccessRequestedStatus,
   EmojiStatusFailedError,
+  FullScreenErrorStatus,
   HomeScreenStatus,
+  InvoiceStatus,
+  PhoneRequestedStatus,
+  SafeAreaInsets,
+  WriteAccessRequestedStatus,
 } from './misc.js';
-import type { If, IsNever, Maybe } from '@telegram-apps/toolkit';
+
+type WithReqId<T = {}> = T & {
+  /**
+   * Unique request identifier.
+   */
+  req_id: string;
+}
 
 /**
  * Map where key is known event name, and value is its listener.
@@ -158,18 +165,13 @@ export interface Events {
    * @since v6.4
    * @see https://docs.telegram-mini-apps.com/platform/events#clipboard-text-received
    */
-  clipboard_text_received: {
-    /**
-     * Passed during the `web_app_read_text_from_clipboard` method invocation
-     * `req_id` value.
-     */
-    req_id: string;
+  clipboard_text_received: WithReqId<{
     /**
      * Data extracted from the clipboard. The returned value will have the type
      * `string` only in the case, application has access to the clipboard.
      */
     data?: string | null;
-  };
+  }>;
   /**
    * Occurs when the safe area for content changes
    * (e.g., due to orientation change or screen adjustments).
@@ -182,11 +184,7 @@ export interface Events {
    * @since v6.9
    * @see https://docs.telegram-mini-apps.com/platform/events#custom-method-invoked
    */
-  custom_method_invoked: {
-    /**
-     * Unique identifier of this invocation.
-     */
-    req_id: string;
+  custom_method_invoked: WithReqId<{
     /**
      * Method invocation successful result.
      */
@@ -195,7 +193,7 @@ export interface Events {
      * Method invocation error code.
      */
     error?: string;
-  };
+  }>;
   /**
    * Device orientation data changed.
    * @since 8.0
@@ -243,6 +241,40 @@ export interface Events {
    * @see https://docs.telegram-mini-apps.com/platform/events#device-orientation-stopped
    */
   device_orientation_stopped: never;
+  /**
+   * Device's local storage was cleared.
+   * @since v9.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#device-storage-cleared
+   */
+  device_storage_cleared: WithReqId;
+  /**
+   * An error occurred while working with the device's local storage.
+   * @since v9.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#device-storage-failed
+   */
+  device_storage_failed: WithReqId<{
+    /**
+     * An occurred error.
+     */
+    error?: string;
+  }>;
+  /**
+   * A value from the device's local storage was retrieved.
+   * @since v9.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#device-storage-key-received
+   */
+  device_storage_key_received: WithReqId<{
+    /**
+     * A retrieved value.
+     */
+    value: string | null;
+  }>;
+  /**
+   * A value in the device's local storage was saved.
+   * @since v9.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#device-storage-key-saved
+   */
+  device_storage_key_saved: WithReqId;
   /**
    * Request to set custom emoji status was requested.
    * @see https://docs.telegram-mini-apps.com/platform/events#emoji-status-access-requested
@@ -356,8 +388,8 @@ export interface Events {
      * The status of the mini application being added to the home screen.
      *
      * Possible values:
-     * - `unsupported` – the feature is not supported, and it is not possible to add the icon to the home
-     *   screen,
+     * - `unsupported` – the feature is not supported, and it is not possible to add the icon to
+     * the home screen,
      * - `unknown` – the feature is supported, and the icon can be added, but it is not possible to
      *   determine if the icon has already been added,
      * - `added` – the icon has already been added to the home screen,
@@ -481,7 +513,6 @@ export interface Events {
      */
     error: string;
   };
-
   /**
    * A prepared message was sent.
    * @since 8.0
@@ -524,6 +555,55 @@ export interface Events {
    * @see https://docs.telegram-mini-apps.com/platform/events#secondary-button-pressed
    */
   secondary_button_pressed: never;
+  /**
+   * Device's secure storage was cleared.
+   * @since v9.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#secure-storage-cleared
+   */
+  secure_storage_cleared: WithReqId;
+  /**
+   * An error occurred while working with the device's secure storage.
+   * @since v9.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#secure-storage-failed
+   */
+  secure_storage_failed: WithReqId<{
+    /**
+     * An occurred error.
+     */
+    error?: string;
+  }>;
+  /**
+   * A value from the device's secure storage was retrieved.
+   * @since v9.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#secure-storage-key-received
+   */
+  secure_storage_key_received: WithReqId<{
+    /**
+     * A retrieved value.
+     */
+    value: string | null;
+    /**
+     * True if this value can be restored.
+     */
+    can_restore?: boolean;
+  }>;
+  /**
+   * A value from the device's secure storage was restored.
+   * @since v9.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#secure-storage-key-restored
+   */
+  secure_storage_key_restored: WithReqId<{
+    /**
+     * A restored value.
+     */
+    value: string | null;
+  }>;
+  /**
+   * A value in the device's secure storage was saved.
+   * @since v9.0
+   * @see https://docs.telegram-mini-apps.com/platform/events#secure-storage-key-saved
+   */
+  secure_storage_key_saved: WithReqId;
   /**
    * The event which is usually sent by the Telegram web application. Its
    * payload represents
