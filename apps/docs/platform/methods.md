@@ -206,6 +206,39 @@ class [Message](https://core.telegram.org/bots/api#message).
 |-------|----------|----------------------------------------------------------------------|
 | data  | `string` | Data to send to a bot. Should not have size of more than 4096 bytes. |
 
+### `web_app_device_storage_clear`
+
+Available since: **v9.0**
+
+Clears all keys previously stored by the bot in the device's local storage.
+
+| Field  | Type     | Description                                                                                         |
+|--------|----------|-----------------------------------------------------------------------------------------------------|
+| req_id | `string` | Unique request identifier. Should be any unique string to handle the generated event appropriately. |
+
+### `web_app_device_storage_get_key`
+
+Available since: **v9.0**
+
+Receives a value from the device's local storage using the specified key.
+
+| Field  | Type     | Description                                                                                         |
+|--------|----------|-----------------------------------------------------------------------------------------------------|
+| req_id | `string` | Unique request identifier. Should be any unique string to handle the generated event appropriately. |
+| key    | `string` | A key name to retrieve.                                                                             |
+
+### `web_app_device_storage_save_key`
+
+Available since: **v9.0**
+
+Stores a value in the device's local storage using the specified key.
+
+| Field  | Type             | Description                                                                                         |
+|--------|------------------|-----------------------------------------------------------------------------------------------------|
+| req_id | `string`         | Unique request identifier. Should be any unique string to handle the generated event appropriately. |
+| key    | `string`         | A key to use to store the value.                                                                    |
+| value  | `string \| null` | A value to store for the specified key. Passing `null` will lead to the key removal.                |
+
 ### `web_app_exit_fullscreen`
 
 Available since: **v8.0**
@@ -215,6 +248,12 @@ Requests exiting the fullscreen mode for mini app.
 ### `web_app_expand`
 
 [Expands](viewport.md) the Mini App.
+
+### `web_app_hide_keyboard`
+
+Available since: **v9.1**
+
+Hides the on-screen keyboard, if it is currently visible. Does nothing if the keyboard is not active.
 
 ### `web_app_invoke_custom_method`
 
@@ -481,6 +520,51 @@ Telegram will create [viewport_changed](events.md#viewport-changed) event.
 Available since: **v6.9**
 
 Requests write message access to current user.
+
+### `web_app_secure_storage_clear`
+
+Available since: **v9.0**
+
+Clears all keys previously stored by the bot in the device's secure storage.
+
+| Field  | Type     | Description                                                                                         |
+|--------|----------|-----------------------------------------------------------------------------------------------------|
+| req_id | `string` | Unique request identifier. Should be any unique string to handle the generated event appropriately. |
+
+### `web_app_secure_storage_get_key`
+
+Available since: **v9.0**
+
+Clears all keys previously stored by the bot in the device's secure storage.
+
+| Field  | Type     | Description                                                                                         |
+|--------|----------|-----------------------------------------------------------------------------------------------------|
+| req_id | `string` | Unique request identifier. Should be any unique string to handle the generated event appropriately. |
+| key    | `string` | A key to use to store the value.                                                                    |
+
+### `web_app_secure_storage_restore_key`
+
+Available since: **v9.0**
+
+Attempts to restore a key that previously existed on the current device. When called, the user will be asked for
+permission to restore the value.
+
+| Field  | Type     | Description                                                                                         |
+|--------|----------|-----------------------------------------------------------------------------------------------------|
+| req_id | `string` | Unique request identifier. Should be any unique string to handle the generated event appropriately. |
+| key    | `string` | A key to use to restore the value.                                                                  |
+
+### `web_app_secure_storage_save_key`
+
+Available since: **v9.0**
+
+Stores a value in the device's secure storage using the specified key.
+
+| Field  | Type             | Description                                                                                         |
+|--------|------------------|-----------------------------------------------------------------------------------------------------|
+| req_id | `string`         | Unique request identifier. Should be any unique string to handle the generated event appropriately. |
+| key    | `string`         | A key to use to store the value.                                                                    |
+| value  | `string \| null` | A value to store for the specified key. Passing `null` will lead to the key removal.                |
 
 ### `web_app_send_prepared_message`
 

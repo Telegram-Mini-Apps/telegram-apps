@@ -260,6 +260,48 @@ Available since: **v8.0**
 
 Device orientation data tracking stopped.
 
+### `device_storage_cleared`
+
+Available since: **v9.0**
+
+Device's local storage was cleared.
+
+| Field  | Type     | Description                  |
+|--------|----------|------------------------------|
+| req_id | `string` | A unique request identifier. |
+
+### `device_storage_failed`
+
+Available since: **v9.0**
+
+An error occurred while working with the device's local storage.
+
+| Field  | Type     | Description                  |
+|--------|----------|------------------------------|
+| req_id | `string` | A unique request identifier. |
+| error  | `string` | An occurred error.           |
+
+### `device_storage_key_received`
+
+Available since: **v9.0**
+
+A value from the device's local storage was retrieved.
+
+| Field  | Type             | Description                  |
+|--------|------------------|------------------------------|
+| req_id | `string`         | A unique request identifier. |
+| value  | `string \| null` | A retrieved value.           |
+
+### `device_storage_key_saved`
+
+Available since: **v9.0**
+
+A value in the device's local storage was saved.
+
+| Field  | Type     | Description                  |
+|--------|----------|------------------------------|
+| req_id | `string` | A unique request identifier. |
+
 ### `emoji_status_access_requested`
 
 Available since: **v8.0**
@@ -497,6 +539,60 @@ QR scanner was closed.
 Available since: **v7.10**
 
 A user clicked the Secondary Button.
+
+### `secure_storage_cleared`
+
+Available since: **v9.0**
+
+Device's secure storage was cleared.
+
+| Field  | Type     | Description                  |
+|--------|----------|------------------------------|
+| req_id | `string` | A unique request identifier. |
+
+### `secure_storage_failed`
+
+Available since: **v9.0**
+
+An error occurred while working with the device's secure storage.
+
+| Field  | Type     | Description                    |
+|--------|----------|--------------------------------|
+| req_id | `string` | A unique request identifier.   |
+| error  | `string` | _Optional_. An occurred error. |
+
+### `secure_storage_key_received`
+
+Available since: **v9.0**
+
+A value from the device's secure storage was retrieved.
+
+| Field       | Type             | Description                                     |
+|-------------|------------------|-------------------------------------------------|
+| req_id      | `string`         | A unique request identifier.                    |
+| value       | `string \| null` | A retrieved value.                              |
+| can_restore | `boolean`        | _Optional_. True if this value can be restored. |
+
+### `secure_storage_key_restored`
+
+Available since: **v9.0**
+
+A value from the device's secure storage was restored.
+
+| Field  | Type             | Description                  |
+|--------|------------------|------------------------------|
+| req_id | `string`         | A unique request identifier. |
+| value  | `string \| null` | A restored value.            |
+
+### `secure_storage_key_saved`
+
+Available since: **v9.0**
+
+A value in the device's secure storage was saved.
+
+| Field  | Type             | Description                  |
+|--------|------------------|------------------------------|
+| req_id | `string`         | A unique request identifier. |
 
 ### `set_custom_style`
 
