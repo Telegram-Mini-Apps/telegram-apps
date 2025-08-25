@@ -221,7 +221,12 @@ export interface Methods {
    * @since 9.0
    * @see https://docs.telegram-mini-apps.com/platform/methods#web-app-device-storage-get-key
    */
-  web_app_device_storage_get_key: CreateMethodParams<WithReqId<{ key: string }>>;
+  web_app_device_storage_get_key: CreateMethodParams<WithReqId<{
+    /**
+     * A key name to retrieve.
+     */
+    key: string;
+  }>>;
   /**
    * Stores a value in the device's local storage using the specified key.
    * @since 9.0
@@ -442,7 +447,7 @@ export interface Methods {
    */
   web_app_secure_storage_restore_key: CreateMethodParams<WithReqId<{
     /**
-     * A key to use to store the value.
+     * A key to use to restore the value.
      */
     key: string;
   }>>;
