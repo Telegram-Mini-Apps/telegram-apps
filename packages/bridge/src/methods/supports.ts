@@ -122,6 +122,16 @@ export function supports(
     case 'web_app_stop_gyroscope':
     case 'web_app_toggle_orientation_lock':
       return versionLessOrEqual('8.0', paramOrVersion);
+    case 'web_app_device_storage_clear':
+    case 'web_app_device_storage_get_key':
+    case 'web_app_device_storage_save_key':
+    case 'web_app_secure_storage_clear':
+    case 'web_app_secure_storage_get_key':
+    case 'web_app_secure_storage_restore_key':
+    case 'web_app_secure_storage_save_key':
+      return versionLessOrEqual('9.0', paramOrVersion);
+    case 'web_app_hide_keyboard':
+      return versionLessOrEqual('9.1', paramOrVersion);
     default:
       return [
         'iframe_ready',
