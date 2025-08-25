@@ -1,5 +1,11 @@
 # @telegram-apps/bridge
 
+## 2.11.0
+
+### Minor Changes
+
+- 17cc2b6: Add methods and events related to Telegram Bot API v9
+
 ## 2.10.3
 
 ### Patch Changes
