@@ -3,8 +3,6 @@ import { defineConfig } from 'vitepress';
 import { packagesLinksGenerator } from './packages';
 import { platformLinksGenerator } from './platform';
 
-import { zh } from "./zh/config";
-
 const { packagesNavItem, packagesSidebar } = packagesLinksGenerator();
 const { platformNavItem, platformSidebar } = platformLinksGenerator();
 
@@ -38,11 +36,7 @@ export default defineConfig({
     root: {
       label: 'English',
       lang: 'en',
-    },
-    zh: {
-      label: "中文",
-      ...zh,
-    },
+    }
   },
 
   // Show when each page content was last updated.
