@@ -1,6 +1,7 @@
 export { copyTextToClipboard } from './copyTextToClipboard.js';
 export { downloadFile } from './downloadFile.js';
 export { getCurrentTime } from './getCurrentTime.js';
+export { hideKeyboard } from './hideKeyboard.js';
 export { readTextFromClipboard } from './readTextFromClipboard.js';
 export { retrieveAndroidDeviceData } from './retrieveAndroidDeviceData.js';
 export { retrieveAndroidDeviceDataFrom, type AndroidDeviceData } from './retrieveAndroidDeviceDataFrom.js';
