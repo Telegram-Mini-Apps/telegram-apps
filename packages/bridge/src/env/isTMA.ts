@@ -23,7 +23,7 @@ export function isTMA(): boolean;
  *
  * In case you need less strict checks, use sync override of this function.
  */
-export function isTMA(type: 'complete', options?: PromiseOptions): AbortablePromise<boolean>
+export function isTMA(type: 'complete', options?: PromiseOptions): AbortablePromise<boolean>;
 
 export function isTMA(
   type?: 'complete',

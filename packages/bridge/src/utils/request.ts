@@ -30,7 +30,7 @@ export type RequestCaptureFnEventsPayload<E extends EventName[]> = E extends (in
 
 export type RequestCaptureEventsFn<E extends EventName[]> = (
   payload: RequestCaptureFnEventsPayload<E>,
-) => boolean
+) => boolean;
 
 export type RequestCaptureEventFn<E extends EventName> = If<
   IsNever<EventPayload<E>>,
@@ -119,7 +119,7 @@ export function request<M extends MethodName, E extends AnyEventName>(
   const { capture } = options;
   const [addCleanup, cleanup] = createCbCollector();
 
-  return new AbortablePromise<RequestResult<E>>((resolve) => {
+  return new AbortablePromise<RequestResult<E>>(resolve => {
     // We need to iterate over all tracked events and create their event listeners.
     ((Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents])).forEach(event => {
       // Each event listener waits for the event to occur.

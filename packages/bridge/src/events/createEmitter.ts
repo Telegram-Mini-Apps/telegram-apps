@@ -61,7 +61,7 @@ export function createEmitter<E extends object>(
   on: OnFn<E>,
   off: OffFn<E>,
   emit: EmitFn<E>,
-  clear: VoidFunction
+  clear: VoidFunction,
 ] {
   // To understand the event handlers concept here, let's tell the underlying idea.
   //

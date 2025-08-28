@@ -12,7 +12,7 @@ type HaveCheckSupportMethodObj = {
   [M in MethodNameWithVersionedParams]: {
     title: string;
     method: M;
-    parameter: MethodVersionedParams<M>
+    parameter: MethodVersionedParams<M>;
   }
 }[MethodNameWithVersionedParams];
 
@@ -148,7 +148,7 @@ describe.each<[
     return typeof m === 'object';
   });
 
-  describe.each(methodsOnly)('%s', (method) => {
+  describe.each(methodsOnly)('%s', method => {
     it(`should return true if version >= ${version} (${higher})`, () => {
       expect(supports(method, version)).toBe(true);
       expect(supports(method, higher)).toBe(true);

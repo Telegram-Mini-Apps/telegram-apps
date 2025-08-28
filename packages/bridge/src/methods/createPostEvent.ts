@@ -15,11 +15,11 @@ export type OnUnsupportedFn = (
   data: { version: Version } & (
     | { method: MethodName }
     | {
-    [M in MethodNameWithVersionedParams]: {
-      method: M;
-      param: MethodVersionedParams<M>;
-    };
-  }[MethodNameWithVersionedParams]),
+      [M in MethodNameWithVersionedParams]: {
+        method: M;
+        param: MethodVersionedParams<M>;
+      };
+    }[MethodNameWithVersionedParams]),
 ) => void;
 
 export type CreatePostEventMode = 'strict' | 'non-strict';
