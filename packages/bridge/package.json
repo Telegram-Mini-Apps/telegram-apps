@@ -50,6 +50,7 @@
     "@telegram-apps/types": "workspace:^",
     "better-promises": "^0.4.1",
     "error-kid": "^0.0.7",
+    "fp-ts": "^2.16.11",
     "mitt": "^3.0.1",
     "valibot": "1.0.0"
   },
