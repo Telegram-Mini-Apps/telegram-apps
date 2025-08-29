@@ -14,6 +14,7 @@ it(
 );
 
 it('should throw if value\'s base64 representation length exceeds 512', () => {
-  expect(() => createStartParam(new Array(385).fill('A').join('')))
+  expect(() => createStartParam(new Array(385).fill('A')
+    .join('')))
     .toThrow('Value is too long for start parameter');
 });

@@ -123,6 +123,6 @@ describe('env is not iframe', () => {
     });
     postEvent('web_app_data_send', { data: 'Data!' });
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith('web_app_data_send', `{"data":"Data!"}`);
+    expect(spy).toHaveBeenCalledWith('web_app_data_send', '{"data":"Data!"}');
   });
 });

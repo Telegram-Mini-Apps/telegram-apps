@@ -65,6 +65,28 @@ if (result[0]) {
 
 :::
 
+## `hideKeyboard`
+
+To hide the on-screen keyboard, use the `hideKeyboard` function.
+
+::: code-group
+
+```ts [Using isAvailable]
+import { hideKeyboard } from '@telegram-apps/sdk';
+
+if (hideKeyboard.isAvailable()) {
+  hideKeyboard();
+}
+```
+
+```ts [Using ifAvailable]
+import { hideKeyboard } from '@telegram-apps/sdk';
+
+hideKeyboard.ifAvailable();
+```
+
+:::
+
 ## `readTextFromClipboard`
 
 To read text from the clipboard, use the `readTextFromClipboard` function.

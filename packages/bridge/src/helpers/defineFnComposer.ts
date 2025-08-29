@@ -57,7 +57,7 @@ export function defineFnComposer(
       // removed.
       pool.unshift(1);
       defineDefaultProperty(obj, prop, callPool);
-    }
+    },
   });
 
   // Define the composer.

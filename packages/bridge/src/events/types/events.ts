@@ -20,7 +20,7 @@ type WithReqId<T = {}> = T & {
    * Unique request identifier.
    */
   req_id: string;
-}
+};
 
 /**
  * Map where key is known event name, and value is its listener.
@@ -101,20 +101,20 @@ export interface Events {
      * If true, indicates that biometric authentication is available on the
      * current device.
      */
-    available: false;
-  }
+      available: false;
+    }
     | {
     /**
      * If true, indicates that biometric authentication is available on the
      * current device.
      */
-    available: true;
-    /**
+      available: true;
+      /**
      * Indicates whether the app has previously requested permission to use
      * biometrics.
      */
-    access_requested: boolean;
-    /**
+      access_requested: boolean;
+      /**
      * Indicates whether the user has granted the app permission to use
      * biometrics.
      *
@@ -128,21 +128,21 @@ export interface Events {
      * case the app should open a prompt notifying the user that the biometric
      * settings must be changed to use biometrics.
      */
-    access_granted: boolean;
-    /**
+      access_granted: boolean;
+      /**
      * A unique device identifier that can be used to match the token to the
      * device.
      */
-    device_id: string;
-    /**
+      device_id: string;
+      /**
      * Show whether a token was safely stored on-device.
      */
-    token_saved: boolean;
-    /**
+      token_saved: boolean;
+      /**
      * The type of biometrics currently available on the device.
      */
-    type: BiometryType;
-  };
+      type: BiometryType;
+    };
   /**
    * Biometry token was updated.
    * @since 7.2
@@ -425,10 +425,10 @@ export interface Events {
   location_checked:
     | { available: false }
     | {
-    available: true;
-    access_requested?: Maybe<boolean>;
-    access_granted?: Maybe<boolean>;
-  };
+      available: true;
+      access_requested?: Maybe<boolean>;
+      access_granted?: Maybe<boolean>;
+    };
   /**
    * Location-related functionality availability status was retrieved.
    * @since 8.0
@@ -437,44 +437,44 @@ export interface Events {
   location_requested:
     | { available: false }
     | {
-    available: true;
-    /**
+      available: true;
+      /**
      * Latitude in degrees.
      */
-    latitude: number;
-    /**
+      latitude: number;
+      /**
      * Longitude in degrees.
      */
-    longitude: number;
-    /**
+      longitude: number;
+      /**
      * Altitude above sea level in meters.
      */
-    altitude?: Maybe<number>;
-    /**
+      altitude?: Maybe<number>;
+      /**
      * The direction the device is moving in degrees.
      */
-    course?: Maybe<number>;
-    /**
+      course?: Maybe<number>;
+      /**
      * The speed of the device in m/s.
      */
-    speed?: Maybe<number>;
-    /**
+      speed?: Maybe<number>;
+      /**
      * Accuracy of the latitude and longitude values in meters.
      */
-    horizontal_accuracy?: Maybe<number>;
-    /**
+      horizontal_accuracy?: Maybe<number>;
+      /**
      * Accuracy of the altitude value in meters.
      */
-    vertical_accuracy?: Maybe<number>;
-    /**
+      vertical_accuracy?: Maybe<number>;
+      /**
      * Accuracy of the course value in degrees.
      */
-    course_accuracy?: Maybe<number>;
-    /**
+      course_accuracy?: Maybe<number>;
+      /**
      * Accuracy of the speed value in m/s.
      */
-    speed_accuracy?: Maybe<number>;
-  };
+      speed_accuracy?: Maybe<number>;
+    };
   /**
    * A user clicked the Main Button.
    * @see https://docs.telegram-mini-apps.com/platform/events#main-button-pressed

@@ -99,7 +99,7 @@ describe('env: window mobile', () => {
 describe('env: unknown', () => {
   it('should throw', () => {
     createWindow();
-    expect(() => postEvent('web_app_close')).toThrow(new UnknownEnvError);
+    expect(() => postEvent('web_app_close')).toThrow(new UnknownEnvError());
   });
 });
 

@@ -20,7 +20,7 @@ type WithReqId<T = {}> = T & {
    * appropriately.
    */
   req_id: string;
-}
+};
 
 interface ButtonParams {
   /**
@@ -527,15 +527,15 @@ export interface Methods {
     /**
      * The Mini App header color key.
      */
-    color_key: HeaderColorKey
-  }
+      color_key: HeaderColorKey;
+    }
     | {
     /**
      * Color in RGB format.
      * @since v6.9
      */
-    color: RGB;
-  }, 'color'>;
+      color: RGB;
+    }, 'color'>;
   /**
    * Updates the Back Button settings.
    * @since v6.1
@@ -632,7 +632,7 @@ export interface Methods {
        * The name to be displayed for the widget link, 0-48 characters.
        */
       name?: string;
-    }
+    };
   }>;
   /**
    * Starts tracking accelerometer data.
