@@ -33,6 +33,7 @@ export { supports } from '@/methods/supports.js';
 
 export { createStartParam } from '@/start-param/createStartParam.js';
 export { decodeStartParam } from '@/start-param/decodeStartParam.js';
+export { createStartParam, createStartParamFp } from '@/start-param/createStartParam.js';
 export { isSafeToCreateStartParam } from '@/start-param/isSafeToCreateStartParam.js';
 
 export { compareVersions } from '@/utils/compareVersions.js';
