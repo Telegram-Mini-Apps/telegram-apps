@@ -1,6 +1,7 @@
 import type { Either } from 'fp-ts/Either';
 
-import { eitherGet } from '@/helpers/eitherGet.js';
+import { eitherGet } from '@/fp/eitherGet.js';
+import type { RightOfFnReturnType } from '@/fp/types.js';
 
 /**
  * Wraps the function returning an either and creating a new function.
@@ -10,6 +11,6 @@ import { eitherGet } from '@/helpers/eitherGet.js';
  */
 export function wrapEitherGet<Fn extends (...args: any[]) => Either<any, any>>(
   fn: Fn,
-): (...args: Parameters<Fn>) => ReturnType<Fn> extends Either<any, infer U> ? U : never {
+): (...args: Parameters<Fn>) => RightOfFnReturnType<Fn> {
   return (...args) => eitherGet(fn(...args));
 }

@@ -1,6 +1,6 @@
 import { type Either, tryCatch } from 'fp-ts/Either';
 
-import { wrapEitherGet } from '@/helpers/wrapEitherGet.js';
+import { wrapEitherGet } from '@/fp/wrapEitherGet.js';
 
 /**
  * Decodes a base-64-url ASCII string.
