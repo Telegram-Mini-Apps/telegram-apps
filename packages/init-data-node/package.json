@@ -1,16 +1,16 @@
 {
-  "name": "@telegram-apps/init-data-node",
-  "version": "2.0.10",
+  "name": "@tma.js/init-data-node",
+  "version": "2.0.0",
   "description": "TypeScript Node library to operate with Telegram init data.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
+    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
     "directory": "packages/init-data-node"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
   },
   "keywords": [
     "telegram-mini-apps",
@@ -59,8 +59,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@telegram-apps/transformers": "workspace:^",
-    "@telegram-apps/types": "workspace:^",
+    "@tma.js/transformers": "workspace:^",
+    "@tma.js/types": "workspace:^",
     "error-kid": "^0.0.7"
   }
 }

@@ -1,16 +1,16 @@
 {
-  "name": "@telegram-apps/toolkit",
-  "version": "2.1.3",
-  "description": "Internal toolkit used in the @telegram-apps packages.",
+  "name": "@tma.js/toolkit",
+  "version": "1.0.0",
+  "description": "Internal toolkit used in the @tma.js packages.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
+  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
+    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
     "directory": "packages/toolkit"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
+    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
   },
   "keywords": [
     "telegram-mini-apps",
