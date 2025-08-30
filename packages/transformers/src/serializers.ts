@@ -1,4 +1,4 @@
-import type { InitData, LaunchParams } from '@telegram-apps/types';
+import type { InitData, LaunchParams } from '@tma.js/types';
 import type { InferOutput } from 'valibot';
 
 import type { initData, launchParams } from './structures.js';

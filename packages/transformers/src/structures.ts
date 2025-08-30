@@ -5,7 +5,7 @@ import type {
   LaunchParams,
   RGB,
   User,
-} from '@telegram-apps/types';
+} from '@tma.js/types';
 import {
   type BaseSchema,
   boolean,
