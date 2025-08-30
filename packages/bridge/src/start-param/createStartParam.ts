@@ -1,7 +1,7 @@
 import { type Either, left, right } from 'fp-ts/Either';
 
 import { encodeBase64Url } from '@/base64-url/encodeBase64Url.js';
-import { wrapEitherGet } from '@/helpers/wrapEitherGet.js';
+import { wrapEitherGet } from '@/fp/wrapEitherGet.js';
 
 /**
  * Creates a safe start parameter value. If the value is not a string, the

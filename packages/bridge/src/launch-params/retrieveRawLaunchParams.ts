@@ -6,7 +6,7 @@ import { getStorageValue, setStorageValue } from '@telegram-apps/toolkit';
 import { type Either, left, right } from 'fp-ts/Either';
 
 import { LaunchParamsRetrieveError } from '@/errors.js';
-import { wrapEitherGet } from '@/helpers/wrapEitherGet.js';
+import { wrapEitherGet } from '@/fp/wrapEitherGet.js';
 
 const SESSION_STORAGE_KEY = 'launchParams';
 

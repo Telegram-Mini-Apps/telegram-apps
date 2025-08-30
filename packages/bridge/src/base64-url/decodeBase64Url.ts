@@ -29,7 +29,7 @@ export function decodeBase64UrlFp(value: string): Either<DOMException, string> {
         .replace(/-/g, '+')
         .replace(/_/g, '/')
         .split('')
-        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
         .join(''),
     );
   }, e => e as DOMException);
