@@ -52,7 +52,7 @@ export interface Logger {
   warn: LoggerFn;
 }
 
-/*@__NO_SIDE_EFFECTS__*/
+/* @__NO_SIDE_EFFECTS__*/
 export function createLogger(scope: string, options?: LoggerOptions): Logger {
   options ||= {};
   const {
