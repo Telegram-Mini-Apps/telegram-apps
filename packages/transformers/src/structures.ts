@@ -12,6 +12,7 @@ import {
   check,
   type CheckAction,
   date,
+  type InferOutput,
   integer,
   is,
   looseObject,
@@ -33,6 +34,12 @@ import {
 
 import { pipeJsonToSchema, pipeQueryToSchema } from './pipes.js';
 import { isRGB } from './rgb.js';
+
+export type InitDataGenSchema = ReturnType<typeof initData>;
+export type InitDataGenType = InferOutput<InitDataGenSchema>;
+
+export type LaunchParamsGenSchema = ReturnType<typeof launchParams>;
+export type LaunchParamsGenType = InferOutput<LaunchParamsGenSchema>;
 
 export function initDataChat() {
   return looseObject({
