@@ -46,5 +46,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "fp-ts": "^2.16.11"
   }
 }
