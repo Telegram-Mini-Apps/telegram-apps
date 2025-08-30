@@ -1,11 +1,29 @@
-import { parse } from 'valibot';
+import * as E from 'fp-ts/Either';
+import { parse, type ValiError } from 'valibot';
 
-import { initDataQuery, launchParamsQuery } from './structures.js';
+import {
+  type InitDataGenSchema,
+  type InitDataGenType,
+  initDataQuery,
+  type LaunchParamsGenSchema,
+  type LaunchParamsGenType,
+  launchParamsQuery,
+} from './structures.js';
 
-export function parseInitDataQuery(value: string | URLSearchParams) {
-  return parse(initDataQuery(), value);
+export function parseInitDataQuery(
+  value: string | URLSearchParams,
+): E.Either<ValiError<InitDataGenSchema>, InitDataGenType> {
+  return E.tryCatch(
+    () => parse(initDataQuery(), value),
+    e => e as ValiError<InitDataGenSchema>,
+  );
 }
 
-export function parseLaunchParamsQuery(value: string | URLSearchParams) {
-  return parse(launchParamsQuery(), value);
+export function parseLaunchParamsQuery(
+  value: string | URLSearchParams,
+): E.Either<ValiError<LaunchParamsGenSchema>, LaunchParamsGenType> {
+  return E.tryCatch(
+    () => parse(launchParamsQuery(), value),
+    e => e as ValiError<LaunchParamsGenSchema>,
+  );
 }

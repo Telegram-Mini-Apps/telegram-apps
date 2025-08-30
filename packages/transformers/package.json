@@ -43,6 +43,7 @@
   "dependencies": {
     "@telegram-apps/toolkit": "workspace:^",
     "@telegram-apps/types": "workspace:^",
+    "fp-ts": "^2.16.11",
     "valibot": "1.1.0"
   },
   "devDependencies": {
