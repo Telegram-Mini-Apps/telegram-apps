@@ -17,7 +17,7 @@ export const [
 export const [
   SignatureMissingError,
   isSignatureMissingError,
-] = errorClass<[thirdParty: boolean]>('SignatureMissingError', (thirdParty) => [
+] = errorClass<[thirdParty: boolean]>('SignatureMissingError', thirdParty => [
   `"${thirdParty ? 'signature' : 'hash'}" parameter is missing`,
 ]);
 
