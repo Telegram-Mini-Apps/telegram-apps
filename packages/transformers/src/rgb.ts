@@ -50,6 +50,7 @@ export function toRGB(value: string): RGB {
 
   // Otherwise, take R, G and B components, convert to hex and create #RRGGBB string.
   return match.slice(1).reduce((acc, component) => {
-    return acc + parseInt(component, 10).toString(16).padStart(2, '0');
+    return acc + parseInt(component, 10).toString(16)
+      .padStart(2, '0');
   }, '#') as RGB;
 }

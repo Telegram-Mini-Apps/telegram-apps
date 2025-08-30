@@ -1,6 +1,6 @@
-import { expect, it, describe } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { isRGB, isRGBShort, toRGB } from '@/validation/rgb.js';
+import { isRGB, isRGBShort, toRGB } from './rgb.js';
 
 describe('isRGB', () => {
   it('should return true for correct full RGB representation', () => {
@@ -8,7 +8,7 @@ describe('isRGB', () => {
   });
 
   it('should return false for any other value', () => {
-    ['abc', '#ffff', '#fff', '#fffffg'].forEach((v) => {
+    ['abc', '#ffff', '#fff', '#fffffg'].forEach(v => {
       expect(isRGB(v)).toBe(false);
     });
   });
@@ -20,7 +20,7 @@ describe('isRGBShort', () => {
   });
 
   it('should return false for any other value', () => {
-    ['abc', '#ffff', '#ffffff', '#ggg'].forEach((v) => {
+    ['abc', '#ffff', '#ffffff', '#ggg'].forEach(v => {
       expect(isRGBShort(v)).toBe(false);
     });
   });
