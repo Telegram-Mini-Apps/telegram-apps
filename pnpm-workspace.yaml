@@ -1,4 +1,4 @@
 packages:
   - "apps/*"
-  - "packages/*"
+  - "tma.js/*"
   - "playgrounds/*"
