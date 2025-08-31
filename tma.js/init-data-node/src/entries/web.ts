@@ -1,9 +1,21 @@
+import * as TE from 'fp-ts/TaskEither';
+import * as TO from 'fp-ts/TaskOption';
+import { pipe } from 'fp-ts/lib/function.js';
+
 import { hashToken as _hashToken } from '../hashToken.js';
-import { sign as _sign, SignOptions } from '../sign.js';
-import { signData as _signData, SignDataOptions } from '../signData.js';
-import type { CreateHmacFn, SignData, Text } from '../types.js';
-import { isValid as _isValid } from '../validation/isValid.js';
-import { validate as _validate, type ValidateOptions, type ValidateValue } from '../validation/validate.js';
+import { signDataFp as _signDataFp, SignDataError, type SignDataOptions } from '../signDataFp.js';
+import {
+  signFp as _signFp,
+  type SignableData,
+  type SignOptions,
+} from '../signFp.js';
+import type { CreateHmacFn, Text } from '../types.js';
+import {
+  validateFp as _validateFp,
+  type ValidateError,
+  type ValidateOptions,
+  type ValidateValue,
+} from '../validation.js';
 
 const createHmac: CreateHmacFn<true> = async (data, key) => {
   const encoder = new TextEncoder();
@@ -35,8 +47,15 @@ export function hashToken(token: Text): Promise<ArrayBuffer> {
  * @param options - additional validation options.
  * @returns True is specified init data is valid.
  */
-export function isValid(value: ValidateValue, token: Text, options?: ValidateOptions): boolean {
-  return _isValid(value, token, validate, options);
+export function isValid(
+  value: ValidateValue,
+  token: Text,
+  options?: ValidateOptions,
+): Promise<boolean> {
+  return pipe(
+    validateFp(value, token, options),
+    TO.match(() => true, () => false),
+  )();
 }
 
 /**
@@ -48,12 +67,34 @@ export function isValid(value: ValidateValue, token: Text, options?: ValidateOpt
  * @returns Signed init data presented as query parameters.
  */
 export function sign(
-  data: SignData,
+  data: SignableData,
   key: Text,
   authDate: Date,
   options?: SignOptions,
 ): Promise<string> {
-  return _sign(data, key, authDate, signData, options);
+  return pipe(
+    signFp(data, key, authDate, options),
+    TE.match(e => {
+      throw e;
+    }, v => v),
+  )();
+}
+
+/**
+ * Signs specified init data.
+ * @param data - init data to sign.
+ * @param authDate - date, when this init data should be signed.
+ * @param key - private key.
+ * @param options - additional options.
+ * @returns Signed init data presented as query parameters.
+ */
+export function signFp(
+  data: SignableData,
+  key: Text,
+  authDate: Date,
+  options?: SignOptions,
+): TE.TaskEither<SignDataError, string> {
+  return _signFp(data, key, authDate, signDataFp, options);
 }
 
 /**
@@ -64,7 +105,27 @@ export function sign(
  * @returns Data sign.
  */
 export function signData(data: Text, key: Text, options?: SignDataOptions): Promise<string> {
-  return _signData(data, key, createHmac, options);
+  return pipe(
+    signDataFp(data, key, options),
+    TE.match(e => {
+      throw e;
+    }, v => v),
+  )();
+}
+
+/**
+ * Signs specified data with the passed token.
+ * @param data - data to sign.
+ * @param key - private key.
+ * @param options - additional options.
+ * @returns Data sign.
+ */
+export function signDataFp(
+  data: Text,
+  key: Text,
+  options?: SignDataOptions,
+): TE.TaskEither<SignDataError, string> {
+  return _signDataFp(true, data, key, createHmac, options);
 }
 
 /**
@@ -82,7 +143,26 @@ export function validate(
   token: Text,
   options?: ValidateOptions,
 ): Promise<void> {
-  return Promise.resolve().then(() => _validate(value, token, signData, options));
+  return pipe(
+    validateFp(value, token, options),
+    TO.match(() => undefined, e => {
+      throw e;
+    }),
+  )();
+}
+
+/**
+ * Validates passed init data.
+ * @param value - value to check.
+ * @param token - bot secret token.
+ * @param options - additional validation options.
+ */
+export function validateFp(
+  value: ValidateValue,
+  token: Text,
+  options?: ValidateOptions,
+): TO.TaskOption<ValidateError> {
+  return _validateFp(true, value, token, signDataFp, options);
 }
 
 export * from './shared.js';

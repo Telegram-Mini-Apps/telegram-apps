@@ -3,7 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   AuthDateInvalidError,
   ExpiredError,
-  isValid3rd, SignatureInvalidError,
+  isValid3rd,
+  SignatureInvalidError,
   SignatureMissingError,
   validate3rd,
 } from './shared';

@@ -1,11 +1,23 @@
+import * as E from 'fp-ts/Either';
+import * as O from 'fp-ts/Option';
+import { pipe } from 'fp-ts/lib/function.js';
 import { createHmac as nodeCreateHmac } from 'node:crypto';
 
+import { bufferToArrayBuffer } from '../buf-converters.js';
 import { hashToken as _hashToken } from '../hashToken.js';
-import { sign as _sign, SignOptions } from '../sign.js';
-import { signData as _signData, SignDataOptions } from '../signData.js';
-import type { CreateHmacFn, SignData, Text } from '../types.js';
-import { isValid as _isValid } from '../validation/isValid.js';
-import { validate as _validate, type ValidateOptions, type ValidateValue } from '../validation/validate.js';
+import { signDataFp as _signDataFp, SignDataError, type SignDataOptions } from '../signDataFp.js';
+import {
+  signFp as _signFp,
+  type SignableData,
+  type SignOptions,
+} from '../signFp.js';
+import type { CreateHmacFn, Text } from '../types.js';
+import {
+  validateFp as _validateFp,
+  type ValidateError,
+  type ValidateOptions,
+  type ValidateValue,
+} from '../validation.js';
 
 /**
  * Converts Text to Node.js Buffer.
@@ -16,9 +28,11 @@ function textToBuffer(text: Text): Buffer {
 }
 
 const createHmac: CreateHmacFn<false> = (data, key) => {
-  return nodeCreateHmac('sha256', textToBuffer(key))
-    .update(textToBuffer(data))
-    .digest();
+  return bufferToArrayBuffer(
+    nodeCreateHmac('sha256', textToBuffer(key))
+      .update(textToBuffer(data))
+      .digest(),
+  );
 };
 
 /**
@@ -36,7 +50,10 @@ export function hashToken(token: Text): Buffer {
  * @returns True is specified init data is valid.
  */
 export function isValid(value: ValidateValue, token: Text, options?: ValidateOptions): boolean {
-  return _isValid(value, token, validate, options);
+  return pipe(
+    validateFp(value, token, options),
+    O.match(() => true, () => false),
+  );
 }
 
 /**
@@ -47,8 +64,30 @@ export function isValid(value: ValidateValue, token: Text, options?: ValidateOpt
  * @param options - additional options.
  * @returns Signed init data presented as query parameters.
  */
-export function sign(data: SignData, key: Text, authDate: Date, options?: SignOptions): string {
-  return _sign(data, key, authDate, signData, options);
+export function sign(data: SignableData, key: Text, authDate: Date, options?: SignOptions): string {
+  return pipe(
+    signFp(data, key, authDate, options),
+    E.match(e => {
+      throw e;
+    }, v => v),
+  );
+}
+
+/**
+ * Signs specified init data.
+ * @param data - init data to sign.
+ * @param authDate - date, when this init data should be signed.
+ * @param key - private key.
+ * @param options - additional options.
+ * @returns Signed init data presented as query parameters.
+ */
+export function signFp(
+  data: SignableData,
+  key: Text,
+  authDate: Date,
+  options?: SignOptions,
+): E.Either<SignDataError, string> {
+  return _signFp(data, key, authDate, signDataFp, options);
 }
 
 /**
@@ -59,7 +98,27 @@ export function sign(data: SignData, key: Text, authDate: Date, options?: SignOp
  * @returns Data sign.
  */
 export function signData(data: Text, key: Text, options?: SignDataOptions): string {
-  return _signData(data, key, createHmac, options);
+  return pipe(
+    signDataFp(data, key, options),
+    E.match(e => {
+      throw e;
+    }, v => v),
+  );
+}
+
+/**
+ * Signs specified data with the passed token.
+ * @param data - data to sign.
+ * @param key - private key.
+ * @param options - additional options.
+ * @returns Data sign.
+ */
+export function signDataFp(
+  data: Text,
+  key: Text,
+  options?: SignDataOptions,
+): E.Either<SignDataError, string> {
+  return _signDataFp(false, data, key, createHmac, options);
 }
 
 /**
@@ -78,7 +137,26 @@ export function validate(
   token: Text,
   options?: ValidateOptions,
 ): void {
-  return _validate(value, token, signData, options);
+  return pipe(
+    validateFp(value, token, options),
+    O.match(() => undefined, e => {
+      throw e;
+    }),
+  );
+}
+
+/**
+ * Validates passed init data.
+ * @param value - value to check.
+ * @param token - bot secret token.
+ * @param options - additional validation options.
+ */
+export function validateFp(
+  value: ValidateValue,
+  token: Text,
+  options?: ValidateOptions,
+): O.Option<ValidateError> {
+  return _validateFp(false, value, token, signDataFp, options);
 }
 
 export * from './shared.js';
