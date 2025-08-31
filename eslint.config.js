@@ -12,12 +12,13 @@ export default tseslint.config(
   },
   {
     name: 'app/files-to-lint',
-    files: ['{packages,playgrounds}/**/*.{js,ts,mts,tsx,vue}'],
+    files: ['{packages,tma.js,playgrounds}/**/*.{js,ts,mts,tsx,vue}'],
     languageOptions: {
       parserOptions: {
         project: [
           './packages/*/tsconfig.eslint.json',
-          './playgrounds/*/tsconfig.json'
+          './playgrounds/*/tsconfig.json',
+          './tma.js/*/tsconfig.eslint.json',
         ],
         tsconfigRootDir: import.meta.dirname,
         ecmaVersion: 'latest',
@@ -25,12 +26,11 @@ export default tseslint.config(
       },
     },
     ignores: ['eslint.config.js'],
-  },
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-
-  // Custom eslint rules to override recommended ones.
-  {
+    extends: [
+      eslint.configs.recommended,
+      ...tseslint.configs.recommendedTypeChecked,
+    ],
+    plugins: { '@stylistic': stylistic },
     rules: {
       '@typescript-eslint/no-empty-object-type': 0,
       '@typescript-eslint/no-explicit-any': 0,
@@ -44,13 +44,6 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-call': 0,
       '@typescript-eslint/no-namespace': 0,
       'no-empty': 0,
-    },
-  },
-
-  // Stylystic eslint rules.
-  {
-    plugins: { '@stylistic': stylistic },
-    rules: {
       '@stylistic/array-bracket-newline': ['error', 'consistent'],
       '@stylistic/array-bracket-spacing': ['error', 'never'],
       '@stylistic/array-element-newline': ['error', 'consistent'],
