@@ -1,4 +1,4 @@
-import { InitDataLike } from '@telegram-apps/transformers';
+import type { InitDataLike } from '@tma.js/transformers';
 
 import type { SignDataOptions } from './signData.js';
 

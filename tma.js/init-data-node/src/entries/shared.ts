@@ -6,7 +6,7 @@ import {
   type Validate3rdValue,
 } from '../validation/validate3rd.js';
 
-export type { Chat, ChatType, InitData, User } from '@telegram-apps/types';
+export type { Chat, ChatType, InitData, User } from '@tma.js/types';
 
 export {
   AuthDateInvalidError, ExpiredError, isAuthDateInvalidError,

@@ -1,5 +1,5 @@
-import { defineConfig } from 'vitest/config';
 import dts from 'vite-plugin-dts';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig((_) => ({
   test: {
@@ -25,8 +25,8 @@ export default defineConfig((_) => ({
     rollupOptions: {
       external: [
         'node:crypto',
-        '@telegram-apps/transformers',
-        '@telegram-apps/types',
+        '@tma.js/transformers',
+        '@tma.js/types',
         'error-kid',
       ],
     },
