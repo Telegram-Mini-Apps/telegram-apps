@@ -1,23 +1,24 @@
+import { signal } from '@tma.js/signals';
+
 import { off, on } from '@/events/emitter.js';
 import type { SubscribeListener } from '@/events/types/index.js';
 import { logger } from '@/logger.js';
-import { targetOrigin } from '@/methods/targetOrigin.js';
 
-/**
- * The package debug mode.
- *
- * Enabling debug mode leads to printing additional messages in the console related to the
- * processes inside the package.
- */
-export let debug = false;
+export const debug = signal(false);
 
 const eventsListener: SubscribeListener = event => {
   logger().log('Event received:', event);
 };
 
-const originListener = (origin: string) => {
-  logger().log('Target origin changed:', origin);
-};
+/**
+ * Returns the current debug mode state.
+ *
+ * Enabling debug mode leads to printing additional messages in the console related to the
+ * processes inside the package.
+ */
+export function getDebug(): boolean {
+  return debug();
+}
 
 /**
  * Sets the package debug mode.
@@ -27,14 +28,8 @@ const originListener = (origin: string) => {
  * @param value - enable debug mode.
  */
 export function setDebug(value: boolean): void {
-  if (value !== debug) {
-    debug = value;
-    if (debug) {
-      on('*', eventsListener);
-      targetOrigin.sub(originListener);
-    } else {
-      off('*', eventsListener);
-      targetOrigin.unsub(originListener);
-    }
+  if (value !== debug()) {
+    debug.set(value);
+    (value ? on : off)('*', eventsListener);
   }
 }
