@@ -11,8 +11,11 @@ import {
   launchParamsQuery,
 } from './structures.js';
 
+export type ParseInitDataQueryError = ValiError<InitDataGenSchema>;
+export type ParseLaunchParamsQueryError = ValiError<LaunchParamsGenSchema>;
+
 export function parseInitDataQueryFp(value: string | URLSearchParams): E.Either<
-  ValiError<InitDataGenSchema>,
+  ParseInitDataQueryError,
   InitDataGenType
 > {
   return E.tryCatch(
@@ -22,7 +25,7 @@ export function parseInitDataQueryFp(value: string | URLSearchParams): E.Either<
 }
 
 export function parseLaunchParamsQueryFp(value: string | URLSearchParams): E.Either<
-  ValiError<LaunchParamsGenSchema>,
+  ParseLaunchParamsQueryError,
   LaunchParamsGenType
 > {
   return E.tryCatch(
