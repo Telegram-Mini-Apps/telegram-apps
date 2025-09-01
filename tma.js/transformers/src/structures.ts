@@ -41,6 +41,9 @@ export type InitDataGenType = InferOutput<InitDataGenSchema>;
 export type LaunchParamsGenSchema = ReturnType<typeof launchParams>;
 export type LaunchParamsGenType = InferOutput<LaunchParamsGenSchema>;
 
+export type MiniAppsMessageGenSchema = ReturnType<typeof miniAppsMessage>;
+export type MiniAppsMessageGenType = InferOutput<MiniAppsMessageGenSchema>;
+
 export function initDataChat() {
   return looseObject({
     id: number(),
