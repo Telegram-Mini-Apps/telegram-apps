@@ -25,6 +25,8 @@ export function eitherGet<T>(either: E.Either<any, T>): T {
   return either.right;
 }
 
-export function eitherFnToSimple<Fn extends (...args: any) => E.Either<any, any>>(fn: Fn): Fn {
-  return ((...args) => eitherGet(fn(...args))) as Fn;
+export function eitherFnToSimple<Fn extends (...args: any) => E.Either<any, any>>(
+  fn: Fn,
+): (...args: Parameters<Fn>) => LeftOfFnReturnType<Fn> {
+  return (...args) => eitherGet(fn(...args));
 }
