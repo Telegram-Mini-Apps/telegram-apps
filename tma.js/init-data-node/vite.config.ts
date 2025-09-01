@@ -27,6 +27,7 @@ export default defineConfig((_) => ({
         'node:crypto',
         '@tma.js/transformers',
         '@tma.js/types',
+        '@tma.js/toolkit',
         'error-kid',
       ],
     },
