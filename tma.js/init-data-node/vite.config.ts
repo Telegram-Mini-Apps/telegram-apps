@@ -1,6 +1,8 @@
 import dts from 'vite-plugin-dts';
 import { defineConfig } from 'vitest/config';
 
+import packageJson from './package.json' with { type: "json" };
+
 export default defineConfig((_) => ({
   test: {
     include: ['src/**/*.test.ts'],
@@ -23,13 +25,7 @@ export default defineConfig((_) => ({
     emptyOutDir: false,
     sourcemap: true,
     rollupOptions: {
-      external: [
-        'node:crypto',
-        '@tma.js/transformers',
-        '@tma.js/types',
-        '@tma.js/toolkit',
-        'error-kid',
-      ],
+      external: Object.keys(packageJson.dependencies),
     },
     lib: {
       entry: {

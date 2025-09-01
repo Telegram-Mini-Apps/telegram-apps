@@ -4,6 +4,8 @@ import dts from 'vite-plugin-dts';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
+import packageJson from './package.json' with { type: "json" };
+
 export default defineConfig(({ mode }) => {
   const tsconfigPath = mode === 'test'
     ? './tsconfig.test.json'
@@ -21,10 +23,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       rollupOptions: {
-        external: [
-          '@tma.js/toolkit',
-          '@tma.js/types'
-        ],
+        external: Object.keys(packageJson.dependencies),
       },
       outDir: 'dist',
       emptyOutDir: true,
