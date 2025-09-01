@@ -1,4 +1,4 @@
-import { encodeBase64Url } from '@/base64-url/encode.js';
+import { encodeBase64Url } from '@/base64-url/encodeBase64Url.js';
 
 /**
  * @returns True if the passed value is safe to be used to create a start parameter value from it.

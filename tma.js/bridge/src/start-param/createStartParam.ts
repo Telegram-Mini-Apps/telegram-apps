@@ -1,7 +1,7 @@
 import { eitherFnToSimple } from '@tma.js/toolkit';
 import * as E from 'fp-ts/Either';
 
-import { encodeBase64Url } from '@/base64-url/encode.js';
+import { encodeBase64Url } from '@/base64-url/encodeBase64Url.js';
 
 /**
  * Creates a safe start parameter value. If the value is not a string, the

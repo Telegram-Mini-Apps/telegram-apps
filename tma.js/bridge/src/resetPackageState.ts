@@ -1,6 +1,6 @@
 import { debug } from '@/debug.js';
 import { offAll } from '@/events/emitter.js';
-import { postMessageImplementation } from '@/methods/postMessage.js';
+import { postMessageImpl } from '@/methods/postMessage.js';
 import { targetOrigin } from '@/methods/targetOrigin.js';
 
 /**
@@ -9,7 +9,7 @@ import { targetOrigin } from '@/methods/targetOrigin.js';
  */
 export function resetPackageState() {
   offAll();
-  [postMessageImplementation, targetOrigin, debug].forEach(s => {
+  [postMessageImpl, targetOrigin, debug].forEach(s => {
     s.unsubAll();
     s.reset();
   });
