@@ -1,6 +1,8 @@
 import { eitherFnToSimple } from '@tma.js/toolkit';
 import * as E from 'fp-ts/Either';
 
+export type DecodeBase64UrlError = DOMException;
+
 /**
  * Decodes a base-64-url ASCII string.
  * @param value - the value to decode.
@@ -9,7 +11,7 @@ import * as E from 'fp-ts/Either';
  * @see Source:
  * https://developer.mozilla.org/ru/docs/Glossary/Base64#solution_1_–_escaping_the_string_before_encoding_it
  */
-export function decodeBase64UrlFp(value: string): E.Either<DOMException, string> {
+export function decodeBase64UrlFp(value: string): E.Either<DecodeBase64UrlError, string> {
   return E.tryCatch(() => {
     return decodeURIComponent(
       atob(value)
