@@ -10,8 +10,7 @@ import { parse } from 'valibot';
 
 import { isIframe } from '@/env/isIframe.js';
 import { InvalidLaunchParamsError } from '@/errors.js';
-import { logger } from '@/logger.js';
-import { postMessageImpl } from '@/methods/postMessage.js';
+import { logger, postMessageImpl } from '@/globals.js';
 import type { MethodName, MethodParams } from '@/methods/types/index.js';
 
 /**

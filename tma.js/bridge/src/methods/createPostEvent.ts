@@ -2,7 +2,7 @@ import type { Version } from '@tma.js/types';
 import { any, is, looseObject } from 'valibot';
 
 import { MethodParameterUnsupportedError, MethodUnsupportedError } from '@/errors.js';
-import { logger } from '@/logger.js';
+import { logger } from '@/globals.js';
 import { type PostEventFn, postEvent } from '@/methods/postEvent.js';
 import { supports } from '@/methods/supports.js';
 import type {

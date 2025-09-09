@@ -14,9 +14,8 @@ import {
 import { createEmitter } from '@/events/createEmitter.js';
 import { emitEvent } from '@/events/emitEvent.js';
 import type { EventName, EventPayload, Events } from '@/events/types/index.js';
-import { logger } from '@/logger.js';
-import { defineFnComposer } from '@/obj-prop-helpers/defineFnComposer.js';
-import { defineMergeableProperty } from '@/obj-prop-helpers/defineMergeableProperty.js';
+import { logger } from '@/globals.js';
+import { defineFnComposer, defineMergeableProperty } from '@/obj-prop-helpers.js';
 
 /**
  * Transformers for problematic Mini Apps events.
@@ -141,7 +140,7 @@ export const {
 
       // A tuple, where the first value is the receiveEvent function owner, and the second
       // value is the receiveEvent itself.
-      let cursor: [any, any] = [undefined, wnd];
+      let cursor: [obj: any, receieveEvent: any] = [undefined, wnd];
       for (const item of path) {
         cursor = [cursor[1], cursor[1][item]];
         if (!cursor[1]) {

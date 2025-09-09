@@ -5,7 +5,7 @@ import { function as fn, is, looseObject } from 'valibot';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { isIframe } from '@/env/isIframe.js';
 import { UnknownEnvError } from '@/errors.js';
-import { logger } from '@/logger.js';
+import { logger, targetOrigin } from '@/globals.js';
 import type {
   MethodName,
   MethodNameWithOptionalParams,
@@ -13,8 +13,8 @@ import type {
   MethodNameWithRequiredParams,
   MethodParams,
 } from '@/methods/types/index.js';
+
 import { postMessage } from './postMessage.js';
-import { targetOrigin } from './targetOrigin.js';
 
 export type PostEventError = InstanceType<typeof UnknownEnvError>;
 export type PostEventFn = typeof postEvent;
