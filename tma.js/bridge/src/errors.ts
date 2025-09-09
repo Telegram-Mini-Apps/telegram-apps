@@ -1,23 +1,19 @@
 import type { Version } from '@tma.js/types';
 import { errorClass, errorClassWithData } from 'error-kid';
 
-export const [MethodUnsupportedError, isMethodUnsupportedError] = errorClass<
+export const MethodUnsupportedError = errorClass<
   [method: string, version: Version]
 >('MethodUnsupportedError', (method, version) => [
   `Method "${method}" is unsupported in Mini Apps version ${version}`,
 ]);
 
-export const [
-  MethodParameterUnsupportedError,
-  isMethodMethodParameterUnsupportedError,
-] = errorClass<[method: string, param: string, version: Version]>(
-  'MethodParameterUnsupportedError',
-  (method, param, version) => [
-    `Parameter "${param}" of "${method}" method is unsupported in Mini Apps version ${version}`,
-  ],
-);
+export const MethodParameterUnsupportedError = errorClass<
+  [method: string, param: string, version: Version]
+>('MethodParameterUnsupportedError', (method, param, version) => [
+  `Parameter "${param}" of "${method}" method is unsupported in Mini Apps version ${version}`,
+]);
 
-export const [LaunchParamsRetrieveError, isLaunchParamsRetrieveError] = errorClassWithData<
+export const LaunchParamsRetrieveError = errorClassWithData<
   { errors: { source: string; error: unknown }[] },
   [{ source: string; error: unknown }[]]
 >(
@@ -37,19 +33,16 @@ export const [LaunchParamsRetrieveError, isLaunchParamsRetrieveError] = errorCla
   ],
 );
 
-export const [InvalidLaunchParamsError, isInvalidLaunchParamsError] = errorClass<
+export const InvalidLaunchParamsError = errorClass<
   [launchParams: string, cause: unknown]
->(
-  'InvalidLaunchParamsError',
-  (launchParams, cause) => [
-    `Invalid value for launch params: ${launchParams}`,
-    { cause },
-  ],
-);
+>('InvalidLaunchParamsError', (launchParams, cause) => [
+  `Invalid value for launch params: ${launchParams}`,
+  { cause },
+]);
 
-export const [UnknownEnvError, isUnknownEnvError] = errorClass('UnknownEnvError');
+export const UnknownEnvError = errorClass('UnknownEnvError');
 
-export const [InvokeCustomMethodError, isInvokeCustomMethodError] = errorClass<[error: string]>(
+export const InvokeCustomMethodError = errorClass<[error: string]>(
   'InvokeCustomMethodError',
   error => [`Server returned error: ${error}`],
 );
