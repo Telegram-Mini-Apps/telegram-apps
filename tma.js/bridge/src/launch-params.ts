@@ -1,13 +1,21 @@
 import { eitherFnToSimple, getStorageValue, setStorageValue } from '@tma.js/toolkit';
-import { parseLaunchParamsQueryFp } from '@tma.js/transformers';
+import {
+  parseLaunchParamsQueryFp,
+  type LaunchParamsGenType,
+  type ParseLaunchParamsQueryError,
+} from '@tma.js/transformers';
 import * as E from 'fp-ts/Either';
+import * as O from 'fp-ts/Option';
+import { flow, pipe } from 'fp-ts/function';
 
 import { LaunchParamsRetrieveError } from '@/errors.js';
-import { pipe } from 'fp-ts/lib/function.js';
 
 const SESSION_STORAGE_KEY = 'launchParams';
 
+export type RetrieveRawInitDataError = RetrieveRawLaunchParamsError;
 export type RetrieveRawLaunchParamsError = InstanceType<typeof LaunchParamsRetrieveError>;
+export type RetrieveLaunchParamsError = RetrieveRawLaunchParamsError | ParseLaunchParamsQueryError;
+export type RetrieveLaunchParamsResult = LaunchParamsGenType;
 
 /**
  * @param urlString - URL to extract launch parameters from.
@@ -15,7 +23,7 @@ export type RetrieveRawLaunchParamsError = InstanceType<typeof LaunchParamsRetri
  * @throws Error if function was unable to extract launch parameters from the
  *   passed URL.
  */
-function fromURL(urlString: string): string {
+function retrieveLpFromUrl(urlString: string): string {
   return urlString
     // Replace everything before this first hashtag or question sign.
     .replace(/^[^?#]*[?#]/, '')
@@ -23,6 +31,39 @@ function fromURL(urlString: string): string {
     // params.
     .replace(/[?#]/g, '&');
 }
+
+/**
+ * @returns Launch parameters from any known source.
+ */
+export const retrieveLaunchParamsFp: () => E.Either<
+  RetrieveLaunchParamsError,
+  RetrieveLaunchParamsResult
+> = flow(retrieveRawLaunchParamsFp, E.chainW(parseLaunchParamsQueryFp));
+
+/**
+ * @see retrieveLaunchParamsFp
+ */
+export const retrieveLaunchParams = eitherFnToSimple(retrieveLaunchParamsFp);
+
+/**
+ * @returns Raw init data from any known source.
+ */
+export const retrieveRawInitDataFp: () => E.Either<RetrieveRawInitDataError, O.Option<string>> =
+  flow(retrieveRawLaunchParamsFp, E.map(raw => {
+    const v = new URLSearchParams(raw).get('tgWebAppData');
+    return v ? O.some(v) : O.none;
+  }));
+
+/**
+ * @see retrieveRawInitDataFp
+ */
+export const retrieveRawInitData: () => string | undefined = flow(
+  retrieveRawInitDataFp,
+  E.fold(err => {
+    throw err;
+  }, v => v),
+  O.match(() => undefined, v => v),
+);
 
 /**
  * @returns Launch parameters in a raw format from any known source.
@@ -34,11 +75,11 @@ export function retrieveRawLaunchParamsFp(): E.Either<RetrieveRawLaunchParamsErr
     // Try to retrieve launch parameters from the current location. This method
     // can return nothing in case, location was changed, and then the page was
     // reloaded.
-    [() => fromURL(window.location.href), 'window.location.href'],
+    [() => retrieveLpFromUrl(window.location.href), 'window.location.href'],
     // Then, try using the lower level API - window.performance.
     [() => {
       const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
-      return navigationEntry && fromURL(navigationEntry.name);
+      return navigationEntry && retrieveLpFromUrl(navigationEntry.name);
     }, 'performance navigation entries'],
     // Finally, try using the session storage.
     [() => getStorageValue<string>(SESSION_STORAGE_KEY), 'local storage'],

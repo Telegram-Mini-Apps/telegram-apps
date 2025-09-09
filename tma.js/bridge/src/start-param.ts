@@ -1,9 +1,30 @@
-import { eitherGet } from '@tma.js/toolkit';
+import { eitherFnToSimple, eitherGet } from '@tma.js/toolkit';
 import * as E from 'fp-ts/Either';
 import { pipe } from 'fp-ts/lib/function.js';
 import * as J from 'fp-ts/lib/Json.js';
 
-import { type DecodeBase64UrlError, decodeBase64UrlFp } from '@/base64-url/decode.js';
+import { encodeBase64Url, type DecodeBase64UrlError, decodeBase64UrlFp } from '@/base64-url.js';
+
+/**
+ * Creates a safe start parameter value. If the value is not a string, the
+ * function applies JSON.stringify to it, so make sure you are not passing an
+ * object with circular references.
+ *
+ * @param value - value to create start parameter from.
+ * @see Learn more about start parameter:
+ * https://docs.telegram-mini-apps.com/platform/start-parameter
+ */
+export function createStartParamFp(value: unknown): E.Either<Error, string> {
+  const b64 = encodeBase64Url(typeof value === 'string' ? value : JSON.stringify(value));
+  return b64.length > 512
+    ? E.left(new Error('Value is too long for start parameter'))
+    : E.right(b64);
+}
+
+/**
+ * @see createStartParamFp
+ */
+export const createStartParam = eitherFnToSimple(createStartParamFp);
 
 /**
  * @see decodeStartParamFp
@@ -24,7 +45,6 @@ export function decodeStartParam<T>(
   return eitherGet(
     decodeStartParamFp(
       value,
-      // @ts-expect-error The problem is in overrides. Everything is fine here.
       typeof arg2 === 'function'
         ? (value: string) => E.tryCatch(() => arg2(value), e => e)
         : arg2,
@@ -71,4 +91,14 @@ export function decodeStartParamFp<L, R>(
       return J.parse(decoded) as E.Either<SyntaxError, J.Json>;
     }),
   );
+}
+
+/**
+ * @returns True if the passed value is safe to be used to create a start parameter value from it.
+ * If true is returned, the value can be safely passed to the `createStartParam` function.
+ * @param value - value to check.
+ * @see createStartParam
+ */
+export function isSafeToCreateStartParam(value: string): boolean {
+  return encodeBase64Url(value).length <= 512;
 }

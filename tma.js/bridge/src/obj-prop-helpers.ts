@@ -1,6 +1,3 @@
-import { defineProxiedProperty } from '@/obj-prop-helpers/defineProxiedProperty.js';
-import { defineStaticProperty } from '@/obj-prop-helpers/defineStaticProperty.js';
-
 /**
  * Defines a property, that is a functions compose. Trying to set a value in this property
  * will lead to adding it to a function's pool. The property value will always be equal to a
@@ -66,4 +63,55 @@ export function defineFnComposer(
     () => unwrappableCallAssignedFunctions,
     value => assignedFunctions.push(value),
   );
+}
+
+/**
+ * Wires the specified property in the object preventing it from being overwritten. Instead, it
+ * enhances the previous value by merging the current one with the passed one.
+ * @param obj - object.
+ * @param prop - object property to rewire.
+ */
+export function defineMergeableProperty(obj: any, prop: string): void {
+  const value = obj[prop];
+  defineProxiedProperty(obj, prop, () => value, v => {
+    Object.entries(v).forEach(([objKey, objValue]) => {
+      value[objKey] = objValue;
+    });
+  });
+}
+
+/**
+ * Defines an enumerable and configurable property with a getter and setter.
+ * @param obj - object.
+ * @param prop - object property name.
+ * @param get - getter to use.
+ * @param set - setter to use.
+ */
+export function defineProxiedProperty(
+  obj: any,
+  prop: string,
+  get: () => unknown,
+  set: (v: any) => void,
+) {
+  Object.defineProperty(obj, prop, {
+    enumerable: true,
+    configurable: true,
+    get,
+    set,
+  });
+}
+
+/**
+ * Defines an enumerable, configurable and writable property with the initial value.
+ * @param obj - object.
+ * @param prop - object property name.
+ * @param value - value to set.
+ */
+export function defineStaticProperty(obj: any, prop: string, value: any): void {
+  Object.defineProperty(obj, prop, {
+    enumerable: true,
+    configurable: true,
+    writable: true,
+    value,
+  });
 }
