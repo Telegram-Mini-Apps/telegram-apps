@@ -1,6 +1,12 @@
-export * from '../errors.js';
-export * from '../parsing.js';
-export type * from '../types.js';
+export {
+  AuthDateInvalidError,
+  HexStringLengthInvalidError,
+  SignatureInvalidError,
+  SignatureMissingError,
+  ExpiredError,
+} from '../errors.js';
+export { parse, parseFp } from '../parsing.js';
+export type { Text, CreateHmacFn } from '../types.js';
 export {
   isValid3rd,
   isValid3rdFp,
@@ -11,7 +17,7 @@ export {
   type Validate3rdValue,
   type ValidateError,
   type ValidateOptions,
-  type ValidateValue
+  type ValidateValue,
 } from '../validation.js';
 
 export type { Chat, ChatType, InitData, User } from '@tma.js/types';
