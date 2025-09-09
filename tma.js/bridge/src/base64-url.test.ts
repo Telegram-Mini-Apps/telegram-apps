@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { decodeBase64Url, decodeBase64UrlFp } from './decodeBase64Url.js';
+import { decodeBase64Url, decodeBase64UrlFp } from '@/base64-url/decodeBase64Url.js';
+import { encodeBase64Url } from '@/base64-url/encodeBase64Url.js';
 
 describe('decodeBase64Url', () => {
   it('should properly decode ASCII value', () => {
@@ -19,5 +20,15 @@ describe('decodeBase64UrlFp', () => {
 
   it('should properly decode Unicode value', () => {
     expect(decodeBase64UrlFp('0KLQtdC70LXQs9GA0LDQvA==')).toMatchObject({ right: 'Телеграм' });
+  });
+});
+
+describe('encodeBase64Url', () => {
+  it('should properly encode ASCII value', () => {
+    expect(encodeBase64Url('ABCDEF')).toBe('QUJDREVG');
+  });
+
+  it('should properly encode Unicode value', () => {
+    expect(encodeBase64Url('Телеграм')).toBe('0KLQtdC70LXQs9GA0LDQvA==');
   });
 });
