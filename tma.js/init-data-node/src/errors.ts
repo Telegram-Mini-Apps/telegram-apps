@@ -1,6 +1,6 @@
 import { errorClass, errorClassWithData } from 'error-kid';
 
-export const [AuthDateInvalidError, isAuthDateInvalidError] = errorClassWithData<
+export const AuthDateInvalidError = errorClassWithData<
   { value: string | undefined },
   [value?: string]
 >(
@@ -9,18 +9,18 @@ export const [AuthDateInvalidError, isAuthDateInvalidError] = errorClassWithData
   value => [`"auth_date" is invalid: ${value || 'value is missing'}`],
 );
 
-export const [SignatureInvalidError, isSignatureInvalidError] = errorClass('SignatureInvalidError');
+export const SignatureInvalidError = errorClass('SignatureInvalidError');
 
-export const [HexStringLengthInvalidError, isHexStringLengthInvalidError] = errorClass(
+export const HexStringLengthInvalidError = errorClass(
   'HexStringLengthInvalidError',
 );
 
-export const [SignatureMissingError, isSignatureMissingError] = errorClass<[thirdParty: boolean]>(
+export const SignatureMissingError = errorClass<[thirdParty: boolean]>(
   'SignatureMissingError',
   thirdParty => [`"${thirdParty ? 'signature' : 'hash'}" parameter is missing`],
 );
 
-export const [ExpiredError, isExpiredError] = errorClassWithData<
+export const ExpiredError = errorClassWithData<
   { issuedAt: Date; expiresAt: Date },
   [issuedAt: Date, expiresAt: Date, now: Date]
 >(
