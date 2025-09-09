@@ -35,12 +35,21 @@ const transformers = {
     looseObject({ button_id: nullish(string(), () => undefined) }),
     {},
   ),
-  viewport_changed: looseObject({
-    height: number(),
-    width: nullish(number(), () => window.innerWidth),
-    is_state_stable: boolean(),
-    is_expanded: boolean(),
-  }),
+  viewport_changed: nullish(
+    looseObject({
+      height: number(),
+      width: nullish(number(), () => window.innerWidth),
+      is_state_stable: boolean(),
+      is_expanded: boolean(),
+    }),
+    // TODO: At the moment, macOS has a bug with the invalid event payload - it is always equal to
+    //  null. Leaving this default value until the bug is fixed.
+    () => ({
+      height: window.innerHeight,
+      is_state_stable: true,
+      is_expanded: true,
+    }),
+  ),
   theme_changed: looseObject({
     theme_params: themeParams(),
   }),
