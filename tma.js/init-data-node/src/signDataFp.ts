@@ -1,4 +1,3 @@
-import type { LeftOfFnReturnType } from '@tma.js/toolkit';
 import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/lib/function.js';
@@ -14,7 +13,9 @@ export interface SignDataOptions {
   tokenHashed?: boolean;
 }
 
-export type SignDataError = LeftOfFnReturnType<typeof hexToArrayBuffer>;
+export type SignDataError = ReturnType<typeof hexToArrayBuffer> extends E.Either<infer U, any>
+  ? U
+  : never;
 
 export function signDataFp(
   async: false,
