@@ -47,7 +47,7 @@ export class InvalidLaunchParamsError extends errorClass<
 export class UnknownEnvError extends errorClass('UnknownEnvError') {
 }
 
-export class InvokeCustomMethodError extends errorClass<[error: string]>(
+export class InvokeCustomMethodFailedError extends errorClass<[error: string]>(
   'InvokeCustomMethodError',
   error => [`Server returned error: ${error}`],
 ) {
