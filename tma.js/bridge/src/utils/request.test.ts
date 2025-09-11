@@ -231,6 +231,7 @@ describe('requestFp', () => {
             () => expect.unreachable(),
           ),
         )();
+        expect.assertions(1);
       });
 
       it('should not throw if data was received before timeout', async () => {
@@ -249,6 +250,7 @@ describe('requestFp', () => {
             payload => expect(payload).toStrictEqual({ status: 'allowed' }),
           ),
         )();
+        expect.assertions(1);
       });
     });
 
@@ -285,6 +287,7 @@ describe('requestFp', () => {
             () => expect.unreachable(),
           ),
         )();
+        expect.assertions(1);
       });
     });
 
@@ -306,6 +309,7 @@ describe('requestFp', () => {
             payload => expect(payload).toStrictEqual({ status: 'allowed' }),
           ),
         )();
+        expect.assertions(1);
       });
 
       it('should not capture an event in case, capture method returned false', async () => {
@@ -324,6 +328,7 @@ describe('requestFp', () => {
             () => expect.unreachable(),
           ),
         )();
+        expect.assertions(1);
       });
     });
 
@@ -343,6 +348,7 @@ describe('requestFp', () => {
             () => expect.unreachable(),
           ),
         )();
+        expect.assertions(1);
       });
     });
   });
@@ -365,6 +371,7 @@ describe('requestFp', () => {
           () => expect.unreachable(),
         ),
       )();
+      expect.assertions(1);
     });
 
     it('should capture event with the same request id', async () => {
@@ -394,6 +401,7 @@ describe('requestFp', () => {
           }),
         ),
       )();
+      expect.assertions(1);
     });
   });
 
@@ -416,6 +424,7 @@ describe('requestFp', () => {
             payload => expect(payload).toStrictEqual({ status: 'allowed' }),
           ),
         )();
+        expect.assertions(1);
       });
     });
 
@@ -440,6 +449,7 @@ describe('requestFp', () => {
             payload => expect(payload).toStrictEqual({ status: 'declined' }),
           ),
         )();
+        expect.assertions(1);
       });
     });
   });

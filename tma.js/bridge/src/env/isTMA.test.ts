@@ -2,11 +2,11 @@ import { TimeoutError } from 'better-promises';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createWindow, mockSessionStorageGetItem, mockWindow } from 'test-utils';
 import * as TE from 'fp-ts/TaskEither';
+import { pipe } from 'fp-ts/function';
 
 import { requestFp as _requestFp } from '@/utils/request.js';
 
 import { isTMA, isTMAFp } from './isTMA.js';
-import { pipe } from 'fp-ts/function';
 
 const requestFp = vi.mocked(_requestFp);
 
@@ -80,6 +80,7 @@ describe('isTMAFp', () => {
           result => expect(result).toBe(true),
         ),
       )();
+      expect.assertions(1);
     });
 
     it(
@@ -94,6 +95,7 @@ describe('isTMAFp', () => {
             result => expect(result).toBe(true),
           ),
         )();
+        expect.assertions(1);
       },
     );
 
@@ -109,15 +111,17 @@ describe('isTMAFp', () => {
             result => expect(result).toBe(false),
           ),
         )();
+        expect.assertions(1);
 
         requestFp.mockImplementationOnce(() => TE.left(new Error('something else')));
         await pipe(
           isTMAFp('complete'),
           TE.match(
-            error => expect(error).toBe(new Error('something else')),
+            error => expect(error).toStrictEqual(new Error('something else')),
             () => expect.unreachable(),
           ),
         )();
+        expect.assertions(2);
       },
     );
   });
