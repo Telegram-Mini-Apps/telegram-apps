@@ -44,7 +44,7 @@
     "@tma.js/toolkit": "workspace:^",
     "@tma.js/types": "workspace:^",
     "fp-ts": "^2.16.11",
-    "valibot": "1.1.0"
+    "valibot": "^1.1.0"
   },
   "devDependencies": {
     "test-utils": "workspace:*",
