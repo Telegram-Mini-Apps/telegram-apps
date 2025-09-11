@@ -16,7 +16,7 @@ import type {
 
 import { postMessage } from './postMessage.js';
 
-export type PostEventError = InstanceType<typeof UnknownEnvError>;
+export type PostEventError = UnknownEnvError;
 export type PostEventFn = typeof postEvent;
 export type PostEventFpFn = typeof postEventFp;
 

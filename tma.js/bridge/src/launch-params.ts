@@ -13,7 +13,7 @@ import { LaunchParamsRetrieveError } from '@/errors.js';
 const SESSION_STORAGE_KEY = 'launchParams';
 
 export type RetrieveRawInitDataError = RetrieveRawLaunchParamsError;
-export type RetrieveRawLaunchParamsError = InstanceType<typeof LaunchParamsRetrieveError>;
+export type RetrieveRawLaunchParamsError = LaunchParamsRetrieveError;
 export type RetrieveLaunchParamsError = RetrieveRawLaunchParamsError | ParseLaunchParamsQueryError;
 export type RetrieveLaunchParamsResult = LaunchParamsGenType;
 
