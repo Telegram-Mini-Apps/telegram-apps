@@ -48,11 +48,11 @@
     "@tma.js/toolkit": "workspace:^",
     "@tma.js/transformers": "workspace:^",
     "@tma.js/types": "workspace:^",
-    "better-promises": "^0.4.1",
-    "error-kid": "^1.0.1",
+    "better-promises": "^1.0.0",
+    "error-kid": "^1.0.2",
     "fp-ts": "^2.16.11",
     "mitt": "^3.0.1",
-    "valibot": "1.0.0"
+    "valibot": "^1.1.0"
   },
   "devDependencies": {
     "test-utils": "workspace:*",
