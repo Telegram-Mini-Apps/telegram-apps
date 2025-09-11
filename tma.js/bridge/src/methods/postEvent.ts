@@ -1,4 +1,4 @@
-import { pipe } from 'fp-ts/lib/function.js';
+import { pipe } from 'fp-ts/function';
 import * as O from 'fp-ts/Option';
 import { function as fn, is, looseObject } from 'valibot';
 

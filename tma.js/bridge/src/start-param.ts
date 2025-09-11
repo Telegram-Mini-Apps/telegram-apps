@@ -1,7 +1,7 @@
 import { eitherFnToSimple, eitherGet } from '@tma.js/toolkit';
 import * as E from 'fp-ts/Either';
-import { pipe } from 'fp-ts/lib/function.js';
-import * as J from 'fp-ts/lib/Json.js';
+import { pipe } from 'fp-ts/function';
+import * as J from 'fp-ts/Json';
 
 import { encodeBase64Url, type DecodeBase64UrlError, decodeBase64UrlFp } from '@/base64-url.js';
 
@@ -45,6 +45,7 @@ export function decodeStartParam<T>(
   return eitherGet(
     decodeStartParamFp(
       value,
+      // @ts-expect-error TypeScript is unable to detect a correct override.
       typeof arg2 === 'function'
         ? (value: string) => E.tryCatch(() => arg2(value), e => e)
         : arg2,
