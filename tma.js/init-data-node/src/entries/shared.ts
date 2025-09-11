@@ -21,3 +21,4 @@ export {
 } from '../validation.js';
 
 export type { Chat, ChatType, InitData, User } from '@tma.js/types';
+export { deepSnakeToCamelObjKeys } from '@tma.js/toolkit';
