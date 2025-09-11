@@ -1,22 +1,17 @@
 import {
-  AbortablePromise,
-  type CancelledError,
-  type PromiseOptions,
-  type TimeoutError,
+  BetterPromise,
+  type BetterPromiseOptions,
+  TimeoutError,
 } from 'better-promises';
 import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
-import { pipe } from 'fp-ts/lib/function.js';
+import { pipe } from 'fp-ts/function';
 
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
-import {
-  retrieveRawLaunchParamsFp,
-} from '@/launch-params/retrieveRawLaunchParams.js';
-import { request } from '@/utils/request.js';
+import { retrieveRawLaunchParamsFp } from '@/launch-params.js';
+import { type RequestError, requestFp } from '@/utils/request.js';
 
-export type isTMAError =
-  | InstanceType<typeof CancelledError>
-  | InstanceType<typeof TimeoutError>;
+export type isTMAError = Exclude<RequestError, TimeoutError>;
 
 /**
  * @see isTMAFp
@@ -25,23 +20,25 @@ export function isTMA(): boolean;
 /**
  * @see isTMAFp
  */
-export function isTMA(type: 'complete', options?: PromiseOptions): Promise<boolean>;
+export function isTMA(type: 'complete', options?: BetterPromiseOptions): BetterPromise<boolean>;
 export function isTMA(
   type?: 'complete',
-  options?: PromiseOptions,
-): boolean | Promise<boolean> {
+  options?: BetterPromiseOptions,
+): boolean | BetterPromise<boolean> {
   const monad = isTMAFp(
     // @ts-expect-error TS doesn't get what override we are going to use.
     type,
     options,
   ) as boolean | TE.TaskEither<isTMAError, boolean>;
   return typeof monad === 'function'
-    ? pipe(monad, TE.match(
-      err => {
-        throw err;
-      },
-      v => v,
-    ))()
+    ? BetterPromise.fn(() => {
+      return pipe(monad, TE.match(
+        err => {
+          throw err;
+        },
+        v => v,
+      ))();
+    })
     : monad;
 }
 
@@ -65,27 +62,26 @@ export function isTMAFp(): boolean;
  */
 export function isTMAFp(
   type: 'complete',
-  options?: PromiseOptions
+  options?: BetterPromiseOptions,
 ): TE.TaskEither<isTMAError, boolean>;
 export function isTMAFp(
   type?: 'complete',
-  options?: PromiseOptions,
+  options?: BetterPromiseOptions,
 ): boolean | TE.TaskEither<isTMAError, boolean> {
+  const hasProxy = hasWebviewProxy(window);
   if (!type) {
-    return pipe(retrieveRawLaunchParamsFp(), E.match(() => false, () => true));
+    return hasProxy || pipe(retrieveRawLaunchParamsFp(), E.match(() => false, () => true));
   }
-  return TE.tryCatch(
-    () => AbortablePromise.fn(async context => {
-      if (hasWebviewProxy(window)) {
-        return true;
-      }
-      try {
-        await request('web_app_request_theme', 'theme_changed', context);
-        return true;
-      } catch {
-        return false;
-      }
-    }, options || { timeout: 100 }),
-    e => e as isTMAError,
+  if (hasProxy) {
+    return TE.right(true);
+  }
+  const { timeout = 100 } = options || {};
+
+  return pipe(
+    requestFp('web_app_request_theme', 'theme_changed', { ...options, timeout }),
+    TE.match(
+      error => (TimeoutError.is(error) ? E.right(false) : E.left(error)),
+      () => E.right(true),
+    ),
   );
 }
