@@ -127,7 +127,7 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
   }
 
   // In all other environments, it is enough to define window.TelegramWebviewProxy.postEvent.
-  const proxy = (window as any).TelegramWebviewProxy;
+  const proxy = (window as any).TelegramWebviewProxy || {};
   const postEventDefaulted = proxy.postEvent || (() => undefined);
   (window as any).TelegramWebviewProxy = {
     ...proxy,

@@ -1,7 +1,7 @@
 import { createWindow } from 'test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { resetPackageState } from '@/resetPackageState.js';
+import { resetGlobals } from '@/globals.js';
 
 import { off, on } from './emitter.js';
 
@@ -28,7 +28,7 @@ function mockTelegramSDK() {
 }
 
 beforeEach(() => {
-  resetPackageState();
+  resetGlobals();
   vi.restoreAllMocks();
   createWindow();
 });
@@ -123,8 +123,14 @@ describe('telegram SDK connected last', () => {
         emitMiniAppsEvent('theme_changed', { theme_params: {} });
 
         expect(listener).toHaveBeenCalledTimes(2);
-        expect(listener).toHaveBeenNthCalledWith(1, ['viewport_changed', eventData]);
-        expect(listener).toHaveBeenNthCalledWith(2, ['theme_changed', { theme_params: {} }]);
+        expect(listener).toHaveBeenNthCalledWith(
+          1,
+          { name: 'viewport_changed', payload: eventData },
+        );
+        expect(listener).toHaveBeenNthCalledWith(
+          2,
+          { name: 'theme_changed', payload: { theme_params: {} } },
+        );
         expect(receiveEventMock).toHaveBeenCalledTimes(2);
         expect(receiveEventMock).toHaveBeenNthCalledWith(1, 'viewport_changed', eventData);
         expect(receiveEventMock).toHaveBeenNthCalledWith(2, 'theme_changed', { theme_params: {} });
@@ -400,13 +406,19 @@ describe('telegram SDK not connected', () => {
       emitMiniAppsEvent('theme_changed', { theme_params: {} });
 
       expect(listener).toHaveBeenCalledTimes(2);
-      expect(listener).toHaveBeenNthCalledWith(1, ['viewport_changed', {
-        height: 123,
-        width: 321,
-        is_expanded: false,
-        is_state_stable: false,
-      }]);
-      expect(listener).toHaveBeenNthCalledWith(2, ['theme_changed', { theme_params: {} }]);
+      expect(listener).toHaveBeenNthCalledWith(1, {
+        name: 'viewport_changed',
+        payload: {
+          height: 123,
+          width: 321,
+          is_expanded: false,
+          is_state_stable: false,
+        },
+      });
+      expect(listener).toHaveBeenNthCalledWith(2, {
+        name: 'theme_changed',
+        payload: { theme_params: {} },
+      });
     });
 
     it('should define mini apps event listeners', () => {

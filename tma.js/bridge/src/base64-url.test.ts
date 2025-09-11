@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { decodeBase64Url, decodeBase64UrlFp } from '@/base64-url/decodeBase64Url.js';
-import { encodeBase64Url } from '@/base64-url/encodeBase64Url.js';
+import { decodeBase64Url, decodeBase64UrlFp } from '@/base64-url.js';
+import { encodeBase64Url } from '@/base64-url.js';
 
 describe('decodeBase64Url', () => {
   it('should properly decode ASCII value', () => {
