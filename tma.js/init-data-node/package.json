@@ -61,7 +61,7 @@
   "dependencies": {
     "@tma.js/transformers": "workspace:^",
     "@tma.js/types": "workspace:^",
-    "error-kid": "^1.0.1",
+    "error-kid": "^1.0.2",
     "fp-ts": "^2.16.11"
   }
 }
