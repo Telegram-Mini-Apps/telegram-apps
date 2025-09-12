@@ -1,6 +1,4 @@
-import { eitherFnToSimple } from '@tma.js/toolkit';
-import type { RGB, RGBShort } from '@tma.js/types';
-import * as E from 'fp-ts/Either';
+import type { RGB, RGBShort } from '@telegram-apps/types';
 
 /**
  * Returns true in case, passed value has #RRGGBB format.
@@ -25,11 +23,12 @@ export function isRGBShort(value: string): value is RGBShort {
  * - `rgb(1,2,3)`
  * - `rgba(1,2,3,4)`
  * @param value - value to convert.
+ * @throws {Error} Passed value does not satisfy any of known RGB formats.
  */
-export function toRGBFp(value: string): E.Either<Error, RGB> {
+export function toRGB(value: string): RGB {
   const clean = value.replace(/\s/g, '').toLowerCase();
   if (isRGB(clean)) {
-    return E.right(clean);
+    return clean;
   }
 
   if (isRGBShort(clean)) {
@@ -37,7 +36,7 @@ export function toRGBFp(value: string): E.Either<Error, RGB> {
     for (let i = 0; i < 3; i += 1) {
       color += clean[1 + i].repeat(2);
     }
-    return E.right(color);
+    return color;
   }
 
   // Example valid values: rgb(0,3,10) rgba(32,114,8,0)
@@ -46,24 +45,11 @@ export function toRGBFp(value: string): E.Either<Error, RGB> {
 
   // If this didn't work as well, we can't extract RGB color from passed text.
   if (!match) {
-    return E.left(new Error(`Value "${value}" does not satisfy any of known RGB formats.`));
+    throw new Error(`Value "${value}" does not satisfy any of known RGB formats.`);
   }
 
   // Otherwise, take R, G and B components, convert to hex and create #RRGGBB string.
-  return E.right(
-    match.slice(1).reduce((acc, component) => {
-      return acc + parseInt(component, 10).toString(16)
-        .padStart(2, '0');
-    }, '#') as RGB,
-  );
+  return match.slice(1).reduce((acc, component) => {
+    return acc + parseInt(component, 10).toString(16).padStart(2, '0');
+  }, '#') as RGB;
 }
-
-/**
- * Converts passed value to #RRGGBB format. Accepts following color formats:
- * - `#RGB`
- * - `#RRGGBB`
- * - `rgb(1,2,3)`
- * - `rgba(1,2,3,4)`
- * @param value - value to convert.
- */
-export const toRGB = eitherFnToSimple(toRGBFp);

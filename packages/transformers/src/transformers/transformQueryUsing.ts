@@ -7,16 +7,12 @@ import {
   type TransformAction,
 } from 'valibot';
 
-type RequiredSchema = BaseSchema<any, any, BaseIssue<any>>;
+export type TransformQueryUsingAction<Schema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>>
+  = TransformAction<string | URLSearchParams, InferOutput<Schema>>
 
-export type TransformJsonToSchemaAction = TransformAction<string, unknown>;
-
-export type TransformQueryToSchemaAction<Schema extends RequiredSchema> =
-  TransformAction<string | URLSearchParams, InferOutput<Schema>>;
-
-export function transformQueryToSchema<Schema extends RequiredSchema>(
+export function transformQueryUsing<Schema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>>(
   schema: Schema,
-): TransformQueryToSchemaAction<Schema> {
+): TransformQueryUsingAction<Schema> {
   return transform(input => {
     const result: Record<string, string | string[]> = {};
 
@@ -33,11 +29,4 @@ export function transformQueryToSchema<Schema extends RequiredSchema>(
 
     return parse(schema, result);
   });
-}
-
-/**
- * @returns A transformer applying `JSON.parse` to the input.
- */
-export function transformJsonToSchema(): TransformJsonToSchemaAction {
-  return transform(JSON.parse);
 }

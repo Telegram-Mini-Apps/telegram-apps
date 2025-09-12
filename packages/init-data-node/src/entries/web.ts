@@ -21,6 +21,7 @@ const createHmac: CreateHmacFn<true> = async (data, key) => {
   );
 };
 
+
 /**
  * Hashes specified token using a string, expected during init data sign.
  * @param token - token to hash.
@@ -51,7 +52,7 @@ export function sign(
   data: SignData,
   key: Text,
   authDate: Date,
-  options?: SignOptions,
+  options?: SignOptions
 ): Promise<string> {
   return _sign(data, key, authDate, signData, options);
 }

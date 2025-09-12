@@ -7,5 +7,5 @@ export type CamelToSnakeCase<T extends string> = T extends `${infer First}${infe
  * @param value - value to convert.
  */
 export function camelToSnake<T extends string>(value: T): CamelToSnakeCase<T> {
-  return value.replace(/[A-Z]/g, match => `_${match.toLowerCase()}`) as CamelToSnakeCase<T>;
+  return value.replace(/[A-Z]/g, (match) => `_${match.toLowerCase()}`) as CamelToSnakeCase<T>;
 }

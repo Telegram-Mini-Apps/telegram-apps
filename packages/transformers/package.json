@@ -1,16 +1,16 @@
 {
-  "name": "@tma.js/transformers",
-  "version": "1.0.0",
-  "description": "Transformation utilities we use in the @tma.js packages.",
+  "name": "@telegram-apps/transformers",
+  "version": "2.2.6",
+  "description": "Transformation utilities we use in the @telegram-apps packages.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
+  "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
+    "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
     "directory": "packages/transformers"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
+    "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
   },
   "keywords": [
     "telegram-mini-apps",
@@ -41,10 +41,9 @@
     "build": "vite build -c vite.config.ts"
   },
   "dependencies": {
-    "@tma.js/toolkit": "workspace:^",
-    "@tma.js/types": "workspace:^",
-    "fp-ts": "^2.16.11",
-    "valibot": "1.1.0"
+    "@telegram-apps/toolkit": "workspace:^",
+    "@telegram-apps/types": "workspace:^",
+    "valibot": "1.0.0-beta.14"
   },
   "devDependencies": {
     "test-utils": "workspace:*",

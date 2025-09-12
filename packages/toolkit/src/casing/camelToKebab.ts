@@ -3,5 +3,5 @@
  * @param value - value to convert.
  */
 export function camelToKebab(value: string): string {
-  return value.replace(/[A-Z]/g, match => `-${match.toLowerCase()}`);
+  return value.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
 }

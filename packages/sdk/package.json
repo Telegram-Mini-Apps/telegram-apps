@@ -44,12 +44,12 @@
     "build:iife": "vite build -c vite.iife.config.ts"
   },
   "dependencies": {
-    "@tma.js/bridge": "workspace:^",
-    "@tma.js/navigation": "workspace:^",
-    "@tma.js/signals": "workspace:^",
-    "@tma.js/toolkit": "workspace:^",
-    "@tma.js/transformers": "workspace:^",
-    "@tma.js/types": "workspace:^",
+    "@telegram-apps/bridge": "workspace:^",
+    "@telegram-apps/navigation": "workspace:^",
+    "@telegram-apps/signals": "workspace:^",
+    "@telegram-apps/toolkit": "workspace:^",
+    "@telegram-apps/transformers": "workspace:^",
+    "@telegram-apps/types": "workspace:^",
     "better-promises": "^0.4.1",
     "error-kid": "^0.0.7",
     "valibot": "1.0.0"

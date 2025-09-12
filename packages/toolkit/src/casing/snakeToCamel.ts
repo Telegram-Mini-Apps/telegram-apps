@@ -8,5 +8,5 @@ export type SnakeToCamelCase<S extends string> =
  * @param value - value to convert.
  */
 export function snakeToCamel<T extends string>(value: T): SnakeToCamelCase<T> {
-  return value.replace(/_[a-z]/g, m => m[1].toUpperCase()) as SnakeToCamelCase<T>;
+  return value.replace(/_[a-z]/g, (m) => m[1].toUpperCase()) as SnakeToCamelCase<T>;
 }
