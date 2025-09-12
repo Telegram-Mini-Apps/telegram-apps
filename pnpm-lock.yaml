@@ -103,6 +103,43 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
 
+  tma.js/bridge:
+    dependencies:
+      '@tma.js/signals':
+        specifier: workspace:^
+        version: link:../signals
+      '@tma.js/toolkit':
+        specifier: workspace:^
+        version: link:../toolkit
+      '@tma.js/transformers':
+        specifier: workspace:^
+        version: link:../transformers
+      '@tma.js/types':
+        specifier: workspace:^
+        version: link:../types
+      better-promises:
+        specifier: ^1.0.0
+        version: 1.0.0
+      error-kid:
+        specifier: ^1.0.2
+        version: 1.0.2
+      fp-ts:
+        specifier: ^2.16.11
+        version: 2.16.11
+      mitt:
+        specifier: ^3.0.1
+        version: 3.0.1
+      valibot:
+        specifier: ^1.1.0
+        version: 1.1.0(typescript@5.8.2)
+    devDependencies:
+      test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+
   tma.js/init-data-node:
     dependencies:
       '@tma.js/toolkit':
@@ -115,8 +152,8 @@ importers:
         specifier: workspace:^
         version: link:../types
       error-kid:
-        specifier: ^0.0.7
-        version: 0.0.7
+        specifier: ^1.0.2
+        version: 1.0.2
       fp-ts:
         specifier: ^2.16.11
         version: 2.16.11
@@ -171,7 +208,7 @@ importers:
         specifier: ^2.16.11
         version: 2.16.11
       valibot:
-        specifier: 1.1.0
+        specifier: ^1.1.0
         version: 1.1.0(typescript@5.8.2)
     devDependencies:
       test-utils:
@@ -1900,6 +1937,9 @@ packages:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
     engines: {node: '>=4'}
 
+  better-promises@1.0.0:
+    resolution: {integrity: sha512-gPgL2nRgeSbMIe3QpsYdKR3K0S9OZuphVuos60Eqsw8d/6GivOkyJ5D/zmnolJ6hzh7upnnflBUWUlQh4qpU2A==}
+
   birpc@0.2.19:
     resolution: {integrity: sha512-5WeXXAvTmitV1RqJFppT5QtUiz2p1mRSYU000Jkft5ZUCLJIk4uQriYNO50HknxKwM6jd8utNc66K1qGIwwWBQ==}
 
@@ -2229,8 +2269,8 @@ packages:
   error-ex@1.3.2:
     resolution: {integrity: sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==}
 
-  error-kid@0.0.7:
-    resolution: {integrity: sha512-8mFs7ZaDWlBFgjOy4lHLMCe2+KZfZXGx5GOgh2VQ/M1CCIvSWzbl2OMl+5fdZgrgoUfhTeF+NPhmqfEvUhN8yw==}
+  error-kid@1.0.2:
+    resolution: {integrity: sha512-Xvq0ZrY/azCbREWKt9E/3mXDF0MkuEVVvHnOKutUhtq2O8pyneEixQ4nSFkA19Xfn+/OVSg//iVG0dxIDj7DIA==}
 
   es-module-lexer@1.7.0:
     resolution: {integrity: sha512-jEQoCwk8hyb2AZziIOLhDqpm5+2ww5uIE6lkO/6jcOCusfk6LhMHpXXfBLXTZ7Ydyt0j4VoUQv6uGNYbdW+kBA==}
@@ -5953,6 +5993,10 @@ snapshots:
     dependencies:
       is-windows: 1.0.2
 
+  better-promises@1.0.0:
+    dependencies:
+      error-kid: 1.0.2
+
   birpc@0.2.19: {}
 
   bl@4.1.0:
@@ -6289,7 +6333,7 @@ snapshots:
       is-arrayish: 0.2.1
     optional: true
 
-  error-kid@0.0.7: {}
+  error-kid@1.0.2: {}
 
   es-module-lexer@1.7.0: {}
 
