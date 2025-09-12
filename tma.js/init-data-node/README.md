@@ -4,9 +4,9 @@
 
 [docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
 
-[code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/packages/init-data-node
+[code-link]: https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/tma.js/init-data-node
 
-[docs-link]: https://docs.telegram-mini-apps.com/packages/tma.js-init-data-node
+[docs-link]: https://docs.telegram-mini-apps.com/packages/tma-js-init-data-node
 
 [npm-link]: https://npmjs.com/package/@tma.js/init-data-node
 

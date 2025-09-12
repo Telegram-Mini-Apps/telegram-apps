@@ -34,14 +34,28 @@ export const packagesLinksGenerator = (prefix: string = '') => {
 
   const packagesSidebar: Sidebar = {
     [BASE]: [
-      section('CLI', {
+      section('TypeScript', {
+        '@tma.js/signals': 'tma-js-signals',
+        '@tma.js/bridge': ['tma-js-bridge', {
+          'Methods': 'methods',
+          'Events': 'events',
+          'Launch Parameters': 'launch-parameters',
+          'Environment': 'environment',
+          'Globals': 'globals',
+          'Advanced': 'advanced',
+          'Non-throwing functions': 'non-throwing-functions',
+          'Migrate from telegram-apps': 'migrate-from-telegram-apps',
+        }],
+      }),
+      section('Node', { '@tma.js/init-data-node': 'tma-js-init-data-node' }),
+      section('GoLang', { 'init-data-golang': 'init-data-golang' }),
+      section('CLI (docs to be removed in 2026)', {
         '@telegram-apps/create-mini-app': 'telegram-apps-create-mini-app',
         '@telegram-apps/mate': ['telegram-apps-mate', {
           'Hosting': 'hosting',
         }],
       }),
-      section('TypeScript', {
-        '@telegram-apps/signals': 'telegram-apps-signals',
+      section('TypeScript (deprecated, docs to be removed in 2026)', {
         '@telegram-apps/bridge': ['telegram-apps-bridge', {
           '@2.x': ['2-x', {
             'Methods': 'methods',
@@ -58,6 +72,7 @@ export const packagesLinksGenerator = (prefix: string = '') => {
           'Launch Parameters': 'launch-parameters',
           'Globals': 'globals',
         }],
+        '@telegram-apps/signals': 'telegram-apps-signals',
         '@telegram-apps/sdk': [{ url: 'telegram-apps-sdk', page: false }, {
           '@1.x': ['1-x', {
             'Components': ['components', {
@@ -186,13 +201,10 @@ export const packagesLinksGenerator = (prefix: string = '') => {
         '@telegram-apps/solid-router-integration': '/telegram-apps-solid-router-integration',
         '@telegram-apps/react-router-integration': '/telegram-apps-react-router-integration',
       }),
-      section('Node', {
+      section('Node (deprecated, docs to be removed in 2026)', {
         '@telegram-apps/init-data-node': [{ url: 'telegram-apps-init-data-node' }, {
           '@2.x': '2-x',
         }],
-      }),
-      section('GoLang', {
-        'init-data-golang': 'init-data-golang',
       }),
     ],
   };

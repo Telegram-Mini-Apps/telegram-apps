@@ -25,7 +25,7 @@ export class LaunchParamsRetrieveError extends errorClassWithData<
     [
       'Unable to retrieve launch parameters from any known source. Perhaps, you have opened your app outside Telegram?',
       '📖 Refer to docs for more information:',
-      'https://docs.telegram-mini-apps.com/packages/telegram-apps-bridge/environment',
+      'https://docs.telegram-mini-apps.com/packages/tma-js-bridge/environment',
       '',
       'Collected errors:',
       ...errors.map(({ source, error }) => {
