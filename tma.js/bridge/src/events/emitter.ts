@@ -80,7 +80,7 @@ function windowMessageListener(event: MessageEvent): void {
       [
         `An error occurred processing the "${eventType}" event from the Telegram application.`,
         'Please, file an issue here:',
-        'https://github.com/Telegram-Mini-Apps/tma.js/issues/new/choose',
+        'https://github.com/Telegram-Mini-Apps/telegram-apps/issues/new/choose',
       ].join('\n'),
       message,
       cause,

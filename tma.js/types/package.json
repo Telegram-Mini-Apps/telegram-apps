@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "Telegram Mini Apps related TypeScript types.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
-  "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
+  "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Telegram-Mini-Apps/tma.js.git",
-    "directory": "packages/types"
+    "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
+    "directory": "tma.js/types"
   },
   "bugs": {
-    "url": "https://github.com/Telegram-Mini-Apps/tma.js/issues"
+    "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
   },
   "keywords": [
     "telegram-mini-apps",
