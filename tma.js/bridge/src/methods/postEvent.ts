@@ -1,5 +1,5 @@
 import { pipe } from 'fp-ts/function';
-import * as O from 'fp-ts/Option';
+import * as E from 'fp-ts/Either';
 import { function as fn, is, looseObject } from 'valibot';
 
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
@@ -49,7 +49,7 @@ export function postEvent(
       eventType,
       eventData,
     ),
-    O.chain(err => {
+    E.mapLeft(err => {
       throw err;
     }),
   );
@@ -63,13 +63,13 @@ export function postEvent(
 export function postEventFp<Method extends MethodNameWithRequiredParams>(
   method: Method,
   params: MethodParams<Method>,
-): O.Option<PostEventError>;
+): E.Either<PostEventError, void>;
 
 /**
  * Calls Mini Apps methods accepting no parameters at all.
  * @param method - method name.
  */
-export function postEventFp(method: MethodNameWithoutParams): O.Option<PostEventError>;
+export function postEventFp(method: MethodNameWithoutParams): E.Either<PostEventError, void>;
 
 /**
  * Calls Mini Apps methods accepting optional parameters.
@@ -79,12 +79,12 @@ export function postEventFp(method: MethodNameWithoutParams): O.Option<PostEvent
 export function postEventFp<Method extends MethodNameWithOptionalParams>(
   method: Method,
   params?: MethodParams<Method>,
-): O.Option<PostEventError>;
+): E.Either<PostEventError, void>;
 
 export function postEventFp(
   eventType: MethodName,
   eventData?: MethodParams<MethodName>,
-): O.Option<PostEventError> {
+): E.Either<PostEventError, void> {
   logger().log('Posting event:', eventData ? { eventType, eventData } : { eventType });
 
   const w = window;
@@ -93,21 +93,21 @@ export function postEventFp(
   // Telegram Web.
   if (isIframe()) {
     postMessage(message, targetOrigin());
-    return O.none;
+    return E.right(undefined);
   }
 
   // Telegram for iOS, macOS, Android and Telegram Desktop.
   if (hasWebviewProxy(w)) {
     w.TelegramWebviewProxy.postEvent(eventType, JSON.stringify(eventData));
-    return O.none;
+    return E.right(undefined);
   }
 
   // Telegram for Windows Phone or Android.
   if (is(looseObject({ external: looseObject({ notify: fn() }) }), w)) {
     w.external.notify(message);
-    return O.none;
+    return E.right(undefined);
   }
 
   // Otherwise, the current environment is unknown, and we are not able to send event.
-  return O.some(new UnknownEnvError());
+  return E.left(new UnknownEnvError());
 }

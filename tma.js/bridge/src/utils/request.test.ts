@@ -12,7 +12,7 @@ import {
 import { TimeoutError } from 'better-promises';
 import { pipe } from 'fp-ts/function';
 import * as TE from 'fp-ts/TaskEither';
-import * as O from 'fp-ts/Option';
+import * as E from 'fp-ts/Either';
 
 import { resetGlobals } from '@/globals.js';
 import { postEventFp as globalPostEventFp } from '@/methods/postEvent.js';
@@ -256,7 +256,7 @@ describe('requestFp', () => {
 
     describe('postEvent', () => {
       it('should use specified postEvent property', async () => {
-        const postEvent = vi.fn(() => O.none);
+        const postEvent = vi.fn(() => E.right(undefined));
         const result = requestFp('web_app_request_phone', 'phone_requested', { postEvent });
         emitEvent('phone_requested', { status: 'allowed' });
         await result();
@@ -277,7 +277,7 @@ describe('requestFp', () => {
 
       it('should reject promise if postEvent threw an error', async () => {
         const result = requestFp('web_app_request_phone', 'phone_requested', {
-          postEvent: () => O.some(new Error('Nope!')),
+          postEvent: () => E.left(new Error('Nope!')),
         });
 
         await pipe(

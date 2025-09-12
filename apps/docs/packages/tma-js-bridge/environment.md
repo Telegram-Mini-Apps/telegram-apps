@@ -54,24 +54,21 @@ if (await isTMA('complete', { timeout: 50 })) {
 }
 ```
 
-You can also use a [non-throwing alternative](./non-throwing-functions.md) - `isTMAFp`:
+You can also use a [functional alternative](functional-approach.md) - `isTMAFp`:
 
 ```typescript
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 import { isTMAFp } from '@tma.js/bridge';
 
-await pipe(
-  isTMAFp('complete'),
-  TE.match(
-    error => {
-      // Something went wrong.
-    },
-    isTMA => {
-      // Check is done, use the argument.
-    }
-  )
-)();
+pipe(isTMAFp('complete'), TE.match(
+  error => {
+    // Something went wrong.
+  },
+  isTMA => {
+    // Check is done, use the argument.
+  }
+));
 ```
 
 ## Mocking Environment

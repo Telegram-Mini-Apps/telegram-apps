@@ -56,9 +56,10 @@ The reason is using something else rather than this function, there is no guaran
 data will not become malformed. This is the only function which guarantees that the returned
 value will be returned unmodified, as it was passed by the Telegram client.
 
-## Non-throwing Alternatives
+## Functional Approach
 
-The package provides [non-throwing alternatives](./non-throwing-functions.md) for the following functions:
+The package provides [functional alternatives](functional-approach.md) for the following functions:
+
 - `retrieveLaunchParams` -> `retrieveLaunchParamsFp`
 - `retrieveRawLaunchParams` -> `retrieveRawLaunchParamsFp`
 - `retrieveRawInitData` -> `retrieveRawInitDataFp`
@@ -70,15 +71,12 @@ import * as E from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 import { retrieveLaunchParamsFp } from '@tma.js/bridge';
 
-pipe(
-  retrieveLaunchParamsFp(),
-  E.match(
-    error => {
-      // ...
-    },
-    launchParams => {
-      // ...
-    },
-  ),
-);
+pipe(retrieveLaunchParamsFp(), E.match(
+  error => {
+    // ...
+  },
+  launchParams => {
+    // ...
+  },
+));
 ```

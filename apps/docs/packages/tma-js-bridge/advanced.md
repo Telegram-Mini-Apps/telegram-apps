@@ -130,9 +130,9 @@ the function will capture the event only if it has the expected slug, specific f
 When passing an array of events, the `capture` function will receive an object with
 the `event: EventName` and `payload?: EventPayload` properties.
 
-### Non-throwing Alternative
+### Functional Approach
 
-This function supports a [non-throwing alternative](./non-throwing-functions.md) - `requestFp`:
+This function supports a [functional alternative](functional-approach.md) - `requestFp`:
 
 ```typescript
 import { requestFp } from '@tma.js/bridge';
@@ -206,9 +206,9 @@ Unlike the `request` function, the `invokeCustomMethod` function parses the resu
 contains the `error` property. If it does, the function throws the corresponding error; otherwise,
 the `result` property is returned.
 
-### Non-throwing Alternative
+### Functional Approach
 
-This function supports a [non-throwing alternative](./non-throwing-functions.md) - `invokeCustomMethodFp`:
+This function supports a [functional alternative](functional-approach.md) - `invokeCustomMethodFp`:
 
 ```typescript
 import { invokeCustomMethodFp } from '@tma.js/bridge';

@@ -17,7 +17,7 @@ Mini Apps platform.
 
 [//]: # (While a developer can use this package alone, it's recommended to use a higher-level package)
 
-[//]: # (like [@tma.js/sdk]&#40;tma.js-sdk/2-x&#41;.)
+[//]: # (like [@tma.js/sdk]&#40;./tma-js-sdk&#41;.)
 
 ## Installation
 

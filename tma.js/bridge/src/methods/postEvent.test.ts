@@ -6,7 +6,7 @@ import {
   beforeEach,
 } from 'vitest';
 import { createWindow } from 'test-utils';
-import * as O from 'fp-ts/Option';
+import * as E from 'fp-ts/Either';
 
 import { resetGlobals, setTargetOrigin } from '@/globals.js';
 import { UnknownEnvError } from '@/errors.js';
@@ -238,7 +238,7 @@ describe('postEventFp', () => {
   describe('env: unknown', () => {
     it('should throw', () => {
       createWindow();
-      expect(postEventFp('web_app_close')).toStrictEqual(O.some(new UnknownEnvError()));
+      expect(postEventFp('web_app_close')).toStrictEqual(E.left(new UnknownEnvError()));
     });
   });
 

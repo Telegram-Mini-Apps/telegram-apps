@@ -96,25 +96,21 @@ postEvent('web_app_read_text_from_clipboard');
 postEvent('web_app_request_phone');
 ```
 
-## Non-throwing Alternative - `postEventFp`
+## Functional Approach
 
 ```typescript
-import * as O from 'fp-ts/Option';
 import * as E from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 import { postEventFp, retrieveLaunchParamsFp } from '@tma.js/bridge';
 
-pipe(
-  postEventFp('web_app_expand'),
-  O.match(
-    () => {
-      // Everything is ok.
-    },
-    error => {
-      // error will be typed here, you will know exactly what is wrong.
-    },
-  ),
-);
+pipe(postEventFp('web_app_expand'), E.match(
+  error => {
+    // error will be typed here, you will know exactly what is wrong.
+  },
+  () => {
+    // Everything is ok.
+  },
+));
 ```
 
--> [Learn more about non-throwing functions](./non-throwing-functions.md)
+-> [Learn more about functional approach](functional-approach.md)

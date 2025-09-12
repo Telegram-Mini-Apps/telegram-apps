@@ -5,7 +5,7 @@ import {
   type CancelledError,
 } from 'better-promises';
 import { createCbCollector, type If, type IsNever } from '@tma.js/toolkit';
-import * as O from 'fp-ts/Option';
+import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 
@@ -176,9 +176,9 @@ export function requestFp<M extends MethodName, E extends AnyEventName>(
 
   return pipe(
     postEvent(method as any, (options as any).params),
-    O.match(
+    E.match(
+      error => TE.left(error),
       () => TE.tryCatch(() => promise, e => e),
-      e => TE.left(e),
     ),
   );
 }
@@ -227,9 +227,9 @@ export function request<M extends MethodName, E extends AnyEventName>(
             try {
               // @ts-expect-error TypeScript will not be able to handle our overrides here.
               postEvent(...args);
-              return O.none;
+              return E.right(undefined);
             } catch (e) {
-              return O.some(e);
+              return E.left(e);
             }
           }
           : postEventFp,
