@@ -1,8 +1,11 @@
 import * as E from 'fp-ts/Either';
-import { pipe } from 'fp-ts/lib/function.js';
-import * as O from 'fp-ts/Option';
 import * as TE from 'fp-ts/TaskEither';
-import * as TO from 'fp-ts/TaskOption';
+import { pipe } from 'fp-ts/function';
+import {
+  BetterPromise,
+  type BetterPromiseOptions,
+  type BetterPromiseRejectReason,
+} from 'better-promises';
 
 import {
   AuthDateInvalidError,
@@ -12,31 +15,23 @@ import {
 } from './errors.js';
 import { Text } from './types.js';
 
-export interface Validate3rdOptions {
-  /**
-   * Time in seconds which states, how long from creation time init data is considered valid.
-   *
-   * In other words, in case when authDate + expiresIn is before current time, init data is
-   * recognized as expired.
-   *
-   * In case this value is equal to 0, the function does not check init data expiration.
-   * @default 86400 (1 day)
-   */
-  expiresIn?: number;
-  /**
-   * When true, uses the test environment public key to validate init data.
-   * @default false
-   */
-  test?: boolean;
-}
+type OmittedPromiseOptions = Omit<BetterPromiseOptions, 'abortOnResolve' | 'abortOnReject'>;
 
-export type Validate3rdError =
-  | InstanceType<typeof SignatureMissingError>
-  | InstanceType<typeof SignatureInvalidError>
-  | InstanceType<typeof AuthDateInvalidError>
-  | InstanceType<typeof ExpiredError>;
-
+export type ValidateValue = string | URLSearchParams;
 export type Validate3rdValue = string | URLSearchParams;
+
+export type ValidateError =
+  | SignatureMissingError
+  | SignatureInvalidError
+  | AuthDateInvalidError
+  | ExpiredError;
+export type ValidateAsyncError = ValidateError | BetterPromiseRejectReason;
+export type Validate3rdError =
+  | SignatureMissingError
+  | SignatureInvalidError
+  | AuthDateInvalidError
+  | ExpiredError
+  | BetterPromiseRejectReason;
 
 interface ValidateSignDataFpArg<Async extends boolean, Left> {
   (data: Text, key: Text, options?: ValidateOptions): Async extends true
@@ -44,7 +39,7 @@ interface ValidateSignDataFpArg<Async extends boolean, Left> {
     : E.Either<Left, string>;
 }
 
-export interface ValidateOptions {
+interface SharedValidateOptions {
   /**
    * Time in seconds which states, how long from creation time init data is considered valid.
    *
@@ -55,6 +50,9 @@ export interface ValidateOptions {
    * @default 86400 (1 day)
    */
   expiresIn?: number;
+}
+
+export interface ValidateOptions extends SharedValidateOptions {
   /**
    * True, if token is already hashed.
    * @default false
@@ -62,32 +60,15 @@ export interface ValidateOptions {
   tokenHashed?: boolean;
 }
 
-export type ValidateValue = string | URLSearchParams;
+export interface ValidateAsyncOptions extends ValidateOptions, OmittedPromiseOptions {
+}
 
-export type ValidateError =
-  | InstanceType<typeof SignatureMissingError>
-  | InstanceType<typeof SignatureInvalidError>
-  | InstanceType<typeof AuthDateInvalidError>
-  | InstanceType<typeof ExpiredError>;
-
-/**
- * Validates passed init data using a publicly known Ee25519 key.
- * @param value - value to check.
- * @param botId - bot identifier
- * @param options - additional validation options.
- * @throws {SignatureInvalidError} Signature is invalid.
- * @throws {AuthDateInvalidError} "auth_date" property is missing or invalid.
- * @throws {SignatureMissingError} "hash" property is missing.
- * @throws {ExpiredError} Init data is expired.
- */
-export function validate3rd(
-  value: Validate3rdValue,
-  botId: number,
-  options?: Validate3rdOptions,
-): Promise<void> {
-  return pipe(validate3rdFp(value, botId, options), TO.match(() => undefined, err => {
-    throw err;
-  }))();
+export interface Validate3rdOptions extends SharedValidateOptions, OmittedPromiseOptions {
+  /**
+   * When true, uses the test environment public key to validate init data.
+   * @default false
+   */
+  test?: boolean;
 }
 
 /**
@@ -100,7 +81,7 @@ export function validate3rdFp(
   value: Validate3rdValue,
   botId: number,
   options: Validate3rdOptions = {},
-): TO.TaskOption<Validate3rdError> {
+): TE.TaskEither<Validate3rdError, void> {
   // Init data required params.
   let authDate: Date | undefined;
   let authDateString: string | undefined;
@@ -132,11 +113,11 @@ export function validate3rdFp(
 
   // Signature and auth date always required.
   if (!signature) {
-    return TO.some(new SignatureMissingError(true));
+    return TE.left(new SignatureMissingError(true));
   }
 
   if (!authDate) {
-    return TO.some(new AuthDateInvalidError(authDateString));
+    return TE.left(new AuthDateInvalidError(authDateString));
   }
 
   // In case, expiration time passed, we do additional parameters check.
@@ -146,45 +127,58 @@ export function validate3rdFp(
     const expiresAtTs = authDate.getTime() + (expiresIn * 1000);
     const nowTs = Date.now();
     if (expiresAtTs < nowTs) {
-      return TO.some(new ExpiredError(authDate, new Date(expiresAtTs), new Date(nowTs)));
+      return TE.left(new ExpiredError(authDate, new Date(expiresAtTs), new Date(nowTs)));
     }
   }
 
   return pipe(
-    TO.tryCatch(async () => crypto.subtle.verify(
-      'Ed25519',
-      await crypto.subtle.importKey(
-        'raw',
-        Buffer.from(
-          options.test
-            ? '40055058a4ee38156a06562e52eece92a771bcd8346a8c4615cb7376eddf72ec'
-            : 'e7bf03a2fa4602af4580703d88dda5bb59f32ed8b02a56c187fe7d34caed242d',
-          'hex',
-        ),
-        'Ed25519',
-        false,
-        ['verify'],
-      ),
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      Buffer.from(signature as string, 'base64'),
-      Buffer.from(`${botId}:WebAppData\n${pairs.sort().join('\n')}`),
-    )),
-    TO.chain(isVerified => (isVerified ? TO.none : TO.some(new SignatureInvalidError()))),
+    TE.tryCatch(
+      () => {
+        return BetterPromise.fn(async () => {
+          return crypto.subtle.verify(
+            'Ed25519',
+            await crypto.subtle.importKey(
+              'raw',
+              Buffer.from(
+                options.test
+                  ? '40055058a4ee38156a06562e52eece92a771bcd8346a8c4615cb7376eddf72ec'
+                  : 'e7bf03a2fa4602af4580703d88dda5bb59f32ed8b02a56c187fe7d34caed242d',
+                'hex',
+              ),
+              'Ed25519',
+              false,
+              ['verify'],
+            ),
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            Buffer.from(signature as string, 'base64'),
+            Buffer.from(`${botId}:WebAppData\n${pairs.sort().join('\n')}`),
+          );
+        }, options);
+      },
+      (e: unknown) => e,
+    ),
+    TE.chainW(isVerified => {
+      return isVerified ? TE.right(undefined) : TE.left(new SignatureInvalidError());
+    }),
   );
 }
 
 /**
- * @param value - value to check.
- * @param botId - bot identifier
- * @param options - additional validation options.
- * @returns True is specified init data is signed by Telegram.
+ * @see validate3rdFp
  */
-export function isValid3rd(
+export function validate3rd(
   value: Validate3rdValue,
   botId: number,
   options?: Validate3rdOptions,
-): Promise<boolean> {
-  return pipe(isValid3rdFp(value, botId, options), TO.match(() => false, v => v))();
+): BetterPromise<void> {
+  return BetterPromise.fn(async () => {
+    await pipe(
+      validate3rdFp(value, botId, options),
+      TE.mapLeft(error => {
+        throw error;
+      }),
+    )();
+  });
 }
 
 /**
@@ -197,11 +191,25 @@ export function isValid3rdFp(
   value: Validate3rdValue,
   botId: number,
   options?: Validate3rdOptions,
-): TO.TaskOption<boolean> {
-  return pipe(validate3rdFp(value, botId, options), TO.match(
-    () => O.some(true),
-    () => O.some(false),
+): TE.TaskEither<void, boolean> {
+  return pipe(validate3rdFp(value, botId, options), TE.match(
+    () => E.right(false),
+    () => E.right(true),
   ));
+}
+
+/**
+ * @see isValid3rdFp
+ */
+export function isValid3rd(
+  value: Validate3rdValue,
+  botId: number,
+  options?: Validate3rdOptions,
+): BetterPromise<boolean> {
+  return BetterPromise.fn(() => pipe(
+    isValid3rdFp(value, botId, options),
+    TE.match(() => false, v => v),
+  )());
 }
 
 export function validateFp<Left>(
@@ -210,25 +218,25 @@ export function validateFp<Left>(
   token: Text,
   signData: ValidateSignDataFpArg<false, Left>,
   options?: ValidateOptions,
-): O.Option<Left | ValidateError>;
+): E.Either<Left | ValidateError, void>;
 
 export function validateFp<Left>(
   async: true,
   value: ValidateValue,
   token: Text,
   signData: ValidateSignDataFpArg<true, Left>,
-  options?: ValidateOptions,
-): TO.TaskOption<Left | ValidateError>;
+  options?: ValidateAsyncOptions,
+): TE.TaskEither<Left | ValidateAsyncError, void>;
 
 export function validateFp<Left>(
   async: boolean,
   value: ValidateValue,
   token: Text,
   signData: ValidateSignDataFpArg<boolean, Left>,
-  options: ValidateOptions = {},
+  options: ValidateOptions | ValidateAsyncOptions = {},
 ):
-  | TO.TaskOption<Left | ValidateError>
-  | O.Option<Left | ValidateError> {
+  | E.Either<Left | ValidateError, void>
+  | TE.TaskEither<Left | ValidateAsyncError, void> {
   // Init data required params.
   let authDate: Date | undefined;
   let authDateString: string | undefined;
@@ -258,11 +266,11 @@ export function validateFp<Left>(
 
   // Hash and auth date always required.
   if (!hash) {
-    return (async ? TO.some : O.some)(new SignatureMissingError(false));
+    return (async ? TE.left : E.left)(new SignatureMissingError(false));
   }
 
   if (!authDate) {
-    return (async ? TO.some : O.some)(new AuthDateInvalidError(authDateString));
+    return (async ? TE.left : E.left)(new AuthDateInvalidError(authDateString));
   }
 
   // In case, expiration time passed, we do additional parameters check.
@@ -272,7 +280,7 @@ export function validateFp<Left>(
     const expiresAtTs = authDate.getTime() + (expiresIn * 1000);
     const nowTs = Date.now();
     if (expiresAtTs < nowTs) {
-      return (async ? TO.some : O.some)(
+      return (async ? TE.left : E.left)(
         new ExpiredError(authDate, new Date(expiresAtTs), new Date(nowTs)),
       );
     }
@@ -282,9 +290,9 @@ export function validateFp<Left>(
   pairs.sort();
 
   const eitherSignature = signData(pairs.join('\n'), token, options);
-  const onLeft = (e: Left) => O.some(e);
+  const onLeft = (error: Left) => E.left(error);
   const onRight = (signature: string) => (
-    signature === hash ? O.none : O.some(new SignatureInvalidError())
+    signature === hash ? E.right(undefined) : E.left(new SignatureInvalidError())
   );
 
   return typeof eitherSignature === 'function'

@@ -5,7 +5,7 @@ export {
   SignatureMissingError,
   ExpiredError,
 } from '../errors.js';
-export { parse, parseFp } from '../parsing.js';
+export { parse, parseFp, type ParseError } from '../parsing.js';
 export type { Text, CreateHmacFn } from '../types.js';
 export {
   isValid3rd,
@@ -18,6 +18,8 @@ export {
   type ValidateError,
   type ValidateOptions,
   type ValidateValue,
+  type ValidateAsyncOptions,
+  type ValidateAsyncError,
 } from '../validation.js';
 
 export type { Chat, ChatType, InitData, User } from '@tma.js/types';

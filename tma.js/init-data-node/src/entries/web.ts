@@ -1,5 +1,6 @@
+import { BetterPromise, type BetterPromiseRejectReason } from 'better-promises';
+import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
-import * as TO from 'fp-ts/TaskOption';
 import { pipe } from 'fp-ts/lib/function.js';
 
 import { hashToken as _hashToken } from '../hashToken.js';
@@ -12,10 +13,17 @@ import {
 import type { CreateHmacFn, Text } from '../types.js';
 import {
   validateFp as _validateFp,
-  type ValidateError,
-  type ValidateOptions,
   type ValidateValue,
+  type ValidateAsyncError,
+  type ValidateAsyncOptions,
 } from '../validation.js';
+import {
+  AuthDateInvalidError,
+  ExpiredError,
+  SignatureInvalidError,
+  SignatureMissingError,
+  HexStringLengthInvalidError,
+} from '../errors.js';
 
 const createHmac: CreateHmacFn<true> = async (data, key) => {
   const encoder = new TextEncoder();
@@ -47,37 +55,46 @@ export function hashToken(token: Text): Promise<ArrayBuffer> {
  * @param options - additional validation options.
  * @returns True is specified init data is valid.
  */
-export function isValid(
+export function isValidFp(
   value: ValidateValue,
   token: Text,
-  options?: ValidateOptions,
-): Promise<boolean> {
+  options?: ValidateAsyncOptions,
+): TE.TaskEither<BetterPromiseRejectReason, boolean> {
   return pipe(
     validateFp(value, token, options),
-    TO.match(() => true, () => false),
-  )();
+    TE.match(
+      error => {
+        return [
+          AuthDateInvalidError,
+          ExpiredError,
+          SignatureInvalidError,
+          SignatureMissingError,
+          HexStringLengthInvalidError,
+        ].some(errorClass => errorClass.is(error))
+          ? E.right(false)
+          : E.left(error);
+      },
+      () => E.right(true),
+    ),
+  );
 }
 
 /**
- * Signs specified init data.
- * @param data - init data to sign.
- * @param authDate - date, when this init data should be signed.
- * @param key - private key.
- * @param options - additional options.
- * @returns Signed init data presented as query parameters.
+ * @see isValidFp
  */
-export function sign(
-  data: SignableData,
-  key: Text,
-  authDate: Date,
-  options?: SignOptions,
-): Promise<string> {
-  return pipe(
-    signFp(data, key, authDate, options),
-    TE.match(e => {
-      throw e;
-    }, v => v),
-  )();
+export function isValid(
+  value: ValidateValue,
+  token: Text,
+  options?: ValidateAsyncOptions,
+): BetterPromise<boolean> {
+  return BetterPromise.fn(() => {
+    return pipe(
+      isValidFp(value, token, options),
+      TE.match(error => {
+        throw error;
+      }, isValid => isValid),
+    )();
+  });
 }
 
 /**
@@ -98,19 +115,22 @@ export function signFp(
 }
 
 /**
- * Signs specified data with the passed token.
- * @param data - data to sign.
- * @param key - private key.
- * @param options - additional options.
- * @returns Data sign.
+ * @see signFp
  */
-export function signData(data: Text, key: Text, options?: SignDataOptions): Promise<string> {
-  return pipe(
-    signDataFp(data, key, options),
-    TE.match(e => {
-      throw e;
-    }, v => v),
-  )();
+export function sign(
+  data: SignableData,
+  key: Text,
+  authDate: Date,
+  options?: SignOptions,
+): BetterPromise<string> {
+  return BetterPromise.fn(() => {
+    return pipe(
+      signFp(data, key, authDate, options),
+      TE.match(e => {
+        throw e;
+      }, v => v),
+    )();
+  });
 }
 
 /**
@@ -129,26 +149,17 @@ export function signDataFp(
 }
 
 /**
- * Validates passed init data.
- * @param value - value to check.
- * @param token - bot secret token.
- * @param options - additional validation options.
- * @throws {SignatureInvalidError} Signature is invalid.
- * @throws {AuthDateInvalidError} "auth_date" property is missing or invalid.
- * @throws {SignatureMissingError} "hash" property is missing.
- * @throws {ExpiredError} Init data is expired.
+ * @see signDataFp
  */
-export function validate(
-  value: ValidateValue,
-  token: Text,
-  options?: ValidateOptions,
-): Promise<void> {
-  return pipe(
-    validateFp(value, token, options),
-    TO.match(() => undefined, e => {
-      throw e;
-    }),
-  )();
+export function signData(data: Text, key: Text, options?: SignDataOptions): BetterPromise<string> {
+  return BetterPromise.fn(() => {
+    return pipe(
+      signDataFp(data, key, options),
+      TE.match(e => {
+        throw e;
+      }, v => v),
+    )();
+  });
 }
 
 /**
@@ -160,9 +171,27 @@ export function validate(
 export function validateFp(
   value: ValidateValue,
   token: Text,
-  options?: ValidateOptions,
-): TO.TaskOption<ValidateError> {
+  options?: ValidateAsyncOptions,
+): TE.TaskEither<ValidateAsyncError, void> {
   return _validateFp(true, value, token, signDataFp, options);
+}
+
+/**
+ * @see validateFp
+ */
+export function validate(
+  value: ValidateValue,
+  token: Text,
+  options?: ValidateAsyncOptions,
+): BetterPromise<void> {
+  return BetterPromise.fn(async () => {
+    await pipe(
+      validateFp(value, token, options),
+      TE.mapLeft(error => {
+        throw error;
+      }),
+    )();
+  });
 }
 
 export * from './shared.js';

@@ -1,5 +1,4 @@
 import * as E from 'fp-ts/Either';
-import * as O from 'fp-ts/Option';
 import { pipe } from 'fp-ts/lib/function.js';
 import { createHmac as nodeCreateHmac } from 'node:crypto';
 
@@ -52,24 +51,7 @@ export function hashToken(token: Text): Buffer {
 export function isValid(value: ValidateValue, token: Text, options?: ValidateOptions): boolean {
   return pipe(
     validateFp(value, token, options),
-    O.match(() => true, () => false),
-  );
-}
-
-/**
- * Signs specified init data.
- * @param data - init data to sign.
- * @param authDate - date, when this init data should be signed.
- * @param key - private key.
- * @param options - additional options.
- * @returns Signed init data presented as query parameters.
- */
-export function sign(data: SignableData, key: Text, authDate: Date, options?: SignOptions): string {
-  return pipe(
-    signFp(data, key, authDate, options),
-    E.match(e => {
-      throw e;
-    }, v => v),
+    E.match(() => false, () => true),
   );
 }
 
@@ -91,15 +73,11 @@ export function signFp(
 }
 
 /**
- * Signs specified data with the passed token.
- * @param data - data to sign.
- * @param key - private key.
- * @param options - additional options.
- * @returns Data sign.
+ * @see signFp
  */
-export function signData(data: Text, key: Text, options?: SignDataOptions): string {
+export function sign(data: SignableData, key: Text, authDate: Date, options?: SignOptions): string {
   return pipe(
-    signDataFp(data, key, options),
+    signFp(data, key, authDate, options),
     E.match(e => {
       throw e;
     }, v => v),
@@ -122,26 +100,14 @@ export function signDataFp(
 }
 
 /**
- * Validates passed init data.
- * @param value - value to check.
- * @param token - bot secret token.
- * @param options - additional validation options.
- * @throws {TypeError} "auth_date" should present integer
- * @throws {SignatureInvalidError} Signature is invalid.
- * @throws {AuthDateInvalidError} "auth_date" property is missing or invalid.
- * @throws {SignatureMissingError} "hash" property is missing.
- * @throws {ExpiredError} Init data is expired.
+ * @see signDataFp
  */
-export function validate(
-  value: ValidateValue,
-  token: Text,
-  options?: ValidateOptions,
-): void {
+export function signData(data: Text, key: Text, options?: SignDataOptions): string {
   return pipe(
-    validateFp(value, token, options),
-    O.match(() => undefined, e => {
+    signDataFp(data, key, options),
+    E.match(e => {
       throw e;
-    }),
+    }, v => v),
   );
 }
 
@@ -155,8 +121,20 @@ export function validateFp(
   value: ValidateValue,
   token: Text,
   options?: ValidateOptions,
-): O.Option<ValidateError> {
+): E.Either<ValidateError, void> {
   return _validateFp(false, value, token, signDataFp, options);
+}
+
+/**
+ * @see validateFp
+ */
+export function validate(value: ValidateValue, token: Text, options?: ValidateOptions): void {
+  pipe(
+    validateFp(value, token, options),
+    E.mapLeft(error => {
+      throw error;
+    }),
+  );
 }
 
 export * from './shared.js';
