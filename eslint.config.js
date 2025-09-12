@@ -149,7 +149,9 @@ export default tseslint.config(
       '@stylistic/space-in-parens': ['error', 'never'],
       '@stylistic/space-infix-ops': 'error',
       '@stylistic/space-unary-ops': ['error', { words: true, nonwords: false }],
-      '@stylistic/spaced-comment': ['error', 'always'],
+      '@stylistic/spaced-comment': ['error', 'always', {
+        markers: ['#region', '#endregion'], // Code wrapping.
+      }],
       '@stylistic/switch-colon-spacing': ['error', { before: false, after: true }],
       '@stylistic/template-curly-spacing': ['error', 'never'],
       '@stylistic/template-tag-spacing': ['error', 'never'],
