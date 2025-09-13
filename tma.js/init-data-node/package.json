@@ -1,0 +1,69 @@
+{
+  "name": "@tma.js/init-data-node",
+  "version": "2.0.0",
+  "description": "TypeScript Node library to operate with Telegram init data.",
+  "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
+  "homepage": "https://github.com/Telegram-Mini-Apps/telegram-apps#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
+    "directory": "tma.js/init-data-node"
+  },
+  "bugs": {
+    "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
+  },
+  "keywords": [
+    "telegram-mini-apps",
+    "init-data",
+    "node",
+    "typescript"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/entries/node.cjs",
+  "module": "./dist/entries/node.js",
+  "types": "./dist/entries/node.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/entries/node.d.ts",
+      "import": "./dist/entries/node.js",
+      "require": "./dist/entries/node.cjs",
+      "default": "./dist/entries/node.cjs"
+    },
+    "./web": {
+      "types": "./dist/entries/web.d.ts",
+      "import": "./dist/entries/web.js",
+      "require": "./dist/entries/web.cjs",
+      "default": "./dist/entries/web.cjs"
+    }
+  },
+  "scripts": {
+    "test": "vitest --run",
+    "lint": "cd ../.. && eslint packages/init-data-node/src --ignore-pattern **/*.test.ts",
+    "lint:fix": "pnpm run lint --fix",
+    "typecheck": "tsc --noEmit",
+    "build:node": "vite build --ssr src/entries/node.ts",
+    "build:web": "vite build --ssr src/entries/web.ts",
+    "build": "rimraf dist && pnpm run build:node && pnpm run build:web"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "test-utils": "workspace:*",
+    "tsconfig": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@tma.js/toolkit": "workspace:^",
+    "@tma.js/transformers": "workspace:^",
+    "@tma.js/types": "workspace:^",
+    "better-promises": "^1.0.0",
+    "error-kid": "^1.0.2",
+    "fp-ts": "^2.16.11"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "tsconfig/esnext-dom.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "vite.config.ts",
+    "package.json"
+  ]
+}
