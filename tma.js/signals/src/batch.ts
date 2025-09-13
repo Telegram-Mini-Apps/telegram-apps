@@ -3,7 +3,11 @@ import { Signal } from './signal.js';
 let callbacks: Map<Signal<any>, () => void> | undefined;
 
 export function runInBatchMode(signal: Signal<any>, fn: () => void): void {
-  callbacks && callbacks.set(signal, fn) || fn();
+  if (callbacks) {
+    callbacks.set(signal, fn);
+  } else {
+    fn();
+  }
 }
 
 /**

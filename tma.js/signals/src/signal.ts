@@ -107,7 +107,7 @@ export function signal<T>(
 
   let listeners: [
     listener: SubscribeListenerFn<T | undefined>,
-    options: Required<SubOptions>
+    options: Required<SubOptions>,
   ][] = [];
   let value: ReturnType<CurrentSignal> = initialValue;
 
