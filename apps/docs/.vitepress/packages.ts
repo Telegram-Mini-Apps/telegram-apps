@@ -47,11 +47,15 @@ export const packagesLinksGenerator = (prefix: string = '') => {
           'Migrating from telegram-apps': 'migrate-from-telegram-apps',
         }],
       }),
+      section('Node', {
+        '@tma.js/init-data-node': ['tma-js-init-data-node', {
+          'Parsing': 'parsing',
+          'Validating': 'validating',
+          'Signing': 'signing',
           'Non-throwing functions': 'non-throwing-functions',
-          'Migrate from telegram-apps': 'migrate-from-telegram-apps',
+          'Migrating from telegram-apps': 'migrate-from-telegram-apps',
         }],
       }),
-      section('Node', { '@tma.js/init-data-node': 'tma-js-init-data-node' }),
       section('GoLang', { 'init-data-golang': 'init-data-golang' }),
       section('CLI (docs to be removed in 2026)', {
         '@telegram-apps/create-mini-app': 'telegram-apps-create-mini-app',
