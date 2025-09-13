@@ -43,7 +43,7 @@
   },
   "scripts": {
     "test": "vitest --run",
-    "lint": "cd ../.. && eslint packages/init-data-node/src --ignore-pattern **/*.test.ts",
+    "lint": "cd ../.. && eslint tma.js/init-data-node/src --ignore-pattern **/*.test.ts",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit",
     "build:node": "vite build --ssr src/entries/node.ts",
