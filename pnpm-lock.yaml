@@ -458,6 +458,9 @@ importers:
       '@tma.js/types':
         specifier: workspace:^
         version: link:../types
+      better-promises:
+        specifier: ^1.0.0
+        version: 1.0.0
       error-kid:
         specifier: ^1.0.2
         version: 1.0.2
