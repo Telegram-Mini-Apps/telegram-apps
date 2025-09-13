@@ -35,7 +35,7 @@
   },
   "scripts": {
     "test": "vitest --run",
-    "lint": "cd ../.. && eslint packages/toolkit/src --ignore-pattern **/*.test.ts",
+    "lint": "cd ../.. && eslint tma.js/toolkit/src --ignore-pattern **/*.test.ts",
     "lint:fix": "pnpm run lint --fix",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "build": "vite build -c vite.config.ts"
