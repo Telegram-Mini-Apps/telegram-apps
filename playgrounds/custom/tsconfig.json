@@ -3,7 +3,7 @@
   "compilerOptions": {
     "paths": {
       "@/*": [
-        "../../packages/*/src/index.ts"
+        "../../tma.js/*/src/index.ts"
       ]
     }
   },
