@@ -52,7 +52,7 @@ export const packagesLinksGenerator = (prefix: string = '') => {
           'Parsing': 'parsing',
           'Validating': 'validating',
           'Signing': 'signing',
-          'Non-throwing functions': 'non-throwing-functions',
+          'Functional Approach': 'functional-approach',
           'Migrating from telegram-apps': 'migrate-from-telegram-apps',
         }],
       }),
