@@ -154,7 +154,7 @@ export interface WrapSafeOptions<Args extends any[]> {
   /**
    * A signal to retrieve the current Telegram Mini Apps version or the value itself.
    */
-  version: Version | (() => Version);
+  version?: Version | (() => Version);
 }
 
 /**
@@ -172,7 +172,7 @@ export function wrapSafe<Fn extends AnyFn, O extends WrapSafeOptions<Parameters<
   O extends { supports: Record<string, any> } ? keyof O['supports'] & string : never
 > {
   const version = () => (
-    typeof options.version === 'function' ? options.version() : options.version
+    (typeof options.version === 'function' ? options.version() : options.version) || '100'
   );
   const isTma = () => (
     typeof options.isTma === 'function' ? options.isTma() : options.isTma
