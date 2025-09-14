@@ -15,7 +15,6 @@ import type {
 export type BackButtonStorage = ComponentStorage<{ isVisible: boolean }>;
 
 export interface BackButtonOptions extends WithVersion,
-  WithPostEvent,
   WithStorage<BackButtonStorage>,
   WithPostEvent,
   SharedComponentOptions {
@@ -36,17 +35,17 @@ export class BackButton {
   private readonly _isMounted = signal(false);
 
   /**
-   * Signal indicating if the Back Button is currently visible.
+   * Signal indicating if the component is currently visible.
    */
   readonly isVisible = computed(this._isVisible);
 
   /**
-   * Signal indicating if the Back Button is currently mounted.
+   * Signal indicating if the component is currently mounted.
    */
   readonly isMounted = computed(this._isMounted);
 
   /**
-   * Signal indicating if the Back Button is supported.
+   * Signal indicating if the component is supported.
    */
   readonly isSupported: Computed<boolean>;
 
@@ -87,13 +86,13 @@ export class BackButton {
   }
 
   /**
-   * Mounts the Back Button restoring its state.
+   * Mounts the component restoring its state.
    * @since Mini Apps v6.1
    */
   mount: SafeWrapped<() => void, true>;
 
   /**
-   * Unmounts the Back Button.
+   * Unmounts the component.
    *
    * Note that this function does not remove listeners added via the `onClick`
    * function, so you have to remove them on your own.
@@ -104,39 +103,39 @@ export class BackButton {
   }
 
   /**
-   * Hides the Back Button.
+   * Hides the back button.
    * @since Mini Apps v6.1
    */
   hide: SafeWrapped<() => void, true>;
 
   /**
-   * Shows the Back Button.
+   * Shows the back button.
    * @since Mini Apps v6.1
    */
   show: SafeWrapped<() => void, true>;
 
   /**
-   * Adds a new Back Button listener.
+   * Adds a new back button listener.
    * @param listener - event listener.
    * @param once - should the listener be called only once.
    * @returns A function to remove bound listener.
    * @since Mini Apps v6.1
    * @example
    * const off = backButton.onClick(() => {
-   *   console.log('User clicked the Back Button');
+   *   console.log('User clicked the back button');
    *   off();
    * });
    */
   onClick: SafeWrapped<(listener: () => void, once?: boolean) => VoidFunction, true>;
 
   /**
-   * Removes the Back Button click listener.
+   * Removes the back button click listener.
    * @param listener - event listener.
    * @param once - should the listener be called only once.
    * @since Mini Apps v6.1
    * @example
    * function listener() {
-   *   console.log('User clicked the Back Button');
+   *   console.log('User clicked the back button');
    *   backButton.offClick(listener);
    * }
    * backButton.onClick(listener);

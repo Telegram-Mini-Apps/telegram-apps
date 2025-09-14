@@ -48,7 +48,7 @@ describe.each([
       try: tryCall,
       minVersion: MIN_VERSION,
       mount: requireMount
-        ? bb => bb.mount()
+        ? component => component.mount()
         : undefined,
     });
   });
@@ -59,25 +59,25 @@ describe.each([
   ['show', true, 'hide'],
 ] as const)('%s', (method, targetIsVisible, oppositeMethod) => {
   it(`should set isVisible = ${targetIsVisible}`, () => {
-    const bb = instantiate();
-    bb.mount();
-    bb[oppositeMethod]();
-    expect(bb.isVisible()).toBe(!targetIsVisible);
-    bb[method]();
-    expect(bb.isVisible()).toBe(targetIsVisible);
+    const component = instantiate();
+    component.mount();
+    component[oppositeMethod]();
+    expect(component.isVisible()).toBe(!targetIsVisible);
+    component[method]();
+    expect(component.isVisible()).toBe(targetIsVisible);
   });
 
   it(
     `should call postEvent with "web_app_setup_back_button" and { is_visible: ${targetIsVisible} }`,
     () => {
       const postEvent = vi.fn(() => E.right(undefined));
-      const bb = instantiate({ postEvent });
-      bb.mount();
-      bb[oppositeMethod]();
+      const component = instantiate({ postEvent });
+      component.mount();
+      component[oppositeMethod]();
       postEvent.mockClear();
-      bb[method]();
-      bb[method]();
-      bb[method]();
+      component[method]();
+      component[method]();
+      component[method]();
       expect(postEvent).toBeCalledTimes(1);
       expect(postEvent)
         .toBeCalledWith('web_app_setup_back_button', { is_visible: targetIsVisible });
@@ -86,13 +86,13 @@ describe.each([
 
   it('should save the state using passed storage', () => {
     const set = vi.fn();
-    const bb = instantiate({
+    const component = instantiate({
       storage: { get: () => undefined, set },
     });
-    bb.mount();
-    bb[oppositeMethod]();
+    component.mount();
+    component[oppositeMethod]();
     set.mockClear();
-    bb[method]();
+    component[method]();
     expect(set).toHaveBeenCalledOnce();
     expect(set).toHaveBeenCalledWith({ isVisible: targetIsVisible });
   });
@@ -127,9 +127,9 @@ describe('onClick', () => {
 describe('offClick', () => {
   it('should stop calling specified listener', () => {
     const spy = vi.fn();
-    const bb = instantiate();
-    bb.onClick(spy);
-    bb.offClick(spy);
+    const component = instantiate();
+    component.onClick(spy);
+    component.offClick(spy);
     emitEvent('back_button_pressed');
     expect(spy).not.toHaveBeenCalled();
   });
@@ -137,18 +137,18 @@ describe('offClick', () => {
 
 describe('mount', () => {
   it('should set isMunted = true', () => {
-    const bb = instantiate();
-    expect(bb.isMounted()).toBe(false);
-    bb.mount();
-    expect(bb.isMounted()).toBe(true);
+    const component = instantiate();
+    expect(component.isMounted()).toBe(false);
+    component.mount();
+    expect(component.isMounted()).toBe(true);
   });
 
   describe('no page reload', () => {
     it('should not use value from the storage', () => {
       const get = vi.fn(() => ({ isVisible: true }));
       const set = vi.fn();
-      const bb = instantiate({ storage: { get, set } });
-      bb.mount();
+      const component = instantiate({ storage: { get, set } });
+      component.mount();
       expect(get).not.toHaveBeenCalled();
       expect(set).toHaveBeenCalledOnce();
       expect(set).toHaveBeenCalledWith({ isVisible: false });
@@ -161,16 +161,16 @@ describe('mount', () => {
     it('should extract state from storage and save it again', () => {
       const get = vi.fn();
       const set = vi.fn();
-      const bb = instantiate({ storage: { get, set } });
-      bb.mount();
+      const component = instantiate({ storage: { get, set } });
+      component.mount();
       expect(get).toHaveBeenCalledOnce();
       expect(set).toHaveBeenCalledOnce();
       expect(set).toHaveBeenCalledWith({ isVisible: false });
 
       const get2 = vi.fn(() => ({ isVisible: true }));
       const set2 = vi.fn();
-      const bb2 = instantiate({ storage: { get: get2, set: set2 } });
-      bb2.mount();
+      const component2 = instantiate({ storage: { get: get2, set: set2 } });
+      component2.mount();
       expect(get2).toHaveBeenCalledOnce();
       expect(set2).toHaveBeenCalledOnce();
       expect(set2).toHaveBeenCalledWith({ isVisible: true });
@@ -180,12 +180,12 @@ describe('mount', () => {
 
 describe('unmount', () => {
   it('should set isMunted = false', () => {
-    const bb = instantiate();
-    expect(bb.isMounted()).toBe(false);
-    bb.mount();
-    expect(bb.isMounted()).toBe(true);
-    bb.unmount();
-    expect(bb.isMounted()).toBe(false);
+    const component = instantiate();
+    expect(component.isMounted()).toBe(false);
+    component.mount();
+    expect(component.isMounted()).toBe(true);
+    component.unmount();
+    expect(component.isMounted()).toBe(false);
   });
 });
 

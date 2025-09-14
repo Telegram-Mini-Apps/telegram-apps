@@ -12,8 +12,7 @@ import type {
 
 export type ClosingBehaviorStorage = ComponentStorage<{ isConfirmationEnabled: boolean }>;
 
-export interface ClosingBehaviorOptions extends WithPostEvent,
-  WithStorage<ClosingBehaviorStorage>,
+export interface ClosingBehaviorOptions extends WithStorage<ClosingBehaviorStorage>,
   WithPostEvent,
   SharedComponentOptions {
 }
@@ -35,7 +34,7 @@ export class ClosingBehavior {
   readonly isConfirmationEnabled = computed(this._isConfirmationEnabled);
 
   /**
-   * Signal indicating if the Closing Behavior is currently mounted.
+   * Signal indicating if the component is currently mounted.
    */
   readonly isMounted = computed(this._isMounted);
 
@@ -72,12 +71,12 @@ export class ClosingBehavior {
   }
 
   /**
-   * Mounts the Closing Behavior restoring its state.
+   * Mounts the component restoring its state.
    */
   mount: SafeWrapped<() => void, true>;
 
   /**
-   * Unmounts the Closing Behavior.
+   * Unmounts the component.
    */
   unmount() {
     this._isMounted.set(false);
