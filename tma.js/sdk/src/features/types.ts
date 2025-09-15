@@ -1,4 +1,4 @@
-import type { Version } from '@tma.js/types';
+import type { Version, InitData } from '@tma.js/types';
 import type {
   PostEventFpFn,
   InvokeCustomMethodError,
@@ -9,11 +9,13 @@ import type {
   RequestFpFn,
 } from '@tma.js/bridge';
 import type * as TE from 'fp-ts/TaskEither';
+import type * as E from 'fp-ts/Either';
+import type * as O from 'fp-ts/Option';
 
 import type { MaybeAccessor } from '@/types.js';
 import type { ComponentStorage } from '@/component-storage.js';
 
-export interface InvokeCustomMethodFpFnNoRequestId {
+export interface InvokeCustomMethodNoRequestIdFn {
   <M extends CustomMethodName>(
     this: void,
     method: M,
@@ -27,6 +29,10 @@ export interface InvokeCustomMethodFpFnNoRequestId {
     options?: InvokeCustomMethodFpOptions,
   ): TE.TaskEither<RequestError, unknown>;
 }
+
+export type RetrieveInitDataFn<E> = () => E.Either<E, InitData>;
+
+export type RetrieveRawInitDataFn<E> = () => E.Either<E, O.Option<string>>;
 
 export interface WithVersion {
   /**
@@ -42,8 +48,22 @@ export interface WithRequest {
   request: RequestFpFn;
 }
 
+export interface WithRetrieveInitData<E> {
+  /**
+   * Retrieves init data from the current environment.
+   */
+  retrieveInitData: RetrieveInitDataFn<E>;
+}
+
+export interface WithRetrieveRawInitData<E> {
+  /**
+   * Retrieves raw init data from the current environment.
+   */
+  retrieveRawInitData: RetrieveRawInitDataFn<E>;
+}
+
 export interface WithInvokeCustomMethod {
-  invokeCustomMethod: InvokeCustomMethodFpFnNoRequestId;
+  invokeCustomMethod: InvokeCustomMethodNoRequestIdFn;
 }
 
 export interface WithPostEvent {
