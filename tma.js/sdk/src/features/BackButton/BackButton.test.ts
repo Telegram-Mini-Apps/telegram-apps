@@ -136,7 +136,7 @@ describe('offClick', () => {
 });
 
 describe('mount', () => {
-  it('should set isMunted = true', () => {
+  it('should set isMounted = true', () => {
     const component = instantiate();
     expect(component.isMounted()).toBe(false);
     component.mount();
