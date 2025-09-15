@@ -79,8 +79,6 @@ export class Biometry {
 
   private readonly _isMounted = signal(false);
 
-  private isListenerBound = false;
-
   /**
    * Complete biometry state.
    */
@@ -112,15 +110,17 @@ export class Biometry {
       isMounted: this._isMounted,
     });
 
+    let isListenerBound = false;
+
     this.mount = wrapSupported(options => {
       if (this._isMounted()) {
         return BetterPromise.resolve();
       }
 
       const processResult = (state: BiometryState) => {
-        if (!this.isListenerBound) {
+        if (!isListenerBound) {
           on('biometry_info_received', this.onBiometryInfoReceived);
-          this.isListenerBound = true;
+          isListenerBound = true;
         }
         this.setState(state);
         this._isMounted.set(true);
@@ -290,7 +290,6 @@ export class Biometry {
 
   /**
    * Unmounts the component.
-   * @see onClick
    */
   unmount() {
     off('biometry_info_received', this.onBiometryInfoReceived);
