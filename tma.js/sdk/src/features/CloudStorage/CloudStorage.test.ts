@@ -5,7 +5,7 @@ import { BetterPromise } from 'better-promises';
 import { CloudStorage } from '@/features/CloudStorage/CloudStorage.js';
 import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
 import { testComponentMethodSafety } from '@test-utils/predefined/testComponentMethodSafety.js';
-import { InvokeCustomMethodFpFnNoRequestId } from '@/features/types.js';
+import { InvokeCustomMethodNoRequestIdFn } from '@/features/types.js';
 
 const MIN_VERSION = '6.9';
 
@@ -15,7 +15,7 @@ function instantiate({
   isTma = true,
 }: {
   version?: string;
-  invokeCustomMethod?: InvokeCustomMethodFpFnNoRequestId;
+  invokeCustomMethod?: InvokeCustomMethodNoRequestIdFn;
   isTma?: boolean;
 } = {}) {
   return new CloudStorage({ version, invokeCustomMethod, isTma });
