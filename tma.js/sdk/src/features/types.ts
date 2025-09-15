@@ -6,6 +6,7 @@ import type {
   RequestError,
   CustomMethodName,
   CustomMethodParams,
+  RequestFpFn,
 } from '@tma.js/bridge';
 import type * as TE from 'fp-ts/TaskEither';
 
@@ -32,6 +33,13 @@ export interface WithVersion {
    * The currently supported Telegram Mini Apps version by the Telegram client.
    */
   version: MaybeAccessor<Version>;
+}
+
+export interface WithRequest {
+  /**
+   * A request function to use to call Mini Apps methods.
+   */
+  request: RequestFpFn;
 }
 
 export interface WithInvokeCustomMethod {
