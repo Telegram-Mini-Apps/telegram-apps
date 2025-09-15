@@ -31,7 +31,7 @@ export function testComponentMethodSafety<C>({
   /**
    * Mounts the component.
    */
-  mount?: (component: C) => void;
+  mount?: (component: C) => void | Promise<void>;
   /**
    * Attempts to call component method.
    * @param component
@@ -86,16 +86,16 @@ export function testComponentMethodSafety<C>({
     if (hasMinVersion) {
       it(
         `should return true if mini apps env, version is ${versions.min} and component is mounted`,
-        () => {
+        async () => {
           const component = instantiate({ isTma: true, version: versions.min });
-          mount(component);
+          await mount(component);
           expect(get(component).isAvailable()).toBe(true);
         },
       );
     } else {
-      it('should return true if mini apps env and component is mounted', () => {
+      it('should return true if mini apps env and component is mounted', async () => {
         const component = instantiate({ isTma: true, version: versions.min });
-        mount(component);
+        await mount(component);
         expect(get(component).isAvailable()).toBe(true);
       });
     }
@@ -148,9 +148,9 @@ export function testComponentMethodSafety<C>({
             });
 
             describe('component is mounted', () => {
-              it('should not throw', () => {
+              it('should not throw', async () => {
                 const component = instantiate({ isTma: true, version: versions.min });
-                mount(component);
+                await mount(component);
                 expect(() => tryCall(component)).not.toThrow();
               });
             });
@@ -174,9 +174,9 @@ export function testComponentMethodSafety<C>({
       });
 
       describe('component is mounted', () => {
-        it('should not throw', () => {
+        it('should not throw', async () => {
           const component = instantiate({ isTma: true, version: versions.min });
-          mount(component);
+          await mount(component);
           expect(() => tryCall(component)).not.toThrow();
         });
       });
