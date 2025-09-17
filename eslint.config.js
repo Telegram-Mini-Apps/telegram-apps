@@ -72,7 +72,7 @@ export default tseslint.config(
       '@stylistic/lines-between-class-members': ['error', {
         enforce: [
           { blankLine: 'always', prev: '*', next: 'field' },
-          { blankLine: 'never', prev: 'field', next: 'field' },
+          { blankLine: 'always', prev: 'field', next: 'field' },
           { blankLine: 'always', prev: 'field', next: 'method' },
           { blankLine: 'always', prev: 'method', next: 'method' },
         ],
