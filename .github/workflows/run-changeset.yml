@@ -16,14 +16,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v5
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup node
         uses: actions/setup-node@v5
         with:
           node-version: 22
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+          cache: 'pnpm'
 
       - name: Rollup
         run: pnpm run ci:packages:rollup
