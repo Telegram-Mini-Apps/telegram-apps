@@ -43,7 +43,8 @@ export const retrieveLaunchParamsFp: () => E.Either<
 /**
  * @see retrieveLaunchParamsFp
  */
-export const retrieveLaunchParams = eitherFnToSimple(retrieveLaunchParamsFp);
+export const retrieveLaunchParams: () => RetrieveLaunchParamsResult =
+  eitherFnToSimple(retrieveLaunchParamsFp);
 
 /**
  * @returns Raw init data from any known source.
