@@ -3,8 +3,8 @@ import * as E from 'fp-ts/Either';
 import type { PostEventFpFn } from '@tma.js/bridge';
 import { mockPageReload } from 'test-utils';
 
-import { BackButton, type BackButtonStorage } from '@/features/BackButton/BackButton.js';
-import { createComponentSessionStorage } from '@/component-storage.js';
+import { BackButton, type BackButtonState } from '@/features/BackButton/BackButton.js';
+import { type ComponentStorage, createComponentSessionStorage } from '@/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
 import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
 import { testComponentMethodSafety } from '@test-utils/predefined/testComponentMethodSafety.js';
@@ -20,7 +20,7 @@ function instantiate({
   offClick = () => undefined,
 }: {
   version?: string;
-  storage?: boolean | BackButtonStorage;
+  storage?: boolean | ComponentStorage<BackButtonState>;
   postEvent?: PostEventFpFn;
   isTma?: boolean;
   onClick?: (listener: VoidFunction, once?: boolean) => VoidFunction;
