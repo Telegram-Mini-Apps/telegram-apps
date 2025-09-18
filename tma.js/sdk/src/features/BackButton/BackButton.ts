@@ -1,5 +1,4 @@
 import { computed, type Computed, signal } from '@tma.js/signals';
-import { type PostEventFpFn, on, off } from '@tma.js/bridge';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { isPageReload } from '@/navigation.js';
@@ -7,6 +6,7 @@ import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { ComponentStorage } from '@/component-storage.js';
 import type {
   SharedComponentOptions,
+  WithOnClickListener,
   WithPostEvent,
   WithStorage,
   WithVersion,
@@ -17,73 +17,64 @@ export type BackButtonStorage = ComponentStorage<{ isVisible: boolean }>;
 export interface BackButtonOptions extends WithVersion,
   WithStorage<BackButtonStorage>,
   WithPostEvent,
+  WithOnClickListener,
   SharedComponentOptions {
 }
-
-const SETUP_METHOD_NAME = 'web_app_setup_back_button';
 
 /**
  * @since Mini Apps v6.1
  */
 export class BackButton {
-  private readonly postEvent: PostEventFpFn;
+  constructor({ version, postEvent, storage, isTma, onClick, offClick }: BackButtonOptions) {
+    const isMounted = signal(false);
+    const isVisible = signal(false);
+    const wrapOptions = { version, isSupported: 'web_app_setup_back_button', isTma } as const;
+    const wrapSupported = createWrapSafe(wrapOptions);
+    const wrapComplete = createWrapSafe({ ...wrapOptions, isMounted });
 
-  private readonly storage: BackButtonStorage;
+    const setVisibility = (value: boolean): void => {
+      if (value !== isVisible()) {
+        postEvent('web_app_setup_back_button', { is_visible: value });
+        storage.set({ isVisible: value });
+        isVisible.set(value);
+      }
+    };
 
-  private readonly _isVisible = signal(false);
-
-  private readonly _isMounted = signal(false);
+    this.isSupported = createIsSupportedSignal('web_app_setup_back_button', version);
+    this.isVisible = computed(isVisible);
+    this.isMounted = computed(isMounted);
+    this.hide = wrapComplete(() => setVisibility(false));
+    this.show = wrapComplete(() => setVisibility(true));
+    this.onClick = wrapSupported(onClick);
+    this.offClick = wrapSupported(offClick);
+    this.mount = wrapSupported(() => {
+      if (!isMounted()) {
+        const state = isPageReload() ? storage.get() : undefined;
+        if (state) {
+          isVisible.set(state.isVisible);
+        }
+        isMounted.set(true);
+      }
+    });
+    this.unmount = () => {
+      isMounted.set(false);
+    };
+  }
 
   /**
    * Signal indicating if the component is currently visible.
    */
-  readonly isVisible = computed(this._isVisible);
+  readonly isVisible: Computed<boolean>;
 
   /**
    * Signal indicating if the component is currently mounted.
    */
-  readonly isMounted = computed(this._isMounted);
+  readonly isMounted: Computed<boolean>;
 
   /**
    * Signal indicating if the component is supported.
    */
   readonly isSupported: Computed<boolean>;
-
-  constructor({ version, postEvent, storage, isTma }: BackButtonOptions) {
-    this.isSupported = createIsSupportedSignal(SETUP_METHOD_NAME, version);
-    this.storage = storage;
-    this.postEvent = postEvent;
-
-    const wrapOptions = { version, isSupported: SETUP_METHOD_NAME, isTma } as const;
-    const wrapSupported = createWrapSafe(wrapOptions);
-    const wrapComplete = createWrapSafe({
-      ...wrapOptions,
-      isMounted: this._isMounted,
-    });
-
-    this.hide = wrapComplete(() => this.setVisibility(false));
-    this.show = wrapComplete(() => this.setVisibility(true));
-    this.onClick = wrapSupported((listener, once) => {
-      return on('back_button_pressed', listener, once);
-    });
-    this.offClick = wrapSupported((listener, once) => {
-      off('back_button_pressed', listener, once);
-    });
-    this.mount = wrapSupported(() => {
-      if (!this._isMounted()) {
-        this.storage.set((isPageReload() ? this.storage.get() : undefined) || { isVisible: false });
-        this._isMounted.set(true);
-      }
-    });
-  }
-
-  private setVisibility(isVisible: boolean): void {
-    if (isVisible !== this._isVisible()) {
-      this.postEvent(SETUP_METHOD_NAME, { is_visible: isVisible });
-      this.storage.set({ isVisible });
-      this._isVisible.set(isVisible);
-    }
-  }
 
   /**
    * Mounts the component restoring its state.
@@ -98,9 +89,7 @@ export class BackButton {
    * function, so you have to remove them on your own.
    * @see onClick
    */
-  unmount() {
-    this._isMounted.set(false);
-  }
+  unmount: () => void;
 
   /**
    * Hides the back button.

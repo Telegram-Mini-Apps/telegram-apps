@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as E from 'fp-ts/Either';
-import { type PostEventFpFn, emitEvent } from '@tma.js/bridge';
+import type { PostEventFpFn } from '@tma.js/bridge';
 import { mockPageReload } from 'test-utils';
 
 import { BackButton, type BackButtonStorage } from '@/features/BackButton/BackButton.js';
@@ -16,11 +16,15 @@ function instantiate({
   version = MIN_VERSION,
   postEvent = () => E.right(undefined),
   isTma = true,
+  onClick = () => () => undefined,
+  offClick = () => undefined,
 }: {
   version?: string;
   storage?: boolean | BackButtonStorage;
   postEvent?: PostEventFpFn;
   isTma?: boolean;
+  onClick?: (listener: VoidFunction, once?: boolean) => VoidFunction;
+  offClick?: (listener: VoidFunction, once?: boolean) => void;
 } = {}) {
   return new BackButton({
     version,
@@ -31,6 +35,8 @@ function instantiate({
       : storage,
     postEvent,
     isTma,
+    onClick,
+    offClick,
   });
 }
 
@@ -99,39 +105,23 @@ describe.each([
 });
 
 describe('onClick', () => {
-  it('should call specified listener if "back_button_pressed" event was emitted', () => {
-    const spy = vi.fn();
-    instantiate().onClick(spy);
-    emitEvent('back_button_pressed');
-    expect(spy).toHaveBeenCalledOnce();
-  });
-
-  it('should call specified listener once if second argument = true', () => {
-    const spy = vi.fn();
-    instantiate().onClick(spy, true);
-    emitEvent('back_button_pressed');
-    emitEvent('back_button_pressed');
-    emitEvent('back_button_pressed');
-    expect(spy).toHaveBeenCalledOnce();
-  });
-
-  it('should stop calling specified listener if returned function was called', () => {
-    const spy = vi.fn();
-    const offClick = instantiate().onClick(spy, true);
-    offClick();
-    emitEvent('back_button_pressed');
-    expect(spy).not.toHaveBeenCalled();
+  it('should return result of passed onClick from options', () => {
+    const offClick = () => undefined;
+    const onClick = vi.fn(() => offClick);
+    const listener = vi.fn();
+    expect(instantiate({ onClick }).onClick(listener, true)).toBe(offClick);
+    expect(onClick).toHaveBeenCalledOnce();
+    expect(onClick).toHaveBeenCalledWith(listener, true);
   });
 });
 
 describe('offClick', () => {
-  it('should stop calling specified listener', () => {
-    const spy = vi.fn();
-    const component = instantiate();
-    component.onClick(spy);
-    component.offClick(spy);
-    emitEvent('back_button_pressed');
-    expect(spy).not.toHaveBeenCalled();
+  it('should use passed offClick from options', () => {
+    const offClick = vi.fn(() => undefined);
+    const listener = vi.fn();
+    instantiate({ offClick }).offClick(listener, true);
+    expect(offClick).toHaveBeenCalledOnce();
+    expect(offClick).toHaveBeenCalledWith(listener, true);
   });
 });
 
@@ -146,34 +136,25 @@ describe('mount', () => {
   describe('no page reload', () => {
     it('should not use value from the storage', () => {
       const get = vi.fn(() => ({ isVisible: true }));
-      const set = vi.fn();
-      const component = instantiate({ storage: { get, set } });
+      const component = instantiate({ storage: { get, set: vi.fn() } });
       component.mount();
       expect(get).not.toHaveBeenCalled();
-      expect(set).toHaveBeenCalledOnce();
-      expect(set).toHaveBeenCalledWith({ isVisible: false });
     });
   });
 
   describe('page reload', () => {
     beforeEach(mockPageReload);
 
-    it('should extract state from storage and save it again', () => {
+    it('should extract state from storage', () => {
       const get = vi.fn();
-      const set = vi.fn();
-      const component = instantiate({ storage: { get, set } });
+      const component = instantiate({ storage: { get, set: vi.fn() } });
       component.mount();
       expect(get).toHaveBeenCalledOnce();
-      expect(set).toHaveBeenCalledOnce();
-      expect(set).toHaveBeenCalledWith({ isVisible: false });
 
       const get2 = vi.fn(() => ({ isVisible: true }));
-      const set2 = vi.fn();
-      const component2 = instantiate({ storage: { get: get2, set: set2 } });
+      const component2 = instantiate({ storage: { get: get2, set: vi.fn() } });
       component2.mount();
       expect(get2).toHaveBeenCalledOnce();
-      expect(set2).toHaveBeenCalledOnce();
-      expect(set2).toHaveBeenCalledWith({ isVisible: true });
     });
   });
 });
