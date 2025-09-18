@@ -19,7 +19,7 @@ export interface BackButtonOptions extends WithVersion,
  */
 export class BackButton {
   constructor({ postEvent, version, isTma, ...rest }: BackButtonOptions) {
-    this.buttonLike = new ButtonLike({
+    const buttonLike = new ButtonLike({
       ...rest,
       initialState: { isVisible: false },
       isTma,
@@ -32,24 +32,23 @@ export class BackButton {
     const wrapSupported = createWrapSafe(wrapOptions);
     const wrapComplete = createWrapSafe({
       ...wrapOptions,
-      isMounted: this.buttonLike.isMounted,
+      isMounted: buttonLike.isMounted,
     });
 
     const setVisibility = (isVisible: boolean): void => {
-      this.buttonLike.setState({ isVisible });
+      buttonLike.setState({ isVisible });
     };
 
-    this.isVisible = this.buttonLike.isVisible;
-    this.isMounted = this.buttonLike.isMounted;
+    this.isVisible = buttonLike.isVisible;
+    this.isMounted = buttonLike.isMounted;
     this.isSupported = createIsSupportedSignal('web_app_setup_back_button', version);
     this.hide = wrapComplete(() => setVisibility(false));
     this.show = wrapComplete(() => setVisibility(true));
-    this.onClick = wrapSupported(this.buttonLike.onClick);
-    this.offClick = wrapSupported(this.buttonLike.offClick);
-    this.mount = wrapSupported(this.buttonLike.mount);
+    this.onClick = wrapSupported(buttonLike.onClick);
+    this.offClick = wrapSupported(buttonLike.offClick);
+    this.mount = wrapSupported(buttonLike.mount);
+    this.unmount = buttonLike.unmount;
   }
-
-  private readonly buttonLike: ButtonLike<BackButtonState>;
 
   /**
    * Signal indicating if the component is currently visible.
@@ -125,7 +124,5 @@ export class BackButton {
    * function, so you have to remove them on your own.
    * @see onClick
    */
-  unmount() {
-    this.buttonLike.unmount();
-  }
+  readonly unmount: () => void;
 }
