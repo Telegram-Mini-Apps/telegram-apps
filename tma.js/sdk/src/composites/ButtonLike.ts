@@ -9,6 +9,7 @@ import type {
 } from '@/features/types.js';
 import { Mountable } from '@/composites/Mountable.js';
 import { Stateful } from '@/composites/Stateful.js';
+import { bound } from '@/helpers/bound.js';
 
 export interface ButtonLikeState {
   isVisible: boolean;
@@ -39,41 +40,31 @@ export class ButtonLike<S extends ButtonLikeState> {
   }: ButtonLikeOptions<S>) {
     const wrapSupported = createWrapSafe({ isTma });
 
-    this.stateful = new Stateful({
+    const stateful = new Stateful({
       initialState,
       onChange(state) {
         storage.set(state);
         onChange(state);
       },
     });
-    this.setState = this.stateful.setState.bind(this.stateful);
-    this.isVisible = this.stateful.computedFromState('isVisible');
-
-    this.mountable = new Mountable({
+    const mountable = new Mountable({
       onBeforeMounted: state => {
         if (state) {
-          this.stateful.setState(state);
+          stateful.setState(state);
         }
       },
       restoreState: storage.get,
       isTma,
     });
-    this.isMounted = this.mountable.isMounted;
-    this.mount = this.mountable.mount.bind(this.mountable);
-    this.unmount = this.mountable.unmount.bind(this.mountable);
 
+    this.isVisible = stateful.computedFromState('isVisible');
+    this.isMounted = mountable.isMounted;
+    this.setState = bound(stateful, 'setState');
+    this.mount = bound(mountable, 'mount');
+    this.unmount = bound(mountable, 'unmount');
     this.onClick = wrapSupported(onClick);
     this.offClick = wrapSupported(offClick);
   }
-
-  private readonly stateful: Stateful<S>;
-
-  private readonly mountable: Mountable<S>;
-
-  /**
-   * Updates the button state.
-   */
-  readonly setState: (state: Partial<S>) => void;
 
   /**
    * Signal indicating if the component is currently visible.
@@ -84,6 +75,11 @@ export class ButtonLike<S extends ButtonLikeState> {
    * Signal indicating if the component is currently mounted.
    */
   readonly isMounted: Computed<boolean>;
+
+  /**
+   * Updates the button state.
+   */
+  readonly setState: (state: Partial<S>) => void;
 
   /**
    * Adds a new button listener.
