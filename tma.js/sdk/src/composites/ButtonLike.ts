@@ -48,7 +48,7 @@ export class ButtonLike<S extends ButtonLikeState> {
       },
     });
     const mountable = new Mountable({
-      onBeforeMounted: state => {
+      onStateRestored: state => {
         if (state) {
           stateful.setState(state);
         }
@@ -59,7 +59,8 @@ export class ButtonLike<S extends ButtonLikeState> {
 
     this.isVisible = stateful.computedFromState('isVisible');
     this.isMounted = mountable.isMounted;
-    this.setState = bound(stateful, 'setState');
+    this.state = stateful.state;
+    this.setState = wrapSupported(bound(stateful, 'setState'));
     this.mount = bound(mountable, 'mount');
     this.unmount = bound(mountable, 'unmount');
     this.onClick = wrapSupported(onClick);
@@ -77,9 +78,14 @@ export class ButtonLike<S extends ButtonLikeState> {
   readonly isMounted: Computed<boolean>;
 
   /**
+   * Complete button state.
+   */
+  readonly state: Computed<S>;
+
+  /**
    * Updates the button state.
    */
-  readonly setState: (state: Partial<S>) => void;
+  readonly setState: SafeWrapped<(state: Partial<S>) => void, false>;
 
   /**
    * Adds a new button listener.
