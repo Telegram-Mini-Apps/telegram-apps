@@ -10,20 +10,23 @@ export interface MountableOptions<S> extends SharedFeatureOptions {
    */
   restoreState: () => (S | undefined);
   /**
-   * A function to call right before the mount flag update.
+   * A function to call whenever the state was restored during the mount.
    * @param state - restored state.
    */
-  onBeforeMounted: (state?: S) => void;
+  onStateRestored: (state: S) => void;
 }
 
 export class Mountable<S extends object> {
-  constructor({ onBeforeMounted, restoreState, ...rest }: MountableOptions<S>) {
+  constructor({ onStateRestored, restoreState, ...rest }: MountableOptions<S>) {
     const wrapSafe = createWrapSafe(rest);
 
     this.mount = wrapSafe(() => {
       if (!this._isMounted()) {
         batch(() => {
-          onBeforeMounted(isPageReload() ? restoreState() : undefined);
+          const state = isPageReload() ? restoreState() : undefined;
+          if (state) {
+            onStateRestored(state);
+          }
           this._isMounted.set(true);
         });
       }
