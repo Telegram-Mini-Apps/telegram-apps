@@ -81,6 +81,7 @@ export interface WithStorage<T extends ComponentStorage<any>> {
 }
 
 export interface SharedComponentOptions {
+export interface SharedFeatureOptions {
   /**
    * True if the current environment is Telegram Mini Apps.
    */
