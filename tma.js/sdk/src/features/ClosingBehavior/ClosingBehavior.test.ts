@@ -3,11 +3,8 @@ import * as E from 'fp-ts/Either';
 import type { PostEventFpFn } from '@tma.js/bridge';
 import { mockPageReload } from 'test-utils';
 
-import {
-  ClosingBehavior,
-  type ClosingBehaviorStorage,
-} from '@/features/ClosingBehavior/ClosingBehavior.js';
-import { createComponentSessionStorage } from '@/component-storage.js';
+import { ClosingBehavior } from '@/features/ClosingBehavior/ClosingBehavior.js';
+import { type ComponentStorage, createComponentSessionStorage } from '@/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
 import { testComponentMethodSafety } from '@test-utils/predefined/testComponentMethodSafety.js';
 
@@ -16,7 +13,7 @@ function instantiate({
   postEvent = () => E.right(undefined),
   isTma = true,
 }: {
-  storage?: boolean | ClosingBehaviorStorage;
+  storage?: boolean | ComponentStorage<{ isConfirmationEnabled: boolean }>;
   postEvent?: PostEventFpFn;
   isTma?: boolean;
 } = {}) {
@@ -103,34 +100,25 @@ describe('mount', () => {
   describe('no page reload', () => {
     it('should not use value from the storage', () => {
       const get = vi.fn(() => ({ isConfirmationEnabled: true }));
-      const set = vi.fn();
-      const component = instantiate({ storage: { get, set } });
+      const component = instantiate({ storage: { get, set: vi.fn() } });
       component.mount();
       expect(get).not.toHaveBeenCalled();
-      expect(set).toHaveBeenCalledOnce();
-      expect(set).toHaveBeenCalledWith({ isConfirmationEnabled: false });
     });
   });
 
   describe('page reload', () => {
     beforeEach(mockPageReload);
 
-    it('should extract state from storage and save it again', () => {
+    it('should extract state from storage', () => {
       const get = vi.fn();
-      const set = vi.fn();
-      const component = instantiate({ storage: { get, set } });
+      const component = instantiate({ storage: { get, set: vi.fn() } });
       component.mount();
       expect(get).toHaveBeenCalledOnce();
-      expect(set).toHaveBeenCalledOnce();
-      expect(set).toHaveBeenCalledWith({ isConfirmationEnabled: false });
 
       const get2 = vi.fn(() => ({ isConfirmationEnabled: true }));
-      const set2 = vi.fn();
-      const component2 = instantiate({ storage: { get: get2, set: set2 } });
+      const component2 = instantiate({ storage: { get: get2, set: vi.fn() } });
       component2.mount();
       expect(get2).toHaveBeenCalledOnce();
-      expect(set2).toHaveBeenCalledOnce();
-      expect(set2).toHaveBeenCalledWith({ isConfirmationEnabled: true });
     });
   });
 });
