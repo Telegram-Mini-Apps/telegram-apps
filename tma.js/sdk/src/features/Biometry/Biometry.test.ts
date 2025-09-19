@@ -3,6 +3,7 @@ import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import { type PostEventFpFn, type RequestFpFn, type EventName, emitEvent } from '@tma.js/bridge';
 import { mockPageReload } from 'test-utils';
+import { type EventListener, off, on } from '@tma.js/bridge';
 
 import { Biometry, type BiometryStorage } from '@/features/Biometry/Biometry.js';
 import { createComponentSessionStorage } from '@/component-storage.js';
@@ -36,12 +37,16 @@ function instantiate({
     }
   }) as RequestFpFn,
   isTma = true,
+  onBiometryInfoReceived = () => undefined,
+  offBiometryInfoReceived = () => undefined,
 }: {
   version?: string;
   storage?: boolean | BiometryStorage;
   postEvent?: PostEventFpFn;
   request?: RequestFpFn;
   isTma?: boolean;
+  onBiometryInfoReceived?: (listener: EventListener<'biometry_info_received'>) => void;
+  offBiometryInfoReceived?: (listener: EventListener<'biometry_info_received'>) => void;
 } = {}) {
   return new Biometry({
     version,
@@ -53,6 +58,8 @@ function instantiate({
     postEvent,
     request,
     isTma,
+    onBiometryInfoReceived,
+    offBiometryInfoReceived,
   });
 }
 
@@ -95,21 +102,17 @@ describe('mount', () => {
         tokenSaved: true,
       };
       const get = vi.fn(() => storageState);
-      const set = vi.fn();
-      const component = instantiate({ storage: { get, set } });
+      const component = instantiate({ storage: { get, set: vi.fn() } });
       await component.mount();
       expect(get).not.toHaveBeenCalled();
-      expect(set).toHaveBeenCalledOnce();
-      expect(set).toHaveBeenCalledWith(storageState);
     });
   });
 
   describe('page reload', () => {
     beforeEach(mockPageReload);
 
-    it('should extract state from storage and save it again', async () => {
+    it('should extract state from storage', async () => {
       const get = vi.fn();
-      const set = vi.fn();
       const component = instantiate({
         request: () => TE.right({
           available: true,
@@ -119,19 +122,10 @@ describe('mount', () => {
           token_saved: true,
           type: 'face',
         }),
-        storage: { get, set },
+        storage: { get, set: vi.fn() },
       });
       await component.mount();
       expect(get).toHaveBeenCalledOnce();
-      expect(set).toHaveBeenCalledOnce();
-      expect(set).toHaveBeenCalledWith({
-        available: true,
-        accessRequested: true,
-        accessGranted: true,
-        deviceId: 'A',
-        tokenSaved: true,
-        type: 'face',
-      });
 
       const storageState = {
         available: true,
@@ -142,58 +136,62 @@ describe('mount', () => {
         tokenSaved: true,
       };
       const get2 = vi.fn(() => storageState);
-      const set2 = vi.fn();
-      const component2 = instantiate({ storage: { get: get2, set: set2 } });
+      const component2 = instantiate({ storage: { get: get2, set: vi.fn() } });
       await component2.mount();
       expect(get2).toHaveBeenCalledOnce();
-      expect(set2).toHaveBeenCalledOnce();
-      expect(set2).toHaveBeenCalledWith(storageState);
     });
   });
 
-  it(
-    'should add "biometry_info_received" listener and update component state every time event was received',
-    async () => {
-      const component = instantiate({
-        storage: {
-          get: () => ({
-            available: true,
-            type: 'face',
-            accessGranted: true,
-            accessRequested: true,
-            deviceId: 'A',
-            tokenSaved: true,
-          }),
-          set: vi.fn(),
-        },
-      });
-      await component.mount();
-      expect(component.state()).toStrictEqual({
-        available: true,
-        type: 'face',
-        accessGranted: true,
-        accessRequested: true,
-        deviceId: 'A',
-        tokenSaved: true,
-      });
-      emitEvent('biometry_info_received', {
-        available: true,
-        access_requested: false,
-        access_granted: false,
-        device_id: 'B',
-        token_saved: false,
-        type: 'finger',
-      });
-      expect(component.state()).toStrictEqual({
-        available: true,
-        type: 'finger',
-        accessGranted: false,
-        accessRequested: false,
-        deviceId: 'B',
-        tokenSaved: false,
-      });
-    },
-  );
+  it('should use onBiometryInfoReceived to start tracking state changes', async () => {
+    const onBiometryInfoReceived = vi.fn(
+      (listener: EventListener<'biometry_info_received'>) => {
+        on('biometry_info_received', listener);
+      },
+    );
+    const component = instantiate({
+      storage: {
+        get: () => ({
+          available: true,
+          type: 'face',
+          accessGranted: true,
+          accessRequested: true,
+          deviceId: 'A',
+          tokenSaved: true,
+        }),
+        set: vi.fn(),
+      },
+      onBiometryInfoReceived,
+      offBiometryInfoReceived(listener) {
+        off('biometry_info_received', listener);
+      },
+    });
+    await component.mount();
+    expect(onBiometryInfoReceived).toHaveBeenCalledOnce();
+    expect(component.state()).toStrictEqual({
+      available: true,
+      type: 'face',
+      accessGranted: true,
+      accessRequested: true,
+      deviceId: 'A',
+      tokenSaved: true,
+    });
+    emitEvent('biometry_info_received', {
+      available: true,
+      access_requested: false,
+      access_granted: false,
+      device_id: 'B',
+      token_saved: false,
+      type: 'finger',
+    });
+    expect(component.state()).toStrictEqual({
+      available: true,
+      type: 'finger',
+      accessGranted: false,
+      accessRequested: false,
+      deviceId: 'B',
+      tokenSaved: false,
+    });
+  });
 });
 
 describe('unmount', () => {
@@ -206,8 +204,13 @@ describe('unmount', () => {
   });
 
   it(
-    'should remove "biometry_info_received" listener and stop updating component state every time event was received',
+    'should biometry state change listener using offBiometryInfoReceived',
     async () => {
+      const offBiometryInfoReceived = vi.fn(
+        (listener: EventListener<'biometry_info_received'>) => {
+          off('biometry_info_received', listener);
+        },
+      );
       const component = instantiate({
         storage: {
           get: () => ({
@@ -220,6 +223,10 @@ describe('unmount', () => {
           }),
           set: vi.fn(),
         },
+        onBiometryInfoReceived(listener) {
+          on('biometry_info_received', listener);
+        },
+        offBiometryInfoReceived,
       });
       await component.mount();
       const mountedState = {
@@ -231,7 +238,9 @@ describe('unmount', () => {
         tokenSaved: true,
       };
       expect(component.state()).toStrictEqual(mountedState);
+      expect(offBiometryInfoReceived).not.toHaveBeenCalled();
       component.unmount();
+      expect(offBiometryInfoReceived).toHaveBeenCalledOnce();
       emitEvent('biometry_info_received', {
         available: true,
         access_requested: false,
