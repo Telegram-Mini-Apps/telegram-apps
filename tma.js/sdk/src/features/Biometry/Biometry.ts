@@ -29,6 +29,8 @@ import type {
 import type { AsyncOptions } from '@/types.js';
 import { Stateful } from '@/composites/Stateful.js';
 import { AsyncMountable } from '@/composites/AsyncMountable.js';
+import { bound } from '@/helpers/bound.js';
+import { teToPromise } from '@/helpers/teToPromise.js';
 
 export type BiometryStorage = ComponentStorage<BiometryState>;
 
@@ -101,7 +103,7 @@ export class Biometry {
     });
     const mountable = new AsyncMountable({
       isTma,
-      onBeforeMounted: stateful.setState.bind(stateful),
+      onBeforeMounted: bound(stateful, 'setState'),
       mount(options) {
         return pipe(
           request('web_app_biometry_get_info', 'biometry_info_received', options),
@@ -128,31 +130,24 @@ export class Biometry {
     this.isMounted = mountable.isMounted;
     this.isSupported = createIsSupportedSignal('web_app_biometry_request_auth', version);
     this.state = stateful.state;
-    this.unmount = mountable.unmount.bind(mountable);
-    this.mount = wrapSupported(mountable.mount.bind(mountable));
+    this.unmount = bound(mountable, 'unmount');
+    this.mount = wrapSupported(bound(mountable, 'mount'));
 
     this.authenticate = wrapComplete(options => {
       return BetterPromise.fn(async () => {
         if (!this.isAvailable()) {
           throwNotAvailable();
         }
-        return pipe(
+        const response = await teToPromise(
           request('web_app_biometry_request_auth', 'biometry_auth_requested', {
             ...options,
             params: { reason: ((options || {}).reason || '').trim() },
           }),
-          TE.match(
-            error => {
-              throw error;
-            },
-            response => {
-              if (typeof response.token === 'string') {
-                stateful.setState({ token: response.token });
-              }
-              return response;
-            },
-          ),
-        )();
+        );
+        if (typeof response.token === 'string') {
+          stateful.setState({ token: response.token });
+        }
+        return response;
       });
     });
 
@@ -161,41 +156,28 @@ export class Biometry {
     });
 
     this.requestAccess = wrapComplete(options => {
-      return BetterPromise.fn(async () => {
-        return pipe(
-          request('web_app_biometry_request_access', 'biometry_info_received', {
-            ...options,
-            params: { reason: ((options || {}).reason || '').trim() },
-          }),
-          TE.match(
-            error => {
-              throw error;
-            },
-            response => {
-              const state = biometryInfoEventToState(response);
-              if (!state.available) {
-                throwNotAvailable();
-              }
-              stateful.setState(state);
-              return state.accessRequested;
-            },
-          ),
-        )();
+      return teToPromise(
+        request('web_app_biometry_request_access', 'biometry_info_received', {
+          ...options,
+          params: { reason: ((options || {}).reason || '').trim() },
+        }),
+      ).then(response => {
+        const state = biometryInfoEventToState(response);
+        if (!state.available) {
+          throwNotAvailable();
+        }
+        stateful.setState(state);
+        return state.accessRequested;
       });
     });
 
     this.updateToken = wrapComplete((options = {}) => {
-      return BetterPromise.fn(async () => {
-        return pipe(
-          request('web_app_biometry_update_token', 'biometry_token_updated', {
-            ...options,
-            params: { token: options.token || '', reason: options.reason?.trim() },
-          }),
-          TE.match(error => {
-            throw error;
-          }, response => response.status),
-        )();
-      });
+      return teToPromise(
+        request('web_app_biometry_update_token', 'biometry_token_updated', {
+          ...options,
+          params: { token: options.token || '', reason: options.reason?.trim() },
+        }),
+      ).then(response => response.status);
     });
   }
 
