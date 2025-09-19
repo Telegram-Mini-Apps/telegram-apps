@@ -21,11 +21,11 @@ export interface AsyncMountableOptions<S, E> extends SharedFeatureOptions {
   /**
    * A function to call after mount.
    */
-  onMounted: () => void;
+  onMounted?: () => void;
   /**
    * A function to call after unmount.
    */
-  onUnmounted: () => void;
+  onUnmounted?: () => void;
   /**
    * A function to retrieve the initial state.
    * @param options - additional options.
@@ -68,9 +68,9 @@ export class AsyncMountable<S extends object, E> {
 
     this.isMounted.sub(isMounted => {
       if (isMounted) {
-        onMounted();
+        onMounted?.();
       } else {
-        onUnmounted();
+        onUnmounted?.();
       }
     });
   }
