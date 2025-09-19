@@ -1,48 +1,36 @@
 import { computed, type Computed, signal } from '@tma.js/signals';
 import { type InvoiceStatus } from '@tma.js/bridge';
 import { BetterPromise } from 'better-promises';
-import * as TE from 'fp-ts/TaskEither';
-import { pipe } from 'fp-ts/function';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type {
-  SharedComponentOptions,
+  SharedFeatureOptions,
   WithRequest,
   WithVersion,
 } from '@/features/types.js';
 import type { RequestOptionsNoCapture } from '@/types.js';
 import { InvalidArgumentsError } from '@/errors.js';
+import { teToPromise } from '@/helpers/teToPromise.js';
 
-export interface InvoiceOptions extends WithVersion, WithRequest, SharedComponentOptions {
+export interface InvoiceOptions
+  extends WithVersion,
+  WithRequest,
+  SharedFeatureOptions {
 }
 
 /**
  * @since Mini Apps v6.1
  */
 export class Invoice {
-  private readonly _isOpened = signal(false);
-
-  /**
-   * Signal indicating if invoice is currently opened.
-   */
-  readonly isOpened = computed(this._isOpened);
-
-  /**
-   * Signal indicating if the component is supported.
-   */
-  readonly isSupported: Computed<boolean>;
-
   constructor({ version, request, isTma }: InvoiceOptions) {
-    const OPEN_METHOD_NAME = 'web_app_open_invoice';
-    this.isSupported = createIsSupportedSignal(OPEN_METHOD_NAME, version);
-
     const wrapSupported = createWrapSafe({
       version,
-      isSupported: OPEN_METHOD_NAME,
+      isSupported: 'web_app_open_invoice',
       isTma,
     });
 
+    this.isSupported = createIsSupportedSignal('web_app_open_invoice', version);
     this.open = wrapSupported((
       urlOrSlug: string,
       optionsOrType?: 'url' | RequestOptionsNoCapture,
@@ -71,23 +59,27 @@ export class Invoice {
         options = optionsOrType;
       }
 
-      return BetterPromise.fn(() => {
-        return pipe(
-          request(OPEN_METHOD_NAME, 'invoice_closed', {
-            ...options,
-            params: { slug },
-            capture: data => slug === data.slug,
-          }),
-          TE.match(
-            error => {
-              throw error;
-            },
-            response => response.status,
-          ),
-        )();
-      });
+      return teToPromise(
+        request('web_app_open_invoice', 'invoice_closed', {
+          ...options,
+          params: { slug },
+          capture: data => slug === data.slug,
+        }),
+      ).then(response => response.status);
     });
   }
+
+  private readonly _isOpened = signal(false);
+
+  /**
+   * Signal indicating if invoice is currently opened.
+   */
+  readonly isOpened = computed(this._isOpened);
+
+  /**
+   * Signal indicating if the component is supported.
+   */
+  readonly isSupported: Computed<boolean>;
 
   /**
    * Opens an invoice using its slug or URL.
