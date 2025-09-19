@@ -1,23 +1,20 @@
-import { computed, type Computed, signal } from '@tma.js/signals';
-import {
-  on,
-  off,
-  type EventPayload,
-  type BiometryAuthRequestStatus,
-  type EventListener,
-  type BiometryTokenUpdateStatus,
+import type { Computed } from '@tma.js/signals';
+import type {
+  EventPayload,
+  BiometryAuthRequestStatus,
+  EventListener,
+  BiometryTokenUpdateStatus,
 } from '@tma.js/bridge';
 import { BetterPromise } from 'better-promises';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import { isPageReload } from '@/navigation.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import { NotAvailableError } from '@/errors.js';
 import type { ComponentStorage } from '@/component-storage.js';
 import type {
-  SharedComponentOptions,
+  SharedFeatureOptions,
   WithPostEvent,
   WithRequest,
   WithStorage,
@@ -30,6 +27,8 @@ import type {
   BiometryUpdateTokenOptions,
 } from '@/features/Biometry/types.js';
 import type { AsyncOptions } from '@/types.js';
+import { Stateful } from '@/composites/Stateful.js';
+import { AsyncMountable } from '@/composites/AsyncMountable.js';
 
 export type BiometryStorage = ComponentStorage<BiometryState>;
 
@@ -37,7 +36,17 @@ export interface BiometryOptions extends WithVersion,
   WithStorage<BiometryStorage>,
   WithRequest,
   WithPostEvent,
-  SharedComponentOptions {
+  SharedFeatureOptions {
+  /**
+   * Adds a biometry info received event listener.
+   * @param listener - a listener to add.
+   */
+  onBiometryInfoReceived: (listener: EventListener<'biometry_info_received'>) => void;
+  /**
+   * Removes a biometry info received event listener.
+   * @param listener - a listener to add.
+   */
+  offBiometryInfoReceived: (listener: EventListener<'biometry_info_received'>) => void;
 }
 
 function throwNotAvailable(): never {
@@ -66,83 +75,61 @@ function biometryInfoEventToState(event: EventPayload<'biometry_info_received'>)
  * @since Mini Apps v7.2
  */
 export class Biometry {
-  private readonly storage: BiometryStorage;
+  constructor({
+    version,
+    request,
+    postEvent,
+    storage,
+    onBiometryInfoReceived,
+    offBiometryInfoReceived,
+    isTma,
+  }: BiometryOptions) {
+    const listener: EventListener<'biometry_info_received'> = event => {
+      stateful.setState(biometryInfoEventToState(event));
+    };
 
-  private readonly _state = signal<BiometryState>({
-    available: false,
-    type: '',
-    accessGranted: false,
-    accessRequested: false,
-    deviceId: '',
-    tokenSaved: false,
-  });
-
-  private readonly _isMounted = signal(false);
-
-  /**
-   * Complete biometry state.
-   */
-  readonly state = computed(this._state);
-
-  /**
-   * Signal indicating if biometry is available.
-   */
-  readonly isAvailable = computed(() => this._state().available);
-
-  /**
-   * Signal indicating if the component is currently mounted.
-   */
-  readonly isMounted = computed(this._isMounted);
-
-  /**
-   * Signal indicating if the component is supported.
-   */
-  readonly isSupported: Computed<boolean>;
-
-  constructor({ version, request, postEvent, storage, isTma }: BiometryOptions) {
-    this.isSupported = createIsSupportedSignal('web_app_biometry_request_auth', version);
-    this.storage = storage;
+    const stateful = new Stateful<BiometryState>({
+      initialState: {
+        available: false,
+        type: 'unknown',
+        accessGranted: false,
+        accessRequested: false,
+        deviceId: '',
+        tokenSaved: false,
+      },
+      onChange: storage.set,
+    });
+    const mountable = new AsyncMountable({
+      isTma,
+      onBeforeMounted: stateful.setState.bind(stateful),
+      mount(options) {
+        return pipe(
+          request('web_app_biometry_get_info', 'biometry_info_received', options),
+          TE.map(biometryInfoEventToState),
+        );
+      },
+      onMounted: () => {
+        onBiometryInfoReceived(listener);
+      },
+      onUnmounted: () => {
+        offBiometryInfoReceived(listener);
+      },
+      restoreState: storage.get,
+    });
 
     const wrapOptions = { version, isSupported: 'web_app_biometry_request_auth', isTma } as const;
     const wrapSupported = createWrapSafe(wrapOptions);
     const wrapComplete = createWrapSafe({
       ...wrapOptions,
-      isMounted: this._isMounted,
+      isMounted: mountable.isMounted,
     });
 
-    let isListenerBound = false;
-
-    this.mount = wrapSupported(options => {
-      if (this._isMounted()) {
-        return BetterPromise.resolve();
-      }
-
-      const processResult = (state: BiometryState) => {
-        if (!isListenerBound) {
-          on('biometry_info_received', this.onBiometryInfoReceived);
-          isListenerBound = true;
-        }
-        this.setState(state);
-        this._isMounted.set(true);
-      };
-
-      const state = isPageReload() && this.storage.get();
-      if (state) {
-        return BetterPromise.resolve(state).then(processResult);
-      }
-
-      return BetterPromise.fn(async () => {
-        await pipe(
-          request('web_app_biometry_get_info', 'biometry_info_received', options),
-          TE.match(
-            error => {
-              throw error;
-            },
-            response => processResult(biometryInfoEventToState(response)),
-          ),
-        )();
-      });
-    });
+    this.isAvailable = stateful.computedFromState('available');
+    this.isMounted = mountable.isMounted;
+    this.isSupported = createIsSupportedSignal('web_app_biometry_request_auth', version);
+    this.state = stateful.state;
+    this.unmount = mountable.unmount.bind(mountable);
+    this.mount = wrapSupported(mountable.mount.bind(mountable));
 
     this.authenticate = wrapComplete(options => {
       return BetterPromise.fn(async () => {
@@ -160,7 +147,7 @@ export class Biometry {
             },
             response => {
               if (typeof response.token === 'string') {
-                this.setState({ ...this._state(), token: response.token });
+                stateful.setState({ token: response.token });
               }
               return response;
             },
@@ -189,7 +176,7 @@ export class Biometry {
               if (!state.available) {
                 throwNotAvailable();
               }
-              this.setState(state);
+              stateful.setState(state);
               return state.accessRequested;
             },
           ),
@@ -212,14 +199,25 @@ export class Biometry {
     });
   }
 
-  private setState(s: BiometryState): void {
-    this._state.set(s);
-    this.storage.set(s);
-  }
+  /**
+   * Signal indicating if biometry is available.
+   */
+  readonly isAvailable: Computed<boolean>;
 
-  private onBiometryInfoReceived: EventListener<'biometry_info_received'> = event => {
-    this.setState(biometryInfoEventToState(event));
-  };
+  /**
+   * Signal indicating if the component is supported.
+   */
+  readonly isSupported: Computed<boolean>;
+
+  /**
+   * Signal indicating if the component is mounted.
+   */
+  readonly isMounted: Computed<boolean>;
+
+  /**
+   * Complete component state.
+   */
+  readonly state: Computed<BiometryState>;
 
   /**
    * Attempts to authenticate a user using biometrics and fetch a previously stored secure token.
@@ -291,8 +289,5 @@ export class Biometry {
   /**
    * Unmounts the component.
    */
-  unmount() {
-    off('biometry_info_received', this.onBiometryInfoReceived);
-    this._isMounted.set(false);
-  }
+  unmount: () => void;
 }
