@@ -1,12 +1,12 @@
 import { batch, computed, signal } from '@tma.js/signals';
 import { BetterPromise } from 'better-promises';
 import * as TE from 'fp-ts/TaskEither';
-import { pipe } from 'fp-ts/function';
 
 import type { SharedFeatureOptions } from '@/features/types.js';
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { isPageReload } from '@/navigation.js';
 import type { AsyncOptions } from '@/types.js';
+import { taskEitherToPromise } from '@/helpers/taskEitherToPromise.js';
 
 export interface AsyncMountableOptions<S, E> extends SharedFeatureOptions {
   /**
@@ -45,37 +45,25 @@ export class AsyncMountable<S extends object, E> {
     const wrapSafe = createWrapSafe({ isTma });
 
     this.mount = wrapSafe(options => {
-      if (this._isMounted()) {
-        return BetterPromise.resolve();
-      }
-
-      const processResult = (state: S) => {
-        // The user could call mount several times in a row while the
-        // component was still mounting. We should prevent calling the
-        // same hooks several times in this case.
-        if (this._isMounted()) {
-          return;
-        }
-        batch(() => {
-          onBeforeMounted(state);
-          this._isMounted.set(true);
-        });
-      };
-
-      const state = isPageReload() ? restoreState() : undefined;
-      if (state) {
-        return BetterPromise.resolve(state).then(processResult);
-      }
-
-      return BetterPromise.fn(async () => {
-        await pipe(mount(options), TE.match(
-          error => {
-            // eslint-disable-next-line @typescript-eslint/only-throw-error
-            throw error;
-          },
-          processResult,
-        ))();
-      });
+      return this._isMounted()
+        ? BetterPromise.resolve()
+        : BetterPromise
+          .fn(() => {
+            return (isPageReload() ? restoreState() : undefined)
+              || taskEitherToPromise(mount(options));
+          })
+          .then(state => {
+            // The user could call mount several times in a row while the
+            // component was still mounting. We should prevent calling the
+            // same hooks several times in this case.
+            if (this._isMounted()) {
+              return;
+            }
+            batch(() => {
+              onBeforeMounted(state);
+              this._isMounted.set(true);
+            });
+          });
     });
 
     this.isMounted.sub(isMounted => {
