@@ -6,31 +6,28 @@ import type {
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import type {
-  SharedComponentOptions,
+  SharedFeatureOptions,
   WithPostEvent,
   WithVersion,
 } from '@/features/types.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 
-export interface HapticFeedbackOptions extends WithPostEvent, WithVersion, SharedComponentOptions {
+export interface HapticFeedbackOptions
+  extends WithPostEvent,
+  WithVersion,
+  SharedFeatureOptions {
 }
 
 /**
  * @since Mini Apps v6.1
  */
 export class HapticFeedback {
-  /**
-   * Signal indicating if the component is supported.
-   */
-  readonly isSupported: Computed<boolean>;
-
   constructor({ postEvent, isTma, version }: HapticFeedbackOptions) {
     const HAPTIC_METHOD_NAME = 'web_app_trigger_haptic_feedback';
-    this.isSupported = createIsSupportedSignal(HAPTIC_METHOD_NAME, version);
-
     const wrapOptions = { isSupported: HAPTIC_METHOD_NAME, isTma, version } as const;
     const wrapSupported = createWrapSafe(wrapOptions);
 
+    this.isSupported = createIsSupportedSignal(HAPTIC_METHOD_NAME, version);
     this.impactOccurred = wrapSupported(style => {
       postEvent(HAPTIC_METHOD_NAME, { type: 'impact', impact_style: style });
     });
@@ -41,6 +38,11 @@ export class HapticFeedback {
       postEvent(HAPTIC_METHOD_NAME, { type: 'selection_change' });
     });
   }
+
+  /**
+   * Signal indicating if the component is supported.
+   */
+  readonly isSupported: Computed<boolean>;
 
   /**
    * A method that tells if an impact occurred. The Telegram app may play the
