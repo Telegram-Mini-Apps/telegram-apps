@@ -1,16 +1,36 @@
 import { computed, type Computed, signal } from '@tma.js/signals';
 import type { InitData as InitDataType } from '@tma.js/types';
+import { eitherGet } from '@tma.js/toolkit';
 import * as E from 'fp-ts/Either';
 import * as O from 'fp-ts/Option';
 import { pipe } from 'fp-ts/function';
 
-import type { WithRetrieveInitData, WithRetrieveRawInitData } from '@/features/types.js';
-
-export interface InitDataOptions<EComplete, ERaw> extends WithRetrieveInitData<EComplete>,
-  WithRetrieveRawInitData<ERaw> {
+export interface InitDataOptions<EComplete, ERaw> {
+  /**
+   * Retrieves init data from the current environment.
+   */
+  retrieveInitData: () => E.Either<EComplete, O.Option<InitDataType>>;
+  /**
+   * Retrieves raw init data from the current environment.
+   */
+  retrieveRawInitData: () => E.Either<ERaw, O.Option<string>>;
 }
 
-export class InitData<EComplete, ERaw> {
+export class InitData<EComplete extends Error, ERaw extends Error> {
+  constructor(options: InitDataOptions<EComplete, ERaw>) {
+    this.restore = () => {
+      pipe(eitherGet(options.retrieveInitData()), O.map(this._state.set));
+      pipe(eitherGet(options.retrieveRawInitData()), O.map(this._raw.set));
+    };
+  }
+
+  private fromState<K extends keyof InitDataType>(key: K): Computed<InitDataType[K] | undefined> {
+    return computed(() => {
+      const s = this._state();
+      return s ? s[key] : undefined;
+    });
+  }
+
   private readonly _state = signal<InitDataType>();
 
   private readonly _raw = signal<string>();
@@ -92,34 +112,6 @@ export class InitData<EComplete, ERaw> {
    * @see InitDataType.user
    */
   readonly user = this.fromState('user');
-
-  constructor(options: InitDataOptions<EComplete, ERaw>) {
-    this.restore = () => {
-      const onError = (error: unknown) => {
-        throw error;
-      };
-      pipe(options.retrieveInitData(), E.match(
-        onError,
-        initData => {
-          this._state.set(initData);
-        },
-      ));
-      pipe(
-        options.retrieveRawInitData(),
-        E.match(onError, v => v),
-        O.map(initData => {
-          this._raw.set(initData);
-        }),
-      );
-    };
-  }
-
-  private fromState<K extends keyof InitDataType>(key: K): Computed<InitDataType[K] | undefined> {
-    return computed(() => {
-      const s = this._state();
-      return s ? s[key] : undefined;
-    });
-  }
 
   /**
    * Restores the component state.
