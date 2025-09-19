@@ -6,7 +6,7 @@ import type { SharedFeatureOptions } from '@/features/types.js';
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { isPageReload } from '@/navigation.js';
 import type { AsyncOptions } from '@/types.js';
-import { taskEitherToPromise } from '@/helpers/taskEitherToPromise.js';
+import { teToPromise } from '@/helpers/teToPromise.js';
 
 export interface AsyncMountableOptions<S, E> extends SharedFeatureOptions {
   /**
@@ -50,7 +50,7 @@ export class AsyncMountable<S extends object, E> {
         : BetterPromise
           .fn(() => {
             return (isPageReload() ? restoreState() : undefined)
-              || taskEitherToPromise(mount(options));
+              || teToPromise(mount(options));
           })
           .then(state => {
             // The user could call mount several times in a row while the
