@@ -2,49 +2,40 @@ import type { Computed } from '@tma.js/signals';
 import type { InvokeCustomMethodFpOptions } from '@tma.js/bridge';
 import { BetterPromise } from 'better-promises';
 import { array, parse, record, string } from 'valibot';
-import { pipe } from 'fp-ts/function';
-import * as TE from 'fp-ts/TaskEither';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type {
-  SharedComponentOptions,
+  SharedFeatureOptions,
   WithInvokeCustomMethod,
   WithVersion,
 } from '@/features/types.js';
+import { teToPromise } from '@/helpers/teToPromise.js';
 
 export interface CloudStorageOptions extends WithVersion,
   WithInvokeCustomMethod,
-  SharedComponentOptions {
+  SharedFeatureOptions {
 }
 
 /**
  * @since Mini Apps v6.9
  */
 export class CloudStorage {
-  /**
-   * Signal indicating if the component is supported.
-   */
-  readonly isSupported: Computed<boolean>;
-
   constructor({ version, isTma, invokeCustomMethod }: CloudStorageOptions) {
-    const INVOKE_METHOD_NAME = 'web_app_invoke_custom_method';
-    this.isSupported = createIsSupportedSignal(INVOKE_METHOD_NAME, version);
-
-    const wrapOptions = { version, isSupported: INVOKE_METHOD_NAME, isTma } as const;
+    const wrapOptions = {
+      version,
+      isSupported: 'web_app_invoke_custom_method',
+      isTma,
+    } as const;
     const wrapSupported = createWrapSafe(wrapOptions);
-    const throwOnError = (error: unknown) => {
-      throw error;
-    };
+
+    this.isSupported = createIsSupportedSignal('web_app_invoke_custom_method', version);
 
     this.deleteItem = wrapSupported((keyOrKeys, options) => {
       return BetterPromise.fn(async () => {
         const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
         if (keys.length) {
-          await pipe(
-            invokeCustomMethod('deleteStorageValues', { keys }, options),
-            TE.mapLeft(throwOnError),
-          )();
+          await teToPromise(invokeCustomMethod('deleteStorageValues', { keys }, options));
         }
       });
     });
@@ -53,45 +44,32 @@ export class CloudStorage {
       keyOrKeys: string | string[],
       options?: InvokeCustomMethodFpOptions,
     ): BetterPromise<string | Record<string, string>> => {
-      return BetterPromise.fn(async () => {
-        const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
-        if (!keys.length) {
-          return Array.isArray(keyOrKeys) ? {} : '';
-        }
-        return pipe(
-          invokeCustomMethod('getStorageValues', { keys }, options),
-          TE.match(throwOnError, data => {
-            const response = {
-              // Fulfill the response with probably missing keys.
-              ...keys.reduce<Record<string, string>>((acc, key) => {
-                acc[key] = '';
-                return acc;
-              }, {}),
-              ...parse(record(string(), string()), data),
-            };
+      const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
+      if (!keys.length) {
+        return BetterPromise.resolve(Array.isArray(keyOrKeys) ? {} : '');
+      }
+      return teToPromise(invokeCustomMethod('getStorageValues', { keys }, options))
+        .then(data => {
+          const response = {
+            // Fulfill the response with probably missing keys.
+            ...keys.reduce<Record<string, string>>((acc, key) => {
+              acc[key] = '';
+              return acc;
+            }, {}),
+            ...parse(record(string(), string()), data),
+          };
 
-            return typeof keyOrKeys === 'string' ? response[keyOrKeys] : response;
-          }),
-        )();
-      });
+          return typeof keyOrKeys === 'string' ? response[keyOrKeys] : response;
+        });
     }) as typeof this.getItem);
 
     this.getKeys = wrapSupported(options => {
-      return BetterPromise.fn(async () => {
-        return pipe(
-          invokeCustomMethod('getStorageKeys', {}, options),
-          TE.match(throwOnError, data => parse(array(string()), data)),
-        )();
-      });
+      return teToPromise(invokeCustomMethod('getStorageKeys', {}, options))
+        .then(data => parse(array(string()), data));
     });
 
     this.setItem = wrapSupported((key, value, options) => {
-      return BetterPromise.fn(async () => {
-        await pipe(
-          invokeCustomMethod('saveStorageValue', { key, value }, options),
-          TE.mapLeft(throwOnError),
-        )();
-      });
+      return teToPromise(invokeCustomMethod('saveStorageValue', { key, value }, options)).then();
     });
 
     this.clear = wrapSupported(options => {
@@ -100,6 +78,11 @@ export class CloudStorage {
         .then();
     });
   }
+
+  /**
+   * Signal indicating if the component is supported.
+   */
+  readonly isSupported: Computed<boolean>;
 
   /**
    * Deletes specified key or keys from the cloud storage.
