@@ -1,4 +1,4 @@
-import type { Version, InitData } from '@tma.js/types';
+import type { Version } from '@tma.js/types';
 import type {
   PostEventFpFn,
   InvokeCustomMethodError,
@@ -9,8 +9,6 @@ import type {
   RequestFpFn,
 } from '@tma.js/bridge';
 import type * as TE from 'fp-ts/TaskEither';
-import type * as E from 'fp-ts/Either';
-import type * as O from 'fp-ts/Option';
 
 import type { MaybeAccessor } from '@/types.js';
 import type { ComponentStorage } from '@/component-storage.js';
@@ -30,10 +28,6 @@ export interface InvokeCustomMethodNoRequestIdFn {
   ): TE.TaskEither<RequestError, unknown>;
 }
 
-export type RetrieveInitDataFn<E> = () => E.Either<E, InitData>;
-
-export type RetrieveRawInitDataFn<E> = () => E.Either<E, O.Option<string>>;
-
 export interface WithVersion {
   /**
    * The currently supported Telegram Mini Apps version by the Telegram client.
@@ -46,20 +40,6 @@ export interface WithRequest {
    * A request function to use to call Mini Apps methods.
    */
   request: RequestFpFn;
-}
-
-export interface WithRetrieveInitData<E> {
-  /**
-   * Retrieves init data from the current environment.
-   */
-  retrieveInitData: RetrieveInitDataFn<E>;
-}
-
-export interface WithRetrieveRawInitData<E> {
-  /**
-   * Retrieves raw init data from the current environment.
-   */
-  retrieveRawInitData: RetrieveRawInitDataFn<E>;
 }
 
 export interface WithInvokeCustomMethod {
