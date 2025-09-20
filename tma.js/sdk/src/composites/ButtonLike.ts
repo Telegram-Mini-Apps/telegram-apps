@@ -48,20 +48,15 @@ export class ButtonLike<S extends ButtonLikeState> {
       },
     });
     const mountable = new Mountable({
-      onStateRestored: state => {
-        if (state) {
-          stateful.setState(state);
-        }
-      },
+      onStateRestored: bound(stateful, 'setState'),
       restoreState: storage.get,
-      isTma,
     });
 
     this.isVisible = stateful.computedFromState('isVisible');
     this.isMounted = mountable.isMounted;
     this.state = stateful.state;
     this.setState = wrapSupported(bound(stateful, 'setState'));
-    this.mount = bound(mountable, 'mount');
+    this.mount = wrapSupported(bound(mountable, 'mount'));
     this.unmount = bound(mountable, 'unmount');
     this.onClick = wrapSupported(onClick);
     this.offClick = wrapSupported(offClick);
