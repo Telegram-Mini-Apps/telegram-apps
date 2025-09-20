@@ -11,11 +11,11 @@ import { Mountable } from '@/composites/Mountable.js';
 import { Stateful } from '@/composites/Stateful.js';
 import { bound } from '@/helpers/bound.js';
 
-export interface ButtonLikeState {
+export interface ButtonState {
   isVisible: boolean;
 }
 
-export interface ButtonLikeOptions<S> extends WithStorage<ComponentStorage<S>>,
+export interface ButtonOptions<S> extends WithStorage<ComponentStorage<S>>,
   WithOnClickListener,
   SharedFeatureOptions {
   /**
@@ -29,7 +29,7 @@ export interface ButtonLikeOptions<S> extends WithStorage<ComponentStorage<S>>,
   onChange: (state: S) => void;
 }
 
-export class ButtonLike<S extends ButtonLikeState> {
+export class Button<S extends ButtonState> {
   constructor({
     storage,
     isTma,
@@ -37,7 +37,7 @@ export class ButtonLike<S extends ButtonLikeState> {
     offClick,
     initialState,
     onChange,
-  }: ButtonLikeOptions<S>) {
+  }: ButtonOptions<S>) {
     const wrapSupported = createWrapSafe({ isTma });
 
     const stateful = new Stateful({
