@@ -3,7 +3,7 @@ import type { Computed } from '@tma.js/signals';
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { WithPostEvent, WithVersion } from '@/features/types.js';
-import { ButtonLike, ButtonLikeOptions } from '@/composites/ButtonLike.js';
+import { Button, type ButtonOptions } from '@/composites/Button.js';
 
 export interface BackButtonState {
   isVisible: boolean;
@@ -11,7 +11,7 @@ export interface BackButtonState {
 
 export interface BackButtonOptions extends WithVersion,
   WithPostEvent,
-  Omit<ButtonLikeOptions<BackButtonState>, 'onChange' | 'initialState'> {
+  Omit<ButtonOptions<BackButtonState>, 'onChange' | 'initialState'> {
 }
 
 /**
@@ -19,7 +19,7 @@ export interface BackButtonOptions extends WithVersion,
  */
 export class BackButton {
   constructor({ postEvent, version, isTma, ...rest }: BackButtonOptions) {
-    const buttonLike = new ButtonLike({
+    const button = new Button({
       ...rest,
       initialState: { isVisible: false },
       isTma,
@@ -32,22 +32,22 @@ export class BackButton {
     const wrapSupported = createWrapSafe(wrapOptions);
     const wrapComplete = createWrapSafe({
       ...wrapOptions,
-      isMounted: buttonLike.isMounted,
+      isMounted: button.isMounted,
     });
 
     const setVisibility = (isVisible: boolean): void => {
-      buttonLike.setState({ isVisible });
+      button.setState({ isVisible });
     };
 
-    this.isVisible = buttonLike.isVisible;
-    this.isMounted = buttonLike.isMounted;
+    this.isVisible = button.isVisible;
+    this.isMounted = button.isMounted;
     this.isSupported = createIsSupportedSignal('web_app_setup_back_button', version);
     this.hide = wrapComplete(() => setVisibility(false));
     this.show = wrapComplete(() => setVisibility(true));
-    this.onClick = wrapSupported(buttonLike.onClick);
-    this.offClick = wrapSupported(buttonLike.offClick);
-    this.mount = wrapSupported(buttonLike.mount);
-    this.unmount = buttonLike.unmount;
+    this.onClick = wrapSupported(button.onClick);
+    this.offClick = wrapSupported(button.offClick);
+    this.mount = wrapSupported(button.mount);
+    this.unmount = button.unmount;
   }
 
   /**
