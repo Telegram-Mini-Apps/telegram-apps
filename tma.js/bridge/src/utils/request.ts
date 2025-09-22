@@ -175,11 +175,12 @@ export function requestFp<M extends MethodName, E extends AnyEventName>(
     .finally(cleanup);
 
   return pipe(
-    postEvent(method as any, (options as any).params),
-    E.match(
-      error => TE.left(error),
-      () => TE.tryCatch(() => promise, e => e),
-    ),
+    TE.fromEither(postEvent(method as any, (options as any).params)),
+    TE.mapLeft(err => {
+      promise.catch(() => undefined).cancel();
+      return err;
+    }),
+    TE.chain(() => TE.tryCatch(() => promise, e => e)),
   );
 }
 
