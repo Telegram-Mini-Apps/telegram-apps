@@ -1,5 +1,11 @@
 # @tma.js/bridge
 
+## 2.0.2
+
+### Patch Changes
+
+- fefa2b4: properly handle error of postEvent in requestFp
+
 ## 2.0.1
 
 ### Patch Changes
