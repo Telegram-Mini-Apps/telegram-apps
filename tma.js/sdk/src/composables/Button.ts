@@ -7,8 +7,8 @@ import type {
   WithOnClickListener,
   WithStorage,
 } from '@/features/types.js';
-import { Mountable } from '@/composites/Mountable.js';
-import { Stateful } from '@/composites/Stateful.js';
+import { Mountable } from '@/composables/Mountable.js';
+import { Stateful } from '@/composables/Stateful.js';
 import { bound } from '@/helpers/bound.js';
 
 export interface ButtonState {
