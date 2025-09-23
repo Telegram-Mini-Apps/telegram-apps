@@ -4,7 +4,7 @@ import type { RGB } from '@tma.js/types';
 import type { MaybeAccessor } from '@/types.js';
 import { access } from '@/helpers/access.js';
 import type { SafeWrapped } from '@/wrappers/wrapSafe.js';
-import { Button, type ButtonOptions, type ButtonState } from '@/composites/Button.js';
+import { Button, type ButtonOptions, type ButtonState } from '@/composables/Button.js';
 
 export interface BottomButtonState extends ButtonState {
   bgColor?: RGB;
