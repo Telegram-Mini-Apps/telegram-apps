@@ -1,34 +1,52 @@
 import { batch, computed, signal } from '@tma.js/signals';
 
 import { isPageReload } from '@/navigation.js';
+import type { MaybeAccessor } from '@/types.js';
+import { access } from '@/helpers/access.js';
 
 type RestoreStateFn<S> = () => (S | undefined);
 
-type OnStateRestoredFn<S> = (state: S) => void;
+type OnMounted<S> = (state: S) => void;
 
 export interface MountableOptions<S> {
   /**
-   * Attempts to restore the component state.
+   * A state to use when the current application launch is fresh (page
+   * was not reloaded) or `restoreState` returned falsy value.
    */
-  restoreState: RestoreStateFn<S>;
+  fallbackState: MaybeAccessor<S>;
   /**
-   * A function to call whenever the state was restored during the mount.
+   * A function to call whenever the component was mounted.
    * @param state - restored state.
    */
-  onStateRestored: OnStateRestoredFn<S>;
+  onMounted?: OnMounted<S>;
+  /**
+   * A function to call whenever the component was unmounted.
+   */
+  onUnmounted?: VoidFunction;
+  /**
+   * Attempts to restore previously saved component state. This function
+   * will only be called if the current page was reloaded.
+   */
+  restoreState: RestoreStateFn<S>;
 }
 
 export class Mountable<S extends object> {
-  constructor({ onStateRestored, restoreState }: MountableOptions<S>) {
+  constructor({ onMounted, restoreState, fallbackState, onUnmounted }: MountableOptions<S>) {
     this.restoreState = restoreState;
-    this.onStateRestored = onStateRestored;
+    this.onMounted = onMounted;
+    this.onUnmounted = onUnmounted;
+    this.fallbackState = fallbackState;
   }
+
+  private readonly fallbackState: MaybeAccessor<S>;
 
   private readonly restoreState: RestoreStateFn<S>;
 
-  private readonly onStateRestored: OnStateRestoredFn<S>;
+  private readonly onMounted?: OnMounted<S>;
 
-  protected readonly _isMounted = signal(false);
+  private readonly onUnmounted?: VoidFunction;
+
+  private readonly _isMounted = signal(false);
 
   /**
    * Signal indicating if the component is mounted.
@@ -42,11 +60,10 @@ export class Mountable<S extends object> {
   mount() {
     if (!this._isMounted()) {
       batch(() => {
-        const state = isPageReload() ? this.restoreState() : undefined;
-        if (state) {
-          this.onStateRestored(state);
-        }
+        const state = (isPageReload() ? this.restoreState() : undefined)
+          || access(this.fallbackState);
         this._isMounted.set(true);
+        this.onMounted?.(state);
       });
     }
   }
@@ -55,6 +72,11 @@ export class Mountable<S extends object> {
    * Unmounts the component.
    */
   unmount() {
-    this._isMounted.set(false);
+    if (this._isMounted()) {
+      batch(() => {
+        this._isMounted.set(false);
+        this.onUnmounted?.();
+      });
+    }
   }
 }
