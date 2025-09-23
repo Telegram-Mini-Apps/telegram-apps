@@ -1,6 +1,5 @@
 import { batch, computed, signal } from '@tma.js/signals';
 
-import { isPageReload } from '@/navigation.js';
 import type { MaybeAccessor } from '@/types.js';
 import { access } from '@/helpers/access.js';
 
@@ -28,14 +27,25 @@ export interface MountableOptions<S> {
    * will only be called if the current page was reloaded.
    */
   restoreState: RestoreStateFn<S>;
+  /**
+   * @returns True if the current page was reloaded.
+   */
+  isPageReload: MaybeAccessor<boolean>;
 }
 
 export class Mountable<S extends object> {
-  constructor({ onMounted, restoreState, fallbackState, onUnmounted }: MountableOptions<S>) {
+  constructor({
+    onMounted,
+    restoreState,
+    fallbackState,
+    onUnmounted,
+    isPageReload,
+  }: MountableOptions<S>) {
     this.restoreState = restoreState;
     this.onMounted = onMounted;
     this.onUnmounted = onUnmounted;
     this.fallbackState = fallbackState;
+    this.isPageReload = isPageReload;
   }
 
   private readonly fallbackState: MaybeAccessor<S>;
@@ -45,6 +55,8 @@ export class Mountable<S extends object> {
   private readonly onMounted?: OnMounted<S>;
 
   private readonly onUnmounted?: VoidFunction;
+
+  private readonly isPageReload: MaybeAccessor<boolean>;
 
   private readonly _isMounted = signal(false);
 
@@ -60,8 +72,9 @@ export class Mountable<S extends object> {
   mount() {
     if (!this._isMounted()) {
       batch(() => {
-        const state = (isPageReload() ? this.restoreState() : undefined)
-          || access(this.fallbackState);
+        const state = (
+          access(this.isPageReload) ? this.restoreState() : undefined
+        ) || access(this.fallbackState);
         this._isMounted.set(true);
         this.onMounted?.(state);
       });

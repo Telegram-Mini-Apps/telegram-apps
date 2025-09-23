@@ -76,6 +76,13 @@ export interface WithOnClickListener {
   offClick: (listener: VoidFunction, once?: boolean) => void;
 }
 
+export interface WithIsPageReload {
+  /**
+   * True if the current page is reloaded.
+   */
+  isPageReload: MaybeAccessor<boolean>;
+}
+
 export interface SharedFeatureOptions {
   /**
    * True if the current environment is Telegram Mini Apps.
