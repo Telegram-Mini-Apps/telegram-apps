@@ -47,8 +47,9 @@ export class Button<S extends ButtonState> {
         onChange(state);
       },
     });
-    const mountable = new Mountable({
-      onStateRestored: bound(stateful, 'setState'),
+    const mountable = new Mountable<S>({
+      onMounted: bound(stateful, 'setState'),
+      fallbackState: initialState,
       restoreState: storage.get,
     });
 
