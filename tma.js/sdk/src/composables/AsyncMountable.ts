@@ -2,80 +2,68 @@ import { batch, computed, signal } from '@tma.js/signals';
 import { BetterPromise } from 'better-promises';
 import * as TE from 'fp-ts/TaskEither';
 
-import type { SharedFeatureOptions } from '@/features/types.js';
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import { isPageReload } from '@/navigation.js';
-import type { AsyncOptions } from '@/types.js';
+import type { AsyncOptions, MaybeAccessor } from '@/types.js';
 import { teToPromise } from '@/helpers/teToPromise.js';
+import { access } from '@/helpers/access.js';
 
-export interface AsyncMountableOptions<S, E> extends SharedFeatureOptions {
+type RestoreStateFn<S> = () => (S | undefined);
+
+type OnMounted<S> = (state: S) => void;
+
+type InitialStateFn<S, E> = (options?: AsyncOptions) => TE.TaskEither<E, S>;
+
+export interface AsyncMountableOptions<S, E> {
   /**
-   * Attempts to restore the component state.
+   * @returns True if the current page was reloaded.
    */
-  restoreState: () => (S | undefined);
-  /**
-   * A function to call right before the mount flag update.
-   * @param state - restored state.
-   */
-  onBeforeMounted: (state: S) => void;
-  /**
-   * A function to call after mount.
-   */
-  onMounted?: () => void;
-  /**
-   * A function to call after unmount.
-   */
-  onUnmounted?: () => void;
+  isPageReload: MaybeAccessor<boolean>;
   /**
    * A function to retrieve the initial state.
    * @param options - additional options.
    */
-  mount: (options?: AsyncOptions) => TE.TaskEither<E, S>;
+  initialState: InitialStateFn<S, E>;
+  /**
+   * A function to call whenever the component was mounted.
+   * @param state - restored state.
+   */
+  onMounted?: OnMounted<S>;
+  /**
+   * A function to call whenever the component was unmounted.
+   */
+  onUnmounted?: VoidFunction;
+  /**
+   * Attempts to restore previously saved component state. This function
+   * will only be called if the current page was reloaded.
+   */
+  restoreState: RestoreStateFn<S>;
 }
 
 export class AsyncMountable<S extends object, E> {
   constructor({
-    onBeforeMounted,
-    mount,
-    restoreState,
+    initialState,
     onMounted,
+    restoreState,
     onUnmounted,
-    isTma,
+    isPageReload,
   }: AsyncMountableOptions<S, E>) {
-    const wrapSafe = createWrapSafe({ isTma });
-
-    this.mount = wrapSafe(options => {
-      return this._isMounted()
-        ? BetterPromise.resolve()
-        : BetterPromise
-          .fn(() => {
-            return (isPageReload() ? restoreState() : undefined)
-              || teToPromise(mount(options));
-          })
-          .then(state => {
-            // The user could call mount several times in a row while the
-            // component was still mounting. We should prevent calling the
-            // same hooks several times in this case.
-            if (this._isMounted()) {
-              return;
-            }
-            batch(() => {
-              onBeforeMounted(state);
-              this._isMounted.set(true);
-            });
-          });
-    });
-
-    this.isMounted.sub(isMounted => {
-      if (isMounted) {
-        onMounted?.();
-      } else {
-        onUnmounted?.();
-      }
-    });
+    this.restoreState = restoreState;
+    this.onMounted = onMounted;
+    this.onUnmounted = onUnmounted;
+    this.isPageReload = isPageReload;
+    this.initialState = initialState;
   }
 
-  protected readonly _isMounted = signal(false);
+  private readonly restoreState: RestoreStateFn<S>;
+
+  private readonly onMounted?: OnMounted<S>;
+
+  private readonly onUnmounted?: VoidFunction;
+
+  private readonly isPageReload: MaybeAccessor<boolean>;
+
+  private readonly initialState: InitialStateFn<S, E>;
+
+  private readonly _isMounted = signal(false);
 
   /**
    * Signal indicating if the component is mounted.
@@ -87,12 +75,37 @@ export class AsyncMountable<S extends object, E> {
    * effects.
    * @param options - additional execution options.
    */
-  mount: SafeWrapped<(options?: AsyncOptions) => BetterPromise<void>, false>;
+  mount(options?: AsyncOptions): BetterPromise<void> {
+    return this._isMounted()
+      ? BetterPromise.resolve()
+      : BetterPromise
+        .fn(() => {
+          return (
+            access(this.isPageReload) ? this.restoreState() : undefined
+          ) || teToPromise(this.initialState(options));
+        })
+        .then(state => {
+          // The user could call mount several times in a row while the
+          // component was still mounting. We should prevent calling the
+          // same hooks several times in this case.
+          if (!this._isMounted()) {
+            batch(() => {
+              this._isMounted.set(true);
+              this.onMounted?.(state);
+            });
+          }
+        });
+  }
 
   /**
    * Unmounts the component.
    */
   unmount() {
-    this._isMounted.set(false);
+    if (this._isMounted()) {
+      batch(() => {
+        this._isMounted.set(false);
+        this.onUnmounted?.();
+      });
+    }
   }
 }
