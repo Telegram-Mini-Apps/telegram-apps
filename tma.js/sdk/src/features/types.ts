@@ -60,22 +60,6 @@ export interface WithStorage<T extends ComponentStorage<any>> {
   storage: T;
 }
 
-export interface WithOnClickListener {
-  /**
-   * Adds a component click listener.
-   * @returns A function to remove listener.
-   * @param listener - a listener to add.
-   * @param once - should the listener be called only once.
-   */
-  onClick: (listener: VoidFunction, once?: boolean) => VoidFunction;
-  /**
-   * Removes a component click listener.
-   * @param listener - a listener to remove.
-   * @param once - should the listener be called only once.
-   */
-  offClick: (listener: VoidFunction, once?: boolean) => void;
-}
-
 export interface WithIsPageReload {
   /**
    * True if the current page is reloaded.
