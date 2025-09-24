@@ -1,7 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import * as E from 'fp-ts/Either';
 import type { PostEventFpFn } from '@tma.js/bridge';
-import { mockPageReload } from 'test-utils';
 
 import { BackButton, type BackButtonState } from '@/features/BackButton/BackButton.js';
 import { type ComponentStorage, createComponentSessionStorage } from '@/component-storage.js';
@@ -18,13 +17,15 @@ function instantiate({
   isTma = true,
   onClick = () => () => undefined,
   offClick = () => undefined,
+  isPageReload = false,
 }: {
-  version?: string;
-  storage?: boolean | ComponentStorage<BackButtonState>;
-  postEvent?: PostEventFpFn;
+  isPageReload?: boolean;
   isTma?: boolean;
-  onClick?: (listener: VoidFunction, once?: boolean) => VoidFunction;
   offClick?: (listener: VoidFunction, once?: boolean) => void;
+  onClick?: (listener: VoidFunction, once?: boolean) => VoidFunction;
+  postEvent?: PostEventFpFn;
+  storage?: boolean | ComponentStorage<BackButtonState>;
+  version?: string;
 } = {}) {
   return new BackButton({
     version,
@@ -37,6 +38,7 @@ function instantiate({
     isTma,
     onClick,
     offClick,
+    isPageReload,
   });
 }
 
@@ -143,16 +145,20 @@ describe('mount', () => {
   });
 
   describe('page reload', () => {
-    beforeEach(mockPageReload);
-
     it('should extract state from storage', () => {
       const get = vi.fn();
-      const component = instantiate({ storage: { get, set: vi.fn() } });
+      const component = instantiate({
+        storage: { get, set: vi.fn() },
+        isPageReload: true,
+      });
       component.mount();
       expect(get).toHaveBeenCalledOnce();
 
       const get2 = vi.fn(() => ({ isVisible: true }));
-      const component2 = instantiate({ storage: { get: get2, set: vi.fn() } });
+      const component2 = instantiate({
+        storage: { get: get2, set: vi.fn() },
+        isPageReload: true,
+      });
       component2.mount();
       expect(get2).toHaveBeenCalledOnce();
     });
