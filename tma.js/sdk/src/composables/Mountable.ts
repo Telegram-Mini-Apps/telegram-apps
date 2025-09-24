@@ -9,10 +9,14 @@ type OnMounted<S> = (state: S) => void;
 
 export interface MountableOptions<S> {
   /**
-   * A state to use when the current application launch is fresh (page
-   * was not reloaded) or `restoreState` returned falsy value.
+   * A state to use if the `restoreState` function returned falsy value or
+   * `isPageReload` returned false.
    */
-  fallbackState: MaybeAccessor<S>;
+  initialState: MaybeAccessor<S>;
+  /**
+   * @returns True if the current page was reloaded.
+   */
+  isPageReload: MaybeAccessor<boolean>;
   /**
    * A function to call whenever the component was mounted.
    * @param state - restored state.
@@ -27,28 +31,24 @@ export interface MountableOptions<S> {
    * will only be called if the current page was reloaded.
    */
   restoreState: RestoreStateFn<S>;
-  /**
-   * @returns True if the current page was reloaded.
-   */
-  isPageReload: MaybeAccessor<boolean>;
 }
 
 export class Mountable<S extends object> {
   constructor({
     onMounted,
     restoreState,
-    fallbackState,
+    initialState,
     onUnmounted,
     isPageReload,
   }: MountableOptions<S>) {
     this.restoreState = restoreState;
     this.onMounted = onMounted;
     this.onUnmounted = onUnmounted;
-    this.fallbackState = fallbackState;
+    this.initialState = initialState;
     this.isPageReload = isPageReload;
   }
 
-  private readonly fallbackState: MaybeAccessor<S>;
+  private readonly initialState: MaybeAccessor<S>;
 
   private readonly restoreState: RestoreStateFn<S>;
 
@@ -74,7 +74,7 @@ export class Mountable<S extends object> {
       batch(() => {
         const state = (
           access(this.isPageReload) ? this.restoreState() : undefined
-        ) || access(this.fallbackState);
+        ) || access(this.initialState);
         this._isMounted.set(true);
         this.onMounted?.(state);
       });
