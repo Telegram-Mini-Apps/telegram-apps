@@ -1,7 +1,8 @@
-import { Maybe } from '@tma.js/toolkit';
+import type { Maybe } from '@tma.js/toolkit';
 import type { ComponentStorage } from '@/component-storage.js';
 import type {
-  SharedComponentOptions,
+  SharedFeatureOptions,
+  WithIsPageReload,
   WithPostEvent,
   WithRequest,
   WithStorage,
@@ -73,5 +74,6 @@ export interface LocationManagerOptions extends WithVersion,
   WithStorage<LocationManagerStorage>,
   WithRequest,
   WithPostEvent,
-  SharedComponentOptions {
+  WithIsPageReload,
+  SharedFeatureOptions {
 }

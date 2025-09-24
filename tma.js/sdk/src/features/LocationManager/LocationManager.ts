@@ -1,12 +1,11 @@
-import { computed, type Computed, signal } from '@tma.js/signals';
-import type { EventPayload } from '@tma.js/bridge';
-import { Maybe } from '@tma.js/toolkit';
+import type { Computed } from '@tma.js/signals';
+import type { EventPayload, RequestError } from '@tma.js/bridge';
+import type { Maybe } from '@tma.js/toolkit';
 import { BetterPromise } from 'better-promises';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import { isPageReload } from '@/navigation.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { AsyncOptions } from '@/types.js';
 import type {
@@ -14,8 +13,12 @@ import type {
   LocationManagerRequestLocationResponse,
   LocationManagerState,
 } from '@/features/LocationManager/types.js';
+import { Stateful } from '@/composables/Stateful.js';
+import { bound } from '@/helpers/bound.js';
+import { AsyncMountable } from '@/composables/AsyncMountable.js';
+import { teToPromise } from '@/helpers/teToPromise.js';
 
-function locationEventToState(event: EventPayload<'location_checked'>): LocationManagerState {
+function eventToState(event: EventPayload<'location_checked'>): LocationManagerState {
   let available = false;
   let accessRequested: Maybe<boolean>;
   let accessGranted: Maybe<boolean>;
@@ -35,119 +38,99 @@ function locationEventToState(event: EventPayload<'location_checked'>): Location
  * @since Mini Apps v8.0
  */
 export class LocationManager {
-  private readonly _state = signal<LocationManagerState>({
-    available: false,
-    accessGranted: false,
-    accessRequested: false,
-  });
+  constructor({
+    version,
+    request,
+    postEvent,
+    storage,
+    isTma,
+    isPageReload,
+  }: LocationManagerOptions) {
+    const stateful = new Stateful({
+      initialState: {
+        available: false,
+        accessGranted: false,
+        accessRequested: false,
+      },
+      onChange: storage.set,
+    });
+    const mountable = new AsyncMountable<LocationManagerState, RequestError>({
+      isPageReload,
+      restoreState: storage.get,
+      onMounted: bound(stateful, 'setState'),
+      initialState(options) {
+        return pipe(
+          request('web_app_check_location', 'location_checked', options),
+          TE.map(eventToState),
+        );
+      },
+    });
 
-  private readonly _isMounted = signal(false);
+    const wrapOptions = {
+      version,
+      isSupported: 'web_app_check_location',
+      isTma,
+    } as const;
+    const wrapSupported = createWrapSafe(wrapOptions);
+    const wrapComplete = createWrapSafe({
+      ...wrapOptions,
+      isMounted: mountable.isMounted,
+    });
+
+    this.isAvailable = stateful.computedFromState('available');
+    this.isAccessRequested = stateful.computedFromState('accessRequested');
+    this.isAccessGranted = stateful.computedFromState('accessGranted');
+    this.isSupported = createIsSupportedSignal('web_app_check_location', version);
+    this.isMounted = mountable.isMounted;
+    this.state = stateful.state;
+    this.mount = wrapSupported(bound(mountable, 'mount'));
+    this.unmount = bound(mountable, 'unmount');
+    this.openSettings = wrapSupported(() => {
+      postEvent('web_app_open_location_settings');
+    });
+    this.requestLocation = wrapComplete(options => {
+      return teToPromise(request('web_app_request_location', 'location_requested', options))
+        .then(response => {
+          if (!response.available) {
+            stateful.setState({ available: false });
+            return null;
+          }
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { available, ...rest } = response;
+          return rest;
+        });
+    });
+  }
 
   /**
    * Complete location manager state.
    */
-  readonly state = computed(this._state);
+  readonly state: Computed<LocationManagerState>;
 
   /**
    * Signal indicating whether the location data tracking is currently available.
    */
-  readonly isAvailable = this.fromState('available');
+  readonly isAvailable: Computed<boolean>;
 
   /**
    * Signal indicating whether the user has granted the app permission to track location data.
    */
-  readonly isAccessGranted = this.fromState('accessGranted');
+  readonly isAccessGranted: Computed<boolean>;
 
   /**
    * Signal indicating whether the app has previously requested permission to track location data.
    */
-  readonly isAccessRequested = this.fromState('accessRequested');
+  readonly isAccessRequested: Computed<boolean>;
 
   /**
    * Signal indicating if the component is currently mounted.
    */
-  readonly isMounted = computed(this._isMounted);
+  readonly isMounted: Computed<boolean>;
 
   /**
    * Signal indicating if the component is supported.
    */
   readonly isSupported: Computed<boolean>;
-
-  constructor({ version, request, postEvent, storage, isTma }: LocationManagerOptions) {
-    this.isSupported = createIsSupportedSignal('web_app_check_location', version);
-
-    const wrapOptions = { version, isSupported: 'web_app_check_location', isTma } as const;
-    const wrapSupported = createWrapSafe(wrapOptions);
-    const wrapComplete = createWrapSafe({
-      ...wrapOptions,
-      isMounted: this._isMounted,
-    });
-
-    const setState = (state: LocationManagerState) => {
-      storage.set(state);
-      this._state.set(state);
-    };
-
-    this.mount = wrapSupported(options => {
-      if (this._isMounted()) {
-        return BetterPromise.resolve();
-      }
-
-      const processResult = (state: LocationManagerState) => {
-        setState(state);
-        this._isMounted.set(true);
-      };
-
-      const state = isPageReload() && storage.get();
-      if (state) {
-        return BetterPromise.resolve(state).then(processResult);
-      }
-
-      return BetterPromise.fn(async () => {
-        await pipe(
-          request('web_app_check_location', 'location_checked', options),
-          TE.match(
-            error => {
-              throw error;
-            },
-            response => processResult(locationEventToState(response)),
-          ),
-        )();
-      });
-    });
-
-    this.openSettings = wrapSupported(() => {
-      postEvent('web_app_open_location_settings');
-    });
-
-    this.requestLocation = wrapComplete(options => {
-      return BetterPromise.fn(async () => {
-        return pipe(
-          request('web_app_request_location', 'location_requested', options),
-          TE.match(
-            error => {
-              throw error;
-            },
-            response => {
-              if (!response.available) {
-                setState({ ...this._state(), available: false });
-                return null;
-              }
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              const { available, ...rest } = response;
-              return rest;
-            },
-          ),
-        )();
-      });
-    });
-  }
-
-  private fromState<K extends keyof LocationManagerState>(
-    key: K,
-  ): Computed<LocationManagerState[K]> {
-    return computed(() => this._state()[key]);
-  }
 
   /**
    * Opens the location access settings for bots. Useful when you need to request location access
@@ -178,7 +161,5 @@ export class LocationManager {
   /**
    * Unmounts the component.
    */
-  unmount() {
-    this._isMounted.set(false);
-  }
+  unmount: () => void;
 }
