@@ -15,6 +15,7 @@ import { NotAvailableError } from '@/errors.js';
 import type { ComponentStorage } from '@/component-storage.js';
 import type {
   SharedFeatureOptions,
+  WithIsPageReload,
   WithPostEvent,
   WithRequest,
   WithStorage,
@@ -27,8 +28,8 @@ import type {
   BiometryUpdateTokenOptions,
 } from '@/features/Biometry/types.js';
 import type { AsyncOptions } from '@/types.js';
-import { Stateful } from '@/composites/Stateful.js';
-import { AsyncMountable } from '@/composites/AsyncMountable.js';
+import { Stateful } from '@/composables/Stateful.js';
+import { AsyncMountable } from '@/composables/AsyncMountable.js';
 import { bound } from '@/helpers/bound.js';
 import { teToPromise } from '@/helpers/teToPromise.js';
 
@@ -38,6 +39,7 @@ export interface BiometryOptions extends WithVersion,
   WithStorage<BiometryStorage>,
   WithRequest,
   WithPostEvent,
+  WithIsPageReload,
   SharedFeatureOptions {
   /**
    * Adds a biometry info received event listener.
@@ -55,7 +57,7 @@ function throwNotAvailable(): never {
   throw new NotAvailableError('Biometry is not available');
 }
 
-function biometryInfoEventToState(event: EventPayload<'biometry_info_received'>): BiometryState {
+function eventToState(event: EventPayload<'biometry_info_received'>): BiometryState {
   let available = false;
   let tokenSaved = false;
   let deviceId = '';
@@ -85,9 +87,10 @@ export class Biometry {
     onBiometryInfoReceived,
     offBiometryInfoReceived,
     isTma,
+    isPageReload,
   }: BiometryOptions) {
     const listener: EventListener<'biometry_info_received'> = event => {
-      stateful.setState(biometryInfoEventToState(event));
+      stateful.setState(eventToState(event));
     };
 
     const stateful = new Stateful<BiometryState>({
@@ -102,18 +105,18 @@ export class Biometry {
       onChange: storage.set,
     });
     const mountable = new AsyncMountable({
-      isTma,
-      onBeforeMounted: bound(stateful, 'setState'),
-      mount(options) {
+      initialState(options) {
         return pipe(
           request('web_app_biometry_get_info', 'biometry_info_received', options),
-          TE.map(biometryInfoEventToState),
+          TE.map(eventToState),
         );
       },
-      onMounted: () => {
+      isPageReload,
+      onMounted(state) {
+        stateful.setState(state);
         onBiometryInfoReceived(listener);
       },
-      onUnmounted: () => {
+      onUnmounted() {
         offBiometryInfoReceived(listener);
       },
       restoreState: storage.get,
@@ -162,7 +165,7 @@ export class Biometry {
           params: { reason: ((options || {}).reason || '').trim() },
         }),
       ).then(response => {
-        const state = biometryInfoEventToState(response);
+        const state = eventToState(response);
         if (!state.available) {
           throwNotAvailable();
         }
