@@ -4,21 +4,23 @@ import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import type { ComponentStorage } from '@/component-storage.js';
 import type {
   SharedFeatureOptions,
+  WithIsPageReload,
   WithPostEvent,
   WithStorage,
 } from '@/features/types.js';
-import { Stateful } from '@/composites/Stateful.js';
-import { Mountable } from '@/composites/Mountable.js';
+import { Stateful } from '@/composables/Stateful.js';
+import { Mountable } from '@/composables/Mountable.js';
 import { bound } from '@/helpers/bound.js';
 
 export interface ClosingBehaviorOptions
   extends WithStorage<ComponentStorage<{ isConfirmationEnabled: boolean }>>,
   WithPostEvent,
+  WithIsPageReload,
   SharedFeatureOptions {
 }
 
 export class ClosingBehavior {
-  constructor({ postEvent, storage, isTma }: ClosingBehaviorOptions) {
+  constructor({ postEvent, storage, isTma, isPageReload }: ClosingBehaviorOptions) {
     const stateful = new Stateful({
       initialState: { isConfirmationEnabled: false },
       onChange(state) {
@@ -29,13 +31,10 @@ export class ClosingBehavior {
       },
     });
     const mountable = new Mountable({
-      isTma,
-      onBeforeMounted(state) {
-        if (state) {
-          stateful.setState(state);
-        }
-      },
+      onMounted: bound(stateful, 'setState'),
       restoreState: storage.get,
+      initialState: { isConfirmationEnabled: false },
+      isPageReload,
     });
 
     const wrapOptions = { isSupported: 'web_app_setup_closing_behavior', isTma } as const;
@@ -53,7 +52,7 @@ export class ClosingBehavior {
     this.isMounted = mountable.isMounted;
     this.disableConfirmation = wrapComplete(() => setClosingConfirmation(false));
     this.enableConfirmation = wrapComplete(() => setClosingConfirmation(true));
-    this.mount = wrapSupported(mountable.mount);
+    this.mount = wrapSupported(bound(mountable, 'mount'));
     this.unmount = bound(mountable, 'unmount');
   }
 
