@@ -16,6 +16,6 @@ export const biometry = new Biometry({
   },
   postEvent: postEventFp,
   request: requestFp,
-  storage: createComponentSessionStorage('backButton'),
+  storage: createComponentSessionStorage('biometry'),
   version,
 });
