@@ -2,8 +2,8 @@ import type { Computed } from '@tma.js/signals';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import type { ComponentStorage } from '@/component-storage.js';
-import type { SharedFeatureOptions, WithStorage } from '@/features/types.js';
-import { Mountable, type MountableOptions } from '@/composables/Mountable.js';
+import type { SharedFeatureOptions, WithIsPageReload, WithStorage } from '@/features/types.js';
+import { Mountable } from '@/composables/Mountable.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { bound } from '@/helpers/bound.js';
 
@@ -12,7 +12,7 @@ export interface ButtonState {
 }
 
 export interface ButtonOptions<S> extends WithStorage<ComponentStorage<S>>,
-  Pick<MountableOptions<S>, 'isPageReload'>,
+  WithIsPageReload,
   SharedFeatureOptions {
   /**
    * The initial button state.
