@@ -2,12 +2,8 @@ import type { Computed } from '@tma.js/signals';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import type { ComponentStorage } from '@/component-storage.js';
-import type {
-  SharedFeatureOptions,
-  WithOnClickListener,
-  WithStorage,
-} from '@/features/types.js';
-import { Mountable } from '@/composables/Mountable.js';
+import type { SharedFeatureOptions, WithStorage } from '@/features/types.js';
+import { Mountable, type MountableOptions } from '@/composables/Mountable.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { bound } from '@/helpers/bound.js';
 
@@ -16,17 +12,30 @@ export interface ButtonState {
 }
 
 export interface ButtonOptions<S> extends WithStorage<ComponentStorage<S>>,
-  WithOnClickListener,
+  Pick<MountableOptions<S>, 'isPageReload'>,
   SharedFeatureOptions {
   /**
    * The initial button state.
    */
   initialState: S;
   /**
+   * Removes a component click listener.
+   * @param listener - a listener to remove.
+   * @param once - should the listener be called only once.
+   */
+  offClick: (listener: VoidFunction, once?: boolean) => void;
+  /**
    * A function to call whenever the button state changes.
    * @param state - updated state.
    */
   onChange: (state: S) => void;
+  /**
+   * Adds a component click listener.
+   * @returns A function to remove listener.
+   * @param listener - a listener to add.
+   * @param once - should the listener be called only once.
+   */
+  onClick: (listener: VoidFunction, once?: boolean) => VoidFunction;
 }
 
 export class Button<S extends ButtonState> {
@@ -37,6 +46,7 @@ export class Button<S extends ButtonState> {
     offClick,
     initialState,
     onChange,
+    isPageReload,
   }: ButtonOptions<S>) {
     const wrapSupported = createWrapSafe({ isTma });
 
@@ -48,8 +58,9 @@ export class Button<S extends ButtonState> {
       },
     });
     const mountable = new Mountable<S>({
+      initialState,
+      isPageReload,
       onMounted: bound(stateful, 'setState'),
-      fallbackState: initialState,
       restoreState: storage.get,
     });
 
