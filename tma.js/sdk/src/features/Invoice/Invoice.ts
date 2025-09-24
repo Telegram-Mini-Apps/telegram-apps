@@ -54,7 +54,6 @@ export class Invoice {
         }
         [, , slug] = match;
       } else {
-        // todo: validate slug?
         slug = urlOrSlug;
         options = optionsOrType;
       }
