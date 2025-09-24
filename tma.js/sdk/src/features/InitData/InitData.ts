@@ -5,24 +5,30 @@ import * as E from 'fp-ts/Either';
 import * as O from 'fp-ts/Option';
 import { pipe } from 'fp-ts/function';
 
+type RetrieveInitData<Err> = () => E.Either<Err, O.Option<InitDataType>>;
+
+type RetrieveRawInitData<Err> = () => E.Either<Err, O.Option<string>>;
+
 export interface InitDataOptions<EComplete, ERaw> {
   /**
    * Retrieves init data from the current environment.
    */
-  retrieveInitData: () => E.Either<EComplete, O.Option<InitDataType>>;
+  retrieveInitData: RetrieveInitData<EComplete>;
   /**
    * Retrieves raw init data from the current environment.
    */
-  retrieveRawInitData: () => E.Either<ERaw, O.Option<string>>;
+  retrieveRawInitData: RetrieveRawInitData<ERaw>;
 }
 
 export class InitData<EComplete extends Error, ERaw extends Error> {
-  constructor(options: InitDataOptions<EComplete, ERaw>) {
-    this.restore = () => {
-      pipe(eitherGet(options.retrieveInitData()), O.map(this._state.set));
-      pipe(eitherGet(options.retrieveRawInitData()), O.map(this._raw.set));
-    };
+  constructor({ retrieveRawInitData, retrieveInitData }: InitDataOptions<EComplete, ERaw>) {
+    this.retrieveRawInitData = retrieveRawInitData;
+    this.retrieveInitData = retrieveInitData;
   }
+
+  private readonly retrieveInitData: RetrieveInitData<EComplete>;
+
+  private readonly retrieveRawInitData: RetrieveRawInitData<ERaw>;
 
   private fromState<K extends keyof InitDataType>(key: K): Computed<InitDataType[K] | undefined> {
     return computed(() => {
@@ -116,5 +122,8 @@ export class InitData<EComplete extends Error, ERaw extends Error> {
   /**
    * Restores the component state.
    */
-  restore: () => void;
+  restore() {
+    pipe(eitherGet(this.retrieveInitData()), O.map(this._state.set));
+    pipe(eitherGet(this.retrieveRawInitData()), O.map(this._raw.set));
+  }
 }
