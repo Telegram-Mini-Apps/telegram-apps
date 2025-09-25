@@ -1,17 +1,22 @@
 import type { Version } from '@tma.js/types';
-import type {
-  PostEventFpFn,
-  InvokeCustomMethodError,
-  InvokeCustomMethodFpOptions,
-  RequestError,
-  CustomMethodName,
-  CustomMethodParams,
-  RequestFpFn,
+import {
+  type PostEventFpFn,
+  type InvokeCustomMethodError,
+  type InvokeCustomMethodFpOptions,
+  type RequestError,
+  type CustomMethodName,
+  type CustomMethodParams,
+  type RequestFpFn,
+  postEventFp,
+  isTMAFp,
 } from '@tma.js/bridge';
 import type * as TE from 'fp-ts/TaskEither';
 
 import type { MaybeAccessor } from '@/types.js';
-import type { ComponentStorage } from '@/component-storage.js';
+import { type ComponentStorage, createComponentSessionStorage } from '@/component-storage.js';
+import { version } from '@/globals/version.js';
+import { isPageReload } from '@/navigation.js';
+import { access } from '@/helpers/access.js';
 
 export interface InvokeCustomMethodNoRequestIdFn {
   <M extends CustomMethodName>(
@@ -20,6 +25,7 @@ export interface InvokeCustomMethodNoRequestIdFn {
     params: CustomMethodParams<M>,
     options?: InvokeCustomMethodFpOptions,
   ): TE.TaskEither<InvokeCustomMethodError, unknown>;
+
   (
     this: void,
     method: string,
@@ -53,7 +59,6 @@ export interface WithPostEvent {
   postEvent: PostEventFpFn;
 }
 
-
 export interface WithStorage<T> {
   /**
    * A storage the component could use to store its data.
@@ -73,4 +78,29 @@ export interface SharedFeatureOptions {
    * True if the current environment is Telegram Mini Apps.
    */
   isTma: MaybeAccessor<boolean>;
+}
+
+export const withVersion = createMixin<WithVersion>({
+  version,
+});
+
+export const withPostEvent = createMixin<WithPostEvent>({
+  postEvent: postEventFp,
+});
+
+export const sharedFeatureOptions: SharedFeatureOptions = {
+  isTma: isTMAFp,
+};
+
+export function withStateRestore<S>(storageName: string) {
+  return createMixin<WithStorage<S> & WithIsPageReload>({
+    storage: createComponentSessionStorage<S>(storageName),
+    isPageReload,
+  });
+}
+
+function createMixin<T>(mix: MaybeAccessor<T>) {
+  return <O extends object>(obj: O) => {
+    return { ...obj, ...access(mix) };
+  };
 }
