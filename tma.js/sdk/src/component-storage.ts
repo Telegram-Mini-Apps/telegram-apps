@@ -1,8 +1,8 @@
 import { getStorageValue, setStorageValue } from '@tma.js/toolkit';
 
 export interface ComponentStorage<T> {
-  get(): T | undefined;
-  set(value: T): void;
+  get: () => T | undefined;
+  set: (value: T) => void;
 }
 
 /**
