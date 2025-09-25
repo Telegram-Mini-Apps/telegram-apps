@@ -166,7 +166,7 @@ describe('mount', () => {
 });
 
 describe('unmount', () => {
-  it('should set isMunted = false', () => {
+  it('should set isMounted = false', () => {
     const component = instantiate();
     expect(component.isMounted()).toBe(false);
     component.mount();

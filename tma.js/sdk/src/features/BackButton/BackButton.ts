@@ -2,7 +2,7 @@ import type { Computed } from '@tma.js/signals';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type { WithPostEvent, WithVersion } from '@/features/types.js';
+import type { WithPostEvent, WithVersion } from '@/features/mixins.js';
 import { Button, type ButtonOptions } from '@/composables/Button.js';
 
 export interface BackButtonState {
@@ -19,6 +19,7 @@ export interface BackButtonOptions extends WithVersion,
  */
 export class BackButton {
   constructor({ postEvent, version, isTma, ...rest }: BackButtonOptions) {
+    const SETUP_METHOD = 'web_app_setup_back_button';
     const button = new Button({
       ...rest,
       initialState: { isVisible: false },
@@ -28,22 +29,22 @@ export class BackButton {
       },
     });
 
-    const wrapOptions = { version, isSupported: 'web_app_setup_back_button', isTma } as const;
+    const wrapOptions = { version, isSupported: SETUP_METHOD, isTma } as const;
     const wrapSupported = createWrapSafe(wrapOptions);
     const wrapComplete = createWrapSafe({
       ...wrapOptions,
       isMounted: button.isMounted,
     });
 
-    const setVisibility = (isVisible: boolean): void => {
-      button.setState({ isVisible });
-    };
-
     this.isVisible = button.isVisible;
     this.isMounted = button.isMounted;
-    this.isSupported = createIsSupportedSignal('web_app_setup_back_button', version);
-    this.hide = wrapComplete(() => setVisibility(false));
-    this.show = wrapComplete(() => setVisibility(true));
+    this.isSupported = createIsSupportedSignal(SETUP_METHOD, version);
+    this.hide = wrapComplete(() => {
+      button.setState({ isVisible: false });
+    });
+    this.show = wrapComplete(() => {
+      button.setState({ isVisible: true });
+    });
     this.onClick = wrapSupported(button.onClick);
     this.offClick = wrapSupported(button.offClick);
     this.mount = wrapSupported(button.mount);
