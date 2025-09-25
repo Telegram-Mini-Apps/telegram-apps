@@ -9,7 +9,8 @@ import type { If, IsNever } from '@tma.js/toolkit';
 import type { Version } from '@tma.js/types';
 
 import { FunctionUnavailableError } from '@/errors.js';
-import type { AnyFn } from '@/types.js';
+import type { AnyFn, MaybeAccessor } from '@/types.js';
+import { access } from '@/helpers/access.js';
 
 /**
  * @returns Error text if something is wrong.
@@ -144,7 +145,7 @@ export interface WrapSafeOptions<Args extends any[]> {
   /**
    * A signal to retrieve the current Telegram Mini Apps version or the value itself.
    */
-  isTma: boolean | (() => boolean);
+  isTma: MaybeAccessor<boolean>;
   /**
    * A map where the key is a method name with versioned parameters, and the value is a tuple
    * containing the method and parameter names. The third tuple value is a function accepting
@@ -154,7 +155,7 @@ export interface WrapSafeOptions<Args extends any[]> {
   /**
    * A signal to retrieve the current Telegram Mini Apps version or the value itself.
    */
-  version?: Version | (() => Version);
+  version?: MaybeAccessor<Version>;
 }
 
 /**
@@ -171,12 +172,8 @@ export function wrapSafe<Fn extends AnyFn, O extends WrapSafeOptions<Parameters<
   O extends { isSupported: any } ? true : false,
   O extends { supports: Record<string, any> } ? keyof O['supports'] & string : never
 > {
-  const version = () => (
-    (typeof options.version === 'function' ? options.version() : options.version) || '100'
-  );
-  const isTma = () => (
-    typeof options.isTma === 'function' ? options.isTma() : options.isTma
-  );
+  const version = () => access(options.version) || '100';
+  const isTma = () => access(options.isTma);
 
   // Simplify the isSupported value to work with an array of validators or a single object.
   const { isSupported: optionsIsSupported } = options;
