@@ -1,4 +1,7 @@
-import { it, expect } from 'vitest';
+import { it, expect, beforeEach } from 'vitest';
+
+import { version } from '@/globals/version.js';
+import { resetGlobals } from '@/globals/resetGlobals.js';
 
 export function testIsSupported(
   get: (version: string) => { isSupported(): boolean },
@@ -11,4 +14,19 @@ export function testIsSupported(
     expect(get(prevVersion).isSupported()).toBe(false);
     expect(get(minVersion).isSupported()).toBe(true);
   });
+}
+
+export function testIsSupportedFn(
+  instance: { isSupported(): boolean },
+  minVersion: string,
+) {
+  beforeEach(resetGlobals);
+
+  testIsSupported(
+    v => {
+      version.set(v);
+      return instance;
+    },
+    minVersion,
+  );
 }
