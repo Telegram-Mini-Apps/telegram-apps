@@ -7,9 +7,13 @@ import {
   type CustomMethodName,
   type CustomMethodParams,
   type RequestFpFn,
+  type EventName,
+  off,
+  on,
   postEventFp,
   isTMAFp,
 } from '@tma.js/bridge';
+import { computed } from '@tma.js/signals';
 import type * as TE from 'fp-ts/TaskEither';
 
 import type { MaybeAccessor } from '@/types.js';
@@ -84,13 +88,26 @@ export const withVersion = createMixin<WithVersion>({
   version,
 });
 
+export function withClickListeners(trackedEvent: EventName) {
+  return createMixin({
+    onClick(listener: VoidFunction, once?: boolean): VoidFunction {
+      return on(trackedEvent, listener, once);
+    },
+    offClick(listener: VoidFunction, once?: boolean): void {
+      off(trackedEvent, listener, once);
+    },
+  });
+}
+
 export const withPostEvent = createMixin<WithPostEvent>({
   postEvent: postEventFp,
 });
 
-export const sharedFeatureOptions: SharedFeatureOptions = {
-  isTma: isTMAFp,
-};
+export function sharedFeatureOptions(): SharedFeatureOptions {
+  return {
+    isTma: computed(() => isTMAFp()),
+  };
+}
 
 export function withStateRestore<S>(storageName: string) {
   return createMixin<WithStorage<S> & WithIsPageReload>({
