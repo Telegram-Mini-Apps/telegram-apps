@@ -1,4 +1,5 @@
 import type { Computed } from '@tma.js/signals';
+import { eitherGet } from '@tma.js/toolkit';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
@@ -25,7 +26,9 @@ export class BackButton {
       initialState: { isVisible: false },
       isTma,
       onChange(state) {
-        postEvent('web_app_setup_back_button', { is_visible: state.isVisible });
+        eitherGet(
+          postEvent(SETUP_METHOD, { is_visible: state.isVisible }),
+        );
       },
     });
 
