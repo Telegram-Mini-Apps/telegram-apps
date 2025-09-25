@@ -53,11 +53,12 @@ export interface WithPostEvent {
   postEvent: PostEventFpFn;
 }
 
-export interface WithStorage<T extends ComponentStorage<any>> {
+
+export interface WithStorage<T> {
   /**
    * A storage the component could use to store its data.
    */
-  storage: T;
+  storage: ComponentStorage<T>;
 }
 
 export interface WithIsPageReload {
