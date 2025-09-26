@@ -134,7 +134,7 @@ export function testComponentMethodSafety<C>(options: Options<C>) {
 
     describe('mini apps env', () => {
       describe('package uninitialized (version is "0.0")', () => {
-        it('should throw FunctionUnavailableError', () => {
+        it.runIf(hasMinVersion)('should throw FunctionUnavailableError', () => {
           expect(() => tryCall(instantiate({ isTma: true, version: '0.0' })))
             .toThrow(new FunctionUnavailableError(
               'Unable to call function: the SDK was not initialized. Use the SDK init() function',
