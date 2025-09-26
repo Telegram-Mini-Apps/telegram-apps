@@ -4,8 +4,8 @@ import { BackButton, type BackButtonState } from '@/features/BackButton/BackButt
 import {
   withStateRestore,
   sharedFeatureOptions,
-  withVersion,
-  withPostEvent, withClickListeners,
+  withVersionedBasedPostEvent,
+  withClickListeners,
 } from '@/features/mixins.js';
 
 /**
@@ -14,8 +14,7 @@ import {
 export function instantiateBackButton() {
   return new BackButton(pipe(
     sharedFeatureOptions(),
-    withVersion,
-    withPostEvent,
+    withVersionedBasedPostEvent,
     withStateRestore<BackButtonState>('backButton'),
     withClickListeners('back_button_pressed'),
   ));
