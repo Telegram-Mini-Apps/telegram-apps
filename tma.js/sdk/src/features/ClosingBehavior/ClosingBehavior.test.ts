@@ -1,7 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import * as E from 'fp-ts/Either';
 import type { PostEventFpFn } from '@tma.js/bridge';
-import { mockPageReload } from 'test-utils';
 
 import { ClosingBehavior } from '@/features/ClosingBehavior/ClosingBehavior.js';
 import { type ComponentStorage, createComponentSessionStorage } from '@/component-storage.js';
@@ -12,10 +11,12 @@ function instantiate({
   storage = false,
   postEvent = () => E.right(undefined),
   isTma = true,
+  isPageReload = false,
 }: {
   storage?: boolean | ComponentStorage<{ isConfirmationEnabled: boolean }>;
   postEvent?: PostEventFpFn;
   isTma?: boolean;
+  isPageReload?: boolean;
 } = {}) {
   return new ClosingBehavior({
     storage: typeof storage === 'boolean'
@@ -25,6 +26,7 @@ function instantiate({
       : storage,
     postEvent,
     isTma,
+    isPageReload,
   });
 }
 
@@ -70,8 +72,9 @@ describe.each([
       component[method]();
       component[method]();
       expect(postEvent).toBeCalledTimes(1);
-      expect(postEvent)
-        .toBeCalledWith('web_app_setup_closing_behavior', { need_confirmation: targetValue });
+      expect(postEvent).toBeCalledWith(
+        'web_app_setup_closing_behavior', { need_confirmation: targetValue },
+      );
     },
   );
 
@@ -107,16 +110,20 @@ describe('mount', () => {
   });
 
   describe('page reload', () => {
-    beforeEach(mockPageReload);
-
     it('should extract state from storage', () => {
       const get = vi.fn();
-      const component = instantiate({ storage: { get, set: vi.fn() } });
+      const component = instantiate({
+        storage: { get, set: vi.fn() },
+        isPageReload: true,
+      });
       component.mount();
       expect(get).toHaveBeenCalledOnce();
 
       const get2 = vi.fn(() => ({ isConfirmationEnabled: true }));
-      const component2 = instantiate({ storage: { get: get2, set: vi.fn() } });
+      const component2 = instantiate({
+        storage: { get: get2, set: vi.fn() },
+        isPageReload: true,
+      });
       component2.mount();
       expect(get2).toHaveBeenCalledOnce();
     });

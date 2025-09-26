@@ -1,12 +1,20 @@
-import { isTMAFp, postEventFp } from '@tma.js/bridge';
+import { pipe } from 'fp-ts/function';
 
-import { ClosingBehavior } from '@/features/ClosingBehavior/ClosingBehavior.js';
-import { isPageReload } from '@/navigation.js';
-import { createComponentSessionStorage } from '@/component-storage.js';
+import {
+  ClosingBehavior,
+  type ClosingBehaviorState,
+} from '@/features/ClosingBehavior/ClosingBehavior.js';
+import { sharedFeatureOptions, withPostEvent, withStateRestore } from '@/features/mixins.js';
 
-export const closingBehavior = new ClosingBehavior({
-  isPageReload,
-  isTma: isTMAFp,
-  postEvent: postEventFp,
-  storage: createComponentSessionStorage('closingBehavior'),
-});
+/**
+ * @internal
+ */
+export function instantiateClosingBehavior() {
+  return new ClosingBehavior(pipe(
+    sharedFeatureOptions(),
+    withStateRestore<ClosingBehaviorState>('closingBehavior'),
+    withPostEvent,
+  ));
+}
+
+export const closingBehavior = instantiateClosingBehavior();

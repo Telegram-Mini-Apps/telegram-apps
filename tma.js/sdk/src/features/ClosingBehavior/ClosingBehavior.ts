@@ -1,19 +1,22 @@
 import type { Computed } from '@tma.js/signals';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import type { ComponentStorage } from '@/component-storage.js';
 import type {
   SharedFeatureOptions,
   WithIsPageReload,
   WithPostEvent,
   WithStorage,
-} from '@/features/types.js';
+} from '@/features/mixins.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { bound } from '@/helpers/bound.js';
 
+export interface ClosingBehaviorState {
+  isConfirmationEnabled: boolean;
+}
+
 export interface ClosingBehaviorOptions
-  extends WithStorage<ComponentStorage<{ isConfirmationEnabled: boolean }>>,
+  extends WithStorage<ClosingBehaviorState>,
   WithPostEvent,
   WithIsPageReload,
   SharedFeatureOptions {
@@ -38,7 +41,7 @@ export class ClosingBehavior {
     });
 
     const wrapOptions = { isSupported: 'web_app_setup_closing_behavior', isTma } as const;
-    const wrapSupported = createWrapSafe(wrapOptions);
+    const wrapSafe = createWrapSafe(wrapOptions);
     const wrapComplete = createWrapSafe({
       ...wrapOptions,
       isMounted: mountable.isMounted,
@@ -52,7 +55,7 @@ export class ClosingBehavior {
     this.isMounted = mountable.isMounted;
     this.disableConfirmation = wrapComplete(() => setClosingConfirmation(false));
     this.enableConfirmation = wrapComplete(() => setClosingConfirmation(true));
-    this.mount = wrapSupported(bound(mountable, 'mount'));
+    this.mount = wrapSafe(bound(mountable, 'mount'));
     this.unmount = bound(mountable, 'unmount');
   }
 
@@ -69,7 +72,7 @@ export class ClosingBehavior {
   /**
    * Mounts the component restoring its state.
    */
-  mount: SafeWrapped<() => void, true>;
+  mount: SafeWrapped<() => void, false>;
 
   /**
    * Unmounts the component.
@@ -79,10 +82,10 @@ export class ClosingBehavior {
   /**
    * Disables the closing confirmation dialog.
    */
-  disableConfirmation: SafeWrapped<() => void, true>;
+  disableConfirmation: SafeWrapped<() => void, false>;
 
   /**
    * Enables the closing confirmation dialog.
    */
-  enableConfirmation: SafeWrapped<() => void, true>;
+  enableConfirmation: SafeWrapped<() => void, false>;
 }
