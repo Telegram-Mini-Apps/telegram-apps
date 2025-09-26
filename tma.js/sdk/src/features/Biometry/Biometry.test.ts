@@ -37,16 +37,18 @@ function instantiate({
     }
   }) as RequestFpFn,
   isTma = true,
-  onBiometryInfoReceived = () => undefined,
-  offBiometryInfoReceived = () => undefined,
+  onInfoReceived = () => undefined,
+  offInfoReceived = () => undefined,
+  isPageReload = false,
 }: {
   version?: string;
   storage?: boolean | BiometryStorage;
   postEvent?: PostEventFpFn;
   request?: RequestFpFn;
   isTma?: boolean;
-  onBiometryInfoReceived?: (listener: EventListener<'biometry_info_received'>) => void;
-  offBiometryInfoReceived?: (listener: EventListener<'biometry_info_received'>) => void;
+  onInfoReceived?: (listener: EventListener<'biometry_info_received'>) => void;
+  offInfoReceived?: (listener: EventListener<'biometry_info_received'>) => void;
+  isPageReload?: boolean;
 } = {}) {
   return new Biometry({
     version,
@@ -58,8 +60,9 @@ function instantiate({
     postEvent,
     request,
     isTma,
-    onBiometryInfoReceived,
-    offBiometryInfoReceived,
+    onInfoReceived,
+    offInfoReceived,
+    isPageReload,
   });
 }
 
@@ -160,8 +163,8 @@ describe('mount', () => {
         }),
         set: vi.fn(),
       },
-      onBiometryInfoReceived,
-      offBiometryInfoReceived(listener) {
+      onInfoReceived: onBiometryInfoReceived,
+      offInfoReceived(listener) {
         off('biometry_info_received', listener);
       },
     });
@@ -223,10 +226,10 @@ describe('unmount', () => {
           }),
           set: vi.fn(),
         },
-        onBiometryInfoReceived(listener) {
+        onInfoReceived(listener) {
           on('biometry_info_received', listener);
         },
-        offBiometryInfoReceived,
+        offInfoReceived: offBiometryInfoReceived,
       });
       await component.mount();
       const mountedState = {

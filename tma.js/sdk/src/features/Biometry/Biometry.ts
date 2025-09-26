@@ -20,7 +20,7 @@ import type {
   WithRequest,
   WithStorage,
   WithVersion,
-} from '@/features/types.js';
+} from '@/features/mixins.js';
 import type {
   BiometryAuthenticateOptions,
   BiometryRequestAccessOptions,
@@ -36,7 +36,7 @@ import { teToPromise } from '@/helpers/teToPromise.js';
 export type BiometryStorage = ComponentStorage<BiometryState>;
 
 export interface BiometryOptions extends WithVersion,
-  WithStorage<BiometryStorage>,
+  WithStorage<BiometryState>,
   WithRequest,
   WithPostEvent,
   WithIsPageReload,
@@ -45,12 +45,12 @@ export interface BiometryOptions extends WithVersion,
    * Adds a biometry info received event listener.
    * @param listener - a listener to add.
    */
-  onBiometryInfoReceived: (listener: EventListener<'biometry_info_received'>) => void;
+  onInfoReceived: (listener: EventListener<'biometry_info_received'>) => void;
   /**
    * Removes a biometry info received event listener.
    * @param listener - a listener to add.
    */
-  offBiometryInfoReceived: (listener: EventListener<'biometry_info_received'>) => void;
+  offInfoReceived: (listener: EventListener<'biometry_info_received'>) => void;
 }
 
 function throwNotAvailable(): never {
@@ -84,8 +84,8 @@ export class Biometry {
     request,
     postEvent,
     storage,
-    onBiometryInfoReceived,
-    offBiometryInfoReceived,
+    onInfoReceived,
+    offInfoReceived,
     isTma,
     isPageReload,
   }: BiometryOptions) {
@@ -114,10 +114,10 @@ export class Biometry {
       isPageReload,
       onMounted(state) {
         stateful.setState(state);
-        onBiometryInfoReceived(listener);
+        onInfoReceived(listener);
       },
       onUnmounted() {
-        offBiometryInfoReceived(listener);
+        offInfoReceived(listener);
       },
       restoreState: storage.get,
     });
