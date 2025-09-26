@@ -12,6 +12,7 @@ import {
   on,
   postEventFp,
   isTMAFp,
+  requestFp,
 } from '@tma.js/bridge';
 import { computed } from '@tma.js/signals';
 import type * as TE from 'fp-ts/TaskEither';
@@ -36,6 +37,13 @@ export interface InvokeCustomMethodNoRequestIdFn {
     params: object,
     options?: InvokeCustomMethodFpOptions,
   ): TE.TaskEither<RequestError, unknown>;
+}
+
+export interface WithVersionedBasedPostEvent extends WithPostEvent {
+  /**
+   * The currently supported Telegram Mini Apps version by the Telegram client.
+   */
+  version: MaybeAccessor<Version>;
 }
 
 export interface WithVersion {
@@ -88,6 +96,10 @@ export const withVersion = createMixin<WithVersion>({
   version,
 });
 
+export const withVersionedBasedPostEvent = createMixin<WithVersionedBasedPostEvent>(
+  () => withPostEvent({ version }),
+);
+
 export function withClickListeners(trackedEvent: EventName) {
   return createMixin({
     onClick(listener: VoidFunction, once?: boolean): VoidFunction {
@@ -101,6 +113,10 @@ export function withClickListeners(trackedEvent: EventName) {
 
 export const withPostEvent = createMixin<WithPostEvent>({
   postEvent: postEventFp,
+});
+
+export const withRequest = createMixin<WithRequest>({
+  request: requestFp,
 });
 
 export function sharedFeatureOptions(): SharedFeatureOptions {
