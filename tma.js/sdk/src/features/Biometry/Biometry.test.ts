@@ -1,8 +1,7 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import { type PostEventFpFn, type RequestFpFn, type EventName, emitEvent } from '@tma.js/bridge';
-import { mockPageReload } from 'test-utils';
 import { type EventListener, off, on } from '@tma.js/bridge';
 
 import { Biometry, type BiometryStorage } from '@/features/Biometry/Biometry.js';
@@ -112,8 +111,6 @@ describe('mount', () => {
   });
 
   describe('page reload', () => {
-    beforeEach(mockPageReload);
-
     it('should extract state from storage', async () => {
       const get = vi.fn();
       const component = instantiate({
@@ -126,6 +123,7 @@ describe('mount', () => {
           type: 'face',
         }),
         storage: { get, set: vi.fn() },
+        isPageReload: true,
       });
       await component.mount();
       expect(get).toHaveBeenCalledOnce();
@@ -139,14 +137,17 @@ describe('mount', () => {
         tokenSaved: true,
       };
       const get2 = vi.fn(() => storageState);
-      const component2 = instantiate({ storage: { get: get2, set: vi.fn() } });
+      const component2 = instantiate({
+        storage: { get: get2, set: vi.fn() },
+        isPageReload: true,
+      });
       await component2.mount();
       expect(get2).toHaveBeenCalledOnce();
     });
   });
 
   it('should use onBiometryInfoReceived to start tracking state changes', async () => {
-    const onBiometryInfoReceived = vi.fn(
+    const onInfoReceived = vi.fn(
       (listener: EventListener<'biometry_info_received'>) => {
         on('biometry_info_received', listener);
       },
@@ -163,13 +164,13 @@ describe('mount', () => {
         }),
         set: vi.fn(),
       },
-      onInfoReceived: onBiometryInfoReceived,
+      onInfoReceived,
       offInfoReceived(listener) {
         off('biometry_info_received', listener);
       },
     });
     await component.mount();
-    expect(onBiometryInfoReceived).toHaveBeenCalledOnce();
+    expect(onInfoReceived).toHaveBeenCalledOnce();
     expect(component.state()).toStrictEqual({
       available: true,
       type: 'face',
