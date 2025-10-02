@@ -3,9 +3,9 @@ import * as TE from 'fp-ts/TaskEither';
 import { BetterPromise } from 'better-promises';
 
 import { CloudStorage } from '@/features/CloudStorage/CloudStorage.js';
-import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
-import { testComponentMethodSafety } from '@test-utils/predefined/testComponentMethodSafety.js';
-import { InvokeCustomMethodNoRequestIdFn } from '@/features/mixins.js';
+import { testIsSupportedPure } from '@test-utils/predefined/testIsSupportedPure.js';
+import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
+import type { InvokeCustomMethodNoRequestIdFn } from '@/fn-options/withInvokeCustomMethod.js';
 
 const MIN_VERSION = '6.9';
 
@@ -29,7 +29,7 @@ describe.each([
   ['clear', (component: CloudStorage) => component.clear()],
 ] as const)('%s', (method, tryCall) => {
   describe('safety', () => {
-    testComponentMethodSafety({
+    testSafetyPure({
       instantiate,
       get: instance => instance[method],
       try: tryCall,
@@ -101,5 +101,5 @@ describe('clear', () => {
 });
 
 describe('isSupported', () => {
-  testIsSupported(version => instantiate({ isTma: true, version }), MIN_VERSION);
+  testIsSupportedPure(version => instantiate({ isTma: true, version }), MIN_VERSION);
 });

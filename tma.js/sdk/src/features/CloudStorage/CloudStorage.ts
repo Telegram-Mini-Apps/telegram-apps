@@ -5,12 +5,10 @@ import { array, parse, record, string } from 'valibot';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type {
-  SharedFeatureOptions,
-  WithInvokeCustomMethod,
-  WithVersion,
-} from '@/features/mixins.js';
 import { teToPromise } from '@/helpers/teToPromise.js';
+import type { WithVersion } from '@/fn-options/withVersion.js';
+import type { WithInvokeCustomMethod } from '@/fn-options/withInvokeCustomMethod.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
 export interface CloudStorageOptions extends WithVersion,
   WithInvokeCustomMethod,

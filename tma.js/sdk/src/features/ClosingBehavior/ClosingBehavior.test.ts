@@ -5,7 +5,7 @@ import type { PostEventFpFn } from '@tma.js/bridge';
 import { ClosingBehavior } from '@/features/ClosingBehavior/ClosingBehavior.js';
 import { type ComponentStorage, createComponentSessionStorage } from '@/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
-import { testComponentMethodSafety } from '@test-utils/predefined/testComponentMethodSafety.js';
+import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
 
 function instantiate({
   storage = false,
@@ -36,7 +36,7 @@ describe.each([
   ['mount', (component: ClosingBehavior) => component.mount(), false],
 ] as const)('%s', (method, tryCall, requireMount) => {
   describe('safety', () => {
-    testComponentMethodSafety({
+    testSafetyPure({
       instantiate,
       get: instance => instance[method],
       try: tryCall,

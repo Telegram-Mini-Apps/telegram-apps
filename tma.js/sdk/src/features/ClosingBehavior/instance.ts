@@ -4,7 +4,9 @@ import {
   ClosingBehavior,
   type ClosingBehaviorState,
 } from '@/features/ClosingBehavior/ClosingBehavior.js';
-import { sharedFeatureOptions, withPostEvent, withStateRestore } from '@/features/mixins.js';
+import { sharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import { withStateRestore } from '@/fn-options/withStateRestore.js';
+import { withPostEvent } from '@/fn-options/withPostEvent.js';
 
 /**
  * @internal

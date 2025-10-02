@@ -1,24 +1,20 @@
 import type { Computed } from '@tma.js/signals';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import type {
-  SharedFeatureOptions,
-  WithIsPageReload,
-  WithPostEvent,
-  WithStorage,
-} from '@/features/mixins.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { bound } from '@/helpers/bound.js';
+import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
+import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
 export interface ClosingBehaviorState {
   isConfirmationEnabled: boolean;
 }
 
 export interface ClosingBehaviorOptions
-  extends WithStorage<ClosingBehaviorState>,
+  extends WithStateRestore<ClosingBehaviorState>,
   WithPostEvent,
-  WithIsPageReload,
   SharedFeatureOptions {
 }
 

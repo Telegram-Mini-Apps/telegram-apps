@@ -1,15 +1,12 @@
 import { on, off } from '@tma.js/bridge';
 import { pipe } from 'fp-ts/function';
 
-import {
-  sharedFeatureOptions,
-  withPostEvent,
-  withRequest,
-  withStateRestore,
-  withVersion,
-} from '@/features/mixins.js';
 import { Biometry } from '@/features/Biometry/Biometry.js';
 import type { BiometryState } from '@/features/Biometry/types.js';
+import { sharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import { withVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
+import { withRequest } from '@/fn-options/withRequest.js';
+import { withStateRestore } from '@/fn-options/withStateRestore.js';
 
 /**
  * @internal
@@ -18,8 +15,7 @@ export function instantiateBiometry() {
   return new Biometry({
     ...pipe(
       sharedFeatureOptions(),
-      withVersion,
-      withPostEvent,
+      withVersionBasedPostEvent,
       withRequest,
       withStateRestore<BiometryState>('biometry'),
     ),

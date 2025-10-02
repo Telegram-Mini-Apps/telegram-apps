@@ -7,8 +7,8 @@ import { type EventListener, off, on } from '@tma.js/bridge';
 import { Biometry, type BiometryStorage } from '@/features/Biometry/Biometry.js';
 import { createComponentSessionStorage } from '@/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
-import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
-import { testComponentMethodSafety } from '@test-utils/predefined/testComponentMethodSafety.js';
+import { testIsSupportedPure } from '@test-utils/predefined/testIsSupportedPure.js';
+import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
 
 const MIN_VERSION = '7.2';
 
@@ -73,7 +73,7 @@ describe.each([
   ['mount', (component: Biometry) => component.mount(), false],
 ] as const)('%s', (method, tryCall, requireMount) => {
   describe('safety', () => {
-    testComponentMethodSafety({
+    testSafetyPure({
       instantiate,
       get: instance => instance[method],
       try: tryCall,
@@ -259,5 +259,5 @@ describe('unmount', () => {
 });
 
 describe('isSupported', () => {
-  testIsSupported(version => instantiate({ isTma: true, version }), MIN_VERSION);
+  testIsSupportedPure(version => instantiate({ isTma: true, version }), MIN_VERSION);
 });

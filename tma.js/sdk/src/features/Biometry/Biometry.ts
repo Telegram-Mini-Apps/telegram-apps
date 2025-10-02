@@ -14,14 +14,6 @@ import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import { NotAvailableError } from '@/errors.js';
 import type { ComponentStorage } from '@/component-storage.js';
 import type {
-  SharedFeatureOptions,
-  WithIsPageReload,
-  WithPostEvent,
-  WithRequest,
-  WithStorage,
-  WithVersion,
-} from '@/features/mixins.js';
-import type {
   BiometryAuthenticateOptions,
   BiometryRequestAccessOptions,
   BiometryState,
@@ -32,14 +24,18 @@ import { Stateful } from '@/composables/Stateful.js';
 import { AsyncMountable } from '@/composables/AsyncMountable.js';
 import { bound } from '@/helpers/bound.js';
 import { teToPromise } from '@/helpers/teToPromise.js';
+import type { WithVersion } from '@/fn-options/withVersion.js';
+import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
+import type { WithRequest } from '@/fn-options/withRequest.js';
+import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
 export type BiometryStorage = ComponentStorage<BiometryState>;
 
 export interface BiometryOptions extends WithVersion,
-  WithStorage<BiometryState>,
+  WithStateRestore<BiometryState>,
   WithRequest,
   WithPostEvent,
-  WithIsPageReload,
   SharedFeatureOptions {
   /**
    * Adds a biometry info received event listener.

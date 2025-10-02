@@ -1,17 +1,17 @@
 import type { Computed } from '@tma.js/signals';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import type { SharedFeatureOptions, WithIsPageReload, WithStorage } from '@/features/mixins.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { bound } from '@/helpers/bound.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 
 export interface ButtonState {
   isVisible: boolean;
 }
 
-export interface ButtonOptions<S> extends WithStorage<S>,
-  WithIsPageReload,
+export interface ButtonOptions<S> extends WithStateRestore<S>,
   SharedFeatureOptions {
   /**
    * The initial button state.

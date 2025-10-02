@@ -3,8 +3,9 @@ import { eitherGet } from '@tma.js/toolkit';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type { WithPostEvent, WithVersion } from '@/features/mixins.js';
 import { Button, type ButtonOptions } from '@/composables/Button.js';
+import type { WithVersion } from '@/fn-options/withVersion.js';
+import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 
 export interface BackButtonState {
   isVisible: boolean;
