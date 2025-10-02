@@ -5,8 +5,8 @@ import type { PostEventFpFn } from '@tma.js/bridge';
 import { SettingsButton, type SettingsButtonState } from '@/features/SettingsButton/SettingsButton.js';
 import { type ComponentStorage, createComponentSessionStorage } from '@/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
-import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
-import { testComponentMethodSafety } from '@test-utils/predefined/testComponentMethodSafety.js';
+import { testIsSupportedPure } from '@test-utils/predefined/testIsSupportedPure.js';
+import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
 
 const MIN_VERSION = '6.10';
 
@@ -50,7 +50,7 @@ describe.each([
   ['offClick', (component: SettingsButton) => component.offClick(() => undefined), false],
 ] as const)('%s', (method, tryCall, requireMount) => {
   describe('safety', () => {
-    testComponentMethodSafety({
+    testSafetyPure({
       instantiate,
       get: instance => instance[method],
       try: tryCall,
@@ -177,5 +177,5 @@ describe('unmount', () => {
 });
 
 describe('isSupported', () => {
-  testIsSupported(version => instantiate({ isTma: true, version }), MIN_VERSION);
+  testIsSupportedPure(version => instantiate({ isTma: true, version }), MIN_VERSION);
 });

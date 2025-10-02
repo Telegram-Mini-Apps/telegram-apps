@@ -1,20 +1,24 @@
-import { on, off, postEventFp, isTMA } from '@tma.js/bridge';
+import { pipe } from 'fp-ts/function';
 
-import { SettingsButton } from '@/features/SettingsButton/SettingsButton.js';
-import { createComponentSessionStorage } from '@/component-storage.js';
-import { version } from '@/globals/version.js';
-import { isPageReload } from '@/navigation.js';
+import {
+  SettingsButton,
+  type SettingsButtonState,
+} from '@/features/SettingsButton/SettingsButton.js';
+import { sharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import { withClickListeners } from '@/fn-options/withClickListeners.js';
+import { withVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
+import { withStateRestore } from '@/fn-options/withStateRestore.js';
 
-export const settingsButton = new SettingsButton({
-  isPageReload,
-  isTma: isTMA,
-  offClick(listener, once) {
-    off('settings_button_pressed', listener, once);
-  },
-  onClick(listener, once) {
-    return on('settings_button_pressed', listener, once);
-  },
-  postEvent: postEventFp,
-  storage: createComponentSessionStorage('settingsButton'),
-  version,
-});
+/**
+ * @internal
+ */
+export function instantiateSettingsButton() {
+  return new SettingsButton(pipe(
+    sharedFeatureOptions(),
+    withClickListeners('settings_button_pressed'),
+    withVersionBasedPostEvent,
+    withStateRestore<SettingsButtonState>('settingsButton'),
+  ));
+}
+
+export const settingsButton = instantiateSettingsButton();

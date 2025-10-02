@@ -2,15 +2,14 @@ import type { Computed } from '@tma.js/signals';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type { WithPostEvent, WithVersion } from '@/features/mixins.js';
 import { Button, type ButtonOptions } from '@/composables/Button.js';
+import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 
 export interface SettingsButtonState {
   isVisible: boolean;
 }
 
-export interface SettingsButtonOptions extends WithVersion,
-  WithPostEvent,
+export interface SettingsButtonOptions extends WithVersionBasedPostEvent,
   Omit<ButtonOptions<SettingsButtonState>, 'onChange' | 'initialState'> {
 }
 
