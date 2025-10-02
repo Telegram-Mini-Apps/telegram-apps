@@ -96,7 +96,7 @@ export const withVersion = createMixin<WithVersion>({
   version,
 });
 
-export const withVersionedBasedPostEvent = createMixin<WithVersionedBasedPostEvent>(
+export const withVersionBasedPostEvent = createMixin<WithVersionedBasedPostEvent>(
   () => withPostEvent({ version }),
 );
 
