@@ -5,27 +5,20 @@ import type { EventListener } from '@tma.js/bridge';
 import type { Either } from 'fp-ts/Either';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import type {
-  SharedFeatureOptions,
-  WithIsPageReload,
-  WithStorage,
-  WithVersion,
-} from '@/features/mixins.js';
 import { Stateful } from '@/composables/Stateful.js';
-import type { ComponentStorage } from '@/component-storage.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { bound } from '@/helpers/bound.js';
 import { CSSVarsBoundError } from '@/errors.js';
 import { deleteCssVar, setCssVar } from '@/helpers/css-vars.js';
 import { isColorDark } from '@/helpers/isColorDark.js';
+import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
 export type ThemeParamsState = ThemeParamsType;
 
 type RetrieveThemeParams<E> = () => Either<E, ThemeParamsType>;
 
-export interface ThemeParamsOptions<Err> extends WithVersion,
-  WithStorage<ComponentStorage<ThemeParamsState>>,
-  WithIsPageReload,
+export interface ThemeParamsOptions<Err> extends WithStateRestore<ThemeParamsState>,
   SharedFeatureOptions {
   /**
    * Removes a theme change listener.
@@ -57,7 +50,6 @@ export class ThemeParams<Err> {
     retrieveThemeParams,
     onThemeChanged,
     offThemeChanged,
-    version,
     isTma,
     storage,
     isPageReload,
@@ -84,7 +76,7 @@ export class ThemeParams<Err> {
       restoreState: storage.get,
     });
 
-    const wrapOptions = { version, isTma };
+    const wrapOptions = { isTma };
     const wrapSafe = createWrapSafe(wrapOptions);
     const wrapComplete = createWrapSafe({
       ...wrapOptions,
