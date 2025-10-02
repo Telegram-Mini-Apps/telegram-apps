@@ -5,17 +5,11 @@ import type {
 } from '@tma.js/bridge';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import type {
-  SharedFeatureOptions,
-  WithPostEvent,
-  WithVersion,
-} from '@/features/mixins.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
+import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
-export interface HapticFeedbackOptions
-  extends WithPostEvent,
-  WithVersion,
-  SharedFeatureOptions {
+export interface HapticFeedbackOptions extends WithVersionBasedPostEvent, SharedFeatureOptions {
 }
 
 /**
