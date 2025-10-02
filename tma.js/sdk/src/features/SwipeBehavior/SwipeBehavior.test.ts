@@ -6,7 +6,7 @@ import type { Version } from '@tma.js/types';
 import { SwipeBehavior } from '@/features/SwipeBehavior/SwipeBehavior.js';
 import { type ComponentStorage, createComponentSessionStorage } from '@/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
-import { testComponentMethodSafety } from '@test-utils/predefined/testComponentMethodSafety.js';
+import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
 
 function instantiate({
   version = '100',
@@ -40,7 +40,7 @@ describe.each([
   ['mount', (component: SwipeBehavior) => component.mount(), false],
 ] as const)('%s', (method, tryCall, requireMount) => {
   describe('safety', () => {
-    testComponentMethodSafety({
+    testSafetyPure({
       instantiate,
       get: instance => instance[method],
       minVersion: '7.7',

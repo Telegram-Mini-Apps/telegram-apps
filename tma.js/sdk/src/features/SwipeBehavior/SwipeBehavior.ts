@@ -1,23 +1,21 @@
 import type { Computed } from '@tma.js/signals';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import type { ComponentStorage } from '@/component-storage.js';
-import type {
-  SharedFeatureOptions,
-  WithIsPageReload,
-  WithPostEvent,
-  WithStorage, WithVersion,
-} from '@/features/mixins.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { bound } from '@/helpers/bound.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
+import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
+import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+
+export interface SwipeBehaviorState {
+  isVerticalEnabled: boolean;
+}
 
 export interface SwipeBehaviorOptions
-  extends WithStorage<ComponentStorage<{ isVerticalEnabled: boolean }>>,
-  WithPostEvent,
-  WithIsPageReload,
-  WithVersion,
+  extends WithStateRestore<SwipeBehaviorState>,
+  WithVersionBasedPostEvent,
   SharedFeatureOptions {
 }
 

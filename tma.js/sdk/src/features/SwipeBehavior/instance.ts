@@ -1,14 +1,19 @@
-import { isTMAFp, postEventFp } from '@tma.js/bridge';
+import { pipe } from 'fp-ts/function';
 
-import { SwipeBehavior } from '@/features/SwipeBehavior/SwipeBehavior.js';
-import { isPageReload } from '@/navigation.js';
-import { createComponentSessionStorage } from '@/component-storage.js';
-import { version } from '@/globals/version.js';
+import { SwipeBehavior, type SwipeBehaviorState } from '@/features/SwipeBehavior/SwipeBehavior.js';
+import { sharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import { withVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
+import { withStateRestore } from '@/fn-options/withStateRestore.js';
 
-export const swipeBehavior = new SwipeBehavior({
-  isPageReload,
-  isTma: isTMAFp,
-  postEvent: postEventFp,
-  storage: createComponentSessionStorage('swipeBehavior'),
-  version,
-});
+/**
+ * @internal
+ */
+export function instantiateSwipeBehavior() {
+  return new SwipeBehavior(pipe(
+    sharedFeatureOptions(),
+    withVersionBasedPostEvent,
+    withStateRestore<SwipeBehaviorState>('swipeBehavior'),
+  ));
+}
+
+export const swipeBehavior = instantiateSwipeBehavior();
