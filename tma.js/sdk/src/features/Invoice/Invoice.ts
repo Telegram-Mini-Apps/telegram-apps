@@ -27,7 +27,7 @@ export class Invoice {
     const wrapSupported = createWrapSafe({
       version,
       isSupported: 'web_app_open_invoice',
-      isTma,
+      isEnvSupported: isTma,
     });
 
     this.isSupported = createIsSupportedSignal('web_app_open_invoice', version);

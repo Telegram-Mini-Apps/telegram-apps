@@ -3,8 +3,8 @@ import * as TE from 'fp-ts/TaskEither';
 import type { RequestFpFn } from '@tma.js/bridge';
 
 import { Invoice } from '@/features/Invoice/Invoice.js';
-import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
-import { testComponentMethodSafety } from '@test-utils/predefined/testComponentMethodSafety.js';
+import { testIsSupportedPure } from '@test-utils/predefined/testIsSupportedPure.js';
+import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
 
 const MIN_VERSION = '6.1';
 
@@ -24,7 +24,7 @@ describe.each([
   ['open', (component: Invoice) => component.open('$a')],
 ] as const)('%s', (method, tryCall) => {
   describe('safety', () => {
-    testComponentMethodSafety({
+    testSafetyPure({
       instantiate,
       get: instance => instance[method],
       try: tryCall,
@@ -50,5 +50,5 @@ describe('open', () => {
 });
 
 describe('isSupported', () => {
-  testIsSupported(version => instantiate({ isTma: true, version }), MIN_VERSION);
+  testIsSupportedPure(version => instantiate({ isTma: true, version }), MIN_VERSION);
 });
