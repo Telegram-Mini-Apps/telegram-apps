@@ -9,7 +9,7 @@ import type {
   SharedFeatureOptions,
   WithPostEvent,
   WithVersion,
-} from '@/features/types.js';
+} from '@/features/mixins.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 
 export interface HapticFeedbackOptions

@@ -9,7 +9,7 @@ import type {
   SharedFeatureOptions,
   WithInvokeCustomMethod,
   WithVersion,
-} from '@/features/types.js';
+} from '@/features/mixins.js';
 import { teToPromise } from '@/helpers/teToPromise.js';
 
 export interface CloudStorageOptions extends WithVersion,

@@ -7,7 +7,7 @@ import type {
   WithRequest,
   WithStorage,
   WithVersion,
-} from '@/features/types.js';
+} from '@/features/mixins.js';
 
 export interface LocationManagerRequestLocationResponse {
   /**

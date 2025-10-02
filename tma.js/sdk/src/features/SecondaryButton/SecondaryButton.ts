@@ -6,9 +6,9 @@ import {
   BottomButton,
   type BottomButtonOptions,
   type BottomButtonState,
-} from '@/composites/BottomButton.js';
+} from '@/composables/BottomButton.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type { WithPostEvent, WithVersion } from '@/features/types.js';
+import type { WithPostEvent, WithVersion } from '@/features/mixins.js';
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 
 export interface SecondaryButtonState extends BottomButtonState {
@@ -17,10 +17,7 @@ export interface SecondaryButtonState extends BottomButtonState {
 
 export interface SecondaryButtonOptions extends WithVersion,
   WithPostEvent,
-  Pick<
-    BottomButtonOptions<SecondaryButtonState>,
-    'isTma' | 'storage' | 'onClick' | 'offClick' | 'defaults'
-  > {
+  Omit<BottomButtonOptions<SecondaryButtonState>, 'initialState' | 'onChange'> {
 }
 
 /**

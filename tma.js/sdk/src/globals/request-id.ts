@@ -1,4 +1,4 @@
-import { createSignal } from '@/signals-registry.js';
+import { createSignal } from '@/globals/signals-registry.js';
 
 const lastRequestId = createSignal(0);
 

@@ -5,7 +5,7 @@ import { BetterPromise } from 'better-promises';
 import { CloudStorage } from '@/features/CloudStorage/CloudStorage.js';
 import { testIsSupported } from '@test-utils/predefined/testIsSupported.js';
 import { testComponentMethodSafety } from '@test-utils/predefined/testComponentMethodSafety.js';
-import { InvokeCustomMethodNoRequestIdFn } from '@/features/types.js';
+import { InvokeCustomMethodNoRequestIdFn } from '@/features/mixins.js';
 
 const MIN_VERSION = '6.9';
 

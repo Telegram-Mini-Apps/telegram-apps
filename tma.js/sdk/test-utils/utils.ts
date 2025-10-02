@@ -5,7 +5,7 @@ import { type LaunchParamsLike, serializeLaunchParamsQuery } from '@tma.js/trans
 
 import type { ComponentStorage } from '@/component-storage.js';
 import { $postEvent, _$launchParams, $launchParams, type PackageLaunchParams } from '@/globals.js';
-import { resetSignals } from '@/signals-registry.js';
+import { resetSignals } from '@/globals/signals-registry.js';
 
 export function mockPostEvent(postEvent: PostEventFn = () => null) {
   const fn = vi.fn(postEvent);

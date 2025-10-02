@@ -5,18 +5,15 @@ import {
   BottomButton,
   type BottomButtonOptions,
   type BottomButtonState,
-} from '@/composites/BottomButton.js';
-import type { WithPostEvent, WithVersion } from '@/features/types.js';
+} from '@/composables/BottomButton.js';
+import type { WithPostEvent, WithVersion } from '@/features/mixins.js';
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 
 export type MainButtonState = BottomButtonState;
 
 export interface MainButtonOptions extends WithVersion,
   WithPostEvent,
-  Pick<
-    BottomButtonOptions<MainButtonState>,
-    'isTma' | 'storage' | 'onClick' | 'offClick' | 'defaults'
-  > {
+  Omit<BottomButtonOptions<MainButtonState>, 'initialState' | 'onChange'> {
 }
 
 export class MainButton {

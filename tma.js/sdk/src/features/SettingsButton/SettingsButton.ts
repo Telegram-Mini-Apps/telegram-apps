@@ -2,7 +2,7 @@ import type { Computed } from '@tma.js/signals';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type { WithPostEvent, WithVersion } from '@/features/types.js';
+import type { WithPostEvent, WithVersion } from '@/features/mixins.js';
 import { Button, type ButtonOptions } from '@/composables/Button.js';
 
 export interface SettingsButtonState {

@@ -7,7 +7,7 @@ import type {
   WithIsPageReload,
   WithPostEvent,
   WithStorage, WithVersion,
-} from '@/features/types.js';
+} from '@/features/mixins.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { bound } from '@/helpers/bound.js';

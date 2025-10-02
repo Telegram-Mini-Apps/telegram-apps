@@ -10,7 +10,7 @@ import type {
   WithIsPageReload,
   WithStorage,
   WithVersion,
-} from '@/features/types.js';
+} from '@/features/mixins.js';
 import { Stateful } from '@/composables/Stateful.js';
 import type { ComponentStorage } from '@/component-storage.js';
 import { Mountable } from '@/composables/Mountable.js';

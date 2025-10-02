@@ -8,7 +8,7 @@ import type {
   SharedFeatureOptions,
   WithRequest,
   WithVersion,
-} from '@/features/types.js';
+} from '@/features/mixins.js';
 import type { RequestOptionsNoCapture } from '@/types.js';
 import { InvalidArgumentsError } from '@/errors.js';
 import { teToPromise } from '@/helpers/teToPromise.js';
