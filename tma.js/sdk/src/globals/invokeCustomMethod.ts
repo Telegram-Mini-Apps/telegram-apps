@@ -4,11 +4,11 @@ import {
   type CustomMethodParams,
   type InvokeCustomMethodOptions,
   invokeCustomMethodFp,
-  postEventFp,
 } from '@tma.js/bridge';
 import * as TE from 'fp-ts/TaskEither';
 
 import { createRequestId } from '@/globals/request-id.js';
+import { postEventFp } from '@/globals/post-event.js';
 
 /**
  * Invokes known custom method. Returns method execution result.
