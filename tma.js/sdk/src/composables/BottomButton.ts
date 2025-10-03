@@ -14,6 +14,10 @@ export interface BottomButtonState extends ButtonState {
   textColor?: RGB;
 }
 
+type BottomButtonStateBoolFields = {
+  [K in keyof BottomButtonState]-?: BottomButtonState[K] extends boolean ? K : never;
+}[keyof BottomButtonState];
+
 export interface BottomButtonOptions<S> extends ButtonOptions<S> {
   /**
    * Default values for different kinds of the button properties.
@@ -40,8 +44,19 @@ export class BottomButton<S extends BottomButtonState> {
         return fromState() || access(getDefault);
       });
     };
+    const createSetter = <K extends keyof BottomButtonState>(key: K) => {
+      return (value: BottomButtonState[K]) => {
+        button.setState({ [key]: value } as Record<K, BottomButtonState[K]> as Partial<S>);
+      };
+    };
+    const createBoolSetters = <K extends BottomButtonStateBoolFields>(key: K) => {
+      const set = createSetter(key);
+      return [
+        () => set(true),
+        () => set(false),
+      ];
+    };
 
-    this.state = button.state;
     this.bgColor = withDefault('bgColor', defaults.bgColor);
     this.hasShineEffect = computedFromState('hasShineEffect');
     this.isEnabled = computedFromState('isEnabled');
@@ -50,6 +65,8 @@ export class BottomButton<S extends BottomButtonState> {
     this.isMounted = button.isMounted;
     this.text = computedFromState('text');
     this.textColor = withDefault('textColor', defaults.textColor);
+    this.state = button.state;
+
     this.mount = button.mount;
     this.unmount = button.unmount;
     this.setParams = button.setState;
@@ -57,8 +74,15 @@ export class BottomButton<S extends BottomButtonState> {
     this.offClick = button.offClick;
     this.hide = button.hide;
     this.show = button.show;
+    [this.enable, this.disable] = createBoolSetters('isEnabled');
+    [this.enableShineEffect, this.disableShineEffect] = createBoolSetters('hasShineEffect');
+    [this.showLoader, this.hideLoader] = createBoolSetters('isLoaderVisible');
+    this.setText = createSetter('text');
+    this.setTextColor = createSetter('textColor');
+    this.setBgColor = createSetter('bgColor');
   }
 
+  //#region Properties.
   /**
    * The button background color.
    */
@@ -107,7 +131,9 @@ export class BottomButton<S extends BottomButtonState> {
    * params colors.
    */
   readonly textColor: Computed<RGB>;
+  //#endregion
 
+  //#region Methods.
   /**
    * Updates the button state.
    * @param state - updates to apply.
@@ -129,6 +155,51 @@ export class BottomButton<S extends BottomButtonState> {
    * Shows the button.
    */
   readonly show: () => void;
+
+  /**
+   * Enables the button.
+   */
+  readonly enable: () => void;
+
+  /**
+   * Enables the button.
+   */
+  readonly enableShineEffect: () => void;
+
+  /**
+   * Disables the button.
+   */
+  readonly disable: () => void;
+
+  /**
+   * Enables the button.
+   */
+  readonly disableShineEffect: () => void;
+
+  /**
+   * Updates the button background color.
+   */
+  readonly setBgColor: (value: RGB) => void;
+
+  /**
+   * Updates the button text color.
+   */
+  readonly setTextColor: (value: RGB) => void;
+
+  /**
+   * Updates the button text.
+   */
+  readonly setText: (value: string) => void;
+
+  /**
+   * Shows the button loader.
+   */
+  readonly showLoader: () => void;
+
+  /**
+   * Hides the button loader.
+   */
+  readonly hideLoader: () => void;
 
   /**
    * Mounts the component restoring its state.
@@ -165,4 +236,5 @@ export class BottomButton<S extends BottomButtonState> {
    * button.onClick(listener);
    */
   readonly offClick: (listener: VoidFunction, once?: boolean) => void;
+  //#endregion
 }
