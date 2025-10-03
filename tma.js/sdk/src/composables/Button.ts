@@ -1,18 +1,15 @@
 import type { Computed } from '@tma.js/signals';
 
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { bound } from '@/helpers/bound.js';
-import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 
 export interface ButtonState {
   isVisible: boolean;
 }
 
-export interface ButtonOptions<S> extends WithStateRestore<S>,
-  SharedFeatureOptions {
+export interface ButtonOptions<S> extends WithStateRestore<S> {
   /**
    * The initial button state.
    */
@@ -40,15 +37,12 @@ export interface ButtonOptions<S> extends WithStateRestore<S>,
 export class Button<S extends ButtonState> {
   constructor({
     storage,
-    isTma,
     onClick,
     offClick,
     initialState,
     onChange,
     isPageReload,
   }: ButtonOptions<S>) {
-    const wrapSupported = createWrapSafe({ isTma });
-
     const stateful = new Stateful({
       initialState,
       onChange(state) {
@@ -66,11 +60,11 @@ export class Button<S extends ButtonState> {
     this.isVisible = stateful.computedFromState('isVisible');
     this.isMounted = mountable.isMounted;
     this.state = stateful.state;
-    this.setState = wrapSupported(bound(stateful, 'setState'));
-    this.mount = wrapSupported(bound(mountable, 'mount'));
+    this.setState = bound(stateful, 'setState');
+    this.mount = bound(mountable, 'mount');
     this.unmount = bound(mountable, 'unmount');
-    this.onClick = wrapSupported(onClick);
-    this.offClick = wrapSupported(offClick);
+    this.onClick = onClick;
+    this.offClick = offClick;
   }
 
   /**
@@ -91,7 +85,7 @@ export class Button<S extends ButtonState> {
   /**
    * Updates the button state.
    */
-  readonly setState: SafeWrapped<(state: Partial<S>) => void, false>;
+  readonly setState: (state: Partial<S>) => void;
 
   /**
    * Adds a new button listener.
@@ -104,7 +98,7 @@ export class Button<S extends ButtonState> {
    *   off();
    * });
    */
-  readonly onClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => VoidFunction, false>;
+  readonly onClick: (listener: VoidFunction, once?: boolean) => VoidFunction;
 
   /**
    * Removes the button click listener.
@@ -117,12 +111,12 @@ export class Button<S extends ButtonState> {
    * }
    * button.onClick(listener);
    */
-  readonly offClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => void, false>;
+  readonly offClick: (listener: VoidFunction, once?: boolean) => void;
 
   /**
    * Mounts the component restoring its state.
    */
-  readonly mount: SafeWrapped<() => void, false>;
+  readonly mount: () => void;
 
   /**
    * Unmounts the component.

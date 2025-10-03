@@ -3,7 +3,6 @@ import type { RGB } from '@tma.js/types';
 
 import type { MaybeAccessor } from '@/types.js';
 import { access } from '@/helpers/access.js';
-import type { SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { Button, type ButtonOptions, type ButtonState } from '@/composables/Button.js';
 
 export interface BottomButtonState extends ButtonState {
@@ -117,12 +116,12 @@ export class BottomButton<S extends BottomButtonState> {
    *   hasShineEffect: true,
    * });
    */
-  readonly setParams: SafeWrapped<(state: Partial<S>) => void, false>;
+  readonly setParams: (state: Partial<S>) => void;
 
   /**
    * Mounts the component restoring its state.
    */
-  readonly mount: SafeWrapped<() => void, false>;
+  readonly mount: () => void;
 
   /**
    * Unmounts the component.
@@ -140,7 +139,7 @@ export class BottomButton<S extends BottomButtonState> {
    *   off();
    * });
    */
-  readonly onClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => VoidFunction, false>;
+  readonly onClick: (listener: VoidFunction, once?: boolean) => VoidFunction;
 
   /**
    * Removes the button click listener.
@@ -153,5 +152,5 @@ export class BottomButton<S extends BottomButtonState> {
    * }
    * button.onClick(listener);
    */
-  readonly offClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => void, false>;
+  readonly offClick: (listener: VoidFunction, once?: boolean) => void;
 }
