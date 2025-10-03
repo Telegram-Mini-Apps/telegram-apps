@@ -7,18 +7,18 @@ import {
   type BottomButtonState,
 } from '@/composables/BottomButton.js';
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 
 export type MainButtonState = BottomButtonState;
 
-export interface MainButtonOptions extends WithVersionBasedPostEvent,
+export interface MainButtonOptions extends WithPostEvent,
   SharedFeatureOptions,
   Omit<BottomButtonOptions<MainButtonState>, 'initialState' | 'onChange'> {
 }
 
 export class MainButton {
-  constructor({ version, postEvent, isTma, ...rest }: MainButtonOptions) {
+  constructor({ postEvent, isTma, ...rest }: MainButtonOptions) {
     const button = new BottomButton<MainButtonState>({
       ...rest,
       initialState: {
@@ -35,13 +35,13 @@ export class MainButton {
           is_active: state.isEnabled,
           is_progress_visible: state.isLoaderVisible,
           text: state.text,
-          color: state.textColor,
+          color: state.bgColor,
           text_color: state.textColor,
         });
       },
     });
 
-    const wrapOptions = { isTma, version };
+    const wrapOptions = { isTma };
     const wrapSupported = createWrapSafe(wrapOptions);
     const wrapMounted = createWrapSafe({
       ...wrapOptions,
@@ -65,6 +65,15 @@ export class MainButton {
     this.unmount = button.unmount;
     this.onClick = wrapSupported(button.onClick);
     this.offClick = wrapSupported(button.offClick);
+    this.enable = wrapMounted(button.enable);
+    this.disable = wrapMounted(button.disable);
+    this.enableShineEffect = wrapMounted(button.enableShineEffect);
+    this.disableShineEffect = wrapMounted(button.disableShineEffect);
+    this.showLoader = wrapMounted(button.showLoader);
+    this.hideLoader = wrapMounted(button.hideLoader);
+    this.setText = wrapMounted(button.setText);
+    this.setTextColor = wrapMounted(button.setTextColor);
+    this.setBgColor = wrapMounted(button.setBgColor);
   }
 
   //#region Properties.
@@ -120,14 +129,59 @@ export class MainButton {
 
   //#region Methods.
   /**
-   * Shows the main button.
+   * Shows the button.
    */
   readonly show: SafeWrapped<() => void, false>;
 
   /**
-   * Hides the main button.
+   * Hides the button.
    */
   readonly hide: SafeWrapped<() => void, false>;
+
+  /**
+   * Enables the button.
+   */
+  readonly enable: SafeWrapped<() => void, false>;
+
+  /**
+   * Enables the button.
+   */
+  readonly enableShineEffect: SafeWrapped<() => void, false>;
+
+  /**
+   * Disables the button.
+   */
+  readonly disable: SafeWrapped<() => void, false>;
+
+  /**
+   * Enables the button.
+   */
+  readonly disableShineEffect: SafeWrapped<() => void, false>;
+
+  /**
+   * Updates the button background color.
+   */
+  readonly setBgColor: SafeWrapped<(value: RGB) => void, false>;
+
+  /**
+   * Updates the button text color.
+   */
+  readonly setTextColor: SafeWrapped<(value: RGB) => void, false>;
+
+  /**
+   * Updates the button text.
+   */
+  readonly setText: SafeWrapped<(value: string) => void, false>;
+
+  /**
+   * Shows the button loader.
+   */
+  readonly showLoader: SafeWrapped<() => void, false>;
+
+  /**
+   * Hides the button loader.
+   */
+  readonly hideLoader: SafeWrapped<() => void, false>;
 
   /**
    * Updates the button state.
