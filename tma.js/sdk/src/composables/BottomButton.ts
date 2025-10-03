@@ -55,6 +55,8 @@ export class BottomButton<S extends BottomButtonState> {
     this.setParams = button.setState;
     this.onClick = button.onClick;
     this.offClick = button.offClick;
+    this.hide = button.hide;
+    this.show = button.show;
   }
 
   /**
@@ -117,6 +119,16 @@ export class BottomButton<S extends BottomButtonState> {
    * });
    */
   readonly setParams: (state: Partial<S>) => void;
+
+  /**
+   * Hides the button.
+   */
+  readonly hide: () => void;
+
+  /**
+   * Shows the button.
+   */
+  readonly show: () => void;
 
   /**
    * Mounts the component restoring its state.
