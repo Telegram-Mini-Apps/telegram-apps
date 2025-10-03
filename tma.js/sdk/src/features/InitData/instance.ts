@@ -5,14 +5,21 @@ import * as O from 'fp-ts/Option';
 
 import { InitData } from '@/features/InitData/InitData.js';
 
-export const initData = new InitData({
-  retrieveRawInitData: retrieveRawInitDataFp,
-  retrieveInitData() {
-    return pipe(
-      retrieveLaunchParamsFp(),
-      E.map(({ tgWebAppData }) => {
-        return tgWebAppData ? O.some(tgWebAppData) : O.none;
-      }),
-    );
-  },
-});
+/**
+ * @internal
+ */
+export function instantiateInitData() {
+  return new InitData({
+    retrieveRawInitData: retrieveRawInitDataFp,
+    retrieveInitData() {
+      return pipe(
+        retrieveLaunchParamsFp(),
+        E.map(({ tgWebAppData }) => {
+          return tgWebAppData ? O.some(tgWebAppData) : O.none;
+        }),
+      );
+    },
+  });
+}
+
+export const initData = instantiateInitData();

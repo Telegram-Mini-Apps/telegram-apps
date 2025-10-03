@@ -1,13 +1,9 @@
 import type { Maybe } from '@tma.js/toolkit';
-import type { ComponentStorage } from '@/component-storage.js';
-import type {
-  SharedFeatureOptions,
-  WithIsPageReload,
-  WithPostEvent,
-  WithRequest,
-  WithStorage,
-  WithVersion,
-} from '@/features/mixins.js';
+
+import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
+import type { WithRequest } from '@/fn-options/withRequest.js';
+import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
 export interface LocationManagerRequestLocationResponse {
   /**
@@ -68,12 +64,8 @@ export interface LocationManagerState {
   accessGranted: boolean;
 }
 
-export type LocationManagerStorage = ComponentStorage<LocationManagerState>;
-
-export interface LocationManagerOptions extends WithVersion,
-  WithStorage<LocationManagerStorage>,
+export interface LocationManagerOptions extends WithStateRestore<LocationManagerState>,
   WithRequest,
-  WithPostEvent,
-  WithIsPageReload,
+  WithVersionBasedPostEvent,
   SharedFeatureOptions {
 }
