@@ -58,6 +58,7 @@ describe.each([
   ['setText', (component: SecondaryButton) => component.setText('a'), true],
   ['setTextColor', (component: SecondaryButton) => component.setTextColor('#aaa'), true],
   ['setBgColor', (component: SecondaryButton) => component.setBgColor('#ddd'), true],
+  ['setPosition', (component: SecondaryButton) => component.setPosition('right'), true],
 ] as const)('%s', (method, tryCall, requireMount) => {
   describe('safety', () => {
     testSafetyPure({
@@ -152,7 +153,8 @@ describe.each([
       component[method]();
       expect(postEvent).toBeCalledTimes(1);
       expect(postEvent).toBeCalledWith(
-        'web_app_setup_secondary_button', expect.objectContaining({ [payloadProperty]: targetValue }),
+        'web_app_setup_secondary_button',
+        expect.objectContaining({ [payloadProperty]: targetValue }),
       );
     },
   );
@@ -176,23 +178,36 @@ describe.each([
     method: 'setBgColor',
     property: 'bgColor',
     payloadProperty: 'color',
+    usedValue: '#abc',
+    use: (component: SecondaryButton) => component.setBgColor('#abc'),
   },
   {
     method: 'setTextColor',
     property: 'textColor',
     payloadProperty: 'text_color',
+    usedValue: '#cba',
+    use: (component: SecondaryButton) => component.setTextColor('#cba'),
   },
   {
     method: 'setText',
     property: 'text',
     payloadProperty: 'text',
+    usedValue: 'Some text',
+    use: (component: SecondaryButton) => component.setText('Some text'),
   },
-] as const)('$method', ({ method, property, payloadProperty }) => {
+  {
+    method: 'setPosition',
+    property: 'position',
+    payloadProperty: 'position',
+    usedValue: 'right',
+    use: (component: SecondaryButton) => component.setPosition('right'),
+  },
+] as const)('$method', ({ property, payloadProperty, usedValue, use }) => {
   it(`should set ${property}`, () => {
     const component = instantiate();
     component.mount();
-    component[method]('#abc');
-    expect(component[property]()).toBe('#abc');
+    use(component);
+    expect(component[property]()).toBe(usedValue);
   });
 
   it(
@@ -201,12 +216,12 @@ describe.each([
       const postEvent = vi.fn(() => E.right(undefined));
       const component = instantiate({ postEvent });
       component.mount();
-      component[method]('#abc');
-      component[method]('#abc');
-      component[method]('#abc');
+      use(component);
+      use(component);
+      use(component);
       expect(postEvent).toBeCalledTimes(1);
       expect(postEvent).toBeCalledWith(
-        'web_app_setup_secondary_button', expect.objectContaining({ [payloadProperty]: '#abc' }),
+        'web_app_setup_secondary_button', expect.objectContaining({ [payloadProperty]: usedValue }),
       );
     },
   );
@@ -217,9 +232,9 @@ describe.each([
       storage: { get: () => undefined, set },
     });
     component.mount();
-    component[method]('#abc');
+    use(component);
     expect(set).toHaveBeenCalledOnce();
-    expect(set).toHaveBeenCalledWith(expect.objectContaining({ [property]: '#abc' }));
+    expect(set).toHaveBeenCalledWith(expect.objectContaining({ [property]: usedValue }));
   });
 });
 
