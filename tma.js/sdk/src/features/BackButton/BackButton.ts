@@ -4,15 +4,15 @@ import { eitherGet } from '@tma.js/toolkit';
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import { Button, type ButtonOptions } from '@/composables/Button.js';
-import type { WithVersion } from '@/fn-options/withVersion.js';
-import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
+import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
 export interface BackButtonState {
   isVisible: boolean;
 }
 
-export interface BackButtonOptions extends WithVersion,
-  WithPostEvent,
+export interface BackButtonOptions extends WithVersionBasedPostEvent,
+  SharedFeatureOptions,
   Omit<ButtonOptions<BackButtonState>, 'onChange' | 'initialState'> {
 }
 
@@ -25,7 +25,6 @@ export class BackButton {
     const button = new Button({
       ...rest,
       initialState: { isVisible: false },
-      isTma,
       onChange(state) {
         eitherGet(
           postEvent(SETUP_METHOD, { is_visible: state.isVisible }),
@@ -74,13 +73,13 @@ export class BackButton {
    * Hides the back button.
    * @since Mini Apps v6.1
    */
-  hide: SafeWrapped<() => void, true>;
+  readonly hide: SafeWrapped<() => void, true>;
 
   /**
    * Shows the back button.
    * @since Mini Apps v6.1
    */
-  show: SafeWrapped<() => void, true>;
+  readonly show: SafeWrapped<() => void, true>;
 
   /**
    * Adds a new button listener.
