@@ -4,19 +4,14 @@ import { BetterPromise } from 'better-promises';
 
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type {
-  SharedFeatureOptions,
-  WithRequest,
-  WithVersion,
-} from '@/features/mixins.js';
 import type { RequestOptionsNoCapture } from '@/types.js';
-import { InvalidArgumentsError } from '@/errors.js';
+import { ConcurrentCallError, InvalidArgumentsError } from '@/errors.js';
 import { teToPromise } from '@/helpers/teToPromise.js';
+import type { WithVersion } from '@/fn-options/withVersion.js';
+import type { WithRequest } from '@/fn-options/withRequest.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
-export interface InvoiceOptions
-  extends WithVersion,
-  WithRequest,
-  SharedFeatureOptions {
+export interface InvoiceOptions extends WithVersion, WithRequest, SharedFeatureOptions {
 }
 
 /**
@@ -26,21 +21,34 @@ export class Invoice {
   constructor({ version, request, isTma }: InvoiceOptions) {
     const wrapSupported = createWrapSafe({
       version,
+      isTma,
       isSupported: 'web_app_open_invoice',
-      isEnvSupported: isTma,
     });
 
+    const openPromise = signal<BetterPromise<InvoiceStatus>>();
+
     this.isSupported = createIsSupportedSignal('web_app_open_invoice', version);
+    this.isOpened = computed(() => !!openPromise);
     this.open = wrapSupported((
       urlOrSlug: string,
       optionsOrType?: 'url' | RequestOptionsNoCapture,
       options?: RequestOptionsNoCapture,
     ): BetterPromise<InvoiceStatus> => {
+      if (this.isOpened()) {
+        // TODO: Make some changes in better-promises.
+        return BetterPromise.resolve('').then(() => {
+          throw new ConcurrentCallError('Invoice is already opened');
+        });
+      }
+
       let slug: string;
       if (optionsOrType === 'url') {
         const { hostname, pathname } = new URL(urlOrSlug, window.location.href);
         if (hostname !== 't.me') {
-          throw new InvalidArgumentsError(`Link has unexpected hostname: ${hostname}`);
+          // TODO: Make some changes in better-promises.
+          return BetterPromise.resolve('').then(() => {
+            throw new InvalidArgumentsError(`Link has unexpected hostname: ${hostname}`);
+          });
         }
 
         // Valid examples:
@@ -48,9 +56,11 @@ export class Invoice {
         // "/$my-slug"
         const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
         if (!match) {
-          throw new InvalidArgumentsError(
-            'Expected to receive a link with a pathname in format "/invoice/{slug}" or "/${slug}"',
-          );
+          return BetterPromise.resolve('').then(() => {
+            throw new InvalidArgumentsError(
+              'Expected to receive a link with a pathname in format "/invoice/{slug}" or "/${slug}"',
+            );
+          });
         }
         [, , slug] = match;
       } else {
@@ -58,22 +68,28 @@ export class Invoice {
         options = optionsOrType;
       }
 
-      return teToPromise(
+      const promise = teToPromise(
         request('web_app_open_invoice', 'invoice_closed', {
           ...options,
           params: { slug },
           capture: data => slug === data.slug,
         }),
-      ).then(response => response.status);
+      )
+        .then(response => response.status)
+        .finally(() => {
+          openPromise.set(undefined);
+        });
+
+      openPromise.set(promise);
+
+      return promise;
     });
   }
-
-  private readonly _isOpened = signal(false);
 
   /**
    * Signal indicating if invoice is currently opened.
    */
-  readonly isOpened = computed(this._isOpened);
+  readonly isOpened: Computed<boolean>;
 
   /**
    * Signal indicating if the component is supported.
