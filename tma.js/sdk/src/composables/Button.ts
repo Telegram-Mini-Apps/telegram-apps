@@ -67,6 +67,10 @@ export class Button<S extends ButtonState> {
     this.offClick = offClick;
   }
 
+  private setVisibility(isVisible: boolean) {
+    this.setState({ isVisible } as Partial<S>);
+  }
+
   /**
    * Signal indicating if the component is currently visible.
    */
@@ -86,6 +90,20 @@ export class Button<S extends ButtonState> {
    * Updates the button state.
    */
   readonly setState: (state: Partial<S>) => void;
+
+  /**
+   * Hides the button.
+   */
+  hide() {
+    this.setVisibility(false);
+  }
+
+  /**
+   * Shows the button.
+   */
+  show() {
+    this.setVisibility(true);
+  }
 
   /**
    * Adds a new button listener.
