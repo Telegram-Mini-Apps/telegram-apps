@@ -4,12 +4,14 @@ import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import { Button, type ButtonOptions } from '@/composables/Button.js';
 import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
 export interface SettingsButtonState {
   isVisible: boolean;
 }
 
 export interface SettingsButtonOptions extends WithVersionBasedPostEvent,
+  SharedFeatureOptions,
   Omit<ButtonOptions<SettingsButtonState>, 'onChange' | 'initialState'> {
 }
 
@@ -21,7 +23,6 @@ export class SettingsButton {
     const button = new Button({
       ...rest,
       initialState: { isVisible: false },
-      isTma,
       onChange(state) {
         postEvent('web_app_setup_settings_button', { is_visible: state.isVisible });
       },
