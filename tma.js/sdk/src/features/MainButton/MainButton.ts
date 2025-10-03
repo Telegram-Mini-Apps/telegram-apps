@@ -6,13 +6,14 @@ import {
   type BottomButtonOptions,
   type BottomButtonState,
 } from '@/composables/BottomButton.js';
-import type { WithPostEvent, WithVersion } from '@/features/mixins.js';
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
 export type MainButtonState = BottomButtonState;
 
-export interface MainButtonOptions extends WithVersion,
-  WithPostEvent,
+export interface MainButtonOptions extends WithVersionBasedPostEvent,
+  SharedFeatureOptions,
   Omit<BottomButtonOptions<MainButtonState>, 'initialState' | 'onChange'> {
 }
 
@@ -20,7 +21,6 @@ export class MainButton {
   constructor({ version, postEvent, isTma, ...rest }: MainButtonOptions) {
     const button = new BottomButton<MainButtonState>({
       ...rest,
-      isTma,
       initialState: {
         hasShineEffect: false,
         isEnabled: true,
@@ -58,6 +58,8 @@ export class MainButton {
     this.isMounted = button.isMounted;
     this.state = button.state;
 
+    this.show = wrapMounted(button.show);
+    this.hide = wrapMounted(button.hide);
     this.setParams = wrapMounted(button.setParams);
     this.mount = wrapSupported(button.mount);
     this.unmount = button.unmount;
@@ -65,6 +67,7 @@ export class MainButton {
     this.offClick = wrapSupported(button.offClick);
   }
 
+  //#region Properties.
   /**
    * The button background color.
    */
@@ -113,6 +116,18 @@ export class MainButton {
    * params colors.
    */
   readonly textColor: Computed<RGB>;
+  //#endregion
+
+  //#region Methods.
+  /**
+   * Shows the main button.
+   */
+  readonly show: SafeWrapped<() => void, false>;
+
+  /**
+   * Hides the main button.
+   */
+  readonly hide: SafeWrapped<() => void, false>;
 
   /**
    * Updates the button state.
@@ -161,4 +176,5 @@ export class MainButton {
    * button.onClick(listener);
    */
   readonly offClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => void, false>;
+  //#endregion
 }
