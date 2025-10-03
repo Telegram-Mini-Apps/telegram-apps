@@ -8,15 +8,16 @@ import {
   type BottomButtonState,
 } from '@/composables/BottomButton.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type { WithPostEvent, WithVersion } from '@/features/mixins.js';
 import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
 export interface SecondaryButtonState extends BottomButtonState {
   position: SecondaryButtonPosition;
 }
 
-export interface SecondaryButtonOptions extends WithVersion,
-  WithPostEvent,
+export interface SecondaryButtonOptions extends WithVersionBasedPostEvent,
+  SharedFeatureOptions,
   Omit<BottomButtonOptions<SecondaryButtonState>, 'initialState' | 'onChange'> {
 }
 
@@ -27,7 +28,6 @@ export class SecondaryButton {
   constructor({ version, postEvent, isTma, ...rest }: SecondaryButtonOptions) {
     const button = new BottomButton<SecondaryButtonState>({
       ...rest,
-      isTma,
       initialState: {
         hasShineEffect: false,
         isEnabled: true,
@@ -43,7 +43,7 @@ export class SecondaryButton {
           is_active: state.isEnabled,
           is_progress_visible: state.isLoaderVisible,
           text: state.text,
-          color: state.textColor,
+          color: state.bgColor,
           text_color: state.textColor,
           position: state.position,
         });
@@ -73,13 +73,25 @@ export class SecondaryButton {
     this.isMounted = button.isMounted;
     this.state = button.state;
 
+    this.show = wrapMounted(button.show);
+    this.hide = wrapMounted(button.hide);
     this.setParams = wrapMounted(button.setParams);
     this.mount = wrapSupported(button.mount);
     this.unmount = button.unmount;
     this.onClick = wrapSupported(button.onClick);
     this.offClick = wrapSupported(button.offClick);
+    this.enable = wrapMounted(button.enable);
+    this.disable = wrapMounted(button.disable);
+    this.enableShineEffect = wrapMounted(button.enableShineEffect);
+    this.disableShineEffect = wrapMounted(button.disableShineEffect);
+    this.showLoader = wrapMounted(button.showLoader);
+    this.hideLoader = wrapMounted(button.hideLoader);
+    this.setText = wrapMounted(button.setText);
+    this.setTextColor = wrapMounted(button.setTextColor);
+    this.setBgColor = wrapMounted(button.setBgColor);
   }
 
+  //#region Properties.
   /**
    * Signal indicating if the component is supported.
    */
@@ -138,6 +150,74 @@ export class SecondaryButton {
    * params colors.
    */
   readonly textColor: Computed<RGB>;
+  //#endregion
+
+  //#region Methods.
+  /**
+   * Shows the secondary button.
+   * @since Mini Apps v7.10
+   */
+  readonly show: SafeWrapped<() => void, true>;
+
+  /**
+   * Hides the secondary button.
+   * @since Mini Apps v7.10
+   */
+  readonly hide: SafeWrapped<() => void, true>;
+
+  /**
+   * Enables the button.
+   * @since Mini Apps v7.10
+   */
+  readonly enable: SafeWrapped<() => void, true>;
+
+  /**
+   * Enables the button.
+   * @since Mini Apps v7.10
+   */
+  readonly enableShineEffect: SafeWrapped<() => void, true>;
+
+  /**
+   * Disables the button.
+   * @since Mini Apps v7.10
+   */
+  readonly disable: SafeWrapped<() => void, true>;
+
+  /**
+   * Enables the button.
+   * @since Mini Apps v7.10
+   */
+  readonly disableShineEffect: SafeWrapped<() => void, true>;
+
+  /**
+   * Updates the button background color.
+   * @since Mini Apps v7.10
+   */
+  readonly setBgColor: SafeWrapped<(value: RGB) => void, true>;
+
+  /**
+   * Updates the button text color.
+   * @since Mini Apps v7.10
+   */
+  readonly setTextColor: SafeWrapped<(value: RGB) => void, true>;
+
+  /**
+   * Updates the button text.
+   * @since Mini Apps v7.10
+   */
+  readonly setText: SafeWrapped<(value: string) => void, true>;
+
+  /**
+   * Shows the button loader.
+   * @since Mini Apps v7.10
+   */
+  readonly showLoader: SafeWrapped<() => void, true>;
+
+  /**
+   * Hides the button loader.
+   * @since Mini Apps v7.10
+   */
+  readonly hideLoader: SafeWrapped<() => void, true>;
 
   /**
    * Updates the button state.
@@ -193,4 +273,5 @@ export class SecondaryButton {
    * button.onClick(listener);
    */
   readonly offClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => void, true>;
+  //#endregion
 }
