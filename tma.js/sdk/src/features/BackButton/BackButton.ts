@@ -6,6 +6,7 @@ import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import { Button, type ButtonOptions } from '@/composables/Button.js';
 import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import { bound } from '@/helpers/bound.js';
 
 export interface BackButtonState {
   isVisible: boolean;
@@ -42,12 +43,8 @@ export class BackButton {
     this.isVisible = button.isVisible;
     this.isMounted = button.isMounted;
     this.isSupported = createIsSupportedSignal(SETUP_METHOD, version);
-    this.hide = wrapComplete(() => {
-      button.setState({ isVisible: false });
-    });
-    this.show = wrapComplete(() => {
-      button.setState({ isVisible: true });
-    });
+    this.hide = wrapComplete(bound(button, 'hide'));
+    this.show = wrapComplete(bound(button, 'show'));
     this.onClick = wrapSupported(button.onClick);
     this.offClick = wrapSupported(button.offClick);
     this.mount = wrapSupported(button.mount);
