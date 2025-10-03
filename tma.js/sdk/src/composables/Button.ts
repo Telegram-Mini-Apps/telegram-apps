@@ -57,6 +57,10 @@ export class Button<S extends ButtonState> {
       restoreState: storage.get,
     });
 
+    const setVisibility = (isVisible: boolean) => {
+      stateful.setState({ isVisible } as Partial<S>);
+    };
+
     this.isVisible = stateful.computedFromState('isVisible');
     this.isMounted = mountable.isMounted;
     this.state = stateful.state;
@@ -65,10 +69,8 @@ export class Button<S extends ButtonState> {
     this.unmount = bound(mountable, 'unmount');
     this.onClick = onClick;
     this.offClick = offClick;
-  }
-
-  private setVisibility(isVisible: boolean) {
-    this.setState({ isVisible } as Partial<S>);
+    this.hide = () => setVisibility(false);
+    this.show = () => setVisibility(true);
   }
 
   /**
@@ -94,16 +96,12 @@ export class Button<S extends ButtonState> {
   /**
    * Hides the button.
    */
-  hide() {
-    this.setVisibility(false);
-  }
+  readonly hide: () => void;
 
   /**
    * Shows the button.
    */
-  show() {
-    this.setVisibility(true);
-  }
+  readonly show: () => void;
 
   /**
    * Adds a new button listener.
