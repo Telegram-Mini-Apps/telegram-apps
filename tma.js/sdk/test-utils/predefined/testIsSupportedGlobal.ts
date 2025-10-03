@@ -1,6 +1,6 @@
 import { beforeEach } from 'vitest';
 import { testIsSupportedPure } from '@test-utils/predefined/testIsSupportedPure.js';
-import { setVersion } from '@test-utils/utils2.js';
+import { setVersion } from '@test-utils/utils.js';
 
 import { resetGlobals } from '@/globals/resetGlobals.js';
 

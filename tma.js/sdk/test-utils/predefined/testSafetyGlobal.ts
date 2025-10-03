@@ -3,7 +3,7 @@ import { Version } from '@tma.js/types';
 
 import { FunctionUnavailableError } from '@/errors.js';
 
-import { getPrevVersion, mockMiniAppsEnv, setVersion } from '../utils2.js';
+import { getPrevVersion, mockMiniAppsEnv, setVersion } from '../utils.js';
 
 import { testIsSupportedGlobal } from '@test-utils/predefined/testIsSupportedGlobal.js';
 import { resetGlobals } from '@/globals/resetGlobals.js';

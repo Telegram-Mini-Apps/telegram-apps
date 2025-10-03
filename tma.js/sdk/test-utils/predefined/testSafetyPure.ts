@@ -3,7 +3,7 @@ import { Version } from '@tma.js/types';
 
 import { FunctionUnavailableError } from '@/errors.js';
 
-import { getPrevVersion } from '../utils2.js';
+import { getPrevVersion } from '../utils.js';
 
 import { testIsSupportedPure } from './testIsSupportedPure.js';
 
