@@ -172,8 +172,8 @@ export function wrapSafe<Fn extends AnyFn, O extends WrapSafeOptions<Parameters<
   O extends { isSupported: any } ? true : false,
   O extends { supports: Record<string, any> } ? keyof O['supports'] & string : never
 > {
-  const version = () => access(options.version) || '100';
-  const isTma = () => access(options.isTma);
+  const version = computed(() => access(options.version) || '100');
+  const isTma = computed(() => access(options.isTma));
 
   // Simplify the isSupported value to work with an array of validators or a single object.
   const { isSupported: optionsIsSupported } = options;
