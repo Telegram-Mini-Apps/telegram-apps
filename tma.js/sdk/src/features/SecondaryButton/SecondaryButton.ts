@@ -89,6 +89,9 @@ export class SecondaryButton {
     this.setText = wrapMounted(button.setText);
     this.setTextColor = wrapMounted(button.setTextColor);
     this.setBgColor = wrapMounted(button.setBgColor);
+    this.setPosition = wrapMounted(position => {
+      button.setParams({ position });
+    });
   }
 
   //#region Properties.
@@ -154,13 +157,13 @@ export class SecondaryButton {
 
   //#region Methods.
   /**
-   * Shows the secondary button.
+   * Shows the button.
    * @since Mini Apps v7.10
    */
   readonly show: SafeWrapped<() => void, true>;
 
   /**
-   * Hides the secondary button.
+   * Hides the button.
    * @since Mini Apps v7.10
    */
   readonly hide: SafeWrapped<() => void, true>;
@@ -206,6 +209,12 @@ export class SecondaryButton {
    * @since Mini Apps v7.10
    */
   readonly setText: SafeWrapped<(value: string) => void, true>;
+
+  /**
+   * Updates the button position.
+   * @since Mini Apps v7.10
+   */
+  readonly setPosition: SafeWrapped<(position: SecondaryButtonPosition) => void, true>;
 
   /**
    * Shows the button loader.
