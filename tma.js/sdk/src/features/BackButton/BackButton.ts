@@ -1,53 +1,26 @@
 import type { Computed } from '@tma.js/signals';
-import { eitherGet } from '@tma.js/toolkit';
 
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import { Button, type ButtonOptions } from '@/composables/Button.js';
-import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
-import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
-
-export interface BackButtonState {
-  isVisible: boolean;
-}
-
-export interface BackButtonOptions extends WithVersionBasedPostEvent,
-  SharedFeatureOptions,
-  Omit<ButtonOptions<BackButtonState>, 'onChange' | 'initialState'> {
-}
+import { type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import { BackButtonFp } from '@/features/BackButton/BackButtonFp.js';
+import { unwrapFp } from '@/wrappers/unwrapFp.js';
+import type { BackButtonOptions } from '@/features/BackButton/types.js';
 
 /**
  * @since Mini Apps v6.1
  */
 export class BackButton {
-  constructor({ postEvent, version, isTma, ...rest }: BackButtonOptions) {
-    const SETUP_METHOD = 'web_app_setup_back_button';
-    const button = new Button({
-      ...rest,
-      initialState: { isVisible: false },
-      onChange(state) {
-        eitherGet(
-          postEvent(SETUP_METHOD, { is_visible: state.isVisible }),
-        );
-      },
-    });
+  constructor(options: BackButtonOptions) {
+    const parent = new BackButtonFp(options);
 
-    const wrapOptions = { version, isSupported: SETUP_METHOD, isTma } as const;
-    const wrapSupported = createWrapSafe(wrapOptions);
-    const wrapComplete = createWrapSafe({
-      ...wrapOptions,
-      isMounted: button.isMounted,
-    });
-
-    this.isVisible = button.isVisible;
-    this.isMounted = button.isMounted;
-    this.isSupported = createIsSupportedSignal(SETUP_METHOD, version);
-    this.hide = wrapComplete(button.hide);
-    this.show = wrapComplete(button.show);
-    this.onClick = wrapSupported(button.onClick);
-    this.offClick = wrapSupported(button.offClick);
-    this.mount = wrapSupported(button.mount);
-    this.unmount = button.unmount;
+    this.isVisible = parent.isVisible;
+    this.isMounted = parent.isMounted;
+    this.isSupported = parent.isSupported;
+    this.hide = unwrapFp(parent.hide);
+    this.show = unwrapFp(parent.show);
+    this.onClick = unwrapFp(parent.onClick);
+    this.offClick = unwrapFp(parent.offClick);
+    this.mount = unwrapFp(parent.mount);
+    this.unmount = parent.unmount;
   }
 
   /**

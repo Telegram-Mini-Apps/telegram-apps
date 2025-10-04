@@ -2,19 +2,9 @@ import type { Computed } from '@tma.js/signals';
 import { eitherGet } from '@tma.js/toolkit';
 
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import { Button, type ButtonOptions } from '@/composables/Button.js';
-import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
-import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
-import { createWrapSafeFp, type SafeWrappedFp } from '@/wrappers/wrapSafeFp.js';
-
-export interface BackButtonState {
-  isVisible: boolean;
-}
-
-export interface BackButtonOptions extends WithVersionBasedPostEvent,
-  SharedFeatureOptions,
-  Omit<ButtonOptions<BackButtonState>, 'onChange' | 'initialState'> {
-}
+import { Button } from '@/composables/Button.js';
+import { createWrapSafeFp, type SafeWrappedFp } from '@/wrappers/wrap-safe-fp.js';
+import { BackButtonOptions } from '@/features/BackButton/types.js';
 
 /**
  * @since Mini Apps v6.1
