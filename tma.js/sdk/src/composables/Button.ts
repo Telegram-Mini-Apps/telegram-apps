@@ -1,15 +1,24 @@
 import type { Computed } from '@tma.js/signals';
+import * as E from 'fp-ts/Either';
+import { pipe } from 'fp-ts/function';
 
 import { Mountable } from '@/composables/Mountable.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { bound } from '@/helpers/bound.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
+import { removeUndefined } from '@/helpers/removeUndefined.js';
 
 export interface ButtonState {
   isVisible: boolean;
 }
 
-export interface ButtonOptions<S> extends WithStateRestore<S> {
+export interface ButtonOptions<S, Err> extends WithStateRestore<S> {
+  /**
+   * A function to commit the button state. This one will be called every time the button state
+   * changes.
+   * @param state - the actual state.
+   */
+  commit: (state: S) => E.Either<Err, void>;
   /**
    * The initial button state.
    */
@@ -21,11 +30,6 @@ export interface ButtonOptions<S> extends WithStateRestore<S> {
    */
   offClick: (listener: VoidFunction, once?: boolean) => void;
   /**
-   * A function to call whenever the button state changes.
-   * @param state - updated state.
-   */
-  onChange: (state: S) => void;
-  /**
    * Adds a component click listener.
    * @returns A function to remove listener.
    * @param listener - a listener to add.
@@ -34,21 +38,18 @@ export interface ButtonOptions<S> extends WithStateRestore<S> {
   onClick: (listener: VoidFunction, once?: boolean) => VoidFunction;
 }
 
-export class Button<S extends ButtonState> {
+export class Button<S extends ButtonState, Err> {
   constructor({
     storage,
     onClick,
     offClick,
     initialState,
-    onChange,
     isPageReload,
-  }: ButtonOptions<S>) {
+    commit,
+  }: ButtonOptions<S, Err>) {
     const stateful = new Stateful({
       initialState,
-      onChange(state) {
-        storage.set(state);
-        onChange(state);
-      },
+      onChange: storage.set,
     });
     const mountable = new Mountable<S>({
       initialState,
@@ -58,13 +59,21 @@ export class Button<S extends ButtonState> {
     });
 
     const setVisibility = (isVisible: boolean) => {
-      stateful.setState({ isVisible } as Partial<S>);
+      return this.setState({ isVisible } as Partial<S>);
     };
 
     this.isVisible = stateful.computedFromState('isVisible');
     this.isMounted = mountable.isMounted;
     this.state = stateful.state;
-    this.setState = bound(stateful, 'setState');
+    this.setState = state => {
+      const nextState = { ...stateful.state(), ...removeUndefined(state) };
+      return pipe(
+        commit(nextState),
+        E.map(() => {
+          stateful.setState(nextState);
+        }),
+      );
+    };
     this.mount = bound(mountable, 'mount');
     this.unmount = bound(mountable, 'unmount');
     this.onClick = onClick;
@@ -91,17 +100,17 @@ export class Button<S extends ButtonState> {
   /**
    * Updates the button state.
    */
-  readonly setState: (state: Partial<S>) => void;
+  readonly setState: (state: Partial<S>) => E.Either<Err, void>;
 
   /**
    * Hides the button.
    */
-  readonly hide: () => void;
+  readonly hide: () => E.Either<Err, void>;
 
   /**
    * Shows the button.
    */
-  readonly show: () => void;
+  readonly show: () => E.Either<Err, void>;
 
   /**
    * Adds a new button listener.
