@@ -172,12 +172,6 @@ export interface WrapSafeOptions<Args extends any[]> {
   version?: MaybeAccessor<Version>;
 }
 
-/**
- * Wraps the function enhancing it with the useful utilities described in the SafeWrapped type.
- * @see SafeWrappedFp
- * @param fn - wrapped function
- * @param options - additional options
- */
 export function wrapSafeFp<Fn extends AnyFn, O extends WrapSafeOptions<Parameters<Fn>>>(
   fn: Fn,
   options: O,
@@ -296,7 +290,11 @@ export function wrapSafeFp<Fn extends AnyFn, O extends WrapSafeOptions<Parameter
           : 'unmounted. Use the mount() method';
         return wrapError(`${errMessagePrefix} the component is ${message}`);
       }
-      return fn(...args) as WrappedFnReturnType<Fn>;
+      return (
+        'task' in options
+          ? TE.tryCatch(() => fn(...args), e => e)
+          : E.tryCatch(() => fn(...args), e => e)
+      ) as WrappedFnReturnType<Fn>;
     },
     fn,
     {
