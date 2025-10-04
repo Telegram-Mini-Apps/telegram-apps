@@ -1,5 +1,6 @@
 import { computed, type Computed } from '@tma.js/signals';
 import type { RGB } from '@tma.js/types';
+import * as E from 'fp-ts/Either';
 
 import type { MaybeAccessor } from '@/types.js';
 import { access } from '@/helpers/access.js';
@@ -18,7 +19,7 @@ type BottomButtonStateBoolFields = {
   [K in keyof BottomButtonState]-?: BottomButtonState[K] extends boolean ? K : never;
 }[keyof BottomButtonState];
 
-export interface BottomButtonOptions<S> extends ButtonOptions<S> {
+export interface BottomButtonOptions<S, Err> extends ButtonOptions<S, Err> {
   /**
    * Default values for different kinds of the button properties.
    */
@@ -28,8 +29,8 @@ export interface BottomButtonOptions<S> extends ButtonOptions<S> {
   };
 }
 
-export class BottomButton<S extends BottomButtonState> {
-  constructor({ defaults, ...rest }: BottomButtonOptions<S>) {
+export class BottomButton<S extends BottomButtonState, Err> {
+  constructor({ defaults, ...rest }: BottomButtonOptions<S, Err>) {
     const button = new Button(rest);
 
     const computedFromState = <K extends keyof S>(key: K): Computed<S[K]> => {
@@ -46,7 +47,7 @@ export class BottomButton<S extends BottomButtonState> {
     };
     const createSetter = <K extends keyof BottomButtonState>(key: K) => {
       return (value: BottomButtonState[K]) => {
-        button.setState({ [key]: value } as Record<K, BottomButtonState[K]> as Partial<S>);
+        return button.setState({ [key]: value } as Record<K, BottomButtonState[K]> as Partial<S>);
       };
     };
     const createBoolSetters = <K extends BottomButtonStateBoolFields>(key: K) => {
@@ -144,62 +145,62 @@ export class BottomButton<S extends BottomButtonState> {
    *   hasShineEffect: true,
    * });
    */
-  readonly setParams: (state: Partial<S>) => void;
+  readonly setParams: (state: Partial<S>) => E.Either<Err, void>;
 
   /**
    * Hides the button.
    */
-  readonly hide: () => void;
+  readonly hide: () => E.Either<Err, void>;
 
   /**
    * Shows the button.
    */
-  readonly show: () => void;
+  readonly show: () => E.Either<Err, void>;
 
   /**
    * Enables the button.
    */
-  readonly enable: () => void;
+  readonly enable: () => E.Either<Err, void>;
 
   /**
    * Enables the button.
    */
-  readonly enableShineEffect: () => void;
+  readonly enableShineEffect: () => E.Either<Err, void>;
 
   /**
    * Disables the button.
    */
-  readonly disable: () => void;
+  readonly disable: () => E.Either<Err, void>;
 
   /**
    * Enables the button.
    */
-  readonly disableShineEffect: () => void;
+  readonly disableShineEffect: () => E.Either<Err, void>;
 
   /**
    * Updates the button background color.
    */
-  readonly setBgColor: (value: RGB) => void;
+  readonly setBgColor: (value: RGB) => E.Either<Err, void>;
 
   /**
    * Updates the button text color.
    */
-  readonly setTextColor: (value: RGB) => void;
+  readonly setTextColor: (value: RGB) => E.Either<Err, void>;
 
   /**
    * Updates the button text.
    */
-  readonly setText: (value: string) => void;
+  readonly setText: (value: string) => E.Either<Err, void>;
 
   /**
    * Shows the button loader.
    */
-  readonly showLoader: () => void;
+  readonly showLoader: () => E.Either<Err, void>;
 
   /**
    * Hides the button loader.
    */
-  readonly hideLoader: () => void;
+  readonly hideLoader: () => E.Either<Err, void>;
 
   /**
    * Mounts the component restoring its state.
