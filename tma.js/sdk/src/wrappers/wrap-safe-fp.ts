@@ -53,28 +53,35 @@ export type Supports<Args extends any[]> = {
   }[MethodNameWithVersionedParams];
 };
 
-type IfReturnsPromise<Fn extends AnyFn, A, B> = ReturnType<Fn> extends PromiseLike<any> ? A : B;
-type LeftOfReturn<Fn extends AnyFn> = ReturnType<Fn> extends E.Either<infer U, any> ? U : never;
-type RightOfReturn<Fn extends AnyFn> = ReturnType<Fn> extends E.Either<any, infer U> ? U : never;
-type TaskLeftOfReturn<Fn extends AnyFn> = ReturnType<Fn> extends TE.TaskEither<infer U, any>
+type AnyFpFn = (...args: any[]) => E.Either<any, any> | TE.TaskEither<any, any>;
+
+type IfReturnsTask<Fn extends AnyFpFn, A, B> = ReturnType<Fn> extends TE.TaskEither<any, any>
+  ? A : B;
+type LeftOfReturn<Fn extends AnyFpFn> = ReturnType<Fn> extends E.Either<infer U, any> ? U : never;
+type RightOfReturn<Fn extends AnyFpFn> = ReturnType<Fn> extends E.Either<any, infer U> ? U : never;
+type TaskLeftOfReturn<Fn extends AnyFpFn> = ReturnType<Fn> extends TE.TaskEither<infer U, any>
   ? U : never;
-type TaskRightOfReturn<Fn extends AnyFn> = ReturnType<Fn> extends TE.TaskEither<any, infer U>
+type TaskRightOfReturn<Fn extends AnyFpFn> = ReturnType<Fn> extends TE.TaskEither<any, infer U>
   ? U : never;
 
-type WrappedFnReturnType<Fn extends AnyFn> = IfReturnsPromise<
+type WrappedFnReturnType<Fn extends AnyFpFn> = IfReturnsTask<
   Fn,
   (TE.TaskEither<FunctionUnavailableError | TaskLeftOfReturn<Fn>, TaskRightOfReturn<Fn>>),
   (E.Either<FunctionUnavailableError | LeftOfReturn<Fn>, RightOfReturn<Fn>>)
 >;
-type WrappedFn<Fn extends AnyFn> = (...args: Parameters<Fn>) => WrappedFnReturnType<Fn>;
+type WrappedFn<Fn extends AnyFpFn> = (...args: Parameters<Fn>) => WrappedFnReturnType<Fn>;
 
 export type SafeWrappedFp<
-  Fn extends AnyFn,
+  Fn extends AnyFpFn,
   HasSupportCheck extends boolean,
   SupportsMapKeySchema extends string = never,
 > =
   & WrappedFn<Fn>
-  & IfReturnsPromise<Fn, { task: true }, {}>
+  // This one is required in order to understand what exactly should be returned
+  // from the function - TaskEither or Either. There is no other way to know it until the function
+  // itself is called, but we need to perform some checks before calling it and return a valid
+  // value based on the function return type.
+  & IfReturnsTask<Fn, { task: true }, {}>
   & {
   /**
    * A signal returning `true` if the function is available in the current environment and
@@ -290,11 +297,7 @@ export function wrapSafeFp<Fn extends AnyFn, O extends WrapSafeOptions<Parameter
           : 'unmounted. Use the mount() method';
         return wrapError(`${errMessagePrefix} the component is ${message}`);
       }
-      return (
-        'task' in options
-          ? TE.tryCatch(() => fn(...args), e => e)
-          : E.tryCatch(() => fn(...args), e => e)
-      ) as WrappedFnReturnType<Fn>;
+      return fn(...args);
     },
     fn,
     {
