@@ -1,4 +1,4 @@
-import type { AnyFn } from '@/types.js';
+import type { AnyFn } from '@tma.js/toolkit';
 
 type PickFnProps<T> = {
   [K in keyof T]: T[K] extends AnyFn ? K : never;

@@ -4,8 +4,8 @@ import type { PostEventError } from '@tma.js/bridge';
 
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import { Button, type ButtonOptions } from '@/composables/Button.js';
-import { createWrapSafeFp, type SafeWrappedFp, type SafeWrapped } from '@/wrappers/wrap-safe-fp.js';
-import { unwrapFp } from '@/wrappers/unwrapFp.js';
+import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
@@ -33,11 +33,11 @@ export class BackButton {
     });
 
     const wrapOptions = { version, isSupported: SETUP_METHOD, isTma } as const;
-    const wrapSupportedPlain = createWrapSafeFp({
+    const wrapSupportedPlain = createWithChecksFp({
       ...wrapOptions,
       returns: 'plain',
     });
-    const wrapCompleteEither = createWrapSafeFp({
+    const wrapCompleteEither = createWithChecksFp({
       ...wrapOptions,
       returns: 'either',
       isMounted: button.isMounted,
@@ -53,11 +53,11 @@ export class BackButton {
     this.mountFp = wrapSupportedPlain(button.mount);
     this.unmount = button.unmount;
 
-    this.hide = unwrapFp(this.hideFp);
-    this.show = unwrapFp(this.showFp);
-    this.onClick = unwrapFp(this.onClickFp);
-    this.offClick = unwrapFp(this.offClickFp);
-    this.mount = unwrapFp(this.mountFp);
+    this.hide = throwifyWithChecksFp(this.hideFp);
+    this.show = throwifyWithChecksFp(this.showFp);
+    this.onClick = throwifyWithChecksFp(this.onClickFp);
+    this.offClick = throwifyWithChecksFp(this.offClickFp);
+    this.mount = throwifyWithChecksFp(this.mountFp);
   }
 
   /**
@@ -79,23 +79,23 @@ export class BackButton {
    * Hides the back button.
    * @since Mini Apps v6.1
    */
-  readonly hideFp: SafeWrappedFp<() => E.Either<PostEventError, void>, true>;
+  readonly hideFp: WithChecksFp<() => E.Either<PostEventError, void>, true>;
 
   /**
    * @see hideFp
    */
-  readonly hide: SafeWrapped<() => void, true>;
+  readonly hide: WithChecks<() => void, true>;
 
   /**
    * Shows the back button.
    * @since Mini Apps v6.1
    */
-  readonly showFp: SafeWrappedFp<() => E.Either<PostEventError, void>, true>;
+  readonly showFp: WithChecksFp<() => E.Either<PostEventError, void>, true>;
 
   /**
    * @see showFp
    */
-  readonly show: SafeWrapped<() => void, true>;
+  readonly show: WithChecks<() => void, true>;
 
   /**
    * Adds a new button listener.
@@ -109,7 +109,7 @@ export class BackButton {
    *   off();
    * });
    */
-  readonly onClickFp: SafeWrappedFp<
+  readonly onClickFp: WithChecksFp<
     (listener: VoidFunction, once?: boolean) => VoidFunction,
     true
   >;
@@ -117,7 +117,7 @@ export class BackButton {
   /**
    * @see onClickFp
    */
-  readonly onClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => VoidFunction, true>;
+  readonly onClick: WithChecks<(listener: VoidFunction, once?: boolean) => VoidFunction, true>;
 
   /**
    * Removes the button click listener.
@@ -131,7 +131,7 @@ export class BackButton {
    * }
    * button.onClick(listener);
    */
-  readonly offClickFp: SafeWrappedFp<
+  readonly offClickFp: WithChecksFp<
     (listener: VoidFunction, once?: boolean) => void,
     true
   >;
@@ -139,18 +139,18 @@ export class BackButton {
   /**
    * @see offClickFp
    */
-  readonly offClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => void, true>;
+  readonly offClick: WithChecks<(listener: VoidFunction, once?: boolean) => void, true>;
 
   /**
    * Mounts the component restoring its state.
    * @since Mini Apps v6.1
    */
-  readonly mountFp: SafeWrappedFp<() => void, true>;
+  readonly mountFp: WithChecksFp<() => void, true>;
 
   /**
    * @see mountFp
    */
-  readonly mount: SafeWrapped<() => void, true>;
+  readonly mount: WithChecks<() => void, true>;
 
   /**
    * Unmounts the component.

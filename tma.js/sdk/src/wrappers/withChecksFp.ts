@@ -5,25 +5,23 @@ import {
   type MethodVersionedParams,
 } from '@tma.js/bridge';
 import { type Computed, computed } from '@tma.js/signals';
-import type { If, IsNever, AnyFnAnyEither, RightOfReturn, LeftOfReturn } from '@tma.js/toolkit';
+import type {
+  If,
+  IsNever,
+  AnyFnAnyEither,
+  RightOfReturn,
+  LeftOfReturn,
+  MaybeMonadReturnTypeToCommon,
+  AnyFn,
+} from '@tma.js/toolkit';
 import type { Version } from '@tma.js/types';
 import * as O from 'fp-ts/Option';
 import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 
 import { FunctionUnavailableError } from '@/errors.js';
-import type { AnyFn, MaybeAccessor } from '@/types.js';
+import type { MaybeAccessor } from '@/types.js';
 import { access } from '@/helpers/access.js';
-
-/**
- * Converts function return type to a simple value, unwrapping any Either and TaskEither return
- * types and returning their right value.
- */
-type ReturnTypeToCommon<Fn extends AnyFn> = ReturnType<Fn> extends E.Either<any, any>
-  ? RightOfReturn<Fn>
-  : ReturnType<Fn> extends TE.TaskEither<any, any>
-    ? Promise<RightOfReturn<Fn>>
-    : ReturnType<Fn>;
 
 type IfReturnsTask<Fn extends AnyFnAnyEither, A, B> =
   ReturnType<Fn> extends TE.TaskEither<any, any> ? A : B;
@@ -155,7 +153,7 @@ export type WithChecks<
   HasSupportCheck extends boolean,
   SupportsMapKeySchema extends string = never,
 > =
-  & ((...args: Parameters<Fn>) => ReturnTypeToCommon<Fn>)
+  & ((...args: Parameters<Fn>) => MaybeMonadReturnTypeToCommon<Fn>)
   & Omit<WithChecksFp<Fn, HasSupportCheck, SupportsMapKeySchema>, 'ifAvailable'>
   & {
   /**
@@ -166,7 +164,7 @@ export type WithChecks<
    * backButton.show.ifAvailable();
    */
     ifAvailable(...args: Parameters<Fn>):
-      | { ok: true; data: ReturnTypeToCommon<Fn> }
+      | { ok: true; data: MaybeMonadReturnTypeToCommon<Fn> }
       | { ok: false };
   };
 

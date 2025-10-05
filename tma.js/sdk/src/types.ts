@@ -2,14 +2,9 @@ import type { RequestFpOptions } from '@tma.js/bridge';
 import type { BetterPromiseOptions } from 'better-promises';
 
 /**
- * Function with any arguments list and return type.
+ * `request` options without `capture` and `postEvent` options specified.
  */
-export type AnyFn = (...args: any[]) => any;
-
-/**
- * `request` options without `capture` option specified.
- */
-export type RequestOptionsNoCapture = Omit<RequestFpOptions<never>, 'capture'>;
+export type RequestOptionsNoCapture = Omit<RequestFpOptions<never>, 'capture' | 'postEvent'>;
 
 export type AsyncOptions = Omit<BetterPromiseOptions, 'abortOnResolve' | 'abortOnReject'>;
 
