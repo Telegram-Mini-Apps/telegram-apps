@@ -1,28 +1,33 @@
 import { computed, type Computed, signal } from '@tma.js/signals';
 import type { InitData as InitDataType } from '@tma.js/types';
-import { eitherGet } from '@tma.js/toolkit';
 import * as E from 'fp-ts/Either';
 import * as O from 'fp-ts/Option';
 import { pipe } from 'fp-ts/function';
-
-type RetrieveInitData<Err> = () => E.Either<Err, O.Option<{
-  raw: string;
-  obj: InitDataType;
-}>>;
+import { throwifyFpFn } from '@tma.js/toolkit';
 
 export interface InitDataOptions<Err> {
   /**
    * Retrieves init data from the current environment.
    */
-  retrieveInitData: RetrieveInitData<Err>;
+  retrieveInitData: () => E.Either<Err, O.Option<{
+    raw: string;
+    obj: InitDataType;
+  }>>;
 }
 
 export class InitData<Err extends Error> {
   constructor({ retrieveInitData }: InitDataOptions<Err>) {
-    this.retrieveInitData = retrieveInitData;
+    this.restoreFp = () => {
+      return pipe(
+        retrieveInitData(),
+        E.map(O.match(() => undefined, ({ raw, obj }) => {
+          this._state.set(obj);
+          this._raw.set(raw);
+        })),
+      );
+    };
+    this.restore = throwifyFpFn(this.restoreFp);
   }
-
-  private readonly retrieveInitData: RetrieveInitData<Err>;
 
   private fromState<K extends keyof InitDataType>(key: K): Computed<InitDataType[K] | undefined> {
     return computed(() => {
@@ -116,20 +121,10 @@ export class InitData<Err extends Error> {
   /**
    * Restores the component state.
    */
-  restoreFp(): E.Either<Err, void> {
-    return pipe(
-      this.retrieveInitData(),
-      E.map(O.match(() => undefined, ({ raw, obj }) => {
-        this._state.set(obj);
-        this._raw.set(raw);
-      })),
-    );
-  }
+  readonly restoreFp: () => E.Either<Err, void>;
 
   /**
    * @see restoreFp
    */
-  restore() {
-    return eitherGet(this.restoreFp());
-  }
+  readonly restore: () => void;
 }
