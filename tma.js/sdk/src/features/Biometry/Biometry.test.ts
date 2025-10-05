@@ -1,14 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
 import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
-import { type PostEventFpFn, type RequestFpFn, type EventName, emitEvent } from '@tma.js/bridge';
+import { type RequestFpFn, type EventName, emitEvent } from '@tma.js/bridge';
 import { type EventListener, off, on } from '@tma.js/bridge';
 
-import { Biometry, type BiometryStorage } from '@/features/Biometry/Biometry.js';
+import { Biometry } from '@/features/Biometry/Biometry.js';
 import { createComponentSessionStorage } from '@/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
 import { testIsSupportedPure } from '@test-utils/predefined/testIsSupportedPure.js';
 import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
+import { InstantiateOptions } from '@test-utils/types.js';
+import { BiometryOptions } from '@/features/Biometry/types.js';
 
 const MIN_VERSION = '7.2';
 
@@ -39,16 +41,7 @@ function instantiate({
   onInfoReceived = () => undefined,
   offInfoReceived = () => undefined,
   isPageReload = false,
-}: {
-  version?: string;
-  storage?: boolean | BiometryStorage;
-  postEvent?: PostEventFpFn;
-  request?: RequestFpFn;
-  isTma?: boolean;
-  onInfoReceived?: (listener: EventListener<'biometry_info_received'>) => void;
-  offInfoReceived?: (listener: EventListener<'biometry_info_received'>) => void;
-  isPageReload?: boolean;
-} = {}) {
+}: InstantiateOptions<BiometryOptions> = {}) {
   return new Biometry({
     version,
     storage: typeof storage === 'boolean'
@@ -208,7 +201,7 @@ describe('unmount', () => {
   });
 
   it(
-    'should biometry state change listener using offBiometryInfoReceived',
+    'should remove biometry state change listener using offBiometryInfoReceived',
     async () => {
       const offBiometryInfoReceived = vi.fn(
         (listener: EventListener<'biometry_info_received'>) => {

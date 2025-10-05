@@ -1,7 +1,12 @@
-import type { BiometryType } from '@tma.js/bridge';
+import type { BiometryType, EventListener } from '@tma.js/bridge';
 import type { Maybe } from '@tma.js/toolkit';
 
 import type { RequestOptionsNoCapture } from '@/types.js';
+import type { WithVersion } from '@/fn-options/withVersion.js';
+import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
+import type { WithRequest } from '@/fn-options/withRequest.js';
+import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
 export interface BiometryState {
   /**
@@ -69,4 +74,21 @@ export interface BiometryRequestAccessOptions extends RequestOptionsNoCapture {
    * biometrics, 0-128 characters.
    */
   reason?: Maybe<string>;
+}
+
+export interface BiometryOptions extends WithVersion,
+  WithStateRestore<BiometryState>,
+  WithRequest,
+  WithPostEvent,
+  SharedFeatureOptions {
+  /**
+   * Adds a biometry info received event listener.
+   * @param listener - a listener to add.
+   */
+  onInfoReceived: (listener: EventListener<'biometry_info_received'>) => void;
+  /**
+   * Removes a biometry info received event listener.
+   * @param listener - a listener to add.
+   */
+  offInfoReceived: (listener: EventListener<'biometry_info_received'>) => void;
 }

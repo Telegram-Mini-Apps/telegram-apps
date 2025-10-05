@@ -1,20 +1,22 @@
 import type { Computed } from '@tma.js/signals';
 import type {
+  RequestError,
+  PostEventError,
   EventPayload,
   BiometryAuthRequestStatus,
   EventListener,
   BiometryTokenUpdateStatus,
 } from '@tma.js/bridge';
 import { BetterPromise } from 'better-promises';
+import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import { createWithChecksFp, WithChecks, WithChecksFp } from '@/wrappers/withChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import { NotAvailableError } from '@/errors.js';
-import type { ComponentStorage } from '@/component-storage.js';
 import type {
-  BiometryAuthenticateOptions,
+  BiometryAuthenticateOptions, BiometryOptions,
   BiometryRequestAccessOptions,
   BiometryState,
   BiometryUpdateTokenOptions,
@@ -22,36 +24,22 @@ import type {
 import type { AsyncOptions } from '@/types.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { AsyncMountable } from '@/composables/AsyncMountable.js';
-import { bound } from '@/helpers/bound.js';
-import { teToPromise } from '@/helpers/teToPromise.js';
-import type { WithVersion } from '@/fn-options/withVersion.js';
-import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
-import type { WithRequest } from '@/fn-options/withRequest.js';
-import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
-import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
-export type BiometryStorage = ComponentStorage<BiometryState>;
+type BiometryTask<T> = TE.TaskEither<RequestError, T>;
 
-export interface BiometryOptions extends WithVersion,
-  WithStateRestore<BiometryState>,
-  WithRequest,
-  WithPostEvent,
-  SharedFeatureOptions {
+interface AuthenticateResult {
   /**
-   * Adds a biometry info received event listener.
-   * @param listener - a listener to add.
+   * Authentication status.
    */
-  onInfoReceived: (listener: EventListener<'biometry_info_received'>) => void;
+  status: BiometryAuthRequestStatus;
   /**
-   * Removes a biometry info received event listener.
-   * @param listener - a listener to add.
+   * Token from the local secure storage saved previously.
    */
-  offInfoReceived: (listener: EventListener<'biometry_info_received'>) => void;
+  token?: string;
 }
 
-function throwNotAvailable(): never {
-  throw new NotAvailableError('Biometry is not available');
-}
+const notAvailableError = new NotAvailableError('Biometry is not available');
 
 function eventToState(event: EventPayload<'biometry_info_received'>): BiometryState {
   let available = false;
@@ -119,65 +107,76 @@ export class Biometry {
     });
 
     const wrapOptions = { version, isSupported: 'web_app_biometry_request_auth', isTma } as const;
-    const wrapSupported = createWrapSafe(wrapOptions);
-    const wrapComplete = createWrapSafe({
+    const wrapSupportedEither = createWithChecksFp({
+      ...wrapOptions,
+      returns: 'either',
+    });
+    const wrapSupportedTask = createWithChecksFp({
+      ...wrapOptions,
+      returns: 'task',
+    });
+    const wrapMountedTask = createWithChecksFp({
       ...wrapOptions,
       isMounted: mountable.isMounted,
+      returns: 'task',
     });
 
     this.isAvailable = stateful.computedFromState('available');
     this.isMounted = mountable.isMounted;
     this.isSupported = createIsSupportedSignal('web_app_biometry_request_auth', version);
     this.state = stateful.state;
-    this.unmount = bound(mountable, 'unmount');
-    this.mount = wrapSupported(bound(mountable, 'mount'));
+    this.unmount = mountable.unmount;
+    this.mountFp = wrapSupportedTask(mountable.mount);
 
-    this.authenticate = wrapComplete(options => {
-      return BetterPromise.fn(async () => {
-        if (!this.isAvailable()) {
-          throwNotAvailable();
-        }
-        const response = await teToPromise(
+    this.authenticateFp = wrapMountedTask(options => {
+      return !this.isAvailable()
+        ? TE.left(notAvailableError)
+        : pipe(
           request('web_app_biometry_request_auth', 'biometry_auth_requested', {
             ...options,
             params: { reason: ((options || {}).reason || '').trim() },
           }),
+          TE.map(response => {
+            stateful.setState({ token: response.token });
+            return response;
+          }),
         );
-        if (typeof response.token === 'string') {
-          stateful.setState({ token: response.token });
-        }
-        return response;
-      });
     });
 
-    this.openSettings = wrapSupported(() => {
-      postEvent('web_app_biometry_open_settings');
-    });
+    this.openSettingsFp = wrapSupportedEither(() => postEvent('web_app_biometry_open_settings'));
 
-    this.requestAccess = wrapComplete(options => {
-      return teToPromise(
+    this.requestAccessFp = wrapMountedTask(options => {
+      return pipe(
         request('web_app_biometry_request_access', 'biometry_info_received', {
           ...options,
           params: { reason: ((options || {}).reason || '').trim() },
         }),
-      ).then(response => {
-        const state = eventToState(response);
-        if (!state.available) {
-          throwNotAvailable();
-        }
-        stateful.setState(state);
-        return state.accessRequested;
-      });
+        TE.chain(response => {
+          const state = eventToState(response);
+          if (!state.available) {
+            return TE.left(notAvailableError);
+          }
+          stateful.setState(state);
+          return TE.right(state.accessRequested);
+        }),
+      );
     });
 
-    this.updateToken = wrapComplete((options = {}) => {
-      return teToPromise(
+    this.updateTokenFp = wrapMountedTask((options = {}) => {
+      return pipe(
         request('web_app_biometry_update_token', 'biometry_token_updated', {
           ...options,
           params: { token: options.token || '', reason: options.reason?.trim() },
         }),
-      ).then(response => response.status);
+        TE.map(response => response.status),
+      );
     });
+
+    this.authenticate = throwifyWithChecksFp(this.authenticateFp);
+    this.openSettings = throwifyWithChecksFp(this.openSettingsFp);
+    this.requestAccess = throwifyWithChecksFp(this.requestAccessFp);
+    this.updateToken = throwifyWithChecksFp(this.updateTokenFp);
+    this.mount = throwifyWithChecksFp(this.mountFp);
   }
 
   /**
@@ -210,7 +209,7 @@ export class Biometry {
    *   reason: 'Authenticate to open wallet',
    * });
    */
-  authenticate: SafeWrapped<(options?: BiometryAuthenticateOptions) => BetterPromise<{
+  readonly authenticateFp: WithChecksFp<(options?: BiometryAuthenticateOptions) => BiometryTask<{
     /**
      * Authentication status.
      */
@@ -222,6 +221,14 @@ export class Biometry {
   }>, true>;
 
   /**
+   * @see authenticateFp
+   */
+  readonly authenticate: WithChecks<
+    (options?: BiometryAuthenticateOptions) => BetterPromise<AuthenticateResult>,
+    true
+  >;
+
+  /**
    * Opens the biometric access settings for bots. Useful when you need to request biometrics
    * access to users who haven't granted it yet.
    *
@@ -229,7 +236,12 @@ export class Biometry {
    * interface (e.g. a click inside the Mini App or on the main button)_.
    * @since Mini Apps v7.2
    */
-  openSettings: SafeWrapped<() => void, true>;
+  readonly openSettingsFp: WithChecksFp<() => E.Either<PostEventError, void>, true>;
+
+  /**
+   * @see openSettingsFp
+   */
+  readonly openSettings: WithChecks<() => void, true>;
 
   /**
    * Requests permission to use biometrics.
@@ -240,7 +252,15 @@ export class Biometry {
    *   reason: 'Authenticate to open wallet',
    * });
    */
-  requestAccess: SafeWrapped<
+  readonly requestAccessFp: WithChecksFp<
+    (options?: BiometryRequestAccessOptions) => BiometryTask<boolean>,
+    true
+  >;
+
+  /**
+   * @see requestAccessFp
+   */
+  readonly requestAccess: WithChecks<
     (options?: BiometryRequestAccessOptions) => BetterPromise<boolean>,
     true
   >;
@@ -256,7 +276,15 @@ export class Biometry {
    * @example Deleting the token
    * biometry.updateToken();
    */
-  updateToken: SafeWrapped<
+  readonly updateTokenFp: WithChecksFp<
+    (options?: BiometryUpdateTokenOptions) => BiometryTask<BiometryTokenUpdateStatus>,
+    true
+  >;
+
+  /**
+   * @see updateTokenFp
+   */
+  readonly updateToken: WithChecks<
     (options?: BiometryUpdateTokenOptions) => BetterPromise<BiometryTokenUpdateStatus>,
     true
   >;
@@ -265,10 +293,15 @@ export class Biometry {
    * Mounts the component restoring its state.
    * @since Mini Apps v7.2
    */
-  mount: SafeWrapped<(options?: AsyncOptions) => BetterPromise<void>, true>;
+  readonly mountFp: WithChecksFp<(options?: AsyncOptions) => BiometryTask<void>, true>;
+
+  /**
+   * @see mountFp
+   */
+  readonly mount: WithChecks<(options?: AsyncOptions) => BetterPromise<void>, true>;
 
   /**
    * Unmounts the component.
    */
-  unmount: () => void;
+  readonly unmount: () => void;
 }
