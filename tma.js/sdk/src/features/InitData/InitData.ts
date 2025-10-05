@@ -120,10 +120,24 @@ export class InitData<EComplete extends Error, ERaw extends Error> {
   readonly user = this.fromState('user');
 
   /**
+   * Restores the component state returning fp-ts abstraction.
+   */
+  restoreFp(): E.Either<EComplete | ERaw, void> {
+    const error = pipe(
+      this.retrieveInitData(),
+      E.map(O.map(this._state.set)),
+      E.match(e => e, () => undefined),
+    );
+    if (error) {
+      return E.left(error);
+    }
+    return pipe(this.retrieveRawInitData(), E.map(O.map(this._raw.set)), E.map(() => undefined));
+  }
+
+  /**
    * Restores the component state.
    */
   restore() {
-    pipe(eitherGet(this.retrieveInitData()), O.map(this._state.set));
-    pipe(eitherGet(this.retrieveRawInitData()), O.map(this._raw.set));
+    return eitherGet(this.restoreFp());
   }
 }
