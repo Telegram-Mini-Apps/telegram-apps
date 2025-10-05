@@ -1,14 +1,18 @@
 import type { Computed } from '@tma.js/signals';
-import type { InvokeCustomMethodFpOptions } from '@tma.js/bridge';
+import type { InvokeCustomMethodFpOptions, RequestError } from '@tma.js/bridge';
 import { BetterPromise } from 'better-promises';
 import { array, parse, record, string } from 'valibot';
+import * as TE from 'fp-ts/TaskEither';
+import { pipe } from 'fp-ts/function';
 
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import { teToPromise } from '@/helpers/teToPromise.js';
 import type { WithVersion } from '@/fn-options/withVersion.js';
 import type { WithInvokeCustomMethod } from '@/fn-options/withInvokeCustomMethod.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+
+type CloudStorageTask<T> = TE.TaskEither<RequestError, T>;
 
 export interface CloudStorageOptions extends WithVersion,
   WithInvokeCustomMethod,
@@ -20,35 +24,37 @@ export interface CloudStorageOptions extends WithVersion,
  */
 export class CloudStorage {
   constructor({ version, isTma, invokeCustomMethod }: CloudStorageOptions) {
-    const wrapOptions = {
+    const wrapSupportedTask = createWithChecksFp({
       version,
       isSupported: 'web_app_invoke_custom_method',
       isTma,
-    } as const;
-    const wrapSupported = createWrapSafe(wrapOptions);
+      returns: 'task',
+    });
 
     this.isSupported = createIsSupportedSignal('web_app_invoke_custom_method', version);
 
-    this.deleteItem = wrapSupported((keyOrKeys, options) => {
-      return BetterPromise.fn(async () => {
-        const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
-        if (keys.length) {
-          await teToPromise(invokeCustomMethod('deleteStorageValues', { keys }, options));
-        }
-      });
+    this.deleteItemFp = wrapSupportedTask((keyOrKeys, options) => {
+      const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
+      return pipe(
+        keys.length
+          ? invokeCustomMethod('deleteStorageValues', { keys }, options)
+          : TE.right(undefined),
+        TE.map(() => undefined),
+      );
     });
 
-    this.getItem = wrapSupported(((
-      keyOrKeys: string | string[],
-      options?: InvokeCustomMethodFpOptions,
-    ): BetterPromise<string | Record<string, string>> => {
-      const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
-      if (!keys.length) {
-        return BetterPromise.resolve(Array.isArray(keyOrKeys) ? {} : '');
-      }
-      return teToPromise(invokeCustomMethod('getStorageValues', { keys }, options))
-        .then(data => {
-          const response = {
+    this.getItemFp = wrapSupportedTask((key, options) => {
+      return pipe(
+        this.getItemsFp([key], options),
+        TE.map(values => values[key] || ''),
+      );
+    });
+
+    this.getItemsFp = wrapSupportedTask((keys, options) => {
+      return pipe(
+        keys.length ? invokeCustomMethod('getStorageValues', { keys }, options) : TE.right({}),
+        TE.map(data => {
+          return {
             // Fulfill the response with probably missing keys.
             ...keys.reduce<Record<string, string>>((acc, key) => {
               acc[key] = '';
@@ -56,25 +62,34 @@ export class CloudStorage {
             }, {}),
             ...parse(record(string(), string()), data),
           };
-
-          return typeof keyOrKeys === 'string' ? response[keyOrKeys] : response;
-        });
-    }) as typeof this.getItem);
-
-    this.getKeys = wrapSupported(options => {
-      return teToPromise(invokeCustomMethod('getStorageKeys', {}, options))
-        .then(data => parse(array(string()), data));
+        }),
+      );
     });
 
-    this.setItem = wrapSupported((key, value, options) => {
-      return teToPromise(invokeCustomMethod('saveStorageValue', { key, value }, options)).then();
+    this.getKeysFp = wrapSupportedTask(options => {
+      return pipe(
+        invokeCustomMethod('getStorageKeys', {}, options),
+        TE.map(data => parse(array(string()), data)),
+      );
     });
 
-    this.clear = wrapSupported(options => {
-      return this.getKeys(options)
-        .then(this.deleteItem)
-        .then();
+    this.setItemFp = wrapSupportedTask((key, value, options) => {
+      return pipe(
+        invokeCustomMethod('saveStorageValue', { key, value }, options),
+        TE.map(() => undefined),
+      );
     });
+
+    this.clearFp = wrapSupportedTask(options => {
+      return pipe(this.getKeysFp(options), TE.chain(this.deleteItemFp));
+    });
+
+    this.deleteItem = throwifyWithChecksFp(this.deleteItemFp);
+    this.getItem = throwifyWithChecksFp(this.getItemFp);
+    this.getItems = throwifyWithChecksFp(this.getItemsFp);
+    this.getKeys = throwifyWithChecksFp(this.getKeysFp);
+    this.setItem = throwifyWithChecksFp(this.setItemFp);
+    this.clear = throwifyWithChecksFp(this.clearFp);
   }
 
   /**
@@ -88,22 +103,32 @@ export class CloudStorage {
    * @param options - request execution options.
    * @since Mini Apps v6.9
    */
-  deleteItem: SafeWrapped<
+  readonly deleteItemFp: WithChecksFp<
+    (keyOrKeys: string | string[], options?: InvokeCustomMethodFpOptions) => CloudStorageTask<void>,
+    true
+  >;
+
+  readonly deleteItem: WithChecks<
     (keyOrKeys: string | string[], options?: InvokeCustomMethodFpOptions) => BetterPromise<void>,
     true
   >;
 
   /**
-   * Gets multiple keys' values from the cloud storage.
-   * @param keys - keys list.
+   * Gets a single key value from the cloud storage.
+   * @param key - a key to get.
    * @param options - request execution options.
-   * @returns
-   * - A map, where a key is one of the specified in the `keys` argument,
-   * and a value is a corresponding storage value if an array of keys was passed.
-   * - A key value as a string if a single key was passed.
+   * @returns A key value as a string.
    * @since Mini Apps v6.9
    */
-  getItem: SafeWrapped<{
+  readonly getItemFp: WithChecksFp<
+    (key: string, options?: InvokeCustomMethodFpOptions) => CloudStorageTask<string>,
+    true
+  >;
+
+  /**
+   * @see getItemFp
+   */
+  readonly getItem: WithChecks<{
     <K extends string>(
       keys: K[],
       options?: InvokeCustomMethodFpOptions,
@@ -112,11 +137,49 @@ export class CloudStorage {
   }, true>;
 
   /**
+   * Gets multiple keys' values from the cloud storage.
+   * @param keys - keys list.
+   * @param options - request execution options.
+   * @returns A map, where a key is one of the specified in the `keys` argument,
+   * and a value is a corresponding storage value if an array of keys was passed.
+   * @since Mini Apps v6.9
+   */
+  readonly getItemsFp: WithChecksFp<
+    <K extends string>(
+      keys: K[],
+      options?: InvokeCustomMethodFpOptions,
+    ) => CloudStorageTask<Record<K, string>>,
+    true
+  >;
+
+  /**
+   * @see getItemsFp
+   */
+  readonly getItems: WithChecks<
+    <K extends string>(
+      keys: K[],
+      options?: InvokeCustomMethodFpOptions,
+    ) => BetterPromise<Record<K, string>>,
+    true
+  >;
+
+  /**
    * Returns a list of all keys presented in the cloud storage.
    * @param options - request execution options.
    * @since Mini Apps v6.9
    */
-  getKeys: SafeWrapped<(options?: InvokeCustomMethodFpOptions) => BetterPromise<string[]>, true>;
+  readonly getKeysFp: WithChecksFp<
+    (options?: InvokeCustomMethodFpOptions) => CloudStorageTask<string[]>,
+    true
+  >;
+
+  /**
+   * @see getKeysFp
+   */
+  readonly getKeys: WithChecks<
+    (options?: InvokeCustomMethodFpOptions) => BetterPromise<string[]>,
+    true
+  >;
 
   /**
    * Saves the specified value by a key.
@@ -125,7 +188,15 @@ export class CloudStorage {
    * @param options - request execution options.
    * @since Mini Apps v6.9
    */
-  setItem: SafeWrapped<
+  readonly setItemFp: WithChecksFp<
+    (key: string, value: string, options?: InvokeCustomMethodFpOptions) => CloudStorageTask<void>,
+    true
+  >;
+
+  /**
+   * @see setItemFp
+   */
+  readonly setItem: WithChecks<
     (key: string, value: string, options?: InvokeCustomMethodFpOptions) => BetterPromise<void>,
     true
   >;
@@ -135,5 +206,13 @@ export class CloudStorage {
    * @param options - additional options.
    * @since Mini Apps v6.9
    */
-  clear: SafeWrapped<(options?: InvokeCustomMethodFpOptions) => BetterPromise<void>, true>;
+  readonly clearFp: WithChecksFp<
+    (options?: InvokeCustomMethodFpOptions) => CloudStorageTask<void>,
+    true
+  >;
+
+  /**
+   * @see clearFp
+   */
+  readonly clear: WithChecks<(options?: InvokeCustomMethodFpOptions) => BetterPromise<void>, true>;
 }

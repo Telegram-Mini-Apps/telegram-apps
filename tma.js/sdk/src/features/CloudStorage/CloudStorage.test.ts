@@ -1,6 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
 import * as TE from 'fp-ts/TaskEither';
-import { BetterPromise } from 'better-promises';
 
 import { CloudStorage } from '@/features/CloudStorage/CloudStorage.js';
 import { testIsSupportedPure } from '@test-utils/predefined/testIsSupportedPure.js';
@@ -52,14 +51,26 @@ describe('getItem', () => {
   it('should call invokeCustomMethod with "getStorageValues" and { keys }', async () => {
     const invokeCustomMethod = vi.fn(() => TE.right({ a: 'A', b: '' }));
     const component = instantiate({ invokeCustomMethod });
-    await expect(component.getItem(['a', 'b'])).resolves.toStrictEqual({ a: 'A', b: '' });
+    await component.getItem('a');
     expect(invokeCustomMethod).toHaveBeenCalledOnce();
     expect(invokeCustomMethod).toHaveBeenCalledWith(
-      'getStorageValues', { keys: ['a', 'b'] }, undefined,
+      'getStorageValues', { keys: ['a'] }, undefined,
     );
 
     await expect(component.getItem('a')).resolves.toBe('A');
     await expect(component.getItem('b')).resolves.toBe('');
+  });
+});
+
+describe('getItems', () => {
+  it('should call invokeCustomMethod with "getStorageValues" and { keys }', async () => {
+    const invokeCustomMethod = vi.fn(() => TE.right({ a: 'A', b: '' }));
+    const component = instantiate({ invokeCustomMethod });
+    await expect(component.getItems(['a', 'b'])).resolves.toStrictEqual({ a: 'A', b: '' });
+    expect(invokeCustomMethod).toHaveBeenCalledOnce();
+    expect(invokeCustomMethod).toHaveBeenCalledWith(
+      'getStorageValues', { keys: ['a', 'b'] }, undefined,
+    );
   });
 });
 
@@ -88,11 +99,11 @@ describe('clear', () => {
     const component = instantiate();
 
     const deleteItemSpy = vi
-      .spyOn(component, 'deleteItem')
-      .mockImplementation(() => BetterPromise.resolve());
+      .spyOn(component, 'deleteItemFp')
+      .mockImplementation(() => TE.right(undefined));
     vi
-      .spyOn(component, 'getKeys')
-      .mockImplementation(() => BetterPromise.resolve(['a', 'b', 'c']));
+      .spyOn(component, 'getKeysFp')
+      .mockImplementation(() => TE.right(['a', 'b', 'c']));
 
     await component.clear();
     expect(deleteItemSpy).toHaveBeenCalledOnce();
