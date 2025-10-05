@@ -4,7 +4,7 @@ import * as TE from 'fp-ts/TaskEither';
 export type AnyEither<L = any, R = any> = E.Either<L, R> | TE.TaskEither<L, R>;
 export type AnyFnAnyEither<L = any, R = any> = (...args: any) => AnyEither<L, R>;
 
-export type RightOfEither<E extends AnyEither> = E extends AnyEither<any, infer U> ? U : never;
+export type RightOfEither<E extends AnyEither> = E extends AnyEither<never, infer U> ? U : never;
 export type LeftOfEither<E extends AnyEither> = E extends AnyEither<infer U> ? U : never;
 export type RightOfReturn<F extends AnyFnAnyEither> = RightOfEither<ReturnType<F>>;
 export type LeftOfReturn<F extends AnyFnAnyEither> = LeftOfEither<ReturnType<F>>;
