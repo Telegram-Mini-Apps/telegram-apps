@@ -1,25 +1,30 @@
 import type { Computed } from '@tma.js/signals';
 import type { RGB } from '@tma.js/types';
+import type { PostEventError } from '@tma.js/bridge';
+import * as E from 'fp-ts/Either';
 
 import {
   BottomButton,
   type BottomButtonOptions,
   type BottomButtonState,
 } from '@/composables/BottomButton.js';
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+
+type MainButtonEither = E.Either<PostEventError, void>;
 
 export type MainButtonState = BottomButtonState;
 
 export interface MainButtonOptions extends WithPostEvent,
   SharedFeatureOptions,
-  Omit<BottomButtonOptions<MainButtonState>, 'initialState' | 'onChange'> {
+  Omit<BottomButtonOptions<MainButtonState, PostEventError>, 'initialState' | 'onChange' | 'commit'> {
 }
 
 export class MainButton {
   constructor({ postEvent, isTma, ...rest }: MainButtonOptions) {
-    const button = new BottomButton<MainButtonState>({
+    const button = new BottomButton<MainButtonState, PostEventError>({
       ...rest,
       initialState: {
         hasShineEffect: false,
@@ -28,8 +33,8 @@ export class MainButton {
         isVisible: false,
         text: 'Continue',
       },
-      onChange(state) {
-        postEvent('web_app_setup_main_button', {
+      commit(state) {
+        return postEvent('web_app_setup_main_button', {
           has_shine_effect: state.hasShineEffect,
           is_visible: state.isVisible,
           is_active: state.isEnabled,
@@ -42,9 +47,13 @@ export class MainButton {
     });
 
     const wrapOptions = { isTma };
-    const wrapSupported = createWrapSafe(wrapOptions);
-    const wrapMounted = createWrapSafe({
+    const wrapSupportedPlain = createWithChecksFp({
       ...wrapOptions,
+      returns: 'plain',
+    });
+    const wrapMountedEither = createWithChecksFp({
+      ...wrapOptions,
+      returns: 'either',
       isMounted: button.isMounted,
     });
 
@@ -58,22 +67,38 @@ export class MainButton {
     this.isMounted = button.isMounted;
     this.state = button.state;
 
-    this.show = wrapMounted(button.show);
-    this.hide = wrapMounted(button.hide);
-    this.setParams = wrapMounted(button.setParams);
-    this.mount = wrapSupported(button.mount);
+    this.showFp = wrapMountedEither(button.show);
+    this.hideFp = wrapMountedEither(button.hide);
+    this.setParamsFp = wrapMountedEither(button.setParams);
+    this.mountFp = wrapSupportedPlain(button.mount);
     this.unmount = button.unmount;
-    this.onClick = wrapSupported(button.onClick);
-    this.offClick = wrapSupported(button.offClick);
-    this.enable = wrapMounted(button.enable);
-    this.disable = wrapMounted(button.disable);
-    this.enableShineEffect = wrapMounted(button.enableShineEffect);
-    this.disableShineEffect = wrapMounted(button.disableShineEffect);
-    this.showLoader = wrapMounted(button.showLoader);
-    this.hideLoader = wrapMounted(button.hideLoader);
-    this.setText = wrapMounted(button.setText);
-    this.setTextColor = wrapMounted(button.setTextColor);
-    this.setBgColor = wrapMounted(button.setBgColor);
+    this.onClickFp = wrapSupportedPlain(button.onClick);
+    this.offClickFp = wrapSupportedPlain(button.offClick);
+    this.enableFp = wrapMountedEither(button.enable);
+    this.disableFp = wrapMountedEither(button.disable);
+    this.enableShineEffectFp = wrapMountedEither(button.enableShineEffect);
+    this.disableShineEffectFp = wrapMountedEither(button.disableShineEffect);
+    this.showLoaderFp = wrapMountedEither(button.showLoader);
+    this.hideLoaderFp = wrapMountedEither(button.hideLoader);
+    this.setTextFp = wrapMountedEither(button.setText);
+    this.setTextColorFp = wrapMountedEither(button.setTextColor);
+    this.setBgColorFp = wrapMountedEither(button.setBgColor);
+
+    this.show = throwifyWithChecksFp(this.showFp);
+    this.hide = throwifyWithChecksFp(this.hideFp);
+    this.setParams = throwifyWithChecksFp(this.setParamsFp);
+    this.mount = throwifyWithChecksFp(this.mountFp);
+    this.onClick = throwifyWithChecksFp(this.onClickFp);
+    this.offClick = throwifyWithChecksFp(this.offClickFp);
+    this.enable = throwifyWithChecksFp(this.enableFp);
+    this.disable = throwifyWithChecksFp(this.disableFp);
+    this.enableShineEffect = throwifyWithChecksFp(this.enableShineEffectFp);
+    this.disableShineEffect = throwifyWithChecksFp(this.disableShineEffectFp);
+    this.showLoader = throwifyWithChecksFp(this.showLoaderFp);
+    this.hideLoader = throwifyWithChecksFp(this.hideLoaderFp);
+    this.setText = throwifyWithChecksFp(this.setTextFp);
+    this.setTextColor = throwifyWithChecksFp(this.setTextColorFp);
+    this.setBgColor = throwifyWithChecksFp(this.setBgColorFp);
   }
 
   //#region Properties.
@@ -131,57 +156,112 @@ export class MainButton {
   /**
    * Shows the button.
    */
-  readonly show: SafeWrapped<() => void, false>;
+  readonly showFp: WithChecksFp<() => MainButtonEither, false>;
+
+  /**
+   * @see showFp
+   */
+  readonly show: WithChecks<() => void, false>;
 
   /**
    * Hides the button.
    */
-  readonly hide: SafeWrapped<() => void, false>;
+  readonly hideFp: WithChecksFp<() => MainButtonEither, false>;
+
+  /**
+   * @see hideFp
+   */
+  readonly hide: WithChecks<() => void, false>;
 
   /**
    * Enables the button.
    */
-  readonly enable: SafeWrapped<() => void, false>;
+  readonly enableFp: WithChecksFp<() => MainButtonEither, false>;
+
+  /**
+   * @see enableFp
+   */
+  readonly enable: WithChecks<() => void, false>;
 
   /**
    * Enables the button.
    */
-  readonly enableShineEffect: SafeWrapped<() => void, false>;
+  readonly enableShineEffectFp: WithChecksFp<() => MainButtonEither, false>;
+
+  /**
+   * @see enableShineEffectFp
+   */
+  readonly enableShineEffect: WithChecks<() => void, false>;
 
   /**
    * Disables the button.
    */
-  readonly disable: SafeWrapped<() => void, false>;
+  readonly disableFp: WithChecksFp<() => MainButtonEither, false>;
+
+  /**
+   * @see disableFp
+   */
+  readonly disable: WithChecks<() => void, false>;
 
   /**
    * Enables the button.
    */
-  readonly disableShineEffect: SafeWrapped<() => void, false>;
+  readonly disableShineEffectFp: WithChecksFp<() => MainButtonEither, false>;
+
+  /**
+   * @see disableShineEffectFp
+   */
+  readonly disableShineEffect: WithChecks<() => void, false>;
 
   /**
    * Updates the button background color.
    */
-  readonly setBgColor: SafeWrapped<(value: RGB) => void, false>;
+  readonly setBgColorFp: WithChecksFp<(value: RGB) => MainButtonEither, false>;
+
+  /**
+   * @see setBgColorFp
+   */
+  readonly setBgColor: WithChecks<(value: RGB) => void, false>;
 
   /**
    * Updates the button text color.
    */
-  readonly setTextColor: SafeWrapped<(value: RGB) => void, false>;
+  readonly setTextColorFp: WithChecksFp<(value: RGB) => MainButtonEither, false>;
+
+  /**
+   * @see setTextColorFp
+   */
+  readonly setTextColor: WithChecks<(value: RGB) => void, false>;
 
   /**
    * Updates the button text.
    */
-  readonly setText: SafeWrapped<(value: string) => void, false>;
+  readonly setTextFp: WithChecksFp<(value: string) => MainButtonEither, false>;
+
+  /**
+   * @see setTextFp
+   */
+  readonly setText: WithChecks<(value: string) => void, false>;
 
   /**
    * Shows the button loader.
    */
-  readonly showLoader: SafeWrapped<() => void, false>;
+  readonly showLoaderFp: WithChecksFp<() => MainButtonEither, false>;
+
+  /**
+   * @see showLoaderFp
+   */
+  readonly showLoader: WithChecks<() => void, false>;
 
   /**
    * Hides the button loader.
    */
-  readonly hideLoader: SafeWrapped<() => void, false>;
+  readonly hideLoaderFp: WithChecksFp<() => MainButtonEither, false>;
+
+  /**
+   * @see hideLoaderFp
+   */
+  readonly hideLoader: WithChecks<() => void, false>;
 
   /**
    * Updates the button state.
@@ -193,12 +273,22 @@ export class MainButton {
    *   hasShineEffect: true,
    * });
    */
-  readonly setParams: SafeWrapped<(state: Partial<MainButtonState>) => void, false>;
+  readonly setParamsFp: WithChecksFp<
+    (state: Partial<MainButtonState>) => MainButtonEither,
+    false
+  >;
+
+  readonly setParams: WithChecks<(state: Partial<MainButtonState>) => void, false>;
 
   /**
    * Mounts the component restoring its state.
    */
-  readonly mount: SafeWrapped<() => void, false>;
+  readonly mountFp: WithChecksFp<() => void, false>;
+
+  /**
+   * @see mountFp
+   */
+  readonly mount: WithChecks<() => void, false>;
 
   /**
    * Unmounts the component.
@@ -216,7 +306,12 @@ export class MainButton {
    *   off();
    * });
    */
-  readonly onClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => VoidFunction, false>;
+  readonly onClickFp: WithChecksFp<(listener: VoidFunction, once?: boolean) => VoidFunction, false>;
+
+  /**
+   * @see onClickFp
+   */
+  readonly onClick: WithChecks<(listener: VoidFunction, once?: boolean) => VoidFunction, false>;
 
   /**
    * Removes the button click listener.
@@ -229,6 +324,11 @@ export class MainButton {
    * }
    * button.onClick(listener);
    */
-  readonly offClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => void, false>;
+  readonly offClickFp: WithChecksFp<(listener: VoidFunction, once?: boolean) => void, false>;
+
+  /**
+   * @see offClickFp
+   */
+  readonly offClick: WithChecks<(listener: VoidFunction, once?: boolean) => void, false>;
   //#endregion
 }
