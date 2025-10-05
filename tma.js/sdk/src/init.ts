@@ -1,10 +1,18 @@
-import { on, logger, retrieveLaunchParams } from '@tma.js/bridge';
-import { createCbCollector } from '@tma.js/toolkit';
+import {
+  on,
+  logger,
+  retrieveLaunchParamsFp,
+  type RetrieveLaunchParamsError,
+  type PostEventError,
+} from '@tma.js/bridge';
+import { createCbCollector, eitherFnToSimple } from '@tma.js/toolkit';
 import type { Version } from '@tma.js/types';
 import type { PostEventFpFn } from '@tma.js/bridge';
+import * as E from 'fp-ts/Either';
+import { pipe } from 'fp-ts/function';
 
 import { version } from '@/globals/version.js';
-import { postEventFpSignal, postEvent } from '@/globals/post-event.js';
+import { postEventFpSignal, postEventFp, postEvent } from '@/globals/post-event.js';
 
 export interface InitOptions {
   /**
@@ -31,9 +39,23 @@ export interface InitOptions {
  * @param options - function options.
  * @returns A function, to perform a cleanup.
  */
-export function init(options: InitOptions = {}): VoidFunction {
-  // Configure the package global dependencies.
-  version.set(options.version || retrieveLaunchParams().tgWebAppVersion);
+export function initFp(
+  options: InitOptions = {},
+): E.Either<RetrieveLaunchParamsError | PostEventError, VoidFunction> {
+  const { version: optionsVersion } = options;
+  if (optionsVersion) {
+    version.set(optionsVersion);
+  } else {
+    const error = pipe(retrieveLaunchParamsFp(), E.matchW(
+      err => err,
+      lp => {
+        version.set(lp.tgWebAppVersion);
+      },
+    ));
+    if (error) {
+      return E.left(error);
+    }
+  }
   if (options.postEvent) {
     postEventFpSignal.set(options.postEvent);
   }
@@ -72,9 +94,16 @@ export function init(options: InitOptions = {}): VoidFunction {
   // application.
   //
   // It really has no effect outside non-Telegram web environment.
-  postEvent('iframe_ready', { reload_supported: true });
-
-  logger().log('The package was initialized');
-
-  return cleanup;
+  return pipe(
+    postEventFp('iframe_ready', { reload_supported: true }),
+    E.map(() => {
+      logger().log('The package was initialized');
+      return cleanup;
+    }),
+  );
 }
+
+/**
+ * @see initFp
+ */
+export const init = eitherFnToSimple(initFp);
