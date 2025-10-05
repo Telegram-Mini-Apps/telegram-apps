@@ -1,26 +1,63 @@
 import type { Computed } from '@tma.js/signals';
+import * as E from 'fp-ts/Either';
+import type { PostEventError } from '@tma.js/bridge';
 
-import { type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import { BackButtonFp } from '@/features/BackButton/BackButtonFp.js';
+import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
+import { Button, type ButtonOptions } from '@/composables/Button.js';
+import { createWrapSafeFp, type SafeWrappedFp, type SafeWrapped } from '@/wrappers/wrap-safe-fp.js';
 import { unwrapFp } from '@/wrappers/unwrapFp.js';
-import type { BackButtonOptions } from '@/features/BackButton/types.js';
+import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
+import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+
+export interface BackButtonState {
+  isVisible: boolean;
+}
+
+export interface BackButtonOptions extends WithVersionBasedPostEvent,
+  SharedFeatureOptions,
+  Omit<ButtonOptions<BackButtonState, PostEventError>, 'onChange' | 'initialState' | 'commit'> {
+}
 
 /**
  * @since Mini Apps v6.1
  */
 export class BackButton {
-  constructor(options: BackButtonOptions) {
-    const parent = new BackButtonFp(options);
+  constructor({ postEvent, version, isTma, ...rest }: BackButtonOptions) {
+    const SETUP_METHOD = 'web_app_setup_back_button';
+    const button = new Button({
+      ...rest,
+      initialState: { isVisible: false },
+      commit(state) {
+        return postEvent(SETUP_METHOD, { is_visible: state.isVisible });
+      },
+    });
 
-    this.isVisible = parent.isVisible;
-    this.isMounted = parent.isMounted;
-    this.isSupported = parent.isSupported;
-    this.hide = unwrapFp(parent.hide);
-    this.show = unwrapFp(parent.show);
-    this.onClick = unwrapFp(parent.onClick);
-    this.offClick = unwrapFp(parent.offClick);
-    this.mount = unwrapFp(parent.mount);
-    this.unmount = parent.unmount;
+    const wrapOptions = { version, isSupported: SETUP_METHOD, isTma } as const;
+    const wrapSupportedPlain = createWrapSafeFp({
+      ...wrapOptions,
+      returns: 'plain',
+    });
+    const wrapCompleteEither = createWrapSafeFp({
+      ...wrapOptions,
+      returns: 'either',
+      isMounted: button.isMounted,
+    });
+
+    this.isVisible = button.isVisible;
+    this.isMounted = button.isMounted;
+    this.isSupported = createIsSupportedSignal(SETUP_METHOD, version);
+    this.hideFp = wrapCompleteEither(button.hide);
+    this.showFp = wrapCompleteEither(button.show);
+    this.onClickFp = wrapSupportedPlain(button.onClick);
+    this.offClickFp = wrapSupportedPlain(button.offClick);
+    this.mountFp = wrapSupportedPlain(button.mount);
+    this.unmount = button.unmount;
+
+    this.hide = unwrapFp(this.hideFp);
+    this.show = unwrapFp(this.showFp);
+    this.onClick = unwrapFp(this.onClickFp);
+    this.offClick = unwrapFp(this.offClickFp);
+    this.mount = unwrapFp(this.mountFp);
   }
 
   /**
@@ -42,11 +79,21 @@ export class BackButton {
    * Hides the back button.
    * @since Mini Apps v6.1
    */
+  readonly hideFp: SafeWrappedFp<() => E.Either<PostEventError, void>, true>;
+
+  /**
+   * @see hideFp
+   */
   readonly hide: SafeWrapped<() => void, true>;
 
   /**
    * Shows the back button.
    * @since Mini Apps v6.1
+   */
+  readonly showFp: SafeWrappedFp<() => E.Either<PostEventError, void>, true>;
+
+  /**
+   * @see showFp
    */
   readonly show: SafeWrapped<() => void, true>;
 
@@ -62,10 +109,15 @@ export class BackButton {
    *   off();
    * });
    */
-  readonly onClick: SafeWrapped<
+  readonly onClickFp: SafeWrappedFp<
     (listener: VoidFunction, once?: boolean) => VoidFunction,
     true
   >;
+
+  /**
+   * @see onClickFp
+   */
+  readonly onClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => VoidFunction, true>;
 
   /**
    * Removes the button click listener.
@@ -79,14 +131,24 @@ export class BackButton {
    * }
    * button.onClick(listener);
    */
-  readonly offClick: SafeWrapped<
+  readonly offClickFp: SafeWrappedFp<
     (listener: VoidFunction, once?: boolean) => void,
     true
   >;
 
   /**
+   * @see offClickFp
+   */
+  readonly offClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => void, true>;
+
+  /**
    * Mounts the component restoring its state.
    * @since Mini Apps v6.1
+   */
+  readonly mountFp: SafeWrappedFp<() => void, true>;
+
+  /**
+   * @see mountFp
    */
   readonly mount: SafeWrapped<() => void, true>;
 

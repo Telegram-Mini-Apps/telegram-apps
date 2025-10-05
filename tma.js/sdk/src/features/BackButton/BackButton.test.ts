@@ -6,7 +6,7 @@ import { createComponentSessionStorage } from '@/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
 import { testIsSupportedPure } from '@test-utils/predefined/testIsSupportedPure.js';
 import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
-import { InstantiateOptions } from '@test-utils/types.js';
+import type { InstantiateOptions } from '@test-utils/types.js';
 
 const MIN_VERSION = '6.1';
 

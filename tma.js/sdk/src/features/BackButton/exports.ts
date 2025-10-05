@@ -1,3 +1,2 @@
-export { BackButton } from './BackButton.js';
-export type { BackButtonState, BackButtonOptions } from './types.js';
-export { backButton, backButtonFp } from './instances.js';
+export { BackButton, type BackButtonState, type BackButtonOptions } from './BackButton.js';
+export { backButton } from './instance.js';
