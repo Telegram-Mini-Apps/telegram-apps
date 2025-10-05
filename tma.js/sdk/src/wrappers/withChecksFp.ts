@@ -5,7 +5,7 @@ import {
   type MethodVersionedParams,
 } from '@tma.js/bridge';
 import { type Computed, computed } from '@tma.js/signals';
-import type { If, IsNever } from '@tma.js/toolkit';
+import type { If, IsNever, AnyFnAnyEither, RightOfReturn, LeftOfReturn } from '@tma.js/toolkit';
 import type { Version } from '@tma.js/types';
 import * as O from 'fp-ts/Option';
 import * as E from 'fp-ts/Either';
@@ -14,6 +14,19 @@ import * as TE from 'fp-ts/TaskEither';
 import { FunctionUnavailableError } from '@/errors.js';
 import type { AnyFn, MaybeAccessor } from '@/types.js';
 import { access } from '@/helpers/access.js';
+
+/**
+ * Converts function return type to a simple value, unwrapping any Either and TaskEither return
+ * types and returning their right value.
+ */
+type ReturnTypeToCommon<Fn extends AnyFn> = ReturnType<Fn> extends E.Either<any, any>
+  ? RightOfReturn<Fn>
+  : ReturnType<Fn> extends TE.TaskEither<any, any>
+    ? Promise<RightOfReturn<Fn>>
+    : ReturnType<Fn>;
+
+type IfReturnsTask<Fn extends AnyFnAnyEither, A, B> =
+  ReturnType<Fn> extends TE.TaskEither<any, any> ? A : B;
 
 /**
  * @returns Error text if something is wrong.
@@ -53,35 +66,22 @@ export type Supports<Args extends any[]> = {
   }[MethodNameWithVersionedParams];
 };
 
-type AnyFpFn = (...args: any[]) => E.Either<any, any> | TE.TaskEither<any, any>;
+type WrappedFnReturnType<Fn extends AnyFn> = ReturnType<Fn> extends E.Either<any, any>
+  ? E.Either<FunctionUnavailableError | LeftOfReturn<Fn>, RightOfReturn<Fn>>
+  : ReturnType<Fn> extends TE.TaskEither<any, any>
+    ? TE.TaskEither<FunctionUnavailableError | LeftOfReturn<Fn>, RightOfReturn<Fn>>
+    : ReturnType<Fn> extends PromiseLike<infer U>
+      ? TE.TaskEither<FunctionUnavailableError, U>
+      : E.Either<FunctionUnavailableError, ReturnType<Fn>>;
 
-type IfReturnsTask<Fn extends AnyFpFn, A, B> = ReturnType<Fn> extends TE.TaskEither<any, any>
-  ? A : B;
-type LeftOfReturn<Fn extends AnyFpFn> = ReturnType<Fn> extends E.Either<infer U, any> ? U : never;
-type RightOfReturn<Fn extends AnyFpFn> = ReturnType<Fn> extends E.Either<any, infer U> ? U : never;
-type TaskLeftOfReturn<Fn extends AnyFpFn> = ReturnType<Fn> extends TE.TaskEither<infer U, any>
-  ? U : never;
-type TaskRightOfReturn<Fn extends AnyFpFn> = ReturnType<Fn> extends TE.TaskEither<any, infer U>
-  ? U : never;
+export type WrappedFn<Fn extends AnyFn> = (...args: Parameters<Fn>) => WrappedFnReturnType<Fn>;
 
-type WrappedFnReturnType<Fn extends AnyFpFn> = IfReturnsTask<
-  Fn,
-  (TE.TaskEither<FunctionUnavailableError | TaskLeftOfReturn<Fn>, TaskRightOfReturn<Fn>>),
-  (E.Either<FunctionUnavailableError | LeftOfReturn<Fn>, RightOfReturn<Fn>>)
->;
-type WrappedFn<Fn extends AnyFpFn> = (...args: Parameters<Fn>) => WrappedFnReturnType<Fn>;
-
-export type SafeWrappedFp<
-  Fn extends AnyFpFn,
+export type WithChecksFp<
+  Fn extends AnyFn,
   HasSupportCheck extends boolean,
   SupportsMapKeySchema extends string = never,
 > =
   & WrappedFn<Fn>
-  // This one is required in order to understand what exactly should be returned
-  // from the function - TaskEither or Either. There is no other way to know it until the function
-  // itself is called, but we need to perform some checks before calling it and return a valid
-  // value based on the function return type.
-  & IfReturnsTask<Fn, { task: true }, {}>
   & {
   /**
    * A signal returning `true` if the function is available in the current environment and
@@ -150,7 +150,27 @@ export type SafeWrappedFp<
     supports: Record<SupportsMapKeySchema, Computed<boolean>>;
   }>;
 
-export interface WrapSafeOptions<Args extends any[]> {
+export type WithChecks<
+  Fn extends AnyFn,
+  HasSupportCheck extends boolean,
+  SupportsMapKeySchema extends string = never,
+> =
+  & ((...args: Parameters<Fn>) => ReturnTypeToCommon<Fn>)
+  & Omit<WithChecksFp<Fn, HasSupportCheck, SupportsMapKeySchema>, 'ifAvailable'>
+  & {
+  /**
+   * Calls the function only in case it is available.
+   *
+   * It uses the `isAvailable` internally to check if the function is available for call.
+   * @example
+   * backButton.show.ifAvailable();
+   */
+    ifAvailable(...args: Parameters<Fn>):
+      | { ok: true; data: ReturnTypeToCommon<Fn> }
+      | { ok: false };
+  };
+
+export interface WithChecksOptions<Fn extends AnyFn> {
   /**
    * Signal returning true if the owning component is mounted.
    */
@@ -172,17 +192,25 @@ export interface WrapSafeOptions<Args extends any[]> {
    * containing the method and parameter names. The third tuple value is a function accepting
    * the wrapped function arguments and returning true if support check must be applied.
    */
-  supports?: Supports<Args>;
+  supports?: Supports<Parameters<Fn>>;
   /**
    * A signal to retrieve the current Telegram Mini Apps version or the value itself.
    */
   version?: MaybeAccessor<Version>;
+  /**
+   * Allows to determine what exactly should be returned from the function - TaskEither or Either.
+   * There is no other way to know it until the function itself is called, but we need to perform
+   * some checks before calling it and return a valid value based on the function return type.
+   */
+  returns: Fn extends AnyFnAnyEither
+    ? IfReturnsTask<Fn, 'task', 'either'>
+    : ReturnType<Fn> extends PromiseLike<any> ? 'promise' : 'plain';
 }
 
-export function wrapSafeFp<Fn extends AnyFn, O extends WrapSafeOptions<Parameters<Fn>>>(
+export function withChecksFp<Fn extends AnyFn, O extends WithChecksOptions<Fn>>(
   fn: Fn,
   options: O,
-): SafeWrappedFp<
+): WithChecksFp<
   Fn,
   O extends { isSupported: any } ? true : false,
   O extends { supports: Record<string, any> } ? keyof O['supports'] & string : never
@@ -271,7 +299,9 @@ export function wrapSafeFp<Fn extends AnyFn, O extends WrapSafeOptions<Parameter
 
   const wrapError = (message: string): WrappedFnReturnType<Fn> => {
     const err = new FunctionUnavailableError(message);
-    return ('task' in options ? TE.left(err) : E.left(err)) as WrappedFnReturnType<Fn>;
+    return (['task', 'promise'].includes(options.returns)
+      ? TE.left(err)
+      : E.left(err)) as WrappedFnReturnType<Fn>;
   };
 
   return Object.assign(
@@ -297,6 +327,13 @@ export function wrapSafeFp<Fn extends AnyFn, O extends WrapSafeOptions<Parameter
           : 'unmounted. Use the mount() method';
         return wrapError(`${errMessagePrefix} the component is ${message}`);
       }
+      const { returns } = options;
+      if (returns === 'plain') {
+        return E.tryCatch(() => fn(...args), e => e) as WrappedFnReturnType<Fn>;
+      }
+      if (returns === 'promise') {
+        return TE.tryCatch(() => fn(...args), e => e) as WrappedFnReturnType<Fn>;
+      }
       return fn(...args);
     },
     fn,
@@ -311,10 +348,20 @@ export function wrapSafeFp<Fn extends AnyFn, O extends WrapSafeOptions<Parameter
   );
 }
 
-export function createWrapSafeFp<O extends WrapSafeOptions<any>>(options: O) {
-  return <Fn extends AnyFn>(fn: Fn): SafeWrappedFp<
+type FnOptionsBased<Opts extends WithChecksOptions<any>> = (...args: any[]) => (
+  Opts['returns'] extends 'plain'
+    ? any
+    : Opts['returns'] extends 'promise'
+      ? PromiseLike<any>
+      : Opts['returns'] extends 'task'
+        ? TE.TaskEither<any, any>
+        : E.Either<any, any>
+);
+
+export function createWithChecksFp<O extends WithChecksOptions<any>>(options: O) {
+  return <Fn extends FnOptionsBased<O>>(fn: Fn): WithChecksFp<
     Fn,
     O extends { isSupported: any } ? true : false,
     O extends { supports: any } ? O['supports'] : never
-  > => wrapSafeFp(fn, options);
+  > => withChecksFp(fn, options);
 }
