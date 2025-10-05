@@ -1,15 +1,19 @@
 import { computed, type Computed, signal } from '@tma.js/signals';
-import { type InvoiceStatus } from '@tma.js/bridge';
+import type { InvoiceStatus, RequestError } from '@tma.js/bridge';
 import { BetterPromise } from 'better-promises';
+import * as TE from 'fp-ts/TaskEither';
+import { pipe } from 'fp-ts/function';
 
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { RequestOptionsNoCapture } from '@/types.js';
 import { ConcurrentCallError, InvalidArgumentsError } from '@/errors.js';
-import { teToPromise } from '@/helpers/teToPromise.js';
 import type { WithVersion } from '@/fn-options/withVersion.js';
 import type { WithRequest } from '@/fn-options/withRequest.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+
+type InvoiceTask<E, T> = TE.TaskEither<RequestError | ConcurrentCallError | E, T>;
 
 export interface InvoiceOptions extends WithVersion, WithRequest, SharedFeatureOptions {
 }
@@ -19,71 +23,62 @@ export interface InvoiceOptions extends WithVersion, WithRequest, SharedFeatureO
  */
 export class Invoice {
   constructor({ version, request, isTma }: InvoiceOptions) {
-    const wrapSupported = createWrapSafe({
+    const wrapSupportedTask = createWithChecksFp({
       version,
       isTma,
       isSupported: 'web_app_open_invoice',
+      returns: 'task',
     });
 
-    const openPromise = signal<BetterPromise<InvoiceStatus>>();
+    const isOpened = signal(false);
+    const toggleClosed = () => {
+      isOpened.set(false);
+    };
 
     this.isSupported = createIsSupportedSignal('web_app_open_invoice', version);
-    this.isOpened = computed(() => !!openPromise);
-    this.open = wrapSupported((
-      urlOrSlug: string,
-      optionsOrType?: 'url' | RequestOptionsNoCapture,
-      options?: RequestOptionsNoCapture,
-    ): BetterPromise<InvoiceStatus> => {
-      if (this.isOpened()) {
-        // TODO: Make some changes in better-promises.
-        return BetterPromise.resolve('').then(() => {
-          throw new ConcurrentCallError('Invoice is already opened');
-        });
-      }
-
-      let slug: string;
-      if (optionsOrType === 'url') {
-        const { hostname, pathname } = new URL(urlOrSlug, window.location.href);
-        if (hostname !== 't.me') {
-          // TODO: Make some changes in better-promises.
-          return BetterPromise.resolve('').then(() => {
-            throw new InvalidArgumentsError(`Link has unexpected hostname: ${hostname}`);
+    this.isOpened = computed(isOpened);
+    this.openSlugFp = wrapSupportedTask((slug, options) => {
+      return pipe(
+        this.isOpened()
+          ? TE.left(new ConcurrentCallError('Invoice is already opened'))
+          : TE.right(undefined as never),
+        TE.chain(() => {
+          isOpened.set(true);
+          return request('web_app_open_invoice', 'invoice_closed', {
+            ...options,
+            params: { slug },
+            capture: data => slug === data.slug,
           });
-        }
-
-        // Valid examples:
-        // "/invoice/my-slug"
-        // "/$my-slug"
-        const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
-        if (!match) {
-          return BetterPromise.resolve('').then(() => {
-            throw new InvalidArgumentsError(
-              'Expected to receive a link with a pathname in format "/invoice/{slug}" or "/${slug}"',
-            );
-          });
-        }
-        [, , slug] = match;
-      } else {
-        slug = urlOrSlug;
-        options = optionsOrType;
-      }
-
-      const promise = teToPromise(
-        request('web_app_open_invoice', 'invoice_closed', {
-          ...options,
-          params: { slug },
-          capture: data => slug === data.slug,
         }),
-      )
-        .then(response => response.status)
-        .finally(() => {
-          openPromise.set(undefined);
-        });
-
-      openPromise.set(promise);
-
-      return promise;
+        TE.mapBoth(err => {
+          toggleClosed();
+          return err;
+        }, data => {
+          toggleClosed();
+          return data.status;
+        }),
+      );
     });
+    this.openUrlFp = wrapSupportedTask((url, options) => {
+      const { hostname, pathname } = new URL(url, window.location.href);
+      if (hostname !== 't.me') {
+        return TE.left(new InvalidArgumentsError(`Link has unexpected hostname: ${hostname}`));
+      }
+
+      // Valid examples:
+      // "/invoice/my-slug"
+      // "/$my-slug"
+      const match = pathname.match(/^\/(\$|invoice\/)([A-Za-z0-9\-_=]+)$/);
+      if (!match) {
+        return TE.left(new InvalidArgumentsError(
+          'Expected to receive a link with a pathname in format "/invoice/{slug}" or "/${slug}"',
+        ));
+      }
+      return this.openSlugFp(match[2], options);
+    });
+
+    this.openUrl = throwifyWithChecksFp(this.openUrlFp);
+    this.openSlug = throwifyWithChecksFp(this.openSlugFp);
   }
 
   /**
@@ -101,15 +96,42 @@ export class Invoice {
    * @param slug - invoice slug.
    * @param options - additional options.
    * @since Mini Apps v6.1
-   * @example Using slug
-   * const status = await open('kJNFS331');
-   * @example Using URL
-   * const status = await open('https://t.me/$kJNFS331', 'url');
-   * @example Using another URL
-   * const status = await open('https://t.me/invoice/kJNFS331', 'url');
+   * @example
+   * const status = await invoice.openSlug('kJNFS331');
    */
-  open: SafeWrapped<{
-    (slug: string, options?: RequestOptionsNoCapture): BetterPromise<InvoiceStatus>;
-    (url: string, type: 'url', options?: RequestOptionsNoCapture): BetterPromise<InvoiceStatus>;
-  }, true>;
+  readonly openSlugFp: WithChecksFp<
+    (slug: string, options?: RequestOptionsNoCapture) => InvoiceTask<never, InvoiceStatus>,
+    true
+  >;
+
+  /**
+   * @see openSlugFp
+   */
+  readonly openSlug: WithChecks<
+    (slug: string, options?: RequestOptionsNoCapture) => BetterPromise<InvoiceStatus>,
+    true
+  >;
+
+  /**
+   * Opens an invoice using its URL.
+   * @param url - invoice URL.
+   * @param options - additional options.
+   * @since Mini Apps v6.1
+   * @example
+   * const status = await invoice.openUrl('https://t.me/$kJNFS331');
+   */
+  readonly openUrlFp: WithChecksFp<
+    (url: string, options?: RequestOptionsNoCapture) => (
+      InvoiceTask<InvalidArgumentsError, InvoiceStatus>
+    ),
+    true
+  >;
+
+  /**
+   * @see openUrlFp
+   */
+  readonly openUrl: WithChecks<
+    (url: string, options?: RequestOptionsNoCapture) => BetterPromise<InvoiceStatus>,
+    true
+  >;
 }
