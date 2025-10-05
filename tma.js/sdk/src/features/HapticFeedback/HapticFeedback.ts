@@ -3,12 +3,16 @@ import type {
   ImpactHapticFeedbackStyle,
   NotificationHapticFeedbackType,
 } from '@tma.js/bridge';
+import * as E from 'fp-ts/Either';
+import type { PostEventError } from '@tma.js/bridge';
 
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
-import { createWrapSafeFp, type SafeWrappedFp, type SafeWrapped } from '@/wrappers/wrap-safe-fp.js';
-import { unwrapFp } from '@/wrappers/unwrapFp.js';
+import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+
+type HapticFeedbackEither = E.Either<PostEventError, void>;
 
 export interface HapticFeedbackOptions extends WithVersionBasedPostEvent, SharedFeatureOptions {
 }
@@ -19,7 +23,7 @@ export interface HapticFeedbackOptions extends WithVersionBasedPostEvent, Shared
 export class HapticFeedback {
   constructor({ postEvent, isTma, version }: HapticFeedbackOptions) {
     const HAPTIC_METHOD_NAME = 'web_app_trigger_haptic_feedback';
-    const wrapSupported = createWrapSafeFp({
+    const wrapSupported = createWithChecksFp({
       isSupported: HAPTIC_METHOD_NAME,
       isTma,
       version,
@@ -28,18 +32,18 @@ export class HapticFeedback {
 
     this.isSupported = createIsSupportedSignal(HAPTIC_METHOD_NAME, version);
     this.impactOccurredFp = wrapSupported(style => {
-      postEvent(HAPTIC_METHOD_NAME, { type: 'impact', impact_style: style });
+      return postEvent(HAPTIC_METHOD_NAME, { type: 'impact', impact_style: style });
     });
     this.notificationOccurredFp = wrapSupported(type => {
-      postEvent(HAPTIC_METHOD_NAME, { type: 'notification', notification_type: type });
+      return postEvent(HAPTIC_METHOD_NAME, { type: 'notification', notification_type: type });
     });
     this.selectionChangedFp = wrapSupported(() => {
-      postEvent(HAPTIC_METHOD_NAME, { type: 'selection_change' });
+      return postEvent(HAPTIC_METHOD_NAME, { type: 'selection_change' });
     });
 
-    this.impactOccurred = unwrapFp(this.impactOccurredFp);
-    this.notificationOccurred = unwrapFp(this.notificationOccurredFp);
-    this.selectionChanged = unwrapFp(this.selectionChangedFp);
+    this.impactOccurred = throwifyWithChecksFp(this.impactOccurredFp);
+    this.notificationOccurred = throwifyWithChecksFp(this.notificationOccurredFp);
+    this.selectionChanged = throwifyWithChecksFp(this.selectionChangedFp);
   }
 
   /**
@@ -53,12 +57,12 @@ export class HapticFeedback {
    * @param style - impact style.
    * @since Mini Apps v6.1
    */
-  impactOccurredFp: SafeWrappedFp<(style: ImpactHapticFeedbackStyle) => void, true>;
+  impactOccurredFp: WithChecksFp<(style: ImpactHapticFeedbackStyle) => HapticFeedbackEither, true>;
 
   /**
    * @see impactOccurredFp
    */
-  impactOccurred: SafeWrapped<(style: ImpactHapticFeedbackStyle) => void, true>;
+  impactOccurred: WithChecks<(style: ImpactHapticFeedbackStyle) => void, true>;
 
   /**
    * A method tells that a task or action has succeeded, failed, or produced
@@ -67,12 +71,15 @@ export class HapticFeedback {
    * @param type - notification type.
    * @since Mini Apps v6.1
    */
-  notificationOccurredFp: SafeWrappedFp<(type: NotificationHapticFeedbackType) => void, true>;
+  notificationOccurredFp: WithChecksFp<
+    (type: NotificationHapticFeedbackType) => HapticFeedbackEither,
+    true
+  >;
 
   /**
    * @see notificationOccurredFp
    */
-  notificationOccurred: SafeWrapped<(type: NotificationHapticFeedbackType) => void, true>;
+  notificationOccurred: WithChecks<(type: NotificationHapticFeedbackType) => void, true>;
 
   /**
    * A method tells that the user has changed a selection. The Telegram app may
@@ -82,10 +89,10 @@ export class HapticFeedback {
    * it only when the selection changes.
    * @since Mini Apps v6.1
    */
-  selectionChangedFp: SafeWrappedFp<() => void, true>;
+  selectionChangedFp: WithChecksFp<() => HapticFeedbackEither, true>;
 
   /**
    * @see selectionChangedFp
    */
-  selectionChanged: SafeWrapped<() => void, true>;
+  selectionChanged: WithChecks<() => void, true>;
 }
