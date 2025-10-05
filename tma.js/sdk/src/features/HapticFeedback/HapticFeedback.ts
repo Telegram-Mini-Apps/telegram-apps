@@ -7,8 +7,7 @@ import type {
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
-import type { SafeWrapped } from '@/wrappers/wrapSafe.js';
-import { createWrapSafeFp, type SafeWrappedFp } from '@/wrappers/wrap-safe-fp.js';
+import { createWrapSafeFp, type SafeWrappedFp, type SafeWrapped } from '@/wrappers/wrap-safe-fp.js';
 import { unwrapFp } from '@/wrappers/unwrapFp.js';
 
 export interface HapticFeedbackOptions extends WithVersionBasedPostEvent, SharedFeatureOptions {

@@ -120,7 +120,7 @@ export class InitData<EComplete extends Error, ERaw extends Error> {
   readonly user = this.fromState('user');
 
   /**
-   * Restores the component state returning fp-ts abstraction.
+   * Restores the component state.
    */
   restoreFp(): E.Either<EComplete | ERaw, void> {
     const error = pipe(
@@ -135,7 +135,7 @@ export class InitData<EComplete extends Error, ERaw extends Error> {
   }
 
   /**
-   * Restores the component state.
+   * @see restoreFp
    */
   restore() {
     return eitherGet(this.restoreFp());

@@ -7,6 +7,7 @@ import { Stateful } from '@/composables/Stateful.js';
 import { bound } from '@/helpers/bound.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import { removeUndefined } from '@/helpers/removeUndefined.js';
+import { shallowEqual } from '@/helpers/shallowEqual.js';
 
 export interface ButtonState {
   isVisible: boolean;
@@ -49,7 +50,9 @@ export class Button<S extends ButtonState, Err> {
   }: ButtonOptions<S, Err>) {
     const stateful = new Stateful({
       initialState,
-      onChange: storage.set,
+      onChange(state) {
+        storage.set(state);
+      },
     });
     const mountable = new Mountable<S>({
       initialState,
@@ -67,12 +70,11 @@ export class Button<S extends ButtonState, Err> {
     this.state = stateful.state;
     this.setState = state => {
       const nextState = { ...stateful.state(), ...removeUndefined(state) };
-      return pipe(
-        commit(nextState),
-        E.map(() => {
+      return shallowEqual(nextState, stateful.state())
+        ? E.right(undefined)
+        : pipe(commit(nextState), E.map(() => {
           stateful.setState(nextState);
-        }),
-      );
+        }));
     };
     this.mount = bound(mountable, 'mount');
     this.unmount = bound(mountable, 'unmount');

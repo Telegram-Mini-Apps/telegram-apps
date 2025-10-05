@@ -1,6 +1,7 @@
 import { type Computed, computed, type Signal, signal } from '@tma.js/signals';
 
 import { removeUndefined } from '@/helpers/removeUndefined.js';
+import { shallowEqual } from '@/helpers/shallowEqual.js';
 
 export interface StatefulOptions<S> {
   /**
@@ -16,19 +17,7 @@ export interface StatefulOptions<S> {
 
 export class Stateful<S extends object> {
   constructor({ initialState, onChange }: StatefulOptions<S>) {
-    this._state = signal(initialState, {
-      // Sufficient shallow equal.
-      equals(a, b): boolean {
-        const aKeys = Object.keys(a);
-        const bKeys = Object.keys(b);
-        return aKeys.length !== bKeys.length
-          ? false
-          : aKeys.every(aKey => {
-            return Object.prototype.hasOwnProperty.call(b, aKey)
-              && (a as any)[aKey] === (b as any)[aKey];
-          });
-      },
-    });
+    this._state = signal(initialState, { equals: shallowEqual });
     this.state = computed(this._state);
     this.state.sub(onChange);
   }
