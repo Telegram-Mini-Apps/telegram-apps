@@ -1,12 +1,15 @@
 import type { Computed } from '@tma.js/signals';
+import * as E from 'fp-ts/Either';
+import type { PostEventError } from '@tma.js/bridge';
 
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { bound } from '@/helpers/bound.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
 export interface ClosingBehaviorState {
   isConfirmationEnabled: boolean;
@@ -24,9 +27,6 @@ export class ClosingBehavior {
       initialState: { isConfirmationEnabled: false },
       onChange(state) {
         storage.set(state);
-        postEvent('web_app_setup_closing_behavior', {
-          need_confirmation: state.isConfirmationEnabled,
-        });
       },
     });
     const mountable = new Mountable({
@@ -37,22 +37,36 @@ export class ClosingBehavior {
     });
 
     const wrapOptions = { isSupported: 'web_app_setup_closing_behavior', isTma } as const;
-    const wrapSafe = createWrapSafe(wrapOptions);
-    const wrapComplete = createWrapSafe({
+    const wrapSupportedPlain = createWithChecksFp({
       ...wrapOptions,
+      returns: 'plain',
+    });
+    const wrapMountedEither = createWithChecksFp({
+      ...wrapOptions,
+      returns: 'either',
       isMounted: mountable.isMounted,
     });
 
-    const setClosingConfirmation = (isConfirmationEnabled: boolean): void => {
+    const setClosingConfirmation = (isConfirmationEnabled: boolean) => {
+      if (isConfirmationEnabled === this.isConfirmationEnabled()) {
+        return E.right(undefined);
+      }
       stateful.setState({ isConfirmationEnabled });
+      return postEvent('web_app_setup_closing_behavior', {
+        need_confirmation: isConfirmationEnabled,
+      });
     };
 
     this.isConfirmationEnabled = stateful.computedFromState('isConfirmationEnabled');
     this.isMounted = mountable.isMounted;
-    this.disableConfirmation = wrapComplete(() => setClosingConfirmation(false));
-    this.enableConfirmation = wrapComplete(() => setClosingConfirmation(true));
-    this.mount = wrapSafe(bound(mountable, 'mount'));
-    this.unmount = bound(mountable, 'unmount');
+    this.disableConfirmationFp = wrapMountedEither(() => setClosingConfirmation(false));
+    this.enableConfirmationFp = wrapMountedEither(() => setClosingConfirmation(true));
+    this.mountFp = wrapSupportedPlain(mountable.mount);
+    this.unmount = mountable.unmount;
+
+    this.disableConfirmation = throwifyWithChecksFp(this.disableConfirmationFp);
+    this.enableConfirmation = throwifyWithChecksFp(this.enableConfirmationFp);
+    this.mount = throwifyWithChecksFp(this.mountFp);
   }
 
   /**
@@ -68,20 +82,35 @@ export class ClosingBehavior {
   /**
    * Mounts the component restoring its state.
    */
-  mount: SafeWrapped<() => void, false>;
+  readonly mountFp: WithChecksFp<() => void, false>;
+
+  /**
+   * @see mountFp
+   */
+  readonly mount: WithChecks<() => void, false>;
 
   /**
    * Unmounts the component.
    */
-  unmount: () => void;
+  readonly unmount: () => void;
 
   /**
    * Disables the closing confirmation dialog.
    */
-  disableConfirmation: SafeWrapped<() => void, false>;
+  readonly disableConfirmationFp: WithChecksFp<() => E.Either<PostEventError, void>, false>;
+
+  /**
+   * @see disableConfirmationFp
+   */
+  readonly disableConfirmation: WithChecks<() => void, false>;
 
   /**
    * Enables the closing confirmation dialog.
    */
-  enableConfirmation: SafeWrapped<() => void, false>;
+  readonly enableConfirmationFp: WithChecksFp<() => E.Either<PostEventError, void>, false>;
+
+  /**
+   * @see enableConfirmationFp
+   */
+  readonly enableConfirmation: WithChecks<() => void, false>;
 }
