@@ -1,4 +1,4 @@
-import { eitherFnToSimple } from '@tma.js/toolkit';
+import { throwifyFpFn } from '@tma.js/toolkit';
 import * as E from 'fp-ts/Either';
 import { parse, type ValiError } from 'valibot';
 
@@ -34,5 +34,5 @@ export function parseLaunchParamsQueryFp(value: string | URLSearchParams): E.Eit
   );
 }
 
-export const parseInitDataQuery = eitherFnToSimple(parseInitDataQueryFp);
-export const parseLaunchParamsQuery = eitherFnToSimple(parseLaunchParamsQueryFp);
+export const parseInitDataQuery = throwifyFpFn(parseInitDataQueryFp);
+export const parseLaunchParamsQuery = throwifyFpFn(parseLaunchParamsQueryFp);

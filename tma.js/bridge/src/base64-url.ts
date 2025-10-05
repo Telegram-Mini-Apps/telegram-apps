@@ -1,4 +1,4 @@
-import { eitherFnToSimple } from '@tma.js/toolkit';
+import { throwifyFpFn } from '@tma.js/toolkit';
 import * as E from 'fp-ts/Either';
 
 export type DecodeBase64UrlError = DOMException;
@@ -27,7 +27,7 @@ export function decodeBase64UrlFp(value: string): E.Either<DecodeBase64UrlError,
 /**
  * @see decodeBase64UrlFp
  */
-export const decodeBase64Url = eitherFnToSimple(decodeBase64UrlFp);
+export const decodeBase64Url = throwifyFpFn(decodeBase64UrlFp);
 
 /**
  * Creates a base-64-url encoded ASCII string from the passed value.
