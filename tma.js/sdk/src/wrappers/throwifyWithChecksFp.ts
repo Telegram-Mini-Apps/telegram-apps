@@ -7,7 +7,7 @@ import type { LeftOfReturn, RightOfReturn } from '@tma.js/toolkit';
 import type { WithChecksFp, WithChecks } from '@/wrappers/withChecksFp.js';
 import type { AnyFn } from '@/types.js';
 
-export function unwrapWithChecksFp<
+export function throwifyWithChecksFp<
   Fn extends AnyFn,
   HasSupportCheck extends boolean,
   SupportsMapKeySchema extends string,
