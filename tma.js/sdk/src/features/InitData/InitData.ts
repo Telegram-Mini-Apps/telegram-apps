@@ -5,30 +5,24 @@ import * as E from 'fp-ts/Either';
 import * as O from 'fp-ts/Option';
 import { pipe } from 'fp-ts/function';
 
-type RetrieveInitData<Err> = () => E.Either<Err, O.Option<InitDataType>>;
+type RetrieveInitData<Err> = () => E.Either<Err, O.Option<{
+  raw: string;
+  obj: InitDataType;
+}>>;
 
-type RetrieveRawInitData<Err> = () => E.Either<Err, O.Option<string>>;
-
-export interface InitDataOptions<EComplete, ERaw> {
+export interface InitDataOptions<Err> {
   /**
    * Retrieves init data from the current environment.
    */
-  retrieveInitData: RetrieveInitData<EComplete>;
-  /**
-   * Retrieves raw init data from the current environment.
-   */
-  retrieveRawInitData: RetrieveRawInitData<ERaw>;
+  retrieveInitData: RetrieveInitData<Err>;
 }
 
-export class InitData<EComplete extends Error, ERaw extends Error> {
-  constructor({ retrieveRawInitData, retrieveInitData }: InitDataOptions<EComplete, ERaw>) {
-    this.retrieveRawInitData = retrieveRawInitData;
+export class InitData<Err extends Error> {
+  constructor({ retrieveInitData }: InitDataOptions<Err>) {
     this.retrieveInitData = retrieveInitData;
   }
 
-  private readonly retrieveInitData: RetrieveInitData<EComplete>;
-
-  private readonly retrieveRawInitData: RetrieveRawInitData<ERaw>;
+  private readonly retrieveInitData: RetrieveInitData<Err>;
 
   private fromState<K extends keyof InitDataType>(key: K): Computed<InitDataType[K] | undefined> {
     return computed(() => {
@@ -122,16 +116,14 @@ export class InitData<EComplete extends Error, ERaw extends Error> {
   /**
    * Restores the component state.
    */
-  restoreFp(): E.Either<EComplete | ERaw, void> {
-    const error = pipe(
+  restoreFp(): E.Either<Err, void> {
+    return pipe(
       this.retrieveInitData(),
-      E.map(O.map(this._state.set)),
-      E.match(e => e, () => undefined),
+      E.map(O.match(() => undefined, ({ raw, obj }) => {
+        this._state.set(obj);
+        this._raw.set(raw);
+      })),
     );
-    if (error) {
-      return E.left(error);
-    }
-    return pipe(this.retrieveRawInitData(), E.map(O.map(this._raw.set)), E.map(() => undefined));
   }
 
   /**

@@ -10,12 +10,22 @@ import { InitData } from '@/features/InitData/InitData.js';
  */
 export function instantiateInitData() {
   return new InitData({
-    retrieveRawInitData: retrieveRawInitDataFp,
     retrieveInitData() {
       return pipe(
-        retrieveLaunchParamsFp(),
-        E.map(({ tgWebAppData }) => {
-          return tgWebAppData ? O.some(tgWebAppData) : O.none;
+        E.Do,
+        E.bindW('obj', () => pipe(
+          retrieveLaunchParamsFp(),
+          E.map(({ tgWebAppData }) => {
+            return tgWebAppData ? O.some(tgWebAppData) : O.none;
+          }),
+        )),
+        E.bindW('raw', retrieveRawInitDataFp),
+        E.map(({ obj, raw }) => {
+          return pipe(
+            O.Do,
+            O.bind('obj', () => obj),
+            O.bind('raw', () => raw),
+          );
         }),
       );
     },
