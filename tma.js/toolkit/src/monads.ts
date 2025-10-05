@@ -1,6 +1,7 @@
 import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
+import { BetterPromise } from 'better-promises';
 
 import type { AnyFn } from '@/types/misc.js';
 
@@ -23,7 +24,7 @@ export type LeftOfReturn<F extends AnyFnAnyEither> = LeftOfEither<ReturnType<F>>
 export type MaybeMonadToCommon<T> = [T] extends [E.Either<any, infer U>]
   ? U
   : T extends TE.TaskEither<any, infer U>
-    ? Promise<U>
+    ? BetterPromise<U>
     : T;
 
 export type MaybeMonadReturnTypeToCommon<Fn extends AnyFn> = MaybeMonadToCommon<ReturnType<Fn>>;
@@ -34,7 +35,7 @@ export function throwifyAnyEither<E extends AnyEither>(either: E): MaybeMonadToC
   };
   return (
     typeof either === 'function'
-      ? pipe(either, TE.match(onError, data => data))()
+      ? BetterPromise.resolve(pipe(either, TE.match(onError, data => data))())
       : pipe(either, E.match(onError, data => data))
   ) as MaybeMonadToCommon<E>;
 }
