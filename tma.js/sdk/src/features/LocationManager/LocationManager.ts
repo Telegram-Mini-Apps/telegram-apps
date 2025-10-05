@@ -1,11 +1,12 @@
 import type { Computed } from '@tma.js/signals';
-import type { EventPayload, RequestError } from '@tma.js/bridge';
+import type { EventPayload, RequestError, PostEventError } from '@tma.js/bridge';
 import type { Maybe } from '@tma.js/toolkit';
 import { BetterPromise } from 'better-promises';
+import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { AsyncOptions } from '@/types.js';
 import type {
@@ -16,7 +17,7 @@ import type {
 import { Stateful } from '@/composables/Stateful.js';
 import { bound } from '@/helpers/bound.js';
 import { AsyncMountable } from '@/composables/AsyncMountable.js';
-import { teToPromise } from '@/helpers/teToPromise.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
 function eventToState(event: EventPayload<'location_checked'>): LocationManagerState {
   let available = false;
@@ -71,9 +72,17 @@ export class LocationManager {
       isSupported: 'web_app_check_location',
       isTma,
     } as const;
-    const wrapSupported = createWrapSafe(wrapOptions);
-    const wrapComplete = createWrapSafe({
+    const wrapSupportedEither = createWithChecksFp({
       ...wrapOptions,
+      returns: 'either',
+    });
+    const wrapSupportedTask = createWithChecksFp({
+      ...wrapOptions,
+      returns: 'task',
+    });
+    const wrapMountedTask = createWithChecksFp({
+      ...wrapOptions,
+      returns: 'task',
       isMounted: mountable.isMounted,
     });
 
@@ -83,14 +92,16 @@ export class LocationManager {
     this.isSupported = createIsSupportedSignal('web_app_check_location', version);
     this.isMounted = mountable.isMounted;
     this.state = stateful.state;
-    this.mount = wrapSupported(bound(mountable, 'mount'));
-    this.unmount = bound(mountable, 'unmount');
-    this.openSettings = wrapSupported(() => {
-      postEvent('web_app_open_location_settings');
+
+    this.unmount = mountable.unmount;
+    this.mountFp = wrapSupportedTask(mountable.mount);
+    this.openSettingsFp = wrapSupportedEither(() => {
+      return postEvent('web_app_open_location_settings');
     });
-    this.requestLocation = wrapComplete(options => {
-      return teToPromise(request('web_app_request_location', 'location_requested', options))
-        .then(response => {
+    this.requestLocationFp = wrapMountedTask(options => {
+      return pipe(
+        request('web_app_request_location', 'location_requested', options),
+        TE.map(response => {
           if (!response.available) {
             stateful.setState({ available: false });
             return null;
@@ -98,8 +109,13 @@ export class LocationManager {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { available, ...rest } = response;
           return rest;
-        });
+        }),
+      );
     });
+
+    this.mount = throwifyWithChecksFp(this.mountFp);
+    this.openSettings = throwifyWithChecksFp(this.openSettingsFp);
+    this.requestLocation = throwifyWithChecksFp(this.requestLocationFp);
   }
 
   /**
@@ -140,14 +156,29 @@ export class LocationManager {
    * interface (e.g., a click inside the Mini App or on the main button).
    * @since Mini Apps v8.0
    */
-  openSettings: SafeWrapped<() => void, true>;
+  readonly openSettingsFp: WithChecksFp<() => E.Either<PostEventError, void>, true>;
+
+  /**
+   * @see openSettingsFp
+   */
+  readonly openSettings: WithChecks<() => void, true>;
 
   /**
    * Requests location data.
    * @since Mini Apps v8.0
    * @returns Promise with location data or null it access was not granted.
    */
-  requestLocation: SafeWrapped<
+  readonly requestLocationFp: WithChecksFp<
+    (options?: AsyncOptions) => (
+      TE.TaskEither<RequestError, LocationManagerRequestLocationResponse | null>
+    ),
+    true
+  >;
+
+  /**
+   * @see requestLocationFp
+   */
+  readonly requestLocation: WithChecks<
     (options?: AsyncOptions) => BetterPromise<LocationManagerRequestLocationResponse | null>,
     true
   >;
@@ -156,10 +187,18 @@ export class LocationManager {
    * Mounts the component restoring its state.
    * @since Mini Apps v8.0
    */
-  mount: SafeWrapped<(options?: AsyncOptions) => BetterPromise<void>, true>;
+  readonly mountFp: WithChecksFp<
+    (options?: AsyncOptions) => TE.TaskEither<RequestError, void>,
+    true
+  >;
+
+  /**
+   * @see mountFp
+   */
+  readonly mount: WithChecks<(options?: AsyncOptions) => BetterPromise<void>, true>;
 
   /**
    * Unmounts the component.
    */
-  unmount: () => void;
+  readonly unmount: () => void;
 }
