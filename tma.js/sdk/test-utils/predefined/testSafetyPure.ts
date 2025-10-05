@@ -130,20 +130,23 @@ export function testSafetyPure<C>({
 
   describe('()', () => {
     describe('not mini apps env', () => {
-      it('should throw FunctionUnavailableError', () => {
-        expect(() => tryCall(instantiate({ isTma: false, version: versions.min }))).toThrow(
-          new FunctionUnavailableError(
-            'Unable to call function: it can\'t be called outside Mini Apps',
-          ),
-        );
+      it('should throw FunctionUnavailableError', async () => {
+        await expect(async () => tryCall(instantiate({ isTma: false, version: versions.min })))
+          .rejects
+          .toStrictEqual(
+            new FunctionUnavailableError(
+              'Unable to call function: it can\'t be called outside Mini Apps',
+            ),
+          );
       });
     });
 
     describe('mini apps env', () => {
       describe('package uninitialized (version is "0.0")', () => {
-        it.runIf(hasMinVersion)('should throw FunctionUnavailableError', () => {
-          expect(() => tryCall(instantiate({ isTma: true, version: '0.0' })))
-            .toThrow(new FunctionUnavailableError(
+        it.runIf(hasMinVersion)('should throw FunctionUnavailableError', async () => {
+          await expect(async () => tryCall(instantiate({ isTma: true, version: '0.0' })))
+            .rejects
+            .toStrictEqual(new FunctionUnavailableError(
               'Unable to call function: the SDK was not initialized. Use the SDK init() function',
             ));
         });
@@ -152,23 +155,27 @@ export function testSafetyPure<C>({
       describe('package initialized', () => {
         describe.runIf(hasMinVersion)(() => {
           describe(`minimal version not satisfied (${versions.min})`, () => {
-            it('should throw FunctionUnavailableError', () => {
-              expect(() => tryCall(instantiate({ isTma: true, version: versions.prev }))).toThrow(
-                new FunctionUnavailableError(
-                  `Unable to call function: it is unsupported in Mini Apps version ${versions.prev}`,
-                ),
-              );
+            it('should throw FunctionUnavailableError', async () => {
+              await expect(async () => tryCall(instantiate({ isTma: true, version: versions.prev })))
+                .rejects
+                .toStrictEqual(
+                  new FunctionUnavailableError(
+                    `Unable to call function: it is unsupported in Mini Apps version ${versions.prev}`,
+                  ),
+                );
             });
           });
 
           describe.runIf(mount)(`minimal version satisfied (${versions.min})`, () => {
             describe('component is not mounted', () => {
-              it('should throw FunctionUnavailableError', () => {
-                expect(() => tryCall(instantiate({ isTma: true, version: versions.min }))).toThrow(
-                  new FunctionUnavailableError(
-                    'Unable to call function: the component is unmounted. Use the mount() method',
-                  ),
-                );
+              it('should throw FunctionUnavailableError', async () => {
+                await expect(async () => tryCall(instantiate({ isTma: true, version: versions.min })))
+                  .rejects
+                  .toStrictEqual(
+                    new FunctionUnavailableError(
+                      'Unable to call function: the component is unmounted. Use the mount() method',
+                    ),
+                  );
               });
             });
 
@@ -176,7 +183,7 @@ export function testSafetyPure<C>({
               it('should not throw', async () => {
                 const component = instantiate({ isTma: true, version: versions.min });
                 await mount!(component);
-                expect(() => tryCall(component)).not.toThrow();
+                await expect(async () => tryCall(component)).rejects.toBeUndefined();
               });
             });
           });
@@ -184,12 +191,14 @@ export function testSafetyPure<C>({
 
         describe.runIf(!hasMinVersion && mount)(() => {
           describe('component is not mounted', () => {
-            it('should throw FunctionUnavailableError', () => {
-              expect(() => tryCall(instantiate({ isTma: true, version: versions.min }))).toThrow(
-                new FunctionUnavailableError(
-                  'Unable to call function: the component is unmounted. Use the mount() method',
-                ),
-              );
+            it('should throw FunctionUnavailableError', async () => {
+              await expect(async () => tryCall(instantiate({ isTma: true, version: versions.min })))
+                .rejects
+                .toStrictEqual(
+                  new FunctionUnavailableError(
+                    'Unable to call function: the component is unmounted. Use the mount() method',
+                  ),
+                );
             });
           });
 
@@ -197,7 +206,7 @@ export function testSafetyPure<C>({
             it('should not throw', async () => {
               const component = instantiate({ isTma: true, version: versions.min });
               await mount!(component);
-              expect(() => tryCall(component)).not.toThrow();
+              await expect(async () => tryCall(component)).rejects.toBeUndefined();
             });
           });
         });
