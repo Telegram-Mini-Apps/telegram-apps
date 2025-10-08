@@ -1,12 +1,15 @@
 import { describe, expect, it, vi } from 'vitest';
 import * as E from 'fp-ts/Either';
-import type { PostEventFpFn } from '@tma.js/bridge';
 
-import { SettingsButton, type SettingsButtonState } from '@/features/SettingsButton/SettingsButton.js';
-import { type ComponentStorage, createComponentSessionStorage } from '@/component-storage.js';
+import {
+  SettingsButton,
+  type SettingsButtonOptions,
+} from '@/features/SettingsButton/SettingsButton.js';
+import { createComponentSessionStorage } from '@/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
 import { testIsSupportedPure } from '@test-utils/predefined/testIsSupportedPure.js';
 import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
+import { InstantiateOptions } from '@test-utils/types.js';
 
 const MIN_VERSION = '6.10';
 
@@ -18,15 +21,7 @@ function instantiate({
   onClick = () => () => undefined,
   offClick = () => undefined,
   isPageReload = false,
-}: {
-  isPageReload?: boolean;
-  isTma?: boolean;
-  offClick?: (listener: VoidFunction, once?: boolean) => void;
-  onClick?: (listener: VoidFunction, once?: boolean) => VoidFunction;
-  postEvent?: PostEventFpFn;
-  storage?: boolean | ComponentStorage<SettingsButtonState>;
-  version?: string;
-} = {}) {
+}: InstantiateOptions<SettingsButtonOptions> = {}) {
   return new SettingsButton({
     version,
     storage: typeof storage === 'boolean'

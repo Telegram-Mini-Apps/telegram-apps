@@ -1,56 +1,43 @@
 import type { Computed } from '@tma.js/signals';
+import * as E from 'fp-ts/Either';
+import type { PostEventError } from '@tma.js/bridge';
 
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import { Button, type ButtonOptions } from '@/composables/Button.js';
-import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
-import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import { SimpleButton, type SimpleButtonOptions } from '@/composables/SimpleButton.js';
+import type { WithChecksFp, WithChecks } from '@/wrappers/withChecksFp.js';
 
 export interface SettingsButtonState {
   isVisible: boolean;
 }
 
-export interface SettingsButtonOptions extends WithVersionBasedPostEvent,
-  SharedFeatureOptions,
-  Omit<ButtonOptions<SettingsButtonState>, 'onChange' | 'initialState'> {
-}
+export type SettingsButtonOptions = Omit<
+  SimpleButtonOptions<'web_app_setup_settings_button'>,
+  'method' | 'payload'
+>;
 
 /**
  * @since Mini Apps v6.10
  */
 export class SettingsButton {
-  constructor({ postEvent, version, isTma, ...rest }: SettingsButtonOptions) {
-    const button = new Button({
-      ...rest,
-      initialState: { isVisible: false },
-      onChange(state) {
-        postEvent('web_app_setup_settings_button', { is_visible: state.isVisible });
-      },
+  constructor(options: SettingsButtonOptions) {
+    const button = new SimpleButton({
+      ...options,
+      method: 'web_app_setup_settings_button',
+      payload: state => ({ is_visible: state.isVisible }),
     });
-
-    const wrapOptions = {
-      version,
-      isSupported: 'web_app_setup_settings_button',
-      isTma,
-    } as const;
-    const wrapSupported = createWrapSafe(wrapOptions);
-    const wrapComplete = createWrapSafe({
-      ...wrapOptions,
-      isMounted: button.isMounted,
-    });
-
-    const setVisibility = (isVisible: boolean): void => {
-      button.setState({ isVisible });
-    };
 
     this.isVisible = button.isVisible;
     this.isMounted = button.isMounted;
-    this.isSupported = createIsSupportedSignal('web_app_setup_settings_button', version);
-    this.hide = wrapComplete(() => setVisibility(false));
-    this.show = wrapComplete(() => setVisibility(true));
-    this.onClick = wrapSupported(button.onClick);
-    this.offClick = wrapSupported(button.offClick);
-    this.mount = wrapSupported(button.mount);
+    this.isSupported = button.isSupported;
+    this.hide = button.hide;
+    this.hideFp = button.hideFp;
+    this.show = button.show;
+    this.showFp = button.showFp;
+    this.onClick = button.onClick;
+    this.onClickFp = button.onClickFp;
+    this.offClick = button.offClick;
+    this.offClickFp = button.offClickFp;
+    this.mount = button.mount;
+    this.mountFp = button.mountFp;
     this.unmount = button.unmount;
   }
 
@@ -70,16 +57,26 @@ export class SettingsButton {
   readonly isSupported: Computed<boolean>;
 
   /**
-   * Hides the settings button.
+   * Hides the button.
    * @since Mini Apps v6.10
    */
-  hide: SafeWrapped<() => void, true>;
+  readonly hideFp: WithChecksFp<() => E.Either<PostEventError, void>, true>;
 
   /**
-   * Shows the settings button.
+   * @see hideFp
+   */
+  readonly hide: WithChecks<() => void, true>;
+
+  /**
+   * Shows the button.
    * @since Mini Apps v6.10
    */
-  show: SafeWrapped<() => void, true>;
+  readonly showFp: WithChecksFp<() => E.Either<PostEventError, void>, true>;
+
+  /**
+   * @see showFp
+   */
+  readonly show: WithChecks<() => void, true>;
 
   /**
    * Adds a new button listener.
@@ -93,10 +90,15 @@ export class SettingsButton {
    *   off();
    * });
    */
-  readonly onClick: SafeWrapped<
+  readonly onClickFp: WithChecksFp<
     (listener: VoidFunction, once?: boolean) => VoidFunction,
     true
   >;
+
+  /**
+   * @see onClickFp
+   */
+  readonly onClick: WithChecks<(listener: VoidFunction, once?: boolean) => VoidFunction, true>;
 
   /**
    * Removes the button click listener.
@@ -110,16 +112,26 @@ export class SettingsButton {
    * }
    * button.onClick(listener);
    */
-  readonly offClick: SafeWrapped<
+  readonly offClickFp: WithChecksFp<
     (listener: VoidFunction, once?: boolean) => void,
     true
   >;
 
   /**
+   * @see offClickFp
+   */
+  readonly offClick: WithChecks<(listener: VoidFunction, once?: boolean) => void, true>;
+
+  /**
    * Mounts the component restoring its state.
    * @since Mini Apps v6.10
    */
-  readonly mount: SafeWrapped<() => void, true>;
+  readonly mountFp: WithChecksFp<() => void, true>;
+
+  /**
+   * @see mountFp
+   */
+  readonly mount: WithChecks<() => void, true>;
 
   /**
    * Unmounts the component.

@@ -2,62 +2,43 @@ import type { Computed } from '@tma.js/signals';
 import * as E from 'fp-ts/Either';
 import type { PostEventError } from '@tma.js/bridge';
 
-import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import { Button, type ButtonOptions } from '@/composables/Button.js';
-import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
-import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
-import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import { SimpleButton, type SimpleButtonOptions } from '@/composables/SimpleButton.js';
+import type { WithChecksFp, WithChecks } from '@/wrappers/withChecksFp.js';
 
 export interface BackButtonState {
   isVisible: boolean;
 }
 
-export interface BackButtonOptions extends WithVersionBasedPostEvent,
-  SharedFeatureOptions,
-  Omit<ButtonOptions<BackButtonState, PostEventError>, 'onChange' | 'initialState' | 'commit'> {
-}
+export type BackButtonOptions = Omit<
+  SimpleButtonOptions<'web_app_setup_back_button'>,
+  'method' | 'payload'
+>;
 
 /**
  * @since Mini Apps v6.1
  */
 export class BackButton {
-  constructor({ postEvent, version, isTma, ...rest }: BackButtonOptions) {
-    const SETUP_METHOD = 'web_app_setup_back_button';
-    const button = new Button({
-      ...rest,
-      initialState: { isVisible: false },
-      commit(state) {
-        return postEvent(SETUP_METHOD, { is_visible: state.isVisible });
-      },
-    });
-
-    const wrapOptions = { version, isSupported: SETUP_METHOD, isTma } as const;
-    const wrapSupportedPlain = createWithChecksFp({
-      ...wrapOptions,
-      returns: 'plain',
-    });
-    const wrapMountedEither = createWithChecksFp({
-      ...wrapOptions,
-      returns: 'either',
-      isMounted: button.isMounted,
+  constructor(options: BackButtonOptions) {
+    const button = new SimpleButton({
+      ...options,
+      method: 'web_app_setup_back_button',
+      payload: state => ({ is_visible: state.isVisible }),
     });
 
     this.isVisible = button.isVisible;
     this.isMounted = button.isMounted;
-    this.isSupported = createIsSupportedSignal(SETUP_METHOD, version);
-    this.hideFp = wrapMountedEither(button.hide);
-    this.showFp = wrapMountedEither(button.show);
-    this.onClickFp = wrapSupportedPlain(button.onClick);
-    this.offClickFp = wrapSupportedPlain(button.offClick);
-    this.mountFp = wrapSupportedPlain(button.mount);
+    this.isSupported = button.isSupported;
+    this.hide = button.hide;
+    this.hideFp = button.hideFp;
+    this.show = button.show;
+    this.showFp = button.showFp;
+    this.onClick = button.onClick;
+    this.onClickFp = button.onClickFp;
+    this.offClick = button.offClick;
+    this.offClickFp = button.offClickFp;
+    this.mount = button.mount;
+    this.mountFp = button.mountFp;
     this.unmount = button.unmount;
-
-    this.hide = throwifyWithChecksFp(this.hideFp);
-    this.show = throwifyWithChecksFp(this.showFp);
-    this.onClick = throwifyWithChecksFp(this.onClickFp);
-    this.offClick = throwifyWithChecksFp(this.offClickFp);
-    this.mount = throwifyWithChecksFp(this.mountFp);
   }
 
   /**
@@ -76,7 +57,7 @@ export class BackButton {
   readonly isSupported: Computed<boolean>;
 
   /**
-   * Hides the back button.
+   * Hides the button.
    * @since Mini Apps v6.1
    */
   readonly hideFp: WithChecksFp<() => E.Either<PostEventError, void>, true>;
@@ -87,7 +68,7 @@ export class BackButton {
   readonly hide: WithChecks<() => void, true>;
 
   /**
-   * Shows the back button.
+   * Shows the button.
    * @since Mini Apps v6.1
    */
   readonly showFp: WithChecksFp<() => E.Either<PostEventError, void>, true>;
