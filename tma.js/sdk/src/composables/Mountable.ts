@@ -3,10 +3,6 @@ import { batch, computed, signal } from '@tma.js/signals';
 import type { MaybeAccessor } from '@/types.js';
 import { access } from '@/helpers/access.js';
 
-type RestoreStateFn<S> = () => (S | undefined);
-
-type OnMounted<S> = (state: S) => void;
-
 export interface MountableOptions<S> {
   /**
    * A state to use if the `restoreState` function returned falsy value or
@@ -21,7 +17,7 @@ export interface MountableOptions<S> {
    * A function to call whenever the component was mounted.
    * @param state - restored state.
    */
-  onMounted?: OnMounted<S>;
+  onMounted?: (state: S) => void;
   /**
    * A function to call whenever the component was unmounted.
    */
@@ -30,7 +26,7 @@ export interface MountableOptions<S> {
    * Attempts to restore previously saved component state. This function
    * will only be called if the current page was reloaded.
    */
-  restoreState: RestoreStateFn<S>;
+  restoreState: () => (S | undefined);
 }
 
 export class Mountable<S extends object> {
@@ -41,22 +37,27 @@ export class Mountable<S extends object> {
     onUnmounted,
     isPageReload,
   }: MountableOptions<S>) {
-    this.restoreState = restoreState;
-    this.onMounted = onMounted;
-    this.onUnmounted = onUnmounted;
-    this.initialState = initialState;
-    this.isPageReload = isPageReload;
+    this.mount = () => {
+      if (!this._isMounted()) {
+        batch(() => {
+          const state = (
+            access(isPageReload) ? restoreState() : undefined
+          ) || access(initialState);
+          this._isMounted.set(true);
+          onMounted?.(state);
+        });
+      }
+    };
+
+    this.unmount = () => {
+      if (this._isMounted()) {
+        batch(() => {
+          this._isMounted.set(false);
+          onUnmounted?.();
+        });
+      }
+    };
   }
-
-  private readonly initialState: MaybeAccessor<S>;
-
-  private readonly restoreState: RestoreStateFn<S>;
-
-  private readonly onMounted?: OnMounted<S>;
-
-  private readonly onUnmounted?: VoidFunction;
-
-  private readonly isPageReload: MaybeAccessor<boolean>;
 
   private readonly _isMounted = signal(false);
 
@@ -66,30 +67,12 @@ export class Mountable<S extends object> {
   readonly isMounted = computed(this._isMounted);
 
   /**
-   * Mounts the component restoring its state and calling required side
-   * effects.
+   * Mounts the component restoring its state and calling required side effects.
    */
-  mount() {
-    if (!this._isMounted()) {
-      batch(() => {
-        const state = (
-          access(this.isPageReload) ? this.restoreState() : undefined
-        ) || access(this.initialState);
-        this._isMounted.set(true);
-        this.onMounted?.(state);
-      });
-    }
-  }
+  readonly mount: () => void;
 
   /**
    * Unmounts the component.
    */
-  unmount() {
-    if (this._isMounted()) {
-      batch(() => {
-        this._isMounted.set(false);
-        this.onUnmounted?.();
-      });
-    }
-  }
+  readonly unmount: () => void;
 }
