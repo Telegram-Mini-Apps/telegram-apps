@@ -37,7 +37,7 @@ export class BackButton {
       ...wrapOptions,
       returns: 'plain',
     });
-    const wrapCompleteEither = createWithChecksFp({
+    const wrapMountedEither = createWithChecksFp({
       ...wrapOptions,
       returns: 'either',
       isMounted: button.isMounted,
@@ -46,8 +46,8 @@ export class BackButton {
     this.isVisible = button.isVisible;
     this.isMounted = button.isMounted;
     this.isSupported = createIsSupportedSignal(SETUP_METHOD, version);
-    this.hideFp = wrapCompleteEither(button.hide);
-    this.showFp = wrapCompleteEither(button.show);
+    this.hideFp = wrapMountedEither(button.hide);
+    this.showFp = wrapMountedEither(button.show);
     this.onClickFp = wrapSupportedPlain(button.onClick);
     this.offClickFp = wrapSupportedPlain(button.offClick);
     this.mountFp = wrapSupportedPlain(button.mount);
