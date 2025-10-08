@@ -22,6 +22,7 @@ import * as TE from 'fp-ts/TaskEither';
 import { FunctionUnavailableError } from '@/errors.js';
 import type { MaybeAccessor } from '@/types.js';
 import { access } from '@/helpers/access.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
 type IfReturnsTask<Fn extends AnyFnAnyEither, A, B> =
   ReturnType<Fn> extends TE.TaskEither<any, any> ? A : B;
@@ -362,4 +363,22 @@ export function createWithChecksFp<O extends WithChecksOptions<any>>(options: O)
     O extends { isSupported: any } ? true : false,
     O extends { supports: any } ? O['supports'] : never
   > => withChecksFp(fn, options);
+}
+
+export function genWithChecksTuple<O extends WithChecksOptions<any>>(options: O) {
+  return <Fn extends FnOptionsBased<O>>(fn: Fn): [
+    fpFn: WithChecksFp<
+      Fn,
+      O extends { isSupported: any } ? true : false,
+      O extends { supports: any } ? O['supports'] : never
+    >,
+    throwingFn: WithChecks<
+      Fn,
+      O extends { isSupported: any } ? true : false,
+      O extends { supports: any } ? O['supports'] : never
+    >,
+  ] => {
+    const fpFn = withChecksFp(fn, options);
+    return [fpFn, throwifyWithChecksFp(fpFn)];
+  };
 }
