@@ -16,7 +16,6 @@ import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { bound } from '@/helpers/bound.js';
 import { removeUndefined } from '@/helpers/removeUndefined.js';
-import { shallowEqual } from '@/helpers/shallowEqual.js';
 
 type ButtonEither = E.Either<PostEventError, void>;
 
@@ -98,15 +97,16 @@ export class Button<S extends object, M extends MethodName> {
     this.state = stateful.state;
 
     [this.setState, this.setStateFp] = wrapMountedEither(state => {
-      const nextState = { ...stateful.state(), ...removeUndefined(state) };
-      return shallowEqual(nextState, stateful.state())
-        ? E.right(undefined)
-        : pipe(
-          postEvent(method as any, payload(nextState)),
-          E.map(() => {
-            stateful.setState(nextState);
-          }),
-        );
+      const nextState = { ...this.state(), ...removeUndefined(state) };
+      if (!stateful.hasDiff(nextState)) {
+        return E.right(undefined);
+      }
+      return pipe(
+        postEvent(method as any, payload(nextState)),
+        E.map(() => {
+          stateful.setState(nextState);
+        }),
+      );
     });
     [this.onClick, this.onClickFp] = wrapSupportedPlain(onClick);
     [this.offClick, this.offClickFp] = wrapSupportedPlain(offClick);

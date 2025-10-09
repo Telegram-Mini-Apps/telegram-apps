@@ -27,6 +27,12 @@ import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 type IfReturnsTask<Fn extends AnyFnAnyEither, A, B> =
   ReturnType<Fn> extends TE.TaskEither<any, any> ? A : B;
 
+type OptionsBasedSupported<O extends WithChecksOptions<any>> = O extends { isSupported: any }
+  ? true : false;
+
+type OptionsBasedSupports<O extends WithChecksOptions<any>> = O extends { supports: any }
+  ? O['supports'] : never;
+
 /**
  * @returns Error text if something is wrong.
  */
@@ -209,11 +215,7 @@ export interface WithChecksOptions<Fn extends AnyFn> {
 export function withChecksFp<Fn extends AnyFn, O extends WithChecksOptions<Fn>>(
   fn: Fn,
   options: O,
-): WithChecksFp<
-  Fn,
-  O extends { isSupported: any } ? true : false,
-  O extends { supports: Record<string, any> } ? keyof O['supports'] & string : never
-> {
+): WithChecksFp<Fn, OptionsBasedSupported<O>, OptionsBasedSupports<O>> {
   const version = computed(() => access(options.version) || '100');
   const isTma = computed(() => access(options.isTma));
 
@@ -367,18 +369,10 @@ export function createWithChecksFp<O extends WithChecksOptions<any>>(options: O)
 
 export function genWithChecksTuple<O extends WithChecksOptions<any>>(options: O) {
   return <Fn extends FnOptionsBased<O>>(fn: Fn): [
-    fpFn: WithChecksFp<
-      Fn,
-      O extends { isSupported: any } ? true : false,
-      O extends { supports: any } ? O['supports'] : never
-    >,
-    throwingFn: WithChecks<
-      Fn,
-      O extends { isSupported: any } ? true : false,
-      O extends { supports: any } ? O['supports'] : never
-    >,
+    throwing: WithChecks<Fn, OptionsBasedSupported<O>, OptionsBasedSupports<O>>,
+    fp: WithChecksFp<Fn, OptionsBasedSupported<O>, OptionsBasedSupports<O>>,
   ] => {
     const fpFn = withChecksFp(fn, options);
-    return [fpFn, throwifyWithChecksFp(fpFn)];
+    return [throwifyWithChecksFp(fpFn), fpFn];
   };
 }
