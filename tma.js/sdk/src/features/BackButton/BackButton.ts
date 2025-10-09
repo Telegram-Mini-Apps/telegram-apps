@@ -2,7 +2,7 @@ import type { Computed } from '@tma.js/signals';
 import * as E from 'fp-ts/Either';
 import type { PostEventError } from '@tma.js/bridge';
 
-import { SimpleButton, type SimpleButtonOptions } from '@/composables/SimpleButton.js';
+import { Button, type ButtonOptions } from '@/composables/Button.js';
 import type { WithChecksFp, WithChecks } from '@/wrappers/withChecksFp.js';
 
 export interface BackButtonState {
@@ -10,8 +10,8 @@ export interface BackButtonState {
 }
 
 export type BackButtonOptions = Omit<
-  SimpleButtonOptions<'web_app_setup_back_button'>,
-  'method' | 'payload'
+  ButtonOptions<BackButtonState, 'web_app_setup_back_button'>,
+  'method' | 'payload' | 'initialState'
 >;
 
 /**
@@ -19,19 +19,17 @@ export type BackButtonOptions = Omit<
  */
 export class BackButton {
   constructor(options: BackButtonOptions) {
-    const button = new SimpleButton({
+    const button = new Button({
       ...options,
       method: 'web_app_setup_back_button',
       payload: state => ({ is_visible: state.isVisible }),
+      initialState: { isVisible: false },
     });
 
-    this.isVisible = button.isVisible;
+    this.isVisible = button.stateGetter('isVisible');
     this.isMounted = button.isMounted;
     this.isSupported = button.isSupported;
-    this.hide = button.hide;
-    this.hideFp = button.hideFp;
-    this.show = button.show;
-    this.showFp = button.showFp;
+    [[this.hide, this.hideFp], [this.show, this.showFp]] = button.stateBoolSetters('isVisible');
     this.onClick = button.onClick;
     this.onClickFp = button.onClickFp;
     this.offClick = button.offClick;

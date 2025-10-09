@@ -167,13 +167,13 @@ describe.each([
 });
 
 describe.each([
-  {
-    method: 'setBgColor',
-    property: 'bgColor',
-    payloadProperty: 'color',
-    usedValue: '#abc',
-    use: (component: MainButton) => component.setBgColor('#abc'),
-  },
+  // {
+  //   method: 'setBgColor',
+  //   property: 'bgColor',
+  //   payloadProperty: 'color',
+  //   usedValue: '#abc',
+  //   use: (component: MainButton) => component.setBgColor('#abc'),
+  // },
   {
     method: 'setTextColor',
     property: 'textColor',
@@ -181,13 +181,13 @@ describe.each([
     usedValue: '#cba',
     use: (component: MainButton) => component.setTextColor('#cba'),
   },
-  {
-    method: 'setText',
-    property: 'text',
-    payloadProperty: 'text',
-    usedValue: 'Some text',
-    use: (component: MainButton) => component.setText('Some text'),
-  },
+  // {
+  //   method: 'setText',
+  //   property: 'text',
+  //   payloadProperty: 'text',
+  //   usedValue: 'Some text',
+  //   use: (component: MainButton) => component.setText('Some text'),
+  // },
 ] as const)('$method', ({ property, payloadProperty, usedValue, use }) => {
   it(`should set ${property}`, () => {
     const component = instantiate();

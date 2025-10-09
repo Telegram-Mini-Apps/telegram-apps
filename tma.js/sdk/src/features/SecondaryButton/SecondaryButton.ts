@@ -1,33 +1,47 @@
-import type { SecondaryButtonPosition } from '@tma.js/bridge';
 import { computed, type Computed } from '@tma.js/signals';
 import type { RGB } from '@tma.js/types';
+import type { PostEventError, SecondaryButtonPosition } from '@tma.js/bridge';
+import * as E from 'fp-ts/Either';
 
-import {
-  BottomButton,
-  type BottomButtonOptions,
-  type BottomButtonState,
-} from '@/composables/BottomButton.js';
+import type { WithChecks, WithChecksFp } from '@/wrappers/withChecksFp.js';
+import { Button, type ButtonOptions } from '@/composables/Button.js';
+import type { MaybeAccessor } from '@/types.js';
+import { access } from '@/helpers/access.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
-import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
-import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 
-export interface SecondaryButtonState extends BottomButtonState {
+type SecondaryButtonEither = E.Either<PostEventError, void>;
+
+export interface SecondaryButtonState {
+  isVisible: boolean;
+  bgColor?: RGB;
+  hasShineEffect: boolean;
+  isEnabled: boolean;
+  isLoaderVisible: boolean;
+  text: string;
+  textColor?: RGB;
   position: SecondaryButtonPosition;
 }
 
-export interface SecondaryButtonOptions extends WithVersionBasedPostEvent,
-  SharedFeatureOptions,
-  Omit<BottomButtonOptions<SecondaryButtonState>, 'initialState' | 'onChange'> {
+export interface SecondaryButtonOptions extends Omit<
+  ButtonOptions<SecondaryButtonState, 'web_app_setup_secondary_button'>,
+  'initialState' | 'method' | 'payload'
+> {
+  /**
+   * Default values for different kinds of the button properties.
+   */
+  defaults: {
+    bgColor: MaybeAccessor<RGB>;
+    textColor: MaybeAccessor<RGB>;
+  };
 }
 
 /**
  * @since Mini Apps v7.10
  */
 export class SecondaryButton {
-  constructor({ version, postEvent, isTma, ...rest }: SecondaryButtonOptions) {
-    const button = new BottomButton<SecondaryButtonState>({
-      ...rest,
+  constructor({ defaults, ...options }: SecondaryButtonOptions) {
+    const button = new Button({
+      ...options,
       initialState: {
         hasShineEffect: false,
         isEnabled: true,
@@ -36,62 +50,66 @@ export class SecondaryButton {
         text: 'Cancel',
         position: 'left',
       },
-      onChange(state) {
-        postEvent('web_app_setup_secondary_button', {
-          has_shine_effect: state.hasShineEffect,
-          is_visible: state.isVisible,
-          is_active: state.isEnabled,
-          is_progress_visible: state.isLoaderVisible,
-          text: state.text,
-          color: state.bgColor,
-          text_color: state.textColor,
-          position: state.position,
-        });
-      },
+      method: 'web_app_setup_secondary_button',
+      payload: state => ({
+        has_shine_effect: state.hasShineEffect,
+        is_visible: state.isVisible,
+        is_active: state.isEnabled,
+        is_progress_visible: state.isLoaderVisible,
+        text: state.text,
+        color: state.bgColor,
+        text_color: state.textColor,
+        position: state.position,
+      }),
     });
 
-    const wrapOptions = {
-      isTma,
-      isSupported: 'web_app_setup_secondary_button',
-      version,
-    } as const;
-    const wrapSupported = createWrapSafe(wrapOptions);
-    const wrapMounted = createWrapSafe({
-      ...wrapOptions,
-      isMounted: button.isMounted,
-    });
+    const withDefault = (
+      field: 'bgColor' | 'textColor',
+      getDefault: MaybeAccessor<RGB>,
+    ) => {
+      const fromState = button.stateGetter(field);
+      return computed(() => fromState() || access(getDefault));
+    };
 
-    this.isSupported = createIsSupportedSignal('web_app_setup_secondary_button', version);
-    this.position = computed(() => button.state().position);
-    this.bgColor = button.bgColor;
-    this.hasShineEffect = button.hasShineEffect;
-    this.isEnabled = button.isEnabled;
-    this.isLoaderVisible = button.isLoaderVisible;
-    this.text = button.text;
-    this.textColor = button.textColor;
-    this.isVisible = button.isVisible;
+    this.isSupported = createIsSupportedSignal('web_app_setup_secondary_button', options.version);
+    this.bgColor = withDefault('bgColor', defaults.bgColor);
+    this.textColor = withDefault('textColor', defaults.textColor);
+    this.position = button.stateGetter('position');
+    this.hasShineEffect = button.stateGetter('hasShineEffect');
+    this.isEnabled = button.stateGetter('isEnabled');
+    this.isLoaderVisible = button.stateGetter('isLoaderVisible');
+    this.text = button.stateGetter('text');
+    this.isVisible = button.stateGetter('isVisible');
     this.isMounted = button.isMounted;
     this.state = button.state;
 
-    this.show = wrapMounted(button.show);
-    this.hide = wrapMounted(button.hide);
-    this.setParams = wrapMounted(button.setParams);
-    this.mount = wrapSupported(button.mount);
+    [this.setPosition, this.setPositionFp] = button.stateSetters('position');
+    [this.setBgColor, this.setBgColorFp] = button.stateSetters('bgColor');
+    [this.setTextColor, this.setTextColorFp] = button.stateSetters('textColor');
+    [
+      [this.disableShineEffect, this.disableShineEffectFp],
+      [this.enableShineEffect, this.enableShineEffectFp],
+    ] = button.stateBoolSetters('hasShineEffect');
+    [
+      [this.disable, this.disableFp],
+      [this.enable, this.enableFp],
+    ] = button.stateBoolSetters('isEnabled');
+    [
+      [this.hideLoader, this.hideLoaderFp],
+      [this.showLoader, this.showLoaderFp],
+    ] = button.stateBoolSetters('isLoaderVisible');
+
+    [this.setText, this.setTextFp] = button.stateSetters('text');
+    [[this.hide, this.hideFp], [this.show, this.showFp]] = button.stateBoolSetters('isVisible');
+    this.setParams = button.setState;
+    this.setParamsFp = button.setStateFp;
+    this.onClick = button.onClick;
+    this.onClickFp = button.onClickFp;
+    this.offClick = button.offClick;
+    this.offClickFp = button.offClickFp;
+    this.mount = button.mount;
+    this.mountFp = button.mountFp;
     this.unmount = button.unmount;
-    this.onClick = wrapSupported(button.onClick);
-    this.offClick = wrapSupported(button.offClick);
-    this.enable = wrapMounted(button.enable);
-    this.disable = wrapMounted(button.disable);
-    this.enableShineEffect = wrapMounted(button.enableShineEffect);
-    this.disableShineEffect = wrapMounted(button.disableShineEffect);
-    this.showLoader = wrapMounted(button.showLoader);
-    this.hideLoader = wrapMounted(button.hideLoader);
-    this.setText = wrapMounted(button.setText);
-    this.setTextColor = wrapMounted(button.setTextColor);
-    this.setBgColor = wrapMounted(button.setBgColor);
-    this.setPosition = wrapMounted(position => {
-      button.setParams({ position });
-    });
   }
 
   //#region Properties.
@@ -160,73 +178,136 @@ export class SecondaryButton {
    * Shows the button.
    * @since Mini Apps v7.10
    */
-  readonly show: SafeWrapped<() => void, true>;
+  readonly showFp: WithChecksFp<() => SecondaryButtonEither, true>;
+
+  /**
+   * @see showFp
+   */
+  readonly show: WithChecks<() => void, true>;
 
   /**
    * Hides the button.
    * @since Mini Apps v7.10
    */
-  readonly hide: SafeWrapped<() => void, true>;
+  readonly hideFp: WithChecksFp<() => SecondaryButtonEither, true>;
+
+  /**
+   * @see hideFp
+   */
+  readonly hide: WithChecks<() => void, true>;
 
   /**
    * Enables the button.
    * @since Mini Apps v7.10
    */
-  readonly enable: SafeWrapped<() => void, true>;
+  readonly enableFp: WithChecksFp<() => SecondaryButtonEither, true>;
+
+  /**
+   * @see enableFp
+   */
+  readonly enable: WithChecks<() => void, true>;
 
   /**
    * Enables the button.
    * @since Mini Apps v7.10
    */
-  readonly enableShineEffect: SafeWrapped<() => void, true>;
+  readonly enableShineEffectFp: WithChecksFp<() => SecondaryButtonEither, true>;
+
+  /**
+   * @see enableShineEffectFp
+   */
+  readonly enableShineEffect: WithChecks<() => void, true>;
 
   /**
    * Disables the button.
    * @since Mini Apps v7.10
    */
-  readonly disable: SafeWrapped<() => void, true>;
+  readonly disableFp: WithChecksFp<() => SecondaryButtonEither, true>;
+
+  /**
+   * @see disableFp
+   */
+  readonly disable: WithChecks<() => void, true>;
 
   /**
    * Enables the button.
    * @since Mini Apps v7.10
    */
-  readonly disableShineEffect: SafeWrapped<() => void, true>;
+  readonly disableShineEffectFp: WithChecksFp<() => SecondaryButtonEither, true>;
+
+  /**
+   * @see disableShineEffectFp
+   */
+  readonly disableShineEffect: WithChecks<() => void, true>;
 
   /**
    * Updates the button background color.
    * @since Mini Apps v7.10
    */
-  readonly setBgColor: SafeWrapped<(value: RGB) => void, true>;
+  readonly setBgColorFp: WithChecksFp<(value: RGB) => SecondaryButtonEither, true>;
+
+  /**
+   * @see setBgColorFp
+   */
+  readonly setBgColor: WithChecks<(value: RGB) => void, true>;
 
   /**
    * Updates the button text color.
    * @since Mini Apps v7.10
    */
-  readonly setTextColor: SafeWrapped<(value: RGB) => void, true>;
+  readonly setTextColorFp: WithChecksFp<(value: RGB) => SecondaryButtonEither, true>;
+
+  /**
+   * @see setTextColorFp
+   */
+  readonly setTextColor: WithChecks<(value: RGB) => void, true>;
 
   /**
    * Updates the button text.
    * @since Mini Apps v7.10
    */
-  readonly setText: SafeWrapped<(value: string) => void, true>;
+  readonly setTextFp: WithChecksFp<(value: string) => SecondaryButtonEither, true>;
+
+  /**
+   * @see setTextFp
+   */
+  readonly setText: WithChecks<(value: string) => void, true>;
 
   /**
    * Updates the button position.
    * @since Mini Apps v7.10
    */
-  readonly setPosition: SafeWrapped<(position: SecondaryButtonPosition) => void, true>;
+  readonly setPositionFp: WithChecksFp<
+    (position: SecondaryButtonPosition) => SecondaryButtonEither,
+    true
+  >;
+
+  /**
+   * @see setPositionFp
+   */
+  readonly setPosition: WithChecks<(position: SecondaryButtonPosition) => void, true>;
 
   /**
    * Shows the button loader.
    * @since Mini Apps v7.10
    */
-  readonly showLoader: SafeWrapped<() => void, true>;
+  readonly showLoaderFp: WithChecksFp<() => SecondaryButtonEither, true>;
+
+  /**
+   * @see showLoaderFp
+   */
+  readonly showLoader: WithChecks<() => void, true>;
 
   /**
    * Hides the button loader.
    * @since Mini Apps v7.10
    */
-  readonly hideLoader: SafeWrapped<() => void, true>;
+  readonly hideLoaderFp: WithChecksFp<() => SecondaryButtonEither, true>;
+
+  /**
+   * @see hideLoaderFp
+   */
+  readonly hideLoader: WithChecks<() => void, true>;
 
   /**
    * Updates the button state.
@@ -239,16 +320,26 @@ export class SecondaryButton {
    *   hasShineEffect: true,
    * });
    */
-  readonly setParams: SafeWrapped<
-    (state: Partial<SecondaryButtonState>) => void,
+  readonly setParamsFp: WithChecksFp<
+    (state: Partial<SecondaryButtonState>) => SecondaryButtonEither,
     true
   >;
+
+  /**
+   * @see setParamsFp
+   */
+  readonly setParams: WithChecks<(state: Partial<SecondaryButtonState>) => void, true>;
 
   /**
    * Mounts the component restoring its state.
    * @since Mini Apps v7.10
    */
-  readonly mount: SafeWrapped<() => void, true>;
+  readonly mountFp: WithChecksFp<() => void, true>;
+
+  /**
+   * @see mountFp
+   */
+  readonly mount: WithChecks<() => void, true>;
 
   /**
    * Unmounts the component.
@@ -267,7 +358,12 @@ export class SecondaryButton {
    *   off();
    * });
    */
-  readonly onClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => VoidFunction, true>;
+  readonly onClickFp: WithChecksFp<(listener: VoidFunction, once?: boolean) => VoidFunction, true>;
+
+  /**
+   * @see onClick
+   */
+  readonly onClick: WithChecks<(listener: VoidFunction, once?: boolean) => VoidFunction, true>;
 
   /**
    * Removes the button click listener.
@@ -281,6 +377,11 @@ export class SecondaryButton {
    * }
    * button.onClick(listener);
    */
-  readonly offClick: SafeWrapped<(listener: VoidFunction, once?: boolean) => void, true>;
+  readonly offClickFp: WithChecksFp<(listener: VoidFunction, once?: boolean) => void, true>;
+
+  /**
+   * @see offClick
+   */
+  readonly offClick: WithChecks<(listener: VoidFunction, once?: boolean) => void, true>;
   //#endregion
 }

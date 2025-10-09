@@ -1,31 +1,43 @@
-import type { Computed } from '@tma.js/signals';
+import { computed, type Computed } from '@tma.js/signals';
 import type { RGB } from '@tma.js/types';
 import type { PostEventError } from '@tma.js/bridge';
 import * as E from 'fp-ts/Either';
 
-import {
-  BottomButton,
-  type BottomButtonOptions,
-  type BottomButtonState,
-} from '@/composables/BottomButton.js';
-import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
-import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
-import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import type { WithChecks, WithChecksFp } from '@/wrappers/withChecksFp.js';
+import { Button, type ButtonOptions } from '@/composables/Button.js';
+import type { MaybeAccessor } from '@/types.js';
+import { access } from '@/helpers/access.js';
 
 type MainButtonEither = E.Either<PostEventError, void>;
 
-export type MainButtonState = BottomButtonState;
+export interface MainButtonState {
+  isVisible: boolean;
+  bgColor?: RGB;
+  hasShineEffect: boolean;
+  isEnabled: boolean;
+  isLoaderVisible: boolean;
+  text: string;
+  textColor?: RGB;
+}
 
-export interface MainButtonOptions extends WithPostEvent,
-  SharedFeatureOptions,
-  Omit<BottomButtonOptions<MainButtonState, PostEventError>, 'initialState' | 'onChange' | 'commit'> {
+export interface MainButtonOptions extends Omit<
+  ButtonOptions<MainButtonState, 'web_app_setup_main_button'>,
+  'initialState' | 'method' | 'payload' | 'version'
+> {
+  /**
+   * Default values for different kinds of the button properties.
+   */
+  defaults: {
+    bgColor: MaybeAccessor<RGB>;
+    textColor: MaybeAccessor<RGB>;
+  };
 }
 
 export class MainButton {
-  constructor({ postEvent, isTma, ...rest }: MainButtonOptions) {
-    const button = new BottomButton<MainButtonState, PostEventError>({
-      ...rest,
+  constructor({ defaults, ...options }: MainButtonOptions) {
+    const button = new Button({
+      ...options,
+      version: '100',
       initialState: {
         hasShineEffect: false,
         isEnabled: true,
@@ -33,72 +45,62 @@ export class MainButton {
         isVisible: false,
         text: 'Continue',
       },
-      commit(state) {
-        return postEvent('web_app_setup_main_button', {
-          has_shine_effect: state.hasShineEffect,
-          is_visible: state.isVisible,
-          is_active: state.isEnabled,
-          is_progress_visible: state.isLoaderVisible,
-          text: state.text,
-          color: state.bgColor,
-          text_color: state.textColor,
-        });
-      },
+      method: 'web_app_setup_main_button',
+      payload: state => ({
+        has_shine_effect: state.hasShineEffect,
+        is_visible: state.isVisible,
+        is_active: state.isEnabled,
+        is_progress_visible: state.isLoaderVisible,
+        text: state.text,
+        color: state.bgColor,
+        text_color: state.textColor,
+      }),
     });
 
-    const wrapOptions = { isTma };
-    const wrapSupportedPlain = createWithChecksFp({
-      ...wrapOptions,
-      returns: 'plain',
-    });
-    const wrapMountedEither = createWithChecksFp({
-      ...wrapOptions,
-      returns: 'either',
-      isMounted: button.isMounted,
-    });
+    const withDefault = (
+      field: 'bgColor' | 'textColor',
+      getDefault: MaybeAccessor<RGB>,
+    ) => {
+      const fromState = button.stateGetter(field);
+      return computed(() => fromState() || access(getDefault));
+    };
 
-    this.bgColor = button.bgColor;
-    this.hasShineEffect = button.hasShineEffect;
-    this.isEnabled = button.isEnabled;
-    this.isLoaderVisible = button.isLoaderVisible;
-    this.text = button.text;
-    this.textColor = button.textColor;
-    this.isVisible = button.isVisible;
+    this.bgColor = withDefault('bgColor', defaults.bgColor);
+    this.textColor = withDefault('textColor', defaults.textColor);
+    this.hasShineEffect = button.stateGetter('hasShineEffect');
+    this.isEnabled = button.stateGetter('isEnabled');
+    this.isLoaderVisible = button.stateGetter('isLoaderVisible');
+    this.text = button.stateGetter('text');
+    this.isVisible = button.stateGetter('isVisible');
     this.isMounted = button.isMounted;
     this.state = button.state;
 
-    this.showFp = wrapMountedEither(button.show);
-    this.hideFp = wrapMountedEither(button.hide);
-    this.setParamsFp = wrapMountedEither(button.setParams);
-    this.mountFp = wrapSupportedPlain(button.mount);
-    this.unmount = button.unmount;
-    this.onClickFp = wrapSupportedPlain(button.onClick);
-    this.offClickFp = wrapSupportedPlain(button.offClick);
-    this.enableFp = wrapMountedEither(button.enable);
-    this.disableFp = wrapMountedEither(button.disable);
-    this.enableShineEffectFp = wrapMountedEither(button.enableShineEffect);
-    this.disableShineEffectFp = wrapMountedEither(button.disableShineEffect);
-    this.showLoaderFp = wrapMountedEither(button.showLoader);
-    this.hideLoaderFp = wrapMountedEither(button.hideLoader);
-    this.setTextFp = wrapMountedEither(button.setText);
-    this.setTextColorFp = wrapMountedEither(button.setTextColor);
-    this.setBgColorFp = wrapMountedEither(button.setBgColor);
+    [this.setBgColor, this.setBgColorFp] = button.stateSetters('bgColor');
+    [this.setTextColor, this.setTextColorFp] = button.stateSetters('textColor');
+    [
+      [this.disableShineEffect, this.disableShineEffectFp],
+      [this.enableShineEffect, this.enableShineEffectFp],
+    ] = button.stateBoolSetters('hasShineEffect');
+    [
+      [this.disable, this.disableFp],
+      [this.enable, this.enableFp],
+    ] = button.stateBoolSetters('isEnabled');
+    [
+      [this.hideLoader, this.hideLoaderFp],
+      [this.showLoader, this.showLoaderFp],
+    ] = button.stateBoolSetters('isLoaderVisible');
 
-    this.show = throwifyWithChecksFp(this.showFp);
-    this.hide = throwifyWithChecksFp(this.hideFp);
-    this.setParams = throwifyWithChecksFp(this.setParamsFp);
-    this.mount = throwifyWithChecksFp(this.mountFp);
-    this.onClick = throwifyWithChecksFp(this.onClickFp);
-    this.offClick = throwifyWithChecksFp(this.offClickFp);
-    this.enable = throwifyWithChecksFp(this.enableFp);
-    this.disable = throwifyWithChecksFp(this.disableFp);
-    this.enableShineEffect = throwifyWithChecksFp(this.enableShineEffectFp);
-    this.disableShineEffect = throwifyWithChecksFp(this.disableShineEffectFp);
-    this.showLoader = throwifyWithChecksFp(this.showLoaderFp);
-    this.hideLoader = throwifyWithChecksFp(this.hideLoaderFp);
-    this.setText = throwifyWithChecksFp(this.setTextFp);
-    this.setTextColor = throwifyWithChecksFp(this.setTextColorFp);
-    this.setBgColor = throwifyWithChecksFp(this.setBgColorFp);
+    [this.setText, this.setTextFp] = button.stateSetters('text');
+    [[this.hide, this.hideFp], [this.show, this.showFp]] = button.stateBoolSetters('isVisible');
+    this.setParams = button.setState;
+    this.setParamsFp = button.setStateFp;
+    this.onClick = button.onClick;
+    this.onClickFp = button.onClickFp;
+    this.offClick = button.offClick;
+    this.offClickFp = button.offClickFp;
+    this.mount = button.mount;
+    this.mountFp = button.mountFp;
+    this.unmount = button.unmount;
   }
 
   //#region Properties.
@@ -273,10 +275,7 @@ export class MainButton {
    *   hasShineEffect: true,
    * });
    */
-  readonly setParamsFp: WithChecksFp<
-    (state: Partial<MainButtonState>) => MainButtonEither,
-    false
-  >;
+  readonly setParamsFp: WithChecksFp<(state: Partial<MainButtonState>) => MainButtonEither, false>;
 
   readonly setParams: WithChecks<(state: Partial<MainButtonState>) => void, false>;
 
