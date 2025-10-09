@@ -1,11 +1,14 @@
 import * as E from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
-import type { Computed } from '@tma.js/signals';
+import { computed, type Computed } from '@tma.js/signals';
 import type { PostEventError, MethodName, MethodParams } from '@tma.js/bridge';
 
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import {
+  type WithChecksFp,
+  type WithChecks,
+  genWithChecksTuple,
+} from '@/wrappers/withChecksFp.js';
 import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
@@ -15,13 +18,13 @@ import { bound } from '@/helpers/bound.js';
 import { removeUndefined } from '@/helpers/removeUndefined.js';
 import { shallowEqual } from '@/helpers/shallowEqual.js';
 
-export interface ButtonState {
-  isVisible: boolean;
-}
+type ButtonEither = E.Either<PostEventError, void>;
 
-type ButtonError = PostEventError;
+type BoolFields<S> = {
+  [K in keyof S]-?: S[K] extends boolean ? K : never;
+}[keyof S];
 
-export interface ButtonOptions<S extends ButtonState, M extends MethodName>
+export interface ButtonOptions<S, M extends MethodName>
   extends SharedFeatureOptions,
   WithStateRestore<S>,
   WithVersionBasedPostEvent {
@@ -53,7 +56,7 @@ export interface ButtonOptions<S extends ButtonState, M extends MethodName>
   payload: (state: S) => MethodParams<M>;
 }
 
-export class Button<S extends ButtonState, M extends MethodName> {
+export class Button<S extends object, M extends MethodName> {
   constructor({
     isTma,
     storage,
@@ -79,14 +82,22 @@ export class Button<S extends ButtonState, M extends MethodName> {
       restoreState: storage.get,
     });
 
-    const setVisibility = (isVisible: boolean) => {
-      return this.setState({ isVisible } as Partial<S>);
-    };
+    const wrapOptions = { version, isSupported: method, isTma };
+    const wrapSupportedPlain = genWithChecksTuple({
+      ...wrapOptions,
+      returns: 'plain',
+    });
+    const wrapMountedEither = genWithChecksTuple({
+      ...wrapOptions,
+      returns: 'either',
+      isMounted: mountable.isMounted,
+    });
 
-    this.isVisible = stateful.computedFromState('isVisible');
     this.isMounted = mountable.isMounted;
+    this.isSupported = createIsSupportedSignal(method, version);
     this.state = stateful.state;
-    this.setState = state => {
+
+    [this.setState, this.setStateFp] = wrapMountedEither(state => {
       const nextState = { ...stateful.state(), ...removeUndefined(state) };
       return shallowEqual(nextState, stateful.state())
         ? E.right(undefined)
@@ -96,42 +107,24 @@ export class Button<S extends ButtonState, M extends MethodName> {
             stateful.setState(nextState);
           }),
         );
-    };
-
-    const wrapOptions = { version, isSupported: method, isTma };
-    const wrapSupportedPlain = createWithChecksFp({
-      ...wrapOptions,
-      returns: 'plain',
     });
-    const wrapMountedEither = createWithChecksFp({
-      ...wrapOptions,
-      returns: 'either',
-      isMounted: mountable.isMounted,
-    });
-
-    this.isVisible = stateful.computedFromState('isVisible');
-    this.isMounted = mountable.isMounted;
-    this.isSupported = createIsSupportedSignal(method, version);
-    this.state = stateful.state;
-
-    this.hideFp = wrapMountedEither(() => setVisibility(false));
-    this.showFp = wrapMountedEither(() => setVisibility(true));
-    this.onClickFp = wrapSupportedPlain(onClick);
-    this.offClickFp = wrapSupportedPlain(offClick);
-    this.mountFp = wrapSupportedPlain(mountable.mount);
+    [this.onClick, this.onClickFp] = wrapSupportedPlain(onClick);
+    [this.offClick, this.offClickFp] = wrapSupportedPlain(offClick);
+    [this.mount, this.mountFp] = wrapSupportedPlain(mountable.mount);
     this.unmount = mountable.unmount;
-
-    this.hide = throwifyWithChecksFp(this.hideFp);
-    this.show = throwifyWithChecksFp(this.showFp);
-    this.onClick = throwifyWithChecksFp(this.onClickFp);
-    this.offClick = throwifyWithChecksFp(this.offClickFp);
-    this.mount = throwifyWithChecksFp(this.mountFp);
+    this.stateSetters = key => {
+      return wrapMountedEither(value => {
+        return this.setStateFp({ [key]: value } as unknown as Partial<S>);
+      });
+    };
+    this.stateBoolSetters = <K extends keyof S>(key: K) => {
+      const [, setFp] = this.stateSetters(key);
+      return [
+        wrapMountedEither(() => setFp(false as S[K])),
+        wrapMountedEither(() => setFp(true as S[K])),
+      ];
+    };
   }
-
-  /**
-   * Signal indicating if the component is currently visible.
-   */
-  readonly isVisible: Computed<boolean>;
 
   /**
    * Signal indicating if the component is currently mounted.
@@ -149,29 +142,46 @@ export class Button<S extends ButtonState, M extends MethodName> {
   readonly state: Computed<S>;
 
   /**
+   * @returns A computed based on the specified state and its related key.
+   * @param key - a key to use.
+   */
+  stateGetter<K extends keyof S>(key: K): Computed<S[K]> {
+    return computed(() => this.state()[key]);
+  }
+
+  /**
+   * @returns A setter with checks for the specified key.
+   * @param key
+   */
+  readonly stateSetters: <K extends keyof S>(key: K) => [
+    throwing: WithChecks<(value: S[K]) => void, true>,
+    fp: WithChecksFp<(value: S[K]) => ButtonEither, true>,
+  ];
+
+  /**
+   * @returns Setters with checks to set a specified boolean key.
+   * @param key
+   */
+  readonly stateBoolSetters: <K extends BoolFields<S>>(key: K) => [
+    setFalse: [
+      throwing: WithChecks<() => void, true>,
+      fp: WithChecksFp<() => ButtonEither, true>,
+    ],
+    setTrue: [
+      throwing: WithChecks<() => void, true>,
+      fp: WithChecksFp<() => ButtonEither, true>,
+    ],
+  ];
+
+  /**
    * Updates the button state.
    */
-  readonly setState: (state: Partial<S>) => E.Either<ButtonError, void>;
+  readonly setStateFp: WithChecksFp<(state: Partial<S>) => ButtonEither, true>;
 
   /**
-   * Hides the button.
+   * @see setStateFp
    */
-  readonly hideFp: WithChecksFp<() => E.Either<ButtonError, void>, true>;
-
-  /**
-   * @see hideFp
-   */
-  readonly hide: WithChecks<() => void, true>;
-
-  /**
-   * Shows the button.
-   */
-  readonly showFp: WithChecksFp<() => E.Either<ButtonError, void>, true>;
-
-  /**
-   * @see showFp
-   */
-  readonly show: WithChecks<() => void, true>;
+  readonly setState: WithChecks<(state: Partial<S>) => void, true>;
 
   /**
    * Adds a new button listener.
@@ -184,10 +194,7 @@ export class Button<S extends ButtonState, M extends MethodName> {
    *   off();
    * });
    */
-  readonly onClickFp: WithChecksFp<
-    (listener: VoidFunction, once?: boolean) => VoidFunction,
-    true
-  >;
+  readonly onClickFp: WithChecksFp<(listener: VoidFunction, once?: boolean) => VoidFunction, true>;
 
   /**
    * @see onClickFp
