@@ -15,7 +15,6 @@ import type {
   LocationManagerState,
 } from '@/features/LocationManager/types.js';
 import { Stateful } from '@/composables/Stateful.js';
-import { bound } from '@/helpers/bound.js';
 import { AsyncMountable } from '@/composables/AsyncMountable.js';
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
@@ -58,7 +57,7 @@ export class LocationManager {
     const mountable = new AsyncMountable<LocationManagerState, RequestError>({
       isPageReload,
       restoreState: storage.get,
-      onMounted: bound(stateful, 'setState'),
+      onMounted: stateful.setState,
       initialState(options) {
         return pipe(
           request('web_app_check_location', 'location_checked', options),

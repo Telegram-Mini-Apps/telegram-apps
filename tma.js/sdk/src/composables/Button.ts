@@ -14,7 +14,6 @@ import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js'
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
-import { bound } from '@/helpers/bound.js';
 import { removeUndefined } from '@/helpers/removeUndefined.js';
 
 type ButtonEither = E.Either<PostEventError, void>;
@@ -77,7 +76,7 @@ export class Button<S extends object, M extends MethodName> {
     const mountable = new Mountable<S>({
       initialState,
       isPageReload,
-      onMounted: bound(stateful, 'setState'),
+      onMounted: stateful.setState,
       restoreState: storage.get,
     });
 

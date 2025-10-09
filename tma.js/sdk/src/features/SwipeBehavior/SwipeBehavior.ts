@@ -6,7 +6,6 @@ import { pipe } from 'fp-ts/function';
 import { genWithChecksTuple, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
-import { bound } from '@/helpers/bound.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
@@ -36,7 +35,7 @@ export class SwipeBehavior {
     const mountable = new Mountable({
       initialState: { isVerticalEnabled: false },
       isPageReload,
-      onMounted: bound(stateful, 'setState'),
+      onMounted: stateful.setState,
       restoreState: storage.get,
     });
 

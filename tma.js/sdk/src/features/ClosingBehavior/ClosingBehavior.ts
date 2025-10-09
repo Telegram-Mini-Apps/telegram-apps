@@ -5,7 +5,6 @@ import type { PostEventError } from '@tma.js/bridge';
 import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
-import { bound } from '@/helpers/bound.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
@@ -30,7 +29,7 @@ export class ClosingBehavior {
       },
     });
     const mountable = new Mountable({
-      onMounted: bound(stateful, 'setState'),
+      onMounted: stateful.setState,
       restoreState: storage.get,
       initialState: { isConfirmationEnabled: false },
       isPageReload,
