@@ -1,15 +1,22 @@
 import { computed, type Computed, signal } from '@tma.js/signals';
 import { createCbCollector } from '@tma.js/toolkit';
-import { BetterPromise, CancelledError } from 'better-promises';
+import { BetterPromise } from 'better-promises';
+import type { PostEventError } from '@tma.js/bridge';
 import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';
+import * as TE from 'fp-ts/TaskEither';
 
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import {
+  genWithChecksTuple,
+  type WithChecks,
+  type WithChecksFp,
+} from '@/wrappers/withChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { RequestOptionsNoCapture } from '@/types.js';
 import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import { ConcurrentCallError } from '@/errors.js';
+import { betterTaskEither, type BetterTaskError } from '@/helpers/betterTaskEither.js';
 
 export interface QrScannerOptions
   extends WithVersionBasedPostEvent,
@@ -20,37 +27,36 @@ export interface QrScannerOptions
    * @param listener - a listener to add.
    * @returns A function to remove the listener.
    */
-  onScannerClosed: (listener: VoidFunction) => VoidFunction;
+  onClosed: (listener: VoidFunction) => VoidFunction;
   /**
    * A function to add a listener to the event containing a scanned QR content.
    * @param listener - a listener to add.
    * @returns A function to remove the listener.
    */
-  onScannerTextReceived: (listener: (data: string) => void) => VoidFunction;
+  onTextReceived: (listener: (data: string) => void) => VoidFunction;
 }
 
-interface OpenSharedOptions extends RequestOptionsNoCapture {
+interface SharedOptions extends RequestOptionsNoCapture {
   /**
    * Title to be displayed in the scanner.
    */
   text?: string;
 }
 
-interface OpenFn {
-  (options?: OpenSharedOptions & {
-    /**
-     * Function, which should return true if the scanned QR should be captured.
-     * @param qr - scanned QR content.
-     */
-    capture?: (qr: string) => boolean;
-  }): BetterPromise<string | undefined>;
-  (options: OpenSharedOptions & {
-    /**
-     * Function which will be called if a QR code was scanned.
-     * @param qr - scanned QR content.
-     */
-    onCaptured: (qr: string) => void;
-  }): BetterPromise<void>;
+interface CaptureOptions extends SharedOptions {
+  /**
+   * @returns True if the passed QR code should be captured.
+   * @param qr - scanned QR content.
+   */
+  capture: (qr: string) => boolean;
+}
+
+interface OpenOptions extends SharedOptions {
+  /**
+   * Function which will be called if a QR code was scanned.
+   * @param qr - scanned QR content.
+   */
+  onCaptured: (qr: string) => void;
 }
 
 /**
@@ -59,76 +65,66 @@ interface OpenFn {
 export class QrScanner {
   constructor({
     version,
-    onScannerClosed,
-    onScannerTextReceived,
+    onClosed,
+    onTextReceived,
     isTma,
     postEvent,
   }: QrScannerOptions) {
-    const wrapSupported = createWrapSafe({
+    const wrapOptions = {
       version,
       isSupported: 'web_app_open_scan_qr_popup',
       isTma,
-    });
+    } as const;
+    const wrapSupportedEither = genWithChecksTuple({ ...wrapOptions, returns: 'either' });
+    const wrapSupportedTask = genWithChecksTuple({ ...wrapOptions, returns: 'task' });
 
-    const openPromise = signal<BetterPromise<string | void | undefined>>();
+    const isOpened = signal(false);
+    const toggleClosed = () => {
+      isOpened.set(false);
+    };
 
     this.isSupported = createIsSupportedSignal('web_app_open_scan_qr_popup', version);
-    this.isOpened = computed(() => !!openPromise);
-    this.close = wrapSupported(() => {
-      postEvent('web_app_close_scan_qr_popup');
-      openPromise()?.cancel();
-    });
-    this.open = wrapSupported(
-      ((
-        options: OpenSharedOptions & {
-          onCaptured?: (qr: string) => void;
-          capture?: (qr: string) => boolean;
-        } = {},
-      ) => {
-        if (this.isOpened()) {
-          return BetterPromise.reject(new ConcurrentCallError('The QR Scanner is already opened'));
-        }
+    this.isOpened = computed(isOpened);
 
-        const error = pipe(
-          postEvent('web_app_open_scan_qr_popup', { text: options.text }),
-          E.match(e => e, () => undefined),
-        );
-        if (error) {
-          return BetterPromise.reject(error);
-        }
-
-        const [addToCleanup, cleanup] = createCbCollector(() => {
-          openPromise.set(undefined);
-        });
-        const promise = new BetterPromise<string | undefined>(resolve => {
-          const { capture, onCaptured } = options;
-
-          addToCleanup(
-            onScannerClosed(resolve),
-            onScannerTextReceived(data => {
-              if (onCaptured) {
-                onCaptured(data);
-                return;
-              }
-              if (!capture || capture(data)) {
-                resolve(data);
-                postEvent('web_app_close_scan_qr_popup');
-              }
-            }),
-          );
-        }, options)
-          .catch(e => {
-            if (!CancelledError.is(e)) {
-              throw e;
+    [this.capture, this.captureFp] = wrapSupportedTask(options => {
+      let captured: string | undefined;
+      return pipe(
+        this.openFp({
+          ...options,
+          onCaptured: qr => {
+            if (options.capture(qr)) {
+              captured = qr;
+              this.close();
             }
-          })
-          .finally(cleanup);
+          },
+        }),
+        TE.map(() => captured),
+      );
+    });
+    [this.close, this.closeFp] = wrapSupportedEither(() => {
+      return pipe(postEvent('web_app_close_scan_qr_popup'), E.map(toggleClosed));
+    });
+    [this.open, this.openFp] = wrapSupportedTask(options => {
+      return pipe(
+        this.isOpened()
+          ? TE.left(new ConcurrentCallError('The QR Scanner is already opened'))
+          : TE.fromEither(postEvent('web_app_open_scan_qr_popup', { text: options.text })),
+        TE.chain(() => {
+          const [addToCleanup, cleanup] = createCbCollector();
+          const withCleanup = <T>(value: T): T => {
+            cleanup();
+            return value;
+          };
 
-        openPromise.set(promise);
-
-        return promise;
-      }) as OpenFn,
-    );
+          return pipe(
+            betterTaskEither<void>(resolve => {
+              addToCleanup(onClosed(resolve), onTextReceived(options.onCaptured));
+            }, options),
+            TE.mapBoth(withCleanup, withCleanup),
+          );
+        }),
+      );
+    });
   }
 
   /**
@@ -142,40 +138,88 @@ export class QrScanner {
   readonly isSupported: Computed<boolean>;
 
   /**
-   * Opens the scanner and returns a promise which will be resolved with the QR content if the
+   * Opens the scanner and returns a task which will be completed with the QR content if the
    * passed `capture` function returned true.
    *
-   * The `capture` option may be omitted. In this case, the first scanned QR will be returned.
-   *
-   * Promise may also be resolved to undefined if the scanner was closed.
+   * Task may also be completed with undefined if the scanner was closed.
    * @param options - method options.
-   * @returns A promise with QR content presented as string or undefined if the
-   * scanner was closed.
+   * @returns A promise with QR content presented as string or undefined if the scanner was closed.
    * @since Mini Apps v6.4
-   * @throws {ConcurrentCallError} The QR Scanner is already opened
-   * @example Without `capture` option
-   * if (qrScanner.open.isAvailable()) {
-   *   const qr = await qrScanner.open({ text: 'Scan any QR' });
-   * }
-   * @example Using `capture` option
-   * if (qrScanner.open.isAvailable()) {
-   *   const qr = await qrScanner.open({
-   *     text: 'Scan any QR',
+   * @example
+   * pipe(
+   *   qrScanner.captureOneFp({
    *     capture(scannedQr) {
    *       return scannedQr === 'any expected by me qr';
    *     }
-   *   });
-   * }
+   *   }),
+   *   TE.match(
+   *     error => {
+   *       console.error(error);
+   *     },
+   *     qr => {
+   *       console.log('My QR:'), qr;
+   *     }
+   *   ),
+   * );
    */
-  readonly open: SafeWrapped<OpenFn, true>;
+  readonly captureFp: WithChecksFp<
+    (options: CaptureOptions) => TE.TaskEither<PostEventError | BetterTaskError, string | undefined>,
+    true
+  >;
+
+  /**
+   * @see captureFp
+   */
+  readonly capture: WithChecks<
+    (options: CaptureOptions) => BetterPromise<string | undefined>,
+    true
+  >;
 
   /**
    * Closes the scanner.
    * @since Mini Apps v6.4
-   * @example
-   * if (qrScanner.close.isAvailable()) {
-   *   qrScanner.close();
-   * }
    */
-  readonly close: SafeWrapped<() => void, true>;
+  readonly closeFp: WithChecksFp<() => E.Either<PostEventError, void>, true>;
+
+  /**
+   * @see close
+   */
+  readonly close: WithChecks<() => void, true>;
+
+  /**
+   * Opens the scanner and returns a task which will be completed when the scanner was closed.
+   * @param options - method options.
+   * @since Mini Apps v6.4
+   * @example Without `capture` option
+   * if (qrScanner.open.isAvailable()) {
+   *   const qr = await qrScanner.open({ text: 'Scan any QR' });
+   * }
+   * @example
+   * pipe(
+   *   qrScanner.openFp({
+   *     onCaptured(scannedQr) {
+   *       if (scannedQr === 'any expected by me qr') {
+   *         qrScanner.close();
+   *       }
+   *     }
+   *   }),
+   *   TE.match(
+   *     error => {
+   *       console.error(error);
+   *     },
+   *     () => {
+   *       console.log('The scanner was closed');
+   *     }
+   *   ),
+   * );
+   */
+  readonly openFp: WithChecksFp<
+    (options: OpenOptions) => TE.TaskEither<PostEventError, void>,
+    true
+  >;
+
+  /**
+   * @see openFp
+   */
+  readonly open: WithChecks<(options: OpenOptions) => BetterPromise<void>, true>;
 }
