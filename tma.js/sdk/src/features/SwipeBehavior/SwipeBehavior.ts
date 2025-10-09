@@ -1,6 +1,9 @@
 import type { Computed } from '@tma.js/signals';
+import * as E from 'fp-ts/Either';
+import type { PostEventError } from '@tma.js/bridge';
+import { pipe } from 'fp-ts/function';
 
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import { genWithChecksTuple, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { bound } from '@/helpers/bound.js';
@@ -28,9 +31,6 @@ export class SwipeBehavior {
       initialState: { isVerticalEnabled: false },
       onChange(state) {
         storage.set(state);
-        postEvent('web_app_setup_swipe_behavior', {
-          allow_vertical_swipe: state.isVerticalEnabled,
-        });
       },
     });
     const mountable = new Mountable({
@@ -45,23 +45,40 @@ export class SwipeBehavior {
       isTma,
       version,
     } as const;
-    const wrapSupported = createWrapSafe(wrapOptions);
-    const wrapComplete = createWrapSafe({
+    const wrapSupportedPlain = genWithChecksTuple({
+      ...wrapOptions,
+      returns: 'plain',
+    });
+    const wrapMountedEither = genWithChecksTuple({
       ...wrapOptions,
       isMounted: mountable.isMounted,
+      returns: 'either',
     });
 
-    const setVerticalEnabled = (isVerticalEnabled: boolean): void => {
-      stateful.setState({ isVerticalEnabled });
+    const setVerticalEnabled = (isVerticalEnabled: boolean) => {
+      const update = { isVerticalEnabled };
+      if (!stateful.hasDiff(update)) {
+        return E.right(undefined);
+      }
+      return pipe(
+        postEvent('web_app_setup_swipe_behavior', { allow_vertical_swipe: isVerticalEnabled }),
+        E.map(() => {
+          stateful.setState(update);
+        }),
+      );
     };
 
     this.isSupported = createIsSupportedSignal('web_app_setup_swipe_behavior', version);
     this.isVerticalEnabled = stateful.computedFromState('isVerticalEnabled');
     this.isMounted = mountable.isMounted;
-    this.disableVertical = wrapComplete(() => setVerticalEnabled(false));
-    this.enableVertical = wrapComplete(() => setVerticalEnabled(true));
-    this.mount = wrapSupported(bound(mountable, 'mount'));
-    this.unmount = bound(mountable, 'unmount');
+    [this.disableVertical, this.disableVerticalFp] = wrapMountedEither(() => {
+      return setVerticalEnabled(false);
+    });
+    [this.enableVertical, this.enableVerticalFp] = wrapMountedEither(() => {
+      return setVerticalEnabled(true);
+    });
+    [this.mount, this.mountFp] = wrapSupportedPlain(mountable.mount);
+    this.unmount = mountable.unmount;
   }
 
   /**
@@ -83,22 +100,37 @@ export class SwipeBehavior {
    * Mounts the component restoring its state.
    * @since Mini Apps v7.7
    */
-  mount: SafeWrapped<() => void, true>;
+  readonly mountFp: WithChecksFp<() => void, true>;
+
+  /**
+   * @see mountFp
+   */
+  readonly mount: WithChecks<() => void, true>;
 
   /**
    * Unmounts the component.
    */
-  unmount: () => void;
+  readonly unmount: () => void;
 
   /**
    * Disables the closing confirmation dialog.
    * @since Mini Apps v7.7
    */
-  disableVertical: SafeWrapped<() => void, true>;
+  readonly disableVerticalFp: WithChecksFp<() => E.Either<PostEventError, void>, true>;
+
+  /**
+   * @see disableVerticalFp
+   */
+  readonly disableVertical: WithChecks<() => void, true>;
 
   /**
    * Enables the closing confirmation dialog.
    * @since Mini Apps v7.7
    */
-  enableVertical: SafeWrapped<() => void, true>;
+  readonly enableVerticalFp: WithChecksFp<() => E.Either<PostEventError, void>, true>;
+
+  /**
+   * @see enableVerticalFp
+   */
+  readonly enableVertical: WithChecks<() => void, true>;
 }
