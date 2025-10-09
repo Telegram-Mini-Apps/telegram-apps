@@ -15,13 +15,13 @@ export function instantiateThemeParams() {
       sharedFeatureOptions(),
       withStateRestore<ThemeParamsState>('themeParams'),
     ),
-    offThemeChanged(listener) {
+    offChange(listener) {
       off('theme_changed', listener);
     },
-    onThemeChanged(listener) {
+    onChange(listener) {
       on('theme_changed', listener);
     },
-    retrieveThemeParams() {
+    retrieve() {
       return pipe(
         retrieveLaunchParamsFp(),
         E.map(lp => lp.tgWebAppThemeParams),

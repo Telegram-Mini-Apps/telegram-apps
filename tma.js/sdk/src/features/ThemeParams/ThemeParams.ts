@@ -1,13 +1,12 @@
 import { computed, type Computed, signal } from '@tma.js/signals';
 import type { ThemeParams as ThemeParamsType, RGB } from '@tma.js/types';
-import { snakeToKebab, eitherGet } from '@tma.js/toolkit';
+import { snakeToKebab, throwifyAnyEither } from '@tma.js/toolkit';
 import type { EventListener } from '@tma.js/bridge';
 import type { Either } from 'fp-ts/Either';
 
-import { createWrapSafe, type SafeWrapped } from '@/wrappers/wrapSafe.js';
+import { genWithChecksTuple, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
-import { bound } from '@/helpers/bound.js';
 import { CSSVarsBoundError } from '@/errors.js';
 import { deleteCssVar, setCssVar } from '@/helpers/css-vars.js';
 import { isColorDark } from '@/helpers/isColorDark.js';
@@ -24,17 +23,17 @@ export interface ThemeParamsOptions<Err> extends WithStateRestore<ThemeParamsSta
    * Removes a theme change listener.
    * @param listener - a listener to remove.
    */
-  offThemeChanged: (listener: EventListener<'theme_changed'>) => void;
+  offChange: (listener: EventListener<'theme_changed'>) => void;
   /**
    * Adds a theme change listener.
    * @returns A function to remove listener.
    * @param listener - a listener to add.
    */
-  onThemeChanged: (listener: EventListener<'theme_changed'>) => void;
+  onChange: (listener: EventListener<'theme_changed'>) => void;
   /**
    * Retrieves theme parameters from the current environment.
    */
-  retrieveThemeParams: RetrieveThemeParams<Err>;
+  retrieve: RetrieveThemeParams<Err>;
 }
 
 export interface ThemeParamsGetCssVarNameFn {
@@ -47,9 +46,9 @@ export interface ThemeParamsGetCssVarNameFn {
 
 export class ThemeParams<Err> {
   constructor({
-    retrieveThemeParams,
-    onThemeChanged,
-    offThemeChanged,
+    retrieve,
+    onChange,
+    offChange,
     isTma,
     storage,
     isPageReload,
@@ -63,53 +62,48 @@ export class ThemeParams<Err> {
     };
     const mountable = new Mountable({
       initialState() {
-        return eitherGet(retrieveThemeParams());
+        // TODO: There should be a FP variant here.
+        return throwifyAnyEither(retrieve());
       },
       isPageReload,
       onMounted(state) {
         stateful.setState(state);
-        onThemeChanged(listener);
+        onChange(listener);
       },
       onUnmounted() {
-        offThemeChanged(listener);
+        offChange(listener);
       },
       restoreState: storage.get,
     });
 
-    const wrapOptions = { isTma };
-    const wrapSafe = createWrapSafe(wrapOptions);
-    const wrapComplete = createWrapSafe({
+    const wrapOptions = { isTma, returns: 'plain' } as const;
+    const wrapSupportedPlain = genWithChecksTuple(wrapOptions);
+    const wrapMountedPlain = genWithChecksTuple({
       ...wrapOptions,
       isMounted: mountable.isMounted,
     });
 
-    const fromState = <K extends keyof ThemeParamsType>(
-      key: K,
-    ): Computed<ThemeParamsType[K] | undefined> => {
-      return computed(() => stateful.state()[key]);
-    };
-
     // Colors.
-    this.accentTextColor = fromState('accent_text_color');
-    this.bgColor = fromState('bg_color');
-    this.buttonColor = fromState('button_color');
-    this.buttonTextColor = fromState('button_text_color');
-    this.bottomBarBgColor = fromState('bottom_bar_bg_color');
-    this.destructiveTextColor = fromState('destructive_text_color');
-    this.headerBgColor = fromState('header_bg_color');
-    this.hintColor = fromState('hint_color');
-    this.linkColor = fromState('link_color');
-    this.secondaryBgColor = fromState('secondary_bg_color');
-    this.sectionBgColor = fromState('section_bg_color');
-    this.sectionHeaderTextColor = fromState('section_header_text_color');
-    this.sectionSeparatorColor = fromState('section_separator_color');
-    this.subtitleTextColor = fromState('subtitle_text_color');
-    this.textColor = fromState('text_color');
+    this.accentTextColor = stateful.getter('accent_text_color');
+    this.bgColor = stateful.getter('bg_color');
+    this.buttonColor = stateful.getter('button_color');
+    this.buttonTextColor = stateful.getter('button_text_color');
+    this.bottomBarBgColor = stateful.getter('bottom_bar_bg_color');
+    this.destructiveTextColor = stateful.getter('destructive_text_color');
+    this.headerBgColor = stateful.getter('header_bg_color');
+    this.hintColor = stateful.getter('hint_color');
+    this.linkColor = stateful.getter('link_color');
+    this.secondaryBgColor = stateful.getter('secondary_bg_color');
+    this.sectionBgColor = stateful.getter('section_bg_color');
+    this.sectionHeaderTextColor = stateful.getter('section_header_text_color');
+    this.sectionSeparatorColor = stateful.getter('section_separator_color');
+    this.subtitleTextColor = stateful.getter('subtitle_text_color');
+    this.textColor = stateful.getter('text_color');
 
     // Other public signals.
     this.state = stateful.state;
     this.isMounted = mountable.isMounted;
-    this.bindCssVars = wrapComplete(getCSSVarName => {
+    [this.bindCssVars, this.bindCssVarsFp] = wrapMountedPlain(getCSSVarName => {
       if (this._isCssVarsBound()) {
         throw new CSSVarsBoundError();
       }
@@ -138,8 +132,8 @@ export class ThemeParams<Err> {
       };
     });
 
-    this.mount = wrapSafe(bound(mountable, 'mount'));
-    this.unmount = bound(mountable, 'unmount');
+    [this.mount, this.mountFp] = wrapSupportedPlain(mountable.mount);
+    this.unmount = mountable.unmount;
   }
 
   private readonly _isCssVarsBound = signal(false);
@@ -246,7 +240,15 @@ export class ThemeParams<Err> {
    * @example Using custom CSS vars generator
    * themeParams.bindCssVars(key => `--my-prefix-${key}`);
    */
-  readonly bindCssVars: SafeWrapped<
+  readonly bindCssVarsFp: WithChecksFp<
+    (getCSSVarName?: ThemeParamsGetCssVarNameFn) => VoidFunction,
+    false
+  >;
+
+  /**
+   * @see bindCssVarsFp
+   */
+  readonly bindCssVars: WithChecks<
     (getCSSVarName?: ThemeParamsGetCssVarNameFn) => VoidFunction,
     false
   >;
@@ -254,7 +256,12 @@ export class ThemeParams<Err> {
   /**
    * Mounts the component restoring its state.
    */
-  readonly mount: SafeWrapped<() => void, false>;
+  readonly mountFp: WithChecksFp<() => void, false>;
+
+  /**
+   * @see mountFp
+   */
+  readonly mount: WithChecks<() => void, false>;
 
   /**
    * Unmounts the component.
