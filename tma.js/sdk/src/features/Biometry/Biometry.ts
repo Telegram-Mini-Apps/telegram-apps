@@ -121,7 +121,7 @@ export class Biometry {
       returns: 'task',
     });
 
-    this.isAvailable = stateful.computedFromState('available');
+    this.isAvailable = stateful.getter('available');
     this.isMounted = mountable.isMounted;
     this.isSupported = createIsSupportedSignal('web_app_biometry_request_auth', version);
     this.state = stateful.state;

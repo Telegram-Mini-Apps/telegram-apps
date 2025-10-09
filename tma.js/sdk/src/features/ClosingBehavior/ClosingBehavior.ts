@@ -57,7 +57,7 @@ export class ClosingBehavior {
       });
     };
 
-    this.isConfirmationEnabled = stateful.computedFromState('isConfirmationEnabled');
+    this.isConfirmationEnabled = stateful.getter('isConfirmationEnabled');
     this.isMounted = mountable.isMounted;
     this.disableConfirmationFp = wrapMountedEither(() => setClosingConfirmation(false));
     this.enableConfirmationFp = wrapMountedEither(() => setClosingConfirmation(true));

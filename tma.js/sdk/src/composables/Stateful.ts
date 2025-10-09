@@ -33,7 +33,7 @@ export class Stateful<S extends object> {
    * Creates a computed signal based on the state.
    * @param key - a state key to use as a source.
    */
-  computedFromState<K extends keyof S>(key: K): Computed<S[K]> {
+  getter<K extends keyof S>(key: K): Computed<S[K]> {
     return computed(() => this._state()[key]);
   }
 

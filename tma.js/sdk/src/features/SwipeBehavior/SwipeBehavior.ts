@@ -69,7 +69,7 @@ export class SwipeBehavior {
     };
 
     this.isSupported = createIsSupportedSignal('web_app_setup_swipe_behavior', version);
-    this.isVerticalEnabled = stateful.computedFromState('isVerticalEnabled');
+    this.isVerticalEnabled = stateful.getter('isVerticalEnabled');
     this.isMounted = mountable.isMounted;
     [this.disableVertical, this.disableVerticalFp] = wrapMountedEither(() => {
       return setVerticalEnabled(false);

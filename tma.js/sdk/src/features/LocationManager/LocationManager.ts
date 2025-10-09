@@ -86,9 +86,9 @@ export class LocationManager {
       isMounted: mountable.isMounted,
     });
 
-    this.isAvailable = stateful.computedFromState('available');
-    this.isAccessRequested = stateful.computedFromState('accessRequested');
-    this.isAccessGranted = stateful.computedFromState('accessGranted');
+    this.isAvailable = stateful.getter('available');
+    this.isAccessRequested = stateful.getter('accessRequested');
+    this.isAccessGranted = stateful.getter('accessGranted');
     this.isSupported = createIsSupportedSignal('web_app_check_location', version);
     this.isMounted = mountable.isMounted;
     this.state = stateful.state;
