@@ -42,6 +42,17 @@ export class Stateful<S extends object> {
    * @param state - updates to apply.
    */
   setState(state: Partial<S>): void {
-    this._state.set({ ...this._state(), ...removeUndefined(state) });
+    const nextState = { ...this.state(), ...removeUndefined(state) };
+    if (!shallowEqual(nextState, this.state())) {
+      this._state.set(nextState);
+    }
+  }
+
+  /**
+   * @returns True if specified payload will update the state.
+   * @param state
+   */
+  hasDiff(state: Partial<S>): boolean {
+    return !shallowEqual({ ...this.state(), ...removeUndefined(state) }, this.state());
   }
 }
