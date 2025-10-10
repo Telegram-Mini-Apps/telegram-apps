@@ -5,7 +5,7 @@ import {
   type RetrieveLaunchParamsError,
   type PostEventError,
 } from '@tma.js/bridge';
-import { createCbCollector, eitherFnToSimple } from '@tma.js/toolkit';
+import { createCbCollector, throwifyFpFn } from '@tma.js/toolkit';
 import type { Version } from '@tma.js/types';
 import type { PostEventFpFn } from '@tma.js/bridge';
 import * as E from 'fp-ts/Either';
@@ -106,4 +106,4 @@ export function initFp(
 /**
  * @see initFp
  */
-export const init = eitherFnToSimple(initFp);
+export const init = throwifyFpFn(initFp);
