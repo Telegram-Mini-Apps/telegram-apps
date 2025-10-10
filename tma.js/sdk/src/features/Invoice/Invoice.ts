@@ -82,7 +82,7 @@ export class Invoice {
   }
 
   /**
-   * Signal indicating if invoice is currently opened.
+   * Signal indicating if any invoice is currently opened.
    */
   readonly isOpened: Computed<boolean>;
 

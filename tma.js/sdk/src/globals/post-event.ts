@@ -1,5 +1,5 @@
 import { postEventFp as _postEventFp, type PostEventFpFn, type PostEventFn } from '@tma.js/bridge';
-import { eitherGet } from '@tma.js/toolkit';
+import { throwifyAnyEither } from '@tma.js/toolkit';
 
 import { createSignal } from '@/globals/signals-registry.js';
 
@@ -10,5 +10,5 @@ export const postEventFp: PostEventFpFn = (...args: any[]) => {
 };
 
 export const postEvent: PostEventFn = (...args: any[]) => {
-  return eitherGet((postEventFp as any)(...args));
+  return throwifyAnyEither((postEventFp as any)(...args));
 };
