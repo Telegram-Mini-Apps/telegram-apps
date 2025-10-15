@@ -67,13 +67,14 @@ describe('retrieveLaunchParams', () => {
 
         spy.mockClear();
         spy.mockImplementationOnce(() => {
-          return '"tgWebAppPlatform=android&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23ffffff%22%7D&tgWebAppVersion=7.5"';
+          return '"tgWebAppPlatform=android&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23ffffff%22%2C%22text_color%22%3A%22%23aabbccdd%22%7D&tgWebAppVersion=7.5"';
         });
         expect(retrieveLaunchParams()).toStrictEqual({
           tgWebAppVersion: '7.5',
           tgWebAppPlatform: 'android',
           tgWebAppThemeParams: {
             bg_color: '#ffffff',
+            text_color: '#aabbccdd',
           },
         });
         expect(spy).toHaveBeenCalledOnce();
