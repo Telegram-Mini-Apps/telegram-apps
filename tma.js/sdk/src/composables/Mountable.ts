@@ -1,14 +1,16 @@
 import { batch, computed, signal } from '@tma.js/signals';
+import * as E from 'fp-ts/Either';
+import { pipe } from 'fp-ts/function';
 
 import type { MaybeAccessor } from '@/types.js';
 import { access } from '@/helpers/access.js';
 
-export interface MountableOptions<S> {
+export interface MountableOptions<S, Err> {
   /**
    * A state to use if the `restoreState` function returned falsy value or
    * `isPageReload` returned false.
    */
-  initialState: MaybeAccessor<S>;
+  initialState: S | (() => E.Either<Err, S>);
   /**
    * @returns True if the current page was reloaded.
    */
@@ -29,24 +31,29 @@ export interface MountableOptions<S> {
   restoreState: () => (S | undefined);
 }
 
-export class Mountable<S extends object> {
+export class Mountable<S extends object, Err = never> {
   constructor({
     onMounted,
     restoreState,
     initialState,
     onUnmounted,
     isPageReload,
-  }: MountableOptions<S>) {
+  }: MountableOptions<S, Err>) {
     this.mount = () => {
-      if (!this._isMounted()) {
-        batch(() => {
-          const state = (
-            access(isPageReload) ? restoreState() : undefined
-          ) || access(initialState);
-          this._isMounted.set(true);
-          onMounted?.(state);
-        });
+      if (this.isMounted()) {
+        return E.right(undefined);
       }
+      const restored = access(isPageReload) ? restoreState() : undefined;
+      const state = restored
+        ? E.right(restored)
+        : (typeof initialState === 'function' ? initialState() : E.right(initialState));
+
+      return pipe(state, E.map(s => {
+        batch(() => {
+          this._isMounted.set(true);
+          onMounted?.(s);
+        });
+      }));
     };
 
     this.unmount = () => {
@@ -69,7 +76,7 @@ export class Mountable<S extends object> {
   /**
    * Mounts the component restoring its state and calling required side effects.
    */
-  readonly mount: () => void;
+  readonly mount: () => E.Either<Err, void>;
 
   /**
    * Unmounts the component.
