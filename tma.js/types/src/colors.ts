@@ -1,9 +1,4 @@
 /**
- * Color in format #RRGGBB.
+ * Color in format #RGB, #RGBA, #RRGGBB or #RRGGBBAA.
  */
 export type RGB = `#${string}`;
-
-/**
- * Color in format #RGB.
- */
-export type RGBShort = `#${string}`;

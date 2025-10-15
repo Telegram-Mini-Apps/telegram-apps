@@ -33,7 +33,7 @@ import {
 } from 'valibot';
 
 import { pipeJsonToSchema, pipeQueryToSchema } from './pipes.js';
-import { isRGB } from './rgb.js';
+import { isAnyRGB } from './rgb.js';
 
 export type InitDataGenSchema = ReturnType<typeof initData>;
 export type InitDataGenType = InferOutput<InitDataGenSchema>;
@@ -103,7 +103,7 @@ export function themeParams() {
           ? `#${(value & 0x00FFFFFF).toString(16).padStart(6, '0')}`
           : value;
       }),
-      check(isRGB),
+      check(isAnyRGB),
     ),
   ) as RecordSchema<
     SchemaWithPipe<[
