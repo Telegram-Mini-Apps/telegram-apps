@@ -3,7 +3,8 @@ import * as E from 'fp-ts/Either';
 import type { PostEventError } from '@tma.js/bridge';
 import { pipe } from 'fp-ts/function';
 
-import { genWithChecksTuple, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
+import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
@@ -44,11 +45,11 @@ export class SwipeBehavior {
       isTma,
       version,
     } as const;
-    const wrapSupportedPlain = genWithChecksTuple({
+    const wrapSupportedPlain = createWithChecksFp({
       ...wrapOptions,
       returns: 'plain',
     });
-    const wrapMountedEither = genWithChecksTuple({
+    const wrapMountedEither = createWithChecksFp({
       ...wrapOptions,
       isMounted: mountable.isMounted,
       returns: 'either',
@@ -70,14 +71,21 @@ export class SwipeBehavior {
     this.isSupported = createIsSupportedSignal('web_app_setup_swipe_behavior', version);
     this.isVerticalEnabled = stateful.getter('isVerticalEnabled');
     this.isMounted = mountable.isMounted;
-    [this.disableVertical, this.disableVerticalFp] = wrapMountedEither(() => {
+    this.disableVerticalFp = wrapMountedEither(() => {
       return setVerticalEnabled(false);
     });
-    [this.enableVertical, this.enableVerticalFp] = wrapMountedEither(() => {
+    this.enableVerticalFp = wrapMountedEither(() => {
       return setVerticalEnabled(true);
     });
-    [this.mount, this.mountFp] = wrapSupportedPlain(mountable.mount);
+    this.mountFp = wrapSupportedPlain(() => {
+      const nothing = () => undefined;
+      return pipe(mountable.mount(), E.match(nothing, nothing));
+    });
     this.unmount = mountable.unmount;
+
+    this.disableVertical = throwifyWithChecksFp(this.disableVerticalFp);
+    this.enableVertical = throwifyWithChecksFp(this.enableVerticalFp);
+    this.mount = throwifyWithChecksFp(this.mountFp);
   }
 
   /**

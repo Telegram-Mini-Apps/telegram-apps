@@ -7,10 +7,11 @@ import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 
 import {
-  genWithChecksTuple,
+  createWithChecksFp,
   type WithChecks,
   type WithChecksFp,
 } from '@/wrappers/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { RequestOptionsNoCapture } from '@/types.js';
 import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
@@ -75,8 +76,8 @@ export class QrScanner {
       isSupported: 'web_app_open_scan_qr_popup',
       isTma,
     } as const;
-    const wrapSupportedEither = genWithChecksTuple({ ...wrapOptions, returns: 'either' });
-    const wrapSupportedTask = genWithChecksTuple({ ...wrapOptions, returns: 'task' });
+    const wrapSupportedEither = createWithChecksFp({ ...wrapOptions, returns: 'either' });
+    const wrapSupportedTask = createWithChecksFp({ ...wrapOptions, returns: 'task' });
 
     const isOpened = signal(false);
     const toggleClosed = () => {
@@ -86,7 +87,7 @@ export class QrScanner {
     this.isSupported = createIsSupportedSignal('web_app_open_scan_qr_popup', version);
     this.isOpened = computed(isOpened);
 
-    [this.capture, this.captureFp] = wrapSupportedTask(options => {
+    this.captureFp = wrapSupportedTask(options => {
       let captured: string | undefined;
       return pipe(
         this.openFp({
@@ -101,10 +102,10 @@ export class QrScanner {
         TE.map(() => captured),
       );
     });
-    [this.close, this.closeFp] = wrapSupportedEither(() => {
+    this.closeFp = wrapSupportedEither(() => {
       return pipe(postEvent('web_app_close_scan_qr_popup'), E.map(toggleClosed));
     });
-    [this.open, this.openFp] = wrapSupportedTask(options => {
+    this.openFp = wrapSupportedTask(options => {
       return pipe(
         this.isOpened()
           ? TE.left(new ConcurrentCallError('The QR Scanner is already opened'))
@@ -125,6 +126,10 @@ export class QrScanner {
         }),
       );
     });
+
+    this.open = throwifyWithChecksFp(this.openFp);
+    this.capture = throwifyWithChecksFp(this.captureFp);
+    this.close = throwifyWithChecksFp(this.closeFp);
   }
 
   /**

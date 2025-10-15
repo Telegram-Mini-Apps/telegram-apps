@@ -1,10 +1,11 @@
 import { computed, type Computed, signal } from '@tma.js/signals';
 import type { ThemeParams as ThemeParamsType, RGB } from '@tma.js/types';
-import { snakeToKebab, throwifyAnyEither } from '@tma.js/toolkit';
+import { snakeToKebab } from '@tma.js/toolkit';
 import type { EventListener } from '@tma.js/bridge';
 import type { Either } from 'fp-ts/Either';
 
-import { genWithChecksTuple, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
+import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { CSSVarsBoundError } from '@/errors.js';
@@ -77,8 +78,8 @@ export class ThemeParams<Err> {
     });
 
     const wrapOptions = { isTma, returns: 'plain' } as const;
-    const wrapSupportedPlain = genWithChecksTuple(wrapOptions);
-    const wrapMountedPlain = genWithChecksTuple({
+    const wrapSupportedPlain = createWithChecksFp(wrapOptions);
+    const wrapMountedPlain = createWithChecksFp({
       ...wrapOptions,
       isMounted: mountable.isMounted,
     });
@@ -103,7 +104,7 @@ export class ThemeParams<Err> {
     // Other public signals.
     this.state = stateful.state;
     this.isMounted = mountable.isMounted;
-    [this.bindCssVars, this.bindCssVarsFp] = wrapMountedPlain(getCSSVarName => {
+    this.bindCssVarsFp = wrapMountedPlain(getCSSVarName => {
       if (this._isCssVarsBound()) {
         throw new CSSVarsBoundError();
       }
@@ -131,9 +132,11 @@ export class ThemeParams<Err> {
         this._isCssVarsBound.set(false);
       };
     });
-
-    [this.mount, this.mountFp] = wrapSupportedPlain(mountable.mount);
+    this.mountFp = wrapSupportedPlain(mountable.mount);
     this.unmount = mountable.unmount;
+
+    this.bindCssVars = throwifyWithChecksFp(this.bindCssVarsFp);
+    this.mount = throwifyWithChecksFp(this.mountFp);
   }
 
   private readonly _isCssVarsBound = signal(false);

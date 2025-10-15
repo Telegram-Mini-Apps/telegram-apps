@@ -366,13 +366,3 @@ export function createWithChecksFp<O extends WithChecksOptions<any>>(options: O)
     O extends { supports: any } ? O['supports'] : never
   > => withChecksFp(fn, options);
 }
-
-export function genWithChecksTuple<O extends WithChecksOptions<any>>(options: O) {
-  return <Fn extends FnOptionsBased<O>>(fn: Fn): [
-    throwing: WithChecks<Fn, OptionsBasedSupported<O>, OptionsBasedSupports<O>>,
-    fp: WithChecksFp<Fn, OptionsBasedSupported<O>, OptionsBasedSupports<O>>,
-  ] => {
-    const fpFn = withChecksFp(fn, options);
-    return [throwifyWithChecksFp(fpFn), fpFn];
-  };
-}

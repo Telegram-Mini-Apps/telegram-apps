@@ -1,14 +1,19 @@
 import type { Computed } from '@tma.js/signals';
 import * as E from 'fp-ts/Either';
 import type { PostEventError } from '@tma.js/bridge';
+import { pipe } from 'fp-ts/function';
 
-import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
+import {
+  createWithChecksFp,
+  type WithChecks,
+  type WithChecksFp,
+} from '@/wrappers/withChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
 export interface ClosingBehaviorState {
   isConfirmationEnabled: boolean;
@@ -58,9 +63,17 @@ export class ClosingBehavior {
 
     this.isConfirmationEnabled = stateful.getter('isConfirmationEnabled');
     this.isMounted = mountable.isMounted;
-    this.disableConfirmationFp = wrapMountedEither(() => setClosingConfirmation(false));
-    this.enableConfirmationFp = wrapMountedEither(() => setClosingConfirmation(true));
-    this.mountFp = wrapSupportedPlain(mountable.mount);
+
+    this.disableConfirmationFp = wrapMountedEither(() => {
+      return setClosingConfirmation(false);
+    });
+    this.enableConfirmationFp = wrapMountedEither(() => {
+      return setClosingConfirmation(true);
+    });
+    this.mountFp = wrapSupportedPlain(() => {
+      const nothing = () => undefined;
+      return pipe(mountable.mount(), E.match(nothing, nothing));
+    });
     this.unmount = mountable.unmount;
 
     this.disableConfirmation = throwifyWithChecksFp(this.disableConfirmationFp);
@@ -101,7 +114,7 @@ export class ClosingBehavior {
   /**
    * @see disableConfirmationFp
    */
-  readonly disableConfirmation: WithChecks<() => void, false>;
+  readonly disableConfirmation: WithChecks<(a: string) => void, false>;
 
   /**
    * Enables the closing confirmation dialog.

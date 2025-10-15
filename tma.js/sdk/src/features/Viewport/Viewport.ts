@@ -16,7 +16,8 @@ import { Stateful } from '@/composables/Stateful.js';
 import { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import { AsyncMountable } from '@/composables/AsyncMountable.js';
 import { AsyncOptions } from '@/types.js';
-import { genWithChecksTuple, WithChecks, WithChecksFp } from '@/wrappers/withChecksFp.js';
+import { createWithChecksFp, WithChecks, WithChecksFp } from '@/wrappers/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import { WithVersion } from '@/fn-options/withVersion.js';
 import { WithRequest } from '@/fn-options/withRequest.js';
@@ -126,14 +127,6 @@ export class Viewport<EViewportStable, EFullscreen> {
     };
 
     const mountable = new AsyncMountable({
-      isPageReload,
-      onMounted(state) {
-        onViewportChanged(viewportChangedListener);
-        onFullscreenChanged(fullscreenChangedListener);
-        onSafeAreaInsetsChanged(safeAreaInsetsChangedListener);
-        onContentSafeAreaInsetsChanged(contentSafeAreaInsetsChangedListener);
-        stateful.setState(state);
-      },
       initialState(options) {
         const genRequestInsets = (kind: 'safe-area' | 'content-safe-area') => {
           return () => {
@@ -184,6 +177,14 @@ export class Viewport<EViewportStable, EFullscreen> {
           }),
         );
       },
+      isPageReload,
+      onMounted(state) {
+        onViewportChanged(viewportChangedListener);
+        onFullscreenChanged(fullscreenChangedListener);
+        onSafeAreaInsetsChanged(safeAreaInsetsChangedListener);
+        onContentSafeAreaInsetsChanged(contentSafeAreaInsetsChangedListener);
+        stateful.setState(state);
+      },
       onUnmounted() {
         offViewportChanged(viewportChangedListener);
         offFullscreenChanged(fullscreenChangedListener);
@@ -216,12 +217,12 @@ export class Viewport<EViewportStable, EFullscreen> {
     this.contentSafeAreaInsetLeft = csaBased('left');
     this.contentSafeAreaInsetRight = csaBased('right');
 
-    const wrapTask = genWithChecksTuple({ isTma, returns: 'task' });
-    const wrapMountedEither = genWithChecksTuple({
+    const wrapTask = createWithChecksFp({ isTma, returns: 'task' });
+    const wrapMountedEither = createWithChecksFp({
       isTma,
       returns: 'either',
     });
-    const wrapFullscreenTask = genWithChecksTuple({
+    const wrapFullscreenTask = createWithChecksFp({
       isTma,
       isSupported: 'web_app_request_fullscreen',
       version,
@@ -239,9 +240,7 @@ export class Viewport<EViewportStable, EFullscreen> {
             if ('error' in data && data.error !== 'ALREADY_FULLSCREEN') {
               return TE.left(new FullscreenFailedError(data.error));
             }
-            stateful.setState({
-              isFullscreen: 'is_fullscreen' in data ? data.is_fullscreen : true,
-            });
+            stateful.setState({ isFullscreen: 'is_fullscreen' in data ? data.is_fullscreen : true });
             return TE.right(undefined);
           }),
         );
@@ -250,17 +249,20 @@ export class Viewport<EViewportStable, EFullscreen> {
 
     // Mount.
     this.isMounted = mountable.isMounted;
-    [this.mount, this.mountFp] = wrapTask(mountable.mount);
+    this.mountFp = wrapTask(mountable.mount);
+    this.mount = throwifyWithChecksFp(this.mountFp);
 
     // Fullscreen.
     this.isFullscreen = stateful.getter('isFullscreen');
-    [this.requestFullscreen, this.requestFullscreenFp] = genFullscreenFn(true);
-    [this.exitFullscreen, this.exitFullscreenFp] = genFullscreenFn(false);
+    this.requestFullscreenFp = genFullscreenFn(true);
+    this.requestFullscreen = throwifyWithChecksFp(this.requestFullscreenFp);
+    this.exitFullscreenFp = genFullscreenFn(false);
+    this.exitFullscreen = throwifyWithChecksFp(this.exitFullscreenFp);
 
     // CSS vars.
     const isCssVarsBound = signal(false);
     this.isCssVarsBound = computed(isCssVarsBound);
-    [this.bindCssVars, this.bindCssVarsFp] = wrapMountedEither(
+    this.bindCssVarsFp = wrapMountedEither(
       (getCSSVarName?: GetCSSVarNameFn) => {
         if (isCssVarsBound()) {
           return E.left(new CSSVarsBoundError());
@@ -308,9 +310,11 @@ export class Viewport<EViewportStable, EFullscreen> {
         });
       },
     );
+    this.bindCssVars = throwifyWithChecksFp(this.bindCssVarsFp);
 
     // Other methods.
-    [this.expand, this.expandFp] = wrapMountedEither(() => postEvent('web_app_expand'));
+    this.expandFp = wrapMountedEither(() => postEvent('web_app_expand'));
+    this.expand = throwifyWithChecksFp(this.expandFp);
   }
 
   //#region Other properties.

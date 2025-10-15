@@ -7,8 +7,9 @@ import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import {
   type WithChecksFp,
   type WithChecks,
-  genWithChecksTuple,
+  createWithChecksFp,
 } from '@/wrappers/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
@@ -81,11 +82,11 @@ export class Button<S extends object, M extends MethodName> {
     });
 
     const wrapOptions = { version, isSupported: method, isTma };
-    const wrapSupportedPlain = genWithChecksTuple({
+    const wrapSupportedPlain = createWithChecksFp({
       ...wrapOptions,
       returns: 'plain',
     });
-    const wrapMountedEither = genWithChecksTuple({
+    const wrapMountedEither = createWithChecksFp({
       ...wrapOptions,
       returns: 'either',
       isMounted: mountable.isMounted,
@@ -95,7 +96,7 @@ export class Button<S extends object, M extends MethodName> {
     this.isSupported = createIsSupportedSignal(method, version);
     this.state = stateful.state;
 
-    [this.setState, this.setStateFp] = wrapMountedEither(state => {
+    this.setStateFp = wrapMountedEither(state => {
       const nextState = { ...this.state(), ...removeUndefined(state) };
       if (!stateful.hasDiff(nextState)) {
         return E.right(undefined);
@@ -107,20 +108,30 @@ export class Button<S extends object, M extends MethodName> {
         }),
       );
     });
-    [this.onClick, this.onClickFp] = wrapSupportedPlain(onClick);
-    [this.offClick, this.offClickFp] = wrapSupportedPlain(offClick);
-    [this.mount, this.mountFp] = wrapSupportedPlain(mountable.mount);
+    this.setState = throwifyWithChecksFp(this.setStateFp);
+    this.onClickFp = wrapSupportedPlain(onClick);
+    this.onClick = throwifyWithChecksFp(this.onClickFp);
+    this.offClickFp = wrapSupportedPlain(offClick);
+    this.offClick = throwifyWithChecksFp(this.offClickFp);
+    this.mountFp = wrapSupportedPlain(() => {
+      const nothing = () => undefined;
+      return pipe(mountable.mount(), E.match(nothing, nothing));
+    });
+    this.mount = throwifyWithChecksFp(this.mountFp);
     this.unmount = mountable.unmount;
     this.stateSetters = key => {
-      return wrapMountedEither(value => {
+      const wrapped = wrapMountedEither(value => {
         return this.setStateFp({ [key]: value } as unknown as Partial<S>);
       });
+      return [throwifyWithChecksFp(wrapped), wrapped];
     };
     this.stateBoolSetters = <K extends keyof S>(key: K) => {
       const [, setFp] = this.stateSetters(key);
+      const setFalse = wrapMountedEither(() => setFp(false as S[K]));
+      const setTrue = wrapMountedEither(() => setFp(true as S[K]));
       return [
-        wrapMountedEither(() => setFp(false as S[K])),
-        wrapMountedEither(() => setFp(true as S[K])),
+        [throwifyWithChecksFp(setFalse), setFalse],
+        [throwifyWithChecksFp(setTrue), setTrue],
       ];
     };
   }

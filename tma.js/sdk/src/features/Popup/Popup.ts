@@ -5,7 +5,8 @@ import type { BetterPromise } from 'better-promises';
 import { pipe } from 'fp-ts/function';
 
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
-import { genWithChecksTuple, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
+import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import type { ShowOptions } from '@/features/Popup/types.js';
 import { ConcurrentCallError, type InvalidArgumentsError } from '@/errors.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
@@ -26,7 +27,7 @@ export class Popup {
       isOpened.set(false);
     };
 
-    const wrapSupportedTask = genWithChecksTuple({
+    const wrapSupportedTask = createWithChecksFp({
       version,
       isTma,
       isSupported: 'web_app_open_popup',
@@ -35,7 +36,7 @@ export class Popup {
 
     this.isSupported = createIsSupportedSignal('web_app_open_popup', version);
     this.isOpened = computed(isOpened);
-    [this.show, this.showFp] = wrapSupportedTask(options => {
+    this.showFp = wrapSupportedTask(options => {
       return pipe(
         this.isOpened()
           ? TE.left(new ConcurrentCallError('A popup is already opened'))
@@ -60,6 +61,7 @@ export class Popup {
         ),
       );
     });
+    this.show = throwifyWithChecksFp(this.showFp);
   }
 
   /**
