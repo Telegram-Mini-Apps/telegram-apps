@@ -2,7 +2,7 @@ import { computed, type Computed, signal } from '@tma.js/signals';
 import type { ThemeParams as ThemeParamsType, RGB } from '@tma.js/types';
 import { snakeToKebab } from '@tma.js/toolkit';
 import type { EventListener } from '@tma.js/bridge';
-import type { Either } from 'fp-ts/Either';
+import * as E from 'fp-ts/Either';
 
 import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
@@ -16,7 +16,7 @@ import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js'
 
 export type ThemeParamsState = ThemeParamsType;
 
-type RetrieveThemeParams<E> = () => Either<E, ThemeParamsType>;
+type RetrieveThemeParams<E> = () => E.Either<E, ThemeParamsType>;
 
 export interface ThemeParamsOptions<Err> extends WithStateRestore<ThemeParamsState>,
   SharedFeatureOptions {
@@ -62,10 +62,7 @@ export class ThemeParams<Err> {
       stateful.setState(event.theme_params);
     };
     const mountable = new Mountable({
-      initialState() {
-        // TODO: There should be a FP variant here.
-        return throwifyAnyEither(retrieve());
-      },
+      initialState: retrieve,
       isPageReload,
       onMounted(state) {
         stateful.setState(state);
@@ -259,7 +256,7 @@ export class ThemeParams<Err> {
   /**
    * Mounts the component restoring its state.
    */
-  readonly mountFp: WithChecksFp<() => void, false>;
+  readonly mountFp: WithChecksFp<() => E.Either<Err, void>, false>;
 
   /**
    * @see mountFp
