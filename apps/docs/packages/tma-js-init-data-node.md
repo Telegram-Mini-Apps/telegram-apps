@@ -41,7 +41,7 @@ yarn add @tma.js/init-data-node
 Here is the example of how the library can be used:
 
 ```typescript
-import { validate, parse, type InitData } from '@telegram-apps/init-data-node';
+import { validate, parse, type InitData } from '@tma.js/init-data-node';
 import express, {
   type ErrorRequestHandler,
   type RequestHandler,
