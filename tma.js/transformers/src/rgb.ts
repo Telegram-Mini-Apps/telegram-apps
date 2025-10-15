@@ -3,34 +3,29 @@ import type { RGB } from '@tma.js/types';
 import * as E from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 
-const RE_SHORT_RGB = /^#[\da-f]{3}$/i;
-const RE_SHORT_RGBA = /^#[\da-f]{4}$/i;
-const RE_FULL_RGB = /^#[\da-f]{6}$/i;
-const RE_FULL_RGBA = /^#[\da-f]{8}$/i;
-
 function guardBasedOn(re: RegExp) {
   return (value: string): value is RGB => re.test(value);
 }
 
 /**
- * @returns True if the value has the #RRGGBB format.
- */
-export const isRGB = guardBasedOn(RE_FULL_RGB);
-
-/**
- * @returns True if the value has the #RRGGBBAA format.
- */
-export const isRGBA = guardBasedOn(RE_FULL_RGBA);
-
-/**
  * @returns True if the value has the #RGB format.
  */
-export const isRGBShort = guardBasedOn(RE_SHORT_RGB);
+export const isRGBShort = guardBasedOn(/^#[\da-f]{3}$/i);
 
 /**
  * @returns True if the value has the #RGBA format.
  */
-export const isRGBAShort = guardBasedOn(RE_SHORT_RGBA);
+export const isRGBAShort = guardBasedOn(/^#[\da-f]{4}$/i);
+
+/**
+ * @returns True if the value has the #RRGGBB format.
+ */
+export const isRGB = guardBasedOn(/^#[\da-f]{6}$/i);
+
+/**
+ * @returns True if the value has the #RRGGBBAA format.
+ */
+export const isRGBA = guardBasedOn(/^#[\da-f]{8}$/i);
 
 /**
  * @returns True if the value has any known RGB format.
