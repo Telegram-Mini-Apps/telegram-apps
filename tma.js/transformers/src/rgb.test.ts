@@ -1,9 +1,18 @@
 import { describe, expect, it } from 'vitest';
 
-import { isRGB, isRGBShort, toRGB, toRGBFp } from './rgb.js';
+import {
+  isAnyRGB,
+  isRGB, isRGBA,
+  isRGBAShort,
+  isRGBShort,
+  toRGB,
+  toRGBFp,
+  toRGBFull,
+  toRGBFullFp,
+} from './rgb.js';
 
 describe('isRGB', () => {
-  it('should return true for correct full RGB representation', () => {
+  it('should return true for a value in the #RRGGBB format', () => {
     expect(isRGB('#ffffff')).toBe(true);
   });
 
@@ -14,8 +23,20 @@ describe('isRGB', () => {
   });
 });
 
+describe('isRGBA', () => {
+  it('should return true for a value in the #RRGGBBAA format', () => {
+    expect(isRGBA('#ffffffaa')).toBe(true);
+  });
+
+  it('should return false for any other value', () => {
+    ['abc', '#ffff', '#fff', '#fffffg', '#ffffff'].forEach(v => {
+      expect(isRGBA(v)).toBe(false);
+    });
+  });
+});
+
 describe('isRGBShort', () => {
-  it('should return true for correct short RGB representation', () => {
+  it('should return true for a value in the #RGB format', () => {
     expect(isRGBShort('#fff')).toBe(true);
   });
 
@@ -23,6 +44,29 @@ describe('isRGBShort', () => {
     ['abc', '#ffff', '#ffffff', '#ggg'].forEach(v => {
       expect(isRGBShort(v)).toBe(false);
     });
+  });
+});
+
+describe('isRGBAShort', () => {
+  it('should return true for a value in the #RGBA format', () => {
+    expect(isRGBAShort('#fffa')).toBe(true);
+  });
+
+  it('should return false for any other value', () => {
+    ['abc', '#ffffffaa', '#ffffff', '#ggg'].forEach(v => {
+      expect(isRGBAShort(v)).toBe(false);
+    });
+  });
+});
+
+describe('isAnyRGB', () => {
+  it.each([
+    ['#RGB', '#abc'],
+    ['#RGBA', '#abcd'],
+    ['#RRGGBB', '#aabbcc'],
+    ['#RRGGBBAA', '#aabbccdd'],
+  ] as const)('should return true for a value in the %s format', (_, value) => {
+    expect(isAnyRGB(value)).toBe(true);
   });
 });
 
@@ -67,5 +111,59 @@ describe('toRGB', () => {
 
   it('should throw an error in other cases', () => {
     expect(() => toRGB('abc')).toThrow();
+  });
+});
+
+describe('toRGBFullFp', () => {
+  it('should expand the value if it has #RGB or #RGBA formats', () => {
+    expect(toRGBFullFp('#abc')).toMatchObject({ right: '#aabbccff' });
+    expect(toRGBFullFp('#abcd')).toMatchObject({ right: '#aabbccdd' });
+  });
+
+  it('should fulfill alpha channel part with "ff" of the value has #RRGGBB format', () => {
+    expect(toRGBFullFp('#aabbcc')).toMatchObject({ right: '#aabbccff' });
+  });
+
+  it('should return value as-is if it has #RRGGBBAA format', () => {
+    expect(toRGBFullFp('#aabbccdd')).toMatchObject({ right: '#aabbccdd' });
+  });
+
+  it('should properly handle rgb(*,*,*) format', () => {
+    expect(toRGBFullFp('rgb(6,56,11)')).toMatchObject({ right: '#06380bff' });
+  });
+
+  it('should properly handle rgba(*,*,*,*) format', () => {
+    expect(toRGBFullFp('rgba(6,56,11,3)')).toMatchObject({ right: '#06380b03' });
+  });
+
+  it('should return an error in other cases', () => {
+    expect(toRGBFullFp('abc')).toMatchObject({ left: expect.anything() });
+  });
+});
+
+describe('toRGBFull', () => {
+  it('should expand the value if it has #RGB or #RGBA formats', () => {
+    expect(toRGBFull('#abc')).toBe('#aabbccff');
+    expect(toRGBFull('#abcd')).toBe('#aabbccdd');
+  });
+
+  it('should fulfill alpha channel part with "ff" of the value has #RRGGBB format', () => {
+    expect(toRGBFull('#aabbcc')).toBe('#aabbccff');
+  });
+
+  it('should return value as-is if it has #RRGGBBAA format', () => {
+    expect(toRGBFull('#aabbccdd')).toBe('#aabbccdd');
+  });
+
+  it('should properly handle rgb(*,*,*) format', () => {
+    expect(toRGBFull('rgb(6,56,11)')).toBe('#06380bff');
+  });
+
+  it('should properly handle rgba(*,*,*,*) format', () => {
+    expect(toRGBFull('rgba(6,56,11,3)')).toBe('#06380b03');
+  });
+
+  it('should throw an error in other cases', () => {
+    expect(() => toRGBFull('abc')).toThrow();
   });
 });
