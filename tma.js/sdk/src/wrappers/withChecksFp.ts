@@ -22,7 +22,6 @@ import * as TE from 'fp-ts/TaskEither';
 import { FunctionUnavailableError } from '@/errors.js';
 import type { MaybeAccessor } from '@/types.js';
 import { access } from '@/helpers/access.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
 type IfReturnsTask<Fn extends AnyFnAnyEither, A, B> =
   ReturnType<Fn> extends TE.TaskEither<any, any> ? A : B;
@@ -31,7 +30,7 @@ type OptionsBasedSupported<O extends WithChecksOptions<any>> = O extends { isSup
   ? true : false;
 
 type OptionsBasedSupports<O extends WithChecksOptions<any>> = O extends { supports: any }
-  ? O['supports'] : never;
+  ? Extract<keyof O['supports'], string> : never;
 
 /**
  * @returns Error text if something is wrong.
@@ -145,14 +144,14 @@ export type WithChecksFp<
    * if it is supported by the current environment.
    * @example
    * if (miniApp.setHeaderColor.isAvailable()) {
-   *   if (miniApp.setHeaderColor.supports.rgb()) {
+   *   if (miniApp.setHeaderColor.supports('rgb')) {
    *     miniApp.setHeaderColor('#ffaabb');
    *   } else {
    *     miniApp.setHeaderColor('bg_color');
    *   }
    * }
    */
-    supports: Record<SupportsMapKeySchema, Computed<boolean>>;
+    supports: (key: SupportsMapKeySchema) => boolean;
   }>;
 
 export type WithChecks<
@@ -280,14 +279,6 @@ export function withChecksFp<Fn extends AnyFn, O extends WithChecksOptions<Fn>>(
     }
   };
 
-  let supportsMap: Record<string, Computed<boolean>> | undefined;
-  if (options.supports) {
-    supportsMap = {};
-    for (const option in options.supports) {
-      supportsMap[option] = computed(() => isOptionSupported(option));
-    }
-  }
-
   const isSupported = computed(() => !calculateSupportError());
   const isInitialized = computed(() => version() !== '0.0');
   const isMounted = computed(() => (options.isMounted ? options.isMounted() : true));
@@ -345,7 +336,7 @@ export function withChecksFp<Fn extends AnyFn, O extends WithChecksOptions<Fn>>(
       },
     },
     isSupportedSimplified ? { isSupported } : {},
-    supportsMap ? { supports: supportsMap } : {},
+    options.supports ? { supports: isOptionSupported } : {},
   );
 }
 
