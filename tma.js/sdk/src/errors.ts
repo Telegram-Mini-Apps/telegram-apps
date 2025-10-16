@@ -1,7 +1,18 @@
-import { errorClass } from 'error-kid';
+import { errorClass, errorClassWithData } from 'error-kid';
+import type { BaseIssue } from 'valibot';
 
 function msgToTuple(message?: string): [string?] {
   return [message];
+}
+
+export class ValidationError extends errorClassWithData<
+  { input: unknown; issues: BaseIssue<any>[] },
+  [input: unknown, issues: BaseIssue<any>[]]
+>(
+  'ValidationError',
+  (input, issues) => ({ input, issues }),
+  'Validation error',
+) {
 }
 
 export class CSSVarsBoundError extends errorClass(
