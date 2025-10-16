@@ -11,7 +11,5 @@ export interface SharedFeatureOptions {
 }
 
 export function sharedFeatureOptions(): SharedFeatureOptions {
-  return {
-    isTma: computed(() => isTMAFp()),
-  };
+  return { isTma: computed(() => isTMAFp()) };
 }
