@@ -11,7 +11,7 @@ import { withChecksFp } from '@/wrappers/withChecksFp.js';
 import { InvalidArgumentsError } from '@/errors.js';
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
-interface CreateOpenLinkOptions extends SharedFeatureOptions, WithPostEvent {
+interface CreateOptions extends SharedFeatureOptions, WithPostEvent {
 }
 
 export interface OpenLinkOptions {
@@ -27,10 +27,7 @@ export interface OpenLinkOptions {
 
 export type OpenLinkError = PostEventError | InvalidArgumentsError;
 
-/**
- * @internal
- */
-function createOpenLink({ postEvent, ...rest }: CreateOpenLinkOptions) {
+function create({ postEvent, ...rest }: CreateOptions) {
   return withChecksFp((
     url: string | URL,
     options: OpenLinkOptions = {},
@@ -65,7 +62,7 @@ function createOpenLink({ postEvent, ...rest }: CreateOpenLinkOptions) {
  *   tryBrowser: 'chrome',
  * });
  */
-export const openLinkFp = createOpenLink(pipe(
+export const openLinkFp = create(pipe(
   sharedFeatureOptions(),
   withPostEvent,
 ));

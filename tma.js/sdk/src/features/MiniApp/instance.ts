@@ -8,25 +8,18 @@ import { withVersion } from '@/fn-options/withVersion.js';
 import { withStateRestore } from '@/fn-options/withStateRestore.js';
 import { themeParams } from '@/features/ThemeParams/instance.js';
 
-/**
- * @internal
- */
-export function instantiateMiniApp() {
-  return new MiniApp({
-    ...pipe(
-      sharedFeatureOptions(),
-      withPostEvent,
-      withVersion,
-      withStateRestore<MiniAppState>('miniApp'),
-    ),
-    offVisibilityChanged(listener) {
-      off('visibility_changed', listener);
-    },
-    onVisibilityChanged(listener) {
-      on('visibility_changed', listener);
-    },
-    theme: themeParams.state,
-  });
-}
-
-export const miniApp = instantiateMiniApp();
+export const miniApp = new MiniApp({
+  ...pipe(
+    sharedFeatureOptions(),
+    withPostEvent,
+    withVersion,
+    withStateRestore<MiniAppState>('miniApp'),
+  ),
+  offVisibilityChanged(listener) {
+    off('visibility_changed', listener);
+  },
+  onVisibilityChanged(listener) {
+    on('visibility_changed', listener);
+  },
+  theme: themeParams.state,
+});

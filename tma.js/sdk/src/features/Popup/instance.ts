@@ -5,15 +5,4 @@ import { sharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import { withVersion } from '@/fn-options/withVersion.js';
 import { withRequest } from '@/fn-options/withRequest.js';
 
-/**
- * @internal
- */
-export function instantiatePopup() {
-  return new Popup(pipe(
-    sharedFeatureOptions(),
-    withRequest,
-    withVersion,
-  ));
-}
-
-export const popup = instantiatePopup();
+export const popup = new Popup(pipe(sharedFeatureOptions(), withRequest, withVersion));

@@ -13,15 +13,12 @@ import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import { withVersion, type WithVersion } from '@/fn-options/withVersion.js';
 import { access } from '@/helpers/access.js';
 
-interface CreateOpenTelegramLinkOptions extends SharedFeatureOptions, WithPostEvent, WithVersion {
+interface CreateOptions extends SharedFeatureOptions, WithPostEvent, WithVersion {
 }
 
 export type OpenTelegramLinkError = PostEventError | InvalidArgumentsError;
 
-/**
- * @internal
- */
-function createOpenTelegramLink({ postEvent, version, ...rest }: CreateOpenTelegramLinkOptions) {
+function create({ postEvent, version, ...rest }: CreateOptions) {
   return withChecksFp((
     url: string | URL,
   ): E.Either<OpenTelegramLinkError, void> => {
@@ -49,7 +46,7 @@ function createOpenTelegramLink({ postEvent, version, ...rest }: CreateOpenTeleg
  * @example
  * openTelegramLink('https://t.me/heyqbnk');
  */
-export const openTelegramLinkFp = createOpenTelegramLink(pipe(
+export const openTelegramLinkFp = create(pipe(
   sharedFeatureOptions(),
   withPostEvent,
   withVersion,

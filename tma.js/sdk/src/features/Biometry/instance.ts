@@ -8,24 +8,17 @@ import { withVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEven
 import { withRequest } from '@/fn-options/withRequest.js';
 import { withStateRestore } from '@/fn-options/withStateRestore.js';
 
-/**
- * @internal
- */
-export function instantiateBiometry() {
-  return new Biometry({
-    ...pipe(
-      sharedFeatureOptions(),
-      withVersionBasedPostEvent,
-      withRequest,
-      withStateRestore<BiometryState>('biometry'),
-    ),
-    offInfoReceived(listener) {
-      off('biometry_info_received', listener);
-    },
-    onInfoReceived(listener) {
-      return on('biometry_info_received', listener);
-    },
-  });
-}
-
-export const biometry = instantiateBiometry();
+export const biometry = new Biometry({
+  ...pipe(
+    sharedFeatureOptions(),
+    withVersionBasedPostEvent,
+    withRequest,
+    withStateRestore<BiometryState>('biometry'),
+  ),
+  offInfoReceived(listener) {
+    off('biometry_info_received', listener);
+  },
+  onInfoReceived(listener) {
+    return on('biometry_info_received', listener);
+  },
+});

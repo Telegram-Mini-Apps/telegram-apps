@@ -8,12 +8,7 @@ import {
 } from '@/features/links/openTelegramLink.js';
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
-type CreateShareURLOptions = SharedFeatureOptions;
-
-/**
- * @internal
- */
-function createShareURL(options: CreateShareURLOptions) {
+function create(options: SharedFeatureOptions) {
   return withChecksFp((url: string, text?: string): E.Either<OpenTelegramLinkError, void> => {
     return openTelegramLinkFp(
       'https://t.me/share/url?' + new URLSearchParams({ url, text: text || '' })
@@ -36,7 +31,7 @@ function createShareURL(options: CreateShareURLOptions) {
  * @see https://core.telegram.org/api/links#share-links
  * @see https://core.telegram.org/widgets/share#custom-buttons
  */
-export const shareURLFp = createShareURL(sharedFeatureOptions());
+export const shareURLFp = create(sharedFeatureOptions());
 
 /**
  * @see shareURLFp

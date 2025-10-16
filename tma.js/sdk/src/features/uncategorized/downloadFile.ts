@@ -13,12 +13,12 @@ import { withRequest, type WithRequest } from '@/fn-options/withRequest.js';
 import { withVersion, type WithVersion } from '@/fn-options/withVersion.js';
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
-interface CreateDownloadFileOptions extends SharedFeatureOptions, WithRequest, WithVersion {
+interface CreateOptions extends SharedFeatureOptions, WithRequest, WithVersion {
 }
 
 export type DownloadFileError = RequestError | AccessDeniedError;
 
-function createDownloadFile({ request, ...rest }: CreateDownloadFileOptions) {
+function create({ request, ...rest }: CreateOptions) {
   return withChecksFp((
     url: string,
     fileName: string,
@@ -53,7 +53,7 @@ function createDownloadFile({ request, ...rest }: CreateDownloadFileOptions) {
  *   })
  * )
  */
-export const downloadFileFp = createDownloadFile(pipe(
+export const downloadFileFp = create(pipe(
   sharedFeatureOptions(),
   withRequest,
   withVersion,

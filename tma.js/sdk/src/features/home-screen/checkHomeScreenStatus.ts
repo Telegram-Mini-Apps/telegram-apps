@@ -12,15 +12,10 @@ import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import { withRequest, type WithRequest } from '@/fn-options/withRequest.js';
 import type { AsyncOptions } from '@/types.js';
 
-interface CreateCheckHomeScreenStatusOptions extends SharedFeatureOptions,
-  WithRequest,
-  WithVersion {
+interface CreateOptions extends SharedFeatureOptions, WithRequest, WithVersion {
 }
 
-/**
- * @internal
- */
-function createCheckHomeScreenStatus({ request, ...rest }: CreateCheckHomeScreenStatusOptions) {
+function create({ request, ...rest }: CreateOptions) {
   return withChecksFp((options?: AsyncOptions): TE.TaskEither<RequestError, HomeScreenStatus> => {
     return pipe(
       request('web_app_check_home_screen', 'home_screen_checked', options),
@@ -35,7 +30,7 @@ function createCheckHomeScreenStatus({ request, ...rest }: CreateCheckHomeScreen
  * @param options - additional options.
  * @since Mini Apps v8.0
  */
-export const checkHomeScreenStatusFp = createCheckHomeScreenStatus(pipe(
+export const checkHomeScreenStatusFp = create(pipe(
   sharedFeatureOptions(),
   withVersion,
   withRequest,

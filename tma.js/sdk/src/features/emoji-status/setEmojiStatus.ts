@@ -17,13 +17,10 @@ export interface SetEmojiStatusOptions extends AsyncOptions {
   duration?: number;
 }
 
-interface CreateSetEmojiStatusImplOptions extends SharedFeatureOptions, WithRequest, WithVersion {
+interface CreateOptions extends SharedFeatureOptions, WithRequest, WithVersion {
 }
 
-/**
- * @internal
- */
-function createSetEmojiStatus({ request, ...rest }: CreateSetEmojiStatusImplOptions) {
+function create({ request, ...rest }: CreateOptions) {
   return withChecksFp((
     customEmojiId: string,
     options?: SetEmojiStatusOptions,
@@ -65,7 +62,7 @@ function createSetEmojiStatus({ request, ...rest }: CreateSetEmojiStatusImplOpti
  * );
  * const statusSet = await setEmojiStatus('5361800828313167608');
  */
-export const setEmojiStatusFp = createSetEmojiStatus(pipe(
+export const setEmojiStatusFp = create(pipe(
   sharedFeatureOptions(),
   withRequest,
   withVersion,

@@ -12,18 +12,10 @@ import {
 } from '@/fn-options/sharedFeatureOptions.js';
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
-interface CreateRequestEmojiStatusAccessOptions extends SharedFeatureOptions,
-  WithVersion,
-  WithRequest {
+interface CreateOptions extends SharedFeatureOptions, WithVersion, WithRequest {
 }
 
-/**
- * @internal
- */
-function createRequestEmojiStatusAccess({
-  request,
-  ...rest
-}: CreateRequestEmojiStatusAccessOptions) {
+function create({ request, ...rest }: CreateOptions) {
   return withChecksFp((
     options: AsyncOptions,
   ): TE.TaskEither<RequestError, EmojiStatusAccessRequestedStatus> => {
@@ -31,11 +23,7 @@ function createRequestEmojiStatusAccess({
       request('web_app_request_emoji_status_access', 'emoji_status_access_requested', options),
       TE.map(response => response.status),
     );
-  }, {
-    ...rest,
-    requires: 'web_app_request_emoji_status_access',
-    returns: 'task',
-  });
+  }, { ...rest, requires: 'web_app_request_emoji_status_access', returns: 'task' });
 }
 
 /**
@@ -46,7 +34,7 @@ function createRequestEmojiStatusAccess({
  * @example
  * const status = await requestEmojiStatusAccess();
  */
-export const requestEmojiStatusAccessFp = createRequestEmojiStatusAccess(pipe(
+export const requestEmojiStatusAccessFp = create(pipe(
   sharedFeatureOptions(),
   withVersion,
   withRequest,

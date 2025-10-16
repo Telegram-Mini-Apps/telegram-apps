@@ -2,14 +2,14 @@ import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';
 import { retrieveLaunchParamsFp, on, off, type EventName, EventListener } from '@tma.js/bridge';
 
-import { Viewport, ViewportState } from '@/features/Viewport/Viewport.js';
+import { Viewport, type ViewportState } from '@/features/Viewport/Viewport.js';
 import { sharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import { withStateRestore } from '@/fn-options/withStateRestore.js';
 import { withVersion } from '@/fn-options/withVersion.js';
 import { withRequest } from '@/fn-options/withRequest.js';
 import { withPostEvent } from '@/fn-options/withPostEvent.js';
 
-export function instantiateViewport() {
+function create() {
   const createListeners = <E extends EventName>(event: E) => {
     return {
       on: (listener: EventListener<E>) => {
@@ -52,4 +52,4 @@ export function instantiateViewport() {
   });
 }
 
-export const viewport = instantiateViewport();
+export const viewport = create();

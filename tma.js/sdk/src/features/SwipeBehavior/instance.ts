@@ -5,15 +5,8 @@ import { sharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import { withVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import { withStateRestore } from '@/fn-options/withStateRestore.js';
 
-/**
- * @internal
- */
-export function instantiateSwipeBehavior() {
-  return new SwipeBehavior(pipe(
-    sharedFeatureOptions(),
-    withVersionBasedPostEvent,
-    withStateRestore<SwipeBehaviorState>('swipeBehavior'),
-  ));
-}
-
-export const swipeBehavior = instantiateSwipeBehavior();
+export const swipeBehavior = new SwipeBehavior(pipe(
+  sharedFeatureOptions(),
+  withVersionBasedPostEvent,
+  withStateRestore<SwipeBehaviorState>('swipeBehavior'),
+));

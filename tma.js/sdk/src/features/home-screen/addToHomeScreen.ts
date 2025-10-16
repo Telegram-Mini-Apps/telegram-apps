@@ -11,13 +11,10 @@ import { withVersion, type WithVersion } from '@/fn-options/withVersion.js';
 import { withChecksFp } from '@/wrappers/withChecksFp.js';
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
-interface CreateAddToHomeScreenOptions extends SharedFeatureOptions, WithPostEvent, WithVersion {
+interface CreateOptions extends SharedFeatureOptions, WithPostEvent, WithVersion {
 }
 
-/**
- * @internal
- */
-function createAddToHomeScreen({ postEvent, ...rest }: CreateAddToHomeScreenOptions) {
+function create({ postEvent, ...rest }: CreateOptions) {
   return withChecksFp((): E.Either<PostEventError, void> => {
     return postEvent('web_app_add_to_home_screen');
   }, { ...rest, requires: 'web_app_add_to_home_screen', returns: 'either' });
@@ -27,7 +24,7 @@ function createAddToHomeScreen({ postEvent, ...rest }: CreateAddToHomeScreenOpti
  * Prompts the user to add the Mini App to the home screen.
  * @since Mini Apps v8.0
  */
-export const addToHomeScreenFp = createAddToHomeScreen(pipe(
+export const addToHomeScreenFp = create(pipe(
   sharedFeatureOptions(),
   withVersion,
   withPostEvent,
