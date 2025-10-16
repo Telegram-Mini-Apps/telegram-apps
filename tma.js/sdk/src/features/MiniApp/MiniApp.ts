@@ -262,8 +262,7 @@ export class MiniApp {
         {
           isTma,
           version,
-          isSupported:
-          method,
+          requires: method,
           isMounted: this.isMounted,
           returns: 'either',
           supports: stateKey === 'headerColor'

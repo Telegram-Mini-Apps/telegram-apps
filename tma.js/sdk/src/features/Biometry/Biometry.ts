@@ -106,7 +106,7 @@ export class Biometry {
       restoreState: storage.get,
     });
 
-    const wrapOptions = { version, isSupported: 'web_app_biometry_request_auth', isTma } as const;
+    const wrapOptions = { version, requires: 'web_app_biometry_request_auth', isTma } as const;
     const wrapSupportedEither = createWithChecksFp({
       ...wrapOptions,
       returns: 'either',

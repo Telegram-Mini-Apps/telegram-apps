@@ -40,11 +40,7 @@ export class SwipeBehavior {
       restoreState: storage.get,
     });
 
-    const wrapOptions = {
-      isSupported: 'web_app_setup_swipe_behavior',
-      isTma,
-      version,
-    } as const;
+    const wrapOptions = { requires: 'web_app_setup_swipe_behavior', isTma, version } as const;
     const wrapSupportedPlain = createWithChecksFp({
       ...wrapOptions,
       returns: 'plain',

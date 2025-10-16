@@ -81,7 +81,7 @@ export class Button<S extends object, M extends MethodName> {
       restoreState: storage.get,
     });
 
-    const wrapOptions = { version, isSupported: method, isTma };
+    const wrapOptions = { version, requires: method, isTma };
     const wrapSupportedPlain = createWithChecksFp({
       ...wrapOptions,
       returns: 'plain',

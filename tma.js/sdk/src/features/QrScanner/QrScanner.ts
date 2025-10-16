@@ -71,11 +71,7 @@ export class QrScanner {
     isTma,
     postEvent,
   }: QrScannerOptions) {
-    const wrapOptions = {
-      version,
-      isSupported: 'web_app_open_scan_qr_popup',
-      isTma,
-    } as const;
+    const wrapOptions = { version, requires: 'web_app_open_scan_qr_popup', isTma } as const;
     const wrapSupportedEither = createWithChecksFp({ ...wrapOptions, returns: 'either' });
     const wrapSupportedTask = createWithChecksFp({ ...wrapOptions, returns: 'task' });
 

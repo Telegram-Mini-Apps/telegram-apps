@@ -40,7 +40,7 @@ export class ClosingBehavior {
       isPageReload,
     });
 
-    const wrapOptions = { isSupported: 'web_app_setup_closing_behavior', isTma } as const;
+    const wrapOptions = { requires: 'web_app_setup_closing_behavior', isTma } as const;
     const wrapSupportedPlain = createWithChecksFp({
       ...wrapOptions,
       returns: 'plain',
