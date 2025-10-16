@@ -10,6 +10,8 @@ import type {
 import { invokeCustomMethod } from '@/globals/invokeCustomMethod.js';
 import { createFnOption } from '@/fn-options/createFnOption.js';
 
+export type { InvokeCustomMethodError };
+
 export interface InvokeCustomMethodNoRequestIdFn {
   <M extends CustomMethodName>(
     this: void,
