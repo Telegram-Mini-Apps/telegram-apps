@@ -13,6 +13,7 @@ import { pipe } from 'fp-ts/function';
 
 import { version } from '@/globals/version.js';
 import { postEventFpSignal, postEventFp, postEvent } from '@/globals/post-event.js';
+import { isInlineMode } from '@/globals/inline-mode.js';
 
 export interface InitOptions {
   /**
@@ -30,6 +31,11 @@ export interface InitOptions {
    * @default Will be calculated based on the launch parameters' tgWebAppVersion field.
    */
   version?: Version;
+  /**
+   * True if the application is launched in inline mode.
+   * @default Will be calculated based on the launch parameters' tgWebAppBotInline field.
+   */
+  isInlineMode?: boolean;
 }
 
 /**
@@ -42,14 +48,17 @@ export interface InitOptions {
 export function initFp(
   options: InitOptions = {},
 ): E.Either<RetrieveLaunchParamsError | PostEventError, VoidFunction> {
-  const { version: optionsVersion } = options;
-  if (optionsVersion) {
+  const { version: optionsVersion, isInlineMode: optionsInlineMode } = options;
+
+  if (optionsVersion && typeof optionsInlineMode === 'boolean') {
     version.set(optionsVersion);
+    isInlineMode.set(optionsInlineMode);
   } else {
     const error = pipe(retrieveLaunchParamsFp(), E.matchW(
       err => err,
       lp => {
         version.set(lp.tgWebAppVersion);
+        isInlineMode.set(!!lp.tgWebAppBotInline);
       },
     ));
     if (error) {
