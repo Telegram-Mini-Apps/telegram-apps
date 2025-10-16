@@ -2,14 +2,21 @@ import {
   type BaseIssue,
   type BaseSchema,
   type InferOutput,
-  parse,
+  parse, pipe,
+  type SchemaWithPipe,
+  string,
+  type StringSchema,
   transform,
   type TransformAction,
 } from 'valibot';
 
 type RequiredSchema = BaseSchema<any, any, BaseIssue<any>>;
 
-export type TransformJsonToSchemaAction = TransformAction<string, unknown>;
+export type TransformJsonToSchemaAction<Schema extends RequiredSchema> = SchemaWithPipe<readonly [
+  StringSchema<any>,
+  TransformAction<string, unknown>,
+  Schema,
+]>;
 
 export type TransformQueryToSchemaAction<Schema extends RequiredSchema> =
   TransformAction<string | URLSearchParams, InferOutput<Schema>>;
@@ -38,6 +45,8 @@ export function transformQueryToSchema<Schema extends RequiredSchema>(
 /**
  * @returns A transformer applying `JSON.parse` to the input.
  */
-export function transformJsonToSchema(): TransformJsonToSchemaAction {
-  return transform(JSON.parse);
+export function transformJsonToSchema<Schema extends RequiredSchema>(
+  schema: Schema,
+): TransformJsonToSchemaAction<Schema> {
+  return pipe(string(), transform(JSON.parse), schema);
 }
