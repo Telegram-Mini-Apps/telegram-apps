@@ -7,7 +7,7 @@ import {
 } from '@tma.js/bridge';
 import * as TE from 'fp-ts/TaskEither';
 
-import { createRequestId } from '@/globals/request-id.js';
+import { createRequestId } from '@/globals/createRequestId.js';
 import { postEventFp } from '@/globals/post-event.js';
 
 /**
