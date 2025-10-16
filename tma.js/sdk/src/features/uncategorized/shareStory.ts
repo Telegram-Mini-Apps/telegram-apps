@@ -50,7 +50,7 @@ function create({ postEvent, ...rest }: CreateOptions) {
       media_url: mediaUrl,
       widget_link: options.widgetLink,
     });
-  }, { ...rest, isSupported: 'web_app_share_to_story', returns: 'either' });
+  }, { ...rest, requires: 'web_app_share_to_story', returns: 'either' });
 }
 
 /**

@@ -26,7 +26,7 @@ function createCheckHomeScreenStatus({ request, ...rest }: CreateCheckHomeScreen
       request('web_app_check_home_screen', 'home_screen_checked', options),
       TE.map(response => response.status || 'unknown'),
     );
-  }, { ...rest, isSupported: 'web_app_check_home_screen', returns: 'task' });
+  }, { ...rest, requires: 'web_app_check_home_screen', returns: 'task' });
 }
 
 /**

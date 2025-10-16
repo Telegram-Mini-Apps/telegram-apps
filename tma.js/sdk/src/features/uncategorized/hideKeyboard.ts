@@ -19,7 +19,7 @@ export type HideKeyboardError = PostEventError;
 function create({ postEvent, ...rest }: CreateOptions) {
   return withChecksFp((): E.Either<HideKeyboardError, void> => {
     return postEvent('web_app_hide_keyboard');
-  }, { ...rest, returns: 'either', isSupported: 'web_app_hide_keyboard' });
+  }, { ...rest, returns: 'either', requires: 'web_app_hide_keyboard' });
 }
 
 /**

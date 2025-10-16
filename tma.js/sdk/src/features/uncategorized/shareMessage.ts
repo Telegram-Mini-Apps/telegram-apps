@@ -39,7 +39,7 @@ function create({ request, ...rest }: CreateOptions) {
         return TE.right(undefined);
       }),
     );
-  }, { ...rest, isSupported: 'web_app_send_prepared_message', returns: 'task' });
+  }, { ...rest, requires: 'web_app_send_prepared_message', returns: 'task' });
 }
 
 /**

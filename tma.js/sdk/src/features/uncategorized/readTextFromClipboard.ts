@@ -32,7 +32,7 @@ function create({ request, createRequestId, ...rest }: CreateOptions) {
       }),
       TE.map(({ data = null }) => data),
     );
-  }, { ...rest, isSupported: 'web_app_read_text_from_clipboard', returns: 'task' });
+  }, { ...rest, requires: 'web_app_read_text_from_clipboard', returns: 'task' });
 }
 
 /**

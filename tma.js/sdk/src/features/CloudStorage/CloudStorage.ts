@@ -26,13 +26,12 @@ export class CloudStorage {
   constructor({ version, isTma, invokeCustomMethod }: CloudStorageOptions) {
     const wrapSupportedTask = createWithChecksFp({
       version,
-      isSupported: 'web_app_invoke_custom_method',
+      requires: 'web_app_invoke_custom_method',
       isTma,
       returns: 'task',
     });
 
     this.isSupported = createIsSupportedSignal('web_app_invoke_custom_method', version);
-
     this.deleteItemFp = wrapSupportedTask((keyOrKeys, options) => {
       const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
       return pipe(
@@ -42,14 +41,12 @@ export class CloudStorage {
         TE.map(() => undefined),
       );
     });
-
     this.getItemFp = wrapSupportedTask((key, options) => {
       return pipe(
         this.getItemsFp([key], options),
         TE.map(values => values[key] || ''),
       );
     });
-
     this.getItemsFp = wrapSupportedTask((keys, options) => {
       return pipe(
         keys.length ? invokeCustomMethod('getStorageValues', { keys }, options) : TE.right({}),
@@ -65,21 +62,18 @@ export class CloudStorage {
         }),
       );
     });
-
     this.getKeysFp = wrapSupportedTask(options => {
       return pipe(
         invokeCustomMethod('getStorageKeys', {}, options),
         TE.map(data => parse(array(string()), data)),
       );
     });
-
     this.setItemFp = wrapSupportedTask((key, value, options) => {
       return pipe(
         invokeCustomMethod('saveStorageValue', { key, value }, options),
         TE.map(() => undefined),
       );
     });
-
     this.clearFp = wrapSupportedTask(options => {
       return pipe(this.getKeysFp(options), TE.chain(this.deleteItemFp));
     });

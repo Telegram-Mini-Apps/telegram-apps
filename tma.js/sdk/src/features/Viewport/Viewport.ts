@@ -224,7 +224,7 @@ export class Viewport<EViewportStable, EFullscreen> {
     });
     const wrapFullscreenTask = createWithChecksFp({
       isTma,
-      isSupported: 'web_app_request_fullscreen',
+      requires: 'web_app_request_fullscreen',
       version,
       returns: 'task',
     });

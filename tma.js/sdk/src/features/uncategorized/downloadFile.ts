@@ -36,7 +36,7 @@ function createDownloadFile({ request, ...rest }: CreateDownloadFileOptions) {
           : TE.left(new AccessDeniedError('User denied the action'));
       }),
     );
-  }, { ...rest, isSupported: 'web_app_request_file_download', returns: 'task' });
+  }, { ...rest, requires: 'web_app_request_file_download', returns: 'task' });
 }
 
 /**

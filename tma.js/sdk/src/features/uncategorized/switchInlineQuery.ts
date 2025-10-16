@@ -31,7 +31,7 @@ function create({ isInlineMode, postEvent, ...rest }: CreateOptions) {
     });
   }, {
     ...rest,
-    isSupported: {
+    requires: {
       every: ['web_app_switch_inline_query', () => {
         return access(isInlineMode)
           ? undefined

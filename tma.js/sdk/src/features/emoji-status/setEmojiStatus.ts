@@ -44,7 +44,7 @@ function createSetEmojiStatus({ request, ...rest }: CreateSetEmojiStatusImplOpti
     );
   }, {
     ...rest,
-    isSupported: 'web_app_set_emoji_status',
+    requires: 'web_app_set_emoji_status',
     returns: 'task',
   });
 }

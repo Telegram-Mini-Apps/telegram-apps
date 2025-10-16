@@ -20,7 +20,7 @@ interface CreateAddToHomeScreenOptions extends SharedFeatureOptions, WithPostEve
 function createAddToHomeScreen({ postEvent, ...rest }: CreateAddToHomeScreenOptions) {
   return withChecksFp((): E.Either<PostEventError, void> => {
     return postEvent('web_app_add_to_home_screen');
-  }, { ...rest, isSupported: 'web_app_add_to_home_screen', returns: 'either' });
+  }, { ...rest, requires: 'web_app_add_to_home_screen', returns: 'either' });
 }
 
 /**

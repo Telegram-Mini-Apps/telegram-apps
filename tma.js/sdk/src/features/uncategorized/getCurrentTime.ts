@@ -36,7 +36,7 @@ function create({ invokeCustomMethod, ...rest }: CreateOptions) {
           : TE.left(new ValidationError(response, parsed.issues));
       }),
     );
-  }, { ...rest, isSupported: 'web_app_invoke_custom_method', returns: 'task' });
+  }, { ...rest, requires: 'web_app_invoke_custom_method', returns: 'task' });
 }
 
 /**

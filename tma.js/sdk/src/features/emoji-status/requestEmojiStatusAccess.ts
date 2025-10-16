@@ -33,7 +33,7 @@ function createRequestEmojiStatusAccess({
     );
   }, {
     ...rest,
-    isSupported: 'web_app_request_emoji_status_access',
+    requires: 'web_app_request_emoji_status_access',
     returns: 'task',
   });
 }

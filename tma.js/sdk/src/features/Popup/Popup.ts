@@ -30,7 +30,7 @@ export class Popup {
     const wrapSupportedTask = createWithChecksFp({
       version,
       isTma,
-      isSupported: 'web_app_open_popup',
+      requires: 'web_app_open_popup',
       returns: 'task',
     });
 

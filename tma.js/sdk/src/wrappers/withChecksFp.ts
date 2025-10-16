@@ -26,29 +26,39 @@ import { access } from '@/helpers/access.js';
 type IfReturnsTask<Fn extends AnyFnAnyEither, A, B> =
   ReturnType<Fn> extends TE.TaskEither<any, any> ? A : B;
 
-type OptionsBasedSupported<O extends WithChecksOptions<any>> = O extends { isSupported: any }
+type OptionsBasedRequires<O extends WithChecksOptions<any>> = O extends { requires: any }
   ? true : false;
 
 type OptionsBasedSupports<O extends WithChecksOptions<any>> = O extends { supports: any }
   ? Extract<keyof O['supports'], string> : never;
 
+type OptionsBasedFn<Opts extends WithChecksOptions<any>> = (...args: any[]) => (
+  Opts['returns'] extends 'plain'
+    ? any
+    : Opts['returns'] extends 'promise'
+      ? PromiseLike<any>
+      : Opts['returns'] extends 'task'
+        ? TE.TaskEither<any, any>
+        : E.Either<any, any>
+);
+
 /**
  * @returns Error text if something is wrong.
  */
-export type CustomSupportValidatorFn = () => string | undefined;
+export type CustomSupportFn = () => string | undefined;
 
-export type IsSupportedType =
+export type Require =
   | MethodName
-  | CustomSupportValidatorFn
-  | { every: (MethodName | CustomSupportValidatorFn)[] }
-  | { some: (MethodName | CustomSupportValidatorFn)[] };
+  | CustomSupportFn
+  | { every: (MethodName | CustomSupportFn)[] }
+  | { some: (MethodName | CustomSupportFn)[] };
 
 /**
  * A map where the key is a method name with versioned parameters, and the value is a tuple
  * containing the method and parameter names. The third tuple value is a function accepting
  * the wrapped function arguments and returning true if support check must be applied.
  */
-export type Supports<Args extends any[]> = {
+export type SupportsMap<Args extends any[]> = {
   [OptionName: string]: {
     [M in MethodNameWithVersionedParams]: {
       /**
@@ -184,9 +194,10 @@ export interface WithChecksOptions<Fn extends AnyFn> {
    */
   isMounting?: () => boolean;
   /**
-   * Value determining if the function is supported by the current environment.
+   * A value determining the function requirements. This will enable additional checks for
+   * the function before being called.
    */
-  isSupported?: IsSupportedType;
+  requires?: Require;
   /**
    * A signal to retrieve the current Telegram Mini Apps version or the value itself.
    */
@@ -196,7 +207,7 @@ export interface WithChecksOptions<Fn extends AnyFn> {
    * containing the method and parameter names. The third tuple value is a function accepting
    * the wrapped function arguments and returning true if support check must be applied.
    */
-  supports?: Supports<Parameters<Fn>>;
+  supports?: SupportsMap<Parameters<Fn>>;
   /**
    * A signal to retrieve the current Telegram Mini Apps version or the value itself.
    */
@@ -214,12 +225,12 @@ export interface WithChecksOptions<Fn extends AnyFn> {
 export function withChecksFp<Fn extends AnyFn, O extends WithChecksOptions<Fn>>(
   fn: Fn,
   options: O,
-): WithChecksFp<Fn, OptionsBasedSupported<O>, OptionsBasedSupports<O>> {
+): WithChecksFp<Fn, OptionsBasedRequires<O>, OptionsBasedSupports<O>> {
   const version = computed(() => access(options.version) || '100');
   const isTma = computed(() => access(options.isTma));
 
   // Simplify the isSupported value to work with an array of validators or a single object.
-  const { isSupported: optionsIsSupported } = options;
+  const { requires: optionsIsSupported } = options;
   const isSupportedSimplified = optionsIsSupported
     ? typeof optionsIsSupported === 'object'
       ? optionsIsSupported
@@ -340,20 +351,10 @@ export function withChecksFp<Fn extends AnyFn, O extends WithChecksOptions<Fn>>(
   );
 }
 
-type FnOptionsBased<Opts extends WithChecksOptions<any>> = (...args: any[]) => (
-  Opts['returns'] extends 'plain'
-    ? any
-    : Opts['returns'] extends 'promise'
-      ? PromiseLike<any>
-      : Opts['returns'] extends 'task'
-        ? TE.TaskEither<any, any>
-        : E.Either<any, any>
-);
-
 export function createWithChecksFp<O extends WithChecksOptions<any>>(options: O) {
-  return <Fn extends FnOptionsBased<O>>(fn: Fn): WithChecksFp<
+  return <Fn extends OptionsBasedFn<O>>(fn: Fn): WithChecksFp<
     Fn,
-    O extends { isSupported: any } ? true : false,
-    O extends { supports: any } ? O['supports'] : never
+    OptionsBasedRequires<O>,
+    OptionsBasedSupports<O>
   > => withChecksFp(fn, options);
 }

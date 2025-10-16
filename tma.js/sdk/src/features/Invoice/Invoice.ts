@@ -26,7 +26,7 @@ export class Invoice {
     const wrapSupportedTask = createWithChecksFp({
       version,
       isTma,
-      isSupported: 'web_app_open_invoice',
+      requires: 'web_app_open_invoice',
       returns: 'task',
     });
 

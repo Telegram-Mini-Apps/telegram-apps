@@ -24,7 +24,7 @@ export class HapticFeedback {
   constructor({ postEvent, isTma, version }: HapticFeedbackOptions) {
     const HAPTIC_METHOD_NAME = 'web_app_trigger_haptic_feedback';
     const wrapSupported = createWithChecksFp({
-      isSupported: HAPTIC_METHOD_NAME,
+      requires: HAPTIC_METHOD_NAME,
       isTma,
       version,
       returns: 'plain',
