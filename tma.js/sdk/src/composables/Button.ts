@@ -10,12 +10,13 @@ import {
   createWithChecksFp,
 } from '@/wrappers/withChecksFp.js';
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
-import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { removeUndefined } from '@/helpers/removeUndefined.js';
+import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
+import type { WithVersion } from '@/fn-options/withVersion.js';
 
 type ButtonEither = E.Either<PostEventError, void>;
 
@@ -26,7 +27,8 @@ type BoolFields<S> = {
 export interface ButtonOptions<S, M extends MethodName>
   extends SharedFeatureOptions,
   WithStateRestore<S>,
-  WithVersionBasedPostEvent {
+  WithPostEvent,
+  WithVersion {
   /**
    * The initial button state.
    */
