@@ -7,14 +7,15 @@ import * as E from 'fp-ts/Either';
 import type { PostEventError } from '@tma.js/bridge';
 
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import type { WithVersion } from '@/fn-options/withVersion.js';
+import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 
 type HapticFeedbackEither = E.Either<PostEventError, void>;
 
-export interface HapticFeedbackOptions extends WithVersionBasedPostEvent, SharedFeatureOptions {
+export interface HapticFeedbackOptions extends WithVersion, WithPostEvent, SharedFeatureOptions {
 }
 
 /**

@@ -2,8 +2,9 @@ import type { Maybe } from '@tma.js/toolkit';
 
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import type { WithRequest } from '@/fn-options/withRequest.js';
-import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import type { WithVersion } from '@/fn-options/withVersion.js';
+import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 
 export interface LocationManagerRequestLocationResponse {
   /**
@@ -66,6 +67,7 @@ export interface LocationManagerState {
 
 export interface LocationManagerOptions extends WithStateRestore<LocationManagerState>,
   WithRequest,
-  WithVersionBasedPostEvent,
+  WithVersion,
+  WithPostEvent,
   SharedFeatureOptions {
 }

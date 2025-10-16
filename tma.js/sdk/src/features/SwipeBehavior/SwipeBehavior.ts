@@ -9,8 +9,9 @@ import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
-import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import type { WithVersion } from '@/fn-options/withVersion.js';
+import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 
 export interface SwipeBehaviorState {
   isVerticalEnabled: boolean;
@@ -18,7 +19,8 @@ export interface SwipeBehaviorState {
 
 export interface SwipeBehaviorOptions
   extends WithStateRestore<SwipeBehaviorState>,
-  WithVersionBasedPostEvent,
+  WithVersion,
+  WithPostEvent,
   SharedFeatureOptions {
 }
 

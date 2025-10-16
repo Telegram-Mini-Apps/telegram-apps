@@ -14,14 +14,13 @@ import {
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { AsyncOptions } from '@/types.js';
-import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import { ConcurrentCallError } from '@/errors.js';
 import { betterTaskEither, type BetterTaskError } from '@/helpers/betterTaskEither.js';
+import type { WithVersion } from '@/fn-options/withVersion.js';
+import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 
-export interface QrScannerOptions
-  extends WithVersionBasedPostEvent,
-  SharedFeatureOptions {
+export interface QrScannerOptions extends WithVersion, WithPostEvent, SharedFeatureOptions {
   /**
    * A function to add a listener to the event determining if the QR scanner
    * was closed.
