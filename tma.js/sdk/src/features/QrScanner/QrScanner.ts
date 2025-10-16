@@ -13,7 +13,7 @@ import {
 } from '@/wrappers/withChecksFp.js';
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type { RequestOptionsNoCapture } from '@/types.js';
+import type { AsyncOptions } from '@/types.js';
 import type { WithVersionBasedPostEvent } from '@/fn-options/withVersionBasedPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import { ConcurrentCallError } from '@/errors.js';
@@ -37,7 +37,7 @@ export interface QrScannerOptions
   onTextReceived: (listener: (data: string) => void) => VoidFunction;
 }
 
-interface SharedOptions extends RequestOptionsNoCapture {
+interface SharedOptions extends AsyncOptions {
   /**
    * Title to be displayed in the scanner.
    */

@@ -1,7 +1,7 @@
 import type { BiometryType, EventListener } from '@tma.js/bridge';
 import type { Maybe } from '@tma.js/toolkit';
 
-import type { RequestOptionsNoCapture } from '@/types.js';
+import type { AsyncOptions } from '@/types.js';
 import type { WithVersion } from '@/fn-options/withVersion.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import type { WithRequest } from '@/fn-options/withRequest.js';
@@ -48,7 +48,7 @@ export interface BiometryState {
   token?: string;
 }
 
-export interface BiometryAuthenticateOptions extends RequestOptionsNoCapture {
+export interface BiometryAuthenticateOptions extends AsyncOptions {
   /**
    * Reason to request biometry data. Should be at least 1 symbol length, but not more than
    * 128 symbols.
@@ -56,7 +56,7 @@ export interface BiometryAuthenticateOptions extends RequestOptionsNoCapture {
   reason?: Maybe<string>;
 }
 
-export interface BiometryUpdateTokenOptions extends RequestOptionsNoCapture {
+export interface BiometryUpdateTokenOptions extends AsyncOptions {
   /**
    * Optional string field, containing the reason why the bot is asking to authenticate using biometrics (1-128 chars, used in the prompt).
    */
@@ -68,7 +68,7 @@ export interface BiometryUpdateTokenOptions extends RequestOptionsNoCapture {
   token?: Maybe<string>;
 }
 
-export interface BiometryRequestAccessOptions extends RequestOptionsNoCapture {
+export interface BiometryRequestAccessOptions extends AsyncOptions {
   /**
    * The text to be displayed to a user in the popup describing why the bot needs access to
    * biometrics, 0-128 characters.

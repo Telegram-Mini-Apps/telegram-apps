@@ -6,7 +6,7 @@ import { pipe } from 'fp-ts/function';
 
 import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type { RequestOptionsNoCapture } from '@/types.js';
+import type { AsyncOptions } from '@/types.js';
 import { ConcurrentCallError, InvalidArgumentsError } from '@/errors.js';
 import type { WithVersion } from '@/fn-options/withVersion.js';
 import type { WithRequest } from '@/fn-options/withRequest.js';
@@ -100,7 +100,7 @@ export class Invoice {
    * const status = await invoice.openSlug('kJNFS331');
    */
   readonly openSlugFp: WithChecksFp<
-    (slug: string, options?: RequestOptionsNoCapture) => InvoiceTask<never, InvoiceStatus>,
+    (slug: string, options?: AsyncOptions) => InvoiceTask<never, InvoiceStatus>,
     true
   >;
 
@@ -108,7 +108,7 @@ export class Invoice {
    * @see openSlugFp
    */
   readonly openSlug: WithChecks<
-    (slug: string, options?: RequestOptionsNoCapture) => BetterPromise<InvoiceStatus>,
+    (slug: string, options?: AsyncOptions) => BetterPromise<InvoiceStatus>,
     true
   >;
 
@@ -121,7 +121,7 @@ export class Invoice {
    * const status = await invoice.openUrl('https://t.me/$kJNFS331');
    */
   readonly openUrlFp: WithChecksFp<
-    (url: string, options?: RequestOptionsNoCapture) => (
+    (url: string, options?: AsyncOptions) => (
       InvoiceTask<InvalidArgumentsError, InvoiceStatus>
     ),
     true
@@ -131,7 +131,7 @@ export class Invoice {
    * @see openUrlFp
    */
   readonly openUrl: WithChecks<
-    (url: string, options?: RequestOptionsNoCapture) => BetterPromise<InvoiceStatus>,
+    (url: string, options?: AsyncOptions) => BetterPromise<InvoiceStatus>,
     true
   >;
 }

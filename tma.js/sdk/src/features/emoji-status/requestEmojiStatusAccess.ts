@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/function';
 import * as TE from 'fp-ts/TaskEither';
 import type { EmojiStatusAccessRequestedStatus, RequestError } from '@tma.js/bridge';
 
-import type { RequestOptionsNoCapture } from '@/types.js';
+import type { AsyncOptions } from '@/types.js';
 import { withVersion, type WithVersion } from '@/fn-options/withVersion.js';
 import { withRequest, type WithRequest } from '@/fn-options/withRequest.js';
 import { withChecksFp } from '@/wrappers/withChecksFp.js';
@@ -25,7 +25,7 @@ function createRequestEmojiStatusAccess({
   ...rest
 }: CreateRequestEmojiStatusAccessOptions) {
   return withChecksFp((
-    options: RequestOptionsNoCapture,
+    options: AsyncOptions,
   ): TE.TaskEither<RequestError, EmojiStatusAccessRequestedStatus> => {
     return pipe(
       request('web_app_request_emoji_status_access', 'emoji_status_access_requested', options),

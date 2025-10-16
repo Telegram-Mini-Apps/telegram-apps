@@ -2,7 +2,7 @@ import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 import { RequestError } from '@tma.js/bridge';
 
-import type { RequestOptionsNoCapture } from '@/types.js';
+import type { AsyncOptions } from '@/types.js';
 import { SetEmojiStatusError } from '@/errors.js';
 import { withChecksFp } from '@/wrappers/withChecksFp.js';
 import {
@@ -13,7 +13,7 @@ import { withRequest, type WithRequest } from '@/fn-options/withRequest.js';
 import { withVersion, type WithVersion } from '@/fn-options/withVersion.js';
 import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
 
-export interface SetEmojiStatusOptions extends RequestOptionsNoCapture {
+export interface SetEmojiStatusOptions extends AsyncOptions {
   duration?: number;
 }
 
