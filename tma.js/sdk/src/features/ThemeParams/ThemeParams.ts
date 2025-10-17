@@ -4,7 +4,11 @@ import { snakeToKebab } from '@tma.js/toolkit';
 import type { EventListener } from '@tma.js/bridge';
 import * as E from 'fp-ts/Either';
 
-import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/with-checks/withChecksFp.js';
+import {
+  createWithChecksFp,
+  type WithChecks,
+  type WithChecksFp,
+} from '@/with-checks/withChecksFp.js';
 import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
@@ -13,12 +17,12 @@ import { deleteCssVar, setCssVar } from '@/helpers/css-vars.js';
 import { isColorDark } from '@/helpers/isColorDark.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
+import type { MaybeAccessor } from '@/types.js';
+import { access } from '@/helpers/access.js';
 
 export type ThemeParamsState = ThemeParamsType;
 
-type RetrieveThemeParams<E> = () => E.Either<E, ThemeParamsType>;
-
-export interface ThemeParamsOptions<Err> extends WithStateRestore<ThemeParamsState>,
+export interface ThemeParamsOptions extends WithStateRestore<ThemeParamsState>,
   SharedFeatureOptions {
   /**
    * Removes a theme change listener.
@@ -32,9 +36,9 @@ export interface ThemeParamsOptions<Err> extends WithStateRestore<ThemeParamsSta
    */
   onChange: (listener: EventListener<'theme_changed'>) => void;
   /**
-   * Retrieves theme parameters from the current environment.
+   * Theme parameters initial state.
    */
-  retrieve: RetrieveThemeParams<Err>;
+  initialState: MaybeAccessor<ThemeParamsType>;
 }
 
 export interface ThemeParamsGetCssVarNameFn {
@@ -45,15 +49,15 @@ export interface ThemeParamsGetCssVarNameFn {
   (property: Extract<keyof ThemeParamsType, string>): string;
 }
 
-export class ThemeParams<Err> {
+export class ThemeParams {
   constructor({
-    retrieve,
+    initialState,
     onChange,
     offChange,
     isTma,
     storage,
     isPageReload,
-  }: ThemeParamsOptions<Err>) {
+  }: ThemeParamsOptions) {
     const stateful = new Stateful<ThemeParamsState>({
       initialState: {},
       onChange: storage.set,
@@ -61,8 +65,8 @@ export class ThemeParams<Err> {
     const listener: EventListener<'theme_changed'> = event => {
       stateful.setState(event.theme_params);
     };
-    const mountable = new Mountable({
-      initialState: retrieve,
+    const mountable = new Mountable<ThemeParamsType>({
+      initialState: () => E.right(access(initialState)),
       isPageReload,
       onMounted(state) {
         stateful.setState(state);
@@ -74,9 +78,9 @@ export class ThemeParams<Err> {
       restoreState: storage.get,
     });
 
-    const wrapOptions = { isTma, returns: 'plain' } as const;
-    const wrapSupportedPlain = createWithChecksFp(wrapOptions);
-    const wrapMountedPlain = createWithChecksFp({
+    const wrapOptions = { isTma, returns: 'either' } as const;
+    const wrapSupportedEither = createWithChecksFp(wrapOptions);
+    const wrapMountedEither = createWithChecksFp({
       ...wrapOptions,
       isMounted: mountable.isMounted,
     });
@@ -101,9 +105,9 @@ export class ThemeParams<Err> {
     // Other public signals.
     this.state = stateful.state;
     this.isMounted = mountable.isMounted;
-    this.bindCssVarsFp = wrapMountedPlain(getCSSVarName => {
+    this.bindCssVarsFp = wrapMountedEither(getCSSVarName => {
       if (this._isCssVarsBound()) {
-        throw new CSSVarsBoundError();
+        return E.left(new CSSVarsBoundError());
       }
       getCSSVarName ||= prop => `--tg-theme-${snakeToKebab(prop)}`;
 
@@ -123,20 +127,18 @@ export class ThemeParams<Err> {
       stateful.state.sub(actualize);
       this._isCssVarsBound.set(true);
 
-      return () => {
+      return E.right(() => {
         forEachEntry(deleteCssVar);
         stateful.state.unsub(actualize);
         this._isCssVarsBound.set(false);
-      };
+      });
     });
-    this.mountFp = wrapSupportedPlain(mountable.mount);
+    this.mountFp = wrapSupportedEither(mountable.mount);
     this.unmount = mountable.unmount;
 
     this.bindCssVars = throwifyWithChecksFp(this.bindCssVarsFp);
     this.mount = throwifyWithChecksFp(this.mountFp);
   }
-
-  private readonly _isCssVarsBound = signal(false);
 
   //#region Colors.
   /**
@@ -191,35 +193,13 @@ export class ThemeParams<Err> {
   readonly textColor: Computed<RGB | undefined>;
   //#endregion
 
-  //#region Other public signals.
-
-  /**
-   * Complete component state.
-   */
-  readonly state: Computed<ThemeParamsType>;
+  //#region CSS variables.
+  private readonly _isCssVarsBound = signal(false);
 
   /**
    * True if CSS variables are currently bound.
    */
   readonly isCssVarsBound = computed(this._isCssVarsBound);
-
-  /**
-   * Signal indicating if the component is currently mounted.
-   */
-  readonly isMounted: Computed<boolean>;
-
-  /**
-   * @returns True if the current color scheme is recognized as dark.
-   * This value is calculated based on the current theme's background color.
-   */
-  readonly isDark = computed(() => {
-    const color = this.bgColor();
-    return !color || isColorDark(color);
-  });
-
-  //#endregion
-
-  //#region Methods.
 
   /**
    * Creates CSS variables connected with the current theme parameters.
@@ -241,7 +221,7 @@ export class ThemeParams<Err> {
    * themeParams.bindCssVars(key => `--my-prefix-${key}`);
    */
   readonly bindCssVarsFp: WithChecksFp<
-    (getCSSVarName?: ThemeParamsGetCssVarNameFn) => VoidFunction,
+    (getCSSVarName?: ThemeParamsGetCssVarNameFn) => E.Either<CSSVarsBoundError, VoidFunction>,
     false
   >;
 
@@ -252,11 +232,34 @@ export class ThemeParams<Err> {
     (getCSSVarName?: ThemeParamsGetCssVarNameFn) => VoidFunction,
     false
   >;
+  //#endregion
+
+  //#region Other public signals.
+  /**
+   * Complete component state.
+   */
+  readonly state: Computed<ThemeParamsType>;
+
+  /**
+   * @returns True if the current color scheme is recognized as dark.
+   * This value is calculated based on the current theme's background color.
+   */
+  readonly isDark = computed(() => {
+    const color = this.bgColor();
+    return !color || isColorDark(color);
+  });
+  //#endregion
+
+  //#region Mounting.
+  /**
+   * Signal indicating if the component is currently mounted.
+   */
+  readonly isMounted: Computed<boolean>;
 
   /**
    * Mounts the component restoring its state.
    */
-  readonly mountFp: WithChecksFp<() => E.Either<Err, void>, false>;
+  readonly mountFp: WithChecksFp<() => E.Either<never, void>, false>;
 
   /**
    * @see mountFp
@@ -267,6 +270,5 @@ export class ThemeParams<Err> {
    * Unmounts the component.
    */
   readonly unmount: () => void;
-
   //#endregion
 }
