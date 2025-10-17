@@ -8,8 +8,8 @@ import type { PostEventError } from '@tma.js/bridge';
 
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
-import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/with-checks/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 import type { WithVersion } from '@/fn-options/withVersion.js';
 import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 

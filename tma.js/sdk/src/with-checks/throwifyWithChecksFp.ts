@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/function';
 import * as O from 'fp-ts/Option';
 import { throwifyFpFn, throwifyAnyEither, type AnyFn } from '@tma.js/toolkit';
 
-import type { WithChecksFp, WithChecks } from '@/wrappers/withChecksFp.js';
+import type { WithChecksFp, WithChecks } from '@/with-checks/withChecksFp.js';
 
 export function throwifyWithChecksFp<
   Fn extends AnyFn,

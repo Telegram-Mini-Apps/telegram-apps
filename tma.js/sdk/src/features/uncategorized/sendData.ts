@@ -7,9 +7,9 @@ import {
   type SharedFeatureOptions,
 } from '@/fn-options/sharedFeatureOptions.js';
 import { withPostEvent, type WithPostEvent } from '@/fn-options/withPostEvent.js';
-import { withChecksFp } from '@/wrappers/withChecksFp.js';
+import { withChecksFp } from '@/with-checks/withChecksFp.js';
 import { InvalidArgumentsError } from '@/errors.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 
 interface CreateOptions extends SharedFeatureOptions, WithPostEvent {
 }

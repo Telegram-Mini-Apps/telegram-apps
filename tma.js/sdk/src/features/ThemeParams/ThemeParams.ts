@@ -4,8 +4,8 @@ import { snakeToKebab } from '@tma.js/toolkit';
 import type { EventListener } from '@tma.js/bridge';
 import * as E from 'fp-ts/Either';
 
-import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/with-checks/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { CSSVarsBoundError } from '@/errors.js';

@@ -2,7 +2,7 @@ import { date, integer, number, transform, pipe as valiPipe, safeParse } from 'v
 import { pipe } from 'fp-ts/function';
 import * as TE from 'fp-ts/TaskEither';
 
-import { withChecksFp } from '@/wrappers/withChecksFp.js';
+import { withChecksFp } from '@/with-checks/withChecksFp.js';
 import {
   type SharedFeatureOptions,
   sharedFeatureOptions,
@@ -14,7 +14,7 @@ import {
 } from '@/fn-options/withInvokeCustomMethod.js';
 import { type WithVersion, withVersion } from '@/fn-options/withVersion.js';
 import type { AsyncOptions } from '@/types.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 import { ValidationError } from '@/errors.js';
 
 interface CreateOptions extends SharedFeatureOptions, WithInvokeCustomMethod, WithVersion {

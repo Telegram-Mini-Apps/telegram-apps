@@ -1,15 +1,16 @@
 import type * as E from 'fp-ts/Either';
 
-import { withChecksFp } from '@/wrappers/withChecksFp.js';
+import { withChecksFp } from '@/with-checks/withChecksFp.js';
 import { sharedFeatureOptions, type SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import {
   type OpenTelegramLinkError,
   openTelegramLinkFp,
 } from '@/features/links/openTelegramLink.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 
 function create(options: SharedFeatureOptions) {
   return withChecksFp((url: string, text?: string): E.Either<OpenTelegramLinkError, void> => {
+    // FIXME: It must use a raw implementation.
     return openTelegramLinkFp(
       'https://t.me/share/url?' + new URLSearchParams({ url, text: text || '' })
         .toString()

@@ -18,7 +18,7 @@ import {
   type WithChecks,
   withChecksFp,
   type WithChecksFp,
-} from '@/wrappers/withChecksFp.js';
+} from '@/with-checks/withChecksFp.js';
 import { CSSVarsBoundError, UnknownThemeParamsKeyError } from '@/errors.js';
 import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
@@ -27,7 +27,7 @@ import { Stateful } from '@/composables/Stateful.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { access } from '@/helpers/access.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 import { deleteCssVar, setCssVar } from '@/helpers/css-vars.js';
 
 type AnyColor = RGB | KnownThemeParamsKey | string;

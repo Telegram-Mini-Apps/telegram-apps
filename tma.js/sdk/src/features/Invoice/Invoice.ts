@@ -4,14 +4,14 @@ import { BetterPromise } from 'better-promises';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 
-import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/wrappers/withChecksFp.js';
+import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/with-checks/withChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { AsyncOptions } from '@/types.js';
 import { ConcurrentCallError, InvalidArgumentsError } from '@/errors.js';
 import type { WithVersion } from '@/fn-options/withVersion.js';
 import type { WithRequest } from '@/fn-options/withRequest.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 
 type InvoiceTask<E, T> = TE.TaskEither<RequestError | ConcurrentCallError | E, T>;
 

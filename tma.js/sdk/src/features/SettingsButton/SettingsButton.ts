@@ -3,7 +3,7 @@ import * as E from 'fp-ts/Either';
 import type { PostEventError } from '@tma.js/bridge';
 
 import { Button, type ButtonOptions } from '@/composables/Button.js';
-import type { WithChecksFp, WithChecks } from '@/wrappers/withChecksFp.js';
+import type { WithChecksFp, WithChecks } from '@/with-checks/withChecksFp.js';
 
 export interface SettingsButtonState {
   isVisible: boolean;

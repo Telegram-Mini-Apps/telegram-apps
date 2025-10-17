@@ -5,8 +5,8 @@ import type { BetterPromise } from 'better-promises';
 import { pipe } from 'fp-ts/function';
 
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
-import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/with-checks/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 import type { ShowOptions } from '@/features/Popup/types.js';
 import { ConcurrentCallError, type InvalidArgumentsError } from '@/errors.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';

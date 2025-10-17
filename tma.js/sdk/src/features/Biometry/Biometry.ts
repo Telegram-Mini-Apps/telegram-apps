@@ -12,7 +12,7 @@ import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 
-import { createWithChecksFp, WithChecks, WithChecksFp } from '@/wrappers/withChecksFp.js';
+import { createWithChecksFp, WithChecks, WithChecksFp } from '@/with-checks/withChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import { NotAvailableError } from '@/errors.js';
 import type {
@@ -24,7 +24,7 @@ import type {
 import type { AsyncOptions } from '@/types.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { AsyncMountable } from '@/composables/AsyncMountable.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 
 type BiometryTask<T> = TE.TaskEither<RequestError, T>;
 

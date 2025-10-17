@@ -7,10 +7,10 @@ import {
   createWithChecksFp,
   type WithChecks,
   type WithChecksFp,
-} from '@/wrappers/withChecksFp.js';
+} from '@/with-checks/withChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';

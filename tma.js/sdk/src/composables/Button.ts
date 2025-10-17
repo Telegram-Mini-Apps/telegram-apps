@@ -8,8 +8,8 @@ import {
   type WithChecksFp,
   type WithChecks,
   createWithChecksFp,
-} from '@/wrappers/withChecksFp.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+} from '@/with-checks/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
 import { Stateful } from '@/composables/Stateful.js';

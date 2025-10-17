@@ -10,8 +10,8 @@ import {
   createWithChecksFp,
   type WithChecks,
   type WithChecksFp,
-} from '@/wrappers/withChecksFp.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+} from '@/with-checks/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { AsyncOptions } from '@/types.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';

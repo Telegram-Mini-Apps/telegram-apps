@@ -8,10 +8,10 @@ import {
 } from '@/fn-options/sharedFeatureOptions.js';
 import { withRequest, type WithRequest } from '@/fn-options/withRequest.js';
 import { withVersion, type WithVersion } from '@/fn-options/withVersion.js';
-import { withChecksFp } from '@/wrappers/withChecksFp.js';
+import { withChecksFp } from '@/with-checks/withChecksFp.js';
 import { ShareMessageError } from '@/errors.js';
 import type { AsyncOptions } from '@/types.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 
 interface CreateOptions extends SharedFeatureOptions, WithRequest, WithVersion {
 }

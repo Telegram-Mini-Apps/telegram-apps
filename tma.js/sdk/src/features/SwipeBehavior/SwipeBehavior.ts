@@ -3,8 +3,8 @@ import * as E from 'fp-ts/Either';
 import type { PostEventError } from '@tma.js/bridge';
 import { pipe } from 'fp-ts/function';
 
-import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/wrappers/withChecksFp.js';
-import { throwifyWithChecksFp } from '@/wrappers/throwifyWithChecksFp.js';
+import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/with-checks/withChecksFp.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
 import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';

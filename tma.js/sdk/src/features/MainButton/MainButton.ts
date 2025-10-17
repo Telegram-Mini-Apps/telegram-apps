@@ -3,7 +3,7 @@ import type { RGB } from '@tma.js/types';
 import type { PostEventError } from '@tma.js/bridge';
 import * as E from 'fp-ts/Either';
 
-import type { WithChecks, WithChecksFp } from '@/wrappers/withChecksFp.js';
+import type { WithChecks, WithChecksFp } from '@/with-checks/withChecksFp.js';
 import { Button, type ButtonOptions } from '@/composables/Button.js';
 import type { MaybeAccessor } from '@/types.js';
 import { access } from '@/helpers/access.js';
