@@ -25,7 +25,7 @@ export function createDomEmitter(): DomEmitter {
     },
     dispatchEvent(event): void {
       const cbs = listeners[event.type] || [];
-      cbs.forEach((cb) => cb(event));
+      cbs.forEach(cb => cb(event));
     },
   };
 }
