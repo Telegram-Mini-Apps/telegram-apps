@@ -4,7 +4,7 @@ import type { PostEventFpFn } from '@tma.js/bridge';
 import type { Version } from '@tma.js/types';
 
 import { SwipeBehavior } from '@/features/SwipeBehavior/SwipeBehavior.js';
-import { type ComponentStorage, createComponentSessionStorage } from '@/component-storage.js';
+import { type ComponentStorage, createComponentSessionStorage } from '@/helpers/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
 import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
 

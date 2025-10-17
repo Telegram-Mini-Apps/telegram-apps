@@ -3,7 +3,7 @@ import * as E from 'fp-ts/Either';
 import type { PostEventFpFn } from '@tma.js/bridge';
 
 import { ClosingBehavior } from '@/features/ClosingBehavior/ClosingBehavior.js';
-import { type ComponentStorage, createComponentSessionStorage } from '@/component-storage.js';
+import { type ComponentStorage, createComponentSessionStorage } from '@/helpers/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
 import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
 

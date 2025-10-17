@@ -5,7 +5,7 @@ import {
   MainButton,
   type MainButtonOptions,
 } from '@/features/MainButton/MainButton.js';
-import { createComponentSessionStorage } from '@/component-storage.js';
+import { createComponentSessionStorage } from '@/helpers/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
 import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
 import { InstantiateOptions } from '@test-utils/types.js';

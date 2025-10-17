@@ -5,7 +5,7 @@ import {
   SecondaryButton,
   type SecondaryButtonOptions,
 } from '@/features/SecondaryButton/SecondaryButton.js';
-import { createComponentSessionStorage } from '@/component-storage.js';
+import { createComponentSessionStorage } from '@/helpers/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
 import { testIsSupportedPure } from '@test-utils/predefined/testIsSupportedPure.js';
 import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';

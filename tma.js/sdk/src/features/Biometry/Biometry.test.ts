@@ -5,7 +5,7 @@ import { type RequestFpFn, type EventName, emitEvent } from '@tma.js/bridge';
 import { type EventListener, off, on } from '@tma.js/bridge';
 
 import { Biometry } from '@/features/Biometry/Biometry.js';
-import { createComponentSessionStorage } from '@/component-storage.js';
+import { createComponentSessionStorage } from '@/helpers/component-storage.js';
 import { createNoopComponentStorage } from '@test-utils/utils.js';
 import { testIsSupportedPure } from '@test-utils/predefined/testIsSupportedPure.js';
 import { testSafetyPure } from '@test-utils/predefined/testSafetyPure.js';
