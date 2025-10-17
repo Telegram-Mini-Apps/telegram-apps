@@ -8,7 +8,7 @@ import type { PostEventFpFn } from '@tma.js/bridge';
 import * as E from 'fp-ts/Either';
 import { vi } from 'vitest';
 
-import type { ComponentStorage } from '@/component-storage.js';
+import type { ComponentStorage } from '@/helpers/component-storage.js';
 import { version } from '@/globals/version.js';
 import { resetGlobals } from '@/globals/resetGlobals.js';
 import { postEventFpSignal } from '@/globals/post-event.js';
