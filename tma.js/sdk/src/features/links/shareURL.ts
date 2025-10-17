@@ -1,17 +1,23 @@
 import type * as E from 'fp-ts/Either';
+import type { PostEventError } from '@tma.js/bridge';
 
 import { withChecksFp } from '@/with-checks/withChecksFp.js';
-import { sharedFeatureOptions, type SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import {
-  type OpenTelegramLinkError,
-  openTelegramLinkFp,
-} from '@/features/links/openTelegramLink.js';
+  sharedFeatureOptions,
+  type SharedFeatureOptions,
+} from '@/fn-options/sharedFeatureOptions.js';
+import { openTelegramLinkFp } from '@/features/links/openTelegramLink.js';
 import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
 
-function create(options: SharedFeatureOptions) {
-  return withChecksFp((url: string, text?: string): E.Either<OpenTelegramLinkError, void> => {
-    // FIXME: It must use a raw implementation.
-    return openTelegramLinkFp(
+interface CreateOptions extends SharedFeatureOptions {
+  openTelegramLink: (url: string) => E.Either<PostEventError, void>;
+}
+
+export type ShareURLError = PostEventError;
+
+function create({ openTelegramLink, ...rest }: CreateOptions) {
+  return withChecksFp((url: string, text?: string): E.Either<ShareURLError, void> => {
+    return openTelegramLink(
       'https://t.me/share/url?' + new URLSearchParams({ url, text: text || '' })
         .toString()
         // By default, URL search params encode spaces with "+".
@@ -19,7 +25,7 @@ function create(options: SharedFeatureOptions) {
         // in Telegram.
         .replace(/\+/g, '%20'),
     );
-  }, { ...options, returns: 'either' });
+  }, { ...rest, returns: 'either' });
 }
 
 /**
@@ -32,7 +38,10 @@ function create(options: SharedFeatureOptions) {
  * @see https://core.telegram.org/api/links#share-links
  * @see https://core.telegram.org/widgets/share#custom-buttons
  */
-export const shareURLFp = create(sharedFeatureOptions());
+export const shareURLFp = create({
+  ...sharedFeatureOptions(),
+  openTelegramLink: openTelegramLinkFp,
+});
 
 /**
  * @see shareURLFp
