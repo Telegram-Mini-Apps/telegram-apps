@@ -42,6 +42,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/no-unsafe-call': 0,
       '@typescript-eslint/no-namespace': 0,
+      '@typescript-eslint/require-await': 0,
       'no-empty': 0,
       '@stylistic/array-bracket-newline': ['error', 'consistent'],
       '@stylistic/array-bracket-spacing': ['error', 'never'],
