@@ -6,7 +6,7 @@ import {
   type PostEventError,
 } from '@tma.js/bridge';
 import { createCbCollector, throwifyFpFn } from '@tma.js/toolkit';
-import type { Version } from '@tma.js/types';
+import type { Version, ThemeParams } from '@tma.js/types';
 import type { PostEventFpFn } from '@tma.js/bridge';
 import * as E from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
@@ -14,6 +14,7 @@ import { pipe } from 'fp-ts/function';
 import { version } from '@/globals/version.js';
 import { postEventFpSignal, postEventFp, postEvent } from '@/globals/post-event.js';
 import { isInlineMode } from '@/globals/inline-mode.js';
+import { themeParams } from '@/globals/themeParams.js';
 
 export interface InitOptions {
   /**
@@ -22,20 +23,25 @@ export interface InitOptions {
    */
   acceptCustomStyles?: boolean;
   /**
+   * True if the application is launched in inline mode.
+   * @default Will be calculated based on the launch parameters' tgWebAppBotInline field.
+   */
+  isInlineMode?: boolean;
+  /**
    * A custom `postEvent` function to use across the package.
    * @default tma.js/bridge's postEventFp function will be used.
    */
   postEvent?: PostEventFpFn;
   /**
+   * Mini application theme parameters.
+   * @default Will be calculated based on the launch parameters' tgWebAppThemeParams field.
+   */
+  themeParams?: ThemeParams;
+  /**
    * Telegram Mini Apps version supported by the Telegram client.
    * @default Will be calculated based on the launch parameters' tgWebAppVersion field.
    */
   version?: Version;
-  /**
-   * True if the application is launched in inline mode.
-   * @default Will be calculated based on the launch parameters' tgWebAppBotInline field.
-   */
-  isInlineMode?: boolean;
 }
 
 /**
@@ -48,17 +54,25 @@ export interface InitOptions {
 export function initFp(
   options: InitOptions = {},
 ): E.Either<RetrieveLaunchParamsError | PostEventError, VoidFunction> {
-  const { version: optionsVersion, isInlineMode: optionsInlineMode } = options;
+  const {
+    version: optionsVersion,
+    isInlineMode: optionsInlineMode,
+    themeParams: optionsThemeParams,
+  } = options;
 
-  if (optionsVersion && typeof optionsInlineMode === 'boolean') {
+  if (optionsVersion && typeof optionsInlineMode === 'boolean' && optionsThemeParams) {
     version.set(optionsVersion);
     isInlineMode.set(optionsInlineMode);
+    themeParams.set(optionsThemeParams);
   } else {
     const error = pipe(retrieveLaunchParamsFp(), E.matchW(
       err => err,
       lp => {
-        version.set(lp.tgWebAppVersion);
-        isInlineMode.set(!!lp.tgWebAppBotInline);
+        version.set(optionsVersion || lp.tgWebAppVersion);
+        isInlineMode.set(typeof optionsInlineMode === 'boolean'
+          ? optionsInlineMode
+          : !!lp.tgWebAppBotInline);
+        themeParams.set(optionsThemeParams || lp.tgWebAppThemeParams);
       },
     ));
     if (error) {
