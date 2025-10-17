@@ -4,4 +4,4 @@ export {
   openTelegramLinkFp,
   openTelegramLink,
 } from './openTelegramLink.js';
-export { shareURLFp, shareURL } from './shareURL.js';
+export { shareURLFp, shareURL, type ShareURLError } from './shareURL.js';
