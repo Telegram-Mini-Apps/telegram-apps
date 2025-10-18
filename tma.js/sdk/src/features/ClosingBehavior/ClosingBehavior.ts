@@ -114,7 +114,7 @@ export class ClosingBehavior {
   /**
    * @see disableConfirmationFp
    */
-  readonly disableConfirmation: WithChecks<(a: string) => void, false>;
+  readonly disableConfirmation: WithChecks<() => void, false>;
 
   /**
    * Enables the closing confirmation dialog.
