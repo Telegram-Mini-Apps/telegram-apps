@@ -37,6 +37,7 @@ export {
   type CreatePostEventMode,
   type OnUnsupportedFn,
 } from '@/methods/createPostEvent.js';
+export { getReleaseVersion } from '@/methods/getReleaseVersion.js';
 export {
   postEvent,
   postEventFp,
@@ -154,6 +155,7 @@ export {
 export {
   createLogger,
   deepSnakeToCamelObjKeys,
+  type DeepConvertSnakeKeysToCamelCase,
   type Logger,
   type LoggerFn,
   type LoggerForceFn,

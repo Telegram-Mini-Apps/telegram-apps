@@ -42,6 +42,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/no-unsafe-call': 0,
       '@typescript-eslint/no-namespace': 0,
+      '@typescript-eslint/require-await': 0,
       'no-empty': 0,
       '@stylistic/array-bracket-newline': ['error', 'consistent'],
       '@stylistic/array-bracket-spacing': ['error', 'never'],
@@ -72,7 +73,7 @@ export default tseslint.config(
       '@stylistic/lines-between-class-members': ['error', {
         enforce: [
           { blankLine: 'always', prev: '*', next: 'field' },
-          { blankLine: 'never', prev: 'field', next: 'field' },
+          { blankLine: 'always', prev: 'field', next: 'field' },
           { blankLine: 'always', prev: 'field', next: 'method' },
           { blankLine: 'always', prev: 'method', next: 'method' },
         ],

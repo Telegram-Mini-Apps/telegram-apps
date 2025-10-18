@@ -29,6 +29,50 @@ only, as long as the current repository is a pnpm monorepo):
 pnpm i
 ```
 
+## Philosophy
+
+Before diving deep into the code, it's important to understand the philosophy behind our repositories' development.
+
+The first thing to know here is we don't really like handling errors using `try-catch` construction.
+This approach often requires you to read the source code of a function to know what specific errors it might throw.
+Instead, we use the `Either` abstraction from [fp-ts](https://www.npmjs.com/package/fp-ts). This provides a clear and
+explicit way to see whether a function executed successfully or failed.
+
+However, we recognize that many developers may be more comfortable with a traditional `try-catch` approach. To
+accommodate this, all functions that can fail must return an `Either`. Additionally, you must provide a "throwing"
+alternative that wraps the `Either` and throws the error for those who prefer that style.
+
+When writing your code, ensure that if a function can throw an error, it always returns an `Either` and has a throwing
+counterpart.
+
+Here is an example:
+
+```typescript
+import * as E from 'fp-ts/Either';
+import { pipe } from 'fp-ts/function';
+
+class MyError extends Error {
+}
+
+function nonThrowing(): E.Either<MyError, string> {
+  return Math.random() < 0.5
+    ? E.left(new MyError())
+    : E.right('just some string');
+}
+
+function throwing(): string {
+  return pipe(nonThrowing(), E.match(
+    e => {
+      throw e;
+    },
+    result => result
+  ))
+}
+```
+
+The second and final principle is **the simpler, the better**. We strive to write code that is as understandable and
+intuitive as possible. Please think twice before implementing a complex solution.
+
 ## Trying Your Code
 
 This project contains an already configured application that can use any `@telegram-apps` package located

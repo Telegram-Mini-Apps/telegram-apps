@@ -1,4 +1,4 @@
-import { eitherFnToSimple, eitherGet } from '@tma.js/toolkit';
+import { throwifyFpFn, throwifyAnyEither } from '@tma.js/toolkit';
 import * as E from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
 import * as J from 'fp-ts/Json';
@@ -24,7 +24,7 @@ export function createStartParamFp(value: unknown): E.Either<Error, string> {
 /**
  * @see createStartParamFp
  */
-export const createStartParam = eitherFnToSimple(createStartParamFp);
+export const createStartParam = throwifyFpFn(createStartParamFp);
 
 /**
  * @see decodeStartParamFp
@@ -42,7 +42,7 @@ export function decodeStartParam<T>(
   value: string,
   arg2?: 'json' | ((value: string) => T),
 ): string | unknown | T {
-  return eitherGet(
+  return throwifyAnyEither(
     decodeStartParamFp(
       value,
       // @ts-expect-error TypeScript is unable to detect a correct override.

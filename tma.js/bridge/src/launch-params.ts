@@ -1,4 +1,4 @@
-import { eitherFnToSimple, getStorageValue, setStorageValue } from '@tma.js/toolkit';
+import { throwifyFpFn, getStorageValue, setStorageValue } from '@tma.js/toolkit';
 import {
   parseLaunchParamsQueryFp,
   type LaunchParamsGenType,
@@ -44,7 +44,7 @@ export const retrieveLaunchParamsFp: () => E.Either<
  * @see retrieveLaunchParamsFp
  */
 export const retrieveLaunchParams: () => RetrieveLaunchParamsResult =
-  eitherFnToSimple(retrieveLaunchParamsFp);
+  throwifyFpFn(retrieveLaunchParamsFp);
 
 /**
  * @returns Raw init data from any known source.
@@ -107,4 +107,4 @@ export function retrieveRawLaunchParamsFp(): E.Either<RetrieveRawLaunchParamsErr
 /**
  * @see retrieveRawLaunchParamsFp
  */
-export const retrieveRawLaunchParams = eitherFnToSimple(retrieveRawLaunchParamsFp);
+export const retrieveRawLaunchParams = throwifyFpFn(retrieveRawLaunchParamsFp);

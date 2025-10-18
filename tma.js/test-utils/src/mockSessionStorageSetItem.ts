@@ -5,7 +5,7 @@ import { vi } from 'vitest';
  * @param impl - method implementation.
  */
 export function mockSessionStorageSetItem(
-  impl?: (k: string, v: string) => void
+  impl?: (k: string, v: string) => void,
 ) {
   return vi
     .spyOn(sessionStorage, 'setItem')

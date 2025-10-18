@@ -1,4 +1,4 @@
-import { eitherFnToSimple } from '@tma.js/toolkit';
+import { throwifyFpFn } from '@tma.js/toolkit';
 import type { RGB } from '@tma.js/types';
 import * as E from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
@@ -124,9 +124,9 @@ export function toRGBFp(value: string): E.Either<Error, RGB> {
  * @see toRGBFp
  * @deprecated This function cuts the RGB's alpha channel. Use the `toRGBFull` function instead.
  */
-export const toRGB = eitherFnToSimple(toRGBFp);
+export const toRGB = throwifyFpFn(toRGBFp);
 
 /**
  * @see toRGBFullFp
  */
-export const toRGBFull = eitherFnToSimple(toRGBFullFp);
+export const toRGBFull = throwifyFpFn(toRGBFullFp);

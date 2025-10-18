@@ -22,8 +22,7 @@ type RequiredSchema = BaseSchema<any, any, BaseIssue<any>>;
 
 export type JsonToSchemaPipe<Schema extends RequiredSchema> = SchemaWithPipe<readonly [
   StringSchema<undefined>,
-  TransformJsonToSchemaAction,
-  Schema,
+  TransformJsonToSchemaAction<Schema>,
 ]>;
 
 export type QueryToSchemaPipe<Schema extends RequiredSchema> = SchemaWithPipe<readonly [
@@ -37,7 +36,7 @@ export type QueryToSchemaPipe<Schema extends RequiredSchema> = SchemaWithPipe<re
 export function pipeJsonToSchema<Schema extends RequiredSchema>(
   schema: Schema,
 ): JsonToSchemaPipe<Schema> {
-  return pipe(string(), transformJsonToSchema(), schema);
+  return pipe(string(), transformJsonToSchema(schema));
 }
 
 export function pipeQueryToSchema<Schema extends RequiredSchema>(
