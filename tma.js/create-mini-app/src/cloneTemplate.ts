@@ -27,7 +27,7 @@ export async function cloneTemplate(
     await spawnWithSpinner({
       command: `git clone "${https}" "${rootDir}"`,
       message: `Cloning the template from GitHub (HTTPS): ${chalk.bold.blue(https)}`,
-      messageFail: (error) => `Failed to load the template using HTTPS. ${error}`,
+      messageFail: error => `Failed to load the template using HTTPS. ${error}`,
       messageSuccess,
       theme,
     });
@@ -39,7 +39,7 @@ export async function cloneTemplate(
   await spawnWithSpinner({
     command: `git clone "${ssh}" "${rootDir}"`,
     message: `Cloning the template from GitHub (SSH): ${chalk.bold.blue(ssh)}`,
-    messageFail: (error) => `Failed to load the template using SSH. ${error}`,
+    messageFail: error => `Failed to load the template using SSH. ${error}`,
     messageSuccess,
     theme,
   });
