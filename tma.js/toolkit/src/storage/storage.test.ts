@@ -2,6 +2,7 @@
 import { mockSessionStorageGetItem, mockSessionStorageSetItem } from 'test-utils';
 import {
   afterEach,
+  beforeEach,
   describe,
   expect,
   it,
@@ -9,6 +10,23 @@ import {
 } from 'vitest';
 
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
+
+beforeEach(() => {
+  if (typeof sessionStorage === 'undefined') {
+    Object.defineProperty(globalThis, 'sessionStorage', {
+      value: {
+        getItem: vi.fn(),
+        setItem: vi.fn(),
+        removeItem: vi.fn(),
+        clear: vi.fn(),
+        key: vi.fn(),
+        length: 0,
+      },
+      writable: true,
+      configurable: true,
+    });
+  }
+});
 
 afterEach(() => {
   vi.restoreAllMocks();
