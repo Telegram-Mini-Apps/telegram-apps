@@ -1,6 +1,11 @@
 import { TimeoutError } from 'better-promises';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createWindow, mockSessionStorageGetItem, mockWindow } from 'test-utils';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  createWindow,
+  mockSessionStorageGetItem,
+  mockSessionStorageSetItem,
+  mockWindow,
+} from 'test-utils';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 
@@ -10,12 +15,14 @@ import { isTMA, isTMAFp } from './isTMA.js';
 
 const requestFp = vi.mocked(_requestFp);
 
-vi.mock('@/utils/request.js', () => ({
-  requestFp: vi.fn(),
-}));
+vi.mock('@/utils/request.js', () => ({ requestFp: vi.fn() }));
 
-afterEach(() => {
+beforeEach(() => {
   vi.restoreAllMocks();
+
+  // Every isTMA call may set a value in the session storage.
+  mockSessionStorageSetItem();
+  mockSessionStorageGetItem();
 });
 
 describe('isTMA', () => {
@@ -50,7 +57,6 @@ describe('isTMA', () => {
   describe('sync', () => {
     beforeEach(() => {
       mockWindow({ location: { href: '' } } as any);
-      mockSessionStorageGetItem();
     });
 
     it('should return true if env contains launch params', () => {
@@ -59,7 +65,6 @@ describe('isTMA', () => {
         .mockImplementation(() => {
           return '/abc?tgWebAppStartParam=START#tgWebAppPlatform=tdesktop&tgWebAppVersion=7.0&tgWebAppThemeParams=%7B%7D';
         });
-
       expect(isTMA()).toBe(true);
     });
 
@@ -129,7 +134,6 @@ describe('isTMAFp', () => {
   describe('sync', () => {
     beforeEach(() => {
       mockWindow({ location: { href: '' } } as any);
-      mockSessionStorageGetItem();
     });
 
     it('should return true if env contains launch params', () => {
@@ -141,7 +145,7 @@ describe('isTMAFp', () => {
       expect(isTMAFp()).toBe(true);
     });
 
-    it('should return true if env doesnt contain launch params', () => {
+    it('should return false if env doesnt contain launch params', () => {
       expect(isTMAFp()).toBe(false);
     });
   });

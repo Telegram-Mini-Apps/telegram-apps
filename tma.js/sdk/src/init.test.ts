@@ -37,7 +37,7 @@ it(
     createWindow({ location: { reload: reloadSpy } as any });
 
     const postEvent = vi.fn(() => E.right(undefined));
-    init({ postEvent, version: '999' });
+    init({ postEvent, version: '999', themeParams: {}, isInlineMode: false });
 
     expect(postEvent).toHaveBeenCalledOnce();
     expect(postEvent).toHaveBeenCalledWith('iframe_ready', { reload_supported: true });
@@ -62,7 +62,12 @@ it(
       head: { appendChild },
     }) as any);
 
-    init({ postEvent: vi.fn(() => E.right(undefined)), version: '999' });
+    init({
+      postEvent: vi.fn(() => E.right(undefined)),
+      version: '999',
+      themeParams: {},
+      isInlineMode: false,
+    });
     expect(createElement).toHaveBeenCalledOnce();
     expect(createElement).toHaveBeenCalledWith('style');
     expect(appendChild).toHaveBeenCalledOnce();
@@ -89,7 +94,12 @@ it(
     }) as any);
 
     const postEvent = vi.fn(() => E.right(undefined));
-    const cleanup = init({ postEvent, version: '999' });
+    const cleanup = init({
+      postEvent,
+      version: '999',
+      themeParams: {},
+      isInlineMode: false,
+    });
 
     // Check if style element was created and appended.
     expect(createElement).toHaveBeenCalledOnce();
