@@ -12,12 +12,12 @@ export default tseslint.config(
   },
   {
     name: 'app/files-to-lint',
-    files: ['{tma.js,playgrounds}/**/*.{js,ts,mts,tsx,vue}'],
+    files: ['{packages,playgrounds}/**/*.{js,ts,mts,tsx,vue}'],
     languageOptions: {
       parserOptions: {
         project: [
           './playgrounds/*/tsconfig.json',
-          './tma.js/*/tsconfig.eslint.json',
+          './packages/*/tsconfig.eslint.json',
         ],
         tsconfigRootDir: import.meta.dirname,
         ecmaVersion: 'latest',
