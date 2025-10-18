@@ -1,5 +1,12 @@
 # @tma.js/bridge
 
+## 2.1.0
+
+### Minor Changes
+
+- 473d7fa: - Implement `getReleaseVersion` util.
+  - Remove 'unknown' and 'CancelledError' from the `RequestError` type.
+
 ## 2.0.3
 
 ### Patch Changes
