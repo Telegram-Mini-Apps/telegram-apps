@@ -32,11 +32,7 @@ import { on } from '@/events/emitter.js';
 
 type AnyEventName = EventName | EventName[];
 
-export type RequestError =
-  | PostEventError
-  | TimeoutError
-  | CancelledError
-  | unknown;
+export type RequestError = PostEventError | TimeoutError;
 
 /**
  * @example
