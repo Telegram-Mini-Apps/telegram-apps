@@ -18,11 +18,11 @@ describe('setStorageValue', () => {
   it(
     'should call sessionStorage.setItem with formatted key and JSON.stringify applied to value',
     () => {
-      mockSessionStorageSetItem();
+      const setItem = mockSessionStorageSetItem();
       setStorageValue('backButton', false);
 
-      expect(sessionStorage.setItem).toHaveBeenCalledOnce();
-      expect(sessionStorage.setItem).toHaveBeenCalledWith('tapps/backButton', 'false');
+      expect(setItem).toHaveBeenCalledOnce();
+      expect(setItem).toHaveBeenCalledWith('tapps/backButton', 'false');
     },
   );
 });
@@ -31,18 +31,14 @@ describe('getStorageValue', () => {
   it(
     'should call sessionStorage.getItem with formatted key and apply JSON.parse to the extracted value in case, it is not empty. If parsing failed, return undefined',
     () => {
-      console.log('Window session storage', window.sessionStorage);
-      console.log('Session storage', sessionStorage);
-      console.log('Get item', sessionStorage.getItem);
+      console.log('test frozen', Object.isFrozen(sessionStorage));
       const getItem = vi
         .spyOn(sessionStorage, 'getItem')
         .mockImplementation(() => '{"isVisible":false}');
-      console.log('Mock', getItem);
-      console.log('Session storage 2', sessionStorage);
-      console.log('Get item 2', sessionStorage.getItem);
       let value = getStorageValue('backButton');
-      expect(sessionStorage.getItem).toHaveBeenCalledOnce();
-      expect(sessionStorage.getItem).toHaveBeenCalledWith('tapps/backButton');
+      console.log('test field', sessionStorage.testField);
+      expect(getItem).toHaveBeenCalledOnce();
+      expect(getItem).toHaveBeenCalledWith('tapps/backButton');
       expect(value).toStrictEqual({ isVisible: false });
 
       getItem.mockImplementation(() => null);
