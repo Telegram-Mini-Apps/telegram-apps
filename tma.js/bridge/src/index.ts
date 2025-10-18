@@ -155,6 +155,7 @@ export {
 export {
   createLogger,
   deepSnakeToCamelObjKeys,
+  type DeepConvertSnakeKeysToCamelCase,
   type Logger,
   type LoggerFn,
   type LoggerForceFn,

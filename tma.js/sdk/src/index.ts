@@ -149,6 +149,7 @@ export {
   //#region Re-exports
   createLogger,
   deepSnakeToCamelObjKeys,
+  type DeepConvertSnakeKeysToCamelCase,
   type Logger,
   type LoggerFn,
   type LoggerForceFn,
