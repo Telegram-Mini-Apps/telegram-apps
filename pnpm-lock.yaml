@@ -93,23 +93,7 @@ importers:
         specifier: 1.5.0
         version: 1.5.0(@algolia/client-search@5.14.2)(@types/node@22.10.1)(@types/react@18.3.12)(axios@1.7.8)(change-case@5.4.4)(postcss@8.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.2)(typescript@5.9.2)
 
-  playgrounds/custom:
-    dependencies:
-      '@tma.js/sdk':
-        specifier: workspace:*
-        version: link:../../tma.js/sdk
-      fp-ts:
-        specifier: ^2.16.11
-        version: 2.16.11
-      tsconfig:
-        specifier: workspace:*
-        version: link:../../tma.js/tsconfig
-    devDependencies:
-      cross-env:
-        specifier: ^7.0.3
-        version: 7.0.3
-
-  tma.js/bridge:
+  packages/bridge:
     dependencies:
       '@tma.js/signals':
         specifier: workspace:^
@@ -146,7 +130,7 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/create-mini-app:
+  packages/create-mini-app:
     dependencies:
       '@inquirer/core':
         specifier: ^10.3.0
@@ -174,7 +158,7 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/init-data-node:
+  packages/init-data-node:
     dependencies:
       '@tma.js/toolkit':
         specifier: workspace:^
@@ -205,7 +189,7 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/sdk:
+  packages/sdk:
     dependencies:
       '@tma.js/bridge':
         specifier: workspace:^
@@ -242,7 +226,7 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/sdk-react:
+  packages/sdk-react:
     dependencies:
       '@tma.js/sdk':
         specifier: workspace:^
@@ -258,7 +242,7 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/sdk-solid:
+  packages/sdk-solid:
     dependencies:
       '@tma.js/sdk':
         specifier: workspace:^
@@ -271,7 +255,7 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/sdk-svelte:
+  packages/sdk-svelte:
     dependencies:
       '@tma.js/sdk':
         specifier: workspace:^
@@ -284,7 +268,7 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/sdk-vue:
+  packages/sdk-vue:
     dependencies:
       '@tma.js/sdk':
         specifier: workspace:^
@@ -297,7 +281,7 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/signals:
+  packages/signals:
     devDependencies:
       test-utils:
         specifier: workspace:*
@@ -306,13 +290,13 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/test-utils:
+  packages/test-utils:
     devDependencies:
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/toolkit:
+  packages/toolkit:
     dependencies:
       better-promises:
         specifier: ^1.0.0
@@ -328,7 +312,7 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/transformers:
+  packages/transformers:
     dependencies:
       '@tma.js/toolkit':
         specifier: workspace:^
@@ -350,13 +334,29 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
-  tma.js/tsconfig: {}
+  packages/tsconfig: {}
 
-  tma.js/types:
+  packages/types:
     devDependencies:
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
+
+  playgrounds/custom:
+    dependencies:
+      '@tma.js/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
+      fp-ts:
+        specifier: ^2.16.11
+        version: 2.16.11
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+    devDependencies:
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
 
 packages:
 
@@ -2116,10 +2116,6 @@ packages:
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
-
-  chalk@5.3.0:
-    resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==}
-    engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
 
   chalk@5.6.2:
     resolution: {integrity: sha512-7NzBL0rN6fMUW+f7A6Io4h40qQlG+xGmtMxfbnH/K7TAtt8JQWVQK+6g0UXKMeVJoyV5EkkNsErQ8pVD3bLHbA==}
@@ -4852,7 +4848,7 @@ snapshots:
       '@commitlint/execute-rule': 19.5.0
       '@commitlint/resolve-extends': 19.5.0
       '@commitlint/types': 19.5.0
-      chalk: 5.3.0
+      chalk: 5.6.2
       cosmiconfig: 9.0.0(typescript@5.9.2)
       cosmiconfig-typescript-loader: 5.1.0(@types/node@22.10.1)(cosmiconfig@9.0.0(typescript@5.9.2))(typescript@5.9.2)
       lodash.isplainobject: 4.0.6
@@ -4876,7 +4872,7 @@ snapshots:
   '@commitlint/types@19.5.0':
     dependencies:
       '@types/conventional-commits-parser': 5.0.1
-      chalk: 5.3.0
+      chalk: 5.6.2
     optional: true
 
   '@cspotcode/source-map-support@0.8.1':
@@ -5232,7 +5228,7 @@ snapshots:
   '@jridgewell/remapping@2.3.5':
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
-      '@jridgewell/trace-mapping': 0.3.25
+      '@jridgewell/trace-mapping': 0.3.31
 
   '@jridgewell/resolve-uri@3.1.2': {}
 
@@ -6335,9 +6331,6 @@ snapshots:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
-
-  chalk@5.3.0:
-    optional: true
 
   chalk@5.6.2: {}
 
@@ -8210,7 +8203,7 @@ snapshots:
     dependencies:
       eastasianwidth: 0.2.0
       emoji-regex: 9.2.2
-      strip-ansi: 7.1.0
+      strip-ansi: 7.1.2
 
   string-width@8.1.0:
     dependencies:
@@ -8812,7 +8805,7 @@ snapshots:
     dependencies:
       ansi-styles: 6.2.1
       string-width: 5.1.2
-      strip-ansi: 7.1.0
+      strip-ansi: 7.1.2
 
   wrappy@1.0.2: {}
 
