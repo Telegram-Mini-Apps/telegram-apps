@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/types",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Telegram Mini Apps related TypeScript types.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",
