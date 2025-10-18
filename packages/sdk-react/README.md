@@ -4,7 +4,7 @@
 
 [docs-badge]: https://img.shields.io/badge/documentation-blue?logo=gitbook&logoColor=white
 
-[code-link]: https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/tma.js/sdk-react
+[code-link]: https://github.com/Telegram-Mini-Apps/tma.js/tree/master/tma.js/sdk-react
 
 [docs-link]: https://docs.telegram-mini-apps.com/packages/tma-js-sdk-react
 
