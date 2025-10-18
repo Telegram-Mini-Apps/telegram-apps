@@ -1,6 +1,5 @@
 import { mockSessionStorageSetItem } from 'test-utils';
 import {
-  afterEach,
   beforeEach,
   describe,
   expect,
@@ -11,10 +10,6 @@ import {
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
-});
-
-afterEach(() => {
   vi.restoreAllMocks();
 });
 

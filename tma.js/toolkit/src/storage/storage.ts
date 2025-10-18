@@ -12,7 +12,7 @@ function formatKey(key: string): string {
  * @param value - storage value.
  */
 export function setStorageValue<T>(key: string, value: T): void {
-  sessionStorage.setItem(formatKey(key), JSON.stringify(value));
+  global.sessionStorage.setItem(formatKey(key), JSON.stringify(value));
 }
 
 /**
@@ -20,7 +20,7 @@ export function setStorageValue<T>(key: string, value: T): void {
  * @param key - storage key.
  */
 export function getStorageValue<R>(key: string): R | undefined {
-  const value = sessionStorage.getItem(formatKey(key));
+  const value = global.sessionStorage.getItem(formatKey(key));
   try {
     return value ? JSON.parse(value) as R : undefined;
   } catch {
