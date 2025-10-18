@@ -95,6 +95,12 @@ importers:
 
   playgrounds/custom:
     dependencies:
+      '@tma.js/sdk':
+        specifier: workspace:*
+        version: link:../../tma.js/sdk
+      fp-ts:
+        specifier: ^2.16.11
+        version: 2.16.11
       tsconfig:
         specifier: workspace:*
         version: link:../../tma.js/tsconfig
@@ -225,6 +231,9 @@ importers:
 
   tma.js/toolkit:
     dependencies:
+      better-promises:
+        specifier: ^1.0.0
+        version: 1.0.0
       fp-ts:
         specifier: ^2.16.11
         version: 2.16.11
