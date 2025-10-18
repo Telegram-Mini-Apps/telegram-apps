@@ -26,7 +26,7 @@ describe('setStorageValue', () => {
 describe('getStorageValue', () => {
   it('should call sessionStorage.getItem with formatted key and apply JSON.parse to the extracted value in case, it is not empty. If parsing failed, return undefined', () => {
     const getItem = vi
-      .spyOn(sessionStorage, 'getItem')
+      .spyOn(window.sessionStorage, 'getItem')
       .mockImplementation(() => '{"isVisible":false}');
     let value = getStorageValue('backButton');
     expect(getItem).toHaveBeenCalledOnce();
