@@ -8,6 +8,6 @@ export function mockSessionStorageSetItem(
   impl?: (k: string, v: string) => void,
 ) {
   return vi
-    .spyOn(sessionStorage, 'setItem')
+    .spyOn(Storage.prototype, 'setItem')
     .mockImplementation(impl || (() => null));
 }

@@ -20,8 +20,6 @@ export function setStorageValue<T>(key: string, value: T): void {
  * @param key - storage key.
  */
 export function getStorageValue<R>(key: string): R | undefined {
-  console.log('getStorageValue frozen', Object.isFrozen(sessionStorage));
-  sessionStorage.testField = 'getStorageValue';
   const value = sessionStorage.getItem(formatKey(key));
   try {
     return value ? JSON.parse(value) as R : undefined;

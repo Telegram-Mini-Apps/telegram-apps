@@ -36,12 +36,10 @@ describe('getStorageValue', () => {
   it(
     'should call sessionStorage.getItem with formatted key and apply JSON.parse to the extracted value in case, it is not empty. If parsing failed, return undefined',
     () => {
-      console.log('test frozen', Object.isFrozen(sessionStorage));
       const getItem = vi
-        .spyOn(sessionStorage, 'getItem')
+        .spyOn(Storage.prototype, 'getItem')
         .mockImplementation(() => '{"isVisible":false}');
       let value = getStorageValue('backButton');
-      console.log('test field', sessionStorage.testField);
       expect(getItem).toHaveBeenCalledOnce();
       expect(getItem).toHaveBeenCalledWith('tapps/backButton');
       expect(value).toStrictEqual({ isVisible: false });

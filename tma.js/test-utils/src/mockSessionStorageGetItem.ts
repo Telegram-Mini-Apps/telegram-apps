@@ -10,6 +10,6 @@ export function mockSessionStorageGetItem(
   impl: MockImplementation<string | null, [string]> = null,
 ) {
   return vi
-    .spyOn(sessionStorage, 'getItem')
+    .spyOn(Storage.prototype, 'getItem')
     .mockImplementation(formatImplementation(impl));
 }
