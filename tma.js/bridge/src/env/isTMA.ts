@@ -1,3 +1,4 @@
+import { throwifyAnyEither } from '@tma.js/toolkit';
 import {
   BetterPromise,
   type BetterPromiseOptions,
@@ -31,14 +32,7 @@ export function isTMA(
     options,
   ) as boolean | TE.TaskEither<isTMAError, boolean>;
   return typeof monad === 'function'
-    ? BetterPromise.fn(() => {
-      return pipe(monad, TE.match(
-        err => {
-          throw err;
-        },
-        v => v,
-      ))();
-    })
+    ? BetterPromise.fn(() => throwifyAnyEither(monad))
     : monad;
 }
 
