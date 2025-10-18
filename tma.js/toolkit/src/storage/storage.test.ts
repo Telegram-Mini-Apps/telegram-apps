@@ -1,21 +1,9 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { mockSessionStorageSetItem } from 'test-utils';
-import {
-  beforeEach,
-  afterEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
-});
-
-afterEach(() => {
   vi.restoreAllMocks();
 });
 
@@ -25,7 +13,6 @@ describe('setStorageValue', () => {
     () => {
       const setItem = mockSessionStorageSetItem();
       setStorageValue('backButton', false);
-
       expect(setItem).toHaveBeenCalledOnce();
       expect(setItem).toHaveBeenCalledWith('tapps/backButton', 'false');
     },
