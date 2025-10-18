@@ -1,6 +1,6 @@
 [code-badge]: https://img.shields.io/badge/source-black?logo=github
 
-# @telegram-apps
+# @tma.js
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
@@ -14,13 +14,13 @@ Additionally, the official Telegram [platform documentation](https://core.telegr
 provide valuable insights and a different perspective on the platform.
 
 Before diving into development, it’s also advisable to explore the available 
-[libraries](https://docs.telegram-mini-apps.com/packages/telegram-apps-create-mini-app) for 
+[libraries](https://docs.telegram-mini-apps.com/packages/tma-js-create-mini-app) for 
 both client-side and backend development to gain a better understanding of the tools at your
 disposal.
 
 ## Why not Telegram SDK
 
-Why bother creating a project like `@telegram-apps` when there are existing solutions from the developers
+Why bother creating a project like `@tma.js` when there are existing solutions from the developers
 who own the platform? The answer is rather simple: the currently provided solution (SDK) does not
 seem to meet the required minimum quality standards. Of course, the term 'quality' is rather
 specific and subjective, but this section should make it more objective.
