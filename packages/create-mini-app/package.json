@@ -7,7 +7,7 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:Telegram-Mini-Apps/telegram-apps.git",
-    "directory": "tma.js/create-mini-app"
+    "directory": "packages/create-mini-app"
   },
   "bugs": {
     "url": "https://github.com/Telegram-Mini-Apps/telegram-apps/issues"
