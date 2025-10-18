@@ -1,6 +1,6 @@
 {
   "name": "@tma.js/signals",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TypeScript package implementing simple JavaScript signals.",
   "author": "Vladislav Kibenko <wolfram.deus@gmail.com>",
   "homepage": "https://github.com/Telegram-Mini-Apps/tma.js#readme",

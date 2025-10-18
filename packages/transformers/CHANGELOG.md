@@ -1,5 +1,14 @@
 # @tma.js/transformers
 
+## 1.1.1
+
+### Patch Changes
+
+- 4570643: Update package.json actualizing all paths.
+- Updated dependencies [4570643]
+  - @tma.js/toolkit@1.0.2
+  - @tma.js/types@1.0.2
+
 ## 1.1.0
 
 ### Minor Changes
