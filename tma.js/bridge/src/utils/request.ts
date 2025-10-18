@@ -2,9 +2,14 @@ import {
   BetterPromise,
   type BetterPromiseOptions,
   type TimeoutError,
-  type CancelledError,
 } from 'better-promises';
-import { createCbCollector, type If, type IsNever } from '@tma.js/toolkit';
+import {
+  createCbCollector,
+  throwifyAnyEither,
+  type If,
+  type IsNever,
+  BetterTaskEither,
+} from '@tma.js/toolkit';
 import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
@@ -109,11 +114,15 @@ export type RequestFpFn = typeof requestFp;
  * @param eventOrEvents - tracked event or events.
  * @param options - additional options.
  */
-export function requestFp<M extends MethodNameWithRequiredParams, E extends AnyEventName>(
+export function requestFp<
+  M extends MethodNameWithRequiredParams,
+  E extends AnyEventName,
+  AbortError = never,
+>(
   method: M,
   eventOrEvents: E,
   options: RequestFpOptions<E> & { params: MethodParams<M> },
-): TE.TaskEither<RequestError, RequestResult<E>>;
+): TE.TaskEither<RequestError | AbortError, RequestResult<E>>;
 
 /**
  * Calls a method waiting for the specified event(-s) to occur.
@@ -121,11 +130,15 @@ export function requestFp<M extends MethodNameWithRequiredParams, E extends AnyE
  * @param eventOrEvents - tracked event or events.
  * @param options - additional options.
  */
-export function requestFp<M extends MethodNameWithOptionalParams, E extends AnyEventName>(
+export function requestFp<
+  M extends MethodNameWithOptionalParams,
+  E extends AnyEventName,
+  AbortError = never,
+>(
   method: M,
   eventOrEvents: E,
   options?: RequestFpOptions<E> & { params?: MethodParams<M> },
-): TE.TaskEither<RequestError, RequestResult<E>>;
+): TE.TaskEither<RequestError | AbortError, RequestResult<E>>;
 
 /**
  * Calls a method waiting for the specified event(-s) to occur.
@@ -133,54 +146,57 @@ export function requestFp<M extends MethodNameWithOptionalParams, E extends AnyE
  * @param eventOrEvents - tracked event or events.
  * @param options - additional options.
  */
-export function requestFp<M extends MethodNameWithoutParams, E extends AnyEventName>(
+export function requestFp<
+  M extends MethodNameWithoutParams,
+  E extends AnyEventName,
+  AbortError = never,
+>(
   method: M,
   eventOrEvents: E,
   options?: RequestFpOptions<E>,
-): TE.TaskEither<RequestError, RequestResult<E>>;
+): TE.TaskEither<RequestError | AbortError, RequestResult<E>>;
 
-export function requestFp<M extends MethodName, E extends AnyEventName>(
+export function requestFp<
+  M extends MethodName,
+  E extends AnyEventName,
+  AbortError = never,
+>(
   method: M,
   eventOrEvents: E,
-  options?: RequestFpOptions<E> & { params?: MethodParams<M> },
-): TE.TaskEither<RequestError, RequestResult<E>> {
-  options ||= {};
+  options: RequestFpOptions<E> & { params?: MethodParams<M> } = {},
+): TE.TaskEither<RequestError | AbortError, RequestResult<E>> {
   const {
     // If no capture function was passed, we capture the first compatible event.
     capture = () => true,
     postEvent = postEventFp,
   } = options;
-  const [addCleanup, cleanup] = createCbCollector();
-
-  const promise = new BetterPromise<RequestResult<E>>(resolve => {
-    // Iterate over all the tracked events and add a listener, checking if the event
-    // should be captured.
-    (Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents]).forEach(event => {
-      // Each event listener waits for the event to occur.
-      // Then, if the capture function was passed, we should check if the event should
-      // be captured. If the function is omitted, we instantly capture the event.
-      addCleanup(
-        on(event, payload => {
-          if (
-            Array.isArray(eventOrEvents)
-              ? (capture as RequestCaptureEventsFn<EventName[]>)({ event, payload })
-              : (capture as RequestCaptureEventFn<EventName>)(payload)
-          ) {
-            resolve(payload as RequestResult<E>);
-          }
-        }),
-      );
-    });
-  }, options)
-    .finally(cleanup);
 
   return pipe(
-    TE.fromEither(postEvent(method as any, (options as any).params)),
-    TE.mapLeft(err => {
-      promise.catch(() => undefined).cancel();
-      return err;
+    async () => postEvent(method as any, (options as any).params),
+    TE.chainW(() => {
+      return BetterTaskEither<AbortError, RequestResult<E>>((resolve, _, context) => {
+        const [addCleanup, cleanup] = createCbCollector();
+        // Iterate over all the tracked events and add a listener, checking if the event
+        // should be captured.
+        (Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents]).forEach(event => {
+          // Each event listener waits for the event to occur.
+          // Then, if the capture function was passed, we should check if the event should
+          // be captured. If the function is omitted, we instantly capture the event.
+          addCleanup(
+            on(event, payload => {
+              if (
+                Array.isArray(eventOrEvents)
+                  ? (capture as RequestCaptureEventsFn<EventName[]>)({ event, payload })
+                  : (capture as RequestCaptureEventFn<EventName>)(payload)
+              ) {
+                resolve(payload as RequestResult<E>);
+              }
+            }),
+          );
+        });
+        context.on('finalized', cleanup);
+      }, options);
     }),
-    TE.chain(() => TE.tryCatch(() => promise, e => e)),
   );
 }
 
@@ -218,29 +234,21 @@ export function request<M extends MethodName, E extends AnyEventName>(
 ): BetterPromise<RequestResult<E>> {
   const { postEvent } = options || {};
 
-  return BetterPromise.fn(() => {
-    return pipe(
-      // @ts-expect-error TypeScript will not be able to handle our overrides here.
-      requestFp(method, eventOrEvents, {
-        ...options,
-        postEvent: postEvent
-          ? (...args: any[]) => {
-            try {
-              // @ts-expect-error TypeScript will not be able to handle our overrides here.
-              postEvent(...args);
-              return E.right(undefined);
-            } catch (e) {
-              return E.left(e);
-            }
+  return throwifyAnyEither(
+    // @ts-expect-error TypeScript will not be able to handle our overrides here.
+    requestFp(method, eventOrEvents, {
+      ...options,
+      postEvent: postEvent
+        ? (...args: any[]) => {
+          try {
+            // @ts-expect-error TypeScript will not be able to handle our overrides here.
+            postEvent(...args);
+            return E.right(undefined);
+          } catch (e) {
+            return E.left(e);
           }
-          : postEventFp,
-      }),
-      TE.match(
-        error => {
-          throw error;
-        },
-        result => result,
-      ),
-    )();
-  }) as BetterPromise<RequestResult<E>>;
+        }
+        : postEventFp,
+    }),
+  );
 }
