@@ -12,20 +12,25 @@ import {
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 
 beforeEach(() => {
-  if (typeof sessionStorage === 'undefined') {
-    Object.defineProperty(globalThis, 'sessionStorage', {
-      value: {
-        getItem: vi.fn(),
-        setItem: vi.fn(),
-        removeItem: vi.fn(),
-        clear: vi.fn(),
-        key: vi.fn(),
-        length: 0,
-      },
-      writable: true,
-      configurable: true,
-    });
+  const storage = {
+    getItem: vi.fn(),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    clear: vi.fn(),
+    key: vi.fn(),
+    length: 0,
+  };
+
+  try {
+    delete (globalThis as any).sessionStorage;
+  } catch {
   }
+
+  Object.defineProperty(globalThis, 'sessionStorage', {
+    value: storage,
+    writable: true,
+    configurable: true,
+  });
 });
 
 afterEach(() => {
