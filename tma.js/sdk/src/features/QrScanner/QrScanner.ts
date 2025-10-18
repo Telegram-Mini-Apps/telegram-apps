@@ -1,5 +1,5 @@
 import { computed, type Computed, signal } from '@tma.js/signals';
-import { createCbCollector } from '@tma.js/toolkit';
+import { createCbCollector, BetterTaskEither, type BetterTaskEitherError } from '@tma.js/toolkit';
 import { BetterPromise } from 'better-promises';
 import type { PostEventError } from '@tma.js/bridge';
 import { pipe } from 'fp-ts/function';
@@ -16,7 +16,6 @@ import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
 import type { AsyncOptions } from '@/types.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
 import { ConcurrentCallError } from '@/errors.js';
-import { betterTaskEither, type BetterTaskError } from '@/helpers/betterTaskEither.js';
 import type { WithVersion } from '@/fn-options/withVersion.js';
 import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
 
@@ -104,8 +103,8 @@ export class QrScanner {
       return pipe(
         this.isOpened()
           ? TE.left(new ConcurrentCallError('The QR Scanner is already opened'))
-          : TE.fromEither(postEvent('web_app_open_scan_qr_popup', { text: options.text })),
-        TE.chain(() => {
+          : async () => postEvent('web_app_open_scan_qr_popup', { text: options.text }),
+        TE.chainW(() => {
           const [addToCleanup, cleanup] = createCbCollector();
           const withCleanup = <T>(value: T): T => {
             cleanup();
@@ -113,7 +112,7 @@ export class QrScanner {
           };
 
           return pipe(
-            betterTaskEither<void>(resolve => {
+            BetterTaskEither<never, void>(resolve => {
               addToCleanup(onClosed(resolve), onTextReceived(options.onCaptured));
             }, options),
             TE.mapBoth(withCleanup, withCleanup),
@@ -163,7 +162,9 @@ export class QrScanner {
    * );
    */
   readonly captureFp: WithChecksFp<
-    (options: CaptureOptions) => TE.TaskEither<PostEventError | BetterTaskError, string | undefined>,
+    (options: CaptureOptions) => (
+      TE.TaskEither<PostEventError | BetterTaskEitherError, string | undefined>
+    ),
     true
   >;
 
