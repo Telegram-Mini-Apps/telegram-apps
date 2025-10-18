@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { mockSessionStorageSetItem } from 'test-utils';
+import { mockSessionStorageGetItem, mockSessionStorageSetItem } from 'test-utils';
 import {
-  beforeEach,
+  afterEach,
   describe,
   expect,
   it,
@@ -10,7 +10,7 @@ import {
 
 import { getStorageValue, setStorageValue } from '@/storage/storage.js';
 
-beforeEach(() => {
+afterEach(() => {
   vi.restoreAllMocks();
 });
 
@@ -31,12 +31,8 @@ describe('getStorageValue', () => {
   it(
     'should call sessionStorage.getItem with formatted key and apply JSON.parse to the extracted value in case, it is not empty. If parsing failed, return undefined',
     () => {
-      console.log('test frozen', Object.isFrozen(sessionStorage));
-      const getItem = vi
-        .spyOn(sessionStorage, 'getItem')
-        .mockImplementation(() => '{"isVisible":false}');
+      const getItem = mockSessionStorageGetItem(() => '{"isVisible":false}');
       let value = getStorageValue('backButton');
-      console.log('test field', sessionStorage.testField);
       expect(getItem).toHaveBeenCalledOnce();
       expect(getItem).toHaveBeenCalledWith('tapps/backButton');
       expect(value).toStrictEqual({ isVisible: false });
