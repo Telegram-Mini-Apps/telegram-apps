@@ -87,7 +87,7 @@ function createComplete({
   // Attempts to get previously requested contact.
   const getContact = (
     options?: AsyncOptions,
-  ): TE.TaskEither<GetRequestedContactError, RequestedContactCompleteData> => {
+  ): TE.TaskEither<GetRequestedContactError, RequestedContactCompleteData | undefined> => {
     return pipe(
       invokeCustomMethod('getRequestedContact', {}, {
         ...options,
@@ -97,6 +97,10 @@ function createComplete({
         const toStringResult = safeParse(string(), response);
         if (!toStringResult.success) {
           return TE.left(new ValidationError(response, toStringResult.issues));
+        }
+
+        if (!toStringResult.output) {
+          return TE.right(undefined);
         }
 
         const toParsedResult = safeParse(
@@ -136,7 +140,7 @@ function createComplete({
         // means that we have some data, but we are unable to parse it properly. So, there is no
         // need to make some more requests further, the problem is local.
         error => (ValidationError.is(error) ? E.left(error) : E.right(undefined)),
-        contact => E.right(contact as RequestedContactCompleteData | undefined),
+        contact => E.right(contact),
       ),
     );
   };
