@@ -1,5 +1,5 @@
-import { expect, it, describe } from 'vitest';
-import type { Version } from '@telegram-apps/types';
+import type { Version } from '@tma.js/types';
+import { describe, expect, it } from 'vitest';
 
 import { supports } from './supports.js';
 import type {

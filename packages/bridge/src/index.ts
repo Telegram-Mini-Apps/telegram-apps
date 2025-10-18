@@ -1,90 +1,169 @@
-export { encodeBase64Url } from '@/base64-url/encodeBase64Url.js';
-export { decodeBase64Url } from '@/base64-url/decodeBase64Url.js';
-
+//#region env
 export { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 export { isIframe } from '@/env/isIframe.js';
-export { isTMA } from '@/env/isTMA.js';
+export { isTMA, isTMAFp, type isTMAError } from '@/env/isTMA.js';
 export { mockTelegramEnv } from '@/env/mockTelegramEnv.js';
+//#endregion
 
-export type * from '@/events/types/index.js';
+//#region events
 export { emitEvent } from '@/events/emitEvent.js';
-export { on, off, offAll } from '@/events/emitter.js';
-export type { EventListener, SubscribeListener } from '@/events/types/listening.js';
+export { off, offAll, on } from '@/events/emitter.js';
+export type {
+  EventListener,
+  SubscribeListener,
+  Events,
+  WriteAccessRequestedStatus,
+  EmojiStatusAccessRequestedStatus,
+  BiometryAuthRequestStatus,
+  BiometryTokenUpdateStatus,
+  BiometryType,
+  EmojiStatusFailedError,
+  EventName,
+  EventPayload,
+  EventWithoutPayload,
+  EventWithPayload,
+  PhoneRequestedStatus,
+  FullScreenErrorStatus,
+  HomeScreenStatus,
+  InvoiceStatus,
+  SafeAreaInsets,
+} from '@/events/types/index.js';
+//#endregion
 
-export {
-  retrieveLaunchParams,
-  type RetrieveLPResultCamelCased,
-  type RetrieveLPResult,
-} from '@/launch-params/retrieveLaunchParams.js';
-export { retrieveRawLaunchParams } from '@/launch-params/retrieveRawLaunchParams.js';
-export { retrieveRawInitData } from '@/launch-params/retrieveRawInitData.js';
-
-export type * from '@/methods/types/index.js';
-export { postMessage, postMessageImplementation, type PostMessage } from '@/methods/postMessage.js';
-export { targetOrigin, setTargetOrigin } from '@/methods/targetOrigin.js';
+//#region methods
 export { captureSameReq } from '@/methods/captureSameReq.js';
 export {
   createPostEvent,
-  type OnUnsupportedFn,
   type CreatePostEventMode,
+  type OnUnsupportedFn,
 } from '@/methods/createPostEvent.js';
-export { postEvent, type PostEventFn } from '@/methods/postEvent.js';
+export { getReleaseVersion } from '@/methods/getReleaseVersion.js';
+export {
+  postEvent,
+  postEventFp,
+  type PostEventFn,
+  type PostEventFpFn,
+  type PostEventError,
+} from '@/methods/postEvent.js';
+export { postMessage, type PostMessage } from '@/methods/postMessage.js';
 export { supports } from '@/methods/supports.js';
+export type {
+  AnyHapticFeedbackParams,
+  AnyInvokeCustomMethodParams,
+  CreateMethodParams,
+  CustomMethodName,
+  ImpactHapticFeedbackParams,
+  ImpactHapticFeedbackStyle,
+  CustomMethodsParams,
+  CustomMethodParams,
+  MethodName,
+  MethodVersionedParams,
+  NotificationHapticFeedbackParams,
+  NotificationHapticFeedbackType,
+  Methods,
+  SelectionHapticFeedbackParams,
+  MethodNameWithOptionalParams,
+  MethodNameWithoutParams,
+  MethodNameWithRequiredParams,
+  MethodNameWithVersionedParams,
+  MethodParams,
+  PopupParams,
+  BackgroundColor,
+  BottomBarColor,
+  HeaderColorKey,
+  PopupButton,
+  OpenLinkBrowser,
+  SecondaryButtonPosition,
+  SwitchInlineQueryChatType,
+} from '@/methods/types/index.js';
+//#endregion
 
-export { createStartParam } from '@/start-param/createStartParam.js';
-export { decodeStartParam } from '@/start-param/decodeStartParam.js';
-export { isSafeToCreateStartParam } from '@/start-param/isSafeToCreateStartParam.js';
-
+//#region utils
 export { compareVersions } from '@/utils/compareVersions.js';
 export {
   invokeCustomMethod,
-  type InvokeCustomMethodOptions,
+  invokeCustomMethodFp,
   type InvokeCustomMethodFn,
+  type InvokeCustomMethodOptions,
+  type InvokeCustomMethodFpFn,
+  type InvokeCustomMethodError,
+  type InvokeCustomMethodFpOptions,
 } from '@/utils/invokeCustomMethod.js';
 export {
   request,
-  type RequestCaptureEventsFn,
+  requestFp,
   type RequestCaptureEventFn,
-  type RequestResult,
-  type RequestCaptureFnEventsPayload,
-  type RequestOptions,
+  type RequestCaptureEventsFn,
   type RequestCaptureFn,
+  type RequestCaptureFnEventsPayload,
   type RequestFn,
+  type RequestOptions,
+  type RequestResult,
+  type RequestError,
+  type RequestFpOptions,
+  type RequestFpFn,
 } from '@/utils/request.js';
+//#endregion
 
+//#region misc
 export { applyPolyfills } from '@/applyPolyfills.js';
-export { setDebug } from '@/debug.js';
+export {
+  decodeBase64Url,
+  encodeBase64Url,
+  decodeBase64UrlFp,
+  type DecodeBase64UrlError,
+} from '@/base64-url.js';
 export {
   LaunchParamsRetrieveError,
-  isLaunchParamsRetrieveError,
-  MethodUnsupportedError,
-  isMethodUnsupportedError,
-  InvokeCustomMethodError,
-  isInvokeCustomMethodError,
-  MethodParameterUnsupportedError,
-  isMethodMethodParameterUnsupportedError,
-  UnknownEnvError,
-  isUnknownEnvError,
   InvalidLaunchParamsError,
-  isInvalidLaunchParamsError,
+  InvokeCustomMethodFailedError,
+  MethodParameterUnsupportedError,
+  MethodUnsupportedError,
+  UnknownEnvError,
 } from '@/errors.js';
-export { logger } from '@/logger.js';
-export { resetPackageState } from '@/resetPackageState.js';
+export {
+  setDebug,
+  debug,
+  resetGlobals,
+  postMessageImpl,
+  logger,
+  setTargetOrigin,
+  targetOrigin,
+} from '@/globals.js';
+export {
+  retrieveLaunchParams,
+  retrieveRawInitData,
+  retrieveRawInitDataFp,
+  retrieveRawLaunchParams,
+  retrieveRawLaunchParamsFp,
+  retrieveLaunchParamsFp,
+  type RetrieveLaunchParamsError,
+  type RetrieveLaunchParamsResult,
+  type RetrieveRawInitDataError,
+  type RetrieveRawLaunchParamsError,
+} from '@/launch-params.js';
+export {
+  createStartParam,
+  createStartParamFp,
+  decodeStartParam,
+  decodeStartParamFp,
+  isSafeToCreateStartParam,
+} from '@/start-param.js';
+//#endregion
 
+//#region Re-exports
 export {
   createLogger,
-  type LogLevel,
-  type LoggerOptions,
+  deepSnakeToCamelObjKeys,
+  type DeepConvertSnakeKeysToCamelCase,
   type Logger,
   type LoggerFn,
   type LoggerForceFn,
-} from '@telegram-apps/toolkit';
-
+  type LoggerOptions,
+  type LogLevel,
+} from '@tma.js/toolkit';
 export {
-  isCancelledError,
-  isTimeoutError,
   CancelledError,
   TimeoutError,
-  AbortablePromise,
-  ManualPromise,
 } from 'better-promises';
+//#endregion

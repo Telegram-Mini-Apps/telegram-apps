@@ -1,5 +1,5 @@
-import type { If, IsNever } from '@telegram-apps/toolkit';
-import type { RGB } from '@telegram-apps/types';
+import type { If, IsNever } from '@tma.js/toolkit';
+import type { RGB } from '@tma.js/types';
 
 import type { AnyInvokeCustomMethodParams } from './custom-method.js';
 import type { AnyHapticFeedbackParams } from './haptic-feedback.js';

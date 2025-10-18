@@ -1,4 +1,4 @@
-import type { Version } from '@telegram-apps/types';
+import type { Version } from '@tma.js/types';
 
 function parts(a: Version): number[] {
   return a.split('.').map(Number);

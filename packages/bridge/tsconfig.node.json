@@ -5,6 +5,7 @@
   },
   "include": [
     "tools",
+    "package.json",
     "vite.config.ts",
     "vite.iife.config.ts"
   ]

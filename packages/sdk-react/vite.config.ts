@@ -10,7 +10,7 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
     rollupOptions: {
-      external: ['react', 'react/jsx-runtime', '@telegram-apps/sdk'],
+      external: ['react', 'react/jsx-runtime', '@tma.js/sdk'],
     },
     lib: {
       entry: 'src/index.ts',

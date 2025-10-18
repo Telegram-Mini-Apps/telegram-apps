@@ -1,13 +1,16 @@
+import type { If, IsNever, IsUndefined, Or } from '@tma.js/toolkit';
 import mitt, {
   type Emitter,
   type EventHandlerMap,
   type EventType,
   type Handler,
 } from 'mitt';
-import type { If, IsNever, IsUndefined, Or } from '@telegram-apps/toolkit';
 
 export type WildcardHandler<E> = Handler<{
-  [K in keyof E]: [K, If<Or<IsNever<E[K]>, IsUndefined<E[K]>>, void, E[K]>]
+  [K in keyof E]: {
+    name: K;
+    payload: If<Or<IsNever<E[K]>, IsUndefined<E[K]>>, never, E[K]>;
+  };
 }[keyof E]>;
 
 export interface OnFn<E> {
@@ -15,14 +18,15 @@ export interface OnFn<E> {
    * Adds a new listener for the specified event.
    * @param type - event name.
    * @param handler - event listener.
-   * @param once - should listener be called only once.
+   * @param once - should this listener be called only once.
    * @returns Function to remove bound event listener.
-   */<K extends keyof E>(type: K, handler: Handler<E[K]>, once?: boolean): VoidFunction;
+   */
+  <K extends keyof E>(type: K, handler: Handler<E[K]>, once?: boolean): VoidFunction;
   /**
-   * Adds a listener for all events.
+   * Adds a listener to the wildcard event.
    * @param type - event name.
    * @param handler - event listener.
-   * @param once - should listener be called only once.
+   * @param once - should this listener be called only once.
    * @returns Function to remove bound event listener.
    */
   (type: '*', handler: WildcardHandler<E>, once?: boolean): VoidFunction;
@@ -30,16 +34,17 @@ export interface OnFn<E> {
 
 export interface OffFn<E> {
   /**
-   * Removes a listener for the specified event.
+   * Removes a listener from the specified event.
    * @param type - event to listen.
    * @param handler - event listener to remove.
    * @param once - had this listener to be called only once.
-   */<K extends keyof E>(type: K, handler: Handler<E[K]>, once?: boolean): void;
+   */
+  <K extends keyof E>(type: K, handler: Handler<E[K]>, once?: boolean): void;
   /**
-   * Removes a listener for all events.
+   * Removes a listener from the wildcard event.
    * @param type - event to stop listening.
    * @param handler - event listener to remove.
-   * @param once - had this listener to be called only once.
+   * @param once - should this listener be called only once.
    */
   (type: '*', handler: WildcardHandler<E>, once?: boolean): void;
 }
@@ -51,18 +56,19 @@ export interface EmitFn<E> {
 
 /**
  * Creates a new enhanced event emitter.
- * @param onFirst - will be called when the first event was added.
- * @param onEmpty - will be called when emitter's listeners' map was emptied.
+ * @param onFirst - a function to call every time when the events map appeared to be empty during
+ * the event listener creation.
+ * @param onEmpty - a function to call every tume when the events map became empty.
  */
 export function createEmitter<E extends object>(
   onFirst: VoidFunction,
   onEmpty: VoidFunction,
-): [
-  on: OnFn<E>,
-  off: OffFn<E>,
-  emit: EmitFn<E>,
-  clear: VoidFunction,
-] {
+): {
+  on: OnFn<E>;
+  off: OffFn<E>;
+  emit: EmitFn<E>;
+  clear: VoidFunction;
+} {
   // To understand the event handlers concept here, let's tell the underlying idea.
   //
   // We use a Map, where key is an event name, and the value is a Map we call HandlersMap.
@@ -101,9 +107,11 @@ export function createEmitter<E extends object>(
     <E extends Record<EventType, unknown>>(all?: EventHandlerMap<E>): Emitter<E>;
   })<E & Record<string | symbol, unknown>>();
 
-  const off: OffFn<E> = (event: keyof E | '*', handler: (...args: any) => void, once?: boolean) => {
-    once ||= false;
-
+  const off: OffFn<E> = (
+    event: keyof E | '*',
+    handler: (...args: any) => void,
+    once = false,
+  ) => {
     const handlersMap: HandlersMap = eventToHandlersMap.get(event) || new Map();
     eventToHandlersMap.set(event, handlersMap);
 
@@ -130,8 +138,8 @@ export function createEmitter<E extends object>(
     }
   };
 
-  return [
-    function on(event: keyof E | '*', handler: (...args: any[]) => any, once?: boolean) {
+  return {
+    on(event: keyof E | '*', handler: (...args: any[]) => any, once?: boolean) {
       // The events' map became non-empty. Call the onFirst callback.
       !eventToHandlersMap.size && onFirst();
 
@@ -142,7 +150,7 @@ export function createEmitter<E extends object>(
       const internalHandler = (...args: any[]) => {
         once && cleanup();
         if (event === '*') {
-          handler(args);
+          handler({ name: args[0], payload: args[1] });
         } else {
           handler(...args);
         }
@@ -162,12 +170,12 @@ export function createEmitter<E extends object>(
     },
     off,
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    emitter.emit,
-    function offAll() {
+    emit: emitter.emit,
+    clear() {
       const prevSize = eventToHandlersMap.size;
       emitter.all.clear();
       eventToHandlersMap.clear();
       prevSize && onEmpty();
     },
-  ];
+  };
 }

@@ -1,9 +1,10 @@
 import { defineConfig, type UserConfigFn } from 'vitest/config';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { LibraryFormats } from 'vite';
+
+import packageJson from '../package.json' with { type: 'json' };
 
 export function getConfig({
   filename = 'index',
@@ -25,11 +26,11 @@ export function getConfig({
 
     return {
       plugins: [
-        tsconfigPaths({ projects: [tsconfigPath] }),
         declarations && dts({ outDir: 'dist/dts', tsconfigPath }),
       ],
       resolve: {
         alias: {
+          '@test-utils': resolve(dirname(fileURLToPath(import.meta.url)), '../test-utils'),
           '@': resolve(dirname(fileURLToPath(import.meta.url)), '../src'),
         },
       },
@@ -38,20 +39,10 @@ export function getConfig({
         emptyOutDir: false,
         sourcemap: true,
         rollupOptions: {
-          external: inlineModules ? [] : [
-            '@telegram-apps/bridge',
-            '@telegram-apps/navigation',
-            '@telegram-apps/signals',
-            '@telegram-apps/toolkit',
-            '@telegram-apps/transformers',
-            '@telegram-apps/types',
-            'better-promises',
-            'error-kid',
-            'valibot',
-          ],
+          external: inlineModules ? [] : Object.keys(packageJson.dependencies),
         },
         lib: {
-          name: 'telegramApps.sdk',
+          name: 'tmajs.sdk',
           entry: input,
           formats,
           fileName: filename,

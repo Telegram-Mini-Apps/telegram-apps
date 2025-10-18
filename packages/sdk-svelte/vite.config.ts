@@ -10,7 +10,7 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
     rollupOptions: {
-      external: ['svelte', '@telegram-apps/sdk'],
+      external: ['svelte', '@tma.js/sdk'],
     },
     lib: {
       entry: 'src/index.ts',

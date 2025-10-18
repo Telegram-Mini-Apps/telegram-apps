@@ -1,11 +1,8 @@
-import type { RequestOptions } from '@telegram-apps/bridge';
-import type { PromiseOptions } from 'better-promises';
+import type { BetterPromiseOptions } from 'better-promises';
 
 /**
- * Function with any arguments list and return type.
+ * Async options allowed to be used in package's public functions.
  */
-export type AnyFn = (...args: any[]) => any;
+export type AsyncOptions = Pick<BetterPromiseOptions, 'abortSignal' | 'timeout'>;
 
-export type RequestOptionsNoCapture = Omit<RequestOptions<never>, 'capture'>;
-
-export type AsyncOptions = Omit<PromiseOptions, 'rejectOnAbort'>;
+export type MaybeAccessor<T> = T | (() => T);

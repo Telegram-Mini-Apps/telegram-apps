@@ -1,5 +1,5 @@
-import { expect, it, vi } from 'vitest';
 import { mockWindow } from 'test-utils';
+import { expect, it, vi } from 'vitest';
 
 import { emitEvent } from './emitEvent.js';
 

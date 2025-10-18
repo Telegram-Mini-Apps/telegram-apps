@@ -1,2 +1,2 @@
 export * from './hooks.js';
-export * from '@telegram-apps/sdk';
+export * from '@tma.js/sdk';

@@ -1,5 +1,7 @@
-import { defineConfig } from 'vitest/config';
 import dts from 'vite-plugin-dts';
+import { defineConfig } from 'vitest/config';
+
+import packageJson from './package.json' with { type: "json" };
 
 export default defineConfig((_) => ({
   test: {
@@ -23,12 +25,7 @@ export default defineConfig((_) => ({
     emptyOutDir: false,
     sourcemap: true,
     rollupOptions: {
-      external: [
-        'node:crypto',
-        '@telegram-apps/transformers',
-        '@telegram-apps/types',
-        'error-kid',
-      ],
+      external: Object.keys(packageJson.dependencies),
     },
     lib: {
       entry: {

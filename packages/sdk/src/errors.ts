@@ -1,68 +1,82 @@
-import { errorClass } from 'error-kid';
+import { errorClass, errorClassWithData } from 'error-kid';
+import type { BaseIssue } from 'valibot';
 
-function proxyMessage(message?: string): [string?] {
+function msgToTuple(message?: string): [string?] {
   return [message];
 }
 
-export const [
-  CSSVarsBoundError,
-  isCSSVarsBoundError,
-] = errorClass('CSSVarsBoundError', 'CSS variables are already bound');
+export class ValidationError extends errorClassWithData<
+  { input: unknown; issues: BaseIssue<any>[] },
+  [input: unknown, issues: BaseIssue<any>[]]
+>(
+  'ValidationError',
+  (input, issues) => ({ input, issues }),
+  'Validation error',
+) {
+}
 
-export const [
-  NotAvailableError,
-  isNotAvailableError,
-] = errorClass<[message: string]>('NotAvailableError', proxyMessage);
+export class CSSVarsBoundError extends errorClass(
+  'CSSVarsBoundError',
+  'CSS variables are already bound',
+) {
+}
 
-export const [
-  InvalidEnvError,
-  isInvalidEnvError,
-] = errorClass<[message?: string]>('InvalidEnvError', proxyMessage);
+export class NotAvailableError extends errorClass<[message: string]>(
+  'NotAvailableError',
+  msgToTuple,
+) {
+}
 
-export const [
-  FunctionUnavailableError,
-  isFunctionNotAvailableError,
-] = errorClass<[message?: string]>('FunctionNotAvailableError', proxyMessage);
+export class InvalidEnvError extends errorClass<[message?: string]>(
+  'InvalidEnvError',
+  msgToTuple,
+) {
+}
 
-export const [
-  InvalidArgumentsError,
-  isInvalidArguments,
-] = errorClass<[message: string, cause?: unknown]>(
+export class FunctionUnavailableError extends errorClass<[message?: string]>(
+  'FunctionNotAvailableError',
+  msgToTuple,
+) {
+}
+
+export class InvalidArgumentsError extends errorClass<[message: string, cause?: unknown]>(
   'InvalidArgumentsError',
   (message, cause) => [message, { cause }],
-);
+) {
+}
 
-export const [
-  ConcurrentCallError,
-  isConcurrentCallError,
-] = errorClass<[message: string]>('ConcurrentCallError', proxyMessage);
+export class ConcurrentCallError extends errorClass<[message: string]>(
+  'ConcurrentCallError',
+  msgToTuple,
+) {
+}
 
-export const [
-  SetEmojiStatusError,
-  isSetEmojiStatusError,
-] = errorClass<[error: string]>(
+export class SetEmojiStatusError extends errorClass<[error: string]>(
   'SetEmojiStatusError',
   error => [`Failed to set emoji status: ${error}`],
-);
+) {
+}
 
-export const [
-  AccessDeniedError,
-  isAccessDeniedError,
-] = errorClass<[message: string]>('AccessDeniedError', proxyMessage);
+export class AccessDeniedError extends errorClass<[message: string]>(
+  'AccessDeniedError',
+  msgToTuple,
+) {
+}
 
-export const [
-  FullscreenFailedError,
-  isFullscreenFailedError,
-] = errorClass<[message: string]>('FullscreenFailedError', proxyMessage);
+export class FullscreenFailedError extends errorClass<[message: string]>(
+  'FullscreenFailedError',
+  msgToTuple,
+) {
+}
 
-export const [
-  ShareMessageError,
-  isShareMessageError,
-] = errorClass<[error: string]>('ShareMessageError', proxyMessage);
+export class ShareMessageError extends errorClass<[error: string]>(
+  'ShareMessageError',
+  msgToTuple,
+) {
+}
 
-export const [
-  UnknownThemeParamsKeyError,
-  isUnknownThemeParamsKeyError,
-] = errorClass<[key: string]>('UnknownThemeParamsKeyError', key => {
-  return [`Unknown theme params key passed: ${key}`];
-});
+export class UnknownThemeParamsKeyError extends errorClass<[key: string]>(
+  'UnknownThemeParamsKeyError',
+  key => [`Unknown theme params key passed: ${key}`],
+) {
+}

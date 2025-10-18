@@ -1,19 +1,17 @@
-import { is, parse, pipe, string } from 'valibot';
+import { setStorageValue } from '@tma.js/toolkit';
 import {
-  isLaunchParamsQuery,
-  jsonParse,
-  type LaunchParamsLike,
-  MiniAppsMessageSchema,
-  serializeLaunchParamsQuery,
+  miniAppsMessage,
   parseLaunchParamsQuery,
-} from '@telegram-apps/transformers';
-import { If, IsNever, setStorageValue } from '@telegram-apps/toolkit';
+  pipeJsonToSchema,
+  serializeLaunchParamsQuery,
+  type LaunchParamsLike,
+} from '@tma.js/transformers';
+import { parse } from 'valibot';
 
-import { logger } from '@/logger.js';
 import { isIframe } from '@/env/isIframe.js';
-import type { MethodName, MethodParams } from '@/methods/types/index.js';
 import { InvalidLaunchParamsError } from '@/errors.js';
-import { postMessageImplementation } from '@/methods/postMessage.js';
+import { logger, postMessageImpl } from '@/globals.js';
+import type { MethodName, MethodParams } from '@/methods/types/index.js';
 
 /**
  * Mocks the environment and imitates Telegram Mini Apps behavior.
@@ -41,26 +39,29 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
    * need it when retrieving init data in this format. Otherwise, init data may be broken.
    */
   launchParams?:
-    | (Omit<LaunchParamsLike, 'tgWebAppData'> & { tgWebAppData?: string | URLSearchParams })
-    | string
-    | URLSearchParams;
+  | (Omit<LaunchParamsLike, 'tgWebAppData'> & { tgWebAppData?: string | URLSearchParams })
+  | string
+  | URLSearchParams;
   /**
    * Function that will be called if a Mini Apps method call was requested by the mini app.
    *
    * It receives a Mini Apps method name along with the passed payload.
    *
    * Note that using the `next` function, in non-web environments it uses the
-   * `window.TelegramWebviewProxy.postEvent`.
+   * `window.TelegramWebviewProxy.postEvent` method.
    *
-   * Talking about the web versions of Telegram, the value is a bit more complex - it will
-   * equal to the value stored in the `postMessageImplementation` signal set previously. By default,
+   * Talking about the web versions of Telegram, the value of `next` is a bit more complex - it
+   * will be equal to the value stored in the `postMessageImpl` signal set previously. By default,
    * this value contains a function utilizing the `window.parent.postMessage` method.
    * @param event - event information.
    * @param next - function to call the original method used to call a Mini Apps method.
    */
   onEvent?: (
     event: {
-      [M in MethodName]: [M, If<IsNever<MethodParams<M>>, void, MethodParams<M>>]
+      [M in MethodName]: {
+        name: M;
+        params: MethodParams<M>;
+      }
     }[MethodName] | [string, unknown],
     next: () => void,
   ) => void;
@@ -87,12 +88,10 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
         );
 
     // Remember to check if launch params are valid.
-    if (!isLaunchParamsQuery(launchParamsQuery)) {
-      try {
-        parseLaunchParamsQuery(launchParamsQuery);
-      } catch (e) {
-        throw new InvalidLaunchParamsError(launchParamsQuery, e);
-      }
+    try {
+      parseLaunchParamsQuery(launchParamsQuery);
+    } catch (e) {
+      throw new InvalidLaunchParamsError(launchParamsQuery, e);
     }
     setStorageValue('launchParams', launchParamsQuery);
   }
@@ -103,16 +102,13 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
     if (!onEvent) {
       return;
     }
-    const MiniAppsMessageJson = pipe(
-      string(),
-      jsonParse(),
-      MiniAppsMessageSchema,
-    );
-
     // As long as the postEvent function uses the postMessage method, we should rewire it.
-    resetPostMessage && postMessageImplementation.reset();
-    const original = postMessageImplementation();
-    postMessageImplementation.set((...args) => {
+    if (resetPostMessage) {
+      postMessageImpl.reset();
+    }
+
+    const original = postMessageImpl();
+    postMessageImpl.set((...args) => {
       const [message] = args;
       const next = () => {
         (original as any)(...args);
@@ -120,14 +116,13 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
 
       // Pass only Telegram Mini Apps events to the handler. All other calls should be passed
       // to the original handler (window.parent.postMessage likely).
-      if (is(MiniAppsMessageJson, message)) {
-        const data = parse(MiniAppsMessageJson, message);
+      try {
+        const data = parse(pipeJsonToSchema(miniAppsMessage()), message);
         onEvent([data.eventType, data.eventData], next);
-      } else {
+      } catch {
         next();
       }
     });
-
     return;
   }
 

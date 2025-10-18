@@ -1,64 +1,152 @@
-import { AbortablePromise } from 'better-promises';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createWindow, mockSessionStorageGetItem, mockWindow } from 'test-utils';
+import { TimeoutError } from 'better-promises';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  createWindow,
+  mockSessionStorageGetItem,
+  mockSessionStorageSetItem,
+  mockWindow,
+} from 'test-utils';
+import * as TE from 'fp-ts/TaskEither';
+import { pipe } from 'fp-ts/function';
 
-import { request as requestFn } from '@/utils/request.js';
-import { isTMA } from './isTMA.js';
+import { requestFp as _requestFp } from '@/utils/request.js';
 
-const request = vi.mocked(requestFn);
+import { isTMA, isTMAFp } from './isTMA.js';
 
-vi.mock('@/utils/request.js', () => ({
-  request: vi.fn(),
-}));
+const requestFp = vi.mocked(_requestFp);
 
-afterEach(() => {
+vi.mock('@/utils/request.js', () => ({ requestFp: vi.fn() }));
+
+beforeEach(() => {
   vi.restoreAllMocks();
+
+  // Every isTMA call may set a value in the session storage.
+  mockSessionStorageSetItem();
+  mockSessionStorageGetItem();
 });
 
-describe('complete', () => {
-  it('should return true if current window contains TelegramWebviewProxy property', async () => {
-    createWindow({
-      TelegramWebviewProxy: {
-        postEvent: 123,
+describe('isTMA', () => {
+  describe('complete', () => {
+    it('should return true if current window contains TelegramWebviewProxy property', async () => {
+      createWindow({ TelegramWebviewProxy: { postEvent: () => undefined } } as any);
+      await expect(isTMA('complete')).resolves.toBe(true);
+    });
+
+    it(
+      'should return promise with true value resolved, if requesting theme parameters was successful',
+      async () => {
+        createWindow();
+        requestFp.mockImplementationOnce(() => TE.right({}));
+        await expect(isTMA('complete')).resolves.toBe(true);
       },
-    } as any);
-    await expect(isTMA('complete')).resolves.toBe(true);
+    );
+
+    it(
+      'should return promise with false value resolved if promise was rejected with timeout error',
+      async () => {
+        createWindow();
+        requestFp.mockImplementationOnce(() => TE.left(new TimeoutError(100)));
+        await expect(isTMA('complete')).resolves.toBe(false);
+
+        requestFp.mockImplementationOnce(() => TE.left(new Error('something else')));
+        await expect(isTMA('complete')).rejects.toStrictEqual(new Error('something else'));
+      },
+    );
   });
 
-  it('should return promise with true value resolved, if requesting theme parameters was successful', async () => {
-    createWindow();
-    request.mockImplementationOnce(() => AbortablePromise.resolve({}));
-    await expect(isTMA('complete')).resolves.toBe(true);
-  });
+  describe('sync', () => {
+    beforeEach(() => {
+      mockWindow({ location: { href: '' } } as any);
+    });
 
-  it('should return promise with false value resolved, if requesting theme parameters was unsuccessful', async () => {
-    createWindow();
-    request.mockImplementationOnce(() => AbortablePromise.reject(new Error('Timed out.')));
-    await expect(isTMA('complete')).resolves.toBe(false);
+    it('should return true if env contains launch params', () => {
+      vi
+        .spyOn(window.location, 'href', 'get')
+        .mockImplementation(() => {
+          return '/abc?tgWebAppStartParam=START#tgWebAppPlatform=tdesktop&tgWebAppVersion=7.0&tgWebAppThemeParams=%7B%7D';
+        });
+      expect(isTMA()).toBe(true);
+    });
+
+    it('should return true if env doesnt contain launch params', () => {
+      expect(isTMA()).toBe(false);
+    });
   });
 });
 
-describe('sync', () => {
-  beforeEach(() => {
-    mockWindow({
-      location: {
-        href: '',
+describe('isTMAFp', () => {
+  describe('complete', () => {
+    it('should return true if current window contains TelegramWebviewProxy property', async () => {
+      createWindow({ TelegramWebviewProxy: { postEvent: () => undefined } } as any);
+      await pipe(
+        isTMAFp('complete'),
+        TE.match(
+          () => expect.unreachable(),
+          result => expect(result).toBe(true),
+        ),
+      )();
+      expect.assertions(1);
+    });
+
+    it(
+      'should return promise with true value resolved, if requesting theme parameters was successful',
+      async () => {
+        createWindow();
+        requestFp.mockImplementationOnce(() => TE.right({}));
+        await pipe(
+          isTMAFp('complete'),
+          TE.match(
+            () => expect.unreachable(),
+            result => expect(result).toBe(true),
+          ),
+        )();
+        expect.assertions(1);
       },
-    } as any);
-    mockSessionStorageGetItem();
+    );
+
+    it(
+      'should return promise with false value resolved if promise was rejected with timeout error',
+      async () => {
+        createWindow();
+        requestFp.mockImplementationOnce(() => TE.left(new TimeoutError(100)));
+        await pipe(
+          isTMAFp('complete'),
+          TE.match(
+            () => expect.unreachable(),
+            result => expect(result).toBe(false),
+          ),
+        )();
+        expect.assertions(1);
+
+        requestFp.mockImplementationOnce(() => TE.left(new Error('something else')));
+        await pipe(
+          isTMAFp('complete'),
+          TE.match(
+            error => expect(error).toStrictEqual(new Error('something else')),
+            () => expect.unreachable(),
+          ),
+        )();
+        expect.assertions(2);
+      },
+    );
   });
 
-  it('should return true if env contains launch params', () => {
-    vi
-      .spyOn(window.location, 'href', 'get')
-      .mockImplementation(() => {
-        return '/abc?tgWebAppStartParam=START#tgWebAppPlatform=tdesktop&tgWebAppVersion=7.0&tgWebAppThemeParams=%7B%7D';
-      });
+  describe('sync', () => {
+    beforeEach(() => {
+      mockWindow({ location: { href: '' } } as any);
+    });
 
-    expect(isTMA()).toBe(true);
-  });
+    it('should return true if env contains launch params', () => {
+      vi
+        .spyOn(window.location, 'href', 'get')
+        .mockImplementation(() => {
+          return '/abc?tgWebAppStartParam=START#tgWebAppPlatform=tdesktop&tgWebAppVersion=7.0&tgWebAppThemeParams=%7B%7D';
+        });
+      expect(isTMAFp()).toBe(true);
+    });
 
-  it('should return true if env doesnt contain launch params', () => {
-    expect(isTMA()).toBe(false);
+    it('should return false if env doesnt contain launch params', () => {
+      expect(isTMAFp()).toBe(false);
+    });
   });
 });

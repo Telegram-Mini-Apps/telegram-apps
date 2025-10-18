@@ -6,9 +6,10 @@ import {
   retrieveAndroidDeviceData,
   retrieveAndroidDeviceDataFrom,
   type AndroidDeviceData,
-  type RetrieveLPResult,
-  type RetrieveLPResultCamelCased,
-} from '@telegram-apps/sdk';
+  type RetrieveLaunchParamsResult,
+  deepSnakeToCamelObjKeys,
+  type DeepConvertSnakeKeysToCamelCase,
+} from '@tma.js/sdk';
 
 /**
  * Returns the underlying signal value updating it each time the signal value changes.
@@ -25,7 +26,7 @@ export function useSignal<T>(
   getServerSnapshot?: () => T,
 ): T {
   return useSyncExternalStore(
-    (onStoreChange) => signal.sub(onStoreChange),
+    onStoreChange => signal.sub(onStoreChange),
     signal,
     getServerSnapshot || signal,
   );
@@ -34,25 +35,26 @@ export function useSignal<T>(
 /**
  * @returns Launch parameters from any known source.
  * @param camelCase - should the output be camel-cased.
- * @throws {LaunchParamsRetrieveError} Unable to retrieve launch parameters. They are probably
- * invalid.
  */
-export function useLaunchParams(camelCase?: false): RetrieveLPResult;
+export function useLaunchParams(camelCase?: false): RetrieveLaunchParamsResult;
 /**
  * @returns Launch parameters from any known source.
  * @param camelCase - should the output be camel-cased.
- * @throws {LaunchParamsRetrieveError} Unable to retrieve launch parameters. They are probably
- * invalid.
  */
-export function useLaunchParams(camelCase: true): RetrieveLPResultCamelCased;
-export function useLaunchParams(camelCase?: boolean): RetrieveLPResult | RetrieveLPResultCamelCased {
-  return useMemo(() => retrieveLaunchParams(camelCase as any), [camelCase]);
+export function useLaunchParams(
+  camelCase: true,
+): DeepConvertSnakeKeysToCamelCase<RetrieveLaunchParamsResult>;
+export function useLaunchParams(
+  camelCase?: boolean,
+): RetrieveLaunchParamsResult | DeepConvertSnakeKeysToCamelCase<RetrieveLaunchParamsResult> {
+  return useMemo(() => {
+    const lp = retrieveLaunchParams();
+    return camelCase ? deepSnakeToCamelObjKeys(lp) : lp;
+  }, [camelCase]);
 }
 
 /**
  * @returns Launch parameters in a raw format from any known source.
- * @throws {LaunchParamsRetrieveError} Unable to retrieve launch parameters. They are probably
- * invalid.
  * @see retrieveRawLaunchParams
  */
 export function useRawLaunchParams(): string {
@@ -61,7 +63,6 @@ export function useRawLaunchParams(): string {
 
 /**
  * @returns Raw init data from any known source.
- * @throws {LaunchParamsRetrieveError} Unable to retrieve launch params from any known source.
  */
 export function useRawInitData(): string | undefined {
   return useMemo(retrieveRawInitData, []);

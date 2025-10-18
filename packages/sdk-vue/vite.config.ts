@@ -10,7 +10,7 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
     rollupOptions: {
-      external: ['vue', '@telegram-apps/sdk'],
+      external: ['vue', '@tma.js/sdk'],
     },
     lib: {
       entry: 'src/index.ts',

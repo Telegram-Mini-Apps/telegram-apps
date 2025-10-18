@@ -1,15 +1,15 @@
+import type { Version } from '@tma.js/types';
 import { any, is, looseObject } from 'valibot';
-import type { Version } from '@telegram-apps/types';
 
-import { supports } from '@/methods/supports.js';
+import { MethodParameterUnsupportedError, MethodUnsupportedError } from '@/errors.js';
+import { logger } from '@/globals.js';
 import { type PostEventFn, postEvent } from '@/methods/postEvent.js';
+import { supports } from '@/methods/supports.js';
 import type {
   MethodName,
   MethodNameWithVersionedParams,
   MethodVersionedParams,
 } from '@/methods/types/index.js';
-import { MethodParameterUnsupportedError, MethodUnsupportedError } from '@/errors.js';
-import { logger } from '@/logger.js';
 
 export type OnUnsupportedFn = (
   data: { version: Version } & (
@@ -41,9 +41,8 @@ export type CreatePostEventMode = 'strict' | 'non-strict';
  */
 export function createPostEvent(
   version: Version,
-  onUnsupportedOrMode?: OnUnsupportedFn | CreatePostEventMode,
+  onUnsupportedOrMode: OnUnsupportedFn | CreatePostEventMode = 'strict',
 ): PostEventFn {
-  onUnsupportedOrMode ||= 'strict';
   const onUnsupported: OnUnsupportedFn = typeof onUnsupportedOrMode === 'function'
     ? onUnsupportedOrMode
     : data => {

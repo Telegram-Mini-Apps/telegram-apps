@@ -1,19 +1,19 @@
-import { resolve, dirname } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { defineConfig, type UserConfigFn } from 'vitest/config';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import dts from 'vite-plugin-dts';
 import type { LibraryFormats } from 'vite';
+import dts from 'vite-plugin-dts';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import { defineConfig, type UserConfigFn } from 'vitest/config';
+
+import packageJson from '../package.json' with { type: "json" };
 
 export function getConfig({
-  filename = 'index',
   input,
   formats,
   declarations,
   inlineModules,
 }: {
   input: string;
-  filename?: string;
   formats: LibraryFormats[];
   declarations?: boolean;
   inlineModules?: boolean;
@@ -38,22 +38,13 @@ export function getConfig({
         emptyOutDir: false,
         sourcemap: true,
         rollupOptions: {
-          external: inlineModules ? [] : [
-            '@telegram-apps/signals',
-            '@telegram-apps/toolkit',
-            '@telegram-apps/transformers',
-            '@telegram-apps/types',
-            'valibot',
-            'better-promises',
-            'error-kid',
-            'mitt'
-          ],
+          external: inlineModules ? [] : Object.keys(packageJson.dependencies)
         },
         lib: {
           name: 'tapps.bridge',
           entry: input,
           formats,
-          fileName: filename,
+          fileName: 'index',
         },
       },
       test: {

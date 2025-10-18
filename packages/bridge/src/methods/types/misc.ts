@@ -1,4 +1,4 @@
-import type { RGB } from '@telegram-apps/types';
+import type { RGB } from '@tma.js/types';
 
 type KnownColorKey = 'bg_color' | 'secondary_bg_color';
 

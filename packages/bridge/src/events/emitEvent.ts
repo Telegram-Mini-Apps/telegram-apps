@@ -1,4 +1,4 @@
-import type { EventWithoutPayload, EventWithPayload, EventPayload } from '@/events/types/index.js';
+import type { EventPayload, EventWithoutPayload, EventWithPayload } from '@/events/types/index.js';
 
 /**
  * Emits an event without payload sent from the Telegram native application like it was sent in
@@ -58,7 +58,9 @@ export function emitEvent<E extends string>(
 export function emitEvent(eventType: string, eventData?: unknown): void {
   window.dispatchEvent(new MessageEvent('message', {
     data: JSON.stringify({ eventType, eventData }),
-    // We specify window.parent to imitate the case, the parent iframe sent us this event.
+    // We specify this kind of source here in order to allow the package's "on" function to
+    // capture it. The reason is this function always checks the event source and relies on
+    // it to be the parent window.
     source: window.parent,
   }));
 }

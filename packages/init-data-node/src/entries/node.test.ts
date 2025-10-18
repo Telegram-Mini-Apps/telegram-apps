@@ -1,16 +1,17 @@
-import { vi, describe, expect, it, afterEach } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { arrayBufferToHex, bufferToArrayBuffer } from '../buf-converters.js';
 import {
-  validate,
-  sign,
-  signData,
-  isValid,
-  hashToken,
-  SignatureInvalidError,
   AuthDateInvalidError,
-  ExpiredError, SignatureMissingError,
+  ExpiredError,
+  hashToken,
+  isValid,
+  sign,
+  SignatureInvalidError,
+  SignatureMissingError,
+  signData,
+  validate,
 } from './node';
-import { arrayBufferToHex } from '../converters/arrayBufferToHex';
 
 const sp = 'user=%7B%22id%22%3A279058397%2C%22first_name%22%3A%22Vladislav%20%2B%20-%20%3F%20%5C%2F%22%2C%22last_name%22%3A%22Kibenko%22%2C%22username%22%3A%22vdkfrost%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F4FPEE4tmP3ATHa57u6MqTDih13LTOiMoKoLDRG4PnSA.svg%22%7D&chat_instance=8134722200314281151&chat_type=private&auth_date=1733584787&signature=zL-ucjNyREiHDE8aihFwpfR9aggP2xiAo3NSpfe-p7IbCisNlDKlo7Kb6G4D0Ao2mBrSgEk4maLSdv6MLIlADQ&hash=2174df5b000556d044f3f020384e879c8efcab55ddea2ced4eb752e93e7080d6';
 const spObject = new URLSearchParams(sp);
@@ -25,7 +26,7 @@ afterEach(() => {
 
 describe('hashToken', () => {
   it('should properly hash token', () => {
-    expect(arrayBufferToHex(hashToken('my-secret-token')))
+    expect(arrayBufferToHex(bufferToArrayBuffer(hashToken('my-secret-token'))))
       .toBe('fe37f490481d351837ed49f3b369c886c61013d6d036656fc3c9c92e163e3477');
   });
 });
@@ -111,7 +112,7 @@ describe('validate', () => {
     expect(() => validate(sp, secretToken)).toThrow(
       new ExpiredError(
         new Date(1733584787000),
-        new Date(1733584787000 + 24 * 60 * 60 * 1000),
+        new Date(1733584787000 + (24 * 60 * 60 * 1000)),
         new Date(1800000000000),
       ),
     );
@@ -159,12 +160,11 @@ describe('sign', () => {
             photo_url: 'user-photo',
             username: 'user-username',
           },
-          signature: 'abc',
         },
         '5768337691:AAH5YkoiEuPk8-FZa32hStHTqXiLPtAEhx8',
         new Date(1000),
       ),
-    ).toBe('can_send_after=10000&chat=%7B%22id%22%3A1%2C%22type%22%3A%22group%22%2C%22username%22%3A%22my-chat%22%2C%22title%22%3A%22chat-title%22%2C%22photo_url%22%3A%22chat-photo%22%7D&chat_instance=888&chat_type=sender&query_id=QUERY&receiver=%7B%22added_to_attachment_menu%22%3Afalse%2C%22allows_write_to_pm%22%3Atrue%2C%22first_name%22%3A%22receiver-first-name%22%2C%22id%22%3A991%2C%22is_bot%22%3Afalse%2C%22is_premium%22%3Atrue%2C%22language_code%22%3A%22ru%22%2C%22last_name%22%3A%22receiver-last-name%22%2C%22photo_url%22%3A%22receiver-photo%22%2C%22username%22%3A%22receiver-username%22%7D&start_param=debug&user=%7B%22added_to_attachment_menu%22%3Afalse%2C%22allows_write_to_pm%22%3Afalse%2C%22first_name%22%3A%22user-first-name%22%2C%22id%22%3A222%2C%22is_bot%22%3Atrue%2C%22is_premium%22%3Afalse%2C%22language_code%22%3A%22en%22%2C%22last_name%22%3A%22user-last-name%22%2C%22photo_url%22%3A%22user-photo%22%2C%22username%22%3A%22user-username%22%7D&signature=abc&auth_date=1&hash=cb81cd88e9cc232953c788ebbce5c53d4100b11672af19165a5d24f45dae46be');
+    ).toBe('can_send_after=10000&chat=%7B%22id%22%3A1%2C%22type%22%3A%22group%22%2C%22username%22%3A%22my-chat%22%2C%22title%22%3A%22chat-title%22%2C%22photo_url%22%3A%22chat-photo%22%7D&chat_instance=888&chat_type=sender&query_id=QUERY&receiver=%7B%22added_to_attachment_menu%22%3Afalse%2C%22allows_write_to_pm%22%3Atrue%2C%22first_name%22%3A%22receiver-first-name%22%2C%22id%22%3A991%2C%22is_bot%22%3Afalse%2C%22is_premium%22%3Atrue%2C%22language_code%22%3A%22ru%22%2C%22last_name%22%3A%22receiver-last-name%22%2C%22photo_url%22%3A%22receiver-photo%22%2C%22username%22%3A%22receiver-username%22%7D&start_param=debug&user=%7B%22added_to_attachment_menu%22%3Afalse%2C%22allows_write_to_pm%22%3Afalse%2C%22first_name%22%3A%22user-first-name%22%2C%22id%22%3A222%2C%22is_bot%22%3Atrue%2C%22is_premium%22%3Afalse%2C%22language_code%22%3A%22en%22%2C%22last_name%22%3A%22user-last-name%22%2C%22photo_url%22%3A%22user-photo%22%2C%22username%22%3A%22user-username%22%7D&auth_date=1&hash=d7dc6972a8d2e8e3280caf2e69080f632f1ac562f24ab72cb44ec10c8e671771');
   });
 });
 

@@ -1,178 +1,194 @@
-export * from '@/scopes/components/back-button/exports.js';
-export * from '@/scopes/components/biometry/exports.js';
-export * from '@/scopes/components/closing-behavior/exports.js';
-export * from '@/scopes/components/cloud-storage/exports.js';
-export * from '@/scopes/components/haptic-feedback/exports.js';
-export * from '@/scopes/components/init-data/exports.js';
-export * from '@/scopes/components/invoice/exports.js';
-export * from '@/scopes/components/location-manager/exports.js';
-export * from '@/scopes/components/main-button/exports.js';
-export * from '@/scopes/components/mini-app/exports.js';
-export * from '@/scopes/components/popup/exports.js';
-export * from '@/scopes/components/qr-scanner/exports.js';
-export * from '@/scopes/components/secondary-button/exports.js';
-export * from '@/scopes/components/settings-button/exports.js';
-export * from '@/scopes/components/swipe-behavior/exports.js';
-export * from '@/scopes/components/theme-params/exports.js';
-export * from '@/scopes/components/viewport/exports.js';
-export * from '@/scopes/utilities/emoji-status/exports.js';
-export * from '@/scopes/utilities/home-screen/exports.js';
-export * from '@/scopes/utilities/links/exports.js';
-export * from '@/scopes/utilities/privacy/exports.js';
-export * from '@/scopes/utilities/uncategorized/exports.js';
+export * from './features/BackButton/exports.js';
+export * from './features/Biometry/exports.js';
+export * from './features/ClosingBehavior/exports.js';
+export * from './features/CloudStorage/exports.js';
+export * from './features/emoji-status/exports.js';
+export * from './features/HapticFeedback/exports.js';
+export * from './features/home-screen/exports.js';
+export * from './features/InitData/exports.js';
+export * from './features/Invoice/exports.js';
+export * from './features/links/exports.js';
+export * from './features/LocationManager/exports.js';
+export * from './features/MainButton/exports.js';
+export * from './features/MiniApp/exports.js';
+export * from './features/Popup/exports.js';
+export * from './features/privacy/exports.js';
+export * from './features/QrScanner/exports.js';
+export * from './features/SecondaryButton/exports.js';
+export * from './features/SettingsButton/exports.js';
+export * from './features/SwipeBehavior/exports.js';
+export * from './features/ThemeParams/exports.js';
+export * from './features/uncategorized/exports.js';
+export * from './features/Viewport/exports.js';
+
+export { createRequestId } from './globals/createRequestId.js';
+export { invokeCustomMethod } from './globals/invokeCustomMethod.js';
+export { postEvent, postEventFp } from './globals/post-event.js';
+export { request, requestFp } from './globals/request.js';
+
+export { isColorDark, isColorDarkFp } from './helpers/isColorDark.js';
+export * from './errors.js';
+export { init, initFp, type InitOptions } from './init.js';
+export type { AsyncOptions } from './types.js';
 
 export {
-  wrapSafe,
-  type WrapSafeOptions,
-  type Supports,
-  type SafeWrapped,
-  type CustomSupportValidatorFn,
-  type IsSupportedType,
-  type IfAvailableFnResult,
-} from '@/scopes/wrappers/wrapSafe.js';
-
-export { ignoreCanceled } from '@/utils/ignoreCanceled.js';
-export { isColorDark } from '@/utils/isColorDark.js';
-export { isSSR } from '@/utils/isSSR.js';
-export { safeCall } from '@/utils/safeCall.js';
-
-export { setDebug } from '@/debug.js';
-export * from '@/errors.js';
-export {
-  invokeCustomMethod,
-  postEvent,
-  createRequestId,
-  configure,
-  request,
-  type ConfigureOptions,
-} from '@/globals.js';
-export { init, type InitOptions } from '@/init.js';
-export { logger as sdkLogger, type Logger as SDKLogger } from '@/logger.js';
-export type { RequestOptionsNoCapture, AsyncOptions } from '@/types.js';
-
-export {
-  decodeBase64Url,
-  encodeBase64Url,
-  createStartParam,
-  decodeStartParam,
-  isSafeToCreateStartParam,
+  //#region env
   isTMA,
+  isTMAFp,
+  type isTMAError,
   mockTelegramEnv,
-  targetOrigin,
-  on,
-  off,
-  retrieveLaunchParams,
-  retrieveRawLaunchParams,
-  retrieveRawInitData,
-  type RetrieveLPResult,
-  type RetrieveLPResultCamelCased,
-  type RequestOptions,
-  type InvokeCustomMethodOptions,
+  //#endregion
+  //#region events
+  off, offAll, on,
   type EventListener,
   type SubscribeListener,
-  type EventPayload,
-  type WriteAccessRequestedStatus,
-  UnknownEnvError,
-  isUnknownEnvError,
-  createPostEvent,
-  type CreatePostEventMode,
-  InvokeCustomMethodError,
-  isInvokeCustomMethodError,
-  MethodParameterUnsupportedError,
-  isMethodMethodParameterUnsupportedError,
-  type CustomMethodName,
-  type CustomMethodParams,
-  type CreateMethodParams,
-  type Methods,
-  type AnyInvokeCustomMethodParams,
   type Events,
-  isMethodUnsupportedError,
+  type WriteAccessRequestedStatus,
+  type EmojiStatusAccessRequestedStatus,
+  type BiometryAuthRequestStatus,
+  type BiometryTokenUpdateStatus,
+  type BiometryType,
+  type EmojiStatusFailedError,
+  type EventName,
+  type EventPayload,
   type EventWithoutPayload,
   type EventWithPayload,
-  type CustomMethodsParams,
-  type InvokeCustomMethodFn,
-  supports,
-  emitEvent,
-  MethodUnsupportedError,
-  type EmojiStatusAccessRequestedStatus,
+  type PhoneRequestedStatus,
+  type FullScreenErrorStatus,
   type HomeScreenStatus,
+  type InvoiceStatus,
+  type SafeAreaInsets,
+  //#endregion
+  //#region methods
+  createPostEvent,
+  type CreatePostEventMode,
   type OnUnsupportedFn,
+  getReleaseVersion,
+  type PostEventFn,
+  type PostEventFpFn,
+  type PostEventError,
+  supports,
+  type AnyHapticFeedbackParams,
+  type AnyInvokeCustomMethodParams,
+  type CreateMethodParams,
+  type CustomMethodName,
   type ImpactHapticFeedbackParams,
   type ImpactHapticFeedbackStyle,
+  type CustomMethodsParams,
+  type CustomMethodParams,
   type MethodName,
-  type MethodParams,
-  type PostEventFn,
+  type MethodVersionedParams,
   type NotificationHapticFeedbackParams,
-  type RequestFn,
-  type BiometryAuthRequestStatus,
-  type PhoneRequestedStatus,
-  type SafeAreaInsets,
-  type BiometryType,
-  type BiometryTokenUpdateStatus,
-  type EventName,
   type NotificationHapticFeedbackType,
+  type Methods,
   type SelectionHapticFeedbackParams,
-  type MethodNameWithoutParams,
   type MethodNameWithOptionalParams,
+  type MethodNameWithoutParams,
   type MethodNameWithRequiredParams,
-  type EmojiStatusFailedError,
-  type FullScreenErrorStatus,
-  type InvoiceStatus,
-  type RequestResult,
-  isLaunchParamsRetrieveError,
-  LaunchParamsRetrieveError,
-  InvalidLaunchParamsError,
-  isInvalidLaunchParamsError,
-  type BackgroundColor,
+  type MethodNameWithVersionedParams,
+  type MethodParams,
   type PopupParams,
+  type BackgroundColor,
   type BottomBarColor,
-  type PopupButton,
   type HeaderColorKey,
+  type PopupButton,
   type OpenLinkBrowser,
   type SecondaryButtonPosition,
   type SwitchInlineQueryChatType,
-  isCancelledError,
-  isTimeoutError,
+  //#endregion
+  //#region utils
+  type InvokeCustomMethodFn,
+  type InvokeCustomMethodOptions,
+  type InvokeCustomMethodFpFn,
+  type InvokeCustomMethodError,
+  type InvokeCustomMethodFpOptions,
+  type RequestCaptureEventFn,
+  type RequestCaptureEventsFn,
+  type RequestCaptureFn,
+  type RequestCaptureFnEventsPayload,
+  type RequestFn,
+  type RequestOptions,
+  type RequestResult,
+  type RequestError,
+  type RequestFpOptions,
+  type RequestFpFn,
+  //#endregion
+  //#region misc
+  applyPolyfills,
+  decodeBase64Url,
+  encodeBase64Url,
+  decodeBase64UrlFp,
+  type DecodeBase64UrlError,
+  LaunchParamsRetrieveError,
+  InvalidLaunchParamsError,
+  InvokeCustomMethodFailedError,
+  MethodParameterUnsupportedError,
+  MethodUnsupportedError,
+  UnknownEnvError,
+  setDebug,
+  debug,
+  logger,
+  setTargetOrigin,
+  targetOrigin,
+  retrieveLaunchParams,
+  retrieveRawInitData,
+  retrieveRawInitDataFp,
+  retrieveRawLaunchParams,
+  retrieveRawLaunchParamsFp,
+  retrieveLaunchParamsFp,
+  type RetrieveLaunchParamsError,
+  type RetrieveLaunchParamsResult,
+  type RetrieveRawInitDataError,
+  type RetrieveRawLaunchParamsError,
+  createStartParam,
+  createStartParamFp,
+  decodeStartParam,
+  decodeStartParamFp,
+  isSafeToCreateStartParam,
+  //#endregion
+  //#region Re-exports
+  createLogger,
+  deepSnakeToCamelObjKeys,
+  type DeepConvertSnakeKeysToCamelCase,
+  type Logger,
+  type LoggerFn,
+  type LoggerForceFn,
+  type LoggerOptions,
+  type LogLevel,
   CancelledError,
   TimeoutError,
-  AbortablePromise,
-  ManualPromise,
-  postMessage,
-  postMessageImplementation,
-  applyPolyfills,
-  type PostMessage,
-  logger as bridgeLogger,
-  type Logger as BridgeLogger,
-} from '@telegram-apps/bridge';
+  //#endregion
+} from '@tma.js/bridge';
 export {
-  isRGB,
-  toRGB,
-  isRGBShort,
-  serializeToQuery,
-  serializeInitDataQuery,
-  serializeLaunchParamsQuery,
-  transformQueryUsing,
   parseInitDataQuery,
+  parseInitDataQueryFp,
+  type ParseInitDataQueryError,
   parseLaunchParamsQuery,
-} from '@telegram-apps/transformers';
+  parseLaunchParamsQueryFp,
+  type ParseLaunchParamsQueryError,
+  isRGBShort,
+  isRGBAShort,
+  isRGB,
+  isRGBA,
+  isAnyRGB,
+  toRGBFullFp,
+  toRGBFp,
+  toRGB,
+  toRGBFull,
+  serializeInitDataQuery,
+  type InitDataLike,
+  serializeLaunchParamsQuery,
+  type LaunchParamsLike,
+} from '@tma.js/transformers';
 export type {
   RGB,
   User,
   Chat,
   InitData,
   ChatType,
-  RGBShort,
   Platform,
   ThemeParams,
   LaunchParams,
   KnownThemeParamsKey,
   Version,
-} from '@telegram-apps/types';
-export {
-  createLogger,
-  type LogLevel,
-  type LoggerOptions,
-  type Logger,
-  type LoggerFn,
-  type LoggerForceFn,
-} from '@telegram-apps/toolkit';
+} from '@tma.js/types';

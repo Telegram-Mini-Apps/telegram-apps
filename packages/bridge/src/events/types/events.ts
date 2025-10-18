@@ -1,6 +1,6 @@
-import type { RGB } from '@telegram-apps/types';
+import type { If, IsNever, Maybe } from '@tma.js/toolkit';
+import type { RGB } from '@tma.js/types';
 
-import type { If, IsNever, Maybe } from '@telegram-apps/toolkit';
 import type {
   BiometryAuthRequestStatus,
   BiometryTokenUpdateStatus,
@@ -666,7 +666,8 @@ export interface Events {
        */
       subtitle_text_color?: RGB;
       text_color?: RGB;
-      [key: string]: RGB | undefined; // Future unknown palette keys.
+      // Future unknown palette keys.
+      [key: string]: RGB | undefined;
     };
   };
   /**

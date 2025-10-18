@@ -6,7 +6,7 @@ import { type Accessor, createSignal, onCleanup } from 'solid-js';
  */
 export function useSignal<T>(signal: {
   (): T;
-  sub(fn: (v: T) => void): VoidFunction
+  sub(fn: (v: T) => void): VoidFunction;
 }): Accessor<T> {
   const [get, set] = createSignal<T>(signal());
   onCleanup(signal.sub(set));

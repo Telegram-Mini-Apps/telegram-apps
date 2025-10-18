@@ -1,8 +1,10 @@
-import { resolve, dirname } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vitest/config';
 import dts from 'vite-plugin-dts';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { defineConfig } from 'vitest/config';
+
+import packageJson from './package.json' with { type: "json" };
 
 export default defineConfig(({ mode }) => {
   const tsconfigPath = mode === 'test'
@@ -20,6 +22,9 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
+      rollupOptions: {
+        external: Object.keys(packageJson.dependencies),
+      },
       outDir: 'dist',
       emptyOutDir: true,
       sourcemap: true,

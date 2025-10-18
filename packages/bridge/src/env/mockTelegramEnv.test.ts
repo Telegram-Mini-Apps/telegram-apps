@@ -2,13 +2,13 @@ import { it, expect, afterEach, vi, describe } from 'vitest';
 import { createWindow } from 'test-utils';
 
 import { mockTelegramEnv } from './mockTelegramEnv.js';
-import { resetPackageState } from '@/resetPackageState.js';
-import { retrieveLaunchParams } from '@/launch-params/retrieveLaunchParams.js';
+import { resetGlobals } from '@/globals.js';
+import { retrieveLaunchParams } from '@/launch-params.js';
 import { postEvent } from '@/methods/postEvent.js';
 
 afterEach(() => {
   vi.restoreAllMocks();
-  resetPackageState();
+  resetGlobals();
 });
 
 it('should store launch parameters retuning them from retrieveLaunchParams', () => {

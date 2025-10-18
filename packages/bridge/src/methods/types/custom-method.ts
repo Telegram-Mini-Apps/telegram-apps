@@ -15,17 +15,15 @@ interface CreateInvokeCustomMethodParams<M extends string, Params extends object
 
 export interface CustomMethodsParams {
   /**
-   * Deletes storage values by their keys.
+   * Deletes storage values using their keys.
    */
-  deleteStorageValues: {
-    keys: string | string[];
-  };
+  deleteStorageValues: { keys: string | string[] };
   /**
-   * Returns current server time.
+   * Returns the current server time.
    */
   getCurrentTime: {};
   /**
-   * Gets current user contact in case, Mini has access to it.
+   * Gets the current user contact in case, the mini app has access to it.
    */
   getRequestedContact: {};
   /**
@@ -33,18 +31,13 @@ export interface CustomMethodsParams {
    */
   getStorageKeys: {};
   /**
-   * Gets storage values by their keys.
+   * Gets storage values using their keys.
    */
-  getStorageValues: {
-    keys: string | string[];
-  };
+  getStorageValues: { keys: string | string[] };
   /**
-   * Saves value by specified key in the storage.
+   * Saves a value using specified key in the storage.
    */
-  saveStorageValue: {
-    key: string;
-    value: string;
-  };
+  saveStorageValue: { key: string; value: string };
 }
 
 /**
