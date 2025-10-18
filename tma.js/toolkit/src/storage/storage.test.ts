@@ -1,4 +1,4 @@
-import { mockSessionStorageSetItem } from 'test-utils';
+import { mockSessionStorageGetItem, mockSessionStorageSetItem } from 'test-utils';
 import {
   beforeEach,
   describe,
@@ -25,9 +25,7 @@ describe('setStorageValue', () => {
 
 describe('getStorageValue', () => {
   it('should call sessionStorage.getItem with formatted key and apply JSON.parse to the extracted value in case, it is not empty. If parsing failed, return undefined', () => {
-    const getItem = vi
-      .spyOn(window.sessionStorage, 'getItem')
-      .mockImplementation(() => '{"isVisible":false}');
+    const getItem = mockSessionStorageGetItem('{"isVisible":false}');
     let value = getStorageValue('backButton');
     expect(getItem).toHaveBeenCalledOnce();
     expect(getItem).toHaveBeenCalledWith('tapps/backButton');
