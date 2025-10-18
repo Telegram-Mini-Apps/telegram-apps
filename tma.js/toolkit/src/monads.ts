@@ -67,14 +67,14 @@ export const BetterTaskEither = Object.assign(
       resolve: (data: T) => void,
       reject: (reason: E) => void,
       context: BetterPromiseExecutorContext<E.Either<E | BetterTaskEitherError, T>>,
-    ) => void,
+    ) => (void | Promise<void>),
     options?: BetterPromiseOptions,
   ): TE.TaskEither<E | BetterTaskEitherError, T> => {
     return pipe(
       TE.tryCatch(
         () => {
           return new BetterPromise<E.Either<E, T>>((res, _rej, context) => {
-            executor(
+            return executor(
               result => res(E.right(result)),
               error => res(E.left(error)),
               context,
