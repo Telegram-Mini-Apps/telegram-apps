@@ -17,7 +17,7 @@ import type { TemplateRepository } from './templates/types.js';
 import { input } from './prompts/input.js';
 import { createCustomTheme } from './createCustomTheme.js';
 
-import packageJson from '../package.json';
+import packageJson from '../package.json' with { type: 'json' };
 
 program
   .name(packageJson.name)
@@ -29,7 +29,9 @@ program
     // Check if git is installed.
     if (!await isGitInstalled()) {
       console.log(
-        theme.style.error('To run this CLI tool, you must have git installed. Installation guide: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git'),
+        theme.style.error(
+          'To run this CLI tool, you must have git installed. Installation guide: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git',
+        ),
       );
       process.exit(1);
     }
@@ -132,7 +134,7 @@ program
             'git init',
             `git remote add origin "${gitRepo}"`,
           ].join(' && '),
-          messageFail: (error) => `Failed to initialize Git repository. ${error}`,
+          messageFail: error => `Failed to initialize Git repository. ${error}`,
           messageSuccess: `Git repository initialized. Remote "origin" was set to "${gitRepo}"`,
           theme,
         });
@@ -145,7 +147,9 @@ program
     console.log(
       lines(
         chalk.green.bold('Your project has been successfully initialized!'),
-        `Now, open the "${chalk.bold(rootDir)}" directory and follow the instructions presented in the ${chalk.bold('README.md')} file. ${chalk.bold('Happy coding! 🚀')}`,
+        `Now, open the "${chalk.bold(rootDir)}" directory and follow the instructions presented in the ${chalk.bold(
+          'README.md',
+        )} file. ${chalk.bold('Happy coding! 🚀')}`,
       ),
     );
   });

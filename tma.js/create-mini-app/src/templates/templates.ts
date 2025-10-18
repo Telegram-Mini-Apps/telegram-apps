@@ -25,14 +25,14 @@ const templates: {
   [lang in Language]?: {
     [sdk in SDK]?: {
       [framework in Framework]?: string | {
-      repository: string;
-      deprecationReason?: string;
-    };
+        repository: string;
+        deprecationReason?: string;
+      };
     };
   };
 } = {
   js: {
-    telegramApps: {
+    tmajs: {
       react: jsRepo('reactjs-js-template'),
       solid: jsRepo('solidjs-js-template'),
       next: jsRepo('nextjs-js-template'),
@@ -48,7 +48,7 @@ const templates: {
     },
   },
   ts: {
-    telegramApps: {
+    tmajs: {
       react: 'reactjs-template',
       solid: 'solidjs-template',
       next: 'nextjs-template',

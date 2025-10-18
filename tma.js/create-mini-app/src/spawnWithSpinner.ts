@@ -5,7 +5,6 @@ import ora from 'ora';
 
 import { CustomTheme } from './types.js';
 
-
 interface SharedOptions {
   message: string;
   messageSuccess?: string;
@@ -46,7 +45,7 @@ export function spawnWithSpinner({
   messageSuccess,
   theme: {
     style,
-    spinner: themeSpinner
+    spinner: themeSpinner,
   },
 }: TerminalOptions | OperationOptions): Promise<void> {
   const spinner = ora({
@@ -62,7 +61,7 @@ export function spawnWithSpinner({
       .then(() => {
         spinner.succeed(success);
       })
-      .catch((e) => {
+      .catch(e => {
         const errString = formatError(e);
         spinner.fail(
           style.error(
@@ -92,7 +91,7 @@ export function spawnWithSpinner({
       spinner.suffixText = chalk.bgGray.italic(buf.toString());
     });
 
-    proc.on('exit', (code) => {
+    proc.on('exit', code => {
       // Drop process outputs.
       spinner.suffixText = '';
 

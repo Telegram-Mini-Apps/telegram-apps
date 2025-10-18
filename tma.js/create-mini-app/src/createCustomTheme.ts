@@ -28,5 +28,5 @@ export function createCustomTheme(): CustomTheme {
       done: chalk.green(figures.tick),
       pointer: figures.arrowRight,
     },
-  })
+  });
 }
