@@ -1,4 +1,4 @@
-import { mockSessionStorageGetItem, mockSessionStorageSetItem } from 'test-utils';
+import { mockSessionStorageSetItem } from 'test-utils';
 import {
   beforeEach,
   describe,
@@ -25,7 +25,17 @@ describe('setStorageValue', () => {
 
 describe('getStorageValue', () => {
   it('should call sessionStorage.getItem with formatted key and apply JSON.parse to the extracted value in case, it is not empty. If parsing failed, return undefined', () => {
-    const getItem = mockSessionStorageGetItem('{"isVisible":false}');
+    console.log('Window session storage', window.sessionStorage);
+    console.log('Session storage', sessionStorage);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    console.log('Get item', sessionStorage.getItem);
+    const getItem = vi
+      .spyOn(sessionStorage, 'getItem')
+      .mockImplementation(() => '{"isVisible":false}');
+    console.log('Mock', getItem);
+    console.log('Session storage 2', sessionStorage);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    console.log('Get item 2', sessionStorage.getItem);
     let value = getStorageValue('backButton');
     expect(getItem).toHaveBeenCalledOnce();
     expect(getItem).toHaveBeenCalledWith('tapps/backButton');
