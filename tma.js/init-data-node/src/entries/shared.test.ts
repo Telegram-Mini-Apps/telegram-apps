@@ -18,10 +18,13 @@ describe('isValid3rd', () => {
     await expect(isValid3rd('auth_date=1', botId)).resolves.toBe(false);
   });
 
-  it('should return false if "auth_date" param is missing or does not represent integer', async () => {
-    await expect(isValid3rd('hash=HHH', botId)).resolves.toBe(false);
-    await expect(isValid3rd('auth_date=AAA&hash=HHH', botId)).resolves.toBe(false);
-  });
+  it(
+    'should return false if "auth_date" param is missing or does not represent integer',
+    async () => {
+      await expect(isValid3rd('hash=HHH', botId)).resolves.toBe(false);
+      await expect(isValid3rd('auth_date=AAA&hash=HHH', botId)).resolves.toBe(false);
+    },
+  );
 
   it('should return false if parameters are expired', async () => {
     await expect(isValid3rd(sp, botId, { expiresIn: 1 })).resolves.toBe(false);
@@ -37,9 +40,12 @@ describe('isValid3rd', () => {
     await expect(isValid3rd(spObject, botId, basicOptions)).resolves.toBe(true);
   });
 
-  it('should return false if "expiresIn" is not passed and parameters were created more than 1 day ago', async () => {
-    await expect(isValid3rd(sp, botId)).resolves.toBe(false);
-  });
+  it(
+    'should return false if "expiresIn" is not passed and parameters were created more than 1 day ago',
+    async () => {
+      await expect(isValid3rd(sp, botId)).resolves.toBe(false);
+    },
+  );
 });
 
 describe('validate3rd', () => {
@@ -81,14 +87,17 @@ describe('validate3rd', () => {
     await expect(validate3rd(spObject, botId, basicOptions)).resolves.toBeUndefined();
   });
 
-  it('should throw if "expiresIn" is not passed and parameters were created more than 1 day ago', async () => {
-    vi.spyOn(Date, 'now').mockImplementation(() => 1800000000000);
-    await expect(validate3rd(sp, botId)).rejects.toThrow(
-      new ExpiredError(
-        new Date(1733584787000),
-        new Date(1733584787000 + 24 * 60 * 60 * 1000),
-        new Date(1800000000000),
-      ),
-    );
-  });
+  it(
+    'should throw if "expiresIn" is not passed and parameters were created more than 1 day ago',
+    async () => {
+      vi.spyOn(Date, 'now').mockImplementation(() => 1800000000000);
+      await expect(validate3rd(sp, botId)).rejects.toThrow(
+        new ExpiredError(
+          new Date(1733584787000),
+          new Date(1733584787000 + (24 * 60 * 60 * 1000)),
+          new Date(1800000000000),
+        ),
+      );
+    },
+  );
 });
