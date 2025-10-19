@@ -1,5 +1,11 @@
 # @tma.js/bridge
 
+## 2.1.2
+
+### Patch Changes
+
+- 458cd03: Make listening operation in `request` sync.
+
 ## 2.1.1
 
 ### Patch Changes
