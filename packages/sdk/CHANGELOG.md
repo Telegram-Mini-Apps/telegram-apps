@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 3.0.2
+
+### Patch Changes
+
+- 58793e3: Re-export `emitEvent` from `@tma.js/bridge`.
+
 ## 3.0.1
 
 ### Patch Changes
