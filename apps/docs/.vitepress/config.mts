@@ -34,9 +34,7 @@ export default defineConfig({
   cleanUrls: true,
   // Enable sitemap generation.
   // https://vitepress.dev/guide/sitemap-generation#sitemap-generation
-  sitemap: {
-    hostname: 'https://docs.telegram-mini-apps.com',
-  },
+  sitemap: { hostname: 'https://docs.telegram-mini-apps.com' },
   // Configure <head/>.
   // https://vitepress.dev/reference/site-config#head
   head: [
