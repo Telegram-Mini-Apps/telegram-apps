@@ -12,6 +12,7 @@ import type {
   RightOfReturn,
   LeftOfReturn,
   MaybeMonadReturnTypeToCommon,
+  MaybeCommonReturnTypeToMonad,
   AnyFn,
 } from '@tma.js/toolkit';
 import type { Version } from '@tma.js/types';
@@ -124,7 +125,7 @@ export type WithChecksFp<
    * @example
    * backButton.show.ifAvailable();
    */
-    ifAvailable(...args: Parameters<Fn>): O.Option<ReturnType<Fn>>;
+    ifAvailable(...args: Parameters<Fn>): O.Option<MaybeCommonReturnTypeToMonad<Fn>>;
   }
   & If<HasSupportCheck, {
   /**
@@ -230,7 +231,7 @@ export function withChecksFp<Fn extends AnyFn, O extends WithChecksOptions<Fn>>(
   const isTma = computed(() => access(options.isTma));
 
   // Simplify the isSupported value to work with an array of validators or a single object.
-  const { requires: optionsIsSupported } = options;
+  const { requires: optionsIsSupported, returns } = options;
   const isSupportedSimplified = optionsIsSupported
     ? typeof optionsIsSupported === 'object'
       ? optionsIsSupported
@@ -307,6 +308,16 @@ export function withChecksFp<Fn extends AnyFn, O extends WithChecksOptions<Fn>>(
       : E.left(err)) as WrappedFnReturnType<Fn>;
   };
 
+  const call = (...args: Parameters<Fn>): MaybeCommonReturnTypeToMonad<Fn> => {
+    if (returns === 'plain') {
+      return E.tryCatch(() => fn(...args), e => e) as MaybeCommonReturnTypeToMonad<Fn>;
+    }
+    if (returns === 'promise') {
+      return TE.tryCatch(() => fn(...args), e => e) as MaybeCommonReturnTypeToMonad<Fn>;
+    }
+    return fn(...args);
+  };
+
   return Object.assign(
     (...args: Parameters<Fn>): WrappedFnReturnType<Fn> => {
       const errMessagePrefix = 'Unable to call function:';
@@ -330,20 +341,13 @@ export function withChecksFp<Fn extends AnyFn, O extends WithChecksOptions<Fn>>(
           : 'unmounted. Use the mount() method';
         return wrapError(`${errMessagePrefix} the component is ${message}`);
       }
-      const { returns } = options;
-      if (returns === 'plain') {
-        return E.tryCatch(() => fn(...args), e => e) as WrappedFnReturnType<Fn>;
-      }
-      if (returns === 'promise') {
-        return TE.tryCatch(() => fn(...args), e => e) as WrappedFnReturnType<Fn>;
-      }
-      return fn(...args);
+      return call(...args) as WrappedFnReturnType<Fn>;
     },
     fn,
     {
       isAvailable,
-      ifAvailable(...args: Parameters<Fn>): O.Option<ReturnType<Fn>> {
-        return isAvailable() ? O.some(fn(...args) as ReturnType<Fn>) : O.none;
+      ifAvailable(...args: Parameters<Fn>): O.Option<MaybeCommonReturnTypeToMonad<Fn>> {
+        return isAvailable() ? O.some(call(...args)) : O.none;
       },
     },
     isSupportedSimplified ? { isSupported } : {},
