@@ -32,7 +32,15 @@ export type MaybeMonadToCommon<T> = [T] extends [E.Either<any, infer U>]
     ? BetterPromise<U>
     : T;
 
+export type MaybeCommonToMonad<T> = T extends AnyEither
+  ? T
+  : T extends PromiseLike<infer U>
+    ? TE.TaskEither<unknown, U>
+    : E.Either<unknown, T>;
+
 export type MaybeMonadReturnTypeToCommon<Fn extends AnyFn> = MaybeMonadToCommon<ReturnType<Fn>>;
+
+export type MaybeCommonReturnTypeToMonad<Fn extends AnyFn> = MaybeCommonToMonad<ReturnType<Fn>>;
 
 export function throwifyAnyEither<E extends AnyEither>(either: E): MaybeMonadToCommon<E> {
   const onError = (e: unknown) => {
