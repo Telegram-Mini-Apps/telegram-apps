@@ -39,7 +39,10 @@ export {
   mockTelegramEnv,
   //#endregion
   //#region events
-  off, offAll, on,
+  emitEvent,
+  off,
+  offAll,
+  on,
   type EventListener,
   type SubscribeListener,
   type Events,
