@@ -208,7 +208,6 @@ export function requestFp<
         const listener = (data: [RequestResult<E>] | undefined) => {
           if (data) {
             resolve(data[0]);
-            unsub();
           }
         };
         const unsub = () => {
