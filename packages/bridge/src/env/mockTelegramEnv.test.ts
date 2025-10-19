@@ -75,7 +75,10 @@ describe('env is iframe', () => {
     mockTelegramEnv({ onEvent: spy });
     postEvent('web_app_data_send', { data: 'Data!' });
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith(['web_app_data_send', { data: 'Data!' }], expect.anything());
+    expect(spy).toHaveBeenCalledWith(
+      { name: 'web_app_data_send', params: { data: 'Data!' } },
+      expect.anything(),
+    );
   });
 
   it('should call previously defined window.parent.postMessage if next is called', () => {
@@ -110,19 +113,25 @@ describe('env is not iframe', () => {
     mockTelegramEnv({ onEvent: spy });
     postEvent('web_app_data_send', { data: 'Data!' });
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith(['web_app_data_send', { data: 'Data!' }], expect.anything());
+    expect(spy).toHaveBeenCalledWith(
+      { name: 'web_app_data_send', params: { data: 'Data!' } },
+      expect.anything(),
+    );
   });
 
-  it('should call previously defined window.TelegramWebviewProxy.postEvent if next is called', () => {
-    const spy = vi.fn();
-    createWindow({ TelegramWebviewProxy: { postEvent: spy } } as any);
-    mockTelegramEnv({
-      onEvent(_, next) {
-        next();
-      },
-    });
-    postEvent('web_app_data_send', { data: 'Data!' });
-    expect(spy).toHaveBeenCalledOnce();
-    expect(spy).toHaveBeenCalledWith('web_app_data_send', '{"data":"Data!"}');
-  });
+  it(
+    'should call previously defined window.TelegramWebviewProxy.postEvent if next is called',
+    () => {
+      const spy = vi.fn();
+      createWindow({ TelegramWebviewProxy: { postEvent: spy } } as any);
+      mockTelegramEnv({
+        onEvent(_, next) {
+          next();
+        },
+      });
+      postEvent('web_app_data_send', { data: 'Data!' });
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith('web_app_data_send', '{"data":"Data!"}');
+    },
+  );
 });

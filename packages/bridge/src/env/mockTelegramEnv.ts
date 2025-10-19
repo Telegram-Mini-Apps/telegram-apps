@@ -39,9 +39,9 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
    * need it when retrieving init data in this format. Otherwise, init data may be broken.
    */
   launchParams?:
-  | (Omit<LaunchParamsLike, 'tgWebAppData'> & { tgWebAppData?: string | URLSearchParams })
-  | string
-  | URLSearchParams;
+    | (Omit<LaunchParamsLike, 'tgWebAppData'> & { tgWebAppData?: string | URLSearchParams })
+    | string
+    | URLSearchParams;
   /**
    * Function that will be called if a Mini Apps method call was requested by the mini app.
    *
@@ -57,12 +57,9 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
    * @param next - function to call the original method used to call a Mini Apps method.
    */
   onEvent?: (
-    event: {
-      [M in MethodName]: {
-        name: M;
-        params: MethodParams<M>;
-      }
-    }[MethodName] | [string, unknown],
+    event:
+      | { [M in MethodName]: { name: M; params: MethodParams<M> } }[MethodName]
+      | { name: string; params: unknown },
     next: () => void,
   ) => void;
   /**
@@ -118,7 +115,7 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
       // to the original handler (window.parent.postMessage likely).
       try {
         const data = parse(pipeJsonToSchema(miniAppsMessage()), message);
-        onEvent([data.eventType, data.eventData], next);
+        onEvent({ name: data.eventType, params: data.eventData }, next);
       } catch {
         next();
       }
@@ -136,7 +133,10 @@ export function mockTelegramEnv({ launchParams, onEvent, resetPostMessage }: {
         postEventDefaulted(eventType, eventData);
       };
       onEvent
-        ? onEvent([eventType, eventData ? JSON.parse(eventData) : undefined], next)
+        ? onEvent({
+          name: eventType,
+          params: eventData ? JSON.parse(eventData) : undefined,
+        }, next)
         : next();
     },
   };

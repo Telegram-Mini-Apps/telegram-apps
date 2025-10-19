@@ -10,6 +10,7 @@ import {
   type IsNever,
   BetterTaskEither,
 } from '@tma.js/toolkit';
+import { signal } from '@tma.js/signals';
 import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
@@ -167,32 +168,56 @@ export function requestFp<
     postEvent = postEventFp,
   } = options;
 
+  const result = signal<undefined | [RequestResult<E>]>();
+  const [addCleanup, cleanup] = createCbCollector();
+  // Iterate over all the tracked events and add a listener, checking if the event should be
+  // captured.
+  (Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents]).forEach(event => {
+    // Each event listener waits for the event to occur.
+    // Then, if the capture function was passed, we should check if the event should
+    // be captured. If the function is omitted, we instantly capture the event.
+    addCleanup(
+      on(event, payload => {
+        if (
+          Array.isArray(eventOrEvents)
+            ? (capture as RequestCaptureEventsFn<EventName[]>)({ event, payload })
+            : (capture as RequestCaptureEventFn<EventName>)(payload)
+        ) {
+          result.set([payload as RequestResult<E>]);
+        }
+      }),
+    );
+  });
+  const withCleanup = <T>(value: T): T => {
+    cleanup();
+    return value;
+  };
+
   return pipe(
     async () => postEvent(method as any, (options as any).params),
     TE.chainW(() => {
       return BetterTaskEither<AbortError, RequestResult<E>>((resolve, _, context) => {
-        const [addCleanup, cleanup] = createCbCollector();
-        // Iterate over all the tracked events and add a listener, checking if the event
-        // should be captured.
-        (Array.isArray(eventOrEvents) ? eventOrEvents : [eventOrEvents]).forEach(event => {
-          // Each event listener waits for the event to occur.
-          // Then, if the capture function was passed, we should check if the event should
-          // be captured. If the function is omitted, we instantly capture the event.
-          addCleanup(
-            on(event, payload => {
-              if (
-                Array.isArray(eventOrEvents)
-                  ? (capture as RequestCaptureEventsFn<EventName[]>)({ event, payload })
-                  : (capture as RequestCaptureEventFn<EventName>)(payload)
-              ) {
-                resolve(payload as RequestResult<E>);
-              }
-            }),
-          );
-        });
-        context.on('finalized', cleanup);
+        // When creating this BetterTaskEither, we could already have a value stored in
+        // the result signal. For example, when tracked events were generated via emitEvent in
+        // mockTelegramEnv.onEvent.
+        const data = result();
+        if (data) {
+          return resolve(data[0]);
+        }
+
+        const listener = (data: [RequestResult<E>] | undefined) => {
+          if (data) {
+            resolve(data[0]);
+          }
+        };
+        const unsub = () => {
+          result.unsub(listener);
+        };
+        result.sub(listener);
+        context.on('finalized', unsub);
       }, options);
     }),
+    TE.mapBoth(withCleanup, withCleanup),
   );
 }
 
