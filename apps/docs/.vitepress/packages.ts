@@ -60,6 +60,7 @@ export const packagesLinksGenerator = (prefix: string = '') => {
               component('init-data'),
               component('invoice'),
               utils('links'),
+              component('location-manager'),
               component('main-button'),
               component('mini-app'),
               component('popup'),
