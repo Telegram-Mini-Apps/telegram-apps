@@ -28,7 +28,7 @@ export const packagesLinksGenerator = (prefix: string = '') => {
 
   const packagesNavItem: NavItemWithLink = {
     text: 'Packages',
-    link: `${BASE}/telegram-apps-create-mini-app`,
+    link: `${BASE}/tma-js-signals`,
   };
 
   const packagesSidebar: Sidebar = {
