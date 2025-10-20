@@ -8,7 +8,6 @@ outline: [2, 3]
   <a href="https://npmjs.com/package/@tma.js/init-data-node">
     <img src="https://img.shields.io/npm/v/@tma.js/init-data-node?logo=npm"/>
   </a>
-  <img src="https://img.shields.io/bundlephobia/minzip/@tma.js/init-data-node"/>
   <a href="https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/tma.js/init-data-node">
     <img src="https://img.shields.io/badge/source-black?logo=github"/>
   </a>
