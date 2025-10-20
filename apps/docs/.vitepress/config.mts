@@ -6,53 +6,35 @@ import { platformLinksGenerator } from './platform';
 const { packagesNavItem, packagesSidebar } = packagesLinksGenerator();
 const { platformNavItem, platformSidebar } = platformLinksGenerator();
 
-function withSlashes(value: string | undefined): string {
-  if (!value) {
-    return '/';
-  }
+function padSlashes(value: string = ''): string {
   if (!value.startsWith('/')) {
-    value = '/' + value;
+    value = `/${value}`;
   }
-  if (!value.endsWith('/')) {
-    value += '/';
-  }
-  return value;
+  return value.endsWith('/') ? value : `${value}/`;
 }
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'Telegram Mini Apps',
   description: 'Documentation covering all aspects of Telegram platform - Telegram Mini Apps.',
-
   // The base URL the site will be deployed at.
   // https://vitepress.dev/reference/site-config#base
-  base: withSlashes(process.env.DOCS_BASE_URL),
-
+  base: padSlashes(process.env.DOCS_BASE_URL),
   ignoreDeadLinks: true,
-
   // Internationalization.
   // https://vitepress.dev/guide/i18n
   locales: {
-    root: {
-      label: 'English',
-      lang: 'en',
-    }
+    root: { label: 'English', lang: 'en' },
   },
-
   // Show when each page content was last updated.
   // https://vitepress.dev/reference/default-theme-last-updated#last-updated
   lastUpdated: true,
-
   // We don't want .html to be in the end of each route.
   // https://vitepress.dev/guide/routing#generating-clean-url
   cleanUrls: true,
-
   // Enable sitemap generation.
   // https://vitepress.dev/guide/sitemap-generation#sitemap-generation
-  sitemap: {
-    hostname: 'https://docs.telegram-mini-apps.com',
-  },
-
+  sitemap: { hostname: 'https://docs.telegram-mini-apps.com' },
   // Configure <head/>.
   // https://vitepress.dev/reference/site-config#head
   head: [
@@ -63,43 +45,30 @@ export default defineConfig({
     // https://docs.mixpanel.com/docs/quickstart/connect-your-data?sdk=javascript
     ['script', { async: '', src: '/analytics.js' }],
   ],
-
   // https://vitepress.dev/reference/default-theme-config
   themeConfig: {
     logo: '/logo.db0268ac.png',
-
     // https://vitepress.dev/reference/default-theme-footer#footer
     footer: {
       message: 'Released under the MIT License.',
       copyright: 'Copyright © 2022-present Vladislav Kibenko and Contributors',
     },
-
     editLink: {
       text: 'Edit this page on GitHub',
-      pattern: 'https://github.com/telegram-mini-apps/telegram-apps/edit/master/apps/docs/:path',
+      pattern: 'https://github.com/telegram-mini-apps/tma.js/edit/master/apps/docs/:path',
     },
-
     nav: [
       { text: 'Home', link: '/' },
       platformNavItem,
       packagesNavItem,
     ],
-
     // https://vitepress.dev/reference/default-theme-sidebar
     sidebar: {
       ...packagesSidebar,
       ...platformSidebar,
     },
-
-    socialLinks: [{
-      icon: 'github',
-      link: 'https://github.com/telegram-mini-apps',
-    }],
-
-    search: {
-      provider: 'local',
-    },
-
+    socialLinks: [{ icon: 'github', link: 'https://github.com/telegram-mini-apps' }],
+    search: { provider: 'local' },
     // search: {
     //   provider: 'algolia',
     //   options: {
@@ -110,7 +79,6 @@ export default defineConfig({
     //   },
     // },
   },
-
   transformPageData(pageData, { siteConfig }) {
     const {
       frontmatter,
@@ -165,7 +133,6 @@ export default defineConfig({
       }
     }
   },
-
   transformHtml(code) {
     // To make meta tags work properly, we should add specific prefixes to html tag.
     const prefix = [

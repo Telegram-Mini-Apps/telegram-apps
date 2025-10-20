@@ -146,7 +146,7 @@ export class QrScanner {
    * @since Mini Apps v6.4
    * @example
    * pipe(
-   *   qrScanner.captureOneFp({
+   *   qrScanner.captureFp({
    *     capture(scannedQr) {
    *       return scannedQr === 'any expected by me qr';
    *     }

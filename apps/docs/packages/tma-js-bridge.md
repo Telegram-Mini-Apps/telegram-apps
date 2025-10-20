@@ -4,7 +4,6 @@
   <a href="https://npmjs.com/package/@tma.js/bridge">
     <img src="https://img.shields.io/npm/v/@tma.js/bridge?logo=npm"/>
   </a>
-  <img src="https://img.shields.io/bundlephobia/minzip/@tma.js/bridge"/>
   <a href="https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/tma.js/bridge">
     <img src="https://img.shields.io/badge/source-black?logo=github"/>
   </a>
@@ -15,9 +14,9 @@ The lowest level communication layer with Telegram Mini Apps.
 This package provides fundamental utilities and types for developing applications on the Telegram
 Mini Apps platform.
 
-[//]: # (While a developer can use this package alone, it's recommended to use a higher-level package)
-
-[//]: # (like [@tma.js/sdk]&#40;./tma-js-sdk&#41;.)
+> [!TIP] Higher-level package
+> While a developer can use this package alone, it's recommended to use a higher-level package
+> like [@tma.js/sdk](./tma-js-sdk.md).
 
 ## Installation
 

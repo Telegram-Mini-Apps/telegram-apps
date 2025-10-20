@@ -5,21 +5,20 @@ import { sectionGen } from './utils';
 type Sidebar = DefaultTheme.Sidebar;
 type NavItemWithLink = DefaultTheme.NavItemWithLink;
 
-function scope(path: string, title?: string): [string, string] {
+function feature(prefix: string, path: string, title?: string): [string, string] {
   title ||=
     path[0].toUpperCase() +
     path.slice(1).replace(/-./g, (m) => ' ' + m[1].toUpperCase());
 
-  return [title, path];
+  return [`${prefix}${title}`, path];
 }
 
-function fromEntries(entries: [string, any][]): Record<string, any> {
-  const result = {};
-  entries.forEach(([k, v]) => {
-    result[k] = v;
-  });
+function component(path: string, title?: string): [string, string] {
+  return feature('💠', path, title);
+}
 
-  return result;
+function utils(path: string, title?: string): [string, string] {
+  return feature('⚙️', path, title);
 }
 
 export const packagesLinksGenerator = (prefix: string = '') => {
@@ -46,6 +45,41 @@ export const packagesLinksGenerator = (prefix: string = '') => {
           'Functional Approach': 'functional-approach',
           'Migrating from telegram-apps': 'migrate-from-telegram-apps',
         }],
+        '@tma.js/sdk': ['tma-js-sdk', {
+          'Initializing': 'initializing',
+          'Usage Tips': 'usage-tips',
+          'Features': ['features', {
+            ...Object.fromEntries([
+              component('back-button'),
+              component('biometry'),
+              component('closing-behavior'),
+              component('cloud-storage'),
+              utils('emoji-status'),
+              component('haptic-feedback'),
+              utils('home-screen'),
+              component('init-data'),
+              component('invoice'),
+              utils('links'),
+              component('location-manager'),
+              component('main-button'),
+              component('mini-app'),
+              component('popup'),
+              utils('privacy'),
+              component('qr-scanner', 'QR Scanner'),
+              component('secondary-button'),
+              component('settings-button'),
+              component('swipe-behavior'),
+              component('theme-params'),
+              utils('uncategorized'),
+              component('viewport'),
+            ]),
+          }],
+          'Migrating from telegram-apps': 'migrate-from-telegram-apps',
+        }],
+        '@tma.js/sdk-react': 'tma-js-sdk-react',
+        '@tma.js/sdk-svelte': 'tma-js-sdk-svelte',
+        '@tma.js/sdk-vue': 'tma-js-sdk-vue',
+        '@tma.js/sdk-solid': 'tma-js-sdk-solid',
       }),
       section('Node', {
         '@tma.js/init-data-node': ['tma-js-init-data-node', {
@@ -56,14 +90,13 @@ export const packagesLinksGenerator = (prefix: string = '') => {
           'Migrating from telegram-apps': 'migrate-from-telegram-apps',
         }],
       }),
-      section('GoLang', { 'init-data-golang': 'init-data-golang' }),
-      section('CLI (docs to be removed in 2026)', {
-        '@telegram-apps/create-mini-app': 'telegram-apps-create-mini-app',
-        '@telegram-apps/mate': ['telegram-apps-mate', {
-          'Hosting': 'hosting',
-        }],
+      section('CLI', {
+        '@tma.js/create-mini-app': 'tma-js-create-mini-app',
       }),
-      section('TypeScript (deprecated, docs to be removed in 2026)', {
+      section('GoLang', { 'init-data-golang': 'init-data-golang' }),
+      section('⚠️ Deprecated. Docs to be removed in 2026. Switch to @tma.js', {
+        '@telegram-apps/create-mini-app': 'telegram-apps-create-mini-app',
+        '@telegram-apps/mate': ['telegram-apps-mate', { 'Hosting': 'hosting' }],
         '@telegram-apps/bridge': ['telegram-apps-bridge', {
           '@2.x': ['2-x', {
             'Methods': 'methods',
@@ -121,31 +154,31 @@ export const packagesLinksGenerator = (prefix: string = '') => {
             'Usage Tips': 'usage-tips',
             'Components': [
               { url: 'components', page: false },
-              fromEntries([
-                scope('back-button'),
-                scope('biometry'),
-                scope('closing-behavior'),
-                scope('cloud-storage'),
-                scope('haptic-feedback'),
-                scope('init-data'),
-                scope('invoice'),
-                scope('main-button'),
-                scope('mini-app'),
-                scope('popup'),
-                scope('qr-scanner', 'QR Scanner'),
-                scope('secondary-button'),
-                scope('settings-button'),
-                scope('swipe-behavior'),
-                scope('theme-params'),
-                scope('viewport'),
+              Object.fromEntries([
+                component('back-button'),
+                component('biometry'),
+                component('closing-behavior'),
+                component('cloud-storage'),
+                component('haptic-feedback'),
+                component('init-data'),
+                component('invoice'),
+                component('main-button'),
+                component('mini-app'),
+                component('popup'),
+                component('qr-scanner', 'QR Scanner'),
+                component('secondary-button'),
+                component('settings-button'),
+                component('swipe-behavior'),
+                component('theme-params'),
+                component('viewport'),
               ]),
             ],
-            'Utilities': [{ url: 'utils', page: false }, fromEntries([
-              scope('emoji-status'),
-              scope('home-screen'),
-              scope('links'),
-              scope('privacy'),
-              scope('uncategorized'),
+            'Utilities': [{ url: 'utils', page: false }, Object.fromEntries([
+              component('emoji-status'),
+              component('home-screen'),
+              component('links'),
+              component('privacy'),
+              component('uncategorized'),
             ])],
           }],
           '@3.x': ['3-x', {
@@ -154,32 +187,32 @@ export const packagesLinksGenerator = (prefix: string = '') => {
             'Usage Tips': 'usage-tips',
             'Components': [
               { url: 'components', page: false },
-              fromEntries([
-                scope('back-button'),
-                scope('biometry'),
-                scope('closing-behavior'),
-                scope('cloud-storage'),
-                scope('haptic-feedback'),
-                scope('init-data'),
-                scope('invoice'),
-                scope('location-manager'),
-                scope('main-button'),
-                scope('mini-app'),
-                scope('popup'),
-                scope('qr-scanner', 'QR Scanner'),
-                scope('secondary-button'),
-                scope('settings-button'),
-                scope('swipe-behavior'),
-                scope('theme-params'),
-                scope('viewport'),
+              Object.fromEntries([
+                component('back-button'),
+                component('biometry'),
+                component('closing-behavior'),
+                component('cloud-storage'),
+                component('haptic-feedback'),
+                component('init-data'),
+                component('invoice'),
+                component('location-manager'),
+                component('main-button'),
+                component('mini-app'),
+                component('popup'),
+                component('qr-scanner', 'QR Scanner'),
+                component('secondary-button'),
+                component('settings-button'),
+                component('swipe-behavior'),
+                component('theme-params'),
+                component('viewport'),
               ]),
             ],
-            'Utilities': [{ url: 'utils', page: false }, fromEntries([
-              scope('emoji-status'),
-              scope('home-screen'),
-              scope('links'),
-              scope('privacy'),
-              scope('uncategorized'),
+            'Utilities': [{ url: 'utils', page: false }, Object.fromEntries([
+              component('emoji-status'),
+              component('home-screen'),
+              component('links'),
+              component('privacy'),
+              component('uncategorized'),
             ])],
             'Migrate v2 -> v3': 'migrate-v2-v3',
           }],
@@ -208,8 +241,6 @@ export const packagesLinksGenerator = (prefix: string = '') => {
         }],
         '@telegram-apps/solid-router-integration': '/telegram-apps-solid-router-integration',
         '@telegram-apps/react-router-integration': '/telegram-apps-react-router-integration',
-      }),
-      section('Node (deprecated, docs to be removed in 2026)', {
         '@telegram-apps/init-data-node': [{ url: 'telegram-apps-init-data-node' }, {
           '@2.x': '2-x',
         }],
