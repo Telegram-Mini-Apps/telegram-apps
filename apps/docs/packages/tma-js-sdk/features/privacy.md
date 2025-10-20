@@ -1,4 +1,4 @@
-# Privacy
+# ⚙️Privacy
 
 ## `requestPhoneAccess`
 

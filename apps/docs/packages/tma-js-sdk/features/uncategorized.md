@@ -1,4 +1,4 @@
-# Uncategorized
+# ⚙️Uncategorized
 
 ## `copyTextToClipboard`
 

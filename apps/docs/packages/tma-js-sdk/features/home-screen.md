@@ -1,4 +1,4 @@
-# Home Screen
+# ⚙️Home Screen
 
 ## `addToHomeScreen`
 
@@ -10,30 +10,24 @@ import { addToHomeScreen } from '@tma.js/sdk';
 addToHomeScreen();
 ```
 
-To track whether the current Mini App is added to the device's home screen, use
-the `onAddedToHomeScreen` and `offAddedToHomeScreen` functions:
+To track whether the current Mini App is added to the device's home screen, use the `on` and `off` functions:
 
 ```ts
-import {
-  onAddedToHomeScreen,
-  onAddToHomeScreenFailed,
-  offAddedToHomeScreen,
-  offAddToHomeScreenFailed,
-} from '@tma.js/sdk';
+import { on, off } from '@tma.js/sdk';
 
 function onAdded() {
   console.log('Added');
 }
 
-onAddedToHomeScreen(onAdded);
-offAddedToHomeScreen(onAdded);
+on('home_screen_added', onAdded);
+off('home_screen_added', onAdded);
 
 function onFailed() {
   console.log('User declined the request');
 }
 
-onAddToHomeScreenFailed(onFailed);
-offAddToHomeScreenFailed(onFailed);
+on('home_screen_failed', onFailed);
+off('home_screen_failed', onFailed);
 ```
 
 > [!NOTE]  

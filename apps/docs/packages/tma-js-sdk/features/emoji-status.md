@@ -1,4 +1,4 @@
-# Emoji Status
+# ⚙️Emoji Status
 
 ## `requestEmojiStatusAccess`
 
