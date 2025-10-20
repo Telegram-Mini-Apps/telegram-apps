@@ -94,13 +94,9 @@ export const packagesLinksGenerator = (prefix: string = '') => {
         '@tma.js/create-mini-app': 'tma-js-create-mini-app',
       }),
       section('GoLang', { 'init-data-golang': 'init-data-golang' }),
-      section('CLI (docs to be removed in 2026)', {
+      section('⚠️ Deprecated. Docs to be removed in 2026. Switch to @tma.js', {
         '@telegram-apps/create-mini-app': 'telegram-apps-create-mini-app',
-        '@telegram-apps/mate': ['telegram-apps-mate', {
-          'Hosting': 'hosting',
-        }],
-      }),
-      section('TypeScript (deprecated, docs to be removed in 2026)', {
+        '@telegram-apps/mate': ['telegram-apps-mate', { 'Hosting': 'hosting' }],
         '@telegram-apps/bridge': ['telegram-apps-bridge', {
           '@2.x': ['2-x', {
             'Methods': 'methods',
@@ -245,8 +241,6 @@ export const packagesLinksGenerator = (prefix: string = '') => {
         }],
         '@telegram-apps/solid-router-integration': '/telegram-apps-solid-router-integration',
         '@telegram-apps/react-router-integration': '/telegram-apps-react-router-integration',
-      }),
-      section('Node (deprecated, docs to be removed in 2026)', {
         '@telegram-apps/init-data-node': [{ url: 'telegram-apps-init-data-node' }, {
           '@2.x': '2-x',
         }],
