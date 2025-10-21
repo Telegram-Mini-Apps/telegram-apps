@@ -244,7 +244,12 @@ export class MiniApp {
             method === 'web_app_set_header_color'
             && (color === 'bg_color' || color === 'secondary_bg_color')
           ) {
-            return postEvent('web_app_set_header_color', { color_key: color });
+            return pipe(
+              postEvent('web_app_set_header_color', { color_key: color }),
+              E.map(() => {
+                stateful.setState({ [stateKey]: color });
+              }),
+            );
           }
           const rgb = rgbBasedOn(color);
           return pipe(
