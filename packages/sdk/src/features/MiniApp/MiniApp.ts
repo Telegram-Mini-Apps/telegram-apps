@@ -86,27 +86,28 @@ export class MiniApp {
       // such an opportunity to developers.
       //
       // So if the developer specified some field as a reference to some theme params key, we
-      // should find an according RGB color for it and send it to the Telegram client. The excluded
-      // keys are 'bg_color' and 'secondary_bg_color' - they are known to the Telegram client.
-      //
-      // - 'web_app_set_header_color' accepts RGB only.
-      // - 'web_app_set_background_color' and 'web_app_set_bottom_bar_color' accept RGB and such
-      // values as 'bg_color' and 'secondary_bg_color'.
+      // should find an according RGB color for it and send it to the Telegram client. We have one
+      // exclusion here - the method 'web_app_set_header_color' may accept values 'bg_color'
+      // and 'secondary_bg_color'. Other methods accept only RGB values.
       ([
         [this.headerColor, 'web_app_set_header_color'],
         [this.bgColor, 'web_app_set_background_color'],
         [this.bottomBarColor, 'web_app_set_bottom_bar_color'],
       ] as const).forEach(([signal, method]) => {
         const color = signal();
-        // The value is already RGB, we have nothing to do here.
+        console.log(color, method);
+        // The value is already in RGB format, we have nothing to update here.
         if (isRGB(color)) {
           return;
         }
-        // The real RGB value should only be extracted of the 'web_app_set_header_color' should be
-        // used (it accepts only RGB values) or the color
-        // is not 'bg_color' and 'secondary_bg_color' (other methods may work with such values).
+        // The real RGB value should only be extracted for the following methods:
+        // - 'web_app_set_background_color'
+        // - 'web_app_set_bottom_bar_color'
+        // We should also do it in case of the 'web_app_set_header_color' method, if the value
+        // specified is not 'bg_color' and 'secondary_bg_color' (unknown key to
+        // the Telegram client).
         if (
-          method === 'web_app_set_header_color'
+          method !== 'web_app_set_header_color'
           || !['bg_color', 'secondary_bg_color'].includes(color)
         ) {
           const rgb = theme[color];
