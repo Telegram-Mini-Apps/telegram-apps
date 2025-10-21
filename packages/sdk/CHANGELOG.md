@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 3.0.5
+
+### Patch Changes
+
+- 95ae14e: Don't use values from theme params when mounting MiniApp. Also, don't call setters when the component mounted
+
 ## 3.0.4
 
 ### Patch Changes
