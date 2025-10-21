@@ -1,5 +1,12 @@
 # @tma.js/sdk
 
+## 3.0.6
+
+### Patch Changes
+
+- bd78481: - fix(MiniApp): apply state changes when calling `setHeaderColor` method
+  - fix(MiniApp): fix improper logic updating colors when theme changes
+
 ## 3.0.5
 
 ### Patch Changes
