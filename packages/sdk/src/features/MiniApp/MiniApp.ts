@@ -118,19 +118,15 @@ export class MiniApp {
     };
     const mountable = new Mountable({
       initialState() {
-        const tp = access(theme);
         return E.right({
-          bgColor: tp.bg_color || 'bg_color',
-          headerColor: tp.header_bg_color || 'header_bg_color',
-          bottomBarColor: tp.bottom_bar_bg_color || 'bottom_bar_bg_color',
+          bgColor: 'bg_color',
+          headerColor: 'header_bg_color',
+          bottomBarColor: 'bottom_bar_bg_color',
           isActive: true,
         });
       },
       isPageReload,
       onMounted: state => {
-        this.setBgColorFp.ifAvailable(state.bgColor);
-        this.setBottomBarColorFp.ifAvailable(state.bottomBarColor);
-        this.setHeaderColorFp.ifAvailable(state.headerColor);
         onVisibilityChanged(visibilityChangedListener);
         theme.sub(themeChangedListener);
         stateful.setState(state);
