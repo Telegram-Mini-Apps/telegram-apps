@@ -11,6 +11,7 @@ import { pipe } from 'fp-ts/function';
 import { hasWebviewProxy } from '@/env/hasWebviewProxy.js';
 import { retrieveRawLaunchParamsFp } from '@/launch-params.js';
 import { type RequestError, requestFp } from '@/utils/request.js';
+import { UnknownEnvError } from '@/errors.js';
 
 export type isTMAError = Exclude<RequestError, TimeoutError>;
 
@@ -74,7 +75,11 @@ export function isTMAFp(
   return pipe(
     requestFp('web_app_request_theme', 'theme_changed', { ...options, timeout }),
     TE.match(
-      error => (TimeoutError.is(error) ? E.right(false) : E.left(error)),
+      error => (
+        TimeoutError.is(error) || UnknownEnvError.is(error)
+          ? E.right(false)
+          : E.left(error)
+      ),
       () => E.right(true),
     ),
   );

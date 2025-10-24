@@ -95,7 +95,6 @@ export class MiniApp {
         [this.bottomBarColor, 'web_app_set_bottom_bar_color'],
       ] as const).forEach(([signal, method]) => {
         const color = signal();
-        console.log(color, method);
         // The value is already in RGB format, we have nothing to update here.
         if (isRGB(color)) {
           return;
