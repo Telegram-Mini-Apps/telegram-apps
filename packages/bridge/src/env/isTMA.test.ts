@@ -12,6 +12,7 @@ import { pipe } from 'fp-ts/function';
 import { requestFp as _requestFp } from '@/utils/request.js';
 
 import { isTMA, isTMAFp } from './isTMA.js';
+import { UnknownEnvError } from '@/errors.js';
 
 const requestFp = vi.mocked(_requestFp);
 
@@ -129,6 +130,19 @@ describe('isTMAFp', () => {
         expect.assertions(2);
       },
     );
+
+    it('should return false if the env is unknown', async () => {
+      mockWindow({} as any);
+      requestFp.mockImplementationOnce(() => TE.left(new UnknownEnvError()));
+      await pipe(
+        isTMAFp('complete'),
+        TE.match(
+          () => expect.unreachable(),
+          result => expect(result).toBe(false),
+        ),
+      )();
+      expect.assertions(1);
+    });
   });
 
   describe('sync', () => {
