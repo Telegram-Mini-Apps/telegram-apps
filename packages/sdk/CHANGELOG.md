@@ -1,5 +1,11 @@
 # @tma.js/sdk
 
+## 3.0.8
+
+### Patch Changes
+
+- 7ab459c: Set `SwipeBehavior.isVerticalEnabled` initial value as true.
+
 ## 3.0.7
 
 ### Patch Changes
