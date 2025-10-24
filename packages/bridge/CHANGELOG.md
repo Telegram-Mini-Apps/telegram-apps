@@ -1,5 +1,11 @@
 # @tma.js/bridge
 
+## 2.1.3
+
+### Patch Changes
+
+- 9b46673: Make isTMA return false if the env is unknown.
+
 ## 2.1.2
 
 ### Patch Changes
