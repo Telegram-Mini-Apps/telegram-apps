@@ -1,17 +1,17 @@
+import type { PostEventError } from '@tma.js/bridge';
 import type { Computed } from '@tma.js/signals';
 import * as E from 'fp-ts/Either';
-import type { PostEventError } from '@tma.js/bridge';
 import { pipe } from 'fp-ts/function';
 
-import { createWithChecksFp, type WithChecksFp, type WithChecks } from '@/with-checks/withChecksFp.js';
-import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
-import { Stateful } from '@/composables/Stateful.js';
 import { Mountable } from '@/composables/Mountable.js';
-import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
-import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
+import { Stateful } from '@/composables/Stateful.js';
 import type { SharedFeatureOptions } from '@/fn-options/sharedFeatureOptions.js';
-import type { WithVersion } from '@/fn-options/withVersion.js';
 import type { WithPostEvent } from '@/fn-options/withPostEvent.js';
+import type { WithStateRestore } from '@/fn-options/withStateRestore.js';
+import type { WithVersion } from '@/fn-options/withVersion.js';
+import { createIsSupportedSignal } from '@/helpers/createIsSupportedSignal.js';
+import { throwifyWithChecksFp } from '@/with-checks/throwifyWithChecksFp.js';
+import { createWithChecksFp, type WithChecks, type WithChecksFp } from '@/with-checks/withChecksFp.js';
 
 export interface SwipeBehaviorState {
   isVerticalEnabled: boolean;
@@ -29,14 +29,15 @@ export interface SwipeBehaviorOptions
  */
 export class SwipeBehavior {
   constructor({ postEvent, storage, isTma, isPageReload, version }: SwipeBehaviorOptions) {
+    const initialState = { isVerticalEnabled: true };
     const stateful = new Stateful({
-      initialState: { isVerticalEnabled: false },
+      initialState,
       onChange(state) {
         storage.set(state);
       },
     });
     const mountable = new Mountable({
-      initialState: { isVerticalEnabled: false },
+      initialState,
       isPageReload,
       onMounted: stateful.setState,
       restoreState: storage.get,
